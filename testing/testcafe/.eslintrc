@@ -7,5 +7,6 @@
     "globals": {
         "test": true,
         "fixture": true
-    }
+    },
+    "extends": ["devextreme/testcafe"]
 }

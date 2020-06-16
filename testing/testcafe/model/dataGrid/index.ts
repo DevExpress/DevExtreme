@@ -10,187 +10,183 @@ import DataCell from './data/cell';
 import Headers from './headers';
 
 const CLASS = {
-    headers: 'headers',
-    headerPanel: 'header-panel',
-    dataRow: 'dx-data-row',
-    groupRow: 'dx-group-row',
-    focusedRow: 'dx-row-focused',
-    filterPanel: 'filter-panel',
-    pager: 'pager',
-    editFormRow: 'edit-form',
-    button: 'dx-button',
-    formButtonsContainer: 'form-buttons-container',
-    overlayContent: 'edit-popup',
-    popupContent: 'dx-overlay-content',
-    toolbar: 'dx-toolbar'
+  headers: 'headers',
+  headerPanel: 'header-panel',
+  dataRow: 'dx-data-row',
+  groupRow: 'dx-group-row',
+  focusedRow: 'dx-row-focused',
+  filterPanel: 'filter-panel',
+  pager: 'pager',
+  editFormRow: 'edit-form',
+  button: 'dx-button',
+  formButtonsContainer: 'form-buttons-container',
+  overlayContent: 'edit-popup',
+  popupContent: 'dx-overlay-content',
+  toolbar: 'dx-toolbar',
 };
 
 export default class DataGrid extends Widget {
-    dataRows: Selector;
-    getGridInstance: ClientFunction<any>;
+  dataRows: Selector;
 
-    name: string;
+  getGridInstance: ClientFunction<any>;
 
-    constructor(id: string, name = 'dxDataGrid') {
-        super(id);
+  name: string;
 
-        this.name = name;
-        this.dataRows = this.element.find(`.${CLASS.dataRow}`);
+  constructor(id: string, name = 'dxDataGrid') {
+    super(id);
 
-        const grid = this.element;
+    this.name = name;
+    this.dataRows = this.element.find(`.${CLASS.dataRow}`);
 
-        this.getGridInstance = ClientFunction(
-            () => $(grid())[`${name}`]('instance'),
-            { dependencies: { grid, name } }
-        );
-    }
+    const grid = this.element;
 
-    addWidgetPrefix(className: string) {
-        return Widget.addClassPrefix(this.name, className);
-    }
+    this.getGridInstance = ClientFunction(
+      () => $(grid())[`${name}`]('instance'),
+      { dependencies: { grid, name } },
+    );
+  }
 
-    getHeaders(): Headers {
-        return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.name);
-    }
+  addWidgetPrefix(className: string) {
+    return Widget.addClassPrefix(this.name, className);
+  }
 
-    getDataRow(index: number): DataRow {
-        return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.name);
-    }
+  getHeaders(): Headers {
+    return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.name);
+  }
 
-    getDataCell(rowIndex: number, columnIndex: number): DataCell {
-        return this.getDataRow(rowIndex).getDataCell(columnIndex);
-    }
+  getDataRow(index: number): DataRow {
+    return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.name);
+  }
 
-    getGroupRow(index: number): GroupRow {
-        return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.name);
-    }
+  getDataCell(rowIndex: number, columnIndex: number): DataCell {
+    return this.getDataRow(rowIndex).getDataCell(columnIndex);
+  }
 
-    getFocusedRow(): Selector {
-        return this.dataRows.filter(`.${CLASS.focusedRow}`);
-    }
+  getGroupRow(index: number): GroupRow {
+    return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.name);
+  }
 
-    getFilterPanel(): FilterPanel {
-        return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.name);
-    }
+  getFocusedRow(): Selector {
+    return this.dataRows.filter(`.${CLASS.focusedRow}`);
+  }
 
-    getPager(): Pager {
-        return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
-    }
+  getFilterPanel(): FilterPanel {
+    return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.name);
+  }
 
-    scrollTo(options): Promise<void> {
-        const getGridInstance: any = this.getGridInstance;
+  getPager(): Pager {
+    return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
+  }
 
-        return ClientFunction(
-            () => getGridInstance().getScrollable().scrollTo(options),
-            { dependencies: { getGridInstance, options } }
-        )();
-    }
+  scrollTo(options): Promise<void> {
+    const { getGridInstance } = this;
 
-    getScrollLeft() : Promise<number> {
-        const getGridInstance: any = this.getGridInstance;
+    return ClientFunction(
+      () => (getGridInstance() as any).getScrollable().scrollTo(options),
+      { dependencies: { getGridInstance, options } },
+    )();
+  }
 
-        return ClientFunction(
-            () => getGridInstance().getScrollable().scrollLeft(),
-            { dependencies: { getGridInstance } }
-        )();
-    }
+  getScrollLeft(): Promise<number> {
+    const { getGridInstance } = this;
 
-    getScrollbarWidth(isHorizontal: boolean) : Promise<number> {
-        const getGridInstance: any = this.getGridInstance;
+    return ClientFunction(
+      () => (getGridInstance() as any).getScrollable().scrollLeft(),
+      { dependencies: { getGridInstance } },
+    )();
+  }
 
-        return ClientFunction(
-            () => getGridInstance().getView('rowsView').getScrollbarWidth(isHorizontal),
-            { dependencies: { getGridInstance, isHorizontal } }
-        )();
-    }
+  getScrollbarWidth(isHorizontal: boolean): Promise<number> {
+    const { getGridInstance } = this;
 
-    getEditForm(): EditForm {
-        const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
-        const element = this.element ? this.element.find(`.${editFormRowClass}`) : Selector(`.${editFormRowClass}`);
-        const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
+    return ClientFunction(
+      () => (getGridInstance() as any).getView('rowsView').getScrollbarWidth(isHorizontal),
+      { dependencies: { getGridInstance, isHorizontal } },
+    )();
+  }
 
-        return new EditForm(element, buttons);
-    }
+  getEditForm(): EditForm {
+    const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
+    const element = this.element ? this.element.find(`.${editFormRowClass}`) : Selector(`.${editFormRowClass}`);
+    const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
 
-    getPopupEditForm(): EditForm {
-        const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
-        const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
+    return new EditForm(element, buttons);
+  }
 
-        return new EditForm(element, buttons);
-    }
+  getPopupEditForm(): EditForm {
+    const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+    const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
-    getHeaderPanel(): HeaderPanel {
-        return new HeaderPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.headerPanel)}`), this.name);
-    }
+    return new EditForm(element, buttons);
+  }
 
-    apiOption(name: any, value = 'undefined') : Promise<any> {
-        const getGridInstance: any = this.getGridInstance;
+  getHeaderPanel(): HeaderPanel {
+    return new HeaderPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.headerPanel)}`), this.name);
+  }
 
-        return ClientFunction(
-            () => {
-                const dataGrid = getGridInstance();
-                return value !== 'undefined' ? dataGrid.option(name, value) : dataGrid.option(name);
-            },
-            { dependencies: { getGridInstance, name, value } }
-        )();
-    }
+  apiOption(name: any, value = 'undefined'): Promise<any> {
+    const { getGridInstance } = this;
 
-    apiEditRow(rowIndex: number) : Promise<void> {
-        const getGridInstance: any = this.getGridInstance;
+    return ClientFunction(
+      () => {
+        const dataGrid = getGridInstance() as any;
+        return value !== 'undefined' ? dataGrid.option(name, value) : dataGrid.option(name);
+      },
+      { dependencies: { getGridInstance, name, value } },
+    )();
+  }
 
-        return ClientFunction(
-            () => getGridInstance().editRow(rowIndex),
-            { dependencies: { getGridInstance, rowIndex } }
-        )();
-    }
+  apiEditRow(rowIndex: number): Promise<void> {
+    const { getGridInstance } = this;
 
-    apiCancelEditData() : Promise<void> {
-        const getGridInstance: any = this.getGridInstance;
-        return ClientFunction(
-            () => getGridInstance().cancelEditData(),
-            { dependencies: { getGridInstance } }
-        )();
-    }
+    return ClientFunction(
+      () => (getGridInstance() as any).editRow(rowIndex),
+      { dependencies: { getGridInstance, rowIndex } },
+    )();
+  }
 
-    apiSaveEditData() : Promise<void> {
-        const getGridInstance: any = this.getGridInstance;
-        return ClientFunction(
-            () => getGridInstance().saveEditData(),
-            { dependencies: { getGridInstance } }
-        )();
-    }
+  apiCancelEditData(): Promise<void> {
+    const { getGridInstance } = this;
+    return ClientFunction(
+      () => (getGridInstance() as any).cancelEditData(),
+      { dependencies: { getGridInstance } },
+    )();
+  }
 
-    apiEditCell(rowIndex: number, columnIndex: number) : Promise<void> {
-        const getGridInstance: any = this.getGridInstance;
-        return ClientFunction(
-            () => getGridInstance().editCell(rowIndex, columnIndex),
-            { dependencies: { getGridInstance, rowIndex, columnIndex } }
-        )();
-    }
+  apiSaveEditData(): Promise<void> {
+    const { getGridInstance } = this;
+    return ClientFunction(
+      () => (getGridInstance() as any).saveEditData(),
+      { dependencies: { getGridInstance } },
+    )();
+  }
 
-    apiCellValue(rowIndex: number, columnIndex: number, value: string) : Promise<void> {
-        const getGridInstance: any = this.getGridInstance;
-        return ClientFunction(
-            () => getGridInstance().editCell(rowIndex, columnIndex, value),
-            { dependencies: { getGridInstance, rowIndex, columnIndex, value } }
-        )();
-    }
+  apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
+    const { getGridInstance } = this;
+    return ClientFunction(
+      () => (getGridInstance() as any).editCell(rowIndex, columnIndex),
+      { dependencies: { getGridInstance, rowIndex, columnIndex } },
+    )();
+  }
 
-    apiGetCellValue(rowIndex: number, columnIndex: number) : Promise<string> {
-        const getGridInstance: any = this.getGridInstance;
-        return ClientFunction(
-            () => getGridInstance().cellValue(rowIndex, columnIndex),
-            { dependencies: { getGridInstance, rowIndex, columnIndex } }
-        )();
-    }
+  apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
+    const { getGridInstance } = this;
+    return ClientFunction(
+      () => (getGridInstance() as any).editCell(rowIndex, columnIndex, value),
+      {
+        dependencies: {
+          getGridInstance, rowIndex, columnIndex, value,
+        },
+      },
+    )();
+  }
 
-    apiGetCellValidationStatus(rowIndex: number, columnIndex: number) : Promise<any> {
-        const getGridInstance: any = this.getGridInstance;
-        return ClientFunction(() => {
-            const dataGrid = getGridInstance();
-            const result = dataGrid.getController('validating').getCellValidationResult({ rowKey: dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
-            return result ? result.status : null;
-        }, { dependencies: { getGridInstance, rowIndex, columnIndex } }
-        )();
-    }
+  apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      const result = dataGrid.getController('validating').getCellValidationResult({ rowKey: dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
+      return result ? result.status : null;
+    }, { dependencies: { getGridInstance, rowIndex, columnIndex } })();
+  }
 }
