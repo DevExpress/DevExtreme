@@ -86,7 +86,8 @@ const moduleSetup = {
 
 QUnit.module('rendering with css', {}, () => {
     QUnit.test('Right width of popup', function(assert) {
-        const $element = $('#selectBox').dxSelectBox({ width: 100 });
+        const editorWidth = 100;
+        const $element = $('#selectBox').dxSelectBox({ editorWidth: 100 });
         const instance = $element.dxSelectBox('instance');
         instance.open();
         const $popup = $(instance._popup.$element());
@@ -96,7 +97,7 @@ QUnit.module('rendering with css', {}, () => {
         assert.strictEqual(instance._popup.option('width'), 'auto');
 
         const $overlayContent = $('.dx-overlay-content');
-        assert.roughEqual($overlayContent.outerWidth(), 137, 1, 'overlay content width is correct');
+        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
     });
 });
 
