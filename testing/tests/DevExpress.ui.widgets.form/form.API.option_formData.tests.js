@@ -332,14 +332,6 @@ QUnit.test('Reset editor\'s value when set formData: {dataField1: a}', function(
 
 
 QUnit.module('Checkbox editor field', () => {
-    function checkCheckboxAndFormValueEditor(editor, value) {
-        QUnit.assert.strictEqual(editor.option('value'), value, `editor has ${value} value`);
-
-        const $checkBox = $(editor.element());
-        QUnit.assert.strictEqual($checkBox.hasClass('dx-checkbox-checked'), value === true, 'checkbox has checked class if it has selected');
-        QUnit.assert.strictEqual($checkBox.hasClass('dx-checkbox-indeterminate'), value === undefined, 'checkbox has indeterminate class if it has undefied value');
-    }
-
     function checkCheckboxAndFormValue(form, dateField, editorValue, formValue) {
         const editor = form.getEditor(dateField);
         QUnit.assert.strictEqual(editor.option('value'), editorValue, `editor has ${editorValue} value`);
@@ -395,8 +387,6 @@ QUnit.module('Checkbox editor field', () => {
 
                         form.updateData(newFormData);
                         const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
-                        checkCheckboxAndFormValueEditor(form.getEditor('b'), editorNewValue);
-
                         const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
                         checkCheckboxAndFormValue(form, 'b', editorNewValue, formNewValue);
                     });
