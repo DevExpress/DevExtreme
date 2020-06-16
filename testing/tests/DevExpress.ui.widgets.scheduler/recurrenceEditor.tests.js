@@ -77,6 +77,7 @@ module('GetEditorByField', moduleConfig, () => {
         { field: 'interval', isNecessarily: true, editorType: NumberBox },
         { field: 'count', isNecessarily: true, editorType: NumberBox },
         { field: 'until', isNecessarily: true, editorType: DateBox },
+        { field: 'repeatEnd', isNecessarily: true, editorType: RadioGroup },
         { field: 'byday', isNecessarily: false, editorType: ButtonGroup, freq: 'FREQ=WEEKLY' },
         { field: 'bymonth', isNecessarily: false, editorType: SelectBox, freq: 'FREQ=YEARLY' },
         { field: 'bymonthday', isNecessarily: false, editorType: NumberBox, freq: 'FREQ=MONTHLY' }
@@ -212,7 +213,7 @@ const repeatEndModuleConfig = {
     beforeEach() {
         this.createInstance = function(options) {
             this.instance = new RecurrenceEditor($('#recurrence-editor'), options);
-            this.repeatEndEditor = this.instance._repeatEndEditor;
+            this.repeatEndEditor = this.instance.getEditorByField('repeatEnd');
         };
     }
 };

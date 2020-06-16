@@ -341,7 +341,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         assert.equal(appointmentPopup.form.getSubject(), defaultData[0].text, 'Subject in form should equal selected appointment');
     });
 
-    QUnit.test('Recurrence repeat-type editor should have default \'never\' value after reopening appointment popup', function(assert) {
+    QUnit.test('Recurrence repeat-end editor should have default \'never\' value after reopening appointment popup', function(assert) {
         const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
         const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
         const scheduler = createScheduler();
@@ -352,7 +352,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         let visibilityChanged = form.getEditor('visibilityChanged');
         visibilityChanged.option('value', true);
 
-        const repeatEndEditor = form.getEditor('recurrenceRule')._repeatEndEditor;
+        const repeatEndEditor = form.getEditor('recurrenceRule').getEditorByField('repeatEnd');
         repeatEndEditor.option('value', 'count');
         scheduler.appointmentPopup.clickDoneButton();
 

@@ -12,7 +12,6 @@ import ButtonGroup from '../button_group';
 import DateBox from '../date_box';
 import Editor from '../editor/editor';
 import NumberBox from '../number_box';
-import RadioGroup from '../radio_group';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { getRecurrenceProcessor } from './recurrence';
 import typeUtils from '../../core/utils/type';
@@ -301,12 +300,8 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _getRepeatOnItems: function(freq) {
-        const monthsNames = dateLocalization.getMonthNames('wide');
-        const months = [];
-
-        for(let i = 0; i < 12; i++) {
-            months[i] = { value: String(i + 1), text: monthsNames[i] };
-        }
+        const monthsName = dateLocalization.getMonthNames('wide');
+        const months = [...Array(12)].map((_, i) => ({ value: i + 1, text: monthsName[i] }));
 
         return [
             {
@@ -373,10 +368,10 @@ const RecurrenceEditor = Editor.inherit({
                     showSpinButtons: true,
                     useLargeSpinButtons: false,
                     value: this._dayOfMonthByRules(),
-                    onValueChanged: (args) => this._valueChangedHandler(args),
                     elementAttr: {
                         class: DAY_OF_MONTH
-                    }
+                    },
+                    onValueChanged: (args) => this._valueChangedHandler(args)
                 },
                 visible: freq === 'monthly' || freq === 'yearly',
                 label: {
@@ -389,39 +384,35 @@ const RecurrenceEditor = Editor.inherit({
     _getRepeatEndItems: function() {
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
-        return [
-            {
-                template: (_, itemElement) =>{
-                    this._$repeatEndEditor = $('<div>')
-                        .addClass(REPEAT_END_TYPE_EDITOR)
-                        .appendTo(itemElement);
+        return [{
+            dataField: 'repeatEnd',
+            editorType: 'dxRadioGroup',
+            editorOptions: {
+                items: repeatEndTypes,
+                value: repeatType,
+                valueExpr: 'type',
+                field: 'repeatEnd',
+                itemTemplate: (itemData) => {
+                    if(itemData.type === 'count') {
+                        return this._renderRepeatCountEditor();
+                    }
+                    if(itemData.type === 'until') {
+                        return this._renderRepeatUntilEditor();
+                    }
 
-                    this._repeatEndEditor = this._createComponent(this._$repeatEndEditor, RadioGroup, {
-                        items: repeatEndTypes,
-                        value: repeatType,
-                        valueExpr: 'type',
-                        itemTemplate: (itemData) => {
-                            if(itemData.type === 'count') {
-                                return this._renderRepeatCountEditor();
-                            }
-                            if(itemData.type === 'until') {
-                                return this._renderRepeatUntilEditor();
-                            }
+                    return this._renderDefaultRepeatEnd();
 
-                            return this._renderDefaultRepeatEnd();
-
-                        },
-                        layout: 'vertical',
-                        onValueChanged: (args) => this._repeatEndValueChangedHandler(args)
-                    });
-
-                    this._disableRepeatEndParts(repeatType);
                 },
-                label: {
-                    text: messageLocalization.format('dxScheduler-recurrenceEnd')
-                }
+                layout: 'vertical',
+                elementAttr: {
+                    class: REPEAT_END_TYPE_EDITOR
+                },
+                onValueChanged: (args) => this._repeatEndValueChangedHandler(args)
+            },
+            label: {
+                text: messageLocalization.format('dxScheduler-recurrenceEnd')
             }
-        ];
+        }];
     },
 
     _renderEditors: function($container) {
@@ -757,7 +748,7 @@ const RecurrenceEditor = Editor.inherit({
     _changeRepeatEndValue() {
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
-        this._repeatEndEditor.option('value', repeatType);
+        this._recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
     },
 
     _changeDayOfMonthValue() {
