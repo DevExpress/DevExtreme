@@ -360,93 +360,101 @@ QUnit.module('Checkbox editor field', () => {
         return data;
     }
 
+    function getItemByType(itemType, item) {
+        switch(itemType) {
+            case 'simpleItem':
+                return item;
+            case 'groupItem':
+                return { itemType: 'group', items: [ item ] };
+            case 'tabbedItem':
+                return { itemType: 'tabbed', tabs: [{ items: [ item ] }] };
+        }
+    }
+
     [true, false, undefined].forEach(allowIndeterminateState => {
-        [true, false, undefined, null, 'no member'].forEach(oldBoolValue => {
-            [true, false, undefined, null, 'no member'].forEach(newBoolValue => {
-                QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, FormData = { b:  ${oldBoolValue}} -> updateFormData({ b: ${newBoolValue} })`, function(assert) {
-                    const form = $('#form').dxForm({
-                        formData: createTestData(oldBoolValue),
-                        items: [
-                            { dataField: 'b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState }
-                        ],
-                    }).dxForm('instance');
+        ['simpleItem', 'groupItem', 'tabbedItem'].forEach(itemType => {
+            [true, false, undefined, null, 'no member'].forEach(oldBoolValue => {
+                [true, false, undefined, null, 'no member'].forEach(newBoolValue => {
+                    QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, ItemType: ${itemType}, FormData = { b:  ${oldBoolValue}} -> updateFormData({ b: ${newBoolValue} })`, function(assert) {
+                        const form = $('#form').dxForm({
+                            formData: createTestData(oldBoolValue),
+                            items: [ getItemByType(itemType,
+                                { dataField: 'b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState })
+                            ]
+                        }).dxForm('instance');
 
-                    const editorOldValue = (oldBoolValue === 'no member' || (allowIndeterminateState === false && oldBoolValue === undefined))
-                        ? false
-                        : oldBoolValue;
-                    checkCheckboxAndFormValue(form, 'b', editorOldValue, oldBoolValue);
+                        const editorOldValue = (oldBoolValue === 'no member' || (allowIndeterminateState === false && oldBoolValue === undefined))
+                            ? false
+                            : oldBoolValue;
+                        checkCheckboxAndFormValue(form, 'b', editorOldValue, oldBoolValue);
 
-                    const newFormData = {};
-                    if(newBoolValue !== 'no member') {
-                        newFormData['b'] = newBoolValue;
-                    }
+                        const newFormData = {};
+                        if(newBoolValue !== 'no member') {
+                            newFormData['b'] = newBoolValue;
+                        }
 
-                    form.updateData(newFormData);
-                    const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
-                    checkCheckboxAndFormValueEditor(form.getEditor('b'), editorNewValue);
+                        form.updateData(newFormData);
+                        const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
+                        checkCheckboxAndFormValueEditor(form.getEditor('b'), editorNewValue);
 
-                    const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
-                    checkCheckboxAndFormValue(form, 'b', editorNewValue, formNewValue);
-                });
+                        const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
+                        checkCheckboxAndFormValue(form, 'b', editorNewValue, formNewValue);
+                    });
 
-                QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, FormData = { innerObject: { b:  ${oldBoolValue} }} -> updateFormData({ innerObject.b = ${newBoolValue })`, function(assert) {
-                    const form = $('#form').dxForm({
-                        formData: { innerObject: createTestData(oldBoolValue) },
-                        items: [
-                            { dataField: 'innerObject.b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState }
-                        ],
-                    }).dxForm('instance');
+                    QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, ItemType: ${itemType}, FormData = { innerObject: { b:  ${oldBoolValue} }} -> updateFormData({ innerObject.b = ${newBoolValue })`, function(assert) {
+                        const form = $('#form').dxForm({
+                            formData: { innerObject: createTestData(oldBoolValue) },
+                            items: [ getItemByType(itemType,
+                                { dataField: 'innerObject.b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState })
+                            ]
+                        }).dxForm('instance');
 
-                    const editorOldValue = (oldBoolValue === 'no member' || (allowIndeterminateState === false && oldBoolValue === undefined))
-                        ? false
-                        : oldBoolValue;
-                    checkCheckboxAndFormValue(form, 'innerObject.b', editorOldValue, oldBoolValue);
+                        const editorOldValue = (oldBoolValue === 'no member' || (allowIndeterminateState === false && oldBoolValue === undefined))
+                            ? false
+                            : oldBoolValue;
+                        checkCheckboxAndFormValue(form, 'innerObject.b', editorOldValue, oldBoolValue);
 
-                    const newFormData = { innerObject: { } };
-                    if(newBoolValue !== 'no member') {
-                        newFormData.innerObject['b'] = newBoolValue;
-                    }
+                        const newFormData = { innerObject: { } };
+                        if(newBoolValue !== 'no member') {
+                            newFormData.innerObject['b'] = newBoolValue;
+                        }
 
-                    form.updateData(newFormData);
-                    const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
-                    const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
-                    checkCheckboxAndFormValue(form, 'innerObject.b', editorNewValue, formNewValue);
-                });
+                        form.updateData(newFormData);
+                        const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
+                        const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
+                        checkCheckboxAndFormValue(form, 'innerObject.b', editorNewValue, formNewValue);
+                    });
 
-                QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, FormData = { b:  ${oldBoolValue}} -> option('formData', { b: ${newBoolValue} })`, function() {
-                    const form = $('#form').dxForm({
-                        formData: createTestData(oldBoolValue),
-                        items: [ { itemType: 'tabbed',
-                            tabs: [{
-                                items: [{
-                                    dataField: 'b',
-                                    editorType: 'dxCheckBox',
-                                    allowIndeterminateState: allowIndeterminateState
-                                }]
-                            }]
-                        }]
-                    }).dxForm('instance');
+                    QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, ItemType: ${itemType}, FormData = { b:  ${oldBoolValue}} -> option('formData', { b: ${newBoolValue} })`, function() {
+                        const form = $('#form').dxForm({
+                            formData: createTestData(oldBoolValue),
+                            items: [ getItemByType(itemType,
+                                { dataField: 'b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState })
+                            ]
+                        }).dxForm('instance');
 
-                    form.option('formData', createTestData(newBoolValue));
-                    const editorValue = (newBoolValue === 'no member' || (allowIndeterminateState === false && newBoolValue === undefined))
-                        ? false
-                        : newBoolValue;
+                        form.option('formData', createTestData(newBoolValue));
+                        const editorValue = (newBoolValue === 'no member' || (allowIndeterminateState === false && newBoolValue === undefined))
+                            ? false
+                            : newBoolValue;
 
-                    checkCheckboxAndFormValue(form, 'b', editorValue, newBoolValue);
-                });
+                        checkCheckboxAndFormValue(form, 'b', editorValue, newBoolValue);
+                    });
 
-                QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, FormData = { innerObject: { b:  ${oldBoolValue} }} -> option('formData', { innerObject.b = ${newBoolValue })`, function() {
-                    const form = $('#form').dxForm({
-                        formData: { innerObject: createTestData(oldBoolValue) },
-                        items: [ { itemType: 'group', items: [
-                            { dataField: 'innerObject.b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState }
-                        ] } ] }).dxForm('instance');
+                    QUnit.test(`AllowIndeterminateState = ${allowIndeterminateState}, ItemType: ${itemType}, FormData = { innerObject: { b:  ${oldBoolValue} }} -> option('formData', { innerObject.b = ${newBoolValue })`, function() {
+                        const form = $('#form').dxForm({
+                            formData: { innerObject: createTestData(oldBoolValue) },
+                            items: [ getItemByType(itemType,
+                                { dataField: 'innerObject.b', editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState })
+                            ]
+                        }).dxForm('instance');
 
-                    form.option('formData', { innerObject: createTestData(newBoolValue) });
-                    const editorValue = (newBoolValue === 'no member' || (allowIndeterminateState === false && newBoolValue === undefined))
-                        ? false
-                        : newBoolValue;
-                    checkCheckboxAndFormValue(form, 'innerObject.b', editorValue, newBoolValue);
+                        form.option('formData', { innerObject: createTestData(newBoolValue) });
+                        const editorValue = (newBoolValue === 'no member' || (allowIndeterminateState === false && newBoolValue === undefined))
+                            ? false
+                            : newBoolValue;
+                        checkCheckboxAndFormValue(form, 'innerObject.b', editorValue, newBoolValue);
+                    });
                 });
             });
         });
