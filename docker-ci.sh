@@ -188,6 +188,8 @@ function run_test_jest {
 }
 
 function run_test_scss {
+    npm i
+    npm run build-themes
     cd themebuilder-scss
     npm i && npm run build && npm run test
 }
