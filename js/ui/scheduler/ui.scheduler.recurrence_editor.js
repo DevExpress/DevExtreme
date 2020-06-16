@@ -15,6 +15,7 @@ import NumberBox from '../number_box';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { getRecurrenceProcessor } from './recurrence';
 import typeUtils from '../../core/utils/type';
+import '../radio_group';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -216,172 +217,196 @@ const RecurrenceEditor = Editor.inherit({
 
     _prepareEditors: function() {
         const freq = (this._recurrenceRule.getRules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
-        const interval = this._recurrenceRule.getRules().interval || 1;
 
         this._editors = [
-            {
-                dataField: 'freq',
-                name: 'FREQ',
-                editorType: 'dxSelectBox',
-                cssClass: FREQUENCY_EDITOR,
-                editorOptions: {
-                    items: frequencies,
-                    value: freq,
-                    field: 'freq',
-                    valueExpr: 'value',
-                    displayExpr: 'text',
-                    layout: 'horizontal',
-                    elementAttr: {
-                        class: FREQUENCY_EDITOR
-                    },
-                    onValueChanged: (args) => this._valueChangedHandler(args)
-                },
-                label: {
-                    text: messageLocalization.format('dxScheduler-editorLabelRecurrence')
-                }
-            },
-            {
-                itemType: 'group',
-                colCount: 2,
-                cssClass: `${INTERVAL_EDITOR}${WRAPPER_POSTFIX}`,
-                colCountByScreen: { xs: 2 },
-                items: [
-                    {
-                        dataField: 'interval',
-                        editorType: 'dxNumberBox',
-                        editorOptions: {
-                            width: recurrentEditorNumberBoxWidth,
-                            min: 1,
-                            field: 'interval',
-                            value: interval,
-                            showSpinButtons: true,
-                            useLargeSpinButtons: false,
-                            elementAttr: {
-                                class: INTERVAL_EDITOR
-                            },
-                            onValueChanged: (args) => this._valueChangedHandler(args)
-                        },
-                        label: {
-                            text: messageLocalization.format('dxScheduler-recurrenceRepeatEvery')
-                        }
-                    },
-                    {
-                        name: 'intervalLabel',
-                        cssClass: `${INTERVAL_EDITOR}${LABEL_POSTFIX}`,
-                        template: () => messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`)
-                    }
-                ]
-            },
-            {
-                itemType: 'group',
-                items: [
-                    {
-                        name: 'repeatOnLabel',
-                        colSpan: 2,
-                        template: () => messageLocalization.format('dxScheduler-recurrenceRepeatOn'),
-                        visible: freq && freq !== 'daily' && freq !== 'hourly',
-                    }
-                ]
-            },
+            this._createFreqEditor(freq),
+            this._createIntervalEditor(freq),
+            this._createRepeatOnLabel(freq),
             {
                 itemType: 'group',
                 cssClass: REPEAT_ON_EDITOR,
                 colCount: 2,
                 colCountByScreen: { xs: 2 },
-                items: this._getRepeatOnItems(freq)
+                items: this._createRepeatOnEditor(freq)
             },
             {
                 itemType: 'group',
-                items: this._getRepeatEndItems()
+                items: this._createRepeatEndEditor()
             }
         ];
 
         return this._editors;
     },
 
-    _getRepeatOnItems: function(freq) {
-        const monthsName = dateLocalization.getMonthNames('wide');
-        const months = [...Array(12)].map((_, i) => ({ value: i + 1, text: monthsName[i] }));
-
-        return [
-            {
-                dataField: 'byday',
-                colSpan: 2,
-                template: (_, itemElement) =>{
-                    const firstDayOfWeek = this._getFirstDayOfWeek();
-                    const byDay = this._recurrenceRule.getRules()['byday'] ?
-                        this._recurrenceRule.getRules()['byday'].split(',') : days[firstDayOfWeek];
-
-                    const localDaysNames = dateLocalization.getDayNames('abbreviated');
-                    const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
-
-                    const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map((item, index) => { return { text: item, key: dayNames[index] }; });
-
-                    this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(itemElement);
-
-                    this._weekEditor = this._createComponent(this._$repeatOnWeek, ButtonGroup, {
-                        items: itemsButtonGroup,
-                        field: 'byday',
-                        selectionMode: 'multiple',
-                        selectedItemKeys: byDay,
-                        keyExpr: 'key',
-                        onSelectionChanged: (e) => {
-                            const selectedKeys = e.component.option('selectedItemKeys');
-                            this._recurrenceRule.makeRule('byday', selectedKeys);
-                            this._changeEditorValue();
-                        }
-                    });
+    _createFreqEditor: function(freq) {
+        return {
+            dataField: 'freq',
+            name: 'FREQ',
+            editorType: 'dxSelectBox',
+            cssClass: FREQUENCY_EDITOR,
+            editorOptions: {
+                items: frequencies,
+                value: freq,
+                field: 'freq',
+                valueExpr: 'value',
+                displayExpr: 'text',
+                layout: 'horizontal',
+                elementAttr: {
+                    class: FREQUENCY_EDITOR
                 },
-                visible: freq === 'weekly',
-                label: {
-                    visible: false
-                }
+                onValueChanged: (args) => this._valueChangedHandler(args)
             },
-            {
-                dataField: 'bymonth',
-                editorType: 'dxSelectBox',
-                editorOptions: {
-                    field: 'bymonth',
-                    items: months,
-                    value: this._monthOfYearByRules(),
-                    width: recurrentEditorSelectBoxWidth,
-                    displayExpr: 'text',
-                    valueExpr: 'value',
-                    elementAttr: {
-                        class: MONTH_OF_YEAR
-                    },
-                    onValueChanged: (args) => this._valueChangedHandler(args)
-                },
-                visible: freq === 'yearly',
-                label: {
-                    visible: false
-                }
-            },
-            {
-                dataField: 'bymonthday',
-                editorType: 'dxNumberBox',
-                editorOptions: {
-                    min: 1,
-                    max: 31,
-                    width: recurrentEditorNumberBoxWidth,
-                    field: 'bymonthday',
-                    showSpinButtons: true,
-                    useLargeSpinButtons: false,
-                    value: this._dayOfMonthByRules(),
-                    elementAttr: {
-                        class: DAY_OF_MONTH
-                    },
-                    onValueChanged: (args) => this._valueChangedHandler(args)
-                },
-                visible: freq === 'monthly' || freq === 'yearly',
-                label: {
-                    visible: false
-                }
+            label: {
+                text: messageLocalization.format('dxScheduler-editorLabelRecurrence')
             }
+        };
+    },
+
+    _createIntervalEditor: function(freq) {
+        const interval = this._recurrenceRule.getRules().interval || 1;
+        return {
+            itemType: 'group',
+            colCount: 2,
+            cssClass: `${INTERVAL_EDITOR}${WRAPPER_POSTFIX}`,
+            colCountByScreen: { xs: 2 },
+            items: [
+                {
+                    dataField: 'interval',
+                    editorType: 'dxNumberBox',
+                    editorOptions: {
+                        width: recurrentEditorNumberBoxWidth,
+                        min: 1,
+                        field: 'interval',
+                        value: interval,
+                        showSpinButtons: true,
+                        useLargeSpinButtons: false,
+                        elementAttr: {
+                            class: INTERVAL_EDITOR
+                        },
+                        onValueChanged: (args) => this._valueChangedHandler(args)
+                    },
+                    label: {
+                        text: messageLocalization.format('dxScheduler-recurrenceRepeatEvery')
+                    }
+                },
+                {
+                    name: 'intervalLabel',
+                    cssClass: `${INTERVAL_EDITOR}${LABEL_POSTFIX}`,
+                    template: () => messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`)
+                }
+            ]
+        };
+    },
+
+    _createRepeatOnLabel: function(freq) {
+        return {
+            itemType: 'group',
+            items: [
+                {
+                    name: 'repeatOnLabel',
+                    colSpan: 2,
+                    template: () => messageLocalization.format('dxScheduler-recurrenceRepeatOn'),
+                    visible: freq && freq !== 'daily' && freq !== 'hourly',
+                }
+            ]
+        };
+    },
+
+    _createRepeatOnEditor: function(freq) {
+        return [
+            this._createByDayEditor(freq),
+            this._createByMonthEditor(freq),
+            this._createByMonthDayEditor(freq)
         ];
     },
 
-    _getRepeatEndItems: function() {
+    _createByDayEditor: function(freq) {
+        return {
+            dataField: 'byday',
+            colSpan: 2,
+            template: (_, itemElement) =>{
+                const firstDayOfWeek = this._getFirstDayOfWeek();
+                const byDay = this._recurrenceRule.getRules()['byday'] ?
+                    this._recurrenceRule.getRules()['byday'].split(',') : days[firstDayOfWeek];
+
+                const localDaysNames = dateLocalization.getDayNames('abbreviated');
+                const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
+
+                const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map((item, index) => { return { text: item, key: dayNames[index] }; });
+
+                this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(itemElement);
+
+                this._weekEditor = this._createComponent(this._$repeatOnWeek, ButtonGroup, {
+                    items: itemsButtonGroup,
+                    field: 'byday',
+                    selectionMode: 'multiple',
+                    selectedItemKeys: byDay,
+                    keyExpr: 'key',
+                    onSelectionChanged: (e) => {
+                        const selectedKeys = e.component.option('selectedItemKeys');
+                        this._recurrenceRule.makeRule('byday', selectedKeys);
+                        this._changeEditorValue();
+                    }
+                });
+            },
+            visible: freq === 'weekly',
+            label: {
+                visible: false
+            }
+        };
+    },
+
+    _createByMonthEditor: function(freq) {
+        const monthsName = dateLocalization.getMonthNames('wide');
+        const months = [...Array(12)].map((_, i) => ({ value: i + 1, text: monthsName[i] }));
+
+        return {
+            dataField: 'bymonth',
+            editorType: 'dxSelectBox',
+            editorOptions: {
+                field: 'bymonth',
+                items: months,
+                value: this._monthOfYearByRules(),
+                width: recurrentEditorSelectBoxWidth,
+                displayExpr: 'text',
+                valueExpr: 'value',
+                elementAttr: {
+                    class: MONTH_OF_YEAR
+                },
+                onValueChanged: (args) => this._valueChangedHandler(args)
+            },
+            visible: freq === 'yearly',
+            label: {
+                visible: false
+            }
+        };
+    },
+
+    _createByMonthDayEditor: function(freq) {
+        return {
+            dataField: 'bymonthday',
+            editorType: 'dxNumberBox',
+            editorOptions: {
+                min: 1,
+                max: 31,
+                width: recurrentEditorNumberBoxWidth,
+                field: 'bymonthday',
+                showSpinButtons: true,
+                useLargeSpinButtons: false,
+                value: this._dayOfMonthByRules(),
+                elementAttr: {
+                    class: DAY_OF_MONTH
+                },
+                onValueChanged: (args) => this._valueChangedHandler(args)
+            },
+            visible: freq === 'monthly' || freq === 'yearly',
+            label: {
+                visible: false
+            }
+        };
+    },
+
+    _createRepeatEndEditor: function() {
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
         return [{
