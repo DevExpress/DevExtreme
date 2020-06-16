@@ -3586,17 +3586,17 @@ QUnit.module('popup position and size', moduleSetup, () => {
         const instance = $('#tagBox').dxTagBox({
             width: 600,
             dropDownOptions: {
-                width: '50%'
+                width: '150%'
             },
             opened: true
         }).dxTagBox('instance');
 
         const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
 
         instance.option('width', 400);
 
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
     });
 });
 
