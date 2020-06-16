@@ -31,11 +31,5 @@ describe('Info, separate view and component approach', () => {
       });
       expect(infoText.text).toBe('Page 6 of 20 (200 items) (custom)');
     });
-    it('text with numberFormatting', () => {
-      const infoText = new InfoText({
-        infoText: 'Page {0} of {1} ({2} items)', pageCount: 2000, pageIndex: 50000, totalCount: 20000,
-      });
-      expect(infoText.text).toBe('Page 50,001 of 2,000 (20,000 items)');
-    });
   });
 });

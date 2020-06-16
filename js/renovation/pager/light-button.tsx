@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 import clickEvent from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';

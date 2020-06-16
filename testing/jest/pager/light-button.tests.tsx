@@ -1,34 +1,59 @@
-import { h } from 'preact';
-import { shallow } from 'enzyme';
-import { EVENT, emit, getEventHandlers } from '../utils/events-mock';
+import { h, createRef } from 'preact';
+import { mount } from 'enzyme';
+import {
+  EVENT, emit, getEventHandlers, clear,
+} from '../utils/events-mock';
 import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
-import LightButton, { LightButtonProps, dxClickEffect } from '../../../js/renovation/pager/light-button';
+import LightButton, { viewFunction as LightButtonComponent } from '../../../js/renovation/pager/light-button';
+import * as LightButtonModule from '../../../js/renovation/pager/light-button';
+
+const { dxClickEffect } = LightButtonModule;
 
 
 jest.mock('../../../js/ui/shared/accessibility');
 
 describe('LightButton', () => {
   describe('View', () => {
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const render = (props: LightButtonProps) => shallow(<LightButton {...props} />);
-
     it('should render valid markup', () => {
-      const tree = render({
-        children: 'text', className: 'class', label: 'label',
-      });
+      const widgetRef = createRef();
+      const props = {
+        widgetRef,
+        props: { children: 'text', className: 'class', label: 'label' },
+      } as Partial<LightButton>;
+      const tree = mount(<LightButtonComponent {...props as any} />as any);
+
+      expect(tree.find('div').instance()).toBe(widgetRef.current);
 
       expect(tree.html())
         .toBe('<div class="class" tabindex="0" role="button" aria-label="label">text</div>');
     });
 
     it('should render children', () => {
-      const tree = render({ children: <div className="child" /> });
+      const props = {
+        props: { children: <div className="child" />, className: 'class', label: 'label' },
+      } as Partial<LightButton>;
+      const tree = mount(<LightButtonComponent {...props as any} />as any);
 
       expect(tree.find('.child').exists()).toBe(true);
     });
   });
 
   describe('Effect', () => {
+    afterEach(() => { clear(); });
+    describe('ClickEffect', () => {
+      it('clickEffect', () => {
+        const dxClickEffectSpy = jest.spyOn(LightButtonModule, 'dxClickEffect');
+        const click = jest.fn();
+        const widgetRef = {} as HTMLDivElement;
+        const component = new LightButton({ onClick: click });
+        component.widgetRef = widgetRef;
+        const unsubscribeFn = component.clickEffect();
+        expect(dxClickEffectSpy).toBeCalledTimes(1);
+        expect(dxClickEffectSpy).toBeCalledWith(widgetRef, click);
+        unsubscribeFn();
+        expect(dxClickEffectSpy).toBeCalledTimes(1);
+      });
+    });
     describe('dxClickEffect', () => {
       it('should not subscribe to click event without handler', () => {
         dxClickEffect(null, null);

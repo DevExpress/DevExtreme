@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { normalizeKeyName } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
 import domAdapter from '../../core/dom_adapter';
-import commonUtils from '../../core/utils/common';
+import { noop } from '../../core/utils/common';
 
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -125,7 +125,7 @@ export function hiddenFocus(element) {
 
 export function registerKeyboardAction(viewName, instance, $element, selector, action, executeKeyDown) {
     if(instance.option('useLegacyKeyboardNavigation')) {
-        return commonUtils.noop;
+        return noop;
     }
 
     const $mainElement = $(instance.element());

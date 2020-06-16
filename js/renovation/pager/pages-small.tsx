@@ -8,7 +8,7 @@ import {
   Ref,
   InternalState,
 } from 'devextreme-generator/component_declaration/common';
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 import Page from './page';
 import { PAGER_INFO_CLASS } from './info';

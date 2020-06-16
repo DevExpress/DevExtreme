@@ -1,9 +1,8 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import { formatNumber } from '../../localization';
 import { format } from '../../core/utils/string';
 import { GetHtmlElement } from './pager.types';
 
@@ -24,11 +23,7 @@ export class InfoTextProps {
   @OneWay() totalCount?: number = 0;
 }
 
-// tslint:disable-next-line: max-classes-per-file
-@Component({
-  defaultOptionRules: null,
-  view: viewFunction,
-})
+@Component({ defaultOptionRules: null, view: viewFunction })
 export default class InfoText extends JSXComponent(InfoTextProps) implements GetHtmlElement {
   @Ref() htmlRef!: HTMLElement;
 
@@ -41,8 +36,8 @@ export default class InfoText extends JSXComponent(InfoTextProps) implements Get
       infoText = '', pageIndex, pageCount, totalCount,
     } = this.props as Required<InfoTextProps>;
     return format(infoText,
-      formatNumber(pageIndex + 1, ''),
-      formatNumber(pageCount, ''),
-      formatNumber(totalCount, ''));
+      (pageIndex + 1).toString(),
+      pageCount.toString(),
+      totalCount.toString());
   }
 }

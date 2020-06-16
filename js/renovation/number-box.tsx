@@ -1,7 +1,7 @@
 import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method,
 } from 'devextreme-generator/component_declaration/common';
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 import DxNumberBox from '../ui/number_box';
 import { WidgetProps } from './widget';
