@@ -318,7 +318,7 @@ describe('Button', () => {
       it('should get original icon prop', () => {
         const button = render({
           icon: 'testicon',
-          component: ({ icon }) => <div>{icon}</div>,
+          component: ({ data: { icon } }) => <div>{icon}</div>,
           text: 'My button',
         });
         const buttonContentChildren = button.find('.dx-button-content').children();
@@ -455,7 +455,7 @@ describe('Button', () => {
 
         render({
           onClick,
-          onKeyDown: (event, { keyName, which }) => {
+          onKeyDown: ({ keyName, which }) => {
             if (keyName === 'a' || which === 'a') {
               customHandler();
             }
@@ -482,12 +482,12 @@ describe('Button', () => {
 
         render({
           onClick,
-          onKeyDown: (event, { keyName, which }) => {
+          onKeyDown: ({ originalEvent, keyName, which }) => {
             if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
               customHandler();
-              event.cancel = true; // eslint-disable-line no-param-reassign
+              originalEvent.cancel = true; // eslint-disable-line no-param-reassign
 
-              return event;
+              return originalEvent;
             }
 
             return null;

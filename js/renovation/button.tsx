@@ -18,7 +18,7 @@ import { getImageSourceType } from '../core/utils/icon';
 import Icon from './icon';
 import InkRipple from './ink-ripple';
 import Widget from './widget';
-import { BaseWidgetProps } from './utils/base-props';
+import BaseWidgetProps from './utils/base-props';
 import BaseComponent from './preact-wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
@@ -165,7 +165,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   view: viewFunction,
 })
 
-export default class Button extends JSXComponent<ButtonProps> {
+export default class Button extends JSXComponent(ButtonProps) {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
@@ -208,18 +208,18 @@ export default class Button extends JSXComponent<ButtonProps> {
     useSubmitBehavior && this.submitInputRef.click();
   }
 
-  onWidgetKeyDown(event: Event, options) {
+  onWidgetKeyDown(options) {
     const { onKeyDown } = this.props;
-    const { keyName, which } = options;
+    const { originalEvent, keyName, which } = options;
 
-    const result = onKeyDown?.(event, options);
+    const result = onKeyDown?.(options);
     if (result?.cancel) {
       return result;
     }
 
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-      event.preventDefault();
-      this.onWidgetClick(event);
+      originalEvent.preventDefault();
+      this.onWidgetClick(originalEvent);
     }
 
     return undefined;

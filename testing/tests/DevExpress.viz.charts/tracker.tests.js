@@ -1541,20 +1541,6 @@ QUnit.test('pointermove from axis element to out of canvas', function(assert) {
     assert.strictEqual(this.series.notify.lastCall.args[0].action, 'clearPointHover');
 });
 
-QUnit.test('pointermove from axis element to out of canvas', function(assert) {
-    const axisElement1 = this.renderer.g();
-
-    this.axis.coordsIn.withArgs(97, 45).returns(true);
-
-    axisElement1.element['chart-data-argument'] = 'argument1';
-
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: axisElement1.element }));
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 2, pageY: 50 }));
-
-    assert.strictEqual(this.series.stub('notify').callCount, 2);
-    assert.strictEqual(this.series.notify.lastCall.args[0].action, 'clearPointHover');
-});
-
 QUnit.test('pointermove from hovered point to axis element', function(assert) {
     // arrange
     const point1 = createPoint(this.series, 'argument1');
@@ -2572,7 +2558,7 @@ QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', functi
     assert.equal(this.tooltip.stub('show').callCount, 0);
 });
 
-QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown not fired', function(assert) {
+QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown fired', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
     this.environment.point1.isVisible = function() { return false; };
     this.tracker.repairTooltip();
@@ -2584,7 +2570,7 @@ QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown not f
     this.tracker.repairTooltip();
 
     assert.equal(this.tooltip.show.callCount, 1);
-    assert.deepEqual(this.tooltip.show.lastCall.args[2], undefined);
+    assert.strictEqual(this.tooltip.show.lastCall.args[2].target, this.environment.point1);
     assert.equal(this.tooltip.stub('hide').callCount, 0);
 });
 

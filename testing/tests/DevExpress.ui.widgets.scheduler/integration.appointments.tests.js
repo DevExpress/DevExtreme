@@ -2200,7 +2200,7 @@ QUnit.test('Recurrence long appointment should be rendered correctly when curren
 
     this.instance.option('currentDate', new Date(2015, 5, 25));
 
-    const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+    const $appointment = this.instance.$element().find(`.${APPOINTMENT_CLASS}`);
 
     assert.equal($appointment.length, 10, 'Appointments were rendered');
 });
