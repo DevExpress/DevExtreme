@@ -403,7 +403,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 targetedAppointmentData:object
+     * @type_function_param1_field5 targetedAppointmentData:object|undefined
      * @type_function_param1_field6 appointmentElement:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
