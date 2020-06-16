@@ -61,6 +61,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -1423,6 +1424,31 @@ QUnit.module('widget options', moduleSetup, () => {
 
         assert.equal(element.option('value'), null, 'value was changed');
         assert.equal($input.val(), '', 'input text has been cleared');
+    });
+
+    QUnit.testInActiveWindow('input should no be cleared after click on the overlay content (T897239)', function(assert) {
+        const $element = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            applyValueMode: 'useButtons',
+            searchTimeout: 0,
+            opened: true
+        });
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        this.clock.tick(TIME_TO_WAIT);
+        keyboardMock($input)
+            .focus()
+            .type('1')
+            .change();
+        this.clock.tick(TIME_TO_WAIT);
+
+        $(toSelector(OVERLAY_CONTENT_CLASS)).focus();
+        assert.notOk($input.is(':focus'), 'input is not focused');
+        assert.strictEqual($input.val(), '1', 'input text has not been cleared');
+
+        const items = $(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual(items.length, 1, 'items are filtered');
     });
 
     QUnit.testInActiveWindow('don\'t rise valueChange event on focusout in readonly state with searchEnabled', function(assert) {

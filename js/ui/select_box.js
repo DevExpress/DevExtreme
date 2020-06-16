@@ -21,6 +21,7 @@ const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const SelectBox = DropDownList.inherit({
 
@@ -232,6 +233,7 @@ const SelectBox = DropDownList.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
+        this.$element().find(`.${OVERLAY_CONTENT_CLASS}`).attr('tabindex', -1);
     },
 
     _popupWrapperClass: function() {
@@ -542,14 +544,18 @@ const SelectBox = DropDownList.inherit({
 
     _focusOutHandler: function(e) {
         if(!this._preventNestedFocusEvent(e)) {
-            this._clearSearchTimer();
-            this._restoreInputText();
+            const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
+            if(!isOverlayTarget) {
+                this._restoreInputText();
+                this._clearSearchTimer();
+            }
 
             const shouldCancelSearch = this._wasSearch() &&
                 !this.option('acceptCustomValue') &&
                 this.option('searchEnabled') &&
                 this.option('opened') &&
-                !this._isOverlayNestedTarget(e.relatedTarget);
+                !isOverlayTarget;
+
             if(shouldCancelSearch) {
                 this._searchCanceled();
             }
