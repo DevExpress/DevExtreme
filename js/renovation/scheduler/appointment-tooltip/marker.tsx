@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, Effect, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { h } from 'preact';
 import {
   TOOLTIP_APPOINTMENT_ITEM_MARKER, TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY,
 } from './consts';
