@@ -22,7 +22,6 @@ require('./themes/generic.softblue');
 require('./themes/generic.darkviolet');
 require('./themes/generic.greenmist');
 require('./themes/material');
-require('./themes/ios');
 
 function getThemePart(theme, path) {
     let _theme = theme;

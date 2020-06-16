@@ -23,8 +23,7 @@ const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'common',
     'light',
-    'material.blue.light',
-    'ios7.default'
+    'material.blue.light'
 ];
 
 const getBundleSourcePath = name => `styles/bundles/dx.${name}.less`;

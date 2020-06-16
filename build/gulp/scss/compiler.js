@@ -10,8 +10,7 @@ const fiber = require('fibers');
 
 function compile() {
     return gulp.src([
-        'scss/bundles/*',
-        '!scss/bundles/dx.ios7.default.scss'
+        'scss/bundles/*'
     ])
         .pipe(sass({
             fiber,

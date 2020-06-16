@@ -8,7 +8,6 @@ const Editor = require('./editor/editor');
 const eventUtils = require('../events/utils');
 const feedbackEvents = require('../events/core/emitter.feedback');
 const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const themes = require('./themes');
 const fx = require('../animation/fx');
 const messageLocalization = require('../localization/message');
 const clickEvent = require('../events/click');
@@ -66,8 +65,6 @@ const Switch = Editor.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
-
         return this.callBase().concat([
             {
                 device: function() {
@@ -76,15 +73,7 @@ const Switch = Editor.inherit({
                 options: {
                     focusStateEnabled: true
                 }
-            },
-            {
-                device: function(device) {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    _animateHandle: false
-                }
-            },
+            }
         ]);
     },
 

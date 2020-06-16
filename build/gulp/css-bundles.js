@@ -47,8 +47,7 @@ gulp.task('copy-fonts', gulp.parallel(
 gulp.task('create-widgets', () => {
     return gulp.src([
         'styles/bundles/*',
-        '!styles/bundles/dx.common.less',
-        '!styles/bundles/dx.ios7.default.less'
+        '!styles/bundles/dx.common.less'
     ])
         .pipe(headerPipes.starLicense())
         .pipe(replace('@import (once) "../theme.less";', ''))

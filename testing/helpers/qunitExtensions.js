@@ -124,7 +124,6 @@
 
         [
             'generic.light',
-            'ios7.default',
             'material.blue.light'
         ].forEach(function(theme) {
             const link = document.createElement('link');
