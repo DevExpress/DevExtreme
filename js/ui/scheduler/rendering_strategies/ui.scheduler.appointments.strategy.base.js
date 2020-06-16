@@ -113,16 +113,18 @@ class BaseRenderingStrategy {
         return this.getDefaultCellWidth();
     }
 
-    _getItemPosition(item) {
-        const position = this._getAppointmentCoordinates(item);
-        const allDay = this.isAllDay(item);
+    _getItemPosition(appointment) {
+        const adapter = this.instance.createAppointmentAdapter(appointment);
+
+        const position = this._getAppointmentCoordinates(appointment);
+        const allDay = this.isAllDay(appointment);
+        const startDate = new Date(adapter.startDate);
+        const isRecurring = !!adapter.recurrenceRule;
         let result = [];
-        const startDate = new Date(this.instance.fire('getField', 'startDate', item));
-        const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
 
         for(let j = 0; j < position.length; j++) {
-            const height = this.calculateAppointmentHeight(item, position[j], isRecurring);
-            const width = this.calculateAppointmentWidth(item, position[j], isRecurring);
+            const height = this.calculateAppointmentHeight(appointment, position[j], isRecurring);
+            const width = this.calculateAppointmentWidth(appointment, position[j], isRecurring);
             let resultWidth = width;
             let appointmentReduced = null;
             let multiWeekAppointmentParts = [];
@@ -168,9 +170,9 @@ class BaseRenderingStrategy {
                 rowIndex: initialRowIndex,
                 cellIndex: initialCellIndex,
                 appointmentReduced: appointmentReduced,
-                originalAppointmentStartDate: this.startDate(item, true),
-                originalAppointmentEndDate: this.endDate(item),
-                endDate: this.endDate(item, position[j], isRecurring)
+                originalAppointmentStartDate: this.startDate(appointment, true),
+                originalAppointmentEndDate: this.endDate(appointment),
+                endDate: this.endDate(appointment, position[j], isRecurring)
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
         }
@@ -189,11 +191,20 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _getAppointmentCoordinates(itemData) {
+    // _getAppointmentCoordinates(itemData) {
+    //     return this.instance.fire('needCoordinates', {
+    //         startDate: this.startDate(itemData),
+    //         originalStartDate: this.startDate(itemData, true),
+    //         appointmentData: itemData,
+    //     });
+    // }
+
+    _getAppointmentCoordinates(appointment) {
+        const adapter = this.instance.createAppointmentAdapter(appointment);
+
         return this.instance.fire('needCoordinates', {
-            startDate: this.startDate(itemData),
-            originalStartDate: this.startDate(itemData, true),
-            appointmentData: itemData,
+            startDate: adapter.startDate,
+            appointmentData: appointment,
         });
     }
 
