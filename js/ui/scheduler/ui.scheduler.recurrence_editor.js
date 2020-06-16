@@ -358,7 +358,7 @@ const RecurrenceEditor = Editor.inherit({
 
     _createByMonthEditor: function(freq) {
         const monthsName = dateLocalization.getMonthNames('wide');
-        const months = [...Array(12)].map((_, i) => ({ value: i + 1, text: monthsName[i] }));
+        const months = [...Array(12)].map((_, i) => ({ value: `${i + 1}`, text: monthsName[i] }));
 
         return {
             dataField: 'bymonth',

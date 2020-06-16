@@ -610,6 +610,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         assert.ok(monthOfYear.$element().hasClass(MONTH_OF_YEAR), 'correct default value of day-of-month editor');
         assert.equal(monthOfYear.option('items').length, 12, 'items are correct');
         assert.equal(monthOfYear.option('value'), 2, 'value is correct');
+        assert.equal(monthOfYear.option('text'), 'February', 'text is correct');
     });
 
     test('Recurrence repeat-on editor should should process values correctly, when freq = yearly', function(assert) {
