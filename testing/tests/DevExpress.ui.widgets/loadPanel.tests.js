@@ -43,7 +43,7 @@ QUnit.module('init', {
         assert.equal($content.find(MESSAGE_SELECTOR).text(), 'Test Loading Message');
     });
 
-    QUnit.test('load panel created with templatesRenderAsynchronously option should be shown without delay', function(assert) {
+    QUnit.test('load panel created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
             const onShowingSpy = sinon.spy();
@@ -54,9 +54,9 @@ QUnit.module('init', {
                 onShowing: onShowingSpy
             });
 
-            assert.equal(onShowingSpy.called, 1);
+            assert.strictEqual(onShowingSpy.called, 0);
             clock.tick();
-            assert.equal(onShowingSpy.called, 1);
+            assert.strictEqual(onShowingSpy.called, 1);
         } finally {
             clock.restore();
         }
