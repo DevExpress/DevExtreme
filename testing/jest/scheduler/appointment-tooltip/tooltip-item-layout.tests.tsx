@@ -117,7 +117,9 @@ describe('TooltipItemLayout', () => {
     });
 
     it('should not render DeleteButton if showDeleteButton is false', () => {
-      const tree = shallow(<TooltipItemLayoutView props={{ ...defaultProps, showDeleteButton: false }} />);
+      const tree = shallow(<TooltipItemLayoutView
+        props={{ ...defaultProps, showDeleteButton: false }}
+      />);
 
       expect(tree.find(DeleteButton).exists())
         .toBe(false);
