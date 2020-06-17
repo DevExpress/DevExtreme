@@ -181,6 +181,14 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiGetCellValue(rowIndex: number, columnIndex: number): Promise<string> {
+    const { getGridInstance } = this;
+    return ClientFunction(
+      () => (getGridInstance() as any).cellValue(rowIndex, columnIndex),
+      { dependencies: { getGridInstance, rowIndex, columnIndex } },
+    )();
+  }
+
   apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
