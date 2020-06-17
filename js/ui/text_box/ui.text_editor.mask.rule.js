@@ -1,8 +1,8 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const typeUtils = require('../../core/utils/type');
-const noop = require('../../core/utils/common').noop;
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import typeUtils from '../../core/utils/type';
+import { noop } from '../../core/utils/common';
 const isFunction = typeUtils.isFunction;
 
 const EMPTY_CHAR = ' ';
@@ -287,6 +287,6 @@ const StubMaskRule = MaskRule.inherit({
 
 });
 
-module.exports.MaskRule = MaskRule;
-module.exports.StubMaskRule = StubMaskRule;
-module.exports.EmptyMaskRule = EmptyMaskRule;
+export { MaskRule };
+export { StubMaskRule };
+export { EmptyMaskRule };

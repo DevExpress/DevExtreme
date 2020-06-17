@@ -273,4 +273,4 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 });
 
 registerComponent('dxSchedulerWorkSpace', SchedulerWorkSpaceIndicator);
-module.exports = SchedulerWorkSpaceIndicator;
+export default SchedulerWorkSpaceIndicator;

@@ -977,4 +977,4 @@ class Menu extends MenuBase {
 
 registerComponent('dxMenu', Menu);
 
-module.exports = Menu;
+export default Menu;

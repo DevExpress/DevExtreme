@@ -108,7 +108,7 @@ function onDocumentVisibilityChange() {
     isHiddenFocusing = domAdapter.getDocument().visibilityState === 'visible';
 }
 
-module.exports = {
+export default {
     subscribeVisibilityChange: function() {
         eventsEngine.on(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
     },

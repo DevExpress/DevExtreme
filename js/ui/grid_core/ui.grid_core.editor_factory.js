@@ -236,7 +236,7 @@ const EditorFactory = modules.ViewController.inherit({
     }
 }).include(EditorFactoryMixin);
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
 

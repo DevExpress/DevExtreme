@@ -1431,4 +1431,4 @@ const TagBox = SelectBox.inherit({
 
 registerComponent('dxTagBox', TagBox);
 
-module.exports = TagBox;
+export default TagBox;

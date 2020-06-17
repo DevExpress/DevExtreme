@@ -1,6 +1,6 @@
-const $ = require('../../../core/renderer');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
-const Shader = require('./ui.scheduler.current_time_shader');
+import $ from '../../../core/renderer';
+import { getBoundingRect } from '../../../core/utils/position';
+import Shader from './ui.scheduler.current_time_shader';
 
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
@@ -95,4 +95,4 @@ const VerticalCurrentTimeShader = Shader.inherit({
     }
 });
 
-module.exports = VerticalCurrentTimeShader;
+export default VerticalCurrentTimeShader;

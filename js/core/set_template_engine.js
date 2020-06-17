@@ -1,1 +1,2 @@
-export default require('./templates/template_engine_registry').setTemplateEngine;
+import { setTemplateEngine } from './templates/template_engine_registry';
+export default setTemplateEngine;

@@ -1087,4 +1087,4 @@ const CollectionWidget = Widget.inherit({
 
 CollectionWidget.ItemClass = CollectionWidgetItem;
 
-module.exports = CollectionWidget;
+export default CollectionWidget;

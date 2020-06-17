@@ -49,7 +49,7 @@ const processLongTap = function(that, dxEvent) {
     }
 };
 
-exports.SelectionController = gridCore.Controller.inherit((function() {
+const SelectionController = gridCore.Controller.inherit((function() {
     const isSeveralRowsSelected = function(that, selectionFilter) {
         let keyIndex = 0;
         const store = that._dataController.store();
@@ -464,7 +464,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
     };
 })());
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             selection: {
@@ -488,7 +488,7 @@ module.exports = {
     },
 
     controllers: {
-        selection: exports.SelectionController
+        selection: SelectionController
     },
 
     extenders: {

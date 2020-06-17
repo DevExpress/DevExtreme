@@ -380,4 +380,4 @@ TabPanel.ItemClass = TabPanelItem;
 
 registerComponent('dxTabPanel', TabPanel);
 
-module.exports = TabPanel;
+export default TabPanel;

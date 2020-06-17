@@ -1,10 +1,10 @@
-const $ = require('../../../core/renderer');
-const noop = require('../../../core/utils/common').noop;
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
-const dateUtils = require('../../../core/utils/date');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
-const dateLocalization = require('../../../localization/date');
+import $ from '../../../core/renderer';
+import { noop } from '../../../core/utils/common';
+import registerComponent from '../../../core/component_registrator';
+import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import dateUtils from '../../../core/utils/date';
+import { getBoundingRect } from '../../../core/utils/position';
+import dateLocalization from '../../../localization/date';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -308,4 +308,4 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
 
-module.exports = SchedulerWorkSpaceMonth;
+export default SchedulerWorkSpaceMonth;

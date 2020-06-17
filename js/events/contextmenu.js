@@ -4,13 +4,13 @@ import support from '../core/utils/support';
 import devices from '../core/devices';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
-import eventUtils from './utils';
+import { addNamespace, fireEvent, isMouseEvent } from './utils';
 import holdEvent from './hold';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 
-const CONTEXTMENU_NAMESPACED_EVENT_NAME = eventUtils.addNamespace('contextmenu', CONTEXTMENU_NAMESPACE);
-const HOLD_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(holdEvent.name, CONTEXTMENU_NAMESPACE);
+const CONTEXTMENU_NAMESPACED_EVENT_NAME = addNamespace('contextmenu', CONTEXTMENU_NAMESPACE);
+const HOLD_NAMESPACED_EVENT_NAME = addNamespace(holdEvent.name, CONTEXTMENU_NAMESPACE);
 
 const CONTEXTMENU_EVENT_NAME = 'dxcontextmenu';
 
@@ -28,7 +28,7 @@ const ContextMenu = Class.inherit({
     },
 
     _holdHandler: function(e) {
-        if(eventUtils.isMouseEvent(e) && !devices.isSimulator()) {
+        if(isMouseEvent(e) && !devices.isSimulator()) {
             return;
         }
 
@@ -40,7 +40,7 @@ const ContextMenu = Class.inherit({
     },
 
     _fireContextMenu: function(e) {
-        return eventUtils.fireEvent({
+        return fireEvent({
             type: CONTEXTMENU_EVENT_NAME,
             originalEvent: e
         });

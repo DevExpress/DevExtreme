@@ -1,11 +1,11 @@
-const $ = require('../../core/renderer');
-const Callbacks = require('../../core/utils/callbacks');
-const each = require('../../core/utils/iterator').each;
-const commonUtils = require('../../core/utils/common');
-const extend = require('../../core/utils/extend').extend;
+import $ from '../../core/renderer';
+import Callbacks from '../../core/utils/callbacks';
+import { each } from '../../core/utils/iterator';
+import commonUtils from '../../core/utils/common';
+import { extend } from '../../core/utils/extend';
 const math = Math;
-const simulatedStrategy = require('./ui.scrollable.simulated');
-const LoadIndicator = require('../load_indicator');
+import simulatedStrategy from './ui.scrollable.simulated';
+import LoadIndicator from '../load_indicator';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
@@ -319,4 +319,4 @@ const SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit(
     }
 });
 
-module.exports = SimulatedScrollViewStrategy;
+export default SimulatedScrollViewStrategy;

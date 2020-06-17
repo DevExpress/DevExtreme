@@ -124,7 +124,7 @@ const HeaderPanel = columnsView.ColumnsView.inherit({
     allowDragging: noop
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
         };

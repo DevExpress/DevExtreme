@@ -1,13 +1,13 @@
-const $ = require('../../../core/renderer');
-const domAdapter = require('../../../core/dom_adapter');
-const noop = require('../../../core/utils/common').noop;
-const each = require('../../../core/utils/iterator').each;
-const getPublicElement = require('../../../core/element').getPublicElement;
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerWorkSpace = require('./ui.scheduler.work_space');
-const extend = require('../../../core/utils/extend').extend;
-const dateLocalization = require('../../../localization/date');
-const tableCreator = require('../ui.scheduler.table_creator');
+import $ from '../../../core/renderer';
+import domAdapter from '../../../core/dom_adapter';
+import { noop } from '../../../core/utils/common';
+import { each } from '../../../core/utils/iterator';
+import { getPublicElement } from '../../../core/element';
+import registerComponent from '../../../core/component_registrator';
+import SchedulerWorkSpace from './ui.scheduler.work_space';
+import { extend } from '../../../core/utils/extend';
+import dateLocalization from '../../../localization/date';
+import tableCreator from '../ui.scheduler.table_creator';
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';
 const AGENDA_DATE_CLASS = 'dx-scheduler-agenda-date';
@@ -485,4 +485,4 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);
 
-module.exports = SchedulerAgenda;
+export default SchedulerAgenda;

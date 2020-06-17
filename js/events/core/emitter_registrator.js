@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import registerEvent from './event_registrator';
-import eventUtils from '../utils';
+import { addNamespace, isMouseEvent } from '../utils';
 import pointerEvents from '../pointer';
 import wheelEvent from './wheel';
 
@@ -28,10 +28,10 @@ const EventManager = Class.inherit({
     _attachHandlers: function() {
         readyCallbacks.add(function() {
             const document = domAdapter.getDocument();
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
         }.bind(this));
     },
 
@@ -67,7 +67,7 @@ const EventManager = Class.inherit({
     },
 
     _pointerDownHandler: function(e) {
-        if(eventUtils.isMouseEvent(e) && e.which > 1) {
+        if(isMouseEvent(e) && e.which > 1) {
             return;
         }
 

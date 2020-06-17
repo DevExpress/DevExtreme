@@ -569,4 +569,4 @@ class AppointmentModel {
     }
 }
 
-module.exports = AppointmentModel;
+export default AppointmentModel;

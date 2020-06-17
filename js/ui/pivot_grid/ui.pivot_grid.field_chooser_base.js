@@ -395,4 +395,4 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
 
 registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase);
 
-module.exports = FieldChooserBase;
+export default FieldChooserBase;

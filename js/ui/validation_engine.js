@@ -881,4 +881,4 @@ const ValidationEngine = {
 
 ValidationEngine.initGroups();
 
-module.exports = ValidationEngine;
+export default ValidationEngine;

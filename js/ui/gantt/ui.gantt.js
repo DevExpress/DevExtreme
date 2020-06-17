@@ -826,4 +826,4 @@ class Gantt extends Widget {
 }
 
 registerComponent('dxGantt', Gantt);
-module.exports = Gantt;
+export default Gantt;

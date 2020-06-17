@@ -608,4 +608,4 @@ const HtmlEditor = Editor.inherit({
 
 registerComponent('dxHtmlEditor', HtmlEditor);
 
-module.exports = HtmlEditor;
+export default HtmlEditor;

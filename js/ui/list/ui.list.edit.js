@@ -368,4 +368,4 @@ const ListEdit = ListBase.inherit({
 
 });
 
-module.exports = ListEdit;
+export default ListEdit;

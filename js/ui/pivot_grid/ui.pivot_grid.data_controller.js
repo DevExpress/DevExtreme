@@ -34,7 +34,7 @@ const proxyMethod = function(instance, methodName, defaultResult) {
     }
 };
 
-exports.DataController = Class.inherit((function() {
+export const DataController = Class.inherit((function() {
 
     function getHeaderItemText(item, description, options) {
         let text = item.text;

@@ -266,4 +266,4 @@ class FileManagerItemListBase extends Widget {
 
 }
 
-module.exports = FileManagerItemListBase;
+export default FileManagerItemListBase;

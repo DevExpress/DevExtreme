@@ -121,7 +121,7 @@ const copyAttributes = function(element, newElement) {
     }
 };
 
-exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
+export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createScrollableOptions: function() {
         const that = this;
         const scrollingOptions = that.option('scrolling');

@@ -1,5 +1,5 @@
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerTimeline = require('./ui.scheduler.timeline');
+import registerComponent from '../../../core/component_registrator';
+import SchedulerTimeline from './ui.scheduler.timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 
@@ -20,4 +20,4 @@ const SchedulerTimelineDay = SchedulerTimeline.inherit({
 
 registerComponent('dxSchedulerTimelineDay', SchedulerTimelineDay);
 
-module.exports = SchedulerTimelineDay;
+export default SchedulerTimelineDay;

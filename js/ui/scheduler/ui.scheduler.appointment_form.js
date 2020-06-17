@@ -296,4 +296,4 @@ const SchedulerAppointmentForm = {
     }
 };
 
-module.exports = SchedulerAppointmentForm;
+export default SchedulerAppointmentForm;

@@ -107,7 +107,7 @@ function isDataExists(data) {
     return data.rows.length || data.columns.length || data.values.length;
 }
 
-module.exports = Class.inherit((function() {
+export default Class.inherit((function() {
 
     const findHeaderItem = function(headerItems, path) {
         if(headerItems._cacheByPath) {
@@ -1376,5 +1376,5 @@ module.exports = Class.inherit((function() {
 })());
 
 ///#DEBUG
-module.exports.sort = exports.sort;
+export const sort = exports.sort;
 ///#ENDDEBUG

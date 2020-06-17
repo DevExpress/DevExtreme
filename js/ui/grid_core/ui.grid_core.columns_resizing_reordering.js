@@ -1288,7 +1288,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
     }
 });
 
-module.exports = {
+export default {
     views: {
         columnsSeparatorView: ColumnsSeparatorView,
         blockSeparatorView: BlockSeparatorView,

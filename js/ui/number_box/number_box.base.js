@@ -1,18 +1,18 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
-const eventsEngine = require('../../events/core/events_engine');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const mathUtils = require('../../core/utils/math');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const devices = require('../../core/devices');
-const browser = require('../../core/utils/browser');
-const TextEditor = require('../text_box/ui.text_editor');
-const eventUtils = require('../../events/utils');
-const SpinButtons = require('./number_box.spins').default;
-const messageLocalization = require('../../localization/message');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import mathUtils from '../../core/utils/math';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import devices from '../../core/devices';
+import browser from '../../core/utils/browser';
+import TextEditor from '../text_box/ui.text_editor';
+import { addNamespace, getChar, normalizeKeyName } from '../../events/utils';
+import SpinButtons from './number_box.spins';
+import messageLocalization from '../../localization/message';
+import { Deferred } from '../../core/utils/deferred';
 
 const math = Math;
 
@@ -167,12 +167,12 @@ const NumberBoxBase = TextEditor.inherit({
     _keyPressHandler: function(e) {
         this.callBase(e);
 
-        const char = eventUtils.getChar(e);
+        const char = getChar(e);
         const validCharRegExp = /[\d.,eE\-+]|Subtract/; // Workaround for IE (T592690)
         const isInputCharValid = validCharRegExp.test(char);
 
         if(!isInputCharValid) {
-            const keyName = eventUtils.normalizeKeyName(e);
+            const keyName = normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
             if(e.metaKey || e.ctrlKey || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
                 return;
@@ -314,7 +314,7 @@ const NumberBoxBase = TextEditor.inherit({
     _renderValueChangeEvent: function() {
         this.callBase();
 
-        const forceValueChangeEvent = eventUtils.addNamespace('focusout', FORCE_VALUECHANGE_EVENT_NAMESPACE);
+        const forceValueChangeEvent = addNamespace('focusout', FORCE_VALUECHANGE_EVENT_NAMESPACE);
         eventsEngine.off(this.element(), forceValueChangeEvent);
         eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
     },
@@ -489,4 +489,4 @@ const NumberBoxBase = TextEditor.inherit({
     }
 });
 
-module.exports = NumberBoxBase;
+export default NumberBoxBase;

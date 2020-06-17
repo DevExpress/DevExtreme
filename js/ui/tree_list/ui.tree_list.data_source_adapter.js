@@ -816,7 +816,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 })());
 
 
-module.exports = {
+export default {
     extend: function(extender) {
         DataSourceAdapterTreeList = DataSourceAdapterTreeList.inherit(extender);
     },

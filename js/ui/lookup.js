@@ -1,6 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import support from '../core/utils/support';
 import commonUtils from '../core/utils/common';
 import { getPublicElement } from '../core/element';
@@ -1060,4 +1061,4 @@ const Lookup = DropDownList.inherit({
 
 registerComponent('dxLookup', Lookup);
 
-module.exports = Lookup;
+export default Lookup;

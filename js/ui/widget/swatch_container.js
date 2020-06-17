@@ -1,5 +1,5 @@
-const $ = require('../../core/renderer');
-const viewPortUtils = require('../../core/utils/view_port');
+import $ from '../../core/renderer';
+import viewPortUtils from '../../core/utils/view_port';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
 
@@ -20,5 +20,5 @@ const getSwatchContainer = element => {
     return viewportSwatchContainer;
 };
 
-module.exports = { getSwatchContainer: getSwatchContainer };
+export default { getSwatchContainer: getSwatchContainer };
 

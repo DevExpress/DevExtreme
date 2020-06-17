@@ -1103,12 +1103,14 @@ const SimulatedStrategy = Class.inherit({
 
 });
 
-exports.SimulatedStrategy = SimulatedStrategy;
-exports.Scroller = Scroller;
+export { SimulatedStrategy };
+export { Scroller };
 
 ///#DEBUG
-exports.ACCELERATION = ACCELERATION;
-exports.MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT;
-exports.FRAME_DURATION = FRAME_DURATION;
-exports.SCROLL_LINE_HEIGHT = SCROLL_LINE_HEIGHT;
+export { ACCELERATION };
+
+export { MIN_VELOCITY_LIMIT };
+export { FRAME_DURATION };
+
+export { SCROLL_LINE_HEIGHT };
 ///#ENDDEBUG

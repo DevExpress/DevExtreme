@@ -1,19 +1,19 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const devices = require('../core/devices');
-const extend = require('../core/utils/extend').extend;
-const inkRipple = require('./widget/utils.ink_ripple');
-const registerComponent = require('../core/component_registrator');
-const Editor = require('./editor/editor');
-const eventUtils = require('../events/utils');
-const feedbackEvents = require('../events/core/emitter.feedback');
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const themes = require('./themes');
-const fx = require('../animation/fx');
-const messageLocalization = require('../localization/message');
-const clickEvent = require('../events/click');
-const Swipeable = require('../events/gesture/swipeable');
-const Deferred = require('../core/utils/deferred').Deferred;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import { extend } from '../core/utils/extend';
+import inkRipple from './widget/utils.ink_ripple';
+import registerComponent from '../core/component_registrator';
+import Editor from './editor/editor';
+import { addNamespace } from '../events/utils';
+import feedbackEvents from '../events/core/emitter.feedback';
+import { getBoundingRect } from '../core/utils/position';
+import themes from './themes';
+import fx from '../animation/fx';
+import messageLocalization from '../localization/message';
+import clickEvent from '../events/click';
+import Swipeable from '../events/gesture/swipeable';
+import { Deferred } from '../core/utils/deferred';
 
 const SWITCH_CLASS = 'dx-switch';
 const SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper';
@@ -265,7 +265,7 @@ const Switch = Editor.inherit({
     },
 
     _renderClick: function() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEvent.name, this.NAME);
         const $element = this.$element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
 
@@ -439,4 +439,4 @@ const Switch = Editor.inherit({
 
 registerComponent('dxSwitch', Switch);
 
-module.exports = Switch;
+export default Switch;

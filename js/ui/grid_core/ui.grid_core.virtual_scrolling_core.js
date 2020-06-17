@@ -20,21 +20,21 @@ const isAppendMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
-exports.getPixelRatio = function(window) {
+export function getPixelRatio(window) {
     return window.devicePixelRatio || 1;
-};
+}
 
-exports.getContentHeightLimit = function(browser) {
+export function getContentHeightLimit(browser) {
     if(browser.msie) {
         return 4000000;
     } else if(browser.mozilla) {
         return 8000000;
     }
 
-    return 15000000 / exports.getPixelRatio(getWindow());
-};
+    return 15000000 / getPixelRatio(getWindow());
+}
 
-exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, $targetElement) {
+export function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement) {
     let $scrollElement;
     const scrollableArray = [];
     const scrollToArray = [];
@@ -117,9 +117,9 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
             });
         }
     };
-};
+}
 
-exports.VirtualScrollController = Class.inherit((function() {
+export const VirtualScrollController = Class.inherit((function() {
     const getViewportPageCount = function(that) {
         const pageSize = that._dataSource.pageSize();
         const preventPreload = that.option('scrolling.preventPreload');
@@ -419,7 +419,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     });
                 }
                 const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
-                const contentHeightLimit = exports.getContentHeightLimit(browser);
+                const contentHeightLimit = getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
                     that._sizeRatio = contentHeightLimit / virtualContentSize;
                 } else {
@@ -667,7 +667,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         subscribeToWindowScrollEvents: function($element) {
             const that = this;
 
-            that._windowScroll = that._windowScroll || exports.subscribeToExternalScrollers($element, function(scrollTop) {
+            that._windowScroll = that._windowScroll || subscribeToExternalScrollers($element, function(scrollTop) {
                 if(that.viewportItemSize()) {
                     that.setViewportPosition(scrollTop);
                 }

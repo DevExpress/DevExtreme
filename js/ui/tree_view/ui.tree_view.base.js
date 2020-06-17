@@ -1661,4 +1661,4 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     }
 });
 
-module.exports = TreeViewBase;
+export default TreeViewBase;

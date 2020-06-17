@@ -11,7 +11,7 @@ import { hasWindow } from '../../core/utils/window';
 import PushStrategy from './ui.drawer.rendering.strategy.push';
 import ShrinkStrategy from './ui.drawer.rendering.strategy.shrink';
 import OverlapStrategy from './ui.drawer.rendering.strategy.overlap';
-import { animation } from './ui.drawer.rendering.strategy';
+import { animation } from './ui.drawer.animation';
 import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
@@ -571,5 +571,5 @@ const Drawer = Widget.inherit({
 
 registerComponent('dxDrawer', Drawer);
 
-module.exports = Drawer;
+export default Drawer;
 

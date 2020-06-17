@@ -1,9 +1,9 @@
-const each = require('../../core/utils/iterator').each;
-const eventsEngine = require('../../events/core/events_engine');
-const Promise = require('../../core/polyfills/promise');
-const Provider = require('./provider');
-const Color = require('../../color');
-const clickEvent = require('../../events/click');
+import { each } from '../../core/utils/iterator';
+import eventsEngine from '../../events/core/events_engine';
+import Promise from '../../core/polyfills/promise';
+import Provider from './provider';
+import Color from '../../color';
+import clickEvent from '../../events/click';
 
 let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
@@ -186,6 +186,7 @@ const GoogleStaticProvider = Provider.inherit({
 GoogleStaticProvider.remapConstant = function(newValue) {
     GOOGLE_STATIC_URL = newValue;
 };
+
 ///#ENDDEBUG
 
-module.exports = GoogleStaticProvider;
+export default GoogleStaticProvider;

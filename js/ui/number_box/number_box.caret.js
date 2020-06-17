@@ -1,6 +1,6 @@
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const escapeRegExp = require('../../core/utils/common').escapeRegExp;
-const number = require('../../localization/number');
+import { fitIntoRange } from '../../core/utils/math';
+import { escapeRegExp } from '../../core/utils/common';
+import number from '../../localization/number';
 
 const getCaretBoundaries = function(text, format) {
     const signParts = format.split(';');
@@ -124,9 +124,9 @@ const getCaretOffset = function(previousText, newText, format) {
     return newBoundaries.start - previousBoundaries.start;
 };
 
-exports.getCaretBoundaries = getCaretBoundaries;
-exports.isCaretInBoundaries = isCaretInBoundaries;
-exports.getCaretWithOffset = getCaretWithOffset;
-exports.getCaretInBoundaries = getCaretInBoundaries;
-exports.getCaretAfterFormat = getCaretAfterFormat;
-exports.getCaretOffset = getCaretOffset;
+export { getCaretBoundaries };
+export { isCaretInBoundaries };
+export { getCaretWithOffset };
+export { getCaretInBoundaries };
+export { getCaretAfterFormat };
+export { getCaretOffset };

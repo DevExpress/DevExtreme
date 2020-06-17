@@ -1490,4 +1490,4 @@ Overlay.baseZIndex = zIndex => {
 
 registerComponent('dxOverlay', Overlay);
 
-module.exports = Overlay;
+export default Overlay;

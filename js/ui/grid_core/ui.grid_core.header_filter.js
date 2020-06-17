@@ -459,7 +459,7 @@ const DataControllerFilterRowExtender = {
     }
 };
 
-module.exports = {
+export default {
     invertFilterExpression: invertFilterExpression,
     defaultOptions: function() {
         return {

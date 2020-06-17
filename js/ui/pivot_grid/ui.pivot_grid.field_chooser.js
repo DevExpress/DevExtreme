@@ -704,4 +704,4 @@ const FieldChooser = BaseFieldChooser.inherit({
 
 registerComponent('dxPivotGridFieldChooser', FieldChooser);
 
-module.exports = FieldChooser;
+export default FieldChooser;

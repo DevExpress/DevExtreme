@@ -935,4 +935,4 @@ class ContextMenu extends MenuBase {
 
 registerComponent('dxContextMenu', ContextMenu);
 
-module.exports = ContextMenu;
+export default ContextMenu;

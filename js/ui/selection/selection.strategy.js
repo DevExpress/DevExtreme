@@ -1,11 +1,11 @@
-const dataQuery = require('../../data/query');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
+import dataQuery from '../../data/query';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
 const getKeyHash = commonUtils.getKeyHash;
-const Class = require('../../core/class');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import Class from '../../core/class';
+import { Deferred } from '../../core/utils/deferred';
 
-module.exports = Class.inherit({
+export default Class.inherit({
     ctor: function(options) {
         this.options = options;
 

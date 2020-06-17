@@ -146,4 +146,4 @@ class AppointmentLayoutManager {
     }
 }
 
-module.exports = AppointmentLayoutManager;
+export default AppointmentLayoutManager;

@@ -27,7 +27,7 @@ const BUTTON_CLASS = 'dx-button';
 
 const DATA_STYLE_OFFSET = 3;
 
-exports.DataProvider = Class.inherit({
+export const DataProvider = Class.inherit({
     _getGroupValue: function(item) {
         const { key, data, rowType, groupIndex, summaryCells } = item;
         const groupColumn = this._options.groupColumns[groupIndex];
@@ -318,7 +318,7 @@ exports.DataProvider = Class.inherit({
     }
 });
 
-exports.ExportController = dataGridCore.ViewController.inherit({}).include(exportMixin).inherit({
+export const ExportController = dataGridCore.ViewController.inherit({}).include(exportMixin).inherit({
     _getEmptyCell: function() {
         return {
             caption: '',
@@ -599,7 +599,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             }
         }
 
-        return new exports.DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
+        return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
     exportToExcel: function(selectionOnly) {
         const that = this;

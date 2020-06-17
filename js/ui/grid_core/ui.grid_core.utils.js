@@ -10,7 +10,7 @@ import { extendFromObject } from '../../core/utils/extend';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
-import { normalizeSortingInfo } from '../../data/utils';
+import { normalizeSortingInfo as normalizeSorting } from '../../data/utils';
 import formatHelper from '../../format_helper';
 import { deepExtendArraySafe } from '../../core/utils/object';
 import { getWindow } from '../../core/utils/window';
@@ -45,7 +45,7 @@ const DATE_INTERVAL_SELECTORS = {
     }
 };
 
-module.exports = (function() {
+export default (function() {
     const getIntervalSelector = function() {
         const data = arguments[1];
         const value = this.calculateCellValue(data);
@@ -198,14 +198,14 @@ module.exports = (function() {
             return changes.length && changes.length === changesWithChangeNamesCount;
         },
 
-        equalFilterParameters: function(filter1, filter2) {
+        equalFilterParameters: (filter1, filter2) => {
 
             if(Array.isArray(filter1) && Array.isArray(filter2)) {
                 if(filter1.length !== filter2.length) {
                     return false;
                 } else {
                     for(let i = 0; i < filter1.length; i++) {
-                        if(!module.exports.equalFilterParameters(filter1[i], filter2[i])) {
+                        if(!this.equalFilterParameters(filter1[i], filter2[i])) {
                             return false;
                         }
                     }
@@ -266,7 +266,7 @@ module.exports = (function() {
 
             for(let i = 0; i < summaryItems.length; i++) {
                 const summaryItem = summaryItems[i];
-                result += (i > 0 ? ', ' : '') + module.exports.getSummaryText(summaryItem, summaryTexts);
+                result += (i > 0 ? ', ' : '') + this.getSummaryText(summaryItem, summaryTexts);
             }
             return result += ')';
         },
@@ -283,9 +283,9 @@ module.exports = (function() {
             });
         },
 
-        normalizeSortingInfo: function(sort) {
+        normalizeSortingInfo(sort) {
             sort = sort || [];
-            const result = normalizeSortingInfo(sort);
+            const result = normalizeSorting(sort);
 
             for(let i = 0; i < sort.length; i++) {
                 if(sort && sort[i] && sort[i].isExpanded !== undefined) {
@@ -339,10 +339,10 @@ module.exports = (function() {
             return result;
         },
 
-        equalSortParameters: function(sortParameters1, sortParameters2, ignoreIsExpanded) {
+        equalSortParameters(sortParameters1, sortParameters2, ignoreIsExpanded) {
 
-            sortParameters1 = module.exports.normalizeSortingInfo(sortParameters1);
-            sortParameters2 = module.exports.normalizeSortingInfo(sortParameters2);
+            sortParameters1 = this.normalizeSortingInfo(sortParameters1);
+            sortParameters2 = this.normalizeSortingInfo(sortParameters2);
 
             if(Array.isArray(sortParameters1) && Array.isArray(sortParameters2)) {
                 if(sortParameters1.length !== sortParameters2.length) {
@@ -503,4 +503,4 @@ module.exports = (function() {
             return false;
         }
     };
-})();
+}());

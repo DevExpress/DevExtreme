@@ -709,4 +709,4 @@ Box.ItemClass = BoxItem;
 
 registerComponent('dxBox', Box);
 
-module.exports = Box;
+export default Box;

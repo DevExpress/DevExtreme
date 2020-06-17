@@ -1,36 +1,36 @@
-const $ = require('../../../core/renderer');
-const domAdapter = require('../../../core/dom_adapter');
-const eventsEngine = require('../../../events/core/events_engine');
-const dataUtils = require('../../../core/element_data');
-const dateUtils = require('../../../core/utils/date');
-const typeUtils = require('../../../core/utils/type');
-const windowUtils = require('../../../core/utils/window');
-const getPublicElement = require('../../../core/element').getPublicElement;
-const extend = require('../../../core/utils/extend').extend;
-const each = require('../../../core/utils/iterator').each;
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
-const messageLocalization = require('../../../localization/message');
-const dateLocalization = require('../../../localization/date');
+import $ from '../../../core/renderer';
+import domAdapter from '../../../core/dom_adapter';
+import eventsEngine from '../../../events/core/events_engine';
+import dataUtils from '../../../core/element_data';
+import dateUtils from '../../../core/utils/date';
+import typeUtils from '../../../core/utils/type';
+import windowUtils from '../../../core/utils/window';
+import { getPublicElement } from '../../../core/element';
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { getBoundingRect } from '../../../core/utils/position';
+import messageLocalization from '../../../localization/message';
+import dateLocalization from '../../../localization/date';
 const toMs = dateUtils.dateToMilliseconds;
-const Widget = require('../../widget/ui.widget');
+import Widget from '../../widget/ui.widget';
 const abstract = Widget.abstract;
-const noop = require('../../../core/utils/common').noop;
-const isDefined = require('../../../core/utils/type').isDefined;
-const publisherMixin = require('../ui.scheduler.publisher_mixin');
-const eventUtils = require('../../../events/utils');
-const pointerEvents = require('../../../events/pointer');
-const errors = require('../../widget/ui.errors');
-const clickEvent = require('../../../events/click');
-const contextMenuEvent = require('../../../events/contextmenu');
-const dragEvents = require('../../../events/drag');
-const Scrollable = require('../../scroll_view/ui.scrollable');
-const HorizontalGroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy.horizontal');
-const VerticalGroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy.vertical');
-const tableCreator = require('../ui.scheduler.table_creator');
-const VerticalShader = require('../shaders/ui.scheduler.current_time_shader.vertical');
-const AppointmentDragBehavior = require('../appointmentDragBehavior');
-const FIXED_CONTAINER_CLASS = require('../constants').FIXED_CONTAINER_CLASS;
-const timeZoneUtils = require('../utils.timeZone');
+import { noop } from '../../../core/utils/common';
+import { isDefined } from '../../../core/utils/type';
+import publisherMixin from '../ui.scheduler.publisher_mixin';
+import { isMouseEvent, addNamespace } from '../../../events/utils';
+import pointerEvents from '../../../events/pointer';
+import errors from '../../widget/ui.errors';
+import clickEvent from '../../../events/click';
+import contextMenuEvent from '../../../events/contextmenu';
+import dragEvents from '../../../events/drag';
+import Scrollable from '../../scroll_view/ui.scrollable';
+import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
+import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
+import tableCreator from '../ui.scheduler.table_creator';
+import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
+import AppointmentDragBehavior from '../appointmentDragBehavior';
+import { FIXED_CONTAINER_CLASS } from '../constants';
+import timeZoneUtils from '../utils.timeZone';
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
@@ -79,16 +79,16 @@ const SCHEDULER_HEADER_SCROLLABLE_CLASS = 'dx-scheduler-header-scrollable';
 const SCHEDULER_SIDEBAR_SCROLLABLE_CLASS = 'dx-scheduler-sidebar-scrollable';
 const SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = 'dx-scheduler-date-table-scrollable';
 
-const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, 'dxSchedulerWorkSpace');
+const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerWorkSpace');
 
-const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = eventUtils.addNamespace(dragEvents.enter, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDROP_EVENT_NAME = eventUtils.addNamespace(dragEvents.drop, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXCLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = addNamespace(dragEvents.enter, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEvents.drop, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEvent.name, 'dxSchedulerDateTable');
 
-const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
 
-const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
 
 const CELL_DATA = 'dxCellData';
 
@@ -1100,7 +1100,7 @@ const SchedulerWorkSpace = Widget.inherit({
         eventsEngine.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME);
         eventsEngine.on($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME, function(e) {
-            if(eventUtils.isMouseEvent(e) && e.which > 1) {
+            if(isMouseEvent(e) && e.which > 1) {
                 e.preventDefault();
                 return;
             }
@@ -1173,7 +1173,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
         const cellSelector = '.' + DATE_TABLE_CELL_CLASS + ',.' + ALL_DAY_TABLE_CELL_CLASS;
         const $element = this.$element();
-        const eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
+        const eventName = addNamespace(contextMenuEvent.name, this.NAME);
 
         eventsEngine.off($element, eventName, cellSelector);
         eventsEngine.on($element, eventName, cellSelector, this._contextMenuHandler.bind(this));
@@ -1685,7 +1685,7 @@ const SchedulerWorkSpace = Widget.inherit({
             cellWidth = 0;
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            if(eventUtils.isMouseEvent(e) && e.which === 1) {
+            if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
@@ -2588,4 +2588,4 @@ const SchedulerWorkSpace = Widget.inherit({
     }
 }).include(publisherMixin);
 
-module.exports = SchedulerWorkSpace;
+export default SchedulerWorkSpace;

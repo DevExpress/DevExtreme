@@ -383,4 +383,4 @@ const Editor = Widget.inherit({
     }
 });
 
-module.exports = Editor;
+export default Editor;

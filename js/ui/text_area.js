@@ -286,4 +286,4 @@ const TextArea = TextBox.inherit({
 
 registerComponent('dxTextArea', TextArea);
 
-module.exports = TextArea;
+export default TextArea;

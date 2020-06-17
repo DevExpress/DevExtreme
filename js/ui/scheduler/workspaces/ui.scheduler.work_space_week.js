@@ -1,9 +1,9 @@
-const $ = require('../../../core/renderer');
-const registerComponent = require('../../../core/component_registrator');
-const dateUtils = require('../../../core/utils/date');
-const dateLocalization = require('../../../localization/date');
-const each = require('../../../core/utils/iterator').each;
-const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
+import $ from '../../../core/renderer';
+import registerComponent from '../../../core/component_registrator';
+import dateUtils from '../../../core/utils/date';
+import dateLocalization from '../../../localization/date';
+import { each } from '../../../core/utils/iterator';
+import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 
@@ -151,4 +151,4 @@ const SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
 
 registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);
 
-module.exports = SchedulerWorkSpaceWeek;
+export default SchedulerWorkSpaceWeek;

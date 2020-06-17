@@ -2,7 +2,7 @@ import swipeEvents from '../swipe';
 import eventsEngine from '../../events/core/events_engine';
 import DOMComponent from '../../core/dom_component';
 import { each } from '../../core/utils/iterator';
-import eventUtils from '../utils';
+import { addNamespace } from '../utils';
 import { extend } from '../../core/utils/extend';
 import publicComponentUtils from '../../core/utils/public_component';
 
@@ -53,7 +53,7 @@ const Swipeable = DOMComponent.inherit({
         each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
             const action = this._createActionByOption(actionName, { context: this });
 
-            eventName = eventUtils.addNamespace(eventName, NAME);
+            eventName = addNamespace(eventName, NAME);
 
             eventsEngine.on(this.$element(), eventName, this._eventData, function(e) {
                 return action({ event: e });

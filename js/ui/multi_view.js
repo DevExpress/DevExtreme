@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
-import fx from '../animation/fx';
 import translator from '../animation/translator';
+import { _translator, animation } from './multi_view/ui.multi_view.animation';
 import mathUtils from '../core/utils/math';
 import { extend } from '../core/utils/extend';
 import { noop, deferRender } from '../core/utils/common';
@@ -25,27 +25,6 @@ const MULTIVIEW_ANIMATION_DURATION = 200;
 const toNumber = value => +(value);
 
 const position = $element => translator.locate($element).left;
-
-const _translator = {
-    move($element, position) {
-        translator.move($element, { left: position });
-    }
-};
-
-const animation = {
-    moveTo($element, position, duration, completeAction) {
-        fx.animate($element, {
-            type: 'slide',
-            to: { left: position },
-            duration: duration,
-            complete: completeAction
-        });
-    },
-
-    complete($element) {
-        fx.stop($element, true);
-    }
-};
 
 const MultiView = CollectionWidget.inherit({
 
@@ -457,8 +436,4 @@ const MultiView = CollectionWidget.inherit({
 
 registerComponent('dxMultiView', MultiView);
 
-module.exports = MultiView;
-///#DEBUG
-module.exports.animation = animation;
-module.exports._translator = _translator;
-///#ENDDEBUG
+export default MultiView;

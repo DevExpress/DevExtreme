@@ -654,4 +654,4 @@ const Slider = TrackBar.inherit({
 
 registerComponent('dxSlider', Slider);
 
-module.exports = Slider;
+export default Slider;

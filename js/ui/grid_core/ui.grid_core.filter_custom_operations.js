@@ -1,11 +1,11 @@
 import { renderValueText } from '../filter_builder/filter_builder';
 
-const $ = require('../../core/renderer');
-const messageLocalization = require('../../localization/message');
-const extend = require('../../core/utils/extend').extend;
-const DataSource = require('../../data/data_source/data_source').DataSource;
-const deferredUtils = require('../../core/utils/deferred');
-const utils = require('../filter_builder/utils');
+import $ from '../../core/renderer';
+import messageLocalization from '../../localization/message';
+import { extend } from '../../core/utils/extend';
+import { DataSource } from '../../data/data_source/data_source';
+import deferredUtils from '../../core/utils/deferred';
+import utils from '../filter_builder/utils';
 
 function baseOperation(grid) {
     const calculateFilterExpression = function(filterValue, field) {
@@ -129,5 +129,5 @@ function noneOf(grid) {
     });
 }
 
-exports.anyOf = anyOf;
-exports.noneOf = noneOf;
+export { anyOf };
+export { noneOf };

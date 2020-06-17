@@ -1,15 +1,15 @@
-const Class = require('../../core/class');
-const commonUtils = require('../../core/utils/common');
-const iteratorUtils = require('../../core/utils/iterator');
-const each = require('../../core/utils/iterator').each;
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const errors = require('../../ui/widget/ui.errors');
-const getOperationBySearchMode = require('../../ui/widget/ui.search_box_mixin').getOperationBySearchMode;
-const inArray = require('../../core/utils/array').inArray;
-const query = require('../../data/query');
-const storeHelper = require('../../data/store_helper');
-const HierarchicalDataConverter = require('./ui.data_converter');
+import Class from '../../core/class';
+import commonUtils from '../../core/utils/common';
+import iteratorUtils from '../../core/utils/iterator';
+import { each } from '../../core/utils/iterator';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import errors from '../../ui/widget/ui.errors';
+import { getOperationBySearchMode } from '../../ui/widget/ui.search_box_mixin';
+import { inArray } from '../../core/utils/array';
+import query from '../../data/query';
+import storeHelper from '../../data/store_helper';
+import HierarchicalDataConverter from './ui.data_converter';
 
 const EXPANDED = 'expanded';
 const SELECTED = 'selected';
@@ -536,4 +536,4 @@ const DataAdapter = Class.inherit({
 
 });
 
-module.exports = DataAdapter;
+export default DataAdapter;

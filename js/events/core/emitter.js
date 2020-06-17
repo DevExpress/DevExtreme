@@ -3,7 +3,7 @@ import { noop } from '../../core/utils/common';
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
 import { extend } from '../../core/utils/extend';
-import eventUtils from '../utils';
+import { isDxMouseWheelEvent, hasTouches, fireEvent } from '../utils';
 
 const Emitter = Class.inherit({
 
@@ -19,11 +19,11 @@ const Emitter = Class.inherit({
     },
 
     validate: function(e) {
-        return !eventUtils.isDxMouseWheelEvent(e);
+        return !isDxMouseWheelEvent(e);
     },
 
     validatePointers: function(e) {
-        return eventUtils.hasTouches(e) === 1;
+        return hasTouches(e) === 1;
     },
 
     allowInterruptionByMouseWheel: function() {
@@ -86,7 +86,7 @@ const Emitter = Class.inherit({
             delegateTarget: this.getElement().get(0)
         }, params);
 
-        e = eventUtils.fireEvent(eventData);
+        e = fireEvent(eventData);
 
         if(e.cancel) {
             this._cancel(e);

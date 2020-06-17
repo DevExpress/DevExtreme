@@ -1,12 +1,12 @@
-const variableWrapper = require('../../core/utils/variable_wrapper');
-const dataCoreUtils = require('../../core/utils/data');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const DataHelperMixin = require('../../data_helper');
-const DataSourceModule = require('../../data/data_source/data_source');
-const ArrayStore = require('../../data/array_store');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import variableWrapper from '../../core/utils/variable_wrapper';
+import dataCoreUtils from '../../core/utils/data';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import DataHelperMixin from '../../data_helper';
+import DataSourceModule from '../../data/data_source/data_source';
+import ArrayStore from '../../data/array_store';
+import { Deferred } from '../../core/utils/deferred';
 
 const DataExpressionMixin = extend({}, DataHelperMixin, {
 
@@ -197,4 +197,4 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     }
 });
 
-module.exports = DataExpressionMixin;
+export default DataExpressionMixin;

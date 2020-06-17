@@ -1,5 +1,5 @@
-const GroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
+import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
+import { getBoundingRect } from '../../../core/utils/position';
 
 const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
 
@@ -206,4 +206,4 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
     }
 });
 
-module.exports = VerticalGroupedStrategy;
+export default VerticalGroupedStrategy;

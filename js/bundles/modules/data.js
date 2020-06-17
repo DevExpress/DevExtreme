@@ -37,7 +37,7 @@ DevExpress.data.utils.compileSetter = require('../../core/utils/data').compileSe
 
 DevExpress.EndpointSelector = require('../../data/endpoint_selector');
 
-DevExpress.data.queryImpl = require('../../data/query').queryImpl;
+DevExpress.data.queryImpl = require('../../data/query_implementation').queryImpl;
 DevExpress.data.queryAdapters = require('../../data/query_adapters');
 
 const dataUtils = require('../../data/utils');

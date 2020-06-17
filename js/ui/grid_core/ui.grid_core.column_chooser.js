@@ -420,7 +420,7 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             columnChooser: {

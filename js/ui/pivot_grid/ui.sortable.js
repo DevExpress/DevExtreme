@@ -521,4 +521,4 @@ Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 // TODO remove dxSortableOld component
 registerComponent('dxSortableOld', Sortable);
 
-module.exports = Sortable;
+export default Sortable;

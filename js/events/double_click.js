@@ -4,11 +4,11 @@ import domAdapter from '../core/dom_adapter';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
 import clickEvent from './click';
-import eventUtils from './utils';
+import { addNamespace, fireEvent } from './utils';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';
-const NAMESPACED_CLICK_EVENT = eventUtils.addNamespace(clickEvent.name, DBLCLICK_NAMESPACE);
+const NAMESPACED_CLICK_EVENT = addNamespace(clickEvent.name, DBLCLICK_NAMESPACE);
 
 const DBLCLICK_TIMEOUT = 300;
 
@@ -36,7 +36,7 @@ const DblClick = Class.inherit({
         const timeStamp = e.timeStamp || Date.now();
 
         if(timeStamp - this._lastClickTimeStamp < DBLCLICK_TIMEOUT) {
-            eventUtils.fireEvent({
+            fireEvent({
                 type: DBLCLICK_EVENT_NAME,
                 target: domUtils.closestCommonParent(this._firstClickTarget, e.target),
                 originalEvent: e

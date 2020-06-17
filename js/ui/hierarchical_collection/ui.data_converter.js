@@ -1,8 +1,8 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const errors = require('../../ui/widget/ui.errors');
-const each = require('../../core/utils/iterator').each;
-const typeUtils = require('../../core/utils/type');
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import errors from '../../ui/widget/ui.errors';
+import { each } from '../../core/utils/iterator';
+import typeUtils from '../../core/utils/type';
 
 const DataConverter = Class.inherit({
 
@@ -229,4 +229,4 @@ const DataConverter = Class.inherit({
 
 });
 
-module.exports = DataConverter;
+export default DataConverter;

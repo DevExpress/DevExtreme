@@ -1608,4 +1608,4 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 
 registerComponent('dxFileUploader', FileUploader);
 
-module.exports = FileUploader;
+export default FileUploader;

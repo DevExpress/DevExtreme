@@ -25,7 +25,7 @@ const parseDates = function(state) {
     });
 };
 
-exports.StateStoringController = modules.ViewController.inherit((function() {
+export const StateStoringController = modules.ViewController.inherit((function() {
     const getStorage = function(options) {
         const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
 

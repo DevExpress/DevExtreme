@@ -65,12 +65,10 @@ const FakeDialogComponent = Component.inherit({
         ]);
     }
 });
-exports.FakeDialogComponent = FakeDialogComponent;
+export { FakeDialogComponent };
+export const title = '';
 
-exports.title = '';
-
-
-exports.custom = function(options) {
+export function custom(options) {
     const deferred = new Deferred();
 
     const defaultOptions = new FakeDialogComponent().option();
@@ -208,16 +206,15 @@ exports.custom = function(options) {
         show: show,
         hide: hide
     };
-};
+}
 
-
-exports.alert = function(messageHtml, title, showTitle) {
+export function alert(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return exports.custom(options).show();
-};
+}
 
-exports.confirm = function(messageHtml, title, showTitle) {
+export function confirm(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml)
         ? messageHtml
         : {
@@ -232,4 +229,4 @@ exports.confirm = function(messageHtml, title, showTitle) {
         };
 
     return exports.custom(options).show();
-};
+}

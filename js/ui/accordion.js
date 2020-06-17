@@ -439,4 +439,4 @@ const Accordion = CollectionWidget.inherit({
 
 registerComponent('dxAccordion', Accordion);
 
-module.exports = Accordion;
+export default Accordion;

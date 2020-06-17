@@ -1,15 +1,15 @@
-const $ = require('../core/renderer');
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const inflector = require('../core/utils/inflector');
-const iteratorUtils = require('../core/utils/iterator');
-const isDefined = require('../core/utils/type').isDefined;
-const extend = require('../core/utils/extend').extend;
-const windowUtils = require('../core/utils/window');
-const getPublicElement = require('../core/element').getPublicElement;
-const deferRender = require('../core/utils/common').deferRender;
-const ScrollView = require('./scroll_view');
-const CollectionWidget = require('./collection/ui.collection_widget.edit');
+import $ from '../core/renderer';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import inflector from '../core/utils/inflector';
+import iteratorUtils from '../core/utils/iterator';
+import { isDefined } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import windowUtils from '../core/utils/window';
+import { getPublicElement } from '../core/element';
+import { deferRender } from '../core/utils/common';
+import ScrollView from './scroll_view';
+import CollectionWidget from './collection/ui.collection_widget.edit';
 
 const TILEVIEW_CLASS = 'dx-tileview';
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
@@ -508,4 +508,4 @@ const TileView = CollectionWidget.inherit({
 
 registerComponent('dxTileView', TileView);
 
-module.exports = TileView;
+export default TileView;

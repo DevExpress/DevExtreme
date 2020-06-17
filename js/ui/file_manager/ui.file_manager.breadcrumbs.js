@@ -167,4 +167,4 @@ class FileManagerBreadcrumbs extends Widget {
 
 }
 
-module.exports = FileManagerBreadcrumbs;
+export default FileManagerBreadcrumbs;

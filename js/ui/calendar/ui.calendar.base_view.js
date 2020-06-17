@@ -331,4 +331,4 @@ const BaseView = Widget.inherit({
     }
 });
 
-module.exports = BaseView;
+export default BaseView;

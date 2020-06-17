@@ -1,6 +1,6 @@
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerTimeline = require('./ui.scheduler.timeline');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
+import registerComponent from '../../../core/component_registrator';
+import SchedulerTimeline from './ui.scheduler.timeline';
+import { getBoundingRect } from '../../../core/utils/position';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 
@@ -32,4 +32,4 @@ const SchedulerTimelineWeek = SchedulerTimeline.inherit({
 
 registerComponent('dxSchedulerTimelineWeek', SchedulerTimelineWeek);
 
-module.exports = SchedulerTimelineWeek;
+export default SchedulerTimelineWeek;

@@ -111,4 +111,4 @@ const DiagramMenuHelper = {
     }
 };
 
-module.exports = DiagramMenuHelper;
+export default DiagramMenuHelper;

@@ -1,6 +1,6 @@
-const $ = require('../../../core/renderer');
-const Class = require('../../../core/class');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
+import $ from '../../../core/renderer';
+import Class from '../../../core/class';
+import { getBoundingRect } from '../../../core/utils/position';
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
@@ -34,4 +34,4 @@ const currentTimeShader = Class.inherit({
     }
 });
 
-module.exports = currentTimeShader;
+export default currentTimeShader;

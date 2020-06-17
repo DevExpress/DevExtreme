@@ -1,19 +1,19 @@
-const $ = require('../core/renderer');
-const windowUtils = require('../core/utils/window');
+import $ from '../core/renderer';
+import windowUtils from '../core/utils/window';
 const window = windowUtils.getWindow();
-const getPublicElement = require('../core/element').getPublicElement;
-const domAdapter = require('../core/dom_adapter');
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const extend = require('../core/utils/extend').extend;
-const translator = require('../animation/translator');
-const positionUtils = require('../animation/position');
-const typeUtils = require('../core/utils/type');
-const mathUtils = require('../core/utils/math');
-const eventUtils = require('../events/utils');
-const Popup = require('./popup');
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
+import { getPublicElement } from '../core/element';
+import domAdapter from '../core/dom_adapter';
+import eventsEngine from '../events/core/events_engine';
+import registerComponent from '../core/component_registrator';
+import commonUtils from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import translator from '../animation/translator';
+import positionUtils from '../animation/position';
+import typeUtils from '../core/utils/type';
+import mathUtils from '../core/utils/math';
+import { addNamespace } from '../events/utils';
+import Popup from './popup';
+import { getBoundingRect } from '../core/utils/position';
 
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
@@ -73,7 +73,7 @@ const attachEvent = function(that, name) {
         return;
     }
 
-    const eventName = eventUtils.addNamespace(event, that.NAME);
+    const eventName = addNamespace(event, that.NAME);
     const action = that._createAction((function() {
         const delay = getEventDelay(that, name + 'Event');
         this._clearEventsTimeouts();
@@ -108,7 +108,7 @@ const detachEvent = function(that, target, name, event) {
         return;
     }
 
-    eventName = eventUtils.addNamespace(eventName, that.NAME);
+    eventName = addNamespace(eventName, that.NAME);
 
     const EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
     if(that[EVENT_HANDLER_NAME]) {
@@ -597,4 +597,4 @@ const Popover = Popup.inherit({
 
 registerComponent('dxPopover', Popover);
 
-module.exports = Popover;
+export default Popover;

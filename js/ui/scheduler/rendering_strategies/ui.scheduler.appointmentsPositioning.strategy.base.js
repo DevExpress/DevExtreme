@@ -79,4 +79,4 @@ class AppointmentPositioningStrategy {
     }
 }
 
-module.exports = AppointmentPositioningStrategy;
+export default AppointmentPositioningStrategy;

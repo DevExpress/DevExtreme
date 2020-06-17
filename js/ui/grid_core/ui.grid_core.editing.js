@@ -2367,7 +2367,7 @@ const EditingController = modules.ViewController.inherit((function() {
     };
 })());
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
 

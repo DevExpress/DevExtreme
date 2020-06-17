@@ -218,4 +218,4 @@ class SpeedDialItem extends Overlay {
     }
 }
 
-module.exports = SpeedDialItem;
+export default SpeedDialItem;

@@ -541,7 +541,7 @@ const GroupingHeaderPanelExtender = (function() {
     };
 })();
 
-exports.GroupingHeaderPanelExtender = GroupingHeaderPanelExtender;
+export { GroupingHeaderPanelExtender };
 
 
 const GroupingRowsViewExtender = (function() {

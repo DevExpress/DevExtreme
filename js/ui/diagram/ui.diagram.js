@@ -2437,4 +2437,4 @@ class Diagram extends Widget {
 }
 
 registerComponent('dxDiagram', Diagram);
-module.exports = Diagram;
+export default Diagram;

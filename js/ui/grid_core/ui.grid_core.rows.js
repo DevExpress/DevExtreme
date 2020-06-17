@@ -33,7 +33,7 @@ const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             hoverStateEnabled: false,

@@ -1,9 +1,9 @@
-const errors = require('../../core/errors');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const inArray = require('../../core/utils/array').inArray;
-const isDefined = require('../../core/utils/type').isDefined;
-const dateUtils = require('../../core/utils/date');
+import errors from '../../core/errors';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { inArray } from '../../core/utils/array';
+import { isDefined } from '../../core/utils/type';
+import dateUtils from '../../core/utils/date';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -851,4 +851,4 @@ extend(resultUtils, {
     getTimeZoneOffset: getTimeZoneOffset
 });
 
-module.exports = resultUtils;
+export default resultUtils;

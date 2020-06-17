@@ -1,4 +1,4 @@
-const dateUtils = require('../../../core/utils/date');
+import dateUtils from '../../../core/utils/date';
 const MONDAY_INDEX = 1;
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;

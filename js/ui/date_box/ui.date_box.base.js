@@ -1,20 +1,20 @@
-const windowUtils = require('../../core/utils/window');
+import windowUtils from '../../core/utils/window';
 const window = windowUtils.getWindow();
-const registerComponent = require('../../core/component_registrator');
-const typeUtils = require('../../core/utils/type');
-const dom = require('../../core/utils/dom');
-const each = require('../../core/utils/iterator').each;
-const compareVersions = require('../../core/utils/version').compare;
-const extend = require('../../core/utils/extend').extend;
-const support = require('../../core/utils/support');
-const devices = require('../../core/devices');
-const config = require('../../core/config');
-const dateUtils = require('../../core/utils/date');
-const uiDateUtils = require('./ui.date_utils');
-const dateSerialization = require('../../core/utils/date_serialization');
-const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
-const dateLocalization = require('../../localization/date');
-const messageLocalization = require('../../localization/message');
+import registerComponent from '../../core/component_registrator';
+import typeUtils from '../../core/utils/type';
+import dom from '../../core/utils/dom';
+import { each } from '../../core/utils/iterator';
+import { compare as compareVersions } from '../../core/utils/version';
+import { extend } from '../../core/utils/extend';
+import support from '../../core/utils/support';
+import devices from '../../core/devices';
+import config from '../../core/config';
+import dateUtils from '../../core/utils/date';
+import uiDateUtils from './ui.date_utils';
+import dateSerialization from '../../core/utils/date_serialization';
+import DropDownEditor from '../drop_down_editor/ui.drop_down_editor';
+import dateLocalization from '../../localization/date';
+import messageLocalization from '../../localization/message';
 
 const DATEBOX_CLASS = 'dx-datebox';
 const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
@@ -753,4 +753,4 @@ const DateBox = DropDownEditor.inherit({
 
 registerComponent('dxDateBox', DateBox);
 
-module.exports = DateBox;
+export default DateBox;

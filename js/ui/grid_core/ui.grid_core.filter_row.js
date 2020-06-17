@@ -675,7 +675,7 @@ const DataControllerFilterRowExtender = {
     }
 };
 
-exports.ApplyFilterViewController = modules.ViewController.inherit({
+const ApplyFilterViewController = modules.ViewController.inherit({
     _getHeaderPanel: function() {
         if(!this._headerPanel) {
             this._headerPanel = this.getView('headerPanel');
@@ -722,7 +722,7 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             filterRow: {
@@ -853,7 +853,7 @@ module.exports = {
         };
     },
     controllers: {
-        applyFilter: exports.ApplyFilterViewController
+        applyFilter: ApplyFilterViewController
     },
     extenders: {
         controllers: {

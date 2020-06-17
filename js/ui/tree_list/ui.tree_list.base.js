@@ -181,4 +181,4 @@ TreeList.registerModule = treeListCore.registerModule.bind(treeListCore);
 
 registerComponent('dxTreeList', TreeList);
 
-module.exports = TreeList;
+export default TreeList;

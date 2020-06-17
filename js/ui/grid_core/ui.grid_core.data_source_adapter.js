@@ -8,7 +8,7 @@ import ArrayStore from '../../data/array_store';
 import arrayUtils from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
-module.exports = gridCore.Controller.inherit((function() {
+export default gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
         if(items) {
             items = items.slice(0);

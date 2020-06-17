@@ -1,6 +1,6 @@
-const query = require('../../../data/query');
-const errors = require('../../../core/errors');
-const tzData = require('./ui.scheduler.timezones_data');
+import query from '../../../data/query';
+import errors from '../../../core/errors';
+import tzData from './ui.scheduler.timezones_data';
 
 const SchedulerTimezones = {
     _displayNames: tzData.displayNames,
@@ -149,4 +149,4 @@ const SchedulerTimezones = {
     }
 };
 
-module.exports = SchedulerTimezones;
+export default SchedulerTimezones;

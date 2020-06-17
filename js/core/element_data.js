@@ -10,7 +10,7 @@ const strategyChanging = new MemorizedCallbacks();
 let beforeCleanDataFunc = function() {};
 let afterCleanDataFunc = function() {};
 
-const setDataStrategy = exports.setDataStrategy = function(value) {
+export const setDataStrategy = function(value) {
     strategyChanging.fire(value);
 
     strategy = value;
@@ -74,8 +74,6 @@ setDataStrategy({
         }
     }
 });
-
-export { setDataStrategy };
 
 export function getDataStrategy() {
     return strategy;

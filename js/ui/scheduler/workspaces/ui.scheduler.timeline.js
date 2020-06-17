@@ -1,12 +1,12 @@
-const $ = require('../../../core/renderer');
-const noop = require('../../../core/utils/common').noop;
-const extend = require('../../../core/utils/extend').extend;
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
-const registerComponent = require('../../../core/component_registrator');
-const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
-const dateUtils = require('../../../core/utils/date');
-const tableCreator = require('../ui.scheduler.table_creator');
-const HorizontalShader = require('../shaders/ui.scheduler.current_time_shader.horizontal');
+import $ from '../../../core/renderer';
+import { noop } from '../../../core/utils/common';
+import { extend } from '../../../core/utils/extend';
+import { getBoundingRect } from '../../../core/utils/position';
+import registerComponent from '../../../core/component_registrator';
+import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import dateUtils from '../../../core/utils/date';
+import tableCreator from '../ui.scheduler.table_creator';
+import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -577,4 +577,4 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);
 
-module.exports = SchedulerTimeline;
+export default SchedulerTimeline;

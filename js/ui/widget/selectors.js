@@ -1,5 +1,5 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
 
 const focusable = function(element, tabIndex) {
     if(!visible(element)) {
@@ -31,7 +31,7 @@ function visible(element) {
     return $element.is(':visible') && $element.css('visibility') !== 'hidden' && $element.parents().css('visibility') !== 'hidden';
 }
 
-module.exports = {
+export default {
     focusable: function(index, element) {
         return focusable(element, $(element).attr('tabIndex'));
     },

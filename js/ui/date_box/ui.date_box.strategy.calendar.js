@@ -1,10 +1,10 @@
-const Calendar = require('../calendar');
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const dateUtils = require('../../core/utils/date');
-const commonUtils = require('../../core/utils/common');
-const isFunction = require('../../core/utils/type').isFunction;
-const extend = require('../../core/utils/extend').extend;
-const messageLocalization = require('../../localization/message');
+import Calendar from '../calendar';
+import DateBoxStrategy from './ui.date_box.strategy';
+import dateUtils from '../../core/utils/date';
+import commonUtils from '../../core/utils/common';
+import { isFunction } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
 
 const CalendarStrategy = DateBoxStrategy.inherit({
 
@@ -178,4 +178,4 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = CalendarStrategy;
+export default CalendarStrategy;

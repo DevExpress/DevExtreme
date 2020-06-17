@@ -732,4 +732,4 @@ const Popup = Overlay.inherit({
 
 registerComponent('dxPopup', Popup);
 
-module.exports = Popup;
+export default Popup;

@@ -1743,7 +1743,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 * @hidden
 */
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             useLegacyKeyboardNavigation: false,

@@ -1,4 +1,4 @@
-const Class = require('../../../core/class');
+import Class from '../../../core/class';
 const abstract = Class.abstract;
 
 const LAST_GROUP_CELL_CLASS = 'dx-scheduler-last-group-cell';
@@ -48,4 +48,4 @@ const GroupedStrategy = Class.inherit({
 });
 
 
-module.exports = GroupedStrategy;
+export default GroupedStrategy;

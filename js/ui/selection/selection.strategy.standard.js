@@ -1,16 +1,16 @@
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
 const isDefined = typeUtils.isDefined;
 const getKeyHash = commonUtils.getKeyHash;
-const dataQuery = require('../../data/query');
-const deferredUtils = require('../../core/utils/deferred');
-const SelectionFilterCreator = require('../../core/utils/selection_filter').SelectionFilterCreator;
+import dataQuery from '../../data/query';
+import deferredUtils from '../../core/utils/deferred';
+import { SelectionFilterCreator } from '../../core/utils/selection_filter';
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
-const errors = require('../widget/ui.errors');
-const SelectionStrategy = require('./selection.strategy');
+import errors from '../widget/ui.errors';
+import SelectionStrategy from './selection.strategy';
 
-module.exports = SelectionStrategy.inherit({
+export default SelectionStrategy.inherit({
     ctor: function(options) {
         this.callBase(options);
         this._initSelectedItemKeyHash();

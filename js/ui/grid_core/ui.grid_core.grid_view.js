@@ -762,7 +762,7 @@ const GridView = modules.View.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             showBorders: false,

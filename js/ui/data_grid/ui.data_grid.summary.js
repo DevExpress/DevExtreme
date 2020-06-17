@@ -61,7 +61,7 @@ const recalculateWhileEditing = function(that) {
     return that.option('summary.recalculateWhileEditing');
 };
 
-exports.FooterView = columnsView.ColumnsView.inherit((function() {
+export const FooterView = columnsView.ColumnsView.inherit((function() {
     return {
         _getRows: function() {
             return this._dataController.footerItems();
@@ -371,7 +371,7 @@ const SummaryDataSourceAdapterClientExtender = (function() {
 dataSourceAdapter.extend(SummaryDataSourceAdapterExtender);
 dataSourceAdapter.extend(SummaryDataSourceAdapterClientExtender);
 
-exports.renderSummaryCell = renderSummaryCell;
+export { renderSummaryCell };
 
 gridCore.registerModule('summary', {
     defaultOptions: function() {

@@ -1,10 +1,10 @@
-const $ = require('../../../core/renderer');
-const registerComponent = require('../../../core/component_registrator');
-const extend = require('../../../core/utils/extend').extend;
-const publisherMixin = require('../ui.scheduler.publisher_mixin');
-const messageLocalization = require('../../../localization/message');
-const Editor = require('../../editor/editor');
-const SelectBox = require('../../select_box');
+import $ from '../../../core/renderer';
+import registerComponent from '../../../core/component_registrator';
+import { extend } from '../../../core/utils/extend';
+import publisherMixin from '../ui.scheduler.publisher_mixin';
+import messageLocalization from '../../../localization/message';
+import Editor from '../../editor/editor';
+import SelectBox from '../../select_box';
 
 const TIMEZONE_EDITOR_CLASS = 'dx-timezone-editor';
 const TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS = 'dx-timezone-display-name';
@@ -122,4 +122,4 @@ const SchedulerTimezoneEditor = Editor.inherit({
 
 registerComponent('dxSchedulerTimezoneEditor', {}, SchedulerTimezoneEditor);
 
-module.exports = SchedulerTimezoneEditor;
+export default SchedulerTimezoneEditor;

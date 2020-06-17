@@ -1,5 +1,5 @@
-const Errors = require('../widget/ui.errors');
-const Diagram = require('devexpress-diagram');
+import Errors from '../widget/ui.errors';
+import Diagram from 'devexpress-diagram';
 
 function getDiagram() {
     if(!Diagram) {
@@ -9,4 +9,4 @@ function getDiagram() {
     return Diagram;
 }
 
-module.exports.getDiagram = getDiagram;
+export { getDiagram };

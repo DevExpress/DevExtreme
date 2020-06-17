@@ -355,4 +355,4 @@ RadioGroup.include(DataExpressionMixin);
 
 registerComponent('dxRadioGroup', RadioGroup);
 
-module.exports = RadioGroup;
+export default RadioGroup;

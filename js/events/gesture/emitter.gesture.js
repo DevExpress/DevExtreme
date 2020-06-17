@@ -9,7 +9,7 @@ const ready = readyCallbacks.add;
 import mathUtils from '../../core/utils/math';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import eventUtils from '../utils';
+import { needSkipEvent, createEvent, eventData, isDxMouseWheelEvent, eventDelta, isTouchEvent } from '../utils';
 import Emitter from '../core/emitter';
 const sign = mathUtils.sign;
 const abs = Math.abs;
@@ -84,13 +84,13 @@ const GestureEmitter = Emitter.inherit({
     },
 
     start: function(e) {
-        if(e._needSkipEvent || eventUtils.needSkipEvent(e)) {
+        if(e._needSkipEvent || needSkipEvent(e)) {
             this._cancel(e);
             return;
         }
 
-        this._startEvent = eventUtils.createEvent(e);
-        this._startEventData = eventUtils.eventData(e);
+        this._startEvent = createEvent(e);
+        this._startEventData = eventData(e);
 
         this._stage = INITED;
         this._init(e);
@@ -137,7 +137,7 @@ const GestureEmitter = Emitter.inherit({
 
     _directionConfirmed: function(e) {
         const touchBoundary = this._getTouchBoundary(e);
-        const delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
+        const delta = eventDelta(this._startEventData, eventData(e));
         const deltaX = abs(delta.x);
         const deltaY = abs(delta.y);
 
@@ -157,12 +157,12 @@ const GestureEmitter = Emitter.inherit({
     },
 
     _getTouchBoundary: function(e) {
-        return (this.immediate || eventUtils.isDxMouseWheelEvent(e)) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
+        return (this.immediate || isDxMouseWheelEvent(e)) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
     },
 
     _adjustStartEvent: function(e) {
         const touchBoundary = this._getTouchBoundary(e);
-        const delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
+        const delta = eventDelta(this._startEventData, eventData(e));
 
         this._startEvent.pageX += sign(delta.x) * touchBoundary;
         this._startEvent.pageY += sign(delta.y) * touchBoundary;
@@ -187,7 +187,7 @@ const GestureEmitter = Emitter.inherit({
     },
 
     _clearSelection: function(e) {
-        if(eventUtils.isDxMouseWheelEvent(e) || eventUtils.isTouchEvent(e)) {
+        if(isDxMouseWheelEvent(e) || isTouchEvent(e)) {
             return;
         }
 

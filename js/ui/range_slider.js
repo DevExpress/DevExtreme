@@ -1,12 +1,12 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const Slider = require('./slider');
-const SliderHandle = require('./slider/ui.slider_handle');
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const applyServerDecimalSeparator = require('../core/utils/common').applyServerDecimalSeparator;
-const eventUtils = require('../events/utils');
-const messageLocalization = require('../localization/message');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import Slider from './slider';
+import SliderHandle from './slider/ui.slider_handle';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import { applyServerDecimalSeparator } from '../core/utils/common';
+import eventUtils from '../events/utils';
+import messageLocalization from '../localization/message';
 
 const RANGE_SLIDER_CLASS = 'dx-rangeslider';
 const RANGE_SLIDER_START_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-start-handle';
@@ -352,4 +352,4 @@ const RangeSlider = Slider.inherit({
 
 registerComponent('dxRangeSlider', RangeSlider);
 
-module.exports = RangeSlider;
+export default RangeSlider;

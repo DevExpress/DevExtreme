@@ -16,6 +16,7 @@ import { addNamespace } from '../../events/utils';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
 import simulatedStrategy from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';
+import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE = 'dxScrollable';
@@ -28,30 +29,6 @@ const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
-
-const deviceDependentOptions = function() {
-    return [{
-        device: function() {
-            return !support.nativeScrolling;
-        },
-        options: {
-            useNative: false
-        }
-    }, {
-        device: function(device) {
-            return !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
-        },
-        options: {
-            bounceEnabled: false,
-
-            scrollByThumb: true,
-
-            scrollByContent: support.touch,
-
-            showScrollbar: 'onHover'
-        }
-    }];
-};
 
 const Scrollable = DOMComponent.inherit({
 
@@ -584,6 +561,4 @@ const Scrollable = DOMComponent.inherit({
 
 registerComponent(SCROLLABLE, Scrollable);
 
-module.exports = Scrollable;
-
-module.exports.deviceDependentOptions = deviceDependentOptions;
+export default Scrollable;

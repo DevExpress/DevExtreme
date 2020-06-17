@@ -779,4 +779,4 @@ class FileManager extends Widget {
 
 registerComponent('dxFileManager', FileManager);
 
-module.exports = FileManager;
+export default FileManager;

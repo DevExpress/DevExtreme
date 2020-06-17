@@ -462,7 +462,7 @@ function prepareFields(fields) {
     });
 }
 
-module.exports = Class.inherit((function() {
+export default Class.inherit((function() {
     return {
         ctor: function(options) {
             this._dataSource = new DataSource(options);
@@ -570,5 +570,5 @@ module.exports = Class.inherit((function() {
 })());
 
 ///#DEBUG
-module.exports.__forEachGroup = forEachGroup;
+export { forEachGroup as __forEachGroup };
 ///#ENDDEBUG

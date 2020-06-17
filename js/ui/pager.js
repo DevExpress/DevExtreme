@@ -1,20 +1,20 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const Class = require('../core/class');
-const stringUtils = require('../core/utils/string');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const each = require('../core/utils/iterator').each;
-const typeUtils = require('../core/utils/type');
-const extend = require('../core/utils/extend').extend;
-const clickEvent = require('../events/click');
-const pointerEvents = require('../events/pointer');
-const messageLocalization = require('../localization/message');
-const Widget = require('./widget/ui.widget');
-const SelectBox = require('./select_box');
-const NumberBox = require('./number_box');
-const eventUtils = require('../events/utils');
-const accessibility = require('./shared/accessibility');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import Class from '../core/class';
+import stringUtils from '../core/utils/string';
+import registerComponent from '../core/component_registrator';
+import commonUtils from '../core/utils/common';
+import { each } from '../core/utils/iterator';
+import typeUtils from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import clickEvent from '../events/click';
+import pointerEvents from '../events/pointer';
+import messageLocalization from '../localization/message';
+import Widget from './widget/ui.widget';
+import SelectBox from './select_box';
+import NumberBox from './number_box';
+import { addNamespace } from '../events/utils';
+import accessibility from './shared/accessibility';
 
 const PAGES_LIMITER = 4;
 const PAGER_CLASS = 'dx-pager';
@@ -308,7 +308,7 @@ const Pager = Widget.inherit({
         if(pagesLength > 1) {
             that._pageClickHandler = this._wrapClickAction(clickPagesIndexAction);
 
-            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + 'Pages'), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
+            eventsEngine.on(that._$pagesChooser, addNamespace([pointerEvents.up, clickEvent.name], that.Name + 'Pages'), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
 
             accessibility.registerKeyboardAction('pager', that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
         }
@@ -371,7 +371,7 @@ const Pager = Widget.inherit({
             .addClass(PAGER_PAGES_COUNT_CLASS)
             .text(pageCount);
 
-        eventsEngine.on($pageCount, eventUtils.addNamespace(clickEvent.name, that.Name + 'PagesCount'), function(e) {
+        eventsEngine.on($pageCount, addNamespace(clickEvent.name, that.Name + 'PagesCount'), function(e) {
             clickAction({ event: e });
         });
 
@@ -449,7 +449,7 @@ const Pager = Widget.inherit({
         that._testCurrentPageSize = currentPageSize;
         ///#ENDDEBUG
 
-        eventsEngine.on(that._$pagesSizeChooser, eventUtils.addNamespace(clickEvent.name, that.Name + 'PageSize'), PAGER_PAGE_SIZE_CLASS_SELECTOR, function(e) {
+        eventsEngine.on(that._$pagesSizeChooser, addNamespace(clickEvent.name, that.Name + 'PageSize'), PAGER_PAGE_SIZE_CLASS_SELECTOR, function(e) {
             clickPagesSizeAction({ event: e });
         });
 
@@ -547,7 +547,7 @@ const Pager = Widget.inherit({
         if(that.option('showNavigationButtons') || that.option('lightModeEnabled')) {
             $button = $('<div>').addClass(PAGER_NAVIGATE_BUTTON);
 
-            eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + 'Pages'), that._wrapClickAction(clickAction));
+            eventsEngine.on($button, addNamespace([pointerEvents.up, clickEvent.name], that.Name + 'Pages'), that._wrapClickAction(clickAction));
 
             accessibility.registerKeyboardAction('pager', that, $button, undefined, clickAction);
 
@@ -697,7 +697,7 @@ const Pager = Widget.inherit({
 
     _clean: function() {
         if(this._$pagesChooser) {
-            eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], this.Name + 'Pages'), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
+            eventsEngine.off(this._$pagesChooser, addNamespace([pointerEvents.up, clickEvent.name], this.Name + 'Pages'), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
 
             accessibility.registerKeyboardAction('pager', this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
         }
@@ -759,6 +759,6 @@ const Pager = Widget.inherit({
     }
 });
 
-module.exports = Pager;
+export default Pager;
 
 registerComponent('dxPager', Pager);

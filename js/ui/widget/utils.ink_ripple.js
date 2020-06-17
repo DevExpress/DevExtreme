@@ -1,4 +1,4 @@
-const $ = require('../../core/renderer');
+import $ from '../../core/renderer';
 const INKRIPPLE_CLASS = 'dx-inkripple';
 const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
 const INKRIPPLE_SHOWING_CLASS = 'dx-inkripple-showing';
@@ -130,7 +130,7 @@ function hideWave(args, config) {
     args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);
 }
 
-module.exports = {
+export {
     initConfig,
     hideWave,
     render,

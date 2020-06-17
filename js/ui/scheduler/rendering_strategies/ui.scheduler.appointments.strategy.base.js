@@ -768,4 +768,4 @@ class BaseRenderingStrategy {
     }
 }
 
-module.exports = BaseRenderingStrategy;
+export default BaseRenderingStrategy;

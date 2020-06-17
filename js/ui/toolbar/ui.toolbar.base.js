@@ -482,4 +482,4 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
 
 registerComponent('dxToolbarBase', ToolbarBase);
 
-module.exports = ToolbarBase;
+export default ToolbarBase;

@@ -1,11 +1,11 @@
-const typeUtils = require('../../core/utils/type');
-const inArray = require('../../core/utils/array').inArray;
-const iteratorUtils = require('../../core/utils/iterator');
+import typeUtils from '../../core/utils/type';
+import { inArray } from '../../core/utils/array';
+import iteratorUtils from '../../core/utils/iterator';
 
 const DEFAULT_DATE_INTERVAL = ['year', 'month', 'day'];
 const DEFAULT_DATETIME_INTERVAL = ['year', 'month', 'day', 'hour', 'minute'];
 
-module.exports = (function() {
+export default (function() {
     const getFilterSelector = function(column, target) {
         let selector = column.dataField || column.selector;
         if(target === 'search') {
@@ -184,4 +184,4 @@ module.exports = (function() {
             }
         }
     };
-})();
+}());

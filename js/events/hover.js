@@ -3,16 +3,16 @@ import dataUtils from '../core/element_data';
 import Class from '../core/class';
 import devices from '../core/devices';
 import registerEvent from './core/event_registrator';
-import eventUtils from './utils';
+import { addNamespace, isTouchEvent, fireEvent } from './utils';
 import pointerEvents from './pointer';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';
-const POINTERENTER_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE);
+const POINTERENTER_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE);
 
 const HOVEREND_NAMESPACE = 'dxHoverEnd';
 const HOVEREND = 'dxhoverend';
-const POINTERLEAVE_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
+const POINTERLEAVE_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
 
 
 const Hover = Class.inherit({
@@ -38,11 +38,11 @@ const Hover = Class.inherit({
     },
 
     _handler: function(e) {
-        if(eventUtils.isTouchEvent(e) || devices.isSimulator()) {
+        if(isTouchEvent(e) || devices.isSimulator()) {
             return;
         }
 
-        eventUtils.fireEvent({
+        fireEvent({
             type: this._eventName,
             originalEvent: e,
             delegateTarget: e.delegateTarget

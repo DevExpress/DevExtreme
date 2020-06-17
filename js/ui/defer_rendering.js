@@ -290,4 +290,4 @@ const DeferRendering = Widget.inherit({
 
 registerComponent('dxDeferRendering', DeferRendering);
 
-module.exports = DeferRendering;
+export default DeferRendering;

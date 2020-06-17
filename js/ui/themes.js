@@ -399,27 +399,22 @@ devices.changed.add(function() {
     init({ _autoInit: true });
 });
 
-exports.current = current;
+export { current };
+export { themeReady as ready };
+export { init };
+export { attachCssClasses };
+export { detachCssClasses };
+export { waitForThemeLoad };
+export { isMaterial };
+export { isIos7 };
+export { isGeneric };
+export { isDark };
+export { isWebFontLoaded };
+export { waitWebFont };
 
-exports.ready = themeReady;
-
-exports.init = init;
-
-exports.attachCssClasses = attachCssClasses;
-exports.detachCssClasses = detachCssClasses;
-
-exports.waitForThemeLoad = waitForThemeLoad;
-exports.isMaterial = isMaterial;
-exports.isIos7 = isIos7;
-exports.isGeneric = isGeneric;
-exports.isDark = isDark;
-exports.isWebFontLoaded = isWebFontLoaded;
-exports.waitWebFont = waitWebFont;
-
-
-exports.resetTheme = function() {
+export function resetTheme() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
-};
+}
 

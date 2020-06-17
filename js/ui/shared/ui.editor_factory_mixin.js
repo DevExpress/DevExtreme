@@ -1,15 +1,15 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const eventsEngine = require('../../events/core/events_engine');
-const typeUtils = require('../../core/utils/type');
-const isWrapped = require('../../core/utils/variable_wrapper').isWrapped;
-const compileGetter = require('../../core/utils/data').compileGetter;
-const browser = require('../../core/utils/browser');
-const extend = require('../../core/utils/extend').extend;
-const devices = require('../../core/devices');
-const getPublicElement = require('../../core/element').getPublicElement;
-const normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
-const normalizeKeyName = require('../../events/utils').normalizeKeyName;
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import eventsEngine from '../../events/core/events_engine';
+import typeUtils from '../../core/utils/type';
+import { isWrapped } from '../../core/utils/variable_wrapper';
+import { compileGetter } from '../../core/utils/data';
+import browser from '../../core/utils/browser';
+import { extend } from '../../core/utils/extend';
+import devices from '../../core/devices';
+import { getPublicElement } from '../../core/element';
+import { normalizeDataSourceOptions } from '../../data/data_source/utils';
+import { normalizeKeyName } from '../../events/utils';
 
 require('../text_box');
 require('../number_box');
@@ -319,4 +319,4 @@ const EditorFactoryMixin = (function() {
     };
 })();
 
-module.exports = EditorFactoryMixin;
+export default EditorFactoryMixin;

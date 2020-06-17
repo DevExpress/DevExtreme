@@ -983,4 +983,4 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
 registerComponent('dxSchedulerAppointments', SchedulerAppointments);
 
-module.exports = SchedulerAppointments;
+export default SchedulerAppointments;

@@ -88,6 +88,6 @@ function createColumnsInfo(info, startIndex, endIndex) {
     return newInfo;
 }
 
-exports.foreachColumnInfo = foreachColumnInfo;
-exports.createColumnsInfo = createColumnsInfo;
+export { foreachColumnInfo };
+export { createColumnsInfo };
 

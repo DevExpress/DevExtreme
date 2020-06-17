@@ -1,4 +1,4 @@
-const Shader = require('./ui.scheduler.current_time_shader');
+import Shader from './ui.scheduler.current_time_shader';
 import { getBoundingRect } from '../../../core/utils/position';
 
 const HorizontalCurrentTimeShader = Shader.inherit({
@@ -32,4 +32,4 @@ const HorizontalCurrentTimeShader = Shader.inherit({
     },
 });
 
-module.exports = HorizontalCurrentTimeShader;
+export default HorizontalCurrentTimeShader;

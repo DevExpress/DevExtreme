@@ -688,7 +688,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             columnHidingEnabled: false,

@@ -4,7 +4,7 @@ import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import domUtils from '../core/utils/dom';
 import animationFrame from '../animation/frame';
-import eventUtils from './utils';
+import { addNamespace, fireEvent, eventDelta, eventData } from './utils';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
@@ -37,7 +37,7 @@ let ClickEmitter = Emitter.inherit({
     start: function(e) {
         this._blurPrevented = e.isDefaultPrevented();
         this._startTarget = e.target;
-        this._startEventData = eventUtils.eventData(e);
+        this._startEventData = eventData(e);
     },
 
     end: function(e) {
@@ -60,7 +60,7 @@ let ClickEmitter = Emitter.inherit({
         const target = e.target;
         const targetChanged = !domUtils.contains(element, target) && element !== target;
 
-        const gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData);
+        const gestureDelta = eventDelta(eventData(e), this._startEventData);
         const boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
 
         return targetChanged || boundsExceeded;
@@ -107,7 +107,7 @@ let ClickEmitter = Emitter.inherit({
             }
 
             lastFiredEvent = originalEvent;
-            eventUtils.fireEvent({
+            fireEvent({
                 type: CLICK_EVENT_NAME,
                 originalEvent: e
             });
@@ -186,8 +186,8 @@ let ClickEmitter = Emitter.inherit({
 
         const NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER';
         const document = domAdapter.getDocument();
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.subscribeGlobal(document, addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

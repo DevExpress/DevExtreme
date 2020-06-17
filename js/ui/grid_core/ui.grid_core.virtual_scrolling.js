@@ -733,7 +733,7 @@ const VirtualScrollingRowsViewExtender = (function() {
     };
 })();
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             scrolling: {

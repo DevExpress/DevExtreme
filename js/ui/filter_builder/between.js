@@ -1,5 +1,5 @@
-const $ = require('../../core/renderer');
-const extend = require('../../core/utils/extend').extend;
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
 
 const FILTER_BUILDER_RANGE_CLASS = 'dx-filterbuilder-range';
 const FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + '-start';
@@ -55,4 +55,4 @@ function getConfig(caption, context) {
     };
 }
 
-exports.getConfig = getConfig;
+export { getConfig };

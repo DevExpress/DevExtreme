@@ -243,4 +243,4 @@ DataGrid.registerModule = gridCore.registerModule.bind(gridCore);
 
 registerComponent('dxDataGrid', DataGrid);
 
-module.exports = DataGrid;
+export default DataGrid;

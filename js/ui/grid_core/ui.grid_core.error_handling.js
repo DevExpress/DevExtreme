@@ -134,7 +134,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             errorRowEnabled: true

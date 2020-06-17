@@ -1,15 +1,15 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const commonUtils = require('../core/utils/common');
-const typeUtils = require('../core/utils/type');
-const errors = require('./widget/ui.errors');
-const windowUtils = require('../core/utils/window');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import commonUtils from '../core/utils/common';
+import typeUtils from '../core/utils/type';
+import errors from './widget/ui.errors';
+import windowUtils from '../core/utils/window';
 const window = windowUtils.getWindow();
-const iteratorUtils = require('../core/utils/iterator');
-const extend = require('../core/utils/extend').extend;
-const registerComponent = require('../core/component_registrator');
-const Box = require('./box');
-const CollectionWidget = require('./collection/ui.collection_widget.edit');
+import iteratorUtils from '../core/utils/iterator';
+import { extend } from '../core/utils/extend';
+import registerComponent from '../core/component_registrator';
+import Box from './box';
+import CollectionWidget from './collection/ui.collection_widget.edit';
 
 const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
 const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
@@ -721,4 +721,4 @@ const ResponsiveBox = CollectionWidget.inherit({
 
 registerComponent('dxResponsiveBox', ResponsiveBox);
 
-module.exports = ResponsiveBox;
+export default ResponsiveBox;

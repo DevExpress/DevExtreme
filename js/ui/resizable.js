@@ -465,4 +465,4 @@ const Resizable = DOMComponent.inherit({
 
 registerComponent(RESIZABLE, Resizable);
 
-module.exports = Resizable;
+export default Resizable;

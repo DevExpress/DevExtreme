@@ -1,20 +1,20 @@
-const $ = require('../core/renderer');
-const commonUtils = require('../core/utils/common');
-const typeUtils = require('../core/utils/type');
+import $ from '../core/renderer';
+import commonUtils from '../core/utils/common';
+import typeUtils from '../core/utils/type';
 const isDefined = typeUtils.isDefined;
 const isPromise = typeUtils.isPromise;
-const extend = require('../core/utils/extend').extend;
-const inArray = require('../core/utils/array').inArray;
-const each = require('../core/utils/iterator').each;
-const deferredUtils = require('../core/utils/deferred');
-const getPublicElement = require('../core/element').getPublicElement;
+import { extend } from '../core/utils/extend';
+import { inArray } from '../core/utils/array';
+import { each } from '../core/utils/iterator';
+import deferredUtils from '../core/utils/deferred';
+import { getPublicElement } from '../core/element';
 const Deferred = deferredUtils.Deferred;
-const errors = require('../core/errors');
-const domAdapter = require('../core/dom_adapter');
-const inkRipple = require('./widget/utils.ink_ripple');
-const messageLocalization = require('../localization/message');
-const registerComponent = require('../core/component_registrator');
-const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+import errors from '../core/errors';
+import domAdapter from '../core/dom_adapter';
+import inkRipple from './widget/utils.ink_ripple';
+import messageLocalization from '../localization/message';
+import registerComponent from '../core/component_registrator';
+import DropDownList from './drop_down_editor/ui.drop_down_list';
 
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
@@ -854,4 +854,4 @@ const SelectBox = DropDownList.inherit({
 
 registerComponent('dxSelectBox', SelectBox);
 
-module.exports = SelectBox;
+export default SelectBox;

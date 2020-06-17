@@ -778,4 +778,4 @@ const Sortable = Draggable.inherit({
 
 registerComponent(SORTABLE, Sortable);
 
-module.exports = Sortable;
+export default Sortable;

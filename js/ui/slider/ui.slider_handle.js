@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const Widget = require('../widget/ui.widget');
-const Tooltip = require('../tooltip');
-const translator = require('../../animation/translator');
-const positionUtils = require('../../animation/position');
-const mathUtils = require('../../core/utils/math');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const getBoundingRect = require('../../core/utils/position').getBoundingRect;
-const numberLocalization = require('../../localization/number');
+import $ from '../../core/renderer';
+import Widget from '../widget/ui.widget';
+import Tooltip from '../tooltip';
+import translator from '../../animation/translator';
+import positionUtils from '../../animation/position';
+import mathUtils from '../../core/utils/math';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
+import numberLocalization from '../../localization/number';
 
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
@@ -279,4 +279,4 @@ const SliderHandle = Widget.inherit({
     }
 });
 
-module.exports = SliderHandle;
+export default SliderHandle;

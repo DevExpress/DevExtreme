@@ -1,21 +1,21 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const typeUtils = require('../core/utils/type');
-const windowUtils = require('../core/utils/window');
-const extend = require('../core/utils/extend').extend;
-const getPublicElement = require('../core/element').getPublicElement;
-const fx = require('../animation/fx');
-const clickEvent = require('../events/click');
-const translator = require('../animation/translator');
-const devices = require('../core/devices');
-const Widget = require('./widget/ui.widget');
-const eventUtils = require('../events/utils');
-const CollectionWidget = require('./collection/ui.collection_widget.edit');
-const Swipeable = require('../events/gesture/swipeable');
-const BindableTemplate = require('../core/templates/bindable_template').BindableTemplate;
-const Deferred = require('../core/utils/deferred').Deferred;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import registerComponent from '../core/component_registrator';
+import commonUtils from '../core/utils/common';
+import typeUtils from '../core/utils/type';
+import windowUtils from '../core/utils/window';
+import { extend } from '../core/utils/extend';
+import { getPublicElement } from '../core/element';
+import fx from '../animation/fx';
+import clickEvent from '../events/click';
+import translator from '../animation/translator';
+import devices from '../core/devices';
+import Widget from './widget/ui.widget';
+import { addNamespace } from '../events/utils';
+import CollectionWidget from './collection/ui.collection_widget.edit';
+import Swipeable from '../events/gesture/swipeable';
+import { BindableTemplate } from '../core/templates/bindable_template';
+import { Deferred } from '../core/utils/deferred';
 
 const GALLERY_CLASS = 'dx-gallery';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
@@ -61,7 +61,7 @@ const GalleryNavButton = Widget.inherit({
 
         const that = this;
         const $element = this.$element();
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEvent.name, this.NAME);
 
         $element.addClass(GALLERY_CLASS + '-nav-button-' + this.option('direction'));
 
@@ -313,7 +313,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _renderDragHandler: function() {
-        const eventName = eventUtils.addNamespace('dragstart', this.NAME);
+        const eventName = addNamespace('dragstart', this.NAME);
 
         eventsEngine.off(this.$element(), eventName);
         eventsEngine.on(this.$element(), eventName, 'img', function() { return false; });
@@ -654,8 +654,8 @@ const Gallery = CollectionWidget.inherit({
 
         const indicatorSelectAction = this._createAction(this._indicatorSelectHandler);
 
-        eventsEngine.off(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
-        eventsEngine.on(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
+        eventsEngine.off(rootElement, addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
+        eventsEngine.on(rootElement, addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
             indicatorSelectAction({ event: e });
         });
     },
@@ -1145,4 +1145,4 @@ const Gallery = CollectionWidget.inherit({
 
 registerComponent('dxGallery', Gallery);
 
-module.exports = Gallery;
+export default Gallery;

@@ -1,2 +1,2 @@
-
-module.exports = require('./gantt/ui.gantt');
+import Gantt from './gantt/ui.gantt';
+export default Gantt;
