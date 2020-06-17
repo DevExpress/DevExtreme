@@ -16,7 +16,7 @@ export const viewFunction = (viewModel: Marker) => (
   >
     <div
       className={TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY}
-      style={{ background: viewModel.appointmentColor! }}
+      style={viewModel.style}
     />
   </div>
 );
@@ -41,5 +41,9 @@ export default class Marker extends JSXComponent(MarkerProps) {
     color?.done((value) => {
       this.appointmentColor = value;
     });
+  }
+
+  get style() {
+    return { background: this.appointmentColor! };
   }
 }

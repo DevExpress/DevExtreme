@@ -22,11 +22,13 @@ describe('Marker', () => {
       expect(childDiv.children())
         .toHaveLength(0);
       expect(childDiv.prop('style'))
-        .toEqual({});
+        .toBeUndefined();
     });
 
     it('should set color correctly', () => {
-      const tree = shallow(<MarkerView props={defaultProps} appointmentColor="appointmentColor" />);
+      const tree = shallow(
+        <MarkerView props={defaultProps} style={{ background: 'appointmentColor' }} />,
+      );
 
       const childDiv = tree.find('.dx-tooltip-appointment-item-marker-body');
       expect(childDiv.prop('style'))
@@ -45,17 +47,19 @@ describe('Marker', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tree = shallow(<MarkerView
-        restAttributes={{ customAttribute: 'customAttribute' }}
-        props={defaultProps}
-      />);
+      const tree = shallow(
+        <MarkerView
+          restAttributes={{ customAttribute: 'customAttribute' }}
+          props={defaultProps}
+        />,
+      );
 
       expect(tree.prop('customAttribute'))
         .toBe('customAttribute');
     });
   });
 
-  describe('Effect', () => {
+  describe('Effects', () => {
     describe('colorEffect', () => {
       it('should set color correctly', () => {
         const color = 'color';
@@ -75,6 +79,20 @@ describe('Marker', () => {
         marker.colorEffect();
         expect(marker.appointmentColor)
           .toBe(undefined);
+      });
+    });
+  });
+
+  describe('Getters', () => {
+    describe('style', () => {
+      it('should return correct style', () => {
+        const color = 'color';
+
+        const marker = new Marker({});
+        marker.appointmentColor = color;
+
+        expect(marker.style)
+          .toEqual({ background: 'color' });
       });
     });
   });

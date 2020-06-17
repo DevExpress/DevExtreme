@@ -38,10 +38,12 @@ describe('TooltipItemLayout', () => {
     };
 
     it('should combine `className` with predefined classes', () => {
-      const tree = shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps, className: 'custom-class' }}
-        {...defaultViewModel}
-      />).childAt(0);
+      const tree = shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps, className: 'custom-class' }}
+          {...defaultViewModel}
+        />,
+      ).childAt(0);
 
       expect(tree.hasClass('dx-tooltip-appointment-item'))
         .toBe(true);
@@ -50,21 +52,25 @@ describe('TooltipItemLayout', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tree = shallow(<TooltipItemLayoutView
-        restAttributes={{ customAttribute: 'customAttribute' }}
-        props={defaultProps}
-        {...defaultViewModel}
-      />);
+      const tree = shallow(
+        <TooltipItemLayoutView
+          restAttributes={{ customAttribute: 'customAttribute' }}
+          props={defaultProps}
+          {...defaultViewModel}
+        />,
+      );
 
       expect(tree.childAt(0).prop('customAttribute'))
         .toBe('customAttribute');
     });
 
     it('should render appointment item with marker, content and delete button', () => {
-      const tree = shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps }}
-        {...defaultViewModel}
-      />);
+      const tree = shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps }}
+          {...defaultViewModel}
+        />,
+      );
 
       expect(tree.type())
         .toBe(Fragment);
@@ -88,10 +94,12 @@ describe('TooltipItemLayout', () => {
     });
 
     it('should pass correct props to Marker', () => {
-      const marker = shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps }}
-        {...defaultViewModel}
-      />).find(Marker);
+      const marker = shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps }}
+          {...defaultViewModel}
+        />,
+      ).find(Marker);
 
       expect(marker.props())
         .toMatchObject({
@@ -101,12 +109,14 @@ describe('TooltipItemLayout', () => {
 
     it('should pass correct props to DeleteButton', () => {
       const onDeleteButtonClick = jest.fn();
-      const deleteButton = shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps }}
-        {...defaultViewModel}
-        currentAppointment={defaultProps.item.currentData}
-        onDeleteButtonClick={onDeleteButtonClick}
-      />).find(DeleteButton);
+      const deleteButton = shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps }}
+          {...defaultViewModel}
+          currentAppointment={defaultProps.item.currentData}
+          onDeleteButtonClick={onDeleteButtonClick}
+        />,
+      ).find(DeleteButton);
 
       expect(deleteButton.props())
         .toMatchObject({
@@ -117,11 +127,13 @@ describe('TooltipItemLayout', () => {
     });
 
     it('should pass correct props to item content', () => {
-      const content = shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps }}
-        {...defaultViewModel}
-        currentAppointment={defaultProps.item?.currentData}
-      />).find(TooltipItemContent);
+      const content = shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps }}
+          {...defaultViewModel}
+          currentAppointment={defaultProps.item?.currentData}
+        />,
+      ).find(TooltipItemContent);
 
       expect(content.props())
         .toMatchObject({
@@ -131,10 +143,12 @@ describe('TooltipItemLayout', () => {
     });
 
     it('should not render DeleteButton if showDeleteButton is false', () => {
-      const tree = shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps, showDeleteButton: false }}
-        {...defaultViewModel}
-      />);
+      const tree = shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps, showDeleteButton: false }}
+          {...defaultViewModel}
+        />,
+      );
 
       expect(tree.find(DeleteButton).exists())
         .toBe(false);
@@ -144,11 +158,13 @@ describe('TooltipItemLayout', () => {
       const currentAppointment: dxSchedulerAppointment = { text: 'currentAppointment' };
       const template = () => null;
       let container;
-      const render = () => shallow(<TooltipItemLayoutView
-        props={{ ...defaultProps, itemContentTemplate: template, container }}
-        {...defaultViewModel}
-        currentAppointment={currentAppointment}
-      />);
+      const render = () => shallow(
+        <TooltipItemLayoutView
+          props={{ ...defaultProps, itemContentTemplate: template, container }}
+          {...defaultViewModel}
+          currentAppointment={currentAppointment}
+        />,
+      );
       beforeAll(() => {
         container = shallow(<div />);
       });
@@ -178,10 +194,12 @@ describe('TooltipItemLayout', () => {
       });
 
       it('should rerender template in runtime', () => {
-        const tree = shallow(<TooltipItemLayoutView
-          props={{ ...defaultProps }}
-          {...defaultViewModel}
-        />);
+        const tree = shallow(
+          <TooltipItemLayoutView
+            props={{ ...defaultProps }}
+            {...defaultViewModel}
+          />,
+        );
 
         expect(tree.find(template).exists())
           .toBe(false);
