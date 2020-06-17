@@ -1,4 +1,3 @@
-
 import path from 'path';
 import fs from 'fs';
 import { metadata } from '../data/metadata';

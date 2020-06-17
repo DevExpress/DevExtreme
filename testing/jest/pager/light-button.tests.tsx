@@ -9,7 +9,6 @@ import * as LightButtonModule from '../../../js/renovation/pager/light-button';
 
 const { dxClickEffect } = LightButtonModule;
 
-
 jest.mock('../../../js/ui/shared/accessibility');
 
 describe('LightButton', () => {

@@ -2,7 +2,6 @@ import { h, createRef } from 'preact';
 import { shallow } from 'enzyme';
 import InfoText, { viewFunction as InfoTextComponent } from '../../../js/renovation/pager/info';
 
-
 describe('Info, separate view and component approach', () => {
   describe('View', () => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
