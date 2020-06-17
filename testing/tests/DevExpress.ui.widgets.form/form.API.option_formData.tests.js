@@ -451,10 +451,12 @@ QUnit.module('Checkbox editor field', () => {
     [{}, null, undefined].forEach(newFormData => {
         QUnit.test(`form.option('formData', ${newFormData})`, function(assert) {
             const form = $('#form').dxForm({
-                formData: { boolA: true, boolB: false, boolC: undefined, strA: 'ABC', strB: '', strC: undefined, numA: 1, numB: 0, numC: undefined },
+                formData: { boolA: true, boolB: false, strA: 'ABC', strB: '' },
                 items: [
                     { dataField: 'boolA', editorType: 'dxCheckBox' },
-                    { dataField: 'boolB', editorType: 'dxCheckBox' }
+                    { dataField: 'boolB', editorType: 'dxCheckBox' },
+                    { dataField: 'strA', editorType: 'dxCheckBox' },
+                    { dataField: 'strB', editorType: 'dxCheckBox' }
                 ]
             }).dxForm('instance');
 
