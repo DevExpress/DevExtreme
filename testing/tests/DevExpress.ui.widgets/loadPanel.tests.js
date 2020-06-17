@@ -48,15 +48,16 @@ QUnit.module('init', {
         try {
             const onShowingSpy = sinon.spy();
 
-            $('#loadPanel').dxLoadPanel({
+            const instance = $('#loadPanel').dxLoadPanel({
                 templatesRenderAsynchronously: true,
                 visible: true,
                 onShowing: onShowingSpy
-            });
+            }).dxLoadPanel('instance');
 
-            assert.strictEqual(onShowingSpy.called, 0);
+            assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
+            assert.strictEqual(onShowingSpy.called, false);
             clock.tick();
-            assert.strictEqual(onShowingSpy.called, 1);
+            assert.strictEqual(onShowingSpy.called, true);
         } finally {
             clock.restore();
         }
