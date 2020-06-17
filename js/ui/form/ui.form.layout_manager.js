@@ -149,7 +149,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _isCheckboxUndefinedStateEnabled: function(editorOption) {
-        if(editorOption.checkboxUndefinedStateEnabled !== true || editorOption.editorType !== 'dxCheckBox') {
+        if(editorOption.allowIndeterminateState !== true || editorOption.editorType !== 'dxCheckBox') {
             return false;
         }
 
@@ -277,7 +277,7 @@ const LayoutManager = Widget.inherit({
         }
 
         if(item.editorType === 'dxCheckBox') {
-            item.checkboxUndefinedStateEnabled = item.checkboxUndefinedStateEnabled ?? true;
+            item.allowIndeterminateState = item.allowIndeterminateState ?? true;
         }
 
         return item;
@@ -663,7 +663,7 @@ const LayoutManager = Widget.inherit({
             labelID: labelOptions.labelID,
             id: id,
             validationBoundary: that.option('validationBoundary'),
-            checkboxUndefinedStateEnabled: item.checkboxUndefinedStateEnabled
+            allowIndeterminateState: item.allowIndeterminateState
         });
 
         this._itemsRunTimeInfo.add({
