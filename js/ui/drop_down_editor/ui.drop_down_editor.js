@@ -474,7 +474,9 @@ const DropDownEditor = TextBox.inherit({
     _renderPopupContent: noop,
 
     _renderPopup: function() {
-        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._options.cache('dropDownOptions')));
+        const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
+
+        this._popup = this._createComponent(this._$popup, Popup, popupConfig);
 
         this._popup.on({
             'showing': this._popupShowingHandler.bind(this),

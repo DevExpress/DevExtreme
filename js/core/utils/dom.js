@@ -8,6 +8,7 @@ const inArray = require('./array').inArray;
 const typeUtils = require('./type');
 const isDefined = typeUtils.isDefined;
 const isRenderer = typeUtils.isRenderer;
+const isWindow = typeUtils.isWindow;
 const htmlParser = require('../../core/utils/html_parser');
 let elementStrategy;
 
@@ -180,6 +181,10 @@ const contains = function(container, element) {
 
     if(domAdapter.isDocument(container)) {
         return container.documentElement.contains(element);
+    }
+
+    if(isWindow(container)) {
+        return contains(container.document, element);
     }
 
     return container.contains

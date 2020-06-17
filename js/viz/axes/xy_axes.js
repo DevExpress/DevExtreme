@@ -996,12 +996,12 @@ module.exports = {
                 seriesData.maxVisible = viewport.max;
             }
 
-            that._translator.updateBusinessRange(that.adjustViewport(seriesData));
-
-            that._breaks = that._getScaleBreaks(that._options, {
+            seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
+
+            that._translator.updateBusinessRange(that._getViewportRange());
         },
 
         hasWrap() {

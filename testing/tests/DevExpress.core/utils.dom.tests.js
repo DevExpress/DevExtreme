@@ -151,6 +151,10 @@ QUnit.test('it correctly detect the body element', function(assert) {
     assert.ok(domUtils.contains(document, body), 'Document contains the body element');
 });
 
+QUnit.test('it correctly detects the window element', function(assert) {
+    assert.ok(domUtils.contains(window, document.body), 'Window contains the body element');
+});
+
 QUnit.test('it correctly works with svg elements', function(assert) {
     const svgContainer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const childElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');

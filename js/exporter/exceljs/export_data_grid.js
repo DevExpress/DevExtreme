@@ -1,4 +1,5 @@
 import { isDefined, isString, isObject, isDate } from '../../core/utils/type';
+import errors from '../../core/errors';
 import excelFormatConverter from '../excel_format_converter';
 import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
@@ -148,7 +149,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
-                numberFormat = numberFormat.replace(/&quot;/g, '');
+                numberFormat = numberFormat.replace(/&quot;/g, '"');
             } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
                 numberFormat = '@';
             }
@@ -159,11 +160,16 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         }
 
         if(isDefined(customizeCell)) {
-            customizeCell({
-                cell: excelCell,
-                excelCell: excelCell,
-                gridCell: gridCell
+            const options = { excelCell, gridCell };
+
+            Object.defineProperty(options, 'cell', {
+                get: function() {
+                    errors.log('W0003', 'CustomizeCell handler argument', 'cell', '20.1', 'Use the \'excelCell\' field instead');
+                    return excelCell;
+                },
             });
+
+            customizeCell(options);
         }
 
         if(rowIndex < headerRowCount) {
