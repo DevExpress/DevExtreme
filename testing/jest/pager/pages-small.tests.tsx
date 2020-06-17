@@ -1,5 +1,5 @@
 import { h, createRef } from 'preact';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import PagesSmall, { viewFunction as PagesSmallComponent } from '../../../js/renovation/pager/pages-small';
 import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
 import NumberBox from '../../../js/renovation/number-box';
@@ -11,7 +11,7 @@ jest.mock('../../../js/renovation/pager/utils/get-computed-style');
 describe('Small pager pages', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const render = (props) => {
-    const tree = shallow<Element>(<PagesSmallComponent {...props} /> as any);
+    const tree = mount<Element>(<PagesSmallComponent {...props} /> as any).childAt(0);
     const pageIndexNumberBox = tree.childAt(0);
     const span = tree.childAt(1);
     const maxPage = tree.childAt(2);
@@ -25,11 +25,12 @@ describe('Small pager pages', () => {
   };
 
   it('View', () => {
+    const pageIndexRef = createRef();
     const props = {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
-      pageIndexRef: createRef() as NumberBox,
+      pageIndexRef: pageIndexRef as NumberBox,
       selectLastPageIndex: jest.fn(),
       props: { pageCount: 100, pagesCountText: 'of', rtlEnabled: true },
     } as Partial<PagesSmall>;
@@ -38,12 +39,13 @@ describe('Small pager pages', () => {
     } = render(props);
     expect(tree.props().className).toBe('dx-light-pages');
 
+    expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toEqual({
       className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: props.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toEqual({
-      children: [], index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
+      index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
     });
   });
   it('updateWidth effect', () => {
