@@ -26,27 +26,29 @@ const VerticalCurrentTimeShader = Shader.inherit({
                 this._renderTopShader(this._$shader, shaderHeight, getBoundingRect(this._$container.get(0)).width, 0);
                 this._renderAllDayShader(getBoundingRect(this._$container.get(0)).width, 0);
             } else {
-                const groupByDay = this._workspace.isGroupedByDate();
-
-                if(!groupByDay) {
-                    for(let i = 0; i < groupCount; i++) {
-                        const shaderWidth = this._getShaderWidth(i);
-                        this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
-
-                        this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
-
-                        this._renderAllDayShader(shaderWidth, i);
-                    }
-                } else {
-                    const shaderWidth = this._getShaderWidth(0);
-                    this._renderTopShader(this._$shader, shaderHeight, shaderWidth * groupCount, 0);
-
-                    this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth * groupCount - this._workspace.getCellWidth(), 0);
-
-                    this._renderAllDayShader(shaderWidth * groupCount, 0);
-                }
+                this._workspace.isGroupedByDate() ? this._renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight) : this._renderShaderParts(groupCount, shaderHeight, maxHeight);
             }
         }
+    },
+
+    _renderShaderParts: function(groupCount, shaderHeight, maxHeight) {
+        for(let i = 0; i < groupCount; i++) {
+            const shaderWidth = this._getShaderWidth(i);
+            this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
+
+            this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
+
+            this._renderAllDayShader(shaderWidth, i);
+        }
+    },
+
+    _renderGroupedByDateShaderParts: function(groupCount, shaderHeight, maxHeight) {
+        const shaderWidth = this._getShaderWidth(0);
+        this._renderTopShader(this._$shader, shaderHeight, shaderWidth * groupCount, 0);
+
+        this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth * groupCount - this._workspace.getCellWidth(), 0);
+
+        this._renderAllDayShader(shaderWidth * groupCount, 0);
     },
 
     _renderTopShader: function($shader, height, width, i) {
