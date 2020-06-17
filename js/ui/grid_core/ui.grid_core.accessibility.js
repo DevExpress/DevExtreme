@@ -1,4 +1,4 @@
-import accessibility from '../../ui/shared/accessibility';
+import * as accessibility from '../../ui/shared/accessibility';
 
 module.exports = {
     registerKeyboardAction: function(viewName, instance, $element, selector, action) {

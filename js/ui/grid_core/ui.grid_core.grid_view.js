@@ -10,7 +10,7 @@ import messageLocalization from '../../localization/message';
 import { when, Deferred } from '../../core/utils/deferred';
 import domAdapter from '../../core/dom_adapter';
 import browser from '../../core/utils/browser';
-import accessibility from '../shared/accessibility';
+import * as accessibility from '../shared/accessibility';
 
 const TABLE_CLASS = 'table';
 const BORDERS_CLASS = 'borders';
