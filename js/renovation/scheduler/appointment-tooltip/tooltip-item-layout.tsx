@@ -18,6 +18,9 @@ import TooltipItemContent from './tooltip-item-content';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
+  const formattedContent = viewModel.props.getTextAndFormatDate!(
+    viewModel.props.item!.data, viewModel.currentData,
+  );
 
   return (
     <Fragment>
@@ -41,9 +44,8 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
         >
           <Marker color={viewModel.props.item!.color} />
           <TooltipItemContent
-            appointmentData={viewModel.props.item!.data}
-            currentAppointmentData={viewModel.currentData}
-            getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
+            text={formattedContent.text}
+            formattedDate={formattedContent.formatDate}
           />
           {viewModel.props.showDeleteButton && (
             <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>

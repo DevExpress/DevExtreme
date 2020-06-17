@@ -1,15 +1,16 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import TooltipItemContent, { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content';
+import { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content';
 
 describe('TooltipItemContent', () => {
   describe('View', () => {
-    const defaultProps = {};
-    const formattedData = { text: 'text', formatDate: 'formatDate' };
+    const defaultProps = {
+      text: 'text',
+      formattedDate: 'formattedDate',
+    };
     it('should combine `className` with predefined classes', () => {
       const tree = shallow(<TooltipItemContentView
         props={{ ...defaultProps, className: 'custom-class' }}
-        formattedData={formattedData}
       />);
 
       expect(tree.hasClass('dx-tooltip-appointment-item-content'))
@@ -21,7 +22,6 @@ describe('TooltipItemContent', () => {
     it('should spread restAttributes', () => {
       const tree = shallow(<TooltipItemContentView
         restAttributes={{ customAttribute: 'customAttribute' }}
-        formattedData={formattedData}
         props={defaultProps}
       />);
 
@@ -31,7 +31,6 @@ describe('TooltipItemContent', () => {
 
     it('should render components correctly', () => {
       const tree = shallow(<TooltipItemContentView
-        formattedData={formattedData}
         props={defaultProps}
       />);
 
@@ -50,34 +49,7 @@ describe('TooltipItemContent', () => {
       expect(date.is('.dx-tooltip-appointment-item-content-date'))
         .toBe(true);
       expect(date.text())
-        .toBe('formatDate');
-    });
-  });
-
-  describe('Getters', () => {
-    describe('formattedData', () => {
-      it('should return data if other are undefiend', () => {
-        const getTextAndFormatDate = jest.fn(() => ({
-          text: 'text', formatDate: 'formatDate',
-        }));
-        const appointmentData = { text: 'appointmentData' };
-        const currentAppointmentData = { text: 'currentAppointmentData' };
-
-        const tooltipItemContent = new TooltipItemContent({
-          appointmentData, currentAppointmentData, getTextAndFormatDate,
-        });
-        const { formattedData } = tooltipItemContent;
-
-        expect(formattedData)
-          .toEqual({
-            text: 'text', formatDate: 'formatDate',
-          });
-
-        expect(getTextAndFormatDate)
-          .toHaveBeenCalledTimes(1);
-        expect(getTextAndFormatDate)
-          .toHaveBeenCalledWith(appointmentData, currentAppointmentData);
-      });
+        .toBe('formattedDate');
     });
   });
 });

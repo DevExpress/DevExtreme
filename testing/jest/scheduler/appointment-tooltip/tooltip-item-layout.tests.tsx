@@ -112,9 +112,8 @@ describe('TooltipItemLayout', () => {
 
       expect(content.props())
         .toMatchObject({
-          appointmentData: defaultProps.item?.data,
-          currentAppointmentData: defaultProps.item?.currentData,
-          getTextAndFormatDate: defaultProps.getTextAndFormatDate,
+          formattedDate: 'Formatted date',
+          text: 'Appointment text',
         });
     });
 
@@ -125,6 +124,15 @@ describe('TooltipItemLayout', () => {
 
       expect(tree.find(DeleteButton).exists())
         .toBe(false);
+    });
+
+    it('should call getTextAndFormatDate with correct parameters', () => {
+      shallow(<TooltipItemLayoutView
+        props={defaultProps}
+      />);
+
+      expect(defaultProps.getTextAndFormatDate)
+        .toHaveBeenCalledWith(defaultProps.item?.data, defaultProps.item?.currentData);
     });
 
     describe('Template', () => {
