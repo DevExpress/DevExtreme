@@ -2720,6 +2720,65 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.equal($.trim($tagContainer.text()), 'MoscowLondon', 'selected values are rendered');
     });
 
+    QUnit.test('selected tags should not be removed after enter the string with length smaller then minSearchLength (T898390)', function(assert) {
+        const items = [111, 222, 333];
+        const instance = $('#tagBox').dxTagBox({
+            items,
+            searchEnabled: true,
+            minSearchLength: 3,
+            searchTimeout: 0,
+            showSelectionControls: true,
+            opened: true
+        }).dxTagBox('instance');
+
+        const $input = instance.$element().find(`.${TEXTBOX_CLASS}`).get(0);
+        const keyboard = keyboardMock($input);
+
+        this.clock.tick(TIME_TO_WAIT);
+        keyboard
+            .focus()
+            .type('111')
+            .change();
+        this.clock.tick(TIME_TO_WAIT);
+
+        $('.dx-list-item').eq(0).trigger('dxclick');
+
+        $input.blur();
+        keyboard
+            .focus()
+            .type('1');
+
+        assert.deepEqual(instance.option('value'), [items[0]], 'tag is not removed');
+    });
+
+    QUnit.test('selected tags should not be removed after search value becomes smaller then minSearchLength (T898390)', function(assert) {
+        const items = [111, 222, 333];
+        const instance = $('#tagBox').dxTagBox({
+            items,
+            searchEnabled: true,
+            minSearchLength: 3,
+            searchTimeout: 0,
+            showSelectionControls: true,
+            opened: true
+        }).dxTagBox('instance');
+        const $input = instance.$element().find(`.${TEXTBOX_CLASS}`).get(0);
+        const keyboard = keyboardMock($input);
+
+        this.clock.tick(TIME_TO_WAIT);
+        keyboard
+            .focus()
+            .type('111')
+            .change();
+        this.clock.tick(TIME_TO_WAIT);
+        $('.dx-list-item').eq(0).trigger('dxclick');
+
+        keyboard
+            .focus()
+            .press('backspace');
+
+        assert.deepEqual(instance.option('value'), [items[0]], 'tag is not removed');
+    });
+
     QUnit.test('input is positioned on the right of last tag', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: ['Moscow'],
