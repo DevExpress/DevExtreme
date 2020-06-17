@@ -12,14 +12,6 @@ const PROPERTY_NAMES = {
     recurrenceException: 'recurrenceException'
 };
 
-export const PathTimeZoneConversion = {
-    fromSourceToAppointment: 0,
-    fromAppointmentToSource: 1,
-
-    fromSourceToGrid: 3,
-    fromGridToSource: 4,
-};
-
 export default class AppointmentAdapter {
     constructor(scheduler, appointment) {
         this.scheduler = scheduler;
@@ -74,21 +66,15 @@ export default class AppointmentAdapter {
         return this.calculateDate(this.endDate, this.endDateTimeZone, pathTimeZoneConversion);
     }
 
-    calculateDate(date, dateTimeZone, pathTimeZoneConversion) {
-        if(!date) {
+    calculateDate(date, appointmentTimeZone, pathTimeZoneConversion) {
+        if(!date) { // TODO:
             return undefined;
         }
-        switch(pathTimeZoneConversion) {
-            case PathTimeZoneConversion.fromSourceToAppointment:
-                return this.scheduler.fire('convertDateByTimezone', date, dateTimeZone, true);
-            case PathTimeZoneConversion.fromAppointmentToSource:
-                return this.scheduler.fire('convertDateByTimezoneBack', date, dateTimeZone, true);
-            case PathTimeZoneConversion.fromSourceToGrid:
-                return this.scheduler.fire('convertDateByTimezone', date, dateTimeZone);
-            case PathTimeZoneConversion.fromGridToSource:
-                return this.scheduler.fire('convertDateByTimezoneBack', date, dateTimeZone);
-        }
-        throw new Error('not specified pathTimeZoneConversion');
+
+        return this.scheduler.timeZoneCalculator.createDate(date, {
+            appointmentTimeZone: appointmentTimeZone,
+            path: pathTimeZoneConversion
+        });
     }
 
     createModifiedAppointment(pathTimeZoneConversion) {

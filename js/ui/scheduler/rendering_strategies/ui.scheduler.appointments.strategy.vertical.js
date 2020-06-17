@@ -3,7 +3,6 @@ import { extend } from '../../../core/utils/extend';
 import { isNumeric } from '../../../core/utils/type';
 import dateUtils from '../../../core/utils/date';
 import timeZoneUtils from './../utils.timeZone';
-import { PathTimeZoneConversion } from '../appointmentAdapter';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -67,9 +66,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
 
-        // TODO
-        const newAppointment = adapter.createModifiedAppointment(PathTimeZoneConversion.fromSourceToGrid);
-        const position = this._getAppointmentCoordinates(newAppointment);
+        const position = this._getAppointmentCoordinates(appointment);
         let result = [];
 
         for(let j = 0; j < position.length; j++) {

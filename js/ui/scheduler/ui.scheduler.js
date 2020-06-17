@@ -50,6 +50,7 @@ import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month'
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import AppointmentAdapter from './appointmentAdapter';
+import TimeZoneCalculator from './timeZoneCalculator';
 
 // STYLE scheduler
 const toMs = dateUtils.dateToMilliseconds;
@@ -1241,6 +1242,8 @@ class Scheduler extends Widget {
         this._dataSourceLoadedCallback = Callbacks();
 
         this._subscribes = subscribes;
+
+        this.timeZoneCalculator = new TimeZoneCalculator(this);
     }
 
     _initTemplates() {
@@ -1998,7 +2001,7 @@ class Scheduler extends Widget {
         if(isPopupEditing) {
             this._updatedRecAppointment = updatedAppointment;
 
-            this._showAppointmentPopup(singleAppointment, true, false);
+            this._appointmentPopup.show(singleAppointment, true);
             this._editAppointmentData = targetAppointment;
 
         } else {
@@ -2154,10 +2157,10 @@ class Scheduler extends Widget {
                     appointmentStartDate = settings && settings.originalAppointmentStartDate;
                     appointmentEndDate = settings && settings.originalAppointmentEndDate;
 
-                    if(this._isAppointmentRecurrence(appointmentData)) {
-                        appointmentStartDate = settings && settings.startDate;
-                        appointmentEndDate = settings && settings.endDate;
-                    }
+                    // if(this._isAppointmentRecurrence(appointmentData)) {
+                    //     appointmentStartDate = settings && settings.startDate;
+                    //     appointmentEndDate = settings && settings.endDate;
+                    // }
 
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
@@ -2473,10 +2476,10 @@ class Scheduler extends Widget {
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
             if(createNewAppointment || isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
-                this._editing.allowAdding && this._showAppointmentPopup(appointmentData, true, true);
+                this._editing.allowAdding && this._appointmentPopup.show(appointmentData, true);
             } else {
                 this._editAppointmentData = appointmentData;
-                this._showAppointmentPopup(appointmentData, this._editing.allowUpdating, true);
+                this._appointmentPopup.show(appointmentData, this._editing.allowUpdating);
             }
         }.bind(this), false, true);
     }
@@ -2578,7 +2581,7 @@ class Scheduler extends Widget {
         return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
     }
 
-    createAppointmentAdapter: function(appointment) {
+    createAppointmentAdapter(appointment) {
         return new AppointmentAdapter(this, appointment);
     }
 
