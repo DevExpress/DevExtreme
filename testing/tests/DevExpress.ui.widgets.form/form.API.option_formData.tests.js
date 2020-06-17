@@ -345,11 +345,9 @@ QUnit.module('Checkbox editor field', () => {
     }
 
     function createTestData(boolValue) {
-        const data = {};
-        if(boolValue !== 'no member') {
-            data['b'] = boolValue;
-        }
-        return data;
+        return boolValue !== 'no member'
+            ? { b: boolValue }
+            : {};
     }
 
     function getItemByType(itemType, item) {
@@ -447,6 +445,21 @@ QUnit.module('Checkbox editor field', () => {
                     });
                 });
             });
+        });
+    });
+
+    [{}, null, undefined].forEach(newFormData => {
+        QUnit.test(`form.option('formData', ${newFormData})`, function(assert) {
+            const form = $('#form').dxForm({
+                formData: { boolA: true, boolB: false, boolC: undefined, strA: 'ABC', strB: '', strC: undefined, numA: 1, numB: 0, numC: undefined },
+                items: [
+                    { dataField: 'boolA', editorType: 'dxCheckBox' },
+                    { dataField: 'boolB', editorType: 'dxCheckBox' }
+                ]
+            }).dxForm('instance');
+
+            form.option('formData', newFormData);
+            assert.propEqual(form.option('formData'), {});
         });
     });
 });
