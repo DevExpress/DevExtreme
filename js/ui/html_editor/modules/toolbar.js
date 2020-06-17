@@ -69,6 +69,11 @@ class ToolbarModule extends BaseModule {
         }
     }
 
+    _applyFormat(formatArgs, event) {
+        this._editorInstance._saveValueChangeEvent(event);
+        this.quill.format(...formatArgs);
+    }
+
     _addCallbacks() {
         this._editorInstance.addCleanCallback(this.clean.bind(this));
         this._editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
@@ -80,12 +85,12 @@ class ToolbarModule extends BaseModule {
     }
 
     _getDefaultClickHandler(formatName) {
-        return (e) => {
+        return ({ event }) => {
             const formats = this.quill.getFormat();
             const value = formats[formatName];
             const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-            this.quill.format(formatName, newValue, USER_ACTION);
+            this._applyFormat([formatName, newValue, USER_ACTION], event);
 
             this._updateFormatWidget(formatName, newValue, formats);
         };
@@ -130,17 +135,19 @@ class ToolbarModule extends BaseModule {
             alignRight: this._prepareShortcutHandler('align', 'right'),
             alignJustify: this._prepareShortcutHandler('align', 'justify'),
             codeBlock: this._getDefaultClickHandler('code-block'),
-            undo: () => {
+            undo: ({ event }) => {
+                this._editorInstance._saveValueChangeEvent(event);
                 this.quill.history.undo();
             },
-            redo: () => {
+            redo: ({ event }) => {
+                this._editorInstance._saveValueChangeEvent(event);
                 this.quill.history.redo();
             },
-            increaseIndent: () => {
-                this.quill.format('indent', '+1', USER_ACTION);
+            increaseIndent: ({ event }) => {
+                this._applyFormat(['indent', '+1', USER_ACTION], event);
             },
-            decreaseIndent: () => {
-                this.quill.format('indent', '-1', USER_ACTION);
+            decreaseIndent: ({ event }) => {
+                this._applyFormat(['indent', '-1', USER_ACTION], event);
             },
             superscript: this._prepareShortcutHandler('script', 'super'),
             subscript: this._prepareShortcutHandler('script', 'sub')
@@ -148,11 +155,11 @@ class ToolbarModule extends BaseModule {
     }
 
     _prepareShortcutHandler(formatName, shortcutValue) {
-        return () => {
+        return ({ event }) => {
             const formats = this.quill.getFormat();
             const value = formats[formatName] === shortcutValue ? false : shortcutValue;
 
-            this.quill.format(formatName, value, USER_ACTION);
+            this._applyFormat([formatName, value, USER_ACTION], event);
             this.updateFormatWidgets(true);
         };
     }
@@ -176,12 +183,13 @@ class ToolbarModule extends BaseModule {
                 items: this._getLinkFormItems(selection)
             });
 
-            promise.done((formData) => {
+            promise.done((formData, event) => {
                 if(selection && !hasEmbedContent) {
                     const text = formData.text || formData.href;
                     const { index, length } = selection;
 
                     formData.text = undefined;
+                    this._editorInstance._saveValueChangeEvent(event);
 
                     length && this.quill.deleteText(index, length, SILENT_ACTION);
                     this.quill.insertText(index, text, 'link', formData, USER_ACTION);
@@ -189,7 +197,7 @@ class ToolbarModule extends BaseModule {
 
                 } else {
                     formData.text = !selection && !formData.text ? formData.href : formData.text;
-                    this.quill.format('link', formData, USER_ACTION);
+                    this._applyFormat(['link', formData, USER_ACTION], event);
                 }
             });
 
@@ -250,8 +258,10 @@ class ToolbarModule extends BaseModule {
             });
 
             promise
-                .done((formData) => {
+                .done((formData, event) => {
                     let index = defaultIndex;
+
+                    this._editorInstance._saveValueChangeEvent(event);
 
                     if(isUpdateDialog) {
                         index = formatIndex;
@@ -416,7 +426,7 @@ class ToolbarModule extends BaseModule {
                 placeholder: titleize(item.formatName),
                 onValueChanged: (e) => {
                     if(!this._isReset) {
-                        this.quill.format(item.formatName, e.value, USER_ACTION);
+                        this._applyFormat([item.formatName, e.value, USER_ACTION], e.event);
                         this._setValueSilent(e.component, e.value);
                     }
                 }
@@ -446,8 +456,8 @@ class ToolbarModule extends BaseModule {
                 }]
             });
 
-            promise.done((formData) => {
-                this.quill.format(formatName, formData[formatName], USER_ACTION);
+            promise.done((formData, event) => {
+                this._applyFormat([formatName, formData[formatName], USER_ACTION], event);
             });
             promise.fail(() => {
                 this.quill.focus();

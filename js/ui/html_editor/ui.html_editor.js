@@ -226,8 +226,19 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+        this._addKeyPressHandler();
 
         return renderContentPromise;
+    },
+
+    _addKeyPressHandler: function() {
+        const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
+
+        eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
+    },
+
+    _keyDownHandler: function(e) {
+        this._saveValueChangeEvent(e);
     },
 
     _renderHtmlEditor: function() {
