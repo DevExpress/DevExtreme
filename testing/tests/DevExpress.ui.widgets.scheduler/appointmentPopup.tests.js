@@ -260,6 +260,27 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         assert.deepEqual(scheduler.appointmentForm.getEditor('endDate').option('value'), data.endDate);
     });
 
+    QUnit.test('onAppointmentFormOpening event should pass e.popup argument', function(assert) {
+        const data = [{
+            text: 'Website Re-Design Plan',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }];
+
+        const scheduler = createScheduler({
+            dataSource: data,
+            onAppointmentFormOpening: (e) => {
+                assert.equal(e.popup.NAME, 'dxPopup', 'e.popup should be instance of dxPopup');
+
+                e.popup.option('showTitle', true);
+                e.popup.option('title', 'Information');
+            }
+        });
+
+        scheduler.appointments.dblclick();
+        assert.equal(scheduler.appointmentPopup.getPopupTitleElement().length, 1, 'title should be visible, after set dxPopup property on onAppointmentFormOpening');
+    });
+
     QUnit.test('onAppointmentFormOpening event should handle e.cancel value', function(assert) {
         const data = [{
             text: 'Website Re-Design Plan',
