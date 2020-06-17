@@ -7477,6 +7477,46 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         assert.notOk(thirdRowColumns[0].rowspan, 'rowspan of the first column of the third row');
     });
 
+    // T895529
+    QUnit.test('getVisibleColumns when there are grouped columns with showWhenGrouped', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                {
+                    caption: 'Band 1',
+                    columns: ['field1', 'field2']
+                },
+                {
+                    caption: 'Band 2',
+                    columns: [{ dataField: 'field3', showWhenGrouped: true, groupIndex: 0 }, 'field4']
+                }
+            ]
+        });
+
+        // assert
+        assert.ok(this.columnsController.isInitialized());
+
+        // act
+        const visibleColumns = this.columnsController.getVisibleColumns();
+
+        assert.equal(visibleColumns.length, 5, 'column count in second row');
+        assert.equal(visibleColumns[0].type, 'groupExpand', 'type of the first column');
+        assert.equal(visibleColumns[0].colspan, undefined, 'colspan of the first column');
+        assert.equal(visibleColumns[0].rowspan, undefined, 'rowspan of the first column');
+        assert.equal(visibleColumns[1].caption, 'Field 1', 'caption of the second column');
+        assert.equal(visibleColumns[1].colspan, undefined, 'colspan of the second column');
+        assert.equal(visibleColumns[1].rowspan, undefined, 'rowspan of the second column');
+        assert.equal(visibleColumns[2].caption, 'Field 2', 'caption of the third column');
+        assert.equal(visibleColumns[2].colspan, undefined, 'colspan of the third column');
+        assert.equal(visibleColumns[2].rowspan, undefined, 'rowspan of the third column');
+        assert.equal(visibleColumns[3].caption, 'Field 3', 'caption of the fourth column');
+        assert.equal(visibleColumns[3].colspan, undefined, 'colspan of the fourth column');
+        assert.equal(visibleColumns[3].rowspan, undefined, 'rowspan of the fourth column');
+        assert.equal(visibleColumns[4].caption, 'Field 4', 'caption of the fifth column');
+        assert.equal(visibleColumns[4].colspan, undefined, 'colspan of the fifth column');
+        assert.equal(visibleColumns[4].rowspan, undefined, 'rowspan of the fifth column');
+    });
+
     QUnit.test('getFixedColumns for data columns', function(assert) {
         // arrange
         this.applyOptions({
