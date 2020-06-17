@@ -732,6 +732,7 @@ QUnit.module('Layout manager', () => {
             col: 0
         }, {
             dataField: 'active',
+            allowIndeterminateState: true,
             editorType: 'dxCheckBox',
             itemType: 'simple',
             visibleIndex: 1,
