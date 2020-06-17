@@ -1064,7 +1064,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _selectionChangeHandler: function(e) {
-        if(this.option('applyValueMode') === 'useButtons') {
+        if(this.option('applyValueMode') === 'useButtons' || this.option('searchValue').length < this.option('minSearchLength')) {
             return;
         }
 
