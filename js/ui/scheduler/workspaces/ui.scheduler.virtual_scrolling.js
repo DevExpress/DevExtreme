@@ -3,8 +3,25 @@ import typeUtils from '../../../core/utils/type';
 const ROW_HEIGHT = 50;
 
 export default class VirtualScrolling {
-    constructor(workspace, viewportHeight, dateTableScrollable) {
-        this._init(workspace, viewportHeight, dateTableScrollable);
+    constructor(workspace, viewportHeight, scrollable) {
+        this._workspace = workspace;
+        this._viewportHeight = viewportHeight;
+        this._scrollable = scrollable;
+
+        this._init();
+    }
+
+    // TODO get rid of the workspace
+    getWorkspace() {
+        return this._workspace;
+    }
+
+    getViewportHeight() {
+        return this._viewportHeight;
+    }
+
+    getScrollable() {
+        return this._scrollable;
     }
 
     getRowHeight() {
@@ -16,17 +33,15 @@ export default class VirtualScrolling {
     }
 
     getLayoutMap() {
-        return this._state.layoutMap;
+        return this.getState().layoutMap;
     }
 
     _setLayoutMap(layoutMap) {
         return this._state.layoutMap = layoutMap;
     }
 
-    _init(workspace, viewportHeight, dateTableScrollable) {
-        const pageSize = Math.ceil(viewportHeight / this.getRowHeight());
-        const groupCount = workspace._getGroupCount();
-        const rowCount = workspace._getTotalRowCount(groupCount);
+    _init() {
+        const pageSize = Math.ceil(this.getViewportHeight() / this.getRowHeight());
         const scrollOffset = {
             top: 0,
             left: 0
@@ -36,7 +51,7 @@ export default class VirtualScrolling {
             pageSize: pageSize,
             scrollOffset: scrollOffset,
             startIndex: -1,
-            rowCount: rowCount,
+            rowCount: 0,
             topVirtualRowCount: 0,
             bottomVirtualRowCount: 0,
             layoutMap: {
@@ -46,23 +61,24 @@ export default class VirtualScrolling {
             }
         };
 
-        this._updateState(workspace, scrollOffset);
+        this._updateState(scrollOffset);
 
-        const onScroll = dateTableScrollable.option('onScroll');
-        dateTableScrollable.option('onScroll', e => {
+        const scrollable = this.getScrollable();
+        const onScroll = scrollable.option('onScroll');
+        scrollable.option('onScroll', e => {
             if(onScroll) {
-                onScroll.bind(dateTableScrollable)();
+                onScroll.bind(scrollable)();
             }
 
-            if(this._updateState(workspace, e.scrollOffset)) {
+            if(this._updateState(e.scrollOffset)) {
                 // Renovative render
-                // TODO get rid of the workspace
-                this._updateLayoutMap(workspace);
+                this._updateLayoutMap();
             }
         });
     }
 
-    _updateState(workspace, scrollOffset) {
+    _updateState(scrollOffset) {
+        const workspace = this.getWorkspace();
         const state = this.getState();
         const top = scrollOffset.top;
         const currentStartIndex = state.startIndex;
@@ -95,7 +111,8 @@ export default class VirtualScrolling {
         return false;
     }
 
-    _updateLayoutMap(workspace) {
+    _updateLayoutMap() {
+        const workspace = this.getWorkspace();
         const groupCount = workspace._getGroupCount();
         const options = Object.assign({
             cellCount: workspace._getTotalCellCount(groupCount),
