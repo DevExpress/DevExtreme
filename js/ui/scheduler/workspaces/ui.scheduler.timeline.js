@@ -244,7 +244,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     getIndicationWidth() {
-        if(this.option('groupByDate')) {
+        if(this.isGroupedByDate()) {
             const cellCount = this.getIndicationCellCount();
             const integerPart = Math.trunc(cellCount);
             const fractionPart = cellCount - integerPart;
@@ -266,7 +266,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             $indicator.css('left', rtlOffset ? rtlOffset - width : width);
         } else {
             for(let i = 0; i < groupCount; i++) {
-                const offset = this.option('groupByDate') ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
                 $indicator = this._createIndicator($container);
                 $indicator.height(getBoundingRect($container.get(0)).height);
 

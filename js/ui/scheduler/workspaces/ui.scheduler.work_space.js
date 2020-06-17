@@ -1302,8 +1302,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellTemplate = this._getDateHeaderTemplate();
         const repeatCount = this._calculateHeaderCellRepeatCount();
         const templateCallbacks = [];
-        const colspan = this.option('groupByDate') ? this._getGroupCount() : 1;
-        const groupByDate = this.option('groupByDate');
+        const groupByDate = this.isGroupedByDate();
+        const colspan = groupByDate ? this._getGroupCount() : 1;
+
         let i;
         let j;
 
@@ -2125,7 +2126,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.option('groupByDate') ? this._getGroupCount() - 1 : groupIndex;
+        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
@@ -2415,7 +2416,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowIndex = this._getRowCount() - 1;
         let cellIndex = this._getCellCount();
 
-        if(this.option('groupByDate') && this._getGroupCount() > 0) {
+        if(this.isGroupedByDate()) {
             cellIndex = cellIndex * this._getGroupCount() - 1;
         } else {
             cellIndex = cellIndex - 1;

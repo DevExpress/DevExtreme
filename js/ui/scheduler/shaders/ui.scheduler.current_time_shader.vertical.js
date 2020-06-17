@@ -26,7 +26,7 @@ const VerticalCurrentTimeShader = Shader.inherit({
                 this._renderTopShader(this._$shader, shaderHeight, getBoundingRect(this._$container.get(0)).width, 0);
                 this._renderAllDayShader(getBoundingRect(this._$container.get(0)).width, 0);
             } else {
-                const groupByDay = this._workspace.option('groupByDate');
+                const groupByDay = this._workspace.isGroupedByDate();
 
                 if(!groupByDay) {
                     for(let i = 0; i < groupCount; i++) {

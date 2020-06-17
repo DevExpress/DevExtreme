@@ -62,7 +62,7 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     _addLastGroupCellClass: function(cellClass, index) {
-        const groupByDay = this._workSpace.option('groupByDate');
+        const groupByDay = this._workSpace.isGroupedByDate();
 
         if(groupByDay) {
             if(index % this._workSpace._getGroupCount() === 0) {
@@ -149,15 +149,8 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
         };
     },
 
-    shiftIndicator: function($indicator, height, rtlOffset, i) {
-        const groupByDay = this._workSpace.option('groupByDate');
-        let offset = 0;
-
-        if(groupByDay) {
-            offset = this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(i - 1, 0) * i;
-        } else {
-            offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i;
-        }
+    shiftIndicator: function($indicator, height, rtlOffset, groupIndex) {
+        const offset = this._getIndicatorOffset(groupIndex);
 
         const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
 
@@ -165,6 +158,18 @@ const HorizontalGroupedStrategy = GroupedStrategy.inherit({
         $indicator.css('top', height);
     },
 
+    _getIndicatorOffset: function(groupIndex) {
+        const groupByDay = this._workSpace.isGroupedByDate();
+        let offset = 0;
+
+        if(groupByDay) {
+            offset = this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+        } else {
+            offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex + this._workSpace.getIndicatorOffset(groupIndex) + groupIndex;
+        }
+
+        return offset;
+    },
 
     getShaderOffset: function(i, width) {
         const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
