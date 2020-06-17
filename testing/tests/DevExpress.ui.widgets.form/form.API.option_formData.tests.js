@@ -332,7 +332,7 @@ QUnit.test('Reset editor\'s value when set formData: {dataField1: a}', function(
 
 
 QUnit.module('Checkbox editor field', () => {
-    function checkCheckbox(form, dateField, editorValue, formValue) {
+    function checkCheckboxAndFormValue(form, dateField, editorValue, formValue) {
         const editor = form.getEditor(dateField);
         QUnit.assert.strictEqual(editor.option('value'), editorValue, `editor has ${editorValue} value`);
 
@@ -364,7 +364,7 @@ QUnit.module('Checkbox editor field', () => {
                     const editorOldValue = (oldBoolValue === 'no member' || (checkboxUndefinedStateEnabled === false && oldBoolValue === undefined))
                         ? false
                         : oldBoolValue;
-                    checkCheckbox(form, 'b', editorOldValue, oldBoolValue);
+                    checkCheckboxAndFormValue(form, 'b', editorOldValue, oldBoolValue);
 
                     const newFormData = {};
                     if(newBoolValue !== 'no member') {
@@ -374,7 +374,7 @@ QUnit.module('Checkbox editor field', () => {
                     form.updateData(newFormData);
                     const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
                     const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
-                    checkCheckbox(form, 'b', editorNewValue, formNewValue);
+                    checkCheckboxAndFormValue(form, 'b', editorNewValue, formNewValue);
                 });
 
                 QUnit.test(`checkboxUndefinedStateEnabled = ${checkboxUndefinedStateEnabled}, FormData = { innerObject: { b:  ${oldBoolValue} }} -> updateFormData({ innerObject.b = ${newBoolValue })`, function(assert) {
@@ -388,7 +388,7 @@ QUnit.module('Checkbox editor field', () => {
                     const editorOldValue = (oldBoolValue === 'no member' || (checkboxUndefinedStateEnabled === false && oldBoolValue === undefined))
                         ? false
                         : oldBoolValue;
-                    checkCheckbox(form, 'innerObject.b', editorOldValue, oldBoolValue);
+                    checkCheckboxAndFormValue(form, 'innerObject.b', editorOldValue, oldBoolValue);
 
                     const newFormData = { innerObject: { } };
                     if(newBoolValue !== 'no member') {
@@ -398,7 +398,7 @@ QUnit.module('Checkbox editor field', () => {
                     form.updateData(newFormData);
                     const editorNewValue = newBoolValue === 'no member' ? editorOldValue : newBoolValue;
                     const formNewValue = newBoolValue === 'no member' ? oldBoolValue : newBoolValue;
-                    checkCheckbox(form, 'innerObject.b', editorNewValue, formNewValue);
+                    checkCheckboxAndFormValue(form, 'innerObject.b', editorNewValue, formNewValue);
                 });
 
                 QUnit.test(`checkboxUndefinedStateEnabled = ${checkboxUndefinedStateEnabled}, FormData = { b:  ${oldBoolValue}} -> option('formData', { b: ${newBoolValue} })`, function() {
@@ -421,7 +421,7 @@ QUnit.module('Checkbox editor field', () => {
                             : false;
                     }
 
-                    checkCheckbox(form, 'b', editorValue, expectedFormValue);
+                    checkCheckboxAndFormValue(form, 'b', editorValue, expectedFormValue);
                 });
 
                 QUnit.test(`checkboxUndefinedStateEnabled = ${checkboxUndefinedStateEnabled}, FormData = { innerObject: { b:  ${oldBoolValue} }} -> option('formData', { innerObject.b = ${newBoolValue })`, function() {
@@ -438,7 +438,7 @@ QUnit.module('Checkbox editor field', () => {
                         : newBoolValue;
 
                     const expectedFormValue = newBoolValue === 'no member' ? undefined : newBoolValue;
-                    checkCheckbox(form, 'innerObject.b', editorValue, expectedFormValue);
+                    checkCheckboxAndFormValue(form, 'innerObject.b', editorValue, expectedFormValue);
                 });
             });
         });
