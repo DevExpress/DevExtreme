@@ -11,7 +11,6 @@ import messageLocalization from '../../localization/message';
 import Popup from '../popup';
 import AppointmentForm from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
-import { PathTimeZoneConversion } from './appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -40,22 +39,18 @@ export default class AppointmentPopup {
             saveChangesLocker: false,
             appointment: {
                 data: null,
-                processTimeZone: false,
                 isEmptyText: false,
                 isEmptyDescription: false
             }
         };
     }
 
-    show(data = {}, isDoneButtonVisible, processTimeZone) {
+    show(data = {}, isDoneButtonVisible) {
         this.state.appointment.data = data;
-        this.state.appointment.processTimeZone = processTimeZone;
 
         if(!this._popup) {
             const popupConfig = this._createPopupConfig();
             this._popup = this._createPopup(popupConfig);
-        } else {
-            this._updateForm();
         }
 
         this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
@@ -101,7 +96,7 @@ export default class AppointmentPopup {
             contentTemplate: () => {
                 return this._createPopupContent();
             },
-            onShowing: this._onShowing.bind(this),
+            onShowing: () => this._onShowing(),
             defaultOptionsRules: [
                 {
                     device: () => devices.current().android,
@@ -114,6 +109,8 @@ export default class AppointmentPopup {
     }
 
     _onShowing(e) {
+        this._updateForm();
+
         const arg = {
             form: this._appointmentForm,
             popup: this._popup,
@@ -134,7 +131,7 @@ export default class AppointmentPopup {
     _createPopupContent() {
         const formElement = $('<div>');
         this._appointmentForm = this._createForm(formElement);
-        this._updateForm();
+        // this._updateForm();
         return formElement;
     }
 
@@ -188,26 +185,24 @@ export default class AppointmentPopup {
     }
 
     _updateForm() {
-        const { data, processTimeZone } = this.state.appointment;
+        const { data } = this.state.appointment;
         const adapter = this.scheduler.createAppointmentAdapter(data);
 
         const allDay = adapter.allDay;
-        const startDate = processTimeZone ? adapter.calculateStartDate(PathTimeZoneConversion.fromSourceToAppointment) : adapter.startDate;
-        const endDate = processTimeZone ? adapter.calculateEndDate(PathTimeZoneConversion.fromSourceToAppointment) : adapter.endDate;
+        const startDate = adapter.calculateStartDate('toAppointment');
+        const endDate = adapter.calculateEndDate('toAppointment');
 
         this.state.appointment.isEmptyText = data === undefined || adapter.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || adapter.description === undefined;
 
-
         const formData = extend({ text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
-        if(processTimeZone) {
-            if(startDate) {
-                this.scheduler.fire('setField', 'startDate', formData, startDate);
-            }
-            if(endDate) {
-                this.scheduler.fire('setField', 'endDate', formData, endDate);
-            }
+        // TODO:
+        if(startDate) {
+            this.scheduler.fire('setField', 'startDate', formData, startDate);
+        }
+        if(endDate) {
+            this.scheduler.fire('setField', 'endDate', formData, endDate);
         }
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
@@ -332,7 +327,7 @@ export default class AppointmentPopup {
 
             // const formData = objectUtils.deepExtendArraySafe({}, this._appointmentForm.option('formData'), true);
             const adapter = this._createFormDataAdapter();
-            const appointment = adapter.createModifiedAppointment(PathTimeZoneConversion.fromAppointmentToSource);
+            const appointment = adapter.createModifiedAppointment('fromAppointment');
 
             const oldData = this.scheduler._editAppointmentData;
             const recData = this.scheduler._updatedRecAppointment;
