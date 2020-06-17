@@ -345,11 +345,9 @@ QUnit.module('Checkbox editor field', () => {
     }
 
     function createTestData(boolValue) {
-        const data = {};
-        if(boolValue !== 'no member') {
-            data['b'] = boolValue;
-        }
-        return data;
+        return boolValue !== 'no member'
+            ? { b: boolValue }
+            : {};
     }
 
     [true, false, undefined].forEach(allowIndeterminateState => {
