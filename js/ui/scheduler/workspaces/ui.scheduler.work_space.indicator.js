@@ -39,7 +39,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _renderDateTimeIndication() {
         if(this.needRenderDateTimeIndication()) {
             if(this.option('shadeUntilCurrentTime')) {
-                this._shader.render(this);
+                this._shader.render();
             }
 
             if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {

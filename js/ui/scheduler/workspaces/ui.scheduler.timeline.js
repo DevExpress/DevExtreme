@@ -220,7 +220,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._renderTimePanel();
         this._renderDateTable();
 
-        this._shader = new HorizontalShader();
+        this._shader = new HorizontalShader(this);
 
         this._updateGroupTableHeight();
 

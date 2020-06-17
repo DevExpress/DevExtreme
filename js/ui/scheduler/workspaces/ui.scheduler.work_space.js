@@ -993,7 +993,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._updateGroupTableHeight();
 
-        this._shader = new VerticalShader();
+        this._shader = new VerticalShader(this);
     }
 
     _updateGroupTableHeight() {
