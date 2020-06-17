@@ -22,6 +22,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import themes from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
+import 'ui/form/ui.form.layout_manager';
 import {
     concatPaths,
     createItemPathByIndex,
