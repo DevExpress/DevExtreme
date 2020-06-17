@@ -35,7 +35,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
     _customizeGroupedByDateShader($shader, groupIndex) {
         const cellCount = this._workSpace.getIndicationCellCount();
-        const integerPart = Math.trunc(cellCount);
+        const integerPart = Math.floor(cellCount);
         const fractionPart = cellCount - integerPart;
         const isFirstShaderPart = groupIndex === 0;
 
