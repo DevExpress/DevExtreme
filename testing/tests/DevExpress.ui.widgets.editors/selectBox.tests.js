@@ -1451,6 +1451,14 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.strictEqual(items.length, 1, 'items are filtered');
     });
 
+    QUnit.testInActiveWindow('overlay content tabindex should be -1 (T897239)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            opened: true
+        }).dxSelectBox('instance');
+
+        assert.strictEqual(instance._popup.$content().parent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
+    });
+
     QUnit.testInActiveWindow('don\'t rise valueChange event on focusout in readonly state with searchEnabled', function(assert) {
         const valueChangedMock = sinon.spy();
         const $element = $('#selectBox').dxSelectBox({

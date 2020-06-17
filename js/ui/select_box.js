@@ -21,7 +21,6 @@ const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
-const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const SelectBox = DropDownList.inherit({
 
@@ -233,7 +232,7 @@ const SelectBox = DropDownList.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-        this.$element().find(`.${OVERLAY_CONTENT_CLASS}`).attr('tabindex', -1);
+        this._popup.$content().parent().attr('tabindex', -1);
     },
 
     _popupWrapperClass: function() {
