@@ -58,9 +58,7 @@ const Switch = Editor.inherit({
 
             value: false,
 
-            useInkRipple: false,
-            _animateHandle: true
-
+            useInkRipple: false
         });
     },
 
@@ -240,10 +238,8 @@ const Switch = Editor.inherit({
         const innerOffset = this._getInnerOffset(state, swipeOffset);
         const handleOffset = this._getHandleOffset(state, swipeOffset);
 
-        if(this.option('_animateHandle')) {
-            this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
-            this._$handle.css('transform', ' translateX(' + handleOffset + ')');
-        }
+        this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
+        this._$handle.css('transform', ' translateX(' + handleOffset + ')');
     },
 
     _validateValue: function() {
@@ -412,8 +408,6 @@ const Switch = Editor.inherit({
             case 'value':
                 this._renderValue();
                 this.callBase(args);
-                break;
-            case '_animateHandle':
                 break;
             default:
                 this.callBase(args);
