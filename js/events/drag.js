@@ -5,7 +5,7 @@ import { inArray } from '../core/utils/array';
 import iteratorUtils from '../core/utils/iterator';
 import { contains } from '../core/utils/dom';
 import registerEvent from './core/event_registrator';
-import eventUtils from './utils';
+import { eventData as eData, fireEvent } from './utils';
 import GestureEmitter from './gesture/emitter.gesture';
 import registerEmitter from './core/emitter_registrator';
 
@@ -156,7 +156,7 @@ const DragEmitter = GestureEmitter.inherit({
     },
 
     _move: function(e) {
-        const eventData = eventUtils.eventData(e);
+        const eventData = eData(e);
         const dragOffset = this._calculateOffset(eventData);
 
         e = this._fireEvent(DRAG_EVENT, e, {
@@ -229,7 +229,7 @@ const DragEmitter = GestureEmitter.inherit({
             target: this._currentDropTarget
         };
 
-        eventUtils.fireEvent(eventData);
+        fireEvent(eventData);
     },
 
     _findDropTarget: function(e) {
@@ -294,7 +294,7 @@ const DragEmitter = GestureEmitter.inherit({
     },
 
     _end: function(e) {
-        const eventData = eventUtils.eventData(e);
+        const eventData = eData(e);
 
         this._fireEvent(DRAG_END_EVENT, e, {
             offset: this._calculateOffset(eventData)
