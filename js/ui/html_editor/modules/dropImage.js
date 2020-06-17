@@ -30,14 +30,17 @@ class DropImageModule extends BaseModule {
         const dataTransfer = e.originalEvent.dataTransfer;
         const hasFiles = dataTransfer?.files?.length;
 
+        this.editorInstance._saveValueChangeEvent(e);
         e.preventDefault();
         if(hasFiles) {
             this._getImage(dataTransfer.files, this._addImage.bind(this));
         }
     }
 
-    _pasteHandler({ originalEvent }) {
-        const { clipboardData } = originalEvent;
+    _pasteHandler(e) {
+        const { clipboardData } = e.originalEvent;
+
+        this.editorInstance._saveValueChangeEvent(e);
 
         if(!clipboardData) {
             return;
