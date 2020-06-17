@@ -20,11 +20,11 @@ const eventUtils = require('../../events/utils');
 const themes = require('../themes');
 const windowUtils = require('../../core/utils/window');
 let ScrollView = require('../scroll_view');
-const deviceDependentOptions = require('../scroll_view/ui.scrollable').deviceDependentOptions;
-const CollectionWidget = require('../collection/ui.collection_widget.live_update').default;
+const deviceDependentOptions = require('../scroll_view/ui.scrollable.device').deviceDependentOptions;
+const CollectionWidget = require('../collection/ui.collection_widget.live_update');
 const BindableTemplate = require('../../core/templates/bindable_template').BindableTemplate;
 const Deferred = require('../../core/utils/deferred').Deferred;
-const DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
+const DataConverterMixin = require('../shared/grouped_data_converter_mixin');
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';

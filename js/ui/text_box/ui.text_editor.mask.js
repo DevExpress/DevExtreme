@@ -13,8 +13,8 @@ const stringUtils = require('../../core/utils/string');
 const wheelEvent = require('../../events/core/wheel');
 const MaskRules = require('./ui.text_editor.mask.rule');
 const TextEditorBase = require('./ui.text_editor.base');
-const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default;
-const AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
+const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default');
+const AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android');
 
 const stubCaret = function() {
     return {};
