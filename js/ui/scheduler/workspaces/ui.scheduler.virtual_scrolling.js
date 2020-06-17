@@ -27,7 +27,6 @@ export default class VirtualScrolling {
         const pageSize = Math.ceil(viewportHeight / this.getRowHeight());
         const groupCount = workspace._getGroupCount();
         const rowCount = workspace._getTotalRowCount(groupCount);
-        const height = rowCount * this.getRowHeight();
         const scrollOffset = {
             top: 0,
             left: 0
@@ -36,23 +35,14 @@ export default class VirtualScrolling {
         this._state = {
             pageSize: pageSize,
             scrollOffset: scrollOffset,
-            viewportHeight: viewportHeight,
             startIndex: -1,
             rowCount: rowCount,
-            height: height,
-            totalRowCount: 0,
             topVirtualRowCount: 0,
             bottomVirtualRowCount: 0,
-            addRowCount: 0,
-            deleteRowCount: 0,
             layoutMap: {
-                topVirtualRow: {
-                    height: 0
-                },
+                topVirtualRowHeight: 0,
                 dataItems: [],
-                bottomVirtualRow: {
-                    height: 0
-                }
+                bottomVirtualRowHeight: 0
             }
         };
 
@@ -73,16 +63,16 @@ export default class VirtualScrolling {
     }
 
     _updateState(workspace, scrollOffset) {
-        const previousTop = this._state.scrollOffset.top;
+        const state = this.getState();
         const top = scrollOffset.top;
-        const currentStartIndex = this._state.startIndex;
+        const currentStartIndex = state.startIndex;
         const rowHeight = this.getRowHeight();
 
-        this._state.scrollOffset = scrollOffset;
-        this._state.startIndex = Math.ceil(top / rowHeight);
+        state.scrollOffset = scrollOffset;
+        state.startIndex = Math.ceil(top / rowHeight);
 
-        if(currentStartIndex !== this._state.startIndex) {
-            const pageSize = this._state.pageSize;
+        if(currentStartIndex !== state.startIndex) {
+            const pageSize = state.pageSize;
             const groupCount = workspace._getGroupCount();
 
             const totalRowCount = workspace._getTotalRowCount(groupCount);
@@ -91,22 +81,9 @@ export default class VirtualScrolling {
             const rowCount = deltaRowCount >= pageSize ? pageSize : deltaRowCount;
             const bottomVirtualRowCount = totalRowCount - topVirtualRowCount - rowCount;
 
-            const isAppend = top >= previousTop ? 1 : -1;
-            let addRowCount = Math.abs(Math.ceil((top - previousTop) / rowHeight));
-            if(addRowCount > pageSize) {
-                addRowCount = pageSize;
-            }
-            addRowCount = addRowCount * isAppend;
-            const deleteRowCount = -1 * addRowCount;
-
-            Object.assign(this._state, {
-                totalRowCount: totalRowCount,
-                topVirtualRowCount: topVirtualRowCount,
-                rowCount: rowCount,
-                bottomVirtualRowCount: bottomVirtualRowCount,
-                addRowCount: addRowCount,
-                deleteRowCount: deleteRowCount,
-            });
+            state.topVirtualRowCount = topVirtualRowCount;
+            state.rowCount = rowCount;
+            state.bottomVirtualRowCount = bottomVirtualRowCount;
 
             this._updateLayoutMap(workspace);
 
@@ -147,8 +124,8 @@ export default class VirtualScrolling {
         const layoutMap = this.getLayoutMap();
         let dataItems = layoutMap.dataItems.slice(0, dataRowCount);
 
-        const prevTopVirtualRowHeight = layoutMap.topVirtualRow.height;
-        const prevBottomVirtualRowHeight = layoutMap.bottomVirtualRow.height;
+        const prevTopVirtualRowHeight = layoutMap.topVirtualRowHeight;
+        const prevBottomVirtualRowHeight = layoutMap.bottomVirtualRowHeight;
         const topVirtualRowHeight = rowHeight * topVirtualRowCount;
         const bottomVirtualRowHeight = rowHeight * bottomVirtualRowCount;
 
@@ -169,8 +146,8 @@ export default class VirtualScrolling {
             dataItems = this._addLayoutMapRows(options, dataItems, addRowCount, rowCountInGroup, isAppend);
 
             layoutMap.dataItems = dataItems;
-            layoutMap.topVirtualRow.height = topVirtualRowHeight;
-            layoutMap.bottomVirtualRow.height = bottomVirtualRowHeight;
+            layoutMap.topVirtualRowHeight = topVirtualRowHeight;
+            layoutMap.bottomVirtualRowHeight = bottomVirtualRowHeight;
         }
     }
 
