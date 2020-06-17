@@ -2,24 +2,23 @@ import Widget from './internal/widget';
 import ActionButton from './internal/actionButton';
 
 const CLASS = {
-    buttonContainer: 'dx-texteditor-buttons-container',
-    button: 'dx-button',
-    input: 'dx-texteditor-input'
+  input: 'dx-texteditor-input',
 };
 export default class TextBox extends Widget {
-    input: Selector;
-    value: Promise<string>;
+  input: Selector;
 
-    name: string = 'dxTextBox';
+  value: Promise<string>;
 
-    constructor (id: string) {
-        super(id);
+  name = 'dxTextBox';
 
-        this.input = this.element.find(`.${CLASS.input}`);
-        this.value = this.input.value;
-    }
+  constructor(id: string) {
+    super(id);
 
-    async getButton(index:number):Promise<ActionButton> {
-        return new ActionButton(this.element, index);
-    }
+    this.input = this.element.find(`.${CLASS.input}`);
+    this.value = this.input.value;
+  }
+
+  async getButton(index: number): Promise<ActionButton> {
+    return new ActionButton(this.element, index);
+  }
 }
