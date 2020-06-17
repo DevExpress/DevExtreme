@@ -9,23 +9,27 @@ const currentTimeShader = Class.inherit({
         this._workspace = workspace;
         this._$container = workspace._dateTableScrollable.$content();
 
-        this._$shader = this._createShader();
+        this._$shader = this.createShader();
         this._shader = [];
         this._shader.push(this._$shader);
 
-        this._renderShader();
+        this.renderShader();
 
-        if(this._$shader && this._workspace.option('crossScrollingEnabled')) {
-            this._$shader.css('marginTop', -getBoundingRect(this._$container.get(0)).height);
-            this._$shader.css('height', getBoundingRect(this._$container.get(0)).height);
-        }
+        this.applyShaderMargin(this._$shader);
 
         this._shader.forEach((shader, index) => {
             this._$container.append(shader);
         });
     },
 
-    _createShader: function() {
+    applyShaderMargin: function($shader) {
+        if($shader && this._workspace.option('crossScrollingEnabled')) {
+            $shader.css('marginTop', -getBoundingRect(this._$container.get(0)).height);
+            $shader.css('height', getBoundingRect(this._$container.get(0)).height);
+        }
+    },
+
+    createShader: function() {
         return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
     },
 

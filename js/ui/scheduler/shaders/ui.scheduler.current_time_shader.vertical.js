@@ -7,7 +7,7 @@ const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
 const DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
 
 const VerticalCurrentTimeShader = Shader.inherit({
-    _renderShader: function() {
+    renderShader: function() {
         let shaderHeight = this._getShaderHeight();
         const maxHeight = this._getShaderMaxHeight();
         let renderSolidShader = false;

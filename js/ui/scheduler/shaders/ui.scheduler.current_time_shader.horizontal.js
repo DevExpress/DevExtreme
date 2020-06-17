@@ -2,66 +2,53 @@ const Shader = require('./ui.scheduler.current_time_shader');
 import { getBoundingRect } from '../../../core/utils/position';
 
 const HorizontalCurrentTimeShader = Shader.inherit({
-    _renderShader: function() {
+    renderShader: function() {
         const groupCount = this._workspace.option('groupOrientation') === 'horizontal' ? this._workspace._getGroupCount() : 1;
 
-        this._customizeShader(this._$shader, 0);
-
-        if(groupCount > 1) {
-            for(let i = 1; i < groupCount; i++) {
-                const $shader = this._createShader();
-                this._customizeShader($shader, 1);
-                this._shader.push($shader);
-            }
+        for(let i = 0; i < groupCount; i++) {
+            const $shader = i === 0 ? this._$shader : this.createShader();
+            this._workspace.isGroupedByDate() ? this._customizeGroupedByDateShader($shader, i) : this._customizeShader($shader, i);
+            i !== 0 && this._shader.push($shader);
         }
     },
 
     _customizeShader: function($shader, groupIndex) {
-        if(this._workspace.isGroupedByDate()) {
-            if(groupIndex === 0) {
-                let shaderWidth = this._workspace.getIndicationWidth();
-                const maxWidth = getBoundingRect(this._$container.get(0)).width;
+        if(groupIndex > 1) { groupIndex = 1; }
+        const shaderWidth = this._workspace.getIndicationWidth();
 
-                if(shaderWidth > maxWidth) {
-                    shaderWidth = maxWidth;
-                }
+        this._applyShaderWidth($shader, shaderWidth);
 
-                if(shaderWidth > 0) {
-                    $shader.width(shaderWidth);
-                }
+        $shader.css('left', this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
+    },
 
-                $shader.css('left', this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
-            } else {
-                const cellCount = this._workspace.getIndicationCellCount();
-                const integerPart = Math.trunc(cellCount);
-                const fractionPart = cellCount - integerPart;
+    _applyShaderWidth: function($shader, width) {
+        const maxWidth = getBoundingRect(this._$container.get(0)).width;
 
-                const shaderWidth = fractionPart * this._workspace.getCellWidth();
+        if(width > maxWidth) {
+            width = maxWidth;
+        }
 
-                if(shaderWidth > 0) {
-                    $shader.width(shaderWidth);
-                }
-                if(this._workspace.option('crossScrollingEnabled')) {
-                    $shader.css('marginTop', -getBoundingRect(this._$container.get(0)).height);
-                    $shader.css('height', getBoundingRect(this._$container.get(0)).height);
-                }
-                $shader.css('left', this._workspace.getCellWidth() * integerPart * this._workspace._getGroupCount() + groupIndex * this._workspace.getCellWidth());
-            }
-        } else {
-            let shaderWidth = this._workspace.getIndicationWidth();
-            const maxWidth = getBoundingRect(this._$container.get(0)).width;
-
-            if(shaderWidth > maxWidth) {
-                shaderWidth = maxWidth;
-            }
-
-            if(shaderWidth > 0) {
-                $shader.width(shaderWidth);
-            }
-
-            $shader.css('left', this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
+        if(width > 0) {
+            $shader.width(width);
         }
     },
+
+    _customizeGroupedByDateShader: function($shader, groupIndex) {
+        const cellCount = this._workspace.getIndicationCellCount();
+        const integerPart = Math.trunc(cellCount);
+        const fractionPart = cellCount - integerPart;
+        const isFirstShaderPart = groupIndex === 0;
+
+        const shaderWidth = isFirstShaderPart ? this._workspace.getIndicationWidth() : fractionPart * this._workspace.getCellWidth();
+
+        this._applyShaderWidth($shader, shaderWidth);
+        this.applyShaderMargin($shader);
+
+        const shaderLeft = isFirstShaderPart ? this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex :
+            this._workspace.getCellWidth() * integerPart * this._workspace._getGroupCount() + groupIndex * this._workspace.getCellWidth();
+
+        $shader.css('left', shaderLeft);
+    }
 });
 
 module.exports = HorizontalCurrentTimeShader;
