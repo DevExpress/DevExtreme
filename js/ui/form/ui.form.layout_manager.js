@@ -148,8 +148,8 @@ const LayoutManager = Widget.inherit({
         return dataField ? this.option('layoutData.' + dataField) : null;
     },
 
-    _allowIndeterminateState: function(editorOption) {
-        if(editorOption.allowIndeterminateState !== true || editorOption.editorType !== 'dxCheckBox') {
+    _isCheckboxUndefinedStateEnabled: function(editorOption) {
+        if(editorOption.checkboxUndefinedStateEnabled !== true || editorOption.editorType !== 'dxCheckBox') {
             return false;
         }
 
@@ -277,7 +277,7 @@ const LayoutManager = Widget.inherit({
         }
 
         if(item.editorType === 'dxCheckBox') {
-            item.allowIndeterminateState = item.allowIndeterminateState ?? true;
+            item.checkboxUndefinedStateEnabled = item.checkboxUndefinedStateEnabled ?? true;
         }
 
         return item;
@@ -663,7 +663,7 @@ const LayoutManager = Widget.inherit({
             labelID: labelOptions.labelID,
             id: id,
             validationBoundary: that.option('validationBoundary'),
-            allowIndeterminateState: item.allowIndeterminateState
+            checkboxUndefinedStateEnabled: item.checkboxUndefinedStateEnabled
         });
 
         this._itemsRunTimeInfo.add({
@@ -803,7 +803,7 @@ const LayoutManager = Widget.inherit({
 
     _renderEditor: function(options) {
         const dataValue = this._getDataByField(options.dataField);
-        const defaultEditorOptions = dataValue !== undefined || this._allowIndeterminateState(options)
+        const defaultEditorOptions = dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(options)
             ? { value: dataValue }
             : {};
         const isDeepExtend = true;
@@ -1154,7 +1154,7 @@ const LayoutManager = Widget.inherit({
                                     const valueGetter = dataUtils.compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
-                                    if(dataValue !== undefined || this._allowIndeterminateState(itemRunTimeInfo.item)) {
+                                    if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(itemRunTimeInfo.item)) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     } else {
                                         this._resetWidget(itemRunTimeInfo.widgetInstance);
