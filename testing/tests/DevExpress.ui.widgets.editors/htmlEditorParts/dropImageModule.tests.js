@@ -30,7 +30,8 @@ const moduleConfig = {
 
         this.options = {
             editorInstance: {
-                NAME: 'dxHtmlEditor'
+                NAME: 'dxHtmlEditor',
+                _saveValueChangeEvent: () => {}
             }
         };
     }
