@@ -138,10 +138,10 @@ Object.keys(widgets).forEach(function(widget) {
 });
 
 Object.keys(widgets).forEach(function(widget) {
-    [true, false].forEach(function(optionValue) {
-        QUnit.test(widget + ' templatesRenderAsynchronously option check', function(assert) {
-            this.instance = new widgets[widget](this.element, { templatesRenderAsynchronously: optionValue });
-            assert.strictEqual(this.instance.option('templatesRenderAsynchronously'), optionValue, `it is possible to set ${optionValue} templatesRenderAsynchronously option value for the ${widget} widget`);
+    [true, false].forEach(function(templatesRenderAsynchronously) {
+        QUnit.test(`${widget} templatesRenderAsynchronously option check`, function(assert) {
+            this.instance = new widgets[widget](this.element, { templatesRenderAsynchronously: templatesRenderAsynchronously });
+            assert.strictEqual(this.instance.option('templatesRenderAsynchronously'), templatesRenderAsynchronously, `it is possible to set ${templatesRenderAsynchronously} templatesRenderAsynchronously option value for the ${widget} widget`);
         });
     });
 });
