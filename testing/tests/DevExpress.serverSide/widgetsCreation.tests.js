@@ -133,3 +133,14 @@ Object.keys(widgets).forEach(function(widget) {
         }
     });
 });
+
+Object.keys(widgets).forEach(function(widget) {
+    [true, false].forEach(function(templatesRenderAsynchronously) {
+        QUnit.test(`${widget} templatesRenderAsynchronously option check`, function(assert) {
+            this.instance = new widgets[widget](this.element, { templatesRenderAsynchronously: templatesRenderAsynchronously });
+            assert.strictEqual(this.instance.option('templatesRenderAsynchronously'), templatesRenderAsynchronously, `it is possible to set ${templatesRenderAsynchronously} templatesRenderAsynchronously option value for the ${widget} widget`);
+        });
+    });
+});
+
+
