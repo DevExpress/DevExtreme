@@ -780,4 +780,13 @@ QUnit.module('Exceljs format', () => {
         { value: 'LBP', expected: '\\L\\B\\P#,##0_);\\(\\L\\B\\P#,##0\\)' },
         { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
     ]);
+
+    ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
+        { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
+        { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
+        { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
+        { value: 'KPW', expected: '\\K\\P\\W#,##0_);\\(\\K\\P\\W#,##0\\)' },
+        { value: 'LBP', expected: '\\L\\B\\P#,##0_);\\(\\L\\B\\P#,##0\\)' },
+        { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
+    ]);
 });

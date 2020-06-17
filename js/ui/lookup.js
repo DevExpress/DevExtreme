@@ -482,7 +482,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _popupShowingHandler: function() {
-        this.callBase.apply(this, arguments);
+        this._dimensionChanged();
 
         if(this.option('cleanSearchOnOpening')) {
             if(this.option('searchEnabled') && this._searchBox.option('value')) {
@@ -576,17 +576,18 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderPopover: function() {
-        this._popup = this._createComponent(this._$popup, Popover, extend(this._popupConfig(), {
-            showEvent: null,
-            hideEvent: null,
-            target: this.$element(),
-            fullScreen: false,
-            shading: false,
-            closeOnTargetScroll: true,
-            width: this._isInitialOptionValue('dropDownOptions.width')
-                ? (function() { return this.$element().outerWidth(); }).bind(this)
-                : this._popupConfig().width
-        }));
+        this._popup = this._createComponent(this._$popup, Popover, extend(this._popupConfig(),
+            this._options.cache('dropDownOptions'), {
+                showEvent: null,
+                hideEvent: null,
+                target: this.$element(),
+                fullScreen: false,
+                shading: false,
+                closeOnTargetScroll: true,
+                width: this._isInitialOptionValue('dropDownOptions.width')
+                    ? (function() { return this.$element().outerWidth(); }).bind(this)
+                    : this._popupConfig().width
+            }));
 
         this._popup.on({
             'showing': this._popupShowingHandler.bind(this),
@@ -721,7 +722,7 @@ const Lookup = DropDownList.inherit({
 
     _refreshPopupVisibility: function() {
         if(this.option('opened')) {
-            this._updatePopupHeight();
+            this._updatePopupDimensions();
         }
     },
 
@@ -731,10 +732,6 @@ const Lookup = DropDownList.inherit({
         }
 
         this.callBase();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupHeight();
     },
 
     _input: function() {

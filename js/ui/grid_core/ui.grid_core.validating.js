@@ -764,7 +764,11 @@ module.exports = {
                             rowKey: e.key,
                             columnIndex: e.column.index
                         });
-                        when(currentValidator && validatingController.validateCell(currentValidator)).done(deferred.resolve);
+                        when(currentValidator && validatingController.validateCell(currentValidator))
+                            .done((validationResult) => {
+                                this.getController('editorFactory').refocus();
+                                deferred.resolve(validationResult);
+                            });
                     });
                     return deferred.promise();
                 },

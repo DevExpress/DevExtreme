@@ -164,6 +164,10 @@ function detectPassiveEventHandlersSupport() {
 const passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
 
 const contains = (container, element) => {
+    if(isWindow(container)) {
+        return contains(container.document, element);
+    }
+
     return container.contains
         ? container.contains(element)
         : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);

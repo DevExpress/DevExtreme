@@ -285,14 +285,16 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const isCustomParser = typeUtils.isFunction(formatOption.parser);
         const parser = isCustomParser ? formatOption.parser : number.parse;
 
-        const formatPointIndex = format.indexOf('.');
-        const textPointIndex = text.indexOf(number.getDecimalSeparator());
+        if(!isCustomParser) {
+            const formatPointIndex = format.indexOf('.');
+            const textPointIndex = text.indexOf(number.getDecimalSeparator());
 
-        const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
-        const textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
+            const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
+            const textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
 
-        if(textIntegerPartLength > formatIntegerPartLength && format.indexOf('#') === -1) {
-            text = text.substr(textIntegerPartLength - formatIntegerPartLength);
+            if(textIntegerPartLength > formatIntegerPartLength && format.indexOf('#') === -1) {
+                text = text.substr(textIntegerPartLength - formatIntegerPartLength);
+            }
         }
 
         return parser(text, format);
@@ -300,33 +302,45 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _format: function(value, format) {
         const formatOption = this.option('format');
-        const isCustomFormatter = typeUtils.isFunction(formatOption.formatter);
+        const isCustomFormatter = typeUtils.isFunction(formatOption?.formatter);
         const formatter = isCustomFormatter ? formatOption.formatter : number.format;
 
         return formatter(value, format);
     },
 
     _getFormatPattern: function() {
-        const format = this.option('format');
-        const isLDMLPattern = typeof format === 'string' && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
+        if(!this._currentFormat) {
+            this._updateFormat();
+        }
 
-        if(isLDMLPattern) {
-            return format;
-        } else {
-            return getLDMLFormat(function(value) {
+        return this._currentFormat;
+    },
+
+    _updateFormat: function() {
+        const format = this.option('format');
+        const isCustomParser = typeUtils.isFunction(format?.parser);
+        const isLDMLPattern = typeUtils.isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
+
+        this._currentFormat = isCustomParser || isLDMLPattern ?
+            format :
+            getLDMLFormat((value) => {
                 const text = this._format(value, format);
                 return number.convertDigits(text, true);
-            }.bind(this));
-        }
+            });
     },
 
     _getFormatForSign: function(text) {
         const format = this._getFormatPattern();
-        const signParts = format.split(';');
-        const sign = number.getSign(text, format);
+        if(typeUtils.isString(format)) {
+            const signParts = format.split(';');
+            const sign = number.getSign(text, format);
 
-        signParts[1] = signParts[1] || '-' + signParts[0];
-        return sign < 0 ? signParts[1] : signParts[0];
+            signParts[1] = signParts[1] || '-' + signParts[0];
+            return sign < 0 ? signParts[1] : signParts[0];
+        } else {
+            const sign = number.getSign(text);
+            return sign < 0 ? '-' : '';
+        }
     },
 
     _removeStubs: function(text, excludeComma) {
@@ -378,7 +392,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const format = this._getFormatPattern();
         const isTextSelected = selection.start !== selection.end;
         let parsedValue = this._getParsedValue(editedText, format);
-        const maxPrecision = this._getPrecisionLimits(format, editedText).max;
+        const maxPrecision = !format.parser && this._getPrecisionLimits(editedText).max;
         const isValueChanged = parsedValue !== this._parsedValue;
         const decimalSeparator = number.getDecimalSeparator();
 
@@ -398,13 +412,13 @@ const NumberBoxMask = NumberBoxBase.inherit({
         }
 
         const value = parsedValue === null ? this._parsedValue : parsedValue;
-        parsedValue = this._truncateToPrecision(value, maxPrecision);
+        parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-        return this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
+        return !format.parser && this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
     },
 
     _getParsedValue: function(text, format) {
-        const sign = number.getSign(text, format);
+        const sign = number.getSign(text, format?.formatter || format);
         const textWithoutStubs = this._removeStubs(text, true);
         const parsedValue = this._parse(textWithoutStubs, format);
         const parsedValueWithSign = parsedValue ? sign * parsedValue : parsedValue;
@@ -428,8 +442,10 @@ const NumberBoxMask = NumberBoxBase.inherit({
         }
 
         const floatLength = textParts[1].length;
-        const precision = this._getPrecisionLimits(this._getFormatPattern(), text);
-        const isPrecisionInRange = inRange(floatLength, precision.min, precision.max);
+        const format = this._getFormatPattern();
+        const isCustomParser = !!format.parser;
+        const precision = !isCustomParser && this._getPrecisionLimits(this._getFormatPattern(), text);
+        const isPrecisionInRange = isCustomParser ? true : inRange(floatLength, precision.min, precision.max);
         const endsWithZero = textParts[1].charAt(floatLength - 1) === '0';
 
         return isPrecisionInRange && (endsWithZero || !floatLength);
@@ -471,7 +487,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isChar: function(str) {
-        return typeof str === 'string' && str.length === 1;
+        return typeUtils.isString(str) && str.length === 1;
     },
 
     _moveCaret: function(offset) {
@@ -743,6 +759,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         switch(args.name) {
             case 'format':
             case 'useMaskBehavior':
+                this._updateFormat();
                 this._renderFormatter();
                 this._renderValue();
                 break;
