@@ -11,16 +11,13 @@ import {
   TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER,
   TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON,
 } from './consts';
-import { AppointmentItem } from './types';
+import { AppointmentItem, FormattedContent } from './types';
 import Marker from './marker';
 import Button from '../../button';
 import TooltipItemContent from './tooltip-item-content';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
-  const formattedContent = viewModel.props.getTextAndFormatDate!(
-    viewModel.props.item!.data, viewModel.currentData,
-  );
 
   return (
     <Fragment>
@@ -28,7 +25,7 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
         <viewModel.props.itemContentTemplate
           model={{
             appointmentData: viewModel.props.item!.data,
-            targetedAppointmentData: viewModel.currentData,
+            targetedAppointmentData: viewModel.currentAppointment,
           }}
           index={viewModel.props.index}
           parentRef={{
@@ -39,13 +36,13 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
       {!useTemplate && (
         <div
           className={`${TOOLTIP_APPOINTMENT_ITEM} ${viewModel.props.className}`}
-        // eslint-disable-next-line react/jsx-props-no-spreading
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...viewModel.restAttributes}
         >
           <Marker color={viewModel.props.item!.color} />
           <TooltipItemContent
-            text={formattedContent.text}
-            formattedDate={formattedContent.formatDate}
+            text={viewModel.formattedContent.text}
+            formattedDate={viewModel.formattedContent.formatDate}
           />
           {viewModel.props.showDeleteButton && (
             <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
@@ -99,7 +96,7 @@ export class TooltipItemLayoutProps {
   },
 })
 export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
-  get currentData(): dxSchedulerAppointment {
+  get currentAppointment(): dxSchedulerAppointment {
     const { item } = this.props;
 
     const { settings, data, currentData } = item!;
@@ -117,5 +114,12 @@ export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutPro
       e.event.stopPropagation();
       onDelete!(item!.data, singleAppointmentData);
     };
+  }
+
+  get formattedContent(): FormattedContent {
+    const { getTextAndFormatDate, item } = this.props;
+    const { data } = item!;
+
+    return getTextAndFormatDate!(data, this.currentAppointment);
   }
 }
