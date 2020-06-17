@@ -180,7 +180,7 @@ describe('TooltipItemLayout', () => {
       it('should rerender template in runtime', () => {
         const tree = shallow(<TooltipItemLayoutView
           props={{ ...defaultProps }}
-          formattedContent={{ text: 'text', formatDate: 'formattedDate' }}
+          {...defaultViewModel}
         />);
 
         expect(tree.find(template).exists())
