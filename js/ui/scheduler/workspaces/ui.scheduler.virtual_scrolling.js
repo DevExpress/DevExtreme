@@ -114,7 +114,7 @@ export default class VirtualScrolling {
     _updateLayoutMap() {
         const workspace = this.getWorkspace();
         const groupCount = workspace._getGroupCount();
-        const options = Object.assign({
+        const options = {
             cellCount: workspace._getTotalCellCount(groupCount),
             cellClass: workspace._getDateTableCellClass.bind(workspace),
             rowClass: workspace._getDateTableRowClass(),
@@ -123,15 +123,17 @@ export default class VirtualScrolling {
             allDayElements: workspace._insertAllDayRowsIntoDateTable() ? workspace._allDayPanels : undefined,
             groupCount: groupCount,
             groupByDate: workspace.option('groupByDate')
-        }, this.getState());
+        };
 
         this._updateLayoutMapCore(options);
     }
+
     _updateLayoutMapCore(options) {
+        const state = this.getState();
         const rowHeight = this.getRowHeight();
-        const topVirtualRowCount = options.topVirtualRowCount;
-        const bottomVirtualRowCount = options.bottomVirtualRowCount;
-        const dataRowCount = options.rowCount;
+        const topVirtualRowCount = state.topVirtualRowCount;
+        const bottomVirtualRowCount = state.bottomVirtualRowCount;
+        const dataRowCount = state.rowCount;
 
         let rowCountInGroup = dataRowCount;
         if(options.groupCount) {
@@ -160,7 +162,7 @@ export default class VirtualScrolling {
 
             addRowCount = Math.min(addRowCount, dataRowCount);
 
-            dataItems = this._addLayoutMapRows(options, dataItems, addRowCount, rowCountInGroup, isAppend);
+            dataItems = this._populateLayoutMap(options, dataItems, addRowCount, rowCountInGroup, isAppend);
 
             layoutMap.dataItems = dataItems;
             layoutMap.topVirtualRowHeight = topVirtualRowHeight;
@@ -168,9 +170,10 @@ export default class VirtualScrolling {
         }
     }
 
-    _addLayoutMapRows(options, dataItems, addRowCount, rowCountInGroup, isAppend) {
-        const dataRowCount = options.rowCount;
-        const topVirtualRowCount = options.topVirtualRowCount;
+    _populateLayoutMap(options, dataItems, addRowCount, rowCountInGroup, isAppend) {
+        const state = this.getState();
+        const dataRowCount = state.rowCount;
+        const topVirtualRowCount = state.topVirtualRowCount;
         const isEmptyData = dataItems.length === 0;
 
         if(!isEmptyData) {
@@ -191,15 +194,15 @@ export default class VirtualScrolling {
         if(isAppend) {
             for(let index = 0; index < addRowCount; ++index) {
                 const rowIndex = dataItems.length + topVirtualRowCount;
-                const rowModel = this._createRowModel(options, rowIndex, rowCountInGroup);
+                const rowModel = this._createLayoutMapRow(options, rowIndex, rowCountInGroup);
                 dataItems.push(rowModel);
             }
         } else {
-            const startIndex = options.startIndex;
+            const startIndex = state.startIndex;
             const prependRows = new Array(addRowCount);
             for(let index = addRowCount - 1; index >= 0; --index) {
                 const rowIndex = startIndex + index;
-                const rowModel = this._createRowModel(options, rowIndex, rowCountInGroup);
+                const rowModel = this._createLayoutMapRow(options, rowIndex, rowCountInGroup);
                 prependRows[index] = rowModel;
             }
 
@@ -209,8 +212,8 @@ export default class VirtualScrolling {
         return dataItems;
     }
 
-    _createRowModel(options, rowIndex, rowCountInGroup) {
-        const cells = this._createCellsMap(options, rowIndex);
+    _createLayoutMapRow(options, rowIndex, rowCountInGroup) {
+        const cells = this._populateLayoutMapCells(options, rowIndex);
         const isLastRowInGroup = (rowIndex + 1) % rowCountInGroup === 0;
 
         const rowModel = {
@@ -222,7 +225,8 @@ export default class VirtualScrolling {
 
         return rowModel;
     }
-    _createCellsMap(options, rowIndex) {
+
+    _populateLayoutMapCells(options, rowIndex) {
         const cellsMap = [];
         const cellClass = options.cellClass;
 
