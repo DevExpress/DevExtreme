@@ -1,4 +1,4 @@
-import eventUtils from './utils';
+import { eventData } from './utils';
 import GestureEmitter from './gesture/emitter.gesture';
 import registerEmitter from './core/emitter_registrator';
 
@@ -20,12 +20,12 @@ const HorizontalStrategy = {
     },
 
     calcOffsetRatio: function(e) {
-        const endEventData = eventUtils.eventData(e);
+        const endEventData = eventData(e);
         return (endEventData.x - (this._savedEventData && this._savedEventData.x || 0)) / this._itemSizeFunc().call(this, e);
     },
 
     isFastSwipe: function(e) {
-        const endEventData = eventUtils.eventData(e);
+        const endEventData = eventData(e);
         return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.x - this._tickData.x) >= (endEventData.time - this._tickData.time);
     }
 };
@@ -43,12 +43,12 @@ const VerticalStrategy = {
     },
 
     calcOffsetRatio: function(e) {
-        const endEventData = eventUtils.eventData(e);
+        const endEventData = eventData(e);
         return (endEventData.y - (this._savedEventData && this._savedEventData.y || 0)) / this._itemSizeFunc().call(this, e);
     },
 
     isFastSwipe: function(e) {
-        const endEventData = eventUtils.eventData(e);
+        const endEventData = eventData(e);
         return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.y - this._tickData.y) >= (endEventData.time - this._tickData.time);
     }
 };
@@ -84,11 +84,11 @@ const SwipeEmitter = GestureEmitter.inherit({
     },
 
     _init: function(e) {
-        this._tickData = eventUtils.eventData(e);
+        this._tickData = eventData(e);
     },
 
     _start: function(e) {
-        this._savedEventData = eventUtils.eventData(e);
+        this._savedEventData = eventData(e);
 
         e = this._fireEvent(SWIPE_START_EVENT, e);
 
@@ -102,7 +102,7 @@ const SwipeEmitter = GestureEmitter.inherit({
 
     _move: function(e) {
         const strategy = this._getStrategy();
-        const moveEventData = eventUtils.eventData(e);
+        const moveEventData = eventData(e);
         let offset = strategy.calcOffsetRatio.call(this, e);
 
         offset = this._fitOffset(offset, this.elastic);

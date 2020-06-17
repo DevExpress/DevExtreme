@@ -5,7 +5,7 @@ import SliderHandle from './slider/ui.slider_handle';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { applyServerDecimalSeparator } from '../core/utils/common';
-import eventUtils from '../events/utils';
+import { eventData } from '../events/utils';
 import messageLocalization from '../localization/message';
 
 const RANGE_SLIDER_CLASS = 'dx-rangeslider';
@@ -162,7 +162,7 @@ const RangeSlider = Slider.inherit({
         const e = args.event;
         const $range = this._$range;
         const rangeWidth = $range.width();
-        const eventOffsetX = eventUtils.eventData(e).x - this._$bar.offset().left;
+        const eventOffsetX = eventData(e).x - this._$bar.offset().left;
         const startHandleX = $range.position().left;
         const endHandleX = $range.position().left + rangeWidth;
         const rtlEnabled = this.option('rtlEnabled');

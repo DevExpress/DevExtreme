@@ -2,7 +2,7 @@ import { extend } from '../../core/utils/extend';
 import BaseStrategy from './base';
 import MouseStrategy from './mouse';
 import TouchStrategy from './touch';
-import eventUtils from '../utils';
+import { isMouseEvent } from '../utils';
 
 const eventMap = {
     'dxpointerdown': 'touchstart mousedown',
@@ -38,17 +38,17 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
     },
 
     _handler: function(e) {
-        const isMouseEvent = eventUtils.isMouseEvent(e);
+        const isMouse = isMouseEvent(e);
 
-        if(!isMouseEvent) {
+        if(!isMouse) {
             this._skipNextEvents = true;
         }
 
-        if(isMouseEvent && this._mouseLocked) {
+        if(isMouse && this._mouseLocked) {
             return;
         }
 
-        if(isMouseEvent && this._skipNextEvents) {
+        if(isMouse && this._skipNextEvents) {
             this._skipNextEvents = false;
             this._mouseLocked = true;
 
@@ -66,7 +66,7 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
     },
 
     _fireEvent: function(args) {
-        const isMouseEvent = eventUtils.isMouseEvent(args.originalEvent);
+        const isMouseEvent = isMouseEvent(args.originalEvent);
         const normalizer = isMouseEvent ? MouseStrategy.normalize : TouchStrategy.normalize;
 
         return this.callBase(extend(normalizer(args.originalEvent), args));

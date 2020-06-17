@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import commonUtils from '../../core/utils/common';
 import { contains } from '../../core/utils/dom';
 import devices from '../../core/devices';
-import eventUtils from '../utils';
+import { isMouseEvent } from '../utils';
 import pointerEvents from '../pointer';
 import Emitter from './emitter';
 import registerEmitter from './emitter_registrator';
@@ -102,7 +102,7 @@ const FeedbackEmitter = Emitter.inherit({
 
         const eventTarget = this._getEmitterTarget(e);
 
-        const mouseEvent = eventUtils.isMouseEvent(e);
+        const mouseEvent = isMouseEvent(e);
         const isSimulator = devices.isSimulator();
         const deferFeedback = isSimulator || !mouseEvent;
 

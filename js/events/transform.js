@@ -1,7 +1,7 @@
 import mathUtils from '../core/utils/math';
 import iteratorUtils from '../core/utils/iterator';
 import errors from '../core/errors';
-import eventUtils from './utils';
+import { hasTouches } from './utils';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
 
@@ -112,7 +112,7 @@ const TransformEmitter = Emitter.inherit({
     },
 
     validatePointers: function(e) {
-        return eventUtils.hasTouches(e) > 1;
+        return hasTouches(e) > 1;
     },
 
     start: function(e) {

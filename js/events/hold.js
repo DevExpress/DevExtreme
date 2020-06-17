@@ -1,4 +1,4 @@
-import eventUtils from './utils';
+import { eventData, eventDelta } from './utils';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
 const abs = Math.abs;
@@ -11,7 +11,7 @@ const TOUCH_BOUNDARY = 5;
 const HoldEmitter = Emitter.inherit({
 
     start: function(e) {
-        this._startEventData = eventUtils.eventData(e);
+        this._startEventData = eventData(e);
 
         this._startTimer(e);
     },
@@ -34,7 +34,7 @@ const HoldEmitter = Emitter.inherit({
     },
 
     _touchWasMoved: function(e) {
-        const delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
+        const delta = eventDelta(this._startEventData, eventData(e));
 
         return abs(delta.x) > TOUCH_BOUNDARY || abs(delta.y) > TOUCH_BOUNDARY;
     },

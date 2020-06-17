@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import translator from '../../animation/translator';
-import eventUtils from '../../events/utils';
+import { eventData } from '../../events/utils';
 import NativeStrategy from './ui.scrollable.native';
 import LoadIndicator from '../load_indicator';
 import { Deferred } from '../../core/utils/deferred';
@@ -84,14 +84,14 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase(e);
 
         if(this._state === STATE_RELEASED && this._location === 0) {
-            this._startClientY = eventUtils.eventData(e.originalEvent).y;
+            this._startClientY = eventData(e.originalEvent).y;
             this._state = STATE_TOUCHED;
         }
     },
 
     handleMove: function(e) {
         this.callBase(e);
-        this._deltaY = eventUtils.eventData(e.originalEvent).y - this._startClientY;
+        this._deltaY = eventData(e.originalEvent).y - this._startClientY;
 
         if(this._state === STATE_TOUCHED) {
             if(this._pullDownEnabled && this._deltaY > 0) {
