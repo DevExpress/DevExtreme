@@ -1973,7 +1973,7 @@ module.exports = {
                     if(!dataSource || dataSource.isLoaded()) {
                         const sortParameters = dataSource ? dataSource.sort() || [] : this.getSortDataSourceParameters();
                         const groupParameters = dataSource ? dataSource.group() || [] : this.getGroupDataSourceParameters();
-                        const filterParameters = dataSource && dataSource.lastLoadOptions().filter;
+                        const filterParameters = dataSource?.lastLoadOptions().filter;
 
                         this._customizeColumns(this._columns);
 
