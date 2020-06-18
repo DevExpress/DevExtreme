@@ -36,7 +36,47 @@ test('Drag-n-drop in the "month" view', async (t) => {
   dataSource,
 }));
 
-test('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
+test('Drag-n-drop when browser has horizontal scroll', async t => {
+  const scheduler = new Scheduler("#container");
+  const draggableAppointment = scheduler.getAppointment("Staff Productivity Report");
+
+  await t
+      .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(6))
+      .expect(draggableAppointment.isAllDay).eql(true);
+
+}).before(() => createScheduler({
+  views: ["week"],
+  currentView: "week",
+  dataSource: [{
+      text: "Staff Productivity Report",
+      startDate: new Date(2019, 3, 6, 9, 0),
+      endDate: new Date(2019, 3, 6, 10, 30),
+      resourceId: 2
+  }],
+  width: 1800
+}));
+
+test('Drag-n-drop when browser has vertical scroll', async t => {
+  const scheduler = new Scheduler("#container");
+  const draggableAppointment = scheduler.getAppointment("Staff Productivity Report");
+
+  await t
+      .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(25, 0))
+      .expect(draggableAppointment.date.time).eql("9:30 PM - 10:00 PM");
+
+}).before(() => createScheduler({
+  views: ["week"],
+  currentView: "week",
+  dataSource: [{
+      text: "Staff Productivity Report",
+      startDate: new Date(2019, 3, 1, 21, 0),
+      endDate: new Date(2019, 3, 1, 21, 30),
+      resourceId: 2
+  }],
+  height: 1800
+}));
+
+test('Drag recurrent appointment occurrence from collector (T832887)', async t => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Recurrence two');
   const collector = scheduler.getAppointmentCollector('2');
