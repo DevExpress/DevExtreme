@@ -12,7 +12,7 @@ import config from '../../core/config';
 import { orderEach, deepExtendArraySafe } from '../../core/utils/object';
 import errors from '../widget/ui.errors';
 import modules from './ui.grid_core.modules';
-import { isDateType, getFormatByDataType, getDisplayValue, normalizeSortingInfo, equalSortParameters, equalFilterParameters } from './ui.grid_core.utils';
+import { isDateType, getFormatByDataType, getDisplayValue, normalizeSortingInfo, equalSortParameters } from './ui.grid_core.utils';
 import { normalizeIndexes } from '../../core/utils/array';
 import inflector from '../../core/utils/inflector';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -1966,47 +1966,45 @@ module.exports = {
                     }
                 },
                 updateColumns: function(dataSource, forceApplying) {
+                    const that = this;
+
                     if(!forceApplying) {
-                        this.updateSortingGrouping(dataSource);
+                        that.updateSortingGrouping(dataSource);
                     }
 
                     if(!dataSource || dataSource.isLoaded()) {
-                        const sortParameters = dataSource ? dataSource.sort() || [] : this.getSortDataSourceParameters();
-                        const groupParameters = dataSource ? dataSource.group() || [] : this.getGroupDataSourceParameters();
-                        const filterParameters = dataSource && dataSource.lastLoadOptions().filter;
+                        const sortParameters = dataSource ? dataSource.sort() || [] : that.getSortDataSourceParameters();
+                        const groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
-                        this._customizeColumns(this._columns);
+                        that._customizeColumns(that._columns);
 
-                        updateIndexes(this);
+                        updateIndexes(that);
 
-                        const columns = this._columns;
-                        return when(this.refresh(true)).always(() => {
-                            if(this._columns !== columns) return;
+                        const columns = that._columns;
+                        return when(that.refresh(true)).always(function() {
+                            if(that._columns !== columns) return;
 
-                            this._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters, filtering: filterParameters });
+                            that._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters });
 
-                            fireColumnsChanged(this);
+                            fireColumnsChanged(that);
                         });
                     }
                 },
                 _updateChanges: function(dataSource, parameters) {
+                    const that = this;
+
                     if(dataSource) {
-                        this.updateColumnDataTypes(dataSource);
-                        this._dataSourceApplied = true;
+                        that.updateColumnDataTypes(dataSource);
+                        that._dataSourceApplied = true;
                     }
 
-                    if(!equalSortParameters(parameters.sorting, this.getSortDataSourceParameters())) {
-                        updateColumnChanges(this, 'sorting');
+                    if(!equalSortParameters(parameters.sorting, that.getSortDataSourceParameters())) {
+                        updateColumnChanges(that, 'sorting');
                     }
-                    if(!equalSortParameters(parameters.grouping, this.getGroupDataSourceParameters())) {
-                        updateColumnChanges(this, 'grouping');
+                    if(!equalSortParameters(parameters.grouping, that.getGroupDataSourceParameters())) {
+                        updateColumnChanges(that, 'grouping');
                     }
-
-                    const dataController = this.getController('data');
-                    if(dataController && !equalFilterParameters(parameters.filtering, dataController.getCombinedFilter())) {
-                        updateColumnChanges(this, 'filtering');
-                    }
-                    updateColumnChanges(this, 'columns');
+                    updateColumnChanges(that, 'columns');
                 },
                 updateSortingGrouping: function(dataSource, fromDataSource) {
                     const that = this;
