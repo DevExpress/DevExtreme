@@ -3110,7 +3110,7 @@ declare module DevExpress.ui {
         /** @name dxDataGridColumn.showWhenGrouped */
         showWhenGrouped?: boolean;
         /** @name dxDataGridColumn.type */
-        type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+        type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
     }
     /** @name dxDataGridColumnButton */
     export interface dxDataGridColumnButton extends GridBaseColumnButton {
@@ -6300,7 +6300,7 @@ declare module DevExpress.ui {
         /** @name dxTreeListColumn.headerCellTemplate */
         headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: { component?: dxTreeList, columnIndex?: number, column?: dxTreeListColumn }) => any);
         /** @name dxTreeListColumn.type */
-        type?: 'adaptive' | 'buttons';
+        type?: 'adaptive' | 'buttons' | 'drag';
     }
     /** @name dxTreeListColumnButton */
     export interface dxTreeListColumnButton extends GridBaseColumnButton {
