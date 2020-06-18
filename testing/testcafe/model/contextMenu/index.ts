@@ -1,29 +1,31 @@
-import Widget from '../internal/widget';
 import { Selector } from 'testcafe';
+import Widget from '../internal/widget';
 import Overlay from './overlay';
 import OverlayWrapper from './overlay/wrapper';
 
 const CLASS = {
-    contextMenu: 'dx-context-menu',
-    item: 'dx-menu-item'
+  contextMenu: 'dx-context-menu',
+  item: 'dx-menu-item',
 };
 
 export default class ContextMenu extends Widget {
-    items: Selector;
-    overlay: Overlay;
-    overlayWrapper: OverlayWrapper;
+  items: Selector;
 
-    name: string = 'dxContextMenu';
+  overlay: Overlay;
 
-    constructor(id: string|Selector) {
-        super(id);
+  overlayWrapper: OverlayWrapper;
 
-        this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
-        this.overlay = new Overlay();
-        this.overlayWrapper = new OverlayWrapper();
-    }
+  name = 'dxContextMenu';
 
-    getItemCount() {
-        return this.items.count;
-    }
+  constructor(id: string|Selector) {
+    super(id);
+
+    this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
+    this.overlay = new Overlay();
+    this.overlayWrapper = new OverlayWrapper();
+  }
+
+  getItemCount() {
+    return this.items.count;
+  }
 }
