@@ -6094,8 +6094,6 @@ declare module DevExpress.ui {
         items?: Array<string | dxToolbarItem | any>;
         /** @name dxToolbar.Options.menuItemTemplate */
         menuItemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxToolbar.Options.renderAs */
-        renderAs?: 'bottomToolbar' | 'topToolbar';
     }
     /** @name dxToolbar */
     export class dxToolbar extends CollectionWidget {
