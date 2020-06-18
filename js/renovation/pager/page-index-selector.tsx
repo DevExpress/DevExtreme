@@ -24,9 +24,10 @@ export const viewFunction = ({
   navigateToPrevPage,
   nextClassName,
   navigateToNextPage,
+  pageIndexChange,
   props: {
     isLargeDisplayMode, maxPagesCount,
-    pageCount, pageIndex, pageIndexChange, pagesCountText,
+    pageCount, pageIndex, pagesCountText,
     rtlEnabled,
   },
 }: PageIndexSelector) => (
@@ -105,17 +106,20 @@ export default class PageIndexSelector extends JSXComponent(PageIndexSelectorPro
     return !this.props.rtlEnabled ? 'prev' : 'next';
   }
 
+  private canNavigateToPage(pageIndex: number): boolean {
+    return (pageIndex >= 0 && pageIndex <= (this.props.pageCount as number) - 1);
+  }
+
+  private getNextPageIndex(direction: Direction): number {
+    return (this.props.pageIndex as number) + getIncrement(direction);
+  }
+
   private canNavigateTo(direction: Direction): boolean {
-    const isNextDirection = direction === 'next';
-    const { pageCount, pageIndex } = this.props as Required<PageIndexSelectorProps>;
-    return isNextDirection ? pageIndex < pageCount - 1 : pageIndex > 0;
+    return this.canNavigateToPage(this.getNextPageIndex(direction));
   }
 
   private navigateToPage(direction: Direction): void {
-    const canNavigate = this.canNavigateTo(direction);
-    if (canNavigate) {
-          this.props.pageIndexChange?.((this.props.pageIndex as number) + getIncrement(direction));
-    }
+    this.pageIndexChange(this.getNextPageIndex(direction));
   }
 
   get renderNavButtons(): boolean {
@@ -136,6 +140,12 @@ export default class PageIndexSelector extends JSXComponent(PageIndexSelectorPro
     const direction = this.getPrevDirection();
     const canNavigate = this.canNavigateTo(direction);
     return canNavigate ? prevButtonClassName : prevButtonDisabledClassName;
+  }
+
+  pageIndexChange(pageIndex: number): void {
+    if (this.canNavigateToPage(pageIndex)) {
+        this.props.pageIndexChange?.(pageIndex);
+    }
   }
 
   navigateToNextPage(): void {

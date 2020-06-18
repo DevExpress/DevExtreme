@@ -11,12 +11,12 @@ describe('Page index selector', () => {
       navigateToPrevPage: jest.fn(),
       nextClassName: 'nextClassName',
       navigateToNextPage: jest.fn(),
+      pageIndexChange: jest.fn(),
       props: {
         isLargeDisplayMode: true,
         maxPagesCount: 10,
         pageCount: 10,
         pageIndex: 1,
-        pageIndexChange: jest.fn(),
         pagesCountText: 'Of',
         rtlEnabled: true,
       },
@@ -35,7 +35,7 @@ describe('Page index selector', () => {
         maxPagesCount: 10,
         pageCount: 10,
         pageIndex: 1,
-        pageIndexChange: props.props?.pageIndexChange,
+        pageIndexChange: props.pageIndexChange,
         rtlEnabled: true,
       });
       expect(prevButton.props()).toEqual({
@@ -60,7 +60,7 @@ describe('Page index selector', () => {
         maxPagesCount: 10,
         pageCount: 10,
         pageIndex: 1,
-        pageIndexChange: props.props?.pageIndexChange,
+        pageIndexChange: props.pageIndexChange,
         rtlEnabled: true,
       });
     });
@@ -79,7 +79,7 @@ describe('Page index selector', () => {
         children: [],
         pageCount: 10,
         pageIndex: 1,
-        pageIndexChange: props.props?.pageIndexChange,
+        pageIndexChange: props.pageIndexChange,
         pagesCountText: 'Of',
         rtlEnabled: true,
       });
@@ -106,13 +106,13 @@ describe('Page index selector', () => {
       expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
     it('prevClassName, rtlEnabled: false', () => {
-      const component = new PageIndexSelector({ rtlEnabled: false, pageIndex: 1 });
+      const component = new PageIndexSelector({ rtlEnabled: false, pageIndex: 1, pageCount: 5 });
       expect(component.prevClassName).toBe('dx-navigate-button dx-prev-button');
       component.props.pageIndex = 0;
       expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
     it('nextClassName, rtlEnabled: true', () => {
-      const component = new PageIndexSelector({ rtlEnabled: true, pageIndex: 1 });
+      const component = new PageIndexSelector({ rtlEnabled: true, pageIndex: 1, pageCount: 5 });
       expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
       component.props.pageIndex = 0;
       expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
@@ -194,6 +194,18 @@ describe('Page index selector', () => {
       expect(pageIndexChange).not.toBeCalled();
       component.navigateToPrevPage();
       expect(pageIndexChange).not.toBeCalled();
+    });
+    it('pageIndexChange', () => {
+      const pageIndexChange = jest.fn();
+      const component = new PageIndexSelector({
+        pageCount: 5, pageIndexChange,
+      });
+      component.pageIndexChange(-1);
+      expect(pageIndexChange).not.toBeCalled();
+      component.pageIndexChange(5);
+      expect(pageIndexChange).not.toBeCalled();
+      component.pageIndexChange(4);
+      expect(pageIndexChange).toBeCalledWith(4);
     });
   });
 });
