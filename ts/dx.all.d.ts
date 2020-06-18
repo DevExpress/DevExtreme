@@ -6094,8 +6094,6 @@ declare module DevExpress.ui {
         items?: Array<string | dxToolbarItem | any>;
         /** @name dxToolbar.Options.menuItemTemplate */
         menuItemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxToolbar.Options.renderAs */
-        renderAs?: 'bottomToolbar' | 'topToolbar';
     }
     /** @name dxToolbar */
     export class dxToolbar extends CollectionWidget {
@@ -6994,7 +6992,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.size */
         size?: BaseWidgetSize;
         /** @name BaseWidget.Options.theme */
-        theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
+        theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
         /** @name BaseWidget.Options.title */
         title?: BaseWidgetTitle | string;
         /** @name BaseWidget.Options.tooltip */
