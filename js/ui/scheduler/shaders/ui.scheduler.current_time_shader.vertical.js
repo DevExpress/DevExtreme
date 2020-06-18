@@ -9,52 +9,39 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     renderShader() {
         let shaderHeight = this._getShaderHeight();
         const maxHeight = this._getShaderMaxHeight();
-        let renderSolidShader = false;
-
-        if(shaderHeight > maxHeight) {
-            shaderHeight = maxHeight;
-            renderSolidShader = true;
-        }
+        const isSolidShader = shaderHeight > maxHeight;
 
         if(shaderHeight >= 0) {
-            this._$shader.height(shaderHeight);
+            if(shaderHeight > maxHeight) {
+                shaderHeight = maxHeight;
+            }
 
+            this._$shader.height(shaderHeight);
             const groupCount = this._workSpace._getGroupCount() || 1;
 
-            if(renderSolidShader) {
-                this._renderSolidShaderParts(groupCount, shaderHeight);
-            } else {
-                this._workSpace.isGroupedByDate() ? this._renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight) : this._renderShaderParts(groupCount, shaderHeight, maxHeight);
-            }
+            this._workSpace.isGroupedByDate() ? this._renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) :
+                this._renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
         }
     }
 
-    _renderSolidShaderParts(groupCount, shaderHeight) {
-        for(let i = 0; i < groupCount; i++) {
-            const shaderWidth = this._getShaderWidth(i);
-            this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
-            this._renderAllDayShader(shaderWidth, i);
-        }
-    }
-
-    _renderShaderParts(groupCount, shaderHeight, maxHeight) {
+    _renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
         for(let i = 0; i < groupCount; i++) {
             const shaderWidth = this._getShaderWidth(i);
             this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
-            this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
+            !isSolidShader && this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
 
             this._renderAllDayShader(shaderWidth, i);
         }
     }
 
-    _renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight) {
+    _renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
         const shaderWidth = this._getShaderWidth(0);
         const bottomShaderWidth = (shaderWidth - this._workSpace.getCellWidth()) * groupCount + this._workSpace.getCellWidth();
 
         this._renderTopShader(this._$shader, shaderHeight, shaderWidth * groupCount, 0);
 
-        this._renderBottomShader(this._$shader, maxHeight - shaderHeight, bottomShaderWidth, 0);
+        !isSolidShader && this._renderBottomShader(this._$shader, maxHeight - shaderHeight, bottomShaderWidth, 0);
 
         this._renderAllDayShader(shaderWidth * groupCount, 0);
     }

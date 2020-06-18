@@ -756,8 +756,8 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         this.instance.option({
             endDayHour: 18,
             groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
-            currentDate: new Date(2017, 7, 5),
-            indicatorTime: new Date(2017, 8, 5, 19, 45)
+            currentDate: new Date(2017, 8, 2),
+            indicatorTime: new Date(2017, 7, 30, 19, 45)
         });
 
         const $element = this.instance.$element();
@@ -772,16 +772,42 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         assert.equal($bottomShader.length, 0, 'BottomShader wasn\'t rendered for overdue view');
 
         $topShader.each((index, element) => {
-            assert.roughEqual($(element).outerWidth(), 7 * cellWidth, 2, 'TopShader has correct width');
+            assert.roughEqual($(element).outerWidth(), 4 * cellWidth, 2, 'TopShader has correct width');
             assert.roughEqual($(element).outerHeight(), 1000, 2, 'TopShader has correct height');
+            assert.roughEqual(parseInt($(element).css('left')), index * 7 * cellWidth, 2, 'TopShader has correct left');
         });
 
         $allDayShader.each((index, element) => {
-            assert.roughEqual($(element).outerWidth(), 7 * cellWidth, 2, 'TopShader has correct width');
+            assert.roughEqual($(element).outerWidth(), 4 * cellWidth, 2, 'AllDay has correct width');
         });
     });
 
-    QUnit.test('DateTimeIndicator should have correct position and size, Week view with groupByDate', function(assert) {
+    QUnit.test('Shader should be rendered for \'overdue\' grouped view, groupByDate = true', function(assert) {
+        this.instance.option({
+            endDayHour: 18,
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+            groupByDate: true,
+            currentDate: new Date(2017, 8, 2),
+            indicatorTime: new Date(2017, 7, 30, 19, 45)
+        });
+
+        const $element = this.instance.$element();
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellWidth = $cell.outerWidth();
+
+        assert.equal($topShader.length, 1, 'Shader top parts count is correct');
+        assert.equal($allDayShader.length, 1, 'Shader allDay parts count is correct');
+        assert.equal($bottomShader.length, 0, 'BottomShader wasn\'t rendered for overdue view');
+
+        assert.roughEqual($topShader.outerWidth(), 8 * cellWidth, 2, 'TopShader has correct width');
+        assert.roughEqual($topShader.outerHeight(), 1000, 2, 'TopShader has correct height');
+        assert.roughEqual($allDayShader.outerWidth(), 8 * cellWidth, 2, 'AllDay has correct width');
+    });
+
+    QUnit.test('DateTimeIndicator should have correct position and size, Week view with groupByDate = true', function(assert) {
         this.instance.option({
             groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
             groupByDate: true,
@@ -797,7 +823,7 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         assert.roughEqual($indicator.outerWidth(), 2 * cellWidth, 1, 'Indicator has correct width');
     });
 
-    QUnit.test('Shader should have correct position and size, Week view with groupByDate', function(assert) {
+    QUnit.test('Shader should have correct position and size, Week view with groupByDate = true', function(assert) {
         this.instance.option({
             groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }],
             groupByDate: true,
