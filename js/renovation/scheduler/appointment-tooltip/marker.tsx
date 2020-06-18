@@ -3,19 +3,16 @@ import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, Effect, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import {
-  TOOLTIP_APPOINTMENT_ITEM_MARKER, TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY,
-} from './consts';
 import { DeferredColor, Color } from './types';
 
 export const viewFunction = (viewModel: Marker) => (
   <div
-    className={`${TOOLTIP_APPOINTMENT_ITEM_MARKER} ${viewModel.props.className}`}
+    className={`dx-tooltip-appointment-item-marker ${viewModel.props.className}`}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
     <div
-      className={TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY}
+      className="dx-tooltip-appointment-item-marker-body"
       style={viewModel.style}
     />
   </div>

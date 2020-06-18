@@ -7,14 +7,10 @@ import {
 import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
-import {
-  TOOLTIP_APPOINTMENT_ITEM, TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER,
-  TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON,
-} from './consts';
 import { AppointmentItem, FormattedContent } from './types';
 import Marker from './marker';
 import Button from '../../button';
-import TooltipItemContent from './tooltip-item-content';
+import TooltipItemContent from './item-content';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
@@ -35,7 +31,7 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
       )}
       {!useTemplate && (
         <div
-          className={`${TOOLTIP_APPOINTMENT_ITEM} ${viewModel.props.className}`}
+          className={`dx-tooltip-appointment-item ${viewModel.props.className}`}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...viewModel.restAttributes}
         >
@@ -45,9 +41,9 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
             formattedDate={viewModel.formattedContent.formatDate}
           />
           {viewModel.props.showDeleteButton && (
-            <div className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER}>
+            <div className="dx-tooltip-appointment-item-delete-button-container">
               <Button
-                className={TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON}
+                className="dx-tooltip-appointment-item-delete-button"
                 icon="trash"
                 stylingMode="text"
                 onClick={viewModel.onDeleteButtonClick}

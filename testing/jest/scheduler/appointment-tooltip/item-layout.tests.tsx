@@ -5,14 +5,14 @@ import { dxSchedulerAppointment } from '../../../../js/ui/scheduler';
 import TooltipItemLayout, {
   viewFunction as TooltipItemLayoutView,
   TooltipItemLayoutProps,
-} from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-layout';
+} from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
 import DeleteButton from '../../../../js/renovation/button';
 import Marker from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
-import TooltipItemContent from '../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content';
+import TooltipItemContent from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 
 jest.mock('../../../../js/renovation/button', () => () => null);
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/tooltip-item-content', () => () => null);
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
 
 describe('TooltipItemLayout', () => {
   describe('View', () => {
