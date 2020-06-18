@@ -56,6 +56,7 @@ class DialogInfoBase {
 
     _getFormItems() { return {}; }
     _getFormCssClass() { return ''; }
+    _getFormData() { return this._parameters; }
     _updateParameters() {}
     _getOkToolbarItem() {
         return this._getToolbarItem('OK', this._applyAction);
@@ -90,7 +91,7 @@ class DialogInfoBase {
     getContentTemplate() {
         return (content) => {
             this._form = new Form(content, {
-                formData: this._parameters,
+                formData: this._getFormData(),
                 items: this._getFormItems(),
                 elementAttr: {
                     class: this._getFormCssClass()
@@ -139,7 +140,6 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorType: 'dxNumberBox',
             label: { text: messageLocalization.format('dxGantt-dialogProgressTitle') },
             editorOptions: {
-                value: this._parameters.progress / 100,
                 showSpinButtons: true,
                 min: 0,
                 max: 1,
@@ -168,6 +168,13 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 }]
             }
         }];
+    }
+    _getFormData() {
+        const data = {};
+        for(const field in this._parameters) {
+            data[field] = field === 'progress' ? this._parameters[field] / 100 : this._parameters[field];
+        }
+        return data;
     }
     _updateParameters(formData) {
         this._parameters.title = formData.title;

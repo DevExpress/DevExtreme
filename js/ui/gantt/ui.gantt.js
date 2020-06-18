@@ -451,8 +451,9 @@ class Gantt extends Widget {
     }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {
-            const storeArray = this._tasksOption._getStore()._array;
-            this._setTreeListOption('dataSource', storeArray ? storeArray : this.option('tasks.dataSource'));
+            const dataSource = this.option('tasks.dataSource');
+            const storeArray = this._tasksOption._getStore()._array || (dataSource.items && dataSource.items());
+            this._setTreeListOption('dataSource', storeArray ? storeArray : dataSource);
         }
     }
     _skipUpdateTreeListDataSource() {

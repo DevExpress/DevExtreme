@@ -3211,7 +3211,7 @@ QUnit.test('Datetime axis, breaks values are string', function(assert) {
 
 QUnit.test('Remove groups on disposing', function(assert) {
     this.renderSettings.scaleBreaksGroup = this.renderer.g();
-    const axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
+    const axis = this.createSimpleAxis(this.renderSettings, $.extend(true, this.options, {
         breaks: [
             { startValue: 50, endValue: 100 },
             { startValue: 70, endValue: 150 }
@@ -3225,7 +3225,6 @@ QUnit.test('Remove groups on disposing', function(assert) {
         min: 0,
         max: 140
     }));
-
     this.translator.getBusinessRange.returns(new rangeModule.Range({
         breaks: [
             { startValue: 50, endValue: 100 },
@@ -3248,6 +3247,54 @@ QUnit.test('Remove groups on disposing', function(assert) {
 
     assert.ok(this.renderer.g.getCall(1).returnValue.dispose.called);
     assert.ok(this.renderer.clipRect.getCall(1).returnValue.dispose.called);
+});
+
+QUnit.test('T889259. Scale breaks should be into account in the translator after update', function(assert) {
+    // first render
+    this.updateOptions({
+        breaks: []
+    });
+
+    this.axis.visualRange(250, 540);
+    this.axis.createTicks(this.canvas);
+
+    // second render
+    this.translator.updateBusinessRange.reset();
+    this.updateOptions({
+        breaks: [{ startValue: 300, endValue: 400 }]
+    });
+    this.axis.createTicks(this.canvas);
+
+    const updateBusinessRange = this.translator.updateBusinessRange;
+    for(let i = 0; i < updateBusinessRange.callCount; i++) {
+        assert.deepEqual(updateBusinessRange.args[i][0].breaks, [{ from: 300, to: 400, cumulativeWidth: 0 }]);
+    }
+});
+
+QUnit.test('Tick generator should get initial breaks', function(assert) {
+    const that = this;
+    this.tickGeneratorSpy = sinon.spy(function() {
+        return {
+            ticks: that.generatedTicks || [],
+            minorTicks: that.generatedMinorTicks || [],
+            tickInterval: that.generatedTickInterval,
+            breaks: [{ from: 350, to: 450, cumulativeWidth: 0 }]
+        };
+    });
+    this.updateOptions({
+        breaks: [{ startValue: 300, endValue: 400 }]
+    });
+
+    this.axis.visualRange(250, 540);
+
+    this.axis.createTicks(this.canvas);
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{
+        from: 300,
+        to: 400,
+        cumulativeWidth: 0
+    }]);
 });
 
 QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, environment2DTranslator, {
