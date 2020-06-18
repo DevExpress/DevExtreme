@@ -161,15 +161,16 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     _getIndicatorOffset(groupIndex) {
         const groupByDay = this._workSpace.isGroupedByDate();
-        let offset = 0;
 
-        if(groupByDay) {
-            offset = this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
-        } else {
-            offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex + this._workSpace.getIndicatorOffset(groupIndex) + groupIndex;
-        }
+        return groupByDay ? this._calculateGroupByDateOffset(groupIndex) : this._calculateOffset(groupIndex);
+    }
 
-        return offset;
+    _calculateOffset(groupIndex) {
+        return this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex + this._workSpace.getIndicatorOffset(groupIndex) + groupIndex;
+    }
+
+    _calculateGroupByDateOffset(groupIndex) {
+        return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
     }
 
     getShaderOffset(i, width) {
