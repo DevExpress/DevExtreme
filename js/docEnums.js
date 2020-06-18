@@ -1017,12 +1017,12 @@
 
 /**
  * @typedef {string} Enums.GridCommandColumnType
- * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'}
+ * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'|'drag'}
  */
 
 /**
  * @typedef {string} Enums.TreeListCommandColumnType
- * @enum {'adaptive'|'buttons'}
+ * @enum {'adaptive'|'buttons'|'drag'}
  */
 
 /**
