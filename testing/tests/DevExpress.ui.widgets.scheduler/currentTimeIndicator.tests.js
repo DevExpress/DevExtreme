@@ -680,10 +680,12 @@ const stubInvokeMethod = function(instance, options) {
         const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
         const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
         const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellWidth = $cell.outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, 'Shader has correct height');
-        assert.roughEqual($topShader.outerWidth(), this.instance._dateTableScrollable.$content().outerWidth(), 2, 'TopShader has correct width');
-        assert.roughEqual($allDayShader.outerWidth(), this.instance._dateTableScrollable.$content().outerWidth(), 2, 'AllDayShader has correct width');
+        assert.roughEqual($topShader.outerWidth(), 7 * cellWidth, 2, 'TopShader has correct width');
+        assert.roughEqual($allDayShader.outerWidth(), 7 * cellWidth, 2, 'AllDayShader has correct width');
 
         assert.roughEqual($topShader.outerHeight(), 1000, 1.5, 'TopShader has correct height');
 
@@ -736,6 +738,48 @@ const stubInvokeMethod = function(instance, options) {
         assert.roughEqual(parseInt($topShader.css('left')), 706, 1.5, 'Top indicator has correct left');
         assert.roughEqual(parseInt($bottomShader.css('left')), 770, 1.5, 'Bottom indicator has correct left');
     });
+})('DateTime indicator on Week View');
+
+const moduleConfig = {
+    beforeEach() {
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 8, 5),
+            startDayHour: 8,
+        }).dxSchedulerWorkSpaceWeek('instance');
+        stubInvokeMethod(this.instance);
+    }
+};
+
+QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
+    QUnit.test('Shader should be rendered for \'overdue\' grouped view', function(assert) {
+        this.instance.option({
+            endDayHour: 18,
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+            currentDate: new Date(2017, 7, 5),
+            indicatorTime: new Date(2017, 8, 5, 19, 45)
+        });
+
+        const $element = this.instance.$element();
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellWidth = $cell.outerWidth();
+
+        assert.equal($topShader.length, 2, 'Shader top parts count is correct');
+        assert.equal($allDayShader.length, 2, 'Shader allDay parts count is correct');
+        assert.equal($bottomShader.length, 0, 'BottomShader wasn\'t rendered for overdue view');
+
+        $topShader.each((index, element) => {
+            assert.roughEqual($(element).outerWidth(), 7 * cellWidth, 2, 'TopShader has correct width');
+            assert.roughEqual($(element).outerHeight(), 1000, 2, 'TopShader has correct height');
+        });
+
+        $allDayShader.each((index, element) => {
+            assert.roughEqual($(element).outerWidth(), 7 * cellWidth, 2, 'TopShader has correct width');
+        });
+    });
 
     QUnit.test('DateTimeIndicator should have correct position and size, Week view with groupByDate', function(assert) {
         this.instance.option({
@@ -769,19 +813,19 @@ const stubInvokeMethod = function(instance, options) {
         const cellHeight = $cell.get(0).getBoundingClientRect().height;
         const cellWidth = $cell.outerWidth();
 
-        assert.roughEqual($allDayShader.outerHeight(), $allDayCell.outerHeight(), 1, 'AllDay shader has correct height');
-        assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, 'Top shader has correct height');
-        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, 'Bottom shader has correct height');
+        const shaderConfigs = [
+            { type: 'allDay', element: $allDayShader, height: $allDayCell.outerHeight(), width: 9 * cellWidth, left: 0 },
+            { type: 'top', element: $topShader, height: 9.5 * cellHeight, width: 9 * cellWidth, left: 0 },
+            { type: 'bottom', element: $bottomShader, height: 22.5 * cellHeight, width: 6 * cellWidth, left: 0 }
+        ];
 
-        assert.roughEqual($allDayShader.outerWidth(), 9 * cellWidth, 1, 'AllDay shader has correct width');
-        assert.roughEqual($topShader.outerWidth(), 9 * cellWidth, 1.5, 'Top shader has correct width');
-        assert.roughEqual($bottomShader.outerWidth(), 6 * cellWidth, 1.5, 'Bottom shader has correct width');
-
-        assert.roughEqual(parseInt($allDayShader.css('left')), 0, 1.5, 'AllDay shader has correct left');
-        assert.roughEqual(parseInt($topShader.css('left')), 0, 1.5, 'Top shader has correct left');
-        assert.roughEqual(parseInt($bottomShader.css('left')), 0, 1.5, 'Bottom shader has correct left');
+        shaderConfigs.forEach(config => {
+            assert.roughEqual(config.element.outerHeight(), config.height, 1.5, `${config.type} shader has correct height`);
+            assert.roughEqual(config.element.outerWidth(), config.width, 1.5, `${config.type} shader has correct width`);
+            assert.roughEqual(parseInt(config.element.css('left')), config.left, 1.5, `${config.type} shader has correct left`);
+        });
     });
-})('DateTime indicator on Week View');
+});
 
 (function() {
     QUnit.module('DateTime indicator on TimelineDay View', {

@@ -1,4 +1,3 @@
-import { getBoundingRect } from '../../../core/utils/position';
 import $ from '../../../core/renderer';
 import CurrentTimeShader from '../shaders/ui.scheduler.current_time_shader';
 
@@ -23,11 +22,18 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
             const groupCount = this._workSpace._getGroupCount() || 1;
 
             if(renderSolidShader) {
-                this._renderTopShader(this._$shader, shaderHeight, getBoundingRect(this._$container.get(0)).width, 0);
-                this._renderAllDayShader(getBoundingRect(this._$container.get(0)).width, 0);
+                this._renderSolidShaderParts(groupCount, shaderHeight);
             } else {
                 this._workSpace.isGroupedByDate() ? this._renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight) : this._renderShaderParts(groupCount, shaderHeight, maxHeight);
             }
+        }
+    }
+
+    _renderSolidShaderParts(groupCount, shaderHeight) {
+        for(let i = 0; i < groupCount; i++) {
+            const shaderWidth = this._getShaderWidth(i);
+            this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
+            this._renderAllDayShader(shaderWidth, i);
         }
     }
 
