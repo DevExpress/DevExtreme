@@ -974,11 +974,13 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
 
         const $element = this.instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+        const indicationWidth = 50;
 
         assert.equal($indicators.length, 2, 'Indicator count is correct');
-        assert.equal($indicators.eq(0).position().left, 550);
+        assert.equal($indicators.eq(0).position().left, cellWidth * 2.5 + indicationWidth, 'First indicator left is Ok');
         assert.equal($indicators.eq(0).position().top, 0);
-        assert.equal($indicators.eq(1).position().left, 750);
+        assert.equal($indicators.eq(1).position().left, cellWidth * 3.5 + indicationWidth, 'Second indicator left is Ok');
         assert.equal($indicators.eq(1).position().top, 0);
     });
 
@@ -993,17 +995,20 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
 
         const $element = this.instance.$element();
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const cellHeight = $element.find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
+        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+        const indicationWidth = 50;
 
         assert.equal($shader.length, 2, 'Shaders count is correct');
 
-        assert.roughEqual($shader.eq(0).outerHeight(), 160, 1, 'Shader has correct height');
-        assert.roughEqual($shader.eq(0).outerWidth(), 550, 1, 'Shader has correct width');
+        assert.roughEqual($shader.eq(0).outerHeight(), cellHeight, 1, 'Shader has correct height');
+        assert.roughEqual($shader.eq(0).outerWidth(), cellWidth * 2.5 + indicationWidth, 1, 'Shader has correct width');
 
-        assert.roughEqual($shader.eq(1).outerHeight(), 160, 1, 'Shader has correct height');
-        assert.roughEqual($shader.eq(1).outerWidth(), 150, 1, 'Shader has correct width');
+        assert.roughEqual($shader.eq(1).outerHeight(), cellHeight, 1, 'Shader has correct height');
+        assert.roughEqual($shader.eq(1).outerWidth(), cellWidth / 2 + indicationWidth, 1, 'Shader has correct width');
 
         assert.roughEqual($shader.eq(0).position().left, 0, 1, 'Shader has correct left');
-        assert.roughEqual($shader.eq(1).position().left, 600, 1, 'Shader has correct left');
+        assert.roughEqual($shader.eq(1).position().left, cellWidth * 3, 1, 'Shader has correct left');
     });
 
     QUnit.test('Shader should have correct height, width and position', function(assert) {

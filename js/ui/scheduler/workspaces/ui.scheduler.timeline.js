@@ -246,7 +246,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     getIndicationWidth() {
         if(this.isGroupedByDate()) {
             const cellCount = this.getIndicationCellCount();
-            const integerPart = Math.trunc(cellCount);
+            const integerPart = Math.floor(cellCount);
             const fractionPart = cellCount - integerPart;
 
             return this.getCellWidth() * (integerPart * this._getGroupCount() + fractionPart);
