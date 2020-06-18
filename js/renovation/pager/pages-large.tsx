@@ -13,22 +13,16 @@ import Page, { PageProps } from './page';
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({ pages }: PagesLarge) => {
-  const PagesMarkup = pages.map((pageProps) => {
-    if (pageProps !== null) {
-      const { index = 0, selected, onClick } = pageProps;
-      return (
-        <Page
-          key={index.toString()}
-          index={index}
-          selected={selected}
-          onClick={onClick}
-        />
-      );
-    }
-    return (
-      <div key="delimiter" className={PAGER_PAGE_SEPARATOR_CLASS}>. . .</div>
-    );
-  });
+  const PagesMarkup = pages.map((pageProps) => (pageProps !== null
+    ? (
+      <Page
+        key={pageProps.index}
+        index={pageProps.index}
+        selected={pageProps.selected}
+        onClick={pageProps.onClick}
+      />
+    )
+    : <div key="delimiter" className={PAGER_PAGE_SEPARATOR_CLASS}>. . .</div>));
   return (<Fragment>{PagesMarkup}</Fragment>);
 };
 
@@ -99,7 +93,7 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 export default class PagesLarge extends JSXComponent(PagesLargeProps) {
   get pages(): PageType[] {
     const { pageIndex } = this.props as Required<PagesLargeProps>;
-    const createPage = (index: number): PageType => ({
+    const createPage = (index = 0): PageType => ({
       index,
       onClick: () => this.onPageClick(index),
       selected: pageIndex === index,
