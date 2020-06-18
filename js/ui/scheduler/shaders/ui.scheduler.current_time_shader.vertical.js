@@ -44,9 +44,11 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
 
     _renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight) {
         const shaderWidth = this._getShaderWidth(0);
+        const bottomShaderWidth = (shaderWidth - this._workSpace.getCellWidth()) * groupCount + this._workSpace.getCellWidth();
+
         this._renderTopShader(this._$shader, shaderHeight, shaderWidth * groupCount, 0);
 
-        this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth * groupCount - this._workSpace.getCellWidth() * (groupCount - 1), 0);
+        this._renderBottomShader(this._$shader, maxHeight - shaderHeight, bottomShaderWidth, 0);
 
         this._renderAllDayShader(shaderWidth * groupCount, 0);
     }
