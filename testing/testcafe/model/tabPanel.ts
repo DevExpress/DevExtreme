@@ -3,20 +3,21 @@ import Tabs from './tabs'
 import MultiView from './multiView'
 
 const CLASS = {
-    tabs: "dx-tabs",
-    multiview: "dx-multiview"
+  tabs: 'dx-tabs',
+  multiView: 'dx-multiview',
 };
 
 export default class TabPanel extends Widget {
-    tabs: Tabs;
-    multiview: MultiView;
+  tabs: Tabs;
 
-    name: string = 'dxTabPanel';
+  multiView: MultiView;
 
-    constructor (id: string) {
-        super(id);
+  name = 'dxTabPanel';
 
-        this.tabs = new Tabs(`.${CLASS.tabs}`);
-        this.multiview = new MultiView(`.${CLASS.multiview}`);
-    }
+  constructor(id: string) {
+    super(id);
+
+    this.tabs = new Tabs(`.${CLASS.tabs}`);
+    this.multiView = new MultiView(`.${CLASS.multiView}`);
+  }
 }
