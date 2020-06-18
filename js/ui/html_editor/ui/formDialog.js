@@ -52,9 +52,9 @@ class FormDialog {
                 const $formContainer = $('<div>').appendTo(contentElem);
 
                 this._renderForm($formContainer, {
-                    onEditorEnterKey: ({ component, dataField }) => {
+                    onEditorEnterKey: ({ component, dataField, event }) => {
                         this._updateEditorValue(component, dataField);
-                        this.hide(component.option('formData'));
+                        this.hide(component.option('formData'), event);
                     },
                     customizeItem: (item) => {
                         if(item.itemType === 'simple') {
@@ -76,8 +76,8 @@ class FormDialog {
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: format('OK'),
-                        onClick: () => {
-                            this.hide(this._form.option('formData'));
+                        onClick: ({ event }) => {
+                            this.hide(this._form.option('formData'), event);
                         }
                     }
                 }, {
@@ -126,8 +126,8 @@ class FormDialog {
         return this.deferred.promise();
     }
 
-    hide(formData) {
-        this.deferred.resolve(formData);
+    hide(formData, event) {
+        this.deferred.resolve(formData, event);
         this._popup.hide();
     }
 

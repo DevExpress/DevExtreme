@@ -116,6 +116,7 @@ export default class AppointmentPopup {
     _onShowing(e) {
         const arg = {
             form: this._appointmentForm,
+            popup: this._popup,
             appointmentData: this.state.appointment.data,
             cancel: false
         };

@@ -1,29 +1,31 @@
 import FocusableElement from '../internal/focusable';
 
 const CLASS = {
-    form: 'dx-form',
-    textEditor: 'dx-texteditor',
-    textEditorInput: 'dx-texteditor-input',
-    invalid: 'dx-invalid',
+  form: 'dx-form',
+  textEditor: 'dx-texteditor',
+  textEditorInput: 'dx-texteditor-input',
+  invalid: 'dx-invalid',
 };
 
 export default class EditForm extends FocusableElement {
-    form: Selector;
-    saveButton: Selector;
-    cancelButton: Selector;
+  form: Selector;
 
-    constructor(element: Selector, buttons: Selector) {
-        super(element);
-        this.form = this.element.find(`.${CLASS.form}`);
-        this.saveButton = buttons.nth(0);
-        this.cancelButton = buttons.nth(1);
-    }
+  saveButton: Selector;
 
-    getItem(id): Selector {
-        return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`);
-    }
+  cancelButton: Selector;
 
-    getInvalids(): Selector {
-        return this.form.find(`.${CLASS.textEditor}.${CLASS.invalid}`);
-    }
+  constructor(element: Selector, buttons: Selector) {
+    super(element);
+    this.form = this.element.find(`.${CLASS.form}`);
+    this.saveButton = buttons.nth(0);
+    this.cancelButton = buttons.nth(1);
+  }
+
+  getItem(id): Selector {
+    return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`);
+  }
+
+  getInvalids(): Selector {
+    return this.form.find(`.${CLASS.textEditor}.${CLASS.invalid}`);
+  }
 }
