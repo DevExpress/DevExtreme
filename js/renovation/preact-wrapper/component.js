@@ -104,12 +104,10 @@ export default class PreactWrapper extends DOMComponent {
             ...this.elementAttr,
             ...options.elementAttr,
             className: [
-                ...new Set([
-                    ...(this.elementAttr.class || '').split(' '),
-                    ...(options.elementAttr.class || '').split(' '),
-                ]),
+                ...(this.elementAttr.class || '').split(' '),
+                ...(options.elementAttr.class || '').split(' '),
             ]
-                .filter((s) => s)
+                .filter((c, i, a) => c && a.indexOf(c) === i)
                 .join(' '),
             ...this._actionsMap,
             ...abandonProps(),
