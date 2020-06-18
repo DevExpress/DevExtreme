@@ -752,6 +752,35 @@ const stubInvokeMethod = function(instance, options) {
         assert.roughEqual($indicator.eq(0).position().left, 256, 1.5, 'Indicator left is OK');
         assert.roughEqual($indicator.outerWidth(), 2 * cellWidth, 1, 'Indicator has correct width');
     });
+
+    QUnit.test('Shader should have correct position and size, Week view with groupByDate', function(assert) {
+        this.instance.option({
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }],
+            groupByDate: true,
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        const $element = this.instance.$element();
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const $allDayCell = this.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0);
+        const cellHeight = $cell.get(0).getBoundingClientRect().height;
+        const cellWidth = $cell.outerWidth();
+
+        assert.roughEqual($allDayShader.outerHeight(), $allDayCell.outerHeight(), 1, 'AllDay shader has correct height');
+        assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, 'Top shader has correct height');
+        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, 'Bottom shader has correct height');
+
+        assert.roughEqual($allDayShader.outerWidth(), 9 * cellWidth, 1, 'AllDay shader has correct width');
+        assert.roughEqual($topShader.outerWidth(), 9 * cellWidth, 1.5, 'Top shader has correct width');
+        assert.roughEqual($bottomShader.outerWidth(), 6 * cellWidth, 1.5, 'Bottom shader has correct width');
+
+        assert.roughEqual(parseInt($allDayShader.css('left')), 0, 1.5, 'AllDay shader has correct left');
+        assert.roughEqual(parseInt($topShader.css('left')), 0, 1.5, 'Top shader has correct left');
+        assert.roughEqual(parseInt($bottomShader.css('left')), 0, 1.5, 'Bottom shader has correct left');
+    });
 })('DateTime indicator on Week View');
 
 (function() {
