@@ -25,6 +25,8 @@ export default class AppointmentPopup {
 
   cancelButton: Selector;
 
+  allDayElement: Selector;
+
   freqElement: Selector;
 
   constructor(scheduler: Selector) {
@@ -37,7 +39,7 @@ export default class AppointmentPopup {
     this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
     this.allDayElement = this.wrapper.find('.dx-switch').nth(0);
 
-    this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq');
+    this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
 
     this.doneButton = this.wrapper.find('.dx-popup-done.dx-button');
     this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
