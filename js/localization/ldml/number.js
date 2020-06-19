@@ -1,5 +1,5 @@
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const toFixed = require('../utils').toFixed;
+import { fitIntoRange } from '../../core/utils/math';
+import { toFixed } from '../utils';
 
 const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };
 const ESCAPING_CHAR = '\'';
@@ -216,5 +216,5 @@ function getFormat(formatter) {
     return negativeFormat === '-' + positiveFormat ? positiveFormat : positiveFormat + ';' + negativeFormat;
 }
 
-exports.getFormatter = getFormatter;
-exports.getFormat = getFormat;
+export { getFormatter };
+export { getFormat };

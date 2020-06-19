@@ -1,4 +1,4 @@
-const escapeRegExp = require('../../core/utils/common').escapeRegExp;
+import { escapeRegExp } from '../../core/utils/common';
 
 const FORMAT_TYPES = {
     '3': 'abbreviated',
@@ -306,6 +306,6 @@ const getParser = function(format, dateParts) {
     };
 };
 
-exports.getParser = getParser;
-exports.getRegExpInfo = getRegExpInfo;
-exports.getPatternSetters = getPatternSetters;
+export { getParser };
+export { getRegExpInfo };
+export { getPatternSetters };
