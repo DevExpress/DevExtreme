@@ -1435,7 +1435,7 @@ REFRESH_SERIES_FAMILIES_ACTION_OPTIONS.forEach(function(name) {
 import { plugin as exportPlugin } from '../core/export';
 import { plugin as titlePlugin } from '../core/title';
 import { plugin as dataSourcePlugin } from '../core/data_source';
-import { plugin as tooltipPlugin } from '../funnel/tooltip';
+import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
 
 BaseChart.addPlugin(exportPlugin);
