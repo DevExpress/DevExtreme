@@ -1,16 +1,16 @@
-const proto = require('./sankey').prototype;
-const Tracker = require('../components/tracker').Tracker;
+import { prototype as proto } from './sankey';
+import { Tracker } from '../components/tracker';
 const DATA_KEY_BASE = '__sankey_data_';
 let dataKeyModifier = 0;
+const dataKey = DATA_KEY_BASE + dataKeyModifier++;
 
 proto._eventsMap.onNodeClick = { name: 'nodeClick' };
 proto._eventsMap.onLinkClick = { name: 'linkClick' };
 
-exports.plugin = {
+export const plugin = {
     name: 'tracker',
     init: function() {
         const that = this;
-        const dataKey = DATA_KEY_BASE + dataKeyModifier++;
 
         that._tracker = new Tracker({
             widget: that,
@@ -35,10 +35,6 @@ exports.plugin = {
             }
         });
 
-        ///#DEBUG
-        exports._TESTS_dataKey = dataKey;
-        ///#ENDDEBUG
-
         this._dataKey = dataKey;
     },
     dispose: function() {
@@ -54,3 +50,6 @@ exports.plugin = {
     }
 };
 
+///#DEBUG
+export const _TESTS_dataKey = dataKey;
+///#ENDDEBUG

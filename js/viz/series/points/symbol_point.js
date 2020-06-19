@@ -1,12 +1,12 @@
-const extend = require('../../../core/utils/extend').extend;
-const each = require('../../../core/utils/iterator').each;
-const noop = require('../../../core/utils/common').noop;
-const windowUtils = require('../../../core/utils/window');
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { noop } from '../../../core/utils/common';
+import windowUtils from '../../../core/utils/window';
 const window = windowUtils.getWindow();
-const labelModule = require('./label');
+import labelModule from './label';
 const _extend = extend;
-const _isDefined = require('../../../core/utils/type').isDefined;
-const _normalizeEnum = require('../../core/utils').normalizeEnum;
+import { isDefined as _isDefined } from '../../../core/utils/type';
+import { normalizeEnum as _normalizeEnum } from '../../core/utils';
 
 const _math = Math;
 const _round = _math.round;
@@ -78,7 +78,7 @@ function getTriangleUpMarkerCoords(radius) {
     ];
 }
 
-module.exports = {
+export default {
     deleteLabel: function() {
         this._label.dispose();
         this._label = null;

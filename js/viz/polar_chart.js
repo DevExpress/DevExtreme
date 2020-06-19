@@ -217,9 +217,11 @@ const dxPolarChart = AdvancedChart.inherit({
     _isLegendInside: noop
 });
 
-dxPolarChart.addPlugin(require('./core/annotations').plugins.core);
-dxPolarChart.addPlugin(require('./core/annotations').plugins.polarChart);
+import { plugins } from './core/annotations';
+
+dxPolarChart.addPlugin(plugins.core);
+dxPolarChart.addPlugin(plugins.polarChart);
 
 registerComponent('dxPolarChart', dxPolarChart);
 
-module.exports = dxPolarChart;
+export default dxPolarChart;

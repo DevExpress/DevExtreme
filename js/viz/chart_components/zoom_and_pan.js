@@ -63,7 +63,7 @@ function isNotEmptyAxisBusinessRange(axis) {
     return !axis.getTranslator().getBusinessRange().isEmpty();
 }
 
-module.exports = {
+export default {
     name: 'zoom_and_pan',
     init: function() {
         const chart = this;

@@ -467,4 +467,4 @@ SlidersController.prototype = {
     }
 };
 
-exports.SlidersController = SlidersController;
+export { SlidersController };

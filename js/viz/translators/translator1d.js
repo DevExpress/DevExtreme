@@ -74,4 +74,4 @@ Translator1D.prototype = {
     }
 };
 
-exports.Translator1D = Translator1D;
+export { Translator1D };

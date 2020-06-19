@@ -1,4 +1,4 @@
-const themeModule = require('../../themes');
+import themeModule from '../../themes';
 const IOS7_DEFAULT = 'ios7.default';
 const SECONDARY_TEXT_COLOR = '#767676';
 const BORDER_COLOR = '#d3d3d3';

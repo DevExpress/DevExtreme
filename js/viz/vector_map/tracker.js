@@ -463,20 +463,25 @@ Focus = function(fire) {
 
 eventEmitterModule.makeEventEmitter(Tracker);
 
-exports.Tracker = Tracker;
+export { Tracker };
 
 ///#DEBUG
 const originFocus = Focus;
-exports._DEBUG_forceEventMode = function(mode) {
+
+export function _DEBUG_forceEventMode(mode) {
     setupEvents(mode);
-};
-exports.Focus = Focus;
-exports._DEBUG_stubFocusType = function(focusType) {
+}
+
+export { Focus };
+
+export function _DEBUG_stubFocusType(focusType) {
     Focus = focusType;
-};
-exports._DEBUG_restoreFocusType = function() {
+}
+
+export function _DEBUG_restoreFocusType() {
     Focus = originFocus;
-};
+}
+
 ///#ENDDEBUG
 
 function getDistance(x1, y1, x2, y2) {

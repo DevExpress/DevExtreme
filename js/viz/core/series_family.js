@@ -4,6 +4,9 @@ import { each as _each } from '../../core/utils/iterator';
 import { sign } from '../../core/utils/math';
 import { noop as _noop } from '../../core/utils/common';
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
+///#DEBUG
+import { debug } from '../../core/utils/console';
+///#ENDDEBUG
 const { round, abs, pow, sqrt } = Math;
 const _min = Math.min;
 
@@ -386,7 +389,6 @@ function adjustBubbleSeriesDimensions() {
 
 function SeriesFamily(options) {
     ///#DEBUG
-    const debug = require('../../core/utils/console').debug;
     debug.assert(options.type, 'type was not passed or empty');
     ///#ENDDEBUG
 
@@ -448,7 +450,7 @@ function SeriesFamily(options) {
 }
 
 
-exports.SeriesFamily = SeriesFamily;
+export { SeriesFamily };
 
 SeriesFamily.prototype = {
     constructor: SeriesFamily,

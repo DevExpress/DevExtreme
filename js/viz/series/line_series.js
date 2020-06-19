@@ -1,12 +1,13 @@
 // there are line, stepline, stackedline, fullstackedline, spline
-const series = require('./scatter_series');
+import series from './scatter_series';
+
 const chartScatterSeries = series.chart;
 const polarScatterSeries = series.polar;
-const objectUtils = require('../../core/utils/object');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const vizUtils = require('../core/utils');
-const mathUtils = require('../../core/utils/math');
+import objectUtils from '../../core/utils/object';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import vizUtils from '../core/utils';
+import mathUtils from '../../core/utils/math';
 const normalizeAngle = vizUtils.normalizeAngle;
 
 const DISCRETE = 'discrete';
@@ -18,8 +19,8 @@ const _each = each;
 
 const { round, sqrt, pow, min, max, abs } = Math;
 
-exports.chart = {};
-exports.polar = {};
+const chart = {};
+const polar = {};
 
 function clonePoint(point, newX, newY, newAngle) {
     const p = objectUtils.clone(point);
@@ -220,7 +221,7 @@ const lineMethods = {
     }
 };
 
-const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
+const lineSeries = chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
     getPointCenterByArg(arg) {
         const value = this.getArgumentAxis().getTranslator().translate(arg);
         return { x: value, y: value };
@@ -254,7 +255,7 @@ const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineM
     }
 });
 
-exports.chart['stepline'] = _extend({}, lineSeries, {
+chart['stepline'] = _extend({}, lineSeries, {
     _calculateStepLinePoints(points) {
         const segment = [];
         const coordName = this._options.rotated ? 'x' : 'y';
@@ -309,7 +310,7 @@ exports.chart['stepline'] = _extend({}, lineSeries, {
     }
 });
 
-exports.chart['spline'] = _extend({}, lineSeries, {
+chart['spline'] = _extend({}, lineSeries, {
 
     _calculateBezierPoints: function(src, rotated) {
         const bezierPoints = [];
@@ -477,7 +478,7 @@ exports.chart['spline'] = _extend({}, lineSeries, {
     },
 });
 
-exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
+polar.line = _extend({}, polarScatterSeries, lineMethods, {
     _sortPoints: function(points) {
         return points;
     },
@@ -671,3 +672,8 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
         return neighborPoints;
     }
 });
+
+export {
+    chart,
+    polar
+};

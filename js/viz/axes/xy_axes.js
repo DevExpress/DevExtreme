@@ -273,7 +273,7 @@ function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, 
     return breaks;
 }
 
-module.exports = {
+export default {
     linear: {
         _getStep: function(boxes, rotationAngle) {
             const spacing = this._options.label.minSpacing;

@@ -1,10 +1,10 @@
-const baseIndicatorsModule = require('./base_indicators');
+import baseIndicatorsModule from './base_indicators';
 const BaseIndicator = baseIndicatorsModule.BaseIndicator;
 const BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker;
 const BaseRangeBar = baseIndicatorsModule.BaseRangeBar;
 
 const _Number = Number;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
 
 const SimpleIndicator = BaseIndicator.inherit({
     _move: function() {
@@ -542,10 +542,13 @@ const rangeBar = BaseRangeBar.inherit({
     }
 });
 
-exports._default = rangeBar;
-exports['rectangle'] = rectangle;
-exports['rhombus'] = rhombus;
-exports['circle'] = circle;
-exports['trianglemarker'] = triangleMarker;
-exports['textcloud'] = textCloud;
-exports['rangebar'] = rangeBar;
+export { rangeBar as _default };
+/* eslint-disable spellcheck/spell-checker */
+export {
+    rectangle,
+    rhombus,
+    circle,
+    triangleMarker as trianglemarker,
+    textCloud as textcloud,
+    rangeBar as rangebar
+};

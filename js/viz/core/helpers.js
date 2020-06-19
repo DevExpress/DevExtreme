@@ -1,6 +1,6 @@
-const _extend = require('../../core/utils/extend').extend;
-const windowUtils = require('../../core/utils/window');
-const noop = require('../../core/utils/common').noop;
+import { extend as _extend } from '../../core/utils/extend';
+import windowUtils from '../../core/utils/window';
+import { noop } from '../../core/utils/common';
 const isServerSide = !windowUtils.hasWindow();
 
 function Flags() {
@@ -119,7 +119,7 @@ function addPlugin(plugin) {
     }
 }
 
-exports.replaceInherit = isServerSide
+export const replaceInherit = isServerSide
     ? function(widget) {
         const _inherit = widget.inherit;
         widget.inherit = function() {
@@ -185,8 +185,8 @@ exports.replaceInherit = isServerSide
         widget.addPlugin = addPlugin;
     };
 
-exports.changes = function() {
+export function changes() {
     return new Flags();
-};
+}
 
-exports.expand = expand;
+export { expand };

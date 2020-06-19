@@ -1,5 +1,5 @@
-const _format = require('../axes/smart_formatter').smartFormatter;
-const isFunction = require('../../core/utils/type').isFunction;
+import { smartFormatter as _format } from '../axes/smart_formatter';
+import { isFunction } from '../../core/utils/type';
 const HEIGHT_COMPACT_MODE = 24;
 const POINTER_SIZE = 4;
 const EMPTY_SLIDER_MARKER_TEXT = '. . .';
@@ -32,8 +32,7 @@ const formatValue = function(value, formatOptions, tickIntervalsInfo, valueType,
     return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
 };
 
-exports.utils = utils;
-exports.consts = consts;
-exports.formatValue = formatValue;
-
-exports.HEIGHT_COMPACT_MODE = HEIGHT_COMPACT_MODE;
+export { utils };
+export { consts };
+export { formatValue };
+export { HEIGHT_COMPACT_MODE };

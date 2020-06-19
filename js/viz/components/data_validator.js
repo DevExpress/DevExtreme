@@ -1,4 +1,4 @@
-const typeUtils = require('../../core/utils/type');
+import typeUtils from '../../core/utils/type';
 
 const STRING = 'string';
 const NUMERIC = 'numeric';
@@ -10,9 +10,10 @@ const LOGARITHMIC = 'logarithmic';
 const VALUE_TYPE = 'valueType';
 const ARGUMENT_TYPE = 'argumentType';
 
-const extend = require('../../core/utils/extend').extend;
-const axisTypeParser = require('../core/utils').enumParser([STRING, NUMERIC, DATETIME]);
-const _getParser = require('./parse_utils').getParser;
+import { extend } from '../../core/utils/extend';
+import { enumParser } from '../core/utils';
+const axisTypeParser = enumParser([STRING, NUMERIC, DATETIME]);
+import { getParser as _getParser } from './parse_utils';
 
 const _isDefined = typeUtils.isDefined;
 const _isFunction = typeUtils.isFunction;
@@ -485,4 +486,4 @@ function validateData(data, groupsData, incidentOccurred, options) {
     return dataByArgumentFields;
 }
 
-exports.validateData = validateData;
+export { validateData };

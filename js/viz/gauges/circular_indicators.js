@@ -1,8 +1,8 @@
-const baseIndicatorsModule = require('./base_indicators');
+import baseIndicatorsModule from './base_indicators';
 const BaseIndicator = baseIndicatorsModule.BaseIndicator;
 const BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker;
 const BaseRangeBar = baseIndicatorsModule.BaseRangeBar;
-const vizUtils = require('../core/utils');
+import vizUtils from '../core/utils';
 
 const _Number = Number;
 const _getCosAndSin = vizUtils.getCosAndSin;
@@ -424,10 +424,12 @@ const rangeBar = BaseRangeBar.inherit({
     }
 });
 
-exports._default = rectangleNeedle;
-exports['rectangleneedle'] = rectangleNeedle;
-exports['triangleneedle'] = triangleNeedle;
-exports['twocolorneedle'] = twoColorNeedle;
-exports['trianglemarker'] = triangleMarker;
-exports['textcloud'] = textCloud;
-exports['rangebar'] = rangeBar;
+export { rectangleNeedle as _default };
+/* eslint-disable spellcheck/spell-checker */
+
+export { rectangleNeedle as rectangleneedle };
+export { triangleNeedle as triangleneedle };
+export { twoColorNeedle as twocolorneedle };
+export { triangleMarker as trianglemarker };
+export { textCloud as textcloud };
+export { rangeBar as rangebar };

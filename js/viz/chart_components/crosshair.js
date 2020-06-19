@@ -15,12 +15,12 @@ const LEFT = 'left';
 const TOP = 'top';
 const BOTTOM = 'bottom';
 
-exports.getMargins = function() {
+export function getMargins() {
     return {
         x: LABEL_BACKGROUND_PADDING_X,
         y: LABEL_BACKGROUND_PADDING_Y
     };
-};
+}
 
 function getRectangleBBox(bBox) {
     return {
@@ -306,4 +306,4 @@ Crosshair.prototype = {
     }
 };
 
-exports.Crosshair = Crosshair;
+export { Crosshair };

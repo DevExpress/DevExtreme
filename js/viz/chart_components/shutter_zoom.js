@@ -1,4 +1,4 @@
-const dragEvents = require('../../events/drag');
+import dragEvents from '../../events/drag';
 const SHUTTER_EVENTS_NS = '.shutter-zoom';
 const DRAG_START_EVENT_NAME = dragEvents.start + SHUTTER_EVENTS_NS;
 const DRAG_UPDATE_EVENT_NAME = dragEvents.move + SHUTTER_EVENTS_NS;
@@ -116,7 +116,7 @@ function shutterZoom(options) {
     return shutter;
 }
 
-module.exports = {
+export default {
     name: 'shutter_zoom',
 
     init: function() {

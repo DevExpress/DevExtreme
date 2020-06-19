@@ -362,9 +362,9 @@ Tooltip.prototype = {
     }
 };
 
-exports.Tooltip = Tooltip;
+export { Tooltip };
 
-exports.plugin = {
+export const plugin = {
     name: 'tooltip',
     init: function() {
         this._initTooltip();

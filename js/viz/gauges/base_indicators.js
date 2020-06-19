@@ -1,14 +1,14 @@
-const noop = require('../../core/utils/common').noop;
-const each = require('../../core/utils/iterator').each;
+import { noop } from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
 const _isFinite = isFinite;
 const _Number = Number;
 const _round = Math.round;
-const baseGaugeModule = require('./base_gauge');
+import baseGaugeModule from './base_gauge';
 const _formatValue = baseGaugeModule.formatValue;
 const _getSampleText = baseGaugeModule.getSampleText;
-const _patchFontOptions = require('../core/utils').patchFontOptions;
-const extend = require('../../core/utils/extend').extend;
-const Class = require('../../core/class');
+import { patchFontOptions as _patchFontOptions } from '../core/utils';
+import { extend } from '../../core/utils/extend';
+import Class from '../../core/class';
 
 const BaseElement = Class.inherit({
     ctor: function(parameters) {
@@ -423,11 +423,11 @@ const BaseRangeBar = BaseIndicator.inherit({
     }
 });
 
-exports.BaseElement = BaseElement;
-exports.BaseIndicator = BaseIndicator;
-exports.BaseTextCloudMarker = BaseTextCloudMarker;
-exports.BaseRangeBar = BaseRangeBar;
+export { BaseElement };
+export { BaseIndicator };
+export { BaseTextCloudMarker };
+export { BaseRangeBar };
 
 ///#DEBUG
-exports.getTextCloudInfo = getTextCloudInfo;
+export { getTextCloudInfo };
 ///#ENDDEBUG

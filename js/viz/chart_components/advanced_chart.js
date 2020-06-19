@@ -65,7 +65,7 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
     axis.visualRange(visualRange, options);
 }
 
-const AdvancedChart = BaseChart.inherit({
+export const AdvancedChart = BaseChart.inherit({
 
     _fontFields: [COMMON_AXIS_SETTINGS + '.label.' + FONT, COMMON_AXIS_SETTINGS + '.title.' + FONT],
 
@@ -812,5 +812,3 @@ const AdvancedChart = BaseChart.inherit({
 
     _correctValueAxes: _noop
 });
-
-exports.AdvancedChart = AdvancedChart;

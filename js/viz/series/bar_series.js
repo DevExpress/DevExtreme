@@ -1,16 +1,17 @@
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const scatterSeries = require('./scatter_series');
-const areaSeries = require('./area_series').chart.area;
-const vizUtils = require('../core/utils');
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import scatterSeries from './scatter_series';
+import { chart as areaChart } from './area_series';
+const areaSeries = areaChart.area;
+import vizUtils from '../core/utils';
 const chartSeries = scatterSeries.chart;
 const polarSeries = scatterSeries.polar;
-const _isDefined = require('../../core/utils/type').isDefined;
+import { isDefined as _isDefined } from '../../core/utils/type';
 const _extend = extend;
 const _each = each;
 
-exports.chart = {};
-exports.polar = {};
+const chart = {};
+const polar = {};
 
 const baseBarSeriesMethods = {
     _createLegendState: function(styleOptions, defaultColor) {
@@ -109,7 +110,7 @@ const baseBarSeriesMethods = {
     }
 };
 
-exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
+chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     _getAffineCoordOptions: function() {
         const rotated = this._options.rotated;
         const direction = rotated ? 'X' : 'Y';
@@ -176,7 +177,7 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     }
 });
 
-exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
+polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
     _animatePoints: function(firstDrawing, complete, animateFunc) {
         animateFunc(this._drawnPoints, complete);
     },
@@ -229,3 +230,8 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
 
     _createLegendState: areaSeries._createLegendState,
 });
+
+export {
+    chart,
+    polar
+};

@@ -1,11 +1,10 @@
-const _extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const _each = require('../../core/utils/iterator').each;
-const rangeCalculator = require('./helpers/range_data_calculator');
-const typeUtils = require('../../core/utils/type');
-const vizUtils = require('../core/utils');
-
-const _noop = require('../../core/utils/common').noop;
+import { extend as _extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { each as _each } from '../../core/utils/iterator';
+import rangeCalculator from './helpers/range_data_calculator';
+import typeUtils from '../../core/utils/type';
+import vizUtils from '../core/utils';
+import { noop as _noop } from '../../core/utils/common';
 const _isDefined = typeUtils.isDefined;
 const _isString = typeUtils.isString;
 const _map = vizUtils.map;
@@ -32,8 +31,8 @@ const DISCRETE = 'discrete';
 const LOGARITHMIC = 'logarithmic';
 const DATETIME = 'datetime';
 
-exports.chart = {};
-exports.polar = {};
+let chart = {};
+let polar = {};
 
 function sum(array) {
     let result = 0;
@@ -575,7 +574,7 @@ const baseScatterMethods = {
     }
 };
 
-exports.chart = _extend({}, baseScatterMethods, {
+chart = _extend({}, baseScatterMethods, {
     drawTrackers: function() {
         const that = this;
         let trackers;
@@ -723,9 +722,9 @@ exports.chart = _extend({}, baseScatterMethods, {
     }
 });
 
-exports.polar = _extend({}, baseScatterMethods, {
+polar = _extend({}, baseScatterMethods, {
     drawTrackers: function() {
-        exports.chart.drawTrackers.call(this);
+        chart.drawTrackers.call(this);
         const cat = this._trackersTranslator;
         let index;
 
@@ -745,7 +744,7 @@ exports.polar = _extend({}, baseScatterMethods, {
 
     getNeighborPoint: function(x, y) {
         const pos = vizUtils.convertXYToPolar(this.getValueAxis().getCenter(), x, y);
-        return exports.chart.getNeighborPoint.call(this, pos.phi, pos.r);
+        return chart.getNeighborPoint.call(this, pos.phi, pos.r);
     },
 
     _applyVisibleArea: function() {
@@ -777,3 +776,8 @@ exports.polar = _extend({}, baseScatterMethods, {
         return coords;
     }
 });
+
+export {
+    chart,
+    polar
+};

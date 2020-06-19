@@ -192,11 +192,11 @@ function calculateGaps(breaks) {
     });
 }
 
-exports.generateDateBreaks = function(min, max, workWeek, singleWorkdays, holidays) {
+export function generateDateBreaks(min, max, workWeek, singleWorkdays, holidays) {
     const weekendDayIndices = getWeekEndDayIndices(workWeek);
     const breaks = generateDateBreaksForWeekend(min, max, weekendDayIndices);
 
     breaks.push.apply(breaks, generateBreaksForHolidays(min, max, holidays || [], weekendDayIndices));
 
     return calculateGaps(excludeWorkDaysFromWeekEndBreaks(breaks, singleWorkdays || []));
-};
+}

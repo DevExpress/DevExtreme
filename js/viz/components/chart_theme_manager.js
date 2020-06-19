@@ -1,10 +1,10 @@
-const noop = require('../../core/utils/common').noop;
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager;
+import { noop } from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { BaseThemeManager } from '../core/base_theme_manager';
 const _isString = typeUtils.isString;
 const _isDefined = typeUtils.isDefined;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
 
 const ThemeManager = BaseThemeManager.inherit((function() {
     const ctor = function(params) {
@@ -226,4 +226,4 @@ const ThemeManager = BaseThemeManager.inherit((function() {
     };
 })());
 
-exports.ThemeManager = ThemeManager;
+export { ThemeManager };

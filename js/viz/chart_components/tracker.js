@@ -457,7 +457,7 @@ const baseTrackerPrototype = {
     }
 };
 
-const ChartTracker = function(options) {
+export const ChartTracker = function(options) {
     this.ctor(options);
 };
 
@@ -628,7 +628,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     }
 });
 
-const PieTracker = function(options) {
+export const PieTracker = function(options) {
     this.ctor(options);
 };
 
@@ -669,6 +669,3 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     _getCanvas: _noop,
     _notifyLegendOnHoverArgument: true
 });
-
-exports.ChartTracker = ChartTracker;
-exports.PieTracker = PieTracker;

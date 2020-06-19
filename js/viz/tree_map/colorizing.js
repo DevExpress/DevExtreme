@@ -1,5 +1,5 @@
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const _noop = require('../../core/utils/common').noop;
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { noop as _noop } from '../../core/utils/common';
 
 const colorizers = {};
 let defaultColorizerName;
@@ -18,31 +18,31 @@ function wrapGroupColorGetter(getter) {
     };
 }
 
-exports.getColorizer = function(options, themeManager, root) {
+export function getColorizer(options, themeManager, root) {
     const type = _normalizeEnum(options.type || defaultColorizerName);
     const colorizer = colorizers[type] && colorizers[type](options, themeManager, root);
 
     return colorizer ? (options.colorizeGroups ? wrapGroupColorGetter : wrapLeafColorGetter)(colorizer) : _noop;
-};
+}
 
-exports.addColorizer = function(name, colorizer) {
+export function addColorizer(name, colorizer) {
     colorizers[name] = colorizer;
-};
+}
 
-exports.setDefaultColorizer = function(name) {
+export function setDefaultColorizer(name) {
     defaultColorizerName = name;
-};
+}
 
 function getValueAsColorCode(node) {
     return node.value;
 }
 
-function createColorCodeGetter(colorCodeField) {
+function createColorCode(colorCodeField) {
     return function(node) {
         return Number(node.data[colorCodeField]);
     };
 }
 
-exports.createColorCodeGetter = function(options) {
-    return options.colorCodeField ? createColorCodeGetter(options.colorCodeField) : getValueAsColorCode;
-};
+export function createColorCodeGetter(options) {
+    return options.colorCodeField ? createColorCode(options.colorCodeField) : getValueAsColorCode;
+}

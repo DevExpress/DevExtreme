@@ -1,17 +1,17 @@
-const proto = require('./funnel').prototype;
-const Tracker = require('../components/tracker').Tracker;
+import { prototype as proto } from './funnel';
+import { Tracker } from '../components/tracker';
 const DATA_KEY_BASE = '__funnel_data_';
-const isDefined = require('../../core/utils/type').isDefined;
+import { isDefined } from '../../core/utils/type';
 let dataKeyModifier = 0;
+const dataKey = DATA_KEY_BASE + dataKeyModifier++;
 
 proto._eventsMap.onItemClick = { name: 'itemClick' };
 proto._eventsMap.onLegendClick = { name: 'legendClick' };
 
-exports.plugin = {
+export const plugin = {
     name: 'tracker',
     init: function() {
         const that = this;
-        const dataKey = DATA_KEY_BASE + dataKeyModifier++;
         const getProxyData = function(e) {
             const rootOffset = that._renderer.getRootOffset();
             const x = Math.floor(e.pageX - rootOffset.left);
@@ -52,10 +52,6 @@ exports.plugin = {
             }
         });
 
-        ///#DEBUG
-        exports._TESTS_dataKey = dataKey;
-        ///#ENDDEBUG
-
         this._dataKey = dataKey;
     },
     dispose: function() {
@@ -70,4 +66,8 @@ exports.plugin = {
         }
     }
 };
+
+///#DEBUG
+export const _TESTS_dataKey = dataKey;
+///#ENDDEBUG
 

@@ -69,4 +69,4 @@ RangeView.prototype = {
     }
 };
 
-exports.RangeView = RangeView;
+export { RangeView };

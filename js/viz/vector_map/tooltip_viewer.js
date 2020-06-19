@@ -40,4 +40,4 @@ TooltipViewer.prototype = {
     }
 };
 
-exports.TooltipViewer = TooltipViewer;
+export { TooltipViewer };

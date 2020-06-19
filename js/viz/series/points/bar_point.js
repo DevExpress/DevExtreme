@@ -1,4 +1,4 @@
-const extend = require('../../../core/utils/extend').extend;
+import { extend } from '../../../core/utils/extend';
 
 const _extend = extend;
 
@@ -6,7 +6,7 @@ const _math = Math;
 const _floor = _math.floor;
 const _abs = _math.abs;
 
-const symbolPoint = require('./symbol_point');
+import symbolPoint from './symbol_point';
 
 const CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 const DEFAULT_BAR_TRACKER_SIZE = 9;
@@ -27,7 +27,8 @@ function getLabelOrientation(point) {
                 (isFullStacked);
     return notAxisInverted ? TOP : BOTTOM;
 }
-module.exports = _extend({}, symbolPoint, {
+
+export default _extend({}, symbolPoint, {
 
     correctCoordinates(correctOptions) {
         const that = this;

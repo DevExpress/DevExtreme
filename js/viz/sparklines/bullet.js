@@ -1,5 +1,6 @@
-const each = require('../../core/utils/iterator').each;
-const BaseSparkline = require('./base_sparkline');
+import { each } from '../../core/utils/iterator';
+import BaseSparkline from './base_sparkline';
+import componentRegistrator from '../../core/component_registrator';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -261,6 +262,6 @@ each(['color', 'targetColor', 'targetWidth', 'showTarget', 'showZeroLevel',
     dxBullet.prototype._optionChangesMap[name] = 'OPTIONS';
 });
 
-require('../../core/component_registrator')('dxBullet', dxBullet);
+componentRegistrator('dxBullet', dxBullet);
 
-module.exports = dxBullet;
+export default dxBullet;

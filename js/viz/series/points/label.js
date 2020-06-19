@@ -540,7 +540,7 @@ Label.prototype = {
     }
 };
 
-exports.Label = Label;
+export { Label };
 
 ///#DEBUG
 Label._DEBUG_formatText = formatText;

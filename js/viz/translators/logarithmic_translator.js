@@ -1,9 +1,9 @@
-const vizUtils = require('../core/utils');
-const isDefined = require('../../core/utils/type').isDefined;
+import vizUtils from '../core/utils';
+import { isDefined } from '../../core/utils/type';
 const raiseTo = vizUtils.raiseToExt;
 const getLog = vizUtils.getLogExt;
 
-module.exports = {
+export default {
     _fromValue: function(value) {
         return value !== null ? getLog(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
     },
