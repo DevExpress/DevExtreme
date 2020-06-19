@@ -9,12 +9,14 @@ const logger = require('core/utils/console').logger;
 const errors = require('viz/core/errors_warnings');
 const BaseWidget = require('viz/core/base_widget');
 const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
+const DEBUG_createResizeHandler = require('viz/core/base_widget.utils').DEBUG_createResizeHandler;
 const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
 const rendererModule = require('viz/core/renderers/renderer');
 let dxBaseWidgetTester;
 let StubThemeManager;
 let StubTitle;
 const vizMocks = require('../../helpers/vizMocks.js');
+require('viz/core/base_widget');
 
 // TODO: Move export tests to a separate file
 require('viz/core/export');
@@ -1309,7 +1311,7 @@ QUnit.module('createResizeHandler', {
         this.clock.restore();
     },
 
-    create: BaseWidget.DEBUG_createResizeHandler,
+    create: DEBUG_createResizeHandler,
 
     tick: function(count) {
         this.clock.tick(count);

@@ -1,8 +1,9 @@
-import { prototype as proto } from './tree_map.base';
+import TreeMapBase from './tree_map.base';
 import { prototype as nodeProto } from './node';
 import { expand } from '../core/helpers';
-import TreeMapBase from './tree_map.base';
 import common from './common';
+
+const proto = TreeMapBase.prototype;
 
 const _buildRectAppearance = common.buildRectAppearance;
 import { normalizeEnum as _normalizeEnum } from '../core/utils';

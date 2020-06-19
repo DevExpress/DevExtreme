@@ -31,7 +31,8 @@
             DevExpress.require('viz/core/export'),
             DevExpress.require('viz/core/renderers/renderer'),
             DevExpress.require('viz/core/errors_warnings'),
-            DevExpress.require('base_widget')
+            DevExpress.require('base_widget'),
+            DevExpress.require('viz/core/base_widget.utils')
         );
     }
 }(window, function($, tooltipModule, titleModule, legendModule, axisModule, pointModule, Series, loadingIndicatorModule, exportMenuModule, rendererModule, errors, baseWidgetModule, baseWidgetUtils) {

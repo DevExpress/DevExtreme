@@ -1,10 +1,10 @@
-import { prototype as proto } from './tree_map.base';
+import TreeMapBase from './tree_map.base';
 import { prototype as nodeProto } from './node';
 import { expand } from '../core/helpers';
 import common from './common';
 import { parseScalar as _parseScalar } from '../core/utils';
-import { addChange } from './tree_map.base';
 const _buildRectAppearance = common.buildRectAppearance;
+const proto = TreeMapBase.prototype;
 
 const STATE_CODE = 1;
 
@@ -17,7 +17,7 @@ expand(proto._handlers, 'calculateAdditionalStates', function(states, options) {
     states[1] = options.hoverStyle ? _buildRectAppearance(options.hoverStyle) : {};
 });
 
-addChange({
+TreeMapBase.addChange({
     code: 'HOVER_ENABLED',
     handler: function() {
         const hoverEnabled = _parseScalar(this._getOption('hoverEnabled', true), true);

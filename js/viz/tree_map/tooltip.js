@@ -1,6 +1,7 @@
-import { prototype as proto } from './tree_map.base';
 import { expand } from '../core/helpers';
 import TreeMapBase from './tree_map.base';
+
+const proto = TreeMapBase.prototype;
 
 import './api';
 
