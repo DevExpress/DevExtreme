@@ -917,6 +917,37 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         assert.equal(customCellText1, 'test1', 'custom fields text not shown');
         assert.equal(customCellText2, 'test2', 'custom fields text not shown');
     });
+
+    test('edit title (T891411)', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'idKey': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0, 'customField': 'test0' },
+            { 'idKey': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0, 'customField': 'test1' },
+            { 'idKey': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50, 'customField': 'test2' }
+        ];
+        const options = {
+            tasks: { dataSource: tasks, keyExpr: 'idKey', },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+    });
 });
 
 QUnit.module('Edit data sources (T887281)', moduleConfig, () => {

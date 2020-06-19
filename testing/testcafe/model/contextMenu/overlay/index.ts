@@ -1,32 +1,38 @@
 import { Selector, ClientFunction } from 'testcafe';
 
 const CLASS = {
-    overlay: 'dx-overlay'
+  overlay: 'dx-overlay',
 };
 
 export default class Overlay {
-    element: Selector;
-    getOverlayInstance: ClientFunction<any>;
+  element: Selector;
 
-    constructor() {
-        this.element = Selector(`.${CLASS.overlay}`);
+  getOverlayInstance: ClientFunction<any>;
 
-        const { element } = this;
-        this.getOverlayInstance = ClientFunction(
-            () => $(element())['dxOverlay']('instance'),
-            { dependencies: { element } }
-        );
-    }
+  constructor() {
+    this.element = Selector(`.${CLASS.overlay}`);
 
-    getOverlayOffset(): Promise<any> {
-        const getOverlayInstance: any = this.getOverlayInstance;
-        return ClientFunction(
-            () => {
-                const { offsetX, offsetY, pageX, pageY } = getOverlayInstance()._position.of;
+    const { element } = this;
+    this.getOverlayInstance = ClientFunction(
+      () => ($(element()) as any).dxOverlay('instance'),
+      { dependencies: { element } },
+    );
+  }
 
-                return { offsetX, offsetY, pageX, pageY };
-            },
-            { dependencies: { getOverlayInstance } }
-        )();
-    }
+  getOverlayOffset(): Promise<any> {
+    const { getOverlayInstance } = this;
+    return ClientFunction(
+      () => {
+        const {
+          offsetX, offsetY, pageX, pageY,
+        // eslint-disable-next-line no-underscore-dangle
+        } = (getOverlayInstance() as any)._position.of;
+
+        return {
+          offsetX, offsetY, pageX, pageY,
+        };
+      },
+      { dependencies: { getOverlayInstance } },
+    )();
+  }
 }

@@ -232,6 +232,7 @@ const SelectBox = DropDownList.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
+        this._popup.overlayContent().attr('tabindex', -1);
     },
 
     _popupWrapperClass: function() {
@@ -485,7 +486,7 @@ const SelectBox = DropDownList.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this._dimensionChanged();
+        this._setPopupOption('width');
     },
 
     _isValueEqualInputText: function() {
@@ -542,14 +543,18 @@ const SelectBox = DropDownList.inherit({
 
     _focusOutHandler: function(e) {
         if(!this._preventNestedFocusEvent(e)) {
-            this._clearSearchTimer();
-            this._restoreInputText();
+            const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
+            if(!isOverlayTarget) {
+                this._restoreInputText();
+                this._clearSearchTimer();
+            }
 
             const shouldCancelSearch = this._wasSearch() &&
                 !this.option('acceptCustomValue') &&
                 this.option('searchEnabled') &&
                 this.option('opened') &&
-                !this._isOverlayNestedTarget(e.relatedTarget);
+                !isOverlayTarget;
+
             if(shouldCancelSearch) {
                 this._searchCanceled();
             }

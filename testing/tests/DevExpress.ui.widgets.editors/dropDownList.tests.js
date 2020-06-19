@@ -30,11 +30,6 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
-const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-
-const getPopup = (instance) => {
-    return instance._popup;
-};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -86,7 +81,7 @@ QUnit.module('focus policy', {
         this.instance.option('opened', true);
 
         const mouseDownStub = sinon.stub();
-        const $popupContent = $(getPopup(this.instance).$content());
+        const $popupContent = $(this.instance._popup.$content());
 
         $popupContent
             .on('mousedown', mouseDownStub)
@@ -160,7 +155,7 @@ QUnit.module('keyboard navigation', {
         this.clock = sinon.useFakeTimers();
         this.instance = this.$element.dxDropDownList('instance');
         this.$input = this.$element.find('.' + TEXTEDITOR_INPUT_CLASS);
-        this.popup = getPopup(this.instance);
+        this.popup = this.instance._popup;
         this.$list = this.instance._$list;
         this.keyboard = keyboardMock(this.$input);
     },
@@ -1141,81 +1136,6 @@ QUnit.module('popup', moduleConfig, () => {
         assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
     });
 
-    QUnit.test('popup should have width equal to dropDownOptions.width if it\'s defined (T897820)', function(assert) {
-        const instance = $('#dropDownList').dxDropDownList({
-            width: 100,
-            dropDownOptions: {
-                width: 300
-            },
-            opened: true
-        }).dxDropDownList('instance');
-
-        assert.strictEqual(getPopup(instance).option('width'), 300, 'popup width option value is correct');
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
-    });
-
-    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
-        const instance = $('#dropDownList').dxDropDownList({
-            width: 100,
-            dropDownOptions: {
-                width: 500
-            },
-            opened: true
-        }).dxDropDownList('instance');
-
-        instance.option('width', 300);
-
-        assert.strictEqual(getPopup(instance).option('width'), 500, 'popup width option value is correct');
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
-    });
-
-    QUnit.test('popup should have width 100% if dropDownOptions.width is set to auto (T897820)', function(assert) {
-        const instance = $('#dropDownList').dxDropDownList({
-            dropDownOptions: {
-                width: 'auto'
-            },
-            opened: true
-        }).dxDropDownList('instance');
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 'overlay content width is correct');
-    });
-
-    QUnit.test('popup should have width 100% if dropDownOptions.width is not defined (T897820)', function(assert) {
-        const instance = $('#dropDownList').dxDropDownList({
-            opened: true
-        }).dxDropDownList('instance');
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 'overlay content width is correct');
-    });
-
-    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
-        const instance = $('#dropDownList').dxDropDownList({
-            width: 600,
-            dropDownOptions: {
-                width: '150%'
-            },
-            opened: true
-        }).dxDropDownList('instance');
-
-        assert.strictEqual(getPopup(instance).option('width'), '150%', 'popup width option value is correct');
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
-
-        instance.close();
-        instance.option('width', 400);
-        instance.open();
-
-        assert.strictEqual(getPopup(instance).option('width'), '150%', 'popup width option value is correct after editor width runtime change');
-        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
-    });
-
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
         this.clock.restore();
 
@@ -1683,8 +1603,7 @@ QUnit.module(
 
             window
                 .waitFor(() => {
-                    const instance = $('#test-drop-down').dxDropDownList('instance');
-                    const popup = getPopup(instance).$content();
+                    const popup = $('#test-drop-down').dxDropDownList('instance')._popup.$content();
                     const items = popup.find('.dx-list-item');
 
                     return items.length === 1 && $(items[0]).text() === 'z';
