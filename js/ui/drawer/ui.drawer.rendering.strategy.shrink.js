@@ -2,11 +2,10 @@ import { animation } from './ui.drawer.rendering.strategy';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { isDefined } from '../../core/utils/type';
 import { camelize } from '../../core/utils/inflector';
-import * as zIndexPool from '../overlay/z_index';
 
 class ShrinkStrategy extends DrawerStrategy {
+
     _slidePositionRendering(config, _, animate) {
         if(animate) {
             const animationConfig = extend(config.defaultAnimationConfig, {
@@ -50,24 +49,6 @@ class ShrinkStrategy extends DrawerStrategy {
 
     isViewContentFirst(position, isRtl) {
         return (isRtl ? position === 'left' : position === 'right') || position === 'bottom';
-    }
-
-    updateZIndex() {
-        super.updateZIndex();
-        if(!isDefined(this._panelZIndex)) {
-            this._panelZIndex = zIndexPool.base() + 501;
-            this._drawer._$panelContentWrapper.css('zIndex', this._panelZIndex);
-        }
-
-    }
-
-    clearZIndex() {
-        if(isDefined(this._panelZIndex)) {
-            this._drawer._$panelContentWrapper.css('zIndex', '');
-            delete this._panelZIndex;
-        }
-
-        super.clearZIndex();
     }
 }
 
