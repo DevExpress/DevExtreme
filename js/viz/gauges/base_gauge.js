@@ -268,7 +268,7 @@ function compareArraysElements(array1, array2) {
 // PLUGINS_SECTION
 import { plugin as exportPlugin } from '../core/export';
 import { plugin as titlePlugin } from '../core/title';
-import { plugin as tooltipPlugin } from '../funnel/tooltip';
+import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
 
 dxBaseGauge.addPlugin(exportPlugin);
