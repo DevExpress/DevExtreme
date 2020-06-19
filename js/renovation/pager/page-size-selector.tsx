@@ -11,13 +11,15 @@ import { FullPageSize } from './pager.types';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
-export const viewFunction = ({
+
+export const viewFunction1 = ({
   htmlRef,
+  visible,
   normalizedPageSizes,
   props: {
     isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
   },
-}: PageSizeSelector) => (
+}: PageSizeSelector) => visible && (
   <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
     {isLargeDisplayMode && (
     <PageSizeLarge
@@ -27,6 +29,39 @@ export const viewFunction = ({
     />
     )}
     {!isLargeDisplayMode && (
+    <PageSizeSmall
+      parentRef={htmlRef}
+      rtlEnabled={rtlEnabled}
+      pageSizes={normalizedPageSizes}
+      pageSize={pageSize}
+      pageSizeChange={pageSizeChange}
+    />
+    )}
+  </div>
+);
+
+
+export const viewFunction = ({
+  htmlRef,
+  visible,
+  normalizedPageSizes,
+  props: {
+    isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
+  },
+}: PageSizeSelector) => {
+  if (!visible) {
+    return null;
+  }
+  return (
+    <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
+      {isLargeDisplayMode && (
+      <PageSizeLarge
+        pageSizes={normalizedPageSizes}
+        pageSize={pageSize}
+        pageSizeChange={pageSizeChange}
+      />
+      )}
+      {!isLargeDisplayMode && (
       <PageSizeSmall
         parentRef={htmlRef}
         rtlEnabled={rtlEnabled}
@@ -34,9 +69,10 @@ export const viewFunction = ({
         pageSize={pageSize}
         pageSizeChange={pageSizeChange}
       />
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
+};
 type PageSize = number;// | FullPageSize;
 @ComponentBindings()
 export class PageSizeSelectorProps {
@@ -44,7 +80,7 @@ export class PageSizeSelectorProps {
 
   @OneWay() pageSize?: number = 5;
 
-  @OneWay() pageSizes?: PageSize[] = [5, 10];
+  @OneWay() pageSizes?: PageSize[] | boolean = [5, 10];
 
   @OneWay() rtlEnabled?: boolean = false;
 
@@ -61,8 +97,18 @@ export default class PageSizeSelector
     return this.htmlRef;
   }
 
+  get visible(): boolean {
+    if (this.props.pageSizes === true || this.props.pageSizes === false) {
+      return this.props.pageSizes;
+    }
+    return true;
+  }
+
   get normalizedPageSizes(): FullPageSize[] {
     const { pageSizes } = this.props as Required<PageSizeSelectorProps>;
-    return pageSizes.map((p) => ({ text: String(p), value: p } as FullPageSize));
+    if (this.visible) {
+      return pageSizes.map((p) => ({ text: String(p), value: p } as FullPageSize));
+    }
+    return [];
   }
 }

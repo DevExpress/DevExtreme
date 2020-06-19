@@ -10,6 +10,7 @@ describe('Pager size selector', () => {
   const htmlRef = createRef();
   const defaultProps = {
     htmlRef: htmlRef as HTMLDivElement,
+    visible: true,
     normalizedPageSizes: [{
       text: '5',
       value: 5,
@@ -23,6 +24,12 @@ describe('Pager size selector', () => {
       isLargeDisplayMode: true, pageSize: 5, pageSizeChange: jest.fn(), rtlEnabled: false,
     },
   } as Partial<PageSizeSelector>;
+  it('View, visible = false', () => {
+    const tree = mount(
+      <PageSizeSelectorComponent {...{ visible: false, props: {} } as any} /> as any,
+    );
+    expect(tree.html()).toBe('');
+  });
   it('View, isLargeDisplayMode = true', () => {
     const tree = mount(<PageSizeSelectorComponent {...defaultProps as any} /> as any).childAt(0);
     expect(tree.props()).toEqual({ className: 'dx-page-sizes' });
@@ -69,6 +76,14 @@ describe('Pager size selector', () => {
     it('normalizedPageSizes', () => {
       const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });
       expect(component.normalizedPageSizes).toEqual(defaultProps.normalizedPageSizes);
+    });
+    it('visible, true', () => {
+      const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });
+      expect(component.visible).toBe(true);
+    });
+    it('visible, false', () => {
+      const component = new PageSizeSelector({ pageSizes: false, pageSizeChange: jest.fn() });
+      expect(component.visible).toBe(false);
     });
   });
 });
