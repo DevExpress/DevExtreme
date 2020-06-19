@@ -1143,7 +1143,6 @@ QUnit.module('popup', moduleConfig, () => {
 
     QUnit.test('popup should have width equal to dropDownOptions.width if it\'s defined (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
-            width: 100,
             dropDownOptions: {
                 width: 300
             },
@@ -1158,7 +1157,6 @@ QUnit.module('popup', moduleConfig, () => {
 
     QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
-            width: 100,
             dropDownOptions: {
                 width: 500
             },
@@ -1198,22 +1196,22 @@ QUnit.module('popup', moduleConfig, () => {
         const instance = $('#dropDownList').dxDropDownList({
             width: 600,
             dropDownOptions: {
-                width: '150%'
+                width: '50%'
             },
             opened: true
         }).dxDropDownList('instance');
 
-        assert.strictEqual(getPopup(instance).option('width'), '150%', 'popup width option value is correct');
+        assert.strictEqual(getPopup(instance).option('width'), '50%', 'popup width option value is correct');
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
 
         instance.close();
         instance.option('width', 400);
         instance.open();
 
-        assert.strictEqual(getPopup(instance).option('width'), '150%', 'popup width option value is correct after editor width runtime change');
-        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
+        assert.strictEqual(getPopup(instance).option('width'), '50%', 'popup width option value is correct after editor width runtime change');
+        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
     });
 
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
