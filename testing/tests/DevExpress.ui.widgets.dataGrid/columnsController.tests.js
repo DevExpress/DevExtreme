@@ -34,8 +34,18 @@ const createMockDataSource = function(items, loadOptions) {
         },
         load: function() {
             return items;
+        },
+        lastLoadOptions: function() {
+            return {};
         }
     };
+};
+
+const createDataSource = function(context, config, remoteOperations) {
+    const dataSource = new DataSource(config);
+    const dataAdapter = dataSourceAdapter.create(context);
+    dataAdapter.init(dataSource, remoteOperations);
+    return dataAdapter;
 };
 
 const processColumnsForCompare = function(columns, parameterNames, ignoreParameterNames) {
@@ -1373,7 +1383,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
 QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterEach: teardownModule }, () => {
 
     QUnit.test('Initialize from array store', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
@@ -1393,7 +1403,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize from array store. Private fields with \'__\' prefix ignores', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15, __privateField: 1, __metadata: {} },
             { name: 'Dan', age: 19, __privateField: 2, __metadata: {} }
         ]);
@@ -1414,7 +1424,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // B254737
     QUnit.test('Reinitialize from array store on init', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
@@ -1455,7 +1465,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1 },
             { name: 'Dan', age: 19, category_id: 2 }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         let lookupLoadingCount = 0;
@@ -1516,7 +1526,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1 },
             { name: 'Dan', age: 19, category_id: 2 }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         this.applyOptions({
@@ -1550,7 +1560,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1 },
             { name: 'Dan', age: 19, category_id: 2 }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         this.applyOptions({
@@ -1579,7 +1589,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1 },
             { name: 'Dan', age: 19, category_id: 2 }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         let lookupLoadingCount = 0;
@@ -1640,7 +1650,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1 },
             { name: 'Dan', age: 19, category_id: 2 }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         this.applyOptions({
@@ -1722,7 +1732,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1, category: { name: 'Category 1' } },
             { name: 'Dan', age: 19, category_id: 2, category: { name: 'Category 2' } }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         let lookupLoadingCount = 0;
@@ -1784,7 +1794,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1, category: { name: 'Category 1' } },
             { name: 'Dan', age: 19, category_id: 2, category: { name: 'Category 2' } }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         let lookupLoadingCount = 0;
@@ -1847,7 +1857,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Alex', age: 15, category_id: 1 },
             { name: 'Dan', age: 19, category_id: 2 }
         ];
-        const dataSource = new DataSource(array);
+        const dataSource = createDataSource(this, array);
         dataSource.load();
 
         this.options.customizeColumns = function(columns) {
@@ -1884,7 +1894,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize from array store with sort defined where type sort column undefined', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
@@ -1901,7 +1911,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize from array store with group defined where type group column undefined', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
@@ -1918,7 +1928,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize from not loaded array store when sort defined', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
@@ -1930,7 +1940,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
 
     QUnit.test('Initialize from array store when items with different data', function(assert) {
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name1: 'Alex', age1: 15 },
             { name2: 'Dan', age2: 19 }
         ]);
@@ -1956,7 +1966,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             array.push(item);
         }
 
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: array,
             paginate: false
         });
@@ -1975,7 +1985,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Dan', birthDate: '1985/8/25' }
         ];
 
-        const dataSource = new DataSource({ store: array });
+        const dataSource = createDataSource(this, { store: array });
         dataSource.load();
 
         this.applyOptions({
@@ -2002,7 +2012,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Dan', birthDate: '1985/8/25' }
         ];
 
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             load: function(options) {
                 return array;
             }
@@ -2034,7 +2044,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Dan', age: '25' }
         ];
 
-        const dataSource = new DataSource({ store: array });
+        const dataSource = createDataSource(this, { store: array });
         dataSource.load();
 
         this.applyOptions({
@@ -2060,7 +2070,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Dan', age: 15 }
         ];
 
-        const dataSource = new DataSource({ store: array });
+        const dataSource = createDataSource(this, { store: array });
         dataSource.load();
 
         this.applyOptions({
@@ -2083,7 +2093,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             { name: 'Dan', state: 2 }
         ];
 
-        const dataSource = new DataSource({ store: array });
+        const dataSource = createDataSource(this, { store: array });
         dataSource.load();
 
         this.applyOptions({
@@ -2115,7 +2125,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     QUnit.test('Converting numbers for empty array', function(assert) {
         const array = [];
 
-        const dataSource = new DataSource({ store: array });
+        const dataSource = createDataSource(this, { store: array });
         dataSource.load();
 
         this.applyOptions({
@@ -2137,7 +2147,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
         const arrayStore = new ArrayStore(array);
 
-        const dataSource = new DataSource({ store: arrayStore });
+        const dataSource = createDataSource(this, { store: arrayStore });
         dataSource.load();
         this.applyOptions({
             columns: ['name', { dataField: 'birthDate', dataType: 'date' }]
@@ -2162,7 +2172,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         const array = [
             { name: 'Alex', date: new Date(2012, 10, 5), numberDate: 5000000, stringDate: '2005/08/09 18:31:42'/* , stringDateDotNet: "\/Date(1310669017000)\/", stringDateISO8601UTC: '1997-07-16T19:20:15.123Z', stringDateISO8601ZeroTime: '1997-07-16T00:00:00.000Z', stringDateTimeZone: '2005-08-09T18:31:42+05', stringDateTimeZoneWithMinutes : '2005-08-09T18:31:42+03:30' */ }
         ];
-        const dataSource = new DataSource({ store: array });
+        const dataSource = createDataSource(this, { store: array });
         dataSource.load();
 
         this.applyOptions({
@@ -2197,7 +2207,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize grouping from dataSource', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
@@ -2217,18 +2227,13 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // B254489
     QUnit.test('Initialize grouping from dataSource when remoteOperations disabled and autoExpandAll enabled', function(assert) {
-        let dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
             ],
             group: 'age'
         });
-
-        const dataAdapter = dataSourceAdapter.create(this);
-
-        dataAdapter.init(dataSource);
-        dataSource = dataAdapter;
 
         dataSource.load();
 
@@ -2265,18 +2270,13 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // B254489
     QUnit.test('Initialize grouping from dataSource when remoteOperations disabled after expand group', function(assert) {
-        let dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
             ],
             group: 'age'
         });
-
-        const dataAdapter = dataSourceAdapter.create(this);
-
-        dataAdapter.init(dataSource);
-        dataSource = dataAdapter;
 
         dataSource.load();
 
@@ -2306,7 +2306,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Group options from columns wins group options from dataSource', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
@@ -2328,7 +2328,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize grouping from dataSource. Not update sorting/grouping', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
@@ -2355,7 +2355,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize grouping with desc sorting from dataSource', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
@@ -2375,7 +2375,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Initialize sorting from dataSource', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { name: 'Alex', age: 15 },
                 { name: 'Dan', age: 19 }
@@ -2396,7 +2396,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // B254274
     QUnit.test('Initialize grouping from dataSource and sorting from columns', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { team: 'internal', name: 'Alex', age: 30 },
                 { team: 'internal', name: 'Dan', age: 25 },
@@ -2429,7 +2429,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // B254274
     QUnit.test('Initialize grouping from dataSource when sortOrder is defined in columns', function(assert) {
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             store: [
                 { team: 'internal', name: 'Alex', age: 30 },
                 { team: 'internal', name: 'Dan', age: 25 },
@@ -2464,14 +2464,14 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // B232542
     QUnit.test('Second Initialize from array store after reset', function(assert) {
-        const dataSource1 = new DataSource([
+        const dataSource1 = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
 
         dataSource1.load();
 
-        const dataSource2 = new DataSource([
+        const dataSource2 = createDataSource(this, [
             { id: 0, value: 'value1' },
             { id: 1, value: 'value2' }
         ]);
@@ -2493,14 +2493,14 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     // T169690
     QUnit.test('Second Initialize from array store after reset keep user state options', function(assert) {
-        const dataSource1 = new DataSource([
+        const dataSource1 = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
 
         dataSource1.load();
 
-        const dataSource2 = new DataSource([
+        const dataSource2 = createDataSource(this, [
             { name: 'Alex', age: 15 }
         ]);
 
@@ -2525,14 +2525,14 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Second Initialize from array when regenerateColumnsByVisibleItems enabled', function(assert) {
-        const dataSource1 = new DataSource([
+        const dataSource1 = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
 
         dataSource1.load();
 
-        const dataSource2 = new DataSource([
+        const dataSource2 = createDataSource(this, [
             { id: 0, value: 'value1' },
             { id: 1, value: 'value2' }
         ]);
@@ -2555,14 +2555,14 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     });
 
     QUnit.test('Second Initialize from array when regenerateColumnsByVisibleItems disabled', function(assert) {
-        const dataSource1 = new DataSource([
+        const dataSource1 = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
 
         dataSource1.load();
 
-        const dataSource2 = new DataSource([
+        const dataSource2 = createDataSource(this, [
             { id: 0, value: 'value1' },
             { id: 1, value: 'value2' }
         ]);
@@ -2586,10 +2586,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
     QUnit.test('Initialize from remote rest store', function(assert) {
         const done = assert.async();
-        const that = this;
-        const columnsController = this.columnsController;
-
-        const dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             load: function() {
                 const d = $.Deferred();
 
@@ -2598,24 +2595,23 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
                 });
 
                 return d.promise();
-            },
-            onChanged: function() {
-                columnsController.applyDataSource(dataSource);
-                assert.deepEqual(that.getColumns(), [{
-                    index: 0,
-                    dataField: 'a',
-                    caption: 'A',
-                    visible: true,
-                    showEditorAlways: false,
-                    allowFiltering: true,
-                    alignment: 'right',
-                    dataType: 'number'
-                }]);
-                done();
             }
         });
 
-        dataSource.load();
+        dataSource.load().done(() => {
+            this.columnsController.applyDataSource(dataSource);
+            assert.deepEqual(this.getColumns(), [{
+                index: 0,
+                dataField: 'a',
+                caption: 'A',
+                visible: true,
+                showEditorAlways: false,
+                allowFiltering: true,
+                alignment: 'right',
+                dataType: 'number'
+            }]);
+            done();
+        });
         assert.deepEqual(this.columnsController.getColumns(), []);
     });
 
@@ -2629,7 +2625,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             columns: ['Column1', { dataField: 'Column2', dataType: 'date' }]
         });
 
-        let dataSource = new DataSource({
+        const dataSource = createDataSource(this, {
             group: 'Column1',
             load: function(options) {
                 return items;
@@ -2637,12 +2633,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             totalCount: function() {
                 return 3;
             }
-        });
-
-        const dataAdapter = dataSourceAdapter.create(this);
-
-        dataAdapter.init(dataSource, { filtering: true, sorting: true, paging: true });
-        dataSource = dataAdapter;
+        }, { filtering: true, sorting: true, paging: true });
 
         dataSource.load();
 
@@ -2701,7 +2692,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
     // T421307
     QUnit.test('Initialize from array store. Field as a function', function(assert) {
         // arrange
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15, lastName: function() { } },
         ]);
 
@@ -4585,7 +4576,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
 
         const columnsChangedArgs = [];
 
-        const dataSource = new DataSource([]);
+        const dataSource = createDataSource(this, []);
 
         dataSource.load();
 
@@ -4611,7 +4602,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
 
         const columnsChangedArgs = [];
 
-        const dataSource = new DataSource([]);
+        const dataSource = createDataSource(this, []);
 
         dataSource.load();
 
@@ -4807,7 +4798,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
 
         const columnsChangedArgs = [];
 
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { field1: 1, field1a: 2, field1b: 3 },
             { field1: 4, field1a: 5, field1b: 6 }
         ]);
@@ -4844,7 +4835,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
             { id: 2, orderDate: '2018/08/31' }
         ];
 
-        const dataSource = new DataSource(items);
+        const dataSource = createDataSource(this, items);
 
         dataSource.load();
 
@@ -4873,7 +4864,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
 
         const columnsChangedArgs = [];
 
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { field1: 1, field2: 2 }
         ]);
 
@@ -4987,7 +4978,7 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
 
         this.columnsController.columnOption(-1, 'visibleWidth', 100);
 
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { field1: 1, field2: 2 }
         ]);
         dataSource.load();
@@ -6919,7 +6910,7 @@ QUnit.module('State storing', {
 
     QUnit.test('Apply user state columns are generated by dataSource', function(assert) {
         // arrange
-        const dataSource = new DataSource([
+        const dataSource = createDataSource(this, [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
@@ -6944,7 +6935,7 @@ QUnit.module('State storing', {
     // T551524, T552566
     QUnit.test('Apply user state columns are generated by dataSource and dataSource is empty', function(assert) {
         // arrange
-        const dataSource = new DataSource([]);
+        const dataSource = createDataSource(this, []);
 
         dataSource.load();
 
@@ -7475,6 +7466,46 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
 
         assert.equal(thirdRowColumns[0].caption, 'Field 3', 'caption of the first column of the third row');
         assert.notOk(thirdRowColumns[0].rowspan, 'rowspan of the first column of the third row');
+    });
+
+    // T895529
+    QUnit.test('getVisibleColumns when there are grouped columns with showWhenGrouped', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                {
+                    caption: 'Band 1',
+                    columns: ['field1', 'field2']
+                },
+                {
+                    caption: 'Band 2',
+                    columns: [{ dataField: 'field3', showWhenGrouped: true, groupIndex: 0 }, 'field4']
+                }
+            ]
+        });
+
+        // assert
+        assert.ok(this.columnsController.isInitialized());
+
+        // act
+        const visibleColumns = this.columnsController.getVisibleColumns();
+
+        assert.equal(visibleColumns.length, 5, 'column count in second row');
+        assert.equal(visibleColumns[0].type, 'groupExpand', 'type of the first column');
+        assert.equal(visibleColumns[0].colspan, undefined, 'colspan of the first column');
+        assert.equal(visibleColumns[0].rowspan, undefined, 'rowspan of the first column');
+        assert.equal(visibleColumns[1].caption, 'Field 1', 'caption of the second column');
+        assert.equal(visibleColumns[1].colspan, undefined, 'colspan of the second column');
+        assert.equal(visibleColumns[1].rowspan, undefined, 'rowspan of the second column');
+        assert.equal(visibleColumns[2].caption, 'Field 2', 'caption of the third column');
+        assert.equal(visibleColumns[2].colspan, undefined, 'colspan of the third column');
+        assert.equal(visibleColumns[2].rowspan, undefined, 'rowspan of the third column');
+        assert.equal(visibleColumns[3].caption, 'Field 3', 'caption of the fourth column');
+        assert.equal(visibleColumns[3].colspan, undefined, 'colspan of the fourth column');
+        assert.equal(visibleColumns[3].rowspan, undefined, 'rowspan of the fourth column');
+        assert.equal(visibleColumns[4].caption, 'Field 4', 'caption of the fifth column');
+        assert.equal(visibleColumns[4].colspan, undefined, 'colspan of the fifth column');
+        assert.equal(visibleColumns[4].rowspan, undefined, 'rowspan of the fifth column');
     });
 
     QUnit.test('getFixedColumns for data columns', function(assert) {

@@ -46,7 +46,6 @@ const Toast = require('ui/toast');
 const TreeList = require('ui/tree_list');
 const TreeView = require('ui/tree_view');
 const FileUploader = require('ui/file_uploader');
-const Toolbar = require('ui/toolbar');
 const Form = require('ui/form');
 
 
@@ -665,17 +664,6 @@ testComponentDefaults(Toast,
     }
 );
 
-testComponentDefaults(Toolbar,
-    {},
-    { submenuType: 'actionSheet' },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('ios7');
-    }, function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
 testComponentDefaults(TabPanel,
     { platform: 'generic' },
     {
@@ -714,21 +702,6 @@ testComponentDefaults(LoadIndicator,
     function() {
         this.originalCurrentTheme = themes.current();
         themes.current('generic');
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(LoadIndicator,
-    {},
-    {
-        _animatingSegmentCount: 11,
-        _animatingSegmentInner: false
-    },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('ios7');
     },
     function() {
         themes.current(this.originalCurrentTheme);

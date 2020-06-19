@@ -45,14 +45,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      */
     menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxToolbarOptions.renderAs
-     * @type Enums.ToolbarRenderMode
-     * @default 'topToolbar'
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    renderAs?: 'bottomToolbar' | 'topToolbar';
-    /**
      * @docid dxToolbarOptions.height
      * @deprecated
      * @type number|string|function

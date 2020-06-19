@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
 const { test } = QUnit;
 import 'common.css!';
 import 'ui/gantt';
@@ -555,6 +557,27 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal(resources[1].text, thirdResourceText, 'second resource ds');
         assert.equal(resources[2].text, newResourceText, 'new resource ds');
     });
+    test('task progress not reset check (T890805)', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
+
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(tasks[0].progress, 31, 'progress reset');
+    });
 });
 
 QUnit.module('Toolbar', moduleConfig, () => {
@@ -893,5 +916,309 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         assert.equal(customCellText0, 'test0', 'custom fields text not shown');
         assert.equal(customCellText1, 'test1', 'custom fields text not shown');
         assert.equal(customCellText2, 'test2', 'custom fields text not shown');
+    });
+
+    test('edit title (T891411)', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'idKey': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0, 'customField': 'test0' },
+            { 'idKey': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0, 'customField': 'test1' },
+            { 'idKey': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50, 'customField': 'test2' }
+        ];
+        const options = {
+            tasks: { dataSource: tasks, keyExpr: 'idKey', },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+    });
+});
+
+QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
+    test('array, auto update parents on', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date('2019-02-21');
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        this.instance._updateTreeListDataSource();
+        this.clock.tick();
+
+        const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
+    });
+    test('array, auto update parents off', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: false }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date('2019-02-21');
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        this.instance._updateTreeListDataSource();
+        this.clock.tick();
+
+        const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
+    });
+    test('user data source with load/update, auto update parents on', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+
+        const ds = new DataSource({
+            key: 'my_id',
+            load: function(loadOptions) {
+                return tasks;
+            },
+
+            update: function(key, values) {
+                let row = {};
+                const k = this.key();
+
+                for(let i = 0; i < tasks.length; i++) {
+                    const r = tasks[i];
+                    if(r[k] === key) {
+                        row = r;
+                        break;
+                    }
+                }
+                for(const val in values) {
+                    row[val] = values[val];
+                }
+            }
+        });
+
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: ds
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date('2019-02-21');
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        this.instance._updateTreeListDataSource();
+        this.clock.tick();
+
+        const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
+    });
+    test('user data source with load/update, auto update parents off', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+
+        const ds = new DataSource({
+            key: 'my_id',
+            load: function(loadOptions) {
+                return tasks;
+            },
+
+            update: function(key, values) {
+                let row = {};
+                const k = this.key();
+
+                for(let i = 0; i < tasks.length; i++) {
+                    const r = tasks[i];
+                    if(r[k] === key) {
+                        row = r;
+                        break;
+                    }
+                }
+                for(const val in values) {
+                    row[val] = values[val];
+                }
+            }
+        });
+
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: ds
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: false }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date('2019-02-21');
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        this.instance._updateTreeListDataSource();
+        this.clock.tick();
+
+        const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
+    });
+    test('user custom store with load/update, auto update parents on', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+
+        const ds = new CustomStore({
+            key: 'my_id',
+            load: function(loadOptions) {
+                return tasks;
+            },
+
+            update: function(key, values) {
+                let row = {};
+                const k = this.key();
+
+                for(let i = 0; i < tasks.length; i++) {
+                    const r = tasks[i];
+                    if(r[k] === key) {
+                        row = r;
+                        break;
+                    }
+                }
+                for(const val in values) {
+                    row[val] = values[val];
+                }
+            }
+        });
+
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: ds
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date('2019-02-21');
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        this.instance._updateTreeListDataSource();
+        this.clock.tick();
+
+        const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
+    });
+    test('user dcustom store with load/update, auto update parents off', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+
+        const ds = new CustomStore({
+            key: 'my_id',
+            load: function(loadOptions) {
+                return tasks;
+            },
+
+            update: function(key, values) {
+                let row = {};
+                const k = this.key();
+
+                for(let i = 0; i < tasks.length; i++) {
+                    const r = tasks[i];
+                    if(r[k] === key) {
+                        row = r;
+                        break;
+                    }
+                }
+                for(const val in values) {
+                    row[val] = values[val];
+                }
+            }
+        });
+
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: ds
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: false }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date('2019-02-21');
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        this.instance._updateTreeListDataSource();
+        this.clock.tick();
+
+        const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
 });

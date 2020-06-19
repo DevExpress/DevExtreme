@@ -1,4 +1,3 @@
-
 import PreCompiler from '../../src/modules/pre-compiler';
 
 describe('PreCompiler class tests', () => {

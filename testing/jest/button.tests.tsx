@@ -1,4 +1,3 @@
-
 import { h, createRef } from 'preact';
 import { mount, ReactWrapper } from 'enzyme';
 import { JSXInternal } from 'preact/src/jsx';
@@ -597,34 +596,40 @@ describe('Button', () => {
   });
 
   describe('ARIA accessibility', () => {
+    it('should set `button` role', () => {
+      const tree = render({ text: 'button-text' });
+
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ role: 'button' });
+    });
+
     it('should use `text` value as aria-label', () => {
       const tree = render({ text: 'button-text' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'button-text' });
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'button-text' });
     });
 
     it('should use `icon` name as aria-label', () => {
       const tree = render({ text: '', icon: 'find' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'find' });
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'find' });
     });
 
     it('should use `icon` file name as aria-label if local icon is used', () => {
       const tree = render({ text: '', icon: '/path/file.png' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'file' });
-    });
-
-    it('should not define aria-label if properties are not defined', () => {
-      const tree = render({ text: '', icon: '' });
-
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({});
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'file' });
     });
 
     it('should not parse icon if icon-type is base64 for aria-label', () => {
       const tree = render({ text: '', icon: 'data:image/png;base64,' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'Base64' });
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'Base64' });
+    });
+
+    it('should not define aria-label if properties are not defined', () => {
+      const tree = render({ text: '', icon: '' });
+
+      expect(tree.find(Widget).prop('aria')).not.toHaveProperty('label');
     });
   });
 

@@ -48,6 +48,8 @@ const LoadPanel = Overlay.inherit({
 
             delay: 0,
 
+            templatesRenderAsynchronously: false,
+
             hideTopOverlayHandler: null,
 
             /**
@@ -108,11 +110,6 @@ const LoadPanel = Overlay.inherit({
 
     _init: function() {
         this.callBase.apply(this, arguments);
-    },
-
-    _initOptions: function() {
-        this.callBase.apply(this, arguments);
-        this.option('templatesRenderAsynchronously', false);
     },
 
     _render: function() {

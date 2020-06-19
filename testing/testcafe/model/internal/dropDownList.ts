@@ -3,43 +3,45 @@ import List from '../list';
 import TextBox from '../textBox';
 
 const ATTR = {
-    popupId: 'aria-controls'
+  popupId: 'aria-controls',
 };
 
 const CLASS = {
-    dropDownButton: 'dx-dropdowneditor-button'
+  dropDownButton: 'dx-dropdowneditor-button',
 };
 
 export default abstract class DropDownList extends TextBox {
-    opened: Promise<boolean>;
-    dropDownButton: Selector;
+  opened: Promise<boolean>;
 
-    constructor(id: string) {
-        super(id);
+  dropDownButton: Selector;
 
-        const popupOwnerElement = this.getPopupOwnerElement();
-        const popupIdAttr = this.getPopupIdAttr();
+  constructor(id: string) {
+    super(id);
 
-        this.opened = popupOwnerElement.hasAttribute(popupIdAttr);
-        this.dropDownButton = this.element.find(`.${CLASS.dropDownButton}`);
-    }
+    const popupOwnerElement = this.getPopupOwnerElement();
+    const popupIdAttr = this.getPopupIdAttr();
 
-    getPopupOwnerElement() {
-        return this.input;
-    }
+    this.opened = popupOwnerElement.hasAttribute(popupIdAttr);
+    this.dropDownButton = this.element.find(`.${CLASS.dropDownButton}`);
+  }
 
-    getPopupIdAttr() {
-        return ATTR.popupId;
-    }
+  getPopupOwnerElement() {
+    return this.input;
+  }
 
-    async getList(): Promise<List> {
-        await t.expect(this.opened).ok();
+  // eslint-disable-next-line class-methods-use-this
+  getPopupIdAttr() {
+    return ATTR.popupId;
+  }
 
-        const popupOwnerElement = this.getPopupOwnerElement();
-        const popupIdAttr = this.getPopupIdAttr();
-        const popupId = await popupOwnerElement.getAttribute(popupIdAttr);
-        const popup = Selector(`#${popupId}`);
+  async getList(): Promise<List> {
+    await t.expect(this.opened).ok();
 
-        return new List(popup);
-    }
+    const popupOwnerElement = this.getPopupOwnerElement();
+    const popupIdAttr = this.getPopupIdAttr();
+    const popupId = await popupOwnerElement.getAttribute(popupIdAttr);
+    const popup = Selector(`#${popupId}`);
+
+    return new List(popup);
+  }
 }

@@ -61,7 +61,7 @@ QUnit.test('should render button with default template', function(assert) {
     $element.dxrButton({ text: 'test', icon: 'check' });
     const $contentElements = $element.find('.dx-button-content').children();
 
-    assert.strictEqual($element.dxrButton('instance').option('template'), undefined, 'default template value');
+    assert.strictEqual($element.dxrButton('instance').option('template'), '', 'default template value');
     assert.ok($contentElements.eq(0).hasClass('dx-icon'), 'render icon');
     assert.ok($contentElements.eq(1).hasClass('dx-button-text'), 'render test');
 });

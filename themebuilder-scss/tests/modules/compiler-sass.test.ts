@@ -1,4 +1,3 @@
-
 import sass from 'sass';
 
 import Compiler from '../../src/modules/compiler';
@@ -20,7 +19,6 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
     },
   ],
 }));
-
 
 describe('Sass features', () => {
   test('collector function', () => {

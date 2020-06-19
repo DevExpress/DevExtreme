@@ -17,7 +17,7 @@ export class SelectBoxProps extends WidgetProps {
 
   @OneWay() valueExpr?: string;
 
-  @Event() valueChange?: ((value: number) => void) = () => {};
+  @Event() valueChange?: ((value: number) => void) = () => { };
 }
 @Component({
   defaultOptionRules: null,
@@ -30,12 +30,16 @@ export default class SelectBox extends JSXComponent(SelectBoxProps) {
   @Effect()
   setupWidget() {
     const { valueChange } = this.props;
-
-    new DxSelectBox(this.widgetRef, { // eslint-disable-line no-new
-      ...this.props as any,
-      onValueChanged: (e) => {
-        valueChange!(e.value);
-      },
-    });
+    const instance = DxSelectBox.getInstance(this.widgetRef);
+    if (instance) {
+      instance.option({ ...this.props });
+    } else {
+      new DxSelectBox(this.widgetRef, { // eslint-disable-line no-new
+        ...this.props as any,
+        onValueChanged: (e) => {
+          valueChange!(e.value);
+        },
+      });
+    }
   }
 }

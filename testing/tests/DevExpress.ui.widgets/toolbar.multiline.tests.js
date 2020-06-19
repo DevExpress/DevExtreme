@@ -3,6 +3,7 @@ import 'ui/toolbar';
 import 'ui/button';
 import 'ui/select_box';
 import { extend } from 'core/utils/extend';
+import { value as viewPort } from 'core/utils/view_port';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -11,6 +12,8 @@ const TOOLBAR_ITEM_HEIGHT = 36;
 
 class ToolbarTestWrapper {
     constructor(multiline) {
+        viewPort($('#container'));
+
         this._$toolbar = $('#toolbar').dxToolbar(extend({
             items: [{
                 location: 'before',
@@ -82,7 +85,7 @@ class ToolbarTestWrapper {
 }
 
 QUnit.testStart(() => {
-    const markup = '<div id=\'toolbar\'></div>';
+    const markup = '<div id="container" class="dx-viewport"><div id=\'toolbar\'></div></div>';
 
     $('#qunit-fixture').html(markup);
 });

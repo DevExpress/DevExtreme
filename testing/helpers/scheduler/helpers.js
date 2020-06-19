@@ -242,6 +242,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
 
             getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);
                 return scrollableContainer.scrollHeight > scrollableContainer.clientHeight;
