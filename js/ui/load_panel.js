@@ -50,6 +50,8 @@ const LoadPanel = Overlay.inherit({
 
             closeOnBackButton: false,
 
+            templatesRenderAsynchronously: false,
+
             /**
             * @name dxLoadPanelOptions.resizeEnabled
             * @hidden
@@ -108,11 +110,6 @@ const LoadPanel = Overlay.inherit({
 
     _init: function() {
         this.callBase.apply(this, arguments);
-    },
-
-    _initOptions: function() {
-        this.callBase.apply(this, arguments);
-        this.option('templatesRenderAsynchronously', false);
     },
 
     _render: function() {
