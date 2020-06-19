@@ -215,7 +215,7 @@ QUnit.module('default', {}, () => {
         assert.equal(callCount, 1, 'Public option calls "onOptionChanged"');
 
         instance.option({
-            '__privateOption': 'a'
+            '_privateOption': 'a'
         });
         assert.equal(callCount, 1, 'Inner option doesn\'t calls "onOptionChanged"');
 

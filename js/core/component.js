@@ -17,7 +17,7 @@ const getEventName = (actionName) => {
 };
 
 const isInnerOption = (optionName) => {
-    return optionName.indexOf('__', 0) === 0;
+    return optionName.indexOf('_', 0) === 0;
 };
 
 const Component = Class.inherit({
