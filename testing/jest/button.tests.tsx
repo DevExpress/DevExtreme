@@ -1,4 +1,3 @@
-
 import { h, createRef } from 'preact';
 import { mount, ReactWrapper } from 'enzyme';
 import { JSXInternal } from 'preact/src/jsx';

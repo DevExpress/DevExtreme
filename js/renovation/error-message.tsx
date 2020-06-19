@@ -2,7 +2,7 @@
 import {
   ComponentBindings, OneWay, JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 
 export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (

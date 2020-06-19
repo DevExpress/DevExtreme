@@ -2148,7 +2148,7 @@ QUnit.module('datebox w/ calendar', {
         assert.deepEqual(getInstanceWidget(this.fixture.dateBox).option('value'), date);
     });
 
-    QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
         this.fixture.dateBox.option('width', 300);
         this.fixture.dateBox.option('dropDownOptions.width', '50%');
         this.fixture.dateBox.option('opened', true);
@@ -2157,6 +2157,15 @@ QUnit.module('datebox w/ calendar', {
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
         assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width when editor width is defined (T897820)', function(assert) {
+        const editorWidth = 200;
+        this.fixture.dateBox.option('width', editorWidth);
+        this.fixture.dateBox.option('opened', true);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
     });
 
     QUnit.test('DateBox must update its value when a date is selected in the calendar when applyValueMode=\'instantly\'', function(assert) {
@@ -3444,12 +3453,12 @@ QUnit.module('datebox w/ time list', {
         assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width 100% if dropDownOptions.width is set to auto (T897820)', function(assert) {
+    QUnit.test('popup should have width auto if dropDownOptions.width is set to auto (T897820)', function(assert) {
         this.dateBox.option('dropDownOptions.width', 'auto');
         this.dateBox.option('opened', true);
 
         const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('width'), '100%', 'popup width option value is correct');
+        assert.strictEqual(popup.option('width'), 'auto', 'popup width option value is correct');
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
         assert.strictEqual($overlayContent.outerWidth(), this.dateBox.$element().outerWidth(), 'overlay content width is correct');
