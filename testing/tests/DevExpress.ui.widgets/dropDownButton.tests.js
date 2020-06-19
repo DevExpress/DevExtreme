@@ -234,10 +234,7 @@ QUnit.module('popup integration', {
                 of: this.instance.$element(),
                 collision: 'flipfit',
                 my: 'top left',
-                at: 'bottom left',
-                offset: {
-                    y: -1
-                }
+                at: 'bottom left'
             }
         };
 
