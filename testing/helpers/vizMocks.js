@@ -14,7 +14,8 @@
                 require('viz/core/export'),
                 require('viz/core/renderers/renderer'),
                 require('viz/core/errors_warnings'),
-                require('viz/core/base_widget')
+                require('viz/core/base_widget'),
+                require('viz/core/base_widget.utils')
             );
         });
     } else {
@@ -33,7 +34,7 @@
             DevExpress.require('base_widget')
         );
     }
-}(window, function($, tooltipModule, titleModule, legendModule, axisModule, pointModule, Series, loadingIndicatorModule, exportMenuModule, rendererModule, errors, baseWidgetModule) {
+}(window, function($, tooltipModule, titleModule, legendModule, axisModule, pointModule, Series, loadingIndicatorModule, exportMenuModule, rendererModule, errors, baseWidgetModule, baseWidgetUtils) {
     /* global currentAssert, currentTest */
 
     const Element = stubClass(rendererModule.SvgElement, {
@@ -254,11 +255,11 @@
     }
 
     function stubIncidentOccurredCreation() {
-        baseWidgetModule.DEBUG_stub_createIncidentOccurred(incidentOccurred);
+        baseWidgetUtils.DEBUG_stub_createIncidentOccurred(incidentOccurred);
     }
 
     function restoreIncidentOccurredCreation() {
-        baseWidgetModule.DEBUG_restore_createIncidentOccurred();
+        baseWidgetUtils.DEBUG_restore_createIncidentOccurred();
     }
 
     function wrapObject(target, items) {

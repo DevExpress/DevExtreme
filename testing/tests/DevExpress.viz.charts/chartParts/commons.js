@@ -20,13 +20,14 @@ const ScrollBarClass = scrollBarClassModule.ScrollBar;
 const trackerModule = require('viz/chart_components/tracker');
 const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
 const PieTrackerSub = vizMocks.stubClass(trackerModule.PieTracker);
-const chartModule = require('viz/chart');
 const dataValidatorModule = require('viz/components/data_validator');
 const chartMocks = require('../../../helpers/chartMocks.js');
 const insertMockFactory = chartMocks.insertMockFactory;
 const resetMockFactory = chartMocks.resetMockFactory;
 const exportModule = require('viz/core/export');
+const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
 const restoreMockFactory = chartMocks.restoreMockFactory;
+require('viz/chart');
 
 exports.LabelCtor = LabelCtor;
 exports.rendererModule = rendererModule;
@@ -217,7 +218,7 @@ exports.environment = {
             family.updateSeriesValues = sinon.stub();
             return family;
         });
-        this.prepareSegmentRectPoints = chartModule._test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
+        this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
         this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair', function() {
             return sinon.createStubInstance(Crosshair);
         });
