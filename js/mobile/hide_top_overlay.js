@@ -1,4 +1,4 @@
-const inArray = require('../core/utils/array').inArray;
+import { inArray } from '../core/utils/array';
 
 const hideCallback = (function() {
     let callbacks = [];
@@ -35,7 +35,8 @@ const hideCallback = (function() {
     };
 })();
 
-module.exports = function() {
+export default function() {
     return hideCallback.fire();
-};
-module.exports.hideCallback = hideCallback;
+}
+
+export { hideCallback };

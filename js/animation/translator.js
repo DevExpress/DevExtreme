@@ -1,5 +1,5 @@
-const dataUtils = require('../core/element_data');
-const type = require('../core/utils/type').type;
+import dataUtils from '../core/element_data';
+import { type } from '../core/utils/type';
 
 const TRANSLATOR_DATA_KEY = 'dxTranslator';
 const TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/;
@@ -137,10 +137,10 @@ const parseTranslate = function(translateString) {
     return result;
 };
 
-exports.move = move;
-exports.locate = locate;
-exports.clearCache = clearCache;
-exports.parseTranslate = parseTranslate;
-exports.getTranslate = getTranslate;
-exports.getTranslateCss = getTranslateCss;
-exports.resetPosition = resetPosition;
+export { move };
+export { locate };
+export { clearCache };
+export { parseTranslate };
+export { getTranslate };
+export { getTranslateCss };
+export { resetPosition };

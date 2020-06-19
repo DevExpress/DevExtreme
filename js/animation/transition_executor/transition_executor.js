@@ -1,12 +1,12 @@
-const $ = require('../../core/renderer');
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const iteratorUtils = require('../../core/utils/iterator');
-const fx = require('../fx');
-const animationPresetsModule = require('../presets/presets');
-const deferredUtils = require('../../core/utils/deferred');
+import $ from '../../core/renderer';
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import iteratorUtils from '../../core/utils/iterator';
+import fx from '../fx';
+import animationPresetsModule from '../presets/presets';
+import deferredUtils from '../../core/utils/deferred';
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
@@ -178,4 +178,4 @@ const TransitionExecutor = Class.inherit({
 
 });
 
-exports.TransitionExecutor = TransitionExecutor;
+export { TransitionExecutor };

@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
-const windowUtils = require('../../core/utils/window');
-const window = windowUtils.getWindow();
-const eventsEngine = require('../../events/core/events_engine');
-const extend = require('../../core/utils/extend').extend;
-const resizeCallbacks = require('../../core/utils/resize_callbacks');
-const support = require('../../core/utils/support');
-const styleUtils = require('../../core/utils/style');
-const devices = require('../../core/devices');
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
+import eventsEngine from '../../events/core/events_engine';
+import { extend } from '../../core/utils/extend';
+import resizeCallbacks from '../../core/utils/resize_callbacks';
+import support from '../../core/utils/support';
+import styleUtils from '../../core/utils/style';
+import devices from '../../core/devices';
 
 const initMobileViewport = function(options) {
     options = extend({}, options);
@@ -92,4 +92,4 @@ const initMobileViewport = function(options) {
     }
 };
 
-exports.initMobileViewport = initMobileViewport;
+export { initMobileViewport };

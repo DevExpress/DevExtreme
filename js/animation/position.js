@@ -58,19 +58,19 @@
 */
 
 
-const $ = require('../core/renderer');
-const commonUtils = require('../core/utils/common');
-const each = require('../core/utils/iterator').each;
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.getWindow();
-const domAdapter = require('../core/dom_adapter');
-const isWindow = require('../core/utils/type').isWindow;
-const extend = require('../core/utils/extend').extend;
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const browser = require('../core/utils/browser');
+import $ from '../core/renderer';
 
-const translator = require('./translator');
-const support = require('../core/utils/support');
+import commonUtils from '../core/utils/common';
+import { each } from '../core/utils/iterator';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import domAdapter from '../core/dom_adapter';
+import { isWindow } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import { getBoundingRect } from '../core/utils/position';
+import browser from '../core/utils/browser';
+import translator from './translator';
+import support from '../core/utils/support';
 
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
@@ -438,7 +438,7 @@ if(!position.normalizeAlign) {
     position.normalizeAlign = normalizeAlign;
 }
 
-module.exports = {
+export default {
     calculateScrollbarWidth: calculateScrollbarWidth,
     calculate: calculatePosition,
     setup: position,
