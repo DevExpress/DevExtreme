@@ -740,7 +740,6 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._setPopupOption('minWidth', this.$element().outerWidth());
         this._dimensionChanged();
     },
 

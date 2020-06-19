@@ -482,7 +482,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._dimensionChanged();
+        this.callBase(...arguments);
 
         if(this.option('cleanSearchOnOpening')) {
             if(this.option('searchEnabled') && this._searchBox.option('value')) {
