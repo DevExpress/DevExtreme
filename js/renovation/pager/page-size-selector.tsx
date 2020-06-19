@@ -12,7 +12,8 @@ import { FullPageSize } from './pager.types';
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
 export const viewFunction = ({
-  htmlRef, getHtmlElementWorkAround: getHtmlElement, normalizedPageSizes,
+  htmlRef,
+  normalizedPageSizes,
   props: {
     isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
   },
@@ -27,7 +28,7 @@ export const viewFunction = ({
     )}
     {!isLargeDisplayMode && (
       <PageSizeSmall
-        parentRef={getHtmlElement}
+        parentRef={htmlRef}
         rtlEnabled={rtlEnabled}
         pageSizes={normalizedPageSizes}
         pageSize={pageSize}
@@ -51,19 +52,14 @@ export class PageSizeSelectorProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageSizeSelector extends JSXComponent(PageSizeSelectorProps)
+export default class PageSizeSelector
+  extends JSXComponent(PageSizeSelectorProps)
   implements GetHtmlElement {
+  @Ref() htmlRef!: HTMLDivElement;
+
   @Method() getHtmlElement(): HTMLElement {
     return this.htmlRef;
   }
-
-  // TODO Vitik: bug in generator: Create same function because cannot use
-  // getHtmlElement in viewFunction (it local and not exported)
-  getHtmlElementWorkAround(): HTMLElement {
-    return this.htmlRef;
-  }
-
-  @Ref() htmlRef!: HTMLDivElement;
 
   get normalizedPageSizes(): FullPageSize[] {
     const { pageSizes } = this.props as Required<PageSizeSelectorProps>;
