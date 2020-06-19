@@ -1,30 +1,30 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const iconUtils = require('../../core/utils/icon');
-const getPublicElement = require('../../core/element').getPublicElement;
-const each = require('../../core/utils/iterator').each;
-const compileGetter = require('../../core/utils/data').compileGetter;
-const extend = require('../../core/utils/extend').extend;
-const fx = require('../../animation/fx');
-const clickEvent = require('../../events/click');
-const swipeEvents = require('../../events/swipe');
-const support = require('../../core/utils/support');
-const messageLocalization = require('../../localization/message');
-const inkRipple = require('../widget/utils.ink_ripple');
-const devices = require('../../core/devices');
-const ListItem = require('./item');
-const Button = require('../button');
-const eventUtils = require('../../events/utils');
-const themes = require('../themes');
-const windowUtils = require('../../core/utils/window');
-let ScrollView = require('../scroll_view');
-const deviceDependentOptions = require('../scroll_view/ui.scrollable.device').deviceDependentOptions;
-const CollectionWidget = require('../collection/ui.collection_widget.live_update');
-const BindableTemplate = require('../../core/templates/bindable_template').BindableTemplate;
-const Deferred = require('../../core/utils/deferred').Deferred;
-const DataConverterMixin = require('../shared/grouped_data_converter_mixin');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import iconUtils from '../../core/utils/icon';
+import { getPublicElement } from '../../core/element';
+import { each } from '../../core/utils/iterator';
+import { compileGetter } from '../../core/utils/data';
+import { extend } from '../../core/utils/extend';
+import fx from '../../animation/fx';
+import clickEvent from '../../events/click';
+import swipeEvents from '../../events/swipe';
+import support from '../../core/utils/support';
+import messageLocalization from '../../localization/message';
+import inkRipple from '../widget/utils.ink_ripple';
+import devices from '../../core/devices';
+import ListItem from './item';
+import Button from '../button';
+import eventUtils from '../../events/utils';
+import themes from '../themes';
+import windowUtils from '../../core/utils/window';
+import ScrollView from '../scroll_view';
+import { deviceDependentOptions } from '../scroll_view/ui.scrollable.device';
+import CollectionWidget from '../collection/ui.collection_widget.live_update';
+import { BindableTemplate } from '../../core/templates/bindable_template';
+import { Deferred } from '../../core/utils/deferred';
+import DataConverterMixin from '../shared/grouped_data_converter_mixin';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -991,10 +991,4 @@ const ListBase = CollectionWidget.inherit({
 
 ListBase.ItemClass = ListItem;
 
-module.exports = ListBase;
-
-///#DEBUG
-module.exports.mockScrollView = function(Mock) {
-    ScrollView = Mock;
-};
-///#ENDDEBUG
+export default ListBase;

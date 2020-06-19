@@ -9,6 +9,7 @@ import { getFiltersByPath,
     getExpandedLevel,
     discoverObjectFields,
     setDefaultFieldValueFormatting } from './ui.pivot_grid.utils';
+import { forEachGroup } from './remote_store.utils';
 import { deserializeDate } from '../../core/utils/date_serialization';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
@@ -187,20 +188,6 @@ function createLoadOptions(options, externalFilterExpr, hasRows) {
     });
 
     return loadOptions;
-}
-
-function forEachGroup(data, callback, level) {
-
-    data = data || [];
-    level = level || 0;
-
-    for(let i = 0; i < data.length; i++) {
-        const group = data[i];
-        callback(group, level);
-        if(group && group.items && group.items.length) {
-            forEachGroup(group.items, callback, level + 1);
-        }
-    }
 }
 
 function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
@@ -568,7 +555,3 @@ export default Class.inherit((function() {
         }
     };
 })());
-
-///#DEBUG
-export { forEachGroup as __forEachGroup };
-///#ENDDEBUG

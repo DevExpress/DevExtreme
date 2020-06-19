@@ -79,6 +79,45 @@ export default (function() {
         $container.get(0).textContent = '\u00A0';
     };
 
+    const normalizeSortingInfo = function(sort) {
+        sort = sort || [];
+        const result = normalizeSorting(sort);
+
+        for(let i = 0; i < sort.length; i++) {
+            if(sort && sort[i] && sort[i].isExpanded !== undefined) {
+                result[i].isExpanded = sort[i].isExpanded;
+            }
+            if(sort && sort[i] && sort[i].groupInterval !== undefined) {
+                result[i].groupInterval = sort[i].groupInterval;
+            }
+        }
+        return result;
+    };
+
+    const formatValue = function(value, options) {
+        const valueText = formatHelper.format(value, options.format) || (value && value.toString()) || '';
+        const formatObject = {
+            value: value,
+            valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
+            target: options.target || 'row',
+            groupInterval: options.groupInterval
+        };
+
+        return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
+    };
+
+    const getSummaryText = function(summaryItem, summaryTexts) {
+        const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[summaryItem.summaryType + 'OtherColumn']) || summaryTexts[summaryItem.summaryType];
+
+        return formatValue(summaryItem.value, {
+            format: summaryItem.valueFormat,
+            getDisplayFormat: function(valueText) {
+                return displayFormat ? format(displayFormat, valueText, summaryItem.columnCaption) : valueText;
+            },
+            customizeText: summaryItem.customizeText
+        });
+    };
+
     const getWidgetInstance = function($element) {
         const editorData = $element.data && $element.data();
         const dxComponents = editorData && editorData.dxComponents;
@@ -227,17 +266,7 @@ export default (function() {
             }
         },
 
-        formatValue: function(value, options) {
-            const valueText = formatHelper.format(value, options.format) || (value && value.toString()) || '';
-            const formatObject = {
-                value: value,
-                valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
-                target: options.target || 'row',
-                groupInterval: options.groupInterval
-            };
-
-            return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
-        },
+        formatValue: formatValue,
 
         getFormatOptionsByColumn: function(column, target) {
             return {
@@ -266,37 +295,14 @@ export default (function() {
 
             for(let i = 0; i < summaryItems.length; i++) {
                 const summaryItem = summaryItems[i];
-                result += (i > 0 ? ', ' : '') + this.getSummaryText(summaryItem, summaryTexts);
+                result += (i > 0 ? ', ' : '') + getSummaryText(summaryItem, summaryTexts);
             }
             return result += ')';
         },
 
-        getSummaryText: function(summaryItem, summaryTexts) {
-            const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[summaryItem.summaryType + 'OtherColumn']) || summaryTexts[summaryItem.summaryType];
+        getSummaryText: getSummaryText,
 
-            return this.formatValue(summaryItem.value, {
-                format: summaryItem.valueFormat,
-                getDisplayFormat: function(valueText) {
-                    return displayFormat ? format(displayFormat, valueText, summaryItem.columnCaption) : valueText;
-                },
-                customizeText: summaryItem.customizeText
-            });
-        },
-
-        normalizeSortingInfo(sort) {
-            sort = sort || [];
-            const result = normalizeSorting(sort);
-
-            for(let i = 0; i < sort.length; i++) {
-                if(sort && sort[i] && sort[i].isExpanded !== undefined) {
-                    result[i].isExpanded = sort[i].isExpanded;
-                }
-                if(sort && sort[i] && sort[i].groupInterval !== undefined) {
-                    result[i].groupInterval = sort[i].groupInterval;
-                }
-            }
-            return result;
-        },
+        normalizeSortingInfo: normalizeSortingInfo,
 
         getFormatByDataType: function(dataType) {
             switch(dataType) {
@@ -341,8 +347,8 @@ export default (function() {
 
         equalSortParameters(sortParameters1, sortParameters2, ignoreIsExpanded) {
 
-            sortParameters1 = this.normalizeSortingInfo(sortParameters1);
-            sortParameters2 = this.normalizeSortingInfo(sortParameters2);
+            sortParameters1 = normalizeSortingInfo(sortParameters1);
+            sortParameters2 = normalizeSortingInfo(sortParameters2);
 
             if(Array.isArray(sortParameters1) && Array.isArray(sortParameters2)) {
                 if(sortParameters1.length !== sortParameters2.length) {

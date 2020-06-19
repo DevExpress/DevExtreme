@@ -5,9 +5,10 @@ import { addNamespace, isDxMouseWheelEvent, isMouseEvent, eventData, eventDelta 
 import GestureEmitter from '../../events/gesture/emitter.gesture';
 import registerEmitter from '../../events/core/emitter_registrator';
 import animationFrame from '../../animation/frame';
-const realDevice = require('../../core/devices').real();
+import devices from '../../core/devices';
 import { compare as compareVersions } from '../../core/utils/version';
 
+const realDevice = devices.real();
 
 const SCROLL_INIT_EVENT = 'dxscrollinit';
 const SCROLL_START_EVENT = 'dxscrollstart';

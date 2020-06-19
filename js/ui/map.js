@@ -17,11 +17,14 @@ import { wrapToArray } from '../core/utils/array';
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 
+import googleStatic from './map/provider.google_static';
+import google from './map/provider.dynamic.google';
+import bing from './map/provider.dynamic.bing';
 
 const PROVIDERS = {
-    googleStatic: require('./map/provider.google_static'),
-    google: require('./map/provider.dynamic.google'),
-    bing: require('./map/provider.dynamic.bing')
+    googleStatic,
+    google,
+    bing
 };
 
 

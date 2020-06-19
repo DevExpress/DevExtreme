@@ -2,8 +2,8 @@
 // 1. animation
 
 import $ from '../core/renderer';
-
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import { add as ready } from '../core/utils/ready_callbacks';

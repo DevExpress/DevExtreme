@@ -11,11 +11,11 @@ import { getPublicElement } from '../../core/element';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import { normalizeKeyName } from '../../events/utils';
 
-require('../text_box');
-require('../number_box');
-require('../check_box');
-require('../select_box');
-require('../date_box');
+import '../text_box';
+import '../number_box';
+import '../check_box';
+import '../select_box';
+import '../date_box';
 
 const CHECKBOX_SIZE_CLASS = 'checkbox-size';
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';

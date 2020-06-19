@@ -16,6 +16,12 @@ import DropDownEditor from '../drop_down_editor/ui.drop_down_editor';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
 
+import Calendar from './ui.date_box.strategy.calendar';
+import DateView from './ui.date_box.strategy.date_view';
+import Native from './ui.date_box.strategy.native';
+import CalendarWithTime from './ui.date_box.strategy.calendar_with_time';
+import List from './ui.date_box.strategy.list';
+
 const DATEBOX_CLASS = 'dx-datebox';
 const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
 const DX_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
@@ -44,11 +50,11 @@ const STRATEGY_NAME = {
 };
 
 const STRATEGY_CLASSES = {
-    Calendar: require('./ui.date_box.strategy.calendar'),
-    DateView: require('./ui.date_box.strategy.date_view'),
-    Native: require('./ui.date_box.strategy.native'),
-    CalendarWithTime: require('./ui.date_box.strategy.calendar_with_time'),
-    List: require('./ui.date_box.strategy.list')
+    Calendar,
+    DateView,
+    Native,
+    CalendarWithTime,
+    List
 };
 
 const DateBox = DropDownEditor.inherit({

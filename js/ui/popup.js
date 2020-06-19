@@ -20,9 +20,10 @@ import messageLocalization from '../localization/message';
 import Button from './button';
 import Overlay from './overlay';
 import themes from './themes';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 
-require('./toolbar/ui.toolbar.base');
+import './toolbar/ui.toolbar.base';
 
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';

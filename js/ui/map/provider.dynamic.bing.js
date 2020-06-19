@@ -1,5 +1,6 @@
 import { noop } from '../../core/utils/common';
-const window = require('../../core/utils/window').getWindow();
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
 import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';

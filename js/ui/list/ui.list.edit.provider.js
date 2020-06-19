@@ -6,13 +6,13 @@ import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
 import decoratorRegistry from './ui.list.edit.decorator_registry';
 
-require('./ui.list.edit.decorator.static');
-require('./ui.list.edit.decorator.switchable.button');
-require('./ui.list.edit.decorator.switchable.slide');
-require('./ui.list.edit.decorator.swipe');
-require('./ui.list.edit.decorator.context');
-require('./ui.list.edit.decorator.selection');
-require('./ui.list.edit.decorator.reorder');
+import './ui.list.edit.decorator.static';
+import './ui.list.edit.decorator.switchable.button';
+import './ui.list.edit.decorator.switchable.slide';
+import './ui.list.edit.decorator.swipe';
+import './ui.list.edit.decorator.context';
+import './ui.list.edit.decorator.selection';
+import './ui.list.edit.decorator.reorder';
 
 
 const editOptionsRegistry = [];
