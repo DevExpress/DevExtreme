@@ -5,7 +5,6 @@ import { isDefined, isFunction } from '../../core/utils/type';
 import title from '../core/title';
 import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
-import { debug } from '../../core/utils/console';
 import { processHatchingAttrs, getFuncIri } from '../core/renderers/renderer';
 
 const _Number = Number;
@@ -135,6 +134,7 @@ function parseOptions(options, textField, allowInsidePosition) {
     if(!options) return null;
 
     ///#DEBUG
+    const debug = require('../../core/utils/console').debug;
     debug.assertParam(options.visible, 'Visibility was not passed');
     debug.assertParam(options.markerSize, 'markerSize was not passed');
     debug.assertParam(options.font.color, 'fontColor was not passed');
@@ -352,7 +352,7 @@ function getTitleHorizontalAlignment(options) {
     }
 }
 
-const _Legend = function(settings) {
+const _Legend = exports.Legend = function(settings) {
     const that = this;
     that._renderer = settings.renderer;
     that._legendGroup = settings.group;
@@ -364,8 +364,6 @@ const _Legend = function(settings) {
     that._allowInsidePosition = settings.allowInsidePosition;
     that._widget = settings.widget;
 };
-
-export const Legend = _Legend;
 
 const legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
 
@@ -1081,7 +1079,7 @@ extend(legendPrototype, {
 });
 
 
-export const plugin = {
+exports.plugin = {
     name: 'legend',
     init: function() {
         const that = this;
@@ -1092,7 +1090,7 @@ export const plugin = {
             .enableLinks()
             .append(that._renderer.root);
 
-        that._legend = new Legend({
+        that._legend = new exports.Legend({
             renderer: that._renderer,
             group: group,
             widget: this,
@@ -1172,14 +1170,12 @@ export const plugin = {
 
 ///#DEBUG
 const __getMarkerCreator = getMarkerCreator;
-
-export function _DEBUG_stubMarkerCreator(callback) {
+exports._DEBUG_stubMarkerCreator = function(callback) {
     getMarkerCreator = function() {
         return callback;
     };
-}
-
-export function _DEBUG_restoreMarkerCreator() {
+};
+exports._DEBUG_restoreMarkerCreator = function() {
     getMarkerCreator = __getMarkerCreator;
-}
+};
 ///#ENDDEBUG
