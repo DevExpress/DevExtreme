@@ -7128,7 +7128,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         } catch(err) {
             assert.ok(false, 'the error is thrown');
         } finally {
-            assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
+            assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
         }
     });
 
@@ -7156,9 +7156,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         });
 
-        assert.equal(calculateFilterExpressionCallCount, 4, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 6, 'calculateFilterExpression call count');
         assert.ok(grid.getCombinedFilter(), 'combined filter');
-        assert.equal(calculateFilterExpressionCallCount, 5, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 7, 'calculateFilterExpression call count');
     });
 
     // T364210
@@ -10755,6 +10755,347 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok($filterPanelViewElement.is(':visible'), 'filterPanel is visible');
         assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
         assert.equal(dataGrid.columnOption('b', 'groupIndex'), 0, 'column b is grouped');
+    });
+
+    QUnit.test('Column\'s filterValue is applied at runtime (T898619)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', 'name']
+        });
+        this.clock.tick();
+
+        // act
+        const filterValue = 'test2';
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValue }]);
+        this.clock.tick();
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValue);
+    });
+
+    QUnit.test('Column\'s filterValue is applied at runtime while dataSource is reloading (T898619)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', 'name']
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        const filterValue = 'test2';
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValue }]);
+        this.clock.tick();
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValue);
+    });
+
+    QUnit.test('Columns\'s selectedFilterOperation is applied at runtime (T898619)', function(assert) {
+        // arrange, act
+        const filterValue = 'test1';
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', { dataField: 'name', filterValue }]
+        });
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValue);
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValue, selectedFilterOperation: '<>' }]);
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, 'test2');
+    });
+
+    QUnit.test('Columns\'s selectedFilterOperation is applied at runtime while dataSource is reloading (T898619)', function(assert) {
+        // arrange, act
+        const filterValue = 'test1';
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', { dataField: 'name', filterValue }]
+        });
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValue);
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValue, selectedFilterOperation: '<>' }]);
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, 'test2');
+    });
+
+    QUnit.test('Columns\'s allowFiltering is applied at runtime (T898619)', function(assert) {
+        // arrange, act
+        const filterValue = 'test1';
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', { dataField: 'name', filterValue }]
+        });
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValue, allowFiltering: false }]);
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 2, 'two rows are displayed');
+    });
+
+    QUnit.test('Columns\'s allowFiltering is applied at runtime while dataSource is reloading (T898619)', function(assert) {
+        // arrange, act
+        const filterValue = 'test1';
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', { dataField: 'name', filterValue }]
+        });
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValue, allowFiltering: false }]);
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 2, 'two rows are displayed');
+    });
+
+    QUnit.test('Columns\'s filterValues is applied at runtime (T898619)', function(assert) {
+        // arrange, act
+        const filterValues = ['test1'];
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', 'name']
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValues }]);
+        this.clock.tick();
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValues[0]);
+    });
+
+    QUnit.test('Columns\'s filterValues is applied at runtime while dataSource is reloading (T898619)', function(assert) {
+        // arrange, act
+        const filterValues = ['test1'];
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', 'name']
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValues }]);
+        this.clock.tick();
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValues[0]);
+    });
+
+    QUnit.test('Columns\'s filterType is applied at runtime (T898619)', function(assert) {
+        // arrange, act
+        const filterValues = ['test1'];
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', { dataField: 'name', filterValues }]
+        });
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValues[0]);
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValues, filterType: 'exclude' }]);
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, 'test2');
+    });
+
+    QUnit.test('Columns\'s filterType is applied at runtime while dataSource is reloading (T898619)', function(assert) {
+        // arrange, act
+        const filterValues = ['test1'];
+        const dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [
+                        { id: 1, name: 'test1' },
+                        { id: 2, name: 'test2' }
+                    ]
+                }
+            },
+            columns: ['id', { dataField: 'name', filterValues }]
+        });
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, filterValues[0]);
+
+        // act
+        dataGrid.option('filterPanel.visible', true); // causes reloading a data source
+        const dataSource = dataGrid.getDataSource();
+
+        // assert
+        assert.ok(dataSource.isLoading(), 'dataSource is loading');
+
+        // act
+        dataGrid.option('columns', ['id', { dataField: 'name', filterValues, filterType: 'exclude' }]);
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 1, 'a single row is displayed');
+        assert.equal(visibleRows[0].data.name, 'test2');
     });
 
     QUnit.test('Toolbar update it\'s items only when corresponding options are change', function(assert) {
