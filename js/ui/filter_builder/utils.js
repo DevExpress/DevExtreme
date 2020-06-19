@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import { Deferred, when } from '../../core/utils/deferred';
 import { errors as dataErrors } from '../../data/errors';
 import { isDefined } from '../../core/utils/type';
@@ -45,6 +46,12 @@ const AVAILABLE_FIELD_PROPERTIES = [
     'calculateFilterExpression',
     'name'
 ];
+
+const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
+const FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + '-text';
+const FILTER_BUILDER_ITEM_TEXT_PART_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-part';
+const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-separator';
+const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS + '-empty';
 
 function getFormattedValueText(field, value) {
     const fieldFormat = field.format || DEFAULT_FORMAT[field.dataType];
@@ -802,6 +809,30 @@ function filterHasField(filter, dataField) {
     });
 }
 
+const renderValueText = function($container, value, customOperation) {
+    if(Array.isArray(value)) {
+        const lastItemIndex = value.length - 1;
+        $container.empty();
+        value.forEach((t, i) => {
+            $('<span>')
+                .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
+                .text(t)
+                .appendTo($container);
+            if(i !== lastItemIndex) {
+                $('<span>')
+                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS)
+                    .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : '|')
+                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS).appendTo($container);
+            }
+        });
+    } else if(value) {
+        $container.text(value);
+    } else {
+        $container.text(messageLocalization.format('dxFilterBuilder-enterValueText'));
+    }
+};
+
+export { renderValueText };
 export { isValidCondition };
 export { isEmptyGroup };
 export { getOperationFromAvailable };
