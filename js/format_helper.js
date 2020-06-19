@@ -1,12 +1,12 @@
-const typeUtils = require('./core/utils/type');
-const dateUtils = require('./core/utils/date');
-const numberLocalization = require('./localization/number');
-const dateLocalization = require('./localization/date');
-const dependencyInjector = require('./core/utils/dependency_injector');
+import typeUtils from './core/utils/type';
+import dateUtils from './core/utils/date';
+import numberLocalization from './localization/number';
+import dateLocalization from './localization/date';
+import dependencyInjector from './core/utils/dependency_injector';
 
-require('./localization/currency');
+import './localization/currency';
 
-module.exports = dependencyInjector({
+export default dependencyInjector({
     format: function(value, format) {
         const formatIsValid = typeUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || typeUtils.isFunction(format);
         const valueIsValid = typeUtils.isNumeric(value) || typeUtils.isDate(value);

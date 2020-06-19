@@ -1,11 +1,13 @@
-const fileSaver = require('./exporter/file_saver').fileSaver;
-const excelCreator = require('./exporter/excel_creator');
-const imageCreator = require('./exporter/image_creator');
-const svgCreator = require('./exporter/svg_creator');
-const _isFunction = require('./core/utils/type').isFunction;
-const Deferred = require('./core/utils/deferred').Deferred;
+import { fileSaver } from './exporter/file_saver';
+import excelCreator from './exporter/excel_creator';
+import imageCreator from './exporter/image_creator';
+import svgCreator from './exporter/svg_creator';
+import { isFunction as _isFunction } from './core/utils/type';
+import { Deferred } from './core/utils/deferred';
+import formatConverter from './exporter/excel_format_converter';
+import { getData } from './exporter/pdf_creator';
 
-exports.export = function(data, options, getData) {
+function _export(data, options, getData) {
     if(!data) {
         return new Deferred().resolve();
     }
@@ -38,26 +40,32 @@ exports.export = function(data, options, getData) {
     }
 
     return new Deferred().resolve();
-};
+}
 
-exports.fileSaver = fileSaver;
-exports.excel = {
+export { _export as export };
+
+export { fileSaver };
+
+export const excel = {
+    ///#DEBUG
+    __internals: excelCreator.__internals,
+    ///#ENDDEBUG
     creator: excelCreator.ExcelCreator,
     getData: excelCreator.getData,
-    formatConverter: require('./exporter/excel_format_converter')
+    formatConverter: formatConverter
 };
-///#DEBUG
-exports.excel.__internals = excelCreator.__internals;
-///#ENDDEBUG
-exports.image = {
+
+export const image = {
     creator: imageCreator.imageCreator,
     getData: imageCreator.getData,
     testFormats: imageCreator.testFormats
 };
-exports.pdf = {
-    getData: require('./exporter/pdf_creator').getData
+
+export const pdf = {
+    getData: getData
 };
-exports.svg = {
+
+export const svg = {
     creator: svgCreator.svgCreator,
     getData: svgCreator.getData
 };
