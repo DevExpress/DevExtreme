@@ -1,5 +1,6 @@
 import VERSION from '../core/version';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import { imageCreator } from './image_creator';
 import { isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';

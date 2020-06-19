@@ -1,2 +1,3 @@
 
-export default require('./data_source/data_source').DataSource;
+import { DataSource } from './data_source/data_source';
+export default DataSource;

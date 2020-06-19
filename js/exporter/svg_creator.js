@@ -1,6 +1,7 @@
 import $ from '../core/renderer';
 import ajax from '../core/utils/ajax';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import { isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import svgUtils from '../core/utils/svg';

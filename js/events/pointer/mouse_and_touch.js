@@ -66,8 +66,7 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
     },
 
     _fireEvent: function(args) {
-        const isMouseEvent = isMouseEvent(args.originalEvent);
-        const normalizer = isMouseEvent ? MouseStrategy.normalize : TouchStrategy.normalize;
+        const normalizer = isMouseEvent(args.originalEvent) ? MouseStrategy.normalize : TouchStrategy.normalize;
 
         return this.callBase(extend(normalizer(args.originalEvent), args));
     },

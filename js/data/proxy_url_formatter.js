@@ -1,6 +1,7 @@
 import { each } from '../core/utils/iterator';
 import domAdapter from '../core/dom_adapter';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import callOnce from '../core/utils/call_once';
 const DXPROXY_HOST = 'dxproxy.devexpress.com:8000';
 const urlMapping = {};
