@@ -110,41 +110,38 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.test('Resize by option', function(assert) {
-        const setUpWidth = 300;
-        const setUpHeight = 50;
+        const setUpWidth = 456;
+        const setUpHeight = 1000;
 
-        const $autocomplete = $('#autocomplete').dxAutocomplete({
+        const $autocomplete = $('#autocomplete2').dxAutocomplete({
             value: 'anotherText',
             dataSource: ['qwerty', 'item 2', 'item 3'],
             placeholder: 'type something',
             width: setUpWidth,
-            height: setUpHeight,
-            opened: true
+            height: setUpHeight
         });
 
         const autocomplete = $autocomplete.dxAutocomplete('instance');
         const popup = autocomplete._popup;
-        const $overlayContent = $('.dx-overlay-content');
-        const initialPopupWidth = $overlayContent.width();
+        const initialPopupWidth = popup.option('width');
         const initialWidth = $autocomplete.width();
         const initialHeight = $autocomplete.height();
         const increment = 123;
 
-        assert.strictEqual(initialWidth, setUpWidth, 'Width was set up successfully');
-        assert.strictEqual(initialHeight, setUpHeight, 'Height was set up successfully');
-        assert.strictEqual(popup.option('width'), '100%', 'Popup was set up successfully');
-        assert.strictEqual(initialPopupWidth, initialWidth, 'overlay content has correct width');
+        assert.equal(initialWidth, setUpWidth, 'Width was set up successfully');
+        assert.equal(initialHeight, setUpHeight, 'Height was set up successfully');
+        assert.equal(initialPopupWidth, initialWidth + autocomplete.option('popupWidthExtension'), 'Popup was set up successfully');
 
         autocomplete.option('height', initialHeight + increment);
         autocomplete.option('width', initialWidth + increment);
 
         const dHeight = $autocomplete.height() - initialHeight;
         const dWidth = $autocomplete.width() - initialWidth;
-        const dPopupWidth = $overlayContent.width() - initialPopupWidth;
+        const dPopupWidth = popup.option('width') - initialPopupWidth;
 
         assert.notEqual(dHeight, 0, 'Height could be changed');
         assert.notEqual(dWidth, 0, 'Width could be changed');
-        assert.equal(dWidth, dPopupWidth, 'Element and popup change width accordingly');
+        assert.equal(dWidth, dPopupWidth + autocomplete.option('popupWidthExtension'), 'Element and popup change width accordingly');
     });
 
     QUnit.test('check textbox sizes', function(assert) {
