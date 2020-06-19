@@ -1,5 +1,5 @@
 import Errors from '../widget/ui.errors';
-import Diagram from 'devexpress-diagram';
+import * as Diagram from 'devexpress-diagram';
 
 function getDiagram() {
     if(!Diagram) {

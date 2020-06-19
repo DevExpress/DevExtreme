@@ -4,7 +4,7 @@ import { noop } from '../core/utils/common';
 import clickEvent from '../events/click';
 import translator from '../animation/translator';
 import { getPublicElement } from '../core/element';
-import { hideCallback as hideTopOverlayCallback } from '../mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from '../mobile/hide_callback';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import Widget from './widget/ui.widget';

@@ -26,7 +26,7 @@ import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
 import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
-import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
 import selectors from '../widget/selectors';
 import swatch from '../widget/swatch_container';
