@@ -201,6 +201,38 @@ QUnit.module('default', {}, () => {
         assert.deepEqual(eventChangeLog, expectedLog);
     });
 
+
+    QUnit.test('options api - changing inner options', function(assert) {
+        let callCount = 0;
+        const instance = new TestComponent({
+            onOptionChanged: () => callCount++
+        });
+        instance._resetTraceLog();
+
+        instance.option({
+            'publicOption': 'a'
+        });
+        assert.equal(callCount, 1, 'Public option calls "onOptionChanged"');
+
+        instance.option({
+            '__privateOption': 'a'
+        });
+        assert.equal(callCount, 1, 'Inner option doesn\'t calls "onOptionChanged"');
+
+        const methodCallStack = $.map(instance._traceLog, i => {
+            return i.method;
+        });
+
+        assert.deepEqual(methodCallStack, [
+            'beginUpdate',
+            '_optionChanged',
+            'endUpdate',
+            'beginUpdate',
+            '_optionChanged',
+            'endUpdate'
+        ]);
+    });
+
     QUnit.test('options api - \'onOptionChanged\' changing', function(assert) {
         let called = null;
 

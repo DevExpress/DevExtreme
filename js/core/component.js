@@ -16,6 +16,10 @@ const getEventName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3);
 };
 
+const isInnerOption = (optionName) => {
+    return optionName.startsWith('__');
+};
+
 const Component = Class.inherit({
     _setDeprecatedOptions() {
         this._deprecatedOptions = {};
@@ -228,8 +232,10 @@ const Component = Class.inherit({
                     previousValue: previousValue
                 };
 
-                this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
-                this._optionChangedAction(extend({}, args));
+                if(!isInnerOption(name)) {
+                    this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
+                    this._optionChangedAction(extend({}, args));
+                }
 
                 if(!this._disposed && this._cancelOptionChange !== args.name) {
                     this._optionChanged(args);
