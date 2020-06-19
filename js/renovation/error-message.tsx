@@ -1,11 +1,15 @@
+/* eslint-disable max-classes-per-file */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  ComponentBindings, OneWay, JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 
 export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (
   <div
     className={`dx-validationsummary dx-validationsummary-item ${className}`}
-    {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+      /* eslint-disable react/jsx-props-no-spreading */
+    {...restAttributes}
   >
     {message}
   </div>
@@ -22,4 +26,4 @@ export class ErrorMessageProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class ErrorMessage extends JSXComponent<ErrorMessageProps> {}
+export default class ErrorMessage extends JSXComponent(ErrorMessageProps) {}

@@ -203,7 +203,14 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getScrollableScrollTop: function(allDay) {
         return this._workSpace.getScrollable().scrollTop();
-    }
+    },
+
+    getGroupIndexByCell: function($cell) {
+        const rowIndex = $cell.parent().index();
+        const rowCount = this._workSpace._getRowCountWithAllDayRows();
+
+        return Math.ceil((rowIndex + 1) / rowCount);
+    },
 });
 
 export default VerticalGroupedStrategy;

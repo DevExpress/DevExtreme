@@ -477,7 +477,22 @@ export default Class.inherit((function() {
 
         result.push.apply(result, mergedGroups);
 
+        assignGroupIndexes(result);
+
         return result;
+    }
+
+    function assignGroupIndexes(fields) {
+        fields.forEach(field => {
+            if(field.groupName && field.groupInterval && field.groupIndex === undefined) {
+                const maxGroupIndex = fields
+                    .filter(f => f.groupName === field.groupName && isNumeric(f.groupIndex))
+                    .map(f => f.groupIndex)
+                    .reduce((prev, current) => Math.max(prev, current), -1);
+
+                field.groupIndex = maxGroupIndex + 1;
+            }
+        });
     }
 
     function getFields(that) {

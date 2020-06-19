@@ -7,39 +7,38 @@ const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const SchedulerTimelineMonth = SchedulerTimeline.inherit({
-
-    _renderView: function() {
-        this.callBase();
+class SchedulerTimelineMonth extends SchedulerTimeline {
+    _renderView() {
+        super._renderView();
 
         this._updateScrollable();
-    },
+    }
 
-    _getElementClass: function() {
+    _getElementClass() {
         return TIMELINE_CLASS;
-    },
+    }
 
-    _getDateHeaderTemplate: function() {
+    _getDateHeaderTemplate() {
         return this.option('dateCellTemplate');
-    },
+    }
 
-    _getHiddenInterval: function() {
+    _getHiddenInterval() {
         return 0;
-    },
+    }
 
-    _getIndicationFirstViewDate: function() {
+    _getIndicationFirstViewDate() {
         return dateUtils.trimTime(new Date(this._firstViewDate));
-    },
+    }
 
-    getCellDuration: function() {
+    getCellDuration() {
         return toMs('day');
-    },
+    }
 
-    calculateEndViewDate: function(dateOfLastViewCell) {
+    calculateEndViewDate(dateOfLastViewCell) {
         return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
-    },
+    }
 
-    _getCellCount: function() {
+    _getCellCount() {
         const currentDate = this.option('currentDate');
         let cellCount = 0;
         if(this._isWorkSpaceWithCount()) {
@@ -53,57 +52,57 @@ const SchedulerTimelineMonth = SchedulerTimeline.inherit({
         }
 
         return cellCount;
-    },
+    }
 
-    _setFirstViewDate: function() {
+    _setFirstViewDate() {
         this._firstViewDate = dateUtils.getFirstMonthDate(this.option('currentDate'));
         this._setStartDayHour(this._firstViewDate);
-    },
+    }
 
-    _getFormat: function() {
+    _getFormat() {
         return this._formatWeekdayAndDay;
-    },
+    }
 
-    _getDateByIndex: function(headerIndex) {
+    _getDateByIndex(headerIndex) {
         const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
 
         return resultDate;
-    },
+    }
 
-    _getInterval: function() {
+    _getInterval() {
         return DAY_IN_MILLISECONDS;
-    },
+    }
 
-    _getIntervalBetween: function(currentDate) {
+    _getIntervalBetween(currentDate) {
         const firstViewDate = this.getStartViewDate();
         const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
-    },
+    }
 
-    calculateEndDate: function(startDate) {
+    calculateEndDate(startDate) {
         const startDateCopy = new Date(startDate);
         return new Date(startDateCopy.setHours(this.option('endDayHour')));
-    },
+    }
 
-    _calculateHiddenInterval: function() {
+    _calculateHiddenInterval() {
         return 0;
-    },
+    }
 
-    _getDateByCellIndexes: function(rowIndex, cellIndex) {
-        const date = this.callBase(rowIndex, cellIndex);
+    _getDateByCellIndexes(rowIndex, cellIndex) {
+        const date = super._getDateByCellIndexes(rowIndex, cellIndex);
 
         this._setStartDayHour(date);
 
         return date;
-    },
+    }
 
-    needUpdateScrollPosition: function(hours, minutes, bounds, date) {
+    needUpdateScrollPosition(hours, minutes, bounds, date) {
         return this._dateWithinBounds(bounds, date);
-    },
+    }
 
-    getPositionShift: function() {
+    getPositionShift() {
         return {
             top: 0,
             left: 0,
@@ -111,7 +110,7 @@ const SchedulerTimelineMonth = SchedulerTimeline.inherit({
         };
     }
 
-});
+}
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);
 

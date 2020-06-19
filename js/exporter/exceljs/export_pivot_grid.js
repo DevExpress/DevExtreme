@@ -1,4 +1,4 @@
-import { isDefined, isString, isObject } from '../../core/utils/type'; //  '../../core/utils/type';
+import { isDefined, isString, isObject, isDate } from '../../core/utils/type'; //  '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
 import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend'; // '../../core/utils/extend';
@@ -58,7 +58,7 @@ function exportPivotGrid(options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, undefined, mergedCells, mergeRanges, /* customizeCell, headerRowCount */ wrapText);
+                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, undefined, mergedCells, mergeRanges, wrapText);
 
                 if(rowIndex >= 1) {
                     cellRange.to.row++;
@@ -119,18 +119,22 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const gridCell = cellData.cellSourceData;
+        const pivotCell = cellData.cellSourceData;
 
         const excelCell = row.getCell(startColumnIndex + cellIndex);
-        excelCell.value = cellData.value;
 
+        if(isDate(cellData.value)) {
+            excelCell.value = _convertDateForExcelJS(cellData.value);
+        } else {
+            excelCell.value = cellData.value;
+        }
 
         if(isDefined(excelCell.value)) {
             const { alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
-                numberFormat = numberFormat.replace(/&quot;/g, '');
+                numberFormat = numberFormat.replace(/&quot;/g, '"');
             } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
                 numberFormat = '@';
             }
@@ -142,7 +146,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         if(isDefined(customizeCell)) {
             customizeCell({
                 excelCell: excelCell,
-                gridCell: gridCell
+                pivotCell: pivotCell
             });
         }
 
@@ -151,6 +155,10 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             mergeRanges.push(mergeRange);
         }
     }
+}
+
+function _convertDateForExcelJS(date) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 }
 
 function _setNumberFormat(excelCell, numberFormat) {

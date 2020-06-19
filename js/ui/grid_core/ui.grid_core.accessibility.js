@@ -1,4 +1,4 @@
-import accessibility from '../../ui/shared/accessibility';
+import * as accessibility from '../../ui/shared/accessibility';
 
 export default {
     registerKeyboardAction: function(viewName, instance, $element, selector, action) {

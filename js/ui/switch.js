@@ -8,7 +8,6 @@ import Editor from './editor/editor';
 import { addNamespace } from '../events/utils';
 import feedbackEvents from '../events/core/emitter.feedback';
 import { getBoundingRect } from '../core/utils/position';
-import themes from './themes';
 import fx from '../animation/fx';
 import messageLocalization from '../localization/message';
 import clickEvent from '../events/click';
@@ -59,15 +58,11 @@ const Switch = Editor.inherit({
 
             value: false,
 
-            useInkRipple: false,
-            _animateHandle: true
-
+            useInkRipple: false
         });
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
-
         return this.callBase().concat([
             {
                 device: function() {
@@ -76,15 +71,7 @@ const Switch = Editor.inherit({
                 options: {
                     focusStateEnabled: true
                 }
-            },
-            {
-                device: function(device) {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    _animateHandle: false
-                }
-            },
+            }
         ]);
     },
 
@@ -251,10 +238,8 @@ const Switch = Editor.inherit({
         const innerOffset = this._getInnerOffset(state, swipeOffset);
         const handleOffset = this._getHandleOffset(state, swipeOffset);
 
-        if(this.option('_animateHandle')) {
-            this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
-            this._$handle.css('transform', ' translateX(' + handleOffset + ')');
-        }
+        this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
+        this._$handle.css('transform', ' translateX(' + handleOffset + ')');
     },
 
     _validateValue: function() {
@@ -423,8 +408,6 @@ const Switch = Editor.inherit({
             case 'value':
                 this._renderValue();
                 this.callBase(args);
-                break;
-            case '_animateHandle':
                 break;
             default:
                 this.callBase(args);

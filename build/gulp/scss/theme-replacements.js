@@ -350,8 +350,8 @@ module.exports = {
             'PIVOTGRID_FIELD_INDICATORS_OFFSET',
             'PIVOTGRID_INDICATORS_LINE_HEIGHT',
             'PIVOTGRID_TOTALCOLOR',
-            'PIVOTGRID_EXPAND_ICON_OFFSET', // TODO this variable is the same for generic, material (refactor with ios removing)
-            'PIVOTGRID_EXPAND_ICON_TEXT_OFFSET', // TODO this variable is the same for generic, material (refactor with ios removing)
+            'PIVOTGRID_EXPAND_ICON_OFFSET',
+            'PIVOTGRID_EXPAND_ICON_TEXT_OFFSET',
             'PIVOTGRID_FIELD_AREA_TEXT_COLOR',
             'PIVOTGRID_DATA_AREA_COLOR',
             'PIVOTGRID_GRANDTOTALCOLOR',

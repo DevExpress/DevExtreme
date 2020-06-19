@@ -329,10 +329,15 @@ const dxPieChart = BaseChart.inherit({
         this._centerTemplateGroup.append(this._renderer.root);
 
         template = this._getTemplate(template);
-        template.render({ model: this, container: this._centerTemplateGroup.element });
 
-        const bBox = this._centerTemplateGroup.getBBox();
-        this._centerTemplateGroup.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
+        template.render({
+            model: this,
+            container: this._centerTemplateGroup.element,
+            onRendered: ()=>{
+                const bBox = this._centerTemplateGroup.getBBox();
+                this._centerTemplateGroup.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
+            }
+        });
     },
 
     getInnerRadius() {

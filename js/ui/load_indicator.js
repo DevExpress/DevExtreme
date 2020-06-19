@@ -77,14 +77,6 @@ const LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    _animatingSegmentCount: 11
-                }
-            },
-            {
-                device: function() {
                     return themes.isMaterial(themeName);
                 },
                 options: {

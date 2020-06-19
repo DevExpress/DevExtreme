@@ -7,7 +7,7 @@ import {
     createWrapper,
     initTestMarkup,
     isDesktopEnvironment
-} from './helpers.js';
+} from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -231,12 +231,6 @@ const draggingFromTooltipConfig = $.extend({}, {
         };
     },
 
-    testViews: function(views, currentView, rtlEnabled, assert) {
-        const scheduler = this.createScheduler(views, currentView, rtlEnabled);
-
-        this.testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, currentView, assert);
-    },
-
     testFakeAppointmentPosition: function(scheduler, button, index, viewName, assert) {
         const dragOffset = { left: 100, top: 100 };
 
@@ -268,14 +262,37 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    commonViews.forEach((view) => {
-        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, false, assert); });
-    });
-    timeLineViews.forEach((view) => {
-        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, false, assert); });
-    });
-    groupViews.forEach((view) => {
-        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, false, assert); });
+    [commonViews, timeLineViews, groupViews].forEach(views => {
+        views.forEach(view => {
+            test(`Views: ${view.name}`, function(assert) {
+                const scheduler = this.createScheduler(views, view.name, false);
+                const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
+
+                const dragOffset = { left: 100, top: 100 };
+
+                this.scrollToButton(scheduler, compactAppointmentButton);
+                scheduler.appointments.compact.click(0);
+
+                const compactAppointment = scheduler.appointments.compact.getAppointment();
+                const mousePosition = this.createMousePosition(compactAppointment);
+
+                const pointer = pointerMock(compactAppointment).start();
+
+                pointer
+                    .down(mousePosition.x, mousePosition.y)
+                    .move(dragOffset.left, dragOffset.top);
+
+                const fakeAppointmentPosition = this.getFakeAppointmentPosition(scheduler);
+
+                assert.roughEqual(Math.round(fakeAppointmentPosition.left - dragOffset.left), Math.round(mousePosition.x), 1.1,
+                    `appointment should have correct left position in ${view.name}`);
+                assert.roughEqual(Math.round(fakeAppointmentPosition.top - dragOffset.top), Math.round(mousePosition.y), 1.1,
+                    `appointment should have correct top position in ${view.name}`);
+
+                pointer
+                    .up();
+            });
+        });
     });
 });
 
@@ -284,14 +301,38 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    commonViews.forEach((view) => {
-        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, true, assert); });
-    });
-    timeLineViews.forEach((view) => {
-        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, true, assert); });
-    });
-    groupViews.forEach((view) => {
-        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, true, assert); });
+
+    [commonViews, timeLineViews, groupViews].forEach(views => {
+        views.forEach(view => {
+            test(`Views: ${view.name}`, function(assert) {
+                const scheduler = this.createScheduler(views, view.name, true);
+                const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
+
+                const dragOffset = { left: 100, top: 100 };
+
+                this.scrollToButton(scheduler, compactAppointmentButton);
+                scheduler.appointments.compact.click(0);
+
+                const compactAppointment = scheduler.appointments.compact.getAppointment();
+                const mousePosition = this.createMousePosition(compactAppointment);
+
+                const pointer = pointerMock(compactAppointment).start();
+
+                pointer
+                    .down(mousePosition.x, mousePosition.y)
+                    .move(dragOffset.left, dragOffset.top);
+
+                const fakeAppointmentPosition = this.getFakeAppointmentPosition(scheduler);
+
+                assert.roughEqual(Math.round(fakeAppointmentPosition.left - dragOffset.left), Math.round(mousePosition.x), 1.1,
+                    `appointment should have correct left position in ${view.name}`);
+                assert.roughEqual(Math.round(fakeAppointmentPosition.top - dragOffset.top), Math.round(mousePosition.y), 1.1,
+                    `appointment should have correct top position in ${view.name}`);
+
+                pointer
+                    .up();
+            });
+        });
     });
 });
 
@@ -1037,6 +1078,40 @@ module('appointmentDragging customization', $.extend({}, {
     // T885459
     test('Move appointment to Draggable - droppable class should be removed', function(assert) {
         const group = 'shared';
+        const scheduler = this.createScheduler({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 1, 9, 30),
+                endDate: new Date(2018, 4, 1, 11, 30)
+            }],
+            appointmentDragging: {
+                group: group
+            }
+        });
+        const $dragElement = this.createDraggable({ group: group });
+
+        const appointment = scheduler.appointments.find('App 1');
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const draggablePosition = getAbsolutePosition($dragElement);
+        const $cellElement = $(scheduler.workSpace.getCell(0, 2));
+
+        const pointer = pointerMock(appointment).start();
+
+        pointer.down(appointmentPosition.left, appointmentPosition.top);
+        pointer.move(5, 5).move(draggablePosition.left - appointmentPosition.left - 5, draggablePosition.top - appointmentPosition.top - 5).move(5, 5);
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+
+        pointer.up();
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+    });
+
+    // T885459
+    test('Move item from Draggable to Scheduler and back - droppable class should be removed', function(assert) {
+        const group = 'shared';
         const $dragElement = this.createDraggable({ group: group });
         const scheduler = this.createScheduler({
             views: ['month'],
@@ -1056,11 +1131,48 @@ module('appointmentDragging customization', $.extend({}, {
         const draggablePosition = getAbsolutePosition($dragElement);
         const $cellElement = $(scheduler.workSpace.getCell(0, 2));
 
+        const pointer = pointerMock($dragElement).start();
+
+        pointer.down(draggablePosition.left, draggablePosition.top);
+        pointer
+            .move(5, 5)
+            .move(appointmentPosition.left - draggablePosition.left - 5, appointmentPosition.top - draggablePosition.top - 5)
+            .move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top)
+            .up();
+
+        assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+    });
+
+    // T885459
+    test('Move appointment outside Scheduler - droppable class should not be removed', function(assert) {
+        const group = 'shared';
+        const scheduler = this.createScheduler({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 1, 9, 30),
+                endDate: new Date(2018, 4, 1, 11, 30)
+            }],
+            appointmentDragging: {
+                group: group
+            }
+        });
+        const $schedulerElement = $(scheduler.instance.element());
+
+        const appointment = scheduler.appointments.find('App 1');
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const schedulerPosition = getAbsolutePosition($schedulerElement);
+        const $cellElement = $(scheduler.workSpace.getCell(0, 2));
+
         const pointer = pointerMock(appointment).start();
 
         pointer.down(appointmentPosition.left, appointmentPosition.top);
-        $cellElement.trigger('dxdragenter');
-        pointer.move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top).up();
+        pointer.move(5, 5).move(schedulerPosition - 15, schedulerPosition - 15);
+
+        assert.ok($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has droppable class');
+
+        pointer.up();
 
         assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
     });

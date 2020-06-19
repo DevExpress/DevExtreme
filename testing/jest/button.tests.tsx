@@ -1,4 +1,3 @@
-
 import { h, createRef } from 'preact';
 import { mount, ReactWrapper } from 'enzyme';
 import { JSXInternal } from 'preact/src/jsx';
@@ -240,6 +239,10 @@ describe('Button', () => {
         expect(classNames.includes('dx-button-has-text')).toBe(false);
         expect(render().find('.dx-button-text').exists()).toBe(false);
       });
+
+      it('should not raise an error with non-string text option value', () => {
+        expect(() => { render({ text: 1 }); }).not.toThrow();
+      });
     });
 
     describe('type', () => {
@@ -272,7 +275,8 @@ describe('Button', () => {
 
       it('should render template', () => {
         const button = render({
-          render: template,
+        // should use "component" property te be able find template
+          component: template,
           text: 'My button',
         });
         const customRender = button.find(template);
@@ -289,15 +293,15 @@ describe('Button', () => {
 
         expect(button.exists(template)).toBe(false);
 
-        button.setProps({ render: template });
+        button.setProps({ component: template });
         expect(button.exists(template)).toBe(true);
 
-        button.setProps({ render: undefined });
+        button.setProps({ component: undefined });
         expect(button.exists(template)).toBe(false);
       });
 
       it('should change properties in runtime', () => {
-        const button = mount(<Button text="My button" render={template} />);
+        const button = mount(<Button text="My button" component={template} />);
         let buttonContent = button.find(template);
 
         expect(buttonContent.props().data.text).toBe('My button');
@@ -313,7 +317,7 @@ describe('Button', () => {
       it('should get original icon prop', () => {
         const button = render({
           icon: 'testicon',
-          render: ({ data: { icon } }) => <div>{icon}</div>,
+          component: ({ data: { icon } }) => <div>{icon}</div>,
           text: 'My button',
         });
         const buttonContentChildren = button.find('.dx-button-content').children();
@@ -450,7 +454,7 @@ describe('Button', () => {
 
         render({
           onClick,
-          onKeyDown: (event, { keyName, which }) => {
+          onKeyDown: ({ keyName, which }) => {
             if (keyName === 'a' || which === 'a') {
               customHandler();
             }
@@ -477,12 +481,12 @@ describe('Button', () => {
 
         render({
           onClick,
-          onKeyDown: (event, { keyName, which }) => {
+          onKeyDown: ({ originalEvent, keyName, which }) => {
             if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
               customHandler();
-              event.cancel = true; // eslint-disable-line no-param-reassign
+              originalEvent.cancel = true; // eslint-disable-line no-param-reassign
 
-              return event;
+              return originalEvent;
             }
 
             return null;
@@ -592,34 +596,40 @@ describe('Button', () => {
   });
 
   describe('ARIA accessibility', () => {
+    it('should set `button` role', () => {
+      const tree = render({ text: 'button-text' });
+
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ role: 'button' });
+    });
+
     it('should use `text` value as aria-label', () => {
       const tree = render({ text: 'button-text' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'button-text' });
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'button-text' });
     });
 
     it('should use `icon` name as aria-label', () => {
       const tree = render({ text: '', icon: 'find' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'find' });
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'find' });
     });
 
     it('should use `icon` file name as aria-label if local icon is used', () => {
       const tree = render({ text: '', icon: '/path/file.png' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'file' });
-    });
-
-    it('should not define aria-label if properties are not defined', () => {
-      const tree = render({ text: '', icon: '' });
-
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({});
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'file' });
     });
 
     it('should not parse icon if icon-type is base64 for aria-label', () => {
       const tree = render({ text: '', icon: 'data:image/png;base64,' });
 
-      expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'Base64' });
+      expect(tree.find(Widget).prop('aria')).toMatchObject({ label: 'Base64' });
+    });
+
+    it('should not define aria-label if properties are not defined', () => {
+      const tree = render({ text: '', icon: '' });
+
+      expect(tree.find(Widget).prop('aria')).not.toHaveProperty('label');
     });
   });
 

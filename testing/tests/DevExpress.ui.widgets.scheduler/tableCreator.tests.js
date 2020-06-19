@@ -1,4 +1,4 @@
-const tableCreator = require('ui/scheduler/ui.scheduler.table_creator');
+import { tableCreator } from 'ui/scheduler/ui.scheduler.table_creator';
 
 const FIXTURE_DATA = [{
     title: 'o1',

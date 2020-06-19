@@ -22,7 +22,6 @@ import './themes/generic.softblue';
 import './themes/generic.darkviolet';
 import './themes/generic.greenmist';
 import './themes/material';
-import './themes/ios';
 
 function getThemePart(theme, path) {
     let _theme = theme;

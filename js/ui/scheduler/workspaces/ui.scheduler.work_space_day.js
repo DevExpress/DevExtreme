@@ -1,27 +1,27 @@
 import registerComponent from '../../../core/component_registrator';
-import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
-const SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
-    _getElementClass: function() {
+class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
+    _getElementClass() {
         return DAY_CLASS;
-    },
+    }
 
-    _getRowCount: function() {
+    _getRowCount() {
         return this._getCellCountInDay();
-    },
+    }
 
-    _getCellCount: function() {
+    _getCellCount() {
         return this.option('intervalCount');
-    },
+    }
 
-    _setFirstViewDate: function() {
+    _setFirstViewDate() {
         this._firstViewDate = this._getViewStartByOptions();
         this._setStartDayHour(this._firstViewDate);
-    },
+    }
 
-    _getDateByIndex: function(headerIndex) {
+    _getDateByIndex(headerIndex) {
         if(this.option('intervalCount') === 1) {
             return this._firstViewDate;
         }
@@ -29,36 +29,12 @@ const SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
         const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
         return resultDate;
-    },
-
-    _getFormat: function() {
-        return this._formatWeekdayAndDay;
-    },
-
-    _renderDateHeader: function() {
-        if(this.option('intervalCount') === 1) {
-            return;
-        }
-
-        return this.callBase();
-    },
-
-    _getRightCell: function(isMultiSelection) {
-        if(!isMultiSelection) {
-            return this.callBase(isMultiSelection);
-        }
-
-        return this._$focusedCell;
-    },
-
-    _getLeftCell: function(isMultiSelection) {
-        if(!isMultiSelection) {
-            return this.callBase(isMultiSelection);
-        }
-
-        return this._$focusedCell;
     }
-});
+
+    _renderDateHeader() {
+        return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
+    }
+}
 
 registerComponent('dxSchedulerWorkSpaceDay', SchedulerWorkSpaceDay);
 

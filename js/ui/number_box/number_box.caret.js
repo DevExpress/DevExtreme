@@ -3,23 +3,27 @@ import { escapeRegExp } from '../../core/utils/common';
 import number from '../../localization/number';
 
 const getCaretBoundaries = function(text, format) {
-    const signParts = format.split(';');
-    const sign = number.getSign(text, format);
+    if(typeof format === 'string') {
+        const signParts = format.split(';');
+        const sign = number.getSign(text, format);
 
-    signParts[1] = signParts[1] || '-' + signParts[0];
-    format = signParts[sign < 0 ? 1 : 0];
+        signParts[1] = signParts[1] || '-' + signParts[0];
+        format = signParts[sign < 0 ? 1 : 0];
 
-    const mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
+        const mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
 
-    format = mockEscapedStubs(format);
+        format = mockEscapedStubs(format);
 
-    const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
-    const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
+        const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
+        const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
 
-    return {
-        start: prefixStubLength,
-        end: text.length - postfixStubLength
-    };
+        return {
+            start: prefixStubLength,
+            end: text.length - postfixStubLength
+        };
+    } else {
+        return { start: 0, end: text.length };
+    }
 };
 
 const _getDigitCountBeforeIndex = function(index, text) {
@@ -56,6 +60,10 @@ const _getDigitPositionByIndex = function(digitIndex, text) {
     return index === null ? text.length : index;
 };
 
+const _trimNonNumericCharsFromEnd = function(text) {
+    return text.replace(/[^0-9e]+$/, '');
+};
+
 const getCaretWithOffset = function(caret, offset) {
     if(caret.start === undefined) {
         caret = { start: caret, end: caret };
@@ -85,10 +93,11 @@ const getCaretAfterFormat = function(text, formatted, caret, format) {
 
         return getCaretInBoundaries(newPosition, formatted, format);
     } else {
+        const formattedIntPart = _trimNonNumericCharsFromEnd(formattedParts[0]);
         const positionFromEnd = textParts[0].length - caret.start;
         const digitsFromEnd = _getDigitCountBeforeIndex(positionFromEnd, _reverseText(textParts[0]));
-        const newPositionFromEnd = _getDigitPositionByIndex(digitsFromEnd, _reverseText(formattedParts[0]));
-        const newPositionFromBegin = formattedParts[0].length - (newPositionFromEnd + 1);
+        const newPositionFromEnd = _getDigitPositionByIndex(digitsFromEnd, _reverseText(formattedIntPart));
+        const newPositionFromBegin = formattedIntPart.length - (newPositionFromEnd + 1);
 
         return getCaretInBoundaries(newPositionFromBegin, formatted, format);
     }

@@ -230,8 +230,6 @@ function current(options) {
         }
     }
 
-    checkThemeDeprecation();
-
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
 
@@ -300,22 +298,12 @@ function isMaterial(themeName) {
     return isTheme('material', themeName);
 }
 
-function isIos7(themeName) {
-    return isTheme('ios7', themeName);
-}
-
 function isGeneric(themeName) {
     return isTheme('generic', themeName);
 }
 
 function isDark(themeName) {
     return isTheme('dark', themeName);
-}
-
-function checkThemeDeprecation() {
-    if(isIos7()) {
-        errors.log('W0010', 'The \'ios7\' theme', '19.1', 'Use the \'generic\' theme instead.');
-    }
 }
 
 function isWebFontLoaded(text, fontWeight) {
@@ -406,7 +394,6 @@ export { attachCssClasses };
 export { detachCssClasses };
 export { waitForThemeLoad };
 export { isMaterial };
-export { isIos7 };
 export { isGeneric };
 export { isDark };
 export { isWebFontLoaded };

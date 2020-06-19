@@ -15,7 +15,7 @@ import NumberBox from '../number_box';
 import RadioGroup from '../radio_group';
 import SelectBox from '../select_box';
 import publisherMixin from './ui.scheduler.publisher_mixin';
-import recurrenceUtils from './utils.recurrence';
+import { getRecurrenceProcessor } from './recurrence';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -82,12 +82,13 @@ const DAYS_IN_WEEK = 7;
 
 class RecurrenceRule {
 
-    constructor(recurrence) {
-        this._recurrenceRule = recurrenceUtils.getRecurrenceRule(recurrence).rule;
+    constructor(rule) {
+        this._recurrenceProcessor = getRecurrenceProcessor();
+        this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(rule).rule;
     }
 
     makeRules(string) {
-        this._recurrenceRule = recurrenceUtils.getRecurrenceRule(string).rule;
+        this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(string).rule;
     }
 
     makeRule(field, value) {
@@ -124,7 +125,7 @@ class RecurrenceRule {
     }
 
     recurrenceString() {
-        return recurrenceUtils.getRecurrenceString(this._recurrenceRule);
+        return this._recurrenceProcessor.getRecurrenceString(this._recurrenceRule);
     }
 
     rules() {
@@ -132,7 +133,7 @@ class RecurrenceRule {
     }
 
     daysFromByDayRule() {
-        return recurrenceUtils.daysFromByDayRule(this._recurrenceRule);
+        return this._recurrenceProcessor.daysFromByDayRule(this._recurrenceRule);
     }
 }
 

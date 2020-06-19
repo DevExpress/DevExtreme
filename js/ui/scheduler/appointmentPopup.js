@@ -47,16 +47,18 @@ export default class AppointmentPopup {
         };
     }
 
-    show(data = {}, showButtons, processTimeZone) {
+    show(data = {}, isDoneButtonVisible, processTimeZone) {
         this.state.appointment.data = data;
         this.state.appointment.processTimeZone = processTimeZone;
 
         if(!this._popup) {
-            const popupConfig = this._createPopupConfig(showButtons);
+            const popupConfig = this._createPopupConfig();
             this._popup = this._createPopup(popupConfig);
         } else {
             this._updateForm();
         }
+
+        this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
         this._popup.show();
     }
 
@@ -89,11 +91,10 @@ export default class AppointmentPopup {
         return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
-    _createPopupConfig(showButtons) {
+    _createPopupConfig() {
         return {
             height: 'auto',
             maxHeight: '100%',
-            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
             showCloseButton: false,
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
@@ -115,6 +116,7 @@ export default class AppointmentPopup {
     _onShowing(e) {
         const arg = {
             form: this._appointmentForm,
+            popup: this._popup,
             appointmentData: this.state.appointment.data,
             cancel: false
         };
@@ -193,15 +195,17 @@ export default class AppointmentPopup {
         this.state.appointment.isEmptyText = data === undefined || data.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || data.description === undefined;
 
-        const formData = extend({}, { text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
+        const formData = extend({ text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
         if(processTimeZone) {
             if(startDate) {
-                startDate = this.scheduler.fire('convertDateByTimezone', startDate);
+                const timezone = this.scheduler.fire('getField', 'startDateTimeZone', data);
+                startDate = this.scheduler.fire('convertDateByTimezone', startDate, timezone, true);
                 this.scheduler.fire('setField', 'startDate', formData, startDate);
             }
             if(endDate) {
-                endDate = this.scheduler.fire('convertDateByTimezone', endDate);
+                const timezone = this.scheduler.fire('getField', 'endDateTimeZone', data);
+                endDate = this.scheduler.fire('convertDateByTimezone', endDate, timezone, true);
                 this.scheduler.fire('setField', 'endDate', formData, endDate);
             }
         }
@@ -280,20 +284,24 @@ export default class AppointmentPopup {
         }
     }
 
-    _getPopupToolbarItems() {
+    _createPopupToolbarItems(isDoneButtonVisible) {
+        const result = [];
         const isIOs = devices.current().platform === 'ios';
-        return [
-            {
+
+        if(isDoneButtonVisible) {
+            result.push({
                 shortcut: 'done',
                 options: { text: messageLocalization.format('Done') },
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: (e) => this._doneButtonClickHandler(e)
-            },
-            {
-                shortcut: 'cancel',
-                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
-            }
-        ];
+            });
+        }
+        result.push({
+            shortcut: 'cancel',
+            location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
+        });
+
+        return result;
     }
 
     saveChanges(showLoadPanel) {

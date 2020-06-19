@@ -1,6 +1,6 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import { isDefined, isRenderer } from './type';
+import { isDefined, isRenderer, isWindow } from './type';
 import { getWindow } from './window';
 
 const window = getWindow();
@@ -106,6 +106,10 @@ const contains = function(container, element) {
 
     if(domAdapter.isDocument(container)) {
         return container.documentElement.contains(element);
+    }
+
+    if(isWindow(container)) {
+        return contains(container.document, element);
     }
 
     return container.contains

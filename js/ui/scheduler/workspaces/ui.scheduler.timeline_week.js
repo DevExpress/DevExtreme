@@ -4,32 +4,30 @@ import { getBoundingRect } from '../../../core/utils/position';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 
-const SchedulerTimelineWeek = SchedulerTimeline.inherit({
-    _getElementClass: function() {
+export default class SchedulerTimelineWeek extends SchedulerTimeline {
+    _getElementClass() {
         return TIMELINE_CLASS;
-    },
+    }
 
-    _getCellCount: function() {
-        return this.callBase() * this._getWeekDuration();
-    },
+    _getCellCount() {
+        return super._getCellCount() * this._getWeekDuration();
+    }
 
-    _getHeaderPanelCellWidth: function($headerRow) {
+    _getHeaderPanelCellWidth($headerRow) {
         return getBoundingRect($headerRow.children().first().get(0)).width;
-    },
+    }
 
-    _getWeekDuration: function() {
+    _getWeekDuration() {
         return 7;
-    },
+    }
 
-    _needRenderWeekHeader: function() {
+    _needRenderWeekHeader() {
         return true;
-    },
+    }
 
-    _incrementDate: function(date) {
+    _incrementDate(date) {
         date.setDate(date.getDate() + 1);
     }
-});
+}
 
 registerComponent('dxSchedulerTimelineWeek', SchedulerTimelineWeek);
-
-export default SchedulerTimelineWeek;

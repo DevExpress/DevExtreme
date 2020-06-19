@@ -56,14 +56,12 @@
 
 /**
  * @typedef {string} Enums.VizTheme
- * @enum {'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
- * @member 'ios7.default' @deprecated 'generic.light'
+ * @enum {'generic.dark'|'generic.light'|'generic.contrast'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
  */
 
 /**
  * @typedef {string} Enums.VizPalette
- * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
- * @member 'Default' @deprecated 'Material'
+ * @enum {'Bright'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
  */
 
 /**
@@ -1018,12 +1016,12 @@
 
 /**
  * @typedef {string} Enums.GridCommandColumnType
- * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'}
+ * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'|'drag'}
  */
 
 /**
  * @typedef {string} Enums.TreeListCommandColumnType
- * @enum {'adaptive'|'buttons'}
+ * @enum {'adaptive'|'buttons'|'drag'}
  */
 
 /**

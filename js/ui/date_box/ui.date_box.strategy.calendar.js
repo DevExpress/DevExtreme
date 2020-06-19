@@ -2,7 +2,7 @@ import Calendar from '../calendar';
 import DateBoxStrategy from './ui.date_box.strategy';
 import dateUtils from '../../core/utils/date';
 import commonUtils from '../../core/utils/common';
-import { isFunction } from '../../core/utils/type';
+import { isFunction, isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
@@ -109,7 +109,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             position = ['bottom', 'center'];
         }
 
-        if(this.dateBox.option('applyValueMode') === 'useButtons') {
+        if(this.dateBox.option('applyValueMode') === 'useButtons' && this._isCalendarVisible()) {
             toolbarItems.unshift({
                 widget: 'dxButton',
                 toolbar: position[0],
@@ -131,6 +131,10 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                 collision: 'flipfit flip'
             }
         });
+    },
+
+    _isCalendarVisible: function() {
+        return isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
     },
 
     _escapeHandler: function() {

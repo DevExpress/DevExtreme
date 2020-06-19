@@ -4,18 +4,16 @@ import {
 import config from '../../core/config';
 
 @ComponentBindings()
-export class BaseWidgetProps { // eslint-disable-line import/prefer-default-export
+export default class BaseWidgetProps {
   @OneWay() accessKey?: string | null = null;
 
   @OneWay() activeStateEnabled?: boolean = false;
 
   @OneWay() disabled?: boolean = false;
 
-  @OneWay() elementAttr?: { [name: string]: any };
-
   @OneWay() focusStateEnabled?: boolean = false;
 
-  @OneWay() height?: string | number | null = null;
+  @OneWay() height?: string | number | (() => (string | number));
 
   @OneWay() hint?: string;
 
@@ -27,7 +25,7 @@ export class BaseWidgetProps { // eslint-disable-line import/prefer-default-expo
     actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
   }) onContentReady?: (e: any) => any = (() => {});
 
-  @Event() onKeyDown?: (e: any, options: any) => any;
+  @Event() onKeyDown?: (e: any) => any;
 
   @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
 
@@ -35,5 +33,5 @@ export class BaseWidgetProps { // eslint-disable-line import/prefer-default-expo
 
   @OneWay() visible?: boolean = true;
 
-  @OneWay() width?: string | number | null = null;
+  @OneWay() width?: string | number | (() => (string | number));
 }

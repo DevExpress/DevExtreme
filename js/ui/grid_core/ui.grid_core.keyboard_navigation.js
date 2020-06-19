@@ -5,7 +5,7 @@ import core from './ui.grid_core.modules';
 import { focusAndSelectElement, getWidgetInstance } from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
-import { focused } from '../widget/selectors';
+import selectors from '../widget/selectors';
 import { addNamespace, createEvent } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import clickEvent from '../../events/click';
@@ -464,7 +464,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this.getController('editorFactory').loseFocus();
             if(this._editingController.isEditing() && !this._isRowEditMode()) {
                 this._resetFocusedCell();
-                this._editingController.closeEditCell();
+                this._closeEditCell();
             }
         } else {
             eventArgs.originalEvent.preventDefault();
@@ -665,7 +665,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 if(this._editingController.getEditMode() === 'cell') {
                     this._editingController.cancelEditData();
                 } else {
-                    this._editingController.closeEditCell();
+                    this._closeEditCell();
                 }
             } else {
                 this._focusEditFormCell($cell);
@@ -806,7 +806,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this.setFocusedRowIndex(args.prevRowIndex);
             $cell = this._getFocusedCell();
             if(this._editingController.isEditing() && isCellEditMode) {
-                this._editingController.closeEditCell();
+                this._closeEditCell();
             }
         }
     },
@@ -960,7 +960,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     }
                     if($cell.is('td') || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
-                        if(!isCommandCell && that.getController('editorFactory').focus()) {
+                        if((isRenderView || !isCommandCell) && that.getController('editorFactory').focus()) {
                             that._focus($cell);
                         } else if(that._isCellEditMode()) {
                             that._focus($cell, that._isHiddenFocus);
@@ -1819,7 +1819,7 @@ export default {
                     let rowIndex = this.option('focusedRowIndex') || 0;
                     const $rowsView = this.element();
 
-                    if($rowsView && !focused($rowsView)) {
+                    if($rowsView && !selectors.focused($rowsView)) {
                         $rowsView.attr('tabIndex', null);
                     }
 
@@ -2018,7 +2018,7 @@ export default {
                         const focusedRowIndexCorrection = getRowIndexCorrection(focusedCellPosition.rowIndex);
                         if(focusedRowIndexCorrection) {
                             focusedCellPosition.rowIndex += focusedRowIndexCorrection;
-                            editorFactory.focus(editorFactory.focus());
+                            editorFactory.refocus();
                         }
                     }
                 }

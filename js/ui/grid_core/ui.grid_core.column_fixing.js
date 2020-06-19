@@ -607,7 +607,9 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                     }, scrollDelay);
                 });
                 eventsEngine.on($content, wheelEvent.name, function(e) {
-                    if(scrollable) {
+                    const $nearestScrollable = $(e.target).closest('.dx-scrollable');
+
+                    if(scrollable && scrollable.$element().is($nearestScrollable)) {
                         scrollTop = scrollable.scrollTop();
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 

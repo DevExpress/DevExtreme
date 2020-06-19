@@ -176,13 +176,9 @@ QUnit.module('scroll move');
 QUnit.test('dxscroll fired on pointer move', function(assert) {
     let fired = 0;
     let args;
-    let initEventData; // eslint-disable-line no-unused-vars
     let moveEventData;
 
     const $scrollable = $('#scrollable')
-        .on(scrollEvents.init, function(e) {
-            initEventData = eventUtils.eventData(e.originalEvent);
-        })
         .on(scrollEvents.move, function(e) {
             args = e;
             fired++;

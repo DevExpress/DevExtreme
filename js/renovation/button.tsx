@@ -18,21 +18,10 @@ import { getImageSourceType } from '../core/utils/icon';
 import Icon from './icon';
 import InkRipple from './ink-ripple';
 import Widget from './widget';
-import { BaseWidgetProps } from './utils/base-props';
+import BaseWidgetProps from './utils/base-props';
 import BaseComponent from './preact-wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
-
-const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
-  const isOnlyIconButton = (!text && icon) || (type === 'back');
-  const config: any = isOnlyIconButton ? {
-    isCentered: true,
-    useHoldAnimation: false,
-    waveSizeCoefficient: 1,
-  } : {};
-
-  return config;
-};
 
 const getCssClasses = (model: ButtonProps) => {
   const {
@@ -49,16 +38,6 @@ const getCssClasses = (model: ButtonProps) => {
   iconPosition !== 'left' && classNames.push('dx-button-icon-right');
 
   return classNames.join(' ');
-};
-
-const getAriaLabel = (text, icon) => {
-  let label = (text && text.trim()) || icon;
-
-  if (!text && getImageSourceType(icon) === 'image') {
-    label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
-  }
-
-  return label ? { label } : {};
 };
 
 export const viewFunction = (viewModel: Button) => {
@@ -78,7 +57,6 @@ export const viewFunction = (viewModel: Button) => {
       aria={viewModel.aria}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
-      elementAttr={viewModel.elementAttr}
       focusStateEnabled={viewModel.props.focusStateEnabled}
       height={viewModel.props.height}
       hint={viewModel.props.hint}
@@ -103,8 +81,7 @@ export const viewFunction = (viewModel: Button) => {
                 />
                 )}
         {isIconLeft && iconComponent}
-        {renderText
-                && <span className="dx-button-text">{text}</span>}
+        {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
         {viewModel.props.useSubmitBehavior
                 && <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
@@ -165,7 +142,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   view: viewFunction,
 })
 
-export default class Button extends JSXComponent<ButtonProps> {
+export default class Button extends JSXComponent(ButtonProps) {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
@@ -208,18 +185,18 @@ export default class Button extends JSXComponent<ButtonProps> {
     useSubmitBehavior && this.submitInputRef.click();
   }
 
-  onWidgetKeyDown(event: Event, options) {
+  onWidgetKeyDown(options) {
     const { onKeyDown } = this.props;
-    const { keyName, which } = options;
+    const { originalEvent, keyName, which } = options;
 
-    const result = onKeyDown?.(event, options);
+    const result = onKeyDown?.(options);
     if (result?.cancel) {
       return result;
     }
 
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-      event.preventDefault();
-      this.onWidgetClick(event);
+      originalEvent.preventDefault();
+      this.onWidgetClick(originalEvent);
     }
 
     return undefined;
@@ -242,15 +219,22 @@ export default class Button extends JSXComponent<ButtonProps> {
   }
 
   get aria() {
-    return getAriaLabel(this.props.text, this.props.icon);
+    const { text, icon } = this.props;
+
+    let label = text || icon;
+
+    if (!text && icon && getImageSourceType(icon) === 'image') {
+      label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+    }
+
+    return {
+      role: 'button',
+      ...(label ? { label } : {}),
+    };
   }
 
   get cssClasses(): string {
     return getCssClasses(this.props);
-  }
-
-  get elementAttr() {
-    return { ...this.props.elementAttr, role: 'button' };
   }
 
   get iconSource(): string {
@@ -260,6 +244,11 @@ export default class Button extends JSXComponent<ButtonProps> {
   }
 
   get inkRippleConfig() {
-    return getInkRippleConfig(this.props);
+    const { text, icon, type } = this.props;
+    return ((!text && icon) || (type === 'back')) ? {
+      isCentered: true,
+      useHoldAnimation: false,
+      waveSizeCoefficient: 1,
+    } : {};
   }
 }

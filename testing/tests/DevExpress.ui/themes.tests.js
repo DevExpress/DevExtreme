@@ -184,9 +184,6 @@ QUnit.module('dx-theme changing', () => {
         }, {
             functionName: 'isMaterial',
             themeName: materialThemeName
-        }, {
-            functionName: 'isIos7',
-            themeName: 'ios7.default'
         }];
 
         linksContainer.append('<link rel=\'dx-theme\' href=\'style2.css\' data-theme=\'' + materialThemeName + '\' />');
@@ -199,7 +196,6 @@ QUnit.module('dx-theme changing', () => {
         themes.current(genericThemeName);
         assert.ok(themes.isGeneric(), 'isGeneric after activate generic theme');
         assert.notOk(themes.isMaterial(), 'isMaterial is false after generic theme init');
-        assert.notOk(themes.isIos7(), 'isIos7 is false after generic theme init');
         themes.resetTheme();
         assert.notOk(themes.isGeneric(), 'isGeneric is false after reset');
 

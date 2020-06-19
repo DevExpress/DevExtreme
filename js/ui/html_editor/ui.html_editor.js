@@ -227,8 +227,19 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+        this._addKeyPressHandler();
 
         return renderContentPromise;
+    },
+
+    _addKeyPressHandler: function() {
+        const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
+
+        eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
+    },
+
+    _keyDownHandler: function(e) {
+        this._saveValueChangeEvent(e);
     },
 
     _renderHtmlEditor: function() {
@@ -350,14 +361,19 @@ const HtmlEditor = Editor.inherit({
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
         const htmlMarkup = this._deltaConverter.toHtml();
-        const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
+        const convertedValue = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
+        const currentValue = this.option('value');
 
-        if(this.option('value') !== value) {
+        if(currentValue !== convertedValue && !this._isNullValueConverted(currentValue, convertedValue)) {
             this._isEditorUpdating = true;
-            this.option('value', value);
+            this.option('value', convertedValue);
         }
 
         this._finalizeContentRendering();
+    },
+
+    _isNullValueConverted: function(currentValue, convertedValue) {
+        return currentValue === null && convertedValue === '';
     },
 
     _finalizeContentRendering: function() {

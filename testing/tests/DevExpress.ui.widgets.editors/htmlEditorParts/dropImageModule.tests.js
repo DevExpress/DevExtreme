@@ -30,7 +30,8 @@ const moduleConfig = {
 
         this.options = {
             editorInstance: {
-                NAME: 'dxHtmlEditor'
+                NAME: 'dxHtmlEditor',
+                _saveValueChangeEvent: () => {}
             }
         };
     }
@@ -74,8 +75,9 @@ QUnit.module('DropImage module', moduleConfig, () => {
         this.$element.trigger(event);
         clock.tick();
 
-        if(browser.mozilla) {
-            assert.ok(true, 'FF handle this out-the-box');
+        const { mozilla, chrome, version } = browser;
+        if(mozilla || chrome && version > 82) {
+            assert.ok(true, 'FF and Chrome v83+ handle this out-the-box');
         } else {
             assert.equal(this.insertEmbedStub.callCount, 1, 'File inserted');
             assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, 'extendedImage', IMAGE, 'user'], 'insert base64 image by user');

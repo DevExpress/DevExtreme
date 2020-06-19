@@ -17,7 +17,6 @@ const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
 const TOOLBAR_CENTER_CLASS = 'dx-toolbar-center';
 const TOOLBAR_AFTER_CLASS = 'dx-toolbar-after';
-const TOOLBAR_BOTTOM_CLASS = 'dx-toolbar-bottom';
 const TOOLBAR_MINI_CLASS = 'dx-toolbar-mini';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
@@ -199,7 +198,6 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
     _renderToolbar: function() {
         this.$element()
             .addClass(TOOLBAR_CLASS)
-            .toggleClass(TOOLBAR_BOTTOM_CLASS, this.option('renderAs') === 'bottomToolbar')
             .toggleClass(TOOLBAR_MULTILINE_CLASS, this.option('multiline'));
 
         this._$toolbarItemsContainer = $('<div>')

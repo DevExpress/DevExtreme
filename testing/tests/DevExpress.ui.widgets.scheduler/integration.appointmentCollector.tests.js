@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
-import { SchedulerTestWrapper, createWrapper } from './helpers.js';
+import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
 import Widget from 'ui/widget/ui.widget';

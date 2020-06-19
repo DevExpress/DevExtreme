@@ -1,44 +1,49 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
+import 'ui/html_editor/converters/markdown';
+
+import keyboardMock from '../../../helpers/keyboardMock.js';
+
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
 const TIME_TO_WAIT = 500;
+const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
 
-const { test, module } = QUnit;
+const { test, module: testModule } = QUnit;
 
-function createPasteEvent() {
-    const pasteEvent = document.createEvent('Event');
+function createEvent(type = 'paste') {
+    const customEvent = document.createEvent('Event');
 
-    pasteEvent.initEvent('paste', true, true);
-    pasteEvent.clipboardData = {
+    customEvent.initEvent(type, true, true);
+    customEvent.clipboardData = {
         getData: () => 'test'
     };
 
-    return pasteEvent;
+    return customEvent;
 }
 
-const moduleConfig = {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
+const createModuleConfig = function(initialOptions = {}) {
+    return {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
 
-        this.options = {
-            value: '<p>Test 1</p><p>Test 2</p><p>Test 3</p>'
-        };
+            this.options = initialOptions;
 
-        this.createEditor = (options) => {
-            this.instance = $('#htmlEditor')
-                .dxHtmlEditor(options || this.options)
-                .dxHtmlEditor('instance');
-        };
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
+            this.createEditor = (options) => {
+                this.instance = $('#htmlEditor')
+                    .dxHtmlEditor(options || this.options)
+                    .dxHtmlEditor('instance');
+            };
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    };
 };
 
-module('Events', moduleConfig, () => {
+testModule('Events', createModuleConfig({ value: '<p>Test 1</p><p>Test 2</p><p>Test 3</p>' }), () => {
     test('focusIn event by API', function(assert) {
         this.createEditor();
 
@@ -91,7 +96,7 @@ module('Events', moduleConfig, () => {
 
         const $content = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`);
 
-        $content[0].dispatchEvent(createPasteEvent());
+        $content[0].dispatchEvent(createEvent('paste'));
         this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(focusInStub.callCount, 1, 'Editor is focused one time');
@@ -118,7 +123,7 @@ module('Events', moduleConfig, () => {
 
         const $content = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`);
 
-        $content[0].dispatchEvent(createPasteEvent());
+        $content[0].dispatchEvent(createEvent('paste'));
         this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(focusInStub.callCount, 1, 'Editor is focused one time');
@@ -129,5 +134,265 @@ module('Events', moduleConfig, () => {
 
         assert.strictEqual(focusInStub.callCount, 1, 'Editor is focused one time');
         assert.strictEqual(focusOutStub.callCount, 1, 'Editor is blurred one time');
+    });
+
+    ['html', 'markdown'].forEach((valueType) => {
+        test(`change value to "null" should raise only one ValueChanged event (valueType is "${valueType}")`, function(assert) {
+            const valueChangedStub = sinon.stub();
+            const onValueChangedStub = sinon.stub();
+            this.createEditor({
+                value: 'test',
+                onValueChanged: onValueChangedStub,
+                valueType
+            });
+            this.instance.on('valueChanged', valueChangedStub);
+
+            this.instance.option('value', null);
+
+            assert.ok(onValueChangedStub.calledOnce, 'subscribe via options');
+            assert.ok(valueChangedStub.calledOnce, 'subscribe via method');
+        });
+    });
+});
+
+testModule('ValueChanged event', createModuleConfig(), function() {
+    ['drop', 'paste'].forEach((eventType) => {
+        test(`event should keep valueChanged event on ${eventType}`, function(assert) {
+            const done = assert.async();
+            this.createEditor({
+                onValueChanged: ({ event }) => {
+                    assert.strictEqual(event.type, eventType, 'value changed after "paste" event dispatched');
+                    done();
+                },
+            });
+            this.instance.focus();
+            this.clock.tick(TIME_TO_WAIT);
+            const contentElem = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
+
+            contentElem.dispatchEvent(createEvent(eventType));
+            contentElem.textContent = 'test';
+        });
+    });
+
+    test('event should keep the last raised event', function(assert) {
+        const done = assert.async();
+        this.createEditor({
+            onValueChanged: ({ event }) => {
+                assert.strictEqual(event.type, 'paste', 'value changed after "paste" event dispatched');
+                done();
+            },
+        });
+        this.instance.focus();
+        this.clock.tick(TIME_TO_WAIT);
+        const contentElem = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
+
+        contentElem.dispatchEvent(createEvent('drop'));
+        contentElem.dispatchEvent(createEvent('paste'));
+
+        contentElem.textContent = 'test';
+    });
+
+
+    test('event should keep valueChanged event on typing', function(assert) {
+        const done = assert.async();
+        this.createEditor({
+            onValueChanged: ({ event }) => {
+                assert.strictEqual(event.type, 'keydown', 'value changed after "keydown" event dispatched');
+                done();
+            },
+        });
+        this.instance.focus();
+        this.clock.tick(TIME_TO_WAIT);
+        const contentElem = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
+
+        keyboardMock(contentElem).type('t');
+        contentElem.textContent = 't';
+    });
+
+    [
+        'bold',
+        'italic',
+        'strike',
+        'underline',
+        'alignLeft',
+        'alignCenter',
+        'alignRight',
+        'alignJustify',
+        'orderedList',
+        'bulletList',
+        'codeBlock',
+        'blockquote',
+
+    ].forEach((toolbarOperation) => {
+        test(`${toolbarOperation} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
+            assert.expect(1);
+            const done = assert.async();
+            this.createEditor({
+                value: 'test',
+                toolbar: { items: [toolbarOperation] },
+                onValueChanged: ({ event }) => {
+                    if(event) {
+                        assert.strictEqual(
+                            event.type,
+                            'dxclick',
+                            `${toolbarOperation} toolbar item - value changed after "dxclick" event dispatched`
+                        );
+                        done();
+                    }
+                },
+            });
+            this.instance.focus();
+            this.clock.tick(TIME_TO_WAIT);
+            this.instance.setSelection(0, 3);
+
+            $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
+        });
+    });
+
+    [
+        {
+            formatName: 'header',
+            formatValues: [false, 1, 2, 3, 4, 5]
+        },
+        {
+            formatName: 'size',
+            formatValues: ['8pt', '10pt']
+        },
+        {
+            formatName: 'font',
+            formatValues: ['Arial', 'Courier New']
+        }
+    ].forEach((listFormat) => {
+        const { formatName } = listFormat;
+
+        test(`${formatName} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
+            assert.expect(1);
+            const done = assert.async();
+            this.createEditor({
+                value: 'test',
+                toolbar: { items: [listFormat] },
+                onValueChanged: ({ event }) => {
+                    if(event) {
+                        assert.strictEqual(
+                            event.type,
+                            'dxclick',
+                            `${formatName} toolbar item - value changed after "dxclick" event dispatched`
+                        );
+                        done();
+                    }
+                },
+            });
+            this.instance.focus();
+            this.clock.tick(TIME_TO_WAIT);
+            this.instance.setSelection(0, 3);
+
+            $('.dx-htmleditor-toolbar .dx-dropdowneditor-button').trigger('dxclick');
+            $('.dx-list-item')
+                .last()
+                .trigger('dxclick');
+        });
+    });
+
+    [
+        'color',
+        'background'
+    ].forEach((colorDialog) => {
+        test(`${colorDialog} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
+            assert.expect(1);
+            const done = assert.async();
+            this.createEditor({
+                value: 'test',
+                toolbar: { items: [colorDialog] },
+                onValueChanged: ({ event }) => {
+                    if(event) {
+                        assert.strictEqual(
+                            event.type,
+                            'dxclick',
+                            `${colorDialog} toolbar item - value changed after "dxclick" event dispatched`
+                        );
+                        done();
+                    }
+                },
+            });
+            this.instance.focus();
+            this.clock.tick(TIME_TO_WAIT);
+            this.instance.setSelection(0, 3);
+
+            $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
+
+            keyboardMock($('.dx-texteditor-input').first())
+                .type('100')
+                .change();
+
+            $('.dx-formdialog .dx-button')
+                .first()
+                .trigger('dxclick');
+        });
+    });
+
+    test('link toolbar item - click on toolbar button should raise valueChanged event with the relevant event', function(assert) {
+        assert.expect(1);
+        const done = assert.async();
+        const operationName = 'link';
+        this.createEditor({
+            value: 'test',
+            toolbar: { items: [operationName] },
+            onValueChanged: ({ event }) => {
+                if(event) {
+                    assert.strictEqual(
+                        event.type,
+                        'dxclick',
+                        `${operationName} toolbar item - value changed after "dxclick" event dispatched`
+                    );
+                    done();
+                }
+            },
+        });
+        this.instance.focus();
+        this.clock.tick(TIME_TO_WAIT);
+        this.instance.setSelection(0, 3);
+
+        $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
+
+        keyboardMock($('.dx-texteditor-input').first())
+            .type('http://testdomain.test')
+            .change();
+
+        $('.dx-formdialog .dx-button')
+            .first()
+            .trigger('dxclick');
+    });
+
+    test('image toolbar item - click on toolbar button should raise valueChanged event with the relevant event', function(assert) {
+        assert.expect(1);
+        const done = assert.async();
+        const operationName = 'image';
+        this.createEditor({
+            value: 'test',
+            toolbar: { items: [operationName] },
+            onValueChanged: ({ event }) => {
+                if(event) {
+                    assert.strictEqual(
+                        event.type,
+                        'dxclick',
+                        `${operationName} toolbar item - value changed after "dxclick" event dispatched`
+                    );
+                    done();
+                }
+            },
+        });
+        this.instance.focus();
+        this.clock.tick(TIME_TO_WAIT);
+        this.instance.setSelection(0, 3);
+
+        $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
+
+        keyboardMock($('.dx-texteditor-input').first())
+            .type(ORANGE_PIXEL)
+            .change();
+
+        $('.dx-formdialog .dx-button')
+            .first()
+            .trigger('dxclick');
     });
 });

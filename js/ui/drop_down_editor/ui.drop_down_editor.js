@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop, splitPair } from '../../core/utils/common';
-import { focused } from '../widget/selectors';
+import selectors from '../widget/selectors';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -316,7 +316,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
-        const isFocused = focused(this._input());
+        const isFocused = selectors.focused(this._input());
         const $container = this._$container;
 
         this._detachKeyboardEvents();
@@ -424,7 +424,7 @@ const DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        if(this.option('focusStateEnabled') && !focused(this._input())) {
+        if(this.option('focusStateEnabled') && !selectors.focused(this._input())) {
             eventsEngine.trigger(this._input(), 'focus');
         }
 

@@ -348,6 +348,7 @@ class Diagram extends Widget {
 
                 if(this._viewToolbar) {
                     this._viewToolbar.$element().css('opacity', e.visible && this.isMobileScreenSize() ? '0' : '1');
+                    this._viewToolbar.$element().css('pointerEvents', e.visible && this.isMobileScreenSize() ? 'none' : '');
                 }
             },
             onVisibilityChanged: (e) => {

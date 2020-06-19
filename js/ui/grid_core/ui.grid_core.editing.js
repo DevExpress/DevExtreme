@@ -250,9 +250,9 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
 
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup($pointerDownTarget);
+                        const isEditorPopup = checkEditorPopup($target) || checkEditorPopup(targetComponent?.$element());
                         const isDomElement = !!$target.closest(getWindow().document).length;
-                        const isAnotherComponent = targetComponent && targetComponent !== that.component;
+                        const isAnotherComponent = targetComponent && !targetComponent._disposed && targetComponent !== that.component;
                         const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
                         const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         const isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
@@ -719,13 +719,12 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
 
             const editIndex = getIndexByKey(key, that._editData);
+            item.isEditing = false;
 
             if(editIndex >= 0) {
                 const editMode = getEditMode(that);
                 const editData = that._editData[editIndex];
                 data = editData.data;
-
-                item.isEditing = false;
 
                 switch(editData.type) {
                     case DATA_EDIT_DATA_INSERT_TYPE:

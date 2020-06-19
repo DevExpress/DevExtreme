@@ -17,6 +17,7 @@ import 'ui/autocomplete';
 import 'ui/color_box';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/drop_down_box';
+import 'ui/switch';
 import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
@@ -1754,7 +1755,7 @@ QUnit.module('Editing', {
     });
 
     // T869676
-    QUnit.test('Not close Editing Cell in batch mode on click add button inside editor popup', function(assert) {
+    QUnit.test('Not close Editing Cell in batch mode on click add button and cell inside editor popup', function(assert) {
     // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -1770,7 +1771,7 @@ QUnit.module('Editing', {
                 contentTemplate: function(e) {
                     return $('<div>').dxDataGrid({
                         dataSource: [],
-                        columns: ['name'],
+                        columns: ['name', 'age'],
                         editing: {
                             mode: 'batch',
                             allowAdding: true
@@ -1795,6 +1796,11 @@ QUnit.module('Editing', {
         $addButton.trigger('dxpointerdown');
         $addButton.trigger('dxclick');
         this.clock.tick();
+        const $secondCell = $('.dx-popup-wrapper .dx-datagrid .dx-data-row > td').eq(1);
+        $secondCell.trigger('dxpointerdown');
+        $secondCell.trigger('dxclick');
+        this.clock.tick();
+
 
         // assert
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
@@ -6079,6 +6085,27 @@ QUnit.module('Editing with real dataController', {
         assert.ok(isEditingRow, 'isEditing parameter of the row');
     });
 
+    // T893985
+    QUnit.test('e.row.isEditing should be \'false\' in onCellPrepared during initialization', function(assert) {
+        // arrange
+        let isEditingCell;
+        let isEditingRow;
+
+        this.options.onCellPrepared = function(e) {
+            if(e.rowIndex === 0 && e.columnIndex === 0) {
+                isEditingCell = e.isEditing;
+                isEditingRow = e.row.isEditing;
+            }
+        };
+
+        this.rowsView.init();
+        this.rowsView.render($('#container'));
+
+        // assert
+        assert.equal(isEditingCell, false, 'isEditing parameter of the cell');
+        assert.equal(isEditingRow, false, 'isEditing parameter of the row');
+    });
+
     // T316439
     QUnit.testInActiveWindow('Hide focus overlay before update on editing cell', function(assert) {
     // arrange
@@ -8765,6 +8792,42 @@ QUnit.module('Refresh modes', {
         // assert
         assert.ok(event.isDefaultPrevented(), 'default is prevented');
     });
+
+    ['Full', 'Reshape', 'Repaint'].forEach(refreshMode => {
+        QUnit.test(`${refreshMode} - selectedRowKeys should be updated after deleting a row (T896582)`, function(assert) {
+            // arrange
+            const items = [
+                { id: 1, name: 'Test1' },
+                { id: 2, name: 'Test2' },
+                { id: 3, name: 'Test2' }
+            ];
+            this.options.dataSource = {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: items
+                }
+            };
+            this.options.editing = {
+                refreshMode: refreshMode.toLowerCase()
+            };
+            this.options.selection = {
+                mode: 'multiple'
+            };
+            this.options.selectedRowKeys = [1, 2];
+            this.setupModules();
+            this.clock.tick();
+
+            // act
+            this.deleteRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.getVisibleRows().length, 2);
+            assert.deepEqual(this.getSelectedRowKeys(), [2], 'getSelectedRowKeys returns correct values');
+            assert.deepEqual(this.option('selectedRowKeys'), [2], 'the selectedRowKeys option is updated');
+        });
+    });
 });
 
 QUnit.module('Editing with validation', {
@@ -9819,6 +9882,49 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements($testElement).length, 1, 'has input');
         assert.ok(!$cells.eq(1).find('.dx-tooltip').length, 'not has tooltip');
+    });
+
+    QUnit.testInActiveWindow('Show tooltip on switch editor value change to invalid value (T897363)', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const $testElement = $('#container .dx-datagrid');
+
+        that.applyOptions({
+            onEditorPreparing(e) {
+                e.editorName = 'dxSwitch';
+                e.editorOptions.value = true;
+            },
+            editing: {
+                mode: 'batch'
+            },
+            columns: [{
+                dataField: 'boolean',
+                dataType: 'boolean',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        that.editorFactoryController.init();
+
+        rowsView.render($testElement);
+
+        // act
+        const $cell = $(this.getCellElement(0, 0));
+        const editor = $cell.find('.dx-switch').dxSwitch('instance');
+
+        eventsEngine.trigger(editor.$element(), 'focus');
+        this.clock.tick();
+
+        // assert
+        assert.equal($cell.find('.dx-overlay').length, 0, 'no tooltip');
+
+        // act
+        editor.option('value', false);
+        this.clock.tick();
+
+        // assert
+        assert.equal($cell.find('.dx-overlay').length, 1, 'tooltip is rendered');
     });
 
     // T183197

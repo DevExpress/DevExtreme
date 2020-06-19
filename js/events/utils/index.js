@@ -3,7 +3,7 @@ import mappedAddNamespace from './add_namespace';
 import eventsEngine, { Event } from '../core/events_engine';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { focused } from '../../ui/widget/selectors';
+import selectors from '../../ui/widget/selectors';
 
 const KEY_MAP = {
     'backspace': 'backspace',
@@ -177,7 +177,7 @@ export const needSkipEvent = e => {
     }
 
     if(isTouchEvent(e)) {
-        return touchInInput && focused($target);
+        return touchInInput && selectors.focused($target);
     }
 };
 

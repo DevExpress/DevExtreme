@@ -31,27 +31,30 @@ if(Quill) {
 
         _dropHandler(e) {
             const dataTransfer = e.originalEvent.dataTransfer;
-            const hasFiles = dataTransfer && dataTransfer.files && dataTransfer.files.length;
+            const hasFiles = dataTransfer?.files?.length;
 
+            this.editorInstance._saveValueChangeEvent(e);
             e.preventDefault();
             if(hasFiles) {
                 this._getImage(dataTransfer.files, this._addImage.bind(this));
             }
         }
 
-        _pasteHandler({ originalEvent }) {
-            const { clipboardData } = originalEvent;
+        _pasteHandler(e) {
+            const { clipboardData } = e.originalEvent;
+
+            this.editorInstance._saveValueChangeEvent(e);
 
             if(!clipboardData) {
                 return;
             }
 
-            const hasDataItems = clipboardData.items && clipboardData.items.length;
+            const hasDataItems = clipboardData.items?.length;
             const isHtmlData = clipboardData.getData('text/html');
 
             if(!isHtmlData && hasDataItems) {
                 this._getImage(clipboardData.items, (imageData) => {
-                    if(browser.mozilla) {
+                    if(this._isBrowserSupportImagePaste(browser)) {
                         return;
                     }
 
@@ -62,6 +65,11 @@ if(Quill) {
                     }
                 });
             }
+        }
+
+        _isBrowserSupportImagePaste({ mozilla, chrome, version }) {
+            return mozilla ||
+                chrome && version > 82; // T894297
         }
 
         _isImage(file) {

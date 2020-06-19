@@ -3,20 +3,20 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 
-const SchedulerTimelineDay = SchedulerTimeline.inherit({
-    _getElementClass: function() {
+class SchedulerTimelineDay extends SchedulerTimeline {
+    _getElementClass() {
         return TIMELINE_CLASS;
-    },
+    }
 
-    _setFirstViewDate: function() {
+    _setFirstViewDate() {
         this._firstViewDate = this.option('currentDate');
         this._setStartDayHour(this._firstViewDate);
-    },
+    }
 
-    _needRenderWeekHeader: function() {
+    _needRenderWeekHeader() {
         return this._isWorkSpaceWithCount();
-    },
-});
+    }
+}
 
 registerComponent('dxSchedulerTimelineDay', SchedulerTimelineDay);
 

@@ -1,102 +1,136 @@
-/* eslint-disable */
+import * as Preact from 'preact';
+import { useLayoutEffect } from 'preact/hooks';
 import $ from '../../core/renderer';
 import DOMComponent from '../../core/dom_component';
-import * as Preact from 'preact';
-import { isEmpty } from '../../core/utils/string';
-import { wrapElement, removeDifferentElements } from '../preact-wrapper/utils';
-import { useLayoutEffect } from 'preact/hooks';
+import { extend } from '../../core/utils/extend';
+import { wrapElement, removeDifferentElements } from './utils';
 import { getPublicElement } from '../../core/element';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+
+function abandonProps() {
+    return {
+        _hasAnonymousTemplateContent: null,
+        class: null,
+        elementAttr: null,
+        integrationOptions: null,
+    };
+}
 
 export default class PreactWrapper extends DOMComponent {
     getInstance() {
         return this;
     }
 
+    get viewRef() {
+        return this._viewRef.current;
+    }
+
+    _getDefaultOptions() {
+        return extend(
+            super._getDefaultOptions(),
+            this._viewComponent.defaultProps,
+        );
+    }
+
     _initMarkup() {
-        const isFirstRender = this.$element().children().length === 0;
-        const hasParent = this.$element().parent().length > 0;
-        const container = isFirstRender && hasParent ? this.$element().get(0) : undefined;
+        const props = this.getAllProps();
+        if(this._shouldRefresh) {
+            this._shouldRefresh = false;
 
-        Preact.render(Preact.h(this._viewComponent, this.getAllProps(isFirstRender)), this.$element().get(0), container);
+            this._renderPreact({
+                ...props, width: null, height: null, style: null, className: null,
+            });
+        }
+        this._renderPreact(props);
     }
 
-    _render() {
-        // NOTE: see ui.widget
-        // this._renderContent();
+    _renderPreact(props) {
+        const containerNode = this.$element().get(0);
+        const replaceNode = (!this._preactReplaced && containerNode.parentNode) ? containerNode : undefined;
+
+        if(containerNode.parentNode) {
+            this._preactReplaced = true;
+        }
+
+        Preact.render(
+            Preact.h(this._viewComponent, props),
+            containerNode,
+            replaceNode,
+        );
     }
-    // _renderContent() { }
 
-    getAllProps(isFirstRender) {
-        const options = { ...this.option() };
-        const attributes = this.$element()[0].attributes;
-        const { width, height } = this.$element()[0].style;
+    _render() { }
 
-        if(isFirstRender) {
-            options.elementAttr = {
+    _dispose() {
+        Preact.render(null, this.$element().get(0));
+        super._dispose();
+    }
+
+    get elementAttr() {
+        if(!this._elementAttr) {
+            const { attributes } = this.$element()[0];
+            this._elementAttr = {
                 ...Object.keys(attributes).reduce((a, key) => {
                     if(attributes[key].specified) {
                         a[attributes[key].name] = attributes[key].value;
                     }
                     return a;
                 }, {}),
-                ...options.elementAttr
             };
-        } else {
-            if(attributes.id) {
-                // NOTE: workaround to save container id
-                options.elementAttr = {
-                    [attributes.id.name]: attributes.id.value,
-                    ...options.elementAttr
-                };
-            }
-            if(attributes.class) {
-                // NOTE: workaround to save custom classes on type changes
-                const customClass = attributes.class.value
-                    .split(' ')
-                    .filter(name => name.indexOf('dx-') < 0)
-                    .join(' ');
-                const classes = options.elementAttr.class ? options.elementAttr.class.concat(customClass) : customClass;
-                options.elementAttr = { class: classes, ...options.elementAttr };
-            }
         }
-        if(!isEmpty(width)) {
-            options.width = width;
+        const elemStyle = this.$element()[0].style;
+        const style = {};
+        for(let i = 0; i < elemStyle.length; i++) {
+            style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
         }
-        if(!isEmpty(height)) {
-            options.height = height;
+        this._elementAttr.style = style;
+
+        const cssClass = this.$element()[0].getAttribute('class');
+        if(cssClass) {
+            this._elementAttr.class = cssClass
+                .split(' ')
+                .filter((name) => name.indexOf('dx-') < 0)
+                .join(' ');
         }
 
-        if(this.viewRef) {
-            options.ref = this.viewRef;
-        }
-
-        Object.keys(this._actionsMap).forEach(name => {
-            options[name] = this._actionsMap[name];
-        });
-
-        return this.getProps && this.getProps(options) || options;
+        return this._elementAttr;
     }
 
-    _getActionConfigs() { return {}; }
+    getAllProps() {
+        const options = { ...this.option(), ref: this._viewRef };
+        return this.getProps({
+            ...options,
+            ...this.elementAttr,
+            ...options.elementAttr,
+            className: [
+                ...(this.elementAttr.class || '').split(' '),
+                ...(options.elementAttr.class || '').split(' '),
+            ]
+                .filter((c, i, a) => c && a.indexOf(c) === i)
+                .join(' '),
+            ...this._actionsMap,
+            ...abandonProps(),
+        });
+    }
+
+    _getActionConfigs() {
+        return {};
+    }
 
     _init() {
         super._init();
         this._actionsMap = {};
 
-        Object.keys(this._getActionConfigs()).forEach(name => this._addAction(name));
+        Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
 
-        this._initWidget && this._initWidget();
+        this._viewRef = Preact.createRef();
         this._supportedKeys = () => ({});
     }
 
     _addAction(event, action) {
-        this._actionsMap[event] = action || this._createActionByOption(event, this._getActionConfigs()[event]);
-    }
-
-    _createViewRef() {
-        this.viewRef = Preact.createRef();
+        this._actionsMap[event] = action
+            || this._createActionByOption(event, this._getActionConfigs()[event]);
     }
 
     _optionChanged(option) {
@@ -114,7 +148,11 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     _createTemplateComponent(props, templateOption, canBeAnonymous) {
-        if(!templateOption && this.option('_hasAnonymousTemplateContent') && canBeAnonymous) {
+        if(
+            !templateOption
+            && this.option('_hasAnonymousTemplateContent')
+            && canBeAnonymous
+        ) {
             templateOption = this._templateManager.anonymousTemplateName;
         }
         if(!templateOption) {
@@ -123,38 +161,44 @@ export default class PreactWrapper extends DOMComponent {
 
         const template = this._getTemplate(templateOption);
         return ({ parentRef, data, index }) => {
-            useLayoutEffect(() => {
-                const $parent = $(parentRef.current);
-                const $children = $parent.contents();
+            useLayoutEffect(
+                () => {
+                    const $parent = $(parentRef.current);
+                    const $children = $parent.contents();
 
-                const payload = {
-                    container: getPublicElement($parent),
-                    model: data,
-                    transclude: canBeAnonymous && templateOption === this._templateManager.anonymousTemplateName
-                };
-                if(isFinite(index)) {
-                    payload.index = index;
-                }
+                    const payload = {
+                        container: getPublicElement($parent),
+                        model: data,
+                        transclude:
+                            canBeAnonymous
+                            && templateOption
+                            === this._templateManager.anonymousTemplateName,
+                    };
+                    if(isFinite(index)) {
+                        payload.index = index;
+                    }
 
-                let $template = $(template.render(payload));
+                    let $template = $(template.render(payload));
 
-                if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-                    $template = wrapElement($parent, $template);
-                }
-                const $newChildren = $parent.contents();
+                    if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+                        $template = wrapElement($parent, $template);
+                    }
+                    const $newChildren = $parent.contents();
 
-                return () => {
-                    // NOTE: order is important
-                    removeDifferentElements($children, $newChildren);
-                };
-            }, Object.keys(props).map(key => props[key]));
+                    return () => {
+                        // NOTE: order is important
+                        removeDifferentElements($children, $newChildren);
+                    };
+                },
+                Object.keys(props).map((key) => props[key]),
+            );
 
-            return (<Preact.Fragment/>);
+            return <Preact.Fragment />;
         };
     }
 
     _wrapKeyDownHandler(handler) {
-        return (event, options) => {
+        return (options) => {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys();
             const func = keys[keyName] || keys[which];
@@ -165,18 +209,19 @@ export default class PreactWrapper extends DOMComponent {
                 const result = handler(originalEvent, options);
 
                 if(!result) {
-                    event.cancel = true;
-                    return event;
+                    originalEvent.cancel = true;
+                    return originalEvent;
                 }
             }
 
             // NOTE: make it possible to pass onKeyDown property
-            return handler?.(event, options);
+            return handler?.(originalEvent, options);
         };
     }
 
     // Public API
     repaint() {
+        this._shouldRefresh = true;
         this._refresh();
     }
 
@@ -188,7 +233,8 @@ export default class PreactWrapper extends DOMComponent {
     // NOTE: this method will be deprecated
     //       aria changes should be defined in declaration or passed through property
     setAria() {
-        throw new Error('"setAria" method is deprecated, use "aria" property instead');
+        throw new Error(
+            '"setAria" method is deprecated, use "aria" property instead',
+        );
     }
 }
-/* eslint-enable */

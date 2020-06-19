@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import CustomStore from 'data/custom_store';
+import DataSource from 'data/data_source';
 import { projection } from 'viz/vector_map/projection';
 const simpleProjection = projection({
     aspectRatio: 4 / 3,
@@ -42,9 +43,9 @@ QUnit.module('Tests without stub', {
                     type: 'Feature',
                     geometry: {
                         type: 'Polygon',
-                        coordinates: item.coordinates ? item.coordinates : item
+                        coordinates: item
                     },
-                    properties: item.properties || {}
+                    properties: {}
                 };
             })
         };
@@ -111,9 +112,9 @@ QUnit.module('VectorMap bounds', {
                     type: 'Feature',
                     geometry: {
                         type: 'Polygon',
-                        coordinates: item.coordinates ? item.coordinates : item
+                        coordinates: item
                     },
-                    properties: item.properties || {}
+                    properties: {}
                 };
             })
         };
@@ -165,9 +166,9 @@ QUnit.module('VectorMap custom store', {
                     type: 'Feature',
                     geometry: {
                         type: 'Polygon',
-                        coordinates: item.coordinates ? item.coordinates : item
+                        coordinates: item
                     },
-                    properties: item.properties || {}
+                    properties: {}
                 };
             })
         };
@@ -193,4 +194,38 @@ QUnit.test('Vector Map should not failed (T885056)', function(assert) {
     });
 
     assert.ok(true);
+});
+
+QUnit.test('Updating map bbox after push new item to the CustomStore', function(assert) {
+    const markerSource = new CustomStore({
+        load: function() {
+            return [{
+                coordinates: [-121.2808, 38.3320],
+                attributes: { text: 'Sacramento' },
+                'bbox': [0, 0, -121.2808, 38.3320]
+            }];
+        }
+    });
+
+    const map = $('#container').dxVectorMap({
+        getBoundsFromData: true,
+        layers: [{
+            dataSource: new DataSource({
+                pushAggregationTimeout: 0,
+                paginate: false,
+                store: markerSource
+            })
+        }]
+    }).dxVectorMap('instance');
+
+    markerSource.push([{
+        type: 'insert',
+        data: {
+            coordinates: [-180, 30.25],
+            attributes: { text: 'Austin' },
+            'bbox': [0, 0, -180, 30.25]
+        }
+    }]);
+
+    assert.deepEqual(map._projection._engine.min(), [-180, 0]);
 });

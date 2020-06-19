@@ -1,5 +1,4 @@
 import $ from '../core/renderer';
-import themes from './themes';
 import registerComponent from '../core/component_registrator';
 import { grep } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
@@ -93,21 +92,6 @@ const Toolbar = ToolbarBase.inherit({
             */
         });
 
-    },
-
-    _defaultOptionsRules: function() {
-        const themeName = themes.current();
-
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    submenuType: 'actionSheet'
-                }
-            }
-        ]);
     },
 
     _dimensionChanged: function(dimension) {

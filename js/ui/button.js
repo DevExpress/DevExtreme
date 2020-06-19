@@ -322,7 +322,7 @@ class Button extends Widget {
             text = icon || '';
         }
 
-        ariaTarget.attr('aria-label', text.trim() || null);
+        ariaTarget.attr('aria-label', text || null);
     }
 
     _updateClick() {

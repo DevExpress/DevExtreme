@@ -7,41 +7,46 @@ const toMs = dateUtils.dateToMilliseconds;
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;
 
-const SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
-    _getElementClass: function() {
+class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
+    constructor(...args) {
+        super(...args);
+
+        this._getWeekendsCount = workWeekUtils.getWeekendsCount;
+        this._isSkippedData = workWeekUtils.isDataOnWeekend;
+    }
+
+    _getElementClass() {
         return TIMELINE_CLASS;
-    },
+    }
 
-    _getWeekDuration: function() {
+    _getWeekDuration() {
         return 5;
-    },
+    }
 
-    _firstDayOfWeek: function() {
+    _firstDayOfWeek() {
         return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
-    },
+    }
 
-    _isSkippedData: workWeekUtils.isDataOnWeekend,
+    _isSkippedData() { return workWeekUtils.isDataOnWeekend; }
 
-    _incrementDate: function(date) {
+    _incrementDate(date) {
         const day = date.getDay();
         if(day === LAST_DAY_WEEK_INDEX) {
             date.setDate(date.getDate() + 2);
         }
-        this.callBase(date);
-    },
+        super._incrementDate(date);
+    }
 
-    _getOffsetByCount: function(cellIndex) {
+    _getOffsetByCount(cellIndex) {
         const weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
         return toMs('day') * weekendCount * 2;
-    },
+    }
 
-    _getWeekendsCount: workWeekUtils.getWeekendsCount,
-
-    _setFirstViewDate: function() {
+    _setFirstViewDate() {
         this._firstViewDate = workWeekUtils.getFirstViewDate(this.option('currentDate'), this._firstDayOfWeek());
         this._setStartDayHour(this._firstViewDate);
     }
-});
+}
 
 registerComponent('dxSchedulerTimelineWorkWeek', SchedulerTimelineWorkWeek);
 
