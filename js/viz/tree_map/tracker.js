@@ -1,10 +1,10 @@
-import { prototype as proto } from './tree_map.base';
+import TreeMapBase from './tree_map.base';
 import { Tracker } from '../components/tracker';
 import { expand } from '../core/helpers';
 import { parseScalar as _parseScalar } from '../core/utils';
 const DATA_KEY_BASE = '__treemap_data_';
 let dataKeyModifier = 0;
-const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+const proto = TreeMapBase.prototype;
 
 import './api';
 import './hover';
@@ -14,6 +14,7 @@ proto._eventsMap.onClick = { name: 'click' };
 
 expand(proto, '_initCore', function() {
     const that = this;
+    const dataKey = DATA_KEY_BASE + dataKeyModifier++;
     const getProxy = function(index) {
         return that._nodes[index].proxy;
     };
@@ -39,12 +40,12 @@ expand(proto, '_initCore', function() {
     that._handlers.setTrackerData = function(node, element) {
         element.data(dataKey, node._id);
     };
+
+    ///#DEBUG
+    exports._TESTS_dataKey = dataKey;
+    ///#ENDDEBUG
 });
 
 expand(proto, '_disposeCore', function() {
     this._tracker.dispose();
 });
-
-///#DEBUG
-export { dataKey as _TESTS_dataKey };
-///#ENDDEBUG
