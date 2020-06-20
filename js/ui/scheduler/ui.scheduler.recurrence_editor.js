@@ -144,10 +144,10 @@ const RecurrenceEditor = Editor.inherit({
             /**
             * @name dxRecurrenceEditorOptions.startDate
             * @type Date
-            * @default undefined
+            * @default new Date()
             * @hidden
             */
-            startDate: undefined,
+            startDate: new Date(),
 
             /**
             * @name dxRecurrenceEditorOptions.firstDayOfWeek
