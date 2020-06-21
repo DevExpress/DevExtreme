@@ -726,12 +726,10 @@ QUnit.module('Drawer behavior', () => {
         $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
             templatesRenderAsynchronously: true,
-            opened: true,
-            shading: true,
             integrationOptions: {
                 templates: {
                     'panel': {
-                        render: args => {
+                        render: function(args) {
                             const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
@@ -745,11 +743,9 @@ QUnit.module('Drawer behavior', () => {
         });
 
         clock.tick(100);
-        const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
-        const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
+        const $panel = $('#drawer').find('.dx-drawer-panel-content');
 
-        assert.strictEqual($panel.css('zIndex'), '2001', 'panel.zIndex');
-        assert.strictEqual($shader.css('zIndex'), '2000', 'shader.zIndex');
+        assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
         clock.restore();
     });
 
@@ -1058,6 +1054,18 @@ QUnit.module('Shader', () => {
         resizeCallbacks.fire();
 
         assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
+    });
+
+    QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            openedStateMode: 'overlap',
+            shading: true
+        });
+
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+
+        assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
     });
 });
 

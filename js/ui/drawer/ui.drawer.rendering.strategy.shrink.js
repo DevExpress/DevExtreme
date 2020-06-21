@@ -5,6 +5,7 @@ import { extend } from '../../core/utils/extend';
 import { camelize } from '../../core/utils/inflector';
 
 class ShrinkStrategy extends DrawerStrategy {
+
     _slidePositionRendering(config, _, animate) {
         if(animate) {
             const animationConfig = extend(config.defaultAnimationConfig, {

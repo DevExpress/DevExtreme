@@ -2,42 +2,35 @@ import $ from 'jquery';
 import { extend } from 'core/utils/extend';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { clearStack } from 'ui/overlay/z_index';
 
 import 'common.css!';
 
 import dxDrawer from 'ui/drawer';
-import dxLoadPanel from 'ui/load_panel';
-import dxOverlay from 'ui/overlay.js';
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html(drawerTesters.markup);
     // $("#qunit-tests").prepend(drawerTesters.markup);
 });
 
-// TODO: templateSize, minSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
+// TODO: templateSize, minSize, maxSize, shading, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
 const configs = [];
 
 ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
     ['left', 'top', 'right'].forEach(position => {
         ['slide', 'expand'].forEach(revealMode => {
-            [true, false].forEach(shading => {
-                configs.push({ openedStateMode, position, revealMode, shading });
-            });
+            configs.push({ openedStateMode, position, revealMode });
         });
     });
 });
 
 configs.forEach(config => {
-    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading})`, {
+    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode})`, {
         beforeEach() {
             this.clock = sinon.useFakeTimers();
-            clearStack();
         },
         afterEach() {
             this.clock.restore();
             this.clock = undefined;
-            clearStack();
         }
     }, () => {
 
@@ -189,22 +182,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, () => configIs('push', 'top'), function(assert) {
-            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: true,
-                shading: config.shading,
-                template: drawerTesters[config.position].template
-            }));
-
-            this.clock.tick(100);
-            drawer.option('shading', !config.shading);
-            this.clock.tick(100);
-
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
-        });
-
-        testOrSkip('opened: true -> repaint', () => configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: true -> repaint', () => config.openedStateMode === 'push' && config.position === 'top', function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -322,50 +300,6 @@ configs.forEach(config => {
             this.clock.tick(100);
 
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
-        });
-
-        QUnit.test('opened: false -> opened: true, shader has more priority z-index than overlay inside view content', function(assert) {
-            const prevBaseZIndex = dxOverlay.baseZIndex();
-
-            try {
-                dxOverlay.baseZIndex(3000);
-
-                const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                    opened: false,
-                    template: drawerTesters[config.position].template
-                }));
-
-                const env = {
-                    drawer,
-                    drawerElement,
-                    templateElement: drawerElement.querySelector('#template'),
-                    viewElement: drawerElement.querySelector('#view'),
-                    shading: drawer.option('shading')
-                };
-
-                new dxLoadPanel(document.getElementById('loadPanel'), {
-                    visible: true,
-                    container: env.viewElement,
-                    position: { my: 'center', at: 'center', of: env.viewElement }
-                });
-
-                this.clock.tick(100);
-                drawer.option('opened', true);
-                this.clock.tick(100);
-
-                if(config.openedStateMode === 'overlap') {
-                    assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3002', 'loadPanelWrapper.zIndex');
-                    assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3002', 'loadPanelContent.zIndex');
-                    drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: '3501' });
-                } else {
-                    assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3001', 'loadPanelWrapper.zIndex');
-                    assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3001', 'loadPanelContent.zIndex');
-                    drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: 'auto' });
-                }
-            } finally {
-                dxOverlay.baseZIndex(prevBaseZIndex);
-            }
         });
     });
 });
