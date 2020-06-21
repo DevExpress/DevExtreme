@@ -47,6 +47,8 @@ const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
 const groupItemsGetter = compileGetter('items');
 
+let _scrollView;
+
 const ListBase = CollectionWidget.inherit({
 
     _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
@@ -358,7 +360,7 @@ const ListBase = CollectionWidget.inherit({
         const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
         const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
-        this._scrollView = this._createComponent(this.$element(), ScrollView, {
+        this._scrollView = this._createComponent(this.$element(), getScrollView(), {
             disabled: this.option('disabled') || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
@@ -991,4 +993,15 @@ const ListBase = CollectionWidget.inherit({
 
 ListBase.ItemClass = ListItem;
 
-export default ListBase;
+function getScrollView() {
+    return _scrollView || ScrollView;
+}
+
+function setScrollView(value) {
+    _scrollView = value;
+}
+
+export {
+    ListBase,
+    setScrollView
+};

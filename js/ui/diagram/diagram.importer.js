@@ -2,7 +2,7 @@ import Errors from '../widget/ui.errors';
 import * as Diagram from 'devexpress-diagram';
 
 function getDiagram() {
-    if(!Diagram) {
+    if(!Diagram.DiagramCommand) {
         throw Errors.Error('E1041', 'devexpress-diagram');
     }
 

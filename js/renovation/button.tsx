@@ -9,7 +9,7 @@ import {
   Ref,
   Template,
 } from 'devextreme-generator/component_declaration/common';
-import createDefaultOptionRules from '../core/options/utils';
+import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
 import themes from '../ui/themes';

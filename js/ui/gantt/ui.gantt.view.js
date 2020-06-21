@@ -15,7 +15,7 @@ export class GanttView extends Widget {
         this._collapseAll = this._createActionByOption('onCollapseAll');
     }
     _initMarkup() {
-        const { GanttView } = getGanttViewCore();
+        const GanttView = getGanttViewCore();
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option('showResources'),
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
