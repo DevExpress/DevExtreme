@@ -420,6 +420,6 @@ class SchedulerTableCreator {
     }
 }
 
-module.exports = {
+export default {
     tableCreator: new SchedulerTableCreator()
 };
