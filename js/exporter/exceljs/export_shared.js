@@ -106,7 +106,7 @@ const ExportHelper = {
         });
     },
 
-    export: function(options, _getWorksheetFrozenState, _setAutoFilter, _setFont, _getCustomizeCellOptions, _needMergeRange, _trySetOutlineLevel) {
+    export: function(options, SharedFunctions) {
         if(!isDefined(options)) return;
 
         const {
@@ -156,7 +156,7 @@ const ExportHelper = {
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, _setFont, _getCustomizeCellOptions, _needMergeRange, _trySetOutlineLevel);
+                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, SharedFunctions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -175,10 +175,10 @@ const ExportHelper = {
 
                 if(!isDefined(headerRowCount) || headerRowCount > 0) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                        extend(worksheetViewSettings, _getWorksheetFrozenState(dataProvider, cellRange));
+                        extend(worksheetViewSettings, SharedFunctions._getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    if(isFunction(_setAutoFilter)) {
-                        _setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
+                    if(isFunction(SharedFunctions._setAutoFilter)) {
+                        SharedFunctions._setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
                     }
                 }
 
@@ -193,7 +193,7 @@ const ExportHelper = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, _setFont, _getCustomizeCellOptions, _needMergeRange, _trySetOutlineLevel) {
+    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, SharedFunctions) {
         const styles = dataProvider.getStyles();
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -219,16 +219,16 @@ const ExportHelper = {
                 }
 
                 this.setNumberFormat(excelCell, numberFormat);
-                _setFont(excelCell, bold);
+                SharedFunctions._setFont(excelCell, bold);
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
             if(isDefined(customizeCell)) {
-                customizeCell(_getCustomizeCellOptions(excelCell, cell));
+                customizeCell(SharedFunctions._getCustomizeCellOptions(excelCell, cell));
             }
 
 
-            if(_needMergeRange(rowIndex, headerRowCount)) {
+            if(SharedFunctions._needMergeRange(rowIndex, headerRowCount)) {
                 const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
                 if(isDefined(mergeRange)) {
                     mergeRanges.push(mergeRange);
@@ -236,7 +236,7 @@ const ExportHelper = {
             }
         }
 
-        _trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
+        SharedFunctions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
     }
 };
 
