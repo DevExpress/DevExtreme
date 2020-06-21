@@ -126,6 +126,25 @@ export default (function() {
         return widgetName && editorData[widgetName];
     };
 
+    const equalFilterParameters = function(filter1, filter2) {
+        if(Array.isArray(filter1) && Array.isArray(filter2)) {
+            if(filter1.length !== filter2.length) {
+                return false;
+            } else {
+                for(let i = 0; i < filter1.length; i++) {
+                    if(!equalFilterParameters(filter1[i], filter2[i])) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } else if(isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
+            return filter1.columnIndex === filter2.columnIndex && toComparable(filter1.filterValue) === toComparable(filter2.filterValue);
+        } else {
+            return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
+        }
+    };
+
     return {
         renderNoDataText: function($element) {
             const that = this;
@@ -237,25 +256,7 @@ export default (function() {
             return changes.length && changes.length === changesWithChangeNamesCount;
         },
 
-        equalFilterParameters: (filter1, filter2) => {
-
-            if(Array.isArray(filter1) && Array.isArray(filter2)) {
-                if(filter1.length !== filter2.length) {
-                    return false;
-                } else {
-                    for(let i = 0; i < filter1.length; i++) {
-                        if(!this.equalFilterParameters(filter1[i], filter2[i])) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            } else if(isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
-                return filter1.columnIndex === filter2.columnIndex && toComparable(filter1.filterValue) === toComparable(filter2.filterValue);
-            } else {
-                return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
-            }
-        },
+        equalFilterParameters: equalFilterParameters,
 
         proxyMethod: function(instance, methodName, defaultResult) {
             if(!instance[methodName]) {
