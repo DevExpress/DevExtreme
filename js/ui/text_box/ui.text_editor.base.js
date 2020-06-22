@@ -7,7 +7,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
-import themes from '../themes';
+import * as themes from '../themes';
 import Editor from '../editor/editor';
 import { addNamespace } from '../../events/utils';
 import { normalizeKeyName } from '../../events/utils';

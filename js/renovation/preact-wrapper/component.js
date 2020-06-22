@@ -7,6 +7,7 @@ import { wrapElement, removeDifferentElements } from './utils';
 import { getPublicElement } from '../../core/element';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+const h = Preact.h; // eslint-disable-line no-unused-vars
 
 export default class PreactWrapper extends DOMComponent {
     getInstance() {

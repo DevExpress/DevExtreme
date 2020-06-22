@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Component from './component';
 import { extend } from '../../core/utils/extend';
 
@@ -11,4 +10,3 @@ export default class TooltipItemContent extends Component {
         });
     }
 }
-/* eslint-enable */

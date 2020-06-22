@@ -102,6 +102,9 @@ export default class PagerContentComponent extends JSXComponent(PagerContentProp
   }
 
   get className(): string {
-    return this.isLargeDisplayMode ? PAGER_CLASS_FULL : `${PAGER_CLASS_FULL} ${LIGHT_MODE_CLASS}`;
+    const classes = [PAGER_CLASS_FULL];
+    !this.isLargeDisplayMode && classes.push(LIGHT_MODE_CLASS);
+    this.restAttributes.className && classes.push(this.restAttributes.className);
+    return classes.join(' ');
   }
 }

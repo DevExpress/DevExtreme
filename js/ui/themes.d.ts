@@ -34,4 +34,13 @@ export default class themes {
      * @public
      */
     static ready(callback: Function): void;
+    /**
+     * @docid ui.themesmethods.isMaterial
+     * @publicName isMaterial(themeName)
+     * @param1 themeName: string
+     * @static
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    static isMaterial(themeName: string): boolean
 }
