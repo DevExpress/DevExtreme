@@ -1961,6 +1961,69 @@ QUnit.module('_getFullOptions', moduleConfig, () => {
     });
 });
 
+QUnit.module('Text customization', moduleConfig, () => {
+    QUnit.test('noData text', function(assert) {
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            texts: { noData: 'any text' },
+            dataSource: {
+                store: [ { row1: 'A', col1: 'a' } ]
+            }
+        }).dxPivotGrid('instance');
+
+        const done = assert.async();
+        exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.getCell('B2').value, null);
+            done();
+        });
+    });
+
+    ['!©¢£µÂÑßŘ ŤŮ   Ƌ  õĦ/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', null, ''].forEach(text => {
+        QUnit.test(`grandTotal text = ${text}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                texts: { grandTotal: text },
+                dataSource: {
+                    store: [ { row1: 'A', col1: 'a' } ]
+                }
+            }).dxPivotGrid('instance');
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                assert.equal(this.worksheet.getCell('B1').value, text);
+                assert.equal(this.worksheet.getCell('A2').value, text);
+                done();
+            });
+        });
+
+        QUnit.test(`total text = ${text}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                texts: { total: text },
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
+                        { area: 'row', dataField: 'row2', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'col2', dataType: 'string', expanded: true },
+                        { area: 'data', summaryType: 'sum', dataField: 'value', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A1', row2: 'B1', col1: 'C1', col2: 'D2', value: 1 },
+                        { row1: 'A2', row2: 'B2', col1: 'C2', col2: 'D2', value: 2 },
+                    ]
+                }
+            }).dxPivotGrid('instance');
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                assert.equal(this.worksheet.getCell('A4').value, text === null ? '' : text);
+                assert.equal(this.worksheet.getCell('A6').value, text === null ? '' : text);
+                assert.equal(this.worksheet.getCell('B4').value, text === null ? '' : text);
+                assert.equal(this.worksheet.getCell('B6').value, text === null ? '' : text);
+                done();
+            });
+        });
+    });
+});
+
 QUnit.module('LoadPanel', moduleConfig, () => {
     [undefined, { enabled: true, text: 'Export to .xlsx...' }].forEach((loadPanelConfig) => {
         QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
