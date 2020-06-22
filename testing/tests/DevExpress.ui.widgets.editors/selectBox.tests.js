@@ -61,6 +61,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -93,10 +94,7 @@ QUnit.module('rendering with css', {}, () => {
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
-        assert.strictEqual(instance._popup.option('width'), '100%');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 100, 'overlay content width is correct');
+        assert.equal(instance._popup.option('width'), 100 + instance.option('popupWidthExtension'));
     });
 });
 
@@ -938,41 +936,6 @@ QUnit.module('functionality', moduleSetup, () => {
 });
 
 QUnit.module('widget options', moduleSetup, () => {
-    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
-        const instance = $('#selectBox').dxSelectBox({
-            width: 600,
-            dropDownOptions: {
-                width: '50%'
-            },
-            opened: true
-        }).dxSelectBox('instance');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
-
-        instance.close();
-        instance.option('width', 400);
-        instance.open();
-
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
-    });
-
-    QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
-        const instance = $('#selectBox').dxSelectBox({
-            width: 600,
-            dropDownOptions: {
-                width: '50%'
-            },
-            opened: true
-        }).dxSelectBox('instance');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
-
-        instance.option('width', 400);
-
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
-    });
 
     QUnit.test('option onValueChanged', function(assert) {
         assert.expect(4);
@@ -1461,6 +1424,39 @@ QUnit.module('widget options', moduleSetup, () => {
 
         assert.equal(element.option('value'), null, 'value was changed');
         assert.equal($input.val(), '', 'input text has been cleared');
+    });
+
+    QUnit.testInActiveWindow('input should no be cleared after click on the overlay content (T897239)', function(assert) {
+        const $element = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            applyValueMode: 'useButtons',
+            searchTimeout: 0,
+            opened: true
+        });
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        this.clock.tick(TIME_TO_WAIT);
+        keyboardMock($input)
+            .focus()
+            .type('1')
+            .change();
+        this.clock.tick(TIME_TO_WAIT);
+
+        $(toSelector(OVERLAY_CONTENT_CLASS)).focus();
+        assert.notOk($input.is(':focus'), 'input is not focused');
+        assert.strictEqual($input.val(), '1', 'input text has not been cleared');
+
+        const items = $(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual(items.length, 1, 'items are filtered');
+    });
+
+    QUnit.testInActiveWindow('overlay content tabindex should be -1 (T897239)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            opened: true
+        }).dxSelectBox('instance');
+
+        assert.strictEqual(instance._popup.overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
     });
 
     QUnit.testInActiveWindow('don\'t rise valueChange event on focusout in readonly state with searchEnabled', function(assert) {

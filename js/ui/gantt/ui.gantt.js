@@ -395,8 +395,10 @@ class Gantt extends Widget {
                     const parentId = record.parentId;
                     if(parentId !== undefined) {
                         const expandedRowKeys = this._treeList.option('expandedRowKeys');
-                        expandedRowKeys.push(parentId);
-                        this._treeList.option('expandedRowKeys', expandedRowKeys);
+                        if(expandedRowKeys.indexOf(parentId) === -1) {
+                            expandedRowKeys.push(parentId);
+                            this._treeList.option('expandedRowKeys', expandedRowKeys);
+                        }
                     }
                     this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
@@ -451,8 +453,9 @@ class Gantt extends Widget {
     }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {
-            const storeArray = this._tasksOption._getStore()._array;
-            this._setTreeListOption('dataSource', storeArray ? storeArray : this.option('tasks.dataSource'));
+            const dataSource = this.option('tasks.dataSource');
+            const storeArray = this._tasksOption._getStore()._array || (dataSource.items && dataSource.items());
+            this._setTreeListOption('dataSource', storeArray ? storeArray : dataSource);
         }
     }
     _skipUpdateTreeListDataSource() {
