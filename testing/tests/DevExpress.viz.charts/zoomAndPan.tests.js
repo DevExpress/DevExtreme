@@ -271,6 +271,7 @@ QUnit.test('Argument and value. Multiple axis chart with empty axis', function(a
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
 
+    chart._lastRenderingTime = 0;
     // act
     this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 200).dragEnd();
 
@@ -1938,6 +1939,7 @@ QUnit.test('Pinch zoom-in/zoom-out argument axis from some point (discrete axis)
 
     const argumentAxis = chart.getArgumentAxis();
 
+    chart._lastRenderingTime = 0;
     // act
     const $root = $(chart._renderer.root.element);
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 150, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
@@ -1955,6 +1957,7 @@ QUnit.test('Pinch zoom-in/zoom-out argument axis from some point (discrete axis)
     assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.5);
 
+    chart._lastRenderingTime = 0;
     $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
     $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [] }));
@@ -2843,7 +2846,7 @@ QUnit.test('Default behavior - no prevent. On panning by drag (goes to the edge)
 
     // act
     const $root = $(chart._renderer.root.element);
-
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 100, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: -100, y: 50 } }));
     $root.trigger(new $.Event('dxdragend', { pointerType: 'touch' }));
@@ -2949,7 +2952,7 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
 
     // act
     const $root = $(chart._renderer.root.element);
-
+    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pointerType: 'touch', pageX: 200, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { pointerType: 'touch', offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event('dxdragend', { pointerType: 'touch', preventDefault: preventDefault, stopPropagation: stopPropagation }));
