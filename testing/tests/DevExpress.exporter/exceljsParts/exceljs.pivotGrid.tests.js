@@ -1977,6 +1977,27 @@ QUnit.module('Text customization', moduleConfig, () => {
         });
     });
 
+    QUnit.test('dataNotAvailable text', function(assert) {
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            texts: { dataNotAvailable: 'any text' },
+            dataSource: {
+                fields: [
+                    { area: 'column', caption: 'column' },
+                    { area: 'data', caption: 'value', format: 'fixedPoint' }
+                ],
+                rows: [],
+                columns: [{ value: 'columnValue1', index: 0 }],
+                values: [['#N/A']]
+            },
+        }).dxPivotGrid('instance');
+
+        const done = assert.async();
+        exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.getCell('B2').value, '#N/A');
+            done();
+        });
+    });
+
     ['!©¢£µÂÑßŘ ŤŮ   Ƌ  õĦ/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', null, ''].forEach(text => {
         QUnit.test(`grandTotal text = ${text}`, function(assert) {
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
