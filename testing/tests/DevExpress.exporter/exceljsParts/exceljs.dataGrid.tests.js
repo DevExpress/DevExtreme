@@ -8,7 +8,7 @@ import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
-import { MAX_EXCEL_COLUMN_WIDTH, _getFullOptions } from 'exporter/exceljs/export_data_grid';
+import { Export } from 'exporter/exceljs/export';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
@@ -229,7 +229,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
-                helper.checkColumnWidths([MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
+                helper.checkColumnWidths([Export.__internals.MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
                 done();
             });
         });
@@ -6424,6 +6424,8 @@ const moduleConfig = {
 });
 
 QUnit.module('_getFullOptions', moduleConfig, () => {
+    const _getFullOptions = exportDataGrid.__internals._getFullOptions;
+
     QUnit.test('topLeftCell', function(assert) {
         assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
         assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
