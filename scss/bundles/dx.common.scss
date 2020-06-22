@@ -18,6 +18,7 @@
 @use "../widgets/common/responsiveBox";
 @use "../widgets/common/button";
 @use "../widgets/common/buttonGroup";
+@use "../widgets/common/scrollable";
 @use "../widgets/common/scrollView";
 @use "../widgets/common/checkBox";
 @use "../widgets/common/switch";
@@ -73,7 +74,6 @@
 @use "../widgets/common/diagram";
 @use "../widgets/common/gantt";
 @use "../widgets/common/deferRendering";
-@use "../widgets/common/scrollable";
 @use "../widgets/common/badge";
 @use "../widgets/common/textEditor";
 @use "../widgets/common/dropDownEditor";
