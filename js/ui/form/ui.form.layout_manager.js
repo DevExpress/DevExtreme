@@ -148,6 +148,18 @@ const LayoutManager = Widget.inherit({
         return dataField ? this.option('layoutData.' + dataField) : null;
     },
 
+    _isCheckboxUndefinedStateEnabled: function(editorOption) {
+        if(editorOption.allowIndeterminateState === true && editorOption.editorType === 'dxCheckBox') {
+            const nameParts = ['layoutData', ...editorOption.dataField.split('.')];
+            const propertyName = nameParts.pop();
+            const layoutData = this.option(nameParts.join('.'));
+
+            return propertyName in layoutData;
+        }
+
+        return false;
+    },
+
     _updateFieldValue: function(dataField, value) {
         const layoutData = this.option('layoutData');
         let newValue = value;
@@ -262,6 +274,10 @@ const LayoutManager = Widget.inherit({
             const value = this._getDataByField(item.dataField);
 
             item.editorType = isDefined(value) ? this._getEditorTypeByDataType(type(value)) : FORM_EDITOR_BY_DEFAULT;
+        }
+
+        if(item.editorType === 'dxCheckBox') {
+            item.allowIndeterminateState = item.allowIndeterminateState ?? true;
         }
 
         return item;
@@ -640,7 +656,8 @@ const LayoutManager = Widget.inherit({
             helpID: helpID,
             labelID: labelOptions.labelID,
             id: id,
-            validationBoundary: that.option('validationBoundary')
+            validationBoundary: that.option('validationBoundary'),
+            allowIndeterminateState: item.allowIndeterminateState
         });
 
         this._itemsRunTimeInfo.add({
@@ -780,7 +797,9 @@ const LayoutManager = Widget.inherit({
 
     _renderEditor: function(options) {
         const dataValue = this._getDataByField(options.dataField);
-        const defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {};
+        const defaultEditorOptions = dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(options)
+            ? { value: dataValue }
+            : {};
         const isDeepExtend = true;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
@@ -1128,11 +1147,12 @@ const LayoutManager = Widget.inherit({
                                     const valueGetter = dataUtils.compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
-                                    if(dataValue === undefined) {
-                                        this._resetWidget(itemRunTimeInfo.widgetInstance);
-                                    } else {
+                                    if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(itemRunTimeInfo.item)) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
+                                    } else {
+                                        this._resetWidget(itemRunTimeInfo.widgetInstance);
                                     }
+
                                 }
                             }
                         });
