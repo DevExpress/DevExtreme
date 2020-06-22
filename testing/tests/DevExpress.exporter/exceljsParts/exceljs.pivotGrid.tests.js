@@ -17,6 +17,8 @@ import 'ui/pivot_grid/ui.pivot_grid';
 import 'common.css!';
 import 'generic_light.css!';
 
+import { __internals as internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
+
 let helper;
 
 // TODO: Support the WYSIWYG column width. We are supporting the default column value width equal 100px for each column.
@@ -65,7 +67,6 @@ const moduleConfig = {
 //        });
 //    })
 // 3. Select a file in the shown 'SaveAs' dialog and open the saved file in Excel
-
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
 
@@ -1966,7 +1967,7 @@ QUnit.module('Text customization', moduleConfig, () => {
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
             texts: { noData: 'any text' },
             dataSource: {
-                store: [ { row1: 'A', col1: 'a' } ]
+                store: [ ]
             }
         }).dxPivotGrid('instance');
 
@@ -1977,33 +1978,12 @@ QUnit.module('Text customization', moduleConfig, () => {
         });
     });
 
-    QUnit.test('dataNotAvailable text', function(assert) {
-        const pivotGrid = $('#pivotGrid').dxPivotGrid({
-            texts: { dataNotAvailable: 'any text' },
-            dataSource: {
-                fields: [
-                    { area: 'column', caption: 'column' },
-                    { area: 'data', caption: 'value', format: 'fixedPoint' }
-                ],
-                rows: [],
-                columns: [{ value: 'columnValue1', index: 0 }],
-                values: [['#N/A']]
-            },
-        }).dxPivotGrid('instance');
-
-        const done = assert.async();
-        exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
-            assert.equal(this.worksheet.getCell('B2').value, '#N/A');
-            done();
-        });
-    });
-
     ['!©¢£µÂÑßŘ ŤŮ   Ƌ  õĦ/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', null, ''].forEach(text => {
         QUnit.test(`grandTotal text = ${text}`, function(assert) {
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
                 texts: { grandTotal: text },
                 dataSource: {
-                    store: [ { row1: 'A', col1: 'a' } ]
+                    store: [ { r1: 'r1_1', c1: 'c1_1' } ]
                 }
             }).dxPivotGrid('instance');
 
@@ -2020,15 +2000,14 @@ QUnit.module('Text customization', moduleConfig, () => {
                 texts: { total: text },
                 dataSource: {
                     fields: [
-                        { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
-                        { area: 'row', dataField: 'row2', dataType: 'string', expanded: true },
-                        { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
-                        { area: 'column', dataField: 'col2', dataType: 'string', expanded: true },
+                        { area: 'row', dataField: 'r1', dataType: 'string', expanded: true },
+                        { area: 'row', dataField: 'r2', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'c1', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'c2', dataType: 'string', expanded: true },
                         { area: 'data', summaryType: 'sum', dataField: 'value', dataType: 'number' }
                     ],
                     store: [
-                        { row1: 'A1', row2: 'B1', col1: 'C1', col2: 'D2', value: 1 },
-                        { row1: 'A2', row2: 'B2', col1: 'C2', col2: 'D2', value: 2 },
+                        { r1: 'r1_1', r2: 'r2_1', c1: 'c1_1', c2: 'c2_1', value: 1 }
                     ]
                 }
             }).dxPivotGrid('instance');
@@ -2036,9 +2015,30 @@ QUnit.module('Text customization', moduleConfig, () => {
             const done = assert.async();
             exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
                 assert.equal(this.worksheet.getCell('A4').value, text === null ? '' : text);
-                assert.equal(this.worksheet.getCell('A6').value, text === null ? '' : text);
                 assert.equal(this.worksheet.getCell('B4').value, text === null ? '' : text);
-                assert.equal(this.worksheet.getCell('B6').value, text === null ? '' : text);
+                done();
+            });
+        });
+    });
+
+    [undefined, 'currency', 'fixedPoint', '#.##', { type: 'currency', currency: 'RUB' }].forEach(format => {
+        QUnit.test(`dataNotAvailable text. format = ${format}`, function(assert) {
+            const userDefinedText = 'any text';
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                texts: { dataNotAvailable: userDefinedText },
+                dataSource: {
+                    fields: [
+                        { area: 'column' },
+                        { area: 'data', format: format }
+                    ],
+                    values: [[ internals.NO_DATA_AVAILABLE_TEXT ]]
+                },
+            }).dxPivotGrid('instance');
+
+            const done = assert.async();
+            const expectedText = format === undefined ? userDefinedText : internals.NO_DATA_AVAILABLE_TEXT;
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                assert.equal(this.worksheet.getCell('B2').value, expectedText);
                 done();
             });
         });

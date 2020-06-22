@@ -1238,3 +1238,10 @@ exports.DataController = Class.inherit((function() {
 
     return members;
 })());
+
+
+//#DEBUG
+exports.__internals = {
+    NO_DATA_AVAILABLE_TEXT: NOT_AVAILABLE
+};
+//#ENDDEBUG
