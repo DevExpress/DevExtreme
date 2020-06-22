@@ -2124,8 +2124,12 @@ const Scheduler = Widget.inherit({
                 } else {
                     const settings = $appointment.data('dxAppointmentSettings');
 
-                    appointmentStartDate = settings && settings.originalAppointmentStartDate;
-                    appointmentEndDate = settings && settings.originalAppointmentEndDate;
+                    // appointmentStartDate = settings && settings.originalAppointmentStartDate;
+                    // appointmentEndDate = settings && settings.originalAppointmentEndDate;
+
+                    // TODO
+                    appointmentStartDate = settings.startDate;
+                    appointmentEndDate = settings.endDate;
 
                     // if(this._isAppointmentRecurrence(appointmentData)) {
                     //     appointmentStartDate = settings && settings.startDate;

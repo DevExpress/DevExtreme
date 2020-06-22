@@ -34,7 +34,7 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    needCoordinates: function(options) { // TODO: rename
+    createAppointmentSettings: function(options) {
         const createRecurrenceDates = (recurrenceOptions, appointmentTimeZone) => {
             const recurrenceDates = getRecurrenceProcessor().generateDates(recurrenceOptions);
 
