@@ -188,7 +188,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    permissions?: { copy?: boolean, create?: boolean, download?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+    permissions?: { copy?: boolean, create?: boolean, download?: boolean, move?: boolean, delete?: boolean, rename?: boolean, upload?: boolean };
     /**
      * @docid dxFileManagerOptions.rootFolderName
      * @type string
