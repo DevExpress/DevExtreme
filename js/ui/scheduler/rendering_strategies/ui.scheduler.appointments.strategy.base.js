@@ -192,7 +192,7 @@ class BaseRenderingStrategy {
     }
 
     // _getAppointmentCoordinates(itemData) {
-    //     return this.instance.fire('needCoordinates', {
+    //     return this.instance.fire('createAppointmentSettings', {
     //         startDate: this.startDate(itemData),
     //         originalStartDate: this.startDate(itemData, true),
     //         appointmentData: itemData,
@@ -202,7 +202,7 @@ class BaseRenderingStrategy {
     _getAppointmentCoordinates(appointment) {
         const adapter = this.instance.createAppointmentAdapter(appointment);
 
-        return this.instance.fire('needCoordinates', {
+        return this.instance.fire('createAppointmentSettings', {
             startDate: adapter.startDate,
             appointmentData: appointment,
         });

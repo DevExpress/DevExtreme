@@ -67,7 +67,7 @@ const moduleOptions = {
         };
 
         const subscribes = {
-            needCoordinates: function(options) {
+            createAppointmentSettings: function(options) {
                 return that.coordinates;
             },
             getAppointmentColor: function(options) {
