@@ -30,7 +30,7 @@ function _getFullOptions(options) {
 }
 
 //#DEBUG
-exportPivotGrid._getFullOptions = _getFullOptions;
+exportPivotGrid.__internals = { _getFullOptions };
 //#ENDDEBUG
 
 export { exportPivotGrid };

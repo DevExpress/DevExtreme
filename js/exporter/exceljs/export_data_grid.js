@@ -64,7 +64,7 @@ function _getFullOptions(options) {
 }
 
 //#DEBUG
-exportDataGrid._getFullOptions = _getFullOptions;
+exportDataGrid.__internals = { _getFullOptions };
 //#ENDDEBUG
 
 export { exportDataGrid };

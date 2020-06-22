@@ -1,6 +1,6 @@
 import { isDefined, isString, isDate } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
-import ExportFormat from './export_format';
+import { ExportFormat } from './export_format';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from 'jquery';
 
@@ -241,7 +241,7 @@ const Export = {
 };
 
 //#DEBUG
-Export.MAX_EXCEL_COLUMN_WIDTH = MAX_EXCEL_COLUMN_WIDTH;
+Export.__internals = { MAX_EXCEL_COLUMN_WIDTH };
 //#ENDDEBUG
 
 export { Export };

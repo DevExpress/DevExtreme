@@ -152,4 +152,4 @@ const ExportFormat = {
 };
 
 
-export default ExportFormat;
+export { ExportFormat };
