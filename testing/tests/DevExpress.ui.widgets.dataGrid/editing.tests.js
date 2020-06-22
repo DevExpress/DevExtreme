@@ -13226,6 +13226,7 @@ QUnit.module('Editing with validation', {
             .trigger('change');
 
         this.clock.tick();
+        this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
 
@@ -13280,6 +13281,7 @@ QUnit.module('Editing with validation', {
             .trigger('change');
 
         this.clock.tick();
+        this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
 
@@ -13330,6 +13332,7 @@ QUnit.module('Editing with validation', {
             .trigger('change');
 
         this.clock.tick();
+        this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
 
@@ -13383,6 +13386,7 @@ QUnit.module('Editing with validation', {
             .trigger('change');
 
         this.clock.tick();
+        this.saveEditData();
 
         const $secondCell = $(this.getCellElement(0, 1));
 
@@ -13390,6 +13394,91 @@ QUnit.module('Editing with validation', {
         assert.ok($secondCell.hasClass('dx-cell-modified'), 'cell is marked as modified');
         assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'cell is marked as invalid');
         assert.strictEqual($secondCell.text(), 'testab', 'cell text is modified');
+    });
+
+    // T897592
+    QUnit.test('Cell mode(setCellValue) - The modified data should be saved immediately', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+        const dataSource = [{ field1: false, field2: false }];
+
+        const gridConfig = {
+            dataSource: dataSource,
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'field1',
+                    dataType: 'boolean',
+                    setCellValue: function(rowData, value) {
+                        rowData.field1 = value;
+                        rowData.field2 = value;
+                    }
+                },
+                {
+                    dataField: 'field2',
+                    dataType: 'boollean'
+                }
+            ]
+        };
+
+        rowsView.render($testElement);
+        this.applyOptions(gridConfig);
+
+        const $checkboxElement = $(rowsView.getCellElement(0, 0)).find('.dx-checkbox').first();
+        $($checkboxElement).trigger('dxclick');
+
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
+        assert.notOk($(rowsView.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
+        assert.deepEqual(this.getDataSource().items()[0], { field1: true, field2: true }, 'data is saved');
+    });
+
+    // T897592
+    QUnit.test('Cell mode(calculateCellValue) - The modified data should be saved immediately', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+        const dataSource = [{ field1: false, field2: false }];
+
+        const gridConfig = {
+            dataSource: dataSource,
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'field1',
+                    dataType: 'boolean'
+                },
+                {
+                    dataField: 'field2',
+                    dataType: 'boollean',
+                    calculateCellValue: function(rowData) {
+                        rowData.field2 = rowData.field1;
+                    }
+                }
+            ]
+        };
+
+        rowsView.render($testElement);
+        this.applyOptions(gridConfig);
+
+        const $checkboxElement = $(rowsView.getCellElement(0, 0)).find('.dx-checkbox').first();
+        $($checkboxElement).trigger('dxclick');
+
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
+        assert.notOk($(rowsView.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
+        assert.deepEqual(this.getDataSource().items()[0], { field1: true, field2: true }, 'data is saved');
     });
 });
 
