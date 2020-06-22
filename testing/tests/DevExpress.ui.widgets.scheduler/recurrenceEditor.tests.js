@@ -50,6 +50,8 @@ module('Recurrence Editor rendering', moduleConfig, () => {
 
         assert.equal(this.instance.option('value'), null, 'value is right');
         assert.equal(this.instance.option('visible'), true, 'editor is visible');
+        assert.equal(this.instance.option('firstDayOfWeek'), undefined, 'firstDayOfWeek is right');
+        assert.ok(this.instance.option('startDate') instanceof Date, 'startDate is right');
     });
 
     test('Recurrence editor should correctly process null value and reset inner editors to default values', function(assert) {
@@ -68,6 +70,14 @@ module('Recurrence Editor rendering', moduleConfig, () => {
         });
 
         assert.equal(this.instance.getRecurrenceForm().getEditor('interval').option('readOnly'), this.instance.option('readOnly'), 'right readonly option');
+    });
+
+    $.each(['WEEKLY', 'MONTHLY', 'YEARLY'], (_, value) => {
+        QUnit.test(`Recurrence editor should not crash when FREQ=${value} is set without startDate`, function(assert) {
+            this.createInstance({ value: `FREQ=${value}` });
+
+            assert.ok(true, 'recurrenceEditor was rendered');
+        });
     });
 });
 
