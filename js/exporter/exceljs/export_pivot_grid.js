@@ -1,8 +1,6 @@
-import {
-    ExportHelper
-} from './export_shared';
+import Export from './export';
 
-const SharedFunctions = {
+const privateOptions = {
     _getWorksheetFrozenState: function(dataProvider, cellRange) {
         return { state: 'frozen', xSplit: cellRange.from.column + dataProvider.getFrozenArea().x - 1, ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 };
     },
@@ -24,11 +22,11 @@ const SharedFunctions = {
 };
 
 function exportPivotGrid(options) {
-    return ExportHelper.export(_getFullOptions(options), SharedFunctions);
+    return Export.export(_getFullOptions(options), privateOptions);
 }
 
 function _getFullOptions(options) {
-    return ExportHelper.getFullOptions(options);
+    return Export.getFullOptions(options);
 }
 
 export { exportPivotGrid, _getFullOptions };

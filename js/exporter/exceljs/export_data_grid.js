@@ -1,11 +1,8 @@
 import { isDefined } from '../../core/utils/type';
+import Export from './export';
 import errors from '../../core/errors';
-import {
-    ExportHelper,
-    MAX_EXCEL_COLUMN_WIDTH,
-} from './export_shared';
 
-const SharedFunctions = {
+const privateOptions = {
     _setAutoFilter: function(dataProvider, worksheet, cellRange, autoFilterEnabled) {
         if(autoFilterEnabled) {
             if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
@@ -50,11 +47,11 @@ const SharedFunctions = {
 };
 
 function exportDataGrid(options) {
-    return ExportHelper.export(_getFullOptions(options), SharedFunctions);
+    return Export.export(_getFullOptions(options), privateOptions);
 }
 
 function _getFullOptions(options) {
-    const fullOptions = ExportHelper.getFullOptions(options);
+    const fullOptions = Export.getFullOptions(options);
 
     if(!isDefined(fullOptions.selectedRowsOnly)) {
         fullOptions.selectedRowsOnly = false;
@@ -66,4 +63,4 @@ function _getFullOptions(options) {
     return fullOptions;
 }
 
-export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH, _getFullOptions };
+export { exportDataGrid, _getFullOptions };

@@ -7,8 +7,7 @@ import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
-import { exportDataGrid } from 'excel_exporter';
-import { MAX_EXCEL_COLUMN_WIDTH, _getFullOptions } from 'exporter/exceljs/export_data_grid';
+import { exportDataGrid, _getFullOptions } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
@@ -20,6 +19,8 @@ import 'common.css!';
 import 'generic_light.css!';
 
 let helper;
+
+const MAX_EXCEL_COLUMN_WIDTH = 255;
 
 const excelColumnWidthFromGrid500Pixels = 71.42;
 const excelColumnWidthFromColumn100Pixels = 14.28;

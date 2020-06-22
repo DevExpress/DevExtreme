@@ -1,6 +1,6 @@
 import { isDefined, isString, isDate } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
-import FormatHelper from './export_format_helper';
+import ExportFormat from './export_format';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from 'jquery';
 
@@ -11,7 +11,7 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 // support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3 - "Column width limit - 255 characters"
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
-const ExportHelper = {
+const Export = {
     getFullOptions: function(options) {
         const fullOptions = extend({}, options);
         if(!isDefined(fullOptions.topLeftCell)) {
@@ -45,13 +45,13 @@ const ExportHelper = {
     },
 
     tryConvertToExcelNumberFormat: function(format, dataType) {
-        const newFormat = FormatHelper.formatObjectConverter(format, dataType);
+        const newFormat = ExportFormat.formatObjectConverter(format, dataType);
         const currency = newFormat.currency;
 
         format = newFormat.format;
         dataType = newFormat.dataType;
 
-        return FormatHelper.convertFormat(format, newFormat.precision, dataType, currency);
+        return ExportFormat.convertFormat(format, newFormat.precision, dataType, currency);
     },
 
     setAlignment: function(excelCell, wrapText, horizontalAlignment) {
@@ -106,7 +106,7 @@ const ExportHelper = {
         });
     },
 
-    export: function(options, SharedFunctions) {
+    export: function(options, privateOptions) {
         if(!isDefined(options)) return;
 
         const {
@@ -156,7 +156,7 @@ const ExportHelper = {
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, SharedFunctions);
+                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, privateOptions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -175,10 +175,10 @@ const ExportHelper = {
 
                 if(!isDefined(headerRowCount) || headerRowCount > 0) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                        extend(worksheetViewSettings, SharedFunctions._getWorksheetFrozenState(dataProvider, cellRange));
+                        extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    if(isFunction(SharedFunctions._setAutoFilter)) {
-                        SharedFunctions._setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
+                    if(isFunction(privateOptions._setAutoFilter)) {
+                        privateOptions._setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
                     }
                 }
 
@@ -193,7 +193,7 @@ const ExportHelper = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, SharedFunctions) {
+    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, privateOptions) {
         const styles = dataProvider.getStyles();
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -219,16 +219,16 @@ const ExportHelper = {
                 }
 
                 this.setNumberFormat(excelCell, numberFormat);
-                SharedFunctions._setFont(excelCell, bold);
+                privateOptions._setFont(excelCell, bold);
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
             if(isDefined(customizeCell)) {
-                customizeCell(SharedFunctions._getCustomizeCellOptions(excelCell, cell));
+                customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cell));
             }
 
 
-            if(SharedFunctions._needMergeRange(rowIndex, headerRowCount)) {
+            if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
                 const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
                 if(isDefined(mergeRange)) {
                     mergeRanges.push(mergeRange);
@@ -236,11 +236,8 @@ const ExportHelper = {
             }
         }
 
-        SharedFunctions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
+        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
     }
 };
 
-export {
-    ExportHelper,
-    MAX_EXCEL_COLUMN_WIDTH
-};
+export default Export;

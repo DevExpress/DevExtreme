@@ -120,33 +120,36 @@ function _convertNumberFormat(format, precision, currency) {
     return result;
 }
 
-function formatObjectConverter(format, dataType) {
-    const result = {
-        format: format,
-        precision: format && format.precision,
-        dataType: dataType
-    };
+const ExportFormat = {
+    formatObjectConverter: function(format, dataType) {
+        const result = {
+            format: format,
+            precision: format && format.precision,
+            dataType: dataType
+        };
 
-    if(isObject(format)) {
-        return extend(result, format, {
-            format: format.formatter || format.type,
-            currency: format.currency
-        });
-    }
+        if(isObject(format)) {
+            return extend(result, format, {
+                format: format.formatter || format.type,
+                currency: format.currency
+            });
+        }
 
-    return result;
-}
+        return result;
+    },
 
-function convertFormat(format, precision, type, currency) {
-    if(isDefined(format)) {
-        if(type === 'date') {
-            return _convertDateFormat(format);
-        } else {
-            if(isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
-                return _convertNumberFormat(format, precision, currency);
+    convertFormat: function(format, precision, type, currency) {
+        if(isDefined(format)) {
+            if(type === 'date') {
+                return _convertDateFormat(format);
+            } else {
+                if(isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
+                    return _convertNumberFormat(format, precision, currency);
+                }
             }
         }
     }
-}
+};
 
-export default { convertFormat, formatObjectConverter };
+
+export default ExportFormat;
