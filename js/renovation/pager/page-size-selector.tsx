@@ -13,10 +13,9 @@ export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
 export const viewFunction = ({
   htmlRef,
-  visible,
   normalizedPageSizes,
   props: {
-    isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
+    visible, isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
   },
 }: PageSizeSelector) => (!visible ? null : (
   <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>

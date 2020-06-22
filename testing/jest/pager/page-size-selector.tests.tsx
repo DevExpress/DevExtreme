@@ -22,7 +22,11 @@ describe('Pager size selector', () => {
       },
       ],
       props: {
-        isLargeDisplayMode: true, pageSize: 5, pageSizeChange: jest.fn(), rtlEnabled: false,
+        visible: true,
+        isLargeDisplayMode: true,
+        pageSize: 5,
+        pageSizeChange: jest.fn(),
+        rtlEnabled: false,
       },
     } as Partial<PageSizeSelector> as PageSizeSelector;
   }
