@@ -16,6 +16,8 @@ import 'ui/pivot_grid/ui.pivot_grid';
 import 'common.css!';
 import 'generic_light.css!';
 
+import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
+
 let helper;
 
 // TODO: Support the WYSIWYG column width. We are supporting the default column value width equal 100px for each column.
@@ -1959,6 +1961,89 @@ QUnit.module('_getFullOptions', moduleConfig, () => {
 
         assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
         assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
+    });
+});
+
+QUnit.module('Text customization', moduleConfig, () => {
+    QUnit.test('noData text', function(assert) {
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            texts: { noData: 'any text' },
+            dataSource: {
+                store: [ ]
+            }
+        }).dxPivotGrid('instance');
+
+        const done = assert.async();
+        exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.getCell('B2').value, null);
+            done();
+        });
+    });
+
+    ['!©¢£µÂÑßŘ ŤŮ   Ƌ  õĦ/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', null, ''].forEach(text => {
+        QUnit.test(`grandTotal text = ${text}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                texts: { grandTotal: text },
+                dataSource: {
+                    store: [ { r1: 'r1_1', c1: 'c1_1' } ]
+                }
+            }).dxPivotGrid('instance');
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                assert.equal(this.worksheet.getCell('B1').value, text);
+                assert.equal(this.worksheet.getCell('A2').value, text);
+                done();
+            });
+        });
+
+        QUnit.test(`total text = ${text}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                texts: { total: text },
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'r1', dataType: 'string', expanded: true },
+                        { area: 'row', dataField: 'r2', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'c1', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'c2', dataType: 'string', expanded: true },
+                        { area: 'data', summaryType: 'sum', dataField: 'value', dataType: 'number', showGrandTotals: false, showTotals: true }
+                    ],
+                    store: [
+                        { r1: 'r1_1', r2: 'r2_1', c1: 'c1_1', c2: 'c2_1', value: 1 }
+                    ]
+                }
+            }).dxPivotGrid('instance');
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                assert.equal(this.worksheet.getCell('A4').value, text === null ? '' : text);
+                assert.equal(this.worksheet.getCell('B4').value, text === null ? '' : text);
+                done();
+            });
+        });
+    });
+
+    [undefined, 'currency', 'fixedPoint', '#.##', { type: 'currency', currency: 'RUB' }, { type: 'billions', precision: 3 }].forEach(format => {
+        QUnit.test(`dataNotAvailable text. format = ${format}`, function(assert) {
+            const userDefinedText = 'any text';
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                texts: { dataNotAvailable: userDefinedText },
+                dataSource: {
+                    fields: [
+                        { area: 'column' },
+                        { area: 'data', format: format }
+                    ],
+                    values: [[ DataController.__internals.NO_DATA_AVAILABLE_TEXT ]]
+                },
+            }).dxPivotGrid('instance');
+
+            const done = assert.async();
+            const expectedText = format === undefined ? userDefinedText : DataController.__internals.NO_DATA_AVAILABLE_TEXT;
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                assert.equal(this.worksheet.getCell('B2').value, expectedText);
+                done();
+            });
+        });
     });
 });
 
