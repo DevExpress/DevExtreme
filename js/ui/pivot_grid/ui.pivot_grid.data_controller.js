@@ -1241,7 +1241,7 @@ exports.DataController = Class.inherit((function() {
 
 
 //#DEBUG
-exports.__internals = {
+exports.DataController.__internals = {
     NO_DATA_AVAILABLE_TEXT: NOT_AVAILABLE
 };
 //#ENDDEBUG

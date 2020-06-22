@@ -17,7 +17,7 @@ import 'ui/pivot_grid/ui.pivot_grid';
 import 'common.css!';
 import 'generic_light.css!';
 
-import { __internals as internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
+import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
 
 let helper;
 
@@ -67,6 +67,7 @@ const moduleConfig = {
 //        });
 //    })
 // 3. Select a file in the shown 'SaveAs' dialog and open the saved file in Excel
+
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
 
@@ -2021,7 +2022,7 @@ QUnit.module('Text customization', moduleConfig, () => {
         });
     });
 
-    [undefined, 'currency', 'fixedPoint', '#.##', { type: 'currency', currency: 'RUB' }].forEach(format => {
+    [undefined, 'currency', 'fixedPoint', '#.##', { type: 'currency', currency: 'RUB' }, { type: 'billions', precision: 3 }].forEach(format => {
         QUnit.test(`dataNotAvailable text. format = ${format}`, function(assert) {
             const userDefinedText = 'any text';
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
@@ -2031,12 +2032,12 @@ QUnit.module('Text customization', moduleConfig, () => {
                         { area: 'column' },
                         { area: 'data', format: format }
                     ],
-                    values: [[ internals.NO_DATA_AVAILABLE_TEXT ]]
+                    values: [[ DataController.__internals.NO_DATA_AVAILABLE_TEXT ]]
                 },
             }).dxPivotGrid('instance');
 
             const done = assert.async();
-            const expectedText = format === undefined ? userDefinedText : internals.NO_DATA_AVAILABLE_TEXT;
+            const expectedText = format === undefined ? userDefinedText : DataController.__internals.NO_DATA_AVAILABLE_TEXT;
             exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
                 assert.equal(this.worksheet.getCell('B2').value, expectedText);
                 done();
