@@ -13,11 +13,12 @@ export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
 export const viewFunction = ({
   htmlRef,
+  visible,
   normalizedPageSizes,
   props: {
     isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
   },
-}: PageSizeSelector) => (
+}: PageSizeSelector) => (!visible ? null : (
   <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
     {isLargeDisplayMode && (
     <PageSizeLarge
@@ -27,19 +28,22 @@ export const viewFunction = ({
     />
     )}
     {!isLargeDisplayMode && (
-      <PageSizeSmall
-        parentRef={htmlRef}
-        rtlEnabled={rtlEnabled}
-        pageSizes={normalizedPageSizes}
-        pageSize={pageSize}
-        pageSizeChange={pageSizeChange}
-      />
+    <PageSizeSmall
+      parentRef={htmlRef}
+      rtlEnabled={rtlEnabled}
+      pageSizes={normalizedPageSizes}
+      pageSize={pageSize}
+      pageSizeChange={pageSizeChange}
+    />
     )}
   </div>
-);
+));
+
 type PageSize = number;// | FullPageSize;
 @ComponentBindings()
 export class PageSizeSelectorProps {
+  @OneWay() visible?: boolean = true;
+
   @OneWay() isLargeDisplayMode?: boolean = true;
 
   @OneWay() pageSize?: number = 5;

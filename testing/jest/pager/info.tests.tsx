@@ -1,18 +1,22 @@
 import { h, createRef } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import InfoText, { viewFunction as InfoTextComponent } from '../../../js/renovation/pager/info';
 
 describe('Info, separate view and component approach', () => {
   describe('View', () => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     it('should render valid markup, view', () => {
-      const tree = shallow(<InfoTextComponent {...{ text: 'some text' } as any} />);
+      const tree = shallow(<InfoTextComponent {...{ text: 'some text', props: { visible: true } } as any} /> as any);
       expect(tree.html())
         .toBe('<div class="dx-info">some text</div>');
     });
+    it('visible false', () => {
+      const tree = mount(<InfoTextComponent {...{ text: 'some text', props: { visible: false } } as any} /> as any);
+      expect(tree.html()).toBe('');
+    });
     it('ref test', () => {
       const ref = createRef();
-      shallow(<InfoTextComponent {...{ htmlRef: ref, text: 'text' } as any} />);
+      shallow(<InfoTextComponent {...{ htmlRef: ref, text: 'text', props: { visible: true } } as any} /> as any);
       expect(ref.current).not.toBeNull();
       expect(ref.current.className).toBe('dx-info');
     });

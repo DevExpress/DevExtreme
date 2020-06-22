@@ -21,7 +21,7 @@ export default class PagerProps {
 
   @TwoWay() pageSize?: number = 5;
 
-  // showPageSizes: true,
+  @OneWay() showPageSizes? = true;
 
   @OneWay() pageSizes?: number[] = [5, 10];
 

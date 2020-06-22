@@ -8,12 +8,14 @@ import { GetHtmlElement } from './pager.types';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ text, htmlRef }: InfoText) => (
+export const viewFunction = ({ text, htmlRef, props: { visible } }: InfoText) => (visible ? (
   <div ref={htmlRef as any} className={PAGER_INFO_CLASS}>{text}</div>
-);
+) : null);
 
 @ComponentBindings()
 export class InfoTextProps {
+  @OneWay() visible?: boolean = true;
+
   @OneWay() infoText?: string;
 
   @OneWay() pageCount?: number = 10;

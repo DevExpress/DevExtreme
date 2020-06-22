@@ -15,15 +15,14 @@ import PagerProps from './pager-props';
 export const viewFunction = ({
   className,
   isLargeDisplayMode,
+  infoVisible,
   props: {
     parentRef, pageSizesRef, pagesRef, infoTextRef,
-    infoTextVisible,
     pageSizeChange, pageIndexChange,
     infoText, maxPagesCount, pageIndex,
-    pageCount, pageSize, pageSizes,
+    pageCount, showPageSizes, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
-    showInfo,
   },
   restAttributes,
 }: PagerContentComponent) => (
@@ -31,6 +30,7 @@ export const viewFunction = ({
   <div ref={parentRef as any} {...restAttributes} className={className}>
     <PageSizeSelector
       ref={pageSizesRef as any}
+      visible={showPageSizes}
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
@@ -50,15 +50,14 @@ export const viewFunction = ({
         showNavigationButtons={showNavigationButtons}
         totalCount={totalCount}
       />
-      {showInfo && infoTextVisible && (
-        <InfoText
-          ref={infoTextRef as any}
-          infoText={infoText}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-        />
-      )}
+      <InfoText
+        ref={infoTextRef as any}
+        visible={infoVisible}
+        infoText={infoText}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        totalCount={totalCount}
+      />
     </div>
   </div>
 );
@@ -91,6 +90,11 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
 export default class PagerContentComponent extends JSXComponent(PagerContentProps) {
+  get infoVisible(): boolean {
+    const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
+    return showInfo && infoTextVisible;
+  }
+
   get isLargeDisplayMode(): boolean {
     return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
   }
