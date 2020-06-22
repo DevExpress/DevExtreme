@@ -1,4 +1,4 @@
-import Export from './export';
+import { Export } from './export';
 
 const privateOptions = {
     _getWorksheetFrozenState: function(dataProvider, cellRange) {
@@ -29,4 +29,6 @@ function _getFullOptions(options) {
     return Export.getFullOptions(options);
 }
 
-export { exportPivotGrid, _getFullOptions };
+exportPivotGrid._getFullOptions = _getFullOptions;
+
+export { exportPivotGrid };

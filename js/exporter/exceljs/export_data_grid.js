@@ -1,5 +1,5 @@
 import { isDefined } from '../../core/utils/type';
-import Export from './export';
+import { Export } from './export';
 import errors from '../../core/errors';
 
 const privateOptions = {
@@ -63,4 +63,6 @@ function _getFullOptions(options) {
     return fullOptions;
 }
 
-export { exportDataGrid, _getFullOptions };
+exportDataGrid._getFullOptions = _getFullOptions;
+
+export { exportDataGrid };
