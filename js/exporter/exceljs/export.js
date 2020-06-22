@@ -12,8 +12,6 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
 const Export = {
-    MAX_EXCEL_COLUMN_WIDTH: MAX_EXCEL_COLUMN_WIDTH,
-
     getFullOptions: function(options) {
         const fullOptions = extend({}, options);
         if(!isDefined(fullOptions.topLeftCell)) {
@@ -241,5 +239,9 @@ const Export = {
         privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
     }
 };
+
+//#DEBUG
+Export.MAX_EXCEL_COLUMN_WIDTH = MAX_EXCEL_COLUMN_WIDTH;
+//#ENDDEBUG
 
 export { Export };

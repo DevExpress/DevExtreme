@@ -63,6 +63,8 @@ function _getFullOptions(options) {
     return fullOptions;
 }
 
+//#DEBUG
 exportDataGrid._getFullOptions = _getFullOptions;
+//#ENDDEBUG
 
 export { exportDataGrid };
