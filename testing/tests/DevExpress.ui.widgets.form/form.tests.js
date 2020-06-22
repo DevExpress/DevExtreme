@@ -412,6 +412,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
+
 QUnit.module('Tabs', {
     beforeEach: function() {
         const that = this;
