@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const renderer = require('core/renderer');
 const vizMocks = require('../../../helpers/vizMocks.js');
-const dxVectorMapModule = require('viz/vector_map/vector_map');
+const dxVectorMapUtils = require('viz/vector_map/vector_map.utils');
 
 const projectionModule = require('viz/vector_map/projection.main');
 const controlBarModule = require('viz/vector_map/control_bar');
@@ -65,7 +65,7 @@ exports.stubComponentConstructors = stubComponentConstructors;
 
 exports.environment = {
     beforeEach: function() {
-        dxVectorMapModule._TESTS_resetDataKey();
+        dxVectorMapUtils._TESTS_resetDataKey();
         this.$container = $('<div id="test-container"></div>');
         this.renderer = new vizMocks.Renderer();
         this.themeManager = new StubThemeManager();

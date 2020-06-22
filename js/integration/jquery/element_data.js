@@ -1,7 +1,7 @@
-const jQuery = require('jquery');
-const dataUtils = require('../../core/element_data');
-const useJQuery = require('./use_jquery')();
+import jQuery from 'jquery';
+import dataUtils from '../../core/element_data';
+import useJQuery from './use_jquery';
 
-if(useJQuery) {
+if(useJQuery()) {
     dataUtils.setDataStrategy(jQuery);
 }

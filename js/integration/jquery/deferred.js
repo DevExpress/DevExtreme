@@ -1,9 +1,9 @@
-const jQuery = require('jquery');
-const deferredUtils = require('../../core/utils/deferred');
-const useJQuery = require('./use_jquery')();
-const compareVersion = require('../../core/utils/version').compare;
+import jQuery from 'jquery';
+import deferredUtils from '../../core/utils/deferred';
+import useJQuery from './use_jquery';
+import { compare as compareVersion } from '../../core/utils/version';
 
-if(useJQuery) {
+if(useJQuery()) {
     const Deferred = jQuery.Deferred;
     const strategy = { Deferred: Deferred };
 

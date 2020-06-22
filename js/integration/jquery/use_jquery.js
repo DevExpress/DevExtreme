@@ -1,11 +1,11 @@
-const jQuery = require('jquery');
-const config = require('../../core/config');
+import jQuery from 'jquery';
+import config from '../../core/config';
 const useJQuery = config().useJQuery;
 
 if(jQuery && useJQuery !== false) {
     config({ useJQuery: true });
 }
 
-module.exports = function() {
+export default function() {
     return jQuery && config().useJQuery;
-};
+}

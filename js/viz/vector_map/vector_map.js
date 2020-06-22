@@ -8,19 +8,15 @@ import legendModule from './legend';
 import layoutModule from './layout';
 import { MapLayerCollection, getMaxBound } from './map_layer';
 import tooltipViewerModule from './tooltip_viewer';
+import { generateDataKey } from './vector_map.utils';
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 400;
 const RE_STARTS_LAYERS = /^layers/;
 const RE_ENDS_DATA_SOURCE = /\.dataSource$/;
-let nextDataKey = 1;
 
 import './projection';
 import BaseWidget from '../core/base_widget';
-
-function generateDataKey() {
-    return 'vectormap-data-' + nextDataKey++;
-}
 
 function mergeBounds(sumBounds, dataBounds) {
     return dataBounds ? [Math.min(dataBounds[0], dataBounds[2], sumBounds[0]),
@@ -463,13 +459,6 @@ import componentRegistrator from '../../core/component_registrator';
 componentRegistrator('dxVectorMap', dxVectorMap);
 
 export default dxVectorMap;
-
-///#DEBUG
-export function _TESTS_resetDataKey() {
-    nextDataKey = 1;
-}
-
-///#ENDDEBUG
 
 // PLUGINS_SECTION
 import { plugin as ExportPlugin } from '../core/export';
