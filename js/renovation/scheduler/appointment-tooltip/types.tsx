@@ -1,7 +1,8 @@
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
+import { Promise } from '../../../core/utils/deferred';
 
 export type Color = string | undefined;
-export type DeferredColor = Promise<Color> & JQueryPromise<Color>;
+export type DeferredColor = Promise<Color>;
 
 export type AppointmentItem = {
   data: dxSchedulerAppointment;
