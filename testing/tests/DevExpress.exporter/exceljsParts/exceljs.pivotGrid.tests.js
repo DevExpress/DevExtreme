@@ -1917,7 +1917,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
 // TODO: Do I add the shared part for these tests?
 QUnit.module('_getFullOptions', moduleConfig, () => {
-    const _getFullOptions = exportPivotGrid._getFullOptions;
+    const _getFullOptions = exportPivotGrid.__internals._getFullOptions;
 
     QUnit.test('topLeftCell', function(assert) {
         assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
