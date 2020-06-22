@@ -149,15 +149,15 @@ const LayoutManager = Widget.inherit({
     },
 
     _isCheckboxUndefinedStateEnabled: function(editorOption) {
-        if(editorOption.allowIndeterminateState !== true || editorOption.editorType !== 'dxCheckBox') {
-            return false;
+        if(editorOption.allowIndeterminateState === true && editorOption.editorType === 'dxCheckBox') {
+            const nameParts = ['layoutData', ...editorOption.dataField.split('.')];
+            const propertyName = nameParts.pop();
+            const layoutData = this.option(nameParts.join('.'));
+
+            return propertyName in layoutData;
         }
 
-        const nameParts = ['layoutData', ...editorOption.dataField.split('.')];
-        const propertyName = nameParts.pop();
-        const layoutData = this.option(nameParts.join('.'));
-
-        return propertyName in layoutData;
+        return false;
     },
 
     _updateFieldValue: function(dataField, value) {

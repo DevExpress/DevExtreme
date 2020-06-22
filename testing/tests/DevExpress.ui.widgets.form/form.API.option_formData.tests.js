@@ -338,10 +338,6 @@ QUnit.module('Checkbox editor field', () => {
 
         const expectedFormValue = formValue === 'no member' ? undefined : formValue;
         QUnit.assert.strictEqual(form.option(`formData.${dateField}`), expectedFormValue, `formData has ${expectedFormValue} value`);
-
-        const $checkBox = $(editor.element());
-        QUnit.assert.strictEqual($checkBox.hasClass('dx-checkbox-checked'), editorValue === true, 'checkbox has checked class if it has selected');
-        QUnit.assert.strictEqual($checkBox.hasClass('dx-checkbox-indeterminate'), editorValue === undefined, 'checkbox has indeterminate class if it has undefied value');
     }
 
     function createTestData(boolValue) {
