@@ -83,6 +83,7 @@ import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTE
 import 'ui/scroll_view';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
@@ -90,15 +91,6 @@ const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-const baseModuleConfig = {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-};
 
 if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Chrome DevTools device emulation
@@ -117,15 +109,6 @@ DataGrid.defaultOptions({
 QUnit.testDone(function() {
     ajaxMock.clear();
 });
-
-const createDataGrid = function(options, $container) {
-    const dataGridElement = ($container || $('#dataGrid')).dxDataGrid(options);
-
-    QUnit.assert.ok(dataGridElement);
-    const dataGrid = dataGridElement.dxDataGrid('instance');
-    return dataGrid;
-};
-
 
 QUnit.module('Initialization', baseModuleConfig, () => {
 
@@ -10116,51 +10099,6 @@ QUnit.module('Async render', baseModuleConfig, () => {
         assert.equal(cellTemplateArgs.length, 1, 'cell template is called');
         assert.equal(cellTemplateArgs[0].rowType, 'data', 'cell template rowType');
         assert.equal(cellTemplateArgs[0].column.dataField, 'template', 'cell template column');
-    });
-
-    // T857205
-    QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
-        const selectedRowKeys = [1, 2];
-
-        const customLoad = sinon.spy(() => {
-            return {
-                selectedRowKeys: selectedRowKeys
-            };
-        });
-
-        // act
-        const grid = createDataGrid({
-            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
-            keyExpr: 'id',
-            loadingTimeout: undefined,
-            renderAsync: true,
-            filterRow: {
-                visible: true
-            },
-            selection: {
-                mode: 'multiple'
-            },
-            stateStoring: {
-                enabled: true,
-                type: 'custom',
-                customLoad
-            }
-        });
-
-        const $grid = grid.$element();
-        this.clock.tick();
-
-        const $selectCheckboxes = $grid.find('.dx-select-checkbox');
-        const $inputs = $selectCheckboxes.find('input');
-
-        // assert
-        assert.equal(customLoad.callCount, 1, 'customLoad was called once');
-
-        assert.deepEqual(grid.getSelectedRowKeys(), selectedRowKeys, 'selected row keys');
-
-        assert.equal($inputs.eq(1).prop('value'), 'true', 'first row checkbox');
-        assert.equal($inputs.eq(2).prop('value'), 'true', 'second row checkbox');
-        assert.equal($inputs.eq(3).prop('value'), 'false', 'third row checkbox');
     });
 });
 
