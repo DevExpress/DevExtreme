@@ -2005,7 +2005,7 @@ QUnit.module('Text customization', moduleConfig, () => {
                         { area: 'row', dataField: 'r2', dataType: 'string', expanded: true },
                         { area: 'column', dataField: 'c1', dataType: 'string', expanded: true },
                         { area: 'column', dataField: 'c2', dataType: 'string', expanded: true },
-                        { area: 'data', summaryType: 'sum', dataField: 'value', dataType: 'number' }
+                        { area: 'data', summaryType: 'sum', dataField: 'value', dataType: 'number', showGrandTotals: false, showTotals: true }
                     ],
                     store: [
                         { r1: 'r1_1', r2: 'r2_1', c1: 'c1_1', c2: 'c2_1', value: 1 }
