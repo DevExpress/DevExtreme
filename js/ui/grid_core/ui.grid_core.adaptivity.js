@@ -889,7 +889,7 @@ module.exports = {
                 },
 
                 _afterSaveEditData: function() {
-                    this.callBase();
+                    this.callBase.apply(this, arguments);
                     const deferred = new Deferred();
                     if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()) {
                         when(this.getController('validating').validate(true)).done((isValid) => {
