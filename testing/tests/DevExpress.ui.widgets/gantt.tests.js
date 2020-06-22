@@ -406,6 +406,64 @@ QUnit.module('Actions', moduleConfig, () => {
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
     });
+    test('collapse and expand after inserting', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date('2019-02-21');
+        const newEnd = new Date('2019-02-22');
+        const newTitle = 'New';
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '2');
+        this.clock.tick();
+
+        assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
+        const createdTask = tasks[tasks.length - 1];
+        assert.equal(createdTask.title, newTitle, 'new task title is right');
+        assert.equal(createdTask.start, newStart, 'new task start is right');
+        assert.equal(createdTask.end, newEnd, 'new task end is right');
+
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).eq(1);
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
+        collapsedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
+    });
+
+    test('collapse and expand after inserting in auto update mode', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date('2019-02-21');
+        const newEnd = new Date('2019-02-22');
+        const newTitle = 'New';
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '2');
+        this.clock.tick();
+
+        assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
+        const createdTask = tasks[tasks.length - 1];
+        assert.equal(createdTask.title, newTitle, 'new task title is right');
+        assert.equal(createdTask.start, newStart, 'new task start is right');
+        assert.equal(createdTask.end, newEnd, 'new task end is right');
+
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).eq(1);
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
+        collapsedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
+    });
 
     test('move splitter', function(assert) {
         this.createInstance(allSourcesOptions);

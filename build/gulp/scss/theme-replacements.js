@@ -380,11 +380,7 @@ module.exports = {
     ],
     'recurrenceEditor': [
         { import: '../scheduler/sizes', type: 'index' },
-        { import: '../../base/recurrenceEditor', type: 'index', withVars: [
-            'base-border-color',
-            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
-            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
-        ] },
+        { import: '../../base/recurrenceEditor', type: 'index' },
     ],
     'scheduler': [
         { import: '../../base/mixins', type: 'index' },
@@ -411,9 +407,7 @@ module.exports = {
             'SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR',
             'SCHEDULER_APPOINTMENT_TEXT_COLOR',
             'SCHEDULER_FILL_FOCUSED_APPOINTMENT',
-            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR',
-            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
-            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
+            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR'
         ] },
         { import: '../button/colors', type: 'index' },
         { import: '../button', type: 'index' },
