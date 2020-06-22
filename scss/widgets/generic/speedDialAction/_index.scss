@@ -36,13 +36,13 @@ $GENERIC_FA_BUTTON_LABEL_SHADOW: $speed-dial-action-label-shadow;
 );
 
 .dx-fa-button {
-    &.dx-fa-button-main {
-        .dx-overlay-content {
-            .dx-fa-button-label {
-                padding: $GENERIC_MAIN_FA_BUTTON_LABEL_PADDING;
-                font-size: $GENERIC_BASE_FONT_SIZE;
-                margin-right: 0;
-            }
-        }
+  &.dx-fa-button-main {
+    .dx-overlay-content {
+      .dx-fa-button-label {
+        padding: $GENERIC_MAIN_FA_BUTTON_LABEL_PADDING;
+        font-size: $GENERIC_BASE_FONT_SIZE;
+        margin-right: 0;
+      }
     }
+  }
 }

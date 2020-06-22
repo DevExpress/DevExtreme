@@ -36,15 +36,15 @@ $MATERIAL_FA_BUTTON_LABEL_PADDING: 0 12px;
 );
 
 .dx-fa-button {
-    &.dx-fa-button-main {
-        .dx-overlay-content {
-            .dx-fa-button-label {
-                padding: $MATERIAL_MAIN_FA_BUTTON_LABEL_PADDING;
-                font-size: $MATERIAL_BASE_FONT_SIZE;
-                text-transform: uppercase;
-                letter-spacing: 1.25px;
-                font-weight: 500;
-            }
-        }
+  &.dx-fa-button-main {
+    .dx-overlay-content {
+      .dx-fa-button-label {
+        padding: $MATERIAL_MAIN_FA_BUTTON_LABEL_PADDING;
+        font-size: $MATERIAL_BASE_FONT_SIZE;
+        text-transform: uppercase;
+        letter-spacing: 1.25px;
+        font-weight: 500;
+      }
     }
+  }
 }

@@ -3,42 +3,42 @@
 
 
 .dx-radiobutton {
-    display: table;
-    cursor: pointer;
+  display: table;
+  cursor: pointer;
 }
 
 .dx-radio-value-container {
-    display: table-cell;
-    padding-right: 10px;
-    padding-left: 5px;
-    vertical-align: middle;
+  display: table-cell;
+  padding-right: 10px;
+  padding-left: 5px;
+  vertical-align: middle;
 
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-        padding-right: 5px;
-        padding-left: 10px;
-    }
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    padding-right: 5px;
+    padding-left: 10px;
+  }
 }
 
 .dx-radiogroup-horizontal {
-    @include dx-clearfix-mixin();
+  @include dx-clearfix-mixin();
 
-    .dx-radiobutton {
-        float: left;
+  .dx-radiobutton {
+    float: left;
 
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-            float: right;
-        }
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      float: right;
     }
+  }
 
-    .dx-radiobutton:last-of-type {
-        margin-right: 0;
-    }
+  .dx-radiobutton:last-of-type {
+    margin-right: 0;
+  }
 }
 
 .dx-state-disabled {
-    .dx-radiobutton {
-        cursor: default;
-    }
+  .dx-radiobutton {
+    cursor: default;
+  }
 }

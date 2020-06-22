@@ -4,9 +4,9 @@
 $MATERIAL_TOOLTIP_PADDING: null !default;
 
 @if $size == "default" {
-    $MATERIAL_TOOLTIP_PADDING: 6px 8px;
+  $MATERIAL_TOOLTIP_PADDING: 6px 8px;
 }
 
 @else if $size == "compact" {
-    $MATERIAL_TOOLTIP_PADDING: 4px 6px;
+  $MATERIAL_TOOLTIP_PADDING: 4px 6px;
 }

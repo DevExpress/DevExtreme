@@ -12,81 +12,81 @@
 $MATERIAL_MENU_FONT_SIZE: 13px;
 
 .dx-context-menu-container-border {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .dx-context-menu-content-delimiter {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .dx-menu {
-    color: $menu-color;
+  color: $menu-color;
 
+  .dx-menu-item {
+    font-size: $MATERIAL_MENU_FONT_SIZE;
+    border-radius: $base-border-radius;
+
+    .dx-menu-item-content {
+      padding: 7px $MATERIAL_MENU_HORIZONTAL_PADDING 8px;
+
+      .dx-menu-item-popout-container {
+        width: 0;
+      }
+    }
+
+    &.dx-menu-item-has-text {
+      &.dx-menu-item-has-icon {
+        .dx-icon {
+          margin-right: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
+        }
+      }
+    }
+  }
+
+  &.dx-rtl {
     .dx-menu-item {
-        font-size: $MATERIAL_MENU_FONT_SIZE;
-        border-radius: $base-border-radius;
-
-        .dx-menu-item-content {
-            padding: 7px $MATERIAL_MENU_HORIZONTAL_PADDING 8px;
-
-            .dx-menu-item-popout-container {
-                width: 0;
-            }
+      &.dx-menu-item-has-text {
+        &.dx-menu-item-has-icon {
+          .dx-icon {
+            margin-left: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
+            margin-right: 0;
+          }
         }
-
-        &.dx-menu-item-has-text {
-            &.dx-menu-item-has-icon {
-                .dx-icon {
-                    margin-right: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
-                }
-            }
-        }
+      }
     }
-
-    &.dx-rtl {
-        .dx-menu-item {
-            &.dx-menu-item-has-text {
-                &.dx-menu-item-has-icon {
-                    .dx-icon {
-                        margin-left: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
-                        margin-right: 0;
-                    }
-                }
-            }
-        }
-    }
+  }
 }
 
 .dx-menu-adaptive-mode {
-    background-color: $menu-popup-bg;
+  background-color: $menu-popup-bg;
 
-    .dx-treeview {
-        border: 1px solid $menu-popup-border-color;
-        border-radius: $base-border-radius;
+  .dx-treeview {
+    border: 1px solid $menu-popup-border-color;
+    border-radius: $base-border-radius;
 
-        &,
-        &.dx-state-focused {
-            box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
-        }
+    &,
+    &.dx-state-focused {
+      box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
     }
+  }
 
-    .dx-treeview-toggle-item-visibility {
-        font-size: 18px;
+  .dx-treeview-toggle-item-visibility {
+    font-size: 18px;
+  }
+
+  .dx-treeview-node {
+    &.dx-state-focused {
+      .dx-treeview-node .dx-treeview-toggle-item-visibility {
+        color: inherit;
+      }
+
+      .dx-treeview-toggle-item-visibility {
+        color: $menu-popup-bg;
+      }
     }
+  }
 
-    .dx-treeview-node {
-        &.dx-state-focused {
-            .dx-treeview-node .dx-treeview-toggle-item-visibility {
-                color: inherit;
-            }
-
-            .dx-treeview-toggle-item-visibility {
-                color: $menu-popup-bg;
-            }
-        }
-    }
-
-    .dx-treeview-node-container:first-child > .dx-treeview-node {
-        border-bottom: 1px solid $menu-popup-border-color;
-    }
+  .dx-treeview-node-container:first-child > .dx-treeview-node {
+    border-bottom: 1px solid $menu-popup-border-color;
+  }
 }

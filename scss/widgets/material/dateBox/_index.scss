@@ -11,153 +11,153 @@
 
 
 .dx-datebox-wrapper {
-    .dx-popup-title {
-        min-height: 10px;
-        border-bottom: none;
-        background: none;
-    }
+  .dx-popup-title {
+    min-height: 10px;
+    border-bottom: none;
+    background: none;
+  }
 
-    .dx-item {
-        border: none;
-    }
+  .dx-item {
+    border: none;
+  }
 
-    .dx-popup-bottom {
-        .dx-button {
-            width: auto;
-        }
+  .dx-popup-bottom {
+    .dx-button {
+      width: auto;
     }
+  }
 }
 
 .dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
-    margin: $MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN;
+  margin: $MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN;
 }
 
 .dx-datebox-wrapper-list {
-    .dx-overlay-content {
-        border-top: none;
-    }
+  .dx-overlay-content {
+    border-top: none;
+  }
 }
 
 .dx-device-phone .dx-datebox-wrapper-rollers {
-    .dx-popup-content {
-        padding: 10px;
-    }
+  .dx-popup-content {
+    padding: 10px;
+  }
 }
 
 .dx-datebox-calendar {
-    .dx-dropdowneditor-icon {
-        @include dx-icon(spindown);
-        @include dx-dropdowneditor-button-icon();
-    }
+  .dx-dropdowneditor-icon {
+    @include dx-icon(spindown);
+    @include dx-dropdowneditor-button-icon();
+  }
 
+  &.dx-dropdowneditor-active {
+    &.dx-editor-filled {
+      background: $texteditor-hover-bg; //TODO: Use active state const instead
+    }
+  }
+
+  &.dx-rtl {
     &.dx-dropdowneditor-active {
-        &.dx-editor-filled {
-            background: $texteditor-hover-bg; //TODO: Use active state const instead
+      .dx-dropdowneditor-button {
+        .dx-dropdowneditor-icon {
+          opacity: 1;
         }
+      }
     }
-
-    &.dx-rtl {
-        &.dx-dropdowneditor-active {
-            .dx-dropdowneditor-button {
-                .dx-dropdowneditor-icon {
-                    opacity: 1;
-                }
-            }
-        }
-    }
+  }
 }
 
 .dx-datebox-wrapper-calendar {
-    .dx-popup-content {
-        padding: 0;
-    }
+  .dx-popup-content {
+    padding: 0;
+  }
 
-    .dx-calendar {
-        border: none;
-        margin: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
-    }
+  .dx-calendar {
+    border: none;
+    margin: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
+  }
 
-    .dx-datebox-container-cell {
-        margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
-        margin-bottom: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
-    }
+  .dx-datebox-container-cell {
+    margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
+    margin-bottom: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
+  }
 }
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
-    .dx-calendar {
-        margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
-        margin-bottom: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
-    }
+  .dx-calendar {
+    margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin-bottom: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+  }
 
-    .dx-timeview {
-        padding: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
+  .dx-timeview {
+    padding: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
 
-        @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-            margin: 0 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
-        }
+    @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
+      margin: 0 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
     }
+  }
 
-    .dx-datebox-container-cell {
-        margin-top: -1px;
-        margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
-    }
+  .dx-datebox-container-cell {
+    margin-top: -1px;
+    margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
+  }
 }
 
 @media (max-width: 320px) {
-    .dx-datebox-wrapper-calendar .dx-calendar {
-        margin: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE;
-    }
+  .dx-datebox-wrapper-calendar .dx-calendar {
+    margin: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE;
+  }
 }
 
 .dx-rtl {
-    .dx-datebox-wrapper {
-        .dx-popup-bottom {
-            .dx-toolbar-button + .dx-toolbar-button {
-                .dx-button {
-                    margin-right: 5px;
-                    margin-left: 0;
-                }
-            }
+  .dx-datebox-wrapper {
+    .dx-popup-bottom {
+      .dx-toolbar-button + .dx-toolbar-button {
+        .dx-button {
+          margin-right: 5px;
+          margin-left: 0;
         }
+      }
+    }
+  }
+
+  .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+    .dx-calendar {
+      margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
     }
 
-    .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
-        .dx-calendar {
-            margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
-            margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
-        }
-
-        .dx-timeview {
-            margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
-            margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
-        }
+    .dx-timeview {
+      margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
     }
+  }
 }
 
 .dx-datebox-list {
-    .dx-dropdowneditor-icon {
-        @include dx-icon(spindown);
-        @include dx-dropdowneditor-button-icon();
-    }
+  .dx-dropdowneditor-icon {
+    @include dx-icon(spindown);
+    @include dx-dropdowneditor-button-icon();
+  }
 }
 
 .dx-datebox-wrapper-list .dx-popup-content {
-    padding: 0;
+  padding: 0;
 }
 
 .dx-datebox {
-    input[type="date"] {
-        line-height: normal;
-    }
+  input[type="date"] {
+    line-height: normal;
+  }
 
-    &,
-    &:not(.dx-texteditor-empty) {
-        &.dx-auto-width {
-            @include invalid-dropdowneditor-input-padding();
-        }
+  &,
+  &:not(.dx-texteditor-empty) {
+    &.dx-auto-width {
+      @include invalid-dropdowneditor-input-padding();
     }
+  }
 }
 
 .dx-device-ios .dx-datebox.dx-texteditor-empty .dx-texteditor-input {
-    min-height: $MATERIAL_DATEBOX_INPUT_MIN_HEIGHT;
+  min-height: $MATERIAL_DATEBOX_INPUT_MIN_HEIGHT;
 }

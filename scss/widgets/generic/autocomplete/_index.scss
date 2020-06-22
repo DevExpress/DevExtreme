@@ -8,33 +8,33 @@
 
 
 .dx-autocomplete {
-    .dx-texteditor-input {
-        font-size: 1em;
-    }
+  .dx-texteditor-input {
+    font-size: 1em;
+  }
 }
 
 @mixin autocomplete-badge-offset() {
-    right: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+  right: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
 
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-        left: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
-    }
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    left: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+  }
 }
 
 .dx-autocomplete.dx-invalid,
 .dx-autocomplete.dx-valid {
-    .dx-texteditor-container {
-        &:after {
-            @include autocomplete-badge-offset();
-        }
+  .dx-texteditor-container {
+    &:after {
+      @include autocomplete-badge-offset();
     }
+  }
 }
 
 .dx-autocomplete.dx-validation-pending {
-    .dx-texteditor-container {
-        .dx-pending-indicator {
-            @include autocomplete-badge-offset();
-        }
+  .dx-texteditor-container {
+    .dx-pending-indicator {
+      @include autocomplete-badge-offset();
     }
+  }
 }

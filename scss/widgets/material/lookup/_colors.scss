@@ -10,12 +10,12 @@ $lookup-icon-color: null !default;
 @if $mode == "light" {
 
 
-    $lookup-icon-color: $base-icon-color !default;
+  $lookup-icon-color: $base-icon-color !default;
 }
 
 @if $mode == "dark" {
 
 
-    $lookup-icon-color: $base-icon-color !default;
+  $lookup-icon-color: $base-icon-color !default;
 }
 

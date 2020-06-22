@@ -7,15 +7,15 @@
 
 
 .dx-selectbox-popup-wrapper {
-    .dx-overlay-content {
-        box-shadow: $dropdown-widgets-shadow;
-    }
+  .dx-overlay-content {
+    box-shadow: $dropdown-widgets-shadow;
+  }
 
-    .dx-popup-content {
-        padding: 0;
-    }
+  .dx-popup-content {
+    padding: 0;
+  }
 
-    .dx-list {
-        background-color: $selectbox-list-bg;
-    }
+  .dx-list {
+    background-color: $selectbox-list-bg;
+  }
 }

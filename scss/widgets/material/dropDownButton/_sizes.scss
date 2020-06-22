@@ -4,9 +4,9 @@
 $MATERIAL_TOGGLE_BUTTON_FLEX: null !default;
 
 @if $size == "default" {
-    $MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 24px;
+  $MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 24px;
 }
 
 @else if $size == "compact" {
-    $MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 20px;
+  $MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 20px;
 }

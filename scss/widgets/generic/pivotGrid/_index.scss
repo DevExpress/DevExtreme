@@ -41,69 +41,69 @@
 
 
 .dx-pivotgrid {
-    background-color: $PIVOTGRID_AREA_BACKGROUND;
+  background-color: $PIVOTGRID_AREA_BACKGROUND;
 
-    .dx-area-description-cell {
-        .dx-button-content {
-            padding: 5px;
-        }
+  .dx-area-description-cell {
+    .dx-button-content {
+      padding: 5px;
     }
+  }
 
-    .dx-column-header,
-    .dx-filter-header {
-        .dx-pivotgrid-toolbar {
-            .dx-button-content {
-                padding: 5px;
-            }
+  .dx-column-header,
+  .dx-filter-header {
+    .dx-pivotgrid-toolbar {
+      .dx-button-content {
+        padding: 5px;
+      }
 
-            .dx-button {
-                margin-top: 10px;
-            }
-        }
+      .dx-button {
+        margin-top: 10px;
+      }
     }
+  }
 
-    .dx-expand-icon-container {
-        @include dx-icon(spinright);
+  .dx-expand-icon-container {
+    @include dx-icon(spinright);
 
-        &:before {
-            visibility: hidden;
-        }
+    &:before {
+      visibility: hidden;
     }
+  }
 
-    .dx-pivotgrid-collapsed .dx-expand {
-        @include dx-icon(spinright);
-        @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+  .dx-pivotgrid-collapsed .dx-expand {
+    @include dx-icon(spinright);
+    @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
 
-        color: $pivotgrid-spin-icon-color;
+    color: $pivotgrid-spin-icon-color;
+  }
+
+  .dx-pivotgrid-expanded .dx-expand {
+    @include dx-icon(spindown);
+    @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+
+    color: $pivotgrid-spin-icon-color;
+  }
+
+  .dx-area-tree-view {
+    td.dx-white-space-column {
+      width: $PIVOTGRID_EMPTY_COLUMN_WIDTH;
+      min-width: $PIVOTGRID_EMPTY_COLUMN_WIDTH;
     }
+  }
 
-    .dx-pivotgrid-expanded .dx-expand {
-        @include dx-icon(spindown);
-        @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
-
-        color: $pivotgrid-spin-icon-color;
+  .dx-ie {
+    .dx-pivotgrid-fields-area {
+      @include dx-base-typography();
     }
-
-    .dx-area-tree-view {
-        td.dx-white-space-column {
-            width: $PIVOTGRID_EMPTY_COLUMN_WIDTH;
-            min-width: $PIVOTGRID_EMPTY_COLUMN_WIDTH;
-        }
-    }
-
-    .dx-ie {
-        .dx-pivotgrid-fields-area {
-            @include dx-base-typography();
-        }
-    }
+  }
 }
 
 .dx-pivotgridfieldchooser {
-    background-color: $PIVOTGRID_AREA_BACKGROUND;
+  background-color: $PIVOTGRID_AREA_BACKGROUND;
 }
 
 .dx-pivotgrid-fields-container {
-    .dx-position-indicator {
-        background-color: $PIVOTGRID_POSITION_INDICATOR_COLOR;
-    }
+  .dx-position-indicator {
+    background-color: $PIVOTGRID_POSITION_INDICATOR_COLOR;
+  }
 }

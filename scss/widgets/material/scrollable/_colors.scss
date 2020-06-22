@@ -13,32 +13,32 @@ $scrollable-scrollbar-bg: null !default;
 @if $mode == "light" {
 
 
-    $scrollable-bg: $base-bg !default;
+  $scrollable-bg: $base-bg !default;
 
-    /**
+  /**
     * $name 10. Scroller background color
     * $type color
     */
-    $scrollable-scroll-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.7) !default;
+  $scrollable-scroll-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.7) !default;
 
-    $scrollable-scroll-shadow-color: transparent !default;
+  $scrollable-scroll-shadow-color: transparent !default;
 
-    $scrollable-scrollbar-bg: transparent !default;
+  $scrollable-scrollbar-bg: transparent !default;
 }
 
 @if $mode == "dark" {
 
 
-    $scrollable-bg: $base-bg !default;
+  $scrollable-bg: $base-bg !default;
 
-    /**
+  /**
     * $name 10. Scroller background color
     * $type color
     */
-    $scrollable-scroll-bg: color.change(lighten($scrollable-bg, 25%), $alpha: 0.7) !default;
+  $scrollable-scroll-bg: color.change(lighten($scrollable-bg, 25%), $alpha: 0.7) !default;
 
-    $scrollable-scroll-shadow-color: transparent !default;
+  $scrollable-scroll-shadow-color: transparent !default;
 
-    $scrollable-scrollbar-bg: transparent !default;
+  $scrollable-scrollbar-bg: transparent !default;
 }
 

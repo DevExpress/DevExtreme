@@ -11,22 +11,22 @@
 $MATERIAL_POPOVER_TOOLBAR_PADDING: 15px;
 
 .dx-popover-wrapper {
-    .dx-popup-title {
-        margin: 0;
+  .dx-popup-title {
+    margin: 0;
 
-        &.dx-toolbar {
-            padding-left: $MATERIAL_POPOVER_TOOLBAR_PADDING;
-        }
+    &.dx-toolbar {
+      padding-left: $MATERIAL_POPOVER_TOOLBAR_PADDING;
     }
+  }
 
-    .dx-popover-arrow {
-        display: none;
-    }
+  .dx-popover-arrow {
+    display: none;
+  }
 
-    .dx-rtl.dx-popup-title {
-        &.dx-toolbar {
-            padding-right: $MATERIAL_POPOVER_TOOLBAR_PADDING;
-            padding-left: 0;
-        }
+  .dx-rtl.dx-popup-title {
+    &.dx-toolbar {
+      padding-right: $MATERIAL_POPOVER_TOOLBAR_PADDING;
+      padding-left: 0;
     }
+  }
 }

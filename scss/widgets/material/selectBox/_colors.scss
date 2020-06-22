@@ -8,18 +8,18 @@ $selectbox-list-bg: null !default;
 
 
 @if $mode == "light" {
-    /**
+  /**
     * $name 10. Item background color
     * $type color
     */
-    $selectbox-list-bg: $base-bg !default;
+  $selectbox-list-bg: $base-bg !default;
 }
 
 @if $mode == "dark" {
-    /**
+  /**
     * $name 10. Item background color
     * $type color
     */
-    $selectbox-list-bg: $base-bg !default;
+  $selectbox-list-bg: $base-bg !default;
 }
 

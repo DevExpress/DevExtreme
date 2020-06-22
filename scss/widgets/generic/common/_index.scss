@@ -8,83 +8,83 @@
 @use "../list/sizes" as *;
 // adduse
 .dx-theme-marker {
-    font-family: "dx.generic#{$GENERIC_COLOR_POSTFIX}#{$GENERIC_SIZE_POSTFIX}";
+  font-family: "dx.generic#{$GENERIC_COLOR_POSTFIX}#{$GENERIC_SIZE_POSTFIX}";
 }
 
 // stylelint-disable declaration-no-important
 .dx-theme-accent-as-text-color {
-    color: $base-accent !important;
+  color: $base-accent !important;
 }
 
 .dx-theme-text-color {
-    color: $base-text-color !important;
+  color: $base-text-color !important;
 }
 
 .dx-theme-background-color-as-text-color {
-    color: $base-bg !important;
+  color: $base-bg !important;
 }
 
 .dx-theme-border-color-as-text-color {
-    color: $base-border-color !important;
+  color: $base-border-color !important;
 }
 
 .dx-theme-accent-as-background-color {
-    background-color: $base-accent !important;
-    fill: $base-accent !important;
+  background-color: $base-accent !important;
+  fill: $base-accent !important;
 }
 
 .dx-theme-text-color-as-background-color {
-    background-color: $base-text-color !important;
-    fill: $base-text-color !important;
+  background-color: $base-text-color !important;
+  fill: $base-text-color !important;
 }
 
 .dx-theme-background-color {
-    background-color: $base-bg !important;
-    fill: $base-bg !important;
+  background-color: $base-bg !important;
+  fill: $base-bg !important;
 }
 
 .dx-theme-border-color-as-background-color {
-    background-color: $base-border-color !important;
-    fill: $base-border-color !important;
+  background-color: $base-border-color !important;
+  fill: $base-border-color !important;
 }
 
 .dx-theme-accent-as-border-color {
-    border-color: $base-accent !important;
+  border-color: $base-accent !important;
 }
 
 .dx-theme-text-color-as-border-color {
-    border-color: $base-text-color !important;
+  border-color: $base-text-color !important;
 }
 
 .dx-theme-background-color-as-border-color {
-    border-color: $base-bg !important;
+  border-color: $base-bg !important;
 }
 
 .dx-theme-border-color {
-    border-color: $base-border-color !important;
+  border-color: $base-border-color !important;
 }
 // stylelint-enable declaration-no-important
 
 @mixin dx-base-typography() {
-    color: $typography-color;
-    font-weight: normal;
-    font-size: $GENERIC_BASE_FONT_SIZE;
+  color: $typography-color;
+  font-weight: normal;
+  font-size: $GENERIC_BASE_FONT_SIZE;
+  font-family: $base-font-family;
+  line-height: $GENERIC_BASE_LINE_HEIGHT;
+
+  input,
+  textarea {
     font-family: $base-font-family;
     line-height: $GENERIC_BASE_LINE_HEIGHT;
-
-    input,
-    textarea {
-        font-family: $base-font-family;
-        line-height: $GENERIC_BASE_LINE_HEIGHT;
-    }
+  }
 }
 
 @mixin disabled-widget($opacity: $base-disabled-opacity) { // stylelint-disable-line selector-class-pattern
-    opacity: $opacity;
+  opacity: $opacity;
 
-    @include user-select(none);
+  @include user-select(none);
 
-    cursor: default;
+  cursor: default;
 }
 
 
@@ -94,87 +94,87 @@ $badge-invalid-bg: $base-invalid-color;
 
 
 @mixin badge-settings() {
-    pointer-events: none;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    margin-top: -$GENERIC_INVALID_BADGE_SIZE/2;
-    width: $GENERIC_INVALID_BADGE_SIZE;
-    height: $GENERIC_INVALID_BADGE_SIZE;
-    text-align: center;
-    line-height: $GENERIC_INVALID_BADGE_SIZE;
-    font-size: $GENERIC_BASE_FONT_SIZE - 1px;
+  pointer-events: none;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  margin-top: -$GENERIC_INVALID_BADGE_SIZE/2;
+  width: $GENERIC_INVALID_BADGE_SIZE;
+  height: $GENERIC_INVALID_BADGE_SIZE;
+  text-align: center;
+  line-height: $GENERIC_INVALID_BADGE_SIZE;
+  font-size: $GENERIC_BASE_FONT_SIZE - 1px;
 }
 
 @mixin dx-invalid-generic-badge() {
-    @include badge-settings();
+  @include badge-settings();
 
-    background-color: $badge-invalid-bg;
-    color: $base-inverted-text-color;
-    content: '!';
-    border-radius: 50%;
+  background-color: $badge-invalid-bg;
+  color: $base-inverted-text-color;
+  content: '!';
+  border-radius: 50%;
 }
 
 @mixin dx-valid-generic-badge() {
-    @include badge-settings();
+  @include badge-settings();
 
-    font-family: 'DXIcons', sans-serif;
-    color: $base-success;
-    content: '\f005';
+  font-family: 'DXIcons', sans-serif;
+  color: $base-success;
+  content: '\f005';
 
-    @include validation-badge-animation();
+  @include validation-badge-animation();
 }
 
 @mixin dx-pending-indicator-generic() {
-    pointer-events: none;
-    position: absolute;
-    top: 50%;
-    margin-top: -$GENERIC_PENDING_INDICATOR_SIZE/2;
-    width: $GENERIC_PENDING_INDICATOR_SIZE;
-    height: $GENERIC_PENDING_INDICATOR_SIZE;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  margin-top: -$GENERIC_PENDING_INDICATOR_SIZE/2;
+  width: $GENERIC_PENDING_INDICATOR_SIZE;
+  height: $GENERIC_PENDING_INDICATOR_SIZE;
 }
 
 @mixin dx-dropdownlist-list-appearance() {
+  height: 100%;
+
+  &.dx-popup-wrapper .dx-overlay-content {
+    border-top-width: 0;
+    border-bottom-width: 1px;
+
+    &.dx-dropdowneditor-overlay-flipped {
+      border-top-width: 1px;
+      border-bottom-width: 0;
+    }
+  }
+
+  .dx-popup-content {
     height: 100%;
+    padding: 1px;
+  }
 
-    &.dx-popup-wrapper .dx-overlay-content {
-        border-top-width: 0;
-        border-bottom-width: 1px;
+  .dx-list {
+    height: 100%;
+    min-height: $GENERIC_DROPDOWNLIST_MIN_HEIGHT;
 
-        &.dx-dropdowneditor-overlay-flipped {
-            border-top-width: 1px;
-            border-bottom-width: 0;
-        }
+    &:not(.dx-list-select-decorator-enabled) {
+      min-height: $GENERIC_DROPDOWNLIST_MIN_HEIGHT - (3px * 2);
+
+      .dx-list-item-content {
+        padding: $GENERIC_LIST_ITEM_VERTICAL_PADDING - 3px $GENERIC_LIST_ITEM_HORIZONTAL_PADDING - 1px;
+      }
     }
+  }
 
-    .dx-popup-content {
-        height: 100%;
-        padding: 1px;
+  .dx-list-select-all {
+    padding: $GENERIC_LIST_ITEM_VERTICAL_PADDING + 2px 0 $GENERIC_LIST_ITEM_VERTICAL_PADDING - 2px;
+  }
+
+  .dx-list-item,
+  .dx-empty-message {
+    border-top: 0;
+
+    &:last-of-type {
+      border-bottom: none;
     }
-
-    .dx-list {
-        height: 100%;
-        min-height: $GENERIC_DROPDOWNLIST_MIN_HEIGHT;
-
-        &:not(.dx-list-select-decorator-enabled) {
-            min-height: $GENERIC_DROPDOWNLIST_MIN_HEIGHT - (3px * 2);
-
-            .dx-list-item-content {
-                padding: $GENERIC_LIST_ITEM_VERTICAL_PADDING - 3px $GENERIC_LIST_ITEM_HORIZONTAL_PADDING - 1px;
-            }
-        }
-    }
-
-    .dx-list-select-all {
-        padding: $GENERIC_LIST_ITEM_VERTICAL_PADDING + 2px 0 $GENERIC_LIST_ITEM_VERTICAL_PADDING - 2px;
-    }
-
-    .dx-list-item,
-    .dx-empty-message {
-        border-top: 0;
-
-        &:last-of-type {
-            border-bottom: none;
-        }
-    }
+  }
 }

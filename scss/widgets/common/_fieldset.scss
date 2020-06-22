@@ -1,70 +1,70 @@
 @use "../base/mixins" as *;
 // adduse
 .dx-fieldset {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 
-    .dx-field-value {
-        margin: 0;
-    }
+  .dx-field-value {
+    margin: 0;
+  }
 
-    &,
-    * {
-        box-sizing: border-box;
-    }
+  &,
+  * {
+    box-sizing: border-box;
+  }
 }
 
 .dx-fieldset-header:empty {
-    display: none;
+  display: none;
 }
 
 .dx-field {
-    position: relative;
-    padding: 0.4em;
+  position: relative;
+  padding: 0.4em;
 
-    @include dx-clearfix-mixin();
+  @include dx-clearfix-mixin();
 }
 
 .dx-field-label {
-    float: left;
-    width: 40%;
+  float: left;
+  width: 40%;
 
-    @include dx-overflow();
+  @include dx-overflow();
 }
 
 .dx-field-value,
 .dx-field-value-static {
-    float: right;
+  float: right;
 }
 
 .dx-field-value-static {
-    white-space: normal;
+  white-space: normal;
 }
 
 .dx-field-value.dx-datebox {
-    min-width: 60%;
+  min-width: 60%;
 }
 
 .dx-field-value:not(.dx-widget) > .dx-datebox {
-    min-width: 100%;
+  min-width: 100%;
 }
 
 .dx-field-value .dx-selectbox-tag-container {
-    white-space: normal;
+  white-space: normal;
 }
 
 .dx-field-value:not(.dx-widget) > .dx-selectbox.dx-selectbox-multiselect.dx-widget {
-    position: relative;
-    width: auto;
-    text-align: left;
+  position: relative;
+  width: auto;
+  text-align: left;
 }
 
 .dx-rtl .dx-fieldset,
 .dx-fieldset.dx-rtl {
-    .dx-field-label {
-        float: right;
-    }
+  .dx-field-label {
+    float: right;
+  }
 
-    .dx-field-value {
-        float: left;
-    }
+  .dx-field-value {
+    float: left;
+  }
 }

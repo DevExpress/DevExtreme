@@ -10,170 +10,170 @@
 
 
 .dx-tagbox {
-    .dx-texteditor-input-container {
-        height: 100%;
-    }
+  .dx-texteditor-input-container {
+    height: 100%;
+  }
 
+  .dx-texteditor-input {
+    height: $MATERIAL_TAGBOX_TAG_HEIGHT;
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
     .dx-texteditor-input {
-        height: $MATERIAL_TAGBOX_TAG_HEIGHT;
+      padding: 0;
+      margin-top: $MATERIAL_TAGBOX_TAG_MARGIN;
     }
 
-    &.dx-editor-filled,
-    &.dx-editor-outlined {
-        .dx-texteditor-input {
-            padding: 0;
-            margin-top: $MATERIAL_TAGBOX_TAG_MARGIN;
-        }
-
-        .dx-tag-container {
-            padding: $MATERIAL_TAGBOX_TAG_CONTAINER_PADDING;
-            min-height: $MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
-        }
+    .dx-tag-container {
+      padding: $MATERIAL_TAGBOX_TAG_CONTAINER_PADDING;
+      min-height: $MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
     }
+  }
 }
 
 .dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
-    .dx-tag-container {
-        margin-top: -$MATERIAL_TAGBOX_TAG_MARGIN;
+  .dx-tag-container {
+    margin-top: -$MATERIAL_TAGBOX_TAG_MARGIN;
 
-        &:after {
-            margin-top: -$MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE / 2 + $MATERIAL_TAGBOX_TAG_MARGIN / 2;
-        }
+    &:after {
+      margin-top: -$MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE / 2 + $MATERIAL_TAGBOX_TAG_MARGIN / 2;
     }
+  }
 
-    .dx-texteditor-input {
-        padding-left: 0;
-        margin-top: $MATERIAL_TAGBOX_TAG_MARGIN;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-            padding-right: 0;
-            padding-left: 0;
-            margin-right: 0;
-            margin-left: 0;
-        }
-    }
-
-    &.dx-state-focused,
-    &.dx-state-active {
-        &:before {
-            border-top: 0;
-            border-bottom: 0;
-        }
-    }
-
-    &.dx-state-hover,
-    & {
-        &:after {
-            border-bottom: 0;
-        }
-    }
-}
-
-.dx-tagbox-single-line {
-    .dx-tag-container {
-        padding-right: 0;
-    }
-}
-
-.dx-tag-content {
-    margin: 0;
-    padding: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING;
-    min-width: 40px;
-    background-color: $tagbox-tag-bg;
-    color: $tagbox-tag-color;
-    border-radius: $tagbox-tag-border-radius;
-}
-
-.dx-tag-remove-button {
-    width: $MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH;
-    height: 100%;
-    right: $MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
-
-    @include dx-icon(clear);
-
-    font-size: 10px;
-
-    &:before {
-        display: block;
-        position: absolute;
-        top: 51%;
-        left: 50%;
-        width: 16px;
-        height: 16px;
-        margin-left: -8px;
-        margin-top: -8px;
-        line-height: 16px;
-        color: $tagbox-tag-button-remove-color;
-        background-color: $tagbox-tag-button-remove-bg;
-        border-radius: 50%;
-        transform: none;
-    }
-}
-
-.dx-tag {
-    margin: $MATERIAL_TAGBOX_TAG_MARGIN $MATERIAL_TAGBOX_TAG_MARGIN 0 0;
-
-    &:hover {
-        .dx-tag-content {
-            background-color: $tagbox-tag-hover-bg;
-            color: $tagbox-tag-active-color;
-        }
-    }
-}
-
-.dx-tag.dx-state-focused {
-    .dx-tag-content {
-        background-color: $tagbox-tag-focused-bg;
-        color: $tagbox-tag-active-color;
-    }
-}
-
-@mixin tagbox-editor-container-offset() {
-    right: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+  .dx-texteditor-input {
+    padding-left: 0;
+    margin-top: $MATERIAL_TAGBOX_TAG_MARGIN;
 
     @at-root #{selector-append(".dx-rtl", &)},
     .dx-rtl & {
-        left: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+      padding-right: 0;
+      padding-left: 0;
+      margin-right: 0;
+      margin-left: 0;
     }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &:before {
+      border-top: 0;
+      border-bottom: 0;
+    }
+  }
+
+  &.dx-state-hover,
+  & {
+    &:after {
+      border-bottom: 0;
+    }
+  }
+}
+
+.dx-tagbox-single-line {
+  .dx-tag-container {
+    padding-right: 0;
+  }
+}
+
+.dx-tag-content {
+  margin: 0;
+  padding: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING;
+  min-width: 40px;
+  background-color: $tagbox-tag-bg;
+  color: $tagbox-tag-color;
+  border-radius: $tagbox-tag-border-radius;
+}
+
+.dx-tag-remove-button {
+  width: $MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH;
+  height: 100%;
+  right: $MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
+
+  @include dx-icon(clear);
+
+  font-size: 10px;
+
+  &:before {
+    display: block;
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    line-height: 16px;
+    color: $tagbox-tag-button-remove-color;
+    background-color: $tagbox-tag-button-remove-bg;
+    border-radius: 50%;
+    transform: none;
+  }
+}
+
+.dx-tag {
+  margin: $MATERIAL_TAGBOX_TAG_MARGIN $MATERIAL_TAGBOX_TAG_MARGIN 0 0;
+
+  &:hover {
+    .dx-tag-content {
+      background-color: $tagbox-tag-hover-bg;
+      color: $tagbox-tag-active-color;
+    }
+  }
+}
+
+.dx-tag.dx-state-focused {
+  .dx-tag-content {
+    background-color: $tagbox-tag-focused-bg;
+    color: $tagbox-tag-active-color;
+  }
+}
+
+@mixin tagbox-editor-container-offset() {
+  right: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    left: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+  }
 }
 
 .dx-tagbox.dx-invalid,
 .dx-tagbox.dx-valid {
-    .dx-texteditor-container {
-        &:after {
-            @include tagbox-editor-container-offset();
-        }
+  .dx-texteditor-container {
+    &:after {
+      @include tagbox-editor-container-offset();
     }
+  }
 }
 
 .dx-tagbox.dx-validation-pending {
-    .dx-texteditor-container {
-        .dx-pending-indicator {
-            @include tagbox-editor-container-offset();
-        }
+  .dx-texteditor-container {
+    .dx-pending-indicator {
+      @include tagbox-editor-container-offset();
     }
+  }
 }
 
 .dx-tagbox-popup-wrapper {
-    .dx-list-select-all {
-        border-bottom: 1px solid $tagbox-select-all-border-color;
-        padding-bottom: $MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM;
-        margin-bottom: $MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM;
+  .dx-list-select-all {
+    border-bottom: 1px solid $tagbox-select-all-border-color;
+    padding-bottom: $MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM;
+    margin-bottom: $MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM;
 
-        &:after {
-            background-color: transparent;
-        }
+    &:after {
+      background-color: transparent;
     }
+  }
 }
 
 .dx-rtl {
-    .dx-tag-content {
-        padding-right: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-        padding-left: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT;
-    }
+  .dx-tag-content {
+    padding-right: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
+    padding-left: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT;
+  }
 
-    .dx-tag-remove-button {
-        left: 4px !important; // stylelint-disable-line declaration-no-important
-    }
+  .dx-tag-remove-button {
+    left: 4px !important; // stylelint-disable-line declaration-no-important
+  }
 }

@@ -11,14 +11,14 @@ $fieldset-field-value-invalid-color: null !default;
 @if $mode == "light" {
 
 
-    $fieldset-field-label-color: lighten($base-label-color, 46%) !default;
-    $fieldset-field-value-invalid-color: $base-invalid-color !default;
+  $fieldset-field-label-color: lighten($base-label-color, 46%) !default;
+  $fieldset-field-value-invalid-color: $base-invalid-color !default;
 }
 
 @if $mode == "dark" {
 
 
-    $fieldset-field-label-color: lighten($base-label-color, 46%) !default;
-    $fieldset-field-value-invalid-color: $base-invalid-color !default;
+  $fieldset-field-label-color: lighten($base-label-color, 46%) !default;
+  $fieldset-field-value-invalid-color: $base-invalid-color !default;
 }
 

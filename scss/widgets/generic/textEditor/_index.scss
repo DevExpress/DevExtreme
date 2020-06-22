@@ -24,344 +24,344 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
 
 
 @mixin dx-texteditor-icon() {
-    position: absolute;
-    top: 50%;
-    margin-top: -$GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE/2;
+  position: absolute;
+  top: 50%;
+  margin-top: -$GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE/2;
 
-    @include dx-icon-sizing($GENERIC_TEXTEDITOR_ICON_SIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
+  @include dx-icon-sizing($GENERIC_TEXTEDITOR_ICON_SIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
 @mixin texteditor-input-padding() {
-    .dx-texteditor-input {
-        padding-right: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
-    }
+  .dx-texteditor-input {
+    padding-right: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+  }
 
-    &.dx-rtl .dx-texteditor-input {
-        padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
-        padding-left: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
-    }
+  &.dx-rtl .dx-texteditor-input {
+    padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
+    padding-left: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+  }
 }
 
 @mixin texteditor-validation-icon-offset() {
-    right: $GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+  right: $GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-        left: $GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
-        right: auto;
-    }
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    left: $GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+    right: auto;
+  }
 }
 
 @mixin validation-icon-position() {
-    &.dx-invalid,
-    &.dx-valid {
-        @include texteditor-input-padding();
+  &.dx-invalid,
+  &.dx-valid {
+    @include texteditor-input-padding();
 
-        .dx-texteditor-input-container {
-            &:after {
-                @include texteditor-validation-icon-offset();
-            }
-        }
+    .dx-texteditor-input-container {
+      &:after {
+        @include texteditor-validation-icon-offset();
+      }
     }
+  }
 }
 
 @mixin pending-indicator-position() {
-    &.dx-validation-pending {
-        @include texteditor-input-padding();
+  &.dx-validation-pending {
+    @include texteditor-input-padding();
 
-        .dx-texteditor-input-container {
-            .dx-pending-indicator {
-                @include texteditor-validation-icon-offset();
-            }
-        }
+    .dx-texteditor-input-container {
+      .dx-pending-indicator {
+        @include texteditor-validation-icon-offset();
+      }
     }
+  }
 }
 
 .dx-texteditor {
-    &.dx-editor-outlined {
-        background: $texteditor-bg;
-        border: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid $texteditor-border-color;
-        border-radius: $texteditor-border-radius;
+  &.dx-editor-outlined {
+    background: $texteditor-bg;
+    border: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid $texteditor-border-color;
+    border-radius: $texteditor-border-radius;
+  }
+
+  &.dx-editor-underlined {
+    background: $texteditor-underlined-bg;
+    border-bottom: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid $texteditor-border-color;
+    border-radius: 0;
+  }
+
+  &.dx-editor-filled {
+    background: $texteditor-filled-bg;
+    border: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid transparent;
+    border-radius: $texteditor-border-radius;
+  }
+
+  &.dx-state-readonly {
+    border-style: dashed;
+
+    &.dx-editor-filled {
+      border-color: transparent;
+      background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
+
+      &.dx-state-focused {
+        background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
+      }
+
+      &.dx-state-hover {
+        background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
+      }
     }
 
     &.dx-editor-underlined {
-        background: $texteditor-underlined-bg;
-        border-bottom: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid $texteditor-border-color;
-        border-radius: 0;
+      border-style: none;
+      border-bottom-style: dashed;
+    }
+  }
+
+  &.dx-state-hover {
+    border-color: $texteditor-hover-border-color;
+
+    &.dx-editor-filled {
+      border-color: transparent;
+      background-color: color.change($texteditor-hover-border-color, $alpha: 0.1);
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &.dx-editor-filled,
+    &.dx-editor-underlined,
+    &.dx-editor-outlined {
+      border-color: $texteditor-focused-border-color;
     }
 
     &.dx-editor-filled {
-        background: $texteditor-filled-bg;
-        border: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid transparent;
-        border-radius: $texteditor-border-radius;
+      background-color: transparent;
     }
+  }
 
-    &.dx-state-readonly {
-        border-style: dashed;
-
-        &.dx-editor-filled {
-            border-color: transparent;
-            background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
-
-            &.dx-state-focused {
-                background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
-            }
-
-            &.dx-state-hover {
-                background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
-            }
-        }
-
-        &.dx-editor-underlined {
-            border-style: none;
-            border-bottom-style: dashed;
-        }
-    }
-
-    &.dx-state-hover {
-        border-color: $texteditor-hover-border-color;
-
-        &.dx-editor-filled {
-            border-color: transparent;
-            background-color: color.change($texteditor-hover-border-color, $alpha: 0.1);
-        }
-    }
-
-    &.dx-state-focused,
-    &.dx-state-active {
-        &.dx-editor-filled,
-        &.dx-editor-underlined,
-        &.dx-editor-outlined {
-            border-color: $texteditor-focused-border-color;
-        }
-
-        &.dx-editor-filled {
-            background-color: transparent;
-        }
-    }
-
-    @include validation-icon-position();
-    @include pending-indicator-position();
+  @include validation-icon-position();
+  @include pending-indicator-position();
 }
 
 .dx-show-clear-button {
-    .dx-clear-button-area {
-        width: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        min-width: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        right: 0;
-    }
+  .dx-clear-button-area {
+    width: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+    min-width: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+    right: 0;
+  }
 
-    .dx-icon-clear {
-        color: $texteditor-button-clear-icon-color;
+  .dx-icon-clear {
+    color: $texteditor-button-clear-icon-color;
 
-        @include dx-texteditor-icon();
-        @include dx-icon-sizing($GENERIC_TEXTEDITOR_CLEAR_ICON_SIZE - $GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
-    }
+    @include dx-texteditor-icon();
+    @include dx-icon-sizing($GENERIC_TEXTEDITOR_CLEAR_ICON_SIZE - $GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
+  }
 }
 
 /* B231111 */
 .dx-placeholder {
-    color: $texteditor-placeholder-color;
+  color: $texteditor-placeholder-color;
 
-    &:before {
-        padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
+  &:before {
+    padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
 
-        .dx-editor-underlined & {
-            padding-left: 0;
-        }
+    .dx-editor-underlined & {
+      padding-left: 0;
     }
+  }
 }
 
 .dx-texteditor-input {
-    margin: 0;
-    padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
-    background: rgba(0, 0, 0, 0);
-    color: $texteditor-color;
-    font-size: 1em;
-    border-radius: $texteditor-input-border-radius;
-    min-height: $GENERIC_TEXTEDITOR_INPUT_HEIGHT;
+  margin: 0;
+  padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
+  background: rgba(0, 0, 0, 0);
+  color: $texteditor-color;
+  font-size: 1em;
+  border-radius: $texteditor-input-border-radius;
+  min-height: $GENERIC_TEXTEDITOR_INPUT_HEIGHT;
 
-    .dx-editor-underlined & {
-        background: $texteditor-underlined-bg;
-        padding-left: 0;
-        padding-right: 0;
-    }
+  .dx-editor-underlined & {
+    background: $texteditor-underlined-bg;
+    padding-left: 0;
+    padding-right: 0;
+  }
 
-    .dx-editor-filled & {
-        background: transparent;
-    }
+  .dx-editor-filled & {
+    background: transparent;
+  }
 }
 
 .dx-editor-underlined {
-    .dx-texteditor-buttons-container {
-        + .dx-texteditor-input-container {
-            .dx-texteditor-input {
-                padding-left: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
-
-                @at-root #{selector-append(".dx-rtl", &)} {
-                    padding-left: 0;
-                    padding-right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
-                }
-            }
-
-            .dx-placeholder {
-                left: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
-            }
-
-            @at-root #{selector-append(".dx-rtl", &)} {
-                .dx-placeholder {
-                    left: 0;
-                    right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
-                }
-            }
-        }
-
-        > .dx-button {
-            &:first-child {
-                margin-left: 0;
-            }
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
+  .dx-texteditor-buttons-container {
+    + .dx-texteditor-input-container {
+      .dx-texteditor-input {
+        padding-left: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
 
         @at-root #{selector-append(".dx-rtl", &)} {
-            > .dx-button {
-                &:first-child {
-                    margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    margin-right: 0;
-                }
-
-                &:last-child {
-                    margin-left: 0;
-                    margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                }
-
-                &:first-child:last-child {
-                    margin-left: 0;
-                    margin-right: 0;
-                }
-            }
+          padding-left: 0;
+          padding-right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
         }
+      }
+
+      .dx-placeholder {
+        left: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+      }
+
+      @at-root #{selector-append(".dx-rtl", &)} {
+        .dx-placeholder {
+          left: 0;
+          right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+        }
+      }
     }
+
+    > .dx-button {
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      > .dx-button {
+        &:first-child {
+          margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          margin-right: 0;
+        }
+
+        &:last-child {
+          margin-left: 0;
+          margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+        }
+
+        &:first-child:last-child {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }
 
 .dx-invalid.dx-texteditor {
-    border-color: $texteditor-invalid-faded-border-color;
+  border-color: $texteditor-invalid-faded-border-color;
 
-    &.dx-editor-filled,
-    &.dx-editor-underlined,
-    &.dx-editor-outlined {
-        &.dx-state-focused {
-            border-color: $texteditor-invalid-focused-border-color;
-        }
-
-        &.dx-show-invalid-badge .dx-texteditor-input-container {
-            &:after {
-                @include dx-invalid-generic-badge();
-            }
-        }
+  &.dx-editor-filled,
+  &.dx-editor-underlined,
+  &.dx-editor-outlined {
+    &.dx-state-focused {
+      border-color: $texteditor-invalid-focused-border-color;
     }
 
-    &.dx-editor-filled {
-        background-color: $texteditor-filled-invalid-background;
-        border-color: transparent;
-
-        &.dx-state-focused {
-            background: transparent;
-        }
+    &.dx-show-invalid-badge .dx-texteditor-input-container {
+      &:after {
+        @include dx-invalid-generic-badge();
+      }
     }
+  }
+
+  &.dx-editor-filled {
+    background-color: $texteditor-filled-invalid-background;
+    border-color: transparent;
+
+    &.dx-state-focused {
+      background: transparent;
+    }
+  }
 }
 
 .dx-editor-outlined,
 .dx-editor-filled {
-    .dx-texteditor-buttons-container {
-        &:first-child {
-            > .dx-button {
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-
+  .dx-texteditor-buttons-container {
+    &:first-child {
+      > .dx-button {
         &:last-child {
-            > .dx-button {
-                &:first-child {
-                    margin-left: 0;
-                }
-            }
+          margin-right: 0;
         }
-
-        @at-root #{selector-append(".dx-rtl", &)} {
-            &:first-child {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-
-                    &:last-child {
-                        margin-left: 0;
-                        margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-
-                    &:first-child:last-child {
-                        margin-left: 0;
-                        margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-                }
-            }
-
-            &:last-child {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: 0;
-                    }
-
-                    &:last-child {
-                        margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-                }
-            }
-        }
+      }
     }
+
+    &:last-child {
+      > .dx-button {
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      &:first-child {
+        > .dx-button {
+          &:first-child {
+            margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          }
+
+          &:last-child {
+            margin-left: 0;
+            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          }
+
+          &:first-child:last-child {
+            margin-left: 0;
+            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          }
+        }
+      }
+
+      &:last-child {
+        > .dx-button {
+          &:first-child {
+            margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: 0;
+          }
+
+          &:last-child {
+            margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          }
+        }
+      }
+    }
+  }
 }
 
 .dx-valid.dx-texteditor {
-    &.dx-editor-filled,
-    &.dx-editor-underlined,
-    &.dx-editor-outlined {
-        .dx-texteditor-input-container {
-            &:after {
-                @include dx-valid-generic-badge();
-            }
-        }
+  &.dx-editor-filled,
+  &.dx-editor-underlined,
+  &.dx-editor-outlined {
+    .dx-texteditor-input-container {
+      &:after {
+        @include dx-valid-generic-badge();
+      }
     }
+  }
 }
 
 .dx-validation-pending.dx-texteditor {
-    &.dx-editor-filled,
-    &.dx-editor-underlined,
-    &.dx-editor-outlined {
-        .dx-texteditor-input-container {
-            .dx-pending-indicator {
-                @include dx-pending-indicator-generic();
-            }
-        }
+  &.dx-editor-filled,
+  &.dx-editor-underlined,
+  &.dx-editor-outlined {
+    .dx-texteditor-input-container {
+      .dx-pending-indicator {
+        @include dx-pending-indicator-generic();
+      }
     }
+  }
 }
 
 .dx-rtl {
-    .dx-placeholder,
-    .dx-placeholder:before {
-        right: 0;
-        left: auto;
+  .dx-placeholder,
+  .dx-placeholder:before {
+    right: 0;
+    left: auto;
 
-        @at-root #{selector-append(".dx-editor-underlined", &)} {
-            padding-right: 0;
-        }
+    @at-root #{selector-append(".dx-editor-underlined", &)} {
+      padding-right: 0;
     }
+  }
 }

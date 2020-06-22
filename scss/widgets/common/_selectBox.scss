@@ -3,26 +3,26 @@
 
 
 .dx-selectbox {
+  cursor: pointer;
+
+  .dx-texteditor-input {
+    max-width: 100%;
+  }
+
+  .dx-texteditor-input:read-only {
     cursor: pointer;
-
-    .dx-texteditor-input {
-        max-width: 100%;
-    }
-
-    .dx-texteditor-input:read-only {
-        cursor: pointer;
-    }
+  }
 }
 
 .dx-selectbox-container {
-    position: relative;
+  position: relative;
 }
 
 .dx-state-disabled {
-    .dx-selectbox,
-    &.dx-selectbox {
-        .dx-texteditor-input {
-            cursor: default;
-        }
+  .dx-selectbox,
+  &.dx-selectbox {
+    .dx-texteditor-input {
+      cursor: default;
     }
+  }
 }

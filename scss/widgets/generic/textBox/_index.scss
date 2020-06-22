@@ -11,46 +11,46 @@
 
 
 .dx-searchbox {
-    .dx-icon-search {
-        @include dx-icon(search);
-        @include dx-texteditor-icon();
+  .dx-icon-search {
+    @include dx-icon(search);
+    @include dx-texteditor-icon();
 
-        font-size: $GENERIC_TEXTEDITOR_ICON_SIZE - 1;
+    font-size: $GENERIC_TEXTEDITOR_ICON_SIZE - 1;
 
-        &:before {
-            position: static;
-            text-indent: 0;
-            color: $textbox-search-icon-color;
-        }
-
-        color: $texteditor-placeholder-color;
+    &:before {
+      position: static;
+      text-indent: 0;
+      color: $textbox-search-icon-color;
     }
 
+    color: $texteditor-placeholder-color;
+  }
+
+  .dx-texteditor-input,
+  .dx-placeholder:before {
+    padding-left: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      padding-right: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+    }
+  }
+
+  &.dx-editor-underlined {
     .dx-texteditor-input,
     .dx-placeholder:before {
-        padding-left: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-            padding-right: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        }
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        padding-right: 0;
+      }
     }
-
-    &.dx-editor-underlined {
-        .dx-texteditor-input,
-        .dx-placeholder:before {
-            @at-root #{selector-append(".dx-rtl", &)},
-            .dx-rtl & {
-                padding-right: 0;
-            }
-        }
-    }
+  }
 }
 
 .dx-searchbar {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
 
-    .dx-texteditor {
-        margin: 0;
-    }
+  .dx-texteditor {
+    margin: 0;
+  }
 }

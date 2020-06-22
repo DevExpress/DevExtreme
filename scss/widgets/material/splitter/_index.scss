@@ -5,13 +5,13 @@
 @use "../sizes" as *;
 // adduse
 .dx-splitter {
-    background-color: $splitter-bg;
+  background-color: $splitter-bg;
 
-    &.dx-splitter-inactive {
-        background-color: $splitter-inactive-color;
-    }
+  &.dx-splitter-inactive {
+    background-color: $splitter-inactive-color;
+  }
 }
 
 .dx-splitter-border {
-    background-color: transparent;
+  background-color: transparent;
 }

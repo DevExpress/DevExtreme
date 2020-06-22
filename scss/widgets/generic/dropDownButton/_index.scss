@@ -11,26 +11,26 @@
 
 
 .dx-dropdownbutton {
-    .dx-button {
-        overflow: hidden;
-    }
+  .dx-button {
+    overflow: hidden;
+  }
 
-    .dx-button-has-text .dx-icon.dx-icon-right {
-        margin-left: 4px;
-        margin-right: 0;
-    }
+  .dx-button-has-text .dx-icon.dx-icon-right {
+    margin-left: 4px;
+    margin-right: 0;
+  }
 }
 
 .dx-dropdownbutton-toggle {
-    display: flex;
-    flex: 0 0 auto;
-    max-width: 20px;
+  display: flex;
+  flex: 0 0 auto;
+  max-width: 20px;
 }
 
 .dx-dropdownbutton-action {
-    min-width: 0;
+  min-width: 0;
 }
 
 .dx-dropdownbutton-popup-wrapper {
-    @include dx-dropdownlist-list-appearance();
+  @include dx-dropdownlist-list-appearance();
 }

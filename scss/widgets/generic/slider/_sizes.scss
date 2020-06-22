@@ -5,11 +5,11 @@ $GENERIC_SLIDER_WIDTH: null !default;
 $GENERIC_SLIDER_TRACK_HEIGHT: null !default;
 
 @if $size == "default" {
-    $GENERIC_SLIDER_WIDTH: 14px;
-    $GENERIC_SLIDER_TRACK_HEIGHT: 4px;
+  $GENERIC_SLIDER_WIDTH: 14px;
+  $GENERIC_SLIDER_TRACK_HEIGHT: 4px;
 }
 
 @else if $size == "compact" {
-    $GENERIC_SLIDER_WIDTH: 9px;
-    $GENERIC_SLIDER_TRACK_HEIGHT: 2px;
+  $GENERIC_SLIDER_WIDTH: 9px;
+  $GENERIC_SLIDER_TRACK_HEIGHT: 2px;
 }

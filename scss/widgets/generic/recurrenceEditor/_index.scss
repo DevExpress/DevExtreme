@@ -17,19 +17,19 @@ $RECURRENCE_EDITOR_CONTAINER_MARGIN_BOTTOM: 21px;
 $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
 
 .dx-scheduler-recurrence-rule-item.dx-label-v-align {
-    .dx-recurrence-editor-container {
-        padding-top: $RECURRENCE_EDITOR_CONTAINER_PADDING_TOP;
-    }
+  .dx-recurrence-editor-container {
+    padding-top: $RECURRENCE_EDITOR_CONTAINER_PADDING_TOP;
+  }
 }
 
 .dx-recurrence-editor-container {
-    position: relative;
+  position: relative;
 
-    .dx-recurrence-numberbox-interval {
-        margin-right: $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
-    }
+  .dx-recurrence-numberbox-interval {
+    margin-right: $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+  }
 }
 
 .dx-recurrence-repeat-end-container {
-    margin: 0;
+  margin: 0;
 }

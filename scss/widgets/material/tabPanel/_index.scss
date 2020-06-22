@@ -9,25 +9,25 @@
 
 
 .dx-tabpanel {
-    .dx-tabs {
-        display: block;
-        border-bottom: none;
-        background-color: $tabs-tab-bg;
+  .dx-tabs {
+    display: block;
+    border-bottom: none;
+    background-color: $tabs-tab-bg;
 
-        @at-root #{selector-append(".dx-empty-collection", &)} {
-            border-top: none;
-        }
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-top: none;
     }
+  }
 
-    .dx-tab {
-        min-width: 72px;
+  .dx-tab {
+    min-width: 72px;
 
-        &:not(.dx-tab-selected):not(.dx-state-hover) {
-            background: none;
-        }
+    &:not(.dx-tab-selected):not(.dx-state-hover) {
+      background: none;
     }
+  }
 
-    .dx-tabs-wrapper {
-        display: block;
-    }
+  .dx-tabs-wrapper {
+    display: block;
+  }
 }

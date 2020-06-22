@@ -18,317 +18,317 @@ $toast-success-icon-image-bg: null !default;
 
 
 @if $color == "carmine" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
 }
 
 @if $color == "contrast" {
 
-    $toast-shadow-color: $base-shadow-color !default;
-    $toast-border-radius: $base-border-radius + 2px !default;
+  $toast-shadow-color: $base-shadow-color !default;
+  $toast-border-radius: $base-border-radius + 2px !default;
 
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
+  $toast-color: #fff !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-info !default;
+  $toast-info-bg: $base-info !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
 }
 
 @if $color == "dark" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png') !default;
 }
 
 @if $color == "darkmoon" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png') !default;
 }
 
 @if $color == "darkviolet" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png') !default;
 }
 
 @if $color == "greenmist" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
 }
 
 @if $color == "light" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
 
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
 }
 
 @if $color == "softblue" {
-    /**
+  /**
     * $name 10. Text color
     * $type color
     */
-    $toast-color: #fff !default;
-    $toast-shadow-color: transparent !default;
-    $toast-border-radius: $base-border-radius-large !default;
+  $toast-color: #fff !default;
+  $toast-shadow-color: transparent !default;
+  $toast-border-radius: $base-border-radius-large !default;
 
-    /**
+  /**
     * $name 20. Info background color
     * $type color
     */
-    $toast-info-bg: $base-accent !default;
+  $toast-info-bg: $base-accent !default;
 
-    /**
+  /**
     * $name 30. Warning background color
     * $type color
     */
-    $toast-warning-bg: $base-warning !default;
+  $toast-warning-bg: $base-warning !default;
 
-    /**
+  /**
     * $name 40. Error background color
     * $type color
     */
-    $toast-error-bg: $base-danger !default;
+  $toast-error-bg: $base-danger !default;
 
-    /**
+  /**
     * $name 50. Success background color
     * $type color
     */
-    $toast-success-bg: $base-success !default;
+  $toast-success-bg: $base-success !default;
 
-    $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
-    $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
-    $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
-    $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
+  $toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png') !default;
+  $toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png') !default;
+  $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
+  $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
 }
 

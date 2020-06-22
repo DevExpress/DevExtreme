@@ -16,73 +16,73 @@ $MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE: $MATERIAL_M_FONT_SIZE;
 $MATERIAL_POPUP_TITLE_BOTTOM_MARGIN: $MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING - $MATERIAL_POPUP_CONTENT_PADDING;
 
 .dx-popup-wrapper {
-    & > .dx-overlay-content {
-        background: $overlay-content-bg;
-        box-shadow: 0 11px 15px -7px color.change($base-shadow-color, $alpha: 0.2), 0 24px 38px 3px color.change($base-shadow-color, $alpha: 0.14), 0 9px 46px 8px color.change($base-shadow-color, $alpha: 0.12);
-        border-radius: $popup-border-radius;
-    }
+  & > .dx-overlay-content {
+    background: $overlay-content-bg;
+    box-shadow: 0 11px 15px -7px color.change($base-shadow-color, $alpha: 0.2), 0 24px 38px 3px color.change($base-shadow-color, $alpha: 0.14), 0 9px 46px 8px color.change($base-shadow-color, $alpha: 0.12);
+    border-radius: $popup-border-radius;
+  }
 
-    & > .dx-popup-fullscreen {
-        border-radius: 0;
-    }
+  & > .dx-popup-fullscreen {
+    border-radius: 0;
+  }
 }
 
 .dx-popup-title {
-    position: relative;
-    padding: $MATERIAL_POPUP_TOOLBARTOP_PADDING;
-    margin-bottom: $MATERIAL_POPUP_TITLE_BOTTOM_MARGIN;
-    min-height: 28px;
-    border-bottom: 1px solid $popup-title-border-color;
-    background: $popup-title-bg;
-    color: $popup-title-color;
+  position: relative;
+  padding: $MATERIAL_POPUP_TOOLBARTOP_PADDING;
+  margin-bottom: $MATERIAL_POPUP_TITLE_BOTTOM_MARGIN;
+  min-height: 28px;
+  border-bottom: 1px solid $popup-title-border-color;
+  background: $popup-title-bg;
+  color: $popup-title-color;
 
-    &.dx-toolbar {
-        @include dx-toolbar-sizing($MATERIAL_TOOLBAR_HEIGHT, $MATERIAL_POPUP_TOOLBARTOP_PADDING, $MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE, $MATERIAL_POPUP_TOOLBAR_ITEM_SPACING );
+  &.dx-toolbar {
+    @include dx-toolbar-sizing($MATERIAL_TOOLBAR_HEIGHT, $MATERIAL_POPUP_TOOLBARTOP_PADDING, $MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE, $MATERIAL_POPUP_TOOLBAR_ITEM_SPACING );
 
-        box-shadow: none;
+    box-shadow: none;
 
-        .dx-button.dx-closebutton {
-            display: block;
-        }
+    .dx-button.dx-closebutton {
+      display: block;
     }
+  }
 }
 
 .dx-popup-content {
-    padding: $MATERIAL_POPUP_CONTENT_PADDING;
+  padding: $MATERIAL_POPUP_CONTENT_PADDING;
 
-    & > .dx-button {
-        margin: $MATERIAL_POPUP_BUTTON_MARGIN;
-    }
+  & > .dx-button {
+    margin: $MATERIAL_POPUP_BUTTON_MARGIN;
+  }
 }
 
 .dx-popup-bottom {
-    background: $popup-bottom-bg;
-    color: $popup-bottom-color;
+  background: $popup-bottom-bg;
+  color: $popup-bottom-color;
 
-    &.dx-toolbar {
-        @include dx-toolbar-sizing(
+  &.dx-toolbar {
+    @include dx-toolbar-sizing(
             $MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,
             $MATERIAL_POPUP_TOOLBARBOTTOM_PADDING,
             $MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
             $MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
         );
 
-        .dx-device-mobile & {
-            @include dx-toolbar-sizing(
+    .dx-device-mobile & {
+      @include dx-toolbar-sizing(
                 $MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,
                 $MATERIAL_POPUP_TOOLBARBOTTOM_PADDING,
                 $MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
                 $MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
             );
-        }
     }
+  }
 }
 
 .dx-popup-content.dx-dialog-content {
-    min-width: 220px - 2 * $MATERIAL_POPUP_CONTENT_PADDING;
-    padding: $MATERIAL_POPUP_CONTENT_PADDING;
+  min-width: 220px - 2 * $MATERIAL_POPUP_CONTENT_PADDING;
+  padding: $MATERIAL_POPUP_CONTENT_PADDING;
 }
 
 .dx-dialog-message {
-    padding: 0;
+  padding: 0;
 }

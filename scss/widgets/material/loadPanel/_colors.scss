@@ -12,29 +12,29 @@ $loadpanel-content-bg: null !default;
 
 @if $mode == "light" {
 
-    $loadpanel-border-color: $overlay-border-color !default;
-    $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
+  $loadpanel-border-color: $overlay-border-color !default;
+  $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
-    /**
+  /**
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
     * $isLastSubGroupItem true
     */
-    $loadpanel-content-bg: $overlay-content-bg !default;
+  $loadpanel-content-bg: $overlay-content-bg !default;
 }
 
 @if $mode == "dark" {
 
-    $loadpanel-border-color: rgba(0, 0, 0, 0.2) !default;
-    $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
+  $loadpanel-border-color: rgba(0, 0, 0, 0.2) !default;
+  $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
-    /**
+  /**
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
     * $isLastSubGroupItem true
     */
-    $loadpanel-content-bg: $overlay-content-bg !default;
+  $loadpanel-content-bg: $overlay-content-bg !default;
 }
 

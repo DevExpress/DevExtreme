@@ -7,19 +7,19 @@
 
 
 .dx-dropdownmenu-popup-wrapper {
-    .dx-overlay-content {
-        box-shadow: $dropdown-widgets-shadow;
+  .dx-overlay-content {
+    box-shadow: $dropdown-widgets-shadow;
 
-        .dx-popup-content {
-            padding: 1px;
-        }
+    .dx-popup-content {
+      padding: 1px;
     }
+  }
 
-    .dx-dropdownmenu-list {
-        border-radius: 8px;
-    }
+  .dx-dropdownmenu-list {
+    border-radius: 8px;
+  }
 
-    .dx-list-item {
-        border-top: 0;
-    }
+  .dx-list-item {
+    border-top: 0;
+  }
 }

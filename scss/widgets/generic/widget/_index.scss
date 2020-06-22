@@ -6,16 +6,16 @@
 @use "../common" as *;
 // adduse
 .dx-widget {
-    @include dx-base-typography();
+  @include dx-base-typography();
 }
 
 .dx-state-disabled {
-    &.dx-widget,
+  &.dx-widget,
+  .dx-widget {
     .dx-widget {
-        .dx-widget {
-            opacity: 1;
-        }
-
-        @include disabled-widget();
+      opacity: 1;
     }
+
+    @include disabled-widget();
+  }
 }
