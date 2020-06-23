@@ -5,6 +5,7 @@
 import { act } from 'preact/test-utils';
 import $ from '../../js/core/renderer';
 import './test_components/preact_test_widget';
+import './test_components/empty_test_widget';
 import {
   defaultEvent,
   emitKeyboard,
@@ -25,6 +26,10 @@ afterEach(() => {
 });
 
 describe('Misc cases', () => {
+  it('empty component creation does not fail', () => {
+    expect(() => act(() => $('#component').dxrEmptyTestWidget({}))).not.toThrowError();
+  });
+
   it('on disposing should clean preact effects', () => {
     const subscribeEffect = jest.fn();
     const unsubscribeEffect = jest.fn();
@@ -73,8 +78,8 @@ describe('Widget\'s container manipulations', () => {
     expect(subscribeEffect).toHaveBeenCalledTimes(3);
 
     expect(subscribeEffect.mock.calls[1][0]).toMatchObject({
-      className: null,
-      style: null,
+      className: '',
+      style: '',
     });
 
     expect(subscribeEffect.mock.calls[2][0]).toMatchObject({
@@ -209,16 +214,6 @@ describe('Widget\'s container manipulations', () => {
       width: '23.5px',
       height: '56.6px',
       display: 'inline',
-    });
-  });
-
-  it('abandoned options', () => {
-    act(() => $('#component').dxrPreactTestWidget({}));
-
-    expect($('#component').dxrPreactTestWidget('getLastProps')).toMatchObject({
-      _hasAnonymousTemplateContent: null,
-      elementAttr: null,
-      integrationOptions: null,
     });
   });
 });
