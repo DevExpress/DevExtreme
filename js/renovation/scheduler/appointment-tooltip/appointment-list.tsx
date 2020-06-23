@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../utils/noop';
-import { WidgetProps } from '../../widget';
 import List from '../../list';
 import TooltipItemLayout from './item-layout';
 import {
   GetTextAndFormatDateFn, GetSingleAppointmentFn,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
 } from './types';
-import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import getCurrentAppointment from './utils/get-current-appointment';
 
 type ItemTemplateProps = {
@@ -47,8 +47,8 @@ export const viewFunction = (viewModel: AppointmentList) => (
 );
 
 @ComponentBindings()
-export class AppointmentListProps extends WidgetProps {
-  @OneWay() appointments?: dxSchedulerAppointment[];
+export class AppointmentListProps {
+  @OneWay() appointments?: AppointmentItem[];
 
   @OneWay() isEditingAllowed?: boolean = true;
 
