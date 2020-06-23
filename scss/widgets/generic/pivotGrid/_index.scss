@@ -1,0 +1,109 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+@use "../../base/icons" as *;
+@use "../gridBase/colors" as *;
+@use "../treeView/sizes" as *;
+@use "../button" as *;
+@use "../button/colors" as *;
+@use "../../base/pivotGrid" as basePivotGrid with (
+    $PIVOTGRID_DRAG_HEADER_BORDER_COLOR: $PIVOTGRID_DRAG_HEADER_BORDER_COLOR,
+    $PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: $PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR,
+    $PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: $PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR,
+    $PIVOTGRID_BORDER_COLOR: $PIVOTGRID_BORDER_COLOR,
+    $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING,
+    $PIVOTGRID_AREA_COLOR: $PIVOTGRID_AREA_COLOR,
+    $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
+    $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
+    $PIVOTGRID_AREA_BACKGROUND: $PIVOTGRID_AREA_BACKGROUND,
+    $PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: $PIVOTGRID_COMMON_TOP_BOTTOM_PADDING,
+    $PIVOTGRID_FIELD_INDICATORS_OFFSET: $PIVOTGRID_FIELD_INDICATORS_OFFSET,
+    $PIVOTGRID_INDICATORS_LINE_HEIGHT: $PIVOTGRID_INDICATORS_LINE_HEIGHT,
+    $PIVOTGRID_TOTALCOLOR: $PIVOTGRID_TOTALCOLOR,
+    $PIVOTGRID_EXPAND_ICON_OFFSET: $PIVOTGRID_EXPAND_ICON_OFFSET,
+    $PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: $PIVOTGRID_EXPAND_ICON_TEXT_OFFSET,
+    $PIVOTGRID_FIELD_AREA_TEXT_COLOR: $PIVOTGRID_FIELD_AREA_TEXT_COLOR,
+    $PIVOTGRID_DATA_AREA_COLOR: $PIVOTGRID_DATA_AREA_COLOR,
+    $PIVOTGRID_GRANDTOTALCOLOR: $PIVOTGRID_GRANDTOTALCOLOR,
+    $PIVOTGRID_ACCENT_COLOR: $PIVOTGRID_ACCENT_COLOR,
+    $PIVOTGRID_AREA_ALL_IMAGE: $PIVOTGRID_AREA_ALL_IMAGE,
+    $PIVOTGRID_AREA_FILTER_IMAGE: $PIVOTGRID_AREA_FILTER_IMAGE,
+    $PIVOTGRID_AREA_ROW_IMAGE: $PIVOTGRID_AREA_ROW_IMAGE,
+    $PIVOTGRID_AREA_COLUMN_IMAGE: $PIVOTGRID_AREA_COLUMN_IMAGE,
+    $PIVOTGRID_AREA_DATA_IMAGE: $PIVOTGRID_AREA_DATA_IMAGE,
+    $PIVOTGRID_DIMENSION_IMAGE: $PIVOTGRID_DIMENSION_IMAGE,
+    $PIVOTGRID_HIERARCHY_IMAGE: $PIVOTGRID_HIERARCHY_IMAGE,
+);
+// adduse
+
+
+.dx-pivotgrid {
+  background-color: $PIVOTGRID_AREA_BACKGROUND;
+
+  .dx-area-description-cell {
+    .dx-button-content {
+      padding: 5px;
+    }
+  }
+
+  .dx-column-header,
+  .dx-filter-header {
+    .dx-pivotgrid-toolbar {
+      .dx-button-content {
+        padding: 5px;
+      }
+
+      .dx-button {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .dx-expand-icon-container {
+    @include dx-icon(spinright);
+
+    &:before {
+      visibility: hidden;
+    }
+  }
+
+  .dx-pivotgrid-collapsed .dx-expand {
+    @include dx-icon(spinright);
+    @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+
+    color: $pivotgrid-spin-icon-color;
+  }
+
+  .dx-pivotgrid-expanded .dx-expand {
+    @include dx-icon(spindown);
+    @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+
+    color: $pivotgrid-spin-icon-color;
+  }
+
+  .dx-area-tree-view {
+    td.dx-white-space-column {
+      width: $PIVOTGRID_EMPTY_COLUMN_WIDTH;
+      min-width: $PIVOTGRID_EMPTY_COLUMN_WIDTH;
+    }
+  }
+
+  .dx-ie {
+    .dx-pivotgrid-fields-area {
+      @include dx-base-typography();
+    }
+  }
+}
+
+.dx-pivotgridfieldchooser {
+  background-color: $PIVOTGRID_AREA_BACKGROUND;
+}
+
+.dx-pivotgrid-fields-container {
+  .dx-position-indicator {
+    background-color: $PIVOTGRID_POSITION_INDICATOR_COLOR;
+  }
+}

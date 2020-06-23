@@ -1,0 +1,81 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor" as *;
+@use "../textEditor/colors" as *;
+@use "../textEditor/sizes" as *;
+// adduse
+
+
+.dx-searchbox {
+  .dx-icon-search {
+    @include dx-icon(search);
+    @include dx-texteditor-icon();
+
+    &:before {
+      position: static;
+      text-indent: 0;
+      color: $textbox-search-icon-color;
+    }
+
+    color: $texteditor-placeholder-color;
+  }
+
+  &.dx-editor-underlined {
+    .dx-icon-search {
+      left: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        left: initial;
+        right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      }
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder:before {
+      padding-left: $MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        padding-left: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-right: $MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      }
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-icon-search {
+      left: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        left: initial;
+        right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      }
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder:before {
+      padding-left: $MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        padding-left: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-right: $MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      }
+    }
+  }
+}
+
+.dx-searchbar {
+  padding-bottom: 5px;
+
+  .dx-texteditor {
+    margin: 0;
+  }
+}

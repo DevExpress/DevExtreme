@@ -1,0 +1,120 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../menuBase" as *;
+@use "../menuBase/sizes" as *;
+@use "../../base/icons" as *;
+// adduse
+
+
+.dx-context-menu-container-border {
+  background-color: transparent;
+  border: $GENERIC_MENU_POPUP_BORDER;
+  box-shadow: 0 1px 1px $menu-container-shadow-color;
+}
+
+.dx-context-menu-content-delimiter {
+  background-color: $menu-popup-bg;
+}
+
+.dx-menu {
+  color: $menu-color;
+
+  .dx-menu-item-expanded {
+    background-color: $menu-popup-bg;
+  }
+
+  .dx-menu-item-has-icon.dx-menu-item-has-submenu {
+    .dx-icon {
+      margin: 0 $GENERIC_MENU_PADDING_SMALL 0 $GENERIC_MENU_ITEM_PADDING_REDUCED;
+    }
+  }
+
+  .dx-menu-item-has-text {
+    .dx-menu-item-text {
+      padding: 0 $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_BASE;
+    }
+
+    &.dx-menu-item-has-icon {
+      .dx-icon {
+        margin: 0 $GENERIC_MENU_ITEM_PADDING_REDUCED;
+      }
+    }
+
+    &.dx-menu-item-has-submenu {
+      .dx-menu-item-text {
+        padding: 0 $GENERIC_MENU_PADDING_SMALL $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_BASE;
+      }
+    }
+  }
+
+  .dx-menu-horizontal {
+    .dx-menu-item-popout {
+      @include dx-icon(spindown);
+      @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+    }
+  }
+
+  .dx-menu-vertical {
+    .dx-menu-item-popout {
+      @include dx-icon(spinright);
+      @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+    }
+  }
+
+  &.dx-rtl {
+    .dx-menu-item-has-icon.dx-menu-item-has-submenu {
+      .dx-icon {
+        margin: 0 $GENERIC_MENU_ITEM_PADDING_REDUCED 0 $GENERIC_MENU_PADDING_SMALL;
+      }
+    }
+
+    .dx-menu-item-has-text {
+      .dx-menu-item-text {
+        padding: 0 $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_BASE 0;
+      }
+
+      &.dx-menu-item-has-submenu {
+        .dx-menu-item-text {
+          padding: 0 $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_PADDING_SMALL;
+        }
+      }
+    }
+  }
+}
+
+.dx-menu-adaptive-mode {
+  background-color: $menu-popup-bg;
+
+  .dx-treeview {
+    border: 1px solid $menu-popup-border-color;
+    border-radius: $base-border-radius;
+
+    &,
+    &.dx-state-focused {
+      box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    font-size: 18px;
+  }
+
+  .dx-treeview-node {
+    &.dx-state-focused {
+      .dx-treeview-node .dx-treeview-toggle-item-visibility {
+        color: inherit;
+      }
+
+      .dx-treeview-toggle-item-visibility {
+        color: $menu-popup-bg;
+      }
+    }
+  }
+
+  .dx-treeview-node-container:first-child > .dx-treeview-node {
+    border-bottom: 1px solid $menu-popup-border-color;
+  }
+}
