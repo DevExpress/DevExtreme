@@ -6,9 +6,16 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
         const groupCount = this._workSpace.option('groupOrientation') === 'horizontal' ? this._workSpace._getGroupCount() : 1;
 
         for(let i = 0; i < groupCount; i++) {
-            const $shader = i === 0 ? this._$shader : this.createShader();
-            this._workSpace.isGroupedByDate() ? this._customizeGroupedByDateShader($shader, i) : this._customizeShader($shader, i);
-            i !== 0 && this._shader.push($shader);
+            const isFirstShader = i === 0;
+            const $shader = isFirstShader ? this._$shader : this.createShader();
+
+            if(this._workSpace.isGroupedByDate()) {
+                this._customizeGroupedByDateShader($shader, i);
+            } else {
+                this._customizeShader($shader, i);
+            }
+
+            !isFirstShader && this._shaderCollection.push($shader);
         }
     }
 
@@ -37,14 +44,18 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
         const integerPart = Math.floor(cellCount);
         const fractionPart = cellCount - integerPart;
         const isFirstShaderPart = groupIndex === 0;
-
-        const shaderWidth = isFirstShaderPart ? this._workSpace.getIndicationWidth() : fractionPart * this._workSpace.getCellWidth();
+        const workSpace = this._workSpace;
+        const shaderWidth = isFirstShaderPart ? workSpace.getIndicationWidth() : fractionPart * workSpace.getCellWidth();
+        let shaderLeft;
 
         this._applyShaderWidth($shader, shaderWidth);
         this.applyShaderMargin($shader);
 
-        const shaderLeft = isFirstShaderPart ? this._workSpace._getCellCount() * this._workSpace.getCellWidth() * groupIndex :
-            this._workSpace.getCellWidth() * integerPart * this._workSpace._getGroupCount() + groupIndex * this._workSpace.getCellWidth();
+        if(isFirstShaderPart) {
+            shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
+        } else {
+            shaderLeft = workSpace.getCellWidth() * integerPart * workSpace._getGroupCount() + groupIndex * workSpace.getCellWidth();
+        }
 
         $shader.css('left', shaderLeft);
     }
