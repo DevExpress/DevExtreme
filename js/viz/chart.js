@@ -454,7 +454,7 @@ function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, 
     });
 }
 
-function fastHidingByArea(canvas, markersInfo, series) {
+function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
     const area = canvas.width * canvas.height;
     const seriesPoints = markersInfo.series;
 
@@ -933,7 +933,7 @@ const dxChart = AdvancedChart.inherit({
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
-            fastHidingByArea(canvas, markersInfo, series);
+            fastHidingPointMarkersByArea(canvas, markersInfo, series);
 
             if(markersInfo.series.length) {
                 const argVisualRange = argAxis.visualRange();
