@@ -1503,7 +1503,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
                 when(this._beforeSaveEditData()).done(cancel => {
                     if(cancel) {
-                        afterSaveEditData(true);
+                        afterSaveEditData(cancel);
                         return;
                     }
                     this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
