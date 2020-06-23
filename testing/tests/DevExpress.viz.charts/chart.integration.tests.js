@@ -1896,7 +1896,11 @@ QUnit.test('check density of points continuous series', function(assert) {
 QUnit.test('auto switching point markers visibility', function(assert) {
     const chart = this.createChart({});
 
-    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
+
+    chart.getArgumentAxis().visualRange([30000, 300000]);
+
+    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // intersection algorithm
 
     chart.getArgumentAxis().visualRange([200000, 205300]);
 
@@ -1909,7 +1913,7 @@ QUnit.test('auto switching point markers visibility', function(assert) {
 });
 
 // T857880
-QUnit.test('Point is visible when placed in visualRande', function(assert) {
+QUnit.test('Point is visible when placed in visualRange', function(assert) {
     const chart = moduleSetup.createChart.call(this, {
         dataSource: [{
             country: 'USA',
