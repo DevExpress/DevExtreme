@@ -15,9 +15,9 @@ export const viewFunction = ({
   htmlRef,
   normalizedPageSizes,
   props: {
-    visible, isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
+    isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
   },
-}: PageSizeSelector) => (!visible ? null : (
+}: PageSizeSelector) => (
   <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
     {isLargeDisplayMode && (
     <PageSizeLarge
@@ -36,13 +36,11 @@ export const viewFunction = ({
     />
     )}
   </div>
-));
+);
 
 type PageSize = number;// | FullPageSize;
 @ComponentBindings()
 export class PageSizeSelectorProps {
-  @OneWay() visible?: boolean = true;
-
   @OneWay() isLargeDisplayMode?: boolean = true;
 
   @OneWay() pageSize?: number = 5;

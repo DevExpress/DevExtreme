@@ -1,5 +1,5 @@
 import { h, createRef } from 'preact';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import InfoText, { viewFunction as InfoTextComponent } from '../../../js/renovation/pager/info';
 
 describe('Info, separate view and component approach', () => {
@@ -9,10 +9,6 @@ describe('Info, separate view and component approach', () => {
       const tree = shallow(<InfoTextComponent {...{ text: 'some text', props: { visible: true } } as any} /> as any);
       expect(tree.html())
         .toBe('<div class="dx-info">some text</div>');
-    });
-    it('visible false', () => {
-      const tree = mount(<InfoTextComponent {...{ text: 'some text', props: { visible: false } } as any} /> as any);
-      expect(tree.html()).toBe('');
     });
     it('ref test', () => {
       const ref = createRef();

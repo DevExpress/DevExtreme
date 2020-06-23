@@ -28,15 +28,16 @@ export const viewFunction = ({
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div ref={parentRef as any} {...restAttributes} className={className}>
+    {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef as any}
-      visible={showPageSizes}
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
       pageSizes={pageSizes}
       rtlEnabled={rtlEnabled}
     />
+    )}
     <div ref={pagesRef as any} className={PAGER_PAGES_CLASS}>
       <PageIndexSelector
                 // hasKnownLastPage={hasKnownLastPage}
@@ -50,14 +51,15 @@ export const viewFunction = ({
         showNavigationButtons={showNavigationButtons}
         totalCount={totalCount}
       />
+      {infoVisible && (
       <InfoText
         ref={infoTextRef as any}
-        visible={infoVisible}
         infoText={infoText}
         pageCount={pageCount}
         pageIndex={pageIndex}
         totalCount={totalCount}
       />
+      )}
     </div>
   </div>
 );

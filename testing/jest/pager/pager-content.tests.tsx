@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
+import PageIndexSelector from '../../../js/renovation/pager/page-index-selector';
 import PagerContent, { PagerContentProps, viewFunction as PagerContentComponent } from '../../../js/renovation/pager/pager-content';
+import PageSizeSelector from '../../../js/renovation/pager/page-size-selector';
+import InfoText from '../../../js/renovation/pager/info';
 
-jest.mock('../../../js/renovation/select-box', jest.fn());
-jest.mock('../../../js/renovation/pager/page-size-selector', jest.fn());
-jest.mock('../../../js/renovation/pager/page-index-selector', jest.fn());
-jest.mock('../../../js/renovation/pager/info', jest.fn());
-
+jest.mock('../../../js/renovation/pager/page-size-selector', () => jest.fn());
+jest.mock('../../../js/renovation/pager/page-index-selector', () => jest.fn());
+jest.mock('../../../js/renovation/pager/info', () => jest.fn());
 
 describe('PagerContent', () => {
   describe('View', () => {
-    it('render', () => {
+    it('render all children', () => {
       const props = {
         className: 'className',
         isLargeDisplayMode: true,
@@ -35,18 +36,21 @@ describe('PagerContent', () => {
       const tree = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
       expect((tree.instance() as unknown as Element).className).toEqual('className');
       expect(tree.children()).toHaveLength(2);
+      expect(tree.find(PageSizeSelector)).toHaveLength(1);
       expect(tree.childAt(0).props()).toEqual({
+        children: [],
         isLargeDisplayMode: true,
         pageSize: 5,
         pageSizeChange: props.props.pageSizeChange,
         pageSizes: [5, 10],
         rtlEnabled: true,
-        visible: true,
       });
       const pagesContainer = tree.childAt(1);
       expect((pagesContainer.instance() as unknown as Element).className).toEqual('dx-pages');
       expect(pagesContainer.children()).toHaveLength(2);
+      expect(tree.find(PageIndexSelector)).toHaveLength(1);
       expect(pagesContainer.childAt(0).props()).toEqual({
+        children: [],
         isLargeDisplayMode: true,
         maxPagesCount: 10,
         pageCount: 50,
@@ -57,13 +61,41 @@ describe('PagerContent', () => {
         showNavigationButtons: true,
         totalCount: 100,
       });
+      expect(tree.find(InfoText)).toHaveLength(1);
       expect(pagesContainer.childAt(1).props()).toEqual({
+        children: [],
         infoText: 'infoText',
         pageCount: 50,
         pageIndex: 2,
         totalCount: 100,
-        visible: true,
       });
+    });
+    it('infoVisible = false', () => {
+      const parentRef = createRef();
+      const tree = mount(<PagerContentComponent
+        {...{
+          infoVisible: false,
+          props: {
+            parentRef,
+          },
+        } as any}
+      /> as any).childAt(0);
+      const pagesContainer = tree.childAt(0);
+      expect(tree.find(InfoText)).toHaveLength(0);
+      expect(pagesContainer).toHaveLength(1);
+    });
+    it('showPageSizes = false', () => {
+      const parentRef = createRef();
+      const tree = mount(<PagerContentComponent
+        {...{
+          props: {
+            showPageSizes: false,
+            parentRef,
+          },
+        } as any}
+      /> as any).childAt(0);
+      expect(tree).toHaveLength(1);
+      expect(tree.find(PageSizeSelector)).toHaveLength(0);
     });
     it('refs', () => {
       const parentRef = createRef();
@@ -75,6 +107,7 @@ describe('PagerContent', () => {
         isLargeDisplayMode: true,
         infoVisible: true,
         props: {
+          showPageSizes: true,
           parentRef,
           pageSizesRef,
           pagesRef,
@@ -88,6 +121,7 @@ describe('PagerContent', () => {
       expect(tree.childAt(1).childAt(1).instance()).toBe(infoTextRef.current);
     });
   });
+
   describe('Logic', () => {
     it('Logic, className', () => {
       let component = new PagerContent({

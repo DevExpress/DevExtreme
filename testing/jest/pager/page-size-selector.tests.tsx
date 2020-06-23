@@ -22,7 +22,6 @@ describe('Pager size selector', () => {
       },
       ],
       props: {
-        visible: true,
         isLargeDisplayMode: true,
         pageSize: 5,
         pageSizeChange: jest.fn(),
@@ -30,12 +29,6 @@ describe('Pager size selector', () => {
       },
     } as Partial<PageSizeSelector> as PageSizeSelector;
   }
-  it('View, visible = false', () => {
-    const tree = mount(
-      <PageSizeSelectorComponent {...{ visible: false, props: {} } as any} /> as any,
-    );
-    expect(tree.html()).toBe('');
-  });
   it('View, isLargeDisplayMode = true', () => {
     const props = defaultProps();
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
