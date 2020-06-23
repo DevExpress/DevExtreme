@@ -15,7 +15,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
                 this._customizeShader($shader, i);
             }
 
-            !isFirstShader && this._shaderCollection.push($shader);
+            !isFirstShader && this._shader.push($shader);
         }
     }
 
