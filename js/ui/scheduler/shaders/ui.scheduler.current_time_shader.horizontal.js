@@ -24,7 +24,13 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
         this._applyShaderWidth($shader, shaderWidth);
 
-        $shader.css('left', this._workSpace._getCellCount() * this._workSpace.getCellWidth() * (groupIndex >= 1 ? 1 : 0));
+        if(groupIndex >= 1) {
+            const workSpace = this._workSpace;
+            const indicationWidth = workSpace._getCellCount() * workSpace.getCellWidth();
+            $shader.css('left', indicationWidth);
+        } else {
+            $shader.css('left', 0);
+        }
     }
 
     _applyShaderWidth($shader, width) {
