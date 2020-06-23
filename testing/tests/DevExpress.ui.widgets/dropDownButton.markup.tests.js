@@ -277,7 +277,7 @@ QUnit.module('common use cases', {
 
 QUnit.module('data expressions', {
     beforeEach: function() {
-        this.dropDownButton = new DropDownButton('#dropDownButton', {
+        this.createWidget = function(config = {
             items: [
                 { id: 1, file: 'vs.exe', name: 'Trial for Visual Studio', icon: 'box' },
                 { id: 2, file: 'all.exe', name: 'Trial for all platforms', icon: 'user' }
@@ -285,27 +285,33 @@ QUnit.module('data expressions', {
             keyExpr: 'id',
             useSelectMode: true,
             deferRendering: false
-        });
+        }) {
+            return new DropDownButton('#dropDownButton', config);
+        };
     }
 }, () => {
     QUnit.test('displayExpr is required when items are objects', function(assert) {
-        this.dropDownButton.option('displayExpr', undefined);
-        this.dropDownButton.option('selectedItemKey', 1);
+        const dropDownButton = this.createWidget();
 
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), '');
+        dropDownButton.option('displayExpr', undefined);
+        dropDownButton.option('selectedItemKey', 1);
+
+        assert.strictEqual(getActionButton(dropDownButton).text(), '');
     });
 
     QUnit.test('displayExpr as function should work', function(assert) {
-        this.dropDownButton.option('displayExpr', (itemData) => {
+        const dropDownButton = this.createWidget();
+
+        dropDownButton.option('displayExpr', (itemData) => {
             return (itemData && itemData.name + '!') || '';
         });
 
-        this.dropDownButton.option('selectedItemKey', 2);
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for all platforms!', 'displayExpr works');
+        dropDownButton.option('selectedItemKey', 2);
+        assert.strictEqual(getActionButton(dropDownButton).text(), 'Trial for all platforms!', 'displayExpr works');
     });
 
     QUnit.test('null value should be displayed as an empty string', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = this.createWidget({
             items: ['Item 1', 'Item 2', 'Item 3'],
             useSelectMode: true,
             selectedItemKey: null
@@ -315,7 +321,7 @@ QUnit.module('data expressions', {
     });
 
     QUnit.test('undefined value should be displayed as an empty string', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = this.createWidget({
             items: ['Item 1', 'Item 2', 'Item 3'],
             useSelectMode: true,
             selectedItemKey: undefined
@@ -325,7 +331,7 @@ QUnit.module('data expressions', {
     });
 
     QUnit.test('primitive items can be used without data expressions', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = this.createWidget({
             items: ['Item 1', 'Item 2', 'Item 3'],
             useSelectMode: true,
             selectedItemKey: 'Item 1'
@@ -335,7 +341,7 @@ QUnit.module('data expressions', {
     });
 
     QUnit.test('numbers can be used without data expressions', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = this.createWidget({
             items: [0, 1, 2],
             useSelectMode: true,
             selectedItemKey: 0
@@ -345,13 +351,30 @@ QUnit.module('data expressions', {
     });
 
     QUnit.test('booleans can be used without data expressions', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = this.createWidget({
             items: [true, false],
             useSelectMode: true,
             selectedItemKey: false
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), 'false', 'value is correct');
+    });
+
+    QUnit.test('widget should use dataSource key in case the "keyExpr" option is not defined', function(assert) {
+        const dropDownButton = this.createWidget({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: [{ id: '001', text: 'test 1' }, { id: '002', text: 'test 2' }],
+                    key: 'id'
+                }
+            },
+            useSelectMode: true,
+            displayExpr: 'text',
+            selectedItemKey: '001'
+        });
+
+        assert.strictEqual(getActionButton(dropDownButton).text(), 'test 1', 'value is correct');
     });
 });
 

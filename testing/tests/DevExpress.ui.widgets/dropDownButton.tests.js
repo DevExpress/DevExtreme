@@ -482,6 +482,49 @@ QUnit.module('list integration', {}, () => {
         dropDownButton.option('useSelectMode', false);
         assert.deepEqual(list.option('selectedItemKeys'), [], 'selection is correct');
     });
+
+    QUnit.test('selection by click, key has been provided by dataSource', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: [{ key: 1, name: 'Item 1' }, { key: 2, name: 'Item 2' }],
+                    key: 'key'
+                }
+            },
+            deferRendering: false,
+            displayExpr: 'name',
+            selectedItemKey: 2,
+            useSelectMode: true
+        });
+
+        const list = getList(dropDownButton);
+        assert.deepEqual(list.option('selectedItemKeys'), [2], 'selection is correct');
+
+        dropDownButton.open();
+        eventsEngine.trigger(list.itemElements().eq(0), 'dxclick');
+        assert.deepEqual(dropDownButton.option('selectedItemKey'), 1, 'dropDownButton selected item key is correct');
+        assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selected item key is correct');
+    });
+
+    QUnit.test('selection by click, key has been provided by widget', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ key: 1, name: 'Item 1' }, { key: 2, name: 'Item 2' }],
+            deferRendering: false,
+            keyExpr: 'key',
+            displayExpr: 'name',
+            selectedItemKey: 2,
+            useSelectMode: true
+        });
+
+        const list = getList(dropDownButton);
+        assert.deepEqual(list.option('selectedItemKeys'), [2], 'selection is correct');
+
+        dropDownButton.open();
+        eventsEngine.trigger(list.itemElements().eq(0), 'dxclick');
+        assert.deepEqual(dropDownButton.option('selectedItemKey'), 1, 'dropDownButton selected item key is correct');
+        assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selected item key is correct');
+    });
 });
 
 QUnit.module('common use cases', {
