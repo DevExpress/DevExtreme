@@ -2,7 +2,9 @@
 const gulp = require('gulp');
 const lazyPipe = require('lazypipe');
 const named = require('vinyl-named');
-const context = require('./context.js');
+// const context = require('./context.js');
+const path = require('path');
+const artifactsPath = path.join(__dirname, '..', '..', '..', '..', 'artifacts');
 
 const rruleName = 'rrule.js';
 const rruleUrl = 'https://github.com/jakubroztocil/rrule';
@@ -18,6 +20,7 @@ const checkRruleLicenseComment = lazyPipe()
     });
 
 gulp.task('check-rrule-license-header', function() {
-    return gulp.src(context.RESULT_JS_PATH + '/dx.all.js')
+    const file = path.join(artifactsPath, 'js', 'dx.all.js');
+    return gulp.src(file)
         .pipe(checkRruleLicenseComment());
 });
