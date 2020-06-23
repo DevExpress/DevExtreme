@@ -8,15 +8,6 @@ import { getPublicElement } from '../../core/element';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
-function abandonProps() {
-    return {
-        _hasAnonymousTemplateContent: null,
-        class: null,
-        elementAttr: null,
-        integrationOptions: null,
-    };
-}
-
 export default class PreactWrapper extends DOMComponent {
     getInstance() {
         return this;
@@ -39,7 +30,7 @@ export default class PreactWrapper extends DOMComponent {
             this._shouldRefresh = false;
 
             this._renderPreact({
-                ...props, width: null, height: null, style: null, className: null,
+                ...props, width: null, height: null, style: '', className: '',
             });
         }
         this._renderPreact(props);
@@ -97,6 +88,10 @@ export default class PreactWrapper extends DOMComponent {
         return this._elementAttr;
     }
 
+    getProps(props) {
+        return props;
+    }
+
     getAllProps() {
         const options = { ...this.option(), ref: this._viewRef };
         return this.getProps({
@@ -110,7 +105,6 @@ export default class PreactWrapper extends DOMComponent {
                 .filter((c, i, a) => c && a.indexOf(c) === i)
                 .join(' '),
             ...this._actionsMap,
-            ...abandonProps(),
         });
     }
 

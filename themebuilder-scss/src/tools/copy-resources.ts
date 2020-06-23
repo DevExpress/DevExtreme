@@ -12,6 +12,7 @@ try {
     outputJson('dist/package.json', packageConfig, { spaces: 2 });
   });
   copy('src/data/scss', 'dist/data/scss');
+  copy('README.md', 'dist/README.md');
 } catch (e) {
   console.error(e);
   process.exit(1);

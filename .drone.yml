@@ -67,6 +67,5 @@ matrix:
     - { TARGET: test_testcafe, COMPONENT: scheduler, QUARANTINE_MODE: true }
     - { TARGET: test_testcafe, COMPONENT: editors }
     - { TARGET: test_testcafe, COMPONENT: navigation }
-    - { TARGET: test_themebuilder }
     - { TARGET: test_jest }
     - { TARGET: test_scss }

@@ -1,0 +1,36 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../textEditor/colors" as *;
+// adduse
+
+
+$dropdowneditor-icon-color: null !default;
+$dropdowneditor-icon-active-color: null !default;
+
+
+@if $mode == "light" {
+
+
+  $dropdowneditor-icon-color: $base-spin-icon-color !default;
+
+  /**
+    * $name 90. Spin active icon color
+    * $type color
+    */
+  $dropdowneditor-icon-active-color: $base-spin-icon-color !default;
+}
+
+@if $mode == "dark" {
+
+
+  $dropdowneditor-icon-color: $base-spin-icon-color !default;
+
+  /**
+    * $name 90. Spin active icon color
+    * $type color
+    */
+  $dropdowneditor-icon-active-color: $base-spin-icon-color !default;
+}
+

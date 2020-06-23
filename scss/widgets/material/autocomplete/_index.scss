@@ -1,0 +1,34 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+// adduse
+
+
+@mixin autocomplete-editor-container-offset() {
+  right: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    left: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+  }
+}
+
+.dx-autocomplete.dx-invalid,
+.dx-autocomplete.dx-valid {
+  .dx-texteditor-buttons-container {
+    &:after {
+      @include autocomplete-editor-container-offset();
+    }
+  }
+}
+
+.dx-autocomplete.dx-validation-pending {
+  .dx-texteditor-buttons-container {
+    .dx-pending-indicator {
+      @include autocomplete-editor-container-offset();
+    }
+  }
+}
