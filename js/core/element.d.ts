@@ -4,4 +4,4 @@
  * @hidden
  * @prevFileNamespace DevExpress.core
  */
-export type dxElement = Element & JQuery;
+export type dxElement = HTMLElement & SVGElement & JQuery;
