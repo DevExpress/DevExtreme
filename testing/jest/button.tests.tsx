@@ -223,7 +223,7 @@ describe('Button', () => {
           );
         });
 
-        it('should return event dettach callback', () => {
+        it('should return event detach callback', () => {
           const onSubmit = jest.fn();
           const button = new Button({ useSubmitBehavior: true, onSubmit });
           button.submitInputRef = {} as any;
