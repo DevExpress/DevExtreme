@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 
 describe('TooltipItemContent', () => {
-  describe('View', () => {
+  describe('Render', () => {
     const defaultProps = {
       text: 'text',
       formattedDate: 'formattedDate',

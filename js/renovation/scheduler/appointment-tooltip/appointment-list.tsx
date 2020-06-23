@@ -23,7 +23,6 @@ type ListItemProps = {
 
 export const viewFunction = (viewModel: AppointmentList) => (
   <List
-    // This may change in future depending on how List will be implemented.
     itemTemplate={({ item, index, container }: ItemTemplateProps) => (
       <TooltipItemLayout
         item={item}

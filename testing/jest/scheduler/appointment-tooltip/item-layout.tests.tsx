@@ -15,7 +15,7 @@ jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () =
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
 
 describe('TooltipItemLayout', () => {
-  describe('View', () => {
+  describe('Render', () => {
     const defaultProps: TooltipItemLayoutProps = {
       onDelete: jest.fn(),
       onHide: jest.fn(),
@@ -271,107 +271,109 @@ describe('TooltipItemLayout', () => {
     });
   });
 
-  describe('Getters', () => {
-    describe('currentAppointment', () => {
-      it('should return data if others are undefiend', () => {
-        const appointmentItem = { data: { text: 'data' } };
-        const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('currentAppointment', () => {
+        it('should return data if others are undefiend', () => {
+          const appointmentItem = { data: { text: 'data' } };
+          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
 
-        expect(tooltipItemLayout.currentAppointment)
-          .toBe(appointmentItem.data);
-      });
-
-      it('should return currentData if settings are undefined', () => {
-        const appointmentItem = {
-          currentData: { text: 'currentData' },
-          data: { text: 'data' },
-        };
-        const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
-
-        expect(tooltipItemLayout.currentAppointment)
-          .toBe(appointmentItem.currentData);
-      });
-
-      it('should return currentData if settings are defined but targetedAppointmentData is undefined', () => {
-        const appointmentItem = {
-          currentData: { text: 'currentData' },
-          data: { text: 'data' },
-          settings: {},
-        };
-        const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
-
-        expect(tooltipItemLayout.currentAppointment)
-          .toBe(appointmentItem.currentData);
-      });
-
-      it('should return targetedAppointmentData', () => {
-        const appointmentItem = {
-          currentData: { text: 'currentData' },
-          data: { text: 'data' },
-          settings: { targetedAppointmentData: { text: 'targetedAppointmentData' } },
-        };
-        const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
-
-        expect(tooltipItemLayout.currentAppointment)
-          .toBe(appointmentItem.settings.targetedAppointmentData);
-      });
-    });
-
-    describe('onDeleteButtonClick', () => {
-      it('should create onDeleteButtonClick correctly', () => {
-        const onHide = jest.fn();
-        const onDelete = jest.fn();
-        const stopPropagation = jest.fn();
-        const appointmentItem = {
-          data: { text: 'data' },
-          currentData: { text: 'currentData' },
-        };
-        const singleAppointmentData = { text: 'singleAppointmentData' };
-
-        const tooltipItemLayout = new TooltipItemLayout({
-          item: appointmentItem, onHide, onDelete, singleAppointmentData,
+          expect(tooltipItemLayout.currentAppointment)
+            .toBe(appointmentItem.data);
         });
-        const { onDeleteButtonClick } = tooltipItemLayout;
 
-        expect(onDeleteButtonClick)
-          .toEqual(expect.any(Function));
+        it('should return currentData if settings are undefined', () => {
+          const appointmentItem = {
+            currentData: { text: 'currentData' },
+            data: { text: 'data' },
+          };
+          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
 
-        const event = { event: { stopPropagation } };
-        onDeleteButtonClick(event);
-
-        expect(onHide)
-          .toHaveBeenCalledTimes(1);
-        expect(onDelete)
-          .toHaveBeenCalledTimes(1);
-        expect(onDelete)
-          .toHaveBeenCalledWith(appointmentItem.data, singleAppointmentData);
-        expect(stopPropagation)
-          .toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('formattedContent', () => {
-      it('should return formatted content and call getTextAndFormatDate', () => {
-        const getTextAndFormatDate = jest.fn(() => ({
-          text: 'text', formatDate: 'formatDate',
-        }));
-        const appointmentItem = {
-          data: { text: 'text' },
-          currentData: { text: 'currentText' },
-        };
-
-        const tooltipItemLayout = new TooltipItemLayout({
-          item: appointmentItem, getTextAndFormatDate,
+          expect(tooltipItemLayout.currentAppointment)
+            .toBe(appointmentItem.currentData);
         });
-        const { formattedContent } = tooltipItemLayout;
 
-        expect(formattedContent)
-          .toEqual({
-            text: 'text',
-            formatDate: 'formatDate',
+        it('should return currentData if settings are defined but targetedAppointmentData is undefined', () => {
+          const appointmentItem = {
+            currentData: { text: 'currentData' },
+            data: { text: 'data' },
+            settings: {},
+          };
+          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
+
+          expect(tooltipItemLayout.currentAppointment)
+            .toBe(appointmentItem.currentData);
+        });
+
+        it('should return targetedAppointmentData', () => {
+          const appointmentItem = {
+            currentData: { text: 'currentData' },
+            data: { text: 'data' },
+            settings: { targetedAppointmentData: { text: 'targetedAppointmentData' } },
+          };
+          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
+
+          expect(tooltipItemLayout.currentAppointment)
+            .toBe(appointmentItem.settings.targetedAppointmentData);
+        });
+      });
+
+      describe('onDeleteButtonClick', () => {
+        it('should create onDeleteButtonClick correctly', () => {
+          const onHide = jest.fn();
+          const onDelete = jest.fn();
+          const stopPropagation = jest.fn();
+          const appointmentItem = {
+            data: { text: 'data' },
+            currentData: { text: 'currentData' },
+          };
+          const singleAppointment = { text: 'singleAppointmentData' };
+
+          const tooltipItemLayout = new TooltipItemLayout({
+            item: appointmentItem, onHide, onDelete, singleAppointment,
           });
-        expect(getTextAndFormatDate)
-          .toHaveBeenCalledWith(appointmentItem.data, appointmentItem.currentData);
+          const { onDeleteButtonClick } = tooltipItemLayout;
+
+          expect(onDeleteButtonClick)
+            .toEqual(expect.any(Function));
+
+          const event = { event: { stopPropagation } };
+          onDeleteButtonClick(event);
+
+          expect(onHide)
+            .toHaveBeenCalledTimes(1);
+          expect(onDelete)
+            .toHaveBeenCalledTimes(1);
+          expect(onDelete)
+            .toHaveBeenCalledWith(appointmentItem.data, singleAppointment);
+          expect(stopPropagation)
+            .toHaveBeenCalledTimes(1);
+        });
+      });
+
+      describe('formattedContent', () => {
+        it('should return formatted content and call getTextAndFormatDate', () => {
+          const getTextAndFormatDate = jest.fn(() => ({
+            text: 'text', formatDate: 'formatDate',
+          }));
+          const appointmentItem = {
+            data: { text: 'text' },
+            currentData: { text: 'currentText' },
+          };
+
+          const tooltipItemLayout = new TooltipItemLayout({
+            item: appointmentItem, getTextAndFormatDate,
+          });
+          const { formattedContent } = tooltipItemLayout;
+
+          expect(formattedContent)
+            .toEqual({
+              text: 'text',
+              formatDate: 'formatDate',
+            });
+          expect(getTextAndFormatDate)
+            .toHaveBeenCalledWith(appointmentItem.data, appointmentItem.currentData);
+        });
       });
     });
   });

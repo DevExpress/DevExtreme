@@ -4,7 +4,7 @@ import Marker, { viewFunction as MarkerView } from '../../../../js/renovation/sc
 import { Deferred } from '../../../../js/core/utils/deferred';
 
 describe('Marker', () => {
-  describe('View', () => {
+  describe('Render', () => {
     const defaultProps = {};
     it('should render components correctly', () => {
       const tree = shallow(<MarkerView props={defaultProps} />);
@@ -59,40 +59,45 @@ describe('Marker', () => {
     });
   });
 
-  describe('Effects', () => {
-    describe('colorEffect', () => {
-      it('should set color correctly', () => {
-        const color = 'color';
-        const deferredColor = new Deferred();
-        deferredColor.resolve(color);
+  describe('Behaviour', () => {
+    describe('Effects', () => {
+      describe('colorEffect', () => {
+        it('should set color correctly', () => {
+          const color = 'color';
+          const deferredColor = new Deferred<string>();
+          const colorPromise = deferredColor.promise();
+          deferredColor.resolve(color);
 
-        const marker = new Marker({ color: deferredColor });
+          const marker = new Marker({ color: colorPromise });
 
-        marker.colorEffect();
-        expect(marker.appointmentColor)
-          .toBe('color');
-      });
+          marker.colorEffect();
+          expect(marker.appointmentColor)
+            .toBe('color');
+        });
 
-      it('should not set color', () => {
-        const marker = new Marker({ color: undefined });
+        it('should not set color', () => {
+          const marker = new Marker({ color: undefined });
 
-        marker.colorEffect();
-        expect(marker.appointmentColor)
-          .toBe(undefined);
+          marker.colorEffect();
+          expect(marker.appointmentColor)
+            .toBe(undefined);
+        });
       });
     });
   });
 
-  describe('Getters', () => {
-    describe('style', () => {
-      it('should return correct style', () => {
-        const color = 'color';
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('style', () => {
+        it('should return correct style', () => {
+          const color = 'color';
 
-        const marker = new Marker({});
-        marker.appointmentColor = color;
+          const marker = new Marker({});
+          marker.appointmentColor = color;
 
-        expect(marker.style)
-          .toEqual({ background: 'color' });
+          expect(marker.style)
+            .toEqual({ background: 'color' });
+        });
       });
     });
   });
