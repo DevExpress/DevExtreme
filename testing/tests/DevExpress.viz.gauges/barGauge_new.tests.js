@@ -143,19 +143,21 @@ QUnit.module('Legend', {
             return this.renderer;
         });
 
-        sinon.stub(legendModule, 'Legend', () => {
-            const stub = new stubLegend();
-            stub.stub('measure').returns([120, 120]);
-            stub.stub('layoutOptions').returns({
-                horizontalAlignment: 'right',
-                verticalAlignment: 'top',
-                side: 'horizontal'
-            });
-            return stub;
-        });
+        legendModule._setLegend(sinon.spy(
+            () => {
+                const stub = new stubLegend();
+                stub.stub('measure').returns([120, 120]);
+                stub.stub('layoutOptions').returns({
+                    horizontalAlignment: 'right',
+                    verticalAlignment: 'top',
+                    side: 'horizontal'
+                });
+                return stub;
+            }
+        ));
     },
     afterEach() {
-        legendModule.Legend.restore();
+        legendModule._setLegend(Legend);
         rendererModule.Renderer.restore();
     },
 

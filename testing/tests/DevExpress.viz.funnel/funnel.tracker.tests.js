@@ -40,16 +40,18 @@ const trackerEnvironment = $.extend({}, environment, {
             return stub;
         });
 
-        sinon.stub(legendModule, 'Legend', function() {
-            return that.legend;
-        });
+        legendModule._setLegend(sinon.spy(
+            function() {
+                return that.legend;
+            }
+        ));
         this.itemGroupNumber = 1;
     },
 
     afterEach: function() {
         environment.afterEach.call(this);
         labelModule.Label.restore();
-        legendModule.Legend.restore();
+        legendModule._setLegend(Legend);
     },
 
     trigger: function(name, data, options) {

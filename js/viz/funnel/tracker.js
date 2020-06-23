@@ -1,9 +1,10 @@
-import { prototype as proto } from './funnel';
+import Funnel from './funnel';
 import { Tracker } from '../components/tracker';
 const DATA_KEY_BASE = '__funnel_data_';
 import { isDefined } from '../../core/utils/type';
 let dataKeyModifier = 0;
 const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+const proto = Funnel.prototype;
 
 proto._eventsMap.onItemClick = { name: 'itemClick' };
 proto._eventsMap.onLegendClick = { name: 'legendClick' };
