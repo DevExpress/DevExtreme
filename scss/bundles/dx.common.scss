@@ -56,6 +56,7 @@
 @use "../widgets/common/dataGrid";
 @use "../widgets/common/pivotGrid";
 @use "../widgets/common/treeList";
+@use "../widgets/common/menuBase";
 @use "../widgets/common/menu";
 @use "../widgets/common/contextMenu";
 @use "../widgets/common/calendar";
@@ -85,6 +86,5 @@
 @use "../widgets/common/radioButton";
 @use "../widgets/common/colorView";
 @use "../widgets/common/pager";
-@use "../widgets/common/menuBase";
 @use "../widgets/common/recurrenceEditor";
 @use "../widgets/common/splitter";
