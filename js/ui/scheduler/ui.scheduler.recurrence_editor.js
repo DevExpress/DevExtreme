@@ -86,7 +86,7 @@ class RecurrenceRule {
     }
 
     makeRule(field, value) {
-        if(!value || (value && !value.length)) {
+        if(!value || (Array.isArray(value) && !value.length)) {
             delete this._recurrenceRule[field];
             return;
         }
@@ -755,6 +755,7 @@ const RecurrenceEditor = Editor.inherit({
     _changeEditorsValue(rules) {
         this._recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
 
+        this._changeDayOfWeekValue();
         this._changeDayOfMonthValue();
         this._changeMonthOfYearValue();
 
@@ -773,6 +774,14 @@ const RecurrenceEditor = Editor.inherit({
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
         this._recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
+    },
+
+    _changeDayOfWeekValue() {
+        const isEditorVisible = this._recurrenceForm.itemOption('byday').visible;
+        if(isEditorVisible) {
+            const days = this._daysOfWeekByRules();
+            this.getEditorByField('byday').option('selectedItemKeys', days);
+        }
     },
 
     _changeDayOfMonthValue() {
