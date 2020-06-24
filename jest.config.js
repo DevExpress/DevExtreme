@@ -12,7 +12,7 @@ module.exports = {
     },
     collectCoverage: true,
     collectCoverageFrom: [
-        './js/renovation/**/*.p.js',
+        './js/renovation/**/*.tsx',
         './js/renovation/button.tsx',
         '!./js/renovation/error-message.p.js',
         '!./js/renovation/number-box.p.js',
