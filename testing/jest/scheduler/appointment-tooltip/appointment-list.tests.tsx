@@ -144,6 +144,26 @@ describe('AppointmentList', () => {
       expect(tooltipItemLayout.prop('showDeleteButton'))
         .toBe(false);
     });
+
+    it('should pass `showDeleteButton` = false to TooltipItemLayout if `isEditingAllowed` = false and data is disabled', () => {
+      const renderProps = {
+        appointments: [{
+          data: { text: 'data1', disabled: true },
+          currentData: { text: 'currentData1' },
+        }],
+        isEditingAllowed: false,
+      };
+      const appointmentList = render({
+        props: {
+          ...renderProps,
+        },
+      });
+
+      const tooltipItemLayout = appointmentList.find(TooltipItemLayout);
+
+      expect(tooltipItemLayout.prop('showDeleteButton'))
+        .toBe(false);
+    });
   });
 
   describe('Logic', () => {
