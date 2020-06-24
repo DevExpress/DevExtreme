@@ -5,16 +5,20 @@ import { Deferred } from '../../../../js/core/utils/deferred';
 
 describe('Marker', () => {
   describe('Render', () => {
-    const defaultProps = {};
-    it('should render components correctly', () => {
-      const tree = shallow(<MarkerView props={defaultProps} />);
+    const render = (viewModel) => shallow(MarkerView({
+      ...viewModel,
+      props: { ...viewModel.props },
+    } as any) as any);
 
-      expect(tree.is('.dx-tooltip-appointment-item-marker'))
+    it('should render components correctly', () => {
+      const marker = render({});
+
+      expect(marker.is('.dx-tooltip-appointment-item-marker'))
         .toEqual(true);
-      expect(tree.children())
+      expect(marker.children())
         .toHaveLength(1);
 
-      const childDiv = tree.childAt(0);
+      const childDiv = marker.childAt(0);
       expect(childDiv.type())
         .toBe('div');
       expect(childDiv.is('.dx-tooltip-appointment-item-marker-body'))
@@ -26,11 +30,11 @@ describe('Marker', () => {
     });
 
     it('should set color correctly', () => {
-      const tree = shallow(
-        <MarkerView props={defaultProps} style={{ background: 'appointmentColor' }} />,
-      );
+      const marker = render({
+        style: { background: 'appointmentColor' },
+      });
 
-      const childDiv = tree.find('.dx-tooltip-appointment-item-marker-body');
+      const childDiv = marker.find('.dx-tooltip-appointment-item-marker-body');
       expect(childDiv.prop('style'))
         .toEqual({
           background: 'appointmentColor',
@@ -38,7 +42,7 @@ describe('Marker', () => {
     });
 
     it('should combine `className` with predefined classes', () => {
-      const tree = shallow(<MarkerView props={{ className: 'custom-class' }} />);
+      const tree = render({ props: { className: 'custom-class' } });
 
       expect(tree.hasClass('dx-tooltip-appointment-item-marker'))
         .toBe(true);
@@ -47,12 +51,7 @@ describe('Marker', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tree = shallow(
-        <MarkerView
-          restAttributes={{ customAttribute: 'customAttribute' }}
-          props={defaultProps}
-        />,
-      );
+      const tree = render({ restAttributes: { customAttribute: 'customAttribute' } });
 
       expect(tree.prop('customAttribute'))
         .toBe('customAttribute');
