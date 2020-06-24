@@ -20,9 +20,15 @@ const isAppendMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
-export function getPixelRatio(window) {
+export let getPixelRatio = function(window) {
     return window.devicePixelRatio || 1;
+};
+
+///#DEBUG
+export function _setPixelRatioFn(value) {
+    getPixelRatio = value;
 }
+///#ENDDEBUG
 
 export function getContentHeightLimit(browser) {
     if(browser.msie) {
