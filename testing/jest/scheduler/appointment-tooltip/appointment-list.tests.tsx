@@ -157,7 +157,7 @@ describe('AppointmentList', () => {
           expect(onItemClick)
             .toEqual(expect.any(Function));
 
-            onst itemData = { data: { text: 'appointment' } };
+          const itemData = { data: { text: 'appointment' } };
           onItemClick({ itemData });
 
           expect(getCurrentAppointment)
