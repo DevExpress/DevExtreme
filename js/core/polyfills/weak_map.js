@@ -1,4 +1,4 @@
-import { inArray } from '../core/utils/array';
+import { inArray } from '../utils/array';
 import windowUtils from '../utils/window';
 let weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
 
