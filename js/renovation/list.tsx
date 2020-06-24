@@ -1,10 +1,10 @@
-import * as PreactRender from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, Event,
 } from 'devextreme-generator/component_declaration/common';
 import DataSource, { DataSourceOptions } from '../data/data_source';
 import { WidgetProps } from './widget';
 import DxList, { dxListItem } from '../ui/list';
+import renderTemplate from './utils/render-template';
 
 export const viewFunction = (viewModel: List) => (
   <div ref={viewModel.widgetRef as any} />
@@ -60,16 +60,13 @@ export default class List extends JSXComponent(ListProps) {
   setupWidget() {
     const { itemTemplate } = this.props;
 
-    const renderTemplate = itemTemplate ? (item, index, container) => {
-      setTimeout(() => {
-        PreactRender.render(
-          PreactRender.h(itemTemplate, { item, index, container }), container.get(0),
-        );
-      }, 0);
+    const template = itemTemplate ? (item, index, container) => {
+      renderTemplate(itemTemplate, { item, index, container }, container);
     } : undefined;
+
     const nextProps = {
       ...this.props as any,
-      itemTemplate: renderTemplate,
+      itemTemplate: template,
     };
 
     const instance = DxList.getInstance(this.widgetRef);
