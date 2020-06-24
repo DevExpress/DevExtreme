@@ -1,0 +1,130 @@
+@import (once) "./badge.ios7.less";
+@import (once) "./button.ios7.less";
+@import (once) "./scrollable.ios7.less";
+
+.dx-tabs {
+    border: 0;
+    background: @IOS7_TABS_BACKGROUND;
+    border-radius: 6px;
+
+    .dx-tabs-nav-button {
+        width: 30px;
+    }
+
+    &.dx-tabs-nav-buttons .dx-tabs-scrollable {
+        margin-right: 30px;
+        margin-left: 30px;
+    }
+
+    .dx-tabs-item-badge {
+        vertical-align: middle;
+    }
+}
+
+.dx-tabs-nav-buttons {
+    .dx-tab {
+        &:first-child {
+            border-radius: 0;
+        }
+
+        &:last-child {
+            border-radius: 0;
+        }
+    }
+}
+
+.dx-tabs-nav-button {
+    border: 1px solid @IOS7_TABS_TAB_BORDER;
+
+    .dx-icon {
+        margin: 0;
+    }
+}
+
+.dx-tabs-nav-button-left {
+    border-radius: 6px 0 0 6px;
+}
+
+.dx-tabs-nav-button-right {
+    border-radius: 0 6px 6px 0;
+}
+
+.dx-tab {
+    height: 29px;
+    border: 1px solid @IOS7_TABS_TAB_BORDER;
+    border-right: none;
+    background-color: inherit;
+
+    .dx-tab-content {
+        vertical-align: middle;
+    }
+
+    .dx-icon {
+        display: inline-block;
+        vertical-align: middle;
+        .dx-icon-sizing(18px);
+
+        color: @IOS7_TABS_ICON_COLOR;
+    }
+
+    &:first-child {
+        border-radius: 6px 0 0 6px;
+    }
+
+    &:last-child {
+        border-right: 1px solid @IOS7_TABS_TAB_BORDER;
+        border-radius: 0 6px 6px 0;
+    }
+}
+
+.dx-tab,
+.dx-tabs {
+    &.dx-state-disabled {
+        opacity: 1;
+
+        .dx-icon,
+        .dx-tab-text {
+            color: @IOS7_TABS_DISABLE;
+        }
+    }
+}
+
+.dx-tab-selected {
+    background: @IOS7_TABS_SELECTED;
+    transition: background linear 0.1s;
+
+    .dx-icon {
+        color: @IOS7_TABS_SELECTED_TEXT;
+    }
+
+    .dx-tab-text {
+        color: @IOS7_TABS_SELECTED_TEXT;
+    }
+
+    .dx-tabs-item-badge {
+        background-color: @IOS7_SELECTED_BADGE_BACKGROUND;
+        color: @IOS7_SELECTED_BADGE_TEXT_COLOR;
+    }
+}
+
+.dx-tab-text {
+    display: inline-block;
+    padding: 0 4px;
+    color: @IOS7_TABS_TEXT;
+    vertical-align: middle;
+    font-size: @IOS7_TABS_FONT_SIZE;
+    font-weight: 500;
+    line-height: 27px;
+}
+
+.dx-rtl .dx-tab {
+    &:first-child {
+        border-right: 1px solid @IOS7_TABS_TAB_BORDER;
+        border-radius: 0 6px 6px 0;
+    }
+
+    &:last-child {
+        border-right: none;
+        border-radius: 6px 0 0 6px;
+    }
+}

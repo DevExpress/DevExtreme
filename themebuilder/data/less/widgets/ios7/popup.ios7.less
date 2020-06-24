@@ -1,0 +1,168 @@
+@import (once) "./button.ios7.less";
+@import (once) "./overlay.ios7.less";
+@import (once) "./toolbar.ios7.less";
+
+@IOS7_DIALOG_PADDING_TOP: 12px;
+
+.dx-popup-wrapper {
+    & > .dx-overlay-content {
+        border: @IOS7_POPUP_BORDER;
+        background: @IOS7_DIALOG_BACKGROUND;
+        border-radius: @IOS7_POPUP_BORDER_RADIUS;
+
+        .dx-hairlines & {
+            border-width: 0.5px;
+        }
+    }
+
+    &.dx-overlay-shader {
+        .dx-overlay-content {
+            border: none;
+        }
+    }
+
+    .dx-toolbar-item {
+        .dx-button {
+            .dx-icon {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.dx-popup-content {
+    border-radius: @IOS7_POPUP_BORDER_RADIUS;
+}
+
+.dx-popup-fullscreen {
+    border: none;
+    border-radius: 0;
+}
+
+.dx-popup-title {
+    padding: 10px;
+    border-bottom: @IOS7_POPUP_TITLE_BORDER;
+    color: @IOS7_POPUP_TITLE_TEXT;
+    text-align: center;
+    font-weight: bold;
+    border-radius: @IOS7_POPUP_BORDER_RADIUS @IOS7_POPUP_BORDER_RADIUS 0 0;
+
+    .dx-hairlines & {
+        border-bottom-width: 0.5px;
+    }
+
+    & + .dx-popup-content {
+        border-radius: 0 0 @IOS7_POPUP_BORDER_RADIUS @IOS7_POPUP_BORDER_RADIUS;
+    }
+
+    &.dx-toolbar {
+        padding: 5px 0;
+        height: 39px;
+    }
+
+    .dx-toolbar-label {
+        color: @IOS7_POPUP_TITLE_TEXT;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1em;
+        line-height: 1em;
+    }
+}
+
+.dx-popup-content { // stylelint-disable-line no-duplicate-selectors
+    padding: 10px;
+
+    &.dx-dialog-content:first-child {
+        padding-top: @IOS7_DIALOG_PADDING_TOP;
+    }
+}
+
+.dx-popup-bottom {
+    bottom: 5px;
+    width: 100%;
+
+    &.dx-toolbar {
+        border: none;
+    }
+}
+
+.dx-dialog-root {
+    .dx-overlay-content,
+    .dx-popup-content {
+        border-radius: @IOS7_DIALOG_BORDER_RADIUS;
+    }
+
+    .dx-popup-title {
+        border: none;
+        background: none;
+        background-image: none;
+    }
+}
+
+.dx-dialog-message {
+    padding: @IOS7_DIALOG_MESSAGE_PADDING;
+    text-align: center;
+    font-size: @IOS7_DIALOG_MESSAGE_FONT_SIZE;
+}
+
+.dx-dialog-textbox {
+    padding: @IOS7_DIALOG_TEXTBOX_PADDING;
+}
+
+.dx-dialog {
+    .dx-popup-bottom {
+        margin: @IOS7_DIALOG_BUTTONS_MARGIN;
+        width: @IOS7_DIALOG_BUTTONS_WIDTH;
+        display: table;
+        border-top: 1px solid @IOS7_DIALOG_BUTTONS_BORDER;
+
+        .dx-hairlines & {
+            border-top-width: 0.5px;
+        }
+
+        .dx-toolbar-center {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .dx-toolbar-item {
+            margin: 0;
+            padding: 0;
+            border-left: 1px solid @IOS7_DIALOG_BUTTON_BORDER;
+            display: table-cell;
+
+            .dx-hairlines & {
+                border-left-width: 0.5px;
+            }
+
+            &:first-child {
+                border-left: none;
+            }
+
+            .dx-button {
+                padding: 5px;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+.dx-rtl {
+    .dx-dialog {
+        .dx-popup-bottom {
+            .dx-toolbar-item {
+                border-right: 1px solid @IOS7_DIALOG_BUTTON_BORDER;
+                border-left: none;
+
+                .dx-hairlines & {
+                    border-right-width: 0.5px;
+                }
+
+                &:first-child {
+                    border-right: none;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,74 @@
+@import (once) "./list.ios7.less";
+@import (once) "./actionSheet.ios7.less";
+@import (once) "./dropDownMenu.ios7.less";
+@import (once) "./button.ios7.less";
+@import (once) "./autocomplete.ios7.less";
+@import (once) "./checkBox.ios7.less";
+@import (once) "./dateBox.ios7.less";
+@import (once) "./menu.ios7.less";
+@import (once) "./selectBox.ios7.less";
+@import (once) "./tabs.ios7.less";
+@import (once) "./textBox.ios7.less";
+@import (once) "./buttonGroup.ios7.less";
+@import (once) "./dropDownButton.ios7.less";
+
+.dx-toolbar {
+    margin: 0;
+    height: 44px;
+    border-bottom: 1px solid @IOS7_TOOLBAR_BORDER;
+    background: @IOS7_TOOLBAR_BACKGROUND;
+
+    .dx-hairlines & {
+        border-bottom-width: 0.5px;
+    }
+
+    .dx-tabs {
+        table-layout: auto;
+    }
+    .dx-tabs-wrapper {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.dx-toolbar-background {
+    background-color: @IOS7_TOOLBAR_BACKGROUND;
+}
+
+.dx-toolbar-bottom {
+    border-bottom: none;
+}
+
+.dx-toolbar-label {
+    color: @IOS7_TOOLBAR_TEXT;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.dx-toolbar .dx-navbar {
+    height: 30px;
+    white-space: nowrap;
+    border: none;
+
+    .dx-nav-item .dx-tab-text {
+        padding-top: 0;
+    }
+}
+
+.dx-toolbar-menu-section {
+    border-bottom: 1px solid @IOS7_TOOLBAR_BORDER;
+
+    .dx-toolbar-hidden-button .dx-button-content {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .dx-button {
+        color: @IOS7_TOOLBAR_TEXT;
+    }
+
+    .dx-toolbar-item-auto-hide {
+        padding: 5px 10px;
+    }
+}

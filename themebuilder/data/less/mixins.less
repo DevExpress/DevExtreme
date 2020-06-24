@@ -1,0 +1,93 @@
+// stylelint-disable selector-class-pattern
+
+.dx-clearfix-mixin() {
+    &:before,
+    &:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+.gradient-linear(@options) {
+    background-repeat: no-repeat;
+    background-image: linear-gradient(@options);
+}
+
+.gradient-radial-circle2(@startColor, @startPosition, @middleColor, @middlePosition, @endColor, @endPosition) {
+    background: @startColor;
+    background: radial-gradient(circle closest-side at center, @startColor @startPosition, @middleColor @middlePosition, @endColor @endPosition);
+}
+
+.gradient-radial-circle(@startColor, @startPosition, @endColor, @endPosition) {
+    background: @startColor;
+    background: radial-gradient(circle closest-side at center, @startColor @startPosition, @endColor @endPosition);
+}
+.flex-container(@direction: row, @wrap: wrap) {
+    display: flex;
+    flex-flow: @direction @wrap;
+}
+
+.user-select(@value: text) {
+    user-select: @value;
+}
+.user-select(@value) when (@value = none) {
+    -webkit-touch-callout: none;
+}
+
+.dx-overflow(@x: hidden) {
+    overflow: @x;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.flip-horizontally() {
+    transform: scaleX(-1);
+}
+
+.vertical-middle() {
+    height: 100%;
+
+    &:after {
+        height: 100%;
+        display: inline-block;
+        content: '';
+        vertical-align: middle;
+    }
+}
+
+.hide-input-cursor() {
+    border: none;
+    color: transparent;
+    text-shadow: 0 0 0 gray;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.flexible-scrollable() {
+    & > .dx-scrollable,
+    & > .dx-treeview,
+    & > .dx-treeview > .dx-scrollable {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+        height: 0;
+
+        & > .dx-scrollable-wrapper {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            height: 0;
+
+            & > .dx-scrollable-container {
+                height: auto;
+            }
+        }
+    }
+}

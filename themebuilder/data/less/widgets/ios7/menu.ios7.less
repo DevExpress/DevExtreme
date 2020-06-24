@@ -1,0 +1,67 @@
+@import (once) "./menuBase.ios7.less";
+@import (once) "./overlay.ios7.less";
+@import (once) "./button.ios7.less";
+@import (once) "./treeView.ios7.less";
+
+.dx-menu {
+    background-color: @IOS7_MENU_BACKGROUND;
+    color: @IOS7_MENU_TEXT_COLOR;
+
+    .dx-menu-vertical {
+        .dx-menu-item-content {
+            padding: 5px 11px;
+        }
+    }
+
+    .dx-menu-horizontal {
+        .dx-menu-item-content {
+            padding: 0 5px;
+
+            .dx-icon {
+                margin: 0 @IOS7_MENU_ICON_OFFSET 0 0;
+
+                .dx-rtl &,
+                .dx-rtl& {
+                    margin: 0 0 0 @IOS7_MENU_ICON_OFFSET;
+                }
+            }
+        }
+
+        .dx-menu-item-text {
+            padding: 0 4px 5px;
+        }
+    }
+}
+
+.dx-menu-adaptive-mode {
+    background-color: @IOS7_MENU_BACKGROUND;
+
+    &.dx-overlay-content {
+        background-color: @IOS7_MENU_POPUP_BACKGROUND;
+        border: 1px solid @IOS7_MENU_ITEM_BORDER_COLOR;
+        border-radius: 7px;
+        box-shadow: 0 1px 11px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    .dx-treeview-node {
+        padding-left: 31px;
+    }
+
+    .dx-treeview-item {
+        padding: 0;
+    }
+
+    .dx-treeview-item-content {
+        line-height: 32px;
+    }
+
+    .dx-treeview-toggle-item-visibility {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .dx-treeview-node-container:first-child > .dx-treeview-node {
+        border-bottom: 1px solid @IOS7_MENU_ITEM_BORDER_COLOR;
+    }
+}

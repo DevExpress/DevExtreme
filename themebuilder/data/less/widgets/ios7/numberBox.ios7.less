@@ -1,0 +1,49 @@
+@import (once) "./textEditor.ios7.less";
+
+@SPIN_CONTAINER_WIDTH: 25px;
+@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 50px;
+
+.dx-numberbox-spin-container {
+    width: @SPIN_CONTAINER_WIDTH;
+
+    .dx-state-disabled & {
+        opacity: 0.5;
+    }
+
+    .dx-numberbox-spin-touch-friendly & {
+        width: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    }
+}
+
+.dx-numberbox-spin-up-icon {
+    .dx-icon(spinup);
+}
+
+.dx-numberbox-spin-down-icon {
+    .dx-icon(spindown);
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+    color: @IOS7_INPUT_PLACEHOLDER;
+    font-weight: 600;
+    .dx-icon-font-centered-sizing(16px);
+}
+
+.dx-state-active {
+    &.dx-numberbox-spin-button {
+        opacity: 0.4;
+    }
+}
+
+.dx-numberbox-spin {
+    .validation-icon-position();
+
+    .pending-indicator-position();
+}
+
+.dx-numberbox-spin-touch-friendly {
+    .validation-icon-position();
+
+    .pending-indicator-position();
+}

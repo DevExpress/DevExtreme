@@ -1,0 +1,116 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/colorView" as *;
+// adduse
+
+
+@include dx-base-colorview-styles($COLORVIEW_HANDLE_COLOR, $COLORVIEW_HANDLE_BORDER_COLOR);
+
+
+$GENERIC_COLORVIEW_ALPHA_WIDTH: $GENERIC_COLORVIEW_PALETTE_WIDTH + 4;
+$GENERIC_COLORVIEW_HUE_SCALE_HEIGHT: $GENERIC_COLORVIEW_PALETTE_HEIGHT;
+
+.dx-colorview-container {
+  width: $GENERIC_COLORVIEW_CONTAINER_WIDTH;
+
+  label {
+    line-height: $GENERIC_COLORVIEW_CONTAINER_LINE_HEIGHT;
+
+    &.dx-colorview-label-hex {
+      margin: $GENERIC_COLORVIEW_CONTAINER_HEX_MARGIN;
+    }
+
+    &.dx-colorview-alpha-channel-label {
+      margin-left: $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN;
+      width: $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH;
+    }
+
+    .dx-texteditor {
+      width: $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_WIDTH;
+      margin: $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_MARGIN;
+    }
+  }
+}
+
+.dx-colorview-hue-scale-cell {
+  margin-left: $GENERIC_COLORVIEW_HUE_SCALE_MARGIN;
+}
+
+.dx-colorview-palette {
+  width: $GENERIC_COLORVIEW_PALETTE_WIDTH;
+  height: $GENERIC_COLORVIEW_PALETTE_HEIGHT;
+}
+
+.dx-colorview-alpha-channel-scale {
+  width: $GENERIC_COLORVIEW_PALETTE_WIDTH;
+}
+
+.dx-colorview-container-row.dx-colorview-alpha-channel-row {
+  margin-top: $GENERIC_COLORVIEW_ALPHA_MARGIN;
+}
+
+.dx-colorview-hue-scale {
+  width: $GENERIC_COLORVIEW_HUE_SCALE_WIDTH;
+  height: $GENERIC_COLORVIEW_HUE_SCALE_HEIGHT;
+}
+
+.dx-colorview-alpha-channel-cell {
+  width: $GENERIC_COLORVIEW_ALPHA_WIDTH;
+}
+
+.dx-colorview-hue-scale-wrapper {
+  height: $GENERIC_COLORVIEW_HUE_SCALE_HEIGHT + 2;
+}
+
+.dx-colorview-color-preview {
+  width: 100%;
+  height: $GENERIC_COLORVIEW_COLOR_PREVIEW_HEIGHT;
+}
+
+.dx-colorview-controls-container {
+  width: $GENERIC_COLORVIEW_CONTROLS_CONTAINER_WIDTH;
+  margin-left: $GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN;
+}
+
+.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
+  color: $colorview-label-color;
+}
+
+.dx-colorview-palette-cell,
+.dx-colorview-alpha-channel-border,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-color-preview-container {
+  padding: 1px;
+  margin: 1px;
+  margin-top: 0;
+  background-color: $colorbox-palette-cell-bg;
+  box-shadow: 0 0 0 1px $colorview-border-color;
+}
+
+.dx-colorview-color-preview-container {
+  margin-bottom: $GENERIC_COLORVIEW_PREVIEW_CONTAINER_MARGIN;
+}
+
+.dx-rtl {
+  .dx-colorview-controls-container {
+    margin-left: 0;
+    margin-right: $GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN;
+  }
+
+  .dx-colorview-hue-scale-cell {
+    margin-left: 0;
+    margin-right: $GENERIC_COLORVIEW_HUE_SCALE_MARGIN;
+  }
+
+  .dx-colorview-container {
+    label {
+      &.dx-colorview-alpha-channel-label {
+        margin-left: 0;
+        margin-right: $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+@import (once) "./selectBox.ios7.less";
+@import (once) "./numberBox.ios7.less";
+
+.dx-pager {
+    &.dx-light-mode {
+        .dx-page-sizes {
+            min-width: 34px;
+        }
+
+        .dx-page-index {
+            min-width: 19px;
+        }
+    }
+
+    .dx-pages {
+        .dx-prev-button {
+            .dx-icon(chevronleft);
+        }
+
+        .dx-next-button {
+            .dx-icon(chevronright);
+        }
+
+        .dx-prev-button,
+        .dx-next-button {
+            .dx-icon-font-centered-sizing(22px);
+        }
+    }
+
+    .dx-pages,
+    .dx-page-sizes {
+        .dx-selection {
+            background-color: @IOS7_PAGER_SELECTION_BACKGROUND;
+        }
+    }
+}

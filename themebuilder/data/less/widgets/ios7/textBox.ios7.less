@@ -1,0 +1,171 @@
+@import (once) "./textEditor.ios7.less";
+
+@SEARCH_ICON_SIZE: 14px;
+@ANIMATION_DURATION: 400ms;
+@SEARCH_ICON_OFFSET: 8px;
+
+.dx-searchbox {
+    .dx-texteditor-container {
+        width: auto;
+        border: none;
+
+        .dx-icon-search {
+            width: 0;
+            height: 0;
+        }
+    }
+
+    .dx-placeholder {
+        .ios-search-placeholder();
+    }
+
+    &.dx-texteditor-empty {
+        .dx-icon-search:before {
+            display: none;
+        }
+
+        .dx-placeholder:before {
+            display: inline-block;
+        }
+    }
+
+    .dx-icon-search:before {
+        display: block;
+        top: @SEARCH_ICON_OFFSET;
+        left: @SEARCH_ICON_OFFSET;
+        width: @SEARCH_ICON_SIZE;
+        height: @SEARCH_ICON_SIZE;
+        background-image: @ICON_SEARCH_PATH;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .dx-texteditor-input {
+        padding-left: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET * 2;
+        background-color: @IOS7_SEARCHBOX_BACKGROUND;
+    }
+
+    .dx-texteditor-buttons-container {
+        background-color: @IOS7_SEARCHBOX_BACKGROUND;
+    }
+
+    &.dx-state-focused {
+        .dx-placeholder {
+            text-align: left;
+            transform: translate(@SEARCH_ICON_OFFSET / 2, 0);
+
+            &:before {
+                transform: translate(0, 0);
+            }
+        }
+    }
+}
+
+.dx-searchbar {
+    position: relative;
+    margin: 0;
+    padding: 5px 7px 5px;
+    background: @IOS7_LOOKUP_SEARCHBOX_WRAPPER_BACKGROUND;
+
+    .dx-texteditor {
+        margin: 0;
+    }
+
+    .dx-texteditor-input {
+        background: @IOS7_LOOKUP_SEARCHBOX_BACKGROUND;
+    }
+}
+
+.ios-search-placeholder() {
+    width: 100%;
+    transform: translate(50%, 0);
+    transition: transform @ANIMATION_DURATION ease;
+
+    &:before {
+        overflow: visible;
+        display: none;
+        vertical-align: baseline;
+        background-image: @ICON_SEARCH_PATH;
+        background-position: 0 @SEARCH_ICON_OFFSET;
+        margin-left: @SEARCH_ICON_OFFSET / 2;
+        padding-left: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET;
+        min-height: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET;
+        background-repeat: no-repeat;
+        background-size: @SEARCH_ICON_SIZE @SEARCH_ICON_SIZE;
+        transform: translate(-50%, 0);
+        transition: transform @ANIMATION_DURATION ease;
+    }
+}
+
+.ios-search-placeholder-rtl() {
+    transform: translate(-50%, 0);
+
+    &:before {
+        display: inline-block;
+        background-position: 100% @SEARCH_ICON_OFFSET;
+        margin-right: @SEARCH_ICON_OFFSET / 2;
+        margin-left: 0;
+        padding-right: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET;
+        transform: translate(50%, 0);
+    }
+}
+
+.dx-rtl {
+    .dx-searchbox,
+    &.dx-searchbox {
+        .dx-placeholder {
+            .ios-search-placeholder();
+            .ios-search-placeholder-rtl();
+        }
+
+        &.dx-state-focused {
+            .dx-placeholder {
+                text-align: right;
+                transform: translate(-@SEARCH_ICON_OFFSET / 2, 0);
+
+                &:before {
+                    transform: translate(0, 0);
+                }
+            }
+        }
+
+        &.dx-show-clear-button {
+            .dx-texteditor-input {
+                padding-right: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET * 2;
+            }
+        }
+
+        .dx-icon-search:before {
+            right: @SEARCH_ICON_OFFSET;
+            left: auto;
+            background-position-x: right;
+        }
+    }
+}
+
+@media (min-resolution: 192dpi) {
+    .dx-searchbox {
+        .dx-placeholder {
+            &:before {
+                background-position: 0 10px;
+            }
+        }
+
+        .dx-icon-search {
+            &:before {
+                top: 10px;
+            }
+        }
+    }
+
+    .dx-rtl {
+        .dx-searchbox,
+        &.dx-searchbox {
+            .dx-placeholder {
+                &:before {
+                    background-position: 100% 10px;
+                }
+            }
+        }
+    }
+}

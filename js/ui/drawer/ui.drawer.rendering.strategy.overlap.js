@@ -5,9 +5,7 @@ import translator from '../../animation/translator';
 import Overlay from '../overlay';
 import { ensureDefined } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
-import { isDefined } from '../../core/utils/type';
 import { camelize } from '../../core/utils/inflector';
-import * as zIndexPool from '../overlay/z_index';
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -33,9 +31,9 @@ class OverlapStrategy extends DrawerStrategy {
                 this._fixOverlayPosition(e.component.$content());
             }).bind(this),
             contentTemplate: drawer.option('template'),
-            onContentReady: () => {
+            onContentReady: (args) => {
                 whenPanelContentRendered.resolve();
-                drawer.updateZIndex(opened);
+                this._processOverlayZIndex(args.component.content());
             },
             visible: true,
             propagateOutsideClick: true
@@ -180,27 +178,15 @@ class OverlapStrategy extends DrawerStrategy {
         return $(this.getDrawerInstance().getOverlay().content());
     }
 
+    _processOverlayZIndex($element) {
+        const styles = $($element).get(0).style;
+        const zIndex = styles.zIndex || 1;
+
+        this.getDrawerInstance().setZIndex(zIndex);
+    }
+
     isViewContentFirst(position) {
         return position === 'right' || position === 'bottom';
-    }
-
-    updateZIndex() {
-        super.updateZIndex();
-
-        if(!isDefined(this._panelZIndex)) {
-            this._panelZIndex = zIndexPool.base() + 501;
-            this._drawer._$panelContentWrapper.css('zIndex', this._panelZIndex);
-        }
-
-    }
-
-    clearZIndex() {
-        if(isDefined(this._panelZIndex)) {
-            this._drawer._$panelContentWrapper.css('zIndex', '');
-            delete this._panelZIndex;
-        }
-
-        super.clearZIndex();
     }
 }
 

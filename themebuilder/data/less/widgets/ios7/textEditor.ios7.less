@@ -1,0 +1,248 @@
+@import (once) "./validation.ios7.less";
+@import (once) "./button.ios7.less";
+
+@TEXTEDITOR_ICON_SIZE: 18px;
+@CLEAR_ICON_SIZE: @TEXTEDITOR_ICON_SIZE;
+@CLEAR_ICON_TOP: 7px;
+@CLEAR_ICON_RETINA_CORRECTION: 1px;
+@CLEAR_ICON_RIGHT: 8px;
+@TEXTEDITOR_BORDER: 1px solid @IOS7_TEXTEDITOR_BORDER;
+@TEXTEDITOR_DISABLED_BORDER: 1px solid @IOS7_TEXTEDITOR_DISABLE_BORDER;
+@TEXTEDITOR_INPUT_PADDING: 6px;
+@TEXTEDITOR_INPUT_PADDING_LEFT: 8px;
+@TEXTEDITOR_BORDER_RADIUS: 6px;
+@TEXTEDITOR_FONT_SIZE: 1em;
+@TEXTEDITOR_PLACEHOLDER_MARGIN: 7px 7px 7px 9px;
+@TEXTEDITOR_CLEAR_BUTTON_WIDTH: @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT * 2;
+@TEXTEDITOR_INVALID_BADGE_BORDER_WIDTH: 2px;
+@TEXTEDITOR_INVALID_BADGE_WIDTH: 22px;
+@TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING: 4px;
+
+.texteditor-input-padding() {
+    .dx-texteditor-input {
+        padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+    }
+
+    &.dx-rtl .dx-texteditor-input {
+        padding: @TEXTEDITOR_INPUT_PADDING;
+        padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+    }
+}
+
+.texteditor-validation-icon-offset() {
+    right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+        right: auto;
+    }
+}
+
+.validation-icon-position() {
+    &.dx-invalid,
+    &.dx-valid {
+        .texteditor-input-padding();
+
+        .dx-texteditor-input-container {
+            &:after {
+                .texteditor-validation-icon-offset();
+            }
+        }
+    }
+}
+
+.pending-indicator-position() {
+    &.dx-validation-pending {
+        .texteditor-input-padding();
+
+        .dx-texteditor-input-container {
+            .dx-pending-indicator {
+                .texteditor-validation-icon-offset();
+            }
+        }
+    }
+}
+
+.dx-state-readonly {
+    .dx-texteditor-input {
+        color: @IOS7_TEXTEDITOR_READONLY_COLOR;
+    }
+}
+
+.dx-texteditor-container {
+    border: @TEXTEDITOR_BORDER;
+    border-radius: @TEXTEDITOR_BORDER_RADIUS;
+    overflow: hidden;
+
+    .dx-hairlines & {
+        border-width: 0.5px;
+    }
+}
+.dx-placeholder {
+    color: @IOS7_INPUT_PLACEHOLDER;
+
+    &:before {
+        padding: @TEXTEDITOR_PLACEHOLDER_MARGIN;
+        font-size: @TEXTEDITOR_FONT_SIZE;
+    }
+}
+
+.dx-texteditor-input {
+    margin: 0;
+    padding: @TEXTEDITOR_INPUT_PADDING;
+    padding-left: @TEXTEDITOR_INPUT_PADDING_LEFT;
+    background: @IOS7_TEXTEDITOR_BACKGROUND;
+    color: @IOS7_TEXTEDITOR_TEXT;
+    font-size: @TEXTEDITOR_FONT_SIZE;
+    font-family: @IOS7_FONT;
+
+    &:invalid {
+        box-shadow: none;
+    }
+}
+
+.dx-show-clear-button {
+    &:not(.dx-texteditor-empty) {
+        .validation-icon-position();
+
+        .pending-indicator-position();
+    }
+}
+
+.dx-clear-button-area {
+    width: @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+
+    .dx-icon-clear {
+        top: @CLEAR_ICON_TOP;
+        left: 0;
+        color: @IOS7_FONT_LIGHTEN;
+        .dx-icon-sizing(@CLEAR_ICON_SIZE);
+    }
+}
+
+.dx-state-disabled {
+    .dx-placeholder:before {
+        color: @IOS7_TEXTEDITOR_DISABLE;
+    }
+
+    .dx-texteditor-input {
+        color: @IOS7_TEXTEDITOR_DISABLE;
+
+        :not(.dx-searchbox) {
+            padding: @TEXTEDITOR_INPUT_PADDING;
+            padding-left: @TEXTEDITOR_INPUT_PADDING_LEFT;
+        }
+    }
+
+    .dx-texteditor-container {
+        border: @TEXTEDITOR_DISABLED_BORDER;
+    }
+}
+
+.badge-settings() {
+    pointer-events: none;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    margin-top: -@TEXTEDITOR_INVALID_BADGE_WIDTH/2;
+    width: @TEXTEDITOR_INVALID_BADGE_WIDTH;
+    height: @TEXTEDITOR_INVALID_BADGE_WIDTH;
+    text-align: center;
+    line-height: @TEXTEDITOR_INVALID_BADGE_WIDTH - 3px;
+}
+
+.dx-invalid-ios7-badge() {
+    .badge-settings();
+
+    background-color: @IOS7_BACKGROUND;
+    border: @TEXTEDITOR_INVALID_BADGE_BORDER_WIDTH solid @IOS7_INVALID_COLOR;
+    color: @IOS7_INVALID_COLOR;
+    content: '!';
+    border-radius: 11px;
+}
+
+.dx-valid-ios7-badge() {
+    .badge-settings();
+
+    font-family: 'DXIcons', sans-serif;
+    color: @IOS7_BUTTON_SUCCESS;
+    content: '\f005';
+    .validation-badge-animation();
+}
+
+.pending-indicator-ios7() {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    margin-top: -@TEXTEDITOR_INVALID_BADGE_WIDTH/2;
+    width: @TEXTEDITOR_INVALID_BADGE_WIDTH;
+    height: @TEXTEDITOR_INVALID_BADGE_WIDTH;
+}
+
+.dx-texteditor {
+    .validation-icon-position();
+
+    .pending-indicator-position();
+
+    &.dx-invalid {
+        &.dx-show-invalid-badge .dx-texteditor-input-container {
+            &:after {
+                .dx-invalid-ios7-badge();
+            }
+        }
+    }
+
+    &.dx-valid {
+        .dx-texteditor-input-container {
+            &:after {
+                .dx-valid-ios7-badge();
+            }
+        }
+    }
+
+    &.dx-validation-pending {
+        .dx-texteditor-input-container {
+            .dx-pending-indicator {
+                .pending-indicator-ios7();
+            }
+        }
+    }
+}
+
+.dx-rtl .dx-texteditor,
+.dx-rtl.dx-texteditor {
+    &.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-right: @TEXTEDITOR_INPUT_PADDING;
+            padding-left: @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT * 2;
+        }
+    }
+
+    .dx-placeholder,
+    .dx-placeholder:before {
+        right: 0;
+        left: auto;
+    }
+
+    .dx-texteditor-input {
+        padding-right: @TEXTEDITOR_INPUT_PADDING_LEFT;
+        padding-left: @TEXTEDITOR_INPUT_PADDING;
+    }
+
+    .dx-clear-button-area {
+        .dx-icon-clear {
+            float: left;
+            left: auto;
+            right: 0;
+        }
+    }
+}
+
+@media (min-resolution: 192dpi) {
+    .dx-clear-button-area {
+        .dx-icon-clear {
+            top: @CLEAR_ICON_TOP + @CLEAR_ICON_RETINA_CORRECTION;
+        }
+    }
+}

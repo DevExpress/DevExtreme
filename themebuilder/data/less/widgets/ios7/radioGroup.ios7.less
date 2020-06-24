@@ -1,0 +1,20 @@
+@import (once) "./radioButton.ios7.less";
+
+.dx-radiobutton {
+    line-height: 38px;
+    color: @IOS7_FONT_COLOR;
+
+    .dx-radiogroup-horizontal & {
+        margin-right: 10px;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            margin-right: 0;
+            margin-left: 10px;
+        }
+    }
+}
+
+.dx-radio-value-container {
+    padding-top: 2px;
+}

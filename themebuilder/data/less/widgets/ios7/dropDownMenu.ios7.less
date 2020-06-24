@@ -1,0 +1,55 @@
+@import (once) "./button.ios7.less";
+@import (once) "./popover.ios7.less";
+@import (once) "./list.ios7.less";
+
+.dx-dropdownmenu-popup-wrapper {
+    .dx-overlay-content {
+        border-radius: 0.5em;
+    }
+
+    .dx-popup-content {
+        padding: 0;
+        background-color: @IOS7_DROPDOWNMENU_BACKGROUND;
+        border-radius: 0.5em;
+    }
+
+    .dx-scrollview-content {
+        position: static;
+        overflow: hidden;
+        border-radius: 0.4em;
+    }
+
+    .dx-list-item {
+        position: static;
+        border-bottom: 1px solid @IOS7_DROPDOWN_BORDER;
+
+        .dx-hairlines & {
+            border-bottom-width: 0.5px;
+        }
+
+        &.dx-state-active,
+        &.dx-state-focused {
+            background: @IOS7_DROPDOWN_ACTIVE;
+        }
+
+        &:after {
+            display: none;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .dx-list-item-content {
+        padding: 13px 15px;
+
+        &:after {
+            content: none;
+        }
+    }
+
+    .dx-popover-arrow:after {
+        background: @IOS7_DROPDOWNMENU_BACKGROUND;
+    }
+}

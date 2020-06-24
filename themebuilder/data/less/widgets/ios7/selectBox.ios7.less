@@ -1,0 +1,19 @@
+@import (once) "./dropDownList.ios7.less";
+
+.dx-selectbox-popup-wrapper {
+    .dx-overlay-content {
+        box-shadow: @IOS7_SELECTBOX_SHADOW;
+    }
+
+    .dx-list {
+        background-color: @IOS7_SELECTBOX_BACKGROUND;
+
+        &:not(.dx-list-select-decorator-enabled) .dx-list-item:not(:last-child):not(:only-child) {
+            border-bottom: 1px solid @IOS7_SELECTBOX_BORDERCOLOR;
+
+            .dx-hairlines & {
+                border-bottom-width: 0.5px;
+            }
+        }
+    }
+}

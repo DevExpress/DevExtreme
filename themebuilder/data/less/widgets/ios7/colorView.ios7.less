@@ -1,0 +1,27 @@
+@import (once) "../base/colorView.less";
+@import (once) "./numberBox.ios7.less";
+@import (once) "./textBox.ios7.less";
+
+.dx-colorview-container {
+    label {
+        &.dx-colorview-alpha-channel-label {
+            margin-left: 42px;
+            width: 116px;
+        }
+    }
+}
+
+.dx-colorview-palette-cell,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-alpha-channel-border,
+.dx-colorview-color-preview-container {
+    padding: 1px;
+    margin: 1px;
+    margin-top: 0;
+    background-color: @IOS7_COLOR_VIEW_PALETTE_CELL_BACKGROUND_COLOR;
+    box-shadow: 0 0 0 1px @IOS7_COLOR_VIEW_OVERLAY_BORDER_COLOR;
+}
+
+.dx-colorview-color-preview-container {
+    margin-bottom: 34px;
+}

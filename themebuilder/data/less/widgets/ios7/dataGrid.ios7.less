@@ -1,0 +1,92 @@
+@import (once) "../base/dataGrid.less";
+@import (once) "./gridBase.ios7.less";
+
+.grid-base(datagrid);
+
+.dx-datagrid-header-panel .dx-toolbar-label {
+    font-size: inherit;
+    font-weight: normal;
+}
+
+.dx-datagrid-group-panel {
+    font-size: @IOS7_BASE_FONT_SIZE;
+    vertical-align: middle;
+    touch-action: pinch-zoom;
+
+    .dx-group-panel-message {
+        color: @datagrid-headers-color;
+        padding: @GRID_BASE_CELL_PADDING;
+        border-top: @datagrid-border-hidden;
+        border-bottom: @datagrid-border-hidden;
+        text-align: left;
+    }
+
+    .dx-group-panel-item {
+        .dx-datagrid-header-text;
+
+        background-color: @datagrid-headers-background-color;
+        color: @datagrid-headers-color;
+        border: @datagrid-border;
+        padding: @GRID_BASE_CELL_PADDING;
+        font-weight: bold;
+    }
+
+    .dx-block-separator {
+        padding: @GRID_BASE_CELL_PADDING;
+        padding-top: @GRID_BASE_CELL_PADDING - 1px;
+        background-color: @datagrid-selection-background;
+    }
+}
+
+.dx-datagrid-rowsview {
+    .dx-row.dx-group-row {
+        color: @datagrid-group-row-color;
+
+        td {
+            border-top-color: @datagrid-border-color;
+            border-bottom-color: @datagrid-border-color;
+        }
+    }
+}
+
+.dx-datagrid-group-opened {
+    .dx-icon(chevrondown);
+    .dx-icon-sizing(@GRID_BASE_GROUP_COLUMN_ICONS_SIZE);
+}
+
+.dx-datagrid-group-closed {
+    .dx-icon(chevronright);
+    .dx-icon-sizing(@GRID_BASE_GROUP_COLUMN_ICONS_SIZE);
+}
+
+.dx-datagrid-group-opened,
+.dx-datagrid-group-closed {
+    color: #9a9a9a;
+    width: 100%;
+}
+
+.dx-row.dx-datagrid-group-footer > td {
+    &.dx-column-lines {
+        border-bottom: @datagrid-border;
+    }
+
+    & > td {
+        border-top: @datagrid-border;
+        border-left-width: 0;
+        border-right-width: 0;
+    }
+}
+
+.dx-datagrid-table-fixed {
+    .dx-row.dx-group-row {
+        background-color: @datagrid-group-row-background-color;
+
+        td {
+            background-color: @datagrid-group-row-background-color;
+        }
+    }
+}
+
+.dx-rtl .dx-group-panel-message {
+    text-align: right;
+}

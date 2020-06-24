@@ -1,0 +1,100 @@
+@import (once) "./timeView.ios7.less";
+@import (once) "./dateView.ios7.less";
+@import (once) "./box.ios7.less";
+@import (once) "./calendar.ios7.less";
+@import (once) "./list.ios7.less";
+
+.dx-datebox-wrapper {
+    .dx-popup-title {
+        font-size: 1.3em;
+    }
+
+    .dx-popup-content {
+        padding: 10px;
+    }
+
+    &.dx-datebox-wrapper-calendar .dx-popup-content {
+        padding: 0;
+    }
+
+    .dx-popup-bottom.dx-toolbar {
+        height: 50px;
+    }
+}
+
+.dx-datebox {
+    &.dx-state-disabled,
+    .dx-state-disabled {
+        &.dx-widget,
+        .dx-widget {
+            opacity: 1;
+        }
+    }
+
+    .dx-texteditor-input {
+        &::-webkit-clear-button,
+        &::-webkit-inner-spin-button,
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    }
+
+    &.dx-dropdowneditor-field-clickable .dx-dropdowneditor-button {
+        display: none;
+    }
+
+    &,
+    &:not(.dx-texteditor-empty) {
+        .invalid-dropdowneditor-input-padding();
+    }
+}
+
+.dx-datebox-wrapper-calendar {
+    .dx-overlay-content {
+        border-radius: 0.5em;
+        box-shadow: @IOS7_AUTOCOMPLETE_SHADOW;
+        background-color: @IOS7_COLOR_VIEW_OVERLAY_BACKGROUND_COLOR;
+        border: 1px solid @IOS7_COLOR_VIEW_OVERLAY_BORDER_COLOR;
+    }
+
+    .dx-datebox-container-cell {
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+.dx-datebox-calendar-container {
+    margin: 20px;
+}
+
+.dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+    .dx-datebox-calendar-container {
+        margin-right: 6px;
+    }
+
+    .dx-timeview {
+        margin-top: 72px;
+    }
+
+    .dx-timeview-field {
+        margin-top: 30px;
+    }
+
+    .dx-datebox-container-cell {
+        margin-right: 40px;
+        margin-top: -32px;
+        margin-bottom: 20px;
+    }
+}
+
+.dx-rtl {
+    .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime .dx-datebox-calendar-container {
+        margin-left: 6px;
+        margin-right: 20px;
+    }
+}
+
+
+.dx-device-ios .dx-datebox.dx-texteditor-empty .dx-texteditor-input {
+    min-height: 31px;
+}

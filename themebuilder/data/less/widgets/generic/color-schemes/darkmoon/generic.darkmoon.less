@@ -1,0 +1,811 @@
+@GENERIC_COLOR_POSTFIX: ".darkmoon";
+@base-font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
+@base-label-color: #c1c7c9;
+@base-icon-color: #aab2b5;
+@base-accent: #3debd3;
+@base-text-color: #fff;
+@base-link-color: @base-accent;
+@base-bg: #465672;
+@base-border-color: #596980;
+@base-border-radius: 2px;
+@base-border-radius-exsmall: @base-border-radius - 2px;
+
+@base-inverted-bg: darken(@base-bg, 100%);
+@base-element-bg: @base-bg;
+
+@base-success:         #59d8a4;
+
+@base-warning:         #f0ad4e;
+@base-danger:          #f9517e;
+@base-hover-color: @base-text-color;
+@base-hover-bg: fade(#000000, 12%);
+@base-shadow-color: @base-inverted-bg;
+
+@base-select-color: @base-text-color;
+@base-select-bg: fade(#748fbc, 42%);
+@base-inverted-text-color: #2a2a2a;
+@base-focus-color: @base-inverted-text-color;
+@base-focus-bg: @base-accent;
+
+@base-inverted-bg: darken(@base-bg, 100%);
+@base-element-bg: @base-bg;
+@base-shadow-color: @base-inverted-bg;
+@typography-bg: @base-bg;
+@typography-color: @base-text-color;
+@typography-link-color: @base-link-color;
+
+@base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.5;
+@base-dropdown-shadow-color: fade(darken(@base-shadow-color, 100%), 17.5%);
+@base-invalid-color: @base-danger;
+@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
+@base-border-radius-small: @base-border-radius - 1px;
+@base-border-radius-large: @base-border-radius + 2px;
+@screen-text-color: screen(@base-bg, #686868);
+@base-grid-selected-border-color: #45c7de;
+
+// Badges
+@badge-color: @base-inverted-text-color;
+@badge-bg: lighten(@base-accent, 25%);
+
+// Validation
+
+@VALIDATION_MESSAGE_COLOR: @base-inverted-text-color;
+@VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
+@VALIDATION_SUMMARY_COLOR: @base-invalid-color;
+@validation-overlay-border-radius: @base-border-radius;
+
+
+// TextEditor
+@texteditor-border-color: @base-border-color;
+@texteditor-bg: @base-element-bg;
+@texteditor-underlined-bg: transparent;
+
+@texteditor-color: @base-text-color;
+@texteditor-filled-bg: fade(@texteditor-color, 5%);
+@texteditor-focused-border-color: @base-focus-bg;
+@texteditor-hover-bg: @base-bg;
+@texteditor-hover-border-color: fade(@base-accent, 40%);
+@texteditor-placeholder-color: darken(@base-label-color, 17%); // #c1c7c9 => #919ea3
+
+@texteditor-button-clear-icon-color: @base-icon-color;
+
+@texteditor-invalid-focused-border-color: @base-invalid-color;
+@texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
+@texteditor-filled-invalid-background: fade(@texteditor-invalid-faded-border-color, 20%);
+
+@texteditor-border-radius: @base-border-radius;
+@texteditor-input-border-radius: @base-border-radius;
+
+// TextBox
+@textbox-search-icon-color: @base-icon-color;
+
+// RadioGroup
+
+@radiogroup-checked-bg: @base-accent;
+@radiogroup-border-color: @base-border-color;
+@radiogroup-bg: @base-element-bg;
+@radiobutton-active-bg: fade(darken(@radiogroup-bg, 62.5%), 20%);
+@radiogroup-hover-border-color: fade(@base-accent, 40%);
+@radiobutton-focused-border-color: @base-focus-bg;
+@radiobutton-invalid-hover-border-color: @base-invalid-color;
+@radiobutton-invalid-focused-border-color: @base-invalid-color;
+@radiobutton-invalid-faded-border-color: @base-invalid-faded-border-color;
+@radiogroup-readonly-border-color: darken(@radiogroup-border-color, 9%);
+@radiogroup-readonly-bg: @radiogroup-bg;
+
+// Accordion
+
+@accordion-item-border-color: @base-border-color;
+@accordion-item-focused-border-color: @base-accent;
+@accordion-color: @base-text-color;
+@accordion-background-color: @base-bg;
+@accordion-title-color: @accordion-color;
+@accordion-item-title-opened-bg: transparent;
+@accordion-item-border-color: @base-border-color;
+@accordion-title-active-color: @base-accent;
+@accordion-title-active-bg: fade(lighten(@accordion-background-color, 62.5%), 20%);
+@accordion-item-hover-bg: @base-hover-bg;
+@accordion-icon-active-color: @accordion-color;
+@accordion-icon-color: @base-icon-color;
+
+// Button
+
+@button-icon-color: @base-icon-color;
+@button-border-radius: @base-border-radius;
+@button-disabled-text-opacity: 0.5;
+@button-disabled-icon-opacity: 0.6;
+
+// Normal button
+@button-normal-color: @base-text-color;
+@button-normal-bg: @base-element-bg;
+@button-normal-border-color: lighten(@base-border-color, 13%);
+@button-special-hover: transparent;
+
+@button-normal-bg-inverted: lighten(@button-normal-bg, 100%);
+
+@button-normal-contained-bg-hover: lighten(@button-normal-bg, 4%);
+@button-normal-contained-bg-focused: lighten(@button-normal-bg, 8%);
+@button-normal-contained-bg-active: lighten(@button-normal-bg, 24%);
+
+@button-normal-outlined-bg-hover: fade(@button-normal-bg-inverted, 4%);
+@button-normal-outlined-bg-focused: fade(@button-normal-bg-inverted, 8%);
+@button-normal-outlined-bg-active: fade(@button-normal-bg-inverted, 24%);
+
+@button-normal-text-bg-hover: fade(@button-normal-bg-inverted, 4%);
+@button-normal-text-bg-focused: fade(@button-normal-bg-inverted, 8%);
+@button-normal-text-bg-active: fade(@button-normal-bg-inverted, 24%);
+
+
+// Default button
+@button-default-color: @base-inverted-text-color;
+@button-default-bg: @base-accent;
+@button-default-border-color: darken(@base-accent, 5%);
+
+@button-default-contained-bg-hover: lighten(@button-default-bg, 9%);
+@button-default-contained-bg-focused: lighten(@button-default-bg, 12%);
+@button-default-contained-bg-active: lighten(@button-default-bg, 23%);
+
+@button-default-outlined-bg-hover: fade(@button-default-border-color, 10%);
+@button-default-outlined-bg-focused: fade(@button-default-border-color, 10%);
+@button-default-outlined-bg-active: fade(@button-default-border-color, 40%);
+
+@button-default-text-bg-hover: @button-default-outlined-bg-hover;
+@button-default-text-bg-focused: @button-default-outlined-bg-focused;
+@button-default-text-bg-active: @button-default-outlined-bg-active;
+
+
+// Danger button
+@button-danger-color: @base-inverted-text-color;
+@button-danger-bg: @base-danger;
+@button-danger-border-color: darken(@base-danger, 5%);
+
+@button-danger-contained-bg-hover: lighten(@button-danger-bg, 9%);
+@button-danger-contained-bg-focused: lighten(@button-danger-bg, 12%);
+@button-danger-contained-bg-active: lighten(@button-danger-bg, 23%);
+
+@button-danger-outlined-bg-hover: fade(@button-danger-border-color, 10%);
+@button-danger-outlined-bg-focused: fade(@button-danger-border-color, 10%);
+@button-danger-outlined-bg-active: fade(@button-danger-border-color, 40%);
+
+@button-danger-text-bg-hover: @button-danger-outlined-bg-hover;
+@button-danger-text-bg-focused: @button-danger-outlined-bg-focused;
+@button-danger-text-bg-active: @button-danger-outlined-bg-active;
+
+
+// Success button
+@button-success-color: @base-inverted-text-color;
+@button-success-bg: @base-success;
+@button-success-border-color: darken(@base-success, 5%);
+
+@button-success-contained-bg-hover: lighten(@button-success-bg, 9%);
+@button-success-contained-bg-focused: lighten(@button-success-bg, 12%);
+@button-success-contained-bg-active: lighten(@button-success-bg, 23%);
+
+@button-success-outlined-bg-hover: fade(@button-success-border-color, 10%);
+@button-success-outlined-bg-focused: fade(@button-success-border-color, 10%);
+@button-success-outlined-bg-active: fade(@button-success-border-color, 40%);
+
+@button-success-text-bg-hover: @button-success-outlined-bg-hover;
+@button-success-text-bg-focused: @button-success-outlined-bg-focused;
+@button-success-text-bg-active: @button-success-outlined-bg-active;
+
+
+// ButtonGroup
+
+// Normal Button (ButtonGroup)
+@button-group-normal-selected-color: @base-text-color;
+
+@button-group-normal-contained-selected-bg: lighten(@button-normal-bg, 17%);
+@button-group-normal-contained-selected-bg-hover: darken(@button-group-normal-contained-selected-bg, 6%);
+@button-group-normal-contained-selected-bg-focused: darken(@button-group-normal-contained-selected-bg, 3%);
+@button-group-normal-selected-bg: fade(lighten(@button-normal-bg, 100%), 17%);
+
+@button-group-normal-selected-bg-hover: fade(@button-group-normal-selected-bg, 11%);
+@button-group-normal-selected-bg-focused: fade(@button-group-normal-selected-bg, 14%);
+
+// Default Button (ButtonGroup)
+@button-group-default-selected-color: @button-default-bg;
+@button-group-default-selected-bg: fade(@button-default-bg, 30%);
+
+@button-group-default-selected-bg-hover: fade(@button-group-default-selected-bg, 20%);
+@button-group-default-selected-bg-focused: fade(@button-group-default-selected-bg, 20%);
+
+// Danger Button (ButtonGroup)
+@button-group-danger-selected-color: @button-danger-bg;
+@button-group-danger-selected-bg: fade(@button-danger-bg, 30%);
+
+@button-group-danger-selected-bg-hover: fade(@button-group-danger-selected-bg, 20%);
+@button-group-danger-selected-bg-focused: fade(@button-group-danger-selected-bg, 20%);
+
+// Success Button (ButtonGroup)
+@button-group-success-selected-color: @button-success-bg;
+@button-group-success-selected-bg: fade(@button-success-bg, 30%);
+
+@button-group-success-selected-bg-hover: fade(@button-group-success-selected-bg, 20%);
+@button-group-success-selected-bg-focused: fade(@button-group-success-selected-bg, 20%);
+
+// Checkbox
+@checkbox-border-color: @base-border-color;
+@checkbox-checked-color: @base-accent;
+@checkbox-indeterminate-bg: @base-accent;
+@checkbox-focused-borderd-color: @base-focus-bg;
+@checkbox-bg: @base-element-bg;
+@checkbox-hover-border-color: lighten(@base-accent, 12%);
+@checkbox-active-icon-bg: fade(lighten(@checkbox-bg, 62.5%), 20%);
+@checkbox-invalid-focused-border-color: @base-invalid-color;
+@checkbox-invalid-faded-border-color: @base-invalid-faded-border-color;
+@checkbox-readonly-border-color: darken(@checkbox-border-color, 9%);
+@checkbox-readonly-bg: @checkbox-bg;
+@checkbox-icon-border-radius: @base-border-radius-exsmall;
+
+// Diagram
+@diagram-border-color: @base-border-color;
+@diagram-toolbar-border-color: @base-border-color;
+@diagram-normal-format-active-bg: lighten(@base-element-bg, 10%);
+@diagram-default-format-active-bg: lighten(@base-accent, 10%);
+@diagram-danger-format-active-bg: lighten(@base-danger, 10%);
+@diagram-success-format-active-bg: lighten(@base-success, 10%);
+@diagram-image-icon-base-color: @base-bg;
+@diagram-image-icon-accent-color: @loadindicator-bg;
+@diagram-toolbox-shape-text-opacity: 0.5;
+
+// Drawer
+@drawer-shader-background-color: fade(@base-shadow-color, 50%);
+
+// Fileuploader
+@fileuploader-filename-color: @base-text-color;
+@fileuploader-falename-status-color: darken(@fileuploader-filename-color, 40%);
+@fileuploader-border-color: @base-border-color;
+
+
+// Gallery
+@gallery-indicator-bg: @base-bg;
+@gallery-indicator-item-selected-bg: @base-accent;
+@gallery-indicator-focused-bg: lighten(@base-accent, 15%);
+@gallery-indicator-item-border-color: @base-accent;
+@gallery-indicator-selected-border-color: fade(@gallery-indicator-bg, 80%);
+@gallery-navbutton-degradation-bg: @gallery-indicator-bg;
+@gallery-navbutton-hover-color: fade(@base-accent, 50%);
+@gallery-nav-arrow-color: @base-inverted-icon-color;
+@gallery-navbutton-active-color: fade(@base-accent, 70%);
+@gallery-navbutton-border-radius: @base-border-radius - 4px;
+
+// HtmlEditor
+@htmleditor-border-color: @base-border-color;
+@htmleditor-invalid-border-color: @base-invalid-color;
+@htmleditor-invalid-faded-border-color: @base-invalid-faded-border-color;
+@htmleditor-toolbar-border-color: @base-border-color;
+@htmleditor-normal-format-active-bg: lighten(@base-element-bg, 10%);
+@htmleditor-default-format-active-bg: lighten(@base-accent, 10%);
+@htmleditor-danger-format-active-bg: lighten(@base-danger, 10%);
+@htmleditor-success-format-active-bg: lighten(@base-success, 10%);
+@htmleditor-variable-bg: fade(@base-accent, 15%);
+@htmleditor-resize-frame-border-color: @base-accent;
+@htmleditor-resize-handle-bg: @base-accent;
+@htmleditor-mention-bg: lighten(@base-bg, 13.5%);
+@htmleditor-mention-color: @base-text-color;
+
+// List
+
+@list-border-color: @base-border-color;
+@list-normal-color: @base-text-color;
+@list-group-color: @list-normal-color;
+@list-group-header-bg: fade(darken(@base-bg, 37%), 0%);
+@list-item-hover-bg: @base-hover-bg;
+@list-item-selected-bg: @base-select-bg;
+
+@list-item-selected-hover-bg: fade(#748fbc, 30%);
+@list-item-focused-selected-bg: fade(@base-accent, 76%);
+@list-focused-bg: @base-focus-bg;
+@list-item-color: @base-text-color;
+@list-item-hover-color: @base-hover-color;
+@list-item-selected-color: @base-select-color;
+@list-item-focus-color: @base-focus-color;
+@list-item-active-color: @base-focus-color;
+@list-item-active-bg: @base-accent;
+@list-holdmenu-bg: @base-bg;
+@list-holdmenu-border-color: @list-border-color;
+@list-holdmenu-shadow-color: fade(@base-shadow-color, 10%);
+
+@list-menu-button-default-color: @button-default-color;
+@list-menu-button-default-bg: @button-default-bg;
+
+@list-menu-button-delete-color: @button-danger-color;
+@list-menu-button-delete-bg: @button-danger-bg;
+
+@list-item-ghost-bg: @base-bg;
+@list-chevron-focus-color: @base-inverted-text-color;
+@list-item-ghost-color: darken(@base-text-color, 38.5%);
+@list-item-ghost-border-color: @base-accent;
+@list-item-ghost-shadow-color: @base-shadow-color;
+
+@list-icon-color: @base-icon-color;
+
+@list-group-header-border-bottom: 2px solid @list-border-color;
+@list-group-header-default-padding-top: 20px;
+@list-group-header-compact-padding-top: 10px;
+@list-item-chevron-icon-color: @base-icon-color;
+@list-item-icon-toggle-delete-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAQAAAACj/OVAAABi0lEQVRYw93YLa6DQBSGYXAkLALBEmrRBI3EkJoqNtKAZR1NRQV7qKoo8u0GENWIc8UNodPbH35nkptPTjIPmTBnZo4llt5YRkCGxCEgo6SipqGlpaGmoiQjwBkyx1DQJqLgjHzImYIIez7oknL8SD3mSIo7B4w5DMa6HIingT4599GcINzJ8ceCIadJWJcT4Rgw4TKLE4QLyVBwy202Jwg3tkPAZCHul0y+geECi6kubPgJ9Gf+Kq9/H/89mC/OCUL+Down7rvv+zJ+BboTqsrw6uP+BdPVOEFIn0F7RImekiO2CkarcoIQqWCxOlg8gs6X43WJnHF6MFidE4SgBzMtYNaDpRaw7MHqaahhj4c1Ix57mqdZqx6slYErm1lYlw1XZd66B9Vv2S3CWVjs1HXrwVYZ8BYDPWXe1iCofUm1/zTat4X2ja+9tGkv3tqPJ+0HsIErhvZLlPZrooGLsParvoHHjIHnmvYHqYEnt4GmgoG2iYHGkIHWl4HmnpH2pYEG7Tot6H/d1f8Bh8gHKxGErEsAAAAASUVORK5CYII=");
+
+// Overlay
+@overlay-content-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
+@overlay-border-color: @base-border-color;
+@overlay-content-bg: @base-bg;
+@overlay-shader-bg: fade(@base-bg, 80%);
+@overlay-focus-border-color: @base-border-color;
+
+// Popup
+@popup-title-bg: transparent;
+@popup-title-color: @base-text-color;
+@popup-title-border-color: @base-border-color;
+
+@popup-bottom-bg: @popup-title-bg;
+@popup-bottom-color: @base-text-color;
+
+@popup-border-radius: @base-border-radius-large;
+
+// Popover
+@popover-arrow-bg: @overlay-content-bg;
+
+// Toast
+@toast-color: #fff;
+@toast-shadow-color: transparent;
+@toast-border-radius: @base-border-radius-large;
+@toast-info-bg: @base-accent;
+@toast-warning-bg: @base-warning;
+@toast-error-bg: @base-danger;
+@toast-success-bg: @base-success;
+
+@toast-info-icon-image-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAQAAAC00HvSAAABoklEQVRIx63WPUvDQBjA8QMFsZNLlgpxtINjBsFVqINghm4dRAe/Rpdm6UcQHERwUYdAJ8HvkKHEQdrPEBQUrf7PoabtveSSSrit3PPjeve8RCCsyyMkIiYlAzJSYiJCPPt+248BfRKkdSX0CcoZnx7jAiJfY3r4LqbNsITI15B2EdNlVBGRSEZ0bUyXyQqIRDJZQIu/M1oRmZ2ovcz4zjt558NxR/6C6Vk2fHLPOXtsIhA0aHHGA1/Gvl7OBMYT/3BF05poTS5Be/5gxvQ15JWjgtyerWPelP19hMDTMvabQyciEJwoJ0rwBKF2lutSRCC4UWJCQaQx+5WYAyUmEsQas1WJ2VJiYkGqMTuVmG0lJhVkGnNaiblQYjKhZYHkmY1SpMGLEoN5Gskt605kjTstIjPvRiJ50tuSksePxv7UfKm8HAe0DGKXgZbB85eKHLWdKkjHUpjzvAmdHaUKIgnNmrIzLiTBs1W4ybiQvwq39RuV6TB1jpvA1f1yxo0sdT9XLy5DlF5cPBmmq0yG2uZUbVOzthle2xdFbd83//za+gXw/JH9LjmoAgAAAABJRU5ErkJggg==");
+@toast-warning-icon-image-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAQAAAC00HvSAAABJklEQVRIx62WvW2EQBBGpwlSArdgSrBESuKIQhySLJJbcAuXrXTZteCAAG3GlWBRwVsHB+Ykw8zeafVlaPSY/1lBdlXQ0OMJzMBMwNPTUOzb732scAzEXQ04KhtT0jEdIFZNdJQapuZsIFadqY8wLWMiJBIZafcwLdcHIJHIdQNt4YwPQm4e1feYMjkn/3NUbpjuSUgk0q2YSinx5xL0SSl/dcM45V8r5qLYOEQoDjs2FTNQCI0a+deC+VatGqFPwugD0gs+A8YLQTW4LJgf1SoIcxJG751ZIAMGy5sp1ZuQgHkxMMGqVJq81Tdp6q0unnhFeDMK3lgz9b6k+MOaKX3CUzDO3jd2UH/7JtP2y7aLM12GbHcq29XMdsOzvSiyvW+efG39AmPXSbHWZjgLAAAAAElFTkSuQmCC");
+@toast-error-icon-image-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAQAAAC00HvSAAABeklEQVRIx62WMWrDQBBFx01I5zQinQ5hdINA3Kp3mUNEnSBIdwgEcgeBC18gVRojjDr7BklUxAE3b1NYihVrdmWbZbpl9FjN/zOzgqgREJNTUFEDNRUFOTGBnq8dRmQsMWosyYiGMSEpawuijTUpoQszZT6AaGPO1IaZsToRYjCsmGmYGZszIAbD5gA6/M7qTMj+RtMuJjy5Jv0ahQdMeiHEYEhbTKRK/KN+9K3IH+0xmZK+4Jb33mnChM/eaYYIgeLYBdcI4yNQgiBM+Oo5OxBi5S5l0ztdUNJoGrPr5cdCrtbgGOSCGHKhsCjQBbkhhkKorFK2oKsBiKESaocnys58sUMMtYDTXA8NZMSbIwv3bZJO/48VH3VuY6/NYwO4V+Tv1aYYgMTsVB8dKZUPQmyG/OcbzcUvijot6IYPzcVaT225UyQuCRjxrGyLwNbhW54Un5S8KrmZa96cGn/zxtP08zaLPW0Gb3vK29b0tsO9vSi8vW8ufG39AnvvGenmMu5AAAAAAElFTkSuQmCC");
+@toast-success-icon-image-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAQAAAC00HvSAAABlklEQVRIx62Wv0rDUBSHTxE6uHTKGhDEzS2jg4vUMeBmX8BR8AFiJQEfwck3cAh2cxBcXEup3VoHF3UxS1FBvuvQhPy5N0lTwplyknz33HN+95wriNEsXAJCZkRAxIyQABfL/L3J6eAzRhltjI9Tj7HxmJcgEpvjYVdh+oxqEImN6JdhBkzXhCgUUwYmzIBFA4hCsUhB6XamDSGriPpZjL12TvQc2SnG2xCiUHgJxqktcdbe+SmU31lh/AaQJQ4HfOR8PiJYpYrVDU4RhD1+c8q2BLdBLNdxXW8KflcI1obcs4UgnGlvAiE0/DDhW/O90EMQDnMbWlkozDTnMz2OC6AvdhGEHT4Ny86EqOB6i1fNgv44QhC2mRi3Gwlozqs4kSnoHEHocFdWQT0ahWKYA93GT5elyY9MucmDHukiCCeGuDO5CUteJaAOgrDPskIKYZVuhpkG/1qpqKBaxRcIQpeHGmG6dWfKM0hfnxZW/Ql/qj0k/ib9Rh83Tqvdr7Ve3NJkaG1OtTY1W5vhrd0oWrvfbHjb+gdn1DPEHv9HmQAAAABJRU5ErkJggg==");
+
+// DropDownEditor
+@dropdowneditor-button-hover-bg: darken(@button-normal-bg ,10%);
+@dropdowneditor-filled-button-hover-bg: fade(@base-accent, 20%);
+@dropdowneditor-button-hover-border-color: transparent;
+@dropdowneditor-button-active-bg: darken(@button-normal-bg, 30%);
+@dropdowneditor-filled-button-active-bg: fade(@base-accent, 30%);
+@dropdowneditor-filled-button-invalid-hover-bg: fade(@texteditor-invalid-focused-border-color, 20%);
+@dropdowneditor-filled-button-invalid-active-bg: fade(@texteditor-invalid-focused-border-color, 30%);
+@dropdowneditor-button-active-border-color: transparent;
+@dropdowneditor-icon-color: @base-icon-color;
+@dropdowneditor-icon-active-color: @base-icon-color;
+
+@dropdowneditor-icon-border-radius: @base-border-radius-small;
+
+// Lookup
+
+@lookup-icon-color: @base-icon-color;
+
+// Selectbox
+@selectbox-list-bg: @base-bg;
+
+// Tabs
+@tabs-tab-color: @base-text-color;
+@tabs-tab-selected-color: @base-text-color;
+@tabs-tab-bg: darken(@base-bg, 3%);
+@tabs-tab-selected-bg: @base-bg;
+
+@tabs-tab-icon-color: @tabs-tab-color;
+@tabs-tab-icon-selected-color: @tabs-tab-selected-color;
+@tabs-tab-button-disabled-opacity: @button-disabled-icon-opacity;
+@tabs-border-color: @base-border-color;
+@tabs-focused-border-color: @base-focus-bg;
+@tabs-tab-hover-bg: @base-element-bg;
+@tabs-tab-active-bg: fade(lighten(@tabs-tab-bg, 62.5%), 20%);
+
+// TagBox
+@tagbox-tag-color: @base-text-color;
+@tagbox-tag-bg: lighten(@base-bg, 13.5%);
+@tagbox-tag-border-radius: @base-border-radius - 2px;
+@tagbox-tag-button-remove-bg: lighten(@tagbox-tag-bg, 20%);
+@tagbox-tag-button-remove-active-bg: darken(@tagbox-tag-button-remove-bg, 20%);
+
+@tagbox-tag-focused-bg: darken(@tagbox-tag-bg, 7.3%);
+@tagbox-tag-focused-color: @tagbox-tag-color;
+@tagbox-tag-focused-button-remove-bg: @tagbox-tag-button-remove-bg;
+
+@tagbox-select-all-border-color: @base-border-color;
+
+// NavBar
+@navbar-tab-color: @base-text-color;
+@navbar-tab-selected-color: @base-text-color;
+@navbar-tab-bg: darken(@base-bg, 3%);
+@navbar-tab-selected-bg: @base-bg;
+@navbar-tab-focused-border-color: @base-focus-bg;
+
+// Scrollable
+
+@scrollable-bg: @base-bg;
+@scrollable-scroll-bg: fade(darken(@base-accent, 15%), 80%);
+@scrollable-scroll-active-bg: darken(@base-accent, 15%);
+@scrollable-scroll-shadow-color: transparent;
+
+@scrollable-scrollbar-bg: transparent;
+@scrollable-scrollbar-active-bg: fade(lighten(@base-bg, 25%), 20%);
+
+// ScrollView
+
+@scrollview-shadow-color: fade(@base-shadow-color, 37%);
+@scrollview-pull-down-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAyCAQAAAD2dTOtAAAApElEQVRIx2OYxQCHvlggw38oZBgcCrFCihQ2YIFDViH1g+cMFjhkFVI/eP5jgUNWIfWDh2iFdbMuYUCsCmcS65lRhXRRqDXrwKzDYPgci8LDUFgKMilq1h+saREBt8xig1gai1fp9llsCDcm4FS2dxYnqmfS8ClD9XUmFq9wYk/hOWjKeHBnhVK4smMgZfjyTDVY2clZ/IQzVzWwuOPHyFz/iYQAhMbywidpE3YAAAAASUVORK5CYII=") 0 0 no-repeat;
+
+// Toolbar
+@toolbar-bg: @base-bg;
+
+@toolbar-color: @base-text-color;
+
+// LoadIndicator
+@loadindicator-bg: @base-accent;
+@loadindicator-segment-shadow-color: fade(@base-shadow-color, 20%);
+@loadindicator-image-bg: url("data:image/gif;base64,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");
+
+// LoadPanel
+@loadpanel-border-color: @overlay-border-color;
+@loadpanel-content-shadow-color: @overlay-content-shadow-color;
+@loadpanel-content-bg: @overlay-content-bg;
+@loadpanel-content-border-radius: @base-border-radius-large;
+
+// Slider
+@slider-bar-bg: @base-border-color;
+@slider-range-bg: @base-accent;
+@slider-range-border-color: @slider-range-bg;
+
+@slider-handle-bg: @base-accent;
+@slider-handle-border-color: @base-bg;
+@slider-handle-active-bg: lighten(@slider-handle-bg, 17%);
+@slider-handle-hover-bg: lighten(@slider-handle-bg, 10%);
+@slider-handle-focused-bg: @slider-handle-hover-bg;
+@slider-invalid-handle-accent-bg: lighten(@base-danger, 10%);
+
+@slider-handle-border-radius: @base-border-radius - 1px;
+
+//ProgressBar
+@progressbar-bg: difference(@base-bg, #212121); // #465672 => #253552
+@progressbar-border-color: @base-border-color;
+@progressbar-range-bg: @base-accent;
+@progressbar-range-border-color: @base-accent;
+
+@progressbar-range-disabled-bg: fade(@base-accent, 60%);
+@progressbar-range-indeterminate-color: @base-accent;
+
+
+// Switch
+
+@switch-border-color: @base-border-color;
+@switch-on-color: @base-text-color;
+@switch-bg: @base-element-bg;
+@switch-handle-bg: @base-accent;
+@switch-handle-active-bg: lighten(@switch-handle-bg, 17%);
+@switch-handle-border-radius: @base-border-radius - 2px;
+@switch-hover-border-color: @base-accent;
+@switch-focused-border-color: @base-focus-bg;
+@switch-container-active-bg: fade(lighten(@switch-bg, 62.5%), 20%);
+@switch-hover-bg: transparent;
+@switch-active-border-color: @base-accent;
+@switch-off-color: darken(@base-text-color, 40%);
+@switch-handle-off-bg: darken(@switch-handle-bg, 15%);
+@switch-readonly-border-color: darken(@switch-border-color, 9%);
+@switch-container-readonly-bg: @switch-bg;
+@switch-border-radius: @base-border-radius-exsmall;
+
+// Pager
+@pager-page-selected-color: @base-bg;
+@pager-page-selected-bg: @base-accent;
+@pager-page-selected-border-color: transparent;
+@pager-page-border-radius: @base-border-radius - 1px;
+
+// Color View
+@colorbox-overlay-bg: @overlay-content-bg;
+@colorbox-palette-cell-bg: @colorbox-overlay-bg;
+@colorview-border-color: @base-border-color;
+@colorview-label-color: @base-label-color;
+@colorbox-preview-empty-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAQAAACRZI9xAAAAdElEQVQoU4XR0Q3AIAgFQCariS7CFN2qk3UIiyIFFGNe5INcgETAegpQefFCCFPwYZI2qFA/M4EQMQAhKxJgiEcKHFFkwUQY3Q4sBAhUerYzkbaiTUk7Ije0dYoMyeYGi35igUeDzMCiTiKgaPx0BAR1csgH1RfUiCvMOY4AAAAASUVORK5CYII=");
+
+// DataGrid
+@datagrid-base-color: @base-text-color;
+@datagrid-base-background-color: @base-bg;
+@datagrid-border-color: @base-border-color;
+@datagrid-border: 1px solid @datagrid-border-color;
+@datagrid-columnchooser-item-color: @screen-text-color;
+@datagrid-block-separator-bg: lighten(@datagrid-base-background-color, 6.5%);
+@datagrid-columnchooser-font-weight: normal;
+@datagrid-drag-header-border-color: fade(@base-accent, 50%);
+@datagrid-drag-header-shadow-color: fade(@base-shadow-color, 10%);
+@datagrid-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
+@datagrid-header-drag-bg: @datagrid-base-background-color;
+
+@HEADER_FILTER_COLOR: @datagrid-columnchooser-item-color;
+@HEADER_FILTER_COLOR_EMPTY: fade(@datagrid-columnchooser-item-color, 50%);
+@datagrid-selection-bg: @base-accent;
+@datagrid-row-selected-border-color: @base-grid-selected-border-color;
+@datagrid-row-selected-color: @base-bg;
+@datagrid-row-focused-color: @base-inverted-text-color;
+@datagrid-row-focused-bg: mix(@base-bg, @base-accent, 20%);
+@datagrid-hover-bg: @base-hover-bg;
+@datagrid-row-hovered-color: @datagrid-base-color;
+@datagrid-menu-icon-color: @base-icon-color;
+@datagrid-cell-modified-border-color: fade(@base-success, 50%);
+@datagrid-row-removed-bg: fade(@base-success, 50%);
+@datagrid-row-invalid-faded-border-color: @base-invalid-faded-border-color;
+@datagrid-row-invalid-border-color: @base-invalid-color;
+@datagrid-nodata-color: @base-icon-color;
+@datagrid-group-row-color: @base-text-color;
+@datagrid-group-row-bg: lighten(@base-bg, 3%); // #465672 => #4d5e7a
+
+@datagrid-master-detail-cell-bg: lighten(@datagrid-base-background-color, 2%);
+@datagrid-search-color: @base-inverted-text-color;
+@datagrid-spin-icon-color: @base-icon-color;
+@datagrid-search-bg: @base-accent;
+@datagrid-row-error-color: @base-inverted-text-color;
+@datagrid-row-error-bg: mix(@base-invalid-color, @datagrid-base-background-color, 60%);
+@datagrid-link-color: @base-link-color;
+@datagrid-focused-border-color: mix(@base-bg, darken(@base-accent, 20%), 20%);
+@datagrid-editor-bg: @datagrid-base-background-color;
+
+@datagrid-drop-highlight-bg: @base-accent;
+@datagrid-drop-highlight-color: @base-inverted-text-color;
+@datagrid-columnchooser-bg: @base-element-bg;
+@datagrid-row-alternation-bg: darken(@base-bg, 2%); // #465672 => #40506b
+@datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
+@datagrid-summary-color: fade(@datagrid-base-color, 70%);
+@datagrid-columnchooser-message-color: darken(@datagrid-base-color, 40%);
+@datagrid-summary-bg: @datagrid-base-background-color;
+
+@datagrid-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
+@datagrid-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
+
+@datagrid-columnchooser-overlay-border-radius: @base-border-radius-large;
+
+@datagrid-column-separator-bg: fade(@base-accent, 50%);
+@datagrid-text-stub-background-image-path: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAACqCAYAAABbAOqQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA39pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpjYWQ2ODE5MS00ZDMxLWRjNGYtOTU0NC1jNjJkMTIxMjY2M2IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTA1Rjg5QzEzRDYzMTFFODk2RDNEMzdGNEM4MUVCNTEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTA1Rjg5QzAzRDYzMTFFODk2RDNEMzdGNEM4MUVCNTEiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjVlMjM1Y2U0LTc5ZWUtNGI0NC05ZjlkLTk2NTZmZGFjNjhhNCIgc3RSZWY6ZG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjk1OTQ2MjBiLTUyMTQtYTM0Yy04Nzc5LTEwMmEyMTY4MTlhOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pk5ua/oAAAE4SURBVHja7N2xDYQwEEVBjCiD/ivbPtaEBBsQIGTsedI1wOgTsbqWmZvGafcIgAgIEAEBIiBABGTtjut3egyvFhbilSUgQAREQIAICBABASIgQPR5zXdZFiIgQAQEiIAAERAgAiIgQAQEiIAAERAgAqKykS+owkIERECACAgQAQEiIEAERECA6GEuqCxEQIAICBABASIgQAREQIAICBABASIgQAREdav+B1VYiIAAERAgAgJEQAQEiIAAEZCpckFlIQICRECACAgQAQEiIAICRECACAgQAQEiIKpb9YLKQgQEiIAAERAgAiIgQAQEiIDMlQsqCxEQIAICRECACAgQAREQIAICRECACAgQAVHdXy+owkIEBIiACAgQAQEiIEAEBIiA6JYLKgsRECACAkRAgAgIEI1UF2AAcN0XYzrIAiwAAAAASUVORK5CYII=");
+
+// TreeList
+@treelist-spin-icon-color: @datagrid-spin-icon-color;
+@treelist-selection-spin-icon-color: @base-bg;
+@treelist-row-alternation-bg: @datagrid-row-alternation-bg;
+
+
+// dxPivotGrid
+@PIVOTGRID_AREA_BACKGROUND: @base-bg;
+@PIVOTGRID_BORDER_COLOR: @base-border-color;
+@PIVOTGRID_AREA_COLOR: @screen-text-color;
+@PIVOTGRID_DATA_AREA_COLOR: @base-text-color;
+@PIVOTGRID_TOTALCOLOR: darken(@base-bg, 2%); // #465672 => #40506b
+@PIVOTGRID_GRANDTOTALCOLOR: @base-hover-bg;
+@PIVOTGRID_FIELD_AREA_TEXT_COLOR: lighten(@PIVOTGRID_AREA_COLOR, 26.2%);
+
+@PIVOTGRID_ACCENT_COLOR: @base-accent;
+@PIVOTGRID_DRAG_HEADER_BORDER_COLOR: fade(@PIVOTGRID_ACCENT_COLOR, 50%);
+@PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@base-shadow-color, 10%);
+@PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@base-shadow-color, 20%);
+
+@PIVOTGRID_AREA_ALL_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAJUlEQVQoz2P8z4AfMP5nuANTw8iAwVJhpJMCPE5UGXUkCQrwAwDs60IB/o6xEwAAAABJRU5ErkJggg==");
+@PIVOTGRID_AREA_FILTER_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAV0lEQVQoz2P4z4Afgonbf27/xwJ/IxT8xw4RCn4TMqEYi/S/2/lwBUAluUABVOlMJEeClaQjKflzOwHFF1AlyXAFCWjehCtBcv3gVQAJ0V84FeCMTXwQAMrDTFsWJavbAAAAAElFTkSuQmCC");
+@PIVOTGRID_AREA_COLUMN_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAIElEQVQoz2P4z4AfAtHt/xAIZDVAILIYfRSMOpI+jgQAxANicN4woIMAAAAASUVORK5CYII=");
+@PIVOTGRID_AREA_ROW_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAI0lEQVQoz2P4z4AfAtHt/xCInUUfBYQd2QCB2Fn0UTAMQhIAxANicBIhA7AAAAAASUVORK5CYII=");
+@PIVOTGRID_AREA_DATA_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAANklEQVQoz2P4z4AfMhCl4PZ/bJAkBb5QQV+cbsCtBM7ApQSJiV0J8QoIWEHAkQS9SXlIUhSbAIZgO8xzwo9wAAAAAElFTkSuQmCC");
+
+@PIVOTGRID_DIMENSION_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAH0lEQVQoz2P8z4AfMFJHwR2wKhVGdJqKCkbdQIXIAgA90EYBVgioGQAAAABJRU5ErkJggg==");
+@PIVOTGRID_HIERARCHY_IMAGE: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAALUlEQVQoz2P8z4AfMFJXwR0wR4WRhgrwugGmG90UKirA6wZ03cimUEkBRZEFAHc2NAGyhSBoAAAAAElFTkSuQmCC");
+
+@PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
+@pivotgrid-spin-icon-color: @base-icon-color;
+
+// dxScheduler
+@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 60%);
+@scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
+@scheduler-cell-hover-bg: lighten(@base-bg, 4%);
+@scheduler-group-separator-border-color: lighten(@base-border-color, 20%);
+@SCHEDULER_ACCENT_BORDER_COLOR: lighten(@base-border-color, 9.8%);
+@SCHEDULER_APPOINTMENT_TEXT_COLOR: #fff;
+@SCHEDULER_APPOINTMENT_BASE_COLOR: #2cc9b4;
+@SCHEDULER_APPOINTMENT_START_COLOR: fade(darken(@base-shadow-color, 100%), 30%);
+@SCHEDULER_FIRST_MONTH_BORDER_COLOR: lighten(@base-border-color, 20%);
+@SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: darken(@base-element-bg, 5%);
+@SCHEDULER_APPOINTMENT_BASE_COLOR: #2cc9b4;
+@SCHEDULER_APPOINTMENT_TEXT_COLOR: #fff;
+@scheduler-appointment-focus-color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
+@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: fade(@base-accent, 20%);
+@SCHEDULER_PANEL_TEXT_COLOR: @base-text-color;
+@SCHEDULER_WORKSPACE_BACKGROUND_COLOR: @base-bg;
+@SCHEDULER_WORKSPACE_ACCENT_COLOR: @base-accent;
+@SCHEDULER_CURRENT_TIME_CELL_COLOR: @base-accent;
+@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@SCHEDULER_CURRENT_TIME_CELL_COLOR, 15%);
+@SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR: #fff;
+@scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
+@SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: lighten(@base-text-color, 38.5%);
+@scheduler-dropdown-appointment-date-color: lighten(@base-text-color, 38.5%);
+@SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR;
+@scheduler-group-header-color: @SCHEDULER_PANEL_TEXT_COLOR;
+@scheduler-header-bg: @base-hover-bg;
+@scheduler-alldaypanel-bg: @base-element-bg;
+@scheduler-appointment-form-separator-color: @base-border-color;
+@scheduler-tab-selected-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
+@scheduler-tab-selected-before-bg: @scheduler-tab-selected-bg;
+@scheduler-tab-focused-border-color: @base-accent;
+
+@SCHEDULER_OTHER_MONTH_CELL_OPACITY: 0.5;
+@SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
+@SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(222, 222, 222, 0.07);
+@SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: fadeout(@SCHEDULER_APPOINTMENT_BASE_COLOR, 85%);
+
+// SlideOutView
+@slideoutview-content-border-color: fade(@base-border-color, 50%);
+@slideoutview-bg: @base-element-bg;
+
+//Menu
+
+@menu-popup-bg: @base-bg;
+@menu-item-hover-bg: @base-hover-bg;
+@menu-color: @base-text-color;
+@menu-item-hovered-color: @base-hover-color;
+@menu-item-expanded-color: @menu-color;
+@menu-item-selected-bg: lighten(@base-bg, 10%);
+@menu-popup-border-color: @base-border-color;
+
+@menu-separator-bg: @base-border-color;
+@menu-item-selected-color: @base-text-color;
+@menu-item-focused-bg: @base-focus-bg;
+@menu-item-focused-selected-bg: fade(@base-focus-bg, 70%);
+
+@menu-container-shadow-color: fade(@base-shadow-color, 15%);
+
+// Calendar
+@calendar-color: @base-text-color;
+@calendar-header-color: @screen-text-color;
+@calendar-cell-other-color: darken(@calendar-color, 49%);
+@calendar-cell-other-hover-color: darken(@calendar-color, 49%);
+@calendar-bg: @base-bg;
+@calendar-hover-bg: @base-hover-bg;
+@calendar-cell-hover-color: @calendar-color;
+@calendar-cell-selected-bg: @base-accent;
+@calendar-cell-active-bg: fade(lighten(@calendar-bg, 62.5%), 20%);
+@calendar-border-color: @base-border-color;
+@calendar-navigator-border-color: @button-normal-border-color;
+@calendar-navigator-border-radius: @button-border-radius;
+@calendar-navigator-hover-border-color: @button-normal-border-color;
+@calendar-cell-contoured-border-color: lighten(@base-border-color, 12%);
+@calendar-cell-contoured-border-radius: @base-border-radius;
+
+@calendar-invalid-focused-border-color: @base-invalid-color;
+@calendar-invalid-faded-border-color: @base-invalid-faded-border-color;
+
+@calendar-button-caption-active-bg: lighten(@base-bg, 17%);
+@calendar-button-footer-active-bg: lighten(@base-bg, 17%);
+@calendar-button-caption-color: @base-accent;
+
+@calendar-cell-empty-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAnklEQVRIx7XVUQ7AEAwGYCdZuAhOsndn38tuYLOQmNFWaw8NqfiQ/AkVY1Qh7FsaV1Sx0sTcddxlF6A2W6Y0vBSvUP/cuFpg4y36grl4D/3As/gI7cJUHEKHMIZjKAiPcAqKwi1ORUlwhZ+5PGXPTKQKbJfA9fNnojidUyrOCj8Fx1AHHOwgnIVScDaK4SIUwsXoCE8NLUU7uFZ/faYXEL4F+lqnf18AAAAASUVORK5CYII=") center center no-repeat;
+@calendar-shevron-icon-color: @base-accent;
+
+// Tooltip
+@tooltip-color: @base-text-color;
+@tooltip-bg: lighten(@base-bg, 14%); // #465672 => #62789e
+@tooltip-border-color: @overlay-border-color;
+@tooltip-shadow-color: @overlay-content-shadow-color;
+@tooltip-border-radius: @base-border-radius;
+
+// NumberBox
+
+@numberbox-spin-active-bg: darken(@button-normal-bg, 30%);
+@numberbox-spin-active-color: @base-text-color;
+@numberbox-spin-hover-border-color: transparent;
+@numberbox-spin-hover-bg: darken(@button-normal-bg, 10%);
+
+@numberbox-spin-container-border-radius: @base-border-radius;
+@numberbox-spin-icon-border-radius: @base-border-radius-small;
+@numberbox-spin-icon-color: @base-icon-color;
+
+// TileView
+@tileview-color: @base-text-color;
+@tileview-bg: @base-element-bg;
+@tileview-border-color: fade(@base-border-color, 60%);
+@tileview-hover-bg: @base-element-bg;
+@tileview-hover-border-color: fade(@base-accent, 40%);
+@tileview-active-bg: fade(lighten(@tileview-bg, 62.5%), 20%);
+@tileview-active-color: @tileview-color;
+
+// TreeView
+
+@treeview-color: @base-text-color;
+@treeview-focused-bg: @base-focus-bg;
+@treeview-focus-color: @base-focus-color;
+@treeview-hover-bg: @base-hover-bg;
+@treeview-item-hover-color: @treeview-color;
+@treeview-border-color: @base-border-color;
+@treeview-item-selected-color: @treeview-color;
+@treeview-item-selected-bg: fade(#748fbc, 42%);
+@treeview-item-selected-hover-bg: fade(#748fbc, 30%);
+@treeview-spin-icon-color: @base-icon-color;
+
+// TimeView
+@timeview-clock-bg: url("data:image/svg+xml;charset=UTF-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%22191px%22%20height%3D%22191px%22%20viewBox%3D%220%200%20191%20191%22%20enable-background%3D%22new%200%200%20191%20191%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M95.5%2C0C42.8%2C0%2C0%2C42.8%2C0%2C95.5S42.8%2C191%2C95.5%2C191S191%2C148.2%2C191%2C95.5S148.2%2C0%2C95.5%2C0z%20M95.5%2C187.6%0A%09c-50.848%2C0-92.1-41.25-92.1-92.1c0-50.848%2C41.252-92.1%2C92.1-92.1c50.85%2C0%2C92.1%2C41.252%2C92.1%2C92.1%0A%09C187.6%2C146.35%2C146.35%2C187.6%2C95.5%2C187.6z%22%2F%3E%0A%3Cg%3E%0A%09%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M92.9%2C10v8.6H91v-6.5c-0.1%2C0.1-0.2%2C0.2-0.4%2C0.3c-0.2%2C0.1-0.3%2C0.2-0.4%2C0.2c-0.1%2C0-0.3%2C0.1-0.5%2C0.2%0A%09%09c-0.2%2C0.1-0.3%2C0.1-0.5%2C0.1v-1.6c0.5-0.1%2C0.9-0.3%2C1.4-0.5c0.5-0.2%2C0.8-0.5%2C1.2-0.7h1.1V10z%22%2F%3E%0A%09%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M97.1%2C17.1h3.602v1.5h-5.6V18c0-0.4%2C0.1-0.8%2C0.2-1.2c0.1-0.4%2C0.3-0.6%2C0.5-0.9c0.2-0.3%2C0.5-0.5%2C0.7-0.7%0A%09%09c0.2-0.2%2C0.5-0.4%2C0.7-0.6c0.199-0.2%2C0.5-0.3%2C0.6-0.5c0.102-0.2%2C0.301-0.3%2C0.5-0.5c0.2-0.2%2C0.2-0.3%2C0.301-0.5%0A%09%09c0.101-0.2%2C0.101-0.3%2C0.101-0.5c0-0.4-0.101-0.6-0.3-0.8c-0.2-0.2-0.4-0.3-0.801-0.3c-0.699%2C0-1.399%2C0.3-2.101%2C0.9v-1.6%0A%09%09c0.7-0.5%2C1.5-0.7%2C2.5-0.7c0.399%2C0%2C0.8%2C0.1%2C1.101%2C0.2c0.301%2C0.1%2C0.601%2C0.3%2C0.899%2C0.5c0.3%2C0.2%2C0.399%2C0.5%2C0.5%2C0.8%0A%09%09c0.101%2C0.3%2C0.2%2C0.6%2C0.2%2C1s-0.102%2C0.7-0.2%2C1c-0.099%2C0.3-0.3%2C0.6-0.5%2C0.8c-0.2%2C0.2-0.399%2C0.5-0.7%2C0.7c-0.3%2C0.2-0.5%2C0.4-0.8%2C0.6%0A%09%09c-0.2%2C0.1-0.399%2C0.3-0.5%2C0.4s-0.3%2C0.3-0.5%2C0.4s-0.2%2C0.3-0.3%2C0.4C97.1%2C17%2C97.1%2C17%2C97.1%2C17.1z%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%3E%0A%09%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M15%2C95.4c0%2C0.7-0.1%2C1.4-0.2%2C2c-0.1%2C0.6-0.4%2C1.1-0.7%2C1.5C13.8%2C99.3%2C13.4%2C99.6%2C12.9%2C99.8s-1%2C0.3-1.5%2C0.3%0A%09%09c-0.7%2C0-1.3-0.1-1.8-0.3v-1.5c0.4%2C0.3%2C1%2C0.4%2C1.6%2C0.4c0.6%2C0%2C1.1-0.2%2C1.5-0.7c0.4-0.5%2C0.5-1.1%2C0.5-1.9l0%2C0%0A%09%09C12.8%2C96.7%2C12.3%2C96.9%2C11.5%2C96.9c-0.3%2C0-0.7-0.102-1-0.2c-0.3-0.101-0.5-0.3-0.8-0.5c-0.3-0.2-0.4-0.5-0.5-0.8%0A%09%09c-0.1-0.3-0.2-0.7-0.2-1c0-0.4%2C0.1-0.8%2C0.2-1.2c0.1-0.4%2C0.3-0.7%2C0.6-0.9c0.3-0.2%2C0.6-0.5%2C0.9-0.6c0.3-0.1%2C0.8-0.2%2C1.2-0.2%0A%09%09c0.5%2C0%2C0.9%2C0.1%2C1.2%2C0.3c0.3%2C0.2%2C0.7%2C0.4%2C0.9%2C0.8s0.5%2C0.7%2C0.6%2C1.2S15%2C94.8%2C15%2C95.4z%20M13.1%2C94.4c0-0.2%2C0-0.4-0.1-0.6%0A%09%09c-0.1-0.2-0.1-0.4-0.2-0.5c-0.1-0.1-0.2-0.2-0.4-0.3c-0.2-0.1-0.3-0.1-0.5-0.1c-0.2%2C0-0.3%2C0-0.4%2C0.1s-0.3%2C0.2-0.3%2C0.3%0A%09%09c0%2C0.1-0.2%2C0.3-0.2%2C0.4c0%2C0.1-0.1%2C0.4-0.1%2C0.6c0%2C0.2%2C0%2C0.4%2C0.1%2C0.6c0.1%2C0.2%2C0.1%2C0.3%2C0.2%2C0.4c0.1%2C0.1%2C0.2%2C0.2%2C0.4%2C0.3%0A%09%09c0.2%2C0.1%2C0.3%2C0.1%2C0.5%2C0.1c0.2%2C0%2C0.3%2C0%2C0.4-0.1s0.2-0.2%2C0.3-0.3c0.1-0.1%2C0.2-0.2%2C0.2-0.4C13%2C94.7%2C13.1%2C94.6%2C13.1%2C94.4z%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%3E%0A%09%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M176%2C99.7V98.1c0.6%2C0.4%2C1.2%2C0.602%2C2%2C0.602c0.5%2C0%2C0.8-0.102%2C1.1-0.301c0.301-0.199%2C0.4-0.5%2C0.4-0.801%0A%09%09c0-0.398-0.2-0.699-0.5-0.898c-0.3-0.2-0.8-0.301-1.3-0.301h-0.802V95h0.701c1.101%2C0%2C1.601-0.4%2C1.601-1.1c0-0.7-0.4-1-1.302-1%0A%09%09c-0.6%2C0-1.1%2C0.2-1.6%2C0.5v-1.5c0.6-0.3%2C1.301-0.4%2C2.1-0.4c0.9%2C0%2C1.5%2C0.2%2C2%2C0.6s0.701%2C0.9%2C0.701%2C1.5c0%2C1.1-0.601%2C1.8-1.701%2C2.1l0%2C0%0A%09%09c0.602%2C0.1%2C1.102%2C0.3%2C1.4%2C0.6s0.5%2C0.8%2C0.5%2C1.3c0%2C0.801-0.3%2C1.4-0.9%2C1.9c-0.6%2C0.5-1.398%2C0.7-2.398%2C0.7%0A%09%09C177.2%2C100.1%2C176.5%2C100%2C176%2C99.7z%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%3E%0A%09%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M98.5%2C179.102c0%2C0.398-0.1%2C0.799-0.2%2C1.199C98.2%2C180.7%2C98%2C181%2C97.7%2C181.2s-0.601%2C0.5-0.9%2C0.601%0A%09%09c-0.3%2C0.1-0.7%2C0.199-1.2%2C0.199c-0.5%2C0-0.9-0.1-1.3-0.3c-0.4-0.2-0.7-0.399-0.9-0.8c-0.2-0.4-0.5-0.7-0.6-1.2%0A%09%09c-0.1-0.5-0.2-1-0.2-1.601c0-0.699%2C0.1-1.399%2C0.3-2c0.2-0.601%2C0.4-1.101%2C0.8-1.5c0.4-0.399%2C0.7-0.699%2C1.2-1c0.5-0.3%2C1-0.3%2C1.6-0.3%0A%09%09c0.6%2C0%2C1.2%2C0.101%2C1.5%2C0.199v1.5c-0.4-0.199-0.9-0.399-1.4-0.399c-0.3%2C0-0.6%2C0.101-0.8%2C0.2c-0.2%2C0.101-0.5%2C0.3-0.7%2C0.5%0A%09%09c-0.2%2C0.199-0.3%2C0.5-0.4%2C0.8c-0.1%2C0.301-0.2%2C0.7-0.2%2C1.101l0%2C0c0.4-0.601%2C1-0.8%2C1.8-0.8c0.3%2C0%2C0.7%2C0.1%2C0.9%2C0.199%0A%09%09c0.2%2C0.101%2C0.5%2C0.301%2C0.7%2C0.5c0.199%2C0.2%2C0.398%2C0.5%2C0.5%2C0.801C98.5%2C178.2%2C98.5%2C178.7%2C98.5%2C179.102z%20M96.7%2C179.2%0A%09%09c0-0.899-0.4-1.399-1.1-1.399c-0.2%2C0-0.3%2C0-0.5%2C0.1c-0.2%2C0.101-0.3%2C0.201-0.4%2C0.301c-0.1%2C0.101-0.2%2C0.199-0.2%2C0.4%0A%09%09c0%2C0.199-0.1%2C0.299-0.1%2C0.5c0%2C0.199%2C0%2C0.398%2C0.1%2C0.6s0.1%2C0.3%2C0.2%2C0.5c0.1%2C0.199%2C0.2%2C0.199%2C0.4%2C0.3c0.2%2C0.101%2C0.3%2C0.101%2C0.5%2C0.101%0A%09%09c0.2%2C0%2C0.3%2C0%2C0.5-0.101c0.2-0.101%2C0.301-0.199%2C0.301-0.3c0-0.1%2C0.199-0.301%2C0.199-0.399C96.6%2C179.7%2C96.7%2C179.4%2C96.7%2C179.2z%22%2F%3E%0A%3C%2Fg%3E%0A%3Ccircle%20fill%3D%22%23DEDEDE%22%20cx%3D%2295%22%20cy%3D%2295%22%20r%3D%227%22%2F%3E%0A%3C%2Fsvg%3E%0A");
+@timeview-hourarrow-bg: url("data:image/svg+xml;charset=UTF-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%225px%22%20height%3D%2257px%22%20viewBox%3D%220%200%205%2057%22%20enable-background%3D%22new%200%200%205%2057%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M5%2C54c0%2C1.7-1.1%2C3-2.5%2C3S0%2C55.7%2C0%2C54V3c0-1.6%2C1.1-3%2C2.5-3S5%2C1.4%2C5%2C3V54z%22%2F%3E%0A%3C%2Fsvg%3E%0A");
+@timeview-minutearrow-bg: url("data:image/svg+xml;charset=UTF-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%225px%22%20height%3D%2279px%22%20viewBox%3D%220%200%205%2079%22%20enable-background%3D%22new%200%200%205%2079%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cpath%20fill%3D%22%23DEDEDE%22%20d%3D%22M5%2C76c0%2C1.7-1.1%2C3-2.5%2C3S0%2C77.7%2C0%2C76V3c0-1.6%2C1.1-3%2C2.5-3S5%2C1.4%2C5%2C3V76z%22%2F%3E%0A%3C%2Fsvg%3E%0A");
+
+// DateView
+@dateview-border-color: @base-border-color;
+@dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
+@dateview-shadow-down: 180deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
+@dateview-color: @base-text-color;
+
+// ColorView
+@COLORVIEW_HANDLE_COLOR: @base-bg;
+@COLORVIEW_HANDLE_BORDER_COLOR: fade(@base-inverted-bg, 20%);
+
+// Form
+
+@form-field-item-color: @base-label-color;
+@form-group-border-color: @base-icon-color;
+@form-field-required-color: @base-danger;
+@form-field-mark-color: darken(@base-text-color, 44%);
+
+// Fieldset
+
+@fieldset-field-label-color: @base-label-color;
+@fieldset-field-value-invalid-color: @base-invalid-color;
+
+// FilterBuilder
+@filterbuilder-text-color: #000000;
+@filterbuilder-text-focus-color: @filterbuilder-text-color;
+@filterbuilder-menu-icon-color: @base-icon-color;
+@filterbuilder-bg: @base-bg;
+@filterbuilder-plus-icon-color: fade(@base-success, 80%);
+@filterbuilder-plus-icon-hover-color: fadeout(@filterbuilder-plus-icon-color, 10%);
+@filterbuilder-plus-icon-focus-color: fadein(@filterbuilder-plus-icon-color, 20%);
+@filterbuilder-remove-icon-color: fade(@base-danger, 80%);
+@filterbuilder-remove-icon-hover-color: fadeout(@filterbuilder-remove-icon-color, 10%);
+@filterbuilder-remove-icon-focus-color: fadein(@filterbuilder-remove-icon-color, 20%);
+@filterbuilder-group-operation-color: fade(@base-danger, 80%);
+@filterbuilder-group-operation-hover-color: fadeout(@filterbuilder-group-operation-color, 10%);
+@filterbuilder-group-operation-focus-color: fadein(@filterbuilder-group-operation-color, 20%);
+@filterbuilder-item-field-color: fade(@base-accent, 80%);
+@filterbuilder-item-field-hover-color: fadeout(@filterbuilder-item-field-color, 10%);
+@filterbuilder-item-field-focus-color: fadein(@filterbuilder-item-field-color, 20%);
+@filterbuilder-item-operator-color: fade(@base-success, 80%);
+@filterbuilder-item-operator-hover-color: fadeout(@filterbuilder-item-operator-color, 10%);
+@filterbuilder-item-operator-focus-color: fadein(@filterbuilder-item-operator-color, 20%);
+@filterbuilder-item-value-color: rgba(204, 204, 204, 0.8);
+@filterbuilder-item-value-hover-color: fadeout(@filterbuilder-item-value-color, 10%);
+@filterbuilder-item-value-focus-color: fadein(@filterbuilder-item-value-color, 20%);
+
+// FileManager
+@filemanager-border-color: @base-border-color;
+@filemanager-file-toolbar-bg: darken(@base-bg, 3%);
+@filemanager-editor-active-bg: fade(@base-text-color, 10%);
+@filemanager-dirs-tree-item-focus-bg: lighten(@base-bg, 8%);
+@filemanager-dirs-tree-item-focus-color: @base-text-color;
+@filemanager-breadcrumbs-item-focus-bg: @base-border-color;
+@filemanager-breadcrumbs-item-focus-color: @base-text-color;
+@filemanager-custom-thumbnail-color: @base-border-color;
+@filemanager-file-item-select-color: @base-bg;
+@filemanager-file-item-select-bg: fade(@base-accent, 80%);
+@filemanager-file-item-select-focus-color: @base-bg;
+@filemanager-file-item-select-focus-bg: fade(@base-accent, 70%);
+@filemanager-file-item-hover-bg: @base-hover-bg;
+@filemanager-file-item-focused-bg: @base-accent;
+@filemanager-file-item-focused-border: @base-accent;
+@filemanager-item-focused-color: @base-inverted-text-color;
+@filemanager-progressbox-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
+
+// SpeedDialAction
+@speed-dial-action-bg: lighten(@base-bg, 3%);
+@speed-dial-action-hover-bg: lighten(@speed-dial-action-bg, 9%);
+@speed-dial-action-active-bg: lighten(@speed-dial-action-bg, 26%);
+@speed-dial-action-color: @base-text-color;
+@speed-dial-action-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+@speed-dial-action-label-shadow:  0 2px 6px rgba(0, 0, 0, 0.35);
+@speed-dial-action-shading-color: @overlay-shader-bg;
+
+// Gantt
+@gantt-collapsable-row-bg: lighten(@base-bg, 4%);
+@gantt-selection-bg: fade(@datagrid-selection-bg, 30%);
+@gantt-parent-task-bg: @base-danger;
+@gantt-icon-color: darken(@base-text-color, 20%);
+
+// Splitter
+@splitter-inactive-color: @base-border-color;
+@splitter-bg: fade(@base-accent, 50%);

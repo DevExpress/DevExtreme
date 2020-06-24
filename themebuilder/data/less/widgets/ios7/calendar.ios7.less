@@ -1,0 +1,280 @@
+@import (once) "./button.ios7.less";
+
+@IOS7_CALENDAR_BODY_WIDTH: 320px;
+@IOS7_CALENDAR_HEIGHT: 382px;
+@IOS7_CALENDAR_FOOTER_HEIGHT: 50px;
+@IOS7_CALENDAR_LINE_THROUGH_BACKGROUND: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjE2MTBCNjg5MDlEQTExRTU5RjRBQUE4NDBEMTdBNTJBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjE2MTBCNjhBMDlEQTExRTU5RjRBQUE4NDBEMTdBNTJBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MTYxMEI2ODcwOURBMTFFNTlGNEFBQTg0MEQxN0E1MkEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MTYxMEI2ODgwOURBMTFFNTlGNEFBQTg0MEQxN0E1MkEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7T6QapAAAABlBMVEXLy8sAAADhwed1AAAADElEQVR42mJgAAgwAAACAAFPbVnhAAAAAElFTkSuQmCC') center repeat-x;
+@IOS7_CALENDAR_RADIUS_CELL_FIRST: 90%;
+@IOS7_CALENDAR_RADIUS_CELL_SECOND: 95%;
+
+.dx-calendar {
+    width: @IOS7_CALENDAR_BODY_WIDTH;
+    min-width: 260px;
+    height: @IOS7_CALENDAR_HEIGHT;
+    min-height: 260px;
+    background: @IOS7_CALENDAR_BACKGROUND;
+
+    &.dx-calendar-with-footer {
+        height: @IOS7_CALENDAR_HEIGHT + @IOS7_CALENDAR_FOOTER_HEIGHT;
+        min-height: @IOS7_CALENDAR_HEIGHT + @IOS7_CALENDAR_FOOTER_HEIGHT;
+
+        .dx-calendar-body {
+            bottom: @IOS7_CALENDAR_FOOTER_HEIGHT;
+        }
+
+        .dx-calendar-footer {
+            text-align: center;
+            height: @IOS7_CALENDAR_FOOTER_HEIGHT;
+            width: 100%;
+
+            .dx-button {
+                text-decoration: none;
+
+                .dx-button-text {
+                    margin-top: 4px;
+                    font-size: 18px;
+                    text-transform: none;
+                    color: @IOS7_CALENDAR_ACTIVE;
+                }
+            }
+        }
+    }
+
+    &.dx-state-disabled {
+        &.dx-widget {
+            opacity: 1;
+        }
+    }
+}
+
+.mixin-body() {
+    .dx-calendar-body {
+        margin-top: 26px;
+
+        .dx-calendar-cell {
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+    }
+
+    .dx-calendar-today {
+        &,
+        &.dx-calendar-contoured-date,
+        &.dx-state-active {
+            color: @IOS7_CALENDAR_SELECTED;
+
+            span {
+                background-color: @IOS7_CALENDAR_ACTIVE;
+                border-color: @IOS7_CALENDAR_ACTIVE;
+            }
+        }
+    }
+
+    .dx-calendar-contoured-date {
+        span {
+            border-color: @IOS7_CALENDAR_LINE_COLOR;
+        }
+    }
+
+    .dx-calendar-selected-date {
+        &,
+        &.dx-state-active,
+        &.dx-calendar-contoured-date {
+            color: @IOS7_CALENDAR_SELECTED;
+
+            span {
+                background-color: @IOS7_CALENDAR_TODAY_CELL_BACKGROUND_COLOR;
+                border-color: @IOS7_CALENDAR_TODAY_CELL_BACKGROUND_COLOR;
+            }
+        }
+    }
+
+    .dx-state-active:not(.dx-calendar-empty-cell) {
+        span {
+            background-color: @IOS7_CALENDAR_ACTIVE_BACKGROUND_COLOR;
+            border-color: @IOS7_CALENDAR_ACTIVE_BACKGROUND_COLOR;
+        }
+    }
+}
+
+.dx-calendar-body {
+    top: 50px;
+    bottom: 0;
+
+    table {
+        border-collapse: collapse;
+    }
+
+    td,
+    th {
+        text-align: center;
+    }
+
+    td {
+        padding: 0 5px;
+        font-size: 16px;
+        color: @IOS7_CALENDAR_COLOR;
+        border-top: 1px solid @IOS7_CALENDAR_BORDER;
+    }
+
+    th {
+        font-size: 13px;
+        font-weight: normal;
+        color: @IOS7_CALENDAR_DAYS_COLOR;
+        border-bottom: 1px solid @IOS7_CALENDAR_BORDER;
+    }
+}
+
+.dx-calendar-view-month {
+    .dx-calendar-cell {
+        &.dx-calendar-contoured-date {
+            .gradient-radial-circle2(transparent, @IOS7_CALENDAR_RADIUS_CELL_FIRST, @IOS7_CALENDAR_LINE_COLOR, @IOS7_CALENDAR_RADIUS_CELL_SECOND, transparent, 100%);
+        }
+
+        &.dx-state-active:not(.dx-calendar-empty-cell) {
+            .gradient-radial-circle(@IOS7_CALENDAR_ACTIVE_BACKGROUND_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0.5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+        }
+
+        &.dx-calendar-selected-date {
+            &,
+            &.dx-calendar-contoured-date,
+            &.dx-state-active {
+                color: @IOS7_CALENDAR_SELECTED;
+                .gradient-radial-circle(@IOS7_CALENDAR_TODAY_CELL_BACKGROUND_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0.5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+            }
+        }
+
+        &.dx-calendar-today {
+            &,
+            &.dx-calendar-contoured-date,
+            &.dx-state-active {
+                color: @IOS7_CALENDAR_SELECTED;
+                .gradient-radial-circle(@IOS7_CALENDAR_ACTIVE, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0.5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+            }
+        }
+    }
+
+    thead {
+        font-size: 12px;
+        vertical-align: bottom;
+
+        th {
+            height: 26px;
+            line-height: normal;
+        }
+    }
+}
+
+.dx-calendar-view-year,
+.dx-calendar-view-decade,
+.dx-calendar-view-century {
+    .dx-calendar-cell {
+        span {
+            border: 1px solid transparent;
+            border-radius: 10px;
+            display: inline-block;
+        }
+    }
+}
+
+.dx-calendar-view-year,
+.dx-calendar-view-decade {
+    .dx-calendar-cell {
+        padding: 0;
+
+        span {
+            padding: 9px 11px;
+            line-height: 18px;
+            min-width: 60px;
+        }
+    }
+
+    .mixin-body();
+}
+
+.dx-calendar-view-century {
+    .dx-calendar-cell {
+        span {
+            padding: 9px 6px;
+            line-height: 14px;
+        }
+    }
+
+    .mixin-body();
+
+    .dx-calendar-body {
+        .dx-calendar-cell {
+            font-size: 14px;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+}
+
+.dx-calendar-navigator {
+    color: @IOS7_CALENDAR_HEADER_COLOR;
+    text-align: center;
+    width: 100%;
+
+    .dx-calendar-navigator-next-view,
+    .dx-calendar-navigator-previous-view {
+        display: none;
+    }
+
+    .dx-calendar-caption-button {
+        width: 100%;
+        left: 0;
+
+        .dx-button-text {
+            font-size: 22px;
+            line-height: 50px;
+            color: @IOS7_CALENDAR_ACTIVE;
+        }
+    }
+}
+
+.dx-calendar-today-button {
+    .dx-button-text {
+        font-size: 16px;
+    }
+}
+
+.dx-calendar-cell {
+    &.dx-calendar-empty-cell {
+        cursor: default;
+        color: @IOS7_CALENDAR_OTHER_VIEW_TEXT_COLOR;
+        background: @IOS7_CALENDAR_LINE_THROUGH_BACKGROUND;
+    }
+
+    &.dx-calendar-other-view {
+        color: @IOS7_CALENDAR_OTHER_VIEW_TEXT_COLOR;
+    }
+}
+
+.dx-state-disabled {
+    .dx-calendar,
+    &.dx-calendar {
+        .dx-calendar-navigator {
+            color: @IOS7_CALENDAR_DISABLE;
+        }
+
+        .dx-calendar-body {
+            table {
+                th,
+                td {
+                    color: @IOS7_CALENDAR_DISABLE;
+                }
+            }
+        }
+    }
+}
+
+.dx-invalid {
+    &.dx-calendar {
+        border: 1px solid @IOS7_FADED_INVALID_COLOR;
+
+        &.dx-state-focused {
+            border-color: @IOS7_INVALID_COLOR;
+        }
+    }
+}

@@ -1,0 +1,89 @@
+@import (once) "./overlay.ios7.less";
+@import (once) "./menuBase.ios7.less";
+
+@IOS7_MENU_ARROW_ICON_SIZE: 16px;
+@IOS7_MENU_POPUP_BORDER_RADIUS: 7px;
+@IOS7_MENU_BORDER_BOTTOM: 1px solid @IOS7_MENU_ITEM_BORDER_COLOR;
+
+.dx-context-menu {
+    color: @IOS7_CONTEXT_MENU_TEXT_COLOR;
+
+    .dx-menu-items-container {
+        padding: 0;
+    }
+
+    .dx-submenu > .dx-menu-items-container {
+        background-color: @IOS7_MENU_POPUP_BACKGROUND;
+        border-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+        box-shadow: 0 1px 11px 1px rgba(0, 0, 0, 0.15);
+        margin-left: -5px;
+    }
+
+    .dx-menu-item-wrapper {
+        border-bottom: @IOS7_MENU_BORDER_BOTTOM;
+
+        &.dx-menu-last-group-item {
+            border-bottom: none;
+        }
+
+        &:first-child {
+            & > .dx-menu-item {
+                border-top-left-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+                border-top-right-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+            }
+        }
+
+        &:last-child {
+            border-bottom: none;
+
+            & > .dx-menu-item {
+                border-bottom: none;
+                border-bottom-left-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+                border-bottom-right-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+            }
+        }
+    }
+
+    .dx-menu-separator {
+        background-color: @IOS7_SEPARATOP_COLOR;
+    }
+
+    .dx-menu-item-content {
+        padding: 7px 9px 6px 11px;
+
+        .dx-menu-item-text {
+            padding: 9px 35px 11px @IOS7_MENU_ICON_OFFSET + @IOS7_MENU_ICON_SIZE;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                padding: 9px @IOS7_MENU_ICON_OFFSET + @IOS7_MENU_ICON_SIZE 11px 0;
+            }
+        }
+
+        .dx-menu-item-popout {
+            .dx-icon(chevronright);
+            .dx-icon-font-centered-sizing(@IOS7_MENU_ARROW_ICON_SIZE);
+
+            .dx-rtl &,
+            .dx-rtl& {
+                .flip-horizontally();
+            }
+        }
+    }
+
+    .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content .dx-menu-item-text {
+        padding: 9px 35px 11px 0;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            padding: 9px 10px 11px 28px;
+        }
+    }
+
+
+    &.dx-rtl {
+        .dx-submenu > .dx-menu-items-container {
+            margin-right: -5px;
+        }
+    }
+}

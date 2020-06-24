@@ -1,0 +1,51 @@
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    margin: -26px 12px 0;
+    width: 52px;
+    height: 52px;
+    background-repeat: no-repeat;
+}
+
+.dx-gallery-nav-button-prev {
+    .dx-icon(chevronleft);
+}
+
+.dx-gallery-nav-button-next {
+    .dx-icon(chevronright);
+}
+
+// stylelint-disable-next-line no-duplicate-selectors
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    .dx-icon-font-centered-sizing(36px);
+
+    color: @IOS7_FONT_COLOR;
+
+    &.dx-state-active {
+        color: @IOS7_SELECTION_BACKGROUND;
+    }
+}
+
+.dx-gallery-indicator {
+    text-align: center;
+}
+
+.dx-gallery-indicator-item {
+    margin: 1px 6px;
+    width: 8px;
+    height: 8px;
+    background: @IOS7_GALLERY_INDICATOR_BACKGROUND;
+    border-radius: @IOS7_GALLERY_INDICATOR_RADIUS;
+    border: solid 1px @IOS7_GALLERY_INDICATOR_SELECTED_BACKGROUND;
+}
+
+.dx-gallery-indicator-item-selected {
+    border: solid 1px fade(@IOS7_GALLERY_INDICATOR_BACKGROUND, 80%);
+    background: @IOS7_GALLERY_INDICATOR_SELECTED_BACKGROUND;
+    margin: 0 6px 1px 6px;
+}
+
+.dx-state-disabled .dx-gallery,
+.dx-state-disabled.dx-gallery {
+    opacity: 0.45;
+}

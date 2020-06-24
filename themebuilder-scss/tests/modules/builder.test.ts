@@ -91,8 +91,7 @@ describe('Builder integration tests', () => {
 
     return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
-      // TODO this path should be changed after less->scss migration
-      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/scss-css/dx.light.css'), 'utf8'));
+      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/css/dx.light.css'), 'utf8'));
       expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);
