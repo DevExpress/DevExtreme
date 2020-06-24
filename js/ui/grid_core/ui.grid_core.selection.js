@@ -79,12 +79,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         const component = options.component;
         const rowsView = component.getView('rowsView');
 
-        if(component.option('renderAsync')) {
-            const selectedRowKeys = component.getSelectedRowKeys();
-
-            if(selectedRowKeys.indexOf(options.row.key) !== -1) {
-                options.value = true;
-            }
+        if(component.option('renderAsync') && !component.option('selection.deferred')) {
+            options.value = component.isRowSelected(options.row.key);
         }
 
         rowsView.renderSelectCheckBoxContainer($(container), options);

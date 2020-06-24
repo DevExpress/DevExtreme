@@ -67,7 +67,7 @@
     "devextreme-internal-tools": "stable",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^2.2.0",
-    "eslint": "^7.1.0",
+    "eslint": "^7.3.1",
     "eslint-config-airbnb-typescript": "^7.2.1",
     "eslint-config-devextreme": "^0.1.5",
     "eslint-plugin-import": "^2.20.2",
