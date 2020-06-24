@@ -132,7 +132,7 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  device: () => (themes as any).isMaterial(themes.current()),
+  device: () => (themes as any).isMaterial((themes as any).current()),
   options: { useInkRipple: true },
 }]);
 @Component({

@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import clickEvent from '../../events/click';
+import { name } from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import eventsEngine from '../../events/core/events_engine';
 import noop from '../utils/noop';
@@ -15,8 +15,8 @@ type closestFn = (HTMLDivElement, string) => HTMLElement | null;
 
 export const dxClickEffect: dxClickEffectFn = (element, handler) => {
   if (handler) {
-    eventsEngine.on(element, clickEvent.name, handler);
-    return (): void => eventsEngine.off(element, clickEvent.name, handler);
+    eventsEngine.on(element, name, handler);
+    return (): void => eventsEngine.off(element, name, handler);
   }
   return noop;
 };

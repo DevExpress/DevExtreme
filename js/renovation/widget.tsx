@@ -18,7 +18,7 @@ import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../events/short';
 import { extend } from '../core/utils/extend';
-import { focusable } from '../ui/widget/selectors';
+import selectors from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils/index';
 import BaseWidgetProps from './utils/base-props';
 
@@ -195,7 +195,7 @@ export default class Widget extends JSXComponent(WidgetProps) {
         (e) => { !e.isDefaultPrevented() && (this.focused = true); },
         (e) => { !e.isDefaultPrevented() && (this.focused = false); },
         {
-          isFocusable: focusable,
+          isFocusable: selectors.focusable,
           namespace,
         });
 
