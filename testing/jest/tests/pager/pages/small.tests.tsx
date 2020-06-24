@@ -1,12 +1,12 @@
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import PagesSmall, { viewFunction as PagesSmallComponent } from '../../../js/renovation/pager/pages-small';
-import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
-import NumberBox from '../../../js/renovation/number-box';
+import PagesSmall, { viewFunction as PagesSmallComponent } from '../../../../../js/renovation/pager/pages-small';
+import getElementComputedStyle from '../../../../../js/renovation/pager/utils/get-computed-style';
+import NumberBox from '../../../../../js/renovation/number-box';
 
-jest.mock('../../../js/renovation/number-box', jest.fn());
-jest.mock('../../../js/renovation/pager/page', jest.fn());
-jest.mock('../../../js/renovation/pager/utils/get-computed-style');
+jest.mock('../../../../../js/renovation/number-box', jest.fn());
+jest.mock('../../../../../js/renovation/pager/page', jest.fn());
+jest.mock('../../../../../js/renovation/pager/utils/get-computed-style');
 
 describe('Small pager pages', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

@@ -3,10 +3,10 @@ import { h, createRef } from 'preact';
 import { mount, shallow, ShallowWrapper } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit, getEventHandlers, fakeClickEvent, EVENT,
-} from './utils/events-mock';
-import Widget from '../../js/renovation/widget.p';
-import type { WidgetRef } from '../../js/renovation/widget.p';
-import type { WidgetProps } from '../../js/renovation/widget';
+} from '../utils/events_mock';
+import Widget from '../../../js/renovation/widget.p';
+import type { WidgetRef } from '../../../js/renovation/widget.p';
+import type { WidgetProps } from '../../../js/renovation/widget';
 
 describe('Widget', () => {
   const render = (props = {}): ShallowWrapper => shallow(<Widget {...props} />);

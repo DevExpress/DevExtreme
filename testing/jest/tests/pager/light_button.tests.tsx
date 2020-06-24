@@ -2,14 +2,14 @@ import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import {
   EVENT, emit, getEventHandlers, clear,
-} from '../utils/events-mock';
-import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
-import LightButton, { viewFunction as LightButtonComponent } from '../../../js/renovation/pager/light-button';
-import * as LightButtonModule from '../../../js/renovation/pager/light-button';
+} from '../../utils/events_mock';
+import { registerKeyboardAction } from '../../../../js/ui/shared/accessibility';
+import LightButton, { viewFunction as LightButtonComponent } from '../../../../js/renovation/pager/light-button';
+import * as LightButtonModule from '../../../../js/renovation/pager/light-button';
 
 const { dxClickEffect } = LightButtonModule;
 
-jest.mock('../../../js/ui/shared/accessibility');
+jest.mock('../../../../js/ui/shared/accessibility');
 
 describe('LightButton', () => {
   describe('View', () => {

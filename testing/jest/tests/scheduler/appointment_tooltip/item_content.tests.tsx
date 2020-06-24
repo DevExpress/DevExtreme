@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
+import { viewFunction as TooltipItemContentView } from '../../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 
 describe('TooltipItemContent', () => {
   describe('View', () => {

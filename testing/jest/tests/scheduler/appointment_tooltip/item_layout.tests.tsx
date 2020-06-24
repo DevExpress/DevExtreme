@@ -1,18 +1,18 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { Fragment } from 'devextreme-generator/component_declaration/common';
-import { dxSchedulerAppointment } from '../../../../js/ui/scheduler';
+import { dxSchedulerAppointment } from '../../../../../js/ui/scheduler';
 import TooltipItemLayout, {
   viewFunction as TooltipItemLayoutView,
   TooltipItemLayoutProps,
-} from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
-import DeleteButton from '../../../../js/renovation/button';
-import Marker from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
-import TooltipItemContent from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
+} from '../../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
+import DeleteButton from '../../../../../js/renovation/button';
+import Marker from '../../../../../js/renovation/scheduler/appointment-tooltip/marker';
+import TooltipItemContent from '../../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 
-jest.mock('../../../../js/renovation/button', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
+jest.mock('../../../../../js/renovation/button', () => () => null);
+jest.mock('../../../../../js/renovation/scheduler/appointment-tooltip/marker', () => () => null);
+jest.mock('../../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
 
 describe('TooltipItemLayout', () => {
   describe('View', () => {

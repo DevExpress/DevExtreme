@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import Icon from '../../js/renovation/icon';
+import Icon from '../../../../js/renovation/icon';
 
 describe('Icon', () => {
   describe('Props', () => {
