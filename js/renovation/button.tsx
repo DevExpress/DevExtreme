@@ -9,6 +9,8 @@ import {
   Ref,
   Template,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import createDefaultOptionRules from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
@@ -126,7 +128,7 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() validationGroup?: string = undefined;
 }
 
-const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
+export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
 }, {
@@ -181,7 +183,7 @@ export default class Button extends JSXComponent(ButtonProps) {
   onWidgetClick(event: Event) {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
-    onClick!({ event, validationGroup });
+    onClick?.({ event, validationGroup });
     useSubmitBehavior && this.submitInputRef.click();
   }
 
@@ -207,12 +209,12 @@ export default class Button extends JSXComponent(ButtonProps) {
     const namespace = 'UIFeedback';
     const { useSubmitBehavior, onSubmit } = this.props;
 
-    if (useSubmitBehavior) {
+    if (useSubmitBehavior && onSubmit) {
       click.on(this.submitInputRef,
-        (event) => onSubmit!({ event, submitInput: this.submitInputRef }),
+        (event) => onSubmit({ event, submitInput: this.submitInputRef }),
         { namespace });
 
-      return () => click.off(this.submitInputRef, { namespace });
+      return (): void => click.off(this.submitInputRef, { namespace });
     }
 
     return undefined;
