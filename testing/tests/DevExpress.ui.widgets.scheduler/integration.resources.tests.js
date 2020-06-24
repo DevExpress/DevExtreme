@@ -632,7 +632,7 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             const scrollbar = $(scheduler.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
-            assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(scheduler.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, 'Horizontal scrollbar has visible top coordinate');
+            assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(scheduler.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1.01, 'Horizontal scrollbar has visible top coordinate');
         });
     });
 }
