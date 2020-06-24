@@ -586,8 +586,6 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             assert.equal(sortableOptions[1].fromIndex, 0, 'second sortable fromIndex');
             assert.equal(sortableOptions[0].toIndex, 2, 'first sortable toIndex');
             assert.equal(sortableOptions[1].toIndex, 2, 'second sortable toIndex');
-            assert.ok($(rowsView.getRowElement(0)[0]).hasClass('dx-sortable-source-hidden'), 'first row in main table is hidden');
-            assert.ok($(rowsView.getRowElement(0)[1]).hasClass('dx-sortable-source-hidden'), 'first row in fixed table is hidden');
         });
     });
 
