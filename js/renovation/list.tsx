@@ -49,7 +49,6 @@ export class ListProps extends WidgetProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
   view: viewFunction,
 })
 export default class List extends JSXComponent(ListProps) {
