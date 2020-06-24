@@ -11,6 +11,9 @@ import {
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
 } from './types';
 import getCurrentAppointment from './utils/get-current-appointment';
+import {
+  defaultGetTextAndFormatDate, defaultGetSingleAppointment,
+} from './utils/default-functions';
 
 type ItemTemplateProps = {
   item: AppointmentItem;
@@ -62,9 +65,9 @@ export class AppointmentListProps {
 
   @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn = noop;
 
-  @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = () => ({ text: '', formatDate: '' });
+  @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
-  @Event() getSingleAppointmentData?: GetSingleAppointmentFn = () => ({});
+  @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
   @Template() itemContentTemplate?: any;
 }

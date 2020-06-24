@@ -14,6 +14,7 @@ import Marker from './marker';
 import Button from '../../button';
 import TooltipItemContent from './item-content';
 import getCurrentAppointment from './utils/get-current-appointment';
+import { defaultGetTextAndFormatDate } from './utils/default-functions';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
@@ -77,7 +78,7 @@ export class TooltipItemLayoutProps {
 
   @Event() onHide?: () => void = noop;
 
-  @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = () => ({ text: '', formatDate: '' });
+  @OneWay() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
   @OneWay() singleAppointment?: dxSchedulerAppointment;
 }
