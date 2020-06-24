@@ -1,0 +1,15 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_NAVBAR_ICON_SIZE: null !default;
+$GENERIC_NAVBAR_BADGE_TOP: null !default;
+
+@if $size == "default" {
+  $GENERIC_NAVBAR_ICON_SIZE: 31px;
+  $GENERIC_NAVBAR_BADGE_TOP: 11%;
+}
+
+@else if $size == "compact" {
+  $GENERIC_NAVBAR_ICON_SIZE: 26px;
+  $GENERIC_NAVBAR_BADGE_TOP: 6%;
+}

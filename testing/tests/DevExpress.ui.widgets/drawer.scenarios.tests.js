@@ -7,8 +7,6 @@ import { clearStack } from 'ui/overlay/z_index';
 import 'common.css!';
 
 import dxDrawer from 'ui/drawer';
-import dxLoadPanel from 'ui/load_panel';
-import dxOverlay from 'ui/overlay.js';
 
 QUnit.testStart(() => {
     $('#qunit-fixture').html(drawerTesters.markup);
@@ -329,70 +327,5 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-    });
-});
-
-QUnit.module('Specific scenarios', {
-    beforeEach() {
-        this.clock = sinon.useFakeTimers();
-        clearStack();
-    },
-    afterEach() {
-        this.clock.restore();
-        this.clock = undefined;
-        clearStack();
-    }
-}, () => {
-    ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
-        QUnit.test('opened: false -> opened: true, shader has more priority z-index than overlay inside view content', function(assert) {
-            const prevBaseZIndex = dxOverlay.baseZIndex();
-
-            try {
-                dxOverlay.baseZIndex(3000);
-
-                const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-                const drawer = new dxDrawer(drawerElement, {
-                    rtlEnabled: false,
-                    animationEnabled: false,
-                    opened: false,
-                    position: 'left',
-                    revealMode: 'slide',
-                    shading: true,
-                    template: drawerTesters.left.template,
-                    openedStateMode
-                });
-
-                const env = {
-                    drawer,
-                    drawerElement,
-                    templateElement: drawerElement.querySelector('#template'),
-                    viewElement: drawerElement.querySelector('#view'),
-                    shading: drawer.option('shading'),
-                    minSize: drawer.option('minSize') || 0
-                };
-
-                new dxLoadPanel(document.getElementById('loadPanel'), {
-                    visible: true,
-                    container: env.viewElement,
-                    position: { my: 'center', at: 'center', of: env.viewElement }
-                });
-
-                this.clock.tick(100);
-                drawer.option('opened', true);
-                this.clock.tick(100);
-
-                if(openedStateMode === 'overlap') {
-                    assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3002', 'loadPanelWrapper.zIndex');
-                    assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3002', 'loadPanelContent.zIndex');
-                    drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: '3501' });
-                } else {
-                    assert.strictEqual($('.dx-loadpanel-wrapper').css('zIndex'), '3001', 'loadPanelWrapper.zIndex');
-                    assert.strictEqual($('.dx-loadpanel-content').css('zIndex'), '3001', 'loadPanelContent.zIndex');
-                    drawerTesters.checkShader(assert, env, { shader: env.shading ? '3500' : 'auto', panel: 'auto' });
-                }
-            } finally {
-                dxOverlay.baseZIndex(prevBaseZIndex);
-            }
-        });
     });
 });

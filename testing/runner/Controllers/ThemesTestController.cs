@@ -12,7 +12,7 @@ namespace Runner.Controllers
         string _bundlesPath;
         public ThemesTestController(IHostingEnvironment env)
         {
-            _bundlesPath = Path.Combine(env.ContentRootPath, "styles", "bundles");
+            _bundlesPath = Path.Combine(env.ContentRootPath, "scss", "bundles");
         }
 
         [Route("get-css-files-list")]
@@ -20,7 +20,7 @@ namespace Runner.Controllers
             var fileNames = from bundleDirectory
                 in Directory.EnumerateDirectories(_bundlesPath)
                 from fullFilename
-                in Directory.EnumerateFiles(bundleDirectory, "*.less")
+                in Directory.EnumerateFiles(bundleDirectory, "*.scss")
                 select Path.GetFileNameWithoutExtension(fullFilename) + ".css";
 
             return Json(fileNames);

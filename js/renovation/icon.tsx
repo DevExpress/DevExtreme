@@ -1,6 +1,8 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import { getImageSourceType } from '../core/utils/icon';
 
 export const viewFunction = ({ sourceType, cssClass, props: { source } }: Icon) => (

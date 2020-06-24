@@ -12,13 +12,14 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import '../events/click';
 import '../events/hover';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { h } from 'preact';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../events/short';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
-import { isFakeClickEvent } from '../events/utils';
+import { isFakeClickEvent } from '../events/utils/index';
 import BaseWidgetProps from './utils/base-props';
 
 const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
