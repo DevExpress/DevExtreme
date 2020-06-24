@@ -7,7 +7,7 @@ import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import Widget from '../widget/ui.widget';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { hasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import PushStrategy from './ui.drawer.rendering.strategy.push';
 import ShrinkStrategy from './ui.drawer.rendering.strategy.shrink';
 import OverlapStrategy from './ui.drawer.rendering.strategy.overlap';
@@ -291,7 +291,7 @@ const Drawer = Widget.inherit({
     },
 
     getRealPanelWidth() {
-        if(hasWindow()) {
+        if(windowUtils.hasWindow()) {
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
@@ -309,7 +309,7 @@ const Drawer = Widget.inherit({
     },
 
     getRealPanelHeight() {
-        if(hasWindow()) {
+        if(windowUtils.hasWindow()) {
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
@@ -367,7 +367,7 @@ const Drawer = Widget.inherit({
 
         this._animations = [];
 
-        if(!hasWindow()) {
+        if(!windowUtils.hasWindow()) {
             return;
         }
 
@@ -439,7 +439,7 @@ const Drawer = Widget.inherit({
         this._whenPanelContentRefreshed = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRefreshed);
 
-        if(hasWindow()) {
+        if(windowUtils.hasWindow()) {
             this._whenPanelContentRefreshed.always(() => {
                 this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
                 this._renderPosition(this.option('opened'), false, true);

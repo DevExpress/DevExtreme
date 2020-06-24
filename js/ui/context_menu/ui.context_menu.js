@@ -10,7 +10,7 @@ import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import fx from '../../animation/fx';
 import { setup } from '../../animation/position';
 import devices from '../../core/devices';
@@ -134,7 +134,7 @@ class ContextMenu extends MenuBase {
 
     _defaultOptionsRules() {
         return super._defaultOptionsRules().concat([{
-            device: () => !hasWindow(),
+            device: () => !windowUtils.hasWindow(),
             options: {
                 animation: null
             }
@@ -889,7 +889,7 @@ class ContextMenu extends MenuBase {
     }
 
     _refresh() {
-        if(!hasWindow()) {
+        if(!windowUtils.hasWindow()) {
             super._refresh();
         } else {
             if(this._overlay) {

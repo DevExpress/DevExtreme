@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { noop } from '../../core/utils/common';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
@@ -105,7 +105,7 @@ const getEmptyComponent = function() {
     return EmptyComponent;
 };
 
-const isServerSide = !hasWindow();
+const isServerSide = !windowUtils.hasWindow();
 
 function sizeIsValid(value) {
     return isDefined(value) && value > 0;
@@ -335,7 +335,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const scrollEvents = 'scroll.viz_widgets';
 
         if(devices.real().platform === 'generic') {
-            $parents = $parents.add(getWindow());
+            $parents = $parents.add(windowUtils.getWindow());
         }
 
         this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
@@ -375,8 +375,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const elementWidth = !sizeIsValid(size.width) && hasWindow() ? that._$element.width() : 0;
-        const elementHeight = !sizeIsValid(size.height) && hasWindow() ? that._$element.height() : 0;
+        const elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0;
+        const elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0;
         let canvas = {
             width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
             height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),

@@ -2,7 +2,7 @@ import modules from './ui.grid_core.modules';
 import Pager from '../pager';
 import { inArray } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
-import { hasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 
 const PAGER_CLASS = 'pager';
 const MAX_PAGES_COUNT = 10;
@@ -155,7 +155,7 @@ const PagerView = modules.View.inherit({
 
             if(!isDataSource) {
                 that._invalidate();
-                if(hasWindow() && isPager && that.component) {
+                if(windowUtils.hasWindow() && isPager && that.component) {
                     that.component.resize();
                 }
             }

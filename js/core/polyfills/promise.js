@@ -1,6 +1,6 @@
 import { Deferred, when } from '../../core/utils/deferred';
-import { hasWindow, getWindow } from '../../core/utils/window';
-let promise = hasWindow() ? getWindow().Promise : Promise;
+import windowUtils from '../../core/utils/window';
+let promise = windowUtils.hasWindow() ? windowUtils.getWindow().Promise : Promise;
 
 if(!promise) {
     // NOTE: This is an incomplete Promise polyfill but it is enough for creation purposes

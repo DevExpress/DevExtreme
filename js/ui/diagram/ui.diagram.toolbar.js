@@ -4,7 +4,7 @@ import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
@@ -38,7 +38,7 @@ class DiagramToolbar extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
 
-        const isServerSide = !hasWindow();
+        const isServerSide = !windowUtils.hasWindow();
         if(!this.option('skipAdjustSize') && !isServerSide) {
             this.$element().width('');
         }

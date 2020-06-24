@@ -1,6 +1,6 @@
 import domAdapter from '../dom_adapter';
 import injector from './dependency_injector';
-import { hasWindow } from './window';
+import windowUtils from './window';
 import callOnce from './call_once';
 let callbacks = [];
 
@@ -18,7 +18,7 @@ const subscribeReady = callOnce(() => {
 
 const readyCallbacks = {
     add: callback => {
-        const windowExists = hasWindow();
+        const windowExists = windowUtils.hasWindow();
 
         if(windowExists && isReady()) {
             callback();

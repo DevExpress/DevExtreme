@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { getImageContainer } from '../../core/utils/icon';
-import { hasWindow as getHasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
@@ -13,7 +13,7 @@ import ContextMenu from '../context_menu';
 import BaseFieldChooser from './ui.pivot_grid.field_chooser_base';
 
 const DIV = '<div>';
-const hasWindow = getHasWindow();
+const hasWindow = windowUtils.hasWindow();
 
 import './data_source';
 

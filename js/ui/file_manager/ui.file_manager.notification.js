@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
 import { Deferred } from '../../core/utils/deferred';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -10,7 +10,7 @@ import Drawer from '../drawer/ui.drawer';
 
 import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
 
 const FILE_MANAGER_NOTIFICATION_CLASS = 'dx-filemanager-notification';
@@ -138,7 +138,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _isSmallScreen() {
-        if(!hasWindow()) {
+        if(!windowUtils.hasWindow()) {
             return false;
         }
         return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;

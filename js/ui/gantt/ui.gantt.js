@@ -8,7 +8,7 @@ import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import dxTreeList from '../tree_list';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { hasWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import DataOption from './ui.gantt.data.option';
 import SplitterControl from '../splitter';
 import { GanttDialog } from './ui.gantt.dialogs';
@@ -233,7 +233,7 @@ class Gantt extends Widget {
 
 
     _setInnerElementsWidth(widths) {
-        if(!hasWindow()) {
+        if(!windowUtils.hasWindow()) {
             return;
         }
         if(!widths) {

@@ -10,7 +10,7 @@ import { Deferred, when } from '../core/utils/deferred';
 import { createTextElementHiddenCopy } from '../core/utils/dom';
 import { getPublicElement } from '../core/element';
 import { isDefined, isObject, isString } from '../core/utils/type';
-import { hasWindow } from '../core/utils/window';
+import windowUtils from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
@@ -205,7 +205,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _scrollContainer: function(direction) {
-        if(this.option('multiline') || !hasWindow()) {
+        if(this.option('multiline') || !windowUtils.hasWindow()) {
             return;
         }
 

@@ -1,5 +1,5 @@
-import { hasWindow, getWindow } from '../core/utils/window';
-const window = hasWindow() ? getWindow() : {};
+import windowUtils from '../core/utils/window';
+const window = windowUtils.hasWindow() ? windowUtils.getWindow() : {};
 import callOnce from '../core/utils/call_once';
 
 const FRAME_ANIMATION_STEP_TIME = 1000 / 60;

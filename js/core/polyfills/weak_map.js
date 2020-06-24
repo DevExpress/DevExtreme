@@ -1,6 +1,6 @@
-import { inArray } from '../../core/utils/array';
-import { hasWindow, getWindow } from '../../core/utils/window';
-let weakMap = hasWindow() ? getWindow().WeakMap : WeakMap;
+import { inArray } from '../core/utils/array';
+import windowUtils from '../utils/window';
+let weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
 
 if(!weakMap) {
     // NOTE: This is an incomplete WeakMap polyfill but it is enough for creation purposes
