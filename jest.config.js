@@ -10,7 +10,6 @@ module.exports = {
             diagnostics: false, // set to true to enable type checking
         }
     },
-    collectCoverage: true,
     collectCoverageFrom: [
         './js/renovation/**/*.p.js',
         './js/renovation/button.tsx',
@@ -27,13 +26,14 @@ module.exports = {
             branches: 0
         }
     },
+    roots: ['<rootDir>/testing/jest'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
         path.join(path.resolve('.'), './testing/jest/setup-enzyme.ts'),
     ],
     testMatch: [
-        path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')
+        '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)'
     ],
     transform: {
         'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration-transformer.js'),
