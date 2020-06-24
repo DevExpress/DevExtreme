@@ -30,6 +30,8 @@ const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const tooltipModule = require('viz/core/tooltip');
 
+require('viz/vector_map');
+
 const StubExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 
 function returnValue(value) {
