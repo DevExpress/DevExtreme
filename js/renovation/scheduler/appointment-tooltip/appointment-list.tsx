@@ -21,7 +21,7 @@ type ItemTemplateProps = {
   container: HTMLDivElement;
 };
 type ListItemProps = {
-  itemData: AppointmentItem;
+  itemData?: AppointmentItem;
 };
 
 export const viewFunction = (viewModel: AppointmentList) => (
@@ -80,7 +80,7 @@ export default class AppointmentList extends JSXComponent(AppointmentListProps) 
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;
-      showAppointmentPopup!(itemData.data, false, getCurrentAppointment(itemData));
+      showAppointmentPopup!(itemData!.data, false, getCurrentAppointment(itemData!));
     };
   }
 }

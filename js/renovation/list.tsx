@@ -4,6 +4,8 @@ import {
 import DataSource, { DataSourceOptions } from '../data/data_source';
 import { WidgetProps } from './widget';
 import DxList, { dxListItem } from '../ui/list';
+import { dxElement } from '../core/element';
+import { event } from '../events/index';
 import renderTemplate from './utils/render-template';
 
 export const viewFunction = (viewModel: List) => (
@@ -42,9 +44,114 @@ export class ListProps extends WidgetProps {
   // @OneWay() itemDeleteMode?:
   // 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
 
+  // @OneWay() itemDragging?: dxSortableOptions;
+
+  // @TwoWay() items?: Array<string | dxListItem | any>;
+
+  // @OneWay() menuItems?:
+  // Array<{ action?: ((itemElement: dxElement, itemData: any) => any), text?: string }>;
+
+  // @OneWay() menuMode?: 'context' | 'slide';
+
+  // @OneWay() nextButtonText?: string;
+
+  // @Event()onGroupRendered?:((e: {
+  //   component?: dxList, element?: dxElement, model?: any, groupData?: any,
+  //   groupElement?: dxElement, groupIndex?: number
+  // }) => any);
+
+  @Event() onItemClick?: ((e: {
+    component?: DxList;
+    element?: dxElement;
+    model?: any;
+    itemData?: any;
+    itemElement?: dxElement;
+    itemIndex?: number | any;
+    jQueryEvent?: JQueryEventObject;
+    event?: event;
+  }) => any) | string;
+
+  // @Event() onItemContextMenu?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
+  //   itemElement?: dxElement, itemIndex?: number | any,
+  //   jQueryEvent?: JQueryEventObject, event?: event
+  // }) => any);
+
+  // @Event()onItemDeleted?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any,
+  //   itemData?: any, itemElement?: dxElement, itemIndex?: number | any
+  // }) => any);
+
+  // @Event()onItemDeleting?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
+  //   itemElement?: dxElement, itemIndex?: number | any,
+  //   cancel?: boolean | Promise<void> | JQueryPromise<void>
+  // }) => any);
+
+  // @Event()onItemHold?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
+  //   itemElement?: dxElement, itemIndex?: number | any,
+  // jQueryEvent?: JQueryEventObject, event?: event
+  // }) => any);
+
+  // @Event()onItemReordered?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
+  //   itemElement?: dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number
+  // }) => any);
+
+  // @Event()onItemSwipe?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any,
+  //   jQueryEvent?: JQueryEventObject, event?: event,
+  //   itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string
+  // }) => any);
+
+  // @Event()onPageLoading?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
+
+  // @Event()onPullRefresh?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
+
+  // @Event()onScroll?: ((e: {
+  // component?: dxList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject,
+  // event?: event, scrollOffset?: any, reachedLeft?: boolean,
+  // reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean
+  // }) => any);
+
+  // @Event()onSelectAllValueChanged?: ((e: {
+  //   component?: dxList, element?: dxElement, model?: any, value?: boolean
+  // }) => any);
+
+  // @OneWay()pageLoadMode?: 'nextButton' | 'scrollBottom';
+
+  // @OneWay()pageLoadingText?: string;
+
+  // @OneWay()pullRefreshEnabled?: boolean;
+
+  // @OneWay()pulledDownText?: string;
+
+  // @OneWay()pullingDownText?: string;
+
+  // @OneWay()refreshingText?: string;
+
+  // @OneWay()repaintChangesOnly?: boolean;
+
+  // @OneWay()scrollByContent?: boolean;
+
+  // @OneWay()scrollByThumb?: boolean;
+
+  // @OneWay()scrollingEnabled?: boolean;
+
+  // @OneWay()selectAllMode?: 'allPages' | 'page';
+
+  // @OneWay()selectionMode?: 'all' | 'multiple' | 'none' | 'single';
+
+  // @OneWay()showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+
+  // @OneWay()showSelectionControls?: boolean;
+
+  // @OneWay()useNativeScrolling?: boolean;
+
   @OneWay() itemTemplate?: any;
 
-  @Event() onItemClick?: (e: any) => any = (() => {});
+//   @Event() onItemClick?: (e: any) => any = (() => {});
 }
 
 @Component({
