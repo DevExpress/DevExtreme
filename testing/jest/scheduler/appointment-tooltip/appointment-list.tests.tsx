@@ -5,6 +5,7 @@ import AppointmentList, {
 } from '../../../../js/renovation/scheduler/appointment-tooltip/appointment-list';
 import List from '../../../../js/renovation/list';
 import TooltipItemLayout from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
+import getCurrentAppointment from '../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
 
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-layout', () => () => null);
 jest.mock('../../../../js/renovation/list', () => (props) => (
@@ -14,6 +15,9 @@ jest.mock('../../../../js/renovation/list', () => (props) => (
     container="container"
   />
 ));
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment', () => jest.fn(() => ({
+  text: 'currentAppointment',
+})));
 
 describe('AppointmentList', () => {
   describe('Render', () => {
@@ -136,6 +140,31 @@ describe('AppointmentList', () => {
 
       expect(tooltipItemLayout.prop('showDeleteButton'))
         .toBe(false);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('onItemClick', () => {
+        it('should create onItemClick correctly', () => {
+          const showAppointmentPopup = jest.fn();
+          const appointmentList = new AppointmentList({ showAppointmentPopup });
+
+          const { onItemClick } = appointmentList;
+          expect(onItemClick)
+            .toEqual(expect.any(Function));
+
+          const itemData = { data: { text: 'appointment' } };
+          onItemClick({ itemData });
+
+          expect(getCurrentAppointment)
+            .toHaveBeenCalledWith(itemData);
+          expect(showAppointmentPopup)
+            .toHaveBeenCalledTimes(1);
+          expect(showAppointmentPopup)
+            .toHaveBeenCalledWith(itemData.data, false, { text: 'currentAppointment' });
+        });
+      });
     });
   });
 });
