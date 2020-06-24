@@ -643,8 +643,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _valueChangedHandler(args) {
-        const value = args.value;
-        const previousValue = args.previousValue;
+        const { value, previousValue } = args;
         const field = args.component.option('field');
 
         if(!this.option('visible')) {
