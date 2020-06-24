@@ -78,6 +78,7 @@ describe('AppointmentList', () => {
         onHide: jest.fn(),
         itemContentTemplate: (): null => null,
         getTextAndFormatDate: jest.fn(),
+        target: 'target',
       };
       const appointmentList = render({
         props: {
@@ -101,6 +102,8 @@ describe('AppointmentList', () => {
           container: 'container',
           showDeleteButton: true,
         });
+      expect(getSingleAppointmentData)
+        .toHaveBeenCalledWith(appointments[0].data, renderProps.target);
     });
 
     it('should pass `showDeleteButton` = false to TooltipItemLayout if appointment is disabled', () => {
@@ -154,7 +157,7 @@ describe('AppointmentList', () => {
           expect(onItemClick)
             .toEqual(expect.any(Function));
 
-          const itemData = { data: { text: 'appointment' } };
+            onst itemData = { data: { text: 'appointment' } };
           onItemClick({ itemData });
 
           expect(getCurrentAppointment)
