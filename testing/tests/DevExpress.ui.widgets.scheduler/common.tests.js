@@ -666,9 +666,8 @@ QUnit.module('Initialization', {
         dataSource.store().push([{ type: 'update', key: pushItem.id, data: pushItem }]);
         dataSource.load();
 
-        const appointment = scheduler.instance.$element().find('.dx-scheduler-appointment-title');
-        assert.equal(appointment.eq(0).text(), 'Test Appointment', 'Appointment is rerendered');
-        assert.equal(appointment.eq(1).text(), 'Pushed Appointment', 'Pushed appointment is rerendered');
+        assert.equal(scheduler.appointments.getTitleText(0), 'Test Appointment', 'Appointment is rerendered');
+        assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
     });
 
     QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
