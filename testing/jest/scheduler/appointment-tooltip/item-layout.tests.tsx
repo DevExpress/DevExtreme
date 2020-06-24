@@ -9,10 +9,14 @@ import TooltipItemLayout, {
 import DeleteButton from '../../../../js/renovation/button';
 import Marker from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
 import TooltipItemContent from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
+import getCurrentAppointment from '../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
 
 jest.mock('../../../../js/renovation/button', () => () => null);
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => () => null);
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment', () => jest.fn(() => ({
+  text: 'currentAppointment',
+})));
 
 describe('TooltipItemLayout', () => {
   describe('Render', () => {
@@ -246,47 +250,14 @@ describe('TooltipItemLayout', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('currentAppointment', () => {
-        it('should return data if others are undefiend', () => {
+        it('should call getCurrentData with correct parameters', () => {
           const appointmentItem = { data: { text: 'data' } };
           const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
 
           expect(tooltipItemLayout.currentAppointment)
-            .toBe(appointmentItem.data);
-        });
-
-        it('should return currentData if settings are undefined', () => {
-          const appointmentItem = {
-            currentData: { text: 'currentData' },
-            data: { text: 'data' },
-          };
-          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
-
-          expect(tooltipItemLayout.currentAppointment)
-            .toBe(appointmentItem.currentData);
-        });
-
-        it('should return currentData if settings are defined but targetedAppointmentData is undefined', () => {
-          const appointmentItem = {
-            currentData: { text: 'currentData' },
-            data: { text: 'data' },
-            settings: {},
-          };
-          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
-
-          expect(tooltipItemLayout.currentAppointment)
-            .toBe(appointmentItem.currentData);
-        });
-
-        it('should return targetedAppointmentData', () => {
-          const appointmentItem = {
-            currentData: { text: 'currentData' },
-            data: { text: 'data' },
-            settings: { targetedAppointmentData: { text: 'targetedAppointmentData' } },
-          };
-          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
-
-          expect(tooltipItemLayout.currentAppointment)
-            .toBe(appointmentItem.settings.targetedAppointmentData);
+            .toEqual({ text: 'currentAppointment' });
+          expect(getCurrentAppointment)
+            .toHaveBeenCalledWith(appointmentItem);
         });
       });
 
@@ -344,7 +315,7 @@ describe('TooltipItemLayout', () => {
               formatDate: 'formatDate',
             });
           expect(getTextAndFormatDate)
-            .toHaveBeenCalledWith(appointmentItem.data, appointmentItem.currentData);
+            .toHaveBeenCalledWith(appointmentItem.data, { text: 'currentAppointment' });
         });
       });
     });
