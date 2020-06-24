@@ -17,6 +17,7 @@ module.exports = {
         '!./js/renovation/error-message.p.js',
         '!./js/renovation/number-box.p.js',
         '!./js/renovation/select-box.p.js',
+        '!./js/renovation/list.p.js',
     ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
