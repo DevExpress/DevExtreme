@@ -1,5 +1,5 @@
 const $ = require('../../core/renderer');
-const window = require('../../core/utils/window').getWindow();
+const windowUtils = require('../../core/utils/window');
 const eventsEngine = require('../../events/core/events_engine');
 const Guid = require('../../core/guid');
 const registerComponent = require('../../core/component_registrator');
@@ -19,6 +19,7 @@ const messageLocalization = require('../../localization/message');
 const ChildDefaultTemplate = require('../../core/templates/child_default_template').ChildDefaultTemplate;
 const Deferred = require('../../core/utils/deferred').Deferred;
 const DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
+const window = windowUtils.getWindow();
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
@@ -743,12 +744,16 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
+    _updatePopupMinWidth() {
+        this._setPopupOption('minWidth', this.$element().outerWidth());
+    },
+
     _popupShowingHandler: function() {
         this._dimensionChanged();
     },
 
     _dimensionChanged: function() {
-        this._setPopupOption('minWidth', this.$element().outerWidth());
+        windowUtils.hasWindow() && this._updatePopupMinWidth();
         this._popup && this._updatePopupDimensions();
     },
 
