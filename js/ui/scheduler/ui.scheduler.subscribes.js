@@ -46,10 +46,14 @@ const subscribes = {
         return this.getWorkSpace().isGroupedByDate();
     },
 
-    showAppointmentTooltip: function(options) {
-        const appointmentData = options.data;
-        const targetedData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
-        this.showAppointmentTooltip(appointmentData, options.target, targetedData);
+    showAppointmentTooltip: function(options) { // TODO:
+        const settings = $(options.target).data('dxAppointmentSettings');
+
+        const targetedAdapter = this.createAppointmentAdapter(options.data).clone();
+        targetedAdapter.startDate = settings.info.sourceAppointment.startDate;
+        targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
+
+        this.showAppointmentTooltip(options.data, options.target, targetedAdapter.source);
     },
 
     hideAppointmentTooltip: function() {

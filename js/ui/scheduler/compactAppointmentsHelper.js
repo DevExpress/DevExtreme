@@ -6,6 +6,7 @@ import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
 import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
+import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
 
 
@@ -47,12 +48,17 @@ export class CompactAppointmentsHelper {
     }
 
     _createAppointmentsData(items) {
-        return items.data.map((item, index) => {
-            return {
-                data: item,
-                color: items.colors[index],
-                settings: items.settings[index],
-            };
+
+        return items.data.map((appointment, index) => {
+            const { info } = items.settings[index];
+
+            const adapter = this.instance.createAppointmentAdapter(appointment);
+            const targetedAdapter = adapter.clone();
+
+            targetedAdapter.startDate = info.sourceAppointment.startDate;
+            targetedAdapter.endDate = info.sourceAppointment.endDate;
+
+            return new AppointmentTooltipInfo(adapter.source, targetedAdapter.source, items.colors[index]);
         });
     }
 

@@ -85,7 +85,7 @@ export class TooltipStrategyBase {
             dataSource: dataList,
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) => this._renderTemplate(item.data, this._getTargetedAppointment(item), index, item.color)
+            itemTemplate: (item, index) => this._renderTemplate(item.appointment, item.targetedAppointment, index, item.color)
         };
     }
 
@@ -138,19 +138,7 @@ export class TooltipStrategyBase {
     _onListItemClick(e) {
         this.hide();
         this._extraOptions.clickEvent && this._extraOptions.clickEvent(e);
-        this._options.showAppointmentPopup(e.itemData.data, false, this._getTargetedAppointment(e.itemData));
-    }
-
-    _getTargetedAppointment(item) {
-        const { data, settings } = item;
-
-        const adapter = this._options.createAppointmentAdapter(data);
-
-        const targetedAdapter = adapter.clone();
-        targetedAdapter.startDate = settings.info.sourceAppointment.startDate;
-        targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
-
-        return targetedAdapter.source;
+        this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
     }
 
     _createItemListContent(appointment, targetedAppointment, color) {

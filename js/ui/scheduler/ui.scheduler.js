@@ -51,6 +51,7 @@ import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import AppointmentAdapter from './appointmentAdapter';
 import TimeZoneCalculator from './timeZoneCalculator';
+import { AppointmentTooltipInfo } from './dataStructures';
 
 // STYLE scheduler
 const toMs = dateUtils.dateToMilliseconds;
@@ -1501,15 +1502,14 @@ class Scheduler extends Widget {
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
-            createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format),
-            createAppointmentAdapter: appointment => this.createAppointmentAdapter(appointment)
+            createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format)
         };
     }
 
     checkAndDeleteAppointment(appointment, targetedAppointment) {
         const targetedAdapter = this.createAppointmentAdapter(targetedAppointment);
 
-        const that = this;
+        const that = this; // TODO:
         this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, (function() {
             that.deleteAppointment(appointment);
         }), true);
@@ -2617,13 +2617,10 @@ class Scheduler extends Widget {
         }
     }
 
-    showAppointmentTooltip(appointmentData, target, currentAppointmentData) {
-        if(appointmentData) {
-            this.showAppointmentTooltipCore(target, [{
-                color: this._appointments._tryGetAppointmentColor(target),
-                data: appointmentData,
-                currentData: currentAppointmentData,
-            }]);
+    showAppointmentTooltip(appointment, target, targetedAppointment) {
+        if(appointment) {
+            const info = new AppointmentTooltipInfo(appointment, targetedAppointment, this._appointments._tryGetAppointmentColor(target));
+            this.showAppointmentTooltipCore(target, [info]);
         }
     }
 
