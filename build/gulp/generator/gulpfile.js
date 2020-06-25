@@ -56,7 +56,7 @@ function generatePreactComponents() {
         .pipe(gulp.dest(DEST));
 }
 
-function processRenovationMeta() {
+function processRenovationMeta() { // eslint-disable-line no-unused-vars
     const widgetsMeta = generator
         .getComponentsMeta()
         .filter(meta =>
@@ -86,7 +86,7 @@ function processRenovationMeta() {
             .pipe(gulp.dest(COMPAT_TESTS_PARTS))
     );
 }
-gulp.task('generate-components', gulp.series(generatePreactComponents, processRenovationMeta));
+gulp.task('generate-components', gulp.series(generatePreactComponents/* , processRenovationMeta*/));
 
 function addGenerationTask(
     frameworkName,
