@@ -88,17 +88,9 @@ class AppointmentAdapter {
         });
     }
 
-    createModifiedAppointment(pathTimeZoneConversion) { // TODO:
-        const result = extend({}, this.appointment);
-
-        this.scheduler.fire('setField', PROPERTY_NAMES.startDate, result, this.calculateStartDate(pathTimeZoneConversion));
-        this.scheduler.fire('setField', PROPERTY_NAMES.endDate, result, this.calculateEndDate(pathTimeZoneConversion));
-
-        return result;
-    }
-
     clone(options = undefined) {
         const result = new AppointmentAdapter(this.scheduler, extend({}, this.appointment));
+
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);
             result.endDate = result.calculateEndDate(options.pathTimeZone);
