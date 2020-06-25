@@ -826,7 +826,7 @@ const Lookup = DropDownList.inherit({
             this.option('dropDownOptions.width', this.$element().width());
         }
 
-        this.callBase();
+        this._popup && this._updatePopupDimensions();
     },
 
     _input: function() {
