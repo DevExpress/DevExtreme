@@ -70,7 +70,7 @@ class ScrollHelper {
         const that = this;
 
         if(!elements.some(element => that._trySetScrollable(element, mousePosition))) {
-            that._$scrollableAtMousePosition = null;
+            that._$scrollableAtPointer = null;
             that._scrollSpeed = 0;
         }
     }
@@ -99,12 +99,12 @@ class ScrollHelper {
             if(sensitivity > distanceToBorders[that._limitProps.start]) {
                 if(!that._preventScroll) {
                     that._scrollSpeed = -that._calculateScrollSpeed(distanceToBorders[that._limitProps.start]);
-                    that._$scrollableAtMousePosition = $element;
+                    that._$scrollableAtPointer = $element;
                 }
             } else if(sensitivity > distanceToBorders[that._limitProps.end]) {
                 if(!that._preventScroll) {
                     that._scrollSpeed = that._calculateScrollSpeed(distanceToBorders[that._limitProps.end]);
-                    that._$scrollableAtMousePosition = $element;
+                    that._$scrollableAtPointer = $element;
                 }
             } else {
                 isScrollable = false;
@@ -145,9 +145,9 @@ class ScrollHelper {
         const that = this;
         let nextScrollPosition;
 
-        if(that._$scrollableAtMousePosition && that._scrollSpeed) {
-            if(that._$scrollableAtMousePosition.hasClass('dx-scrollable-container')) {
-                const $scrollable = that._$scrollableAtMousePosition.closest('.dx-scrollable');
+        if(that._$scrollableAtPointer && that._scrollSpeed) {
+            if(that._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
+                const $scrollable = that._$scrollableAtPointer.closest('.dx-scrollable');
                 const scrollableInstance = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
 
                 if(scrollableInstance) {
@@ -157,9 +157,9 @@ class ScrollHelper {
                     scrollableInstance.scrollTo(nextScrollPosition);
                 }
             } else {
-                nextScrollPosition = that._$scrollableAtMousePosition[that._scrollValue]() + that._scrollSpeed;
+                nextScrollPosition = that._$scrollableAtPointer[that._scrollValue]() + that._scrollSpeed;
 
-                that._$scrollableAtMousePosition[that._scrollValue](nextScrollPosition);
+                that._$scrollableAtPointer[that._scrollValue](nextScrollPosition);
             }
 
             const dragMoveArgs = that._component._dragMoveArgs;
@@ -170,7 +170,7 @@ class ScrollHelper {
     }
 
     reset() {
-        this._$scrollableAtMousePosition = null;
+        this._$scrollableAtPointer = null;
         this._scrollSpeed = 0;
         this._preventScroll = true;
     }
