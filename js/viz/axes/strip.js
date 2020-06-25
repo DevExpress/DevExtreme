@@ -39,13 +39,15 @@ export default function createStrip(axis, options) {
 
                 this.labelCoords = labelOptions.text ? axis._getStripLabelCoords(stripPos.from, stripPos.to, labelOptions) : null;
 
-                if((stripPos.to - stripPos.from === 0) || (!isDefined(stripPos.to)) || (!isDefined(stripPos.from))) {
+                if(stripPos.outOfCanvas || (!isDefined(stripPos.to)) || (!isDefined(stripPos.from))) {
                     return;
                 }
 
-                this.rect = axis._createStrip(axis._getStripGraphicAttributes(stripPos.from, stripPos.to))
-                    .attr({ fill: options.color })
-                    .append(axis._axisStripGroup);
+                if(stripPos.to !== stripPos.from) {
+                    this.rect = axis._createStrip(axis._getStripGraphicAttributes(stripPos.from, stripPos.to))
+                        .attr({ fill: options.color })
+                        .append(axis._axisStripGroup);
+                }
 
                 this.label = labelOptions.text ? this._drawLabel(this.labelCoords) : null;
             }
