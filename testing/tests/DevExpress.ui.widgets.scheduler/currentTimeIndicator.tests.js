@@ -684,8 +684,8 @@ const stubInvokeMethod = function(instance, options) {
         const cellWidth = $cell.outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, 'Shader has correct height');
-        assert.roughEqual($topShader.outerWidth(), 7 * cellWidth, 2, 'TopShader has correct width');
-        assert.roughEqual($allDayShader.outerWidth(), 7 * cellWidth, 2, 'AllDayShader has correct width');
+        assert.roughEqual($topShader.outerWidth(), 7 * cellWidth, 2.5, 'TopShader has correct width');
+        assert.roughEqual($allDayShader.outerWidth(), 7 * cellWidth, 2.5, 'AllDayShader has correct width');
 
         assert.roughEqual($topShader.outerHeight(), 1000, 1.5, 'TopShader has correct height');
 
@@ -846,9 +846,9 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         ];
 
         shaderConfigs.forEach(config => {
-            assert.roughEqual(config.element.outerHeight(), config.height, 1.5, `${config.type} shader has correct height`);
-            assert.roughEqual(config.element.outerWidth(), config.width, 1.5, `${config.type} shader has correct width`);
-            assert.roughEqual(parseInt(config.element.css('left')), config.left, 1.5, `${config.type} shader has correct left`);
+            assert.roughEqual(config.element.outerHeight(), config.height, 2.5, `${config.type} shader has correct height`);
+            assert.roughEqual(config.element.outerWidth(), config.width, 2.5, `${config.type} shader has correct width`);
+            assert.roughEqual(parseInt(config.element.css('left')), config.left, 2.5, `${config.type} shader has correct left`);
         });
     });
 });
