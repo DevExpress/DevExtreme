@@ -464,7 +464,7 @@ Axis.prototype = {
         }
 
         const stripPosition = (start < end) ? { from: start, to: end } : { from: end, to: start };
-        const visibleArea = this.getVisibleArea();
+        const visibleArea = [canvasStart, canvasEnd].sort((a, b) => a - b);
 
         if(stripPosition.from <= visibleArea[0] && stripPosition.to <= visibleArea[0] || stripPosition.from >= visibleArea[1] && stripPosition.to >= visibleArea[1]) {
             stripPosition.outOfCanvas = true;
