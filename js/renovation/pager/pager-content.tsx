@@ -14,6 +14,8 @@ import PagerProps from './pager-props';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   className,
+  pagesContainerVisible,
+  pagesContainerVisibility,
   isLargeDisplayMode,
   infoVisible,
   props: {
@@ -38,29 +40,35 @@ export const viewFunction = ({
       rtlEnabled={rtlEnabled}
     />
     )}
-    <div ref={pagesRef as any} className={PAGER_PAGES_CLASS}>
-      <PageIndexSelector
+    {pagesContainerVisible && (
+      <div
+        ref={pagesRef as any}
+        className={PAGER_PAGES_CLASS}
+        style={{ visibility: pagesContainerVisibility }}
+      >
+        <PageIndexSelector
                 // hasKnownLastPage={hasKnownLastPage}
-        isLargeDisplayMode={isLargeDisplayMode}
-        maxPagesCount={maxPagesCount}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        pageIndexChange={pageIndexChange}
-        pagesCountText={pagesCountText}
-        rtlEnabled={rtlEnabled}
-        showNavigationButtons={showNavigationButtons}
-        totalCount={totalCount}
-      />
-      {infoVisible && (
-      <InfoText
-        ref={infoTextRef as any}
-        infoText={infoText}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        totalCount={totalCount}
-      />
-      )}
-    </div>
+          isLargeDisplayMode={isLargeDisplayMode}
+          maxPagesCount={maxPagesCount}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          pageIndexChange={pageIndexChange}
+          pagesCountText={pagesCountText}
+          rtlEnabled={rtlEnabled}
+          showNavigationButtons={showNavigationButtons}
+          totalCount={totalCount}
+        />
+        {infoVisible && (
+        <InfoText
+          ref={infoTextRef as any}
+          infoText={infoText}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          totalCount={totalCount}
+        />
+        )}
+      </div>
+    )}
   </div>
 );
 
@@ -89,12 +97,22 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
   @OneWay() infoTextRef: any = null;
 }
 
-// tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
 export default class PagerContentComponent extends JSXComponent(PagerContentProps) {
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
     return showInfo && infoTextVisible;
+  }
+
+  get pagesContainerVisible(): boolean {
+    return !!this.props.pagesNavigatorVisible;
+  }
+
+  get pagesContainerVisibility(): 'hidden' | undefined {
+    if (this.props.pagesNavigatorVisible === 'auto') {
+      return this.props.pageCount === 1 ? 'hidden' : undefined;
+    }
+    return undefined;
   }
 
   get isLargeDisplayMode(): boolean {
