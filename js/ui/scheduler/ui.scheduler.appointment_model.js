@@ -322,17 +322,29 @@ class AppointmentModel {
     }
 
     _initStoreChangeHandlers() {
-        this._dataSource && this._dataSource.store()
-            .on('updating', ((newItem) => {
-                this._updatedAppointment = newItem;
-            }).bind(this));
+        const dataSource = this._dataSource;
+        const store = dataSource?.store();
 
-        this._dataSource && this._dataSource.store()
-            .on('push', ((items) => {
-                items.forEach(((item) => {
-                    this._updatedAppointmentKeys.push({ key: this._dataSource.store().key(), value: item.key });
-                }).bind(this));
-            }).bind(this));
+        if(store) {
+            store.on('updating', newItem => {
+                this._updatedAppointment = newItem;
+            });
+
+            store.on('push', pushItems => {
+                const items = dataSource.items();
+                const keyName = store.key();
+
+                pushItems.forEach(pushItem => {
+                    const itemExists = items.filter(item => item[keyName] === pushItem.key).length !== 0;
+
+                    if(itemExists) {
+                        this._updatedAppointmentKeys.push({ key: keyName, value: pushItem.key });
+                    } else {
+                        items.push(pushItem.data);
+                    }
+                });
+            });
+        }
     }
 
     getUpdatedAppointment() {
