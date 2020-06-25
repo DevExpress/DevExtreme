@@ -42,6 +42,7 @@ const compileBundles = (bundles) => {
         .pipe(cleanCss(cleanCssOptions))
         .pipe(replace(commentsRegex, ''))
         .pipe(starLicense())
+        .pipe(replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1'))
         .pipe(gulp.dest(cssArtifactsPath));
 };
 
