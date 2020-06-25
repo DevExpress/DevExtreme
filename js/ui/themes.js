@@ -372,7 +372,7 @@ function autoInit() {
 if(windowUtils.hasWindow()) {
     autoInit();
 } else {
-    eadyCallbacks.add(autoInit);
+    readyCallbacks.add(autoInit);
 }
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
@@ -386,19 +386,22 @@ devices.changed.add(function() {
     init({ _autoInit: true });
 });
 
+exports.current = current;
 
-export { current };
-export { ready };
-export { init };
-export { attachCssClasses };
-export { detachCssClasses };
-export { waitForThemeLoad };
-export { isMaterial };
-export { isGeneric };
-export { isDark };
-export { isWebFontLoaded };
-export { waitWebFont };
-export function resetTheme() {
+exports.ready = ready;
+exports.init = init;
+
+exports.attachCssClasses = attachCssClasses;
+exports.detachCssClasses = detachCssClasses;
+
+exports.waitForThemeLoad = waitForThemeLoad;
+exports.isMaterial = isMaterial;
+exports.isGeneric = isGeneric;
+exports.isDark = isDark;
+exports.isWebFontLoaded = isWebFontLoaded;
+exports.waitWebFont = waitWebFont;
+
+exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;

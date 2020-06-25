@@ -17,8 +17,8 @@ const watch = require('gulp-watch');
 
 const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
-const BUNDLES_PARTS = 'js/bundles/modules/parts';
-const COMPAT_TESTS_PARTS = 'testing/jest/compat';
+const BUNDLES_PARTS = 'js/bundles/modules/parts/';
+const COMPAT_TESTS_PARTS = 'testing/jest/compat/';
 
 const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
@@ -73,20 +73,16 @@ function processRenovationMeta() {
     ).join('\n');
     content += '\n/// BUNDLER_PARTS_END\nmodule.exports = renovation;\n';
 
+    const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
+        ...meta,
+        path: path.relative(COMPAT_TESTS_PARTS, meta.path)
+    })));
+
     return merge(
         file('widgets-renovation.js', content, { src: true })
             .pipe(gulp.dest(BUNDLES_PARTS)),
 
-        file('widgets.json', JSON.stringify(widgetsMeta.map(meta => ({
-            ...meta,
-            path: path.relative(COMPAT_TESTS_PARTS, meta.path)
-        }))), { src: true })
-            .pipe(lint({
-                quiet: true,
-                fix: true,
-                useEslintrc: true
-            }))
-            .pipe(lint.format())
+        file('widgets.json', metaJson, { src: true })
             .pipe(gulp.dest(COMPAT_TESTS_PARTS))
     );
 }
