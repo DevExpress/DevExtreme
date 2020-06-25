@@ -5907,7 +5907,7 @@ QUnit.test("Horizontal. Minor grids", function(assert) {
     assert.deepEqual(path.getCall(2).returnValue.append.getCall(0).args[0], group);
 });
 
-QUnit.test("Vertical. Major grids", function(assert) {
+QUnit.test("Vertical. Major grids. Ticks were generated", function(assert) {
     // arrange
     this.createAxis();
     this.updateOptions({
@@ -5937,7 +5937,7 @@ QUnit.test("Vertical. Major grids", function(assert) {
     assert.deepEqual(path.getCall(2).args, [[10, 60, 90, 60], "line"]);
 });
 
-QUnit.test("Vertical. Major grids", function(assert) {
+QUnit.test("Vertical. Major grids. Minor ticks were generated", function(assert) {
     // arrange
     this.createAxis();
     this.updateOptions({
@@ -6514,7 +6514,42 @@ QUnit.test("Horizontal axis. Without color", function(assert) {
     assert.equal(renderer.stub("rect").callCount, 0);
 });
 
+// T900791
+QUnit.test('Strips. endValue === startValue', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        strips: [{
+            startValue: 5,
+            endValue: 5,
+            color: 'red',
+            label: { horizontalAlignment: 'center', text: 'text' }
+
+        }]
+    });
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 10
+    });
+    this.translator.stub('translate').withArgs(5).returns(30);
+
+    this.axis.parser = function(value) {
+        return value;
+    };
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.strictEqual(renderer.stub('rect').callCount, 1);
+    assert.deepEqual(renderer.rect.getCall(0).args, [30, 30, 0, 40], 'points');
+    assert.strictEqual(renderer.text.callCount, 1);
+});
+
 QUnit.test("Horizontal axis. Some strips out of bounds, some strips partially out of bounds", function(assert) {
+
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -6543,14 +6578,14 @@ QUnit.test("Horizontal axis. Some strips out of bounds, some strips partially ou
         min: 0,
         max: 10
     });
-    this.translator.stub("translate").withArgs(-3).returns(null);
-    this.translator.stub("translate").withArgs(-2).returns(null);
-    this.translator.stub("translate").withArgs(-1).returns(null);
+    this.translator.stub("translate").withArgs(-3).returns(7);
+    this.translator.stub("translate").withArgs(-2).returns(8);
+    this.translator.stub("translate").withArgs(-1).returns(9);
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(9).returns(50);
-    this.translator.stub("translate").withArgs(11).returns(null);
-    this.translator.stub("translate").withArgs(12).returns(null);
-    this.translator.stub("translate").withArgs(13).returns(null);
+    this.translator.stub("translate").withArgs(11).returns(100);
+    this.translator.stub("translate").withArgs(12).returns(110);
+    this.translator.stub("translate").withArgs(13).returns(120);
     this.axis.parser = function(value) {
         return value;
     };
@@ -6559,8 +6594,8 @@ QUnit.test("Horizontal axis. Some strips out of bounds, some strips partially ou
 
     // assert
     assert.equal(renderer.rect.callCount, 2);
-    assert.deepEqual(renderer.rect.getCall(0).args, [10, 30, 20, 40], "points");
-    assert.deepEqual(renderer.rect.getCall(1).args, [50, 30, 40, 40], "points");
+    assert.deepEqual(renderer.rect.getCall(0).args, [9, 30, 21, 40], "points");
+    assert.deepEqual(renderer.rect.getCall(1).args, [50, 30, 50, 40], "points");
 });
 
 QUnit.test("Vertical axis. Some strips out of bounds, some strips partially out of bounds", function(assert) {
@@ -6592,14 +6627,14 @@ QUnit.test("Vertical axis. Some strips out of bounds, some strips partially out 
         min: 0,
         max: 10
     });
-    this.translator.stub("translate").withArgs(-3).returns(null);
-    this.translator.stub("translate").withArgs(-2).returns(null);
-    this.translator.stub("translate").withArgs(-1).returns(null);
+    this.translator.stub("translate").withArgs(-3).returns(7);
+    this.translator.stub("translate").withArgs(-2).returns(8);
+    this.translator.stub("translate").withArgs(-1).returns(9);
     this.translator.stub("translate").withArgs(1).returns(50);
     this.translator.stub("translate").withArgs(9).returns(40);
-    this.translator.stub("translate").withArgs(11).returns(null);
-    this.translator.stub("translate").withArgs(12).returns(null);
-    this.translator.stub("translate").withArgs(13).returns(null);
+    this.translator.stub("translate").withArgs(11).returns(100);
+    this.translator.stub("translate").withArgs(12).returns(110);
+    this.translator.stub("translate").withArgs(13).returns(120);
     this.axis.parser = function(value) {
         return value;
     };
@@ -6608,8 +6643,8 @@ QUnit.test("Vertical axis. Some strips out of bounds, some strips partially out 
 
     // assert
     assert.equal(renderer.rect.callCount, 2);
-    assert.deepEqual(renderer.rect.getCall(0).args, [10, 50, 80, 20], "points");
-    assert.deepEqual(renderer.rect.getCall(1).args, [10, 30, 80, 10], "points");
+    assert.deepEqual(renderer.rect.getCall(0).args, [10, 9, 80, 41], "points");
+    assert.deepEqual(renderer.rect.getCall(1).args, [10, 40, 80, 60], "points");
 });
 
 QUnit.test("Horizontal axis. End value > start value", function(assert) {
