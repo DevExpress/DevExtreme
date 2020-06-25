@@ -18,7 +18,7 @@ const watch = require('gulp-watch');
 const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
 const BUNDLES_PARTS = 'js/bundles/modules/parts/';
-const COMPAT_TESTS_PARTS = 'testing/jest/compat/';
+const COMPAT_TESTS_PARTS = 'testing/jest/compatibility/';
 
 const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
@@ -56,7 +56,7 @@ function generatePreactComponents() {
         .pipe(gulp.dest(DEST));
 }
 
-function processRenovationMeta() { // eslint-disable-line no-unused-vars
+function processRenovationMeta() {
     const widgetsMeta = generator
         .getComponentsMeta()
         .filter(meta =>
@@ -69,13 +69,13 @@ function processRenovationMeta() { // eslint-disable-line no-unused-vars
     '/// BUNDLER_PARTS\n/* Renovation (dx.module-renovation.js) */\n\n' +
     'const renovation = require(\'../../../bundles/modules/renovation\');\n';
     content += widgetsMeta.map(meta =>
-        `renovation.dxr${meta.name} = require('${path.normalize(path.relative(BUNDLES_PARTS, meta.path)).replace(/\.[\w]+$/, '.j')}').default;`
+        `renovation.dxr${meta.name} = require('${path.relative(BUNDLES_PARTS, meta.path).replace(/\\/g, '/').replace(/\.[\w]+$/, '.j')}').default;`
     ).join('\n');
     content += '\n/// BUNDLER_PARTS_END\nmodule.exports = renovation;\n';
 
     const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
         ...meta,
-        path: path.normalize(path.relative(COMPAT_TESTS_PARTS, meta.path))
+        path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
     })));
 
     return merge(
@@ -86,7 +86,7 @@ function processRenovationMeta() { // eslint-disable-line no-unused-vars
             .pipe(gulp.dest(COMPAT_TESTS_PARTS))
     );
 }
-gulp.task('generate-components', gulp.series(generatePreactComponents/* , processRenovationMeta*/));
+gulp.task('generate-components', gulp.series(generatePreactComponents, processRenovationMeta));
 
 function addGenerationTask(
     frameworkName,
