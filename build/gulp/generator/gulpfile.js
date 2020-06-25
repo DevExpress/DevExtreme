@@ -69,13 +69,13 @@ function processRenovationMeta() {
     '/// BUNDLER_PARTS\n/* Renovation (dx.module-renovation.js) */\n\n' +
     'const renovation = require(\'../../../bundles/modules/renovation\');\n';
     content += widgetsMeta.map(meta =>
-        `renovation.dxr${meta.name} = require('${path.relative(BUNDLES_PARTS, meta.path).replace(/\.[\w]+$/, '.j')}').default;`
+        `renovation.dxr${meta.name} = require('${path.normalize(path.relative(BUNDLES_PARTS, meta.path)).replace(/\.[\w]+$/, '.j')}').default;`
     ).join('\n');
     content += '\n/// BUNDLER_PARTS_END\nmodule.exports = renovation;\n';
 
     const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
         ...meta,
-        path: path.relative(COMPAT_TESTS_PARTS, meta.path)
+        path: path.normalize(path.relative(COMPAT_TESTS_PARTS, meta.path))
     })));
 
     return merge(
