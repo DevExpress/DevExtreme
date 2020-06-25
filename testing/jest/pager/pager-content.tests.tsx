@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import PagerContentComponent, { PagerContentProps } from '../../../../js/renovation/pager/pager-content';
-import PageSizeSelectorComponent from '../../../../js/renovation/pager/page-size-selector';
+import PagerContentComponent, { PagerContentProps } from '../../../js/renovation/pager/pager-content';
+import PageSizeSelectorComponent from '../../../js/renovation/pager/page-size-selector';
 // import type { PageSizeSelectorPropsType } from '../../../js/renovation/pager/page-size-selector';
-import PageIndexSelectorComponent from '../../../../js/renovation/pager/page-index-selector';
-import InfoTextComponent from '../../../../js/renovation/pager/info';
-import { PAGER_CLASS_FULL, PAGER_PAGES_CLASS, LIGHT_MODE_CLASS } from '../../../../js/renovation/pager/consts';
+import PageIndexSelectorComponent from '../../../js/renovation/pager/page-index-selector';
+import InfoTextComponent from '../../../js/renovation/pager/info';
+import { PAGER_CLASS_FULL, PAGER_PAGES_CLASS, LIGHT_MODE_CLASS } from '../../../js/renovation/pager/consts';
 
-jest.mock('../../../../js/renovation/select-box', () => { });
+jest.mock('../../../js/renovation/select-box', () => { });
 
 describe('PagerContent', () => {
   const render = (props: Partial<PagerContentProps>) => {
