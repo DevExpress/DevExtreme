@@ -8,15 +8,15 @@ const deferredUtils = require('../../core/utils/deferred');
 const utils = require('../filter_builder/utils');
 
 function baseOperation(grid) {
-    const calculateFilterExpression = function(filterValue, field) {
+    const calculateFilterExpression = function(filterValue, field, fields) {
         let result = [];
         const lastIndex = filterValue.length - 1;
         filterValue && filterValue.forEach(function(value, index) {
             if(utils.isCondition(value) || utils.isGroup(value)) {
-                const filterExpression = utils.getFilterExpression(value, [field], [], 'headerFilter');
+                const filterExpression = utils.getFilterExpression(value, fields, [], 'headerFilter');
                 result.push(filterExpression);
             } else {
-                result.push(utils.getFilterExpression([field.dataField, '=', value], [field], [], 'headerFilter'));
+                result.push(utils.getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter'));
             }
             index !== lastIndex && result.push('or');
         });
@@ -121,8 +121,8 @@ function anyOf(grid) {
 function noneOf(grid) {
     const baseOp = baseOperation(grid);
     return extend({}, baseOp, {
-        calculateFilterExpression: function(filterValue, field) {
-            const baseFilter = baseOp.calculateFilterExpression(filterValue, field);
+        calculateFilterExpression: function(filterValue, field, fields) {
+            const baseFilter = baseOp.calculateFilterExpression(filterValue, field, fields);
             if(!baseFilter || baseFilter.length === 0) return null;
 
             return baseFilter[0] === '!' ? baseFilter : ['!', baseFilter];
