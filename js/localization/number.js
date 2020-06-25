@@ -331,7 +331,7 @@ const numberLocalization = dependencyInjector({
             parsed = parsed * Math.pow(10, (3 * power));
         }
 
-        if(formatConfig.formatType === 'percent') {
+        if(formatConfig?.formatType === 'percent') {
             parsed /= 100;
         }
 
