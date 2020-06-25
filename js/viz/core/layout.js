@@ -190,7 +190,6 @@ function createTargets(targets) {
     const ii = targets.length;
     let collection = [];
     let layout;
-
     for(i = 0; i < ii; ++i) {
         layout = targets[i].layoutOptions();
         if(layout) {

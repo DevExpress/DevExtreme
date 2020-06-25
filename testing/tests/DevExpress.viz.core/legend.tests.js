@@ -1864,15 +1864,6 @@ QUnit.test('resetItem from invisible series', function(assert) {
     assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
-QUnit.test('resetItem from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
-    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
-    this.legend.resetItem(4);
-
-    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
-});
-
 // T164539
 QUnit.module('legend without data', $.extend({}, environment, {
     beforeEach: function() {
@@ -2118,15 +2109,6 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1 }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');
     });
-});
-
-QUnit.module('probeDraw', environment);
-
-QUnit.test('probeDraw', function(assert) {
-    const legend = this.createSimpleLegend();
-    legend.draw = sinon.stub();
-    legend.probeDraw();
-    assert.ok(legend.draw.calledOnce);
 });
 
 QUnit.module('getActionCallback', environment);

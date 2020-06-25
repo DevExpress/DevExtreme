@@ -476,10 +476,6 @@ extend(legendPrototype, {
         return that;
     },
 
-    probeDraw: function(width, height) {
-        return this.draw(width, height);
-    },
-
     _createItems: function(items) {
         const that = this;
         const options = that._options;

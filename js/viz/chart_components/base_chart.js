@@ -698,7 +698,6 @@ export const BaseChart = BaseWidget.inherit({
         }
 
         that._updateTracker(trackerCanvases);
-        that._updateLegendPosition(drawOptions, isLegendInside);
         that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
@@ -866,8 +865,6 @@ export const BaseChart = BaseWidget.inherit({
     _allowLegendInsidePosition() {
         return false;
     },
-
-    _updateLegendPosition: noop,
 
     _createLegend: function() {
         const that = this;
