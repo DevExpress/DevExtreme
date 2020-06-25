@@ -423,6 +423,32 @@ module('value', moduleConfig, () => {
         radioGroup.option('value', 2);
         assert.notOk(jQueryEvent, 'jQuery event is not defined when api used');
     });
+
+    test('widget changes the selection correctly when using the dataSource with the key', function(assert) {
+        assert.expect(2);
+        const items = [
+            { id: '001', text: 'test 1' },
+            { id: '002', text: 'test 2' }
+        ];
+        const $radioGroup = createRadioGroup({
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: items,
+                    key: 'id'
+                }
+            },
+            onValueChanged: function(e) {
+                assert.deepEqual(e.value, items[0], 'default valueExpr -> set an object as the value');
+            }
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstItem = $(radioGroup.itemElements()).first();
+
+        $firstItem.trigger('dxclick');
+
+        assert.ok($firstItem.hasClass('dx-item-selected'), 'first item is selected');
+    });
 });
 
 module('valueExpr', moduleConfig, () => {

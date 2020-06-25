@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+// adduse
+
+$MATERIAL_INVALID_BADGE_SIZE: null !default;
+
+@if $size == "default" {
+  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
+}
+
+@else if $size == "compact" {
+  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
+}
