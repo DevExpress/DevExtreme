@@ -30,13 +30,13 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './testing/jest/setup_enzyme.ts'),
+        path.join(path.resolve('.'), './testing/jest/setup-enzyme.ts'),
     ],
     testMatch: [
         '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)'
     ],
     transform: {
-        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration_transformer.js'),
+        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration-transformer.js'),
         '\\.(js|jsx|ts|tsx)$': resolve.sync('ts-jest')
     }
 };

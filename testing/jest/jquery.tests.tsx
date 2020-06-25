@@ -3,14 +3,14 @@
  */
 
 import { act } from 'preact/test-utils';
-import $ from '../../../js/core/renderer';
-import '../test_components/preact_test_widget';
-import '../test_components/empty_test_widget';
+import $ from '../../js/core/renderer';
+import './test_components/preact_test_widget';
+import './test_components/empty_test_widget';
 import {
   defaultEvent,
   emitKeyboard,
   KEY,
-} from '../utils/events_mock';
+} from './utils/events-mock';
 
 beforeEach(() => {
   document.body.innerHTML = `
