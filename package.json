@@ -178,7 +178,7 @@
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations",
     "test-testcafe": "node ./testing/testcafe/runner",
-    "test-jest": "jest",
+    "test-jest": "jest --coverage",
     "test-jest:watch": "jest --watch"
   },
   "browserslist": [
