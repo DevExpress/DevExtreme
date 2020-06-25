@@ -2037,10 +2037,10 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _isOutsideScrollable(target, event) {
-        const $dataTableScrollableElement = this._dateTableScrollable.$element();
-        const scrollableSize = getBoundingRect($dataTableScrollableElement.get(0));
+        const $dateTableScrollableElement = this._dateTableScrollable.$element();
+        const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
         const window = windowUtils.getWindow();
-        const isTargetInAllDayPanel = !$(target).closest($dataTableScrollableElement).length;
+        const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
         const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
         const isOutsideVerticalScrollable = event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
 
