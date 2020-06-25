@@ -114,9 +114,9 @@ const DropDownButton = Widget.inherit({
         this._createItemClickAction();
         this._createActionClickAction();
         this._createSelectionChangedAction();
+        this._initDataSource();
         this._compileKeyGetter();
         this._compileDisplayGetter();
-        this._initDataSource();
         this._itemsToDataSource();
         this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
@@ -147,8 +147,15 @@ const DropDownButton = Widget.inherit({
         }
     },
 
+    _getKey: function() {
+        const keyExpr = this.option('keyExpr');
+        const storeKey = this._dataSource?.key();
+
+        return isDefined(storeKey) && (!isDefined(keyExpr) || keyExpr === 'this') ? storeKey : keyExpr;
+    },
+
     _compileKeyGetter() {
-        this._keyGetter = compileGetter(this.option('keyExpr'));
+        this._keyGetter = compileGetter(this._getKey());
     },
 
     _compileDisplayGetter() {
@@ -189,7 +196,7 @@ const DropDownButton = Widget.inherit({
         this._lastSelectedItemData = undefined;
 
         const selectedItemKey = this.option('selectedItemKey');
-        this._loadSingle(this.option('keyExpr'), selectedItemKey)
+        this._loadSingle(this._getKey(), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
                 d.resolve(null);
@@ -331,10 +338,7 @@ const DropDownButton = Widget.inherit({
                 of: this.$element(),
                 collision: 'flipfit',
                 my: 'top ' + horizontalAlignment,
-                at: 'bottom ' + horizontalAlignment,
-                offset: {
-                    y: -1
-                }
+                at: 'bottom ' + horizontalAlignment
             }
         }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },
@@ -352,7 +356,7 @@ const DropDownButton = Widget.inherit({
             selectedItemKeys: selectedItemKey && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             groupTemplate: this.option('groupTemplate'),
-            keyExpr: this.option('keyExpr'),
+            keyExpr: this._getKey(),
             noDataText: this.option('noDataText'),
             displayExpr: this.option('displayExpr'),
             itemTemplate: this.option('itemTemplate'),

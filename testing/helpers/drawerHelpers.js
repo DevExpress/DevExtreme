@@ -1,6 +1,3 @@
-const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
-const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
-
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
@@ -18,49 +15,6 @@ function checkMargin(assert, element, top, right, bottom, left, message) {
     assert.strictEqual(window.getComputedStyle(element).marginBottom, bottom + 'px', 'marginBottom, ' + message);
 }
 
-function checkShader(assert, env, expectedZIndex) {
-    const shaderElement = env.drawerElement.querySelector(`.${DRAWER_SHADER_CLASS}`);
-
-    const { visibility } = window.getComputedStyle(shaderElement);
-    const { opened, shading } = env.drawer.option();
-
-    const shaderZIndex = window.getComputedStyle(shaderElement).zIndex.toString();
-    const panelZIndex = window.getComputedStyle(env.drawerElement.querySelector(`.${DRAWER_PANEL_CONTENT_CLASS}`)).zIndex.toString();
-
-    if(opened) {
-        if(shading) {
-            assert.strictEqual(visibility, 'visible', 'shader is visible');
-            assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
-            const viewRect = env.viewElement.getBoundingClientRect();
-            let expectedRect = { left: viewRect.left, top: viewRect.top, width: viewRect.width, height: viewRect.height };
-            if(env.drawer.option('openedStateMode') === 'overlap') {
-                if(env.drawer.option('position') === 'left') {
-                    expectedRect.width += env.minSize;
-                } else {
-                    const drawerRect = env.drawerElement.getBoundingClientRect();
-                    expectedRect = { left: drawerRect.left, top: drawerRect.top, width: drawerRect.width, height: drawerRect.height };
-                }
-
-            }
-            checkBoundingClientRect(assert, shaderElement, expectedRect, 'shader');
-        } else {
-            assert.strictEqual(visibility, 'hidden', 'shader is hidden');
-            assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
-            checkBoundingClientRect(assert, shaderElement, { width: 0, height: 0, top: 0, left: 0 }, 'shader');
-        }
-
-        assert.strictEqual(shaderZIndex, expectedZIndex.shader, 'shader.zIndex');
-        assert.strictEqual(panelZIndex, expectedZIndex.panel, 'panel.zIndex');
-    } else {
-        assert.strictEqual(visibility, 'hidden', 'shader is hidden');
-        assert.strictEqual(shaderElement.classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
-        assert.strictEqual(shaderZIndex, 'auto', 'shader.zIndex');
-        assert.strictEqual(panelZIndex, 'auto', 'panel.zIndex');
-
-        checkBoundingClientRect(assert, shaderElement, { width: 0, height: 0, top: 0, left: 0 }, 'shader');
-    }
-}
-
 const leftTemplateSize = 150;
 const LeftDrawerTester = {
     templateSize: leftTemplateSize,
@@ -70,19 +24,17 @@ const LeftDrawerTester = {
         function checkPush(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + 150, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
-            checkShader(assert, env, { panel: 'auto', shader: env.shading ? '2000' : 'auto' });
         }
         function checkShrink(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + 150, top: env.drawerRect.top, width: 50, height: 100 }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
-            checkShader(assert, env, { panel: 'auto', shader: env.shading ? '2000' : 'auto' });
         }
         function checkOverlap(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template.parentElement size should not cut template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: 200 - env.minSize, height: 100 }, 'view');
-            checkShader(assert, env, { panel: '2001', shader: env.shading ? '2000' : 'auto' });
+            assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view');
         }
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
         assert.strictEqual(drawer.option('visible'), true, 'option(visible)');
@@ -176,8 +128,6 @@ const LeftDrawerTester = {
         } else {
             assert.notOk('configuration is not tested');
         }
-
-        checkShader(assert, env);
     }
 };
 
@@ -190,19 +140,17 @@ const RightDrawerTester = {
         function checkPush(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left - rightTemplateSize, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
-            checkShader(assert, env, { panel: 'auto', shader: env.shading ? '2000' : 'auto' });
         }
         function checkShrink(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 50, height: 100 }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
-            checkShader(assert, env, { panel: 'auto', shader: env.shading ? '2000' : 'auto' });
         }
         function checkOverlap(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template.parentElement size should not cut template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200 - env.minSize, height: 100 }, 'view');
-            checkShader(assert, env, { panel: '2001', shader: env.shading ? '2000' : 'auto' });
+            assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view');
         }
 
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
@@ -306,8 +254,6 @@ const RightDrawerTester = {
         } else {
             assert.notOk('configuration is not tested');
         }
-
-        checkShader(assert, env);
     }
 };
 
@@ -320,19 +266,17 @@ const TopDrawerTester = {
         function checkPush(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + 150, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
-            checkShader(assert, env, { panel: 'auto', shader: env.shading ? '2000' : 'auto' });
         }
         function checkShrink(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: topTemplateSize }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + topTemplateSize, width: 200, height: env.drawerRect.height - topTemplateSize }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
-            checkShader(assert, env, { panel: 'auto', shader: env.shading ? '2000' : 'auto' });
         }
         function checkOverlap(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: topTemplateSize }, 'template');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: topTemplateSize }, 'template.parentElement size should not cut template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.minSize, width: 200, height: 100 - env.minSize }, 'view');
-            checkShader(assert, env, { panel: '2001', shader: env.shading ? '2000' : 'auto' });
+            assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view');
         }
 
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
@@ -429,8 +373,6 @@ const TopDrawerTester = {
         } else {
             assert.notOk('configuration is not tested');
         }
-
-        checkShader(assert, env);
     }
 };
 
@@ -439,13 +381,9 @@ export const drawerTesters = {
     drawerElementId: drawerElementId,
     markup: `
         <div id="${drawerElementId}" style="background-color: blue; width: 200px; height: 100px">
-            <div id="view" style="width: 100%; height: 100%; background-color: yellow">
-                view
-                <div id="loadPanel"></div>
-            </div>
+            <div id="view" style="width: 100%; height: 100%; background-color: yellow">view</div>
         </div>`,
     left: LeftDrawerTester,
     top: TopDrawerTester,
     right: RightDrawerTester,
-    checkShader: checkShader
 };

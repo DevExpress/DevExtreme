@@ -19,7 +19,7 @@ describe('View', () => {
   });
 });
 
-describe('Pager pages new', () => {
+describe('Pager pages logic', () => {
   it('pageIndexes, pageCount = 0', () => {
     const pages = new PagesLarge({ pageCount: 0, maxPagesCount: 5, pageIndex: 0 });
     expect(pages.pageIndexes).toEqual([]);
@@ -102,6 +102,18 @@ describe('Pager pages new', () => {
     pages.props = { pageCount: 30, maxPagesCount: 10, pageIndex: 5 };
     expect(pages.pageIndexes).toEqual([0, null, 3, 4, 5, 6, null, 29]);
   });
+  it('storeState+(pageIndexes, pageCount), (pageIndex: 12, pageCount: 15) -> (pageIndex: 12, pageCount: 13)', () => {
+    const pages = new PagesLarge({ pageCount: 15, pageIndex: 12, maxPagesCount: 10 });
+    expect(pages.pageIndexes).toEqual([0, null, 10, 11, 12, 13, 14]);
+    pages.props = { pageCount: 13, pageIndex: 12, maxPagesCount: 10 };
+    expect(pages.pageIndexes).toEqual([0, null, 8, 9, 10, 11, 12]);
+  });
+  it('storeState+(pageIndexes, pageCount), (pageIndex: 12, pageCount: 20) -> (pageIndex: 13, pageCount: 19)', () => {
+    const pages = new PagesLarge({ pageCount: 20, pageIndex: 12, maxPagesCount: 10 });
+    expect(pages.pageIndexes).toEqual([0, null, 11, 12, 13, 14, null, 19]);
+    pages.props = { pageCount: 19, pageIndex: 13, maxPagesCount: 10 };
+    expect(pages.pageIndexes).toEqual([0, null, 11, 12, 13, 14, null, 18]);
+  });
   it('pages: pageIndex: 4', () => {
     const pageIndexChange = jest.fn();
     const pages = new PagesLarge({
@@ -112,7 +124,7 @@ describe('Pager pages new', () => {
     expect(pages.pages[3]).toMatchObject({ index: 4, selected: true });
     expect(pages.pages).toHaveLength(8);
     expect(pageIndexChange).not.toBeCalledWith(0);
-    pages.pages[0]?.onClick();
+    pages.pages[0]?.onClick?.();
     expect(pageIndexChange).toBeCalledWith(0);
   });
   it('pages: rtlEnabled: true', () => {

@@ -117,7 +117,7 @@ const Autocomplete = DropDownList.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this._dimensionChanged();
+        this._setPopupOption('width');
     },
 
     _popupWrapperClass: function() {

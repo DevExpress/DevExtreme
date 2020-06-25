@@ -1,0 +1,149 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/treeView" as *;
+@use "../../base/icons" as *;
+@use "../checkBox/colors" as *;
+// adduse
+
+
+$GENERIC_TREEVIEW_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_BASE_FONT_SIZE) + $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING + 2 * $GENERIC_BASE_BORDER_WIDTH;
+$GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET: -4px;
+
+.dx-treeview-node-loadindicator {
+  top: $GENERIC_TREEVIEW_LOADINCICATOR_OFFSET_TOP;
+  left: $GENERIC_TREEVIEW_LOADINCICATOR_OFFSET_LEFT;
+  width: $GENERIC_TREEVIEW_LOADINCICATOR_SIZE;
+  height: $GENERIC_TREEVIEW_LOADINCICATOR_SIZE;
+}
+
+.dx-treeview {
+  &.dx-rtl {
+    @include dx-treeview-make-rtl($GENERIC_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET, $GENERIC_TREEVIEW_NODE_OFFSET, $GENERIC_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, $GENERIC_TREEVIEW_CHECKBOX_OFFSET, $GENERIC_SELECT_ALL_TEXT_OFFSET, $GENERIC_SELECT_ALL_ITEM_LEFT_PADDING, $GENERIC_TREEVIEW_BORDER_PADDING);
+
+    .dx-treeview-toggle-item-visibility {
+      right: $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET;
+    }
+
+    .dx-treeview-item-with-checkbox .dx-checkbox {
+      overflow: visible;
+    }
+  }
+}
+
+
+.dx-treeview-search {
+  margin-bottom: $GENERIC_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
+}
+
+.dx-treeview-with-search > .dx-scrollable {
+  height: calc(100% - #{round($GENERIC_TREEVIEW_SEARCH_EDITOR_HEIGHT + $GENERIC_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM)});
+}
+
+.dx-treeview-border-visible {
+  border: 1px solid $treeview-border-color;
+
+  .dx-treeview-select-all-item {
+    padding-left: $GENERIC_SELECT_ALL_ITEM_LEFT_PADDING;
+  }
+
+  .dx-scrollable-content {
+    > .dx-treeview-node-container {
+      padding: $GENERIC_TREEVIEW_CONTAINER_PADDING;
+    }
+  }
+}
+
+.dx-treeview-select-all-item {
+  margin: 0 0 $GENERIC_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET 0;
+  border-bottom: 1px solid $treeview-border-color;
+  padding: $GENERIC_SELECT_ALL_ITEM_PADDING;
+
+  .dx-checkbox-text {
+    padding-left: $GENERIC_SELECT_ALL_TEXT_OFFSET;
+  }
+}
+
+.dx-treeview-node {
+  padding-left: $GENERIC_TREEVIEW_NODE_OFFSET;
+}
+
+.dx-state-selected {
+  > .dx-treeview-item {
+    color: $treeview-item-selected-color;
+  }
+}
+
+.dx-treeview-item-with-checkbox {
+  .dx-treeview-item {
+    color: $base-text-color;
+    padding-left: $GENERIC_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
+  }
+
+  .dx-checkbox {
+    top: 5px;
+    left: $GENERIC_TREEVIEW_CHECKBOX_OFFSET;
+  }
+
+  &.dx-state-focused {
+    > .dx-checkbox .dx-checkbox-icon {
+      border: 1px solid $checkbox-focused-borderd-color;
+    }
+  }
+}
+
+.dx-treeview-item-without-checkbox {
+  &.dx-state-selected {
+    > .dx-treeview-item {
+      color: $treeview-item-selected-color;
+      background-color: $treeview-item-selected-bg;
+    }
+
+    &:not(.dx-state-focused) {
+      > .dx-treeview-item {
+        &.dx-state-hover {
+          background-color: $treeview-item-selected-hover-bg;
+        }
+      }
+    }
+  }
+
+  &.dx-state-focused {
+    > .dx-treeview-item {
+      background-color: $treeview-focused-bg;
+      color: $treeview-focus-color;
+    }
+  }
+}
+
+.dx-treeview-item {
+  padding: $GENERIC_TREEVIEW_ITEM_PADDING;
+  min-height: $GENERIC_TREEVIEW_MIN_ITEM_HEIGHT;
+
+  .dx-icon {
+    @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+  }
+
+  &.dx-state-hover {
+    background-color: $treeview-hover-bg;
+    color: $treeview-item-hover-color;
+  }
+}
+
+.dx-treeview-toggle-item-visibility {
+  @include dx-icon(spinright);
+  @include dx-icon-font-centered-sizing($GENERIC_TREEVIEW_ARROW_ICON_SIZE);
+
+  color: $treeview-spin-icon-color;
+  width: $GENERIC_TREEVIEW_TOGGLE_ITEM_WIDTH;
+  height: $GENERIC_TREEVIEW_MIN_ITEM_HEIGHT;
+  top: 0;
+  left: $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET;
+
+  &.dx-treeview-toggle-item-visibility-opened {
+    @include dx-icon(spindown);
+    @include dx-icon-font-centered-sizing($GENERIC_TREEVIEW_ARROW_ICON_SIZE);
+  }
+}

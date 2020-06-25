@@ -76,15 +76,10 @@ describe('Compile manager - integration test on test sass', () => {
       widgets: ['datebox'],
     }).then((result) => {
       expect(result.css).toBe('');
-      expect(result.compiledMetadata).toEqual([{
-        Key: '$base-font-family',
-        Path: 'tb/widgets/generic/colors',
-        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-      }, {
-        Key: '$base-accent',
-        Path: 'tb/widgets/generic/colors',
-        Value: 'rgba(51,122,183,1)',
-      }]);
+      expect(result.compiledMetadata).toEqual({
+        '$base-font-family': '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+        '$base-accent': 'rgba(51,122,183,1)',
+      });
     });
   });
 
@@ -105,23 +100,12 @@ describe('Compile manager - integration test on test sass', () => {
   color: red;
 }`);
 
-      expect(result.compiledMetadata).toEqual([{
-        Key: '$base-font-family',
-        Path: 'tb/widgets/generic/colors',
-        Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-      }, {
-        Key: '$base-accent',
-        Path: 'tb/widgets/generic/colors',
-        Value: 'rgba(255,0,0,1)',
-      }, {
-        Key: '$accordion-title-color',
-        Path: 'tb/widgets/generic/accordion/colors',
-        Value: 'rgba(255,0,0,1)',
-      }, {
-        Key: '$accordion-item-title-opened-bg',
-        Path: 'tb/widgets/generic/accordion/colors',
-        Value: 'rgba(0,0,0,0)',
-      }]);
+      expect(result.compiledMetadata).toEqual({
+        '$base-font-family': '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+        '$base-accent': 'rgba(255,0,0,1)',
+        '$accordion-title-color': 'rgba(255,0,0,1)',
+        '$accordion-item-title-opened-bg': 'rgba(0,0,0,0)',
+      });
     });
   });
 
@@ -142,23 +126,12 @@ describe('Compile manager - integration test on test sass', () => {
   color: red;
 }`);
 
-      expect(result.compiledMetadata).toEqual([{
-        Key: '$base-font-family',
-        Path: 'tb/widgets/generic/colors',
-        Value: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-      }, {
-        Key: '$base-accent',
-        Path: 'tb/widgets/generic/colors',
-        Value: 'rgba(255,0,0,1)',
-      }, {
-        Key: '$accordion-title-color',
-        Path: 'tb/widgets/generic/accordion/colors',
-        Value: 'rgba(255,0,0,1)',
-      }, {
-        Key: '$accordion-item-title-opened-bg',
-        Path: 'tb/widgets/generic/accordion/colors',
-        Value: 'rgba(0,0,0,0)',
-      }]);
+      expect(result.compiledMetadata).toEqual({
+        '$base-font-family': '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+        '$base-accent': 'rgba(255,0,0,1)',
+        '$accordion-title-color': 'rgba(255,0,0,1)',
+        '$accordion-item-title-opened-bg': 'rgba(0,0,0,0)',
+      });
     });
   });
 

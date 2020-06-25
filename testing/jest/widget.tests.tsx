@@ -86,30 +86,26 @@ describe('Widget', () => {
     describe('width/height', () => {
       it('should have the ability to be a function', () => {
         const widget = render({ width: () => 50, height: () => 'auto' });
-        const props = widget.props() as any;
 
-        expect(props.style).toEqual({ width: 50, height: 'auto' });
+        expect(widget.prop('style')).toEqual({ width: 50, height: 'auto' });
       });
 
       it('should process string values', () => {
         const widget = render({ width: '50px', height: () => '100%' });
-        const props = widget.props() as any;
 
-        expect(props.style).toEqual({ width: '50px', height: '100%' });
+        expect(widget.prop('style')).toEqual({ width: '50px', height: '100%' });
       });
 
       it('should process number values', () => {
         const widget = render({ width: 50, height: 70 });
-        const props = widget.props() as any;
 
-        expect(props.style).toEqual({ width: 50, height: 70 });
+        expect(widget.prop('style')).toEqual({ width: 50, height: 70 });
       });
 
       it('should ignore null/undefined values', () => {
         const widget = render({ width: null, height: undefined });
-        const props = widget.props() as any;
 
-        expect(props.style).toEqual({});
+        expect(widget.prop('style')).toEqual({});
       });
     });
 
@@ -173,28 +169,6 @@ describe('Widget', () => {
       });
     });
 
-    describe('elementAttr', () => {
-      it('should pass custom css class name via `elementAttr`', () => {
-        const widget = render({ elementAttr: { class: 'custom-class' } });
-
-        expect(widget.hasClass('custom-class')).toBe(true);
-      });
-
-      it('should pass custom attributes', () => {
-        const widget = render({ elementAttr: { 'data-custom': 'custom-attribute-value' } });
-
-        expect(widget.prop('data-custom')).toBe('custom-attribute-value');
-      });
-
-      it('should not provide `class` property', () => {
-        const widget = render({ elementAttr: { class: 'custom-class' } });
-
-        expect(widget.hasClass('custom-class')).toBe(true);
-        expect(widget.hasClass('dx-widget')).toBe(true);
-        expect(widget.prop('class')).toBe(undefined);
-      });
-    });
-
     describe('activeStateEnabled', () => {
       it('should be disabled by default', () => {
         const widget = render();
@@ -234,14 +208,16 @@ describe('Widget', () => {
     });
 
     describe('restAttributes', () => {
-      it('should add merge `className` property', () => {
+      it('should merge `className` property with own className', () => {
         const widget = render({ className: 'custom-class' });
+        expect(widget.hasClass('custom-class')).toBe(true);
+        expect(widget.hasClass('dx-widget')).toBe(true);
 
         expect(widget.is('.custom-class.dx-widget')).toBe(true);
       });
 
-      it('should add merge `styles` property', () => {
-        const widget = render({ styles: { fontSize: '20px', height: 10 } });
+      it('should merge `style` property', () => {
+        const widget = render({ style: { fontSize: '20px', height: 10 } });
 
         expect(widget.prop('style')).toMatchObject({
           fontSize: '20px',
@@ -250,10 +226,20 @@ describe('Widget', () => {
         });
       });
 
-      it('should add custom property', () => {
-        const widget = render({ data: 'custom-data' });
+      it('should width & height props take precedence over `style`', () => {
+        const widget = render({ width: 300, height: 200, style: { fontSize: '20px', height: 10, width: 30 } });
 
-        expect(widget.prop('data')).toBe('custom-data');
+        expect(widget.prop('style')).toMatchObject({
+          fontSize: '20px',
+          height: 200,
+          width: 300,
+        });
+      });
+
+      it('should add custom property', () => {
+        const widget = render({ 'data-custom': 'custom-attribute-value' });
+
+        expect(widget.prop('data-custom')).toBe('custom-attribute-value');
       });
     });
 

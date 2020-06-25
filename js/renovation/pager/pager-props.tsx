@@ -3,9 +3,6 @@ import messageLocalization from '../../localization/message';
 
 @ComponentBindings()
 export default class PagerProps {
-  // Vitik: Renovation workaround for preact remove all existed element attribute from root node
-  @OneWay() elementAttr?: any;
-
   @OneWay() showInfo?: boolean = false;
 
   @OneWay() infoText?: string = messageLocalization.getFormatter('dxPager-infoText')();
@@ -24,7 +21,7 @@ export default class PagerProps {
 
   @TwoWay() pageSize?: number = 5;
 
-  // showPageSizes: true,
+  @OneWay() showPageSizes? = true;
 
   @OneWay() pageSizes?: number[] = [5, 10];
 

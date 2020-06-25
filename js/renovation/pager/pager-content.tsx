@@ -15,20 +15,20 @@ import PagerProps from './pager-props';
 export const viewFunction = ({
   className,
   isLargeDisplayMode,
+  infoVisible,
   props: {
     parentRef, pageSizesRef, pagesRef, infoTextRef,
-    infoTextVisible,
     pageSizeChange, pageIndexChange,
     infoText, maxPagesCount, pageIndex,
-    pageCount, pageSize, pageSizes,
+    pageCount, showPageSizes, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
-    showInfo,
-    elementAttr,
   },
+  restAttributes,
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef as any} className={className} {...elementAttr}>
+  <div ref={parentRef as any} {...restAttributes} className={className}>
+    {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef as any}
       isLargeDisplayMode={isLargeDisplayMode}
@@ -37,6 +37,7 @@ export const viewFunction = ({
       pageSizes={pageSizes}
       rtlEnabled={rtlEnabled}
     />
+    )}
     <div ref={pagesRef as any} className={PAGER_PAGES_CLASS}>
       <PageIndexSelector
                 // hasKnownLastPage={hasKnownLastPage}
@@ -50,14 +51,14 @@ export const viewFunction = ({
         showNavigationButtons={showNavigationButtons}
         totalCount={totalCount}
       />
-      {showInfo && infoTextVisible && (
-        <InfoText
-          ref={infoTextRef as any}
-          infoText={infoText}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-        />
+      {infoVisible && (
+      <InfoText
+        ref={infoTextRef as any}
+        infoText={infoText}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        totalCount={totalCount}
+      />
       )}
     </div>
   </div>
@@ -91,6 +92,11 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
 export default class PagerContentComponent extends JSXComponent(PagerContentProps) {
+  get infoVisible(): boolean {
+    const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
+    return showInfo && infoTextVisible;
+  }
+
   get isLargeDisplayMode(): boolean {
     return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
   }

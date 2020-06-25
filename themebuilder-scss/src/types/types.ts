@@ -49,12 +49,12 @@ interface ConfigSettings {
 
 interface CompilerResult {
   result: import('node-sass').Result;
-  changedVariables: Array<MetaItem>;
+  changedVariables: { [key: string]: string };
 }
 
 interface PackageResult {
   css: string;
-  compiledMetadata: Array<MetaItem>;
+  compiledMetadata: { [key: string]: string };
   widgets: Array<string>;
   unusedWidgets: Array<string>;
   swatchSelector: string;
