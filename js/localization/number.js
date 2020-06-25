@@ -318,7 +318,7 @@ const numberLocalization = dependencyInjector({
         format = this._normalizeFormat(format);
         const formatConfig = this._parseNumberFormatString(format.type);
 
-        let power = formatConfig.power;
+        let power = formatConfig?.power;
 
         if(power) {
             if(power === 'auto') {
