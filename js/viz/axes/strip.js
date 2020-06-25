@@ -43,11 +43,9 @@ export default function createStrip(axis, options) {
                     return;
                 }
 
-                if(stripPos.to !== stripPos.from) {
-                    this.rect = axis._createStrip(axis._getStripGraphicAttributes(stripPos.from, stripPos.to))
-                        .attr({ fill: options.color })
-                        .append(axis._axisStripGroup);
-                }
+                this.rect = axis._createStrip(axis._getStripGraphicAttributes(stripPos.from, stripPos.to))
+                    .attr({ fill: options.color })
+                    .append(axis._axisStripGroup);
 
                 this.label = labelOptions.text ? this._drawLabel(this.labelCoords) : null;
             }

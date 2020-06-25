@@ -6543,7 +6543,8 @@ QUnit.test('Strips. endValue === startValue', function(assert) {
     this.axis.draw(this.canvas);
 
     // assert
-    assert.strictEqual(renderer.stub('rect').callCount, 0);
+    assert.strictEqual(renderer.stub('rect').callCount, 1);
+    assert.deepEqual(renderer.rect.getCall(0).args, [30, 30, 0, 40], 'points');
     assert.strictEqual(renderer.text.callCount, 1);
 });
 
