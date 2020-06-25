@@ -261,15 +261,15 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
 @mixin dx-scheduler-timeline-horizontal-grouping-mixin($baseHeight) {
   &.dx-scheduler-work-space {
     &[dx-group-row-count='1'] {
-      @include set-size-timeline-horizontal-grouping-mixin($baseHeight + 40px);
+      @include set-size-timeline-horizontal-grouping-mixin($baseHeight + 50px);
     }
 
     &[dx-group-row-count='2'] {
-      @include set-size-timeline-horizontal-grouping-mixin($baseHeight + 80px);
+      @include set-size-timeline-horizontal-grouping-mixin($baseHeight + 100px);
     }
 
     &[dx-group-row-count='3'] {
-      @include set-size-timeline-horizontal-grouping-mixin($baseHeight + 120px);
+      @include set-size-timeline-horizontal-grouping-mixin($baseHeight + 150px);
     }
   }
 }
