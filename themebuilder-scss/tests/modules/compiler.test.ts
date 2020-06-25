@@ -61,28 +61,12 @@ describe('compile', () => {
   color: red;
 }`);
       // collected variables
-      expect(data.changedVariables).toEqual([
-        {
-          Key: '$base-font-family',
-          Value: '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-          Path: 'tb/widgets/generic/colors',
-        },
-        {
-          Key: '$base-accent',
-          Value: 'rgba(255,0,0,1)', // red
-          Path: 'tb/widgets/generic/colors',
-        },
-        {
-          Key: '$accordion-title-color',
-          Value: 'rgba(255,0,0,1)', // red
-          Path: 'tb/widgets/generic/accordion/colors',
-        },
-        {
-          Key: '$accordion-item-title-opened-bg',
-          Value: 'rgba(0,128,0,1)', // green
-          Path: 'tb/widgets/generic/accordion/colors',
-        },
-      ]);
+      expect(data.changedVariables).toEqual({
+        '$base-font-family': '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
+        '$base-accent': 'rgba(255,0,0,1)', // red
+        '$accordion-title-color': 'rgba(255,0,0,1)', // red
+        '$accordion-item-title-opened-bg': 'rgba(0,128,0,1)', // green
+      });
     });
   });
 
