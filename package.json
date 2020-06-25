@@ -139,9 +139,9 @@
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
     "test-env": "node testing/launch",
-    "update-ts": "dx-tools update-ts-bundle --output=./ts/dx.all.d.ts",
+    "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts",
     "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations",
+    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner"
   },
   "browserslist": [
