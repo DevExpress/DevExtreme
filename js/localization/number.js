@@ -313,8 +313,29 @@ const numberLocalization = dependencyInjector({
             return NaN;
         }
 
-        const parsed = +cleanedText;
-        return parsed * this.getSign(text, format);
+        let parsed = (+cleanedText) * this.getSign(text, format);
+
+        format = this._normalizeFormat(format);
+        const formatConfig = this._parseNumberFormatString(format.type);
+
+        let power = formatConfig.power;
+
+        if(power) {
+            if(power === 'auto') {
+                const match = text.match(/\d(K|M|B|T)/);
+                if(match) {
+                    power = Object.keys(LargeNumberFormatPostfixes)
+                        .find(power => LargeNumberFormatPostfixes[power] === match[1]);
+                }
+            }
+            parsed = parsed * Math.pow(10, (3 * power));
+        }
+
+        if(formatConfig.formatType === 'percent') {
+            parsed /= 100;
+        }
+
+        return parsed;
     },
 
     _calcSignificantDigits: function(text) {
