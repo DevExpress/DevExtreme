@@ -199,12 +199,7 @@ class BaseRenderingStrategy {
     // }
 
     _getAppointmentCoordinates(appointment) {
-        const adapter = this.instance.createAppointmentAdapter(appointment);
-
-        return this.instance.fire('createAppointmentSettings', {
-            startDate: adapter.startDate,
-            appointmentData: appointment,
-        });
+        return this.instance.fire('createAppointmentSettings', appointment);
     }
 
     _isRtl() {
@@ -508,7 +503,7 @@ class BaseRenderingStrategy {
     }
 
     startDate(appointment, skipNormalize, position) {
-        let startDate = position && position.startDate;
+        let startDate = position && position.info.appointment.startDate;
         const rangeStartDate = this.instance._getStartDate(appointment, skipNormalize);
         const text = this.instance.fire('getField', 'text', appointment);
 
@@ -528,9 +523,11 @@ class BaseRenderingStrategy {
         const realStartDate = this.startDate(appointment, true);
         const viewStartDate = this.startDate(appointment, false, position);
 
+        const info = position?.info;
+
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate;
-            const recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate;
+            const recurrencePartStartDate = info ? info.appointment.startDate : realStartDate;
+            const recurrencePartCroppedByViewStartDate = info ? info.appointment.startDate : realStartDate;
 
             let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
                 this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :

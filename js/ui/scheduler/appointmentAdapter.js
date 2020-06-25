@@ -11,8 +11,7 @@ const PROPERTY_NAMES = {
     recurrenceRule: 'recurrenceRule',
     recurrenceException: 'recurrenceException'
 };
-
-export default class AppointmentAdapter {
+class AppointmentAdapter {
     constructor(scheduler, appointment) {
         this.scheduler = scheduler;
         this.appointment = appointment;
@@ -22,8 +21,16 @@ export default class AppointmentAdapter {
         return this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment);
     }
 
+    set startDate(value) {
+        this.scheduler.fire('setField', PROPERTY_NAMES.startDate, this.appointment, value);
+    }
+
     get endDate() {
         return this.scheduler.fire('getField', PROPERTY_NAMES.endDate, this.appointment);
+    }
+
+    set endDate(value) {
+        this.scheduler.fire('setField', PROPERTY_NAMES.endDate, this.appointment, value);
     }
 
     get allDay() {
@@ -58,6 +65,10 @@ export default class AppointmentAdapter {
         return !!this.appointment.disabled;
     }
 
+    get source() {
+        return this.appointment;
+    }
+
     calculateStartDate(pathTimeZoneConversion) {
         return this.calculateDate(this.startDate, this.startDateTimeZone, pathTimeZoneConversion);
     }
@@ -77,7 +88,7 @@ export default class AppointmentAdapter {
         });
     }
 
-    createModifiedAppointment(pathTimeZoneConversion) {
+    createModifiedAppointment(pathTimeZoneConversion) { // TODO:
         const result = extend({}, this.appointment);
 
         this.scheduler.fire('setField', PROPERTY_NAMES.startDate, result, this.calculateStartDate(pathTimeZoneConversion));
@@ -85,4 +96,17 @@ export default class AppointmentAdapter {
 
         return result;
     }
+
+    clone(options = undefined) {
+        const result = new AppointmentAdapter(this.scheduler, extend({}, this.appointment));
+        if(options?.pathTimeZone) {
+            result.startDate = result.calculateStartDate(options.pathTimeZone);
+            result.endDate = result.calculateEndDate(options.pathTimeZone);
+
+            return result;
+        }
+        return result;
+    }
 }
+
+export default AppointmentAdapter;

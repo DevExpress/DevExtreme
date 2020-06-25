@@ -1,7 +1,11 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
+<<<<<<< HEAD
 import { getRecurrenceProcessor } from './recurrence';
 import { isDefined, isPlainObject } from '../../core/utils/type';
+=======
+import typeUtils from '../../core/utils/type';
+>>>>>>> acc223ae0... Refactoring tooltip: remove time: removed extra timezone conversions
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
@@ -34,82 +38,8 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(options) {
-        const createRecurrenceDates = (recurrenceOptions, appointmentTimeZone) => {
-            const recurrenceDates = getRecurrenceProcessor().generateDates(recurrenceOptions);
-
-            const convertedRecurrenceDates = recurrenceDates.map(date => {
-                return this.timeZoneCalculator.createDate(date, {
-                    appointmentTimeZone: appointmentTimeZone,
-                    path: 'toGrid'
-                });
-            });
-
-            return [convertedRecurrenceDates, recurrenceDates];
-        };
-
-        const adapter = this.createAppointmentAdapter(options.appointmentData);
-
-        const appointmentData = options.appointmentData;
-        const startDate = options.startDate;
-        const originalEndDate = this._getEndDate(appointmentData, true);
-        const recurrenceRule = adapter.recurrenceRule;
-        const recurrenceException = this._getRecurrenceException(appointmentData);
-        const dateRange = this._workSpace.getDateRange();
-        let allDay = this.appointmentTakesAllDay(appointmentData);
-        const startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0];
-        const originalStartDate = options.originalStartDate || startDate;
-        const renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
-        const firstDayOfWeek = this.getFirstDayOfWeek();
-
-        const recurrenceOptions = {
-            rule: recurrenceRule,
-            exception: recurrenceException,
-            start: originalStartDate,
-            end: originalEndDate,
-            min: startViewDate,
-            max: dateRange[1],
-            firstDayOfWeek: firstDayOfWeek
-        };
-
-        let [recurrenceDates, initialDates] = createRecurrenceDates(recurrenceOptions, adapter.timeZone);
-
-        if(!recurrenceDates.length) {
-            recurrenceDates.push(startDate);
-            initialDates = recurrenceDates;
-        } else {
-            recurrenceDates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, recurrenceDates, appointmentData); // TODO:
-            initialDates = recurrenceDates;
-
-            recurrenceDates = recurrenceDates.map((date) => {
-                return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
-            });
-        }
-
-        if(renderingStrategy.needSeparateAppointment(allDay)) {
-            const datesLength = recurrenceDates.length;
-            let longParts = [];
-            let resultDates = [];
-
-            for(let i = 0; i < datesLength; i++) {
-                const endDateOfPart = renderingStrategy.endDate(appointmentData, {
-                    startDate: recurrenceDates[i]
-                }, !!recurrenceRule);
-
-                longParts = dateUtils.getDatesOfInterval(recurrenceDates[i], endDateOfPart, {
-                    milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
-                });
-                const maxDate = new Date(dateRange[1]);
-                resultDates = resultDates.concat(longParts.filter(el => new Date(el) < maxDate));
-            }
-
-            recurrenceDates = resultDates;
-        }
-
-        const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
-        allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
-
-        return this._getCoordinates(initialDates, recurrenceDates, itemResources, allDay);
+    createAppointmentSettings: function(appointment) {
+        return this._createAppointmentSettings(appointment); // TODO: temporary solution
     },
 
     isGroupedByDate: function() {
@@ -249,17 +179,15 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(appointment, currentAppointment, format) {
-        const adapter = this.createAppointmentAdapter(currentAppointment || appointment);
+    getTextAndFormatDate(appointment, targetedAppointment, format) {
+        const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
+            .clone({ pathTimeZone: 'toGrid' });
 
-        const startDate = adapter.calculateStartDate('toGrid');
-        const endDate = adapter.calculateEndDate('toGrid');
-        const allDay = adapter.allDay;
-        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, allDay);
+        const formatType = format || this.fire('_getTypeFormat', adapter.startDate, adapter.endDate, adapter.allDay);
 
         return {
             text: adapter.text,
-            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
+            formatDate: this.fire('_formatDates', adapter.startDate, adapter.endDate, formatType)
         };
     },
 
