@@ -1571,7 +1571,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     QUnit.module('Total fields', moduleConfig, () => {
-        QUnit.test('Export [string x string(r1,r2)/string x number], showRowTotals = false, showRowGrandTotals = false, showColumnGrandTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string x number]', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1619,7 +1619,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string x number], showRowTotals = true, showRowGrandTotals = false, showColumnGrandTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string x number] & showRowTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1671,7 +1671,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string x number], showRowTotals = true, showRowGrandTotals = true, showColumnGrandTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string x number] & showRowTotals & showRowGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1727,7 +1727,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string x number], showRowTotals = true, showRowGrandTotals = true, showColumnGrandTotals = true', function(assert) {
+        QUnit.test('Export [string/string x string x number] & showRowTotals & showRowGrandTotals & showColumnGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1787,7 +1787,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string x number], showRowTotals = true, showRowGrandTotals = true, showColumnGrandTotals = true, data.showTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string x number] & showRowTotals & showRowGrandTotals & showColumnGrandTotals & data.showTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1833,7 +1833,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string x number], showRowTotals = true, showRowGrandTotals = true, showColumnGrandTotals = true, data.showGrandTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string x number] & showRowTotals & showRowGrandTotals & showColumnGrandTotals & data.showGrandTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1885,7 +1885,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string/string(c1,c2) x number], showColumnTotals = false, showColumnGrandTotals = false, showRowGrandTotals = false', function(assert) {
+        QUnit.test('Export [string x string/string x number]', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1933,7 +1933,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = false, showRowGrandTotals = false', function(assert) {
+        QUnit.test('Export [string x string/string x number] & showColumnTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -1984,7 +1984,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = false', function(assert) {
+        QUnit.test('Export [string x string/string x number] & showColumnTotals & showColumnGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2039,7 +2039,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true', function(assert) {
+        QUnit.test('Export [string x string/string x number] & showColumnTotals & showColumnGrandTotals & showRowGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2098,7 +2098,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, data.showGrandTotals = false', function(assert) {
+        QUnit.test('Export [string x string/string x number] & showColumnTotals & showColumnGrandTotals & showRowGrandTotals & data.showGrandTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2149,7 +2149,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, data.showTotals = false', function(assert) {
+        QUnit.test('Export [string x string/string x number] & showColumnTotals & showColumnGrandTotals & showRowGrandTotals & data.showTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2194,7 +2194,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = false, showColumnGrandTotals = false, showRowGrandTotals = false, showRowTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number]', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2246,7 +2246,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = false, showRowGrandTotals = false, showRowTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2301,7 +2301,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = false, showRowTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showColumnGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2359,7 +2359,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, showRowTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showColumnGrandTotals & showRowGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2423,7 +2423,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, showRowTotals = false, data.showGrandTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showColumnGrandTotals & showRowGrandTotals & data.showGrandTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2478,7 +2478,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, showRowTotals = false, data.showTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showColumnGrandTotals & showRowGrandTotals & data.showTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2524,7 +2524,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = false, showRowGrandTotals = false, showRowTotals = true', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2584,7 +2584,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = false, showRowGrandTotals = true, showRowTotals = true', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showRowGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2649,7 +2649,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, showRowTotals = true', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showRowGrandTotals & showColumnGrandTotals', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2719,7 +2719,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, showRowTotals = true, data.showGrandTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showRowGrandTotals & showColumnGrandTotals & data.showGrandTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2779,7 +2779,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showColumnGrandTotals = true, showRowGrandTotals = true, showRowTotals = true, data.showTotals = false', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showRowGrandTotals & showColumnGrandTotals & data.showTotals = false', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2825,7 +2825,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showRowTotals = true, showColumnGrandTotals = false, showRowGrandTotals = false, showTotalsPrior = columns', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showTotalsPrior = columns', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2886,7 +2886,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showRowTotals = true, showColumnGrandTotals = false, showRowGrandTotals = false, showTotalsPrior = rows', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showTotalsPrior = rows', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
@@ -2947,7 +2947,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Export [string x string(r1,r2)/string(c1,c2) x number], showColumnTotals = true, showRowTotals = true, showColumnGrandTotals = false, showRowGrandTotals = false, showTotalsPrior = both', function(assert) {
+        QUnit.test('Export [string/string x string/string x number] & showColumnTotals & showRowTotals & showTotalsPrior = both', function(assert) {
             const done = assert.async();
             const ds = {
                 fields: [
