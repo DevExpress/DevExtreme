@@ -1,5 +1,5 @@
 import dependencyInjector from '../core/utils/dependency_injector';
-import { inArray } from '../core/utils/array';
+import { inArray, find } from '../core/utils/array';
 import { escapeRegExp } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import { isPlainObject } from '../core/utils/type';
@@ -324,8 +324,8 @@ const numberLocalization = dependencyInjector({
             if(power === 'auto') {
                 const match = text.match(/\d(K|M|B|T)/);
                 if(match) {
-                    power = Object.keys(LargeNumberFormatPostfixes)
-                        .find(power => LargeNumberFormatPostfixes[power] === match[1]);
+                    power = find(Object.keys(LargeNumberFormatPostfixes),
+                        power => LargeNumberFormatPostfixes[power] === match[1]);
                 }
             }
             parsed = parsed * Math.pow(10, (3 * power));
