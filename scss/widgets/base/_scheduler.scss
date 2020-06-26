@@ -1393,7 +1393,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
         color: transparent;
         border-left: none;
         border-right: none;
-        border-bottom: none;
+        border-bottom: $SCHEDULER_BASE_BORDER;
         height: 0;
       }
     }
