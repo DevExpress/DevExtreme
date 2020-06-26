@@ -5,7 +5,7 @@ import {
 import { h } from 'preact';
 import SelectBox from '../select-box';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
-import { FullPageSize } from './pager.types';
+import { FullPageSize } from './pager.types.d';
 import { PAGER_SELECTION_CLASS } from './consts';
 import { getElementMinWidth } from './utils/get-element-width';
 
