@@ -22,13 +22,13 @@ QUnit.testDone(function() {
     renderers.SvgElement.reset && renderers.SvgElement.reset();
 });
 
-const elementsName = ['DEBUG_set_SvgElement', 'DEBUG_set_RectSvgElement', 'DEBUG_set_PathSvgElement', 'DEBUG_set_ArcSvgElement', 'DEBUG_set_TextSvgElement'];
+// const elementsName = ['DEBUG_set_SvgElement', 'DEBUG_set_RectSvgElement', 'DEBUG_set_PathSvgElement', 'DEBUG_set_ArcSvgElement', 'DEBUG_set_TextSvgElement'];
 const methodsName = ['SvgElement', 'RectSvgElement', 'PathSvgElement', 'ArcSvgElement', 'TextSvgElement'];
 const origMethods = {};
 
 function setMockElements() {
     function wrapElement(elementName) {
-        renderers[elementName](sinon.spy(vizMocks.stubClass(renderers[elementName], null, {
+        renderers[`DEBUG_set_${elementName}`](sinon.spy(vizMocks.stubClass(renderers[elementName], null, {
             $constructor: function() {
                 this.renderer = arguments[0];
                 this.element = getMockElement();
@@ -41,7 +41,7 @@ function setMockElements() {
         origMethods[name] = renderers[name];
     });
 
-    elementsName.forEach(function(elementName) {
+    methodsName.forEach(function(elementName) {
         wrapElement(elementName);
     });
 }

@@ -1,6 +1,6 @@
 const PARENT_LOCALE_SEPARATOR = '-';
 
-export default (parentLocales, locale) => {
+module.exports = (parentLocales, locale) => {
     const parentLocale = parentLocales[locale];
 
     if(parentLocale) {
