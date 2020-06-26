@@ -745,7 +745,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupMinWidth() {
-        windowUtils.hasWindow() && this._setPopupOption('minWidth', this.$element().outerWidth());
+        windowUtils.hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
     },
 
     _popupShowingHandler: function() {
