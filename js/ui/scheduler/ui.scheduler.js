@@ -1140,8 +1140,19 @@ const Scheduler = Widget.inherit({
     },
 
     _fireContentReadyAction: function(result) {
-        this.callBase();
-        result && result.resolve();
+        const contentReadyBase = this.callBase.bind(this);
+        const fireContentReady = () => {
+            contentReadyBase();
+            result?.resolve();
+        };
+
+        if(this._workSpaceRecalculation) {
+            this._workSpaceRecalculation?.done(() => {
+                fireContentReady();
+            });
+        } else {
+            fireContentReady();
+        }
     },
 
     _dimensionChanged: function() {
