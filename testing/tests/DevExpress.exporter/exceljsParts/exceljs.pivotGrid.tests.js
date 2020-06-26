@@ -165,7 +165,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const ds = {
             fields: [
                 { area: 'row', dataField: 'row1', dataType: 'string' },
-                { area: 'column', dataField: 'col1', dataType: 'string' },
                 { area: 'data', summaryType: 'count', dataType: 'number' }
             ],
             store: [
@@ -181,18 +180,16 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         const expectedCells = [[
             { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, path: ['a'], text: 'a', type: 'D', dataSourceIndex: 1, width: 100 } },
-            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, text: 'Grand Total', type: 'GT', width: 100 } }
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: ['A'], text: 'A', type: 'D', dataSourceIndex: 1 } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', text: '1' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', text: '1' } }
+            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-            helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
+            helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
             helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
@@ -200,7 +197,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
-            helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
+            helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             done();
         });
     });
@@ -209,7 +206,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const done = assert.async();
         const ds = {
             fields: [
-                { area: 'row', dataField: 'row1', dataType: 'string' },
                 { area: 'column', dataField: 'col1', dataType: 'string' },
                 { area: 'data', summaryType: 'count', dataType: 'number' }
             ],
@@ -226,19 +222,16 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         const expectedCells = [[
             { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, path: ['a'], text: 'a', type: 'D', dataSourceIndex: 1, width: 100 } },
+            { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: ['A'], text: 'A', type: 'D', dataSourceIndex: 1 } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', text: '1' } }
-        ], [
-            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, text: 'Grand Total', type: 'GT' } },
-            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: [], rowType: 'GT', text: '1' } }
+            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-            helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
+            helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
             helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
@@ -246,7 +239,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkMergeCells(expectedCells, topLeft);
             helper.checkOutlineLevel([0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
-            helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
+            helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             done();
         });
     });
