@@ -2238,7 +2238,12 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
       }
 
       .dx-scheduler-group-header-content {
+        display: flex;
         height: 40px;
+
+        > div {
+          margin: auto;
+        }
       }
 
       .dx-scheduler-header-panel {
