@@ -30,7 +30,7 @@ import { plugin as pluginLegend } from '../components/legend';
 const OPTION_VALUES = 'values';
 let BarWrapper;
 
-const dxBarGauge = dxBaseGauge.inherit({
+export const dxBarGauge = dxBaseGauge.inherit({
     _rootClass: 'dxbg-bar-gauge',
 
     _themeSection: 'barGauge',
@@ -647,8 +647,6 @@ function compareFloats(value1, value2) {
 }
 
 registerComponent('dxBarGauge', dxBarGauge);
-
-export { dxBarGauge };
 
 dxBarGauge.addPlugin(pluginLegend);
 

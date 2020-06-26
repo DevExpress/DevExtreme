@@ -513,4 +513,4 @@ const SchedulerNavigator = Widget.inherit({
 
 registerComponent('dxSchedulerNavigator', SchedulerNavigator);
 
-module.exports = SchedulerNavigator;
+export default SchedulerNavigator;

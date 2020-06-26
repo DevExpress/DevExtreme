@@ -18,7 +18,7 @@ const getCurrencyFormatter = currency => {
     return (new Intl.NumberFormat(locale(), { style: 'currency', currency: currency }));
 };
 
-module.exports = {
+export default {
     engine: function() {
         return 'intl';
     },

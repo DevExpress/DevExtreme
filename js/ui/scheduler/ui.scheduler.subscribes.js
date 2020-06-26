@@ -852,4 +852,4 @@ const subscribes = {
         this._workSpace.removeDroppableCellClass();
     }
 };
-module.exports = subscribes;
+export default subscribes;

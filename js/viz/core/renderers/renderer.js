@@ -107,11 +107,9 @@ function createElement(tagName) {
     return domAdapter.createElementNS('http://www.w3.org/2000/svg', tagName);
 }
 
-function getFuncIri(id, pathModified) {
+export function getFuncIri(id, pathModified) {
     return id !== null ? 'url(' + (pathModified ? window.location.href.split('#')[0] : '') + '#' + id + ')' : id;
 }
-
-module.exports.getFuncIri = getFuncIri;
 
 function extend(target, source) {
     let key;
@@ -150,7 +148,7 @@ const preserveAspectRatioMap = {
     'rightbottom': 'xMaxYMax'
 };
 
-function processHatchingAttrs(element, attrs) {
+export function processHatchingAttrs(element, attrs) {
     if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== 'none') {
         attrs = extend({}, attrs);
         attrs.fill = element._hatching = element.renderer.lockHatching(attrs.fill, attrs.hatching, element._hatching);
@@ -161,8 +159,6 @@ function processHatchingAttrs(element, attrs) {
     }
     return attrs;
 }
-
-module.exports.processHatchingAttrs = processHatchingAttrs;
 
 //
 // Build path segments
@@ -1379,11 +1375,11 @@ function arcAnimate(params, options, complete) {
 }
 
 ///#DEBUG
-exports.DEBUG_set_getNextDefsSvgId = function(newFunction) {
+export const DEBUG_set_getNextDefsSvgId = function(newFunction) {
     getNextDefsSvgId = newFunction;
 };
 
-exports.DEBUG_removeBackupContainer = function() {
+export const DEBUG_removeBackupContainer = function() {
     if(getBackup().backupCounter) {
         getBackup().backupCounter = 0;
         domAdapter.getBody().removeChild(getBackup().backupContainer);
@@ -1402,7 +1398,7 @@ function buildLink(target, parameters) {
 }
 
 // SvgElement
-function SvgElement(renderer, tagName, type) {
+export let SvgElement = function(renderer, tagName, type) {
     const that = this;
     that.renderer = renderer;
     that.element = createElement(tagName);
@@ -1412,13 +1408,11 @@ function SvgElement(renderer, tagName, type) {
     if(tagName === 'path') {
         that.type = type || 'line';
     }
-}
+};
 
 function removeFuncIriCallback(callback) {
     fixFuncIriCallbacks.remove(callback);
 }
-
-exports.SvgElement = SvgElement;
 
 SvgElement.prototype = {
     constructor: SvgElement,
@@ -1733,10 +1727,9 @@ SvgElement.prototype = {
 // SvgElement
 
 // PathSvgElement
-function PathSvgElement(renderer, type) {
+export let PathSvgElement = function(renderer, type) {
     SvgElement.call(this, renderer, 'path', type);
-}
-exports.PathSvgElement = PathSvgElement;
+};
 
 PathSvgElement.prototype = objectCreate(SvgElement.prototype);
 
@@ -1748,10 +1741,9 @@ extend(PathSvgElement.prototype, {
 // PathSvgElement
 
 // ArcSvgElement
-function ArcSvgElement(renderer) {
+export let ArcSvgElement = function(renderer) {
     SvgElement.call(this, renderer, 'path', 'arc');
-}
-exports.ArcSvgElement = ArcSvgElement;
+};
 
 ArcSvgElement.prototype = objectCreate(SvgElement.prototype);
 
@@ -1763,10 +1755,9 @@ extend(ArcSvgElement.prototype, {
 // ArcSvgElement
 
 // RectSvgElement
-function RectSvgElement(renderer) {
+export let RectSvgElement = function(renderer) {
     SvgElement.call(this, renderer, 'rect');
-}
-exports.RectSvgElement = RectSvgElement;
+};
 
 RectSvgElement.prototype = objectCreate(SvgElement.prototype);
 
@@ -1777,11 +1768,10 @@ extend(RectSvgElement.prototype, {
 // RectSvgElement
 
 // TextSvgElement
-function TextSvgElement(renderer) {
+export let TextSvgElement = function(renderer) {
     SvgElement.call(this, renderer, 'text');
     this.css({ 'white-space': 'pre' });
-}
-exports.TextSvgElement = TextSvgElement;
+};
 
 TextSvgElement.prototype = objectCreate(SvgElement.prototype);
 
@@ -1831,7 +1821,7 @@ function unlinkItem(target) {
     updateIndexes(items, i);
 }
 
-function Renderer(options) {
+export function Renderer(options) {
     const that = this;
     that.root = that._createElement('svg', {
         xmlns: 'http://www.w3.org/2000/svg',
@@ -1859,8 +1849,6 @@ function Renderer(options) {
     that._locker = 0;
     that._backed = false;
 }
-
-exports.Renderer = Renderer;
 
 Renderer.prototype = {
     constructor: Renderer,
@@ -1915,7 +1903,7 @@ Renderer.prototype = {
     },
 
     _createElement: function(tagName, attr, type) {
-        const elem = new exports.SvgElement(this, tagName, type);
+        const elem = new SvgElement(this, tagName, type);
         attr && elem.attr(attr);
         return elem;
     },
@@ -2002,7 +1990,7 @@ Renderer.prototype = {
     },
 
     rect: function(x, y, width, height) {
-        const elem = new exports.RectSvgElement(this);
+        const elem = new RectSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, width: width || 0, height: height || 0 });
     },
 
@@ -2030,19 +2018,19 @@ Renderer.prototype = {
 
     // to combine different d attributes use helper methods
     path: function(points, type) {
-        const elem = new exports.PathSvgElement(this, type);
+        const elem = new PathSvgElement(this, type);
         return elem.attr({ points: points || [] });
     },
 
     // TODO check B232257
     // TODO animate end angle special case
     arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) {
-        const elem = new exports.ArcSvgElement(this);
+        const elem = new ArcSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, innerRadius: innerRadius || 0, outerRadius: outerRadius || 0, startAngle: startAngle || 0, endAngle: endAngle || 0 });
     },
 
     text: function(text, x, y) {
-        const elem = new exports.TextSvgElement(this);
+        const elem = new TextSvgElement(this);
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
@@ -2077,7 +2065,7 @@ Renderer.prototype = {
         pattern.id = id;
 
         const rect = that.rect(0, 0, step, step).attr({ fill: color, opacity: hatching.opacity }).append(pattern);
-        const path = (new exports.PathSvgElement(this)).attr({ d: d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
+        const path = (new PathSvgElement(this)).attr({ d: d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
 
         ///#DEBUG
         pattern.rect = rect;
@@ -2281,8 +2269,31 @@ const fixFuncIriCallbacks = (function() {
     };
 })();
 
-exports.refreshPaths = function() {
+export const refreshPaths = function() {
     fixFuncIriCallbacks.fire();
 };
+
+///#DEBUG
+export const DEBUG_set_SvgElement = function(value) {
+    SvgElement = value;
+};
+
+export const DEBUG_set_RectSvgElement = function(value) {
+    RectSvgElement = value;
+};
+
+export const DEBUG_set_PathSvgElement = function(value) {
+    PathSvgElement = value;
+};
+
+export const DEBUG_set_ArcSvgElement = function(value) {
+    ArcSvgElement = value;
+};
+
+export const DEBUG_set_TextSvgElement = function(value) {
+    TextSvgElement = value;
+};
+
+///#ENDDEBUG
 
 

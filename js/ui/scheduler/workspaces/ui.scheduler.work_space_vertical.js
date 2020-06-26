@@ -69,4 +69,4 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     }
 }
 
-module.exports = SchedulerWorkspaceVertical;
+export default SchedulerWorkspaceVertical;

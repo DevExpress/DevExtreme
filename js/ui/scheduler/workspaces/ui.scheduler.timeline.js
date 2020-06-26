@@ -544,4 +544,4 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 }
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);
-module.exports = SchedulerTimeline;
+export default SchedulerTimeline;

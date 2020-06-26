@@ -301,4 +301,4 @@ const Validator = DOMComponent.inherit({
 
 registerComponent('dxValidator', Validator);
 
-module.exports = Validator;
+export default Validator;

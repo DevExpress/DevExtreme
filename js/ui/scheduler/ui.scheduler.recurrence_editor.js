@@ -814,4 +814,4 @@ const RecurrenceEditor = Editor.inherit({
 
 registerComponent('dxRecurrenceEditor', RecurrenceEditor);
 
-module.exports = RecurrenceEditor;
+export default RecurrenceEditor;

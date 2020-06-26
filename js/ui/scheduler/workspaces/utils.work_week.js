@@ -23,4 +23,4 @@ class workWeekUtils {
     }
 }
 
-module.exports = workWeekUtils;
+export default workWeekUtils;
