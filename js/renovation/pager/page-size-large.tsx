@@ -5,7 +5,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 import LightButton from './light-button';
-import { FullPageSize } from './pager.types';
+import { FullPageSize } from './pager.types.d';
 import { PAGER_SELECTION_CLASS } from './consts';
 
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
