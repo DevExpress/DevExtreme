@@ -500,7 +500,6 @@ Axis.prototype = {
         let swap;
         let startCategoryIndex;
         let endCategoryIndex;
-        const min = range.minVisible;
 
         if(!isContinuous) {
             if(isDefined(startValue) && isDefined(endValue)) {
@@ -509,7 +508,7 @@ Axis.prototype = {
                 startCategoryIndex = inArray(isDefined(parsedStartValue) ? parsedStartValue.valueOf() : undefined, categories);
                 endCategoryIndex = inArray(isDefined(parsedEndValue) ? parsedEndValue.valueOf() : undefined, categories);
                 if(startCategoryIndex === -1 || endCategoryIndex === -1) {
-                    return { from: 0, to: 0 };
+                    return { from: 0, to: 0, outOfCanvas: true };
                 }
                 if(startCategoryIndex > endCategoryIndex) {
                     swap = endValue;
@@ -522,9 +521,6 @@ Axis.prototype = {
         if(isDefined(startValue)) {
             startValue = this.validateUnit(startValue, 'E2105', 'strip');
             start = this._getTranslatedCoord(startValue, -1);
-            if(!isDefined(start) && isContinuous) {
-                start = (startValue < min) ? canvasStart : canvasEnd;
-            }
         } else {
             start = canvasStart;
         }
@@ -532,14 +528,17 @@ Axis.prototype = {
         if(isDefined(endValue)) {
             endValue = this.validateUnit(endValue, 'E2105', 'strip');
             end = this._getTranslatedCoord(endValue, 1);
-            if(!isDefined(end) && isContinuous) {
-                end = (endValue > min) ? canvasEnd : canvasStart;
-            }
         } else {
             end = canvasEnd;
         }
 
-        return (start < end) ? { from: start, to: end } : { from: end, to: start };
+        const stripPosition = (start < end) ? { from: start, to: end } : { from: end, to: start };
+        const visibleArea = this.getVisibleArea();
+
+        if(stripPosition.from <= visibleArea[0] && stripPosition.to <= visibleArea[0] || stripPosition.from >= visibleArea[1] && stripPosition.to >= visibleArea[1]) {
+            stripPosition.outOfCanvas = true;
+        }
+        return stripPosition;
     },
 
     _getStripGraphicAttributes: function(fromPoint, toPoint) {

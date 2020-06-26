@@ -175,9 +175,9 @@
     "dev": "gulp dev",
     "transpile-tests": "gulp transpile-tests",
     "test-env": "node testing/launch",
-    "update-ts": "dx-tools update-ts-bundle --output=./ts/dx.all.d.ts",
+    "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts",
     "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations",
+    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage",
     "test-jest:watch": "jest --watch"
