@@ -102,7 +102,7 @@ export default class PagerContentComponent extends JSXComponent(PagerContentProp
   }
 
   get className(): string {
-    const classes = [PAGER_CLASS_FULL];
+    const classes = ['dx-widget', PAGER_CLASS_FULL];
     !this.isLargeDisplayMode && classes.push(LIGHT_MODE_CLASS);
     this.restAttributes.className && classes.push(this.restAttributes.className);
     return classes.join(' ');

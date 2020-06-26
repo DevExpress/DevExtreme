@@ -11,6 +11,7 @@ import windowUtils from '../core/utils/window';
 import themeReadyCallback from './themes_callback';
 import errors from './widget/ui.errors';
 const window = windowUtils.getWindow();
+const ready = readyCallbacks.add;
 const viewPort = viewPortUtils.value;
 const viewPortChanged = viewPortUtils.changeCallback;
 
@@ -281,7 +282,7 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-function ready(callback) {
+function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
@@ -372,7 +373,7 @@ function autoInit() {
 if(windowUtils.hasWindow()) {
     autoInit();
 } else {
-    readyCallbacks.add(autoInit);
+    ready(autoInit);
 }
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
@@ -388,7 +389,8 @@ devices.changed.add(function() {
 
 exports.current = current;
 
-exports.ready = ready;
+exports.ready = themeReady;
+
 exports.init = init;
 
 exports.attachCssClasses = attachCssClasses;
@@ -401,8 +403,10 @@ exports.isDark = isDark;
 exports.isWebFontLoaded = isWebFontLoaded;
 exports.waitWebFont = waitWebFont;
 
+
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
 };
+
