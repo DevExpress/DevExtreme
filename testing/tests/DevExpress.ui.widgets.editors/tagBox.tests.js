@@ -2791,7 +2791,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const input = $tagBox.find(`.${TEXTBOX_CLASS}`).get(0);
-        const inputWidth = input.getBoundingClientRect().width;
+        const { width: inputWidth } = input.getBoundingClientRect();
 
         // NOTE: width should be 0.1 because of T393423
         assert.roughEqual(inputWidth, 0.1, 0.101, 'input has correct width');
