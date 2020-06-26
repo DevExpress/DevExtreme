@@ -103,7 +103,7 @@ export default class AppointmentPopup {
             contentTemplate: () => {
                 return this._createPopupContent();
             },
-            onShowing: () => this._onShowing(),
+            onShowing: e => this._onShowing(e),
             defaultOptionsRules: [
                 {
                     device: () => devices.current().android,
