@@ -3651,7 +3651,7 @@ QUnit.module('Text customization', moduleConfig, () => {
         });
     });
 
-    ['!©¢£µÂÑßŘ ŤŮ   Ƌ  õĦ/#$%&\'()"+./:;<=>?@[]^`{|}~\\, ', null, ''].forEach(text => {
+    ['!©¢£µÂÑßŘ ŤŮ   Ƌ  õĦ/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', null, ''].forEach(text => {
         QUnit.test(`grandTotal text = ${text}`, function(assert) {
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
                 texts: { grandTotal: text },
