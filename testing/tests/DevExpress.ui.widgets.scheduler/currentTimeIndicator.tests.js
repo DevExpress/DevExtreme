@@ -1019,14 +1019,14 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         });
 
         const $element = this.instance.$element();
-        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $shader = $element.find(`.${SCHEDULER_DATE_TIME_SHADER_CLASS}`);
 
         assert.equal($shader.length, 2, 'Shaders count is correct');
 
-        assert.roughEqual($shader.eq(0).outerHeight(), 160, 1, 'Shader has correct height');
+        assert.roughEqual($shader.eq(0).outerHeight(), 150, 1, 'Shader has correct height');
         assert.roughEqual($shader.eq(0).outerWidth(), 950, 1, 'Shader has correct width');
 
-        assert.roughEqual($shader.eq(1).outerHeight(), 160, 1, 'Shader has correct height');
+        assert.roughEqual($shader.eq(1).outerHeight(), 150, 1, 'Shader has correct height');
         assert.roughEqual($shader.eq(1).outerWidth(), 950, 1, 'Shader has correct width');
 
         assert.roughEqual($shader.eq(0).position().left, 0, 1, 'Shader has correct left');
