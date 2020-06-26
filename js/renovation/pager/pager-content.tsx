@@ -107,7 +107,7 @@ export default class PagerContentComponent extends JSXComponent(PagerContentProp
   }
 
   get pagesContainerVisible(): boolean {
-    return !!this.props.pagesNavigatorVisible;
+    return !!this.props.pagesNavigatorVisible && (this.props.pageCount as number) > 0;
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {
