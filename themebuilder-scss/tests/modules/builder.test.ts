@@ -22,7 +22,7 @@ describe('Builder integration tests', () => {
     return buildTheme(config).then((result) => {
       expect(result.css).not.toBe('');
       expect(result.swatchSelector).toBe(null);
-      expect(result.compiledMetadata.length).toBeGreaterThan(100);
+      expect(Object.keys(result.compiledMetadata).length).toBeGreaterThan(100);
       expect(result.widgets.length).toBeGreaterThan(50);
       expect(result.unusedWidgets.length).toBe(0);
       expect(result.version).toBe(version);

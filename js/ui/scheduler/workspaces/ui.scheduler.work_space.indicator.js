@@ -39,7 +39,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _renderDateTimeIndication() {
         if(this.needRenderDateTimeIndication()) {
             if(this.option('shadeUntilCurrentTime')) {
-                this._shader.render(this);
+                this._shader.render();
             }
 
             if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
@@ -56,10 +56,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _renderIndicator(height, rtlOffset, $container, groupCount) {
-        for(let i = 0; i < groupCount; i++) {
+        const groupedByDate = this.isGroupedByDate();
+        const repeatCount = groupedByDate ? 1 : groupCount;
+
+        for(let i = 0; i < repeatCount; i++) {
             const $indicator = this._createIndicator($container);
 
-            $indicator.width(this.getCellWidth());
+            $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
             this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
         }
     }

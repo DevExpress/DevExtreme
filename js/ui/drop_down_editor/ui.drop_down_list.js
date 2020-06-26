@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
-const window = getWindow();
+import windowUtils from '../../core/utils/window';
+const window = windowUtils.getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
@@ -431,11 +431,14 @@ const DropDownList = DropDownEditor.inherit({
     _popupConfig: function() {
         return extend(this.callBase(), {
             templatesRenderAsynchronously: false,
-            width: this.option('width'),
-            height: 'auto',
             autoResizeEnabled: false,
-            maxHeight: this._getMaxHeight.bind(this)
+            maxHeight: this._getMaxHeight.bind(this),
+            width: this._getInputWidth.bind(this)
         });
+    },
+
+    _getInputWidth() {
+        return this.$element().outerWidth();
     },
 
     _renderPopupContent: function() {
@@ -741,21 +744,17 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
+    _updatePopupMinWidth() {
+        windowUtils.hasWindow() && this._setPopupOption('minWidth', this.$element().outerWidth());
+    },
+
     _popupShowingHandler: function() {
         this._dimensionChanged();
     },
 
     _dimensionChanged: function() {
+        this._updatePopupMinWidth();
         this._popup && this._updatePopupDimensions();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupWidth();
-        this._updatePopupHeight();
-    },
-
-    _updatePopupWidth: function() {
-        this._setPopupOption('width', this.$element().outerWidth() + this.option('popupWidthExtension'));
     },
 
     _needPopupRepaint: function() {
@@ -771,10 +770,8 @@ const DropDownList = DropDownEditor.inherit({
         return needRepaint;
     },
 
-    _updatePopupHeight: function() {
-        if(this._needPopupRepaint()) {
-            this._popup.repaint();
-        }
+    _updatePopupDimensions: function() {
+        this._popup.repaint();
 
         this._list && this._list.updateDimensions();
     },

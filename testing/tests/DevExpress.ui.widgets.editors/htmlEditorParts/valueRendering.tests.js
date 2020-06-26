@@ -246,6 +246,25 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         instance.setSelection(0, 4);
         instance.format('color', 'red');
     });
+
+    test('clear the HTML value', function(assert) {
+        const done = assert.async();
+        const instance = $('#htmlEditor')
+            .dxHtmlEditor({
+                value: 'test',
+                onValueChanged: ({ value, previousValue }) => {
+                    assert.strictEqual(value, '');
+                    assert.strictEqual(previousValue, 'test');
+                    done();
+                }
+            })
+            .dxHtmlEditor('instance');
+
+        instance
+            .$element()
+            .find(getSelector(CONTENT_CLASS))
+            .html('');
+    });
 });
 
 
@@ -319,6 +338,26 @@ QUnit.module('Value as Markdown markup', {
             .dxHtmlEditor('instance');
 
         instance.option('valueType', 'markdown');
+    });
+
+    test('clear the Markdown value', function(assert) {
+        const done = assert.async();
+        const instance = $('#htmlEditor')
+            .dxHtmlEditor({
+                value: 'test',
+                valueType: 'markdown',
+                onValueChanged: ({ value, previousValue }) => {
+                    assert.strictEqual(value, '');
+                    assert.strictEqual(previousValue, 'test');
+                    done();
+                }
+            })
+            .dxHtmlEditor('instance');
+
+        instance
+            .$element()
+            .find(getSelector(CONTENT_CLASS))
+            .html('');
     });
 });
 

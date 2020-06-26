@@ -17,4 +17,4 @@ export declare function getFieldName(fullName: string): string;
 
 export declare function getParentName(fullName: string): string;
 
-export declare function createDefaultOptionRules<T>(options?: Rule<T>[]): Rule<T>[];
+export function createDefaultOptionRules<T>(options?: Rule<T>[]): Rule<T>[];

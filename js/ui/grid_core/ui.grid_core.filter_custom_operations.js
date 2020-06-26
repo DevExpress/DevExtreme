@@ -6,15 +6,15 @@ import deferredUtils from '../../core/utils/deferred';
 import { isGroup, isCondition, getFilterExpression, renderValueText } from '../filter_builder/utils';
 
 function baseOperation(grid) {
-    const calculateFilterExpression = function(filterValue, field) {
+    const calculateFilterExpression = function(filterValue, field, fields) {
         let result = [];
         const lastIndex = filterValue.length - 1;
         filterValue && filterValue.forEach(function(value, index) {
             if(isCondition(value) || isGroup(value)) {
-                const filterExpression = getFilterExpression(value, [field], [], 'headerFilter');
+                const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
                 result.push(filterExpression);
             } else {
-                result.push(getFilterExpression([field.dataField, '=', value], [field], [], 'headerFilter'));
+                result.push(getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter'));
             }
             index !== lastIndex && result.push('or');
         });
@@ -115,8 +115,8 @@ function anyOf(grid) {
 function noneOf(grid) {
     const baseOp = baseOperation(grid);
     return extend({}, baseOp, {
-        calculateFilterExpression: function(filterValue, field) {
-            const baseFilter = baseOp.calculateFilterExpression(filterValue, field);
+        calculateFilterExpression: function(filterValue, field, fields) {
+            const baseFilter = baseOp.calculateFilterExpression(filterValue, field, fields);
             if(!baseFilter || baseFilter.length === 0) return null;
 
             return baseFilter[0] === '!' ? baseFilter : ['!', baseFilter];

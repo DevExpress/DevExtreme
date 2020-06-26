@@ -86,7 +86,7 @@ class RecurrenceRule {
     }
 
     makeRule(field, value) {
-        if(!value) {
+        if(!value || (Array.isArray(value) && !value.length)) {
             delete this._recurrenceRule[field];
             return;
         }
@@ -326,8 +326,7 @@ const RecurrenceEditor = Editor.inherit({
             colSpan: 2,
             template: (_, itemElement) =>{
                 const firstDayOfWeek = this._getFirstDayOfWeek();
-                const byDay = this._recurrenceRule.getRules()['byday'] ?
-                    this._recurrenceRule.getRules()['byday'].split(',') : days[firstDayOfWeek];
+                const byDay = this._daysOfWeekByRules();
 
                 const localDaysNames = dateLocalization.getDayNames('abbreviated');
                 const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
@@ -644,14 +643,17 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _valueChangedHandler(args) {
-        const value = args.component.option('value');
+        const { value, previousValue } = args;
         const field = args.component.option('field');
 
         if(!this.option('visible')) {
             this.option('value', '');
         } else {
             this._recurrenceRule.makeRule(field, value);
-            field === 'freq' && this._makeRepeatOnRule(value);
+            if(field === 'freq') {
+                this._makeRepeatOnRule(value);
+                this._changeRepeatOnVisibility(value, previousValue);
+            }
             this._changeEditorValue();
         }
     },
@@ -685,7 +687,7 @@ const RecurrenceEditor = Editor.inherit({
         switch(args.name) {
             case 'value':
                 this._recurrenceRule.makeRules(args.value);
-                this._changeRepeatOnVisibility();
+
                 this._changeRepeatIntervalLabel();
                 this._disableRepeatEndParts();
                 this._changeEditorsValue(this._recurrenceRule.getRules());
@@ -722,24 +724,24 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _changeRepeatOnVisibility() {
-        const freq = this._recurrenceRule.getRules().freq;
+    _changeRepeatOnVisibility(freq, previousFreq) {
+        if(freq !== previousFreq) {
+            this._recurrenceForm.itemOption('byday', 'visible', false);
+            this._recurrenceForm.itemOption('bymonthday', 'visible', false);
+            this._recurrenceForm.itemOption('bymonth', 'visible', false);
 
-        this._recurrenceForm.itemOption('byday', 'visible', false);
-        this._recurrenceForm.itemOption('bymonthday', 'visible', false);
-        this._recurrenceForm.itemOption('bymonth', 'visible', false);
+            this._recurrenceForm.itemOption('repeatOnLabel', 'visible', freq && freq !== 'daily' && freq !== 'hourly');
 
-        this._recurrenceForm.itemOption('repeatOnLabel', 'visible', freq && freq !== 'DAILY' && freq !== 'HOURLY');
-
-        if(freq === 'WEEKLY') {
-            this._recurrenceForm.itemOption('byday', 'visible', true);
-        }
-        if(freq === 'MONTHLY') {
-            this._recurrenceForm.itemOption('bymonthday', 'visible', true);
-        }
-        if(freq === 'YEARLY') {
-            this._recurrenceForm.itemOption('bymonthday', 'visible', true);
-            this._recurrenceForm.itemOption('bymonth', 'visible', true);
+            if(freq === 'weekly') {
+                this._recurrenceForm.itemOption('byday', 'visible', true);
+            }
+            if(freq === 'monthly') {
+                this._recurrenceForm.itemOption('bymonthday', 'visible', true);
+            }
+            if(freq === 'yearly') {
+                this._recurrenceForm.itemOption('bymonthday', 'visible', true);
+                this._recurrenceForm.itemOption('bymonth', 'visible', true);
+            }
         }
     },
 
@@ -752,6 +754,7 @@ const RecurrenceEditor = Editor.inherit({
     _changeEditorsValue(rules) {
         this._recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
 
+        this._changeDayOfWeekValue();
         this._changeDayOfMonthValue();
         this._changeMonthOfYearValue();
 
@@ -770,6 +773,14 @@ const RecurrenceEditor = Editor.inherit({
         const repeatType = this._recurrenceRule.getRepeatEndRule();
 
         this._recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
+    },
+
+    _changeDayOfWeekValue() {
+        const isEditorVisible = this._recurrenceForm.itemOption('byday').visible;
+        if(isEditorVisible) {
+            const days = this._daysOfWeekByRules();
+            this.getEditorByField('byday').option('selectedItemKeys', days);
+        }
     },
 
     _changeDayOfMonthValue() {

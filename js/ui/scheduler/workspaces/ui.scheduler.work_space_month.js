@@ -165,7 +165,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getCellText(rowIndex, cellIndex) {
-        if(this.option('groupByDate') && this._getGroupCount()) {
+        if(this.isGroupedByDate()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         } else {
             cellIndex = cellIndex % this._getCellCount();
