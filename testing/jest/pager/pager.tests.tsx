@@ -13,6 +13,7 @@ describe('Pager', () => {
       expect(tree.props()).toEqual({
         children: [],
         pagesNavigatorVisible: 'auto',
+        visible: true,
         contentTemplate: PagerContentComponent,
         pageIndexChange: tree.instance().pageIndexChange,
         pageSizeChange: tree.instance().pageSizeChange,

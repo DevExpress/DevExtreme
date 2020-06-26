@@ -172,7 +172,7 @@ describe('PagerContent', () => {
       component.props.pagesNavigatorVisible = true;
       expect(component.pagesContainerVisibility).toBeUndefined();
     });
-    it('className', () => {
+    it('className, isLargeDisplayMode', () => {
       let component = new PagerContent({
         lightModeEnabled: false,
         isLargeDisplayMode: true,
@@ -186,6 +186,14 @@ describe('PagerContent', () => {
       } as PagerContentProps);
       expect(component.isLargeDisplayMode).toBe(false);
       expect(component.className.indexOf('dx-light-mode')).not.toBe(-1);
+    });
+    it('className, visible', () => {
+      const component = new PagerContent({
+        visible: false,
+      } as PagerContentProps);
+      expect(component.className.indexOf('dx-state-invisible')).not.toBe(-1);
+      component.props.visible = true;
+      expect(component.className.indexOf('dx-state-invisible')).toBe(-1);
     });
     it('isLargeDisplayMode', () => {
       let component = new PagerContent({

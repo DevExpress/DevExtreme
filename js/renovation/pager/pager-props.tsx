@@ -15,7 +15,8 @@ export default class PagerProps {
 
   @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
 
-  // visible: true,
+  @OneWay() visible?: boolean = true;
+
   @OneWay() pagesNavigatorVisible?: boolean | 'auto' = 'auto';
 
   @TwoWay() pageIndex?: number = 0;
