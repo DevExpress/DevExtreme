@@ -481,7 +481,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
     });
 
     ['push', 'indicate'].forEach(dropFeedBackMode => {
-        [[null, 1], [1, null], [1, 0]].forEach(fromIndexes => {
+        [[null, 1], [1, null], [1, 0], [null, -1]].forEach(fromIndexes => {
             QUnit.test(`Source item if fromIndex is assigned from ${fromIndexes[0]} to ${fromIndexes[1]} and if dropFeedbackMode is ${dropFeedBackMode}`, function(assert) {
                 // arrange
                 const sortable = this.createSortable({
