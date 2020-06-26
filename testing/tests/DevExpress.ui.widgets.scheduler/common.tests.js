@@ -23,6 +23,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import themes from 'ui/themes';
 import { SchedulerTestWrapper, createWrapper } from './helpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { Deferred } from 'core/utils/deferred';
 
 import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
@@ -3618,6 +3619,30 @@ QUnit.module('Initialization', {
         resizeCallbacks.fire();
 
         assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
+    });
+
+    QUnit.test('ContentReady event should be fired after render completely ready (T902483)', function(assert) {
+        let contentReadyFiresCount = 0;
+
+        const scheduler = createWrapper({
+            onContentReady: () => ++contentReadyFiresCount
+        });
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation = new Deferred();
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation.resolve();
+
+        assert.equal(contentReadyFiresCount, 2, 'contentReadyFiresCount === 2');
+
+        scheduler.instance._workSpaceRecalculation = null;
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');
     });
 })('Events');
 
