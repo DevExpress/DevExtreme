@@ -4,7 +4,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 import { format } from '../../core/utils/string';
-import { GetHtmlElement } from './pager.types';
+import { GetHtmlElement } from './pager.types.d';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

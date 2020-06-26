@@ -1,5 +1,5 @@
 const $ = require('../../core/renderer');
-const window = require('../../core/utils/window').getWindow();
+const windowUtils = require('../../core/utils/window');
 const eventsEngine = require('../../events/core/events_engine');
 const Guid = require('../../core/guid');
 const registerComponent = require('../../core/component_registrator');
@@ -19,6 +19,7 @@ const messageLocalization = require('../../localization/message');
 const ChildDefaultTemplate = require('../../core/templates/child_default_template').ChildDefaultTemplate;
 const Deferred = require('../../core/utils/deferred').Deferred;
 const DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
+const window = windowUtils.getWindow();
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
@@ -430,11 +431,14 @@ const DropDownList = DropDownEditor.inherit({
     _popupConfig: function() {
         return extend(this.callBase(), {
             templatesRenderAsynchronously: false,
-            width: this.option('width'),
-            height: 'auto',
             autoResizeEnabled: false,
-            maxHeight: this._getMaxHeight.bind(this)
+            maxHeight: this._getMaxHeight.bind(this),
+            width: this._getInputWidth.bind(this)
         });
+    },
+
+    _getInputWidth() {
+        return this.$element().outerWidth();
     },
 
     _renderPopupContent: function() {
@@ -740,21 +744,17 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
+    _updatePopupMinWidth() {
+        windowUtils.hasWindow() && this._setPopupOption('minWidth', this.$element().outerWidth());
+    },
+
     _popupShowingHandler: function() {
         this._dimensionChanged();
     },
 
     _dimensionChanged: function() {
+        this._updatePopupMinWidth();
         this._popup && this._updatePopupDimensions();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupWidth();
-        this._updatePopupHeight();
-    },
-
-    _updatePopupWidth: function() {
-        this._setPopupOption('width', this.$element().outerWidth() + this.option('popupWidthExtension'));
     },
 
     _needPopupRepaint: function() {
@@ -770,10 +770,8 @@ const DropDownList = DropDownEditor.inherit({
         return needRepaint;
     },
 
-    _updatePopupHeight: function() {
-        if(this._needPopupRepaint()) {
-            this._popup.repaint();
-        }
+    _updatePopupDimensions: function() {
+        this._popup.repaint();
 
         this._list && this._list.updateDimensions();
     },

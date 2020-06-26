@@ -15,6 +15,7 @@ describe('PagerContent', () => {
     it('render all children', () => {
       const props = {
         className: 'className',
+        pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
         props: {
@@ -70,10 +71,36 @@ describe('PagerContent', () => {
         totalCount: 100,
       });
     });
+    it('pagesContainerVisibility = false', () => {
+      const parentRef = createRef();
+      const tree = mount(<PagerContentComponent
+        {...{
+          pagesContainerVisible: true,
+          pagesContainerVisibility: 'hidden',
+          props: {
+            parentRef,
+          },
+        } as Partial<PagerContent> as any}
+      /> as any).childAt(0);
+      expect((tree.find('.dx-pages').instance() as unknown as HTMLElement).style).toHaveProperty('visibility', 'hidden');
+    });
+    it('pagesContainerVisible = false', () => {
+      const parentRef = createRef();
+      const tree = mount(<PagerContentComponent
+        {...{
+          pagesContainerVisible: false,
+          props: {
+            parentRef,
+          },
+        } as any}
+      /> as any).childAt(0);
+      expect(tree.find('.dx-pages')).toHaveLength(0);
+    });
     it('infoVisible = false', () => {
       const parentRef = createRef();
       const tree = mount(<PagerContentComponent
         {...{
+          pagesContainerVisible: true,
           infoVisible: false,
           props: {
             parentRef,
@@ -104,6 +131,7 @@ describe('PagerContent', () => {
       const infoTextRef = createRef();
       const props = {
         className: 'className',
+        pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
         props: {
@@ -123,7 +151,28 @@ describe('PagerContent', () => {
   });
 
   describe('Logic', () => {
-    it('Logic, className', () => {
+    it('pagesContainerVisible', () => {
+      const component = new PagerContent({
+        pageCount: 1,
+        pagesNavigatorVisible: 'auto',
+      } as PagerContentProps);
+      expect(component.pagesContainerVisible).toBe(true);
+      component.props.pagesNavigatorVisible = false;
+      expect(component.pagesContainerVisible).toBe(false);
+    });
+    it('pagesContainerVisibility', () => {
+      const component = new PagerContent({
+        pageCount: 1,
+        pagesNavigatorVisible: 'auto',
+      } as PagerContentProps);
+      expect(component.pagesContainerVisibility).toBe('hidden');
+      component.props.pageCount = 2;
+      expect(component.pagesContainerVisibility).toBeUndefined();
+      component.props.pageCount = 1;
+      component.props.pagesNavigatorVisible = true;
+      expect(component.pagesContainerVisibility).toBeUndefined();
+    });
+    it('className, isLargeDisplayMode', () => {
       let component = new PagerContent({
         lightModeEnabled: false,
         isLargeDisplayMode: true,
@@ -138,7 +187,15 @@ describe('PagerContent', () => {
       expect(component.isLargeDisplayMode).toBe(false);
       expect(component.className.indexOf('dx-light-mode')).not.toBe(-1);
     });
-    it('Logic isLargeDisplayMode', () => {
+    it('className, visible', () => {
+      const component = new PagerContent({
+        visible: false,
+      } as PagerContentProps);
+      expect(component.className.indexOf('dx-state-invisible')).not.toBe(-1);
+      component.props.visible = true;
+      expect(component.className.indexOf('dx-state-invisible')).toBe(-1);
+    });
+    it('isLargeDisplayMode', () => {
       let component = new PagerContent({
         lightModeEnabled: false,
         isLargeDisplayMode: true,
@@ -163,7 +220,7 @@ describe('PagerContent', () => {
       } as PagerContentProps);
       expect(component.isLargeDisplayMode).toBe(false);
     });
-    it('Logic infoVisible', () => {
+    it('infoVisible', () => {
       let component = new PagerContent({
         showInfo: true,
         infoTextVisible: true,

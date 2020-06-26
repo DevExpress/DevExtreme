@@ -644,7 +644,11 @@ QUnit.module('Recurrences', function() {
     });
 
     QUnit.test('evalRecurrenceRule should return an invalid object for string with wrong byDay', function(assert) {
-        const ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;BYDAY=wrong');
+        let ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;BYDAY=wrong');
+
+        assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
+
+        ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=DAILY;BYDAY=');
 
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
