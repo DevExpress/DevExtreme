@@ -12,6 +12,7 @@ describe('Pager', () => {
       const tree = shallow<PagerComponent>(<PagerComponent /> as any);
       expect(tree.props()).toEqual({
         children: [],
+        pagesNavigatorVisible: 'auto',
         contentTemplate: PagerContentComponent,
         pageIndexChange: tree.instance().pageIndexChange,
         pageSizeChange: tree.instance().pageSizeChange,
