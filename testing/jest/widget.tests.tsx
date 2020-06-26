@@ -27,7 +27,7 @@ describe('Widget', () => {
         cssClasses: 'cssClasses',
         styles: 'styles',
         attributes: { attributes: 'attributes' },
-      } as any));
+      } as any) as any);
 
       expect(widget.props()).toEqual({
         attributes: 'attributes',
@@ -49,7 +49,7 @@ describe('Widget', () => {
         widgetRef: mockRef,
         props,
         cssClasses: 'cssClasses',
-      } as any));
+      } as any) as any);
 
       expect(mockRef.current.className).toBe('cssClasses');
     });
@@ -65,7 +65,7 @@ describe('Widget', () => {
         widgetRef: mockRef,
         props,
         cssClasses: 'cssClasses',
-      } as any));
+      } as any) as any);
 
       expect(widget.find('.child').exists()).toBe(true);
     });
@@ -96,6 +96,18 @@ describe('Widget', () => {
           expect(e.stopImmediatePropagation).toBeCalledTimes(1);
         });
 
+        it('should not change state if click event is not fake', () => {
+          (isFakeClickEvent as any).mockImplementation(() => false);
+          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
+          widget.widgetRef = {} as any;
+
+          widget.accessKeyEffect();
+          emit(EVENT.dxClick, e);
+
+          expect(widget.focused).toBe(false);
+          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
+        });
+
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
           widget.widgetRef = {} as any;
@@ -103,7 +115,7 @@ describe('Widget', () => {
           const detach = widget.accessKeyEffect();
 
           expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach();
+          detach!();
           expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
         });
 
@@ -162,6 +174,21 @@ describe('Widget', () => {
           expect(onInactive).toHaveBeenCalledWith(e);
         });
 
+        it('should woork without errors if onActive and onInactive are not defined', () => {
+          const e = { ...defaultEvent };
+          const widget = new Widget({
+            activeStateEnabled: true, disabled: false, onActive: undefined, onInactive: undefined,
+          });
+          widget.widgetRef = {} as any;
+          widget.activeEffect();
+
+          emit(EVENT.active, e);
+          expect(widget.active).toBe(true);
+
+          emit(EVENT.inactive, e);
+          expect(widget.active).toBe(false);
+        });
+
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
 
@@ -169,7 +196,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
-          detach();
+          detach!();
           expect(getEventHandlers(EVENT.active).length).toBe(0);
           expect(getEventHandlers(EVENT.inactive).length).toBe(0);
         });
@@ -229,10 +256,18 @@ describe('Widget', () => {
           const widget = new Widget({ onClick });
 
           const detach = widget.clickEffect();
-          detach();
+          detach!();
           emit(EVENT.dxClick);
 
           expect(onClick).toHaveBeenCalledTimes(0);
+        });
+
+        it('should return nothing if click is not defined', () => {
+          const widget = new Widget({ onClick: undefined });
+
+          const detach = widget.clickEffect();
+
+          expect(detach).toBe(undefined);
         });
       });
       describe('focusEffect', () => {
@@ -259,7 +294,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
           expect(getEventHandlers(EVENT.blur).length).toBe(1);
-          detach();
+          detach!();
           expect(getEventHandlers(EVENT.focus).length).toBe(0);
           expect(getEventHandlers(EVENT.blur).length).toBe(0);
         });
@@ -309,7 +344,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
-          detach();
+          detach!();
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(0);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(0);
         });
@@ -371,7 +406,7 @@ describe('Widget', () => {
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
 
-          detach();
+          detach!();
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -384,6 +419,13 @@ describe('Widget', () => {
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
+        });
+
+        it('should return nothing if widget does not have event and is not focusable', () => {
+          const widget = new Widget({ });
+          const detach = widget.keyboardEffect();
+
+          expect(detach).toBe(undefined);
         });
       });
 
@@ -405,7 +447,7 @@ describe('Widget', () => {
           const detach = widget.resizeEffect();
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
-          detach();
+          detach!();
           expect(getEventHandlers(EVENT.resize).length).toBe(0);
         });
 
@@ -441,7 +483,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
           expect(getEventHandlers(EVENT.hiding).length).toBe(1);
-          detach();
+          detach!();
           expect(getEventHandlers(EVENT.shown).length).toBe(0);
           expect(getEventHandlers(EVENT.hiding).length).toBe(0);
         });
@@ -452,6 +494,22 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.shown)).toBe(undefined);
           expect(getEventHandlers(EVENT.hiding)).toBe(undefined);
+        });
+      });
+    });
+
+    describe('Methods', () => {
+      describe('focus', () => {
+        it('should trigger focus at element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = jest.fn();
+          widget.widgetRef = mockRef as any;
+
+          widget.focusEffect();
+
+          expect(widget.focused).toBe(false);
+          widget.focus();
+          expect(widget.focused).toBe(true);
         });
       });
     });
@@ -512,8 +570,8 @@ describe('Widget', () => {
           expect(widget.styles).toEqual({ width: 50, height: 70 });
         });
 
-        it('should ignore width and height null/undefined values', () => {
-          const widget = new Widget({ width: null, height: undefined });
+        it('should ignore width and height undefined values', () => {
+          const widget = new Widget({ width: undefined, height: undefined });
 
           expect(widget.styles).toEqual({});
         });
