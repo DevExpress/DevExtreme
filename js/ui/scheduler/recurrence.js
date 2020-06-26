@@ -368,9 +368,13 @@ class RecurrenceValidator {
     }
 
     _wrongDayOfWeek(rule) {
+        const byDay = rule['byday'];
         const daysByRule = getRecurrenceProcessor().daysFromByDayRule(rule);
         let brokenDaysExist = false;
 
+        if(byDay === '') {
+            brokenDaysExist = true;
+        }
         each(daysByRule, function(_, day) {
             if(!Object.prototype.hasOwnProperty.call(days, day)) {
                 brokenDaysExist = true;
