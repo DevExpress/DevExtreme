@@ -7,6 +7,7 @@ import { isDefined } from '../../core/utils/type';
 import { triggerShownEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
+import publisherMixin from './ui.scheduler.publisher_mixin';
 import Form from '../form';
 import ButtonGroup from '../button_group';
 import DateBox from '../date_box';
@@ -132,7 +133,9 @@ class RecurrenceRule {
 
 class RecurrenceEditor extends Editor {
     _getDefaultOptions() {
-        return extend(this.callBase(), {
+        const defaultOptions = super._getDefaultOptions();
+
+        return extend(defaultOptions, {
             value: null,
 
             /**
@@ -166,12 +169,12 @@ class RecurrenceEditor extends Editor {
     }
 
     _init() {
-        this.callBase();
+        super._init();
         this._recurrenceRule = new RecurrenceRule(this.option('value'));
     }
 
     _render() {
-        this.callBase();
+        super._render();
 
         this.$element().addClass(RECURRENCE_EDITOR);
 
@@ -691,7 +694,7 @@ class RecurrenceEditor extends Editor {
                 this._disableRepeatEndParts();
                 this._changeEditorsValue(this._recurrenceRule.getRules());
 
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case 'startDate':
                 this._makeRepeatOnRule(this._recurrenceRule.getRules().freq);
@@ -716,10 +719,10 @@ class RecurrenceEditor extends Editor {
                 break;
             case 'visible':
                 this._changeValueByVisibility(args.value);
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
 
@@ -824,4 +827,5 @@ class RecurrenceEditor extends Editor {
 
 registerComponent('dxRecurrenceEditor', RecurrenceEditor);
 
+RecurrenceEditor.include(publisherMixin);
 module.exports = RecurrenceEditor;
