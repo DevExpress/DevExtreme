@@ -7,7 +7,6 @@ import { isDefined } from '../../core/utils/type';
 import { triggerShownEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
-import publisherMixin from './ui.scheduler.publisher_mixin';
 import Form from '../form';
 import ButtonGroup from '../button_group';
 import DateBox from '../date_box';
@@ -827,5 +826,4 @@ class RecurrenceEditor extends Editor {
 
 registerComponent('dxRecurrenceEditor', RecurrenceEditor);
 
-RecurrenceEditor.include(publisherMixin);
 module.exports = RecurrenceEditor;
