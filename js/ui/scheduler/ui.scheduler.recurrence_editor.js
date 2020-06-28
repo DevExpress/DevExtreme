@@ -164,7 +164,7 @@ class RecurrenceEditor extends Editor {
         this._extendConfig(config, {
             readOnly: this.option('readOnly')
         });
-        return this.callBase(element, name, config);
+        return super._createComponent(element, name, config);
     }
 
     _init() {
