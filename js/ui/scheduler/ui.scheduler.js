@@ -1680,7 +1680,7 @@ const Scheduler = Widget.inherit({
         this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
         this._allowDragging() && this._workSpace.initDragBehavior(this, this._all);
-        this._workSpace.initTableEvents();
+        this._workSpace._attachTablesEvents();
         this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();

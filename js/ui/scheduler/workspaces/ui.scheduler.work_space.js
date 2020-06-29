@@ -2607,10 +2607,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     removeDroppableCellClass($cellElement) {
         ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
     }
-
-    initTableEvents() {
-        this._attachTablesEvents();
-    }
 }
 
 module.exports = SchedulerWorkSpace;
