@@ -116,6 +116,6 @@ export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutPro
     const { getTextAndFormatDate, item } = this.props;
     const { data } = item!;
 
-    return getTextAndFormatDate!(data, this.currentAppointment) || {};
+    return getTextAndFormatDate!(data, this.currentAppointment);
   }
 }
