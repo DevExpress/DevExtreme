@@ -426,3 +426,71 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
     const appointment = scheduler.appointments.getAppointment();
     assert.roughEqual(appointment.outerWidth(), 175, 1, 'Appointment width is OK');
 });
+
+QUnit.module('Integration: Work space: Multiple selection when dragging is not enabled', {
+    beforeEach: function() {
+        fx.off = true;
+        this.createInstance = function(options) {
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            this.scheduler = new SchedulerTestWrapper(this.instance);
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    [{
+        view: 'timelineDay',
+        startCell: {
+            index: 0, startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false,
+        },
+        endCell: {
+            index: 1, startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false,
+        },
+    }, {
+        view: 'timelineWeek',
+        startCell: {
+            index: 0, startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false,
+        },
+        endCell: {
+            index: 1, startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false,
+        },
+    }, {
+        view: 'timelineMonth',
+        startCell: {
+            index: 0, startDate: new Date(2018, 3, 1), endDate: new Date(2018, 3, 2), allDay: false,
+        },
+        endCell: {
+            index: 1, startDate: new Date(2018, 3, 2), endDate: new Date(2018, 3, 3), allDay: false,
+        },
+    }].forEach((config) => {
+        const { view, startCell, endCell } = config;
+        QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
+            this.createInstance({
+                dataSource: [],
+                views: [view],
+                currentView: view,
+                currentDate: new Date(2018, 3, 8),
+                height: 600,
+                editing: { allowDragging: false },
+            });
+
+            const $element = this.instance.$element();
+
+            const $cells = $element.find('.dx-scheduler-date-table-cell');
+            const $table = $element.find('.dx-scheduler-date-table');
+
+            $($table).trigger(
+                $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+            );
+            $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+            assert.deepEqual(
+                this.instance.option('selectedCellData'),
+                [
+                    { startDate: startCell.startDate, endDate: startCell.endDate, allDay: startCell.allDay },
+                    { startDate: endCell.startDate, endDate: endCell.endDate, allDay: endCell.allDay },
+                ], 'correct cells have been selected');
+        });
+    });
+});
