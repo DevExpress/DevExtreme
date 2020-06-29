@@ -46,7 +46,7 @@ const UNSUPPORTED_FORMAT_MAPPING = {
     millisecond: 'longTime'
 };
 
-const ExcelCreator = Class.inherit({
+export const ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
         let result = '<' + tagName;
         let i;
@@ -704,11 +704,9 @@ const ExcelCreator = Class.inherit({
 
 ExcelCreator.JSZip = JSZip;
 
-export { ExcelCreator };
-
 export function getData(data, options) {
     // TODO: Looks like there is no need to export ExcelCreator any more?
-    const excelCreator = new exports.ExcelCreator(data, options);
+    const excelCreator = new ExcelCreator(data, options);
 
     excelCreator._checkZipState();
 

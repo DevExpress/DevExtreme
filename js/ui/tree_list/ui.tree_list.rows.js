@@ -132,6 +132,6 @@ export const RowsView = rowsViewModule.views.rowsView.inherit((function() {
 treeListCore.registerModule('rows', {
     defaultOptions: rowsViewModule.defaultOptions,
     views: {
-        rowsView: exports.RowsView
+        rowsView: RowsView
     }
 });

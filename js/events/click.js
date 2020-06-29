@@ -80,14 +80,14 @@ let ClickEmitter = Emitter.inherit({
 
 
 // NOTE: native strategy for desktop, iOS 9.3+, Android 5+
+const realDevice = devices.real();
+const useNativeClick =
+        realDevice.generic ||
+        realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
+        realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
+
 (function() {
     const NATIVE_CLICK_CLASS = 'dx-native-click';
-    const realDevice = devices.real();
-    const useNativeClick =
-            realDevice.generic ||
-            realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
-            realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
-
     const isNativeClickEvent = function(target) {
         return useNativeClick || $(target).closest('.' + NATIVE_CLICK_CLASS).length;
     };
@@ -154,10 +154,6 @@ let ClickEmitter = Emitter.inherit({
             eventsEngine.off(this.getElement(), 'click', clickHandler);
         }
     });
-
-    ///#DEBUG
-    exports.useNativeClick = useNativeClick;
-    ///#ENDDEBUG
 })();
 
 
@@ -209,5 +205,8 @@ registerEmitter({
 export { CLICK_EVENT_NAME as name };
 
 ///#DEBUG
-export { misc };
+export {
+    misc,
+    useNativeClick
+};
 ///#ENDDEBUG

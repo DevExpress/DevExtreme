@@ -110,7 +110,7 @@ export const ExportMixin = extend({}, exportMixin, {
             dataController.endLoading();
         });
 
-        return new exports.DataProvider({
+        return new DataProvider({
             items: items,
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),

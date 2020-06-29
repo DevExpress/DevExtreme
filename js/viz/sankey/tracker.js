@@ -2,16 +2,25 @@ import { prototype as proto } from './sankey';
 import { Tracker } from '../components/tracker';
 const DATA_KEY_BASE = '__sankey_data_';
 let dataKeyModifier = 0;
-const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+///#DEBUG
+let _TESTS_dataKey;
+///#ENDDEBUG
 
 proto._eventsMap.onNodeClick = { name: 'nodeClick' };
 proto._eventsMap.onLinkClick = { name: 'linkClick' };
+
+const getDataKey = function() {
+    return DATA_KEY_BASE + dataKeyModifier++;
+};
 
 export const plugin = {
     name: 'tracker',
     init: function() {
         const that = this;
-
+        const dataKey = getDataKey();
+        ///#DEBUG
+        _TESTS_dataKey = dataKey;
+        ///#ENDDEBUG
         that._tracker = new Tracker({
             widget: that,
             root: that._renderer.root,
@@ -49,7 +58,6 @@ export const plugin = {
         },
     }
 };
-
 ///#DEBUG
-export const _TESTS_dataKey = dataKey;
+export { _TESTS_dataKey };
 ///#ENDDEBUG

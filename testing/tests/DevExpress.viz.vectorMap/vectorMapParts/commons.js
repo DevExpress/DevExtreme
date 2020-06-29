@@ -48,8 +48,8 @@ function stubComponentConstructors(test) {
     // $.extend(DevExpress.viz, {
     //     LoadingIndicator: returnValue(test.loadingIndicator)
     // });
-    titleModule.Title = returnValue(test.title);
-    tooltipModule.Tooltip = returnValue(test.tooltip);
+    titleModule.DEBUG_set_title(returnValue(test.title));
+    tooltipModule.DEBUG_set_tooltip(returnValue(test.tooltip));
     exportModule.ExportMenu = returnValue(test.exportMenu);
 
     projectionModule.Projection = returnValue(test.projection);

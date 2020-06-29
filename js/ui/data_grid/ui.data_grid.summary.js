@@ -598,7 +598,7 @@ gridCore.registerModule('summary', {
         };
     },
     views: {
-        footerView: exports.FooterView
+        footerView: FooterView
     },
     extenders: {
         controllers: {

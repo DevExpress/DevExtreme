@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import angular from 'angular';
 import eventsEngine from '../../events/core/events_engine';
 import Config from '../../core/config';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
@@ -607,11 +608,12 @@ const registerComponentDirective = name => {
     })]);
 };
 
-registerComponentCallbacks.add((name, componentClass) => {
+if(angular) {
+    registerComponentCallbacks.add((name, componentClass) => {
 
-    if(!registeredComponents[name]) {
-        registerComponentDirective(name);
-    }
-    registeredComponents[name] = componentClass;
-
-});
+        if(!registeredComponents[name]) {
+            registerComponentDirective(name);
+        }
+        registeredComponents[name] = componentClass;
+    });
+}

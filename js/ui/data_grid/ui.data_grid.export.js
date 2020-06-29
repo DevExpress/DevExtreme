@@ -729,7 +729,7 @@ dataGridCore.registerModule('export', {
         };
     },
     controllers: {
-        'export': exports.ExportController
+        'export': ExportController
     },
     extenders: {
         controllers: {

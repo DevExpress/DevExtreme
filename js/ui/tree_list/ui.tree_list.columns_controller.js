@@ -29,7 +29,7 @@ export const ColumnsController = columnsControllerModule.controllers.columns.inh
 treeListCore.registerModule('columns', {
     defaultOptions: columnsControllerModule.defaultOptions,
     controllers: {
-        columns: exports.ColumnsController
+        columns: ColumnsController
     }
 });
 

@@ -10,6 +10,7 @@ const exportModule = require('viz/core/export');
 const labelEnvironment = require('./commonParts/label.js').labelEnvironment;
 const dxFunnel = require('viz/funnel/funnel');
 const Legend = legendModule.Legend;
+const TitleOrig = titleModule.Title;
 
 dxFunnel.addPlugin(legendModule.plugin);
 dxFunnel.addPlugin(titleModule.plugin);
@@ -32,9 +33,7 @@ function stubTitle() {
     const that = this;
     that.title = new vizMocks.Title();
     that.title.stub('measure').returns([200, 50]);
-    sinon.stub(titleModule, 'Title', function() {
-        return that.title;
-    });
+    titleModule.DEBUG_set_title(sinon.spy(function() { return that.title; }));
 }
 
 function stubExport() {
@@ -48,7 +47,7 @@ function stubExport() {
 
 function restore() {
     legendModule._setLegend(Legend);
-    titleModule.Title.restore();
+    titleModule.DEBUG_set_title(TitleOrig);
     exportModule.ExportMenu.restore();
 }
 

@@ -529,10 +529,10 @@ export function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
                     max = categories[categories.length - 1];
                     min = categories[categories.length - 1 - rangeLength];
                 } else if(minDefined && !maxDefined) {
-                    const categoriesInfo = exports.getCategoriesInfo(categories, min, undefined);
+                    const categoriesInfo = getCategoriesInfo(categories, min, undefined);
                     max = categoriesInfo.categories[rangeLength];
                 } else if(!minDefined && maxDefined) {
-                    const categoriesInfo = exports.getCategoriesInfo(categories, undefined, max);
+                    const categoriesInfo = getCategoriesInfo(categories, undefined, max);
                     min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
                 }
             }

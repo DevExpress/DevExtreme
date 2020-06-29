@@ -38,6 +38,10 @@ const DropDownBox = DropDownEditor.inherit({
         });
     },
 
+    ///#DEBUG
+    _realDevice: realDevice,
+    ///#ENDDEBUG
+
     _getTabbableElements: function() {
         return this._getElements().filter(selectors.tabbable);
     },
@@ -328,8 +332,4 @@ const DropDownBox = DropDownEditor.inherit({
 
 registerComponent('dxDropDownBox', DropDownBox);
 
-module.exports = DropDownBox;
-
-///#DEBUG
-module.exports.realDevice = realDevice;
-///#ENDDEBUG
+export default DropDownBox;

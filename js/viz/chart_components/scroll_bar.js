@@ -10,7 +10,7 @@ const _min = Math.min;
 const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 2;
 
-const ScrollBar = function(renderer, group) {
+export const ScrollBar = function(renderer, group) {
     this._translator = new translator2DModule.Translator2D({}, {}, {});
     this._scroll = renderer.rect().append(group);
     this._addEvents();
@@ -234,5 +234,3 @@ ScrollBar.prototype = {
         });
     }
 };
-
-exports.ScrollBar = ScrollBar;

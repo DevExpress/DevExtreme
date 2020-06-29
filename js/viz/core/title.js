@@ -40,11 +40,11 @@ function validateMargin(margin) {
 function checkRect(rect, boundingRect) {
     return rect[2] - rect[0] < boundingRect.width || rect[3] - rect[1] < boundingRect.height;
 }
-function Title(params) {
+export let Title = function(params) {
     this._params = params;
     this._group = params.renderer.g().attr({ 'class': params.cssClass }).linkOn(params.root || params.renderer.root, 'title');
     this._hasText = false;
-}
+};
 
 // There is no normal inheritance from LayoutElement because it is actually a container of methods rather than a class.
 extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
@@ -295,8 +295,6 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     // BaseWidget_layout_implementation
 });
 
-exports.Title = Title;
-
 ///#DEBUG
 Title.prototype.DEBUG_getOptions = function() { return this._options; };
 ///#ENDDEBUG
@@ -307,12 +305,12 @@ function processTitleOptions(options) {
     return newOptions;
 }
 
-exports.plugin = {
+export const plugin = {
     name: 'title',
     init: function() {
         const that = this;
         // "exports" is used for testing purposes.
-        that._title = new exports.Title({
+        that._title = new Title({
             renderer: that._renderer,
             cssClass: that._rootClassPrefix + '-title',
             incidentOccurred: that._incidentOccurred
@@ -338,3 +336,9 @@ exports.plugin = {
     },
     fontFields: ['title.font', 'title.subtitle.font']
 };
+
+///#DEBUG
+export const DEBUG_set_title = function(value) {
+    Title = value;
+};
+///#ENDDEBUG

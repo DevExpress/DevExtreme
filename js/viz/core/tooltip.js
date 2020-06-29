@@ -34,7 +34,7 @@ function getSpecialFormatOptions(options, specialFormat) {
     return result;
 }
 
-function Tooltip(params) {
+export let Tooltip = function(params) {
     const that = this;
     let renderer;
 
@@ -56,7 +56,7 @@ function Tooltip(params) {
     // html text
     that._textGroupHtml = $('<div>').css({ position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._wrapper);
     that._textHtml = $('<div>').css({ position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._textGroupHtml);
-}
+};
 
 Tooltip.prototype = {
     constructor: Tooltip,
@@ -362,8 +362,6 @@ Tooltip.prototype = {
     }
 };
 
-export { Tooltip };
-
 export const plugin = {
     name: 'tooltip',
     init: function() {
@@ -376,7 +374,7 @@ export const plugin = {
         // The method exists only to be overridden in sparklines.
         _initTooltip: function() {
             // "exports" is used for testing purposes.
-            this._tooltip = new exports.Tooltip({
+            this._tooltip = new Tooltip({
                 cssClass: this._rootClassPrefix + '-tooltip',
                 eventTrigger: this._eventTrigger,
                 pathModified: this.option('pathModified'),
@@ -428,3 +426,9 @@ export const plugin = {
     },
     fontFields: ['tooltip.font']
 };
+
+///#DEBUG
+export const DEBUG_set_tooltip = function(value) {
+    Tooltip = value;
+};
+///#ENDDEBUG

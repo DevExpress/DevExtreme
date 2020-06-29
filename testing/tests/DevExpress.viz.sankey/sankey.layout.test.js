@@ -6,6 +6,7 @@ const createSankey = common.createSankey;
 const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const dxSankey = require('viz/sankey/sankey');
+const TitleOrig = titleModule.Title;
 
 dxSankey.addPlugin(titleModule.plugin);
 dxSankey.addPlugin(exportModule.plugin);
@@ -14,9 +15,9 @@ function stubTitle() {
     const that = this;
     that.title = new vizMocks.Title();
     that.title.stub('measure').returns([200, 50]);
-    sinon.stub(titleModule, 'Title', function() {
+    titleModule.DEBUG_set_title(sinon.spy(function() {
         return that.title;
-    });
+    }));
 }
 
 function stubExport() {
@@ -29,7 +30,7 @@ function stubExport() {
 }
 
 function restore() {
-    titleModule.Title.restore();
+    titleModule.DEBUG_set_title(TitleOrig);
     exportModule.ExportMenu.restore();
 }
 

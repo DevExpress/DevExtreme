@@ -1241,7 +1241,7 @@ export const DataController = Class.inherit((function() {
 
 
 //#DEBUG
-exports.DataController.__internals = {
+export const DataController__internals = {
     NO_DATA_AVAILABLE_TEXT: NOT_AVAILABLE
 };
 //#ENDDEBUG

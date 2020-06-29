@@ -3,16 +3,25 @@ import { Tracker } from '../components/tracker';
 const DATA_KEY_BASE = '__funnel_data_';
 import { isDefined } from '../../core/utils/type';
 let dataKeyModifier = 0;
-const dataKey = DATA_KEY_BASE + dataKeyModifier++;
 const proto = Funnel.prototype;
-
+///#DEBUG
+let _TESTS_dataKey;
+///#ENDDEBUG
 proto._eventsMap.onItemClick = { name: 'itemClick' };
 proto._eventsMap.onLegendClick = { name: 'legendClick' };
+
+const getDataKey = function() {
+    return DATA_KEY_BASE + dataKeyModifier++;
+};
 
 export const plugin = {
     name: 'tracker',
     init: function() {
         const that = this;
+        const dataKey = getDataKey();
+        ///#DEBUG
+        _TESTS_dataKey = dataKey;
+        ///#ENDDEBUG
         const getProxyData = function(e) {
             const rootOffset = that._renderer.getRootOffset();
             const x = Math.floor(e.pageX - rootOffset.left);
@@ -67,8 +76,7 @@ export const plugin = {
         }
     }
 };
-
 ///#DEBUG
-export const _TESTS_dataKey = dataKey;
+export { _TESTS_dataKey };
 ///#ENDDEBUG
 

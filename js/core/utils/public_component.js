@@ -10,7 +10,7 @@ const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 const componentNames = new WeakMap();
 let nextAnonymousComponent = 0;
 
-const getName = exports.name = function(componentClass, newName) {
+const getName = function(componentClass, newName) {
     if(isDefined(newName)) {
         componentNames.set(componentClass, newName);
         return;
@@ -49,3 +49,5 @@ export function getInstanceByElement($element, componentClass) {
 
     return dataUtils.data($element.get(0), name);
 }
+
+export { getName as name };

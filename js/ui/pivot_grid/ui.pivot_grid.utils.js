@@ -13,7 +13,7 @@ import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { when, Deferred } from '../../core/utils/deferred';
 
-const setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
+export const setFieldProperty = function(field, property, value, isInitialization) {
     const initProperties = field._initProperties = field._initProperties || {};
     const initValue = isInitialization ? value : field[property];
 
@@ -248,7 +248,7 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
 }
 
 export function discoverObjectFields(items, fields) {
-    const fieldsDataType = exports.getFieldsDataType(fields);
+    const fieldsDataType = getFieldsDataType(fields);
     return parseFields(items, items[0], '', fieldsDataType);
 }
 

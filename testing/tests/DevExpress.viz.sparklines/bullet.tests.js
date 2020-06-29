@@ -36,9 +36,9 @@ rendererModule.Renderer = sinon.spy(function(parameters) {
     return currentTest().renderer;
 });
 
-tooltipModule.Tooltip = sinon.spy(function() {
+tooltipModule.DEBUG_set_tooltip(sinon.spy(function() {
     return currentTest().tooltip;
-});
+}));
 
 const environment = {
     beforeEach: function() {

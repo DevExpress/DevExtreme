@@ -158,7 +158,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
     }
 });
 
-export const VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
+export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     _getAreaClassName: function() {
         return PIVOTGRID_AREA_ROW_CLASS;
     },

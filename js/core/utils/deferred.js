@@ -15,7 +15,7 @@ const deferredConfig = [{
     handler: 'progress'
 }];
 
-let DeferredObj = function() {
+export let Deferred = function() {
     const that = this;
     this._state = 'pending';
     this._promise = {};
@@ -52,7 +52,7 @@ let DeferredObj = function() {
     };
 
     this._promise.then = function(resolve, reject) {
-        const result = new DeferredObj();
+        const result = new Deferred();
 
         ['done', 'fail'].forEach(function(method) {
             const callback = method === 'done' ? resolve : reject;
@@ -92,7 +92,7 @@ deferredConfig.forEach(function(config) {
     const methodName = config.method;
     const state = config.state;
 
-    DeferredObj.prototype[methodName + 'With'] = function(context, args) {
+    Deferred.prototype[methodName + 'With'] = function(context, args) {
         const callbacks = this[methodName + 'Callbacks'];
 
         if(this.state() === 'pending') {
@@ -110,7 +110,7 @@ export function fromPromise(promise, context) {
     if(isDeferred(promise)) {
         return promise;
     } else if(isPromise(promise)) {
-        const d = new DeferredObj();
+        const d = new Deferred();
         promise.then(function() {
             d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
         }, function() {
@@ -119,18 +119,18 @@ export function fromPromise(promise, context) {
         return d;
     }
 
-    return new DeferredObj().resolveWith(context, [promise]);
+    return new Deferred().resolveWith(context, [promise]);
 }
 
 let whenFunc = function() {
     if(arguments.length === 1) {
-        return exports.fromPromise(arguments[0]);
+        return fromPromise(arguments[0]);
     }
 
     const values = [].slice.call(arguments);
     const contexts = [];
     let resolvedCount = 0;
-    const deferred = new DeferredObj();
+    const deferred = new Deferred();
 
     const updateState = function(i) {
         return function(value) {
@@ -161,12 +161,8 @@ let whenFunc = function() {
 };
 
 export function setStrategy(value) {
-    DeferredObj = value.Deferred;
+    Deferred = value.Deferred;
     whenFunc = value.when;
-}
-
-export function Deferred() {
-    return new DeferredObj();
 }
 
 export function when() {

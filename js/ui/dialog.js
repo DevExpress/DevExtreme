@@ -41,7 +41,7 @@ const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
-const FakeDialogComponent = Component.inherit({
+export const FakeDialogComponent = Component.inherit({
     ctor: function(element, options) {
         this.callBase(options);
     },
@@ -65,7 +65,7 @@ const FakeDialogComponent = Component.inherit({
         ]);
     }
 });
-export { FakeDialogComponent };
+
 export const title = '';
 
 export function custom(options) {
@@ -120,7 +120,7 @@ export function custom(options) {
     });
 
     const popupInstance = new Popup($element, extend({
-        title: options.title || exports.title,
+        title: options.title || title,
         showTitle: ensureDefined(options.showTitle, true),
         dragEnabled: ensureDefined(options.dragEnabled, true),
         height: 'auto',
@@ -211,7 +211,7 @@ export function custom(options) {
 export function alert(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
-    return exports.custom(options).show();
+    return custom(options).show();
 }
 
 export function confirm(messageHtml, title, showTitle) {
@@ -228,5 +228,5 @@ export function confirm(messageHtml, title, showTitle) {
             dragEnabled: showTitle
         };
 
-    return exports.custom(options).show();
+    return custom(options).show();
 }
