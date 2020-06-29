@@ -5,12 +5,11 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import InfoText from './info';
-import PageIndexSelector from './page-index-selector';
-import PageSizeSelector from './page-size-selector';
+import { InfoText } from './info';
+import { PageIndexSelector } from './page-index-selector';
+import { PageSizeSelector } from './page-size-selector';
 import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './consts';
 import PagerProps from './pager-props';
-
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -100,7 +99,7 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PagerContentComponent extends JSXComponent(PagerContentProps) {
+export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
     return showInfo && infoTextVisible;

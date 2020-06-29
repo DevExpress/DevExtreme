@@ -46,7 +46,7 @@ export class NumberBoxProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class NumberBox extends JSXComponent(NumberBoxProps) {
+export class NumberBox extends JSXComponent(NumberBoxProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 

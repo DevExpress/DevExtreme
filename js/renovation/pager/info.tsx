@@ -26,7 +26,7 @@ export class InfoTextProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class InfoText extends JSXComponent(InfoTextProps) implements GetHtmlElement {
+export class InfoText extends JSXComponent(InfoTextProps) implements GetHtmlElement {
   @Ref() htmlRef!: HTMLElement;
 
   @Method() getHtmlElement(): HTMLElement {

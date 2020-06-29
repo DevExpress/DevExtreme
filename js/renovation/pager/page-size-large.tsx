@@ -4,7 +4,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import LightButton from './light-button';
+import { LightButton } from './light-button';
 import { FullPageSize } from './pager.types.d';
 import { PAGER_SELECTION_CLASS } from './consts';
 
@@ -34,7 +34,7 @@ export class PageSizeLargeProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageSizeLarge extends JSXComponent(PageSizeLargeProps) {
+export class PageSizeLarge extends JSXComponent(PageSizeLargeProps) {
   get pageSizesText() {
     const { pageSize, pageSizes } = this.props;
     return pageSizes.map(({ value: processedPageSize, text }) => {

@@ -1,10 +1,11 @@
 import { setPublicElementWrapper } from '../../core/element';
-import useJQuery from './use_jquery';
+import useJQueryFn from './use_jquery';
+const useJQuery = useJQueryFn();
 
 const getPublicElement = function($element) {
     return $element;
 };
 
-if(useJQuery()) {
+if(useJQuery) {
     setPublicElementWrapper(getPublicElement);
 }

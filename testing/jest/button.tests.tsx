@@ -10,10 +10,12 @@ import {
   getEventHandlers,
   EVENT,
 } from './utils/events-mock';
-import Button, { ButtonProps, defaultOptionRules, viewFunction } from '../../js/renovation/button';
-import Widget from '../../js/renovation/widget';
-import Icon from '../../js/renovation/icon';
-import InkRipple from '../../js/renovation/ink-ripple';
+import {
+  Button, ButtonProps, defaultOptionRules, viewFunction,
+} from '../../js/renovation/button';
+import { Widget } from '../../js/renovation/widget';
+import { Icon } from '../../js/renovation/icon';
+import { InkRipple } from '../../js/renovation/ink-ripple';
 
 type Mock = jest.Mock;
 

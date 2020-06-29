@@ -3,9 +3,9 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import LightButton from './light-button';
-import PagesLarge from './pages-large';
-import PagesSmall from './pages-small';
+import { LightButton } from './light-button';
+import { PagesLarge } from './pages-large';
+import { PagesSmall } from './pages-small';
 import messageLocalization from '../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
@@ -97,7 +97,7 @@ function getIncrement(direction: Direction): number {
 type Direction = 'next' | 'prev';
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
+export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
   private getNextDirection(): Direction {
     return !this.props.rtlEnabled ? 'next' : 'prev';
   }

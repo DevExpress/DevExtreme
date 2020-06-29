@@ -126,7 +126,7 @@ export class ResizableContainerProps extends PagerProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class ResizableContainer extends JSXComponent(ResizableContainerProps) {
+export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
   @Ref() parentRef!: HTMLElement;
 
   @Ref() pageSizesRef!: GetHtmlElement;

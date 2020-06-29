@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import PageSizeSelector, { viewFunction as PageSizeSelectorComponent } from '../../../js/renovation/pager/page-size-selector';
+import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../../../js/renovation/pager/page-size-selector';
 
 jest.mock('../../../js/renovation/pager/page-size-small', jest.fn());
 jest.mock('../../../js/renovation/pager/page-size-large', jest.fn());

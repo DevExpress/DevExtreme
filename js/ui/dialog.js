@@ -66,9 +66,10 @@ export const FakeDialogComponent = Component.inherit({
     }
 });
 
-export const title = '';
+export let title = '';
 
-export function custom(options) {
+
+export const custom = function(options) {
     const deferred = new Deferred();
 
     const defaultOptions = new FakeDialogComponent().option();
@@ -206,15 +207,15 @@ export function custom(options) {
         show: show,
         hide: hide
     };
-}
+};
 
-export function alert(messageHtml, title, showTitle) {
+export const alert = function(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return custom(options).show();
-}
+};
 
-export function confirm(messageHtml, title, showTitle) {
+export const confirm = function(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml)
         ? messageHtml
         : {
@@ -229,4 +230,10 @@ export function confirm(messageHtml, title, showTitle) {
         };
 
     return custom(options).show();
-}
+};
+
+///#DEBUG
+export const DEBUG_set_title = function(value) {
+    title = value;
+};
+///#ENDDEBUG

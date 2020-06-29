@@ -10,9 +10,9 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import Page from './page';
+import { Page } from './page';
 import { PAGER_INFO_CLASS } from './info';
-import NumberBox from '../number-box';
+import { NumberBox } from '../number-box';
 import messageLocalization from '../../localization/message';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
 import { getElementMinWidth } from './utils/get-element-width';
@@ -68,7 +68,7 @@ export class PagesSmallProps {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PagesSmall extends JSXComponent(PagesSmallProps) {
+export class PagesSmall extends JSXComponent(PagesSmallProps) {
   @Ref() pageIndexRef!: NumberBox;
 
   get value(): number {

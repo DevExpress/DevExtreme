@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import PageSizeSmall, { viewFunction as PageSizeSmallComponent } from '../../../js/renovation/pager/page-size-small';
+import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../../../js/renovation/pager/page-size-small';
 import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
 
 jest.mock('../../../js/renovation/pager/utils/get-computed-style');

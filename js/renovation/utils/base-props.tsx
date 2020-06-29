@@ -4,7 +4,7 @@ import {
 import config from '../../core/config';
 
 @ComponentBindings()
-export default class BaseWidgetProps {
+export class BaseWidgetProps {
   @OneWay() accessKey?: string | null = null;
 
   @OneWay() activeStateEnabled?: boolean = false;

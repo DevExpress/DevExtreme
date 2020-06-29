@@ -8,9 +8,9 @@ import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import { AppointmentItem, FormattedContent } from './types';
-import Marker from './marker';
-import Button from '../../button';
-import TooltipItemContent from './item-content';
+import { Marker } from './marker';
+import { Button } from '../../button';
+import { TooltipItemContent } from './item-content';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
@@ -91,7 +91,7 @@ export class TooltipItemLayoutProps {
     component: BaseComponent,
   },
 })
-export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
+export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
   get currentAppointment(): dxSchedulerAppointment {
     const { item } = this.props;
 
