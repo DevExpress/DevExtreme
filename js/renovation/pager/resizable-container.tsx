@@ -6,7 +6,7 @@ import {
 import { h } from 'preact';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import PagerProps from './pager-props';
-import type { GetHtmlElement } from './pager.types.d';
+import { GetHtmlElement } from './pager.types.d';
 import { getElementWidth } from './utils/get-element-width';
 // bug in generator: Max call stack
 // import { TwoWayProps } from './pager-content';
