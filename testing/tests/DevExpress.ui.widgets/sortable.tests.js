@@ -480,6 +480,32 @@ QUnit.module('placeholder and source', moduleConfig, () => {
         assert.ok($source.hasClass('dx-sortable-source-hidden'), 'source item is hidden');
     });
 
+    ['push', 'indicate'].forEach(dropFeedBackMode => {
+        [[null, 1], [1, null], [1, 0], [null, -1]].forEach(fromIndexes => {
+            QUnit.test(`Source item if fromIndex is assigned from ${fromIndexes[0]} to ${fromIndexes[1]} and if dropFeedbackMode is ${dropFeedBackMode}`, function(assert) {
+                // arrange
+                const sortable = this.createSortable({
+                    dropFeedbackMode: dropFeedBackMode,
+                    filter: '.draggable'
+                });
+
+                // act
+                sortable.option('fromIndex', fromIndexes[0]);
+                sortable.option('fromIndex', fromIndexes[1]);
+
+                // assert
+                const $items = this.$element.children();
+                assert.strictEqual($items.length, 3, 'item count');
+                for(let i = 0; i < 3; i++) {
+                    const isSourceItem = (i === fromIndexes[1]);
+                    const isSourceHidden = isSourceItem && dropFeedBackMode === 'push';
+                    assert.strictEqual($items.eq(i).hasClass('dx-sortable-source-hidden'), isSourceHidden, `item ${i} hidden class`);
+                    assert.strictEqual($items.eq(i).hasClass('dx-sortable-source'), isSourceItem, `item ${i} source class`);
+                }
+            });
+        });
+    });
+
     QUnit.test('Initial placeholder if dropFeedbackMode is indicate', function(assert) {
         // arrange
 
