@@ -708,6 +708,7 @@ QUnit.module('Timeline Keyboard Navigation', {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             },
         }).dxSchedulerTimelineMonth('instance');
         stubInvokeMethod(this.instance);

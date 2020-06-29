@@ -211,6 +211,7 @@ QUnit.testStart(function() {
 
                 this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
                 this.instance.initDragBehavior();
+                this.instance.initTableEvents();
                 stubInvokeMethod(this.instance, options);
             };
 
@@ -2362,6 +2363,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             }
         });
 
@@ -2389,6 +2391,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
             currentDate: new Date(2015, 3, 1),
             onContentReady: function(e) {
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             }
         });
 
@@ -2418,6 +2421,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             }
         });
 
@@ -2464,6 +2468,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             }
         });
         const instance = $element.dxSchedulerWorkSpaceWeek('instance');
@@ -2513,6 +2518,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             }
         });
         const instance = $element.dxSchedulerWorkSpaceMonth('instance');
@@ -2680,6 +2686,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             },
             intervalCount: 3,
             groupOrientation: 'horizontal',
@@ -2723,6 +2730,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component.initTableEvents();
             },
             intervalCount: 3,
             groupOrientation: 'horizontal',
@@ -2793,6 +2801,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         const scrollable = e.component.getScrollable();
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
+                        e.component.initTableEvents();
                     },
                     intervalCount: 2,
                     groupOrientation: 'vertical',
@@ -2870,6 +2879,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         const scrollable = e.component.getScrollable();
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
+                        e.component.initTableEvents();
                     },
                     intervalCount: 2,
                     groupOrientation: 'horizontal',
