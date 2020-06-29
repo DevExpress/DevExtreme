@@ -106,7 +106,7 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get pagesContainerVisible(): boolean {
-    return !!this.props.pagesNavigatorVisible;
+    return !!this.props.pagesNavigatorVisible && (this.props.pageCount as number) > 0;
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {
@@ -121,7 +121,10 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get className(): string {
+    const customClasses = this.restAttributes.className;
     const classesMap = {
+      'dx-widget': true,
+      [customClasses]: true,
       [PAGER_CLASS_FULL]: true,
       [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,

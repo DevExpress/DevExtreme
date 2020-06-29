@@ -14,7 +14,7 @@ import { h } from 'preact';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
-import themes from '../ui/themes';
+import * as themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
 import { Icon } from './icon';

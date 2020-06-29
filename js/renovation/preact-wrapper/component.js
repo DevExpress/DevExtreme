@@ -187,7 +187,7 @@ export default class PreactWrapper extends DOMComponent {
                 Object.keys(props).map((key) => props[key]),
             );
 
-            return <Preact.Fragment />;
+            return Preact.h(Preact.Fragment);
         };
     }
 
