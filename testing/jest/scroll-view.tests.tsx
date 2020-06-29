@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import ScrollView, { ScrollViewProps, viewFunction } from '../../../js/renovation/scroll-view';
+import ScrollView, { ScrollViewProps, viewFunction } from '../../js/renovation/scroll-view';
 
 describe('ScrollView', () => {
   describe('Render', () => {
