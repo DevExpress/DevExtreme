@@ -1,4 +1,5 @@
 import { Export } from './export';
+import PivotGrid from '../../ui/pivot_grid';
 
 const privateOptions = {
     _getWorksheetFrozenState: function(dataProvider, cellRange) {
@@ -26,7 +27,7 @@ function exportPivotGrid(options) {
 }
 
 function _getFullOptions(options) {
-    return Export.getFullOptions(options);
+    return Export.getFullOptions(options, PivotGrid);
 }
 
 //#DEBUG

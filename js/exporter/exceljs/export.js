@@ -1,4 +1,4 @@
-import { isDefined, isString, isDate } from '../../core/utils/type';
+import { isDefined, isString, isDate, isObject } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
 import { extend } from '../../core/utils/extend';
@@ -12,8 +12,17 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
 const Export = {
-    getFullOptions: function(options) {
+    getFullOptions: function(options, instance) {
+        if(!(isDefined(options) && isObject(options))) {
+            throw Error('Export configuration object is not defined');
+        }
         const fullOptions = extend({}, options);
+        if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
+            throw Error('Export configuration object should have the \'worksheet\' field specified');
+        }
+        if(!(isDefined(fullOptions.component) && fullOptions.component instanceof instance)) {
+            throw Error('Export configuration object should have the \'component\' field with widget instance');
+        }
         if(!isDefined(fullOptions.topLeftCell)) {
             fullOptions.topLeftCell = { row: 1, column: 1 };
         } else if(isString(fullOptions.topLeftCell)) {
@@ -107,8 +116,6 @@ const Export = {
     },
 
     export: function(options, privateOptions) {
-        if(!isDefined(options)) return;
-
         const {
             customizeCell,
             component,
