@@ -6,7 +6,7 @@ import {
 import { h } from 'preact';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import PagerProps from './pager-props';
-import type { GetHtmlElement } from './pager.types.d';
+import { GetHtmlElement } from './pager.types.d';
 import { getElementWidth } from './utils/get-element-width';
 // bug in generator: Max call stack
 // import { TwoWayProps } from './pager-content';
@@ -79,10 +79,9 @@ function updateElementsWidthIfNeed(
   currentElementsWidth: ChildElementsWidth,
 ): ChildElementsWidth {
   const updated = {
-    pageSizes: Math.max(elementsWidth.pageSizes || 0,
-      currentElementsWidth.pageSizes || 0),
-    info: Math.max(elementsWidth.info || 0, currentElementsWidth.info || 0),
-    pages: Math.max(elementsWidth.pages || 0, currentElementsWidth.pages || 0),
+    pageSizes: Math.max(elementsWidth.pageSizes, currentElementsWidth.pageSizes),
+    info: Math.max(elementsWidth.info, currentElementsWidth.info),
+    pages: Math.max(elementsWidth.pages, currentElementsWidth.pages),
   };
   const isEqual = (elementsWidth.pageSizes === updated.pageSizes)
   && (elementsWidth.pages === updated.pages)
@@ -91,7 +90,7 @@ function updateElementsWidthIfNeed(
 }
 export function updateChildProps(
   parentRef: HTMLElement,
-  pageSizesHtmlRef: GetHtmlElement, infoTextRef: GetHtmlElement, pagesRef: HTMLElement,
+  pageSizesHtmlRef: GetHtmlElement, infoTextRef: GetHtmlElement, pagesRef: HTMLElement | undefined,
   elementsWidth: ChildElementsWidth,
 ):
   { elementsWidth: ChildElementsWidth } & ChildElementProps {
@@ -134,11 +133,13 @@ export default class ResizableContainer extends JSXComponent(ResizableContainerP
 
   @Ref() infoTextRef!: GetHtmlElement;
 
-  @Ref() pagesRef!: HTMLElement;
+  @Ref() pagesRef!: HTMLElement | undefined;
 
   @InternalState() infoTextVisible = true;
 
   @InternalState() isLargeDisplayMode = true;
+
+  @InternalState() parentWidth = -1;
 
   elementsWidth: ChildElementsWidth = {
     pageSizes: 0,
@@ -152,7 +153,10 @@ export default class ResizableContainer extends JSXComponent(ResizableContainerP
   }
 
   @Effect() effectUpdateChildProps(): void {
-    this.updateChildrenProps();
+    const parentWidth = getElementWidth(this.parentRef);
+    if ((this.parentWidth === -1 && parentWidth > 0) || this.parentWidth === parentWidth) {
+      this.updateChildrenProps();
+    }
   }
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps

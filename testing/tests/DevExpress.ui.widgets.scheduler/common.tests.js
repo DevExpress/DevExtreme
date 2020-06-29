@@ -25,6 +25,7 @@ import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { Deferred } from 'core/utils/deferred';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
@@ -635,6 +636,39 @@ QUnit.module('Initialization', {
         const appointment = this.instance.$element().find('.dx-scheduler-appointment-title');
         assert.equal(appointment.eq(0).text(), 'Update-1', 'Appointment is rerendered');
         assert.equal(appointment.eq(1).text(), 'Update-2', 'Appointment is rerendered');
+    });
+
+    QUnit.test('Push new item to the store (remoteFiltering: true) (T900529)', function(assert) {
+        const data = [{
+            id: 0,
+            text: 'Test Appointment',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }];
+
+        const pushItem = {
+            id: 1,
+            text: 'Pushed Appointment',
+            startDate: new Date(2017, 4, 23, 9, 30),
+            endDate: new Date(2017, 4, 23, 11, 30)
+        };
+
+        const scheduler = createWrapper({
+            dataSource: {
+                load: () => data,
+                key: 'id'
+            },
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25)
+        });
+
+        const dataSource = scheduler.instance.getDataSource();
+        dataSource.store().push([{ type: 'update', key: pushItem.id, data: pushItem }]);
+        dataSource.load();
+
+        assert.equal(scheduler.appointments.getTitleText(0), 'Test Appointment', 'Appointment is rerendered');
+        assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
     });
 
     QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
@@ -3583,6 +3617,30 @@ QUnit.module('Initialization', {
         resizeCallbacks.fire();
 
         assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
+    });
+
+    QUnit.test('ContentReady event should be fired after render completely ready (T902483)', function(assert) {
+        let contentReadyFiresCount = 0;
+
+        const scheduler = createWrapper({
+            onContentReady: () => ++contentReadyFiresCount
+        });
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation = new Deferred();
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation.resolve();
+
+        assert.equal(contentReadyFiresCount, 2, 'contentReadyFiresCount === 2');
+
+        scheduler.instance._workSpaceRecalculation = null;
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');
     });
 })('Events');
 
