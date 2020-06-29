@@ -9,6 +9,7 @@ import { exportPivotGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
+import { ExcelJSOptionTests } from './exceljs.option.tests.js';
 
 import typeUtils from 'core/utils/type';
 import 'ui/pivot_grid/ui.pivot_grid';
@@ -3721,4 +3722,4 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
-
+ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, function() { return $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'); });

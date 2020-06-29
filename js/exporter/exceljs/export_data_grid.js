@@ -1,6 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
+import DataGrid from '../../ui/data_grid';
 
 const privateOptions = {
     _setAutoFilter: function(dataProvider, worksheet, cellRange, autoFilterEnabled) {
@@ -51,7 +52,7 @@ function exportDataGrid(options) {
 }
 
 function _getFullOptions(options) {
-    const fullOptions = Export.getFullOptions(options);
+    const fullOptions = Export.getFullOptions(options, DataGrid);
 
     if(!isDefined(fullOptions.selectedRowsOnly)) {
         fullOptions.selectedRowsOnly = false;
