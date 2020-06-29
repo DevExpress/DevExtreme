@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import ScrollView, { ScrollViewProps, viewFunction } from '../../js/renovation/scroll-view';
+import ScrollView, { viewFunction } from '../../js/renovation/scroll-view';
 
 describe('ScrollView', () => {
   describe('Render', () => {
@@ -54,12 +54,6 @@ describe('ScrollView', () => {
           const { cssClasses } = new ScrollView({ direction: 'both' });
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
         });
-      });
-    });
-
-    describe('Default options', () => {
-      it('should be vertical direction by default', () => {
-        expect(new ScrollViewProps().direction).toEqual('vertical');
       });
     });
   });
