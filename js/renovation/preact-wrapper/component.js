@@ -93,7 +93,11 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     getAllProps() {
-        const options = { ...this.option(), ref: this._viewRef };
+        const options = {
+            ...this.option(),
+            ref: this._viewRef,
+            children: this._extractDefaultSlot(),
+        };
         return this.getProps({
             ...options,
             ...this.elementAttr,
@@ -141,14 +145,15 @@ export default class PreactWrapper extends DOMComponent {
         return (value) => this.option(name, value);
     }
 
-    _createTemplateComponent(props, templateOption, canBeAnonymous) {
-        if(
-            !templateOption
-            && this.option('_hasAnonymousTemplateContent')
-            && canBeAnonymous
-        ) {
-            templateOption = this._templateManager.anonymousTemplateName;
+    _extractDefaultSlot() {
+        if(this.option('_hasAnonymousTemplateContent')) {
+            const template = this._getTemplate(this._templateManager.anonymousTemplateName);
+            // return Preact.createElement('div', { style: { display: 'contents' }, ref: ref => ref.appendChild(template.source().get(0)) });
+            return Preact.createElement('div', { style: { display: 'contents' }, dangerouslySetInnerHTML: { __html: template.source().get(0).outerHTML } });
         }
+    }
+
+    _createTemplateComponent(props, templateOption) {
         if(!templateOption) {
             return;
         }
@@ -163,10 +168,6 @@ export default class PreactWrapper extends DOMComponent {
                     const payload = {
                         container: getPublicElement($parent),
                         model: data,
-                        transclude:
-                            canBeAnonymous
-                            && templateOption
-                            === this._templateManager.anonymousTemplateName,
                     };
                     if(isFinite(index)) {
                         payload.index = index;
