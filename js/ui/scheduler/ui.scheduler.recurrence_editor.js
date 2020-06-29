@@ -301,6 +301,7 @@ const RecurrenceEditor = Editor.inherit({
     _createRepeatOnLabel: function(freq) {
         return {
             itemType: 'group',
+            cssClass: `${REPEAT_ON_EDITOR}${LABEL_POSTFIX}`,
             items: [
                 {
                     name: 'repeatOnLabel',
