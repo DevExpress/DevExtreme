@@ -3453,53 +3453,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 });
 
-// TODO: Do I add the shared part for these tests?
-QUnit.module('_getFullOptions', moduleConfig, () => {
-    const _getFullOptions = exportPivotGrid.__internals._getFullOptions;
-
-    QUnit.test('topLeftCell', function(assert) {
-        assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
-        assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
-        assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'null');
-
-        assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, '{ row: 2, column: 3 }');
-        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'A1' }).topLeftCell, { row: 1, column: 1 }, 'A1');
-        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'D38' }).topLeftCell, { row: 38, column: 4 }, 'D38');
-        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AD8' }).topLeftCell, { row: 8, column: 30 }, 'AD8');
-
-        let errorMessage;
-        try {
-            _getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AA' });
-        } catch(e) {
-            errorMessage = e.message;
-        }
-        assert.strictEqual(errorMessage, 'Invalid Address: AA', 'Exception was thrown');
-    });
-
-    QUnit.test('keepColumnWidths', function(assert) {
-        assert.deepEqual(_getFullOptions({}).keepColumnWidths, true, 'no member');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: undefined }).keepColumnWidths, true, 'undefined');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: null }).keepColumnWidths, true, 'null');
-
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: false }).keepColumnWidths, false, 'false');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: true }).keepColumnWidths, true, 'true');
-    });
-
-    QUnit.test('loadPanel', function(assert) {
-        const defaultLoadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
-        assert.deepEqual(_getFullOptions({}).loadPanel, defaultLoadPanel, 'no member');
-        assert.deepEqual(_getFullOptions({ loadPanel: undefined }).loadPanel, defaultLoadPanel, 'undefined');
-        assert.deepEqual(_getFullOptions({ loadPanel: null }).loadPanel, defaultLoadPanel, 'null');
-
-        assert.deepEqual(_getFullOptions({ loadPanel: {} }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, 'loadPanel: {}');
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: true } }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, '{ enabled: true } }');
-        assert.deepEqual(_getFullOptions({ loadPanel: { text: 'my text' } }).loadPanel, { enabled: true, text: 'my text' }, '{ text: my text }');
-
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
-    });
-});
-
 QUnit.module('Text customization', moduleConfig, () => {
     QUnit.test('noData text', function(assert) {
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
