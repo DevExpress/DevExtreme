@@ -1959,12 +1959,10 @@ if(devices.real().deviceType === 'desktop') {
                     currentDate: new Date(2018, 3, 8),
                     height: 600,
                     editing: { allowDragging: false },
-                }).instance;
+                });
 
-                const $element = instance.$element();
-
-                const $cells = $element.find('.dx-scheduler-date-table-cell');
-                const $table = $element.find('.dx-scheduler-date-table');
+                const $cells = instance.workSpace.getCells();
+                const $table = instance.workSpace.getDateTable();
 
                 $($table).trigger(
                     $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
