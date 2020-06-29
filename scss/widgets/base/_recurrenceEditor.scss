@@ -19,6 +19,12 @@ $RECURRENCE_BUTTON_GROUP_ITEM_PADDING: 8px;
   }
 }
 
+.dx-recurrence-numberbox-interval-wrapper {
+  .dx-field-item-label {
+    white-space: nowrap;
+  }
+}
+
 .dx-layout-manager .dx-field-item.dx-recurrence-repeat-on {
   padding-top: 0;
 }
