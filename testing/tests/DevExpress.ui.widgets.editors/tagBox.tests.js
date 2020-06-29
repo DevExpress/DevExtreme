@@ -2790,9 +2790,11 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: false
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const input = $tagBox.find(`.${TEXTBOX_CLASS}`).get(0);
+        const { width: inputWidth } = input.getBoundingClientRect();
+
         // NOTE: width should be 0.1 because of T393423
-        assert.roughEqual($input.width(), 0.1, 0.101, 'input has correct width');
+        assert.roughEqual(inputWidth, 0.1, 0.101, 'input has correct width');
     });
 
     QUnit.test('no placeholder when textbox is not empty', function(assert) {

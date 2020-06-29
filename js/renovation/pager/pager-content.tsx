@@ -11,7 +11,6 @@ import PageSizeSelector from './page-size-selector';
 import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './consts';
 import PagerProps from './pager-props';
 
-
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -122,7 +121,10 @@ export default class PagerContentComponent extends JSXComponent(PagerContentProp
   }
 
   get className(): string {
+    const customClasses = this.restAttributes.className;
     const classesMap = {
+      'dx-widget': true,
+      [customClasses]: true,
       [PAGER_CLASS_FULL]: true,
       [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,

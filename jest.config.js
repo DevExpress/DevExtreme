@@ -11,17 +11,14 @@ module.exports = {
         }
     },
     collectCoverageFrom: [
-        './js/renovation/**/*.p.js',
-        './js/renovation/button.tsx',
-        '!./js/renovation/error-message.p.js',
-        '!./js/renovation/number-box.p.js',
-        '!./js/renovation/select-box.p.js',
-        '!./js/renovation/list.p.js',
-        '!./js/renovation/utils/render-template.p.js',
+        './js/renovation/**/*.tsx',
+        '!./js/renovation/number-box.tsx',
+        '!./js/renovation/list.tsx',
+        '!./js/renovation/utils/render-template.tsx',
     ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
-        './js/renovation/**/*.p.js': {
+        './js/renovation/**/*.tsx': {
             functions: 0, // Should set code coverage to 100%
             statements: 0, // (after start testing declarations)
             lines: 0,
