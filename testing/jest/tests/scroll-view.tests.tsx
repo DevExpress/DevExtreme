@@ -19,7 +19,7 @@ describe('ScrollView', () => {
       expect(scrollViewContent.exists()).toBe(true);
     });
 
-    it('should render template', () => {
+    it('should render slot', () => {
       const scrollView = shallow(viewFunction({
         props: { children: <div className="content" /> },
       } as any) as any);
@@ -41,15 +41,18 @@ describe('ScrollView', () => {
         });
 
         it('should add vertical direction class', () => {
-          expect(new ScrollView({ direction: 'vertical' }).cssClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
+          const { cssClasses } = new ScrollView({ direction: 'vertical' });
+          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
         });
 
         it('should add horizontal direction class', () => {
-          expect(new ScrollView({ direction: 'horizontal' }).cssClasses).toEqual(expect.stringMatching('dx-scrollable-horizontal'));
+          const { cssClasses } = new ScrollView({ direction: 'horizontal' });
+          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-horizontal'));
         });
 
         it('should add both direction class', () => {
-          expect(new ScrollView({ direction: 'both' }).cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
+          const { cssClasses } = new ScrollView({ direction: 'both' });
+          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
         });
       });
     });
