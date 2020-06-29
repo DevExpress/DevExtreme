@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import themes from '../themes';
-import commonUtils from '../../core/utils/common';
+import { noop } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import { inArray } from '../../core/utils/array';
@@ -418,7 +418,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         this._applyCompactMode();
     },
 
-    _renderEmptyMessage: commonUtils.noop,
+    _renderEmptyMessage: noop,
 
     _clean: function() {
         this._$toolbarItemsContainer.children().empty();

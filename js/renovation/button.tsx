@@ -14,7 +14,7 @@ import { h } from 'preact';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
-import themes from '../ui/themes';
+import * as themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
 import Icon from './icon';
@@ -132,7 +132,7 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  device: () => (themes as any).isMaterial(themes.current()),
+  device: () => (themes as any).isMaterial((themes as any).current()),
   options: { useInkRipple: true },
 }]);
 @Component({
