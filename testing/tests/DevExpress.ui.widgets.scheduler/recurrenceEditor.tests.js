@@ -499,7 +499,7 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
     test('Recurrence repeat-on lablle should have correct css class', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
-        const $repeatOnLabel = this.instance.$element().find('.' + REPEAT_ON_EDITOR + LABEL_POSTFIX);
+        const $repeatOnLabel = this.instance.$element().find(`.${REPEAT_ON_EDITOR}${LABEL_POSTFIX}`);
 
         assert.equal($repeatOnLabel.text(), 'Repeat On', 'label text is correct');
     });
