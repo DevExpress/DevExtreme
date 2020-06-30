@@ -68,7 +68,7 @@ export class TooltipItemLayoutProps {
 
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template({ canBeAnonymous: true }) itemContentTemplate?: any;
+  @Template() itemContentTemplate?: any;
 
   @Event() onDelete?: (
     data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
