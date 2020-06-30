@@ -1,6 +1,7 @@
 import { isString as _isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { patchFontOptions as _patchFontOptions, enumParser } from './utils';
+import { LayoutElement } from './layout_element';
 const _Number = Number;
 const parseHorizontalAlignment = enumParser(['left', 'center', 'right']);
 const parseVerticalAlignment = enumParser(['top', 'bottom']);
@@ -47,7 +48,7 @@ export let Title = function(params) {
 };
 
 // There is no normal inheritance from LayoutElement because it is actually a container of methods rather than a class.
-extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
+extend(Title.prototype, LayoutElement.prototype, {
     dispose: function() {
         const that = this;
         that._group.linkRemove();

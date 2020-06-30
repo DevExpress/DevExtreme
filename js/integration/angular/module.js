@@ -1,4 +1,4 @@
-const angular = require('angular');
+import angular from 'angular';
 let ngModule;
 if(angular) {
     ngModule = angular.module('dx', []);

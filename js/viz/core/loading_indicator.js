@@ -1,4 +1,4 @@
-const _patchFontOptions = require('./utils').patchFontOptions;
+import { patchFontOptions as _patchFontOptions } from './utils';
 
 const STATE_HIDDEN = 0;
 const STATE_SHOWN = 1;
