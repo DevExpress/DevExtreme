@@ -5157,12 +5157,12 @@ testModule('native picker', function() {
                 value: new Date(2020, 10, 11, 13, 0, 0)
             });
             const instance = $editor.dxDateBox('instance');
-            const $newEditor = $('<div>').appendTo('#qunit-fixture').dxDateBox({
+            const newEditorInstance = $('<div>').appendTo('#qunit-fixture').dxDateBox({
                 pickerType: 'native',
                 type: editorType,
                 value: new Date(2020, 10, 12, 13, 1, 0)
-            });
-            const newValue = $newEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`).val();
+            }).dxDateBox('instance');
+            const newValue = newEditorInstance.option('text');
 
             $editor
                 .find(`.${TEXTEDITOR_INPUT_CLASS}`)
