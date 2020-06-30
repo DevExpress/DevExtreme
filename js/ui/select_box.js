@@ -310,22 +310,22 @@ const SelectBox = DropDownList.inherit({
         this._scrollToSelectedItem();
     },
 
-    _renderValue: function() {
-        this._renderInputValue();
+    _renderValue: function(args) {
+        this._renderInputValue(args);
         this._setSubmitValue();
 
         return new Deferred().resolve();
     },
 
-    _renderInputValue: function() {
+    _renderInputValue: function(args) {
         return this.callBase().always(function() {
-            this._renderInputValueAsync();
+            this._renderInputValueAsync(args);
         }.bind(this));
     },
 
-    _renderInputValueAsync: function() {
+    _renderInputValueAsync: function(args) {
         this._renderTooltip();
-        this._renderInputValueImpl().always(function() {
+        this._renderInputValueImpl(args).always(function() {
             this._refreshSelected();
         }.bind(this));
     },

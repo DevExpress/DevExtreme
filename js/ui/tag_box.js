@@ -1,6 +1,7 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
 import dataUtils from '../core/element_data';
+const typeUtils = require('../core/utils/type');
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import browser from '../core/utils/browser';
@@ -549,8 +550,8 @@ const TagBox = SelectBox.inherit({
         this._renderPreventBlur(this._inputWrapper());
     },
 
-    _renderInputValueImpl: function() {
-        return this._renderMultiSelect();
+    _renderInputValueImpl: function(args) {
+        return this._renderMultiSelect(args);
     },
 
     _loadInputValue: function() {
@@ -624,7 +625,7 @@ const TagBox = SelectBox.inherit({
         });
     },
 
-    _renderMultiSelect: function() {
+    _renderMultiSelect: function(args) {
         const d = new Deferred();
 
         this._$tagsContainer = this._$textEditorInputContainer
@@ -634,7 +635,7 @@ const TagBox = SelectBox.inherit({
         this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._renderTags()
+        this._renderTags(args)
             .done(() => {
                 this._popup && this._popup.refreshPosition();
                 d.resolve();
@@ -862,26 +863,68 @@ const TagBox = SelectBox.inherit({
         return tagData.promise();
     },
 
-    _renderTags: function() {
+    _renderTags: function(args) {
         const d = new Deferred();
+        let plainDataUsed = false;
 
-        this._loadTagsData().always((items) => {
-            if(this._disposed) {
-                d.reject();
-                return;
+        if(this._shouldGetDataFromPlain(args)) {
+            this._selectedItems = this._getItemsFromPlain(args.value);
+
+            if(this._selectedItems.length === args.value.length) {
+                this._renderTagsImpl(this._selectedItems);
+                plainDataUsed = true;
+                d.resolve();
             }
+        }
 
-            this._renderTagsCore(items);
-            this._renderEmptyState();
+        if(!plainDataUsed) {
+            this._loadTagsData().always((items) => {
+                if(this._disposed) {
+                    d.reject();
+                    return;
+                }
 
-            if(!this._preserveFocusedTag) {
-                this._clearTagFocus();
-            }
-
-            d.resolve();
-        });
+                this._renderTagsImpl(items);
+                d.resolve();
+            });
+        }
 
         return d.promise();
+    },
+
+    _renderTagsImpl: function(items) {
+        this._renderTagsCore(items);
+        this._renderEmptyState();
+
+        if(!this._preserveFocusedTag) {
+            this._clearTagFocus();
+        }
+    },
+
+    _shouldGetDataFromPlain: function(args) {
+        return args?.value && this._dataSource.isLoaded() && !this._wasSearch() && args.value.length <= this._getPlainItems().length;
+    },
+
+    _getItemsFromPlain: function(values) {
+        const plainItems = this._getPlainItems();
+        const selectedItems = plainItems.filter((dataItem) => {
+
+            for(let i = 0; i < values.length; i++) {
+                if(typeUtils.isObject(values[i])) {
+                    if(this._isValueEquals(dataItem, values[i])) {
+                        return true;
+                    }
+                } else {
+                    if(this._isValueEquals(this._valueGetter(dataItem), values[i])) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }, this);
+
+        return selectedItems;
     },
 
     _renderTagsCore: function(items) {
@@ -1045,6 +1088,11 @@ const TagBox = SelectBox.inherit({
         const itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
         this._removeTagWithUpdate(itemValue);
         this._refreshTagElements();
+    },
+
+    _updateValue: function(args) {
+        this.option('text', undefined);
+        this._renderValue(args);
     },
 
     _updateField: noop,
@@ -1389,7 +1437,9 @@ const TagBox = SelectBox.inherit({
                 this._setListOption('selectAllText', this.option('selectAllText'));
                 break;
             case 'value':
+                this._useValuesToUpdate = args;
                 this.callBase(args);
+                this._useValuesToUpdate = undefined;
                 this._setListDataSourceFilter();
                 break;
             case 'maxDisplayedTags':

@@ -710,7 +710,7 @@ const TextEditorBase = Editor.inherit({
             case 'text':
                 break;
             case 'value':
-                this._updateValue();
+                this._updateValue(this._useValuesToUpdate);
                 this.callBase(args);
                 break;
             case 'inputAttr':
