@@ -234,13 +234,15 @@ const SchedulerAppointmentForm = {
 
     _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
         form.itemOption(recurrenceRuleExpr, 'visible', value);
-        value && form.updateData(recurrenceRuleExpr, '');
-        form.getEditor(recurrenceRuleExpr).changeValueByVisibility(value);
+
+        !value && form.updateData(recurrenceRuleExpr, '');
+        form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
     },
 
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
         const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
 
+        changeSize(recurrenceEditorVisibility);
         this._editors = [
             {
                 itemType: 'group',
@@ -253,10 +255,6 @@ const SchedulerAppointmentForm = {
             },
             {
                 itemType: 'group',
-                colCountByScreen: {
-                    lg: 2,
-                    xs: 1
-                },
                 items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
             }
         ];
