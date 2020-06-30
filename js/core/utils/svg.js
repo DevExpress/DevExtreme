@@ -1,8 +1,8 @@
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from './window';
+import windowUtils from './window';
 import $ from '../../core/renderer';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 function getMarkup(element, backgroundColor) {
     const temp = domAdapter.createElement('div');

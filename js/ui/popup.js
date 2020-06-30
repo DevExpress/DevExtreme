@@ -20,8 +20,7 @@ import messageLocalization from '../localization/message';
 import Button from './button';
 import Overlay from './overlay';
 import themes from './themes';
-import { getWindow } from '../core/utils/window';
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 import './toolbar/ui.toolbar.base';
 

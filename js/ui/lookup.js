@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-import { getWindow } from '../core/utils/window';
-const window = getWindow();
+import windowUtils from '../core/utils/window';
+const window = windowUtils.getWindow();
 import support from '../core/utils/support';
 import commonUtils from '../core/utils/common';
 import { getPublicElement } from '../core/element';

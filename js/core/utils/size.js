@@ -1,7 +1,7 @@
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import typeUtils from '../utils/type';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 

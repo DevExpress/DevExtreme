@@ -36,9 +36,9 @@ rendererModule.Renderer = function(parameters) {
 };
 
 const ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
-exportModule.ExportMenu = sinon.spy(function() {
+exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
     return new ExportMenu();
-});
+}));
 
 legendModule.Legend = sinon.spy(function(parameters) {
     const legend = new vizMocks.Legend(parameters);

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import dataUtils from '../../core/element_data';
 import pointerEvents from '../../events/pointer';
@@ -366,7 +366,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderDelayedTemplatesCoreAsync: function(templates) {
         const that = this;
         if(templates.length) {
-            getWindow().setTimeout(function() {
+            windowUtils.getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }

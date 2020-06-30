@@ -10,7 +10,7 @@ import { isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { isPlainObject } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
-import { getWindow } from '../core/utils/window';
+import windowUtils from '../core/utils/window';
 import { trigger } from '../events/core/events_engine';
 import { value as getViewport } from '../core/utils/view_port';
 
@@ -20,7 +20,7 @@ import Popup from './popup';
 
 import { ensureDefined } from '../core/utils/common';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 const DEFAULT_BUTTON = {
     text: 'OK',

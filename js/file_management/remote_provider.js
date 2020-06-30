@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import ajax from '../core/utils/ajax';
 import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
-import { getWindow } from '../core/utils/window';
+import windowUtils from '../core/utils/window';
 import { each } from '../core/utils/iterator';
 import { Deferred } from '../core/utils/deferred';
 import eventsEngine from '../events/core/events_engine';
@@ -10,7 +10,7 @@ import eventsEngine from '../events/core/events_engine';
 import FileSystemProviderBase from './provider_base';
 import { compileGetter } from '../core/utils/data';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
 
 class RemoteFileSystemProvider extends FileSystemProviderBase {

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
-const window = getWindow();
+import windowUtils from '../../core/utils/window';
+const window = windowUtils.getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import resizeCallbacks from '../../core/utils/resize_callbacks';

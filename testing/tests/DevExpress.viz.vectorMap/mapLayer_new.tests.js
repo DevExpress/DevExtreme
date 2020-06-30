@@ -17,7 +17,7 @@ $('#qunit-fixture').append('<div id="container" style="width: 1200px; height: 60
 
 titleModule.DEBUG_set_title(vizMocks.stubClass(titleModule.Title, { }));
 tooltipModule.DEBUG_set_tooltip(vizMocks.stubClass(tooltipModule.Tooltip));
-exportMenuModule.ExportMenu = vizMocks.stubClass(exportMenuModule.ExportMenu); // TODO maybe if you test layer - you should create exact layer?
+exportMenuModule.DEBUG_set_ExportMenu(vizMocks.stubClass(exportMenuModule.ExportMenu)); // TODO maybe if you test layer - you should create exact layer?
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.stubClass(loadingIndicatorModule.LoadingIndicator));
 controlBarModule.ControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
 legendModule.LegendsControl = vizMocks.stubClass(legendModule.LegendsControl);

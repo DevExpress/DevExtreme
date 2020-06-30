@@ -3,7 +3,7 @@ import { getDiagram } from './diagram.importer';
 import messageLocalization from '../../localization/message';
 
 import FileUploader from '../file_uploader';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 
 const DiagramDialogManager = {
     getConfigurations: function() {
@@ -29,7 +29,7 @@ const DiagramDialogManager = {
             accept: 'image/*',
             uploadMode: 'useForm',
             onValueChanged: function(e) {
-                const window = getWindow();
+                const window = windowUtils.getWindow();
                 const reader = new window.FileReader();
                 reader.onload = function(e) {
                     args.component._commandParameter = e.target.result;

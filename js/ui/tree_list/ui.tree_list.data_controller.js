@@ -204,7 +204,7 @@ treeListCore.registerModule('data', {
         });
     },
     controllers: {
-        data: exports.DataController
+        data: DataController
     }
 });
 /**

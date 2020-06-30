@@ -11,6 +11,7 @@ const labelEnvironment = require('./commonParts/label.js').labelEnvironment;
 const dxFunnel = require('viz/funnel/funnel');
 const Legend = legendModule.Legend;
 const TitleOrig = titleModule.Title;
+const ExportMenuOrig = exportModule.ExportMenu;
 
 dxFunnel.addPlugin(legendModule.plugin);
 dxFunnel.addPlugin(titleModule.plugin);
@@ -40,15 +41,15 @@ function stubExport() {
     const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([50, 50]);
-    sinon.stub(exportModule, 'ExportMenu', function() {
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
-    });
+    }));
 }
 
 function restore() {
     legendModule._setLegend(Legend);
     titleModule.DEBUG_set_title(TitleOrig);
-    exportModule.ExportMenu.restore();
+    exportModule.DEBUG_set_ExportMenu(ExportMenuOrig);
 }
 
 QUnit.module('Layout Funnel element', $.extend({}, labelEnvironment, {

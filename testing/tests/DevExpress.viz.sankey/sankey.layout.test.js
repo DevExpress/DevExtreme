@@ -7,6 +7,7 @@ const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const dxSankey = require('viz/sankey/sankey');
 const TitleOrig = titleModule.Title;
+const ExportMenuOrig = exportModule.ExportMenu;
 
 dxSankey.addPlugin(titleModule.plugin);
 dxSankey.addPlugin(exportModule.plugin);
@@ -24,14 +25,14 @@ function stubExport() {
     const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([50, 50]);
-    sinon.stub(exportModule, 'ExportMenu', function() {
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
-    });
+    }));
 }
 
 function restore() {
     titleModule.DEBUG_set_title(TitleOrig);
-    exportModule.ExportMenu.restore();
+    exportModule.DEBUG_set_ExportMenu(ExportMenuOrig);
 }
 
 QUnit.module('Layout Sankey element', $.extend({}, environment, {

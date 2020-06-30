@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import typeUtils from '../../core/utils/type';
@@ -251,7 +251,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
                         const isEditorPopup = checkEditorPopup($target) || checkEditorPopup(targetComponent?.$element());
-                        const isDomElement = !!$target.closest(getWindow().document).length;
+                        const isDomElement = !!$target.closest(windowUtils.getWindow().document).length;
                         const isAnotherComponent = targetComponent && !targetComponent._disposed && targetComponent !== that.component;
                         const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
                         const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
@@ -2026,7 +2026,7 @@ const EditingController = modules.ViewController.inherit((function() {
             cellOptions.value = column.calculateCellValue(rowData);
 
             const template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
-            that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
+            that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(windowUtils.getWindow().document).length).done(() => {
                 that._rowsView._updateCell($container, cellOptions);
             });
             return cellOptions;

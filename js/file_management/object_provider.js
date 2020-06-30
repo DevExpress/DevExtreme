@@ -5,7 +5,7 @@ import Guid from '../core/guid';
 import typeUtils from '../core/utils/type';
 import { errors } from '../data/errors';
 import { Deferred } from '../core/utils/deferred';
-import { getWindow } from '../core/utils/window';
+import windowUtils from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';
 import Errors from '../ui/widget/ui.errors';
 import JSZip from 'jszip';
@@ -14,7 +14,7 @@ import FileSystemProviderBase from './provider_base';
 import ErrorCode from './errors';
 import { pathCombine } from './utils';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 class ObjectFileSystemProvider extends FileSystemProviderBase {
 

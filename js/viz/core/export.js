@@ -1,5 +1,5 @@
 import { extend } from '../../core/utils/extend';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import { patchFontOptions } from './utils';
 import clientExporter from '../../exporter';
 import messageLocalization from '../../localization/message';
@@ -69,7 +69,7 @@ function getCreatorFunc(format) {
 }
 
 function print(imageSrc, options) {
-    const document = getWindow().document;
+    const document = windowUtils.getWindow().document;
     const iFrame = document.createElement('iframe');
     iFrame.onload = setPrint(imageSrc, options);
     iFrame.style.visibility = 'hidden';

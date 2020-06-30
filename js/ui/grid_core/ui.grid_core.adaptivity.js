@@ -9,7 +9,7 @@ import modules from './ui.grid_core.modules';
 import Form from '../form';
 import gridCoreUtils from './ui.grid_core.utils';
 import themes from '../themes';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import { equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -104,7 +104,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             const templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
-            const isDomElement = !!$container.closest(getWindow().document).length;
+            const isDomElement = !!$container.closest(windowUtils.getWindow().document).length;
             rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isDomElement).done(() => {
                 rowsView._cellPrepared($container, cellOptions);
             });

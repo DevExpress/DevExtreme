@@ -1,5 +1,5 @@
 import $ from '../../../core/renderer';
-import { getWindow } from '../../../core/utils/window';
+import windowUtils from '../../../core/utils/window';
 import Class from '../../../core/class';
 import { format as stringFormat } from '../../../core/utils/string';
 import { errors } from '../../../data/errors';
@@ -12,7 +12,7 @@ import { sendRequest, getExpandedLevel, storeDrillDownMixin, foreachTree } from 
 import { when, Deferred } from '../../../core/utils/deferred';
 import { getLanguageId } from '../../../localization/language_codes';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 export const XmlaStore = Class.inherit((function() {
 

@@ -1,7 +1,7 @@
 import { getDiagram } from './diagram.importer';
 import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
@@ -840,7 +840,7 @@ const DiagramCommandsManager = {
     },
 
     _exportTo(widget, dataURI, format, mimeString) {
-        const window = getWindow();
+        const window = windowUtils.getWindow();
         if(window && window.atob && isFunction(window.Blob)) {
             const blob = this._getBlobByDataURI(window, dataURI, mimeString);
             const options = widget.option('export');

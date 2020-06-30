@@ -1,5 +1,5 @@
-import { getWindow } from './utils/window';
-const window = getWindow();
+import windowUtils from './utils/window';
+const window = windowUtils.getWindow();
 import injector from './utils/dependency_injector';
 
 const nativeXMLHttpRequest = {

@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
+import windowUtils from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import browser from '../../core/utils/browser';
 import { isObject, isString } from '../../core/utils/type';
@@ -37,7 +37,7 @@ export function getContentHeightLimit(browser) {
         return 8000000;
     }
 
-    return 15000000 / getPixelRatio(getWindow());
+    return 15000000 / getPixelRatio(windowUtils.getWindow());
 }
 
 export function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement) {
@@ -82,7 +82,7 @@ export function subscribeToExternalScrollers($element, scrollChangedHandler, $ta
         let eventsStrategy = widgetScrollStrategy;
 
         if(!scrollable) {
-            scrollable = isDocument && $(getWindow()) || $scrollElement.css('overflowY') === 'auto' && $scrollElement;
+            scrollable = isDocument && $(windowUtils.getWindow()) || $scrollElement.css('overflowY') === 'auto' && $scrollElement;
             eventsStrategy = eventsEngine;
             if(!scrollable) return;
         }

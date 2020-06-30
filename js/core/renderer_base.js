@@ -1,7 +1,7 @@
 import dataUtils from './element_data';
 import domAdapter from './dom_adapter';
-import { getWindow } from './utils/window';
-const window = getWindow();
+import windowUtils from './utils/window';
+const window = windowUtils.getWindow();
 import typeUtils from './utils/type';
 import styleUtils from './utils/style';
 import sizeUtils from './utils/size';

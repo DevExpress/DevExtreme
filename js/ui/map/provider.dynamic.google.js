@@ -2,8 +2,8 @@
 
 import $ from '../../core/renderer';
 
-import { getWindow } from '../../core/utils/window';
-const window = getWindow();
+import windowUtils from '../../core/utils/window';
+const window = windowUtils.getWindow();
 import { noop } from '../../core/utils/common';
 import devices from '../../core/devices';
 import Promise from '../../core/polyfills/promise';

@@ -50,7 +50,7 @@ function stubComponentConstructors(test) {
     // });
     titleModule.DEBUG_set_title(returnValue(test.title));
     tooltipModule.DEBUG_set_tooltip(returnValue(test.tooltip));
-    exportModule.ExportMenu = returnValue(test.exportMenu);
+    exportModule.DEBUG_set_ExportMenu(returnValue(test.exportMenu));
 
     projectionModule.Projection = returnValue(test.projection);
     controlBarModule.ControlBar = returnValue(test.controlBar);

@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
-import { getWindow } from '../../../core/utils/window';
+import windowUtils from '../../../core/utils/window';
 
 import Popup from '../../popup';
 import List from '../../list';
@@ -85,7 +85,7 @@ if(Quill) {
         }
 
         get maxHeight() {
-            const window = getWindow();
+            const window = windowUtils.getWindow();
             const windowHeight = window && $(window).height() || 0;
             return Math.max(MIN_HEIGHT, windowHeight * 0.5);
         }
