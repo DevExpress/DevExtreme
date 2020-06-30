@@ -7,6 +7,7 @@ import {
   TwoWay,
   Ref,
   Event,
+  Effect,
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
@@ -24,7 +25,7 @@ const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 const CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate';
 
-const getCssClasses = (model: CheckBoxProps, value: boolean) => {
+const getCssClasses = (model: CheckBoxProps, value: boolean): string => {
   const { text } = model;
   const classNames = [CHECKBOX_CLASS];
 
@@ -44,9 +45,9 @@ const inkRippleConfig = (): object => ({
   wavesNumber: 2,
   isCentered: true,
 });
-
-export const viewFunction = (viewModel: CheckBox) => {
-  const { text } = viewModel.props;
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
+export const viewFunction = (viewModel: CheckBox): any => {
+  const { text, name } = viewModel.props;
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -70,10 +71,11 @@ export const viewFunction = (viewModel: CheckBox) => {
       tabIndex={viewModel.props.tabIndex}
       visible={viewModel.props.visible}
       width={viewModel.props.width}
-      readOnly={viewModel.props.readOnly}
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} />
+      {name
+        ? <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} name={name} />
+        : <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} />}
       <div className={CHECKBOX_CONTAINER_CLASS} ref={viewModel.contentRef}>
         <span className={CHECKBOX_ICON_CLASS} />
         {text && (<span className={CHECKBOX_TEXT_CLASS}>{text}</span>)}
@@ -94,12 +96,19 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
+  @OneWay() name?: string = '';
+
   @TwoWay() value?: boolean | null = false;
 
   @OneWay() useInkRipple?: boolean = false;
+
+  @Event({
+    actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
+  }) onValueChanged?: (e: object) => void = (() => {});
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   device: (): boolean => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
 }]);
@@ -124,8 +133,9 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   @Effect()
-  contentReadyEffect() {
+  contentReadyEffect(): void {
     const { onContentReady } = this.props;
+    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
     onContentReady!({ element: this.submitInputRef.parentNode });
   }
 
@@ -144,14 +154,15 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   onWidgetClick(event: Event): void {
     const { value, onValueChanged } = this.props;
 
+    this.props.value = !value;
+
+    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
     onValueChanged!({
       event,
       element: this.submitInputRef.parentNode,
       previousValue: value,
-      value: !value,
+      value: this.props.value,
     });
-
-    this.props.value = !value;
   }
 
   onWidgetKeyDown(options): undefined {

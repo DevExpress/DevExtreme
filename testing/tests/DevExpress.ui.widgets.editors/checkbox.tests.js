@@ -64,6 +64,8 @@ QUnit.module('render', function() {
     });
 
     QUnit.test('click triggers user handler and changes state', function(assert) {
+        assert.expect(5);
+
         let checked = false;
 
         const element = $('#checkbox').dxCheckBox({
