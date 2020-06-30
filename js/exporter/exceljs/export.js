@@ -20,7 +20,7 @@ const Export = {
         if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
             throw Error('The "worksheet" field must contain an object.');
         }
-        if(!(isDefined(fullOptions.component) && fullOptions.component instanceof instance)) {
+        if(!(isDefined(fullOptions.component) && isObject(fullOptions.component) && fullOptions.component instanceof instance)) {
             throw Error(`The "component" field must contain a ${componentName} instance.`);
         }
         if(!isDefined(fullOptions.topLeftCell)) {
