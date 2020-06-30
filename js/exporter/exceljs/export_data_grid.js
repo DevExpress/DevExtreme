@@ -1,4 +1,4 @@
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
 import DataGrid from '../../ui/data_grid';
@@ -52,16 +52,19 @@ function exportDataGrid(options) {
 }
 
 function _getFullOptions(options) {
-    const fullOptions = Export.getFullOptions(options, DataGrid, 'DataGrid');
-
-    if(!isDefined(fullOptions.selectedRowsOnly)) {
-        fullOptions.selectedRowsOnly = false;
+    if(!(isDefined(options) && isObject(options))) {
+        throw Error('The "exportDataGrid" method requires a configuration object.');
     }
-    if(!isDefined(fullOptions.autoFilterEnabled)) {
-        fullOptions.autoFilterEnabled = false;
+    if(!(isDefined(options.component) && isObject(options.component) && options.component instanceof DataGrid)) {
+        throw Error('The "component" field must contain a DataGrid instance.');
     }
-
-    return fullOptions;
+    if(!isDefined(options.selectedRowsOnly)) {
+        options.selectedRowsOnly = false;
+    }
+    if(!isDefined(options.autoFilterEnabled)) {
+        options.autoFilterEnabled = false;
+    }
+    return Export.getFullOptions(options);
 }
 
 //#DEBUG

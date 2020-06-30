@@ -12,16 +12,10 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
 const Export = {
-    getFullOptions: function(options, instance, componentName) {
-        if(!(isDefined(options) && isObject(options))) {
-            throw Error(`The "export${componentName}" method requires a configuration object.`);
-        }
+    getFullOptions: function(options) {
         const fullOptions = extend({}, options);
         if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
             throw Error('The "worksheet" field must contain an object.');
-        }
-        if(!(isDefined(fullOptions.component) && isObject(fullOptions.component) && fullOptions.component instanceof instance)) {
-            throw Error(`The "component" field must contain a ${componentName} instance.`);
         }
         if(!isDefined(fullOptions.topLeftCell)) {
             fullOptions.topLeftCell = { row: 1, column: 1 };
