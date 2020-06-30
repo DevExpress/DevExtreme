@@ -1,3 +1,4 @@
+import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import PivotGrid from '../../ui/pivot_grid';
 
@@ -27,7 +28,13 @@ function exportPivotGrid(options) {
 }
 
 function _getFullOptions(options) {
-    return Export.getFullOptions(options, PivotGrid, 'PivotGrid');
+    if(!(isDefined(options) && isObject(options))) {
+        throw Error('The "exportPivotGrid" method requires a configuration object.');
+    }
+    if(!(isDefined(options.component) && isObject(options.component) && options.component instanceof PivotGrid)) {
+        throw Error('The "component" field must contain a PivotGrid instance.');
+    }
+    return Export.getFullOptions(options);
 }
 
 //#DEBUG
