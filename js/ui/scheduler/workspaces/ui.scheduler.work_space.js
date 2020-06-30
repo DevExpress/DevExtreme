@@ -2036,16 +2036,19 @@ const SchedulerWorkSpace = Widget.inherit({
         return this.getCoordinatesByDate(currentDate);
     },
 
-    _isOutsideScrollable: function(target, event) {
-        const $scrollableElement = this._dateTableScrollable.$element();
+    _isOutsideScrollable(target, event) {
+        const $dateTableScrollableElement = this._dateTableScrollable.$element();
+        const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
+        const window = windowUtils.getWindow();
+        const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
+        const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
+        const isOutsideVerticalScrollable = event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
 
-        if(!$(target).closest($scrollableElement).length) {
+        if(isTargetInAllDayPanel && !isOutsideHorizontalScrollable) {
             return false;
         }
 
-        const scrollableSize = getBoundingRect($scrollableElement.get(0));
-
-        return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
+        return isOutsideVerticalScrollable || isOutsideHorizontalScrollable;
     },
 
     setCellDataCache: function(cellCoordinates, groupIndex, $cell) {
