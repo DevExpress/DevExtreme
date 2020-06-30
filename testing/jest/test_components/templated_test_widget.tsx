@@ -2,7 +2,6 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  Ref,
   Slot,
   Template,
   OneWay,
@@ -16,7 +15,6 @@ export const view = ({
     text,
   },
   restAttributes,
-  templatesRootRef,
 }: TemplatedTestWidget): any => {
   const hasTemplate = TemplateComp || IndexedTemplateComp;
   return (
@@ -24,18 +22,16 @@ export const view = ({
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {hasTemplate && (
-      <div className="templates-root" ref={templatesRootRef}>
+      <div className="templates-root">
         {TemplateComp && (
         <TemplateComp
           data={{ simpleTemplate: text }}
-          parentRef={templatesRootRef}
         />
         )}
         {IndexedTemplateComp && (
         <IndexedTemplateComp
           data={{ indexedTemplate: text }}
           index={2}
-          parentRef={templatesRootRef}
         />
         )}
       </div>
@@ -63,5 +59,4 @@ export class TemplatedTestWidgetProps {
   view,
 })
 export default class TemplatedTestWidget extends JSXComponent(TemplatedTestWidgetProps) {
-  @Ref() templatesRootRef!: HTMLDivElement;
 }
