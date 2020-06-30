@@ -91,6 +91,10 @@ export class WidgetProps extends BaseWidgetProps {
   @Event() onKeyboardHandled?: (args: any) => any | undefined;
 
   @Event() onVisibilityChange?: (args: boolean) => undefined;
+
+  @Event({
+    actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
+  }) onValueChanged?: (e: any) => any = (() => {});
 }
 
 @Component({
