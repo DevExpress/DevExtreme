@@ -152,9 +152,7 @@ export default class PreactWrapper extends DOMComponent {
                 style: {
                     display: 'contents'
                 },
-                dangerouslySetInnerHTML: {
-                    __html: template.source().get(0).outerHTML
-                }
+                ref: ref => $(ref).append(template._element)
             });
         }
     }
