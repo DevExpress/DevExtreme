@@ -563,4 +563,61 @@ QUnit.module('Options (initially set)', {}, () => {
         assert.equal(instance._nodesOption._getIndexByKey('3'), 2);
     });
 
+    test('items_option keys cache must be updated on data source changes (hierarchical data)', function(assert) {
+        const store = new ArrayStore({
+            key: 'id',
+            data: [
+                {
+                    id: '1',
+                    text: 'text1',
+                    items: [
+                        {
+                            id: '3',
+                            text: 'text3'
+                        }
+                    ],
+                    children: [
+                        {
+                            id: '4',
+                            text: 'text4'
+                        }
+                    ]
+                },
+                {
+                    id: '2',
+                    text: 'text2'
+                }
+            ],
+        });
+        const dataSource = new DataSource({
+            store
+        });
+        const $element = $('#diagram').dxDiagram({
+            nodes: {
+                dataSource,
+                itemsExpr: 'items'
+            }
+        });
+        const instance = $element.dxDiagram('instance');
+
+        assert.equal(instance._nodesOption._items.length, 2);
+        assert.equal(instance._nodesOption._items[0].items.length, 1);
+        assert.equal(instance._nodesOption._getIndexByKey('1'), 0);
+        assert.equal(instance._nodesOption._getIndexByKey('2'), 1);
+        assert.equal(instance._nodesOption._getIndexByKey('3'), 2);
+        assert.equal(instance._nodesOption._getIndexByKey('4'), 3);
+
+        store.insert({
+            id: '5',
+            text: 'text5'
+        });
+        dataSource.reload();
+        assert.equal(instance._nodesOption._items.length, 3);
+        assert.equal(instance._nodesOption._getIndexByKey('1'), 0);
+        assert.equal(instance._nodesOption._getIndexByKey('2'), 1);
+        assert.equal(instance._nodesOption._getIndexByKey('3'), 3);
+        assert.equal(instance._nodesOption._getIndexByKey('4'), 4);
+        assert.equal(instance._nodesOption._getIndexByKey('5'), 2);
+    });
+
 });
