@@ -148,8 +148,14 @@ export default class PreactWrapper extends DOMComponent {
     _extractDefaultSlot() {
         if(this.option('_hasAnonymousTemplateContent')) {
             const template = this._getTemplate(this._templateManager.anonymousTemplateName);
-            // return Preact.createElement('div', { style: { display: 'contents' }, ref: ref => ref.appendChild(template.source().get(0)) });
-            return Preact.createElement('div', { style: { display: 'contents' }, dangerouslySetInnerHTML: { __html: template.source().get(0).outerHTML } });
+            return Preact.createElement('div', {
+                style: {
+                    display: 'contents'
+                },
+                dangerouslySetInnerHTML: {
+                    __html: template.source().get(0).outerHTML
+                }
+            });
         }
     }
 
