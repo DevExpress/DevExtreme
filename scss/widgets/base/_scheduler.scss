@@ -254,7 +254,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
 @mixin set-size-timeline-horizontal-grouping-mixin($size) {
   &.dx-scheduler-work-space .dx-scheduler-date-table-scrollable {
     padding-bottom: $size;
-    margin-bottom: $size;
+    margin-bottom: -$size;
   }
 }
 
