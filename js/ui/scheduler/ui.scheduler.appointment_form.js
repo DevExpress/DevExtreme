@@ -204,7 +204,9 @@ const SchedulerAppointmentForm = {
                         onValueChanged: (args) => {
                             const form = this._appointmentForm;
                             form.option('items[0].colSpan', args.value ? 1 : 2);
-                            form.getEditor(dataExprs.recurrenceRuleExpr).option('visible', args.value);
+
+                            this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
+
                             changeSize(args.value);
                             triggerResize();
                         }
@@ -230,6 +232,12 @@ const SchedulerAppointmentForm = {
         ];
     },
 
+    _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
+        form.itemOption(recurrenceRuleExpr, 'visible', value);
+        value && form.updateData(recurrenceRuleExpr, '');
+        form.getEditor(recurrenceRuleExpr).changeValueByVisibility(value);
+    },
+
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
         const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
 
@@ -244,26 +252,33 @@ const SchedulerAppointmentForm = {
                 items: this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
             },
             {
-                dataField: dataExprs.recurrenceRuleExpr,
-                editorType: 'dxRecurrenceEditor',
-                editorOptions: {
-                    readOnly: readOnly,
-                    firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
-                    onInitialized: (e) => {
-                        const form = this._appointmentForm;
-                        if(form.option) {
-                            e.component.option('visible', !!this.getRecurrenceRule(form.option('formData'), dataExprs));
-                        }
-                    }
+                itemType: 'group',
+                colCountByScreen: {
+                    lg: 2,
+                    xs: 1
                 },
-                label: {
-                    text: ' ',
-                    visible: false
-                }
+                items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
             }
         ];
 
         return this._editors;
+    },
+
+    _createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly) {
+        return [{
+            dataField: dataExprs.recurrenceRuleExpr,
+            editorType: 'dxRecurrenceEditor',
+            colSpan: recurrenceEditorVisibility ? 1 : 2,
+            visible: recurrenceEditorVisibility,
+            editorOptions: {
+                readOnly: readOnly,
+                firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
+            },
+            label: {
+                text: ' ',
+                visible: false
+            }
+        }];
     },
 
     getRecurrenceRule(data, dataExprs) {
