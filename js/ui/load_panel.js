@@ -8,6 +8,8 @@ const Overlay = require('./overlay');
 const Deferred = require('../core/utils/deferred').Deferred;
 const themes = require('./themes');
 
+// STYLE loadPanel
+
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
 const LOADPANEL_INDICATOR_CLASS = 'dx-loadpanel-indicator';
@@ -244,7 +246,5 @@ const LoadPanel = Overlay.inherit({
 });
 
 registerComponent('dxLoadPanel', LoadPanel);
-
-// #STYLE loadPanel
 
 module.exports = LoadPanel;

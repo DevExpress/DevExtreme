@@ -11,6 +11,8 @@ const registerComponent = require('../core/component_registrator');
 const Box = require('./box');
 const CollectionWidget = require('./collection/ui.collection_widget.edit');
 
+// STYLE responsiveBox
+
 const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
 const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
 const BOX_ITEM_CLASS = 'dx-box-item';
@@ -720,5 +722,5 @@ const ResponsiveBox = CollectionWidget.inherit({
 */
 
 registerComponent('dxResponsiveBox', ResponsiveBox);
-// #STYLE responsiveBox
+
 module.exports = ResponsiveBox;

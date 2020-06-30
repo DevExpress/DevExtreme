@@ -31,8 +31,9 @@
 @use "../button/colors" as *;
 @use "../button" as *;
 @use "../tooltip/colors" as *;
-@use "../recurrenceEditor" as *;
 // adduse
+@use "../recurrenceEditor" as *;
+@use "../scrollable";
 
 
 $MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT: $MATERIAL_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;

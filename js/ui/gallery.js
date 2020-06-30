@@ -17,6 +17,8 @@ const Swipeable = require('../events/gesture/swipeable');
 const BindableTemplate = require('../core/templates/bindable_template').BindableTemplate;
 const Deferred = require('../core/utils/deferred').Deferred;
 
+// STYLE gallery
+
 const GALLERY_CLASS = 'dx-gallery';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
 const GALLERY_LOOP_CLASS = 'dx-gallery-loop';
@@ -1144,6 +1146,5 @@ const Gallery = CollectionWidget.inherit({
 });
 
 registerComponent('dxGallery', Gallery);
-// #STYLE gallery
 
 module.exports = Gallery;

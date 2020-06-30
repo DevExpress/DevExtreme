@@ -21,6 +21,8 @@ import './ui.tree_list.error_handling';
 import './ui.tree_list.grid_view';
 import './ui.tree_list.header_panel';
 
+// STYLE treeList
+
 treeListCore.registerModulesOrder([
     'stateStoring',
     'columns',
@@ -180,5 +182,5 @@ const TreeList = Widget.inherit({
 TreeList.registerModule = treeListCore.registerModule.bind(treeListCore);
 
 registerComponent('dxTreeList', TreeList);
-// #STYLE treelist
+
 module.exports = TreeList;

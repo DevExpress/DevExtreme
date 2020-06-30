@@ -1489,5 +1489,5 @@ Overlay.baseZIndex = zIndex => {
 };
 
 registerComponent('dxOverlay', Overlay);
-// #STYLE overlay
+
 module.exports = Overlay;

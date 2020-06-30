@@ -8,6 +8,8 @@ const registerComponent = require('../core/component_registrator');
 const eventUtils = require('../events/utils');
 const clickEvent = require('../events/click');
 
+// STYLE checkbox
+
 const CHECKBOX_CLASS = 'dx-checkbox';
 const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
 const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';
@@ -219,6 +221,5 @@ const CheckBox = Editor.inherit({
 });
 
 registerComponent('dxCheckBox', CheckBox);
-// #STYLE checkbox
 
 module.exports = CheckBox;

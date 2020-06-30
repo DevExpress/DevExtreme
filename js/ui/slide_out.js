@@ -12,6 +12,8 @@ const ChildDefaultTemplate = require('../core/templates/child_default_template')
 const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
 const DataConverterMixin = require('./shared/grouped_data_converter_mixin').default;
 
+// STYLE slideOut
+
 const SLIDEOUT_CLASS = 'dx-slideout';
 const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
 const SLIDEOUT_MENU = 'dx-slideout-menu';
@@ -367,6 +369,5 @@ const SlideOut = CollectionWidget.inherit({
 }).include(DataConverterMixin);
 
 registerComponent('dxSlideOut', SlideOut);
-// #STYLE slideOut
 
 module.exports = SlideOut;

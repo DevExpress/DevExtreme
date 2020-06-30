@@ -135,6 +135,5 @@ const TrackBar = Editor.inherit({
 });
 
 registerComponent('dxTrackBar', TrackBar);
-// #STYLE trackBar
 
 module.exports = TrackBar;

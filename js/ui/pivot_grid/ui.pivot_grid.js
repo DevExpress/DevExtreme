@@ -31,6 +31,8 @@ import Popup from '../popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
+// STYLE pivotGrid
+
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 const ROW_AREA_CELL_CLASS = 'dx-area-row-cell';
 const COLUMN_AREA_CELL_CLASS = 'dx-area-column-cell';
@@ -1742,5 +1744,5 @@ const PivotGrid = Widget.inherit({
     .include(chartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);
-// #STYLE pivotGrid
+
 module.exports = PivotGrid;

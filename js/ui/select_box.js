@@ -16,6 +16,8 @@ const messageLocalization = require('../localization/message');
 const registerComponent = require('../core/component_registrator');
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 
+// STYLE selectBox
+
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
@@ -858,7 +860,5 @@ const SelectBox = DropDownList.inherit({
 });
 
 registerComponent('dxSelectBox', SelectBox);
-
-// #STYLE selectBox
 
 module.exports = SelectBox;

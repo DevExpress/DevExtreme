@@ -11,6 +11,8 @@ const registerComponent = require('../../core/component_registrator');
 const TextEditor = require('./ui.text_editor');
 const eventUtils = require('../../events/utils');
 
+// STYLE textBox
+
 let ua = navigator.userAgent;
 const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];
 
@@ -178,5 +180,5 @@ TextBox.__internals = {
 
 ///#ENDDEBUG
 registerComponent('dxTextBox', TextBox);
-// #STYLE textbox
+
 module.exports = TextBox;

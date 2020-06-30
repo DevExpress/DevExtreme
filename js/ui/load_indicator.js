@@ -8,6 +8,8 @@ const devices = require('../core/devices');
 const registerComponent = require('../core/component_registrator');
 const Widget = require('./widget/ui.widget');
 
+// STYLE loadIndicator
+
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
 const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
@@ -228,7 +230,5 @@ const LoadIndicator = Widget.inherit({
 });
 
 registerComponent('dxLoadIndicator', LoadIndicator);
-
-// #STYLE loadIndicator
 
 module.exports = LoadIndicator;

@@ -47,13 +47,17 @@ jest.mock('fs', () => ({
     let content = '';
     switch (path) {
       case 'toolbar.js':
-        content = '// #STYLE toolbar';
+        content = '// STYLE toolbar';
         break;
       case 'menu.js':
-        content = '// #STYLE menu';
+        content = '// STYLE menu';
         break;
       case 'icon.js':
-        content = '// #STYLE icon';
+        content = '// STYLE icon';
+        break;
+      case '../scss/widgets/generic/_index.scss':
+      case '../scss/widgets/material/_index.scss':
+        content = '// public widgets\n@use "./toolbar";@use "./menu";';
         break;
       default:
         content = '';
@@ -187,10 +191,49 @@ describe('DependencyCollector', () => {
     const dependencyCollector = new DependencyCollector();
     dependencyCollector.collect();
 
-    expect(fs.readFileSync).toBeCalledTimes(7);
+    expect(fs.readFileSync).toBeCalledTimes(9);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
       toolbar: ['menu', 'icon'],
       menu: ['icon'],
     });
+  });
+});
+
+describe('validation', () => {
+  const dependencyCollector = new DependencyCollector();
+
+  dependencyCollector.flatStylesDependencyTree = {
+    button: [],
+    toolbar: [],
+  };
+
+  test('validate - all widgets present in index file', () => {
+    dependencyCollector.readFile = (): string => `
+    // public widgets
+    @use "./button";
+    @use "./toolbar";
+    `;
+
+    expect(() => dependencyCollector.validate()).not.toThrow();
+  });
+
+  test('validate - index file has more widgets than in dependencies', () => {
+    dependencyCollector.readFile = (): string => `
+    // public widgets
+    @use "./button";
+    @use "./toolbar";
+    @use "./dataGrid";
+    `;
+
+    expect(() => dependencyCollector.validate()).toThrow('Some public widgets (generic) has no // STYLE comment in source code or private widget has one');
+  });
+
+  test('validate - index file has less widgets than in dependencies', () => {
+    dependencyCollector.readFile = (): string => `
+    // public widgets
+    @use "./button";
+    `;
+
+    expect(() => dependencyCollector.validate()).toThrow('Some public widgets (generic) has no // STYLE comment in source code or private widget has one');
   });
 });

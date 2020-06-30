@@ -20,6 +20,8 @@ import clickEvent from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
 
+// STYLE fileUploader
+
 const window = getWindow();
 
 const FILEUPLOADER_CLASS = 'dx-fileuploader';
@@ -1607,6 +1609,5 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 }
 
 registerComponent('dxFileUploader', FileUploader);
-// #STYLE fileUploader
 
 module.exports = FileUploader;

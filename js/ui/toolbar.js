@@ -9,6 +9,8 @@ const DropDownMenuStrategy = require('./toolbar/ui.toolbar.strategy.drop_down_me
 const ToolbarBase = require('./toolbar/ui.toolbar.base');
 const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 
+// STYLE toolbar
+
 const STRATEGIES = {
     actionSheet: ActionSheetStrategy,
     dropDownMenu: DropDownMenuStrategy
@@ -323,6 +325,5 @@ const Toolbar = ToolbarBase.inherit({
 });
 
 registerComponent('dxToolbar', Toolbar);
-// #STYLE toolbar
 
 module.exports = Toolbar;

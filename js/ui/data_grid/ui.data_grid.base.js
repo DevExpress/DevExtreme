@@ -10,8 +10,6 @@ import Widget from '../widget/ui.widget';
 import gridCore, { callModuleItemsMethod } from './ui.data_grid.core';
 import themes from '../themes';
 
-// #STYLE dataGrid
-
 const DATAGRID_ROW_SELECTOR = '.dx-row';
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
 

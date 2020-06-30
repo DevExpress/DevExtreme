@@ -6,6 +6,8 @@ const extend = require('../../core/utils/extend').extend;
 const registerComponent = require('../../core/component_registrator');
 const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
 
+// STYLE colorBox
+
 const COLOR_BOX_CLASS = 'dx-colorbox';
 const COLOR_BOX_INPUT_CLASS = COLOR_BOX_CLASS + '-input';
 const COLOR_BOX_INPUT_CONTAINER_CLASS = COLOR_BOX_INPUT_CLASS + '-container';
@@ -24,8 +26,6 @@ const colorUtils = {
     makeTransparentBackground: colorEditorPrototype._makeTransparentBackground.bind(colorEditorPrototype),
     makeRgba: colorEditorPrototype._makeRgba.bind(colorEditorPrototype)
 };
-
-// #STYLE colorBox
 
 const ColorBox = DropDownEditor.inherit({
 

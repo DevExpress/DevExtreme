@@ -9,7 +9,7 @@
 @use "../toolbar/sizes" as *;
 @use "../button" as *;
 // adduse
-
+@use "../overlay";
 
 $MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE: $MATERIAL_M_FONT_SIZE;
 

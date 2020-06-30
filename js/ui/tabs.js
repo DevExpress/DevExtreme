@@ -18,6 +18,8 @@ import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 
+// STYLE tabs
+
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_EXPANDED_CLASS = 'dx-tabs-expanded';
@@ -467,8 +469,6 @@ const Tabs = CollectionWidget.inherit({
 Tabs.ItemClass = TabsItem;
 
 registerComponent('dxTabs', Tabs);
-
-// #STYLE tabs
 
 module.exports = Tabs;
 module.exports.getTabsExpandedClass = TABS_EXPANDED_CLASS;

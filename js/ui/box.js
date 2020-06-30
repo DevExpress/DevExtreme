@@ -12,6 +12,8 @@ import browser from '../core/utils/browser';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
+// STYLE box
+
 const BOX_CLASS = 'dx-box';
 const BOX_SELECTOR = '.dx-box';
 const BOX_ITEM_CLASS = 'dx-box-item';
@@ -708,6 +710,5 @@ class Box extends CollectionWidget {
 Box.ItemClass = BoxItem;
 
 registerComponent('dxBox', Box);
-// #STYLE box
 
 module.exports = Box;

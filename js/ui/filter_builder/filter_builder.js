@@ -15,6 +15,8 @@ import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { normalizeKeyName } from '../../events/utils';
 
+// STYLE filterBuilder
+
 const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
 const FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + '-group';
 const FILTER_BUILDER_GROUP_ITEM_CLASS = FILTER_BUILDER_GROUP_CLASS + '-item';
@@ -948,6 +950,6 @@ const FilterBuilder = Widget.inherit({
 });
 
 registerComponent('dxFilterBuilder', FilterBuilder);
-// #STYLE filterBuilder
+
 module.exports = FilterBuilder;
 module.exports.renderValueText = renderValueText;

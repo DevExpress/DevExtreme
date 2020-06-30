@@ -14,6 +14,8 @@ const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
 const Deferred = require('../core/utils/deferred').Deferred;
 const windowUtils = require('../core/utils/window');
 
+// STYLE slideOutView
+
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
 const SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper';
 const SLIDEOUTVIEW_MENU_CONTENT_CLASS = 'dx-slideoutview-menu-content';
@@ -400,7 +402,6 @@ const SlideOutView = Widget.inherit({
 });
 
 registerComponent('dxSlideOutView', SlideOutView);
-// #STYLE slideOutView
 
 module.exports = SlideOutView;
 

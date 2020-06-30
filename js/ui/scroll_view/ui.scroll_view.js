@@ -14,6 +14,8 @@ const LoadIndicator = require('../load_indicator');
 const themes = require('./../themes');
 const LoadPanel = require('../load_panel');
 
+// STYLE scrollView
+
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
 const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';

@@ -20,6 +20,8 @@ import windowUtils from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 
+// STYLE calendar
+
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
@@ -1224,5 +1226,5 @@ const Calendar = Editor.inherit({
 });
 
 registerComponent('dxCalendar', Calendar);
-// #STYLE calendar
+
 module.exports = Calendar;

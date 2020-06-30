@@ -15,6 +15,8 @@ const eventUtils = require('../events/utils');
 const Popup = require('./popup');
 const getBoundingRect = require('../core/utils/position').getBoundingRect;
 
+// STYLE popover
+
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
@@ -596,6 +598,5 @@ const Popover = Popup.inherit({
 });
 
 registerComponent('dxPopover', Popover);
-// #STYLE popover
 
 module.exports = Popover;

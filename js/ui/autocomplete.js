@@ -5,6 +5,8 @@ const extend = require('../core/utils/extend').extend;
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 const Deferred = require('../core/utils/deferred').Deferred;
 
+// STYLE autocomplete
+
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
@@ -209,6 +211,5 @@ const Autocomplete = DropDownList.inherit({
 });
 
 registerComponent('dxAutocomplete', Autocomplete);
-// #STYLE autocomplete
 
 module.exports = Autocomplete;

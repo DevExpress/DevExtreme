@@ -7,6 +7,8 @@ const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 const isWindow = require('../../core/utils/type').isWindow;
 
+// STYLE tooltip
+
 const Tooltip = Popover.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -81,5 +83,5 @@ const Tooltip = Popover.inherit({
 });
 
 registerComponent('dxTooltip', Tooltip);
-// #STYLE tooltip
+
 module.exports = Tooltip;

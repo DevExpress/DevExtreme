@@ -762,4 +762,3 @@ const Pager = Widget.inherit({
 module.exports = Pager;
 
 registerComponent('dxPager', Pager);
-// #STYLE pager

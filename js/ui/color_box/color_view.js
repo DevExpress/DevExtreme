@@ -866,6 +866,5 @@ const ColorView = Editor.inherit({
 });
 
 registerComponent('dxColorView', ColorView);
-// #STYLE colorView
 
 module.exports = ColorView;

@@ -5,6 +5,7 @@
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 // adduse
+@use "../scrollable";
 
 
 $MATERIAL_DATEVIEW_ROLLER_PADDING: ($MATERIAL_DATEVIEW_ROLLER_HEIGHT - $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT) / 2;

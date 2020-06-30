@@ -814,5 +814,5 @@ const DropDownEditor = TextBox.inherit({
 });
 
 registerComponent('dxDropDownEditor', DropDownEditor);
-// #STYLE dropDownEditor
+
 module.exports = DropDownEditor;

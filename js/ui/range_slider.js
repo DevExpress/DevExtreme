@@ -8,6 +8,8 @@ const applyServerDecimalSeparator = require('../core/utils/common').applyServerD
 const eventUtils = require('../events/utils');
 const messageLocalization = require('../localization/message');
 
+// STYLE rangeSlider
+
 const RANGE_SLIDER_CLASS = 'dx-rangeslider';
 const RANGE_SLIDER_START_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-start-handle';
 const RANGE_SLIDER_END_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-end-handle';
@@ -351,6 +353,5 @@ const RangeSlider = Slider.inherit({
 });
 
 registerComponent('dxRangeSlider', RangeSlider);
-// #STYLE rangeSlider
 
 module.exports = RangeSlider;

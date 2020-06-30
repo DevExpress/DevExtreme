@@ -3,10 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../menuBase" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icons" as *;
 // adduse
+@use "../menuBase" as *;
 
 
 .dx-context-menu-container-border {

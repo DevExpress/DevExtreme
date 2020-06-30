@@ -16,7 +16,7 @@ import Submenu from './ui.submenu';
 import Button from '../button';
 import TreeView from '../tree_view';
 
-// #STYLE menu
+// STYLE menu
 
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + '-vertical';

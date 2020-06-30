@@ -14,6 +14,8 @@ const clickEvent = require('../events/click');
 const Swipeable = require('../events/gesture/swipeable');
 const Deferred = require('../core/utils/deferred').Deferred;
 
+// STYLE switch
+
 const SWITCH_CLASS = 'dx-switch';
 const SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper';
 const SWITCH_CONTAINER_CLASS = SWITCH_CLASS + '-container';
@@ -421,6 +423,5 @@ const Switch = Editor.inherit({
 });
 
 registerComponent('dxSwitch', Switch);
-// #STYLE switch
 
 module.exports = Switch;

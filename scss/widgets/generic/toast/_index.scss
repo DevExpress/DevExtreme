@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 // adduse
+@use "../overlay";
 
 
 $GENERIC_TOAST_SHADOW: 0 2px 3px 0 $toast-shadow-color;

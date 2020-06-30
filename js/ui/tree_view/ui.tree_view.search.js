@@ -4,6 +4,8 @@ import searchBoxMixin from '../widget/ui.search_box_mixin';
 import { extend } from '../../core/utils/extend';
 import TreeViewBase from './ui.tree_view.base';
 
+// STYLE treeView
+
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = `${WIDGET_CLASS}-node-container`;
 
@@ -91,5 +93,5 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
 });
 
 registerComponent('dxTreeView', TreeViewSearch);
-// #STYLE treeView
+
 module.exports = TreeViewSearch;

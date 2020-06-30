@@ -15,6 +15,8 @@ const registerComponent = require('../core/component_registrator');
 const Overlay = require('./overlay');
 const themes = require('./themes');
 
+// STYLE toast
+
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
 const TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper';

@@ -289,6 +289,5 @@ const DeferRendering = Widget.inherit({
 });
 
 registerComponent('dxDeferRendering', DeferRendering);
-// #STYLE deferRendering
 
 module.exports = DeferRendering;

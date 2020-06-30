@@ -3,6 +3,8 @@ const extend = require('../core/utils/extend').extend;
 const NavBarItem = require('./nav_bar/item');
 const Tabs = require('./tabs');
 
+// STYLE navBar
+
 const NAVBAR_CLASS = 'dx-navbar';
 const ITEM_CLASS = 'dx-item-content';
 const NAVBAR_ITEM_CLASS = 'dx-nav-item';
@@ -61,6 +63,5 @@ const NavBar = Tabs.inherit({
 NavBar.ItemClass = NavBarItem;
 
 registerComponent('dxNavBar', NavBar);
-// #STYLE navBar
 
 module.exports = NavBar;

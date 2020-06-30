@@ -452,5 +452,5 @@ const DropDownMenu = Widget.inherit({
 }).include(DataHelperMixin);
 
 registerComponent('dxDropDownMenu', DropDownMenu);
-// #STYLE dropDownMenu
+
 module.exports = DropDownMenu;

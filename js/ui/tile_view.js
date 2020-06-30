@@ -11,6 +11,8 @@ const deferRender = require('../core/utils/common').deferRender;
 const ScrollView = require('./scroll_view');
 const CollectionWidget = require('./collection/ui.collection_widget.edit');
 
+// STYLE tileView
+
 const TILEVIEW_CLASS = 'dx-tileview';
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
 const TILEVIEW_ITEM_CLASS = 'dx-tile';
@@ -507,6 +509,5 @@ const TileView = CollectionWidget.inherit({
 });
 
 registerComponent('dxTileView', TileView);
-// #STYLE tilaView
 
 module.exports = TileView;

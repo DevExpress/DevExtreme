@@ -4,6 +4,8 @@ const extend = require('../core/utils/extend').extend;
 const isFunction = require('../core/utils/type').isFunction;
 const registerComponent = require('../core/component_registrator');
 
+// STYLE progressBar
+
 const PROGRESSBAR_CLASS = 'dx-progressbar';
 const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
 const PROGRESSBAR_RANGE_CONTAINER_CLASS = 'dx-progressbar-range-container';
@@ -229,6 +231,5 @@ const ProgressBar = TrackBar.inherit({
 });
 
 registerComponent('dxProgressBar', ProgressBar);
-// #STYLE progressBar
 
 module.exports = ProgressBar;

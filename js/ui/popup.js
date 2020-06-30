@@ -24,6 +24,8 @@ const window = require('../core/utils/window').getWindow();
 
 require('./toolbar/ui.toolbar.base');
 
+// STYLE popup
+
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
@@ -731,6 +733,5 @@ const Popup = Overlay.inherit({
 });
 
 registerComponent('dxPopup', Popup);
-// #STYLE popup
 
 module.exports = Popup;

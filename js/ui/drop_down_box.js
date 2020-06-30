@@ -16,6 +16,8 @@ import devices from '../core/devices';
 import { getActiveElement } from '../core/dom_adapter';
 import { getPublicElement } from '../core/element';
 
+// STYLE dropDownBox
+
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
@@ -327,7 +329,6 @@ const DropDownBox = DropDownEditor.inherit({
 }).include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);
-// #STYLE dropdownBox
 
 module.exports = DropDownBox;
 
