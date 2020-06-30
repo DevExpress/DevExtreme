@@ -13,6 +13,11 @@ $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
 .dx-recurrence-editor-container {
   .dx-recurrence-numberbox-interval {
     margin-right: $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+
+    &.dx-rtl {
+      margin-right: 0;
+      margin-left: $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+    }
   }
 }
 

@@ -302,6 +302,7 @@ class RecurrenceEditor extends Editor {
     _createRepeatOnLabel(freq) {
         return {
             itemType: 'group',
+            cssClass: `${REPEAT_ON_EDITOR}${LABEL_POSTFIX}`,
             items: [
                 {
                     name: 'repeatOnLabel',

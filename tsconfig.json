@@ -38,6 +38,14 @@
   "exclude": [
     "artifacts",
     "node_modules",
-    "**/dist"
+    "**/dist",
+    "playground"
+  ],
+  "include": [
+    "js/renovation",
+    "themebuilder-scss",
+    "themebuilder",
+    "testing/jest",
+    "testing/testcafe"
   ]
 }
