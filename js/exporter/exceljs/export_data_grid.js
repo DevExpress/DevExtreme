@@ -52,7 +52,7 @@ function exportDataGrid(options) {
 }
 
 function _getFullOptions(options) {
-    const fullOptions = Export.getFullOptions(options, DataGrid);
+    const fullOptions = Export.getFullOptions(options, DataGrid, 'DataGrid');
 
     if(!isDefined(fullOptions.selectedRowsOnly)) {
         fullOptions.selectedRowsOnly = false;

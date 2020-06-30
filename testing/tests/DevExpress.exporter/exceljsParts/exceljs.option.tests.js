@@ -12,7 +12,7 @@ const ExcelJSOptionTests = {
                     } catch(e) {
                         errorMessage = e.message;
                     } finally {
-                        assert.strictEqual(errorMessage, 'Export configuration object is not defined', 'Exception was thrown');
+                        assert.strictEqual(errorMessage, `The "export${getComponent().NAME.substring(2)}" method requires a configuration object.`, 'Exception was thrown');
                     }
                 });
             });
@@ -25,7 +25,7 @@ const ExcelJSOptionTests = {
                     } catch(e) {
                         errorMessage = e.message;
                     }
-                    assert.strictEqual(errorMessage, 'Export configuration object should have the \'component\' field with widget instance', 'Exception was thrown');
+                    assert.strictEqual(errorMessage, `The "component" field must contain a ${getComponent().NAME.substring(2)} instance.`, 'Exception was thrown');
                 });
             });
 
@@ -37,7 +37,7 @@ const ExcelJSOptionTests = {
                     } catch(e) {
                         errorMessage = e.message;
                     } finally {
-                        assert.strictEqual(errorMessage, 'Export configuration object should have the \'worksheet\' field specified', 'Exception was thrown');
+                        assert.strictEqual(errorMessage, 'The "worksheet" field must contain an object.', 'Exception was thrown');
                     }
                 });
             });

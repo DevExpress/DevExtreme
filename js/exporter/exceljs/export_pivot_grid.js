@@ -27,7 +27,7 @@ function exportPivotGrid(options) {
 }
 
 function _getFullOptions(options) {
-    return Export.getFullOptions(options, PivotGrid);
+    return Export.getFullOptions(options, PivotGrid, 'PivotGrid');
 }
 
 //#DEBUG
