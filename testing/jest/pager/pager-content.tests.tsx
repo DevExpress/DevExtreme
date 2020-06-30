@@ -151,7 +151,7 @@ describe('PagerContent', () => {
   });
 
   describe('Logic', () => {
-    it('pagesContainerVisible', () => {
+    it('pagesContainerVisible, pagesNavigatorVisible', () => {
       const component = new PagerContent({
         pageCount: 1,
         pagesNavigatorVisible: 'auto',
@@ -159,6 +159,15 @@ describe('PagerContent', () => {
       expect(component.pagesContainerVisible).toBe(true);
       component.props.pagesNavigatorVisible = false;
       expect(component.pagesContainerVisible).toBe(false);
+    });
+    it('pagesContainerVisible, pageCount', () => {
+      const component = new PagerContent({
+        pageCount: 0,
+        pagesNavigatorVisible: 'auto',
+      } as PagerContentProps);
+      expect(component.pagesContainerVisible).toBe(false);
+      component.props.pageCount = 1;
+      expect(component.pagesContainerVisible).toBe(true);
     });
     it('pagesContainerVisibility', () => {
       const component = new PagerContent({

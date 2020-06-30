@@ -88,10 +88,4 @@ ui.CollectionWidget = require('../../../ui/collection/ui.collection_widget.edit'
 // Reports
 ui.dxDropDownEditor = require('../../../ui/drop_down_editor/ui.drop_down_editor');
 // Reports
-
-// Renovation
-ui.Button = require('../../../renovation/button.j').default;
-ui.Widget = require('../../../renovation/widget.j').default;
-// Renovation
-
 module.exports = ui;

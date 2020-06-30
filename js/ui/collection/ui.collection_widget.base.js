@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import commonUtils from '../../core/utils/common';
+import { ensureDefined, deferRenderer, noop } from '../../core/utils/common';
 import { findTemplates } from '../../core/utils/template_manager';
 import { getPublicElement } from '../../core/element';
 import domAdapter from '../../core/dom_adapter';
@@ -181,7 +181,7 @@ const CollectionWidget = Widget.inherit({
                     if(fieldsMap && isFunction(fieldsMap.text)) {
                         data = fieldsMap.text(data);
                     }
-                    $container.text(String(commonUtils.ensureDefined(data, '')));
+                    $container.text(String(ensureDefined(data, '')));
                 }
             }).bind(this), this._getBindableFields(), this.option('integrationOptions.watchMethod'), fieldsMap)
         });
@@ -650,7 +650,7 @@ const CollectionWidget = Widget.inherit({
         this._prepareContent();
     },
 
-    _prepareContent: commonUtils.deferRenderer(function() {
+    _prepareContent: deferRenderer(function() {
         this._renderContentImpl();
     }),
 
@@ -924,7 +924,7 @@ const CollectionWidget = Widget.inherit({
         };
     },
 
-    _postprocessRenderItem: commonUtils.noop,
+    _postprocessRenderItem: noop,
 
     _executeItemRenderAction: function(index, itemData, itemElement) {
         this._getItemRenderAction()({
