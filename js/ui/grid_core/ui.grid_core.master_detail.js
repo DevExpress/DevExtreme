@@ -119,11 +119,6 @@ module.exports = {
                                 that._expandedItems[expandIndex].visible = !visible;
                             } else {
                                 that._expandedItems.push({ key: key, visible: true });
-
-                                const editingController = that.getController('editing');
-                                if(editingController) {
-                                    editingController.correctEditRowIndexAfterExpand(key);
-                                }
                             }
 
                             that.updateItems({

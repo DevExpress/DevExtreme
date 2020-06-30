@@ -19,6 +19,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
         }
 
+        if(!options.key) {
+            options.items?.forEach(item => {
+                if(item.key === null || item.key === undefined) {
+                    item.key = item;
+                }
+            });
+        }
+
         return {
             _applyFilter: function() {
                 this._isFilterApplied = true;
@@ -213,8 +221,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getCombinedFilter: commonUtils.noop,
 
-            getRowIndexByKey: function() {
-                return -1;
+            getRowIndexByKey: function(key) {
+                return gridCore.getIndexByKey(key, options.items);
             },
 
             loadingOperationTypes: function() {
