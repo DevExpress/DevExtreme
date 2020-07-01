@@ -4,8 +4,8 @@ const window = windowUtils.getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { noop, ensureDefined, grep } from '../../core/utils/common';
+import { isWindow, isDefined, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
@@ -45,9 +45,9 @@ const DropDownList = DropDownEditor.inherit({
 
                 parent.tab.apply(this, arguments);
             },
-            space: commonUtils.noop,
-            home: commonUtils.noop,
-            end: commonUtils.noop
+            space: noop,
+            home: noop,
+            end: noop
         });
     },
 
@@ -86,7 +86,7 @@ const DropDownList = DropDownEditor.inherit({
 
             onSelectionChanged: null,
 
-            onItemClick: commonUtils.noop,
+            onItemClick: noop,
 
             showDataBeforeSearch: false,
 
@@ -267,7 +267,7 @@ const DropDownList = DropDownEditor.inherit({
         const customContainer = this.option('dropDownOptions.container');
         const $container = customContainer && $(customContainer);
 
-        if($container && $container.length && !typeUtils.isWindow($container.get(0))) {
+        if($container && $container.length && !isWindow($container.get(0))) {
             const $containerWithParents = [].slice.call($container.parents());
             $containerWithParents.unshift($container.get(0));
 
@@ -314,7 +314,7 @@ const DropDownList = DropDownEditor.inherit({
 
         if(!selectedItem) {
             plainItems = this._getPlainItems();
-            selectedItem = commonUtils.grep(plainItems, (function(item) {
+            selectedItem = grep(plainItems, (function(item) {
                 return this._isValueEquals(this._valueGetter(item), value);
             }).bind(this))[0];
         }
@@ -348,7 +348,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _setSelectedItem: function(item) {
         const displayValue = this._displayValue(item);
-        this.option('selectedItem', commonUtils.ensureDefined(item, null));
+        this.option('selectedItem', ensureDefined(item, null));
         this.option('displayValue', displayValue);
     },
 
@@ -452,7 +452,7 @@ const DropDownList = DropDownEditor.inherit({
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
 
-    _fireContentReadyAction: commonUtils.noop,
+    _fireContentReadyAction: noop,
 
     _setAriaTargetForList: function() {
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
@@ -583,7 +583,7 @@ const DropDownList = DropDownEditor.inherit({
         this._itemClickAction(e);
     },
 
-    _listItemClickHandler: commonUtils.noop,
+    _listItemClickHandler: noop,
 
     _setListDataSource: function() {
         if(!this._list) {
@@ -763,7 +763,7 @@ const DropDownList = DropDownEditor.inherit({
         }
 
         const currentPageIndex = this._dataSource.pageIndex();
-        const needRepaint = typeUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 
         this._pageIndex = currentPageIndex;
 
@@ -812,7 +812,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _shouldUseDisplayValue: function(value) {
-        return this.option('valueExpr') === 'this' && typeUtils.isObject(value);
+        return this.option('valueExpr') === 'this' && isObject(value);
     },
 
     _optionChanged: function(args) {

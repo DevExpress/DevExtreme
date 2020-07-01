@@ -1,4 +1,4 @@
-import typeUtils from '../../core/utils/type';
+import { isDate, isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import iteratorUtils from '../../core/utils/iterator';
 
@@ -27,7 +27,7 @@ const getGroupInterval = function(column) {
         }
 
         return result;
-    } else if(typeUtils.isDefined(groupInterval)) {
+    } else if(isDefined(groupInterval)) {
         return Array.isArray(groupInterval) ? groupInterval : [groupInterval];
     }
 };
@@ -46,7 +46,7 @@ export default (function() {
     };
 
     const getDateValues = function(dateValue) {
-        if(typeUtils.isDate(dateValue)) {
+        if(isDate(dateValue)) {
             return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
         }
         return iteratorUtils.map(('' + dateValue).split('/'), function(value, index) {
@@ -61,7 +61,7 @@ export default (function() {
         let endFilterExpression;
         const selector = getFilterSelector(column, target);
 
-        if(Array.isArray(filterValue) && typeUtils.isDefined(filterValue[0]) && typeUtils.isDefined(filterValue[1])) {
+        if(Array.isArray(filterValue) && isDefined(filterValue[0]) && isDefined(filterValue[1])) {
             startFilterExpression = [selector, '>=', filterValue[0]];
             endFilterExpression = [selector, '<=', filterValue[1]];
 
@@ -142,7 +142,7 @@ export default (function() {
         const selector = getFilterSelector(column, target);
         const groupInterval = getGroupInterval(column);
 
-        if(target === 'headerFilter' && groupInterval && typeUtils.isDefined(filterValue)) {
+        if(target === 'headerFilter' && groupInterval && isDefined(filterValue)) {
             const values = ('' + filterValue).split('/');
             const value = Number(values[values.length - 1]);
 
@@ -173,7 +173,7 @@ export default (function() {
                 filter = [selector, selectedFilterOperation || 'contains', filterValue];
             } else if(selectedFilterOperation === 'between') {
                 return getFilterExpressionByRange.apply(column, [filterValue, target]);
-            } else if(isDateType(dataType) && typeUtils.isDefined(filterValue)) {
+            } else if(isDateType(dataType) && isDefined(filterValue)) {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === 'number') {
                 return getFilterExpressionForNumber.apply(column, arguments);

@@ -1,12 +1,9 @@
-import elementData from '../../core/element_data';
-const afterCleanData = elementData.afterCleanData;
-const strategyChanging = elementData.strategyChanging;
+import { afterCleanData, strategyChanging, cleanData } from '../../core/element_data';
 import ko from 'knockout';
 import { compare as compareVersion } from '../../core/utils/version';
 
 if(ko) {
     const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
-
     const patchCleanData = function() {
         afterCleanData(function(nodes) {
             let i;
@@ -29,7 +26,7 @@ if(ko) {
         ko.utils.domNodeDisposal.cleanExternalData = function(node) {
             node.cleanedByKo = true;
             if(!node.cleanedByJquery) {
-                elementData.cleanData([node]);
+                cleanData([node]);
             }
         };
     };

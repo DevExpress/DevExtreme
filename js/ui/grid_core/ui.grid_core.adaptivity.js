@@ -1,8 +1,8 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
-import clickEvent from '../../events/click';
-import typeUtils from '../../core/utils/type';
+import { name as clickEventName } from '../../events/click';
+import { isDefined, isString } from '../../core/utils/type';
 import browser from '../../core/utils/browser';
 import Guid from '../../core/guid';
 import modules from './ui.grid_core.modules';
@@ -58,7 +58,7 @@ function adaptiveCellTemplate(container, options) {
 
     if(options.rowType === 'data') {
         $adaptiveColumnButton = $('<span>').addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
-        eventsEngine.on($adaptiveColumnButton, addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
+        eventsEngine.on($adaptiveColumnButton, addNamespace(clickEventName, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
             adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
         }));
         $adaptiveColumnButton.appendTo($container);
@@ -78,14 +78,14 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const rowIndex = this._dataController.getRowIndexByKey(cellOptions.key);
         const row = this._dataController.items()[rowIndex + 1];
 
-        return row && row.modifiedValues && typeUtils.isDefined(row.modifiedValues[columnIndex]);
+        return row && row.modifiedValues && isDefined(row.modifiedValues[columnIndex]);
     },
 
     _renderFormViewTemplate: function(item, cellOptions, $container) {
         const that = this;
         const column = item.column;
         const focusAction = that.createAction(function() {
-            eventsEngine.trigger($container, clickEvent.name);
+            eventsEngine.trigger($container, clickEventName);
         });
         const value = column.calculateCellValue(cellOptions.data);
         const displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType);
@@ -117,7 +117,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             }
 
             $container.addClass(ADAPTIVE_ITEM_TEXT_CLASS);
-            if(!typeUtils.isDefined(text) || text === '') {
+            if(!isDefined(text) || text === '') {
                 $container.html('&nbsp;');
             }
 
@@ -205,7 +205,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isPercentWidth: function(width) {
-        return typeUtils.isString(width) && width.slice(-1) === '%';
+        return isString(width) && width.slice(-1) === '%';
     },
 
     _isColumnHidden: function(column) {
@@ -222,7 +222,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         columns.forEach(function(column) {
             if(!that._isColumnHidden(column)) {
                 const width = column.width;
-                if(typeUtils.isDefined(width) && !isNaN(parseFloat(width))) {
+                if(isDefined(width) && !isNaN(parseFloat(width))) {
                     fixedColumnsWidth += that._isPercentWidth(width) ? that._calculatePercentWidth({
                         visibleIndex: column.visibleIndex,
                         columnsCount: columns.length,
@@ -357,7 +357,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     _hideAdaptiveColumn: function(resultWidths, visibleColumns) {
         const visibleIndex = this._getAdaptiveColumnVisibleIndex(visibleColumns);
-        if(typeUtils.isDefined(visibleIndex)) {
+        if(isDefined(visibleIndex)) {
             resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
             this._hideVisibleColumn({ isCommandColumn: true, visibleIndex });
         }
@@ -568,12 +568,12 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     hasAdaptiveDetailRowExpanded: function() {
-        return typeUtils.isDefined(this._dataController.adaptiveExpandedKey());
+        return isDefined(this._dataController.adaptiveExpandedKey());
     },
 
     updateForm: function(hiddenColumns) {
         if(this.hasAdaptiveDetailRowExpanded()) {
-            if(this._form && typeUtils.isDefined(this._form._contentReadyAction)) {
+            if(this._form && isDefined(this._form._contentReadyAction)) {
                 if(hiddenColumns && hiddenColumns.length) {
                     this._form.option('items', this._getFormItemsByHiddenColumns(hiddenColumns));
                 } else {
@@ -586,7 +586,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     updateHidingQueue: function(columns) {
         const that = this;
         const hideableColumns = columns.filter(function(column) {
-            return column.visible && !column.type && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
+            return column.visible && !column.type && !column.fixed && !(isDefined(column.groupIndex) && column.groupIndex >= 0);
         });
         let columnsHasHidingPriority;
         let i;
@@ -598,7 +598,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         for(i = 0; i < hideableColumns.length; i++) {
-            if(typeUtils.isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
+            if(isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
                 columnsHasHidingPriority = true;
                 that._hidingColumnsQueue[hideableColumns[i].hidingPriority] = hideableColumns[i];
             }
@@ -1017,7 +1017,7 @@ export default {
 
                     items = that.callBase.apply(that, arguments);
 
-                    if((changeType === 'loadingAll') || !typeUtils.isDefined(that._adaptiveExpandedKey)) {
+                    if((changeType === 'loadingAll') || !isDefined(that._adaptiveExpandedKey)) {
                         return items;
                     }
 
@@ -1054,7 +1054,7 @@ export default {
                 },
 
                 adaptiveExpandedKey: function(value) {
-                    if(typeUtils.isDefined(value)) {
+                    if(isDefined(value)) {
                         this._adaptiveExpandedKey = value;
                     } else {
                         return this._adaptiveExpandedKey;

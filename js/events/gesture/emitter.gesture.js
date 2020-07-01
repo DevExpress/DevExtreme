@@ -1,17 +1,16 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import devices from '../../core/devices';
-import styleUtils from '../../core/utils/style';
+import { styleProp } from '../../core/utils/style';
 import callOnce from '../../core/utils/call_once';
 import domUtils from '../../core/utils/dom';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 const ready = readyCallbacks.add;
-import mathUtils from '../../core/utils/math';
+import { sign } from '../../core/utils/math';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { needSkipEvent, createEvent, eventData, isDxMouseWheelEvent, eventDelta, isTouchEvent } from '../utils';
 import Emitter from '../core/emitter';
-const sign = mathUtils.sign;
 const abs = Math.abs;
 
 const SLEEP = 0;
@@ -23,7 +22,7 @@ const IMMEDIATE_TOUCH_BOUNDARY = 0;
 const IMMEDIATE_TIMEOUT = 180;
 
 const supportPointerEvents = function() {
-    return styleUtils.styleProp('pointer-events');
+    return styleProp('pointer-events');
 };
 
 const setGestureCover = callOnce(function() {

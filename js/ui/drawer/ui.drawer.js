@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -135,7 +135,7 @@ const Drawer = Widget.inherit({
     _viewContentWrapperClickHandler(e) {
         let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
-        if(typeUtils.isFunction(closeOnOutsideClick)) {
+        if(isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
@@ -292,7 +292,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelWidth() {
         if(windowUtils.hasWindow()) {
-            if(typeUtils.isDefined(this.option('templateSize'))) {
+            if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
                 return this.getElementWidth(this._strategy.getPanelContent());
@@ -310,7 +310,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelHeight() {
         if(windowUtils.hasWindow()) {
-            if(typeUtils.isDefined(this.option('templateSize'))) {
+            if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
                 return this.getElementHeight(this._strategy.getPanelContent());
@@ -371,7 +371,7 @@ const Drawer = Widget.inherit({
             return;
         }
 
-        animate = typeUtils.isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
+        animate = isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
 
         if(isDrawerOpened) {
             this._toggleShaderVisibility(isDrawerOpened);

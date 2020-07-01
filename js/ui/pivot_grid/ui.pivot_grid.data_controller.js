@@ -5,7 +5,7 @@ import { inArray } from '../../core/utils/array';
 import iteratorUtils from '../../core/utils/iterator';
 import Class from '../../core/class';
 import stringUtils from '../../core/utils/string';
-import commonUtils from '../../core/utils/common';
+import { deferUpdate } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
 import virtualScrolling from '../grid_core/ui.grid_core.virtual_scrolling_core';
 import virtualColumnsCore from '../grid_core/ui.grid_core.virtual_columns_core';
@@ -893,7 +893,7 @@ export const DataController = Class.inherit((function() {
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
                 columnsScrollController.setContentSize(contentParams.itemWidths);
 
-                commonUtils.deferUpdate(function() {
+                deferUpdate(function() {
                     columnsScrollController.loadIfNeed();
                     rowsScrollController.loadIfNeed();
                 });

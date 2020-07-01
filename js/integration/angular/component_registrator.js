@@ -5,7 +5,7 @@ import Config from '../../core/config';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
-import typeUtils from '../../core/utils/type';
+import { type, isDefined, isNumeric } from '../../core/utils/type';
 import iterator from '../../core/utils/iterator';
 const each = iterator.each;
 import arrayUtils from '../../core/utils/array';
@@ -117,7 +117,7 @@ if(angular) {
 
             if(options.bindingOptions) {
                 each(options.bindingOptions, (key, value) => {
-                    if(typeUtils.type(value) === 'string') {
+                    if(type(value) === 'string') {
                         this._ngOptions.bindingOptions[key] = { dataPath: value };
                     }
                 });
@@ -340,7 +340,7 @@ if(angular) {
                 newScope[this._itemAlias] = options.model;
             }
 
-            if(typeUtils.isDefined(options.index)) {
+            if(isDefined(options.index)) {
                 newScope.$index = options.index;
             }
 
@@ -370,7 +370,7 @@ if(angular) {
             const optionOuterBag = [parentPrefix];
 
             if(collectionField) {
-                if(!typeUtils.isNumeric(itemIndex)) return;
+                if(!isNumeric(itemIndex)) return;
 
                 optionOuterBag.push('[', itemIndex, ']');
             }

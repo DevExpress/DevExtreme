@@ -1,9 +1,8 @@
 import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
-import typeUtils from '../../core/utils/type';
+import { isString as _isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import paletteModule from '../palette';
-const _isString = typeUtils.isString;
 import { parseScalar as _parseScalar } from './utils';
 import themeModule from '../themes';
 const _getTheme = themeModule.getTheme;

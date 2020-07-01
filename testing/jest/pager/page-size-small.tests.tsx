@@ -5,7 +5,7 @@ import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../../../
 import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
 
 jest.mock('../../../js/renovation/pager/utils/get-computed-style');
-jest.mock('../../../js/renovation/select-box', () => { });
+jest.mock('../../../js/renovation/select-box', () => ({ SelectBox: () => { } }));
 
 describe('Pager size selector', () => {
   const pageSizes = [{ text: '5', value: 5 }, { text: '10', value: 10 }];
@@ -22,6 +22,7 @@ describe('Pager size selector', () => {
     } as Partial<PageSizeSmall>;
     const tree = shallow(<PageSizeSmallComponent {...props as any} />as any);
     expect(tree.props()).toEqual({
+      children: [],
       displayExpr: 'text',
       valueExpr: 'value',
       dataSource: [{ text: '5', value: 5 }, { text: '10', value: 10 }],

@@ -1,15 +1,15 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { ensureDefined, noop } from '../../core/utils/common';
+import { isPlainObject } from '../../core/utils/type';
 import iconUtils from '../../core/utils/icon';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
 import fx from '../../animation/fx';
-import clickEvent from '../../events/click';
-import swipeEvents from '../../events/swipe';
+import { name as clickEventName } from '../../events/click';
+import { end as swipeEventEnd } from '../../events/swipe';
 import support from '../../core/utils/support';
 import messageLocalization from '../../localization/message';
 import inkRipple from '../widget/utils.ink_ripple';
@@ -109,8 +109,8 @@ const ListBase = CollectionWidget.inherit({
         }
 
         return extend(this.callBase(), {
-            leftArrow: commonUtils.noop,
-            rightArrow: commonUtils.noop,
+            leftArrow: noop,
+            rightArrow: noop,
             pageUp: function() {
                 moveFocusPerPage('prev');
                 return false;
@@ -343,7 +343,7 @@ const ListBase = CollectionWidget.inherit({
         const nextButton = this._nextButtonMode();
 
         return extend(this.callBase(), {
-            paginate: commonUtils.ensureDefined(scrollBottom || nextButton, true)
+            paginate: ensureDefined(scrollBottom || nextButton, true)
         });
     },
 
@@ -399,7 +399,7 @@ const ListBase = CollectionWidget.inherit({
     _initTemplates: function() {
         this._templateManager.addDefaultTemplates({
             group: new BindableTemplate(function($container, data) {
-                if(typeUtils.isPlainObject(data)) {
+                if(isPlainObject(data)) {
                     if(data.key) {
                         $container.text(data.key);
                     }
@@ -544,7 +544,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _attachGroupCollapseEvent: function() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = eventUtils.addNamespace(clickEventName, this.NAME);
         const selector = '.' + LIST_GROUP_HEADER_CLASS;
         const $element = this.$element();
         const collapsibleGroups = this.option('collapsibleGroups');
@@ -658,7 +658,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _attachSwipeEvent: function($itemElement) {
-        const endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
+        const endEventName = eventUtils.addNamespace(swipeEventEnd, this.NAME);
 
         eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },

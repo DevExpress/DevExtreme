@@ -1,4 +1,11 @@
-import typeUtils from './core/utils/type';
+import {
+    isString,
+    isNumeric,
+    isFunction,
+    isDefined,
+    isDate,
+    isPlainObject
+} from './core/utils/type';
 import dateUtils from './core/utils/date';
 import numberLocalization from './localization/number';
 import dateLocalization from './localization/date';
@@ -8,27 +15,27 @@ import './localization/currency';
 
 export default dependencyInjector({
     format: function(value, format) {
-        const formatIsValid = typeUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || typeUtils.isFunction(format);
-        const valueIsValid = typeUtils.isNumeric(value) || typeUtils.isDate(value);
+        const formatIsValid = isString(format) && format !== '' || isPlainObject(format) || isFunction(format);
+        const valueIsValid = isNumeric(value) || isDate(value);
 
 
         if(!formatIsValid || !valueIsValid) {
-            return typeUtils.isDefined(value) ? value.toString() : '';
+            return isDefined(value) ? value.toString() : '';
         }
 
-        if(typeUtils.isFunction(format)) {
+        if(isFunction(format)) {
             return format(value);
         }
 
-        if(typeUtils.isString(format)) {
+        if(isString(format)) {
             format = { type: format };
         }
 
-        if(typeUtils.isNumeric(value)) {
+        if(isNumeric(value)) {
             return numberLocalization.format(value, format);
         }
 
-        if(typeUtils.isDate(value)) {
+        if(isDate(value)) {
             return dateLocalization.format(value, format);
         }
     },
@@ -207,7 +214,7 @@ export default dependencyInjector({
                 }
             }
         };
-        tickInterval = typeUtils.isString(tickInterval) ? tickInterval.toLowerCase() : tickInterval;
+        tickInterval = isString(tickInterval) ? tickInterval.toLowerCase() : tickInterval;
         const dateDifferences = dateUtils.getDatesDifferences(startValue, endValue);
 
         if(startValue !== endValue) {

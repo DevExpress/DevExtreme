@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import dataUtils from '../core/element_data';
+import { data as elementData } from '../core/element_data';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import browser from '../core/utils/browser';
@@ -997,7 +997,7 @@ const TagBox = SelectBox.inherit({
 
         for(let i = 0; i < tagsLength; i++) {
             const $tag = $tags[i];
-            const tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
+            const tagData = elementData($tag, TAGBOX_TAG_DATA_KEY);
 
             if(value === tagData || (equalByValue(value, tagData))) {
                 result = $($tag);

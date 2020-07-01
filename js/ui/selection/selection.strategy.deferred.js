@@ -1,4 +1,4 @@
-import typeUtils from '../../core/utils/type';
+import { isString } from '../../core/utils/type';
 import SelectionStrategy from './selection.strategy';
 import errors from '../widget/ui.errors';
 import dataQuery from '../../data/query';
@@ -14,7 +14,7 @@ export default SelectionStrategy.inherit({
         const d = new Deferred();
         const that = this;
         const key = this.options.key();
-        const select = typeUtils.isString(key) ? [key] : key;
+        const select = isString(key) ? [key] : key;
 
         this._loadFilteredData(this.options.selectionFilter, null, select).done(function(items) {
             const keys = items.map(function(item) {
@@ -137,7 +137,7 @@ export default SelectionStrategy.inherit({
     },
 
     _addFilterOperator: function(selectionFilter, filterOperator) {
-        if(selectionFilter.length > 1 && typeUtils.isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
+        if(selectionFilter.length > 1 && isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
             selectionFilter = [selectionFilter];
         }
         if(selectionFilter.length) {
@@ -147,7 +147,7 @@ export default SelectionStrategy.inherit({
     },
 
     _denormalizeFilter: function(filter) {
-        if(filter && typeUtils.isString(filter[0])) {
+        if(filter && isString(filter[0])) {
             filter = [filter];
         }
         return filter;

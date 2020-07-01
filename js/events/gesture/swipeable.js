@@ -1,4 +1,8 @@
-import swipeEvents from '../swipe';
+import {
+    start as swipeEventStart,
+    swipe as swipeEventSwipe,
+    end as swipeEventEnd
+} from '../swipe';
 import eventsEngine from '../../events/core/events_engine';
 import DOMComponent from '../../core/dom_component';
 import { each } from '../../core/utils/iterator';
@@ -10,9 +14,9 @@ const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';
 
 const ACTION_TO_EVENT_MAP = {
-    'onStart': swipeEvents.start,
-    'onUpdated': swipeEvents.swipe,
-    'onEnd': swipeEvents.end,
+    'onStart': swipeEventStart,
+    'onUpdated': swipeEventSwipe,
+    'onEnd': swipeEventEnd,
     'onCancel': 'dxswipecancel'
 };
 

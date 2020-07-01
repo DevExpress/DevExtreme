@@ -1,9 +1,8 @@
 import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import typeUtils from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
-const isFunction = typeUtils.isFunction;
 
 const EMPTY_CHAR = ' ';
 
@@ -31,9 +30,9 @@ const BaseMaskRule = Class.inherit({
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
         const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
-        args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
-        args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
-        args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
+        args[handlingProperty] = isDefined(config.str) ? config.str : args[handlingProperty];
+        args.start = isDefined(config.start) ? config.start : args.start;
+        args.length = isDefined(config.length) ? config.length : args.length;
         args.index = args.index + 1;
         return args;
     },

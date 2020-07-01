@@ -1,6 +1,6 @@
 import { isDefined } from './type';
 import { each } from './iterator';
-import objectUtils from './object';
+import { orderEach } from './object';
 import config from '../config';
 
 const isEmpty = function(entity) {
@@ -95,7 +95,7 @@ const normalizeIndexes = function(items, indexParameterName, currentItem, needIn
 
     parameterIndex = 0;
 
-    objectUtils.orderEach(indexedItems, function(index, items) {
+    orderEach(indexedItems, function(index, items) {
         each(items, function() {
             if(index >= 0) {
                 this[indexParameterName] = parameterIndex++;

@@ -2,8 +2,8 @@ import $ from '../../core/renderer';
 import { isElementNode } from '../../core/dom_adapter';
 import { on, off } from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
-import clickEvent from '../../events/click';
-import commonUtils from '../../core/utils/common';
+import { name as clickEventName } from '../../events/click';
+import { asyncNoop, noop } from '../../core/utils/common';
 import windowUtils from '../../core/utils/window';
 import { isDefined, isPrimitive, isFunction, isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -60,7 +60,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._itemClickHandler(e, $itemElement.children('.' + ITEM_CLASS));
 
             const expandEventName = this._getEventNameByOption(this.option('expandEvent'));
-            const expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+            const expandByClick = expandEventName === addNamespace(clickEventName, EXPAND_EVENT_NAMESPACE);
 
             if(expandByClick) {
                 this._expandEventHandler(e);
@@ -217,8 +217,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     // TODO: implement these functions
-    _initSelectedItems: commonUtils.noop,
-    _syncSelectionOptions: commonUtils.asyncNoop,
+    _initSelectedItems: noop,
+    _syncSelectionOptions: asyncNoop,
 
     _fireSelectionChanged: function() {
         const selectionChangePromise = this._selectionChangePromise;
@@ -772,7 +772,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getEventNameByOption: function(name) {
-        const event = name === 'click' ? clickEvent : dblclickEvent;
+        const event = name === 'click' ? clickEventName : dblclickEvent;
         return addNamespace(event.name, EXPAND_EVENT_NAMESPACE);
     },
 
@@ -871,7 +871,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         off($icon, eventName);
         on($icon, eventName, e => {
@@ -1287,7 +1287,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _attachClickEvent: function() {
         const clickSelector = '.' + this._itemClass();
         const pointerDownSelector = '.' + NODE_CLASS + ', .' + SELECT_ALL_ITEM_CLASS;
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const pointerDownEvent = addNamespace(PointerDown, this.NAME);
         const $itemContainer = this._itemContainer();
 

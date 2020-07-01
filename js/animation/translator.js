@@ -1,4 +1,4 @@
-import dataUtils from '../core/element_data';
+import { data as elementData, removeData } from '../core/element_data';
 import { type } from '../core/utils/type';
 
 const TRANSLATOR_DATA_KEY = 'dxTranslator';
@@ -19,13 +19,13 @@ function isPercentValue(value) {
 
 function cacheTranslate($element, translate) {
     if($element.length) {
-        dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
+        elementData($element.get(0), TRANSLATOR_DATA_KEY, translate);
     }
 }
 
 const clearCache = function($element) {
     if($element.length) {
-        dataUtils.removeData($element.get(0), TRANSLATOR_DATA_KEY);
+        removeData($element.get(0), TRANSLATOR_DATA_KEY);
     }
 };
 
@@ -40,7 +40,7 @@ const getTranslateCss = function(translate) {
 };
 
 const getTranslate = function($element) {
-    let result = $element.length ? dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
+    let result = $element.length ? elementData($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
         const transformValue = $element.css('transform') || getTranslateCss({ x: 0, y: 0 });

@@ -6,9 +6,10 @@ import arrayUtils from '../../data/array_utils';
 import { keysEqual } from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
-import { insertElement } from '../../core/dom_adapter';
+import domAdapter from '../../core/dom_adapter';
 import { noop } from '../../core/utils/common';
 
+const insertElement = domAdapter.insertElement;
 const PRIVATE_KEY_FIELD = '__dx_key__';
 
 export default CollectionWidget.inherit({

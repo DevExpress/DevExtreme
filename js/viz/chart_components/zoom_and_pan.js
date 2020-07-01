@@ -4,13 +4,13 @@ import { extend } from '../../core/utils/extend';
 import { normalizeEnum, getVizRangeObject } from '../core/utils';
 import { name as wheelEvent } from '../../events/core/wheel';
 import transformEvents from '../../events/transform';
-import dragEvents from '../../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
 
 const EVENTS_NS = '.zoomAndPanNS';
 
-const DRAG_START_EVENT_NAME = dragEvents.start + EVENTS_NS;
-const DRAG_EVENT_NAME = dragEvents.move + EVENTS_NS;
-const DRAG_END_EVENT_NAME = dragEvents.end + EVENTS_NS;
+const DRAG_START_EVENT_NAME = dragEventStart + EVENTS_NS;
+const DRAG_EVENT_NAME = dragEventMove + EVENTS_NS;
+const DRAG_END_EVENT_NAME = dragEventEnd + EVENTS_NS;
 
 const PINCH_START_EVENT_NAME = transformEvents['pinchstart'] + EVENTS_NS;
 const PINCH_EVENT_NAME = transformEvents['pinch'] + EVENTS_NS;

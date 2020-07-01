@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import CheckBox from '../check_box';
@@ -24,7 +24,7 @@ const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const CLICK_EVENT_NAME = addNamespace(clickEvent.name, 'dxListEditDecorator');
+const CLICK_EVENT_NAME = addNamespace(clickEventName, 'dxListEditDecorator');
 
 registerDecorator(
     'selection',

@@ -9,7 +9,16 @@ import * as LightButtonModule from '../../../js/renovation/pager/light-button';
 
 const { dxClickEffect } = LightButtonModule;
 
-jest.mock('../../../js/ui/shared/accessibility');
+jest.mock('../../../js/ui/shared/accessibility', () => ({
+  __esModule: true,
+  setTabIndex: jest.fn(),
+  selectView: jest.fn(),
+  restoreFocus: jest.fn(),
+  registerKeyboardAction: jest.fn(),
+  hiddenFocus: jest.fn(),
+  unsubscribeVisibilityChange: jest.fn(),
+  subscribeVisibilityChange: jest.fn(),
+}));
 
 describe('LightButton', () => {
   describe('View', () => {

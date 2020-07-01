@@ -6,11 +6,11 @@ import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import Editor from './editor/editor';
 import { addNamespace } from '../events/utils';
-import feedbackEvents from '../events/core/emitter.feedback';
+import { lock } from '../events/core/emitter.feedback';
 import { getBoundingRect } from '../core/utils/position';
 import fx from '../animation/fx';
 import messageLocalization from '../localization/message';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import Swipeable from '../events/gesture/swipeable';
 import { Deferred } from '../core/utils/deferred';
 
@@ -250,7 +250,7 @@ const Switch = Editor.inherit({
     },
 
     _renderClick: function() {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const $element = this.$element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
 
@@ -328,7 +328,7 @@ const Switch = Editor.inherit({
         this._swiping = true;
 
         this._feedbackDeferred = new Deferred();
-        feedbackEvents.lock(this._feedbackDeferred);
+        lock(this._feedbackDeferred);
         this._toggleActiveState(this.$element(), this.option('activeStateEnabled'));
     },
 

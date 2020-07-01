@@ -87,9 +87,9 @@ QUnit.begin(function() {
     loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
         return new vizMocks.LoadingIndicator(parameters);
     });
-    exportModule.ExportMenu = function(parameters) {
+    exportModule.DEBUG_set_ExportMenu(function(parameters) {
         return new vizMocks.ExportMenu(parameters);
-    };
+    });
     const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
 
     tooltipModule.DEBUG_set_tooltip(function(parameters) {

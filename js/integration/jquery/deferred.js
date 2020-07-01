@@ -1,5 +1,5 @@
 import jQuery from 'jquery';
-import deferredUtils from '../../core/utils/deferred';
+import { setStrategy } from '../../core/utils/deferred';
 import { compare as compareVersion } from '../../core/utils/version';
 import useJQueryFn from './use_jquery';
 const useJQuery = useJQueryFn();
@@ -20,5 +20,5 @@ if(useJQuery) {
             }
         };
 
-    deferredUtils.setStrategy(strategy);
+    setStrategy(strategy);
 }

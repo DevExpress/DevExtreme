@@ -1,7 +1,7 @@
 import variableWrapper from '../../core/utils/variable_wrapper';
 import dataCoreUtils from '../../core/utils/data';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { ensureDefined, noop } from '../../core/utils/common';
+import { isDefined, isObject as isObjectType, isString, isFunction } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import DataHelperMixin from '../../data_helper';
 import DataSourceModule from '../../data/data_source/data_source';
@@ -64,7 +64,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
         const deferred = new Deferred();
         value = this._unwrappedValue(value);
 
-        if(!typeUtils.isDefined(value)) {
+        if(!isDefined(value)) {
             return deferred.reject().promise();
         }
 
@@ -86,7 +86,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _unwrappedValue: function(value) {
-        value = typeUtils.isDefined(value) ? value : this._getCurrentValue();
+        value = isDefined(value) ? value : this._getCurrentValue();
 
         if(value && this._dataSource && this._valueGetterExpr() === 'this') {
             value = this._getItemKey(value);
@@ -116,7 +116,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     _isValueEquals: function(value1, value2) {
         const dataSourceKey = this._dataSource && this._dataSource.key();
 
-        const isDefined = typeUtils.isDefined;
+        const isDefined = isDefined;
         let result = this._compareValues(value1, value2);
 
         if(!result && dataSourceKey && isDefined(value1) && isDefined(value2)) {
@@ -131,7 +131,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compareByCompositeKey: function(value1, value2, key) {
-        const isObject = typeUtils.isObject;
+        const isObject = isObjectType;
 
         if(!isObject(value1) || !isObject(value2)) {
             return false;
@@ -147,7 +147,6 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compareByKey: function(value1, value2, key) {
-        const ensureDefined = commonUtils.ensureDefined;
         const unwrapObservable = variableWrapper.unwrap;
         const valueKey1 = ensureDefined(unwrapObservable(value1[key]), value1);
         const valueKey2 = ensureDefined(unwrapObservable(value2[key]), value2);
@@ -159,7 +158,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
         return dataCoreUtils.toComparable(value1, true) === dataCoreUtils.toComparable(value2, true);
     },
 
-    _initDynamicTemplates: commonUtils.noop,
+    _initDynamicTemplates: noop,
 
     _setCollectionWidgetItemTemplate: function() {
         this._initDynamicTemplates();
@@ -168,7 +167,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
 
     _getCollectionKeyExpr: function() {
         const valueExpr = this.option('valueExpr');
-        const isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== 'this' || typeUtils.isFunction(valueExpr);
+        const isValueExprField = isString(valueExpr) && valueExpr !== 'this' || isFunction(valueExpr);
 
         return isValueExprField ? valueExpr : null;
     },

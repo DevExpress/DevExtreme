@@ -6,7 +6,7 @@ import inkRipple from './widget/utils.ink_ripple';
 import Editor from './editor/editor';
 import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 
 const CHECKBOX_CLASS = 'dx-checkbox';
 const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
@@ -165,7 +165,7 @@ const CheckBox = Editor.inherit({
 
     _renderClick: function() {
         const that = this;
-        const eventName = addNamespace(clickEvent.name, that.NAME);
+        const eventName = addNamespace(clickEventName, that.NAME);
 
         that._clickAction = that._createAction(that._clickHandler);
 

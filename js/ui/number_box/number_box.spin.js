@@ -5,7 +5,7 @@ import Widget from '../widget/ui.widget';
 import { extend } from '../../core/utils/extend';
 import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
-import feedbackEvents from '../../events/core/emitter.feedback';
+import { lock } from '../../events/core/emitter.feedback';
 import holdEvent from '../../events/hold';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -60,7 +60,7 @@ const SpinButton = Widget.inherit({
 
         eventsEngine.on(this.$element(), holdEvent.name, (function() {
             this._feedBackDeferred = new Deferred();
-            feedbackEvents.lock(this._feedBackDeferred);
+            lock(this._feedBackDeferred);
             this._spinChangeHandler({ event: e });
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { event: e });
         }).bind(this));

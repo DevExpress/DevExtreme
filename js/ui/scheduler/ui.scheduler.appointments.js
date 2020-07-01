@@ -1,11 +1,11 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import dataUtils from '../../core/element_data';
+import { data as elementData } from '../../core/element_data';
 import translator from '../../animation/translator';
 import dateUtils from '../../core/utils/date';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { noop, normalizeKey } from '../../core/utils/common';
+import { isDefined, isDeferred, isPlainObject, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import objectUtils from '../../core/utils/object';
 import arrayUtils from '../../core/utils/array';
@@ -82,7 +82,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const appointments = this._getAccessAppointments();
 
         return appointments.filter(function(_, $item) {
-            return dataUtils.data($item, APPOINTMENT_SETTINGS_NAME).sortedIndex === sortedIndex;
+            return elementData($item, APPOINTMENT_SETTINGS_NAME).sortedIndex === sortedIndex;
         }).eq(0);
     },
 
@@ -95,7 +95,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         $appointment.attr('tabIndex', this.option('tabIndex'));
     },
 
-    _moveFocus: commonUtils.noop,
+    _moveFocus: noop,
 
     _focusTarget: function() {
         return this._itemElements();
@@ -183,7 +183,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _isRepaintAppointment: function(appointment) {
-        return !typeUtils.isDefined(appointment.needRepaint) || appointment.needRepaint === true;
+        return !isDefined(appointment.needRepaint) || appointment.needRepaint === true;
     },
 
     _isRepaintAll: function(appointments) {
@@ -339,7 +339,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
-        if(typeUtils.isPlainObject(data)) {
+        if(isPlainObject(data)) {
             if(data.html) {
                 $container.html(data.html);
             }
@@ -484,7 +484,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         this._applyResourceDataAttr($appointment);
         const data = this._getItemData($appointment);
         const geometry = this.invoke('getAppointmentGeometry', settings);
-        const allowResize = this.option('allowResize') && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing));
+        const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
         const allDay = settings.allDay;
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
@@ -523,9 +523,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const resources = this.invoke('getResourcesFromItem', this._getItemData($appointment));
         if(resources) {
             each(resources, function(name, values) {
-                const attr = 'data-' + commonUtils.normalizeKey(name.toLowerCase()) + '-';
+                const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';
                 for(let i = 0; i < values.length; i++) {
-                    $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
+                    $appointment.attr(attr + normalizeKey(values[i]), true);
                 }
             });
         }
@@ -701,7 +701,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const virtualAppointment = appointmentSetting.virtual;
         const virtualGroupIndex = virtualAppointment.index;
 
-        if(!typeUtils.isDefined(this._virtualAppointments[virtualGroupIndex])) {
+        if(!isDefined(this._virtualAppointments[virtualGroupIndex])) {
             this._virtualAppointments[virtualGroupIndex] = {
                 coordinates: {
                     top: virtualAppointment.top,
@@ -886,7 +886,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const coords = this._initialCoordinates;
 
         if(dragEvent) {
-            if(typeUtils.isDeferred(dragEvent.cancel)) {
+            if(isDeferred(dragEvent.cancel)) {
                 dragEvent.cancel.resolve(true);
             } else {
                 dragEvent.cancel = true;

@@ -13,21 +13,26 @@ import DOMComponent from '../core/dom_component';
 import { getPublicElement } from '../core/element';
 import { addNamespace, needSkipEvent } from '../events/utils';
 import pointerEvents from '../events/pointer';
-import dragEvents from '../events/drag';
+import {
+    start as dragEventStart,
+    move as dragEventMove,
+    end as dragEventEnd,
+    enter as dragEventEnter,
+    leave as dragEventLeave
+} from '../events/drag';
 import positionUtils from '../animation/position';
-import typeUtils from '../core/utils/type';
-import { noop } from '../core/utils/common';
-import viewPortUtils from '../core/utils/view_port';
-import commonUtils from '../core/utils/common';
+import { isFunction, isObject } from '../core/utils/type';
+import { noop, splitPair } from '../core/utils/common';
+import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
 import { getBoundingRect } from '../core/utils/position';
 const DRAGGABLE = 'dxDraggable';
-const DRAGSTART_EVENT_NAME = addNamespace(dragEvents.start, DRAGGABLE);
-const DRAG_EVENT_NAME = addNamespace(dragEvents.move, DRAGGABLE);
-const DRAGEND_EVENT_NAME = addNamespace(dragEvents.end, DRAGGABLE);
-const DRAG_ENTER_EVENT_NAME = addNamespace(dragEvents.enter, DRAGGABLE);
-const DRAGEND_LEAVE_EVENT_NAME = addNamespace(dragEvents.leave, DRAGGABLE);
+const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
+const DRAG_EVENT_NAME = addNamespace(dragEventMove, DRAGGABLE);
+const DRAGEND_EVENT_NAME = addNamespace(dragEventEnd, DRAGGABLE);
+const DRAG_ENTER_EVENT_NAME = addNamespace(dragEventEnter, DRAGGABLE);
+const DRAGEND_LEAVE_EVENT_NAME = addNamespace(dragEventLeave, DRAGGABLE);
 const POINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, DRAGGABLE);
 
 const CLONE_CLASS = 'clone';
@@ -311,13 +316,13 @@ const Draggable = DOMComponent.inherit({
     },
 
     _normalizeCursorOffset: function(offset) {
-        if(typeUtils.isObject(offset)) {
+        if(isObject(offset)) {
             offset = {
                 h: offset.x,
                 v: offset.y
             };
         }
-        offset = commonUtils.splitPair(offset).map((value) => parseFloat(value));
+        offset = splitPair(offset).map((value) => parseFloat(value));
 
         return {
             left: offset[0],
@@ -326,7 +331,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _getNormalizedCursorOffset: function(offset, options) {
-        if(typeUtils.isFunction(offset)) {
+        if(isFunction(offset)) {
             offset = offset.call(this, options);
         }
 
@@ -646,7 +651,7 @@ const Draggable = DOMComponent.inherit({
     _getBoundOffset: function() {
         let boundOffset = this.option('boundOffset');
 
-        if(typeUtils.isFunction(boundOffset)) {
+        if(isFunction(boundOffset)) {
             boundOffset = boundOffset.call(this);
         }
 
@@ -656,7 +661,7 @@ const Draggable = DOMComponent.inherit({
     _getArea: function() {
         let area = this.option('boundary');
 
-        if(typeUtils.isFunction(area)) {
+        if(isFunction(area)) {
             area = area.call(this);
         }
         return $(area);
@@ -666,7 +671,7 @@ const Draggable = DOMComponent.inherit({
         let container = this.option('container');
 
         if(container === undefined) {
-            container = viewPortUtils.value();
+            container = viewPort();
         }
 
         return $(container);

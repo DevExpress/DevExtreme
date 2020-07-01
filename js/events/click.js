@@ -3,7 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import domUtils from '../core/utils/dom';
-import animationFrame from '../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
 import { addNamespace, fireEvent, eventDelta, eventData } from './utils';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
@@ -18,7 +18,7 @@ const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
 };
 
-const misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
+const misc = { requestAnimationFrame: requestAnimationFrame, cancelAnimationFrame: cancelAnimationFrame };
 
 let ClickEmitter = Emitter.inherit({
 

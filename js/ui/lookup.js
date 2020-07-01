@@ -3,7 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import windowUtils from '../core/utils/window';
 const window = windowUtils.getWindow();
 import support from '../core/utils/support';
-import commonUtils from '../core/utils/common';
+import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -14,7 +14,7 @@ import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import themes from './themes';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import Popover from './popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
@@ -386,7 +386,7 @@ const Lookup = DropDownList.inherit({
         });
     },
 
-    _fireContentReadyAction: commonUtils.noop, // TODO: why not symmetric to other dropdowns?
+    _fireContentReadyAction: noop, // TODO: why not symmetric to other dropdowns?
 
     _popupWrapperClass: function() {
         return '';
@@ -398,7 +398,7 @@ const Lookup = DropDownList.inherit({
         });
 
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-        eventsEngine.on(this._$field, addNamespace(clickEvent.name, this.NAME), e => {
+        eventsEngine.on(this._$field, addNamespace(clickEventName, this.NAME), e => {
             fieldClickAction({ event: e });
         });
 
@@ -713,7 +713,7 @@ const Lookup = DropDownList.inherit({
         }
     },
 
-    _preventFocusOnPopup: commonUtils.noop,
+    _preventFocusOnPopup: noop,
 
     _popupConfig: function() {
         const result = extend(this.callBase(), {
@@ -898,8 +898,8 @@ const Lookup = DropDownList.inherit({
         this._searchBox.registerKeyHandler('escape', this.close.bind(this));
         this._searchBox.registerKeyHandler('enter', this._selectListItemHandler.bind(this));
         this._searchBox.registerKeyHandler('space', this._selectListItemHandler.bind(this));
-        this._searchBox.registerKeyHandler('end', commonUtils.noop);
-        this._searchBox.registerKeyHandler('home', commonUtils.noop);
+        this._searchBox.registerKeyHandler('end', noop);
+        this._searchBox.registerKeyHandler('home', noop);
     },
 
     _toggleSearchClass: function(isSearchEnabled) {
@@ -923,7 +923,7 @@ const Lookup = DropDownList.inherit({
         this._searchBox.option('placeholder', placeholder);
     },
 
-    _setAriaTargetForList: commonUtils.noop,
+    _setAriaTargetForList: noop,
 
     _renderList: function() {
         this.callBase();
@@ -955,7 +955,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getSelectionChangedHandler: function() {
-        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
+        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
     },
 
     _listContentReadyHandler: function() {

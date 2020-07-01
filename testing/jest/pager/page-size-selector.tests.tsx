@@ -3,8 +3,8 @@ import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../../../js/renovation/pager/page-size-selector';
 
-jest.mock('../../../js/renovation/pager/page-size-small', jest.fn());
-jest.mock('../../../js/renovation/pager/page-size-large', jest.fn());
+jest.mock('../../../js/renovation/pager/page-size-small', () => ({ PageSizeSmall: jest.fn() }));
+jest.mock('../../../js/renovation/pager/page-size-large', () => ({ PageSizeLarge: jest.fn() }));
 
 describe('Pager size selector', () => {
   function defaultProps(): PageSizeSelector {
@@ -34,6 +34,7 @@ describe('Pager size selector', () => {
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
     expect(tree.props()).toEqual({ className: 'dx-page-sizes' });
     expect(tree.childAt(0).props()).toEqual({
+      children: [],
       pageSize: 5,
       pageSizeChange: props.props?.pageSizeChange,
       pageSizes: [
@@ -55,6 +56,7 @@ describe('Pager size selector', () => {
     expect(tree.props()).toEqual({ className: 'dx-page-sizes' });
     expect(tree.instance()).toBe((props.htmlRef as any).current);
     expect(tree.childAt(0).props()).toEqual({
+      children: [],
       pageSize: 5,
       pageSizes: [
         {

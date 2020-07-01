@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import windowUtils from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { deferRender, deferUpdate } from '../../core/utils/common';
-import styleUtils from '../../core/utils/style';
+import { setHeight } from '../../core/utils/style';
 import { isDefined, isNumeric, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -796,11 +796,11 @@ export default {
                                 const scrollingMode = this.option('scrolling.mode');
 
                                 if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
-                                    styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
+                                    setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
-                                    styleUtils.setHeight(freeSpaceRowElements, 0);
+                                    setHeight(freeSpaceRowElements, 0);
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
@@ -995,7 +995,7 @@ export default {
                     that._hasHeight = hasHeight === undefined ? height !== 'auto' : hasHeight;
 
                     if(isDefined(height) && $element) {
-                        styleUtils.setHeight($element, height);
+                        setHeight($element, height);
                     }
                 },
 

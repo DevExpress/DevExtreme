@@ -1,7 +1,12 @@
 import { fileSaver } from './exporter/file_saver';
-import excelCreator from './exporter/excel_creator';
-import imageCreator from './exporter/image_creator';
-import svgCreator from './exporter/svg_creator';
+import { ///#DEBUG
+    __internals,
+    ///#ENDDEBUG
+    ExcelCreator,
+    getData as getExcelData
+} from './exporter/excel_creator';
+import { imageCreator, testFormats, getData as getImageData } from './exporter/image_creator';
+import { svgCreator, getData as getSvgData } from './exporter/svg_creator';
 import { isFunction as _isFunction } from './core/utils/type';
 import { Deferred } from './core/utils/deferred';
 import formatConverter from './exporter/excel_format_converter';
@@ -48,17 +53,17 @@ export { fileSaver };
 
 export const excel = {
     ///#DEBUG
-    __internals: excelCreator.__internals,
+    __internals: __internals,
     ///#ENDDEBUG
-    creator: excelCreator.ExcelCreator,
-    getData: excelCreator.getData,
+    creator: ExcelCreator,
+    getData: getExcelData,
     formatConverter: formatConverter
 };
 
 export const image = {
-    creator: imageCreator.imageCreator,
-    getData: imageCreator.getData,
-    testFormats: imageCreator.testFormats
+    creator: imageCreator,
+    getData: getImageData,
+    testFormats: testFormats
 };
 
 export const pdf = {
@@ -66,6 +71,6 @@ export const pdf = {
 };
 
 export const svg = {
-    creator: svgCreator.svgCreator,
-    getData: svgCreator.getData
+    creator: svgCreator,
+    getData: getSvgData
 };

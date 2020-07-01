@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import viewPortUtils from '../../core/utils/view_port';
+import { value as viewPort } from '../../core/utils/view_port';
 import LoadPanel from '../load_panel';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -7,7 +7,7 @@ let loading = null;
 
 const createLoadPanel = function(options) {
     return new LoadPanel($('<div>')
-        .appendTo(options && options.container || viewPortUtils.value()),
+        .appendTo(options && options.container || viewPort()),
     options);
 };
 

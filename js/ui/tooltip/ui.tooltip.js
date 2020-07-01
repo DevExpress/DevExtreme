@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Tooltip from './tooltip';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
-import viewPortUtils from '../../core/utils/view_port';
+import { value as viewPort } from '../../core/utils/view_port';
 
 let tooltip = null;
 let removeTooltipElement = null;
@@ -15,7 +15,7 @@ const createTooltip = function(options) {
 
     const $tooltip = $('<div>')
         .html(content)
-        .appendTo(viewPortUtils.value());
+        .appendTo(viewPort());
 
     removeTooltipElement = function() {
         $tooltip.remove();

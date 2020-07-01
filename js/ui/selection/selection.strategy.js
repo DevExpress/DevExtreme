@@ -1,7 +1,6 @@
 import dataQuery from '../../data/query';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
-const getKeyHash = commonUtils.getKeyHash;
+import { getKeyHash, noop, equalByValue } from '../../core/utils/common';
+import { isPlainObject, isObject } from '../../core/utils/type';
 import Class from '../../core/class';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -20,7 +19,7 @@ export default Class.inherit({
         this._setOption('addedItems', []);
     },
 
-    validate: commonUtils.noop,
+    validate: noop,
 
     _setOption: function(name, value) {
         this.options[name] = value;
@@ -33,7 +32,7 @@ export default Class.inherit({
         const removedItems = this.options.removedItems;
         const selectedItems = this.options.selectedItems;
         const selectedItemKeys = this.options.selectedItemKeys;
-        const onSelectionChanged = this.options.onSelectionChanged || commonUtils.noop;
+        const onSelectionChanged = this.options.onSelectionChanged || noop;
 
         this._clearItemKeys();
         onSelectionChanged({
@@ -48,12 +47,12 @@ export default Class.inherit({
 
     equalKeys: function(key1, key2) {
         if(this.options.equalByReference) {
-            if(typeUtils.isObject(key1) && typeUtils.isObject(key2)) {
+            if(isObject(key1) && isObject(key2)) {
                 return key1 === key2;
             }
         }
 
-        return commonUtils.equalByValue(key1, key2);
+        return equalByValue(key1, key2);
     },
 
     getSelectableItems: function(items) {
@@ -84,7 +83,7 @@ export default Class.inherit({
         } else {
             this.options.load(loadOptions)
                 .done(function(items) {
-                    let filteredItems = typeUtils.isPlainObject(items) ? items.data : items;
+                    let filteredItems = isPlainObject(items) ? items.data : items;
 
                     if(localFilter && !isSelectAll) {
                         filteredItems = filteredItems.filter(localFilter);
@@ -104,7 +103,7 @@ export default Class.inherit({
         for(let i = 0; i < keys.length; i++) {
             const keyHash = getKeyHash(keys[i]);
 
-            if(!typeUtils.isObject(keyHash)) {
+            if(!isObject(keyHash)) {
                 this.options.keyHashIndices[keyHash] = this.options.keyHashIndices[keyHash] || [];
 
                 const keyIndices = this.options.keyHashIndices[keyHash];

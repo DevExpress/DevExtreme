@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
-import typeUtils from '../../core/utils/type';
+import { isObject, isDefined } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
-import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
@@ -145,7 +144,7 @@ const SchedulerHeader = Widget.inherit({
         const views = this.option('views');
 
         each(views, function(_, view) {
-            const isViewIsObject = typeUtils.isObject(view);
+            const isViewIsObject = isObject(view);
             const viewType = isViewIsObject && view.type ? view.type : view;
 
             if(inArray(viewType, VIEWS) === -1) {
@@ -236,7 +235,7 @@ const SchedulerHeader = Widget.inherit({
     },
 
     _getCurrentViewName: function(currentView) {
-        return typeUtils.isObject(currentView) ? currentView.name || currentView.type : currentView;
+        return isObject(currentView) ? currentView.name || currentView.type : currentView;
     },
 
     _updateCurrentView: function(e) {

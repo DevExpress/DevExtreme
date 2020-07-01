@@ -6,7 +6,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import support from '../../core/utils/support';
-import styleUtils from '../../core/utils/style';
+import { styleProp } from '../../core/utils/style';
 import devices from '../../core/devices';
 
 const initMobileViewport = function(options) {
@@ -45,7 +45,7 @@ const initMobileViewport = function(options) {
     }
 
     if(!allowSelection && support.supportProp('userSelect')) {
-        $('.dx-viewport').css(styleUtils.styleProp('userSelect'), 'none');
+        $('.dx-viewport').css(styleProp('userSelect'), 'none');
     }
 
     $(metaSelector).attr('content', metaVerbs.join());

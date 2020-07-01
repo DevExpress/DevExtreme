@@ -3,7 +3,7 @@ import Widget from '../widget/ui.widget';
 import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import typeUtils from '../../core/utils/type';
+import { isFunction } from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
@@ -795,7 +795,7 @@ class Diagram extends Widget {
     }
     _createOptionSetter(optionName) {
         const expr = this.option(optionName);
-        if(typeUtils.isFunction(expr)) {
+        if(isFunction(expr)) {
             return expr;
         }
         return expr && dataCoreUtils.compileSetter(expr);

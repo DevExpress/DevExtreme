@@ -1,7 +1,7 @@
 import Calendar from '../calendar';
 import DateBoxStrategy from './ui.date_box.strategy';
 import dateUtils from '../../core/utils/date';
-import commonUtils from '../../core/utils/common';
+import { splitPair } from '../../core/utils/common';
 import { isFunction, isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
@@ -104,7 +104,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         let position = [];
 
         if(buttonsLocation !== 'default') {
-            position = commonUtils.splitPair(buttonsLocation);
+            position = splitPair(buttonsLocation);
         } else {
             position = ['bottom', 'center'];
         }

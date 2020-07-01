@@ -7,7 +7,7 @@ import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import utils from './utils';
-import deferredUtils from '../../core/utils/deferred';
+import { when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import TreeView from '../tree_view';
 import Popup from '../popup';
@@ -704,7 +704,7 @@ const FilterBuilder = Widget.inherit({
                 renderValueText($text, result);
             });
         } else {
-            deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
+            when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
                 renderValueText($text, result, customOperation);
             });
         }

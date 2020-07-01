@@ -1,4 +1,4 @@
-import mathUtils from '../core/utils/math';
+import { sign as mathSign, fitIntoRange } from '../core/utils/math';
 import iteratorUtils from '../core/utils/iterator';
 import errors from '../core/errors';
 import { hasTouches } from './utils';
@@ -88,8 +88,8 @@ const getRotation = function(firstVector, secondVector) {
         return 0;
     }
 
-    const sign = mathUtils.sign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
-    const angle = Math.acos(mathUtils.fitIntoRange(scalarProduct / distanceProduct, -1, 1));
+    const sign = mathSign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
+    const angle = Math.acos(fitIntoRange(scalarProduct / distanceProduct, -1, 1));
 
     return sign * angle;
 };

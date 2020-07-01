@@ -1,7 +1,7 @@
 import windowUtils from '../../core/utils/window';
 const window = windowUtils.getWindow();
 import registerComponent from '../../core/component_registrator';
-import typeUtils from '../../core/utils/type';
+import { isDefined, isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import dom from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
 import { compare as compareVersions } from '../../core/utils/version';
@@ -510,13 +510,13 @@ const DateBox = DropDownEditor.inherit({
         const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
         const parsedText = this._strategy.getParsedText(text, displayFormat);
 
-        return typeUtils.isDefined(parsedText) ? parsedText : undefined;
+        return isDefined(parsedText) ? parsedText : undefined;
     },
 
     _applyInternalValidation(value) {
         const text = this.option('text');
         const hasText = !!text && value !== null;
-        const isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime());
+        const isDate = !!value && isDateType(value) && !isNaN(value.getTime());
         const isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption('min'), this.dateOption('max'), this.option('type'));
         const isValid = !hasText && !value || isDateInRange;
         let validationMessage = '';
@@ -705,11 +705,11 @@ const DateBox = DropDownEditor.inherit({
             return this.option('dateSerializationFormat');
         }
 
-        if(typeUtils.isNumeric(value)) {
+        if(isNumeric(value)) {
             return 'number';
         }
 
-        if(!typeUtils.isString(value)) {
+        if(!isString(value)) {
             return;
         }
 

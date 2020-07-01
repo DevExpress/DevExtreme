@@ -1,10 +1,8 @@
 import { dxBaseGauge } from './base_gauge';
-import typeUtils from '../../core/utils/type';
+import { isDefined as _isDefined, isNumeric as _isNumber } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-const _isDefined = typeUtils.isDefined;
 const _isArray = Array.isArray;
-const _isNumber = typeUtils.isNumeric;
 import axisModule from '../axes/base_axis';
 import { map as _map } from '../core/utils';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';

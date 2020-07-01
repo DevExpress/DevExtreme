@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import Promise from '../../core/polyfills/promise';
 import Provider from './provider';
 import Color from '../../color';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 
 let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
@@ -100,7 +100,7 @@ const GoogleStaticProvider = Provider.inherit({
 
     clean: function() {
         this._$container.css('backgroundImage', 'none');
-        eventsEngine.off(this._$container, this._addEventNamespace(clickEvent.name));
+        eventsEngine.off(this._$container, this._addEventNamespace(clickEventName));
 
         return Promise.resolve();
     },
@@ -172,7 +172,7 @@ const GoogleStaticProvider = Provider.inherit({
 
     _attachClickEvent: function() {
         const that = this;
-        const eventName = this._addEventNamespace(clickEvent.name);
+        const eventName = this._addEventNamespace(clickEventName);
 
         eventsEngine.off(this._$container, eventName);
         eventsEngine.on(this._$container, eventName, function(e) {

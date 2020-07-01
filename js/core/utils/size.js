@@ -1,5 +1,5 @@
 import windowUtils from '../../core/utils/window';
-import typeUtils from '../utils/type';
+import { isWindow, isString, isNumeric } from '../utils/type';
 
 const window = windowUtils.getWindow();
 
@@ -68,7 +68,7 @@ const getSize = function(element, name, include) {
 };
 
 const getContainerHeight = function(container) {
-    return typeUtils.isWindow(container) ? container.innerHeight : container.offsetHeight;
+    return isWindow(container) ? container.innerHeight : container.offsetHeight;
 };
 
 const parseHeight = function(value, container) {
@@ -92,11 +92,11 @@ const getHeightWithOffset = function(value, offset, container) {
         return offset ? null : value;
     }
 
-    if(typeUtils.isString(value)) {
+    if(isString(value)) {
         value = parseHeight(value, container);
     }
 
-    if(typeUtils.isNumeric(value)) {
+    if(isNumeric(value)) {
         return Math.max(0, value + offset);
     }
 

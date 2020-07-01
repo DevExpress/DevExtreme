@@ -6,7 +6,7 @@ import inkRipple from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import Editor from '../editor/editor';
 import { addNamespace } from '../../events/utils';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
@@ -126,7 +126,7 @@ const RadioButton = Editor.inherit({
     },
 
     _renderClick: function() {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         this._clickAction = this._createAction((function(args) {
             this._clickHandler(args.event);

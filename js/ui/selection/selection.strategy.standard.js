@@ -1,12 +1,8 @@
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
-const isDefined = typeUtils.isDefined;
-const getKeyHash = commonUtils.getKeyHash;
+import { getKeyHash } from '../../core/utils/common';
+import { isDefined, isObject } from '../../core/utils/type';
 import dataQuery from '../../data/query';
-import deferredUtils from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import { SelectionFilterCreator } from '../../core/utils/selection_filter';
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
 import errors from '../widget/ui.errors';
 import SelectionStrategy from './selection.strategy';
 
@@ -191,7 +187,7 @@ export default SelectionStrategy.inherit({
         const keyHash = this._getKeyHash(key);
 
         if(this._indexOfSelectedItemKey(keyHash) === -1) {
-            if(!typeUtils.isObject(keyHash) && this.options.keyHashIndices) {
+            if(!isObject(keyHash) && this.options.keyHashIndices) {
                 this.options.keyHashIndices[keyHash] = [this.options.selectedItemKeys.length];
             }
 
@@ -230,7 +226,7 @@ export default SelectionStrategy.inherit({
 
         if(this.options.equalByReference) {
             selectedIndex = this.options.selectedItemKeys.indexOf(key);
-        } else if(typeUtils.isObject(key)) {
+        } else if(isObject(key)) {
             selectedIndex = this._getSelectedIndexByKey(key, ignoreIndicesMap);
         } else {
             selectedIndex = this._getSelectedIndexByHash(key, ignoreIndicesMap);
@@ -274,7 +270,7 @@ export default SelectionStrategy.inherit({
         this.options.selectedItemKeys.splice(keyIndex, 1);
         this.options.selectedItems.splice(keyIndex, 1);
 
-        if(typeUtils.isObject(keyHash) || !this.options.keyHashIndices) {
+        if(isObject(keyHash) || !this.options.keyHashIndices) {
             return keyIndex;
         }
 

@@ -1,22 +1,24 @@
-import { getDocument } from '../../core/dom_adapter';
+import domAdapter from '../../core/dom_adapter';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { Tooltip } from '../core/tooltip';
 import { extend } from '../../core/utils/extend';
 import { patchFontOptions } from './utils';
 import { Plaque } from './plaque';
 import pointerEvents from '../../events/pointer';
-import dragEvents from '../../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
+
+const getDocument = domAdapter.getDocument;
 
 const EVENT_NS = 'annotations';
 const DOT_EVENT_NS = '.' + EVENT_NS;
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
 
-const DRAG_START_EVENT_NAME = dragEvents.start + DOT_EVENT_NS;
-const DRAG_EVENT_NAME = dragEvents.move + DOT_EVENT_NS;
-const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
+const DRAG_START_EVENT_NAME = dragEventStart + DOT_EVENT_NS;
+const DRAG_EVENT_NAME = dragEventMove + DOT_EVENT_NS;
+const DRAG_END_EVENT_NAME = dragEventEnd + DOT_EVENT_NS;
 
 function coreAnnotation(options, contentTemplate) {
     return {

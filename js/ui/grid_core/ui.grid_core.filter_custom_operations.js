@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
 import { DataSource } from '../../data/data_source/data_source';
-import deferredUtils from '../../core/utils/deferred';
+import { Deferred } from '../../core/utils/deferred';
 import { isGroup, isCondition, getFilterExpression, renderValueText } from '../filter_builder/utils';
 
 function baseOperation(grid) {
@@ -52,7 +52,7 @@ function baseOperation(grid) {
             const dataSourceOptions = headerFilterController.getDataSource(column);
             dataSourceOptions.paginate = false;
             const dataSource = new DataSource(dataSourceOptions);
-            const result = new deferredUtils.Deferred();
+            const result = new Deferred();
 
             const key = dataSource.store().key();
             if(key) {

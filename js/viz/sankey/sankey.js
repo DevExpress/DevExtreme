@@ -4,11 +4,9 @@ import { noop } from '../../core/utils/common';
 import Node from './node_item';
 import Link from './link_item';
 import defaultLayoutBuilder from './layout';
-import typeUtils from '../../core/utils/type';
+import { isString as _isString, isNumeric as _isNumber } from '../../core/utils/type';
 import baseWidget from '../core/base_widget';
 import componentRegistrator from '../../core/component_registrator';
-const _isString = typeUtils.isString;
-const _isNumber = typeUtils.isNumeric;
 
 function moveLabel(node, labelOptions, availableLabelWidth, rect) {
     if(node._label.getBBox().width > availableLabelWidth) {

@@ -1,8 +1,7 @@
 import Class from '../../core/class';
-import commonUtils from '../../core/utils/common';
-import iteratorUtils from '../../core/utils/iterator';
+import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import errors from '../../ui/widget/ui.errors';
 import { getOperationBySearchMode } from '../../ui/widget/ui.search_box_mixin';
@@ -50,7 +49,7 @@ const DataAdapter = Class.inherit({
             dataType: 'tree',
             searchMode: 'contains',
             dataConverter: new HierarchicalDataConverter(),
-            onNodeChanged: commonUtils.noop,
+            onNodeChanged: noop,
             sort: null
         };
     },
@@ -167,7 +166,7 @@ const DataAdapter = Class.inherit({
     },
 
     _iterateChildren: function(node, recursive, callback, processedKeys) {
-        if(!typeUtils.isFunction(callback)) {
+        if(!isFunction(callback)) {
             return;
         }
 
@@ -187,7 +186,7 @@ const DataAdapter = Class.inherit({
     },
 
     _iterateParents: function(node, callback, processedKeys) {
-        if(node.internalFields.parentKey === this.options.rootValue || !typeUtils.isFunction(callback)) {
+        if(node.internalFields.parentKey === this.options.rootValue || !isFunction(callback)) {
             return;
         }
         processedKeys = processedKeys || [];
@@ -408,7 +407,7 @@ const DataAdapter = Class.inherit({
     },
 
     toggleSelectAll: function(state) {
-        if(!typeUtils.isDefined(state)) {
+        if(!isDefined(state)) {
             return;
         }
 
@@ -457,7 +456,7 @@ const DataAdapter = Class.inherit({
         if(!Array.isArray(selector)) {
             return [selector, operation, value];
         }
-        iteratorUtils.each(selector, function(i, item) {
+        each(selector, function(i, item) {
             searchFilter.push([item, operation, value], 'or');
         });
 

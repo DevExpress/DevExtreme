@@ -6,9 +6,9 @@ import { PagerContentComponent as PagerContent, PagerContentProps, viewFunction 
 import { PageSizeSelector } from '../../../js/renovation/pager/page-size-selector';
 import { InfoText } from '../../../js/renovation/pager/info';
 
-jest.mock('../../../js/renovation/pager/page-size-selector', () => jest.fn());
-jest.mock('../../../js/renovation/pager/page-index-selector', () => jest.fn());
-jest.mock('../../../js/renovation/pager/info', () => jest.fn());
+jest.mock('../../../js/renovation/pager/page-size-selector', () => ({ __esModule: true, PageSizeSelector: jest.fn() }));
+jest.mock('../../../js/renovation/pager/page-index-selector', () => ({ __esModule: true, PageIndexSelector: jest.fn() }));
+jest.mock('../../../js/renovation/pager/info', () => ({ __esModule: true, InfoText: jest.fn() }));
 
 describe('PagerContent', () => {
   describe('View', () => {

@@ -5,10 +5,7 @@ const window = windowUtils.getWindow();
 import { isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import svgUtils from '../core/utils/svg';
-import deferredUtils from '../core/utils/deferred';
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
-
+import { when, Deferred } from '../core/utils/deferred';
 
 export const svgCreator = {
     _markup: '',

@@ -1,6 +1,6 @@
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
 import { events as eventsConsts, states as statesConsts } from '../components/consts';
@@ -73,7 +73,7 @@ const baseTrackerPrototype = {
         that._renderer.root.off(DOT_EVENT_NS)
             .on(POINTER_ACTION, data, that._pointerHandler)
             .on(addNamespace(pointerEvents.up, EVENT_NS), () => clearTimeout(that._holdTimer))
-            .on(addNamespace(clickEvent.name, EVENT_NS), data, that._clickHandler);
+            .on(addNamespace(clickEventName, EVENT_NS), data, that._clickHandler);
     },
 
     update: function(options) {

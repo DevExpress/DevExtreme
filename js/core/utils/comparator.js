@@ -1,6 +1,6 @@
 import domAdapter from '../dom_adapter';
 import { toComparable } from './data';
-import typeUtils from './type';
+import { isRenderer } from './type';
 
 const hasNegation = function(oldValue, newValue) {
     return (1 / oldValue) === (1 / newValue);
@@ -10,7 +10,7 @@ const equals = function(oldValue, newValue) {
     oldValue = toComparable(oldValue, true);
     newValue = toComparable(newValue, true);
 
-    if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
+    if(oldValue && newValue && isRenderer(oldValue) && isRenderer(newValue)) {
         return newValue.is(oldValue);
     }
 

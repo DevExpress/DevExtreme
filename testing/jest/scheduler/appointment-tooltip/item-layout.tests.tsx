@@ -11,9 +11,9 @@ import { Button as DeleteButton } from '../../../../js/renovation/button';
 import { Marker } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
 import { TooltipItemContent } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 
-jest.mock('../../../../js/renovation/button', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
+jest.mock('../../../../js/renovation/button', () => ({ Button: () => null }));
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => ({ Marker: () => null }));
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => ({ TooltipItemContent: () => null }));
 
 describe('TooltipItemLayout', () => {
   describe('View', () => {

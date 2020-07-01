@@ -1,14 +1,11 @@
 import $ from '../core/renderer';
-import commonUtils from '../core/utils/common';
-import typeUtils from '../core/utils/type';
-const isDefined = typeUtils.isDefined;
-const isPromise = typeUtils.isPromise;
+import { noop, ensureDefined } from '../core/utils/common';
+import { isDefined, isPromise } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
-import deferredUtils from '../core/utils/deferred';
+import { Deferred, fromPromise } from '../core/utils/deferred';
 import { getPublicElement } from '../core/element';
-const Deferred = deferredUtils.Deferred;
 import errors from '../core/errors';
 import domAdapter from '../core/dom_adapter';
 import inkRipple from './widget/utils.ink_ripple';
@@ -432,7 +429,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _getSelectionChangeHandler: function() {
-        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
+        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
     },
 
     _selectionChangeHandler: function(e) {
@@ -533,7 +530,7 @@ const SelectBox = DropDownList.inherit({
             }
 
             this._renderInputValue().always((function(selectedItem) {
-                const newSelectedItem = commonUtils.ensureDefined(selectedItem, initialSelectedItem);
+                const newSelectedItem = ensureDefined(selectedItem, initialSelectedItem);
                 this._setSelectedItem(newSelectedItem);
                 this._updateField(newSelectedItem);
                 this._clearFilter();
@@ -694,7 +691,7 @@ const SelectBox = DropDownList.inherit({
             text: text
         };
         const actionResult = this._customItemCreatingAction(params);
-        const item = commonUtils.ensureDefined(actionResult, params.customItem);
+        const item = ensureDefined(actionResult, params.customItem);
 
         if(isDefined(actionResult)) {
             errors.log('W0015', 'onCustomItemCreating', 'customItem');
@@ -715,7 +712,7 @@ const SelectBox = DropDownList.inherit({
         }
 
         if(isPromise(item)) {
-            deferredUtils.fromPromise(item)
+            fromPromise(item)
                 .done(this._setCustomItem.bind(this))
                 .fail(this._setCustomItem.bind(this, null));
         } else {
@@ -822,7 +819,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _dispose: function() {
-        this._renderInputValueAsync = commonUtils.noop;
+        this._renderInputValueAsync = noop;
         delete this._loadItemDeferred;
         this.callBase();
     },

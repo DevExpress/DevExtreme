@@ -13,10 +13,10 @@ import { extend } from '../../core/utils/extend';
 import { inArray, normalizeIndexes } from '../../core/utils/array';
 import dataUtils from '../../core/utils/data';
 import removeEvent from '../../core/remove_event';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';
-import styleUtils from '../../core/utils/style';
+import { styleProp } from '../../core/utils/style';
 import inflector from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
 import Validator from '../validator';
@@ -327,7 +327,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _hasBrowserFlex: function() {
-        return styleUtils.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
+        return styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
     },
 
     _renderResponsiveBox: function() {
@@ -1075,8 +1075,8 @@ const LayoutManager = Widget.inherit({
         const isBooleanEditors = editorType === 'dxCheckBox' || editorType === 'dxSwitch';
 
         if($label && isBooleanEditors) {
-            eventsEngine.on($label, clickEvent.name, function() {
-                eventsEngine.trigger($editor.children(), clickEvent.name);
+            eventsEngine.on($label, clickEventName, function() {
+                eventsEngine.trigger($editor.children(), clickEventName);
             });
         }
     },

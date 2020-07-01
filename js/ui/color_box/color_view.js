@@ -10,7 +10,7 @@ import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import TextBox from '../text_box';
 import Draggable from '../draggable';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -573,8 +573,8 @@ const ColorView = Editor.inherit({
             .text(options.labelText + ':')
             .append($editor);
 
-        eventsEngine.off($label, clickEvent.name);
-        eventsEngine.on($label, clickEvent.name, function(e) {
+        eventsEngine.off($label, clickEventName);
+        eventsEngine.on($label, clickEventName, function(e) {
             e.preventDefault();
         });
 

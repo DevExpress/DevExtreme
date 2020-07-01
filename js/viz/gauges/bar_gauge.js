@@ -7,7 +7,7 @@ const _max = Math.max;
 
 import registerComponent from '../../core/component_registrator';
 import objectUtils from '../../core/utils/object';
-import commonUtils from '../../core/utils/common';
+import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import baseGaugeModule from './base_gauge';
@@ -23,7 +23,7 @@ const _getCosAndSin = vizUtils.getCosAndSin;
 const _patchFontOptions = vizUtils.patchFontOptions;
 const _Number = Number;
 const _isFinite = isFinite;
-const _noop = commonUtils.noop;
+const _noop = noop;
 const _extend = extend;
 import { plugin as pluginLegend } from '../components/legend';
 

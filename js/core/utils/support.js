@@ -1,10 +1,12 @@
 import { inArray } from './array';
-import { createElement } from '../dom_adapter';
+import domAdapter from '../dom_adapter';
 import { ensureDefined } from './common';
 import callOnce from './call_once';
 import windowUtils from './window';
 import devices from '../devices';
-import styleUtils from './style';
+import { stylePropPrefix, styleProp } from './style';
+
+const createElement = domAdapter.createElement;
 
 const {
     maxTouchPoints,
@@ -21,7 +23,7 @@ const transitionEndEventNames = {
 };
 
 const supportProp = function(prop) {
-    return !!styleUtils.styleProp(prop);
+    return !!styleProp(prop);
 };
 
 const isNativeScrollingSupported = function() {
@@ -74,10 +76,10 @@ export { touchEvents };
 export { pointerEvents };
 export const touch = touchEvents || pointerEvents && touchPointersPresent;
 export const transition = callOnce(function() { return supportProp('transition'); });
-export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleUtils.styleProp('transition')]; });
+export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleProp('transition')]; });
 export const animation = callOnce(function() { return supportProp('animation'); });
 export const nativeScrolling = isNativeScrollingSupported();
-export const styleProp = styleUtils.styleProp;
-export const stylePropPrefix = styleUtils.stylePropPrefix;
+export { styleProp };
+export { stylePropPrefix };
 export { supportProp };
 export { inputType };

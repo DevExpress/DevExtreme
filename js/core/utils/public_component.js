@@ -1,4 +1,4 @@
-import dataUtils from '../../core/element_data';
+import { data as elementData } from '../../core/element_data';
 import eventsEngine from '../../events/core/events_engine';
 import WeakMap from '../polyfills/weak_map';
 import { isDefined } from './type';
@@ -26,7 +26,7 @@ const getName = function(componentClass, newName) {
 };
 
 export function attachInstanceToElement($element, componentInstance, disposeFn) {
-    const data = dataUtils.data($element.get(0));
+    const data = elementData($element.get(0));
     const name = getName(componentInstance.constructor);
 
     data[name] = componentInstance;
@@ -47,7 +47,7 @@ export function attachInstanceToElement($element, componentInstance, disposeFn) 
 export function getInstanceByElement($element, componentClass) {
     const name = getName(componentClass);
 
-    return dataUtils.data($element.get(0), name);
+    return elementData($element.get(0), name);
 }
 
 export { getName as name };

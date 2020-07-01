@@ -1,4 +1,11 @@
-import typeUtils from '../../core/utils/type';
+import {
+    isDefined as _isDefined,
+    isFunction as _isFunction,
+    isString as _isString,
+    isDate as _isDate,
+    isNumeric as _isNumber,
+    isObject as _isObject
+} from '../../core/utils/type';
 
 const STRING = 'string';
 const NUMERIC = 'numeric';
@@ -15,13 +22,7 @@ import { enumParser } from '../core/utils';
 const axisTypeParser = enumParser([STRING, NUMERIC, DATETIME]);
 import { getParser as _getParser } from './parse_utils';
 
-const _isDefined = typeUtils.isDefined;
-const _isFunction = typeUtils.isFunction;
 const _isArray = Array.isArray;
-const _isString = typeUtils.isString;
-const _isDate = typeUtils.isDate;
-const _isNumber = typeUtils.isNumeric;
-const _isObject = typeUtils.isObject;
 
 function groupingValues(data, others, valueField, index) {
     if(index >= 0) {

@@ -6,9 +6,8 @@ import config from '../core/config';
 
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
-import { isFunction } from '../core/utils/type';
+import { isFunction, isPlainObject } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
-import { isPlainObject } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import windowUtils from '../core/utils/window';
 import { trigger } from '../events/core/events_engine';

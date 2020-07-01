@@ -60,7 +60,7 @@
 
 import $ from '../core/renderer';
 
-import commonUtils from '../core/utils/common';
+import { splitPair, pairToObject } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import windowUtils from '../core/utils/window';
 const window = windowUtils.getWindow();
@@ -83,7 +83,7 @@ const normalizeAlign = function(raw) {
         v: 'center'
     };
 
-    const pair = commonUtils.splitPair(raw);
+    const pair = splitPair(raw);
 
     if(pair) {
         each(pair, function() {
@@ -100,11 +100,11 @@ const normalizeAlign = function(raw) {
 };
 
 const normalizeOffset = function(raw) {
-    return commonUtils.pairToObject(raw);
+    return pairToObject(raw);
 };
 
 const normalizeCollision = function(raw) {
-    const pair = commonUtils.splitPair(raw);
+    const pair = splitPair(raw);
     let h = String(pair && pair[0]).toLowerCase();
     let v = String(pair && pair[1]).toLowerCase();
 

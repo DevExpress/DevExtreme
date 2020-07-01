@@ -7,7 +7,7 @@ import objectUtils from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import vizUtils from '../core/utils';
-import mathUtils from '../../core/utils/math';
+import { solveCubicEquation, trunc } from '../../core/utils/math';
 const normalizeAngle = vizUtils.normalizeAngle;
 
 const DISCRETE = 'discrete';
@@ -45,7 +45,7 @@ function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
     const b = 3 * p2 - 6 * p1 + 3 * p0;
     const a = p3 - 3 * p2 + 3 * p1 - p0;
 
-    return mathUtils.solveCubicEquation(a, b, c, d);
+    return solveCubicEquation(a, b, c, d);
 }
 
 const lineMethods = {
@@ -604,7 +604,7 @@ polar.line = _extend({}, polarScatterSeries, lineMethods, {
                     const x = (b2 - b1) / (k1 - k2);
                     const y = k1 * x + b1;
                     if(isInsideInterval(prevPoint, point, { x, y })) {
-                        const quarter = abs(mathUtils.trunc((360 + coordParam) / 90) % 4);
+                        const quarter = abs(trunc((360 + coordParam) / 90) % 4);
                         if(quarter === 0 && x >= centerPoint.x && y <= centerPoint.y ||
                             quarter === 1 && x <= centerPoint.x && y <= centerPoint.y ||
                             quarter === 2 && x <= centerPoint.x && y >= centerPoint.y ||

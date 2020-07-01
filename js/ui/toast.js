@@ -6,15 +6,17 @@ import windowUtils from '../core/utils/window';
 const window = windowUtils.getWindow();
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
-import { add as ready } from '../core/utils/ready_callbacks';
-import commonUtils from '../core/utils/common';
-import typeUtils from '../core/utils/type';
+import readyCallbacks from '../core/utils/ready_callbacks';
+import { noop } from '../core/utils/common';
+import { isString } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import pointerEvents from '../events/pointer';
 import registerComponent from '../core/component_registrator';
 import Overlay from './overlay';
 import themes from './themes';
+
+const ready = readyCallbacks.add;
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
@@ -210,7 +212,7 @@ const Toast = Overlay.inherit({
         this._toggleCloseEvents('Click');
     },
 
-    _renderScrollTerminator: commonUtils.noop,
+    _renderScrollTerminator: noop,
 
     _toggleCloseEvents: function(event) {
         const dxEvent = 'dx' + event.toLowerCase();
@@ -220,7 +222,7 @@ const Toast = Overlay.inherit({
     },
 
     _posStringToObject: function() {
-        if(!typeUtils.isString(this.option('position'))) return;
+        if(!isString(this.option('position'))) return;
 
         const verticalPosition = this.option('position').split(' ')[0];
         const horizontalPosition = this.option('position').split(' ')[1];

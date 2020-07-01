@@ -3,17 +3,17 @@ import domAdapter from '../core/dom_adapter';
 import Promise from '../core/polyfills/promise';
 import $ from '../core/renderer';
 import { Deferred } from '../core/utils/deferred';
-import htmlParser from '../core/utils/html_parser';
+import { parseHTML } from '../core/utils/html_parser';
 import { each } from '../core/utils/iterator';
 import readyCallbacks from '../core/utils/ready_callbacks';
-import viewPortUtils from '../core/utils/view_port';
+import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
 import windowUtils from '../core/utils/window';
 import themeReadyCallback from './themes_callback';
 import errors from './widget/ui.errors';
 const window = windowUtils.getWindow();
 const ready = readyCallbacks.add;
-const viewPort = viewPortUtils.value;
-const viewPortChanged = viewPortUtils.changeCallback;
+const viewPort = viewPortValue;
+const viewPortChanged = changeCallback;
 
 const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
 const THEME_ATTR = 'data-theme';
@@ -101,7 +101,7 @@ function processMarkup() {
     }
 
     knownThemes = {};
-    $activeThemeLink = $(htmlParser.parseHTML('<link rel=stylesheet>'), context);
+    $activeThemeLink = $(parseHTML('<link rel=stylesheet>'), context);
 
     $allThemeLinks.each(function() {
         const link = $(this, context);
@@ -230,7 +230,7 @@ function current(options) {
         }
     }
 
-    attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
+    attachCssClasses(originalViewPort(), currentThemeName);
 }
 
 function getCssClasses(themeName) {
@@ -387,17 +387,19 @@ devices.changed.add(function() {
     init({ _autoInit: true });
 });
 
-export { current };
-export { themeReady as ready };
-export { init };
-export { attachCssClasses };
-export { detachCssClasses };
-export { waitForThemeLoad };
-export { isMaterial };
-export { isGeneric };
-export { isDark };
-export { isWebFontLoaded };
-export { waitWebFont };
+export {
+    current,
+    themeReady as ready,
+    init,
+    attachCssClasses,
+    detachCssClasses,
+    waitForThemeLoad,
+    isMaterial,
+    isGeneric,
+    isDark,
+    isWebFontLoaded,
+    waitWebFont
+};
 
 export function resetTheme() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');

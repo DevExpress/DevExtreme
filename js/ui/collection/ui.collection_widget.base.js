@@ -20,7 +20,7 @@ import selectors from '../widget/selectors';
 import messageLocalization from '../../localization/message';
 import holdEvent from '../../events/hold';
 import { compileGetter } from '../../core/utils/data';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import contextMenuEvent from '../../events/contextmenu';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
@@ -668,7 +668,7 @@ const CollectionWidget = Widget.inherit({
 
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
-        const clickEventNamespace = addNamespace(clickEvent.name, this.NAME);
+        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
         const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
         const that = this;
 
@@ -849,7 +849,7 @@ const CollectionWidget = Widget.inherit({
             return;
         }
 
-        eventsEngine.on($itemElement, clickEvent.name, (function(e) {
+        eventsEngine.on($itemElement, clickEventName, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                 event: e
             });

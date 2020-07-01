@@ -4,7 +4,7 @@ import domAdapter from '../core/dom_adapter';
 import windowUtils from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import errors from '../ui/widget/ui.errors';
-import typeUtils from '../core/utils/type';
+import { isDefined, isFunction } from '../core/utils/type';
 import { logger } from '../core/utils/console';
 
 const window = windowUtils.getWindow();
@@ -115,16 +115,16 @@ export const fileSaver = {
     _saveBlobAs: function(fileName, format, data) {
         this._blobSaved = false;
 
-        if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
+        if(isDefined(navigator.msSaveOrOpenBlob)) {
             navigator.msSaveOrOpenBlob(data, fileName);
             this._blobSaved = true;
-        } else if(typeUtils.isDefined(window.WinJS)) {
+        } else if(isDefined(window.WinJS)) {
             this._winJSBlobSave(data, fileName, format);
             this._blobSaved = true;
         } else {
             const URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
-            if(typeUtils.isDefined(URL)) {
+            if(isDefined(URL)) {
                 const objectURL = URL.createObjectURL(data);
                 const downloadLink = this._linkDownloader(fileName, objectURL);
 
@@ -146,19 +146,19 @@ export const fileSaver = {
             fileName += '.' + fileExtension;
         }
 
-        if(typeUtils.isDefined(proxyURL)) {
+        if(isDefined(proxyURL)) {
             errors.log('W0001', 'Export', 'proxyURL', '19.2', 'This option is no longer required');
         }
 
         if(forceProxy) {
             this._saveByProxy(proxyURL, fileName, format, data);
-        } else if(typeUtils.isFunction(window.Blob)) {
+        } else if(isFunction(window.Blob)) {
             this._saveBlobAs(fileName, format, data);
         } else {
-            if(typeUtils.isDefined(proxyURL) && !typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
+            if(isDefined(proxyURL) && !isDefined(navigator.userAgent.match(/iPad/i))) {
                 this._saveByProxy(proxyURL, fileName, format, data);
             } else {
-                if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log('E1034');
+                if(!isDefined(navigator.userAgent.match(/iPad/i))) errors.log('E1034');
 
                 const downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
                 this._click(downloadLink);

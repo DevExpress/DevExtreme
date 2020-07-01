@@ -5,7 +5,7 @@ import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from './utils/events-mock';
-import Widget, { viewFunction, WidgetProps } from '../../js/renovation/widget';
+import { Widget, viewFunction, WidgetProps } from '../../js/renovation/widget';
 import { isFakeClickEvent } from '../../js/events/utils';
 import config from '../../js/core/config';
 

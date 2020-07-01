@@ -3,12 +3,12 @@ import domUtils from '../core/utils/dom';
 import domAdapter from '../core/dom_adapter';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
-import clickEvent from './click';
+import { name as clickEventName } from './click';
 import { addNamespace, fireEvent } from './utils';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';
-const NAMESPACED_CLICK_EVENT = addNamespace(clickEvent.name, DBLCLICK_NAMESPACE);
+const NAMESPACED_CLICK_EVENT = addNamespace(clickEventName, DBLCLICK_NAMESPACE);
 
 const DBLCLICK_TIMEOUT = 300;
 

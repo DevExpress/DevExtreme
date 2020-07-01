@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isNumeric, isString, isFunction, isDefined } from '../../core/utils/type';
 import { inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
 import Button from '../button';
@@ -220,11 +220,11 @@ const Calendar = Editor.inherit({
             return this.option('dateSerializationFormat');
         }
 
-        if(typeUtils.isNumeric(value)) {
+        if(isNumeric(value)) {
             return 'number';
         }
 
-        if(!typeUtils.isString(value)) {
+        if(!isString(value)) {
             return;
         }
 
@@ -405,7 +405,7 @@ const Calendar = Editor.inherit({
 
     _getNormalizedDate: function(date) {
         date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-        return typeUtils.isDefined(date) ? new Date(date) : date;
+        return isDefined(date) ? new Date(date) : date;
     },
 
     _initActions: function() {
@@ -624,7 +624,7 @@ const Calendar = Editor.inherit({
     _viewConfig: function(date) {
         let disabledDates = this.option('disabledDates');
 
-        disabledDates = typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
+        disabledDates = isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
         return {
             date: date,
             min: this._getMinDate(),
@@ -795,8 +795,8 @@ const Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton('next', !typeUtils.isDefined(this._getRequiredView('next')));
-        this._navigator.toggleButton('prev', !typeUtils.isDefined(this._getRequiredView('prev')));
+        this._navigator.toggleButton('next', !isDefined(this._getRequiredView('next')));
+        this._navigator.toggleButton('prev', !isDefined(this._getRequiredView('prev')));
     },
 
     _renderSwipeable: function() {
@@ -1194,7 +1194,7 @@ const Calendar = Editor.inherit({
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', typeUtils.isDefined(value) ? new Date(value) : new Date());
+                this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
                 this.callBase(args);

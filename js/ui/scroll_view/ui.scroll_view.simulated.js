@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
-import commonUtils from '../../core/utils/common';
+import { executeAsync } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 const math = Math;
-import simulatedStrategy from './ui.scrollable.simulated';
+import { Scroller, SimulatedStrategy } from './ui.scrollable.simulated';
 import LoadIndicator from '../load_indicator';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
@@ -20,7 +20,7 @@ const STATE_REFRESHING = 2;
 const STATE_LOADING = 3;
 
 
-const ScrollViewScroller = simulatedStrategy.Scroller.inherit({
+const ScrollViewScroller = Scroller.inherit({
 
     ctor: function() {
         this._topPocketSize = 0;
@@ -184,7 +184,7 @@ const ScrollViewScroller = simulatedStrategy.Scroller.inherit({
             this._releaseTask.abort();
         }
 
-        this._releaseTask = commonUtils.executeAsync(this._release.bind(this));
+        this._releaseTask = executeAsync(this._release.bind(this));
         return this._releaseTask.promise;
     },
 
@@ -231,7 +231,7 @@ const ScrollViewScroller = simulatedStrategy.Scroller.inherit({
 });
 
 
-const SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
+const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
 
     _init: function(scrollView) {
         this.callBase(scrollView);

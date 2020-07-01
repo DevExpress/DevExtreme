@@ -6,7 +6,7 @@ import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import support from '../../core/utils/support';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils';
 import holdEvent from '../../events/hold';
@@ -660,11 +660,11 @@ export default {
                 },
 
                 _attachSelectAllCheckBoxClickEvent: function($element) {
-                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEventName, this.createAction(function(e) {
                         const event = e.event;
 
                         if(!$(event.target).closest('.' + SELECT_CHECKBOX_CLASS).length) {
-                            eventsEngine.trigger($(event.currentTarget).children('.' + SELECT_CHECKBOX_CLASS), clickEvent.name);
+                            eventsEngine.trigger($(event.currentTarget).children('.' + SELECT_CHECKBOX_CLASS), clickEventName);
                         }
                         event.preventDefault();
                     }));
@@ -696,7 +696,7 @@ export default {
                         value: options.value,
                         setValue: function(value, e) {
                             if(e && e.event && e.event.type === 'keydown') {
-                                eventsEngine.trigger(container, clickEvent.name, e);
+                                eventsEngine.trigger(container, clickEventName, e);
                             }
                         },
                         row: options.row
@@ -706,7 +706,7 @@ export default {
                 },
 
                 _attachCheckBoxClickEvent: function($element) {
-                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEventName, this.createAction(function(e) {
                         const selectionController = this.getController('selection');
                         const event = e.event;
                         const rowIndex = this.getRowIndex($(event.currentTarget).closest('.' + ROW_CLASS));

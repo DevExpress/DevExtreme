@@ -16,7 +16,7 @@ import Widget from '../widget/ui.widget';
 import { format as formatMessage } from '../../localization/message';
 import { addNamespace } from '../../events/utils';
 import TextBox from '../text_box';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
@@ -369,7 +369,7 @@ const DropDownEditor = TextBox.inherit({
 
     _renderOpenHandler: function() {
         const $inputWrapper = this._inputWrapper();
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const openOnFieldClick = this.option('openOnFieldClick');
 
         eventsEngine.off($inputWrapper, eventName);

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
-import typeUtils from '../../core/utils/type';
+import { isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
@@ -388,7 +388,7 @@ class FileManager extends Widget {
 
     _getItemThumbnailInfo(fileInfo) {
         const func = this.option('customizeThumbnail');
-        const thumbnail = typeUtils.isFunction(func) ? func(fileInfo.fileItem) : fileInfo.fileItem.thumbnail;
+        const thumbnail = isFunction(func) ? func(fileInfo.fileItem) : fileInfo.fileItem.thumbnail;
         if(thumbnail) {
             return {
                 thumbnail,

@@ -5,12 +5,12 @@ import { getPublicElement } from '../core/element';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import commonUtils from '../core/utils/common';
+import { noop, pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import translator from '../animation/translator';
 import positionUtils from '../animation/position';
-import typeUtils from '../core/utils/type';
-import mathUtils from '../core/utils/math';
+import { isObject, isString } from '../core/utils/type';
+import { fitIntoRange } from '../core/utils/math';
 import { addNamespace } from '../events/utils';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
@@ -52,7 +52,7 @@ const SIDE_BORDER_WIDTH_STYLES = {
 };
 
 const getEventNameByOption = function(optionValue) {
-    return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
+    return isObject(optionValue) ? optionValue.name : optionValue;
 };
 const getEventName = function(that, optionName) {
     const optionValue = that.option(optionName);
@@ -62,11 +62,11 @@ const getEventName = function(that, optionName) {
 const getEventDelay = function(that, optionName) {
     const optionValue = that.option(optionName);
 
-    return typeUtils.isObject(optionValue) && optionValue.delay;
+    return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
     const target = that.option('target');
-    const isSelector = typeUtils.isString(target);
+    const isSelector = isString(target);
     const event = getEventName(that, name + 'Event');
 
     if(!event || that.option('disabled')) {
@@ -319,7 +319,7 @@ const Popover = Popup.inherit({
         this._renderOverlayPosition();
     },
 
-    _renderOverlayBoundaryOffset: commonUtils.noop,
+    _renderOverlayBoundaryOffset: noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();
@@ -374,7 +374,7 @@ const Popover = Popup.inherit({
     },
 
     _getContainerPosition: function() {
-        const offset = commonUtils.pairToObject(this._position.offset || '');
+        const offset = pairToObject(this._position.offset || '');
         let hOffset = offset.h;
         let vOffset = offset.v;
         const isVerticalSide = this._isVerticalSide();
@@ -449,7 +449,7 @@ const Popover = Popup.inherit({
         }
 
         const borderWidth = this._getContentBorderWidth(side);
-        const finalArrowLocation = mathUtils.fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
+        const finalArrowLocation = fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
         this._$arrow.css(axis, finalArrowLocation);
     },
 

@@ -1,13 +1,13 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import commonUtils from '../core/utils/common';
-import typeUtils from '../core/utils/type';
+import { noop } from '../core/utils/common';
+import { isDefined, isPlainObject } from '../core/utils/type';
 import windowUtils from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { getPublicElement } from '../core/element';
 import fx from '../animation/fx';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import translator from '../animation/translator';
 import devices from '../core/devices';
 import Widget from './widget/ui.widget';
@@ -43,8 +43,8 @@ const MAX_CALC_ERROR = 1;
 const GalleryNavButton = Widget.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
-            pageUp: commonUtils.noop,
-            pageDown: commonUtils.noop
+            pageUp: noop,
+            pageDown: noop
         });
     },
     _getDefaultOptions: function() {
@@ -61,7 +61,7 @@ const GalleryNavButton = Widget.inherit({
 
         const that = this;
         const $element = this.$element();
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         $element.addClass(GALLERY_CLASS + '-nav-button-' + this.option('direction'));
 
@@ -183,7 +183,7 @@ const Gallery = CollectionWidget.inherit({
             item: new BindableTemplate((function($container, data) {
                 const $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
-                if(typeUtils.isPlainObject(data)) {
+                if(isPlainObject(data)) {
                     this._prepareDefaultItemTemplate(data, $container);
 
                     $img.attr({
@@ -469,7 +469,7 @@ const Gallery = CollectionWidget.inherit({
         const targetPosition = this._offsetDirection() * targetIndex * (itemWidth + this._itemFreeSpace());
         let positionReady;
 
-        if(typeUtils.isDefined(this._animationOverride)) {
+        if(isDefined(this._animationOverride)) {
             animate = this._animationOverride;
             delete this._animationOverride;
         }
@@ -654,8 +654,8 @@ const Gallery = CollectionWidget.inherit({
 
         const indicatorSelectAction = this._createAction(this._indicatorSelectHandler);
 
-        eventsEngine.off(rootElement, addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
-        eventsEngine.on(rootElement, addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
+        eventsEngine.off(rootElement, addNamespace(clickEventName, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
+        eventsEngine.on(rootElement, addNamespace(clickEventName, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
             indicatorSelectAction({ event: e });
         });
     },
@@ -1018,7 +1018,7 @@ const Gallery = CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _selectFocusedItem: commonUtils.noop,
+    _selectFocusedItem: noop,
 
     _moveFocus: function() {
         this._stopItemAnimations();

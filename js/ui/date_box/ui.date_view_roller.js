@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
 import { addNamespace } from '../../events/utils';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
 import fx from '../../animation/fx';
 import translator from '../../animation/translator';
@@ -70,7 +70,7 @@ const DateViewRoller = Scrollable.inherit({
             return;
         }
 
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         const clickAction = this._createActionByOption('onClick');
 
@@ -145,7 +145,7 @@ const DateViewRoller = Scrollable.inherit({
 
     _renderItemsClick: function() {
         const itemSelector = this._getItemSelector();
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         eventsEngine.off(this.$element(), eventName, itemSelector);
         eventsEngine.on(this.$element(), eventName, itemSelector, this._itemClickHandler.bind(this));

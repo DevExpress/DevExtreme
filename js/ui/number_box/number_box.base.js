@@ -1,9 +1,9 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
-import mathUtils from '../../core/utils/math';
+import { applyServerDecimalSeparator, ensureDefined } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
+import { fitIntoRange, inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import devices from '../../core/devices';
@@ -157,7 +157,7 @@ const NumberBoxBase = TextEditor.inherit({
     },
 
     _setSubmitValue: function(value) {
-        this._getSubmitElement().val(commonUtils.applyServerDecimalSeparator(value));
+        this._getSubmitElement().val(applyServerDecimalSeparator(value));
     },
 
     _getSubmitElement: function() {
@@ -198,10 +198,10 @@ const NumberBoxBase = TextEditor.inherit({
             this._toggleEmptinessEventHandler();
         }
 
-        const valueText = typeUtils.isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
+        const valueText = isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
         this.setAria({
-            'valuenow': commonUtils.ensureDefined(value, ''),
+            'valuenow': ensureDefined(value, ''),
             'valuetext': valueText
         });
 
@@ -233,8 +233,8 @@ const NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            'valuemin': commonUtils.ensureDefined(this.option('min'), ''),
-            'valuemax': commonUtils.ensureDefined(this.option('max'), '')
+            'valuemin': ensureDefined(this.option('min'), ''),
+            'valuemax': ensureDefined(this.option('max'), '')
         });
     },
 
@@ -270,11 +270,11 @@ const NumberBoxBase = TextEditor.inherit({
         const min = this.option('min');
         const max = this.option('max');
 
-        if(typeUtils.isDefined(min)) {
+        if(isDefined(min)) {
             value = Math.max(min, value);
         }
 
-        if(typeUtils.isDefined(max)) {
+        if(isDefined(max)) {
             value = Math.min(max, value);
         }
 
@@ -390,7 +390,7 @@ const NumberBoxBase = TextEditor.inherit({
     },
 
     _isValueInRange: function(value) {
-        return mathUtils.inRange(value, this.option('min'), this.option('max'));
+        return inRange(value, this.option('min'), this.option('max'));
     },
 
     _isNumber: function(value) {
@@ -441,7 +441,7 @@ const NumberBoxBase = TextEditor.inherit({
             return null;
         }
 
-        return mathUtils.fitIntoRange(number, this.option('min'), this.option('max'));
+        return fitIntoRange(number, this.option('min'), this.option('max'));
     },
 
     _clearValue: function() {

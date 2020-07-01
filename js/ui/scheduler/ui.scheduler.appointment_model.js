@@ -4,7 +4,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from './recurrence';
 import dateUtils from '../../core/utils/date';
 import { equalByValue } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined, isString } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import arrayUtils from '../../core/utils/array';
@@ -169,7 +169,7 @@ class AppointmentModel {
             const resourceGetter = this._dataAccessors.getter.resources[resourceName];
             let resource;
 
-            if(typeUtils.isFunction(resourceGetter)) {
+            if(isFunction(resourceGetter)) {
                 resource = resourceGetter(appointment);
             }
 
@@ -260,7 +260,7 @@ class AppointmentModel {
             const appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment);
             const isAllDay = dataAccessors.getter.allDay(appointment);
             const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
-            const useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule);
+            const useRecurrence = isDefined(dataAccessors.getter.recurrenceRule);
             let recurrenceRule;
 
             if(useRecurrence) {
@@ -404,7 +404,7 @@ class AppointmentModel {
         const startDate = this._dataAccessors.expr.startDateExpr;
         const endDate = this._dataAccessors.expr.endDateExpr;
 
-        if(typeUtils.isString(filter[0])) {
+        if(isString(filter[0])) {
             if(config().forceIsoDateParsing && filter.length > 1) {
                 if(filter[0] === startDate || filter[0] === endDate) {
                     // TODO: wrap filter value to new Date only necessary for case T838165(details in note)
@@ -421,7 +421,7 @@ class AppointmentModel {
     }
 
     filterLoadedAppointments(filterOptions, timeZoneProcessor) {
-        if(!typeUtils.isFunction(timeZoneProcessor)) {
+        if(!isFunction(timeZoneProcessor)) {
             timeZoneProcessor = (date) => {
                 return date;
             };

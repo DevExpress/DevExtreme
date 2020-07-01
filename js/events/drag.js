@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import dataUtils from '../core/element_data';
+import { data as elementData, removeData } from '../core/element_data';
 import { wrapToArray } from '../core/utils/array';
 import { inArray } from '../core/utils/array';
 import iteratorUtils from '../core/utils/iterator';
@@ -48,8 +48,8 @@ const dropTargetRegistration = {
 
     updateEventsCounter: function(element, event, value) {
         if([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].indexOf(event) > -1) {
-            const eventsCount = dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
-            dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
+            const eventsCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
+            elementData(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
         }
     },
 
@@ -58,13 +58,13 @@ const dropTargetRegistration = {
     },
 
     teardown: function(element) {
-        const handlersCount = dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY);
+        const handlersCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY);
         if(!handlersCount) {
             const index = inArray(element, knownDropTargets);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
-            dataUtils.removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
+            removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
         }
     }
 
@@ -345,10 +345,9 @@ export { knownDropTargets as dropTargets };
 
 ///#ENDDEBUG
 
-export { DRAG_EVENT as move };
-
-export { DRAG_START_EVENT as start };
-export { DRAG_END_EVENT as end };
-export { DRAG_ENTER_EVENT as enter };
-export { DRAG_LEAVE_EVENT as leave };
-export { DROP_EVENT as drop };
+export { DRAG_EVENT as move,
+    DRAG_START_EVENT as start,
+    DRAG_END_EVENT as end,
+    DRAG_ENTER_EVENT as enter,
+    DRAG_LEAVE_EVENT as leave,
+    DROP_EVENT as drop };

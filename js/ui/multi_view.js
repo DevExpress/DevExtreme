@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import translator from '../animation/translator';
 import { _translator, animation } from './multi_view/ui.multi_view.animation';
-import mathUtils from '../core/utils/math';
+import { sign } from '../core/utils/math';
 import { extend } from '../core/utils/extend';
 import { noop, deferRender } from '../core/utils/common';
 import { triggerResizeEvent } from '../events/visibility_change';
@@ -298,7 +298,7 @@ const MultiView = CollectionWidget.inherit({
 
         const directionSignVariable = isSwipePresent ? containerPosition : indexDifference;
 
-        return mathUtils.sign(directionSignVariable);
+        return sign(directionSignVariable);
     },
 
     _getSwipeDisabledState() {
@@ -332,7 +332,7 @@ const MultiView = CollectionWidget.inherit({
 
     _swipeUpdateHandler: function(e) {
         const offset = e.offset;
-        const swipeDirection = mathUtils.sign(offset) * this._getRTLSignCorrection();
+        const swipeDirection = sign(offset) * this._getRTLSignCorrection();
 
         _translator.move(this._$itemContainer, offset * this._itemWidth());
 

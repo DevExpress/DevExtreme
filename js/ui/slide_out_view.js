@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { noop } from '../core/utils/common';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import translator from '../animation/translator';
 import { getPublicElement } from '../core/element';
 import { hideCallback as hideTopOverlayCallback } from '../mobile/hide_callback';
@@ -178,8 +178,8 @@ const SlideOutView = Widget.inherit({
     _renderShield: function() {
         this._$shield = this._$shield || $('<div>').addClass(SLIDEOUTVIEW_SHIELD_CLASS);
         this._$shield.appendTo(this.content());
-        eventsEngine.off(this._$shield, clickEvent.name);
-        eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
+        eventsEngine.off(this._$shield, clickEventName);
+        eventsEngine.on(this._$shield, clickEventName, this.hideMenu.bind(this));
         this._toggleShieldVisibility(this.option('menuVisible'));
     },
 

@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-import commonUtils from '../core/utils/common';
-import typeUtils from '../core/utils/type';
+import { grep, noop } from '../core/utils/common';
+import { isDefined, isPlainObject, isEmptyObject } from '../core/utils/type';
 import errors from './widget/ui.errors';
 import windowUtils from '../core/utils/window';
 const window = windowUtils.getWindow();
@@ -240,7 +240,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
             for(let i = 0; i < screenItemsLength; i++) {
                 const sizeConfig = this._defaultSizeConfig();
-                if(i < filteredRows.length && typeUtils.isDefined(filteredRows[i].shrink)) {
+                if(i < filteredRows.length && isDefined(filteredRows[i].shrink)) {
                     sizeConfig.shrink = filteredRows[i].shrink;
                 }
                 result.push(sizeConfig);
@@ -303,7 +303,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     _filterByScreen: function(items) {
         const screenRegExp = this._screenRegExp();
 
-        return commonUtils.grep(items, function(item) {
+        return grep(items, function(item) {
             return !item.screen || screenRegExp.test(item.screen);
         });
     },
@@ -344,7 +344,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     _itemsByScreen: function() {
         return this.option('items').reduce((result, item) => {
             let locations = item.location || {};
-            locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
+            locations = isPlainObject(locations) ? [locations] : locations;
 
             this._filterByScreen(locations).forEach(location => {
                 result.push({
@@ -367,13 +367,13 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _isItemCellOccupied: function(itemCell, itemInfo) {
-        if(!typeUtils.isEmptyObject(itemCell.item)) {
+        if(!isEmptyObject(itemCell.item)) {
             return true;
         }
 
         let result = false;
         this._loopOverSpanning(itemInfo.location, function(cell) {
-            result = result || !typeUtils.isEmptyObject(cell.item);
+            result = result || !isEmptyObject(cell.item);
         });
         return result;
     },
@@ -580,7 +580,7 @@ const ResponsiveBox = CollectionWidget.inherit({
             result.minSize += sizeConfig.minSize;
             result.maxSize += sizeConfig.maxSize;
 
-            if(typeUtils.isDefined(sizeConfig.shrink)) {
+            if(isDefined(sizeConfig.shrink)) {
                 result.shrink = sizeConfig.shrink;
             }
         }
@@ -637,7 +637,7 @@ const ResponsiveBox = CollectionWidget.inherit({
         }
     },
 
-    _attachClickEvent: commonUtils.noop,
+    _attachClickEvent: noop,
 
     _optionChanged: function(args) {
         switch(args.name) {

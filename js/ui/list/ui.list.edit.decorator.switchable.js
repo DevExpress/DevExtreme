@@ -5,11 +5,11 @@ import EditDecorator from './ui.list.edit.decorator';
 const abstract = EditDecorator.abstract;
 import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
-import feedbackEvents from '../../events/core/emitter.feedback';
+import { active } from '../../events/core/emitter.feedback';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR);
-const ACTIVE_EVENT_NAME = addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR);
+const ACTIVE_EVENT_NAME = addNamespace(active, LIST_EDIT_DECORATOR);
 
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 
