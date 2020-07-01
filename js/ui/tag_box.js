@@ -625,7 +625,7 @@ const TagBox = SelectBox.inherit({
         });
     },
 
-    _renderMultiSelect: function(args) {
+    _renderMultiSelect: function() {
         const d = new Deferred();
 
         this._$tagsContainer = this._$textEditorInputContainer
@@ -635,7 +635,7 @@ const TagBox = SelectBox.inherit({
         this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._renderTags(args)
+        this._renderTags()
             .done(() => {
                 this._popup && this._popup.refreshPosition();
                 d.resolve();
@@ -863,14 +863,14 @@ const TagBox = SelectBox.inherit({
         return tagData.promise();
     },
 
-    _renderTags: function(args) {
+    _renderTags: function() {
         const d = new Deferred();
         let plainDataUsed = false;
 
-        if(this._shouldGetDataFromPlain(args)) {
-            this._selectedItems = this._getItemsFromPlain(args.value);
+        if(this._shouldGetDataFromPlain(this._valuesToUpdate)) {
+            this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
-            if(this._selectedItems.length === args.value.length) {
+            if(this._selectedItems.length === this._valuesToUpdate.length) {
                 this._renderTagsImpl(this._selectedItems);
                 plainDataUsed = true;
                 d.resolve();
@@ -901,8 +901,8 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    _shouldGetDataFromPlain: function(args) {
-        return args?.value && this._dataSource.isLoaded() && !this._wasSearch() && args.value.length <= this._getPlainItems().length;
+    _shouldGetDataFromPlain: function(values) {
+        return values && this._dataSource.isLoaded() && !this._wasSearch() && values.length <= this._getPlainItems().length;
     },
 
     _getItemsFromPlain: function(values) {
@@ -1088,11 +1088,6 @@ const TagBox = SelectBox.inherit({
         const itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
         this._removeTagWithUpdate(itemValue);
         this._refreshTagElements();
-    },
-
-    _updateValue: function(args) {
-        this.option('text', undefined);
-        this._renderValue(args);
     },
 
     _updateField: noop,
@@ -1437,9 +1432,9 @@ const TagBox = SelectBox.inherit({
                 this._setListOption('selectAllText', this.option('selectAllText'));
                 break;
             case 'value':
-                this._useValuesToUpdate = args;
+                this._valuesToUpdate = args?.value;
                 this.callBase(args);
-                this._useValuesToUpdate = undefined;
+                this._valuesToUpdate = undefined;
                 this._setListDataSourceFilter();
                 break;
             case 'maxDisplayedTags':

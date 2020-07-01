@@ -1742,22 +1742,8 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             setTimeout(() => {
                 if(loadOptions.take) {
                     deferred.resolve(items.slice().splice(loadOptions.skip, loadOptions.take));
-                } else if(loadOptions.filter) {
-
-                    const result = items.filter((item) => {
-                        if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].UserName === loadOptions.filter[2].UserName) {
-                            return item[2];
-                        } else {
-                            if(item.UserName === loadOptions.filter[2].UserName) {
-                                return item;
-                            }
-
-                        }
-                    });
-
-                    deferred.resolve(result);
                 }
-
+                deferred.resolve();
             }, 500);
 
             return deferred.promise();
@@ -1787,29 +1773,15 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
         assert.strictEqual(loadSpy.callCount, 1, 'selected items are correct');
     });
 
-    QUnit.test('dataSource should not load item on item selection if dataSource key is used', function(assert) {
+    QUnit.test('dataSource should not load item on item selection if dataSource key is used (T888848)', function(assert) {
         const items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }, { name: 'three', value: 3 }];
         const loadSpy = sinon.spy((loadOptions) => {
             const deferred = $.Deferred();
             setTimeout(() => {
                 if(loadOptions.take) {
                     deferred.resolve(items.slice().splice(loadOptions.skip, loadOptions.take));
-                } else if(loadOptions.filter) {
-
-                    const result = items.filter((item) => {
-                        if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].UserName === loadOptions.filter[2].UserName) {
-                            return item[2];
-                        } else {
-                            if(item.UserName === loadOptions.filter[2].UserName) {
-                                return item;
-                            }
-
-                        }
-                    });
-
-                    deferred.resolve(result);
                 }
-
+                deferred.resolve();
             }, 500);
 
             return deferred.promise();
@@ -1846,22 +1818,8 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             setTimeout(() => {
                 if(loadOptions.take) {
                     deferred.resolve(items.slice().splice(loadOptions.skip, loadOptions.take));
-                } else if(loadOptions.filter) {
-
-                    const result = items.filter((item) => {
-                        if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].UserName === loadOptions.filter[2].UserName) {
-                            return item[2];
-                        } else {
-                            if(item.UserName === loadOptions.filter[2].UserName) {
-                                return item;
-                            }
-
-                        }
-                    });
-
-                    deferred.resolve(result);
                 }
-
+                deferred.resolve();
             }, 500);
 
             return deferred.promise();
