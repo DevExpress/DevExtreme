@@ -24,9 +24,6 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
             targetedAppointmentData: viewModel.currentAppointment,
           }}
           index={viewModel.props.index}
-          parentRef={{
-            current: viewModel.props.container,
-          }}
         />
       )}
       {!useTemplate && (
@@ -63,8 +60,6 @@ export class TooltipItemLayoutProps {
   @OneWay() item?: AppointmentItem = { data: {} };
 
   @OneWay() index?: number;
-
-  @OneWay() container?: HTMLDivElement;
 
   @OneWay() showDeleteButton?: boolean = true;
 

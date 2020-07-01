@@ -157,17 +157,13 @@ describe('TooltipItemLayout', () => {
     describe('Template', () => {
       const currentAppointment: dxSchedulerAppointment = { text: 'currentAppointment' };
       const template = () => null;
-      let container;
       const render = () => shallow(
         <TooltipItemLayoutView
-          props={{ ...defaultProps, itemContentTemplate: template, container }}
+          props={{ ...defaultProps, itemContentTemplate: template }}
           {...defaultViewModel}
           currentAppointment={currentAppointment}
         />,
       );
-      beforeAll(() => {
-        container = shallow(<div />);
-      });
 
       it('should render template if it is provided', () => {
         const tree = render();
@@ -186,9 +182,6 @@ describe('TooltipItemLayout', () => {
               targetedAppointmentData: currentAppointment,
             },
             index: 0,
-            parentRef: {
-              current: container,
-            },
             children: [],
           });
       });
@@ -233,9 +226,6 @@ describe('TooltipItemLayout', () => {
               targetedAppointmentData: currentAppointment,
             },
             index: 0,
-            parentRef: {
-              current: container,
-            },
             children: [],
           });
 
@@ -250,7 +240,6 @@ describe('TooltipItemLayout', () => {
             item: nextItem,
             index: nextIndex,
             itemContentTemplate: template,
-            container,
           },
           currentAppointment: nextItem.currentData,
         });
@@ -262,9 +251,6 @@ describe('TooltipItemLayout', () => {
               targetedAppointmentData: nextItem.currentData,
             },
             index: nextIndex,
-            parentRef: {
-              current: container,
-            },
             children: [],
           });
       });
