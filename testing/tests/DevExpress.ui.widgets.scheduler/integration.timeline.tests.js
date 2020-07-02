@@ -16,7 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import devices from 'core/devices';
 
 import 'ui/scheduler/ui.scheduler';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers.js';
+import { SchedulerTestWrapper, createWrapper } from './helpers.js';
 
 const createInstance = options => {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
