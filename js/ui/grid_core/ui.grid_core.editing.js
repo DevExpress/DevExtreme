@@ -939,7 +939,16 @@ const EditingController = modules.ViewController.inherit((function() {
         _getVisibleEditRowIndex: function() {
             const dataController = this._dataController;
             const columns = this._columnsController.getColumns();
-            const isColumnHidden = columns[this._editColumnIndex]?.visibleWidth === 'adaptiveHidden';
+
+            let editColumn;
+            columns.some(column => {
+                if(column.visibleIndex === this._editColumnIndex) {
+                    editColumn = column;
+                    return true;
+                }
+            });
+            const isColumnHidden = editColumn?.visibleWidth === 'adaptiveHidden';
+
             const editRowIndexCorrection = isColumnHidden ? 1 : 0;
 
             return dataController.getRowIndexByKey(this._editRowKey) + editRowIndexCorrection;

@@ -3512,7 +3512,7 @@ QUnit.module('Editing', {
         $('.dx-field-item-content').first().trigger('dxclick');
 
         // assert
-        assert.equal($('.dx-texteditor').length, 1, 'editor\'s count');
+        assert.equal($(this.getRowElement(1)).find('.dx-texteditor').length, 1, 'editor\'s count');
     });
 
     QUnit.test('Create new row in the batch mode', function(assert) {
