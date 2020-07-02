@@ -59,7 +59,8 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('aria checked attributes', function(assert) {
-        const $element = $('#checkbox').dxCheckBox({ value: true }); const instance = $element.dxCheckBox('instance');
+        const $element = $('#checkbox').dxCheckBox({ value: true });
+        const instance = $element.dxCheckBox('instance');
 
         assert.equal($element.attr('aria-checked'), 'true', 'checked state is correct');
 

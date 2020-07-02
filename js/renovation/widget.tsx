@@ -173,10 +173,10 @@ export default class Widget extends JSXComponent(WidgetProps) {
   @Effect()
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   clickEffect(): any {
-    const { name, onClick } = this.props;
+    const { name, onClick, disabled } = this.props;
     const namespace = name;
 
-    if (onClick) {
+    if (onClick && !disabled) {
       dxClick.on(this.widgetRef,
         (e) => onClick(e),
         { namespace });

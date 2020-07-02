@@ -2,6 +2,10 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
+import registerComponent from 'core/component_registrator.js';
+import dxrCheckBox from 'renovation/check-box.j.js';
+import dxCheckBox from 'ui/check_box';
+import { patchOptions, restoreOptions } from '../../helpers/preactHelper.js';
 
 import 'common.css!';
 import 'ui/check_box';
@@ -26,8 +30,46 @@ const CHECKED_CLASS = 'dx-checkbox-checked';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
+const createModuleConfig = (widgetName) => {
+    return {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+            patchOptions();
 
-QUnit.module('render', function() {
+            const clock = this.clock;
+            const _dxrCheckBox = dxrCheckBox.inherit({
+                ctor: function() {
+                    const result = this.callBase.apply(this, arguments);
+                    clock.tick();
+
+                    return result;
+                },
+
+                option: function() {
+                    const result = this.callBase.apply(this, arguments);
+                    clock.tick();
+
+                    return result;
+                }
+            });
+            _dxrCheckBox.getInstance = dxrCheckBox.getInstance;
+
+            registerComponent(widgetName, _dxrCheckBox);
+        },
+        afterEach: function() {
+            restoreOptions();
+            this.clock.restore();
+            registerComponent(widgetName, dxCheckBox);
+        }
+    };
+};
+QUnit.module_r = function(widgetName, name, config, tests) {
+    QUnit.module(name, config, tests);
+    const newConfig = createModuleConfig(widgetName);
+    QUnit.module(`renovated ${name}`, newConfig, tests);
+};
+
+QUnit.module_r('dxCheckBox', 'render', {}, function() {
 
     QUnit.test('markup init', function(assert) {
         const element = $('#checkbox').dxCheckBox();
@@ -92,6 +134,7 @@ QUnit.module('render', function() {
                 assert.ok(true);
             }
         }).dxCheckBox('instance');
+
         checkbox.option('value', true);
     });
 
@@ -108,7 +151,7 @@ QUnit.module('render', function() {
     });
 });
 
-QUnit.module('validation', function() {
+QUnit.skip('validation', function() {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('the click should be processed before the validation message is shown (T570458)', function(assert) {
@@ -160,7 +203,7 @@ QUnit.module('validation', function() {
     }
 });
 
-QUnit.module('options', function() {
+QUnit.module_r('dxCheckBox', 'options', {}, function() {
 
     QUnit.test('visible', function(assert) {
         const $element = $('#checkbox').dxCheckBox();
@@ -228,7 +271,7 @@ QUnit.module('options', function() {
     });
 });
 
-QUnit.module('hidden input', function() {
+QUnit.module_r('dxCheckBox', 'hidden input', {}, function() {
 
     QUnit.test('the hidden input has \'true\' value', function(assert) {
         const $element = $('#checkbox').dxCheckBox({ value: true });
@@ -260,7 +303,7 @@ QUnit.module('hidden input', function() {
 });
 
 
-QUnit.module('the \'name\' option', function() {
+QUnit.module_r('dxCheckBox', 'the \'name\' option', {}, function() {
 
     QUnit.test('widget input should get the \'name\' attribute with a correct value', function(assert) {
         const expectedName = 'some_name';
@@ -274,7 +317,7 @@ QUnit.module('the \'name\' option', function() {
 });
 
 
-QUnit.module('widget sizing render', function() {
+QUnit.module_r('dxCheckBox', 'widget sizing render', {}, function() {
 
     QUnit.test('constructor', function(assert) {
         const $element = $('#widget').dxCheckBox({ width: 400 });
@@ -296,7 +339,7 @@ QUnit.module('widget sizing render', function() {
 });
 
 
-QUnit.module('keyboard navigation', function() {
+QUnit.module_r('dxCheckBox', 'keyboard navigation', {}, function() {
 
     QUnit.test('check state changes on space press', function(assert) {
         assert.expect(2);
@@ -318,7 +361,7 @@ QUnit.module('keyboard navigation', function() {
     });
 });
 
-QUnit.module('events', function() {
+QUnit.module_r('dxCheckBox', 'events', {}, function() {
 
     QUnit.test('valueChanged event fired after setting the value by click', function(assert) {
         const handler = sinon.stub();

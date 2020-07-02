@@ -96,7 +96,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() name?: string = '';
 
-  @TwoWay() value?: boolean | null = false;
+  @TwoWay() value?: boolean = false;
 
   @OneWay() useInkRipple?: boolean = false;
 
