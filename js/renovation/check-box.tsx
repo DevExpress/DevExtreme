@@ -154,8 +154,7 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
 
     this.props.value = !value;
 
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-    onValueChanged!({
+    onValueChanged?.({
       event,
       element: this.submitInputRef.parentNode,
       previousValue: value,
