@@ -1271,7 +1271,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             'marginBottom': -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + 'px'
         });
 
-        this._$allDayTitle && this._$allDayTitle.css('top', headerHeight + headerPanelHeight + 'px');
+        const headerPanelInnerHeight = this.getHeaderPanelHeight(true);
+        this._$allDayTitle?.css('top', headerHeight + headerPanelInnerHeight + 'px');
     }
 
     _makeGroupRows(groups, groupByDate) {
@@ -1821,7 +1822,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._dateTableScrollable._container();
     }
 
-    getHeaderPanelHeight() {
+    getHeaderPanelHeight(isInnerHeight) {
+        if(isInnerHeight) {
+            return this._$headerPanel && this._$headerPanel.height(true);
+        }
         return this._$headerPanel && this._$headerPanel.outerHeight(true);
     }
 
