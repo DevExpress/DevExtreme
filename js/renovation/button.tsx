@@ -8,9 +8,8 @@ import {
   OneWay,
   Ref,
   Template,
+  Slot,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
@@ -44,11 +43,11 @@ const getCssClasses = (model: ButtonProps) => {
 
 export const viewFunction = (viewModel: Button) => {
   const {
-    icon, iconPosition, template, text,
+    children, icon, iconPosition, template, text,
   } = viewModel.props;
-  const renderText = !template && text;
+  const renderText = !template && !children && text;
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !template && viewModel.iconSource
+  const iconComponent = !template && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
 
   return (
@@ -79,9 +78,9 @@ export const viewFunction = (viewModel: Button) => {
                 && (
                 <viewModel.props.template
                   data={{ icon, text }}
-                  parentRef={viewModel.contentRef}
                 />
                 )}
+        {!template && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
@@ -115,7 +114,9 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Template({ canBeAnonymous: true }) template?: any = '';
+  @Template() template?: any = '';
+
+  @Slot() children?: any;
 
   @OneWay() text?: string = '';
 

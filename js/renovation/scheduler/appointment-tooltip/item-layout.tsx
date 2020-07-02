@@ -1,6 +1,3 @@
-// https://github.com/benmosher/eslint-plugin-import/issues/1699
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Fragment, Event,
@@ -9,10 +6,14 @@ import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
-import { AppointmentItem, FormattedContent } from './types';
+import {
+  AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
+} from './types';
 import { Marker } from './marker';
 import { Button } from '../../button';
 import { TooltipItemContent } from './item-content';
+import getCurrentAppointment from './utils/get-current-appointment';
+import { defaultGetTextAndFormatDate } from './utils/default-functions';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
@@ -26,9 +27,6 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
             targetedAppointmentData: viewModel.currentAppointment,
           }}
           index={viewModel.props.index}
-          parentRef={{
-            current: viewModel.props.container,
-          }}
         />
       )}
       {!useTemplate && (
@@ -66,23 +64,17 @@ export class TooltipItemLayoutProps {
 
   @OneWay() index?: number;
 
-  @OneWay() container?: HTMLDivElement;
-
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template({ canBeAnonymous: true }) itemContentTemplate?: any;
+  @Template() itemContentTemplate?: any;
 
-  @Event() onDelete?: (
-    data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
-  ) => void = noop;
+  @Event() onDelete?: CheckAndDeleteAppointmentFn = noop;
 
   @Event() onHide?: () => void = noop;
 
-  @Event() getTextAndFormatDate?: (
-    data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
-  ) => any = noop;
+  @OneWay() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
-  @OneWay() singleAppointmentData?: dxSchedulerAppointment;
+  @OneWay() singleAppointment?: dxSchedulerAppointment;
 }
 
 @Component({
@@ -97,20 +89,18 @@ export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
   get currentAppointment(): dxSchedulerAppointment {
     const { item } = this.props;
 
-    const { settings, data, currentData } = item!;
-
-    return settings?.targetedAppointmentData || currentData || data;
+    return getCurrentAppointment(item!);
   }
 
   get onDeleteButtonClick(): (e: any) => void {
     const {
-      singleAppointmentData, item, onHide, onDelete,
+      singleAppointment, item, onHide, onDelete,
     } = this.props;
 
     return (e: any): void => {
       onHide!();
       e.event.stopPropagation();
-      onDelete!(item!.data, singleAppointmentData);
+      onDelete!(item!.data, singleAppointment!);
     };
   }
 

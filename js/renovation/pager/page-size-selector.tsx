@@ -2,8 +2,7 @@
 import {
   ComponentBindings, JSXComponent, Event, OneWay, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { GetHtmlElement, FullPageSize } from './pager.types.d';
 import { PageSizeSmall } from './page-size-small';
 import { PageSizeLarge } from './page-size-large';

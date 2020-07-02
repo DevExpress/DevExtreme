@@ -1,8 +1,7 @@
 import {
   Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { ResizableContainer } from './resizable-container';
 import PagerProps from './pager-props';
 import { PagerContentComponent } from './pager-content';

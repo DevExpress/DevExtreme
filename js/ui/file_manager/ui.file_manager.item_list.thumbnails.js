@@ -137,7 +137,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
 
         const fileSystemItem = item?.fileItem || null;
-        this._raiseFocusedItemChanged({
+        this._onFocusedItemChanged({
             item: fileSystemItem,
             itemKey: fileSystemItem?.key,
             itemElement: itemElement || undefined

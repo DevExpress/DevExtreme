@@ -1034,12 +1034,12 @@ export default {
                     const oldDataSource = that._dataSource;
 
                     if(!dataSource && oldDataSource) {
+                        oldDataSource.cancelAll();
                         oldDataSource.changed.remove(that._dataChangedHandler);
                         oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
-                        oldDataSource.cancelAll();
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 

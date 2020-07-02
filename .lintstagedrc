@@ -1,5 +1,5 @@
 {
-    "*.js": ["eslint"],
+    "*.js": ["node --max_old_space_size=4096 ./node_modules/eslint/bin/eslint.js"],
     "*.{css,scss}": ["stylelint"],
-    "*.{ts,tsx}": ["eslint"]
+    "*.{ts,tsx}": ["node --max_old_space_size=4096 ./node_modules/eslint/bin/eslint.js"]
 }

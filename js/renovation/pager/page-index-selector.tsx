@@ -1,8 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { LightButton } from './light-button';
 import { PagesLarge } from './pages-large';
 import { PagesSmall } from './pages-small';
@@ -19,7 +18,8 @@ const nextButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIG
 const prevButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  renderNavButtons,
+  renderPrevButton,
+  renderNextButton,
   prevClassName,
   navigateToPrevPage,
   nextClassName,
@@ -32,7 +32,7 @@ export const viewFunction = ({
   },
 }: PageIndexSelector) => (
   <Fragment>
-    {renderNavButtons && (
+    {renderPrevButton && (
     <LightButton
       className={prevClassName}
       label="Previous page"
@@ -57,7 +57,7 @@ export const viewFunction = ({
       rtlEnabled={rtlEnabled}
     />
     )}
-    {renderNavButtons && (
+    {renderNextButton && (
     <LightButton
       className={nextClassName}
       label="Next page"
@@ -107,6 +107,9 @@ export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
   }
 
   private canNavigateToPage(pageIndex: number): boolean {
+    if (!this.props.hasKnownLastPage) {
+      return true;
+    }
     return (pageIndex >= 0 && pageIndex <= (this.props.pageCount as number) - 1);
   }
 
@@ -122,12 +125,16 @@ export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
     this.pageIndexChange(this.getNextPageIndex(direction));
   }
 
-  get renderNavButtons(): boolean {
+  get renderPrevButton(): boolean {
     const {
       isLargeDisplayMode,
       showNavigationButtons,
     } = this.props as Required<PageIndexSelectorProps>;
     return !isLargeDisplayMode || showNavigationButtons;
+  }
+
+  get renderNextButton(): boolean {
+    return this.renderPrevButton || !this.props.hasKnownLastPage;
   }
 
   get nextClassName(): string {

@@ -3,8 +3,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { InfoText } from './info';
 import { PageIndexSelector } from './page-index-selector';
 import { PageSizeSelector } from './page-size-selector';
@@ -22,7 +21,7 @@ export const viewFunction = ({
   props: {
     parentRef, pageSizesRef, pagesRef, infoTextRef,
     pageSizeChange, pageIndexChange,
-    infoText, maxPagesCount, pageIndex,
+    infoText, maxPagesCount, pageIndex, hasKnownLastPage,
     pageCount, showPageSizes, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
@@ -48,7 +47,7 @@ export const viewFunction = ({
         style={{ visibility: pagesContainerVisibility }}
       >
         <PageIndexSelector
-                // hasKnownLastPage={hasKnownLastPage}
+          hasKnownLastPage={hasKnownLastPage}
           isLargeDisplayMode={isLargeDisplayMode}
           maxPagesCount={maxPagesCount}
           pageCount={pageCount}
@@ -110,8 +109,8 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto') {
-      return this.props.pageCount === 1 ? 'hidden' : undefined;
+    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
+      return 'hidden';
     }
     return undefined;
   }

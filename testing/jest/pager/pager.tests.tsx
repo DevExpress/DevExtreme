@@ -17,6 +17,7 @@ describe('Pager', () => {
         contentTemplate: PagerContentComponent,
         pageIndexChange: tree.instance().pageIndexChange,
         pageSizeChange: tree.instance().pageSizeChange,
+        hasKnownLastPage: true,
         infoText: 'Page {0} of {1} ({2} items)',
         lightModeEnabled: false,
         maxPagesCount: 10,

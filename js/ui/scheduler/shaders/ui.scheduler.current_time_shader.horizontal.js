@@ -3,11 +3,13 @@ import CurrentTimeShader from '../shaders/ui.scheduler.current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {
     renderShader() {
-        const groupCount = this._workSpace.option('groupOrientation') === 'horizontal' ? this._workSpace._getGroupCount() : 1;
+        const groupCount = this._workSpace._isHorizontalGroupedWorkSpace() ? this._workSpace._getGroupCount() : 1;
 
         for(let i = 0; i < groupCount; i++) {
             const isFirstShader = i === 0;
             const $shader = isFirstShader ? this._$shader : this.createShader();
+
+            this.applyShaderMargin($shader);
 
             if(this._workSpace.isGroupedByDate()) {
                 this._customizeGroupedByDateShader($shader, i);
@@ -55,7 +57,6 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
         let shaderLeft;
 
         this._applyShaderWidth($shader, shaderWidth);
-        this.applyShaderMargin($shader);
 
         if(isFirstShaderPart) {
             shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;

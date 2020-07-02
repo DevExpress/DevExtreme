@@ -22,6 +22,7 @@ describe('PagerContent', () => {
           pageSizeChange: jest.fn() as any,
           pageIndexChange: jest.fn() as any,
           infoText: 'infoText',
+          hasKnownLastPage: true,
           maxPagesCount: 10,
           pageIndex: 2,
           pageCount: 50,
@@ -53,6 +54,7 @@ describe('PagerContent', () => {
       expect(pagesContainer.childAt(0).props()).toEqual({
         children: [],
         isLargeDisplayMode: true,
+        hasKnownLastPage: true,
         maxPagesCount: 10,
         pageCount: 50,
         pageIndex: 2,
@@ -169,16 +171,34 @@ describe('PagerContent', () => {
       component.props.pageCount = 1;
       expect(component.pagesContainerVisible).toBe(true);
     });
-    it('pagesContainerVisibility', () => {
+    it('pagesContainerVisibility, hidden because pageCount = 1', () => {
       const component = new PagerContent({
         pageCount: 1,
+        hasKnownLastPage: true,
         pagesNavigatorVisible: 'auto',
       } as PagerContentProps);
       expect(component.pagesContainerVisibility).toBe('hidden');
-      component.props.pageCount = 2;
+    });
+    it('pagesContainerVisibility, visible because pageCount > 1', () => {
+      const component = new PagerContent({
+        pagesNavigatorVisible: 'auto',
+        pageCount: 2,
+      } as PagerContentProps);
       expect(component.pagesContainerVisibility).toBeUndefined();
-      component.props.pageCount = 1;
-      component.props.pagesNavigatorVisible = true;
+    });
+    it('pagesContainerVisibility, visible because navigatorVisible', () => {
+      const component = new PagerContent({
+        pagesNavigatorVisible: true,
+        pageCount: 1,
+      } as PagerContentProps);
+      expect(component.pagesContainerVisibility).toBeUndefined();
+    });
+    it('pagesContainerVisibility, visible because hasKnownLastPage is false', () => {
+      const component = new PagerContent({
+        hasKnownLastPage: false,
+        pagesNavigatorVisible: 'auto',
+        pageCount: 1,
+      } as PagerContentProps);
       expect(component.pagesContainerVisibility).toBeUndefined();
     });
     it('className, isLargeDisplayMode', () => {

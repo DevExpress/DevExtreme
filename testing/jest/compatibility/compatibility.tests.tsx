@@ -2,7 +2,7 @@ import { act } from 'preact/test-utils';
 import $ from '../../../js/core/renderer';
 import { dasherize } from '../../../js/core/utils/inflector';
 
-import '../../../js/bundles/modules/parts/widgets-renovation';
+// import '../../../js/bundles/modules/parts/widgets-renovation';
 import widgetsMeta from './widgets.json';
 
 import '../utils/jest-matchers';
@@ -29,7 +29,7 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('Mandatory component setup', () => {
+describe.skip('Mandatory component setup', () => {
   it.each(widgets)('%s - should have dx-widget css class', (widgetName) => {
     const message = 'You should always set `dx-widget` class to the rooot of your component';
 
@@ -104,20 +104,17 @@ describe('Mandatory component setup', () => {
 
   it.each(widgets.filter((m) => m[1].props.template.length))('%s - pass right props to templates', (widgetName, meta) => {
     const message = 'For templates that jQuery users set.\n'
-    + 'You should pass only `data`, `parentRef` and `index` (if applicable) props\n'
+    + 'You should pass only `data` and `index` (if applicable) props\n'
     + 'when rendering template.\n'
-    + '`parentRef` is the ref to the parent element of template\n'
-    + '<div ref={viewModel.divRef}>\n'
+    + '<div>\n'
     + '  {viewModel.props.template &&\n'
     + '    <viewModel.props.template\n'
     + '      data={viewModel.templateData}\n'
     + '      index={1}\n'
-    + '      parentRef={viewModel.divRef}\n'
     + '    />}\n'
     + '  {!viewModel.props.template && \'default content\'}\n'
     + '</div>\n\n'
-    + 'If for some reason you don\'t have parentRef (e.g. parentRef is input prop),\n'
-    + 'or data (if it is based on other props) - exclude your component from the test below\n'
+    + 'If for some reason you don\'t have data (if it is based on other props) - exclude your component from the test below\n'
     + 'and add correspondig tests in your component\'s test suite.';
     expect.assertions(meta.props.template.length * 3);
 
