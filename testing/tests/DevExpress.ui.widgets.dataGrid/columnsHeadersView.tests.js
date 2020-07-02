@@ -504,8 +504,8 @@ QUnit.module('Headers', {
 
         assert.equal($filterCell.attr('aria-label'), messageLocalization.format('dxDataGrid-ariaFilterCell'), 'Filter cell aria-label');
         assert.equal(inputs.length, 2, 'inputs count');
-        assert.equal(inputs.eq(0).css('textAlign'), 'left', 'left alignment');
-        assert.equal(inputs.eq(1).css('textAlign'), 'right', 'right alignment');
+        assert.equal(inputs.eq(0).css('textAlign'), 'start', 'left alignment');
+        assert.equal(inputs.eq(1).css('textAlign'), 'start', 'right alignment');
     });
 
     QUnit.test('filterRow accessibility structure', function(assert) {
