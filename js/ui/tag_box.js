@@ -867,7 +867,7 @@ const TagBox = SelectBox.inherit({
         const d = new Deferred();
         let isPlainDataUsed = false;
 
-        if(this._shouldGetDataFromPlain(this._valuesToUpdate)) {
+        if(this._shouldGetItemsFromPlain(this._valuesToUpdate)) {
             this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
             if(this._selectedItems.length === this._valuesToUpdate.length) {
@@ -901,7 +901,7 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    _shouldGetDataFromPlain: function(values) {
+    _shouldGetItemsFromPlain: function(values) {
         return values && this._dataSource.isLoaded() && !this._wasSearch() && values.length <= this._getPlainItems().length;
     },
 
