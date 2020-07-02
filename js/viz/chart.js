@@ -998,6 +998,8 @@ const dxChart = AdvancedChart.inherit({
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             performActionOnAxes(allAxes, 'prepareAnimation');
             that._renderScaleBreaks();
+            horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
+            verticalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(horizontalAxes));
             return false;
         }
         if(needCustomAdjustAxes) {
@@ -1070,8 +1072,11 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
         }
+
+        horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
+        verticalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(horizontalAxes));
 
         return cleanPanesCanvases;
     },
