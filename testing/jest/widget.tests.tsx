@@ -575,6 +575,12 @@ describe('Widget', () => {
 
           expect(widget.styles).toEqual({});
         });
+
+        it('should convert string without unit into number', () => {
+          const widget = new Widget({ width: '50', height: '100' });
+
+          expect(widget.styles).toEqual({ width: 50, height: 100 });
+        });
       });
 
       describe('cssClasses', () => {

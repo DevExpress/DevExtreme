@@ -50,6 +50,15 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>) => {
   return className.join(' ');
 };
 
+const isNumericString = (str: string): boolean => /^\d+$/.test(str);
+
+const tryParseInt = (size: string | number | undefined): string | number | undefined => {
+  if (typeof size === 'string' && isNumericString(size)) {
+    return parseInt(size, 10);
+  }
+  return size;
+};
+
 export const viewFunction = (viewModel: Widget) => (
   <div
     ref={viewModel.widgetRef as any}
@@ -287,8 +296,8 @@ export default class Widget extends JSXComponent(WidgetProps) {
     const { width, height } = this.props;
     const style = this.restAttributes.style || {};
 
-    const computedWidth = typeof width === 'function' ? width() : width;
-    const computedHeight = typeof height === 'function' ? height() : height;
+    const computedWidth = tryParseInt(typeof width === 'function' ? width() : width);
+    const computedHeight = tryParseInt(typeof height === 'function' ? height() : height);
 
     return {
       ...style,
