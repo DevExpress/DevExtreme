@@ -63,7 +63,6 @@ export const viewFunction = (viewModel: CheckBox): any => {
       onActive={viewModel.onActive}
       aria={viewModel.aria}
       onContentReady={viewModel.props.onContentReady}
-      onValueChanged={viewModel.props.onValueChanged}
       onClick={viewModel.onWidgetClick}
       onInactive={viewModel.onInactive}
       onKeyDown={viewModel.onWidgetKeyDown}
