@@ -20,9 +20,13 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const width = visibility === true ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
     const colSpan = visibility === true ? 1 : 2;
     const form = instance.getAppointmentDetailsForm();
+
     assert.equal(form.itemOption('recurrenceRule').visible,
         visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
+
     assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');
+    assert.equal(form.option('items')[1].colSpan, colSpan, 'colSpan of recurrence group is correct');
+
     assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup is correct');
 };
 
