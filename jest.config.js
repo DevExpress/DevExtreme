@@ -33,7 +33,8 @@ module.exports = {
         '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)'
     ],
     transform: {
-        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration-transformer.js'),
-        '\\.(js|jsx|ts|tsx)$': resolve.sync('ts-jest')
+        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/transformers/declaration-transformer.js'),
+        '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
+        '\\.(tsx)$': path.resolve('./testing/jest/utils/transformers/tsx-transformer.js')
     }
 };

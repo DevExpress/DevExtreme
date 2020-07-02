@@ -1,8 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import LightButton from './light-button';
 import PagesLarge from './pages-large';
 import PagesSmall from './pages-small';
