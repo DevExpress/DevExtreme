@@ -2,8 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent,
   Ref, Effect, Template, InternalState, Event,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import PagerProps from './pager-props';
 import { GetHtmlElement } from './pager.types.d';

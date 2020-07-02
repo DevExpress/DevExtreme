@@ -1,5 +1,6 @@
-$RECURRENCE_CONT_NUMBER_BOX_MARGIN: 11px;
-$RECURRENCE_UNTIL_DATE_BOX_BOX_MARGIN: 23px;
+$RECURRENCE_COUNT_NUMBER_BOX_RIGHT_MARGIN: 11px;
+$RECURRENCE_COUNT_NUMBER_BOX_LEFT_MARGIN: 16px;
+$RECURRENCE_UNTIL_DATE_BOX_BOX_MARGIN: 28px;
 $RECURRENCE_LABEL_LINE_HEIGHT_MARGIN: 36px;
 
 $RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP: 25px;
@@ -17,6 +18,16 @@ $RECURRENCE_BUTTON_GROUP_ITEM_PADDING: 8px;
     flex-grow: 0 !important; // stylelint-disable-line declaration-no-important
     min-width: auto !important; // stylelint-disable-line declaration-no-important
   }
+}
+
+.dx-recurrence-numberbox-interval-wrapper {
+  .dx-field-item-label {
+    white-space: nowrap;
+  }
+}
+
+.dx-layout-manager .dx-field-item.dx-recurrence-repeat-on {
+  padding-top: 0;
 }
 
 .dx-recurrence-numberbox-interval-label {
@@ -40,8 +51,8 @@ $RECURRENCE_BUTTON_GROUP_ITEM_PADDING: 8px;
 }
 
 .dx-recurrence-numberbox-repeat-count {
-  margin-left: $RECURRENCE_CONT_NUMBER_BOX_MARGIN;
-  margin-right: $RECURRENCE_CONT_NUMBER_BOX_MARGIN;
+  margin-left: $RECURRENCE_COUNT_NUMBER_BOX_LEFT_MARGIN;
+  margin-right: $RECURRENCE_COUNT_NUMBER_BOX_RIGHT_MARGIN;
 }
 
 .dx-recurrence-button-group {

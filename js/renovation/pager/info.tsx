@@ -1,8 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { format } from '../../core/utils/string';
 import { GetHtmlElement } from './pager.types.d';
 

@@ -6,8 +6,7 @@ import {
   OneWay,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { Page, PageProps } from './page';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';

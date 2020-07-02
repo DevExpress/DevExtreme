@@ -1,8 +1,7 @@
 import {
   ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import { SelectBox } from '../select-box';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
 import { FullPageSize } from './pager.types.d';
@@ -33,8 +32,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class PageSizeSmallProps {
-// Vitik: bug in generator replacce to @Ref() parentRef!: HTMLElement;
-  @Ref() parentRef: HTMLElement | undefined;
+  @Ref() parentRef!: HTMLElement;
 
   @OneWay() pageSize?: number = 5;
 
