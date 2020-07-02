@@ -1381,6 +1381,7 @@ const TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
+        delete this._valuesToUpdate;
         delete this._tagTemplate;
     },
 
