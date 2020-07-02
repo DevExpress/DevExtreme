@@ -58,16 +58,22 @@ export default class NumberBox extends JSXComponent(NumberBoxProps) {
   @Effect()
   setupWidget() {
     const { valueChange } = this.props;
-    const instance = DxNumberBox.getInstance(this.widgetRef);
-    if (instance) {
-      instance.option({ ...this.props });
-    } else {
-      new DxNumberBox(this.widgetRef, { // eslint-disable-line no-new
-        ...this.props as any,
-        onValueChanged: (e) => {
-          valueChange!(e.value);
-        },
-      });
-    }
+
+    const widget = new DxNumberBox(this.widgetRef, {
+      onInput: ({ event }) => {
+        valueChange!((event?.target as any).value);
+      },
+      onValueChanged: ({ value }) => {
+        valueChange!(value);
+      },
+    });
+
+    return () => widget.dispose();
+  }
+
+  @Effect()
+  updateWidget() {
+    const widget = DxNumberBox.getInstance(this.widgetRef);
+    widget?.option({ ...this.props });
   }
 }
