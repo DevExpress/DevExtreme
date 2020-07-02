@@ -1,13 +1,11 @@
-/* eslint-disable */
-
 const { compileCode } = require('devextreme-generator/component-compiler');
 const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');
+const getCacheKey = require("./getCacheKey");
 
 const THIS_FILE = fs.readFileSync(__filename);
-const crypto = require('crypto');
 const tsJest = require('ts-jest');
 
 const jestTransformer = tsJest.createTransformer();
@@ -72,17 +70,6 @@ module.exports = {
     return jestTransformer.process(src, filename, config);
   },
   getCacheKey(fileData, filePath, configStr) {
-    return crypto
-      .createHash('md5')
-      .update(THIS_FILE)
-      .update('\0', 'utf8')
-      .update(fileData)
-      .update('\0', 'utf8')
-      .update(filePath)
-      .update('\0', 'utf8')
-      .update(configStr)
-      .digest('hex');
+    return getCacheKey(fileData, filePath, configStr, THIS_FILE);
   },
 };
-
-/* eslint-enable */

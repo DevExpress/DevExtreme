@@ -314,4 +314,120 @@ QUnit.module('Selection', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [], 'no one item became selected');
         assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [ selectedItemKeys[1] ], 'one item became deselected');
     });
+
+    test('Thumbnails view - focused item key option can be updated', function(assert) {
+        const itemName = 'Folder 1.2';
+        const itemPath = `Folder 1/${itemName}`;
+        const nextItemName = 'File 1-1.txt';
+
+        createFileManager(this, {
+            itemView: {
+                mode: 'thumbnails'
+            },
+            currentPath: 'Folder 1',
+            focusedItemKey: itemPath
+        });
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused(itemName), 'item focused');
+        assert.notOk(this.wrapper.isThumbnailsItemSelected(itemName), 'item not selected');
+
+        const $item = this.wrapper.findThumbnailsItem(nextItemName);
+        triggerCellClick($item);
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.isThumbnailsItemFocused(itemName), 'item not focused');
+        assert.ok(this.wrapper.isThumbnailsItemFocused(nextItemName), 'next item focused');
+        assert.ok(this.wrapper.isThumbnailsItemSelected(nextItemName), 'next item selected');
+        assert.strictEqual(this.fileManager.option('focusedItemKey'), `Folder 1/${nextItemName}`, 'option updated to the next item key');
+
+        this.fileManager.option('focusedItemKey', itemPath);
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused(itemName), 'item focused');
+        assert.notOk(this.wrapper.isThumbnailsItemSelected(itemName), 'item selected');
+        assert.notOk(this.wrapper.isThumbnailsItemFocused(nextItemName), 'next item not focused');
+        assert.ok(this.wrapper.isThumbnailsItemSelected(nextItemName), 'next item selected');
+        assert.strictEqual(this.fileManager.option('focusedItemKey'), itemPath, 'option updated to the item key');
+    });
+
+    test('Details view - focused item key option can be updated', function(assert) {
+        const itemPath = 'Folder 1/Folder 1.2';
+
+        createFileManager(this, {
+            currentPath: 'Folder 1',
+            focusedItemKey: itemPath
+        });
+
+        assert.ok(this.wrapper.isDetailsRowFocused(3), 'item focused');
+        assert.notOk(this.wrapper.isDetailsRowSelected(3), 'item not selected');
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(4);
+        triggerCellClick($cell);
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.isDetailsRowFocused(3), 'item not focused');
+        assert.ok(this.wrapper.isDetailsRowFocused(4), 'next item focused');
+        assert.ok(this.wrapper.isDetailsRowSelected(4), 'next item selected');
+        assert.strictEqual(this.fileManager.option('focusedItemKey'), 'Folder 1/File 1-1.txt', 'option updated to the next item key');
+
+        this.fileManager.option('focusedItemKey', itemPath);
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.isDetailsRowFocused(3), 'item focused');
+        assert.notOk(this.wrapper.isDetailsRowSelected(3), 'item selected');
+        assert.notOk(this.wrapper.isDetailsRowFocused(4), 'next item not focused');
+        assert.ok(this.wrapper.isDetailsRowSelected(4), 'next item selected');
+        assert.strictEqual(this.fileManager.option('focusedItemKey'), itemPath, 'option updated to the item key');
+    });
+
+    test('Thumbnails view - focusedItemChanged is not raised when initial valid focusedItemKey specified', function(assert) {
+        const itemName = 'Folder 1.2';
+        const itemPath = `Folder 1/${itemName}`;
+        const focusedItemSpy = sinon.spy();
+
+        createFileManager(this, {
+            itemView: {
+                mode: 'thumbnails'
+            },
+            currentPath: 'Folder 1',
+            focusedItemKey: itemPath,
+            onFocusedItemChanged: focusedItemSpy
+        });
+
+        assert.ok(this.wrapper.isThumbnailsItemFocused(itemName), 'item focused');
+        assert.notOk(this.wrapper.isThumbnailsItemSelected(itemName), 'item not selected');
+        assert.strictEqual(focusedItemSpy.callCount, 0, 'event is not raised');
+    });
+
+    test('Thumbnails view - focusedItemChanged raised when initial invalid focusedItemKey specified', function(assert) {
+        const focusedItemSpy = sinon.spy();
+
+        createFileManager(this, {
+            itemView: {
+                mode: 'thumbnails'
+            },
+            currentPath: 'Folder 1',
+            focusedItemKey: 'wrong key',
+            onFocusedItemChanged: focusedItemSpy
+        });
+
+        assert.strictEqual(focusedItemSpy.callCount, 1, 'event is raised');
+        assert.notOk(focusedItemSpy.args[0][0].item, 'item not specified');
+        assert.notOk(focusedItemSpy.args[0][0].itemElement, 'itemElement not specified');
+    });
+
+    test('Details view - focusedItemChanged is not raised when initial valid focusedItemKey specified', function(assert) {
+        const itemPath = 'Folder 1/Folder 1.2';
+        const focusedItemSpy = sinon.spy();
+
+        createFileManager(this, {
+            currentPath: 'Folder 1',
+            focusedItemKey: itemPath,
+            onFocusedItemChanged: focusedItemSpy
+        });
+
+        assert.ok(this.wrapper.isDetailsRowFocused(3), 'item focused');
+        assert.notOk(this.wrapper.isDetailsRowSelected(3), 'item not selected');
+        assert.strictEqual(focusedItemSpy.callCount, 0, 'event is not raised');
+    });
 });
