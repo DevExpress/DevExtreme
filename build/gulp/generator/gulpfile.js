@@ -76,7 +76,7 @@ function processRenovationMeta() {
     const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
         ...meta,
         path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
-    })));
+    })), null, 2);
 
     return merge(
         file('widgets-renovation.js', content, { src: true })

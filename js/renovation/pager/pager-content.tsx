@@ -22,7 +22,7 @@ export const viewFunction = ({
   props: {
     parentRef, pageSizesRef, pagesRef, infoTextRef,
     pageSizeChange, pageIndexChange,
-    infoText, maxPagesCount, pageIndex,
+    infoText, maxPagesCount, pageIndex, hasKnownLastPage,
     pageCount, showPageSizes, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
@@ -48,7 +48,7 @@ export const viewFunction = ({
         style={{ visibility: pagesContainerVisibility }}
       >
         <PageIndexSelector
-                // hasKnownLastPage={hasKnownLastPage}
+          hasKnownLastPage={hasKnownLastPage}
           isLargeDisplayMode={isLargeDisplayMode}
           maxPagesCount={maxPagesCount}
           pageCount={pageCount}
@@ -106,12 +106,12 @@ export default class PagerContentComponent extends JSXComponent(PagerContentProp
   }
 
   get pagesContainerVisible(): boolean {
-    return !!this.props.pagesNavigatorVisible;
+    return !!this.props.pagesNavigatorVisible && (this.props.pageCount as number) > 0;
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto') {
-      return this.props.pageCount === 1 ? 'hidden' : undefined;
+    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
+      return 'hidden';
     }
     return undefined;
   }

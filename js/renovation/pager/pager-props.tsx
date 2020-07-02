@@ -17,6 +17,8 @@ export default class PagerProps {
 
   @OneWay() visible?: boolean = true;
 
+  @OneWay() hasKnownLastPage?: boolean = true;
+
   @OneWay() pagesNavigatorVisible?: boolean | 'auto' = 'auto';
 
   @TwoWay() pageIndex?: number = 0;
@@ -32,6 +34,4 @@ export default class PagerProps {
   @OneWay() showNavigationButtons?: boolean = false;
 
   @OneWay() totalCount?: number = 0;
-
-  // hasKnownLastPage: true,
 }

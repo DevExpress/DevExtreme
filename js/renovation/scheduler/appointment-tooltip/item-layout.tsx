@@ -28,9 +28,6 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
             targetedAppointmentData: viewModel.currentAppointment,
           }}
           index={viewModel.props.index}
-          parentRef={{
-            current: viewModel.props.container,
-          }}
         />
       )}
       {!useTemplate && (
@@ -68,11 +65,9 @@ export class TooltipItemLayoutProps {
 
   @OneWay() index?: number;
 
-  @OneWay() container?: HTMLDivElement;
-
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template({ canBeAnonymous: true }) itemContentTemplate?: any;
+  @Template() itemContentTemplate?: any;
 
   @Event() onDelete?: CheckAndDeleteAppointmentFn = noop;
 

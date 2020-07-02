@@ -4,8 +4,9 @@
 
 import { act } from 'preact/test-utils';
 import $ from '../../js/core/renderer';
-import './test_components/preact_test_widget';
 import './test_components/empty_test_widget';
+import './test_components/preact_test_widget';
+import './test_components/templated_test_widget';
 import {
   defaultEvent,
   emitKeyboard,
@@ -258,8 +259,102 @@ describe('option', () => {
   });
 });
 
-describe('templates', () => {
+describe('templates and slots', () => {
+  it('pass anonymous template content as children', () => {
+    $('#component').html('<span>Default slot</span>');
 
+    act(() => $('#component').dxrTemplatedTestWidget({}));
+
+    expect($('#component').children().length).toBe(1);
+    expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
+  });
+
+  it('preserve anonymous template content element', () => {
+    const element = $('<span>').html('Default slot');
+    $('#component').append(element);
+
+    act(() => $('#component').dxrTemplatedTestWidget({}));
+
+    expect($('#component').children()[0]).toBe(element[0]);
+  });
+
+  it('pass updated anonymous content on repaint', () => {
+    const slotContent = $('<span>').html('Default slot');
+    $('#component').append(slotContent);
+
+    act(() => $('#component').dxrTemplatedTestWidget({}));
+    slotContent.html('Update slot');
+
+    act(() => $('#component').dxrTemplatedTestWidget('repaint'));
+
+    expect($('#component')[0].innerHTML).toBe('<span>Update slot</span>');
+  });
+
+  describe('template function parameters', () => {
+    it('template without index', () => {
+      const template = jest.fn();
+
+      act(() => $('#component').dxrTemplatedTestWidget({
+        template,
+      }));
+
+      const templateRoot = $('#component').children('.templates-root')[0];
+
+      expect(template).toBeCalledTimes(1);
+      expect(template.mock.calls[0]).toEqual([{ simpleTemplate: 'data' }, templateRoot]);
+    });
+
+    it('template with index', () => {
+      const template = jest.fn();
+
+      act(() => $('#component').dxrTemplatedTestWidget({
+        indexedTemplate: template,
+      }));
+
+      const templateRoot = $('#component').children('.templates-root')[0];
+
+      expect(template).toBeCalledTimes(1);
+      expect(template.mock.calls[0]).toEqual([{ indexedTemplate: 'data' }, 2, templateRoot]);
+    });
+  });
+
+  it('insert template content to templates root', () => {
+    act(() => $('#component').dxrTemplatedTestWidget({
+      template(data, element) {
+        $(element).html('<span>Template content</span>');
+      },
+    }));
+
+    const templateRoot = $('#component').children('.templates-root')[0];
+
+    expect(templateRoot.innerHTML).toBe('<span>Template content</span>');
+  });
+
+  it('remove old template content between renders', () => {
+    act(() => $('#component').dxrTemplatedTestWidget({
+      template(data, element) {
+        $(element).append(`<span>Template - ${data.simpleTemplate}</span>`);
+      },
+    }));
+    const templateRoot = $('#component').children('.templates-root')[0];
+
+    act(() => $('#component').dxrTemplatedTestWidget({
+      text: 'new data',
+    }));
+
+    expect(templateRoot.innerHTML).toBe('<span>Template - new data</span>');
+  });
+
+  it('replace root with template if it returns .dx-template-wrapper node', () => {
+    act(() => $('#component').dxrTemplatedTestWidget({
+      template() {
+        return '<div class="dx-template-wrapper">Template content</div>';
+      },
+    }));
+
+    expect($('#component').children('.dx-template-wrapper')[0])
+      .toBe($('#component').children('.templates-root')[0]);
+  });
 });
 
 describe('events/actions', () => {
