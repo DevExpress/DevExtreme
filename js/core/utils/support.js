@@ -6,8 +6,6 @@ import windowUtils from './window';
 import devices from '../devices';
 import { stylePropPrefix, styleProp } from './style';
 
-const createElement = domAdapter.createElement;
-
 const {
     maxTouchPoints,
     msMaxTouchPoints, // TODO: remove this line when we drop IE support
@@ -39,7 +37,7 @@ const inputType = function(type) {
         return true;
     }
 
-    const input = createElement('input');
+    const input = domAdapter.createElement('input');
     try {
         input.setAttribute('type', type);
         input.value = 'wrongValue';

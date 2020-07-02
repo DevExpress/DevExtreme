@@ -116,7 +116,6 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     _isValueEquals: function(value1, value2) {
         const dataSourceKey = this._dataSource && this._dataSource.key();
 
-        const isDefined = isDefined;
         let result = this._compareValues(value1, value2);
 
         if(!result && dataSourceKey && isDefined(value1) && isDefined(value2)) {

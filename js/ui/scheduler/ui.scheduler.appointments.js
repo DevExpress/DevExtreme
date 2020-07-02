@@ -16,7 +16,7 @@ import registerComponent from '../../core/component_registrator';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
 import { addNamespace, isFakeClickEvent } from '../../events/utils';
-import dblclickEvent from '../../events/double_click';
+import { name as dblclickEvent } from '../../events/double_click';
 import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
@@ -32,7 +32,7 @@ const APPOINTMENT_DATE_CLASS = 'dx-scheduler-appointment-content-date';
 const RECURRING_ICON_CLASS = 'dx-scheduler-appointment-recurrence-icon';
 const ALL_DAY_CONTENT_CLASS = 'dx-scheduler-appointment-content-allday';
 
-const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent.name, 'dxSchedulerAppointment');
+const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
 const toMs = dateUtils.dateToMilliseconds;
 

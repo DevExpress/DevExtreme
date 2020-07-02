@@ -9,8 +9,8 @@ import { findChanges } from '../../core/utils/array_compare';
 import domAdapter from '../../core/dom_adapter';
 import { noop } from '../../core/utils/common';
 
-const insertElement = domAdapter.insertElement;
 const PRIVATE_KEY_FIELD = '__dx_key__';
+
 
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
@@ -203,7 +203,7 @@ export default CollectionWidget.inherit({
 
     _appendItemToContainer: function($container, $itemFrame, index) {
         const nextSiblingElement = $container.children(this._itemSelector()).get(index);
-        insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
+        domAdapter.insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
     },
 
     _optionChanged: function(args) {

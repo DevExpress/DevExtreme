@@ -5,7 +5,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
 import pointerEvents from '../../events/pointer';
 import { name as clickEventName } from '../../events/click';
-import dblclickEvent from '../../events/double_click';
+import { name as dblclickEvent } from '../../events/double_click';
 import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import { setWidth } from '../../core/utils/style';

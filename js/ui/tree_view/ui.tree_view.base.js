@@ -13,7 +13,7 @@ import CheckBox from '../check_box';
 import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
 import { addNamespace } from '../../events/utils';
 import { down as PointerDown } from '../../events/pointer';
-import dblclickEvent from '../../events/double_click';
+import { name as dblclickEvent } from '../../events/double_click';
 import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
@@ -773,7 +773,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getEventNameByOption: function(name) {
         const event = name === 'click' ? clickEventName : dblclickEvent;
-        return addNamespace(event.name, EXPAND_EVENT_NAMESPACE);
+        return addNamespace(event, EXPAND_EVENT_NAMESPACE);
     },
 
     _getNode: function(identifier) {
