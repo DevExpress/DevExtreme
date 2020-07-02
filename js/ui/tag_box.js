@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
 import dataUtils from '../core/element_data';
-const typeUtils = require('../core/utils/type');
+import typeUtils from '../core/utils/type';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import browser from '../core/utils/browser';
@@ -865,19 +865,19 @@ const TagBox = SelectBox.inherit({
 
     _renderTags: function() {
         const d = new Deferred();
-        let plainDataUsed = false;
+        let isPlainDataUsed = false;
 
         if(this._shouldGetDataFromPlain(this._valuesToUpdate)) {
             this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
             if(this._selectedItems.length === this._valuesToUpdate.length) {
                 this._renderTagsImpl(this._selectedItems);
-                plainDataUsed = true;
+                isPlainDataUsed = true;
                 d.resolve();
             }
         }
 
-        if(!plainDataUsed) {
+        if(!isPlainDataUsed) {
             this._loadTagsData().always((items) => {
                 if(this._disposed) {
                     d.reject();
@@ -908,16 +908,15 @@ const TagBox = SelectBox.inherit({
     _getItemsFromPlain: function(values) {
         const plainItems = this._getPlainItems();
         const selectedItems = plainItems.filter((dataItem) => {
-
+            let currentValue;
             for(let i = 0; i < values.length; i++) {
-                if(typeUtils.isObject(values[i])) {
-                    if(this._isValueEquals(dataItem, values[i])) {
+                currentValue = values[i];
+                if(typeUtils.isObject(currentValue)) {
+                    if(this._isValueEquals(dataItem, currentValue)) {
                         return true;
                     }
-                } else {
-                    if(this._isValueEquals(this._valueGetter(dataItem), values[i])) {
-                        return true;
-                    }
+                } else if(this._isValueEquals(this._valueGetter(dataItem), currentValue)) {
+                    return true;
                 }
             }
 
