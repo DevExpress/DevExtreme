@@ -109,6 +109,9 @@ export class ButtonProps extends BaseWidgetProps {
   })
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  onClick?: (e: any) => void = noop;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   @Event() onSubmit?: (e: any) => void = noop;
 
   @OneWay() pressed?: boolean;
