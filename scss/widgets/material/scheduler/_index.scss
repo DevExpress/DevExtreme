@@ -739,9 +739,11 @@ $MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING: 8px;
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-timeline):not(.dx-scheduler-agenda) {
     $headerScrollBarTopOffset: $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT;
 
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($headerScrollBarTopOffset);
     @include baseScheduler.dx-scheduler-group-mixin($headerScrollBarTopOffset);
 
     &.dx-scheduler-work-space-day {
+      @include baseScheduler.dx-scheduler-header-scrollable-mixin($headerScrollBarTopOffset - $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
       @include baseScheduler.dx-scheduler-group-mixin($headerScrollBarTopOffset - $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
     }
   }
@@ -759,6 +761,8 @@ $MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING: 8px;
   &.dx-scheduler-timeline-week,
   &.dx-scheduler-timeline,
   &.dx-scheduler-timeline-work-week {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2);
+
     &.dx-scheduler-work-space-grouped {
       .dx-scheduler-sidebar-scrollable {
         padding-bottom: $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2;
@@ -785,6 +789,42 @@ $MATERIAL_SCHEDULER_AGENDA_TIME_PANEL_CELL_PADDING: 8px;
     &:before {
       background-color: $SCHEDULER_WORKSPACE_BACKGROUND_COLOR,;
     }
+  }
+
+  @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
+
+  &.dx-scheduler-work-space-day {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin(0);
+  }
+
+  &.dx-scheduler-work-space.dx-scheduler-work-space-all-day {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
+
+    &.dx-scheduler-work-space-all-day-collapsed {
+      @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
+    }
+
+    &.dx-scheduler-work-space-day {
+      &:not(.dx-scheduler-work-space-count) {
+        @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT);
+
+        &.dx-scheduler-work-space-all-day-collapsed {
+          @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+        }
+      }
+
+      &:not(.dx-scheduler-work-space-grouped) {
+        @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT);
+
+        &.dx-scheduler-work-space-all-day-collapsed {
+          @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+        }
+      }
+    }
+  }
+
+  &.dx-scheduler-work-space.dx-scheduler-work-space-month {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT);
   }
 }
 
