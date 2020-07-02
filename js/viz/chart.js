@@ -467,6 +467,7 @@ function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
             const index = seriesPoints[i].index;
             currentSeries.autoHidePointMarkers = true;
             seriesPoints.splice(i, 1);
+            series.splice(series.indexOf(currentSeries), 1);
             delete markersInfo.overloadedSeries[index];
         }
     }
@@ -916,11 +917,11 @@ const dxChart = AdvancedChart.inherit({
             return;
         }
 
-        that.panes.forEach(({ canvas, name }) => {
+        that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
-            fastHidingPointMarkersByArea(canvas, markersInfo, series);
+            fastHidingPointMarkersByArea(borderCoords, markersInfo, series);
 
             if(markersInfo.series.length) {
                 const argVisualRange = argAxis.visualRange();
