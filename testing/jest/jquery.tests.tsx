@@ -266,8 +266,16 @@ describe('templates and slots', () => {
     act(() => $('#component').dxrTemplatedTestWidget({}));
 
     expect($('#component').children().length).toBe(1);
-    expect($('#component').children()[0].style.display).toBe('contents');
-    expect($('#component').children()[0].innerHTML).toBe('<span>Default slot</span>');
+    expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
+  });
+
+  it('preserve anonymous template content element', () => {
+    const element = $('<span>').html('Default slot');
+    $('#component').append(element);
+
+    act(() => $('#component').dxrTemplatedTestWidget({}));
+
+    expect($('#component').children()[0]).toBe(element[0]);
   });
 
   it('pass updated anonymous content on repaint', () => {
@@ -279,7 +287,7 @@ describe('templates and slots', () => {
 
     act(() => $('#component').dxrTemplatedTestWidget('repaint'));
 
-    expect($('#component').children()[0].innerHTML).toBe('<span>Update slot</span>');
+    expect($('#component')[0].innerHTML).toBe('<span>Update slot</span>');
   });
 
   describe('template function parameters', () => {

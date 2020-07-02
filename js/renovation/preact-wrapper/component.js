@@ -1,5 +1,5 @@
 import * as Preact from 'preact';
-import { useLayoutEffect } from 'preact/hooks';
+import { useLayoutEffect, useRef } from 'preact/hooks';
 import $ from '../../core/renderer';
 import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
@@ -30,7 +30,7 @@ export default class PreactWrapper extends DOMComponent {
             this._shouldRefresh = false;
 
             this._renderPreact({
-                ...props, width: null, height: null, style: '', className: '',
+                ...props, width: null, height: null, style: '', className: '', children: null
             });
         }
         this._renderPreact(props);
@@ -147,13 +147,16 @@ export default class PreactWrapper extends DOMComponent {
 
     _extractDefaultSlot() {
         if(this.option('_hasAnonymousTemplateContent')) {
-            const template = this._getTemplate(this._templateManager.anonymousTemplateName);
-            return Preact.createElement('div', {
-                style: {
-                    display: 'contents'
-                },
-                ref: ref => $(ref).append(template._element)
-            });
+            const dummyDivRefCallback = (dummyDivRef) => {
+                if(!dummyDivRef) return null;
+                const parentNode = dummyDivRef.parentNode;
+                parentNode.removeChild(dummyDivRef);
+                this._getTemplate(this._templateManager.anonymousTemplateName)
+                    .render({ container: getPublicElement($(parentNode)), transclude: true });
+            };
+
+            return Preact.h(Preact.Fragment, {},
+                Preact.h('div', { style: { display: 'none' }, ref: dummyDivRefCallback }));
         }
     }
 
@@ -163,24 +166,23 @@ export default class PreactWrapper extends DOMComponent {
         }
 
         const template = this._getTemplate(templateOption);
-        return ({ parentRef, data, index }) => {
+        return ({ data, index }) => {
+            const dummyDivRef = useRef();
             useLayoutEffect(
                 () => {
-                    const $parent = $(parentRef.current);
+                    const parentNode = dummyDivRef.current.parentNode;
+                    parentNode.removeChild(dummyDivRef.current);
+                    const $parent = $(parentNode);
                     const $children = $parent.contents();
 
-                    const payload = {
+                    const $template = $(template.render({
                         container: getPublicElement($parent),
                         model: data,
-                    };
-                    if(isFinite(index)) {
-                        payload.index = index;
-                    }
-
-                    let $template = $(template.render(payload));
+                        ...(isFinite(index) ? { index } : {}),
+                    }));
 
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-                        $template = wrapElement($parent, $template);
+                        wrapElement($parent, $template);
                     }
                     const $newChildren = $parent.contents();
 
@@ -191,8 +193,8 @@ export default class PreactWrapper extends DOMComponent {
                 },
                 Object.keys(props).map((key) => props[key]),
             );
-
-            return Preact.h(Preact.Fragment);
+            return Preact.h(Preact.Fragment, {},
+                Preact.h('div', { style: { display: 'none' }, ref: dummyDivRef }));
         };
     }
 
