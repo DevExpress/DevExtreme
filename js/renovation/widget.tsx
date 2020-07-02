@@ -84,11 +84,11 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() name?: string = '';
 
-  @Event() onActive?: (e: object) => void;
+  @Event() onActive?: (e: Event) => void;
 
   @Event() onDimensionChanged?: () => void;
 
-  @Event() onInactive?: (e: object) => void;
+  @Event() onInactive?: (e: Event) => void;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   @Event() onKeyboardHandled?: (args: any) => any | undefined;
