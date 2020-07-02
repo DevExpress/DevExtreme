@@ -203,7 +203,9 @@ const SchedulerAppointmentForm = {
                     editorOptions: {
                         onValueChanged: (args) => {
                             const form = this._appointmentForm;
+
                             form.option('items[0].colSpan', args.value ? 1 : 2);
+                            form.option('items[1].colSpan', args.value ? 1 : 2);
 
                             this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
 
@@ -255,6 +257,7 @@ const SchedulerAppointmentForm = {
             },
             {
                 itemType: 'group',
+                colSpan: recurrenceEditorVisibility ? 1 : 2,
                 items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
             }
         ];
@@ -266,7 +269,6 @@ const SchedulerAppointmentForm = {
         return [{
             dataField: dataExprs.recurrenceRuleExpr,
             editorType: 'dxRecurrenceEditor',
-            colSpan: recurrenceEditorVisibility ? 1 : 2,
             visible: recurrenceEditorVisibility,
             editorOptions: {
                 readOnly: readOnly,
