@@ -3,8 +3,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import InfoText from './info';
 import PageIndexSelector from './page-index-selector';
 import PageSizeSelector from './page-size-selector';
