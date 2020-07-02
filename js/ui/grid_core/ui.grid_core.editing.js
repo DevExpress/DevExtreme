@@ -938,18 +938,11 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getVisibleEditRowIndex: function() {
             const dataController = this._dataController;
-            const columns = this._columnsController.getColumns();
 
-            let editColumn;
-            columns.some(column => {
-                if(column.visibleIndex === this._editColumnIndex) {
-                    editColumn = column;
-                    return true;
-                }
-            });
+            const editColumn = this._columnsController.getVisibleColumns()[this._editColumnIndex];
             const isColumnHidden = editColumn?.visibleWidth === 'adaptiveHidden';
 
-            const editRowIndexCorrection = isColumnHidden ? 1 : 0;
+            const editRowIndexCorrection = typeUtils.isDefined(this._editRowKey) && isColumnHidden ? 1 : 0;
 
             return dataController.getRowIndexByKey(this._editRowKey) + editRowIndexCorrection;
         },
