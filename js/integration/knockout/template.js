@@ -7,7 +7,7 @@ import { normalizeTemplateElement } from '../../core/utils/dom';
 import { getClosestNodeWithContext } from './utils';
 
 const getParentContext = function(data) {
-    const parentNode = domAdapter.createElementFn('div');
+    const parentNode = domAdapter.createElement('div');
 
     ko.applyBindingsToNode(parentNode, null, data);
     const parentContext = ko.contextFor(parentNode);
