@@ -33,8 +33,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class PageSizeSmallProps {
-// Vitik: bug in generator replacce to @Ref() parentRef!: HTMLElement;
-  @Ref() parentRef: HTMLElement | undefined;
+  @Ref() parentRef!: HTMLElement;
 
   @OneWay() pageSize?: number = 5;
 
