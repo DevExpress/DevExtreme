@@ -163,7 +163,8 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
     });
   }
 
-  onWidgetKeyDown(options): undefined {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  onWidgetKeyDown(options): any | undefined {
     const { onKeyDown } = this.props;
     const { originalEvent, keyName, which } = options;
 
