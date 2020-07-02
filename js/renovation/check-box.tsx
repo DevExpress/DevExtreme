@@ -73,9 +73,8 @@ export const viewFunction = (viewModel: CheckBox): any => {
       width={viewModel.props.width}
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      {name
-        ? <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} name={name} />
-        : <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} />}
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
       <div className={CHECKBOX_CONTAINER_CLASS} ref={viewModel.contentRef}>
         <span className={CHECKBOX_ICON_CLASS} />
         {text && (<span className={CHECKBOX_TEXT_CLASS}>{text}</span>)}
