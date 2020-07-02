@@ -2589,7 +2589,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.dragBehavior.addTo(this.getAllDayContainer());
             this.dragBehavior.addTo(this._$allDayPanel);
         }
-        this._attachTablesEvents();
     }
 
     _isApplyCompactAppointmentOffset() {
