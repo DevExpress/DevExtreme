@@ -7,10 +7,14 @@ import {
 import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
-import { AppointmentItem, FormattedContent } from './types';
+import {
+  AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
+} from './types';
 import Marker from './marker';
 import Button from '../../button';
 import TooltipItemContent from './item-content';
+import getCurrentAppointment from './utils/get-current-appointment';
+import { defaultGetTextAndFormatDate } from './utils/default-functions';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;
@@ -65,17 +69,13 @@ export class TooltipItemLayoutProps {
 
   @Template() itemContentTemplate?: any;
 
-  @Event() onDelete?: (
-    data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
-  ) => void = noop;
+  @Event() onDelete?: CheckAndDeleteAppointmentFn = noop;
 
   @Event() onHide?: () => void = noop;
 
-  @Event() getTextAndFormatDate?: (
-    data?: dxSchedulerAppointment, currentData?: dxSchedulerAppointment,
-  ) => any = noop;
+  @OneWay() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
-  @OneWay() singleAppointmentData?: dxSchedulerAppointment;
+  @OneWay() singleAppointment?: dxSchedulerAppointment;
 }
 
 @Component({
@@ -90,20 +90,18 @@ export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutPro
   get currentAppointment(): dxSchedulerAppointment {
     const { item } = this.props;
 
-    const { settings, data, currentData } = item!;
-
-    return settings?.targetedAppointmentData || currentData || data;
+    return getCurrentAppointment(item!);
   }
 
   get onDeleteButtonClick(): (e: any) => void {
     const {
-      singleAppointmentData, item, onHide, onDelete,
+      singleAppointment, item, onHide, onDelete,
     } = this.props;
 
     return (e: any): void => {
       onHide!();
       e.event.stopPropagation();
-      onDelete!(item!.data, singleAppointmentData);
+      onDelete!(item!.data, singleAppointment!);
     };
   }
 
