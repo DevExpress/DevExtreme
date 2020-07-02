@@ -79,7 +79,7 @@ export default class DependencyCollector {
     themes.forEach((theme) => {
       const indexFileName = `../scss/widgets/${theme}/_index.scss`;
       const indexContent = this.readFile(indexFileName);
-      const indexPublicWidgetsList = (new WidgetsHandler([], ''))
+      const indexPublicWidgetsList = (new WidgetsHandler([], '', {}))
         .getIndexWidgetItems(indexContent)
         .map((item: WidgetItem): string => item.widgetName.toLowerCase())
         .sort();

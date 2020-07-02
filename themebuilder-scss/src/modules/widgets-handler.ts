@@ -1,7 +1,5 @@
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
-// eslint-disable-next-line import/extensions
-import { dependencies } from '../data/metadata/dx-theme-builder-metadata';
 
 const widgetListComment = '// public widgets';
 
@@ -14,7 +12,7 @@ export default class WidgetsHandler {
 
   dependencies: FlatStylesDependencyTree;
 
-  constructor(widgets: Array<string>, bundlePath: string) {
+  constructor(widgets: Array<string>, bundlePath: string, dependencies: FlatStylesDependencyTree) {
     const theme = /material/.test(bundlePath) ? 'material' : 'generic';
     this.dependencies = dependencies || {};
     this.widgets = widgets ? widgets.map((w) => w.toLowerCase()) : [];
