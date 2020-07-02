@@ -229,6 +229,23 @@ QUnit.module('Initialization', {
             assert.equal(errors.log.callCount, 0, 'there are not any warnings');
         });
     });
+
+    QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [],
+            views: [{
+                type: 'day',
+                intervalCount: 2
+            }],
+            crossScrollingEnabled: true,
+            showAllDayPanel: false
+        });
+
+        const headerScrollableHeight = scheduler.workSpace.getHeaderScrollable().height();
+        const headerHeight = scheduler.header.getElement().height();
+
+        assert.ok(headerScrollableHeight >= headerHeight, 'HeaderScrollable height is correct');
+    });
 });
 
 (function() {

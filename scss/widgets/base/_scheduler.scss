@@ -271,7 +271,11 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
   }
 
   .dx-scheduler-header-scrollable {
-    height: $baseHeight + 1px;
+    height: auto;
+
+    @if $baseHeight > 0 {
+      height: $baseHeight + 1px;
+    }
   }
 
   &.dx-scheduler-work-space-horizontal-grouped {
