@@ -1,4 +1,6 @@
-import { ComponentBindings, OneWay, TwoWay } from 'devextreme-generator/component_declaration/common';
+import {
+  ComponentBindings, OneWay, TwoWay, Event,
+} from 'devextreme-generator/component_declaration/common';
 import messageLocalization from '../../localization/message';
 
 @ComponentBindings()
@@ -23,7 +25,11 @@ export default class PagerProps {
 
   @TwoWay() pageIndex?: number = 0;
 
+  @Event() pageIndexChange?: (newPageIndex: number) => void;
+
   @TwoWay() pageSize?: number = 5;
+
+  @Event() pageSizeChange?: (newPageSize: number) => void;
 
   @OneWay() showPageSizes? = true;
 
