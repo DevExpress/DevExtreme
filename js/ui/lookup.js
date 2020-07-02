@@ -641,7 +641,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function() {
-        if(this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) {
+        if(this._list && this._list.itemElements()) {
             return this._calculateListHeight(this.option('grouped')) +
                 (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
                 (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
@@ -652,12 +652,12 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupWidth: function() {
-        return this.option('itemCenteringEnabled') ? $(this.element()).outerWidth() : $(window).width() * 0.8;
+        return $(this.element()).outerWidth();
     },
 
     _renderPopup: function() {
         if(this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
-            if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
+            if(this.option('_scrollToSelectedItemEnabled')) {
                 this.callBase();
             } else {
                 this._renderPopover();
@@ -736,10 +736,14 @@ const Lookup = DropDownList.inherit({
         delete result.animation;
         delete result.position;
 
-        if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
-            result.position = {
+        if(this.option('_scrollToSelectedItemEnabled')) {
+            result.position = this.option('itemCenteringEnabled') ? {
                 my: 'left top',
                 at: 'left top',
+                of: this.element()
+            } : {
+                my: 'left top',
+                at: 'left bottom',
                 of: this.element()
             };
         }
@@ -1126,8 +1130,9 @@ const Lookup = DropDownList.inherit({
             case '_scrollToSelectedItemEnabled':
                 break;
             case 'itemCenteringEnabled':
-                if(this.option('_scrollToSelectedItemEnabled') && value) {
-                    this.option('usePopover', false);
+                if(this.option('_scrollToSelectedItemEnabled')) {
+                    this.option('dropDownOptions.position', undefined);
+                    this._renderPopup();
                 }
                 break;
             default:
