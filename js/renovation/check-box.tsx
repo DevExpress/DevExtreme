@@ -161,7 +161,7 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
       event,
       element: this.submitInputRef.parentNode,
       previousValue: value,
-      value: this.props.value,
+      value: !value,
     });
   }
 
