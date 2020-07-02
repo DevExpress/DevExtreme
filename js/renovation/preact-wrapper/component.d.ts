@@ -24,7 +24,7 @@ export default class PreactWrapper extends DOMComponent {
 
   _stateChange(name: string): (value: any) => void;
 
-  _createTemplateComponent(props: any, templateOption: any, canBeAnonymous: boolean): any;
+  _createTemplateComponent(props: any, templateOption: any): any;
 
   _wrapKeyDownHandler(handler: (event: any, options: any) => any): any;
 

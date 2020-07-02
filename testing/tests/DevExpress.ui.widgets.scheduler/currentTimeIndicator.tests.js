@@ -382,11 +382,25 @@ const stubInvokeMethod = function(instance, options) {
         });
 
         const $element = this.instance.$element();
-        const $indicator = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
-        const containerHeight = $indicator.parent().outerHeight();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const containerHeight = $shader.parent().outerHeight();
 
-        assert.roughEqual($indicator.outerHeight(), containerHeight, 1, 'Shader has correct height');
-        assert.roughEqual(parseInt($indicator.css('marginTop')), -containerHeight, 1.5, 'Shader has correct margin');
+        assert.roughEqual($shader.outerHeight(), containerHeight, 1, 'Shader has correct height');
+        assert.roughEqual(parseInt($shader.css('marginTop')), -containerHeight, 1.5, 'Shader has correct margin');
+    });
+
+    QUnit.test('Shader parts should be rendered correctly, Day view with crossScrollingEnabled', function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            crossScrollingEnabled: true
+        });
+
+        const $element = this.instance.$element();
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+
+        assert.equal($topShader.length, 1, 'Top shaders count is OK');
+        assert.equal($bottomShader.length, 1, 'Bottom shaders count is OK');
     });
 
     QUnit.test('TimePanel currentTime cell should have specific class, Day view', function(assert) {
@@ -961,6 +975,26 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         assert.equal($indicators.eq(0).position().top, 0);
         assert.equal($indicators.eq(1).position().left, 2150);
         assert.equal($indicators.eq(1).position().top, 0);
+    });
+
+    [true, false].forEach(groupByDate => {
+        QUnit.test(`Shader should have correct marginTop, when crossScrollingEnabled = true and groupByDate = ${groupByDate}`, function(assert) {
+            this.instance.option({
+                indicatorTime: new Date(2017, 8, 5, 12, 45),
+                groupByDate: groupByDate,
+                startDayHour: 11,
+                crossScrollingEnabled: true
+            });
+
+            this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+
+            const $element = this.instance.$element();
+            const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+            const containerHeight = $shader.parent().outerHeight();
+
+            assert.roughEqual(parseInt($shader.eq(0).css('marginTop')), -containerHeight, 1.5, 'First shader part has correct margin');
+            assert.roughEqual(parseInt($shader.eq(1).css('marginTop')), -containerHeight, 1.5, 'Second shader part  has correct margin');
+        });
     });
 
     QUnit.test('DateTimeIndicator should be rendered correctly, groupByDate = true', function(assert) {

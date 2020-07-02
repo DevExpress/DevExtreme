@@ -1,5 +1,6 @@
 {
     "extends": ["devextreme/spell-check"],
+    "root": true,
     "parserOptions": {
         "createDefaultProgram": true,
         "project": "./tsconfig.json",

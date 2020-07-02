@@ -13,6 +13,8 @@ module.exports = {
     collectCoverageFrom: [
         './js/renovation/**/*.tsx',
         '!./js/renovation/number-box.tsx',
+        '!./js/renovation/list.tsx',
+        '!./js/renovation/utils/render-template.tsx',
     ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
