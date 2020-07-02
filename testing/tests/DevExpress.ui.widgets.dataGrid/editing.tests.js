@@ -2495,7 +2495,7 @@ QUnit.module('Editing', {
                 mode: 'row'
             };
 
-            this.editingController._editRowKey = 0;
+            this.editingController.editRow(0);
 
             let resultValue;
             const $editor = $('<div/>').appendTo($('#container'));
@@ -2532,7 +2532,7 @@ QUnit.module('Editing', {
                 mode: 'form'
             };
 
-            this.editingController._editRowKey = 0;
+            this.editingController.editRow(0);
 
             let resultValue;
             const $editor = $('<div/>').appendTo($('#container'));
@@ -2569,7 +2569,7 @@ QUnit.module('Editing', {
                 mode: 'row'
             };
 
-            this.editingController._editRowKey = 0;
+            this.editingController.editRow(0);
 
             let resultValue;
             const $editor = $('<div/>').appendTo($('#container'));
@@ -2605,7 +2605,7 @@ QUnit.module('Editing', {
                 mode: 'form'
             };
 
-            this.editingController._editRowKey = 0;
+            this.editingController.editRow(0);
 
             let resultValue;
             const $editor = $('<div/>').appendTo($('#container'));
