@@ -513,7 +513,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     setCellValue: (rowData, value) => {
       rowData.age = value;
       rowData.name = 'testb';
-    }
+    },
   }, {
     dataField: 'name',
     validationRules: [{
@@ -525,7 +525,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
         }, 50);
         return d.promise();
       },
-    }] 
+    }],
   }, 'lastName'],
 })));
 
@@ -552,7 +552,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     setCellValue: (rowData, value) => {
       rowData.age = value;
       rowData.name = 'testb';
-    }
+    },
   }, {
     dataField: 'name',
     validationRules: [{
@@ -564,7 +564,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
         }, 50);
         return d.promise();
       },
-    }] 
+    }],
   }, 'lastName'],
 })));
 
@@ -587,12 +587,10 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     allowAdding: true,
   },
   columns: [{
-    dataField: 'age'
+    dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData) => {
-      return rowData.age ? rowData.age + 'b' : undefined;
-    },
+    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback() {
@@ -602,7 +600,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
         }, 50);
         return d.promise();
       },
-    }] 
+    }],
   }, 'lastName'],
 })));
 
@@ -625,12 +623,10 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     allowAdding: true,
   },
   columns: [{
-    dataField: 'age'
+    dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData) => {
-      return rowData.age ? rowData.age + 'b' : undefined;
-    },
+    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback() {
@@ -640,7 +636,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
         }, 50);
         return d.promise();
       },
-    }] 
+    }],
   }, 'lastName'],
 })));
 
