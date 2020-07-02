@@ -366,7 +366,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
     }
 
     .dx-scheduler-header-scrollable.dx-scrollable {
-      margin: 0 0 0 $size + $SCHEDULER_LEFT_COLUMN_WIDTH + 1px + $offset;
+      margin: 0 0 0 $size + $SCHEDULER_LEFT_COLUMN_WIDTH + $offset;
     }
 
     &.dx-rtl {
@@ -854,7 +854,6 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
           border-bottom: $SCHEDULER_BASE_BORDER;
         }
       }
-    }
 
     &.dx-scheduler-work-space-vertical-grouped {
       .dx-scheduler-date-table-scrollable .dx-scrollable-content {
