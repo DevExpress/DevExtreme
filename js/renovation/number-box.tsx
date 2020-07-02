@@ -60,9 +60,6 @@ export default class NumberBox extends JSXComponent(NumberBoxProps) {
     const { valueChange } = this.props;
 
     const widget = new DxNumberBox(this.widgetRef, {
-      onInput: ({ event }) => {
-        valueChange!((event?.target as any).value);
-      },
       onValueChanged: ({ value }) => {
         valueChange!(value);
       },
