@@ -2,6 +2,8 @@ import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './widget';
+// https://github.com/benmosher/eslint-plugin-import/issues/1699
+/* eslint-disable-next-line import/named */
 import DataSource, { DataSourceOptions } from '../data/data_source';
 import DxSelectBox from '../ui/select_box';
 

@@ -1,3 +1,4 @@
+// https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { h } from 'preact';
 import {
@@ -6,6 +7,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
+/* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import { AppointmentItem, FormattedContent } from './types';
 import { Marker } from './marker';

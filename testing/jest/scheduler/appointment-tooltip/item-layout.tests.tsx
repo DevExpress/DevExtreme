@@ -1,6 +1,8 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { Fragment } from 'devextreme-generator/component_declaration/common';
+// https://github.com/benmosher/eslint-plugin-import/issues/1699
+/* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../js/ui/scheduler';
 import {
   TooltipItemLayout,
