@@ -427,6 +427,58 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
     const appointment = scheduler.appointments.getAppointment();
     assert.roughEqual(appointment.outerWidth(), 175, 1, 'Appointment width is OK');
 });
+
+QUnit.test('Timelines should not expand vertically on resize if height is not specified', function(assert) {
+    const views = [{
+        type: 'timelineDay',
+        groupOrientation: 'horizontal'
+    }, {
+        type: 'timelineDay',
+        groupOrientation: 'vertical'
+    }, {
+        type: 'timelineWeek',
+        groupOrientation: 'horizontal'
+    }, {
+        type: 'timelineWeek',
+        groupOrientation: 'vertical'
+    }, {
+        type: 'timelineMonth',
+        groupOrientation: 'horizontal'
+    }, {
+        type: 'timelineMonth',
+        groupOrientation: 'vertical',
+    }];
+    const resourcesData = [{ text: 'One', id: 1 }];
+
+    const scheduler = createWrapper({
+        dataSource: [],
+        views: views,
+        currentView: 'timelineWeek',
+        crossScrollingEnabled: true,
+        resources: [{
+            fieldExpr: 'id',
+            dataSource: resourcesData,
+            label: 'Resource'
+        }],
+        groups: ['id'],
+    });
+    const groupOrientations = ['vertical', 'horizontal'];
+
+    views.forEach((view) => {
+        groupOrientations.forEach(() => {
+            scheduler.instance.option('currentView', view.type);
+            scheduler.instance.option('width', 100);
+
+            const prevDateTableHeight = scheduler.workSpace.getDateTableHeight();
+
+            scheduler.instance.option('width', 500);
+
+            const currentDateTableHeight = scheduler.workSpace.getDateTableHeight();
+            assert.equal(currentDateTableHeight, prevDateTableHeight, 'WorkSpace height did not change');
+        });
+    });
+});
+
 if(devices.real().deviceType === 'desktop') {
     QUnit.module('Integration: Work space: Multiple selection when dragging is not enabled', {
         beforeEach: function() {
