@@ -5,7 +5,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../utils/noop';
 import List from '../../list';
-import TooltipItemLayout from './item-layout';
+import { TooltipItemLayout } from './item-layout';
 import {
   GetTextAndFormatDateFn, GetSingleAppointmentFn,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
