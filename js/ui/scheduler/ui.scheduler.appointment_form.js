@@ -203,9 +203,10 @@ const SchedulerAppointmentForm = {
                     editorOptions: {
                         onValueChanged: (args) => {
                             const form = this._appointmentForm;
+                            const colSpan = args.value ? 1 : 2;
 
-                            form.option('items[0].colSpan', args.value ? 1 : 2);
-                            form.option('items[1].colSpan', args.value ? 1 : 2);
+                            form.option('items[0].colSpan', colSpan);
+                            form.option('items[1].colSpan', colSpan);
 
                             this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
 
