@@ -2,7 +2,7 @@ import { act } from 'preact/test-utils';
 import $ from '../../../js/core/renderer';
 import { dasherize } from '../../../js/core/utils/inflector';
 
-import '../../../js/bundles/modules/parts/widgets-renovation';
+// import '../../../js/bundles/modules/parts/widgets-renovation';
 import widgetsMeta from './widgets.json';
 
 import '../utils/jest-matchers';
@@ -29,7 +29,7 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('Mandatory component setup', () => {
+describe.skip('Mandatory component setup', () => {
   it.each(widgets)('%s - should have dx-widget css class', (widgetName) => {
     const message = 'You should always set `dx-widget` class to the rooot of your component';
 
