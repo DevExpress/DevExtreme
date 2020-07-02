@@ -63,6 +63,7 @@ const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
 const widgetName = 'dxDateBox';
+const { module: testModule, test } = QUnit;
 
 const getShortDate = date => {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -104,6 +105,8 @@ const getExpectedResult = (date, mode, stringDate) => {
     return support.inputType(mode) ? stringDate : localizedDate;
 };
 
+const prepareDateString = (type, year, month, day) => type === 'text' ? `${month}/${day}/${year}` : `${year}-${month}-${day}`;
+
 QUnit.module('datebox tests', moduleConfig, () => {
     QUnit.test('value is null after reset', function(assert) {
         const date = new Date(2012, 10, 26, 16, 40, 23);
@@ -119,8 +122,11 @@ QUnit.module('datebox tests', moduleConfig, () => {
             type: 'date'
         });
 
-        $(this.$input())
-            .val('2012-11-26')
+        const $input = $(this.$input());
+        const newValue = prepareDateString($input.prop('type'), 2012, 11, 26);
+
+        $input
+            .val(newValue)
             .trigger('change');
 
         const value = this.instance.option('value');
@@ -975,12 +981,13 @@ QUnit.module('merging dates', moduleConfig, () => {
 
         const instance = $element.dxDateBox('instance');
         const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const inputType = $input.prop('type');
 
-        $input.val('2014-10-31');
+        $input.val(prepareDateString(inputType, 2014, 10, 31));
         $input.triggerHandler('change');
         assert.equal(instance.option('value').valueOf(), new Date(2014, 9, 31, 11, 22).valueOf(), 'date merged correctly');
 
-        $input.val('2014-11-01');
+        $input.val(prepareDateString(inputType, 2014, 11, '01'));
         $input.triggerHandler('change');
         assert.equal(instance.option('value').valueOf(), new Date(2014, 10, 1, 11, 22).valueOf(), 'date merged correctly');
     });
@@ -989,8 +996,11 @@ QUnit.module('merging dates', moduleConfig, () => {
         this.instance.option('type', 'date');
         this.instance.option('value', new Date(2000, 6, 31, 1, 1, 1));
 
-        $(this.$input())
-            .val('2000-09-10')
+        const $input = $(this.$input());
+        const inputType = $input.prop('type');
+
+        $input
+            .val(prepareDateString(inputType, 2000, '09', '10'))
             .trigger('change');
 
         assert.deepEqual(this.instance.option('value'), new Date(2000, 8, 10, 1, 1, 1));
@@ -999,14 +1009,17 @@ QUnit.module('merging dates', moduleConfig, () => {
     QUnit.test('incorrect work of mergeDates function if previous value not valid (Q568689)', function(assert) {
         this.instance.option('type', 'time');
 
-        $(this.$input())
+        const $input = $(this.$input());
+        const inputType = $input.prop('type');
+
+        $input
             .val('')
             .trigger('change');
 
         assert.strictEqual(this.instance.option('value'), null);
 
-        $(this.$input())
-            .val('12:30')
+        $input
+            .val(inputType === 'text' ? '12:30 PM' : '12:30')
             .trigger('change');
 
         const date = new Date(null);
@@ -5129,4 +5142,46 @@ QUnit.module('DateBox number and string value support', {
         });
     });
 
+});
+
+testModule('native picker', function() {
+    [
+        { editorType: 'date', checkDate: true, checkTime: false },
+        { editorType: 'time', checkDate: false, checkTime: true },
+        { editorType: 'datetime', checkDate: true, checkTime: true }
+    ].forEach(({ editorType, checkDate, checkTime }) => {
+        test(`set new value for editor with ${editorType} type`, function(assert) {
+            const $editor = $('#dateBox').dxDateBox({
+                pickerType: 'native',
+                type: editorType,
+                value: new Date(2020, 10, 11, 13, 0, 0)
+            });
+            const instance = $editor.dxDateBox('instance');
+            const newEditorInstance = $('<div>').appendTo('#qunit-fixture').dxDateBox({
+                pickerType: 'native',
+                type: editorType,
+                value: new Date(2020, 10, 12, 13, 1, 0)
+            }).dxDateBox('instance');
+            const newValue = newEditorInstance.option('text');
+
+            $editor
+                .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+                .val(newValue)
+                .trigger('change');
+
+            assert.ok(instance.option('isValid'), 'New value is valid');
+
+            const currentDate = instance.option('value');
+            if(checkDate) {
+                assert.strictEqual(currentDate.getFullYear(), 2020);
+                assert.strictEqual(currentDate.getMonth(), 10);
+                assert.strictEqual(currentDate.getDate(), 12);
+            }
+
+            if(checkTime) {
+                assert.strictEqual(currentDate.getHours(), 13);
+                assert.strictEqual(currentDate.getMinutes(), 1);
+            }
+        });
+    });
 });
