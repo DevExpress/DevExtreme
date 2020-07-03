@@ -1,6 +1,9 @@
 import 'ui/data_grid/ui.data_grid';
 import $ from 'jquery';
 
+import 'common.css!';
+import 'generic_light.css!';
+
 export const baseModuleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
