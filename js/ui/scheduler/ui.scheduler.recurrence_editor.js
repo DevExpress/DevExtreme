@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import recurrenceUtils from './utils.recurrence';
-import domUtils from '../../core/utils/dom';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -186,21 +185,9 @@ const RecurrenceEditor = Editor.inherit({
             .appendTo(this.$element());
 
         this._renderEditors();
-        this._renderContainerVisibility(this.option('value'));
-    },
-
-    _renderContainerVisibility(value) {
-        if(value) {
-            this._$container.show();
-            domUtils.triggerShownEvent(this._$container);
-        } else {
-            this._$container.hide();
-        }
     },
 
     _changeValueByVisibility(value) {
-        this._renderContainerVisibility(value);
-
         if(value) {
             if(!this.option('value')) {
                 this._handleDefaults();
@@ -771,10 +758,6 @@ const RecurrenceEditor = Editor.inherit({
                 if(this._$repeatDateEditor) {
                     this._repeatUntilDate.option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
                 }
-                break;
-            case 'visible':
-                this._changeValueByVisibility(args.value);
-                this.callBase(args);
                 break;
             default:
                 this.callBase(args);

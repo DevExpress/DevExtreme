@@ -210,8 +210,7 @@ export default class AppointmentPopup {
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
         const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        const isRecurrence = AppointmentForm.getRecurrenceRule(formData, this.scheduler._dataAccessors.expr);
-        this._setEditorOptions(recurrenceRuleExpr, extend({}, recurrenceEditorOptions, { startDate: startDate, visible: !!isRecurrence }));
+        this._setEditorOptions(recurrenceRuleExpr, extend({}, recurrenceEditorOptions, { startDate: startDate }));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
@@ -333,6 +332,7 @@ export default class AppointmentPopup {
             if(state.isEmptyDescription && formData.description === '') {
                 delete formData.description;
             }
+
             if(state.data.recurrenceRule === undefined && formData.recurrenceRule === '') { // TODO: plug for recurrent editor
                 delete formData.recurrenceRule;
             }
