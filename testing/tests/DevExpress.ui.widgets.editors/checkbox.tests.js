@@ -151,7 +151,7 @@ QUnit.module_r('dxCheckBox', 'render', {}, function() {
     });
 });
 
-QUnit.skip('validation', function() {
+QUnit.module('validation', function() {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('the click should be processed before the validation message is shown (T570458)', function(assert) {
