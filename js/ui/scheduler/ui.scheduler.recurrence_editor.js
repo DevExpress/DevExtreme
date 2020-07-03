@@ -187,7 +187,7 @@ const RecurrenceEditor = Editor.inherit({
         this._renderEditors();
     },
 
-    _changeValueByVisibility(value) {
+    changeValueByVisibility(value) {
         if(value) {
             if(!this.option('value')) {
                 this._handleDefaults();
