@@ -25,14 +25,16 @@ const CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 const CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate';
+const READ_ONLY_STATE_CLASS = 'dx-state-readonly';
 
 const getCssClasses = (model: CheckBoxProps, value: boolean): string => {
-  const { text } = model;
+  const { text, readOnly } = model;
   const classNames = [CHECKBOX_CLASS];
 
   const checked = value;
   const indeterminate = checked === undefined;
 
+  readOnly && classNames.push(READ_ONLY_STATE_CLASS);
   checked && classNames.push(CHECKBOX_CHECKED_CLASS);
   indeterminate && classNames.push(CHECKBOX_INDETERMINATE_CLASS);
   text && classNames.push(CHECKBOX_HAS_TEXT_CLASS);
@@ -97,6 +99,8 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() name?: string = '';
 
+  @OneWay() readOnly?: boolean = false;
+
   @TwoWay() value?: boolean = false;
 
   @OneWay() useInkRipple?: boolean = false;
@@ -116,6 +120,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   },
   view: viewFunction,
 })
+
 export default class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() contentRef!: HTMLDivElement;
 
@@ -150,8 +155,10 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onWidgetClick(): void {
-    const { value } = this.props;
-    this.props.value = !value;
+    const { readOnly, value } = this.props;
+    if (!readOnly) {
+      this.props.value = !value;
+    }
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -178,12 +185,14 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   get aria(): object {
+    const { readOnly } = this.props;
     const checked = this.props.value;
     const indeterminate = checked === undefined;
 
     return {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : checked || 'false',
+      readonly: readOnly ? 'true' : 'false',
     };
   }
 }
