@@ -20,6 +20,7 @@ import {
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils/index';
+import { normalizeStyleProp } from '../core/utils/style';
 import BaseWidgetProps from './utils/base-props';
 
 const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
@@ -48,15 +49,6 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>) => {
   model.onVisibilityChange && className.push('dx-visibility-change-handler');
 
   return className.join(' ');
-};
-
-const isNumericString = (str: string): boolean => /^\d+$/.test(str);
-
-const tryParseInt = (size: string | number | undefined): string | number | undefined => {
-  if (typeof size === 'string' && isNumericString(size)) {
-    return parseInt(size, 10);
-  }
-  return size;
 };
 
 export const viewFunction = (viewModel: Widget) => (
@@ -296,8 +288,8 @@ export default class Widget extends JSXComponent(WidgetProps) {
     const { width, height } = this.props;
     const style = this.restAttributes.style || {};
 
-    const computedWidth = tryParseInt(typeof width === 'function' ? width() : width);
-    const computedHeight = tryParseInt(typeof height === 'function' ? height() : height);
+    const computedWidth = normalizeStyleProp('width', typeof width === 'function' ? width() : width);
+    const computedHeight = normalizeStyleProp('height', typeof height === 'function' ? height() : height);
 
     return {
       ...style,
