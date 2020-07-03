@@ -161,7 +161,7 @@ QUnit.module('Mandatory component setup', {
                 meta.props.template.forEach((template) => {
                     const [data, index, element = index] = options[template].getCall(0).args;
 
-                    assert.equal($('#component').get(0).contains(element), true, message);
+                    assert.equal($('#component').find(element).get(0), element, message);
                     assert.equal(element === index || (typeof index === 'number'), true, message);
                     assert.equal(typeof data === 'object', true, message);
                 });
