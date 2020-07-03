@@ -2,6 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
 
+import * as domAdapter from '../../core/dom_adapter';
 import clickEvent from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import eventsEngine from '../../events/core/events_engine';
@@ -19,11 +20,14 @@ export const dxClickEffect: dxClickEffectFn = (element, handler) => {
   }
   return noop;
 };
-const isMatchSelector = (el, selector): boolean => el.matches(selector);
+// const isMatchSelector = (el, selector): boolean => el.matches(selector);
 
 // const isMatchSelector = Element.prototype.matches
 //   ? (el, selector): boolean => el.matches(selector)
 //   : (el, selector): boolean => el.msMatchesSelector(selector);
+
+const isMatchSelector = (domAdapter as any).elementMatches;
+
 export const closest: closestFn = (child, className) => {
   let el = child;
   const selector = `.${className}`;
