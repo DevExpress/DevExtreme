@@ -3,7 +3,7 @@ import $ from 'core/renderer';
 
 import 'bundles/modules/parts/widgets-renovation';
 
-import widgetsMeta from './commonParts/widgets.json!';
+import widgetsMeta from './widgets.json!';
 
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code

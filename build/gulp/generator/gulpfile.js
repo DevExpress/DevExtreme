@@ -16,7 +16,7 @@ const watch = require('gulp-watch');
 
 const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
-const COMPAT_TESTS_PARTS = 'testing/tests/renovation/commonParts/';
+const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
 const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
