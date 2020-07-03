@@ -93,14 +93,14 @@ QUnit.module('Mandatory component setup', {
             + 'get styles() { return { ...this.restAttributes.style, display: "inline" }; }';
 
             $('#component').css({
-                width: '100px', height: '50px', margin: '11px',
+                width: '100px', height: '50px', display: 'inline-block',
             });
 
             this.createWidget(meta.widgetName);
 
             assert.equal($('#component').css('width'), '100px', message);
             assert.equal($('#component').css('height'), '50px', message);
-            assert.equal($('#component').css('margin'), '11px', message);
+            assert.equal($('#component').css('display'), 'inline-block', message);
         });
     });
 
