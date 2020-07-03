@@ -550,8 +550,8 @@ const TagBox = SelectBox.inherit({
         this._renderPreventBlur(this._inputWrapper());
     },
 
-    _renderInputValueImpl: function(args) {
-        return this._renderMultiSelect(args);
+    _renderInputValueImpl: function() {
+        return this._renderMultiSelect();
     },
 
     _loadInputValue: function() {
