@@ -14,12 +14,13 @@ import { Marker } from '../../../../js/renovation/scheduler/appointment-tooltip/
 import { TooltipItemContent } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 import getCurrentAppointment from '../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
 
-jest.mock('../../../../js/renovation/button', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => () => null);
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => () => null);
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));
+
+jest.mock('../../../../js/renovation/button', () => ({ __esModule: true, Button: () => null }));
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => ({ __esModule: true, Marker: () => null }));
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => ({ __esModule: true, TooltipItemContent: () => null }));
 
 describe('TooltipItemLayout', () => {
   describe('Render', () => {

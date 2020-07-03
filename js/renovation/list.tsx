@@ -159,7 +159,7 @@ export class ListProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class List extends JSXComponent(ListProps) {
+export class List extends JSXComponent(ListProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 
