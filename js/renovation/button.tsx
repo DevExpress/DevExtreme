@@ -19,7 +19,7 @@ import { getImageSourceType } from '../core/utils/icon';
 import { Icon } from './icon';
 import { InkRipple } from './ink-ripple';
 import { Widget } from './widget';
-import { BaseWidgetProps } from './utils/base-props';
+import BaseWidgetProps from './utils/base-props';
 import BaseComponent from './preact-wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
