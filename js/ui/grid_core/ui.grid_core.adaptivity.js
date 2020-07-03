@@ -892,7 +892,7 @@ module.exports = {
                 },
 
                 _afterSaveEditData: function() {
-                    this.callBase();
+                    this.callBase.apply(this, arguments);
                     if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()
                         && this.getController('validating').validate(true)) {
                         this._cancelEditAdaptiveDetailRow();
