@@ -28,21 +28,20 @@ export default class SelectBox extends JSXComponent(SelectBoxProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  setupWidget() {
-    const { valueChange } = this.props;
+  updateWidget() {
+    const widget = DxSelectBox.getInstance(this.widgetRef);
+    widget?.option(this.properties);
+  }
 
-    const widget = new DxSelectBox(this.widgetRef, {
-      onValueChanged: (e) => {
-        valueChange!(e.value);
-      },
-    });
+  @Effect({ run: 'once' })
+  setupWidget() {
+    const widget = new DxSelectBox(this.widgetRef, this.properties as any);
 
     return () => widget.dispose();
   }
 
-  @Effect()
-  updateWidget() {
-    const widget = DxSelectBox.getInstance(this.widgetRef);
-    widget?.option({ ...this.props });
+  get properties() {
+    const { valueChange, ...restProps } = this.props;
+    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) });
   }
 }

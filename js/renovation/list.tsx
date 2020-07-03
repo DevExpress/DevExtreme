@@ -163,24 +163,25 @@ export default class List extends JSXComponent(ListProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
+  updateWidget() {
+    const widget = DxList.getInstance(this.widgetRef);
+    widget?.option(this.properties);
+  }
+
+  @Effect({ run: 'once' })
   setupWidget() {
-    const { itemTemplate } = this.props;
+    const widget = new DxList(this.widgetRef, this.properties as any);
+
+    return () => widget.dispose();
+  }
+
+  get properties() {
+    const { itemTemplate, ...restProps } = this.props;
 
     const template = itemTemplate ? (item, index, container) => {
       renderTemplate(itemTemplate, { item, index, container }, container);
     } : undefined;
 
-    const nextProps = {
-      ...this.props as any,
-      itemTemplate: template,
-    };
-
-    const instance = DxList.getInstance(this.widgetRef);
-    if (instance) {
-      instance.option(nextProps);
-    } else {
-      // eslint-disable-next-line no-new
-      new DxList(this.widgetRef, nextProps);
-    }
+    return ({ ...restProps, itemTemplate: template });
   }
 }
