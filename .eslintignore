@@ -2,9 +2,8 @@ artifacts/*
 js/viz/docs/*
 node_modules/*
 testing/helpers/sinon/*
-*.p.js
-*.j.js
 *.d.ts
+*.j.tsx
 playground/*
 themebuilder/data/metadata/*
 themebuilder-scss/dist/*
