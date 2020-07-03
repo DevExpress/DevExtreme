@@ -121,4 +121,28 @@ module('Virtual Scrolling model', {
             assert.deepEqual(layoutMap.bottomVirtualRowHeight, step.bottomVirtualRowHeight, 'Layout map bottomVirtualRowHeight');
         });
     });
+
+    test('State validation', function(assert) {
+        let offset;
+
+        this.worksSpaceMock._getTotalRowCount = () => 25;
+
+        for(offset = 0; offset <= 825; offset += 15) {
+            try {
+                this.scrollDown(offset);
+            } catch(e) {
+                assert.ok(false, e.message);
+            }
+        }
+
+        for(; offset >= 0; offset -= 10) {
+            try {
+                this.scrollDown(offset);
+            } catch(e) {
+                assert.ok(false, e.message);
+            }
+        }
+
+        assert.ok(true, 'State validation checked');
+    });
 });

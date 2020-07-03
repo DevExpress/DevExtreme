@@ -306,9 +306,11 @@ export default class VirtualScrolling {
             const diffRowIndex = rowIndex - prevRowIndex;
             if(diffRowIndex !== 1) {
                 const delta = Math.abs(rowIndex - prevRowIndex);
-                consoleUtils.logger.info(`Error Row indices: rowIndex=${rowIndex}, prevIndex=${prevRowIndex}, delta=${delta}`);
+                throw `Error Row indices: rowIndex=${rowIndex}, prevIndex=${prevRowIndex}, delta=${delta}`;
             }
         }
+
+        return true;
     }
 }
 
