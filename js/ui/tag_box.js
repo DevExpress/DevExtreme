@@ -865,24 +865,65 @@ const TagBox = SelectBox.inherit({
 
     _renderTags: function() {
         const d = new Deferred();
+        let isPlainDataUsed = false;
 
-        this._loadTagsData().always((items) => {
-            if(this._disposed) {
-                d.reject();
-                return;
+        if(this._shouldGetItemsFromPlain(this._valuesToUpdate)) {
+            this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
+
+            if(this._selectedItems.length === this._valuesToUpdate.length) {
+                this._renderTagsImpl(this._selectedItems);
+                isPlainDataUsed = true;
+                d.resolve();
             }
+        }
 
-            this._renderTagsCore(items);
-            this._renderEmptyState();
+        if(!isPlainDataUsed) {
+            this._loadTagsData().always((items) => {
+                if(this._disposed) {
+                    d.reject();
+                    return;
+                }
 
-            if(!this._preserveFocusedTag) {
-                this._clearTagFocus();
-            }
-
-            d.resolve();
-        });
+                this._renderTagsImpl(items);
+                d.resolve();
+            });
+        }
 
         return d.promise();
+    },
+
+    _renderTagsImpl: function(items) {
+        this._renderTagsCore(items);
+        this._renderEmptyState();
+
+        if(!this._preserveFocusedTag) {
+            this._clearTagFocus();
+        }
+    },
+
+    _shouldGetItemsFromPlain: function(values) {
+        return values && this._dataSource.isLoaded() && !this._wasSearch() && values.length <= this._getPlainItems().length;
+    },
+
+    _getItemsFromPlain: function(values) {
+        const plainItems = this._getPlainItems();
+        const selectedItems = plainItems.filter((dataItem) => {
+            let currentValue;
+            for(let i = 0; i < values.length; i++) {
+                currentValue = values[i];
+                if(isObject(currentValue)) {
+                    if(this._isValueEquals(dataItem, currentValue)) {
+                        return true;
+                    }
+                } else if(this._isValueEquals(this._valueGetter(dataItem), currentValue)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }, this);
+
+        return selectedItems;
     },
 
     _renderTagsCore: function(items) {
@@ -1339,6 +1380,7 @@ const TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
+        delete this._valuesToUpdate;
         delete this._tagTemplate;
     },
 
@@ -1390,7 +1432,9 @@ const TagBox = SelectBox.inherit({
                 this._setListOption('selectAllText', this.option('selectAllText'));
                 break;
             case 'value':
+                this._valuesToUpdate = args?.value;
                 this.callBase(args);
+                this._valuesToUpdate = undefined;
                 this._setListDataSourceFilter();
                 break;
             case 'maxDisplayedTags':
