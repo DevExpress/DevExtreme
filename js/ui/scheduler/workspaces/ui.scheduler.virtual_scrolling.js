@@ -72,9 +72,11 @@ export default class VirtualScrolling {
         const onScroll = scrollable.option('onScroll');
         scrollable.option('onScroll', e => {
             if(onScroll) {
-                onScroll.bind(scrollable)();
+                onScroll.apply(scrollable, [e]);
             }
-            if(this._updateState(e.scrollOffset)) {
+
+            const scrollOffset = e?.scrollOffset;
+            if(scrollOffset && this._updateState(scrollOffset)) {
                 // Renovative render
                 this._updateLayoutMap();
             }
@@ -264,6 +266,7 @@ export default class VirtualScrolling {
             //
 
             cellModel.cellTemplate = options.cellTemplate;
+            cellsMap.push(cellModel);
         }
 
         return cellsMap;
@@ -277,7 +280,7 @@ export default class VirtualScrolling {
         const logArgs = [];
         propertyNames.forEach(name => {
             const property = target[name];
-            if(typeof property !== 'object') {
+            if(!property || typeof property !== 'object') {
                 logArgs.push(`${name}: ${property}`);
             } else {
                 logArgs.push(`\n\t${name}:`);
