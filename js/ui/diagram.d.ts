@@ -304,6 +304,15 @@ export default class dxDiagram extends Widget {
      */
     getEdgeDataSource(): DataSource;
     /**
+     * @docid dxDiagramMethods.reloadContent
+     * @publicName reloadContent(itemKey, applyLayout)
+     * @param1 itemKey:any
+     * @param1 applyLayout:boolean
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    reloadContent(itemKey?: any, applyLayout?: boolean): void;
+    /**
      * @docid dxDiagramMethods.export
      * @publicName export()
      * @return string
