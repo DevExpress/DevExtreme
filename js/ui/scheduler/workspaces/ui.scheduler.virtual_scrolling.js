@@ -1,4 +1,5 @@
 import typeUtils from '../../../core/utils/type';
+import consoleUtils from '../../../core/utils/console';
 
 const ROW_HEIGHT = 50;
 
@@ -271,7 +272,29 @@ export default class VirtualScrolling {
     dispose() {
     }
 
+    _getStateLogRecursive(target) {
+        const propertyNames = Object.getOwnPropertyNames(target);
+        const logArgs = [];
+        propertyNames.forEach(name => {
+            const property = target[name];
+            if(typeof property !== 'object') {
+                logArgs.push(`${name}: ${property}`);
+            } else {
+                logArgs.push(`\n\t${name}:`);
+                const args = this._getStateLogRecursive(property);
+                logArgs.push(...args);
+            }
+        });
+        return logArgs;
+    }
+
+    _logState() {
+        consoleUtils.logger.info(...this._getStateLogRecursive(this._state));
+    }
+
     _validateState() {
+        this._logState();
+
         const dataItems = this.getLayoutMap().dataItems;
 
         for(let i = 1; i < dataItems.length; ++i) {
@@ -279,7 +302,8 @@ export default class VirtualScrolling {
             const prevRowIndex = dataItems[i - 1].rowIndex;
             const diffRowIndex = rowIndex - prevRowIndex;
             if(diffRowIndex !== 1) {
-                throw `Error Row indices: rowIndex=${rowIndex}, prevIndex=${prevRowIndex}`;
+                const delta = Math.abs(rowIndex - prevRowIndex);
+                consoleUtils.logger.info(`Error Row indices: rowIndex=${rowIndex}, prevIndex=${prevRowIndex}, delta=${delta}`);
             }
         }
     }
