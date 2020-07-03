@@ -1175,7 +1175,7 @@ QUnit.test('Min range restriction', function(assert) {
     handler.complete();
 
     this.checkSliderMoves(assert, 0, [2400]);
-    this.check(assert, [22, 25], [2200, 2500]);
+    this.check(assert, [23, 25], [2300, 2500]);
     const lineAttr = this.sliderLine(0).attr;
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 2).args, [{ stroke: 'invalid-color' }], 'line color is set to invalid');
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 1).args, [{ stroke: 'handle-color' }], 'line color is set to valid');
@@ -1194,7 +1194,7 @@ QUnit.test('Max range restriction', function(assert) {
     handler.complete();
 
     this.checkSliderMoves(assert, 1, [2200, 2600]);
-    this.check(assert, [15, 22], [1500, 2200]);
+    this.check(assert, [15, 23], [1500, 2300]);
     const lineAttr = this.sliderLine(1).attr;
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 2).args, [{ stroke: 'invalid-color' }], 'line color is set to invalid');
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 1).args, [{ stroke: 'handle-color' }], 'line color is set to valid');
