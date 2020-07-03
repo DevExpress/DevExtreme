@@ -1,8 +1,5 @@
-import { act } from 'preact/test-utils';
 import $ from 'jquery';
-
 import '/artifacts/js/dx.all.debug.js';
-
 import widgetsMeta from './widgets.json!';
 
 /**
@@ -41,14 +38,11 @@ QUnit.module('Mandatory component setup', {
             <div id="component"></div>
         </div>
         `);
-    },
-    createWidget(widgetName, options = {}) {
-        act(() => $('#component')[widgetName](options));
     }
 }, () => {
     widgets.forEach((meta) => {
         QUnit.test(`${meta.widgetName} - check css class names`, function(assert) {
-            this.createWidget(meta.widgetName);
+            $('#component')[meta.widgetName]();
 
             let message = 'You should always set `dx-widget` class to the root of your component';
             assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
@@ -63,7 +57,7 @@ QUnit.module('Mandatory component setup', {
             const message = 'You should pass restAttributes to the component\'s root\n'
             + '<root {...viewModel.restAttributes} />';
 
-            this.createWidget(meta.widgetName, {
+            $('#component')[meta.widgetName]({
                 'data-custom-option': 'custom-value',
             });
 
@@ -78,7 +72,7 @@ QUnit.module('Mandatory component setup', {
             + 'get className() { return \`${this.restAttributes.className} dx-my-component\` }'; // eslint-disable-line
 
             $('#component').addClass('custom-class');
-            this.createWidget(meta.widgetName);
+            $('#component')[meta.widgetName]();
 
             assert.equal($('#component').get(0), $(`.custom-class.dx-${meta.name.toLowerCase()}`).get(0), message);
         });
@@ -96,7 +90,7 @@ QUnit.module('Mandatory component setup', {
                 width: '100px', height: '50px', display: 'inline-block',
             });
 
-            this.createWidget(meta.widgetName);
+            $('#component')[meta.widgetName]();
 
             assert.equal($('#component').css('width'), '100px', message);
             assert.equal($('#component').css('height'), '50px', message);
@@ -122,7 +116,7 @@ QUnit.module('Mandatory component setup', {
                     width: '100px', height: '50px',
                 });
 
-                this.createWidget(meta.widgetName, {
+                $('#component')[meta.widgetName]({
                     width: '110px',
                     height: '55px',
                 });
@@ -156,7 +150,7 @@ QUnit.module('Mandatory component setup', {
                     [template]: sinon.spy()
                 }), {});
 
-                this.createWidget(meta.widgetName, options);
+                $('#component')[meta.widgetName](options);
 
                 meta.props.template.forEach((template) => {
                     const [data, index, element = index] = options[template].getCall(0).args;
