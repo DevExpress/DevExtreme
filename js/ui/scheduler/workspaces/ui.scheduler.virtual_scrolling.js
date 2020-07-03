@@ -63,13 +63,16 @@ export default class VirtualScrolling {
 
         this._updateState(scrollOffset);
 
+        this._attachScrollableEvent();
+    }
+
+    _attachScrollableEvent() {
         const scrollable = this.getScrollable();
         const onScroll = scrollable.option('onScroll');
         scrollable.option('onScroll', e => {
             if(onScroll) {
                 onScroll.bind(scrollable)();
             }
-
             if(this._updateState(e.scrollOffset)) {
                 // Renovative render
                 this._updateLayoutMap();
@@ -101,7 +104,7 @@ export default class VirtualScrolling {
             state.rowCount = rowCount;
             state.bottomVirtualRowCount = bottomVirtualRowCount;
 
-            this._updateLayoutMap(workspace);
+            this._updateLayoutMap();
 
             this._validateState();
 
@@ -264,6 +267,10 @@ export default class VirtualScrolling {
 
         return cellsMap;
     }
+
+    dispose() {
+    }
+
     _validateState() {
         const dataItems = this.getLayoutMap().dataItems;
 
