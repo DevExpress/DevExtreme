@@ -195,6 +195,15 @@ function run_test_scss {
     npm i && npm run build && npm run test
 }
 
+function run_test_license {
+    export DEVEXTREME_TEST_CI=false
+
+    npm i
+    npm run build
+
+    npx gulp check-rrule-license-header
+}
+
 function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local last_suite_time=unknown
