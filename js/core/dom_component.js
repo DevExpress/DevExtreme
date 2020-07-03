@@ -12,7 +12,7 @@ import { getPublicElement } from '../core/element';
 import { grep, noop } from './utils/common';
 import { inArray } from './utils/array';
 import { isString, isDefined } from './utils/type';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
 
 const { abstract } = Component;
@@ -91,7 +91,7 @@ const DOMComponent = Component.inherit({
     _renderComponent() {
         this._initMarkup();
 
-        windowUtils.hasWindow() && this._render();
+        hasWindow() && this._render();
     },
 
     _initMarkup() {
@@ -193,7 +193,7 @@ const DOMComponent = Component.inherit({
     },
 
     _isVisibilityChangeSupported() {
-        return this._visibilityChanged !== abstract && windowUtils.hasWindow();
+        return this._visibilityChanged !== abstract && hasWindow();
     },
 
     _clean: noop,

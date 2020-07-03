@@ -1,5 +1,5 @@
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import dom from '../../core/utils/dom';
@@ -289,7 +289,7 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _formatValidationIcon: function() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return;
         }
 

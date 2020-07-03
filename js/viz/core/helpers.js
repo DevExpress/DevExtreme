@@ -1,7 +1,7 @@
 import { extend as _extend } from '../../core/utils/extend';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { noop } from '../../core/utils/common';
-const isServerSide = !windowUtils.hasWindow();
+const isServerSide = !hasWindow();
 
 function Flags() {
     this.reset();

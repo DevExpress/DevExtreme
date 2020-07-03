@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import Guid from '../core/guid';
-import windowUtils from '../core/utils/window';
+import { getWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import Callbacks from '../core/utils/callbacks';
@@ -20,7 +20,7 @@ import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 
 const FILEUPLOADER_CLASS = 'dx-fileuploader';
 const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';

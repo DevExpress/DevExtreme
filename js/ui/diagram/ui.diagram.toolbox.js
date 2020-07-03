@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import messageLocalization from '../../localization/message';
 import TextBox from '../text_box';
@@ -126,7 +126,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             .appendTo($parent);
         this._renderSearchInput($inputContainer);
 
-        const panelHeight = !windowUtils.hasWindow() ? '100%' : 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
+        const panelHeight = !hasWindow() ? '100%' : 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
         const $panel = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_PANEL_CLASS)
             .appendTo($parent)

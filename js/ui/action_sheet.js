@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import { noop } from '../core/utils/common';
 import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';

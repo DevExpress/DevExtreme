@@ -1,5 +1,5 @@
 import domAdapter from '../../core/dom_adapter';
-import windowUtils from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import inflector from '../../core/utils/inflector';
 
 import $ from '../../core/renderer';
@@ -14,7 +14,7 @@ import { Plaque } from './plaque';
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
-const window = windowUtils.getWindow();
+const window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 function hideElement($element) {

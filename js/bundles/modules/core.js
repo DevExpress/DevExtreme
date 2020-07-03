@@ -1,6 +1,5 @@
 const windowUtils = require('../../core/utils/window');
-const getWindow = windowUtils.default ? windowUtils.default.getWindow : windowUtils.getWindow;
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 const DevExpress = window.DevExpress = window.DevExpress || {};
 

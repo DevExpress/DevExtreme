@@ -9,7 +9,7 @@ import { Deferred } from '../core/utils/deferred';
 import { isFunction, isPlainObject } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import windowUtils from '../core/utils/window';
+import { getWindow } from '../core/utils/window';
 import { trigger } from '../events/core/events_engine';
 import { value as getViewport } from '../core/utils/view_port';
 
@@ -19,7 +19,7 @@ import Popup from './popup';
 
 import { ensureDefined } from '../core/utils/common';
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 
 const DEFAULT_BUTTON = {
     text: 'OK',

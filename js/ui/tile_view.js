@@ -5,7 +5,7 @@ import inflector from '../core/utils/inflector';
 import iteratorUtils from '../core/utils/iterator';
 import { isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import { getPublicElement } from '../core/element';
 import { deferRender } from '../core/utils/common';
 import ScrollView from './scroll_view';
@@ -208,7 +208,7 @@ const TileView = CollectionWidget.inherit({
             return Math.round(item[config.itemCrossRatio] || 1);
         }));
 
-        const crossDimensionValue = windowUtils.hasWindow() ?
+        const crossDimensionValue = hasWindow() ?
             this.$element()[config.crossDimension]() : parseInt(this.$element().get(0).style[config.crossDimension]);
 
         this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
@@ -221,7 +221,7 @@ const TileView = CollectionWidget.inherit({
     },
 
     _renderContentSize: function(config, itemMargin) {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             const actualContentSize = this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
             const containerSize = this._$container[config.mainDimension]();
 

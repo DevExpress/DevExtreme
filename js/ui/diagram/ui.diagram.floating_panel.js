@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import Popup from '../popup';
 
 import DiagramPanel from './ui.diagram.panel';
@@ -110,7 +110,7 @@ class DiagramFloatingPanel extends DiagramPanel {
     _getPopupOptions() {
         const that = this;
         return {
-            animation: windowUtils.hasWindow() ? this._getPopupAnimation() : null,
+            animation: hasWindow() ? this._getPopupAnimation() : null,
             shading: false,
             showTitle: false,
             focusStateEnabled: false,

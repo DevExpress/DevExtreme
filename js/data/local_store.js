@@ -1,7 +1,7 @@
 import eventsEngine from '../events/core/events_engine';
 import domAdapter from '../core/dom_adapter';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import Class from '../core/class';
 const abstract = Class.abstract;
 import { errors } from './errors';

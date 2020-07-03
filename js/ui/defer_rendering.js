@@ -7,14 +7,14 @@ import { Deferred, fromPromise } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import { isPromise } from '../core/utils/type';
-import windowUtils from '../core/utils/window';
+import { getWindow, hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { triggerShownEvent } from '../events/visibility_change';
 import LoadIndicator from './load_indicator';
 import Widget from './widget/ui.widget';
 import { getBoundingRect } from '../core/utils/position';
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 
 const WIDGET_CLASS = 'dx-widget';
 const DEFER_RENDERING_CLASS = 'dx-deferrendering';
@@ -146,7 +146,7 @@ const DeferRendering = Widget.inherit({
     _animate: function() {
         const that = this;
         const $element = this.$element();
-        const animation = windowUtils.hasWindow() && this.option('animation');
+        const animation = hasWindow() && this.option('animation');
         const staggerItemSelector = this.option('staggerItemSelector');
         let animatePromise;
 

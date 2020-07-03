@@ -1,13 +1,13 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Drawer from '../drawer/ui.drawer';
 import SplitterControl from '../splitter';
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
 const FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS = 'dx-filemanager-adaptivity-drawer-panel';
@@ -60,7 +60,7 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _onApplyPanelSize(e) {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return;
         }
 

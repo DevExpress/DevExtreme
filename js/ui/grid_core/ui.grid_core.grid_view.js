@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import { deferRender, deferUpdate } from '../../core/utils/common';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { each } from '../../core/utils/iterator';
 import { isString, isDefined, isNumeric } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -740,7 +740,7 @@ const GridView = modules.View.inherit({
 
         if(isFirstRender) {
             that._groupElement = $groupElement;
-            windowUtils.hasWindow() && that.getController('resizing').updateSize($rootElement);
+            hasWindow() && that.getController('resizing').updateSize($rootElement);
             $groupElement.appendTo($rootElement);
         }
 

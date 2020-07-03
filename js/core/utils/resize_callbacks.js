@@ -1,4 +1,4 @@
-import windowUtils from './window';
+import { hasWindow, getWindow } from './window';
 import domAdapter from '../dom_adapter';
 import Callbacks from './callbacks';
 import readyCallbacks from './ready_callbacks';
@@ -10,12 +10,12 @@ const resizeCallbacks = (function() {
     const originalCallbacksAdd = callbacks.add;
     const originalCallbacksRemove = callbacks.remove;
 
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         return callbacks;
     }
 
     const formatSize = function() {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         return {
             width: window.innerWidth,
             height: window.innerHeight,
@@ -54,7 +54,7 @@ const resizeCallbacks = (function() {
 
         readyCallbacks.add(function() {
             if(!removeListener && callbacks.has()) {
-                removeListener = domAdapter.listen(windowUtils.getWindow(), 'resize', handleResize);
+                removeListener = domAdapter.listen(getWindow(), 'resize', handleResize);
             }
         });
 

@@ -1,6 +1,6 @@
 import { extend } from './extend';
-import windowUtils from './window';
-const navigator = windowUtils.getNavigator();
+import { getNavigator } from './window';
+const navigator = getNavigator();
 
 const webkitRegExp = /(webkit)[ /]([\w.]+)/;
 const ieRegExp = /(msie) (\d{1,2}\.\d)/;

@@ -16,7 +16,7 @@ import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 import devices from '../../core/devices';
 import fx from '../../animation/fx';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 
@@ -600,7 +600,7 @@ const Calendar = Editor.inherit({
 
         this._view = this._renderSpecificView(currentDate);
 
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             const beforeDate = this._getDateByOffset(-1, currentDate);
             this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 

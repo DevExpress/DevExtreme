@@ -7,10 +7,10 @@ import { parseHTML } from '../core/utils/html_parser';
 import { each } from '../core/utils/iterator';
 import readyCallbacks from '../core/utils/ready_callbacks';
 import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
-import windowUtils from '../core/utils/window';
+import { getWindow, hasWindow } from '../core/utils/window';
 import themeReadyCallback from './themes_callback';
 import errors from './widget/ui.errors';
-const window = windowUtils.getWindow();
+const window = getWindow();
 const ready = readyCallbacks.add;
 const viewPort = viewPortValue;
 const viewPortChanged = changeCallback;
@@ -31,7 +31,7 @@ let timerId;
 const THEME_MARKER_PREFIX = 'dx.';
 
 function readThemeMarker() {
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         return null;
     }
     const element = $('<div>', context).addClass('dx-theme-marker').appendTo(context.documentElement);
@@ -259,7 +259,7 @@ function attachCssClasses(element, themeName) {
     $(element).addClass(themeClasses);
 
     const activateHairlines = function() {
-        const pixelRatio = windowUtils.hasWindow() && window.devicePixelRatio;
+        const pixelRatio = hasWindow() && window.devicePixelRatio;
 
         if(!pixelRatio || pixelRatio < 2) {
             return;
@@ -370,7 +370,7 @@ function autoInit() {
     initDeferred.resolve();
 }
 
-if(windowUtils.hasWindow()) {
+if(hasWindow()) {
     autoInit();
 } else {
     ready(autoInit);

@@ -8,7 +8,7 @@ import dataCoreUtils from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
@@ -80,7 +80,7 @@ class Diagram extends Widget {
         this._toolbars = [];
         delete this._isMobileScreenSize;
 
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         this.$element().addClass(DIAGRAM_CLASS);
 
         delete this._mainToolbar;
@@ -149,7 +149,7 @@ class Diagram extends Widget {
             });
         }
 
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             resizeCallbacks.add(() => {
                 this._killBrowserResizeTimer();
                 this._browserResizeTimer = setTimeout(() => this._processBrowserResize(), 100);
@@ -190,7 +190,7 @@ class Diagram extends Widget {
     }
     isMobileScreenSize() {
         if(this._isMobileScreenSize === undefined) {
-            this._isMobileScreenSize = windowUtils.hasWindow() && this.$element().outerWidth() < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
+            this._isMobileScreenSize = hasWindow() && this.$element().outerWidth() < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
         }
         return this._isMobileScreenSize;
     }
@@ -264,7 +264,7 @@ class Diagram extends Widget {
         return this.option('historyToolbar.visible') && !this.isReadOnlyMode();
     }
     _renderHistoryToolbar($parent) {
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -296,7 +296,7 @@ class Diagram extends Widget {
         return this.option('toolbox.visibility') === 'visible' || (this.option('toolbox.visibility') === 'auto' && !this.isMobileScreenSize());
     }
     _renderToolbox($parent) {
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         const $toolBox = $('<div>')
             .appendTo($parent);
         const bounds = this._getToolboxBounds($parent, isServerSide);
@@ -399,7 +399,7 @@ class Diagram extends Widget {
         return result;
     }
     _renderViewToolbar($parent) {
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -440,7 +440,7 @@ class Diagram extends Widget {
         return this.option('propertiesPanel.visibility') === 'visible';
     }
     _renderPropertiesToolbar($parent) {
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .addClass(DIAGRAM_PROPERTIES_PANEL_TOOLBAR_CONTAINER_CLASS)
@@ -468,7 +468,7 @@ class Diagram extends Widget {
         });
     }
     _renderPropertiesPanel($parent) {
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         const $propertiesPanel = $('<div>')
             .appendTo($parent);
 
@@ -555,7 +555,7 @@ class Diagram extends Widget {
     }
 
     _renderContextToolbox($parent) {
-        const isServerSide = !windowUtils.hasWindow();
+        const isServerSide = !hasWindow();
         const category = this.option('contextToolbox.category');
         const displayMode = this.option('contextToolbox.displayMode');
         const shapes = this.option('contextToolbox.shapes');
@@ -1103,7 +1103,7 @@ class Diagram extends Widget {
         }
     }
     _changeNativeFullscreen(setModeOn) {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         if(window.self === window.top || setModeOn === this._inNativeFullscreen()) return;
 
         if(setModeOn) {
@@ -1114,7 +1114,7 @@ class Diagram extends Widget {
         this._setNativeFullscreen(setModeOn);
     }
     _setNativeFullscreen(on) {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         const document = window.self.document;
         const body = window.self.document.body;
         if(on) {
@@ -1140,13 +1140,13 @@ class Diagram extends Widget {
         }
     }
     _inNativeFullscreen() {
-        const document = windowUtils.getWindow().document;
+        const document = getWindow().document;
         const fullscreenElement = document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement;
         const isInFullscreen = fullscreenElement === document.body || document.webkitIsFullscreen;
         return !!isInFullscreen;
     }
     _subscribeFullscreenNativeChanged() {
-        const document = windowUtils.getWindow().document;
+        const document = getWindow().document;
         const handler = this._onNativeFullscreenChangeHandler.bind(this);
         eventsEngine.on(document, FULLSCREEN_CHANGE_EVENT_NAME, handler);
         eventsEngine.on(document, IE_FULLSCREEN_CHANGE_EVENT_NAME, handler);
@@ -1154,7 +1154,7 @@ class Diagram extends Widget {
         eventsEngine.on(document, MOZ_FULLSCREEN_CHANGE_EVENT_NAME, handler);
     }
     _unsubscribeFullscreenNativeChanged() {
-        const document = windowUtils.getWindow().document;
+        const document = getWindow().document;
         eventsEngine.off(document, FULLSCREEN_CHANGE_EVENT_NAME);
         eventsEngine.off(document, IE_FULLSCREEN_CHANGE_EVENT_NAME);
         eventsEngine.off(document, WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME);

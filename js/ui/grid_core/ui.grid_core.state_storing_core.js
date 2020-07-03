@@ -1,5 +1,5 @@
 import eventsEngine from '../../events/core/events_engine';
-import windowUtils from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import modules from './ui.grid_core.modules';
 import errors from '../widget/ui.errors';
 import browser from '../../core/utils/browser';
@@ -27,10 +27,10 @@ const parseDates = function(state) {
 
 export const StateStoringController = modules.ViewController.inherit((function() {
     const getStorage = function(options) {
-        const storage = options.type === 'sessionStorage' ? sessionStorage() : windowUtils.getWindow().localStorage;
+        const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
 
         if(!storage) {
-            if(windowUtils.getWindow().location.protocol === 'file:' && browser.msie) {
+            if(getWindow().location.protocol === 'file:' && browser.msie) {
                 throw new Error('E1038');
             } else {
                 throw new Error('E1007');
@@ -93,7 +93,7 @@ export const StateStoringController = modules.ViewController.inherit((function()
                 }
             };
 
-            eventsEngine.on(windowUtils.getWindow(), 'unload', that._windowUnloadHandler);
+            eventsEngine.on(getWindow(), 'unload', that._windowUnloadHandler);
 
             return that;
         },
@@ -157,7 +157,7 @@ export const StateStoringController = modules.ViewController.inherit((function()
 
         dispose: function() {
             clearTimeout(this._savingTimeoutID);
-            eventsEngine.off(windowUtils.getWindow(), 'unload', this._windowUnloadHandler);
+            eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
         }
     };
 })());

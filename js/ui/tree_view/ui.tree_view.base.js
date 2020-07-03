@@ -4,7 +4,7 @@ import { on, off } from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
 import { name as clickEventName } from '../../events/click';
 import { asyncNoop, noop } from '../../core/utils/common';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { isDefined, isPrimitive, isFunction, isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -583,7 +583,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataSource = this.getDataSource();
         const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
-        if(this._scrollableContainer && windowUtils.hasWindow()) {
+        if(this._scrollableContainer && hasWindow()) {
             this._scrollableContainer.update();
         }
 
@@ -591,7 +591,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this.callBase();
         }
 
-        if(this._scrollableContainer && windowUtils.hasWindow()) {
+        if(this._scrollableContainer && hasWindow()) {
             this._scrollableContainer.update();
         }
     },

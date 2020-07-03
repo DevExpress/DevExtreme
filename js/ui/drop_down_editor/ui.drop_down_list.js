@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
@@ -745,7 +745,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupMinWidth() {
-        windowUtils.hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
+        hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
     },
 
     _popupShowingHandler: function() {

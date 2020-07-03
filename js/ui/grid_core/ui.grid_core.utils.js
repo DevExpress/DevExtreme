@@ -13,7 +13,7 @@ import LoadPanel from '../load_panel';
 import { normalizeSortingInfo as normalizeSorting } from '../../data/utils';
 import formatHelper from '../../format_helper';
 import { deepExtendArraySafe } from '../../core/utils/object';
-import windowUtils from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
@@ -187,7 +187,7 @@ export default (function() {
                     shading: false,
                     message: loadPanelOptions.text,
                     position: function() {
-                        const $window = $(windowUtils.getWindow());
+                        const $window = $(getWindow());
                         if($element.height() > $window.height()) {
                             return {
                                 of: $window,

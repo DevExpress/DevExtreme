@@ -1,8 +1,8 @@
 /* global Debug*/
 import errors from '../core/errors';
 
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import proxyUrlFormatter from './proxy_url_formatter';
 
 let IS_WINJS_ORIGIN;

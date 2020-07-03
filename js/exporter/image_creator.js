@@ -6,8 +6,8 @@ import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
 import domUtils from '../core/utils/dom';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import { camelize } from '../core/utils/inflector';
 import { Deferred, fromPromise } from '../core/utils/deferred';
 

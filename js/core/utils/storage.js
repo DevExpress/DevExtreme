@@ -1,5 +1,5 @@
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
 
 const getSessionStorage = function() {
     let sessionStorage;

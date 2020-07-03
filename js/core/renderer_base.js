@@ -1,7 +1,7 @@
 import { cleanDataRecursive, removeData, data as elementData } from './element_data';
 import domAdapter from './dom_adapter';
-import windowUtils from './utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from './utils/window';
+const window = getWindow();
 import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFunction, type } from './utils/type';
 import { styleProp, normalizeStyleProp } from './utils/style';
 import sizeUtils from './utils/size';

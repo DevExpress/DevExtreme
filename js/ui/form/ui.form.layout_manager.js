@@ -6,7 +6,7 @@ import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
 import { isWrapped, isWritableWrapped, unwrap } from '../../core/utils/variable_wrapper';
-import windowUtils from '../../core/utils/window';
+import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import stringUtils from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -344,7 +344,7 @@ const LayoutManager = Widget.inherit({
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
-            if(!windowUtils.hasWindow()) {
+            if(!hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
         }
@@ -405,7 +405,7 @@ const LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     that._renderTemplates(templatesInfo);
                 }
                 if(that.option('onLayoutChanged')) {
@@ -461,7 +461,7 @@ const LayoutManager = Widget.inherit({
         if(colCountByScreen) {
             let screenFactor = this.option('form').getTargetScreenFactor();
             if(!screenFactor) {
-                screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
+                screenFactor = hasWindow() ? getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
             }
             colCount = colCountByScreen[screenFactor] || colCount;
         }
@@ -478,7 +478,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _getMaxColCount: function() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return 1;
         }
 

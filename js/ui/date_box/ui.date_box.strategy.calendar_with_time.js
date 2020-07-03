@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
 import CalendarStrategy from './ui.date_box.strategy.calendar';
 import TimeView from './ui.time_view';
 import dateLocalization from '../../localization/date';

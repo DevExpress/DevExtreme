@@ -1,4 +1,4 @@
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;
@@ -120,7 +120,7 @@ const ColumnsControllerExtender = (function() {
             }
         },
         isVirtualMode: function() {
-            return windowUtils.hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
+            return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
         },
         resize: function() {
             this._setScrollPositionCore(this._position);

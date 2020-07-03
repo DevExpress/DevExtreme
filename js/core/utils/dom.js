@@ -1,9 +1,9 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
 import { isDefined, isRenderer, isWindow } from './type';
-import windowUtils from './window';
+import { getWindow } from './window';
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 
 const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();

@@ -36,7 +36,7 @@ const getCurrentScreenFactor = (screenFactorCallback) => {
 
 const getNavigator = () => hasWindow() ? windowObject.navigator : { userAgent: '' };
 
-export default {
+export {
     hasWindow,
     getWindow,
     hasProperty,

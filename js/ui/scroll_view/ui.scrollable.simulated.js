@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { each, map } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -185,7 +185,7 @@ const Scroller = Class.inherit({
     },
 
     _getScaleRatio: function() {
-        if(windowUtils.hasWindow() && !this._scaleRatio) {
+        if(hasWindow() && !this._scaleRatio) {
             const element = this._$element.get(0);
             const realDimension = this._getRealDimension(element, this._dimension);
             const baseDimension = this._getBaseDimension(element, this._dimension);
@@ -708,8 +708,8 @@ const SimulatedStrategy = Class.inherit({
     },
 
     _tryGetDevicePixelRatio: function() {
-        if(windowUtils.hasWindow()) {
-            return windowUtils.getWindow().devicePixelRatio;
+        if(hasWindow()) {
+            return getWindow().devicePixelRatio;
         }
     },
 

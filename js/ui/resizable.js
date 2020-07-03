@@ -8,7 +8,7 @@ import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import { fitIntoRange } from '../core/utils/math';
 import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
 import { getBoundingRect } from '../core/utils/position';
@@ -430,11 +430,11 @@ const Resizable = DOMComponent.inherit({
                 break;
             case 'minWidth':
             case 'maxWidth':
-                windowUtils.hasWindow() && this._renderWidth(this.$element().outerWidth());
+                hasWindow() && this._renderWidth(this.$element().outerWidth());
                 break;
             case 'minHeight':
             case 'maxHeight':
-                windowUtils.hasWindow() && this._renderHeight(this.$element().outerHeight());
+                hasWindow() && this._renderHeight(this.$element().outerHeight());
                 break;
             case 'onResize':
             case 'onResizeStart':

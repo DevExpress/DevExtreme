@@ -1,6 +1,6 @@
 import Overlay from '../../overlay';
 import { TooltipStrategyBase } from './tooltipStrategyBase';
-import windowUtils from '../../../core/utils/window';
+import { getWindow } from '../../../core/utils/window';
 
 const SLIDE_PANEL_CLASS_NAME = 'dx-scheduler-overlay-panel';
 const MAX_OVERLAY_HEIGHT = 250;
@@ -9,21 +9,21 @@ const animationConfig = {
     show: {
         type: 'slide',
         duration: 300,
-        from: { position: { my: 'top', at: 'bottom', of: windowUtils.getWindow() } },
-        to: { position: { my: 'center', at: 'center', of: windowUtils.getWindow() } }
+        from: { position: { my: 'top', at: 'bottom', of: getWindow() } },
+        to: { position: { my: 'center', at: 'center', of: getWindow() } }
     },
     hide: {
         type: 'slide',
         duration: 300,
-        to: { position: { my: 'top', at: 'bottom', of: windowUtils.getWindow() } },
-        from: { position: { my: 'center', at: 'center', of: windowUtils.getWindow() } }
+        to: { position: { my: 'top', at: 'bottom', of: getWindow() } },
+        from: { position: { my: 'center', at: 'center', of: getWindow() } }
     }
 };
 
 const positionConfig = {
     my: 'bottom',
     at: 'bottom',
-    of: windowUtils.getWindow()
+    of: getWindow()
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {

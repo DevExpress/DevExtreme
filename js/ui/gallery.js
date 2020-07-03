@@ -3,7 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import { noop } from '../core/utils/common';
 import { isDefined, isPlainObject } from '../core/utils/type';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { getPublicElement } from '../core/element';
 import fx from '../animation/fx';
@@ -245,7 +245,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _itemsPerPage: function() {
-        const itemsPerPage = windowUtils.hasWindow() ? Math.floor(1 / this._itemPercentWidth()) : 1;
+        const itemsPerPage = hasWindow() ? Math.floor(1 / this._itemPercentWidth()) : 1;
 
         return Math.min(itemsPerPage, this._itemsCount());
     },
@@ -329,7 +329,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             const selectedIndex = this.option('selectedIndex');
 
             items = items.length > selectedIndex ? items.slice(selectedIndex, selectedIndex + 1) : items.slice(0, 1);
@@ -1082,7 +1082,7 @@ const Gallery = CollectionWidget.inherit({
                 this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
                 this.option('loopItemFocus', args.value);
 
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     this._cloneDuplicateItems();
                     this._renderItemPositions();
                     this._renderNavButtonsVisibility();
@@ -1099,7 +1099,7 @@ const Gallery = CollectionWidget.inherit({
                 break;
             case 'wrapAround':
             case 'stretchImages':
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     this._renderItemSizes();
                     this._renderItemPositions();
                     this._renderItemVisibility();

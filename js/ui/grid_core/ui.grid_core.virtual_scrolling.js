@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { deferUpdate, deferRender } from '../../core/utils/common';
 import virtualScrollingCore from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
@@ -377,7 +377,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             const virtualItemsCount = that._dataController.virtualItemsCount();
 
             if(virtualItemsCount && that.option('legacyRendering')) {
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
                 }
 
@@ -657,7 +657,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 that._updateContentPosition();
 
-                const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(windowUtils.getWindow()).outerHeight();
+                const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
                 that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
             }
         },
@@ -691,7 +691,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase();
 
-            if(that.component.$element() && !that._windowScroll && $element.closest(windowUtils.getWindow().document).length) {
+            if(that.component.$element() && !that._windowScroll && $element.closest(getWindow().document).length) {
                 that._windowScroll = virtualScrollingCore.subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
                         that._dataController.setViewportPosition(scrollPos);

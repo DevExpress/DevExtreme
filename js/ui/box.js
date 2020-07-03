@@ -3,7 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { noop } from '../core/utils/common';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import inflector from '../core/utils/inflector';
 import { isDefined } from '../core/utils/type';
 import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/style';
@@ -53,7 +53,7 @@ const setFlexProp = (element, prop, value) => {
     element.style[styleProp(prop)] = value;
 
     // NOTE: workaround for Domino issue https://github.com/fgnass/domino/issues/119
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         if(value === '' || !isDefined(value)) {
             return;
         }

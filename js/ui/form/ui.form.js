@@ -14,7 +14,7 @@ import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
 import Editor from '../editor/editor';
-import windowUtils from '../../core/utils/window';
+import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import ValidationEngine from '../validation_engine';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
@@ -72,7 +72,7 @@ const Form = Widget.inherit({
 
     _initOptions: function(options) {
         if(!('screenByWidth' in options)) {
-            options.screenByWidth = windowUtils.defaultScreenFactorFunc;
+            options.screenByWidth = defaultScreenFactorFunc;
         }
 
         this.callBase(options);
@@ -386,7 +386,7 @@ const Form = Widget.inherit({
     },
 
     _alignLabelsInColumn: function({ layoutManager, inOneColumn, $container, excludeTabbed, items }) {
-        if(!windowUtils.hasWindow() || this._labelLocation() === 'top') {
+        if(!hasWindow() || this._labelLocation() === 'top') {
             return;
         }
 
@@ -430,7 +430,7 @@ const Form = Widget.inherit({
     },
 
     _getCurrentScreenFactor: function() {
-        return windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
+        return hasWindow() ? getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
     },
 
     _clearCachedInstances: function() {

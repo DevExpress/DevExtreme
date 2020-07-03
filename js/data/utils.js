@@ -1,7 +1,7 @@
 import { isFunction } from '../core/utils/type';
 import domAdapter from '../core/dom_adapter';
 import readyCallbacks from '../core/utils/ready_callbacks';
-import windowUtils from '../core/utils/window';
+import { getWindow } from '../core/utils/window';
 import { map } from '../core/utils/iterator';
 import { Deferred } from '../core/utils/deferred';
 import { equalByValue } from '../core/utils/common';
@@ -67,7 +67,7 @@ const errorMessageFromXhr = (function() {
     // T542570, https://stackoverflow.com/a/18170879
     let unloading;
     ready(function() {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         domAdapter.listen(window, 'beforeunload', function() { unloading = true; });
     });
 

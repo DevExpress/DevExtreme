@@ -1,8 +1,8 @@
 import { Deferred } from './deferred';
 import domAdapter from '../../core/dom_adapter';
 import httpRequest from '../../core/http_request';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
 import { extendFromObject } from './extend';
 import { isDefined } from './type';
 import Promise from '../polyfills/promise';
@@ -151,7 +151,7 @@ const postProcess = function(deferred, xhr, dataType) {
 };
 
 const isCrossDomain = function(url) {
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         return true;
     }
 

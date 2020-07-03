@@ -1,6 +1,6 @@
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
-import windowUtils from '../../../core/utils/window';
+import { getWindow } from '../../../core/utils/window';
 import callOnce from '../../../core/utils/call_once';
 
 import eventsEngine from '../../../events/core/events_engine';
@@ -10,7 +10,7 @@ import animation from './animation';
 import { normalizeBBox, rotateBBox, normalizeEnum } from '../utils';
 import { isDefined } from '../../../core/utils/type';
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 
 const { max, min, floor, round, sin, cos, abs, PI } = Math;
 

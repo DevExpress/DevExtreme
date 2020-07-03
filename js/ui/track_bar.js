@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import Editor from './editor/editor';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import fx from '../animation/fx';
 
 const TRACKBAR_CLASS = 'dx-trackbar';
@@ -102,7 +102,7 @@ const TrackBar = Editor.inherit({
             return;
         }
 
-        if(this._needPreventAnimation || !windowUtils.hasWindow()) {
+        if(this._needPreventAnimation || !hasWindow()) {
             return;
         }
 

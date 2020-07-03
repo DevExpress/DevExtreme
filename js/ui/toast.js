@@ -2,8 +2,8 @@
 // 1. animation
 
 import $ from '../core/renderer';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import readyCallbacks from '../core/utils/ready_callbacks';

@@ -1,14 +1,14 @@
 /* global Windows */
 import $ from '../core/renderer';
 import domAdapter from '../core/dom_adapter';
-import windowUtils from '../core/utils/window';
+import { getWindow, getNavigator } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import errors from '../ui/widget/ui.errors';
 import { isDefined, isFunction } from '../core/utils/type';
 import { logger } from '../core/utils/console';
 
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
+const window = getWindow();
+const navigator = getNavigator();
 
 const FILE_EXTESIONS = {
     EXCEL: 'xlsx',

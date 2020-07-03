@@ -6,7 +6,7 @@ import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
@@ -296,7 +296,7 @@ const Scrollable = DOMComponent.inherit({
 
     _resetInactiveDirection: function() {
         const inactiveProp = this._getInactiveProp();
-        if(!inactiveProp || !windowUtils.hasWindow()) {
+        if(!inactiveProp || !hasWindow()) {
             return;
         }
 

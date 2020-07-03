@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import eventsEngine from '../events/core/events_engine';
 import stringUtils from '../core/utils/string';
 import registerComponent from '../core/component_registrator';

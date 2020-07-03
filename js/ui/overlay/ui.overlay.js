@@ -19,7 +19,7 @@ import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
-import windowUtils from '../../core/utils/window';
+import { getNavigator, getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import {
     start as dragEventStart,
@@ -36,8 +36,8 @@ import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import * as zIndexPool from './z_index';
 const ready = readyCallbacks.add;
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
+const window = getWindow();
+const navigator = getNavigator();
 const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
@@ -264,7 +264,7 @@ const Overlay = Widget.inherit({
             }
         }, {
             device: function() {
-                return !windowUtils.hasWindow();
+                return !hasWindow();
             },
             options: {
                 width: null,
@@ -793,7 +793,7 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSubscriptions: function(enabled) {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
             this._toggleParentsScrollSubscription(enabled);
         }
@@ -1130,7 +1130,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometry: function(isDimensionChanged) {
-        if(this.option('visible') && windowUtils.hasWindow()) {
+        if(this.option('visible') && hasWindow()) {
             this._renderGeometryImpl(isDimensionChanged);
         }
     },

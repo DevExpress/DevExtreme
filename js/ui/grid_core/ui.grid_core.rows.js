@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { deferRender, deferUpdate } from '../../core/utils/common';
 import { setHeight } from '../../core/utils/style';
@@ -638,7 +638,7 @@ export default {
                     const $table = that.callBase(options);
                     const resizeCompletedHandler = function() {
                         const scrollableInstance = that.getScrollable();
-                        if(scrollableInstance && that.element().closest(windowUtils.getWindow().document).length) {
+                        if(scrollableInstance && that.element().closest(getWindow().document).length) {
                             that.resizeCompleted.remove(resizeCompletedHandler);
                             scrollableInstance._visibilityChanged(true);
                         }
@@ -742,7 +742,7 @@ export default {
                 },
 
                 _getDevicePixelRatio: function() {
-                    return windowUtils.getWindow().devicePixelRatio;
+                    return getWindow().devicePixelRatio;
                 },
 
                 renderNoDataText: renderNoDataText,
@@ -1007,7 +1007,7 @@ export default {
                     const animation = dataController.isLoaded() ? loadPanelOptions.animation : null;
                     const $element = that.element();
 
-                    if(!windowUtils.hasWindow()) {
+                    if(!hasWindow()) {
                         return;
                     }
 

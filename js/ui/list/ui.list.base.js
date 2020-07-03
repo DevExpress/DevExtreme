@@ -18,7 +18,7 @@ import ListItem from './item';
 import Button from '../button';
 import eventUtils from '../../events/utils';
 import themes from '../themes';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import ScrollView from '../scroll_view';
 import { deviceDependentOptions } from '../scroll_view/ui.scrollable.device';
 import CollectionWidget from '../collection/ui.collection_widget.live_update';
@@ -466,7 +466,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(!this._shouldAppendItems() && windowUtils.hasWindow()) {
+        if(!this._shouldAppendItems() && hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
@@ -817,7 +817,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _refresh: function() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             this.callBase();
         } else {
             const scrollTop = this._scrollView.scrollTop();

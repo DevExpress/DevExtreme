@@ -1,5 +1,5 @@
 import Class from '../core/class';
-import windowUtils from '../core/utils/window';
+import { getWindow } from '../core/utils/window';
 import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import errors from '../ui/widget/ui.errors';
@@ -710,7 +710,7 @@ export function getData(data, options) {
 
     excelCreator._checkZipState();
 
-    return excelCreator.ready().then(() => excelCreator.getData(isFunction(windowUtils.getWindow().Blob)));
+    return excelCreator.ready().then(() => excelCreator.getData(isFunction(getWindow().Blob)));
 }
 
 ///#DEBUG

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
+import { getNavigator, getWindow } from '../../core/utils/window';
+const window = getWindow();
+const navigator = getNavigator();
 import browser from '../../core/utils/browser';
 import eventsEngine from '../../events/core/events_engine';
 import devices from '../../core/devices';

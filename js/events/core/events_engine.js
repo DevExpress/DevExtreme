@@ -1,8 +1,8 @@
 import registerEventCallbacks from './event_registrator_callbacks';
 import { extend } from '../../core/utils/extend';
 import domAdapter from '../../core/dom_adapter';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
 import injector from '../../core/utils/dependency_injector';
 import { isWindow, isFunction, isString } from '../../core/utils/type';
 import Callbacks from '../../core/utils/callbacks';
@@ -534,7 +534,7 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     extend(that, src);
 
-    if(src instanceof eventsEngine.Event || (windowUtils.hasWindow() && src instanceof window.Event)) {
+    if(src instanceof eventsEngine.Event || (hasWindow() && src instanceof window.Event)) {
         that.originalEvent = src;
         that.currentTarget = undefined;
     }

@@ -2,13 +2,13 @@
 import TurnDown from 'turndown';
 import ShowDown from 'showdown';
 
-import windowUtils from '../../../core/utils/window';
+import { getWindow } from '../../../core/utils/window';
 import Errors from '../../widget/ui.errors';
 import converterController from '../converterController';
 
 class MarkdownConverter {
     constructor() {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         const turndown = window && window.TurndownService || TurnDown;
         const showdown = window && window.showdown || ShowDown;
 

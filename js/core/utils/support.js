@@ -2,7 +2,7 @@ import { inArray } from './array';
 import domAdapter from '../dom_adapter';
 import { ensureDefined } from './common';
 import callOnce from './call_once';
-import windowUtils from './window';
+import { getNavigator, hasProperty } from './window';
 import devices from '../devices';
 import { stylePropPrefix, styleProp } from './style';
 
@@ -10,8 +10,7 @@ const {
     maxTouchPoints,
     msMaxTouchPoints, // TODO: remove this line when we drop IE support
     pointerEnabled
-} = windowUtils.getNavigator();
-const hasProperty = windowUtils.hasProperty.bind(windowUtils);
+} = getNavigator();
 const transitionEndEventNames = {
     'webkitTransition': 'webkitTransitionEnd',
     'MozTransition': 'transitionend',

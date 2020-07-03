@@ -1,11 +1,11 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import { isNumeric } from '../../core/utils/type';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
 export const getElementMaxHeightByWindow = ($element, startLocation) => {
-    const window = windowUtils.getWindow();
+    const window = getWindow();
 
     let actualOffset;
     if(isNumeric(startLocation)) {

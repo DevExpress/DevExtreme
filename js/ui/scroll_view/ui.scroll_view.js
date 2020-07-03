@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import devices from '../../core/devices';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
 import { getPublicElement } from '../../core/element';
@@ -32,7 +32,7 @@ const refreshStrategies = {
     simulated: SimulatedStrategy
 };
 
-const isServerSide = !windowUtils.hasWindow();
+const isServerSide = !hasWindow();
 
 const scrollViewServerConfig = {
     finishLoading: noop,

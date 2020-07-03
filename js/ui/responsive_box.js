@@ -3,8 +3,8 @@ import eventsEngine from '../events/core/events_engine';
 import { grep, noop } from '../core/utils/common';
 import { isDefined, isPlainObject, isEmptyObject } from '../core/utils/type';
 import errors from './widget/ui.errors';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, defaultScreenFactorFunc, hasWindow } from '../core/utils/window';
+const window = getWindow();
 import iteratorUtils from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import registerComponent from '../core/component_registrator';
@@ -139,7 +139,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _init: function() {
         if(!this.option('screenByWidth')) {
-            this._options.silent('screenByWidth', windowUtils.defaultScreenFactorFunc);
+            this._options.silent('screenByWidth', defaultScreenFactorFunc);
         }
 
         this.callBase();
@@ -319,7 +319,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenWidth: function() {
-        return windowUtils.hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
+        return hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
     },
 
     _createEmptyCell: function() {

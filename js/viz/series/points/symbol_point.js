@@ -1,8 +1,8 @@
 import { extend } from '../../../core/utils/extend';
 import { each } from '../../../core/utils/iterator';
 import { noop } from '../../../core/utils/common';
-import windowUtils from '../../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasProperty } from '../../../core/utils/window';
+const window = getWindow();
 import labelModule from './label';
 const _extend = extend;
 import { isDefined as _isDefined } from '../../../core/utils/type';
@@ -539,7 +539,7 @@ export default {
         navigator = that.__debug_navigator || navigator;
         that.__debug_browserNavigator = navigator;
         ///#ENDDEBUG
-        const minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+        const minTrackerSize = hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
         that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
         return that._options.trackerR;
     },

@@ -18,7 +18,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { touch } from '../../core/utils/support';
 import { isDefined, isString, isObject, isFunction, isEmptyObject, isDeferred, isPromise } from '../../core/utils/type';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import DataHelperMixin from '../../data_helper';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
@@ -1526,7 +1526,7 @@ class Scheduler extends Widget {
     }
 
     _initMarkupCore(resources) {
-        this._readyToRenderAppointments = windowUtils.hasWindow();
+        this._readyToRenderAppointments = hasWindow();
 
         this._workSpace && this._cleanWorkspace();
 

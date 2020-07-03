@@ -11,7 +11,7 @@ import Widget from './widget/ui.widget';
 import Swipeable from '../events/gesture/swipeable';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { Deferred } from '../core/utils/deferred';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import { animation } from './slide_out_view/ui.slide_out_view.animation';
 
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
@@ -242,7 +242,7 @@ const SlideOutView = Widget.inherit({
     },
 
     _renderPosition: function(offset, animate) {
-        if(!windowUtils.hasWindow()) return;
+        if(!hasWindow()) return;
 
         const pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 

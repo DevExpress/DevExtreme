@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
-import windowUtils from '../core/utils/window';
-const navigator = windowUtils.getNavigator();
+import { getNavigator } from '../core/utils/window';
+const navigator = getNavigator();
 import support from '../core/utils/support';
 import themes from './themes';
 import { extend } from '../core/utils/extend';

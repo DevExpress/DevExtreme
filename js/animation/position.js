@@ -62,8 +62,8 @@ import $ from '../core/renderer';
 
 import { splitPair, pairToObject } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import domAdapter from '../core/dom_adapter';
 import { isWindow } from '../core/utils/type';
 import { extend } from '../core/utils/extend';

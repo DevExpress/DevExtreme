@@ -3,7 +3,7 @@ import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
 import { data as elementData } from '../../../core/element_data';
 import dateUtils from '../../../core/utils/date';
-import windowUtils from '../../../core/utils/window';
+import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
 import { each } from '../../../core/utils/iterator';
@@ -1000,7 +1000,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _updateGroupTableHeight() {
-        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
+        if(this._isVerticalGroupedWorkSpace() && hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
     }
@@ -2035,7 +2035,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _isOutsideScrollable(target, event) {
         const $dateTableScrollableElement = this._dateTableScrollable.$element();
         const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
         const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
         const isOutsideVerticalScrollable = event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
 import { msie } from '../../core/utils/browser';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
@@ -650,7 +650,7 @@ const PivotGrid = Widget.inherit({
 
         that._dataController = new DataController(that._getDataControllerOptions());
 
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             that._dataController.changed.add(function() {
                 that._render();
             });
@@ -741,7 +741,7 @@ const PivotGrid = Widget.inherit({
                 that.callBase(args);
                 that._renderFieldChooser();
                 that._renderContextMenu();
-                windowUtils.hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+                hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case 'export':
@@ -762,7 +762,7 @@ const PivotGrid = Widget.inherit({
                 that._renderDescriptionArea();
                 break;
             case 'loadPanel':
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                     that._invalidate();
                 }
@@ -1528,7 +1528,7 @@ const PivotGrid = Widget.inherit({
         const rowFieldsHeader = that._rowFields;
         const d = new Deferred();
 
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return;
         }
 

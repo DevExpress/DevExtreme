@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow, hasWindow } from '../core/utils/window';
+const window = getWindow();
 import { getPublicElement } from '../core/element';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
@@ -243,7 +243,7 @@ const Popover = Popup.inherit({
                 }
             }, {
                 device: function() {
-                    return !windowUtils.hasWindow();
+                    return !hasWindow();
                 },
                 options: {
                     animation: null

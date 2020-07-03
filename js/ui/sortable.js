@@ -3,7 +3,7 @@ import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import Draggable from './draggable';
 import { getPublicElement } from '../core/element';
-import windowUtils from '../core/utils/window';
+import { getWindow } from '../core/utils/window';
 import { getBoundingRect } from '../core/utils/position';
 import translator from '../animation/translator';
 import fx from '../animation/fx';
@@ -577,7 +577,7 @@ const Sortable = Draggable.inherit({
             const isVerticalOrientation = this._isVerticalOrientation();
             const start = isVerticalOrientation ? 'top' : 'left';
             const end = isVerticalOrientation ? 'bottom' : 'right';
-            const window = windowUtils.getWindow();
+            const window = getWindow();
             const pageOffset = isVerticalOrientation ? window.pageYOffset : window.pageXOffset;
 
             if(position[start] < (clientRect[start] + pageOffset) || position[start] > (clientRect[end] + pageOffset)) {

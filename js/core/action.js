@@ -1,6 +1,6 @@
 import $ from './renderer';
 import config from './config';
-import windowUtils from './utils/window';
+import { getWindow } from './utils/window';
 import { isPlainObject, isFunction } from './utils/type';
 import { each } from './utils/iterator';
 import errors from './errors';
@@ -9,7 +9,7 @@ export default class Action {
     constructor(action, config) {
         config = config || {};
         this._action = action;
-        this._context = config.context || windowUtils.getWindow();
+        this._context = config.context || getWindow();
         this._beforeExecute = config.beforeExecute;
         this._afterExecute = config.afterExecute;
         this._component = config.component;

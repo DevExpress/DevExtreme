@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
-import windowUtils from '../../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
 import List from '../list';
 import DateBoxStrategy from './ui.date_box.strategy';
 import { noop } from '../../core/utils/common';

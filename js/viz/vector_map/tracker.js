@@ -1,12 +1,12 @@
 import eventsEngine from '../../events/core/events_engine';
-import windowUtils from '../../core/utils/window';
+import { getNavigator, hasProperty } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import eventEmitterModule from './event_emitter';
 import { addNamespace } from '../../events/utils';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { parseScalar } from '../core/utils';
 
-const navigator = windowUtils.getNavigator();
+const navigator = getNavigator();
 const _math = Math;
 const _abs = _math.abs;
 const _sqrt = _math.sqrt;
@@ -508,7 +508,7 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    let flags = [navigator.pointerEnabled, navigator.msPointerEnabled, windowUtils.hasProperty('ontouchstart')];
+    let flags = [navigator.pointerEnabled, navigator.msPointerEnabled, hasProperty('ontouchstart')];
     ///#DEBUG
     if(arguments.length) {
         flags = [
