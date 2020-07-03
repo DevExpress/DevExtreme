@@ -12,7 +12,7 @@ const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout'];
 
 const widgetsInBundle = [];
 for(const name in DevExpress.renovation) {
-    if(name.startsWith('dxr')) {
+    if(name.indexOf('dxr') === 0) {
         widgetsInBundle.push(name);
     }
 }
