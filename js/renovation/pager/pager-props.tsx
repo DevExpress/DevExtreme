@@ -1,4 +1,6 @@
-import { ComponentBindings, OneWay, TwoWay } from 'devextreme-generator/component_declaration/common';
+import {
+  ComponentBindings, OneWay, TwoWay, Event,
+} from 'devextreme-generator/component_declaration/common';
 import messageLocalization from '../../localization/message';
 
 @ComponentBindings()
@@ -15,13 +17,21 @@ export default class PagerProps {
 
   @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
 
-  // visible: true,
-  // pagesNavigatorVisible: 'auto',
+  @OneWay() visible?: boolean = true;
+
+  @OneWay() hasKnownLastPage?: boolean = true;
+
+  @OneWay() pagesNavigatorVisible?: boolean | 'auto' = 'auto';
+
   @TwoWay() pageIndex?: number = 0;
+
+  @Event() pageIndexChange?: (newPageIndex: number) => void;
 
   @TwoWay() pageSize?: number = 5;
 
-  // showPageSizes: true,
+  @Event() pageSizeChange?: (newPageSize: number) => void;
+
+  @OneWay() showPageSizes? = true;
 
   @OneWay() pageSizes?: number[] = [5, 10];
 
@@ -30,6 +40,4 @@ export default class PagerProps {
   @OneWay() showNavigationButtons?: boolean = false;
 
   @OneWay() totalCount?: number = 0;
-
-  // hasKnownLastPage: true,
 }

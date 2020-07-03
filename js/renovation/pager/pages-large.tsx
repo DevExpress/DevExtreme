@@ -6,8 +6,7 @@ import {
   OneWay,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import Page, { PageProps } from './page';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
@@ -62,20 +61,22 @@ function getDelimiterType(
 function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[], pageCount: number,
   delimiter: DelimiterType): SlidingWindowState & { pageIndexes: PageIndexes } {
   let pageIndexes: PageIndexes = [];
-  let possibleIndexes: number[] = [];
+  let indexesForReuse: number[] = [];
   if (delimiter === 'none') {
     pageIndexes = [...slidingWindowIndexes];
   } else if (delimiter === 'both') {
     pageIndexes = [0, null, ...slidingWindowIndexes, null, pageCount - 1];
-    possibleIndexes = slidingWindowIndexes.slice(1, -1);
+    indexesForReuse = slidingWindowIndexes.slice(1, -1);
   } else if (delimiter === 'high') {
     pageIndexes = [0, ...slidingWindowIndexes, null, pageCount - 1];
-    possibleIndexes = slidingWindowIndexes.slice(0, -1);
+    indexesForReuse = slidingWindowIndexes.slice(0, -1);
   } else if (delimiter === 'low') {
     pageIndexes = [0, null, ...slidingWindowIndexes, pageCount - 1];
-    possibleIndexes = slidingWindowIndexes.slice(1);
+    indexesForReuse = slidingWindowIndexes.slice(1);
   }
-  return { slidingWindowIndexes, indexesForReuse: possibleIndexes, pageIndexes };
+  return {
+    slidingWindowIndexes, indexesForReuse, pageIndexes,
+  };
 }
 
 function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCount: number,
@@ -103,9 +104,11 @@ export default class PagesLarge extends JSXComponent(PagesLargeProps) {
     return rtlPageIndexes.map((index): PageType => (index === null ? null : createPage(index)));
   }
 
-  canReuseSlidingWindow(pageIndex = 0): boolean {
+  canReuseSlidingWindow(currentPageCount: number, pageIndex = 0): boolean {
     const { indexesForReuse } = this.slidingWindowState;
-    return indexesForReuse.indexOf(pageIndex) !== -1;
+    const currentPageNotExistInIndexes = indexesForReuse.indexOf(currentPageCount) === -1;
+    const pageIndexExistInIndexes = indexesForReuse.indexOf(pageIndex) !== -1;
+    return currentPageNotExistInIndexes && pageIndexExistInIndexes;
   }
 
   generatePageIndexes(): PageIndexes {
@@ -158,7 +161,7 @@ export default class PagesLarge extends JSXComponent(PagesLargeProps) {
     if (this.isSlidingWindowMode()) {
       return createPageIndexes(0, pageCount, pageCount, 'none').pageIndexes;
     }
-    if (this.canReuseSlidingWindow(this.props.pageIndex)) {
+    if (this.canReuseSlidingWindow(pageCount, this.props.pageIndex)) {
       const { slidingWindowIndexes } = this.slidingWindowState;
       const delimiter = getDelimiterType(
         slidingWindowIndexes[0], PAGES_LIMITER, pageCount,

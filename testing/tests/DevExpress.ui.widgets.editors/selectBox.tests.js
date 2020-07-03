@@ -87,14 +87,34 @@ const moduleSetup = {
 
 QUnit.module('rendering with css', {}, () => {
     QUnit.test('Right width of popup', function(assert) {
-        const $element = $('#selectBox').dxSelectBox({ width: 100 });
+        const editorWidth = 100;
+        const $element = $('#selectBox').dxSelectBox({ editorWidth: 100 });
         const instance = $element.dxSelectBox('instance');
         instance.open();
         const $popup = $(instance._popup.$element());
 
         assert.ok($popup.hasClass(POPUP_CLASS));
 
-        assert.equal(instance._popup.option('width'), 100 + instance.option('popupWidthExtension'));
+        assert.strictEqual(typeof instance._popup.option('width'), 'function');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width and minWidth equal to the input width', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            width: 400,
+            opened: true
+        }).dxSelectBox('instance');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.css('width'), '400px', 'popup width is correct');
+        assert.strictEqual($overlayContent.css('minWidth'), '400px', 'popup width is correct');
+
+        instance.option('width', 600);
+
+        assert.strictEqual($overlayContent.css('width'), '600px', 'popup width is correct');
+        assert.strictEqual($overlayContent.css('minWidth'), '600px', 'popup width is correct');
     });
 });
 
@@ -936,6 +956,41 @@ QUnit.module('functionality', moduleSetup, () => {
 });
 
 QUnit.module('widget options', moduleSetup, () => {
+    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            width: 600,
+            dropDownOptions: {
+                width: '150%'
+            },
+            opened: true
+        }).dxSelectBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
+
+        instance.close();
+        instance.option('width', 400);
+        instance.open();
+
+        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change (T897820)', function(assert) {
+        const instance = $('#selectBox').dxSelectBox({
+            width: 600,
+            dropDownOptions: {
+                width: '150%'
+            },
+            opened: true
+        }).dxSelectBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
+
+        instance.option('width', 400);
+
+        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
+    });
 
     QUnit.test('option onValueChanged', function(assert) {
         assert.expect(4);

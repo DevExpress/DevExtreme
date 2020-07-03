@@ -12,9 +12,12 @@ describe('Pager', () => {
       const tree = shallow<PagerComponent>(<PagerComponent /> as any);
       expect(tree.props()).toEqual({
         children: [],
+        pagesNavigatorVisible: 'auto',
+        visible: true,
         contentTemplate: PagerContentComponent,
         pageIndexChange: tree.instance().pageIndexChange,
         pageSizeChange: tree.instance().pageSizeChange,
+        hasKnownLastPage: true,
         infoText: 'Page {0} of {1} ({2} items)',
         lightModeEnabled: false,
         maxPagesCount: 10,
@@ -25,6 +28,7 @@ describe('Pager', () => {
         pagesCountText: 'of',
         rtlEnabled: false,
         showInfo: false,
+        showPageSizes: true,
         showNavigationButtons: false,
         totalCount: 0,
       });
@@ -36,11 +40,6 @@ describe('Pager', () => {
       expect(component.props.pageSize).toBe(5);
       component.pageSizeChange(10);
       expect(component.props.pageSize).toBe(10);
-
-    //   const tree = shallow<PagerComponent>(<PagerComponent />);
-    //   expect(tree.instance().props.pageSize).toBe(5);
-    //   tree.instance().pageSizeChange(10);
-    //   expect(tree.instance().props.pageSize).toBe(10);
     });
     it('pageIndexChange', () => {
       const component = new PagerComponent({ pageIndex: 5 });

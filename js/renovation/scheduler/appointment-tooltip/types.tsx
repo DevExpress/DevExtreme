@@ -1,15 +1,17 @@
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
-import { Promise } from '../../../core/utils/deferred';
+import { dxPromise } from '../../../core/utils/deferred';
 
 export type Color = string | undefined;
-export type DeferredColor = Promise<Color>;
+export type DeferredColor = dxPromise<Color>;
 
 export type AppointmentItem = {
   data: dxSchedulerAppointment;
   currentData?: dxSchedulerAppointment;
   settings?: AppointmentItemSettings;
   color?: DeferredColor;
+  disabled?: boolean;
 };
+
 export type AppointmentItemSettings = {
   targetedAppointmentData?: dxSchedulerAppointment;
   originalAppointmentStartDate?: Date;
@@ -24,7 +26,25 @@ export type AppointmentItemSettings = {
   appointmentReduced?: boolean;
   sortedIndex?: number;
 };
+
 export type FormattedContent = {
   text: string;
   formatDate: string;
 };
+
+export type GetTextAndFormatDateFn = (
+  appointment?: dxSchedulerAppointment, currentAppointment?: dxSchedulerAppointment,
+) => FormattedContent;
+
+export type GetSingleAppointmentFn = (
+  appointment: dxSchedulerAppointment, target: HTMLElement,
+) => dxSchedulerAppointment;
+
+export type CheckAndDeleteAppointmentFn = (
+  appointment: dxSchedulerAppointment, currentAppointment: dxSchedulerAppointment,
+) => void;
+
+export type ShowAppointmentPopupFn = (
+  appointment: dxSchedulerAppointment, visibleButtons: boolean,
+  currentAppointment: dxSchedulerAppointment,
+) => void;

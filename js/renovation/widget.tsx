@@ -18,7 +18,7 @@ import {
 } from '../events/short';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
-import { isFakeClickEvent } from '../events/utils';
+import { isFakeClickEvent } from '../events/utils/index';
 import BaseWidgetProps from './utils/base-props';
 
 const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {

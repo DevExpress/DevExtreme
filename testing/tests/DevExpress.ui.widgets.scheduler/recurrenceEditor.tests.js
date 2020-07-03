@@ -50,6 +50,8 @@ module('Recurrence Editor rendering', moduleConfig, () => {
 
         assert.equal(this.instance.option('value'), null, 'value is right');
         assert.equal(this.instance.option('visible'), true, 'editor is visible');
+        assert.equal(this.instance.option('firstDayOfWeek'), undefined, 'firstDayOfWeek is right');
+        assert.ok(this.instance.option('startDate') instanceof Date, 'startDate is right');
     });
 
     test('Recurrence editor should correctly process null value and reset inner editors to default values', function(assert) {
@@ -68,6 +70,14 @@ module('Recurrence Editor rendering', moduleConfig, () => {
         });
 
         assert.equal(this.instance.getRecurrenceForm().getEditor('interval').option('readOnly'), this.instance.option('readOnly'), 'right readonly option');
+    });
+
+    $.each(['WEEKLY', 'MONTHLY', 'YEARLY'], (_, value) => {
+        QUnit.test(`Recurrence editor should not crash when FREQ=${value} is set without startDate`, function(assert) {
+            this.createInstance({ value: `FREQ=${value}` });
+
+            assert.ok(true, 'recurrenceEditor was rendered');
+        });
     });
 });
 
@@ -486,6 +496,14 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         assert.equal($repeatOn.length, 1, 'repeat-on editor was rendered');
     });
 
+    test('Recurrence repeat-on lablle should have correct css class', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY' });
+
+        const $repeatOnLabel = this.instance.$element().find(`.${REPEAT_ON_EDITOR}${LABEL_POSTFIX}`);
+
+        assert.equal($repeatOnLabel.text(), 'Repeat On', 'label text is correct');
+    });
+
     test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY' });
 
@@ -519,13 +537,31 @@ module('Repeat-on editor', repeatOnModuleConfig, () => {
         assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU'], 'Right button group select item keys');
     });
 
+    test('Recurrence repeat-on editor should process values by startDate correctly after remove selection, freq = weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 1, 1, 1) });
+
+        const buttonGroup = this.instance.getEditorByField('byday');
+        buttonGroup.option('selectedItemKeys', []);
+
+        assert.equal(buttonGroup.option('selectedItemKeys').length, 0, 'Selection should not consider startDate anymore');
+    });
+
     test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {
         this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU' });
 
         const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
         buttonGroup.option('selectedItemKeys', ['TU', 'WE']);
 
-        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TU,WE');
+        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TU,WE', 'Recurrence editor value is correct');
+    });
+
+    test('Recurrence editor should process values from repeat-on-editor after remove selection, freq=weekly', function(assert) {
+        this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2015, 1, 1, 1) });
+
+        const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
+        buttonGroup.option('selectedItemKeys', []);
+
+        assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU', 'Recurrence editor value is correct');
     });
 
     test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=weekly', function(assert) {

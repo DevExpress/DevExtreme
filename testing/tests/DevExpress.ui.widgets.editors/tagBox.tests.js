@@ -2790,9 +2790,11 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: false
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const input = $tagBox.find(`.${TEXTBOX_CLASS}`).get(0);
+        const { width: inputWidth } = input.getBoundingClientRect();
+
         // NOTE: width should be 0.1 because of T393423
-        assert.roughEqual($input.width(), 0.1, 0.101, 'input has correct width');
+        assert.roughEqual(inputWidth, 0.1, 0.101, 'input has correct width');
     });
 
     QUnit.test('no placeholder when textbox is not empty', function(assert) {
@@ -3580,6 +3582,23 @@ QUnit.module('popup position and size', moduleSetup, () => {
         }
 
         assert.ok(testPassed, 'There is no errors during test');
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        const instance = $('#tagBox').dxTagBox({
+            width: 600,
+            dropDownOptions: {
+                width: '150%'
+            },
+            opened: true
+        }).dxTagBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
+
+        instance.option('width', 400);
+
+        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
     });
 });
 

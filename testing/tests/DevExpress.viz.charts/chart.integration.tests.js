@@ -1893,7 +1893,11 @@ QUnit.test('check density of points continuous series', function(assert) {
 QUnit.test('auto switching point markers visibility', function(assert) {
     const chart = this.createChart({});
 
-    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
+
+    chart.getArgumentAxis().visualRange([30000, 300000]);
+
+    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // intersection algorithm
 
     chart.getArgumentAxis().visualRange([200000, 205300]);
 
@@ -1905,8 +1909,30 @@ QUnit.test('auto switching point markers visibility', function(assert) {
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
+QUnit.test('Has no exception when hiding point markers automatically (both hiding algorithm T904402)', function(assert) {
+    const dataSource = this.options.dataSource;
+
+    for(let i = 30000; i < 300000; i += 500) {
+        const y1 = Math.sin(i);
+        const y2 = Math.sin(i);
+
+        dataSource.filter(d => d.arg === i)[0].val2 = y1 * 10.5 - y2 * 5;
+    }
+
+    const chart = this.createChart({
+        dataSource,
+        series: [
+            { point: { size: 14 } },
+            { valueField: 'val2' }
+        ]
+    });
+
+    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
+    assert.notOk(chart.getAllSeries()[1].getVisiblePoints()[0].graphic); // intersection algorithm
+});
+
 // T857880
-QUnit.test('Point is visible when placed in visualRande', function(assert) {
+QUnit.test('Point is visible when placed in visualRange', function(assert) {
     const chart = moduleSetup.createChart.call(this, {
         dataSource: [{
             country: 'USA',
