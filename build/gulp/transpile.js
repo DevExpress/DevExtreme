@@ -7,6 +7,7 @@ const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const path = require('path');
 const notify = require('gulp-notify');
+const compressionPipes = require('./compression-pipes.js');
 
 const context = require('./context.js');
 
@@ -19,7 +20,14 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile', gulp.series('generate-components', 'bundler-config', function() {
+gulp.task('transpile-npm', function() {
+    return gulp.src(SRC)
+        .pipe(compressionPipes.removeDebug())
+        .pipe(babel())
+        .pipe(gulp.dest(context.TRANSPILED_NPM_PATH));
+});
+
+gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-npm', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
