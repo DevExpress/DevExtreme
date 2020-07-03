@@ -34,9 +34,11 @@ function getTsConfig(filename) {
 
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
-generator.defaultOptionsModule = 'js/core/options/utils';
-generator.jqueryComponentRegistratorModule = 'js/core/component_registrator';
-generator.jqueryBaseComponentModule = 'js/renovation/preact-wrapper/component';
+generator.options = {
+    defaultOptionsModule: 'js/core/options/utils',
+    jqueryComponentRegistratorModule: 'js/core/component_registrator',
+    jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+};
 
 module.exports = {
   process(src, filename, config) {

@@ -4,7 +4,6 @@ import $ from '../../core/renderer';
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import { triggerShownEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
 import Form from '../form';
@@ -182,17 +181,6 @@ class RecurrenceEditor extends Editor {
 
         this._prepareEditors();
         this._renderEditors(this._$container);
-
-        this._renderContainerVisibility(this.option('value'));
-    }
-
-    _renderContainerVisibility(value) {
-        if(value) {
-            this._$container.show();
-            triggerShownEvent(this._$container);
-        } else {
-            this._$container.hide();
-        }
     }
 
     getEditorByField(fieldName) {
@@ -463,9 +451,7 @@ class RecurrenceEditor extends Editor {
         return this._recurrenceForm;
     }
 
-    _changeValueByVisibility(value) {
-        this._renderContainerVisibility(value);
-
+    changeValueByVisibility(value) {
         if(value) {
             if(!this.option('value')) {
                 this._handleDefaults();
@@ -715,10 +701,6 @@ class RecurrenceEditor extends Editor {
                 if(this._$repeatDateEditor) {
                     this._repeatUntilDate.option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
                 }
-                break;
-            case 'visible':
-                this._changeValueByVisibility(args.value);
-                super._optionChanged(args);
                 break;
             default:
                 super._optionChanged(args);
