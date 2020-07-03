@@ -57,12 +57,12 @@ module('Virtual Scrolling model', {
 
     test('State if scrolling Down', function(assert) {
         [
-            { top: 10, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
-            { top: 13, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
-            { top: 66, topVirtualRowCount: 2, bottomVirtualRowCount: 92, rowCount: 6 },
-            { top: 120, topVirtualRowCount: 3, bottomVirtualRowCount: 91, rowCount: 6 },
+            { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 },
+            { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 },
+            { top: 66, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
+            { top: 120, topVirtualRowCount: 2, bottomVirtualRowCount: 92, rowCount: 6 },
             { top: 150, topVirtualRowCount: 3, bottomVirtualRowCount: 91, rowCount: 6 },
-            { top: 3980, topVirtualRowCount: 80, bottomVirtualRowCount: 14, rowCount: 6 },
+            { top: 3980, topVirtualRowCount: 79, bottomVirtualRowCount: 15, rowCount: 6 },
             { top: 4950, topVirtualRowCount: 99, bottomVirtualRowCount: 0, rowCount: 1 }
         ].forEach(step => {
             this.scrollDown(step.top);
@@ -82,12 +82,12 @@ module('Virtual Scrolling model', {
     test('State if scrolling Up', function(assert) {
         [
             { top: 4950, topVirtualRowCount: 99, bottomVirtualRowCount: 0, rowCount: 1 },
-            { top: 3980, topVirtualRowCount: 80, bottomVirtualRowCount: 14, rowCount: 6 },
+            { top: 3980, topVirtualRowCount: 79, bottomVirtualRowCount: 15, rowCount: 6 },
             { top: 150, topVirtualRowCount: 3, bottomVirtualRowCount: 91, rowCount: 6 },
-            { top: 120, topVirtualRowCount: 3, bottomVirtualRowCount: 91, rowCount: 6 },
-            { top: 66, topVirtualRowCount: 2, bottomVirtualRowCount: 92, rowCount: 6 },
-            { top: 13, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
-            { top: 10, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 }
+            { top: 120, topVirtualRowCount: 2, bottomVirtualRowCount: 92, rowCount: 6 },
+            { top: 66, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
+            { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 },
+            { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 }
         ].forEach(step => {
             this.scrollDown(step.top);
 
@@ -105,12 +105,12 @@ module('Virtual Scrolling model', {
 
     test('Layout map virtual heights', function(assert) {
         [
-            { top: 10, bottomVirtualRowHeight: 4650, topVirtualRowHeight: 50 },
-            { top: 13, bottomVirtualRowHeight: 4650, topVirtualRowHeight: 50 },
-            { top: 66, bottomVirtualRowHeight: 4600, topVirtualRowHeight: 100 },
-            { top: 120, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 150 },
+            { top: 10, bottomVirtualRowHeight: 4700, topVirtualRowHeight: 0 },
+            { top: 13, bottomVirtualRowHeight: 4700, topVirtualRowHeight: 0 },
+            { top: 66, bottomVirtualRowHeight: 4650, topVirtualRowHeight: 50 },
+            { top: 120, bottomVirtualRowHeight: 4600, topVirtualRowHeight: 100 },
             { top: 150, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 150 },
-            { top: 3980, bottomVirtualRowHeight: 700, topVirtualRowHeight: 4000 },
+            { top: 3980, bottomVirtualRowHeight: 750, topVirtualRowHeight: 3950 },
             { top: 4950, bottomVirtualRowHeight: 0, topVirtualRowHeight: 4950 }
         ].forEach(step => {
             this.scrollDown(step.top);

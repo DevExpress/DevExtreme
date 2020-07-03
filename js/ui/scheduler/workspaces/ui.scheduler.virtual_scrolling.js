@@ -91,14 +91,14 @@ export default class VirtualScrolling {
         const rowHeight = this.getRowHeight();
 
         state.scrollOffset = scrollOffset;
-        state.startIndex = Math.ceil(top / rowHeight);
+        state.startIndex = Math.floor(top / rowHeight);
 
         if(currentStartIndex !== state.startIndex) {
             const pageSize = state.pageSize;
             const groupCount = workspace._getGroupCount();
 
             const totalRowCount = workspace._getTotalRowCount(groupCount);
-            const topVirtualRowCount = Math.ceil(top / rowHeight);
+            const topVirtualRowCount = Math.floor(top / rowHeight);
             const deltaRowCount = totalRowCount - topVirtualRowCount;
             const rowCount = deltaRowCount >= pageSize ? pageSize : deltaRowCount;
             const bottomVirtualRowCount = totalRowCount - topVirtualRowCount - rowCount;
