@@ -307,6 +307,10 @@ const VirtualScrollingRowsViewExtender = (function() {
                 that.scrollToPage(dataController.pageIndex());
             });
 
+            dataController.stateLoaded?.add(() => {
+                that.scrollToPage(dataController.pageIndex());
+            });
+
             if(!that.option('legacyRendering') && dataController.pageIndex() > 0) {
                 var resizeHandler = function() {
                     that.resizeCompleted.remove(resizeHandler);
@@ -492,18 +496,10 @@ const VirtualScrollingRowsViewExtender = (function() {
                     that._addVirtualRow($(this), isFixed, 'bottom', bottom);
                     that._isFixedTableRendering = false;
                 });
-
-                !isRender && that._updateScrollTopPosition(top);
             } else {
                 deferUpdate(function() {
                     that._updateContentPositionCore();
                 });
-            }
-        },
-
-        _updateScrollTopPosition: function(top) {
-            if(this._scrollTop < top && !this._isScrollByEvent && this._dataController.pageIndex() > 0) {
-                this.scrollTo({ top: top, left: this._scrollLeft });
             }
         },
 
@@ -541,8 +537,6 @@ const VirtualScrollingRowsViewExtender = (function() {
                         that._contentHeight = contentHeight;
                         that._renderVirtualTableContent(virtualTable, contentHeight);
                     }
-
-                    that._updateScrollTopPosition(top);
                 });
             }
         },

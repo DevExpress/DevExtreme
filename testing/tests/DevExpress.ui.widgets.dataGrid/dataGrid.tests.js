@@ -45,9 +45,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
-import 'generic_light.css!';
-
 import '../../../node_modules/underscore/underscore-min.js';
 import '../../../node_modules/jsrender/jsrender.min.js';
 
@@ -9349,7 +9346,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             data.push({ id: i + 1 });
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
+            height: 500,
             dataSource: data,
             loadingTimeout: undefined,
             scrolling: {
