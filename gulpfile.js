@@ -61,7 +61,7 @@ function createDefaultBatch() {
     if(!TEST_CI) {
         tasks.push('npm', 'themebuilder-npm');
     }
-    tasks.push('check-rrule-license-header');
+
     return gulp.series(tasks);
 }
 

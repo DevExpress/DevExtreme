@@ -201,7 +201,7 @@ function run_test_license {
     npm i
     npm run build
 
-    npx gulp check-rrule-license-header
+    npx gulp check-license-notices
 }
 
 function start_runner_watchdog {
