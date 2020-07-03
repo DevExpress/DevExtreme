@@ -6,7 +6,6 @@ import {
   OneWay,
   TwoWay,
   Ref,
-  Event,
   Effect,
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,26 +17,17 @@ import Widget from './widget';
 import BaseComponent from './preact-wrapper/check_box';
 import BaseWidgetProps from './utils/base-props';
 
-const CHECKBOX_CLASS = 'dx-checkbox';
-const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
-const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';
-const CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container';
-const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
-const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
-const CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate';
-const READ_ONLY_STATE_CLASS = 'dx-state-readonly';
-
 const getCssClasses = (model: CheckBoxProps, value: boolean): string => {
   const { text, readOnly } = model;
-  const classNames = [CHECKBOX_CLASS];
+  const classNames = ['dx-checkbox'];
 
   const checked = value;
   const indeterminate = checked === undefined;
 
-  readOnly && classNames.push(READ_ONLY_STATE_CLASS);
-  checked && classNames.push(CHECKBOX_CHECKED_CLASS);
-  indeterminate && classNames.push(CHECKBOX_INDETERMINATE_CLASS);
-  text && classNames.push(CHECKBOX_HAS_TEXT_CLASS);
+  readOnly && classNames.push('dx-state-readonly');
+  checked && classNames.push('dx-checkbox-checked');
+  indeterminate && classNames.push('dx-checkbox-indeterminate');
+  text && classNames.push('dx-checkbox-has-text');
 
   return classNames.join(' ');
 };
@@ -77,9 +67,9 @@ export const viewFunction = (viewModel: CheckBox): any => {
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
-      <div className={CHECKBOX_CONTAINER_CLASS} ref={viewModel.contentRef}>
-        <span className={CHECKBOX_ICON_CLASS} />
-        {text && (<span className={CHECKBOX_TEXT_CLASS}>{text}</span>)}
+      <div className="dx-checkbox-container" ref={viewModel.contentRef}>
+        <span className="dx-checkbox-icon" />
+        {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
