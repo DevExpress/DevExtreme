@@ -15,6 +15,7 @@ import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import InkRipple from './ink-ripple';
 import Widget from './widget';
+import BaseComponent from './preact-wrapper/check_box';
 import BaseWidgetProps from './utils/base-props';
 
 const CHECKBOX_CLASS = 'dx-checkbox';
@@ -99,10 +100,6 @@ export class CheckBoxProps extends BaseWidgetProps {
   @TwoWay() value?: boolean = false;
 
   @OneWay() useInkRipple?: boolean = false;
-
-  @Event({
-    actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
-  }) onValueChanged?: (e: object) => void = (() => {});
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
@@ -113,7 +110,10 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 
 @Component({
   defaultOptionRules,
-  jQuery: { register: true },
+  jQuery: {
+    component: BaseComponent,
+    register: true,
+  },
   view: viewFunction,
 })
 export default class CheckBox extends JSXComponent(CheckBoxProps) {
@@ -149,17 +149,9 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
     useInkRipple && this.inkRippleRef.hideWave({ element: this.widgetRef, event });
   }
 
-  onWidgetClick(event: Event): void {
-    const { value, onValueChanged } = this.props;
-
+  onWidgetClick(): void {
+    const { value } = this.props;
     this.props.value = !value;
-
-    onValueChanged?.({
-      event,
-      element: this.submitInputRef.parentNode,
-      previousValue: value,
-      value: !value,
-    });
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -174,7 +166,7 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
 
     if (keyName === 'space' || which === 'space') {
       originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      this.onWidgetClick();
     }
 
     return undefined;

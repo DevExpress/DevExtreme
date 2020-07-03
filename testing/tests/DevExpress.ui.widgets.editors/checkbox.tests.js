@@ -83,7 +83,7 @@ QUnit.module_r('dxCheckBox', 'render', {}, function() {
         assert.equal(checkboxContent.find(ICON_SELECTOR).length, 1, 'checkbox has an icon');
     });
 
-    QUnit.test('init with default options', function(assert) {
+    QUnit.skip('init with default options', function(assert) {
         const element = $('#checkbox').dxCheckBox();
         const instance = element.dxCheckBox('instance');
 

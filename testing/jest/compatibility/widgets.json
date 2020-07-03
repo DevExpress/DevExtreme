@@ -89,6 +89,7 @@
     "decorator": {
       "defaultOptionRules": "defaultOptionRules",
       "jQuery": {
+        "component": "BaseComponent",
         "register": "true"
       },
       "view": "viewFunction"
@@ -102,7 +103,6 @@
         "name",
         "value",
         "useInkRipple",
-        "onValueChanged",
         "defaultValue",
         "valueChange",
         "accessKey",
@@ -141,7 +141,6 @@
       ],
       "template": [],
       "event": [
-        "onValueChanged",
         "valueChange",
         "onClick",
         "onContentReady",
