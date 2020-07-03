@@ -19,14 +19,15 @@ const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
 const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const width = visibility === true ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
     const colSpan = visibility === true ? 1 : 2;
-    const css = visibility === true ? 'block' : 'none';
     const form = instance.getAppointmentDetailsForm();
-    const recurrenceEditor = form.getEditor('recurrenceRule');
-    assert.equal(recurrenceEditor.option('visible'),
-        visibility, `Container is ${visibility === true ? 'visible' : 'not visible'}`);
-    assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group');
-    assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup');
-    assert.equal(recurrenceEditor._$container.css('display'), css, 'correct css style');
+
+    assert.equal(form.itemOption('recurrenceRule').visible,
+        visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
+
+    assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');
+    assert.equal(form.option('items')[1].colSpan, colSpan, 'colSpan of recurrence group is correct');
+
+    assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup is correct');
 };
 
 const createInstance = function(options) {
@@ -512,7 +513,6 @@ if(isDesktopEnvironment()) {
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'a' });
         checkFormWithRecurrenceEditor(assert, scheduler.instance, false);
         scheduler.instance.getAppointmentPopup().hide();
-
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'b', recurrenceRule: 'FREQ=WEEKLY' });
         $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
         checkFormWithRecurrenceEditor(assert, scheduler.instance, true);

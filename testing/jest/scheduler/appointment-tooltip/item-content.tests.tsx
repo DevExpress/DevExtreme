@@ -1,19 +1,19 @@
-import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
 
 describe('TooltipItemContent', () => {
-  describe('View', () => {
+  describe('Render', () => {
     const defaultProps = {
       text: 'text',
       formattedDate: 'formattedDate',
     };
+    const render = (viewModel) => shallow(TooltipItemContentView({
+      ...viewModel,
+      props: { ...defaultProps, ...viewModel.props },
+    } as any) as any);
+
     it('should combine `className` with predefined classes', () => {
-      const tree = shallow(
-        <TooltipItemContentView
-          props={{ ...defaultProps, className: 'custom-class' }}
-        />,
-      );
+      const tree = render({ props: { className: 'custom-class' } });
 
       expect(tree.hasClass('dx-tooltip-appointment-item-content'))
         .toBe(true);
@@ -22,21 +22,14 @@ describe('TooltipItemContent', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tree = shallow(
-        <TooltipItemContentView
-          restAttributes={{ customAttribute: 'customAttribute' }}
-          props={defaultProps}
-        />,
-      );
+      const tree = render({ restAttributes: { customAttribute: 'customAttribute' } });
 
       expect(tree.prop('customAttribute'))
         .toBe('customAttribute');
     });
 
     it('should render components correctly', () => {
-      const tree = shallow(
-        <TooltipItemContentView props={defaultProps} />,
-      );
+      const tree = render({});
 
       expect(tree.is('.dx-tooltip-appointment-item-content'))
         .toEqual(true);

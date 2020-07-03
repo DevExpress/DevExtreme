@@ -5,8 +5,6 @@ import {
   Slot,
   OneWay,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 
 export const viewFunction = (viewModel: ScrollView) => (
   <div className={viewModel.cssClasses}>

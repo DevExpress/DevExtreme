@@ -2914,9 +2914,42 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     this.instance.showAppointmentPopup(tasks[0]);
 
     form = this.instance.getAppointmentDetailsForm();
-    const recurrenceEditor = form.getEditor('recurrenceRule');
 
-    assert.equal(recurrenceEditor._$container.css('display'), 'none', 'Recurrence editor is hidden. Popup is correct');
+    assert.equal(form.itemOption('recurrenceRule').visible, false, 'Recurrence editor is hidden. Popup is correct');
+});
+
+QUnit.test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {
+    const tasks = [{
+        text: 'Recurrence task',
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
+    }];
+
+    this.createInstance({
+        dataSource: tasks,
+        currentDate: new Date(2017, 2, 13),
+        currentView: 'month',
+        recurrenceEditMode: 'series',
+        views: ['month'],
+        startDateExpr: 'start',
+        endDateExpr: 'end'
+    });
+
+    this.scheduler.appointments.dblclick(0);
+
+    const form = this.instance.getAppointmentDetailsForm();
+    const repeatSwitch = form.getEditor('repeat');
+    repeatSwitch.option('value', false);
+
+    this.scheduler.appointmentPopup.clickDoneButton();
+
+    assert.deepEqual(this.instance.option('dataSource')[0], {
+        text: 'Recurrence task',
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        recurrenceRule: ''
+    }, 'Appointment was updated correctly');
 });
 
 QUnit.test('Scheduler shouldn\'t throw error at deferred appointment loading (T518327)', function(assert) {

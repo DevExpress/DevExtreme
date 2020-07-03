@@ -1,4 +1,4 @@
-import { isDefined, isString, isDate } from '../../core/utils/type';
+import { isDefined, isString, isDate, isObject } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
 import { extend } from '../../core/utils/extend';
@@ -14,6 +14,9 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 const Export = {
     getFullOptions: function(options) {
         const fullOptions = extend({}, options);
+        if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
+            throw Error('The "worksheet" field must contain an object.');
+        }
         if(!isDefined(fullOptions.topLeftCell)) {
             fullOptions.topLeftCell = { row: 1, column: 1 };
         } else if(isString(fullOptions.topLeftCell)) {
@@ -107,8 +110,6 @@ const Export = {
     },
 
     export: function(options, privateOptions) {
-        if(!isDefined(options)) return;
-
         const {
             customizeCell,
             component,

@@ -30,9 +30,12 @@ const knownErrors = [
 
 function generatePreactComponents() {
     const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
-    generator.defaultOptionsModule = 'js/core/options/utils';
-    generator.jqueryComponentRegistratorModule = 'js/core/component_registrator';
-    generator.jqueryBaseComponentModule = 'js/renovation/preact-wrapper/component';
+
+    generator.options = {
+        defaultOptionsModule: 'js/core/options/utils',
+        jqueryComponentRegistratorModule: 'js/core/component_registrator',
+        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+    };
 
     return gulp.src(SRC)
         .pipe(generateComponents(generator))
