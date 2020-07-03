@@ -4,7 +4,6 @@ const gulp = require('gulp');
 const file = require('gulp-file');
 const path = require('path');
 const fs = require('fs');
-const merge = require('merge-stream');
 const { generateComponents } = require('devextreme-generator/component-compiler');
 const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('gulp-typescript');
@@ -17,8 +16,7 @@ const watch = require('gulp-watch');
 
 const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
-const BUNDLES_PARTS = 'js/bundles/modules/parts/';
-const COMPAT_TESTS_PARTS = 'testing/jest/compatibility/';
+const COMPAT_TESTS_PARTS = 'testing/tests/renovation/commonParts/';
 
 const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
@@ -68,26 +66,14 @@ function processRenovationMeta() {
             meta.decorator.jQuery.register === 'true' &&
             fs.existsSync(meta.path));
 
-    let content = '/* !!! This file is auto-generated. Any modification will be lost! */\n\n' +
-    '/// BUNDLER_PARTS\n/* Renovation (dx.module-renovation.js) */\n\n' +
-    'const renovation = require(\'../../../bundles/modules/renovation\');\n';
-    content += widgetsMeta.map(meta =>
-        `renovation.dxr${meta.name} = require('${path.relative(BUNDLES_PARTS, meta.path).replace(/\\/g, '/').replace(/\.[\w]+$/, '.j')}').default;`
-    ).join('\n');
-    content += '\n/// BUNDLER_PARTS_END\nmodule.exports = renovation;\n';
-
     const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
+        widgetName: `dxr${meta.name}`,
         ...meta,
         path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
     })), null, 2);
 
-    return merge(
-        file('widgets-renovation.js', content, { src: true })
-            .pipe(gulp.dest(BUNDLES_PARTS)),
-
-        file('widgets.json', metaJson, { src: true })
-            .pipe(gulp.dest(COMPAT_TESTS_PARTS))
-    );
+    return file('widgets.json', metaJson, { src: true })
+        .pipe(gulp.dest(COMPAT_TESTS_PARTS));
 }
 gulp.task('generate-components', gulp.series(generatePreactComponents, processRenovationMeta));
 
