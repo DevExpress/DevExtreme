@@ -54,6 +54,8 @@ export const viewFunction = (viewModel: CheckBox): any => {
       hint={viewModel.props.hint}
       hoverStateEnabled={viewModel.props.hoverStateEnabled}
       onActive={viewModel.onActive}
+      onFocusin={viewModel.onFocusin}
+      onFocusout={viewModel.onFocusout}
       aria={viewModel.aria}
       onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
@@ -67,12 +69,12 @@ export const viewFunction = (viewModel: CheckBox): any => {
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
-      <div className="dx-checkbox-container" ref={viewModel.contentRef}>
-        <span className="dx-checkbox-icon" />
+      <div className="dx-checkbox-container">
+        <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.props.useInkRipple
-                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
+                && <InkRipple config={inkRippleConfig()} ref={viewModel.inkRippleRef} />}
     </Widget>
   );
 };
@@ -112,7 +114,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export default class CheckBox extends JSXComponent(CheckBoxProps) {
-  @Ref() contentRef!: HTMLDivElement;
+  @Ref() iconRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
 
@@ -135,13 +137,25 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.showWave({ element: this.widgetRef, event });
+    useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 1 });
   }
 
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.hideWave({ element: this.widgetRef, event });
+    useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 1 });
+  }
+
+  onFocusin(event: Event): void {
+    const { useInkRipple } = this.props;
+
+    useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 0 });
+  }
+
+  onFocusout(event: Event): void {
+    const { useInkRipple } = this.props;
+
+    useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 0 });
   }
 
   onWidgetClick(): void {

@@ -90,6 +90,10 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
+  @Event() onFocusin?: (e: Event) => void;
+
+  @Event() onFocusout?: (e: Event) => void;
+
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   @Event() onKeyboardHandled?: (args: any) => any | undefined;
 
@@ -195,14 +199,16 @@ export default class Widget extends JSXComponent(WidgetProps) {
   @Effect()
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   focusEffect(): any {
-    const { disabled, focusStateEnabled, name } = this.props;
+    const {
+      disabled, focusStateEnabled, name, onFocusin, onFocusout,
+    } = this.props;
     const namespace = `${name}Focus`;
     const isFocusable = focusStateEnabled && !disabled;
 
     if (isFocusable) {
       focus.on(this.widgetRef,
-        (e) => { !e.isDefaultPrevented() && (this.focused = true); },
-        (e) => { !e.isDefaultPrevented() && (this.focused = false); },
+        (e) => { onFocusin?.(e); !e.isDefaultPrevented() && (this.focused = true); },
+        (e) => { onFocusout?.(e); !e.isDefaultPrevented() && (this.focused = false); },
         {
           isFocusable: focusable,
           namespace,
