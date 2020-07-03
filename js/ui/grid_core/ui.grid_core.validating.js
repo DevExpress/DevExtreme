@@ -521,7 +521,7 @@ module.exports = {
                     }
                 },
 
-                _afterSaveEditData: function() {
+                _afterSaveEditData: function(cancel) {
                     const that = this;
                     let $firstErrorRow;
 
@@ -535,6 +535,16 @@ module.exports = {
                             scrollable.update();
                             scrollable.scrollToElement($firstErrorRow);
                         }
+                    }
+
+                    if(cancel && this.getEditMode() === EDIT_MODE_CELL && this._needUpdateRow()) {
+                        const editRowIndex = this.getEditRowIndex();
+
+                        this._dataController.updateItems({
+                            changeType: 'update',
+                            rowIndices: [editRowIndex]
+                        });
+                        this._focusEditingCell();
                     }
                 },
 
