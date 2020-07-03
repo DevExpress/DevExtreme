@@ -59,8 +59,9 @@ function createMainBatch() {
 function createDefaultBatch() {
     const tasks = [ 'clean', 'localization', createMainBatch()];
     if(!TEST_CI) {
-        tasks.push('npm', 'themebuilder-npm', 'check-rrule-license-header');
+        tasks.push('npm', 'themebuilder-npm');
     }
+    tasks.push('check-rrule-license-header');
     return gulp.series(tasks);
 }
 
