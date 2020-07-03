@@ -23,7 +23,7 @@ const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
 
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 
-const renderSummaryCell = function(cell, options) {
+export const renderSummaryCell = function(cell, options) {
     const $cell = $(cell);
     const column = options.column;
     const summaryItems = options.summaryItems;
@@ -370,8 +370,6 @@ const SummaryDataSourceAdapterClientExtender = (function() {
 
 dataSourceAdapter.extend(SummaryDataSourceAdapterExtender);
 dataSourceAdapter.extend(SummaryDataSourceAdapterClientExtender);
-
-export { renderSummaryCell };
 
 gridCore.registerModule('summary', {
     defaultOptions: function() {

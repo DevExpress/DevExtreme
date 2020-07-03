@@ -56,7 +56,7 @@ function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
     };
 }
 
-function Crosshair(renderer, options, params, group) {
+export function Crosshair(renderer, options, params, group) {
     const that = this;
     that._renderer = renderer;
     that._crosshairGroup = group;
@@ -305,5 +305,3 @@ Crosshair.prototype = {
         }
     }
 };
-
-export { Crosshair };

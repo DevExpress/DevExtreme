@@ -140,11 +140,13 @@ const createTextElementHiddenCopy = function(element, text, options) {
     });
 };
 
-export { resetActiveElement };
-export { extractTemplateMarkup }; // TODO: extract
-export { normalizeTemplateElement }; // TODO: extract
-export { clearSelection };
-export { closestCommonParent };
-export { clipboardText };
-export { contains };
-export { createTextElementHiddenCopy }; // TODO: extract
+export {
+    resetActiveElement,
+    extractTemplateMarkup, // TODO: extract
+    normalizeTemplateElement, // TODO: extract
+    clearSelection,
+    closestCommonParent,
+    clipboardText,
+    contains,
+    createTextElementHiddenCopy // TODO: extract
+};

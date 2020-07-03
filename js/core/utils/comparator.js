@@ -6,7 +6,7 @@ const hasNegation = function(oldValue, newValue) {
     return (1 / oldValue) === (1 / newValue);
 };
 
-const equals = function(oldValue, newValue) {
+export const equals = function(oldValue, newValue) {
     oldValue = toComparable(oldValue, true);
     newValue = toComparable(newValue, true);
 
@@ -30,5 +30,3 @@ const equals = function(oldValue, newValue) {
 
     return false;
 };
-
-export { equals };

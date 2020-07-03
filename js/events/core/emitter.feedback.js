@@ -171,5 +171,7 @@ registerEmitter({
 });
 
 export const lock = FeedbackEmitter.lock;
-export { ACTIVE_EVENT_NAME as active };
-export { INACTIVE_EVENT_NAME as inactive };
+export {
+    ACTIVE_EVENT_NAME as active,
+    INACTIVE_EVENT_NAME as inactive
+};

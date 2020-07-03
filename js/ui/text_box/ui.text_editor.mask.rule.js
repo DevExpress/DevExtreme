@@ -60,7 +60,7 @@ const BaseMaskRule = Class.inherit({
     isValid: noop
 });
 
-const EmptyMaskRule = BaseMaskRule.inherit({
+export const EmptyMaskRule = BaseMaskRule.inherit({
 
     next: noop,
 
@@ -94,7 +94,7 @@ const EmptyMaskRule = BaseMaskRule.inherit({
 
 });
 
-const MaskRule = BaseMaskRule.inherit({
+export const MaskRule = BaseMaskRule.inherit({
 
     text: function() {
         return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
@@ -217,7 +217,7 @@ const MaskRule = BaseMaskRule.inherit({
 
 });
 
-const StubMaskRule = MaskRule.inherit({
+export const StubMaskRule = MaskRule.inherit({
 
     value: function() {
         return this.next().value();
@@ -285,7 +285,3 @@ const StubMaskRule = MaskRule.inherit({
     }
 
 });
-
-export { MaskRule };
-export { StubMaskRule };
-export { EmptyMaskRule };

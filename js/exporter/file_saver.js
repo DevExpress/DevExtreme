@@ -20,7 +20,7 @@ const FILE_EXTESIONS = {
     PDF: 'pdf'
 };
 
-const MIME_TYPES = {
+export const MIME_TYPES = {
     CSS: 'text/css',
     EXCEL: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     PNG: 'image/png',
@@ -166,5 +166,3 @@ export const fileSaver = {
         }
     }
 };
-
-export { MIME_TYPES };

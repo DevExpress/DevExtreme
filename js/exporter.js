@@ -47,9 +47,10 @@ function _export(data, options, getData) {
     return new Deferred().resolve();
 }
 
-export { _export as export };
-
-export { fileSaver };
+export {
+    _export as export,
+    fileSaver
+};
 
 export const excel = {
     ///#DEBUG

@@ -541,10 +541,9 @@ const rangeBar = BaseRangeBar.inherit({
         return { min: minBound, max: maxBound, indent: indent };
     }
 });
-
-export { rangeBar as _default };
 /* eslint-disable spellcheck/spell-checker */
 export {
+    rangeBar as _default,
     rectangle,
     rhombus,
     circle,

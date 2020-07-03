@@ -102,7 +102,7 @@ const BounceAnimator = InertiaAnimator.inherit({
     }
 });
 
-const Scroller = Class.inherit({
+export const Scroller = Class.inherit({
 
     ctor: function(options) {
         this._initOptions(options);
@@ -548,7 +548,7 @@ const Scroller = Class.inherit({
 let hoveredScrollable;
 let activeScrollable;
 
-const SimulatedStrategy = Class.inherit({
+export const SimulatedStrategy = Class.inherit({
 
     ctor: function(scrollable) {
         this._init(scrollable);
@@ -1102,15 +1102,11 @@ const SimulatedStrategy = Class.inherit({
     }
 
 });
-
-export { SimulatedStrategy };
-export { Scroller };
-
 ///#DEBUG
-export { ACCELERATION };
-
-export { MIN_VELOCITY_LIMIT };
-export { FRAME_DURATION };
-
-export { SCROLL_LINE_HEIGHT };
+export {
+    ACCELERATION,
+    MIN_VELOCITY_LIMIT,
+    FRAME_DURATION,
+    SCROLL_LINE_HEIGHT
+};
 ///#ENDDEBUG

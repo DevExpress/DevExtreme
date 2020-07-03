@@ -306,6 +306,8 @@ const getParser = function(format, dateParts) {
     };
 };
 
-export { getParser };
-export { getRegExpInfo };
-export { getPatternSetters };
+export {
+    getParser,
+    getRegExpInfo,
+    getPatternSetters
+};

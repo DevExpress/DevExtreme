@@ -466,7 +466,7 @@ function verifyData(source, incidentOccurred) {
     return data;
 }
 
-function validateData(data, groupsData, incidentOccurred, options) {
+export function validateData(data, groupsData, incidentOccurred, options) {
     data = verifyData(data, incidentOccurred);
 
     groupsData.argumentType = groupsData.argumentAxisType = null;
@@ -486,5 +486,3 @@ function validateData(data, groupsData, incidentOccurred, options) {
 
     return dataByArgumentFields;
 }
-
-export { validateData };

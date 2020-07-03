@@ -141,12 +141,14 @@ const groupBy = (array, cb) => array.reduce(
     {}
 );
 
-export { isEmpty };
-export { wrapToArray };
-export { intersection };
-export { removeDuplicates };
-export { normalizeIndexes };
-export { inArray };
-export { merge };
-export { find };
-export { groupBy };
+export {
+    isEmpty,
+    wrapToArray,
+    intersection,
+    removeDuplicates,
+    normalizeIndexes,
+    inArray,
+    merge,
+    find,
+    groupBy
+};

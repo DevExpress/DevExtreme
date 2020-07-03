@@ -387,7 +387,7 @@ function adjustBubbleSeriesDimensions() {
     });
 }
 
-function SeriesFamily(options) {
+export function SeriesFamily(options) {
     ///#DEBUG
     debug.assert(options.type, 'type was not passed or empty');
     ///#ENDDEBUG
@@ -448,9 +448,6 @@ function SeriesFamily(options) {
             break;
     }
 }
-
-
-export { SeriesFamily };
 
 SeriesFamily.prototype = {
     constructor: SeriesFamily,

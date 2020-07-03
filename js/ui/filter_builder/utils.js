@@ -832,38 +832,40 @@ const renderValueText = function($container, value, customOperation) {
     }
 };
 
-export { renderValueText };
-export { isValidCondition };
-export { isEmptyGroup };
-export { getOperationFromAvailable };
-export { updateConditionByOperation };
-export { getCaptionWithParents };
-export { getItems };
-export { setGroupValue };
-export { getGroupMenuItem };
-export { getGroupValue };
-export { getAvailableOperations };
-export { removeItem };
-export { createCondition };
-export { createEmptyGroup };
-export { addItem };
-export { getField };
-export { isGroup };
-export { isCondition };
-export { getNormalizedFields };
-export { getNormalizedFilter };
-export { getGroupCriteria };
-export { convertToInnerStructure };
-export { getDefaultOperation };
-export { getCurrentValueText };
-export { getCurrentLookupValueText };
-export { getFilterOperations };
-export { getCaptionByOperation };
-export { getOperationValue };
-export { getFilterExpression };
-export { getCustomOperation };
-export { getMergedOperations };
-export { syncFilters };
-export { getMatchedConditions };
-export { filterHasField };
-export { removeFieldConditionsFromFilter };
+export {
+    renderValueText,
+    isValidCondition,
+    isEmptyGroup,
+    getOperationFromAvailable,
+    updateConditionByOperation,
+    getCaptionWithParents,
+    getItems,
+    setGroupValue,
+    getGroupMenuItem,
+    getGroupValue,
+    getAvailableOperations,
+    removeItem,
+    createCondition,
+    createEmptyGroup,
+    addItem,
+    getField,
+    isGroup,
+    isCondition,
+    getNormalizedFields,
+    getNormalizedFilter,
+    getGroupCriteria,
+    convertToInnerStructure,
+    getDefaultOperation,
+    getCurrentValueText,
+    getCurrentLookupValueText,
+    getFilterOperations,
+    getCaptionByOperation,
+    getOperationValue,
+    getFilterExpression,
+    getCustomOperation,
+    getMergedOperations,
+    syncFilters,
+    getMatchedConditions,
+    filterHasField,
+    removeFieldConditionsFromFilter
+};

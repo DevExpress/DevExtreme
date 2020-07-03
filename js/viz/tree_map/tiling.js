@@ -21,11 +21,9 @@ const directionToIndexOffsets = {};
 directionToIndexOffsets[-1] = [2, 0];
 directionToIndexOffsets[+1] = [0, 2];
 
-const getStaticSideIndex = function(rect) {
+export const getStaticSideIndex = function(rect) {
     return (rect[2] - rect[0]) < (rect[3] - rect[1]) ? 0 : 1;
 };
-
-export { getStaticSideIndex };
 
 export function buildSidesData(rect, directions, _staticSideIndex) {
     const staticSideIndex = _staticSideIndex !== undefined ? _staticSideIndex : getStaticSideIndex(rect);

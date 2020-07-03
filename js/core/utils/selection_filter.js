@@ -2,7 +2,7 @@ import { getKeyHash } from './common';
 import { equalByValue } from './common';
 import { isString, isObject } from './type';
 
-const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
+export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
     this.getLocalFilter = function(keyGetter, equalKeys, equalByReference, keyExpr) {
         equalKeys = equalKeys === undefined ? equalByValue : equalKeys;
@@ -127,5 +127,3 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         return filterExpr;
     }
 };
-
-export { SelectionFilterCreator };

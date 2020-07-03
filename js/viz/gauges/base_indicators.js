@@ -10,7 +10,7 @@ import { patchFontOptions as _patchFontOptions } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import Class from '../../core/class';
 
-const BaseElement = Class.inherit({
+export const BaseElement = Class.inherit({
     ctor: function(parameters) {
         const that = this;
         each(parameters, function(name, value) {
@@ -33,7 +33,7 @@ const BaseElement = Class.inherit({
     }
 });
 
-const BaseIndicator = BaseElement.inherit({
+export const BaseIndicator = BaseElement.inherit({
     _init: function() {
         const that = this;
         that._rootElement = that._createRoot().linkOn(that._owner, { name: 'value-indicator', after: 'core' });
@@ -203,7 +203,7 @@ function getTextCloudInfo(options) {
     };
 }
 
-const BaseTextCloudMarker = BaseIndicator.inherit({
+export const BaseTextCloudMarker = BaseIndicator.inherit({
     _move: function() {
         const that = this;
         const textCloudOptions = that._getTextCloudOptions();
@@ -269,7 +269,7 @@ const BaseTextCloudMarker = BaseIndicator.inherit({
 
 // The following is from baseRangeBar.js
 
-const BaseRangeBar = BaseIndicator.inherit({
+export const BaseRangeBar = BaseIndicator.inherit({
     _measureText: function() {
         const that = this;
         let root;
@@ -422,11 +422,6 @@ const BaseRangeBar = BaseIndicator.inherit({
         return { x: position.x, y: position.y, value: this._currentValue, color: this._options.color, offset: 0 };
     }
 });
-
-export { BaseElement };
-export { BaseIndicator };
-export { BaseTextCloudMarker };
-export { BaseRangeBar };
 
 ///#DEBUG
 export { getTextCloudInfo };

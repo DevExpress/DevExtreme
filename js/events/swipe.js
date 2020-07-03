@@ -196,6 +196,8 @@ registerEmitter({
     ]
 });
 
-export { SWIPE_EVENT as swipe };
-export { SWIPE_START_EVENT as start };
-export { SWIPE_END_EVENT as end };
+export {
+    SWIPE_EVENT as swipe,
+    SWIPE_START_EVENT as start,
+    SWIPE_END_EVENT as end
+};

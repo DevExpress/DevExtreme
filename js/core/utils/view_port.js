@@ -26,8 +26,10 @@ ready(function() {
     value('.dx-viewport');
 });
 
-export { value };
-export { changeCallback };
+export {
+    value,
+    changeCallback
+};
 
 export function originalViewPort() {
     return $originalViewPort;

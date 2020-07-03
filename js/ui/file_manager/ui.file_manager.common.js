@@ -76,7 +76,9 @@ const findItemsByKeys = (itemInfos, keys) => {
     return result;
 };
 
-export { whenSome };
-export { getDisplayFileSize };
-export { extendAttributes };
-export { findItemsByKeys };
+export {
+    whenSome,
+    getDisplayFileSize,
+    extendAttributes,
+    findItemsByKeys
+};

@@ -9,7 +9,7 @@ import { extend } from '../../core/utils/extend';
 import { BaseThemeManager } from '../core/base_theme_manager';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 
-const ThemeManager = BaseThemeManager.inherit((function() {
+export const ThemeManager = BaseThemeManager.inherit((function() {
     const ctor = function(params) {
         const that = this;
 
@@ -228,5 +228,3 @@ const ThemeManager = BaseThemeManager.inherit((function() {
         }
     };
 })());
-
-export { ThemeManager };

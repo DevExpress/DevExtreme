@@ -96,8 +96,10 @@ const isEmpty = (function() {
     };
 })();
 
-export { encodeHtml };
-export { quadToObject };
-export { stringFormat as format };
-export { replaceAll };
-export { isEmpty };
+export {
+    encodeHtml,
+    quadToObject,
+    stringFormat as format,
+    replaceAll,
+    isEmpty
+};

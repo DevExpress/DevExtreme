@@ -1,6 +1,6 @@
 import Callbacks from '../../core/utils/callbacks';
 
-function DataExchanger() {
+export function DataExchanger() {
     this._store = {};
 }
 
@@ -37,5 +37,3 @@ DataExchanger.prototype = {
         return this;
     }
 };
-
-export { DataExchanger };

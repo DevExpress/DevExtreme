@@ -342,12 +342,13 @@ registerEmitter({
 
 ///#DEBUG
 export { knownDropTargets as dropTargets };
-
 ///#ENDDEBUG
 
-export { DRAG_EVENT as move,
+export {
+    DRAG_EVENT as move,
     DRAG_START_EVENT as start,
     DRAG_END_EVENT as end,
     DRAG_ENTER_EVENT as enter,
     DRAG_LEAVE_EVENT as leave,
-    DROP_EVENT as drop };
+    DROP_EVENT as drop
+};

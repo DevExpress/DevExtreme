@@ -1,13 +1,11 @@
 import animationFrame from '../../../animation/frame';
 const noop = function() { };
-const easingFunctions = {
+export const easingFunctions = {
     easeOutCubic: function(pos, start, end) { return (pos === 1) ? end : ((1 - Math.pow((1 - pos), 3)) * (end - start) + (+start)); },
     linear: function(pos, start, end) { return (pos === 1) ? end : (pos * (end - start) + (+start)); }
 };
 
-export { easingFunctions };
-
-const animationSvgStep = {
+export const animationSvgStep = {
     segments: function(elem, params, progress, easing, currentParams) {
         const from = params.from;
         const to = params.to;
@@ -126,14 +124,13 @@ Animation.prototype = {
     }
 };
 
-function AnimationController(element) {
+export function AnimationController(element) {
     const that = this;
     that._animationCount = 0;
     that._timerId = null;
     that._animations = {};
     that.element = element;
 }
-export { AnimationController };
 
 AnimationController.prototype = {
     _loop: function() {
@@ -223,10 +220,9 @@ AnimationController.prototype = {
     }
 };
 
-export { animationSvgStep };
-
 ///#DEBUG
-export { Animation };
-
-export { noop };
+export {
+    Animation,
+    noop
+};
 ///#ENDDEBUG

@@ -80,7 +80,7 @@ function createChainExecutor() {
     return executeChain;
 }
 
-function expand(target, name, expander) {
+export function expand(target, name, expander) {
     let current = target[name];
     if(!current) {
         current = expander;
@@ -188,5 +188,3 @@ export const replaceInherit = isServerSide
 export function changes() {
     return new Flags();
 }
-
-export { expand };

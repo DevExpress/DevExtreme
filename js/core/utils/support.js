@@ -63,20 +63,22 @@ const pointerEvents = detectPointerEvent(hasProperty, pointerEnabled);
 const touchPointersPresent = !!maxTouchPoints || !!msMaxTouchPoints;
 
 ///#DEBUG
-export { detectTouchEvents };
-
-export { detectPointerEvent };
-
+export {
+    detectTouchEvents,
+    detectPointerEvent
+};
 ///#ENDDEBUG
-export { touchEvents };
+export {
+    touchEvents,
+    pointerEvents,
+    styleProp,
+    stylePropPrefix,
+    supportProp,
+    inputType
+};
 
-export { pointerEvents };
 export const touch = touchEvents || pointerEvents && touchPointersPresent;
 export const transition = callOnce(function() { return supportProp('transition'); });
 export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleProp('transition')]; });
 export const animation = callOnce(function() { return supportProp('animation'); });
 export const nativeScrolling = isNativeScrollingSupported();
-export { styleProp };
-export { stylePropPrefix };
-export { supportProp };
-export { inputType };

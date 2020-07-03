@@ -101,7 +101,7 @@ Legend.prototype = _extend(clone(_BaseLegend.prototype), {
     }
 });
 
-function LegendsControl(parameters) {
+export function LegendsControl(parameters) {
     this._params = parameters;
     this._items = [];
     parameters.container.virtualLink('legend-base');
@@ -139,8 +139,6 @@ LegendsControl.prototype = {
         params.layoutControl.resume();
     }
 };
-
-export { LegendsControl };
 
 ///#DEBUG
 const originalLegend = Legend;

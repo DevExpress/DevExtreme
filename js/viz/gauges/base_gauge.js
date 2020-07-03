@@ -6,8 +6,13 @@ const _extend = extend;
 import BaseWidget from '../core/base_widget';
 import themeManagerModule from './theme_manager';
 import Tracker from './tracker';
+import { format as _format } from '../../format_helper';
+import { plugin as exportPlugin } from '../core/export';
+import { plugin as titlePlugin } from '../core/title';
+import { plugin as tooltipPlugin } from '../core/tooltip';
+import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
 
-const dxBaseGauge = BaseWidget.inherit({
+export const dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: 'dxg',
 
     _themeSection: 'gauge',
@@ -217,11 +222,8 @@ const dxBaseGauge = BaseWidget.inherit({
     }
 });
 
-export { dxBaseGauge };
-import { format as _format } from '../../format_helper';
-
 //  TODO: find a better place for it
-const formatValue = function(value, options, extra) {
+export const formatValue = function(value, options, extra) {
     options = options || {};
     const text = _format(value, options.format);
     let formatObject;
@@ -233,14 +235,11 @@ const formatValue = function(value, options, extra) {
 };
 
 //  TODO: find a better place for it
-const getSampleText = function(translator, options) {
+export const getSampleText = function(translator, options) {
     const text1 = formatValue(translator.getDomainStart(), options);
     const text2 = formatValue(translator.getDomainEnd(), options);
     return text1.length >= text2.length ? text1 : text2;
 };
-
-export { formatValue };
-export { getSampleText };
 
 export function compareArrays(array1, array2) {
     return array1 && array2 && array1.length === array2.length && compareArraysElements(array1, array2);
@@ -266,11 +265,6 @@ function compareArraysElements(array1, array2) {
 }
 
 // PLUGINS_SECTION
-import { plugin as exportPlugin } from '../core/export';
-import { plugin as titlePlugin } from '../core/title';
-import { plugin as tooltipPlugin } from '../core/tooltip';
-import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
-
 dxBaseGauge.addPlugin(exportPlugin);
 dxBaseGauge.addPlugin(titlePlugin);
 dxBaseGauge.addPlugin(tooltipPlugin);

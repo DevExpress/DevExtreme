@@ -74,9 +74,11 @@ const captionize = function(name) {
     return captionList.join('');
 };
 
-export { dasherize };
-export { camelize };
-export { humanize };
-export { titleize };
-export { underscore };
-export { captionize };
+export {
+    dasherize,
+    camelize,
+    humanize,
+    titleize,
+    underscore,
+    captionize
+};

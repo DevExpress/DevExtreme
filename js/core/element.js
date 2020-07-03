@@ -2,13 +2,10 @@ let strategy = function(element) {
     return element && element.get(0);
 };
 
-function getPublicElement(element) {
+export function getPublicElement(element) {
     return strategy(element);
 }
 
-function setPublicElementWrapper(newStrategy) {
+export function setPublicElementWrapper(newStrategy) {
     strategy = newStrategy;
 }
-
-export { setPublicElementWrapper };
-export { getPublicElement };

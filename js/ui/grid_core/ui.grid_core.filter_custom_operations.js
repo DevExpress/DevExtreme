@@ -127,5 +127,7 @@ function noneOf(grid) {
     });
 }
 
-export { anyOf };
-export { noneOf };
+export {
+    anyOf,
+    noneOf
+};

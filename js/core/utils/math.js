@@ -144,12 +144,14 @@ function trunc(value) {
     return Math.trunc ? Math.trunc(value) : (value > 0 ? Math.floor(value) : Math.ceil(value));
 }
 
-export { sign };
-export { fitIntoRange };
-export { inRange };
-export { adjust };
-export { getPrecision };
-export { getExponent };
-export { getRoot };
-export { solveCubicEquation };
-export { trunc };
+export {
+    sign,
+    fitIntoRange,
+    inRange,
+    adjust,
+    getPrecision,
+    getExponent,
+    getRoot,
+    solveCubicEquation,
+    trunc
+};

@@ -70,7 +70,7 @@ function isNoneMode(mode) {
     return _normalizeEnum(mode) === 'none';
 }
 
-function Point(series, dataItem, options) {
+export function Point(series, dataItem, options) {
     this.fullState = NORMAL_STATE;
     this.series = series;
     this.update(dataItem, options);
@@ -85,8 +85,6 @@ function Point(series, dataItem, options) {
         dashStyle: null
     };
 }
-
-export { Point };
 
 mixins.symbolPoint = symbolPoint;
 mixins.barPoint = barPoint;

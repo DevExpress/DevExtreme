@@ -216,5 +216,7 @@ function getFormat(formatter) {
     return negativeFormat === '-' + positiveFormat ? positiveFormat : positiveFormat + ';' + negativeFormat;
 }
 
-export { getFormatter };
-export { getFormat };
+export {
+    getFormatter,
+    getFormat
+};

@@ -137,10 +137,12 @@ const parseTranslate = function(translateString) {
     return result;
 };
 
-export { move };
-export { locate };
-export { clearCache };
-export { parseTranslate };
-export { getTranslate };
-export { getTranslateCss };
-export { resetPosition };
+export {
+    move,
+    locate,
+    clearCache,
+    parseTranslate,
+    getTranslate,
+    getTranslateCss,
+    resetPosition
+};

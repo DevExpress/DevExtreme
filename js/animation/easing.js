@@ -56,7 +56,7 @@ const polynomBezier = function(x1, y1, x2, y2) {
 };
 
 let easing = {};
-const convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
+export const convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
     cssTransitionEasing = TransitionTimingFuncMap[cssTransitionEasing] || cssTransitionEasing;
 
     let coeffs = cssTransitionEasing.match(CSS_TRANSITION_EASING_REGEX);
@@ -90,6 +90,3 @@ export function setEasing(value) {
 export function getEasing(name) {
     return easing[name];
 }
-
-export { convertTransitionTimingFuncToEasing };
-

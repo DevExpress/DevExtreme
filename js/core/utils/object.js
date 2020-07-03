@@ -73,4 +73,8 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
     return target;
 };
 
-export { clone, orderEach, deepExtendArraySafe };
+export {
+    clone,
+    orderEach,
+    deepExtendArraySafe
+};

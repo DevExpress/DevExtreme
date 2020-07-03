@@ -183,8 +183,10 @@ function indexByKey(keyInfo, array, key) {
     return -1;
 }
 
-export { applyBatch };
-export { update };
-export { insert };
-export { remove };
-export { indexByKey };
+export {
+    applyBatch,
+    update,
+    insert,
+    remove,
+    indexByKey
+};

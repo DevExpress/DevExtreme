@@ -424,12 +424,14 @@ const rangeBar = BaseRangeBar.inherit({
     }
 });
 
-export { rectangleNeedle as _default };
-/* eslint-disable spellcheck/spell-checker */
 
-export { rectangleNeedle as rectangleneedle };
-export { triangleNeedle as triangleneedle };
-export { twoColorNeedle as twocolorneedle };
-export { triangleMarker as trianglemarker };
-export { textCloud as textcloud };
-export { rangeBar as rangebar };
+/* eslint-disable spellcheck/spell-checker */
+export {
+    rectangleNeedle as _default,
+    rectangleNeedle as rectangleneedle,
+    triangleNeedle as triangleneedle,
+    twoColorNeedle as twocolorneedle,
+    triangleMarker as trianglemarker,
+    textCloud as textcloud,
+    rangeBar as rangebar
+};

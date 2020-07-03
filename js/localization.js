@@ -16,9 +16,11 @@ export const formatNumber = number.format.bind(number);
 export const parseNumber = number.parse.bind(number);
 export const formatDate = date.format.bind(date);
 export const parseDate = date.parse.bind(date);
-export { message };
-export { number };
-export { date };
+export {
+    message,
+    number,
+    date
+};
 
 export function disableIntl() {
     if(number.engine() === 'intl') {

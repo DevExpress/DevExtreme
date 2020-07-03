@@ -191,7 +191,7 @@ function applyLayout(canvas, items) {
     }
 }
 
-function LayoutControl() {
+export function LayoutControl() {
     const that = this;
     that._items = [];
     that._suspended = 0;
@@ -244,5 +244,3 @@ LayoutControl.prototype = {
         }
     }
 };
-
-export { LayoutControl };

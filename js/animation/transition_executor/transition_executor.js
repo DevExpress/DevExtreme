@@ -16,7 +16,7 @@ const directionPostfixes = {
 };
 const DX_ANIMATING_CLASS = 'dx-animating';
 
-const TransitionExecutor = Class.inherit({
+export const TransitionExecutor = Class.inherit({
     ctor: function() {
         this._accumulatedDelays = {
             enter: 0,
@@ -175,5 +175,3 @@ const TransitionExecutor = Class.inherit({
     }
 
 });
-
-export { TransitionExecutor };

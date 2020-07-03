@@ -537,9 +537,9 @@ export function createMockSummaryCell(descriptions, fields, indices) {
 }
 
 ///#DEBUG
-export { SummaryCell as Cell };
-
-export { summaryDictionary };
-
-export { getExpression };
+export {
+    SummaryCell as Cell,
+    summaryDictionary,
+    getExpression
+};
 ///#ENDDEBUG

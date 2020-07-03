@@ -9,7 +9,7 @@ import support from '../../core/utils/support';
 import { styleProp } from '../../core/utils/style';
 import devices from '../../core/devices';
 
-const initMobileViewport = function(options) {
+export const initMobileViewport = function(options) {
     options = extend({}, options);
     let realDevice = devices.real();
     const allowZoom = options.allowZoom;
@@ -91,5 +91,3 @@ const initMobileViewport = function(options) {
         });
     }
 };
-
-export { initMobileViewport };

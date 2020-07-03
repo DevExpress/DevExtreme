@@ -195,6 +195,8 @@ const toComparable = function(value, caseSensitive) {
     return value;
 };
 
-export { compileGetter };
-export { compileSetter };
-export { toComparable };
+export {
+    compileGetter,
+    compileSetter,
+    toComparable
+};

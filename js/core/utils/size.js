@@ -139,10 +139,12 @@ const getVisibleHeight = function(element) {
     return 0;
 };
 
-export { getSize };
-export { getElementBoxParams };
-export { addOffsetToMaxHeight };
-export { addOffsetToMinHeight };
-export { getVerticalOffsets };
-export { getVisibleHeight };
-export { parseHeight };
+export {
+    getSize,
+    getElementBoxParams,
+    addOffsetToMaxHeight,
+    addOffsetToMinHeight,
+    getVerticalOffsets,
+    getVisibleHeight,
+    parseHeight
+};

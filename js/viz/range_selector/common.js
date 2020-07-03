@@ -1,10 +1,10 @@
 import { smartFormatter as _format } from '../axes/smart_formatter';
 import { isFunction } from '../../core/utils/type';
-const HEIGHT_COMPACT_MODE = 24;
+export const HEIGHT_COMPACT_MODE = 24;
 const POINTER_SIZE = 4;
 const EMPTY_SLIDER_MARKER_TEXT = '. . .';
 
-const utils = {
+export const utils = {
     trackerSettings: {
         fill: 'grey',
         stroke: 'grey',
@@ -12,12 +12,12 @@ const utils = {
     },
     animationSettings: { duration: 250 }
 };
-const consts = {
+export const consts = {
     emptySliderMarkerText: EMPTY_SLIDER_MARKER_TEXT,
     pointerSize: POINTER_SIZE
 };
 
-const formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type, logarithmBase) {
+export const formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type, logarithmBase) {
     const formatObject = {
         value: value,
         valueText: _format(value, {
@@ -31,8 +31,3 @@ const formatValue = function(value, formatOptions, tickIntervalsInfo, valueType,
     };
     return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
 };
-
-export { utils };
-export { consts };
-export { formatValue };
-export { HEIGHT_COMPACT_MODE };

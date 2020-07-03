@@ -107,5 +107,7 @@ const HoverEnd = Hover.inherit({
 registerEvent(HOVERSTART, new HoverStart());
 registerEvent(HOVEREND, new HoverEnd());
 
-export { HOVERSTART as start };
-export { HOVEREND as end };
+export {
+    HOVERSTART as start,
+    HOVEREND as end
+};

@@ -34,4 +34,7 @@ const getBoundingRect = (element) => {
     return rect;
 };
 
-export { getBoundingRect, getDefaultAlignment };
+export {
+    getBoundingRect,
+    getDefaultAlignment
+};

@@ -387,7 +387,8 @@ const AnimationPresetCollection = Component.inherit({
     }
 });
 
-export { AnimationPresetCollection as PresetCollection };
-
 const animationPresets = new AnimationPresetCollection();
-export { animationPresets as presets };
+export {
+    animationPresets as presets,
+    AnimationPresetCollection as PresetCollection
+};

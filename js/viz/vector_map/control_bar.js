@@ -52,7 +52,7 @@ COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] =
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_IN] = COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_OUT] = ZoomCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_DRAG] = ZoomDragCommand;
 
-function ControlBar(parameters) {
+export function ControlBar(parameters) {
     const that = this;
     that._params = parameters;
     that._createElements(parameters.renderer, parameters.container, parameters.dataKey);
@@ -404,8 +404,6 @@ ZoomDragCommand.prototype.finish = function() {
     this._owner._applyZoom();
     disposeCommand(this);
 };
-
-export { ControlBar };
 
 ///#DEBUG
 const COMMAND_TO_TYPE_MAP__ORIGINAL = COMMAND_TO_TYPE_MAP;

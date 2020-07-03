@@ -343,7 +343,7 @@ const onGroupingMenuItemClick = function(column, params) {
     }
 };
 
-const GroupingHeaderPanelExtender = (function() {
+export const GroupingHeaderPanelExtender = (function() {
     return {
         _getToolbarItems: function() {
             const items = this.callBase();
@@ -540,9 +540,6 @@ const GroupingHeaderPanelExtender = (function() {
         }
     };
 })();
-
-export { GroupingHeaderPanelExtender };
-
 
 const GroupingRowsViewExtender = (function() {
     return {

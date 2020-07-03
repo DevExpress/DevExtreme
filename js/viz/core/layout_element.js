@@ -51,5 +51,7 @@ wrapperLayoutElementPrototype.shift = function(shiftX, shiftY) {
     this._renderElement.move(_round(shiftX - bBox.x), _round(shiftY - bBox.y));
 };
 
-export { LayoutElement };
-export { WrapperLayoutElement };
+export {
+    LayoutElement,
+    WrapperLayoutElement
+};

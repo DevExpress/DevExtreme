@@ -2,7 +2,7 @@ import { fitIntoRange } from '../../core/utils/math';
 import { escapeRegExp } from '../../core/utils/common';
 import number from '../../localization/number';
 
-const getCaretBoundaries = function(text, format) {
+export const getCaretBoundaries = function(text, format) {
     if(typeof format === 'string') {
         const signParts = format.split(';');
         const sign = number.getSign(text, format);
@@ -64,7 +64,7 @@ const _trimNonNumericCharsFromEnd = function(text) {
     return text.replace(/[^0-9e]+$/, '');
 };
 
-const getCaretWithOffset = function(caret, offset) {
+export const getCaretWithOffset = function(caret, offset) {
     if(caret.start === undefined) {
         caret = { start: caret, end: caret };
     }
@@ -75,7 +75,7 @@ const getCaretWithOffset = function(caret, offset) {
     };
 };
 
-const getCaretAfterFormat = function(text, formatted, caret, format) {
+export const getCaretAfterFormat = function(text, formatted, caret, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const point = number.getDecimalSeparator();
@@ -107,14 +107,14 @@ function isSeparatorBasedString(text) {
     return text.length === 1 && !!text.match(/^[,.][0-9]*$/g);
 }
 
-const isCaretInBoundaries = function(caret, text, format) {
+export const isCaretInBoundaries = function(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const boundaries = getCaretInBoundaries(caret, text, format);
     return caret.start >= boundaries.start && caret.end <= boundaries.end;
 };
 
-function getCaretInBoundaries(caret, text, format) {
+export function getCaretInBoundaries(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const boundaries = getCaretBoundaries(text, format);
@@ -126,16 +126,9 @@ function getCaretInBoundaries(caret, text, format) {
     return adjustedCaret;
 }
 
-const getCaretOffset = function(previousText, newText, format) {
+export const getCaretOffset = function(previousText, newText, format) {
     const previousBoundaries = getCaretBoundaries(previousText, format);
     const newBoundaries = getCaretBoundaries(newText, format);
 
     return newBoundaries.start - previousBoundaries.start;
 };
-
-export { getCaretBoundaries };
-export { isCaretInBoundaries };
-export { getCaretWithOffset };
-export { getCaretInBoundaries };
-export { getCaretAfterFormat };
-export { getCaretOffset };

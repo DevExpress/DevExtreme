@@ -40,7 +40,7 @@ let Focus;
 
 setupEvents();
 
-function Tracker(parameters) {
+export function Tracker(parameters) {
     const that = this;
     that._root = parameters.root;
     that._createEventHandlers(parameters.dataKey);
@@ -462,8 +462,6 @@ Focus = function(fire) {
 };
 
 eventEmitterModule.makeEventEmitter(Tracker);
-
-export { Tracker };
 
 ///#DEBUG
 const originFocus = Focus;

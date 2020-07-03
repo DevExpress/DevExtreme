@@ -43,7 +43,7 @@ function editorTemplate(conditionInfo, container) {
     }));
 }
 
-function getConfig(caption, context) {
+export function getConfig(caption, context) {
     return {
         name: 'between',
         caption: caption,
@@ -54,5 +54,3 @@ function getConfig(caption, context) {
         notForLookup: true
     };
 }
-
-export { getConfig };
