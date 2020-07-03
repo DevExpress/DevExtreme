@@ -11,7 +11,7 @@ define(function(require) {
     if(browser.msie && parseInt(browser.version) >= 17) return;
 
     const $ = require('jquery');
-    const DATA_SOURCE_URL = 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll';
+    const DATA_SOURCE_URL = 'http://dashboard-sql19.corp.devexpress.com/MSOLAP/msmdpump.dll';
     const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
     const pivotGridDataSource = require('ui/pivot_grid/data_source');
     const XmlaStore = require('ui/pivot_grid/xmla_store');
