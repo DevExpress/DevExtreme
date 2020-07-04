@@ -711,6 +711,9 @@ const Sortable = Draggable.inherit({
         const animationConfig = this.option('animation');
         const rtlEnabled = this.option('rtlEnabled');
 
+        const animationLowerLimit = ((toIndex || -1) >= 0 ? toIndex : (prevToIndex || 0)) - 10;
+        const animationUpperLimit = animationLowerLimit + 20;
+
         for(let i = 0; i < items.length; i++) {
             const $item = $(items[i]);
             const prevPosition = prevPositions[i];
@@ -720,10 +723,19 @@ const Sortable = Draggable.inherit({
                 fx.stop($item);
                 translator.resetPosition($item);
             } else if(prevPosition !== position) {
-                fx.stop($item);
-                fx.animate($item, extend({}, animationConfig, {
-                    to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position }
-                }));
+                if(i >= animationLowerLimit && i <= animationUpperLimit) {
+                    fx.stop($item);
+                    fx.animate($item, extend({}, animationConfig, {
+                        to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position }
+                    }));
+                } else {
+                    if(isVerticalOrientation) {
+                        translator.move($item, { top: position, left: 0 });
+                    } else {
+                        translator.move($item, { top: 0, left: rtlEnabled ? -position : position });
+                    }
+
+                }
             }
         }
     },
