@@ -2011,12 +2011,12 @@ class Scheduler extends Widget {
 
     _getRecurrenceExceptionDate(exceptionStartDate, targetStartDate, startDateTimeZone) {
         exceptionStartDate = this.fire('convertDateByTimezoneBack', exceptionStartDate, startDateTimeZone);
-        const appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
+        // const appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
 
-        exceptionStartDate.setHours(appointmentStartDate.getHours(),
-            appointmentStartDate.getMinutes(),
-            appointmentStartDate.getSeconds(),
-            appointmentStartDate.getMilliseconds());
+        // exceptionStartDate.setHours(appointmentStartDate.getHours(),
+        //     appointmentStartDate.getMinutes(),
+        //     appointmentStartDate.getSeconds(),
+        //     appointmentStartDate.getMilliseconds());
 
         const timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionStartDate.getTimezoneOffset();
         exceptionStartDate = new Date(exceptionStartDate.getTime() + timezoneDiff * toMs('minute'));
