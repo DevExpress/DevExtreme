@@ -1696,4 +1696,35 @@ $.each(['minutely', 'hourly'], (_, value) => {
 
         assert.ok(translator.locate($(lastAppointment)).top > translator.locate($(lastRecurrentAppointment)).top, 'Last occurrence renders correctly');
     });
+    QUnit.test(`RecurrenceException should be formed correctly after appointment deletion, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['week'],
+            currentView: 'week',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: apptStartDate,
+                endDate: apptEndDate,
+                recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=3`
+            }],
+            currentDate: new Date(2019, 2, 30)
+        });
+
+        this.scheduler.appointments.click(1);
+        this.clock.tick(300);
+
+        this.scheduler.tooltip.clickOnDeleteButton();
+        $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
+
+        const updatedRecurringItem = this.scheduler.instance.option('dataSource')[0];
+        let exceptionDate;
+
+        if(value === 'hourly') {
+            exceptionDate = new Date(2019, 2, 30, 3, 0);
+        } else if(value === 'minutely') {
+            exceptionDate = new Date(2019, 2, 30, 2, 1);
+        }
+
+        assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
+    });
 });
