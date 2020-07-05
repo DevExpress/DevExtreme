@@ -230,13 +230,59 @@ QUnit.test('Recurrent Task dragging with \'occurrence\' recurrenceEditMode', fun
         recurrenceException: ''
     };
 
-    const pointer = pointerMock($(this.instance.$element()).find('.dx-scheduler-appointment').eq(0)).start().down().move(10, 10);
-    $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(5).trigger(dragEvents.enter);
+    const pointer = pointerMock($(this.scheduler.appointments.getAppointment(0))).start().down().move(10, 10);
+    $(this.scheduler.workSpace.getCell(5)).trigger(dragEvents.enter);
     pointer.up();
 
     const updatedSingleItem = this.instance.option('dataSource').items()[1];
     const updatedRecurringItem = this.instance.option('dataSource').items()[0];
     const exceptionDate = new Date(2015, 1, 9, 1, 0, 0, 0);
+
+    delete updatedSingleItem.initialCoordinates;
+    delete updatedSingleItem.initialSize;
+
+    assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
+
+    assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
+});
+
+QUnit.test('Recurrent Task dragging with \'occurrence\' recurrenceEditMode, \'hourly\' recurrence', function(assert) {
+    const data = new DataSource({
+        store: [
+            {
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0),
+                recurrenceRule: 'FREQ=HOURLY;COUNT=3'
+            }
+        ]
+    });
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        dataSource: data,
+        currentView: 'week',
+        editing: true,
+        firstDayOfWeek: 1,
+        recurrenceEditMode: 'occurrence'
+    });
+
+    const updatedItem = {
+        text: 'Task 1',
+        startDate: new Date(2015, 1, 14),
+        endDate: new Date(2015, 1, 14, 1),
+        allDay: false,
+        recurrenceRule: '',
+        recurrenceException: ''
+    };
+
+    const pointer = pointerMock($(this.scheduler.appointments.getAppointment(2))).start().down().move(10, 10);
+    $(this.scheduler.workSpace.getCell(5)).trigger(dragEvents.enter);
+    pointer.up();
+
+    const updatedSingleItem = this.instance.option('dataSource').items()[1];
+    const updatedRecurringItem = this.instance.option('dataSource').items()[0];
+    const exceptionDate = new Date(2015, 1, 9, 3, 0, 0, 0);
 
     delete updatedSingleItem.initialCoordinates;
     delete updatedSingleItem.initialSize;
