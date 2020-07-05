@@ -2014,13 +2014,12 @@ class Scheduler extends Widget {
         exceptionStartDate = this.fire('convertDateByTimezoneBack', exceptionStartDate, startDateTimeZone);
         const appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
 
+        exceptionStartDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(exceptionStartDate, appointmentStartDate, this.option('timeZone'), startDateTimeZone, true);
+
         isAllDay && exceptionStartDate.setHours(appointmentStartDate.getHours(),
             appointmentStartDate.getMinutes(),
             appointmentStartDate.getSeconds(),
             appointmentStartDate.getMilliseconds());
-
-        const timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionStartDate.getTimezoneOffset();
-        exceptionStartDate = new Date(exceptionStartDate.getTime() + timezoneDiff * toMs('minute'));
 
         return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
     }
