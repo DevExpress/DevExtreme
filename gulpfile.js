@@ -60,7 +60,6 @@ function createDefaultBatch() {
     if(!TEST_CI) {
         tasks.push('npm', 'themebuilder-npm');
     }
-
     return gulp.series(tasks);
 }
 
