@@ -6,10 +6,12 @@ import {
 import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
 import LightButton, { viewFunction as LightButtonComponent } from '../../../js/renovation/pager/light-button';
 import * as LightButtonModule from '../../../js/renovation/pager/light-button';
+import { closestClass } from '../../../js/renovation/pager/utils/closest_class';
 
 const { dxClickEffect } = LightButtonModule;
 
 jest.mock('../../../js/ui/shared/accessibility');
+jest.mock('../../../js/renovation/pager/utils/closest_class');
 
 describe('LightButton', () => {
   describe('View', () => {
@@ -49,7 +51,7 @@ describe('LightButton', () => {
         const unsubscribeFn = component.clickEffect();
         expect(dxClickEffectSpy).toBeCalledTimes(1);
         expect(dxClickEffectSpy).toBeCalledWith(widgetRef, click);
-        unsubscribeFn();
+        unsubscribeFn?.();
         expect(dxClickEffectSpy).toBeCalledTimes(1);
       });
     });
@@ -76,7 +78,7 @@ describe('LightButton', () => {
         emit(EVENT.dxClick);
         expect(clickHandler).toHaveBeenCalledTimes(1);
 
-        unsubscribeFn();
+        unsubscribeFn?.();
 
         emit(EVENT.dxClick);
         expect(clickHandler).toHaveBeenCalledTimes(1);
@@ -88,11 +90,11 @@ describe('LightButton', () => {
         jest.resetAllMocks();
       });
       it('should call registerKeyboardAction with right parameters', () => {
-        const widgetRef = jest.fn();
+        const widgetRef = {} as HTMLDivElement;
         const onClick = jest.fn();
-        const button = new LightButton({});
-
-        button.keyboardEffect.bind({ props: { onClick }, widgetRef })();
+        const button = new LightButton({ onClick });
+        button.widgetRef = widgetRef;
+        button.keyboardEffect();
 
         expect(registerKeyboardAction).toHaveBeenCalledTimes(1);
         expect(registerKeyboardAction).toHaveBeenCalledWith(
@@ -109,15 +111,13 @@ describe('LightButton', () => {
       });
 
       it('should use the `closest` function inside parameters', () => {
-        const widgetRef = document.createElement('div');
-        const onClick = jest.fn();
-        const button = new LightButton({});
-
-        button.keyboardEffect.bind({ props: { onClick }, widgetRef })();
+        const pagerElement = {};
+        (closestClass as jest.Mock).mockReturnValue(pagerElement);
+        const button = new LightButton({ });
+        button.keyboardEffect();
 
         const pagerInstance = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
-
-        expect(pagerInstance.element()).toBe(null);
+        expect(pagerInstance.element()).toBe(pagerElement);
       });
     });
   });
