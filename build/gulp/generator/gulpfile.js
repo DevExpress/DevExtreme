@@ -6,13 +6,14 @@ const path = require('path');
 const fs = require('fs');
 const merge = require('merge-stream');
 const { generateComponents } = require('devextreme-generator/component-compiler');
-const generator = require('devextreme-generator/preact-generator').default;
+const { PreactGenerator } = require('devextreme-generator/preact-generator');
 const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
+const generator = new PreactGenerator();
 
 const SRC = ['js/renovation/**/*.tsx', '!js/renovation/**/*.j.tsx'];
 const DEST = 'js/renovation/';
@@ -28,6 +29,7 @@ const knownErrors = [
 ];
 
 function generateJQueryComponents() {
+    const generator = new PreactGenerator();
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
         jqueryComponentRegistratorModule: 'js/core/component_registrator',
