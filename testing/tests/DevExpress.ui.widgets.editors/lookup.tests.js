@@ -3325,7 +3325,7 @@ QUnit.module('default options', {
 
             $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').not('.dx-state-invisible').height(), 2, 'popup position if second visible item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').not('.dx-state-invisible').height(), 3, 'popup position if second visible item is selected');
             lookup.close();
         } finally {
             $lookup.remove();
