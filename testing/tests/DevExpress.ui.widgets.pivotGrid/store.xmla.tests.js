@@ -7,6 +7,7 @@ define(function(require) {
     }
 
     const browser = require('core/utils/browser');
+    const devices = require('core/devices');
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
     if(browser.msie && parseInt(browser.version) >= 17) return;
@@ -1916,7 +1917,7 @@ define(function(require) {
 
     });
 
-    if(browser.chrome) {
+    if(browser.chrome && devices.real().deviceType === 'desktop') {
         QUnit.module('Discover', testEnvironment, () => {
 
             QUnit.test('Discover. Incorrect dataSource url', function(assert) {
