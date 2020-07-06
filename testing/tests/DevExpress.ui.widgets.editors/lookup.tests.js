@@ -3307,7 +3307,7 @@ QUnit.module('default options', {
                 'visible': true
             }], valueExpr: 'ID', displayExpr: 'Color' }).dxLookup('instance');
 
-            $lookup.css('margin-top', 200);
+            $lookup.css('margin-top', 0);
 
             $(lookup.field()).trigger('dxclick');
 
@@ -3317,6 +3317,8 @@ QUnit.module('default options', {
             assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').not('.dx-state-invisible').height() * 4 + materialLookupPadding * 2, 'popup height equal 4 items and 2 paddings (8px)');
 
             lookup.close();
+
+            $lookup.css('margin-top', 200);
             lookup.option('value', 3);
 
             $(lookup.field()).trigger('dxclick');
