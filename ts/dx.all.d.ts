@@ -902,7 +902,7 @@ declare module DevExpress {
 }
 declare module DevExpress.core {
     /** @name dxElement */
-    export type dxElement = Element & JQuery;
+    export type dxElement = HTMLElement & JQuery;
     /** @name dxTemplate.Options */
     export interface dxTemplateOptions {
         /** @name dxTemplate.Options.name */

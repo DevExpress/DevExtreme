@@ -1,6 +1,6 @@
 /**
  * @docid dxElement
- * @type Node|jQuery
+ * @type HTMLElement|jQuery
  * @hidden
  * @prevFileNamespace DevExpress.core
  */
