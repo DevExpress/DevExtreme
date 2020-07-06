@@ -8,14 +8,13 @@ const merge = require('merge-stream');
 const { generateComponents } = require('devextreme-generator/component-compiler');
 const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('gulp-typescript');
-const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 
-const SRC = ['js/renovation/**/*.tsx'];
+const SRC = ['js/renovation/**/*.tsx', '!js/renovation/**/*.j.tsx'];
 const DEST = 'js/renovation/';
 const BUNDLES_PARTS = 'js/bundles/modules/parts/';
 const COMPAT_TESTS_PARTS = 'testing/jest/compatibility/';
@@ -28,13 +27,32 @@ const knownErrors = [
     'Cannot find module \'preact/compat\''
 ];
 
-function generatePreactComponents() {
-    const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
-    generator.defaultOptionsModule = 'js/core/options/utils';
-    generator.jqueryComponentRegistratorModule = 'js/core/component_registrator';
-    generator.jqueryBaseComponentModule = 'js/renovation/preact-wrapper/component';
+function generateJQueryComponents() {
+    generator.options = {
+        defaultOptionsModule: 'js/core/options/utils',
+        jqueryComponentRegistratorModule: 'js/core/component_registrator',
+        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component',
+        generateJQueryOnly: true
+    };
 
     return gulp.src(SRC)
+        .pipe(generateComponents(generator))
+        .pipe(plumber(()=>null))
+        .pipe(gulp.dest(DEST));
+}
+
+const context = require('../context.js');
+
+function generatePreactComponents() {
+    const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
+
+    generator.options = {
+        defaultOptionsModule: 'js/core/options/utils',
+        jqueryComponentRegistratorModule: 'js/core/component_registrator',
+        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+    };
+
+    return gulp.src(SRC, { base: 'js' })
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
         .pipe(tsProject({
@@ -45,15 +63,8 @@ function generatePreactComponents() {
             },
             finish() {}
         }))
-        .pipe(gulpIf(file => file.extname === '.js',
-            lint({
-                quiet: true,
-                fix: true,
-                useEslintrc: true
-            })
-        ))
-        .pipe(lint.format())
-        .pipe(gulp.dest(DEST));
+        .pipe(babel())
+        .pipe(gulp.dest(context.TRANSPILED_PATH));
 }
 
 function processRenovationMeta() {
@@ -86,7 +97,7 @@ function processRenovationMeta() {
             .pipe(gulp.dest(COMPAT_TESTS_PARTS))
     );
 }
-gulp.task('generate-components', gulp.series(generatePreactComponents, processRenovationMeta));
+gulp.task('generate-components', gulp.series(generateJQueryComponents, generatePreactComponents, processRenovationMeta));
 
 function addGenerationTask(
     frameworkName,

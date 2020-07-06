@@ -183,6 +183,7 @@
         "pageCount",
         "pagesCountText",
         "visible",
+        "hasKnownLastPage",
         "pagesNavigatorVisible",
         "pageIndex",
         "pageSize",
@@ -202,6 +203,7 @@
         "pageCount",
         "pagesCountText",
         "visible",
+        "hasKnownLastPage",
         "pagesNavigatorVisible",
         "showPageSizes",
         "pageSizes",
@@ -243,7 +245,7 @@
         "onDelete",
         "onHide",
         "getTextAndFormatDate",
-        "singleAppointmentData",
+        "singleAppointment",
         "itemContentRender",
         "itemContentComponent"
       ],
@@ -252,7 +254,8 @@
         "item",
         "index",
         "showDeleteButton",
-        "singleAppointmentData",
+        "getTextAndFormatDate",
+        "singleAppointment",
         "itemContentRender",
         "itemContentComponent"
       ],
@@ -262,8 +265,7 @@
       ],
       "event": [
         "onDelete",
-        "onHide",
-        "getTextAndFormatDate"
+        "onHide"
       ],
       "ref": [],
       "slot": []

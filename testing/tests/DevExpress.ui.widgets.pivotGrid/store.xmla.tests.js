@@ -7,11 +7,11 @@ define(function(require) {
     }
 
     const browser = require('core/utils/browser');
+    const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
     if(browser.msie && parseInt(browser.version) >= 17) return;
 
     const $ = require('jquery');
-    const DATA_SOURCE_URL = 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll';
     const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
     const pivotGridDataSource = require('ui/pivot_grid/data_source');
     const XmlaStore = require('ui/pivot_grid/xmla_store');
@@ -150,7 +150,7 @@ define(function(require) {
 
         },
         dataSource: {
-            url: DATA_SOURCE_URL,
+            url: PivotGridTestSettings.XMLA_STORE_URL,
             catalog: 'Adventure Works DW Standard Edition',
             cube: 'Adventure Works'
         }
@@ -3906,7 +3906,7 @@ define(function(require) {
         QUnit.test('T248791. Dimension with zero level members', function(assert) {
             const done = assert.async();
             const store = new XmlaStore({
-                url: DATA_SOURCE_URL,
+                url: PivotGridTestSettings.XMLA_STORE_URL,
                 catalog: 'Q380421',
                 cube: 'CubeMobile'
             });
@@ -3935,7 +3935,7 @@ define(function(require) {
         QUnit.test('T248791. Dimension with zero level members. Expand All level', function(assert) {
             const done = assert.async();
             const store = new XmlaStore({
-                url: DATA_SOURCE_URL,
+                url: PivotGridTestSettings.XMLA_STORE_URL,
                 catalog: 'Q380421',
                 cube: 'CubeMobile'
             });

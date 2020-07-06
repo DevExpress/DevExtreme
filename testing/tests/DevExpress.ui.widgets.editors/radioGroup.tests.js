@@ -795,4 +795,36 @@ module('option changed', () => {
 
         assert.deepEqual(instance.getDataSource().items(), [4, 5, 6], 'items from data source');
     });
+
+    test('widget should select a correct item if an unexisting item was set as a value but new dataSource has it', function(assert) {
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: new DataSource({ store: [1, 2, 3] }),
+                value: 1
+            })
+        );
+
+        instance.option('value', 4);
+        instance.option('dataSource', new DataSource({ store: [4, 5, 6] }));
+
+        const $radioButtons = instance.$element().find('.dx-radiobutton');
+
+        assert.ok($radioButtons.eq(0).hasClass('dx-radiobutton-checked'), 'correct item is selected');
+    });
+
+    test('widget should select a correct item if an unexisting item was set as a value but new Items has it', function(assert) {
+        const instance = getInstance(
+            createRadioGroup({
+                items: [1, 2, 3],
+                value: 1
+            })
+        );
+
+        instance.option('value', 4);
+        instance.option('items', [4, 5, 6]);
+
+        const $radioButtons = instance.$element().find('.dx-radiobutton');
+
+        assert.ok($radioButtons.eq(0).hasClass('dx-radiobutton-checked'), 'correct item is selected');
+    });
 });
