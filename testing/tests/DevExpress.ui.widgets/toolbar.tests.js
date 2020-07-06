@@ -321,7 +321,7 @@ QUnit.module('Deprecated options', {
 QUnit.module('toolbar with menu', {
     beforeEach: function() {
         this.element = $('#toolbar');
-        this.instance = this.element.dxToolbar({ renderAs: 'bottomToolbar' })
+        this.instance = this.element.dxToolbar()
             .dxToolbar('instance');
 
         fx.off = true;
@@ -349,7 +349,6 @@ QUnit.module('toolbar with menu', {
 
     QUnit.test('windowResize should not show/hide menu that doesn\'t created', function(assert) {
         this.element.dxToolbar({
-            renderAs: 'topToolbar',
             submenuType: 'actionSheet',
             items: [],
         });

@@ -1,6 +1,10 @@
 'use strict';
 
 const gulp = require('gulp');
+const file = require('gulp-file');
+const path = require('path');
+const fs = require('fs');
+const merge = require('merge-stream');
 const { generateComponents } = require('devextreme-generator/component-compiler');
 const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('gulp-typescript');
@@ -13,6 +17,8 @@ const watch = require('gulp-watch');
 
 const SRC = ['js/renovation/**/*.tsx'];
 const DEST = 'js/renovation/';
+const BUNDLES_PARTS = 'js/bundles/modules/parts/';
+const COMPAT_TESTS_PARTS = 'testing/jest/compatibility/';
 
 const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
 
@@ -22,11 +28,14 @@ const knownErrors = [
     'Cannot find module \'preact/compat\''
 ];
 
-gulp.task('generate-components', function() {
+function generatePreactComponents() {
     const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
-    generator.defaultOptionsModule = 'js/core/options/utils';
-    generator.jqueryComponentRegistratorModule = 'js/core/component_registrator';
-    generator.jqueryBaseComponentModule = 'js/renovation/preact-wrapper/component';
+
+    generator.options = {
+        defaultOptionsModule: 'js/core/options/utils',
+        jqueryComponentRegistratorModule: 'js/core/component_registrator',
+        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+    };
 
     return gulp.src(SRC)
         .pipe(generateComponents(generator))
@@ -48,7 +57,39 @@ gulp.task('generate-components', function() {
         ))
         .pipe(lint.format())
         .pipe(gulp.dest(DEST));
-});
+}
+
+function processRenovationMeta() {
+    const widgetsMeta = generator
+        .getComponentsMeta()
+        .filter(meta =>
+            meta.decorator &&
+            meta.decorator.jQuery &&
+            meta.decorator.jQuery.register === 'true' &&
+            fs.existsSync(meta.path));
+
+    let content = '/* !!! This file is auto-generated. Any modification will be lost! */\n\n' +
+    '/// BUNDLER_PARTS\n/* Renovation (dx.module-renovation.js) */\n\n' +
+    'const renovation = require(\'../../../bundles/modules/renovation\');\n';
+    content += widgetsMeta.map(meta =>
+        `renovation.dxr${meta.name} = require('${path.relative(BUNDLES_PARTS, meta.path).replace(/\\/g, '/').replace(/\.[\w]+$/, '.j')}').default;`
+    ).join('\n');
+    content += '\n/// BUNDLER_PARTS_END\nmodule.exports = renovation;\n';
+
+    const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
+        ...meta,
+        path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
+    })), null, 2);
+
+    return merge(
+        file('widgets-renovation.js', content, { src: true })
+            .pipe(gulp.dest(BUNDLES_PARTS)),
+
+        file('widgets.json', metaJson, { src: true })
+            .pipe(gulp.dest(COMPAT_TESTS_PARTS))
+    );
+}
+gulp.task('generate-components', gulp.series(generatePreactComponents, processRenovationMeta));
 
 function addGenerationTask(
     frameworkName,

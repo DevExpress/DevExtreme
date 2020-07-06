@@ -2,6 +2,8 @@ import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
 import dateLocalization from '../../localization/date';
+import { isDefined } from '../../core/utils/type';
+
 
 export class GanttView extends Widget {
     _init() {
@@ -19,6 +21,7 @@ export class GanttView extends Widget {
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option('showResources'),
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
+            firstDayOfWeek: this._getFirstDayOfWeek(this.option('firstDayOfWeek')),
             allowSelectTask: this.option('allowSelection'),
             editing: this._parseEditingSettings(this.option('editing')),
             validation: this.option('validation'),
@@ -31,7 +34,9 @@ export class GanttView extends Widget {
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
     }
-
+    _getFirstDayOfWeek(value) {
+        return isDefined(value) ? value : dateLocalization.firstDayOfWeekIndex();
+    }
     getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
     }
@@ -137,6 +142,9 @@ export class GanttView extends Widget {
                 break;
             case 'taskTitlePosition':
                 this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
+                break;
+            case 'firstDayOfWeek':
+                this._ganttViewCore.setFirstDayOfWeek(this._getFirstDayOfWeek(args.value));
                 break;
             case 'allowSelection':
                 this._ganttViewCore.setAllowSelection(args.value);

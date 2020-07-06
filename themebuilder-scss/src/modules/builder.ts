@@ -1,4 +1,3 @@
-
 import normalize from './config-normalizer';
 import CompileManager from './compile-manager';
 

@@ -9,32 +9,19 @@ jest.mock('../../../js/renovation/pager/utils/get-computed-style');
 
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 describe('resizable-container', () => {
-  function getFakeHtml(width: number | null): HTMLElement| null {
-    return width ? { width: `${width}px` } as unknown as HTMLElement : null;
+  function getFakeHtml(width: number | null): HTMLElement | undefined {
+    return width ? { width: `${width}px` } as unknown as HTMLElement : undefined;
   }
   function getElementsRef({
     width, pageSizes, info, pages,
   }) {
-    const parentHtmlEl = getFakeHtml(width);
+    const parentHtmlEl = getFakeHtml(width) as HTMLElement;
     const pageSizesHtmlEl: GetHtmlElement = { getHtmlElement: () => getFakeHtml(pageSizes) };
     const infoHtmlEl: GetHtmlElement = { getHtmlElement: () => getFakeHtml(info) };
     const pagesHtmlEl = getFakeHtml(info + pages);
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };
-  }
-  function createComponent(sizes: {
-    width; pageSizes; info; pages;
-  }) {
-    const component = new ResizableContainer({ } as ResizableContainerProps);
-    const {
-      parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-    } = getElementsRef(sizes);
-    component.parentRef = parentHtmlEl;
-    component.pageSizesRef = pageSizesHtmlEl;
-    component.pagesRef = pagesHtmlEl;
-    component.infoTextRef = infoHtmlEl;
-    return component;
   }
   describe('View', () => {
     it('render', () => {
@@ -50,7 +37,7 @@ describe('resizable-container', () => {
       } as any as ResizableContainer;
 
       const tree = shallow<typeof ResizableContainerComponent>(
-        <ResizableContainerComponent {...props as any} />,
+        <ResizableContainerComponent {...props as any} /> as any,
       );
       expect(tree.props()).toEqual({
         pagerContentProps: 'pagerContentProps',
@@ -65,7 +52,19 @@ describe('resizable-container', () => {
     });
   });
   describe('Logic', () => {
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    function createComponent(sizes: {
+      width; pageSizes; info; pages;
+    }) {
+      const component = new ResizableContainer({ } as ResizableContainerProps);
+      const {
+        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
+      } = getElementsRef(sizes);
+      component.parentRef = parentHtmlEl as HTMLElement;
+      component.pageSizesRef = pageSizesHtmlEl;
+      component.pagesRef = pagesHtmlEl as HTMLElement;
+      component.infoTextRef = infoHtmlEl;
+      return component;
+    }
     it('effectUpdateChildProps', () => {
       const component = createComponent({
         width: 400, pageSizes: 100, info: 50, pages: 100,
@@ -78,6 +77,35 @@ describe('resizable-container', () => {
       });
       expect(component.infoTextVisible).toBe(true);
       expect(component.isLargeDisplayMode).toBe(true);
+    });
+    it('effectUpdateChildProps, visible change from false to true', () => {
+      // visible false
+      const component = createComponent({
+        width: 0, pageSizes: 0, info: 0, pages: 0,
+      });
+      component.effectUpdateChildProps();
+      expect(component.elementsWidth).toEqual({
+        info: 0,
+        pageSizes: 0,
+        pages: 0,
+      });
+      expect(component.isLargeDisplayMode).toBe(true);
+      expect(component.infoTextVisible).toBe(true);
+      const { elementsWidth } = component;
+      // visible true
+      const {
+        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
+      } = getElementsRef({
+        width: 400, pageSizes: 100, info: 50, pages: 100,
+      });
+      component.parentRef = parentHtmlEl;
+      component.pageSizesRef = pageSizesHtmlEl;
+      component.pagesRef = pagesHtmlEl;
+      component.infoTextRef = infoHtmlEl;
+      component.effectUpdateChildProps();
+      expect(component.isLargeDisplayMode).toBe(true);
+      expect(component.infoTextVisible).toBe(true);
+      expect(elementsWidth).not.toBe(component.elementsWidth);
     });
   });
   describe('updateChildProps', () => {
@@ -142,15 +170,12 @@ describe('resizable-container', () => {
       const {
         parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
       } = getElementsRef(widths);
-      const {
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, { } as any);
-      return {
-        infoTextVisible,
-        isLargeDisplayMode,
-      };
+      return updateChildProps(parentHtmlEl,
+        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, {
+          pageSizes: 0,
+          pages: 0,
+          info: 0,
+        } as any);
     }
     it('updateChildProps: fit size', () => {
       const {

@@ -1,17 +1,18 @@
 import DropDownList from './internal/dropDownList';
 
 const ATTR = {
-    popupId: 'aria-owns'
+  popupId: 'aria-owns',
 };
 
 export default class DropDownButton extends DropDownList {
-    name: string = 'dxDropDownButton';
+  name = 'dxDropDownButton';
 
-    getPopupOwnerElement() {
-        return this.element;
-    }
+  getPopupOwnerElement() {
+    return this.element;
+  }
 
-    getPopupIdAttr() {
-        return ATTR.popupId;
-    }
+  // eslint-disable-next-line class-methods-use-this
+  getPopupIdAttr() {
+    return ATTR.popupId;
+  }
 }

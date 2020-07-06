@@ -8,8 +8,7 @@ import {
   Ref,
   InternalState,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import Page from './page';
 import { PAGER_INFO_CLASS } from './info';
 import NumberBox from '../number-box';
@@ -24,10 +23,11 @@ const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
+  pageIndexRef,
+  selectLastPageIndex,
   valueChange,
   width,
   value,
-  pageIndexRef,
   props: { pageCount, pagesCountText, rtlEnabled },
 }: PagesSmall) => (
   <div className={LIGHT_PAGES_CLASS}>
@@ -42,7 +42,12 @@ export const viewFunction = ({
       valueChange={valueChange}
     />
     <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
-    <Page className={PAGER_PAGES_COUNT_CLASS} selected={false} index={(pageCount as number) - 1} />
+    <Page
+      className={PAGER_PAGES_COUNT_CLASS}
+      selected={false}
+      index={(pageCount as number) - 1}
+      onClick={selectLastPageIndex}
+    />
   </div>
 );
 
@@ -78,6 +83,11 @@ export default class PagesSmall extends JSXComponent(PagesSmallProps) {
 
   @Effect() updateWidth(): void {
     this.minWidth = getElementMinWidth(this.pageIndexRef.getHtmlElement()) || this.minWidth;
+  }
+
+  selectLastPageIndex(): void {
+    const { pageCount } = this.props as Required<PagesSmallProps>;
+    this.props.pageIndexChange?.(pageCount - 1);
   }
 
   valueChange(value: number): void {

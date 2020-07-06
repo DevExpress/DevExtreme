@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 
 QUnit.testStart(function() {
@@ -1914,3 +1914,68 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
     assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
     assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');
 });
+
+if(devices.real().deviceType === 'desktop') {
+    QUnit.module('Integration: Work space: Multiple selection when dragging is not enabled', {
+        beforeEach: function() {
+            fx.off = true;
+        },
+        afterEach: function() {
+            fx.off = false;
+        }
+    }, () => {
+        [{
+            view: 'day',
+            startCell: {
+                index: 0, startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false,
+            },
+            endCell: {
+                index: 1, startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false,
+            },
+        }, {
+            view: 'week',
+            startCell: {
+                index: 0, startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false,
+            },
+            endCell: {
+                index: 7, startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false,
+            },
+        }, {
+            view: 'month',
+            startCell: {
+                index: 0, startDate: new Date(2018, 3, 1), endDate: new Date(2018, 3, 2),
+            },
+            endCell: {
+                index: 1, startDate: new Date(2018, 3, 2), endDate: new Date(2018, 3, 3),
+            },
+        }].forEach((config) => {
+            const { view, startCell, endCell } = config;
+            QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
+                const instance = createWrapper({
+                    dataSource: [],
+                    views: [view],
+                    currentView: view,
+                    showAllDayPanel: true,
+                    currentDate: new Date(2018, 3, 8),
+                    height: 600,
+                    editing: { allowDragging: false },
+                });
+
+                const $cells = instance.workSpace.getCells();
+                const $table = instance.workSpace.getDateTable();
+
+                $($table).trigger(
+                    $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+                );
+                $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+                assert.deepEqual(
+                    instance.option('selectedCellData'),
+                    [
+                        { startDate: startCell.startDate, endDate: startCell.endDate, allDay: startCell.allDay },
+                        { startDate: endCell.startDate, endDate: endCell.endDate, allDay: endCell.allDay },
+                    ], 'correct cells have been selected');
+            });
+        });
+    });
+}

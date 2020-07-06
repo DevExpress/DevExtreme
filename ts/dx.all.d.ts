@@ -3112,7 +3112,7 @@ declare module DevExpress.ui {
         /** @name dxDataGridColumn.showWhenGrouped */
         showWhenGrouped?: boolean;
         /** @name dxDataGridColumn.type */
-        type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+        type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
     }
     /** @name dxDataGridColumnButton */
     export interface dxDataGridColumnButton extends GridBaseColumnButton {
@@ -4134,6 +4134,8 @@ declare module DevExpress.ui {
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /** @name dxGantt.Options.editing */
         editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+        /** @name dxGantt.Options.firstDayOfWeek */
+        firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /** @name dxGantt.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /** @name dxGantt.Options.resourceAssignments */
@@ -6096,8 +6098,6 @@ declare module DevExpress.ui {
         items?: Array<string | dxToolbarItem | any>;
         /** @name dxToolbar.Options.menuItemTemplate */
         menuItemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxToolbar.Options.renderAs */
-        renderAs?: 'bottomToolbar' | 'topToolbar';
     }
     /** @name dxToolbar */
     export class dxToolbar extends CollectionWidget {
@@ -6302,7 +6302,7 @@ declare module DevExpress.ui {
         /** @name dxTreeListColumn.headerCellTemplate */
         headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: { component?: dxTreeList, columnIndex?: number, column?: dxTreeListColumn }) => any);
         /** @name dxTreeListColumn.type */
-        type?: 'adaptive' | 'buttons';
+        type?: 'adaptive' | 'buttons' | 'drag';
     }
     /** @name dxTreeListColumnButton */
     export interface dxTreeListColumnButton extends GridBaseColumnButton {
@@ -6996,7 +6996,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.size */
         size?: BaseWidgetSize;
         /** @name BaseWidget.Options.theme */
-        theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
+        theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
         /** @name BaseWidget.Options.title */
         title?: BaseWidgetTitle | string;
         /** @name BaseWidget.Options.tooltip */

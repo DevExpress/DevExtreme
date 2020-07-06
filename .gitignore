@@ -8,9 +8,6 @@
 /js/renovation/**/*.p.js
 /js/renovation/**/*.j.d.ts
 /js/renovation/**/*.j.js
-/themebuilder/data/less
-/themebuilder/data/metadata
-/scss
 bin
 node_modules
 obj

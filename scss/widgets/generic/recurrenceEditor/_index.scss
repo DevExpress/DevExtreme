@@ -1,0 +1,26 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../scheduler/sizes" as *;
+@use "../../base/recurrenceEditor" as *;
+// adduse
+
+
+$GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
+
+.dx-recurrence-editor-container {
+  .dx-recurrence-numberbox-interval {
+    margin-right: $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+
+    &.dx-rtl {
+      margin-right: 0;
+      margin-left: $GENERIC_RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+    }
+  }
+}
+
+.dx-recurrence-numberbox-interval-label {
+  margin-top: $GENERIC_RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP;
+}

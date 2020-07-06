@@ -1,4 +1,3 @@
-
 import sass from 'sass';
 
 import Compiler from '../../src/modules/compiler';
@@ -20,7 +19,6 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
     },
   ],
 }));
-
 
 describe('Sass features', () => {
   test('collector function', () => {
@@ -61,13 +59,13 @@ describe('Sass features', () => {
 
     compiler.collector(map);
 
-    expect(compiler.changedVariables).toEqual([
-      { Key: '$var1', Value: '300px', Path: 'tb/path' },
-      { Key: '$var2', Value: 'Helvetica', Path: 'tb/path' },
-      { Key: '$var3', Value: 'rgba(50,60,70,0.4)', Path: 'tb/path' },
-      { Key: '$var4', Value: '10px,15px,32px', Path: 'tb/path' },
-      { Key: '$var5', Value: '10px 15px 32px', Path: 'tb/path' },
-    ]);
+    expect(compiler.changedVariables).toEqual({
+      $var1: '300px',
+      $var2: 'Helvetica',
+      $var3: 'rgba(50,60,70,0.4)',
+      $var4: '10px,15px,32px',
+      $var5: '10px 15px 32px',
+    });
   });
 
   test('getMatchingUserItemsAsString - return right string for the url', () => {

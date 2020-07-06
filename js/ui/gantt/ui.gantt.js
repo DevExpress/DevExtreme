@@ -131,6 +131,7 @@ class Gantt extends Widget {
             selectedRowKey: this.option('selectedRowKey'),
             showResources: this.option('showResources'),
             taskTitlePosition: this.option('taskTitlePosition'),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
@@ -395,8 +396,10 @@ class Gantt extends Widget {
                     const parentId = record.parentId;
                     if(parentId !== undefined) {
                         const expandedRowKeys = this._treeList.option('expandedRowKeys');
-                        expandedRowKeys.push(parentId);
-                        this._treeList.option('expandedRowKeys', expandedRowKeys);
+                        if(expandedRowKeys.indexOf(parentId) === -1) {
+                            expandedRowKeys.push(parentId);
+                            this._treeList.option('expandedRowKeys', expandedRowKeys);
+                        }
                     }
                     this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
@@ -685,6 +688,7 @@ class Gantt extends Widget {
             taskListWidth: 300,
             showResources: true,
             taskTitlePosition: 'inside',
+            firstDayOfWeek: undefined,
             selectedRowKey: undefined,
             onSelectionChanged: null,
             allowSelection: true,
@@ -790,6 +794,9 @@ class Gantt extends Widget {
                 break;
             case 'taskTitlePosition':
                 this._setGanttViewOption('taskTitlePosition', args.value);
+                break;
+            case 'firstDayOfWeek':
+                this._setGanttViewOption('firstDayOfWeek', args.value);
                 break;
             case 'selectedRowKey':
                 this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(args.value));

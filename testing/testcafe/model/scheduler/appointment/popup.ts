@@ -1,50 +1,56 @@
 import { Selector, ClientFunction } from 'testcafe';
 
 const CLASS = {
-    appointmentPopup: 'dx-scheduler-appointment-popup',
-    popup: 'dx-popup',
-    popupWrapper: 'dx-popup-wrapper',
-    cancelButton: 'dx-popup-cancel.dx-button',
-    stateInvisible: 'dx-state-invisible'
+  appointmentPopup: 'dx-scheduler-appointment-popup',
+  popup: 'dx-popup',
+  popupWrapper: 'dx-popup-wrapper',
+  cancelButton: 'dx-popup-cancel.dx-button',
+  stateInvisible: 'dx-state-invisible',
 };
 
 export default class AppointmentPopup {
-    element: Selector;
-    wrapper: Selector;
+  element: Selector;
 
-    subjectElement: Selector;
-    descriptionElement: Selector;
-    startDateElement: Selector;
-    endDateElement: Selector;
-    allDayElement: Selector;
+  wrapper: Selector;
 
-    doneButton: Selector;
-    cancelButton: Selector;
+  subjectElement: Selector;
 
-    freqElement: Selector;
+  descriptionElement: Selector;
 
-    constructor(scheduler: Selector) {
-        this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
-        this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
+  startDateElement: Selector;
 
-        this.subjectElement = this.wrapper.find('.dx-texteditor-input').nth(0);
-        this.startDateElement = this.wrapper.find('.dx-texteditor-input').nth(1);
-        this.endDateElement = this.wrapper.find('.dx-texteditor-input').nth(2);
-        this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
-        this.allDayElement = this.wrapper.find('.dx-switch').nth(0);
+  endDateElement: Selector;
 
-        this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq');
+  doneButton: Selector;
 
-        this.doneButton = this.wrapper.find('.dx-popup-done.dx-button');
-        this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
-    }
+  cancelButton: Selector;
 
-    isVisible(): Promise<boolean> {
-        const { element } = this;
-        const invisibleStateClass = CLASS.stateInvisible;
+  allDayElement: Selector;
 
-        return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
-            dependencies: { element, invisibleStateClass }
-        })();
-    }
+  freqElement: Selector;
+
+  constructor(scheduler: Selector) {
+    this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
+    this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
+
+    this.subjectElement = this.wrapper.find('.dx-texteditor-input').nth(0);
+    this.startDateElement = this.wrapper.find('.dx-texteditor-input').nth(1);
+    this.endDateElement = this.wrapper.find('.dx-texteditor-input').nth(2);
+    this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
+    this.allDayElement = this.wrapper.find('.dx-switch').nth(0);
+
+    this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
+
+    this.doneButton = this.wrapper.find('.dx-popup-done.dx-button');
+    this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
+  }
+
+  isVisible(): Promise<boolean> {
+    const { element } = this;
+    const invisibleStateClass = CLASS.stateInvisible;
+
+    return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
+      dependencies: { element, invisibleStateClass },
+    })();
+  }
 }

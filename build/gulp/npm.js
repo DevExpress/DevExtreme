@@ -6,12 +6,14 @@ const replace = require('gulp-replace');
 const merge = require('merge-stream');
 const through = require('through2');
 const lazyPipe = require('lazypipe');
+const dataUri = require('./gulp-data-uri').gulpPipe;
 
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
 const version = require('../../package.json').version;
 const packagePath = context.RESULT_NPM_PATH + '/devextreme';
+const scssPackagePath = packagePath + '/scss';
 
 const TRANSPILED_GLOBS = [
     context.TRANSPILED_PATH + '/**/*.js',
@@ -96,6 +98,23 @@ gulp.task('npm-sources', gulp.series('ts-sources', function() {
     );
 }));
 
+gulp.task('npm-sass', gulp.parallel(() => {
+    return gulp
+        .src('scss/**/*')
+        .pipe(dataUri())
+        .pipe(gulp.dest(scssPackagePath));
+
+}, () => {
+    return gulp
+        .src('fonts/**/*', { base: '.' })
+        .pipe(gulp.dest(scssPackagePath + '/widgets/material/typography'));
+}, () => {
+    return gulp
+        .src('icons/**/*', { base: '.' })
+        .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
+}));
+
+
 gulp.task('npm-check', gulp.series('ts-modules-check'));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-check', 'npm-less'));
+gulp.task('npm', gulp.series('npm-sources', 'npm-check', 'npm-sass'));

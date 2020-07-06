@@ -555,6 +555,40 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.strictEqual($fixTable.find('.dx-data-row').children('.dx-pointer-events-none').length, 1, 'fixed table has transparent column');
     });
 
+    [false, true].forEach((isFixedCellDragging) => {
+        QUnit.test(`Tables should be synchronized during ${isFixedCellDragging ? 'fixed' : ''} row dragging if there are fixed columns`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+
+            this.options.columns[2] = {
+                dataField: 'field3',
+                fixed: true
+            };
+            this.options.rowDragging.dropFeedbackMode = 'push';
+
+            const rowsView = this.createRowsView();
+            rowsView.render($testElement);
+
+            // act
+            pointerMock(rowsView.getCellElement(0, isFixedCellDragging ? 2 : 0)).start().down().move(0, 70);
+
+            // assert
+            const $sortable = $testElement.find('.dx-sortable');
+
+            assert.equal($sortable.length, 2, 'two sortables are rendered');
+
+            const sortableOptions = [
+                $sortable.eq(0).dxSortable('instance').option(),
+                $sortable.eq(1).dxSortable('instance').option(),
+            ];
+
+            assert.equal(sortableOptions[0].fromIndex, 0, 'first sortable fromIndex');
+            assert.equal(sortableOptions[1].fromIndex, 0, 'second sortable fromIndex');
+            assert.equal(sortableOptions[0].toIndex, 2, 'first sortable toIndex');
+            assert.equal(sortableOptions[1].toIndex, 2, 'second sortable toIndex');
+        });
+    });
+
     // T830034
     QUnit.test('Placeholder should not be wider than grid if horizontal scroll exists', function(assert) {
     // arrange

@@ -9,7 +9,7 @@ export enum ImportType {
 }
 
 export default class Compiler {
-  changedVariables: Array<MetaItem> = [];
+  changedVariables: { [key: string]: string } = {};
 
   importerCache: Record<string, string> = {};
 
@@ -23,7 +23,7 @@ export default class Compiler {
     items: Array<ConfigMetaItem>,
     options: sass.Options,
   ): Promise<CompilerResult> {
-    this.changedVariables = [];
+    this.changedVariables = {};
     this.userItems = items || [];
 
     let compilerOptions: sass.Options = {
@@ -86,8 +86,6 @@ export default class Compiler {
   }
 
   collector(map: sass.types.Map): sass.types.ReturnValue {
-    const path = (map.getValue(0) as sass.types.String).getValue();
-
     for (let mapIndex = 1; mapIndex < map.getLength(); mapIndex += 1) {
       const value = map.getValue(mapIndex);
       let variableValue;
@@ -108,11 +106,8 @@ export default class Compiler {
         return sass.types.Null.NULL;
       }
 
-      this.changedVariables.push({
-        Key: (map.getKey(mapIndex) as sass.types.String).getValue(),
-        Value: variableValue,
-        Path: path,
-      });
+      const variableKey = (map.getKey(mapIndex) as sass.types.String).getValue();
+      this.changedVariables[variableKey] = variableValue;
     }
     return sass.types.Null.NULL;
   }

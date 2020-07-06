@@ -1,0 +1,15 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_GALLERY_INDICATOR_SIZE: null !default;
+$GENERIC_GALLERY_INDICATOR_SELECTED_SIZE: null !default;
+
+@if $size == "default" {
+  $GENERIC_GALLERY_INDICATOR_SIZE: 8px;
+  $GENERIC_GALLERY_INDICATOR_SELECTED_SIZE: 12px;
+}
+
+@else if $size == "compact" {
+  $GENERIC_GALLERY_INDICATOR_SIZE: 6px;
+  $GENERIC_GALLERY_INDICATOR_SELECTED_SIZE: 7px;
+}
