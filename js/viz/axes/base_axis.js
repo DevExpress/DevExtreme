@@ -1812,7 +1812,7 @@ Axis.prototype = {
             maxPadding = maxExpectedPadding / coeff;
         }
 
-        if(!that.isArgumentAxis) {
+        if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
                 minValue = 0;

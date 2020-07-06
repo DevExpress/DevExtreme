@@ -1562,10 +1562,10 @@ const dataMarginsEnvironment = {
                 assert.deepEqual(range.categories, expectedRange.categories, 'categorties');
             } else {
                 'minVisible' in expectedRange && assert.roughEqual(translator.to(expectedRange.minVisible, -1), this.canvas.left, 1.01, 'minVisible value');
-                'maxVisible' in expectedRange && assert.roughEqual(translator.to(data.expectedRange.maxVisible, +1), this.canvas.width - this.canvas.right, 1.01, 'maxVisible value');
+                'maxVisible' in expectedRange && assert.roughEqual(translator.to(expectedRange.maxVisible, +1), this.canvas.width - this.canvas.right, 1.01, 'maxVisible value');
             }
 
-            'interval' in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval, 'interval');
+            'interval' in expectedRange && assert.equal(range.interval, expectedRange.interval, 'interval');
         }
 
         const expectedVisibleArea = data.expectedVisibleArea;
@@ -2683,6 +2683,29 @@ QUnit.test('Correct zero level on value axis, min and max greater than zero - ma
         expectedRange: {
             minVisible: 0,
             maxVisible: 106
+        }
+    });
+});
+
+// T905213
+QUnit.test('Chech zero value. Datetime axis', function(assert) {
+    const expectedMinVisible = new Date();
+    expectedMinVisible.setTime(-8);
+    this.testMargins(assert, {
+        options: {
+            dataType: 'datetime',
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1,
+            maxValueMargin: 0.1
+        },
+        range: {
+            min: new Date(4),
+            max: new Date(130),
+            dataType: 'datetime'
+        },
+        expectedRange: {
+            minVisible: expectedMinVisible,
+            maxVisible: new Date(143)
         }
     });
 });
