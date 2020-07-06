@@ -21,6 +21,7 @@ const config = {
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
     useLegacyStoreResult: false,
+    useRenovatedComponents: false,
     /**
     * @name globalConfig.useJQuery
     * @type boolean

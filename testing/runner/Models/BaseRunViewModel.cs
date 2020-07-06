@@ -4,6 +4,7 @@ namespace Runner.Models
     {
         public string IEMode { get; set; }
         public bool NoTryCatch { get; set; }
+        public bool EnableRenovation { get; set; }
         public bool NoGlobals { get; set; }
         public bool NoTimers { get; set; }
         public bool NoJQuery { get; set; }

@@ -46,8 +46,10 @@ export function attachInstanceToElement($element, componentInstance, disposeFn) 
 
 export function getInstanceByElement($element, componentClass) {
     const name = getName(componentClass);
+    const el = $element.get(0);
 
-    return elementData($element.get(0), name);
+    return elementData(el, name) || elementData(el, name.replace('dx', 'dxr'));
 }
 
 export { getName as name };
+

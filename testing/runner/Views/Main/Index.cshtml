@@ -63,6 +63,11 @@
         </div>
         <div>
             <label>
+                Use renovation: <input type="checkbox" data-bind="checked: enableRenovation" />
+            </label>
+        </div>
+        <div>
+            <label>
                 jQuery: <select data-bind="options: JQUERY_VERSION, optionsText: 'name', optionsValue: 'value', value: jqueryVersion"></select>
             </label>
         </div>
@@ -160,6 +165,7 @@
             this.IE_MODES = ["edge", "10", "9"];
             this.ieMode = ko.observable(this.IE_MODES[0]);
             this.noTryCatch = ko.observable(false);
+            this.enableRenovation = ko.observable(false);
             this.noGlobals = ko.observable(false);
             this.noTimers = ko.observable(true);
             this.noJQuery = ko.observable(true);
@@ -226,6 +232,8 @@
                     result.noglobals = "true";
                 if(this.noTryCatch())
                     result.notrycatch = "true";
+                if(this.enableRenovation())
+                    result.enablerenovation = "true";
                 if(this.noTimers())
                     result.notimers = "true";
                 if(this.jqueryVersion())

@@ -74,6 +74,7 @@
             originalUrls = urls.slice(0),
             ieMode = @Html.Raw(Json.Serialize(Model.IEMode)),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
+            enableRenovation = @Html.Raw(Json.Serialize(Model.EnableRenovation)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
             jqueryVersion = @Html.Raw(Json.Serialize(Model.JQueryVersion)),
@@ -188,6 +189,8 @@
                 additionalParams.ieMode = ieMode;
             if(noTryCatch)
                 additionalParams.notrycatch = "true";
+            if(enableRenovation)
+                additionalParams.enablerenovation = "true";
             if(noGlobals)
                 additionalParams.noglobals = "true";
             if(noTimers)

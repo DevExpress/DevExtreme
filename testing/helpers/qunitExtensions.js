@@ -170,6 +170,22 @@
     });
 })();
 
+(function enableRenovation() {
+    QUnit.config.urlConfig.push({
+        id: 'enablerenovation',
+        label: 'Enable renovation',
+        tooltip: 'Select to use renovated components'
+    });
+
+    if(QUnit.urlParams['enablerenovation']) {
+        QUnit.testStart(function() {
+            const configPath = SystemJS.baseURL + 'core/config.js';
+            const config = SystemJS.get(configPath).default;
+            config({ useRenovatedComponents: true });
+        });
+    }
+})();
+
 (function checkForTimers() {
 
     QUnit.config.urlConfig.push({
