@@ -196,7 +196,7 @@ function run_test_scss {
 }
 
 function run_test_license {
-    export DEVEXTREME_TEST_CI=false
+    export DEVEXTREME_TEST_CI=undefined
 
     npm i
     npm run build

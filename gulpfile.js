@@ -60,6 +60,7 @@ function createDefaultBatch() {
     const tasks = [ 'clean', 'localization', createMainBatch()];
     if(!TEST_CI) {
         tasks.push('npm', 'themebuilder-npm');
+        tasks.push('check-license-notices');
     }
 
     return gulp.series(tasks);
