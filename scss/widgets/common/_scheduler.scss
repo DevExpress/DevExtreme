@@ -78,12 +78,6 @@ $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
 .dx-scheduler {
   .dx-scheduler-appointment-content-details {
     margin-top: 2px;
-
-    .dx-scheduler-work-space:not(.dx-scheduler-agenda) {
-      .dx-scheduler-appointment-content-date {
-        line-height: 0.8;
-      }
-    }
   }
 
   .dx-scheduler-overlay-panel {
