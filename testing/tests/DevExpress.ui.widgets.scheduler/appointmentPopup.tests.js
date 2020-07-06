@@ -21,7 +21,7 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const colSpan = visibility === true ? 1 : 2;
     const form = instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption('recurrenceRule').visible,
+    assert.equal(form.itemOption('secondGroup').visible,
         visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
 
     assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');

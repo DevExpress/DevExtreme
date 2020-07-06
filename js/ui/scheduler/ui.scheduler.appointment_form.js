@@ -236,8 +236,8 @@ const SchedulerAppointmentForm = {
     },
 
     _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
-        form.itemOption(`secondGroup.${recurrenceRuleExpr}`, 'visible', value);
-
+        // form.itemOption(`secondGroup.${recurrenceRuleExpr}`, 'visible', value);
+        form.itemOption('secondGroup', 'visible', value);
         !value && form.updateData(recurrenceRuleExpr, '');
         form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
     },
@@ -260,6 +260,7 @@ const SchedulerAppointmentForm = {
             {
                 itemType: 'group',
                 name: 'secondGroup',
+                visible: recurrenceEditorVisibility,
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
                 items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
             }
@@ -272,7 +273,7 @@ const SchedulerAppointmentForm = {
         return [{
             dataField: dataExprs.recurrenceRuleExpr,
             editorType: 'dxRecurrenceEditor',
-            visible: recurrenceEditorVisibility,
+            // visible: recurrenceEditorVisibility,
             editorOptions: {
                 readOnly: readOnly,
                 firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
