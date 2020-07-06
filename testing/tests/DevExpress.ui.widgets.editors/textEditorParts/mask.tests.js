@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
@@ -2127,31 +2126,15 @@ QUnit.module('Hidden input', {}, () => {
 });
 
 QUnit.module('Strategies', () => {
-    QUnit.test('default strategy should be used for all devices, except android 5+', function(assert) {
+    QUnit.test('default strategy should be used for browser supports Input Events Level 1', function(assert) {
         const instance = $('#texteditor').dxTextEditor({
             mask: '0'
         }).dxTextEditor('instance');
-
-        const { android, version } = devices.real();
-        const isModernAndroidDevice = android && version[0] >= 5;
-        const expectedMaskStrategy = isModernAndroidDevice ? 'android' : 'default';
+        const { InputEvent } = window || {};
+        const beforeInputEvent = InputEvent && new InputEvent('beforeinput');
+        const isEventSupported = beforeInputEvent && beforeInputEvent.type === 'beforeinput';
+        const expectedMaskStrategy = isEventSupported ? 'inputEvents' : 'default';
 
         assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, 'strategy name is correct');
-    });
-
-    QUnit.test('default strategy should be used for devices with android less than v5', function(assert) {
-        const currentDevice = devices.real();
-
-        devices.real({
-            platform: 'android',
-            version: [4, 4, 1]
-        });
-
-        const instance = $('#texteditor').dxTextEditor({
-            mask: '0'
-        }).dxTextEditor('instance');
-
-        assert.strictEqual(instance._maskStrategy.NAME, 'default', 'strategy name is correct');
-        devices.real(currentDevice);
     });
 });

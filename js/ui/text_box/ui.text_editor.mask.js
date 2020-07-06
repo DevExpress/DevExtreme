@@ -1,6 +1,5 @@
 const $ = require('../../core/renderer');
 let caret = require('./utils.caret');
-const devices = require('../../core/devices');
 const each = require('../../core/utils/iterator').each;
 const eventUtils = require('../../events/utils');
 const eventsEngine = require('../../events/core/events_engine');
@@ -13,8 +12,9 @@ const stringUtils = require('../../core/utils/string');
 const wheelEvent = require('../../events/core/wheel');
 const MaskRules = require('./ui.text_editor.mask.rule');
 const TextEditorBase = require('./ui.text_editor.base');
+const { getWindow } = require('../../core/utils/window');
 const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default;
-const AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
+const InputEventsMaskStrategy = require('./ui.text_editor.mask.strategy.input_events').default;
 
 const stubCaret = function() {
     return {};
@@ -110,10 +110,13 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        const device = devices.real();
-        this._maskStrategy = device.android && device.version[0] > 4 ?
-            new AndroidMaskStrategy(this) :
-            new DefaultMaskStrategy(this);
+        const { InputEvent } = getWindow() || {};
+
+        // Input Events L1 detection
+        const event = InputEvent && new InputEvent('beforeinput');
+        this._maskStrategy = event?.type === 'beforeinput' ?
+            new InputEventsMaskStrategy(this) :
+            new DefaultMaskStrategy(this); // FF, old Safari and desktop Chrome
     },
 
     _initMarkup: function() {
