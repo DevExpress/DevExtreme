@@ -139,9 +139,11 @@ const NumberBoxBase = TextEditor.inherit({
         this.callBase();
     },
 
-    _applyInputAttributes: function($input, customAttributes) {
-        $input.attr('inputmode', 'decimal');
-        this.callBase($input, customAttributes);
+    _getDefaultAttributes: function() {
+        const attributes = this.callBase();
+
+        attributes['inputmodode'] = 'decimal';
+        return attributes;
     },
 
     _renderContentImpl: function() {
