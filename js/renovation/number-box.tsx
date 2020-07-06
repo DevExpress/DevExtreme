@@ -1,7 +1,7 @@
 import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method,
 } from 'devextreme-generator/component_declaration/common';
-import DxNumberBox from '../ui/number_box';
+import DxNumberBox, { Options } from '../ui/number_box';
 import { WidgetProps } from './widget';
 
 export const viewFunction = ({ widgetRef, restAttributes }: NumberBox) => (
@@ -54,18 +54,20 @@ export default class NumberBox extends JSXComponent(NumberBoxProps) {
   }
 
   @Effect()
-  setupWidget() {
-    const { valueChange } = this.props;
-    const instance = DxNumberBox.getInstance(this.widgetRef);
-    if (instance) {
-      instance.option({ ...this.props });
-    } else {
-      new DxNumberBox(this.widgetRef, { // eslint-disable-line no-new
-        ...this.props as any,
-        onValueChanged: (e) => {
-          valueChange!(e.value);
-        },
-      });
-    }
+  updateWidget(): void {
+    const widget = DxNumberBox.getInstance(this.widgetRef);
+    widget?.option(this.properties);
+  }
+
+  @Effect({ run: 'once' })
+  setupWidget(): () => void {
+    const widget = new DxNumberBox(this.widgetRef, this.properties);
+
+    return (): void => widget.dispose();
+  }
+
+  get properties(): Options {
+    const { valueChange, ...restProps } = this.props;
+    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
   }
 }
