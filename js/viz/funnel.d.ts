@@ -5,6 +5,11 @@ import {
 } from '../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from './palette';
+
+import {
     template
 } from '../core/templates/template';
 
@@ -22,13 +27,17 @@ import {
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
+    DashStyleType,
+    HatchingDirectionType
 } from './common';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    WordWrapType,
+    VizTextOverflowType
 } from './core/base_widget';
 
 export interface FunnelLegendItem extends BaseLegendItem {
@@ -102,14 +111,14 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
+    item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } } };
     /**
      * @docid dxFunnelOptions.label
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
+    label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: VizTextOverflowType, visible?: boolean, wordWrap?: WordWrapType };
     /**
      * @docid dxFunnelOptions.legend
      * @inherits BaseLegend
@@ -192,7 +201,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid dxFunnelOptions.paletteExtensionMode
      * @type Enums.VizPaletteExtensionMode
@@ -200,7 +209,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid dxFunnelOptions.resolveLabelOverlapping
      * @type Enums.FunnelResolveLabelOverlapping
