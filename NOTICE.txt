@@ -20,7 +20,7 @@ Roboto Font (Open Source – Apache 2.0)
 https://github.com/google/roboto/blob/master/LICENSE
 
 rrule.js
-Copyright 2010, Jakub Roztocil <jakub@roztocil.name> and Lars Schöning
+Copyright 2010, Jakub Roztocil and Lars Schöning
 https://github.com/jakubroztocil/rrule/blob/master/LICENCE
 
 The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.
