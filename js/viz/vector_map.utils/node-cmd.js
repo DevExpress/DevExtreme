@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-undef, no-var, one-var*/
+/* eslint-disable no-console, no-undef, no-var, one-var, import/no-commonjs*/
 
 var path = require('path');
 

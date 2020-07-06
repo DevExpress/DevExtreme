@@ -77,6 +77,7 @@ function processRenovationMeta() {
             fs.existsSync(meta.path));
 
     let content = '/* !!! This file is auto-generated. Any modification will be lost! */\n\n' +
+    '/* eslint-disable import/no-commonjs */\n\n' +
     '/// BUNDLER_PARTS\n/* Renovation (dx.module-renovation.js) */\n\n' +
     'const renovation = require(\'../../../bundles/modules/renovation\');\n';
     content += widgetsMeta.map(meta =>
