@@ -3,7 +3,6 @@
   "compilerOptions": {
       "jsx": "react",
       "jsxFactory": "h",
-      "target": "ES2019",
-      "resolveJsonModule": true
+      "target": "ES2019"
   },
 }

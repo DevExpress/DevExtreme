@@ -5,35 +5,18 @@ import {
 import { name } from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import eventsEngine from '../../events/core/events_engine';
-import noop from '../utils/noop';
 import { PAGER_CLASS } from './consts';
+import { closestClass } from './utils/closest_class';
 
-type dxClickEffectFn = (HTMLDivElement, Function) => (() => void);
-
-type closestFn = (HTMLDivElement, string) => HTMLElement | null;
+type dxClickEffectFn = (HTMLDivElement, Function) => (() => void) | undefined;
 
 export const dxClickEffect: dxClickEffectFn = (element, handler) => {
   if (handler) {
     eventsEngine.on(element, name, handler);
     return (): void => eventsEngine.off(element, name, handler);
   }
-  return noop;
+  return undefined;
 };
-const isMatchSelector = (el, selector): boolean => el.matches(selector);
-
-// const isMatchSelector = Element.prototype.matches
-//   ? (el, selector): boolean => el.matches(selector)
-//   : (el, selector): boolean => el.msMatchesSelector(selector);
-export const closest: closestFn = (child, className) => {
-  let el = child;
-  const selector = `.${className}`;
-  while (el !== null && el.nodeType === 1) {
-    if (isMatchSelector(el, selector)) return el;
-    el = el.parentElement;
-  }
-  return null;
-};
-
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   widgetRef,
@@ -76,13 +59,13 @@ export class LightButton extends JSXComponent(LightButtonProps) {
   @Effect() keyboardEffect(): (() => void) {
     const fakePagerInstance = {
       option: (): boolean => false,
-      element: (): HTMLElement | null => closest(this.widgetRef, PAGER_CLASS),
+      element: (): HTMLElement | null => closestClass(this.widgetRef, PAGER_CLASS),
       _createActionByOption: createActionByOption,
     };
     return registerKeyboardAction('pager', fakePagerInstance, this.widgetRef, undefined, this.props.onClick);
   }
 
-  @Effect() clickEffect(): (() => void) {
+  @Effect() clickEffect(): (() => void) | undefined {
     return dxClickEffect(this.widgetRef, this.props.onClick);
   }
 }
