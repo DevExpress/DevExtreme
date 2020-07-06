@@ -226,6 +226,55 @@
     "path": "../../../js/renovation/pager/pager.tsx"
   },
   {
+    "name": "AppointmentTooltip",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "adaptivityEnabled",
+        "container",
+        "appointments",
+        "contentTemplate",
+        "checkAndDeleteAppointment",
+        "getTextAndFormatDate",
+        "getSingleAppointmentData",
+        "showAppointmentPopup",
+        "defaultVisible",
+        "visibleChange",
+        "contentRender",
+        "contentComponent"
+      ],
+      "oneway": [
+        "adaptivityEnabled",
+        "container",
+        "appointments",
+        "defaultVisible",
+        "contentRender",
+        "contentComponent"
+      ],
+      "twoway": [],
+      "template": [
+        "contentTemplate"
+      ],
+      "event": [
+        "checkAndDeleteAppointment",
+        "getTextAndFormatDate",
+        "getSingleAppointmentData",
+        "showAppointmentPopup",
+        "visibleChange"
+      ],
+      "ref": [],
+      "slot": []
+    },
+    "api": [],
+    "path": "../../../js/renovation/scheduler/appointment-tooltip/appointment-tooltip.tsx"
+  },
+  {
     "name": "TooltipItemLayout",
     "decorator": {
       "defaultOptionRules": "null",

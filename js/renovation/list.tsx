@@ -1,5 +1,6 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, Event,
+  Component, ComponentBindings, JSXComponent, OneWay,
+  Ref, Effect, Event, Method,
 } from 'devextreme-generator/component_declaration/common';
 import DataSource, { DataSourceOptions } from '../data/data_source';
 import { WidgetProps } from './widget';
@@ -162,6 +163,11 @@ export default class List extends JSXComponent(ListProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 
+  @Method()
+  getHtmlElement(): HTMLDivElement {
+    return this.widgetRef;
+  }
+
   @Effect()
   setupWidget() {
     const { itemTemplate } = this.props;
@@ -179,7 +185,7 @@ export default class List extends JSXComponent(ListProps) {
     if (instance) {
       instance.option(nextProps);
     } else {
-      // eslint-disable-next-line no-new
+    // eslint-disable-next-line no-new
       new DxList(this.widgetRef, nextProps);
     }
   }

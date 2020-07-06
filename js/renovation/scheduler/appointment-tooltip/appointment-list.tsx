@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { h } from 'preact';
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Template, Event, Ref, Method, Effect,
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../utils/noop';
 import List from '../../list';
@@ -44,6 +44,8 @@ export const viewFunction = (viewModel: AppointmentList) => (
     dataSource={viewModel.props.appointments}
     focusStateEnabled={viewModel.props.focusStateEnabled}
     onItemClick={viewModel.onItemClick}
+    onContentReady={viewModel.props.onShowing}
+    ref={viewModel.listRef as never}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   />
@@ -69,6 +71,8 @@ export class AppointmentListProps {
 
   @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
+  @Event() onShowing?: any = noop;
+
   @Template() itemContentTemplate?: any;
 }
 
@@ -77,6 +81,14 @@ export class AppointmentListProps {
   view: viewFunction,
 })
 export default class AppointmentList extends JSXComponent(AppointmentListProps) {
+  @Ref()
+  listRef!: List;
+
+  @Method()
+  getHtmlElement(): HTMLDivElement {
+    return this.listRef.getHtmlElement();
+  }
+
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;
