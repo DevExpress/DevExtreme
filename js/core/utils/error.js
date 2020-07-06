@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 import { extend } from './extend';
 import { logger } from './console';
 import stringUtils from './string';

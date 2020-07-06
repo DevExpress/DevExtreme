@@ -5,7 +5,6 @@ import { hasTouches } from './utils';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
 
-
 const DX_PREFIX = 'dx';
 
 const TRANSFORM = 'transform';
@@ -17,7 +16,6 @@ const ROTATE = 'rotate';
 const START_POSTFIX = 'start';
 const UPDATE_POSTFIX = '';
 const END_POSTFIX = 'end';
-
 
 const eventAliases = [];
 const addAlias = function(eventName, eventArgs) {
@@ -319,7 +317,25 @@ registerEmitter({
     emitter: TransformEmitter,
     events: eventNames
 });
-
+const exportNames = {};
 iteratorUtils.each(eventNames, function(_, eventName) {
-    exports[eventName.substring(DX_PREFIX.length)] = eventName;
+    exportNames[eventName.substring(DX_PREFIX.length)] = eventName;
 });
+/* eslint-disable spellcheck/spell-checker */
+export const {
+    transformstart,
+    transform,
+    transformend,
+    translatestart,
+    translate,
+    translateend,
+    zoomstart,
+    zoom,
+    zoomend,
+    pinchstart,
+    pinch,
+    pinchend,
+    rotatestart,
+    rotate,
+    rotateend
+} = exportNames;
