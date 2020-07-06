@@ -1,7 +1,7 @@
-@use "../base/mixins" as *;
+@use "../../base/mixins" as *;
 // adduse
 
-@use "./scheduler/tooltip";
+@use "./tooltip";
 
 $SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN: 3px;
 $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT: 20px;

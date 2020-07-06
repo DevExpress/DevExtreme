@@ -20,9 +20,9 @@ $SCHEDULER_APPOINTMENT_TEXT_COLOR: null !default;
 $SCHEDULER_FILL_FOCUSED_APPOINTMENT: null !default;
 $SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR: null !default;
 
-@use "./mixins" as *;
-@use "./icons" as *;
-@use "./scheduler/tooltip" with (
+@use "../mixins" as *;
+@use "../icons" as *;
+@use "./tooltip" with (
   $SCHEDULER_APPOINTMENT_BASE_COLOR: $SCHEDULER_APPOINTMENT_BASE_COLOR
 );
 
