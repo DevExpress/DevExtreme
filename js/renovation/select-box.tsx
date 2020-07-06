@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './widget';
 import DataSource, { DataSourceOptions } from '../data/data_source';
-import DxSelectBox from '../ui/select_box';
+import DxSelectBox, { Options } from '../ui/select_box';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
@@ -28,20 +28,20 @@ export default class SelectBox extends JSXComponent(SelectBoxProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  updateWidget() {
+  updateWidget(): void {
     const widget = DxSelectBox.getInstance(this.widgetRef);
     widget?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
-  setupWidget() {
-    const widget = new DxSelectBox(this.widgetRef, this.properties as any);
+  setupWidget(): () => void {
+    const widget = new DxSelectBox(this.widgetRef, this.properties);
 
-    return () => widget.dispose();
+    return (): void => widget.dispose();
   }
 
-  get properties() {
+  get properties(): Options {
     const { valueChange, ...restProps } = this.props;
-    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) });
+    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
   }
 }

@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import DataSource, { DataSourceOptions } from '../data/data_source';
 import { WidgetProps } from './widget';
-import DxList, { dxListItem } from '../ui/list';
+import DxList, { dxListItem, Options } from '../ui/list';
 import { dxElement } from '../core/element';
 import { event } from '../events/index';
 import renderTemplate from './utils/render-template';
@@ -163,25 +163,25 @@ export default class List extends JSXComponent(ListProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  updateWidget() {
+  updateWidget(): void {
     const widget = DxList.getInstance(this.widgetRef);
     widget?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
-  setupWidget() {
-    const widget = new DxList(this.widgetRef, this.properties as any);
+  setupWidget(): () => void {
+    const widget = new DxList(this.widgetRef, this.properties);
 
-    return () => widget.dispose();
+    return (): void => widget.dispose();
   }
 
-  get properties() {
+  get properties(): Options {
     const { itemTemplate, ...restProps } = this.props;
 
-    const template = itemTemplate ? (item, index, container) => {
+    const template = itemTemplate ? (item, index, container): void => {
       renderTemplate(itemTemplate, { item, index, container }, container);
     } : undefined;
 
-    return ({ ...restProps, itemTemplate: template });
+    return ({ ...restProps, itemTemplate: template }) as Options;
   }
 }
