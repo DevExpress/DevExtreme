@@ -5,10 +5,6 @@ import {
 } from '../core/element';
 
 import {
-    template
-} from '../core/templates/template';
-
-import {
     event
 } from '../events/index';
 
@@ -27,12 +23,20 @@ import {
 import {
     ChartSeries,
     ScaleBreak,
-    VizRange
+    VizRange,
+    ChartSeriesType,
+    DashStyleType,
+    TimeIntervalType,
+    HatchingDirectionType
 } from './common';
 
 import {
-    Font
+    Font,
+    WordWrapType,
+    VizTextOverflowType
 } from './core/base_widget';
+
+export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
 
 export interface baseLabelObject {
     /**
@@ -618,7 +622,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    crosshair?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', enabled?: boolean, horizontalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: format, visible?: boolean }, opacity?: number, verticalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, width?: number };
+    crosshair?: { color?: string, dashStyle?: DashStyleType, enabled?: boolean, horizontalLine?: { color?: string, dashStyle?: DashStyleType, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: format, visible?: boolean }, opacity?: number, verticalLine?: { color?: string, dashStyle?: DashStyleType, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, width?: number };
     /**
      * @docid dxChartOptions.customizeAnnotation
      * @type function(annotation)
@@ -947,7 +951,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    aggregationInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.argumentAxis.argumentType
      * @type Enums.ChartDataType
@@ -1070,7 +1074,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minVisualRangeLength?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickCount
      * @type number
@@ -1085,7 +1089,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.argumentAxis.position
      * @type Enums.Position
@@ -1141,7 +1145,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    tickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.argumentAxis.title
      * @type string|object
@@ -1547,7 +1551,7 @@ export interface dxChartCommonAxisSettingsConstantLineStyle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -1678,7 +1682,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    textOverflow?: 'ellipsis' | 'hide' | 'none';
+    textOverflow?: VizTextOverflowType;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.visible
      * @type boolean
@@ -1694,7 +1698,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    wordWrap?: 'normal' | 'breakWord' | 'none';
+    wordWrap?: WordWrapType;
 }
 export interface dxChartCommonAxisSettingsStripStyle {
     /**
@@ -1780,7 +1784,7 @@ export interface dxChartCommonAxisSettingsTitle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    textOverflow?: 'ellipsis' | 'hide' | 'none';
+    textOverflow?: VizTextOverflowType;
     /**
      * @docid dxChartOptions.commonAxisSettings.title.wordWrap
      * @type Enums.VizWordWrap
@@ -1788,7 +1792,7 @@ export interface dxChartCommonAxisSettingsTitle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    wordWrap?: 'normal' | 'breakWord' | 'none';
+    wordWrap?: WordWrapType;
 }
 export interface dxChartCommonPaneSettings {
     /**
@@ -1805,7 +1809,7 @@ export interface dxChartCommonPaneSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { bottom?: boolean, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number };
+    border?: { bottom?: boolean, color?: string, dashStyle?: DashStyleType, left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number };
 }
 export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSeries {
     /**
@@ -1976,7 +1980,7 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+    type?: ChartSeriesType;
 }
 export interface dxChartLegend extends BaseChartLegend {
     /**
@@ -2165,7 +2169,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minVisualRangeLength?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.valueAxis.minorTickCount
      * @type number
@@ -2180,7 +2184,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.valueAxis.multipleAxesSpacing
      * @type number
@@ -2261,7 +2265,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    tickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxChartOptions.valueAxis.title
      * @type string|object
@@ -2800,7 +2804,7 @@ export interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTy
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -2866,7 +2870,7 @@ export interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTyp
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -3019,7 +3023,7 @@ export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends d
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    direction?: 'left' | 'none' | 'right';
+    direction?: HatchingDirectionType;
 }
 export interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -3050,7 +3054,7 @@ export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching exten
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    direction?: 'left' | 'none' | 'right';
+    direction?: HatchingDirectionType;
 }
 export interface dxChartSeriesTypesCommonSeries {
     /**
@@ -3147,7 +3151,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.highValueField
      * @type string
@@ -3417,7 +3421,7 @@ export interface dxChartSeriesTypesCommonSeriesBorder {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border.visible
      * @type boolean
@@ -3462,7 +3466,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching
      * @type object
@@ -3497,7 +3501,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
      * @type boolean
@@ -3523,7 +3527,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    direction?: 'left' | 'none' | 'right';
+    direction?: HatchingDirectionType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity
      * @type number
@@ -3579,7 +3583,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
+    border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.connector
      * @type object
@@ -3779,7 +3783,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching
      * @type object
@@ -3814,7 +3818,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
      * @type boolean
@@ -3840,7 +3844,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    direction?: 'left' | 'none' | 'right';
+    direction?: HatchingDirectionType;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity
      * @type number
@@ -3915,7 +3919,7 @@ export interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxCh
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -3981,7 +3985,7 @@ export interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxCha
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4045,7 +4049,7 @@ export interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxCh
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesFullStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4108,7 +4112,7 @@ export interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extend
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4174,7 +4178,7 @@ export interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dx
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4230,7 +4234,7 @@ export interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTy
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4397,7 +4401,7 @@ export interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSerie
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesScatterSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4460,7 +4464,7 @@ export interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSe
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4526,7 +4530,7 @@ export interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4589,7 +4593,7 @@ export interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartS
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4655,7 +4659,7 @@ export interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSe
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4719,7 +4723,7 @@ export interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartS
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4782,7 +4786,7 @@ export interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dx
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4848,7 +4852,7 @@ export interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChar
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
@@ -4932,7 +4936,7 @@ export interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeri
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStepAreaSeriesBorder extends dxChartSeriesTypesCommonSeriesBorder {
     /**
@@ -5046,7 +5050,7 @@ export interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeri
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+    method?: ChartSingleValueSeriesAggregationMethodType;
 }
 export interface dxChartSeriesTypesStepLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
     /**
