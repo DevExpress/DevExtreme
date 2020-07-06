@@ -2517,8 +2517,6 @@ QUnit.test('Correct zero level on value axis, min and max greater than zero - ma
 
 // T905213
 QUnit.test('Chech zero value. Datetime axis', function(assert) {
-    const expectedMinVisible = new Date();
-    expectedMinVisible.setTime(-8);
     this.testMargins(assert, {
         options: {
             dataType: 'datetime',
@@ -2532,8 +2530,8 @@ QUnit.test('Chech zero value. Datetime axis', function(assert) {
             dataType: 'datetime'
         },
         expectedRange: {
-            minVisible: expectedMinVisible,
-            maxVisible: new Date(143)
+            minVisible: -8,
+            maxVisible: 143
         }
     });
 });
