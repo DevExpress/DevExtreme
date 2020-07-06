@@ -1123,7 +1123,7 @@ QUnit.test('Popup should not contain endDateTimeZone editor by default', functio
 
 QUnit.test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('startDateTimeZone', { visible: true });
+        e.form.itemOption('firstGroup.startDateTimeZone', { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
@@ -1136,7 +1136,7 @@ QUnit.test('It should be possible to render startDateTimeZone editor on appt for
 
 QUnit.test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('endDateTimeZone', { visible: true });
+        e.form.itemOption('firstGroup.endDateTimeZone', { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
