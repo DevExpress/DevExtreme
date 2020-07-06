@@ -1,1 +1,1 @@
-require('./modules/parts/widgets-web');
+import './modules/parts/widgets-web';
