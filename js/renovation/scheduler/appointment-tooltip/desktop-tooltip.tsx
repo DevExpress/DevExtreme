@@ -1,16 +1,9 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event, Template,
+  Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-import noop from '../../utils/noop';
 import Tooltip from '../../tooltip';
 import AppointmentList from './appointment-list';
-import {
-  GetTextAndFormatDateFn, GetSingleAppointmentFn,
-  CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
-} from './types';
-import {
-  defaultGetTextAndFormatDate, defaultGetSingleAppointment,
-} from './utils/default-functions';
+import { OverlayProps } from './overlay-props';
 
 const MAX_TOOLTIP_HEIGHT = 200;
 const closeOnTargetScroll = () => false;
@@ -34,29 +27,8 @@ export const viewFunction = (viewModel: DesktopTooltip) => (
   />
 );
 
-@ComponentBindings()
-export class DesktopTooltipProps {
-  @OneWay() appointments?: AppointmentItem[];
-
-  @OneWay() container?: HTMLDivElement;
-
-  @OneWay() target?: HTMLDivElement;
-
-  @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn = noop;
-
-  @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
-
-  @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
-
-  @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
-
-  @Event() onHide?: () => void = noop;
-
-  @Template() itemContentTemplate?: any;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class DesktopTooltip extends JSXComponent(DesktopTooltipProps) {}
+export default class DesktopTooltip extends JSXComponent(OverlayProps) {}

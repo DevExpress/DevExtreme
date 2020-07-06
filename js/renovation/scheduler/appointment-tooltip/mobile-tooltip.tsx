@@ -2,17 +2,10 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event, Template, Ref,
 } from 'devextreme-generator/component_declaration/common';
-import noop from '../../utils/noop';
 import { getWindow } from '../../../core/utils/window';
 import Overlay from '../../overlay';
 import AppointmentList from './appointment-list';
-import {
-  GetTextAndFormatDateFn, GetSingleAppointmentFn,
-  CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
-} from './types';
-import {
-  defaultGetTextAndFormatDate, defaultGetSingleAppointment,
-} from './utils/default-functions';
+import { OverlayProps } from './overlay-props';
 
 const animationConfigProps: any = {
   show: {
@@ -67,32 +60,11 @@ export const viewFunction = (viewModel: MobileTooltip) => {
   );
 };
 
-@ComponentBindings()
-export class MobileTooltipProps {
-  @OneWay() appointments?: AppointmentItem[];
-
-  @OneWay() container?: HTMLDivElement;
-
-  @OneWay() target?: HTMLDivElement;
-
-  @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn = noop;
-
-  @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
-
-  @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
-
-  @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
-
-  @Event() onHide?: () => void = noop;
-
-  @Template() itemContentTemplate?: any;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class MobileTooltip extends JSXComponent(MobileTooltipProps) {
+export default class MobileTooltip extends JSXComponent(OverlayProps) {
   @Ref()
   listRef!: AppointmentList;
 
