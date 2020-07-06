@@ -306,8 +306,8 @@ export default class dxDiagram extends Widget {
     /**
      * @docid dxDiagramMethods.reloadContent
      * @publicName reloadContent(itemKey, applyLayout)
-     * @param1 itemKey:any
-     * @param1 applyLayout:boolean
+     * @param1 itemKey?:any
+     * @param2 applyLayout?:boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -3297,10 +3297,10 @@ declare module DevExpress.ui {
         getEdgeDataSource(): DevExpress.data.DataSource;
         /** @name dxDiagram.getNodeDataSource() */
         getNodeDataSource(): DevExpress.data.DataSource;
-        /** @name dxDiagram.reloadContent(itemKey, applyLayout) */
-        reloadContent(itemKey?: any, applyLayout?: boolean): void;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly?: boolean): void;
+        /** @name dxDiagram.reloadContent(itemKey, applyLayout) */
+        reloadContent(itemKey?: any, applyLayout?: boolean): void;
     }
     /** @name dxDiagramConnector */
     export interface dxDiagramConnector extends dxDiagramItem {
