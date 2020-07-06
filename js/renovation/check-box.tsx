@@ -7,6 +7,7 @@ import {
   TwoWay,
   Ref,
   Effect,
+  Event,
 } from 'devextreme-generator/component_declaration/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
@@ -18,7 +19,7 @@ import BaseComponent from './preact-wrapper/check_box';
 import BaseWidgetProps from './utils/base-props';
 
 const getCssClasses = (model: CheckBoxProps, value: boolean): string => {
-  const { text, readOnly } = model;
+  const { text, readOnly, isValid } = model;
   const classNames = ['dx-checkbox'];
 
   const checked = value;
@@ -28,7 +29,7 @@ const getCssClasses = (model: CheckBoxProps, value: boolean): string => {
   checked && classNames.push('dx-checkbox-checked');
   indeterminate && classNames.push('dx-checkbox-indeterminate');
   text && classNames.push('dx-checkbox-has-text');
-
+  !isValid && classNames.push('dx-invalid');
   return classNames.join(' ');
 };
 
@@ -87,15 +88,27 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() elementAttr?: object = {};
 
+  @OneWay() validationError?: object | null = null;
+
+  @OneWay() validationErrors?: object[] | null = null;
+
   @OneWay() text?: string = '';
+
+  @OneWay() validationMessageMode?: string = 'auto';
+
+  @OneWay() validationStatus?: string = 'valid';
 
   @OneWay() name?: string = '';
 
   @OneWay() readOnly?: boolean = false;
 
+  @OneWay() isValid?: boolean = true;
+
   @TwoWay() value?: boolean = false;
 
   @OneWay() useInkRipple?: boolean = false;
+
+  @Event() onFocusin?: (e: Event) => void;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
@@ -147,9 +160,10 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onFocusin(event: Event): void {
-    const { useInkRipple } = this.props;
+    const { useInkRipple, onFocusin } = this.props;
 
     useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 0 });
+    onFocusin?.(event);
   }
 
   onFocusout(event: Event): void {
@@ -189,7 +203,7 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   get aria(): object {
-    const { readOnly } = this.props;
+    const { readOnly, isValid } = this.props;
     const checked = this.props.value;
     const indeterminate = checked === undefined;
 
@@ -197,6 +211,7 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : checked || 'false',
       readonly: readOnly ? 'true' : 'false',
+      invalid: !isValid ? 'true' : 'false',
     };
   }
 }
