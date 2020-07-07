@@ -294,8 +294,8 @@ const SchedulerAppointmentForm = {
     },
 
     setEditorsType: function(form, startDateExpr, endDateExpr, allDay) {
-        const startDateFormItem = form.itemOption(startDateExpr);
-        const endDateFormItem = form.itemOption(endDateExpr);
+        const startDateFormItem = form.itemOption(`mainGroup.${startDateExpr}`);
+        const endDateFormItem = form.itemOption(`mainGroup.${endDateExpr}`);
 
         if(startDateFormItem && endDateFormItem) {
             const startDateEditorOptions = startDateFormItem.editorOptions;
@@ -303,8 +303,8 @@ const SchedulerAppointmentForm = {
 
             startDateEditorOptions.type = endDateEditorOptions.type = allDay ? 'date' : 'datetime';
 
-            form.itemOption(startDateExpr, 'editorOptions', startDateEditorOptions);
-            form.itemOption(endDateExpr, 'editorOptions', endDateEditorOptions);
+            form.itemOption(`mainGroup.${startDateExpr}`, 'editorOptions', startDateEditorOptions);
+            form.itemOption(`mainGroup.${endDateExpr}`, 'editorOptions', endDateEditorOptions);
         }
     },
 
