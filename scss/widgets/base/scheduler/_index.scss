@@ -20,8 +20,11 @@ $SCHEDULER_APPOINTMENT_TEXT_COLOR: null !default;
 $SCHEDULER_FILL_FOCUSED_APPOINTMENT: null !default;
 $SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR: null !default;
 
-@use "./mixins" as *;
-@use "./icons" as *;
+@use "../mixins" as *;
+@use "../icons" as *;
+@use "./tooltip" with (
+  $SCHEDULER_APPOINTMENT_BASE_COLOR: $SCHEDULER_APPOINTMENT_BASE_COLOR
+);
 
 $SCHEDULER_NAVIGATOR_OFFSET: 10px;
 $SCHEDULER_SWITCHER_OFFSET: 10px;
@@ -2718,17 +2721,6 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
         float: left;
       }
     }
-  }
-}
-
-.dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
-.dx-scheduler .dx-scheduler-overlay-panel {
-  .dx-overlay-content {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
-  }
-
-  .dx-tooltip-appointment-item-marker-body {
-    background: $SCHEDULER_APPOINTMENT_BASE_COLOR;
   }
 }
 

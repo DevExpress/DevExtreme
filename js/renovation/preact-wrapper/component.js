@@ -21,11 +21,22 @@ export default class PreactWrapper extends DOMComponent {
         return extend(
             super._getDefaultOptions(),
             this._viewComponent.defaultProps,
+            this._getDefaultTwoWayProps()
         );
     }
 
+    _getDefaultTwoWayProps() {
+        const defaultProps = this._viewComponent.defaultProps;
+        const options = {};
+        (this._twoWayProps || []).forEach(([name, defaultName, eventName]) => {
+            options[name] = defaultProps[defaultName];
+            options[eventName] = value => this.option(name, value);
+        });
+        return options;
+    }
+
     _initMarkup() {
-        const props = this.getAllProps();
+        const props = this.getProps();
         if(this._shouldRefresh) {
             this._shouldRefresh = false;
 
@@ -88,17 +99,13 @@ export default class PreactWrapper extends DOMComponent {
         return this._elementAttr;
     }
 
-    getProps(props) {
-        return props;
-    }
-
-    getAllProps() {
+    getProps() {
         const options = {
             ...this.option(),
             ref: this._viewRef,
             children: this._extractDefaultSlot(),
         };
-        return this.getProps({
+        return {
             ...options,
             ...this.elementAttr,
             ...options.elementAttr,
@@ -109,7 +116,7 @@ export default class PreactWrapper extends DOMComponent {
                 .filter((c, i, a) => c && a.indexOf(c) === i)
                 .join(' '),
             ...this._actionsMap,
-        });
+        };
     }
 
     _getActionConfigs() {

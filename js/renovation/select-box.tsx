@@ -5,7 +5,7 @@ import { WidgetProps } from './widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
 import DataSource, { DataSourceOptions } from '../data/data_source';
-import DxSelectBox from '../ui/select_box';
+import DxSelectBox, { Options } from '../ui/select_box';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
@@ -30,18 +30,20 @@ export class SelectBox extends JSXComponent(SelectBoxProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  setupWidget() {
-    const { valueChange } = this.props;
-    const instance = DxSelectBox.getInstance(this.widgetRef);
-    if (instance) {
-      instance.option({ ...this.props });
-    } else {
-      new DxSelectBox(this.widgetRef, { // eslint-disable-line no-new
-        ...this.props as any,
-        onValueChanged: (e) => {
-          valueChange!(e.value);
-        },
-      });
-    }
+  updateWidget(): void {
+    const widget = DxSelectBox.getInstance(this.widgetRef);
+    widget?.option(this.properties);
+  }
+
+  @Effect({ run: 'once' })
+  setupWidget(): () => void {
+    const widget = new DxSelectBox(this.widgetRef, this.properties);
+
+    return (): void => widget.dispose();
+  }
+
+  get properties(): Options {
+    const { valueChange, ...restProps } = this.props;
+    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
   }
 }
