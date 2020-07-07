@@ -1915,8 +1915,8 @@ QUnit.module('Headers', {
 
         // assert
         assert.ok($cellElements.eq(0).hasClass('dx-command-edit-with-icons'), 'command column has with-icons class');
-        assert.strictEqual(parseInt($cellElements.eq(0).css('line-height')), 19, 'command column line-height');
-        assert.strictEqual(parseInt($cellElements.eq(1).css('line-height')), 19, 'data column line-height');
+        assert.roughEqual(parseFloat($cellElements.eq(0).css('line-height')), 19, 0.1, 'command column line-height');
+        assert.roughEqual(parseFloat($cellElements.eq(1).css('line-height')), 19, 0.1, 'data column line-height');
     });
 });
 
