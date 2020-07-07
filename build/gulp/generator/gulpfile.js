@@ -26,7 +26,7 @@ const knownErrors = [
     'Cannot find module \'preact/compat\''
 ];
 
-function generateJQueryComponents() {
+function generateJQueryComponents(isWatch) {
     const generator = new PreactGenerator();
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
@@ -35,7 +35,9 @@ function generateJQueryComponents() {
         generateJQueryOnly: true
     };
 
-    return gulp.src(SRC)
+    const pipe = isWatch ? watch(SRC) : gulp.src(SRC);
+
+    return pipe
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
         .pipe(gulp.dest(DEST));
@@ -86,6 +88,8 @@ function processRenovationMeta() {
         .pipe(gulp.dest(COMPAT_TESTS_PARTS));
 }
 gulp.task('generate-components', gulp.series(generateJQueryComponents, generatePreactComponents, processRenovationMeta));
+
+gulp.task('generate-jquery-components-watch', function watchJQueryComponents() { return generateJQueryComponents(true); });
 
 function addGenerationTask(
     frameworkName,

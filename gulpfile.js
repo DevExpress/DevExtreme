@@ -68,4 +68,5 @@ gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
 gulp.task('default', createDefaultBatch());
 
-gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));
+gulp.task('dev', gulp.parallel('generate-jquery-components-watch', 'bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));
+
