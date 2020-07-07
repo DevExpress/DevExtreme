@@ -46,9 +46,6 @@ QUnit.testStart(function() {
     // $(gridMarkup).appendTo('body');
 });
 
-import 'common.css!';
-import 'generic_light.css!';
-
 import '../../../node_modules/underscore/underscore-min.js';
 import '../../../node_modules/jsrender/jsrender.min.js';
 
@@ -99,12 +96,6 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
 }
 
 fx.off = true;
-
-DataGrid.defaultOptions({
-    options: {
-        loadingTimeout: 0
-    }
-});
 
 QUnit.testDone(function() {
     ajaxMock.clear();
@@ -9413,7 +9404,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             data.push({ id: i + 1 });
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
+            height: 500,
             dataSource: data,
             loadingTimeout: undefined,
             scrolling: {
