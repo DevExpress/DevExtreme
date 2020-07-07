@@ -394,6 +394,11 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 that._renderEditor($editorContainer, editorOptions);
             }
 
+            const alignment = column.alignment;
+            if(alignment && alignment !== 'center') {
+                $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', column.alignment);
+            }
+
             if(column.filterOperations && column.filterOperations.length) {
                 that._renderFilterOperationChooser($container, column, $editorContainer);
             }

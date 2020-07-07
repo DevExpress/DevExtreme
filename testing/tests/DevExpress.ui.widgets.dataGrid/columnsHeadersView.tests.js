@@ -11,7 +11,6 @@ import { DataSource } from 'data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
-import browser from 'core/utils/browser';
 
 import 'ui/data_grid/ui.data_grid';
 import '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
@@ -502,12 +501,11 @@ QUnit.module('Headers', {
 
         // assert
         const inputs = this.columnHeadersView.element().find('input');
-        const textAlign = browser.msie ? 'left' : 'start';
 
         assert.equal($filterCell.attr('aria-label'), messageLocalization.format('dxDataGrid-ariaFilterCell'), 'Filter cell aria-label');
         assert.equal(inputs.length, 2, 'inputs count');
-        assert.equal(inputs.eq(0).css('textAlign'), textAlign, 'left alignment');
-        assert.equal(inputs.eq(1).css('textAlign'), textAlign, 'right alignment');
+        assert.equal(inputs.eq(0).css('textAlign'), 'left', 'left alignment');
+        assert.equal(inputs.eq(1).css('textAlign'), 'right', 'right alignment');
     });
 
     QUnit.test('filterRow accessibility structure', function(assert) {
