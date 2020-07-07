@@ -1,6 +1,7 @@
-import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { h, createRef } from 'preact';
+import { mount, shallow } from 'enzyme';
 import ScrollView, { viewFunction } from '../../js/renovation/scroll-view';
+import Widget from '../../js/renovation/widget';
 
 describe('ScrollView', () => {
   describe('Render', () => {
@@ -84,6 +85,13 @@ describe('ScrollView', () => {
           const { cssClasses } = new ScrollView({ direction: 'both' });
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
         });
+      });
+    });
+
+    describe('Default options', () => {
+      it('should define rtlEnabled', () => {
+        const props = new ScrollViewProps();
+        expect(props.rtlEnabled).toEqual(config().rtlEnabled);
       });
     });
   });
