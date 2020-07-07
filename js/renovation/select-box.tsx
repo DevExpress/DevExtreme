@@ -5,6 +5,7 @@ import { WidgetProps } from './widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
 import DataSource, { DataSourceOptions } from '../data/data_source';
+/* eslint-disable-next-line import/named */
 import DxSelectBox, { Options } from '../ui/select_box';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
