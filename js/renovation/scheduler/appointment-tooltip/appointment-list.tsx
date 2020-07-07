@@ -26,14 +26,13 @@ type ListItemProps = {
 
 export const viewFunction = (viewModel: AppointmentList) => (
   <List
-    itemTemplate={({ item, index, container }: ItemTemplateProps) => (
+    itemTemplate={({ item, index }: ItemTemplateProps) => (
       <TooltipItemLayout
         item={item}
         index={index}
         onDelete={viewModel.props.checkAndDeleteAppointment}
         onHide={viewModel.props.onHide}
         itemContentTemplate={viewModel.props.itemContentTemplate}
-        container={container}
         getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
         singleAppointment={viewModel.props.getSingleAppointmentData!(
           item.data, viewModel.props.target!,
@@ -44,7 +43,8 @@ export const viewFunction = (viewModel: AppointmentList) => (
     dataSource={viewModel.props.appointments}
     focusStateEnabled={viewModel.props.focusStateEnabled}
     onItemClick={viewModel.onItemClick}
-    onContentReady={viewModel.props.onShowing}
+    onContentReady={viewModel.props.dragBehavior}
+    showScrollbar={viewModel.props.showScrollbar}
     ref={viewModel.listRef as never}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -61,6 +61,8 @@ export class AppointmentListProps {
 
   @OneWay() target?: HTMLElement;
 
+  @OneWay() showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+
   @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
 
   @Event() onHide?: () => void = noop;
@@ -71,7 +73,7 @@ export class AppointmentListProps {
 
   @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
-  @Event() onShowing?: any = noop;
+  @Event() dragBehavior?: (element: HTMLElement) => void;
 
   @Template() itemContentTemplate?: any;
 }
@@ -85,7 +87,7 @@ export default class AppointmentList extends JSXComponent(AppointmentListProps) 
   listRef!: List;
 
   @Method()
-  getHtmlElement(): HTMLDivElement {
+  getHtmlElement(): HTMLElement {
     return this.listRef.getHtmlElement();
   }
 

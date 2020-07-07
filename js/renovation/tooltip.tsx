@@ -5,7 +5,8 @@ import { WidgetProps } from './widget';
 import DxTooltip from '../ui/tooltip';
 import renderTemplate from './utils/render-template';
 
-export const viewFunction = ({ widgetRef }: Tooltip) => <div ref={widgetRef as any} />;
+export const viewFunction = (viewModel: Tooltip) => (
+  <div ref={viewModel.widgetRef as any} className={viewModel.props.className} />);
 
 @ComponentBindings()
 export class TooltipProps extends WidgetProps {
@@ -39,6 +40,7 @@ export default class Tooltip extends JSXComponent(TooltipProps) {
       renderTemplate(contentTemplate, { container }, container);
     } : undefined;
 
+    // debugger;
     // eslint-disable-next-line no-new
     new DxTooltip(this.widgetRef, {
       ...this.props as any,

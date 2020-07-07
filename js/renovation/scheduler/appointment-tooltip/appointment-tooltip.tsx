@@ -11,6 +11,7 @@ import {
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
 } from './utils/default-functions';
+import { dxSchedulerAppointment } from '../../../ui/scheduler';
 
 export const viewFunction = (viewModel: AppointmentTooltip) => {
   const Tooltip = viewModel.props.adaptivityEnabled ? MobileTooltip : DesktopTooltip;
@@ -25,12 +26,16 @@ export const viewFunction = (viewModel: AppointmentTooltip) => {
       <Tooltip
         appointments={viewModel.props.appointments}
         onHide={viewModel.onHide}
-        target={viewModel.target}
+        target={viewModel.props.target}
         container={viewModel.props.container}
         checkAndDeleteAppointment={viewModel.props.checkAndDeleteAppointment}
         showAppointmentPopup={viewModel.props.showAppointmentPopup}
         itemContentTemplate={viewModel.props.contentTemplate}
         getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
+        isAppointmentInAllDayPanel={viewModel.props.isAppointmentInAllDayPanel}
+        getScrollableContainer={viewModel.props.getScrollableContainer}
+        offset={viewModel.props.offset}
+        dragBehavior={viewModel.props.dragBehavior}
       />
     </div>
   ) : null;
@@ -46,6 +51,8 @@ export class AppointmentTooltipProps {
 
   @OneWay() appointments?: AppointmentItem[] = [];
 
+  @OneWay() offset?: number;
+
   @TwoWay() visible?: boolean = true;
 
   @Template() contentTemplate?: any;
@@ -57,6 +64,14 @@ export class AppointmentTooltipProps {
   @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
   @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
+
+  @Event() getScrollableContainer?: () => HTMLDivElement;
+
+  @Event() isAppointmentInAllDayPanel?: (
+    appointment: dxSchedulerAppointment,
+  ) => boolean = () => false;
+
+  @Event() dragBehavior?: () => void;
 }
 
 @Component({

@@ -6,7 +6,7 @@ import DxOverlay from '../ui/overlay';
 import renderTemplate from './utils/render-template';
 
 export const viewFunction = (viewModel: Overlay) => (
-  <div ref={viewModel.widgetRef as any} className="dx-scheduler-overlay-panel" />
+  <div ref={viewModel.widgetRef as any} className={viewModel.props.className} />
 );
 @ComponentBindings()
 export class OverlayProps extends WidgetProps {

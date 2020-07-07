@@ -9,6 +9,7 @@ import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
 } from './utils/default-functions';
 import noop from '../../utils/noop';
+import { dxSchedulerAppointment } from '../../../ui/scheduler';
 
 @ComponentBindings()
 export class OverlayProps {
@@ -17,6 +18,8 @@ export class OverlayProps {
   @OneWay() container?: HTMLDivElement;
 
   @OneWay() target?: HTMLDivElement;
+
+  @OneWay() offset?: number;
 
   @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn = noop;
 
@@ -27,6 +30,14 @@ export class OverlayProps {
   @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
 
   @Event() onHide?: () => void = noop;
+
+  @Event() getScrollableContainer?: () => HTMLDivElement;
+
+  @Event() isAppointmentInAllDayPanel?: (
+    appointment: dxSchedulerAppointment,
+  ) => boolean = () => false;
+
+  @Event() dragBehavior?: () => void;
 
   @Template() itemContentTemplate?: any;
 }

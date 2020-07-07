@@ -144,7 +144,7 @@ export class ListProps extends WidgetProps {
 
   // @OneWay()selectionMode?: 'all' | 'multiple' | 'none' | 'single';
 
-  // @OneWay()showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+  @OneWay()showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
 
   // @OneWay()showSelectionControls?: boolean;
 

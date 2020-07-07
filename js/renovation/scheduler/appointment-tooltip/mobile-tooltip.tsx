@@ -33,9 +33,10 @@ export const viewFunction = (viewModel: MobileTooltip) => {
   console.log(viewModel.props.container);
   return (
     <Overlay
+      className="dx-scheduler-overlay-panel"
       shading={false}
-      positionConfig={positionConfigProps}
-      // animationConfig={animationConfigProps}
+      position={positionConfigProps}
+      animation={animationConfigProps}
       target={viewModel.props.container}
       container={viewModel.props.container}
       closeOnOutsideClick
@@ -82,7 +83,7 @@ export default class MobileTooltip extends JSXComponent(OverlayProps) {
       console.log(list);
       this.height = list.getClientRects()[0].height > MAX_OVERLAY_HEIGHT ? MAX_OVERLAY_HEIGHT : 'auto';
       console.log(this.height);
-      debugger;
+      // debugger;
       // debugger;
       // });
     };
