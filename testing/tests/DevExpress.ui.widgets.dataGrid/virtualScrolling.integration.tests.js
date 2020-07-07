@@ -47,4 +47,35 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0, 'scroll top is updated');
     });
 
+    // T643374
+    QUnit.test('ScrollTop should be correct after loading pageIndex from state', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            height: 100,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return { pageIndex: 3 };
+                },
+                customSave: function() {
+                }
+            },
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageSize: 2
+            },
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
+        });
+
+        this.clock.tick();
+
+        // assert
+        const scrollTop = dataGrid.getScrollable().scrollTop();
+        assert.ok(scrollTop > 0, 'scrollTop');
+        assert.ok(dataGrid.$element().find('.dx-virtual-row').first().children().first().height() <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
+    });
 });

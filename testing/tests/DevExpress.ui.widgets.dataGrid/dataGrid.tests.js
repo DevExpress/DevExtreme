@@ -95,12 +95,6 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
 
 fx.off = true;
 
-DataGrid.defaultOptions({
-    options: {
-        loadingTimeout: 0
-    }
-});
-
 QUnit.testDone(function() {
     ajaxMock.clear();
 });
