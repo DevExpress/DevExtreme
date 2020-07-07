@@ -34,7 +34,9 @@ const createModuleConfig = (oldWidget, renovatedWidget, config) => {
 };
 
 export const getQUnitModuleForTestingRenovationWidget = (oldWidget, newWidget) => (name, config, tests) => {
-    QUnit.module(name, config, () => tests(false));
-    const newConfig = createModuleConfig(oldWidget, newWidget, config);
-    QUnit.module(`Renovated ${name}`, newConfig, () => tests(true));
+    const realConfig = tests ? config : {};
+    const realTests = tests || config;
+    QUnit.module(name, config, () => realTests(false));
+    const newConfig = createModuleConfig(oldWidget, newWidget, realConfig);
+    QUnit.module(`Renovated ${name}`, newConfig, () => realTests(true));
 };

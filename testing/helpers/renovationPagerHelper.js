@@ -24,7 +24,6 @@ export class RenovatedPagerForTest extends RenovatedPager {
     get selectedPage() {
         return this._pages.filter(p => p.selected)[0];
     }
-    _useDefaultOptionUpdate = false;
     option(name, value) {
         if(!this._useDefaultOptionUpdate) {
             if(name instanceof Object) {
@@ -62,7 +61,6 @@ export class RenovatedPagerForTest extends RenovatedPager {
         }
         return super.option.apply(this, arguments);
     }
-    theRoofIsOnFire = false;
     _dimensionChanged() {
         if(!this.theRoofIsOnFire) {
             this.theRoofIsOnFire = true;
