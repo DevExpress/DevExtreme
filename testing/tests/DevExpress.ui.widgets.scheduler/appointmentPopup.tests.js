@@ -24,8 +24,8 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     assert.equal(form.itemOption('recurrenceGroup').visible,
         visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
 
-    assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');
-    assert.equal(form.option('items')[1].colSpan, colSpan, 'colSpan of recurrence group is correct');
+    assert.equal(form.itemOption('mainGroup').colSpan, colSpan, 'colSpan of main group is correct');
+    assert.equal(form.itemOption('recurrenceGroup').colSpan, colSpan, 'colSpan of recurrence group is correct');
 
     assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup is correct');
 };
@@ -239,6 +239,21 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
             testCase();
         });
+    });
+
+    QUnit.test('Appointment popup form should have two named groups', function(assert) {
+        const scheduler = createScheduler({ dataSource: [] });
+        const data = {
+            text: 'appointment',
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+        };
+
+        scheduler.instance.showAppointmentPopup(data);
+        const form = scheduler.instance.getAppointmentDetailsForm();
+
+        assert.equal(form.option('items')[0].name, 'mainGroup', 'first group name is correct');
+        assert.equal(form.option('items')[1].name, 'recurrenceGroup', 'second group name is correct');
     });
 
     QUnit.test('Appointment popup should be with correct dates after change allDay switch and w/o saving (T832711)', function(assert) {
