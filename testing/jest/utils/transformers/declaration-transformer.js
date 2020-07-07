@@ -1,4 +1,5 @@
 const { compileCode } = require('devextreme-generator/component-compiler');
+const { getTsConfig } = require("devextreme-generator/utils/typescript-utils");
 const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('typescript');
 const path = require('path');
@@ -11,26 +12,6 @@ const tsJest = require('ts-jest');
 const jestTransformer = tsJest.createTransformer();
 
 const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/preact.tsconfig.json';
-
-function getTsConfig(filename) {
-  const { config, errors } = ts.readConfigFile(filename, ts.sys.readFile);
-  if (errors && errors.length) {
-    return {};
-  }
-  let baseConfig = {};
-  if (config.extends) {
-    baseConfig = getTsConfig(path.resolve(path.dirname(filename), config.extends));
-  }
-  return {
-    ...baseConfig,
-    ...config,
-    compilerOptions: {
-      ...baseConfig.compilerOptions,
-      ...config.compilerOptions,
-      sourceMap: false,
-    },
-  };
-}
 
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
