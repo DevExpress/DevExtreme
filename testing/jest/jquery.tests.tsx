@@ -226,7 +226,7 @@ describe('option', () => {
     expect($('#component').dxrPreactTestWidget('option').text).toBe('default text');
   });
 
-  it.skip('should return default value of TwoWay prop', () => {
+  it('should return default value of TwoWay prop', () => {
     act(() => $('#component').dxrPreactTestWidget({}));
 
     expect($('#component').dxrPreactTestWidget('option').twoWayProp).toBe(1);
@@ -252,6 +252,7 @@ describe('option', () => {
     expect(optionChanged.mock.calls[0][0]).toEqual({
       fullName: 'twoWayProp',
       name: 'twoWayProp',
+      previousValue: 1,
       value: 2,
       element: $('#component').get(0),
       component: $('#component').dxrPreactTestWidget('instance'),

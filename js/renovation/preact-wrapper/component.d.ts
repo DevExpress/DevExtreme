@@ -10,7 +10,7 @@ export default class PreactWrapper extends DOMComponent {
 
   _render(): void;
 
-  getAllProps(isFirstRender: boolean): any;
+  getProps(): any;
 
   _getActionsMap(): any;
 

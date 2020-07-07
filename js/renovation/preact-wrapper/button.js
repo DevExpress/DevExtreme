@@ -7,8 +7,8 @@ export default class Button extends Component {
         this._addAction('onSubmit', this._getSubmitAction());
     }
 
-    getAllProps(isFirstRender) {
-        const props = super.getAllProps(isFirstRender);
+    getProps() {
+        const props = super.getProps();
         props.validationGroup = this._validationGroupConfig;
         return props;
     }
