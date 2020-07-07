@@ -211,28 +211,29 @@ export default class AppointmentPopup {
         }
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
-        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        this._setEditorOptions(recurrenceRuleExpr, extend({}, recurrenceEditorOptions, { startDate: startDate }));
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, 'recurrenceGroup');
+        this._setEditorOptions(recurrenceRuleExpr, 'recurrenceGroup', extend({}, recurrenceEditorOptions, { startDate: startDate }));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
         AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
     }
 
-    _getEditorOptions(name) {
+    _getEditorOptions(name, groupName) {
         if(!name) {
             return;
         }
-        const editor = this._appointmentForm.itemOption(name);
+
+        const editor = this._appointmentForm.itemOption(`${groupName}.${name}`);
         return editor ? editor.editorOptions : {};
     }
 
-    _setEditorOptions(name, options) {
+    _setEditorOptions(name, groupName, options) {
         if(!name) {
             return;
         }
-        const editor = this._appointmentForm.itemOption(name);
-        editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
+        const editor = this._appointmentForm.itemOption(`${groupName}.${name}`);
+        editor && this._appointmentForm.itemOption(`${groupName}.${name}`, 'editorOptions', options);
     }
 
     _isDeviceMobile() {

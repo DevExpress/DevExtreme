@@ -21,7 +21,7 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const colSpan = visibility === true ? 1 : 2;
     const form = instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption('secondGroup').visible,
+    assert.equal(form.itemOption('recurrenceGroup').visible,
         visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
 
     assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');
@@ -1123,7 +1123,7 @@ QUnit.test('Popup should not contain endDateTimeZone editor by default', functio
 
 QUnit.test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('firstGroup.startDateTimeZone', { visible: true });
+        e.form.itemOption('mainGroup.startDateTimeZone', { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
@@ -1136,7 +1136,7 @@ QUnit.test('It should be possible to render startDateTimeZone editor on appt for
 
 QUnit.test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('firstGroup.endDateTimeZone', { visible: true });
+        e.form.itemOption('mainGroup.endDateTimeZone', { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
@@ -1322,8 +1322,8 @@ QUnit.test('startDateBox & endDateBox should have required validation rules', fu
 
     const form = this.instance.getAppointmentDetailsForm();
 
-    assert.deepEqual(form.itemOption('startDate').validationRules, [{ type: 'required' }]);
-    assert.deepEqual(form.itemOption('endDate').validationRules, [{ type: 'required' }]);
+    assert.deepEqual(form.itemOption('mainGroup.startDate').validationRules, [{ type: 'required' }]);
+    assert.deepEqual(form.itemOption('mainGroup.endDate').validationRules, [{ type: 'required' }]);
 });
 
 QUnit.test('Changes shouldn\'t be saved if form is invalid', function(assert) {

@@ -205,8 +205,8 @@ const SchedulerAppointmentForm = {
                             const form = this._appointmentForm;
                             const colSpan = args.value ? 1 : 2;
 
-                            form.itemOption('firstGroup', 'colSpan', colSpan);
-                            form.itemOption('secondGroup', 'colSpan', colSpan);
+                            form.itemOption('mainGroup', 'colSpan', colSpan);
+                            form.itemOption('recurrenceGroup', 'colSpan', colSpan);
 
                             this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
 
@@ -237,7 +237,7 @@ const SchedulerAppointmentForm = {
 
     _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
         // form.itemOption(`secondGroup.${recurrenceRuleExpr}`, 'visible', value);
-        form.itemOption('secondGroup', 'visible', value);
+        form.itemOption('recurrenceGroup', 'visible', value);
         !value && form.updateData(recurrenceRuleExpr, '');
         form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
     },
@@ -249,7 +249,7 @@ const SchedulerAppointmentForm = {
         this._editors = [
             {
                 itemType: 'group',
-                name: 'firstGroup',
+                name: 'mainGroup',
                 colCountByScreen: {
                     lg: 2,
                     xs: 1
@@ -259,7 +259,7 @@ const SchedulerAppointmentForm = {
             },
             {
                 itemType: 'group',
-                name: 'secondGroup',
+                name: 'recurrenceGroup',
                 visible: recurrenceEditorVisibility,
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
                 items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
