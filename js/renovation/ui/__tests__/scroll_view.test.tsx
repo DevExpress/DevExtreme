@@ -1,18 +1,9 @@
-import React from 'react';
+import { h } from 'preact';
 import { shallow } from 'enzyme';
-import ScrollView, { viewFunction } from '../scroll_view';
+import ScrollView, { viewFunction } from '../../js/renovation/scroll-view';
 
 describe('ScrollView', () => {
   describe('Render', () => {
-    it('should render parent container', () => {
-      const scrollView = shallow(viewFunction({
-        cssClasses: 'dx-scrollview',
-        props: { },
-      } as any) as any);
-
-      expect(scrollView.hasClass('dx-scrollview')).toBe(true);
-    });
-
     it('should render scrollable content', () => {
       const scrollView = shallow(viewFunction({ props: { } } as any) as any);
       const scrollViewContent = scrollView.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content');
@@ -20,12 +11,51 @@ describe('ScrollView', () => {
     });
 
     it('should render slot', () => {
-      const scrollView = shallow(viewFunction({
+      const props = {
         props: { children: <div className="content" /> },
-      } as any) as any);
+      } as Partial<ScrollView>;
+      const scrollView = shallow(viewFunction(props as any) as any);
+      expect(scrollView.find('.dx-scrollable-content .content').exists()).toBe(true);
+    });
 
-      const content = scrollView.find('.dx-scrollable-content .content');
-      expect(content.exists()).toBe(true);
+    it('should pass all necessary properties to the Widget', () => {
+      const cssClasses = 'dx-scrollview';
+      const props = {
+        props: {
+          width: '120px',
+          height: '300px',
+          rtlEnabled: true,
+          disabled: true,
+        },
+        cssClasses,
+      } as Partial<ScrollView>;
+      const scrollView = mount(viewFunction(props as any) as any);
+
+      expect(scrollView.find(Widget).props()).toMatchObject({
+        classes: cssClasses,
+        ...props.props,
+      });
+    });
+
+    it('should scrollable content has the ref', () => {
+      const contentRef = createRef();
+      const props = {
+        props: {},
+        contentRef,
+      } as Partial<ScrollView>;
+      const scrollView = mount(viewFunction(props as any) as any);
+      expect(scrollView.find('.dx-scrollable-content').instance()).toBe(contentRef.current);
+    });
+  });
+
+  describe('Behavior', () => {
+    describe('Methods', () => {
+      it('should get the content of the widget', () => {
+        const scrollView = new ScrollView({});
+        const content = { };
+        scrollView.contentRef = content as any;
+        expect(scrollView.content()).toMatchObject(content);
+      });
     });
   });
 
