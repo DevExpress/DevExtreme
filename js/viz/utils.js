@@ -2,7 +2,7 @@ import { refreshPaths } from './core/renderers/renderer';
 import { each as _each } from '../core/utils/iterator';
 
 // 'var' because JSHint throws W021 error
-let prepareSegmentRectPoints = function(left, top, width, height, borderOptions) {
+export let prepareSegmentRectPoints = function(left, top, width, height, borderOptions) {
     const maxSW = ~~((width < height ? width : height) / 2);
     const sw = borderOptions.width || 0;
     const newSW = sw < maxSW ? sw : maxSW;
@@ -64,8 +64,7 @@ let prepareSegmentRectPoints = function(left, top, width, height, borderOptions)
 };
 
 export {
-    refreshPaths,
-    prepareSegmentRectPoints
+    refreshPaths
 };
 
 ///#DEBUG

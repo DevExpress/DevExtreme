@@ -104,7 +104,7 @@ function getFloatPointIndex(format) {
     return format.length;
 }
 
-function getFormatter(format, config) {
+export function getFormatter(format, config) {
     config = config || DEFAULT_CONFIG;
 
     return function(value) {
@@ -203,7 +203,7 @@ function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
     return format;
 }
 
-function getFormat(formatter) {
+export function getFormat(formatter) {
     let valueText = '.';
     const isPercent = formatter(1).indexOf('100') >= 0;
 
@@ -215,8 +215,3 @@ function getFormat(formatter) {
 
     return negativeFormat === '-' + positiveFormat ? positiveFormat : positiveFormat + ';' + negativeFormat;
 }
-
-export {
-    getFormatter,
-    getFormat
-};

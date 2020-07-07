@@ -5,7 +5,7 @@ const TRANSLATOR_DATA_KEY = 'dxTranslator';
 const TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/;
 const TRANSLATE_REGEX = /translate(?:3d)?\((.+?)\)/;
 
-const locate = function($element) {
+export const locate = function($element) {
     const translate = getTranslate($element);
 
     return {
@@ -23,13 +23,13 @@ function cacheTranslate($element, translate) {
     }
 }
 
-const clearCache = function($element) {
+export const clearCache = function($element) {
     if($element.length) {
         removeData($element.get(0), TRANSLATOR_DATA_KEY);
     }
 };
 
-const getTranslateCss = function(translate) {
+export const getTranslateCss = function(translate) {
     translate.x = translate.x || 0;
     translate.y = translate.y || 0;
 
@@ -39,7 +39,7 @@ const getTranslateCss = function(translate) {
     return 'translate(' + xValueString + ', ' + yValueString + ')';
 };
 
-const getTranslate = function($element) {
+export const getTranslate = function($element) {
     let result = $element.length ? elementData($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
@@ -71,7 +71,7 @@ const getTranslate = function($element) {
     return result;
 };
 
-const move = function($element, position) {
+export const move = function($element, position) {
     const left = position.left;
     const top = position.top;
     let translate;
@@ -96,7 +96,7 @@ const move = function($element, position) {
     }
 };
 
-const resetPosition = function($element, finishTransition) {
+export const resetPosition = function($element, finishTransition) {
     let originalTransition;
     const stylesConfig = {
         left: 0,
@@ -119,7 +119,7 @@ const resetPosition = function($element, finishTransition) {
     }
 };
 
-const parseTranslate = function(translateString) {
+export const parseTranslate = function(translateString) {
     let result = translateString.match(TRANSLATE_REGEX);
 
     if(!result || !result[1]) {
@@ -135,14 +135,4 @@ const parseTranslate = function(translateString) {
     };
 
     return result;
-};
-
-export {
-    move,
-    locate,
-    clearCache,
-    parseTranslate,
-    getTranslate,
-    getTranslateCss,
-    resetPosition
 };

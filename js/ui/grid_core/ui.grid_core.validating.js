@@ -6,7 +6,7 @@ import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isDefined, isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import selectors from '../widget/selectors';
+import { focused } from '../widget/selectors';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
 import pointerEvents from '../../events/pointer';
@@ -286,7 +286,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(result.status === VALIDATION_STATUS.invalid) {
                     const $focus = $container.find(':focus');
                     this._editingController.showHighlighting($container, true);
-                    if(!selectors.focused($focus)) {
+                    if(!focused($focus)) {
                         eventsEngine.trigger($focus, 'focus');
                         eventsEngine.trigger($focus, pointerEvents.down);
                     }

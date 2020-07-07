@@ -14,7 +14,7 @@ import Widget from './widget/ui.widget';
 import SelectBox from './select_box';
 import NumberBox from './number_box';
 import { addNamespace } from '../events/utils';
-import accessibility from './shared/accessibility';
+import { registerKeyboardAction, setTabIndex, restoreFocus } from './shared/accessibility';
 
 const PAGES_LIMITER = 4;
 const PAGER_CLASS = 'dx-pager';
@@ -310,7 +310,7 @@ const Pager = Widget.inherit({
 
             eventsEngine.on(that._$pagesChooser, addNamespace([pointerEvents.up, clickEventName], that.Name + 'Pages'), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
 
-            accessibility.registerKeyboardAction('pager', that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
+            registerKeyboardAction('pager', that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
         }
 
         for(let i = 0; i < pagesLength; i++) {
@@ -323,7 +323,7 @@ const Pager = Widget.inherit({
                 'label': 'Page ' + page.value()
             }, page.element());
 
-            accessibility.setTabIndex(that, page.element());
+            setTabIndex(that, page.element());
 
             if(pages[i + 1] && pages[i + 1].value() - page.value() > 1) {
                 $separator = $('<div>').text('. . .').addClass(PAGER_PAGE_SEPARATOR_CLASS);
@@ -375,7 +375,7 @@ const Pager = Widget.inherit({
             clickAction({ event: e });
         });
 
-        accessibility.registerKeyboardAction('pager', that, $pageCount, undefined, clickAction);
+        registerKeyboardAction('pager', that, $pageCount, undefined, clickAction);
 
         $pageCount.appendTo($container);
 
@@ -453,7 +453,7 @@ const Pager = Widget.inherit({
             clickPagesSizeAction({ event: e });
         });
 
-        accessibility.registerKeyboardAction('pager', that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
+        registerKeyboardAction('pager', that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
 
         for(i = 0; i < pagesSizesLength; i++) {
             $pageSize = $('<div>')
@@ -465,7 +465,7 @@ const Pager = Widget.inherit({
                 'label': 'Display ' + pageSizes[i] + ' items on page'
             }, $pageSize);
 
-            accessibility.setTabIndex(that, $pageSize);
+            setTabIndex(that, $pageSize);
 
             if(currentPageSize === pageSizes[i]) {
                 $pageSize.addClass(PAGER_SELECTION_CLASS);
@@ -549,14 +549,14 @@ const Pager = Widget.inherit({
 
             eventsEngine.on($button, addNamespace([pointerEvents.up, clickEventName], that.Name + 'Pages'), that._wrapClickAction(clickAction));
 
-            accessibility.registerKeyboardAction('pager', that, $button, undefined, clickAction);
+            registerKeyboardAction('pager', that, $button, undefined, clickAction);
 
             that.setAria({
                 'role': 'button',
                 'label': direction === 'prev' ? 'Previous page' : ' Next page'
             }, $button);
 
-            accessibility.setTabIndex(that, $button);
+            setTabIndex(that, $button);
 
             if(that.option('rtlEnabled')) {
                 $button.addClass(direction === 'prev' ? PAGER_NEXT_BUTTON_CLASS : PAGER_PREV_BUTTON_CLASS);
@@ -576,7 +576,7 @@ const Pager = Widget.inherit({
         this._updatePageSizes(true);
         this._updatePages(true);
 
-        accessibility.restoreFocus(this);
+        restoreFocus(this);
     },
 
     _initMarkup: function() {
@@ -699,7 +699,7 @@ const Pager = Widget.inherit({
         if(this._$pagesChooser) {
             eventsEngine.off(this._$pagesChooser, addNamespace([pointerEvents.up, clickEventName], this.Name + 'Pages'), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
 
-            accessibility.registerKeyboardAction('pager', this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
+            registerKeyboardAction('pager', this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
         }
 
         this.callBase();

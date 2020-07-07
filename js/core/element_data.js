@@ -6,7 +6,7 @@ import MemorizedCallbacks from './memorized_callbacks';
 const dataMap = new WeakMap();
 let strategy;
 
-const strategyChanging = new MemorizedCallbacks();
+export const strategyChanging = new MemorizedCallbacks();
 let beforeCleanDataFunc = function() {};
 let afterCleanDataFunc = function() {};
 
@@ -82,8 +82,6 @@ export function getDataStrategy() {
 export function data() {
     return strategy.data.apply(this, arguments);
 }
-
-export { strategyChanging };
 
 export function beforeCleanData(callback) {
     beforeCleanDataFunc = callback;

@@ -5,7 +5,7 @@ import core from './ui.grid_core.modules';
 import { focusAndSelectElement, getWidgetInstance } from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
-import selectors from '../widget/selectors';
+import { focused } from '../widget/selectors';
 import { addNamespace, createEvent } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import { name as clickEventName } from '../../events/click';
@@ -1819,7 +1819,7 @@ export default {
                     let rowIndex = this.option('focusedRowIndex') || 0;
                     const $rowsView = this.element();
 
-                    if($rowsView && !selectors.focused($rowsView)) {
+                    if($rowsView && !focused($rowsView)) {
                         $rowsView.attr('tabIndex', null);
                     }
 

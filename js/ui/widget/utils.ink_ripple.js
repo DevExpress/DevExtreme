@@ -10,14 +10,14 @@ const ANIMATION_DURATION = 300;
 const HOLD_ANIMATION_DURATION = 1000;
 const DEFAULT_WAVE_INDEX = 0;
 
-const initConfig = ({ useHoldAnimation, waveSizeCoefficient, isCentered, wavesNumber } = {}) => ({
+export const initConfig = ({ useHoldAnimation, waveSizeCoefficient, isCentered, wavesNumber } = {}) => ({
     waveSizeCoefficient: waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
     isCentered: isCentered || false,
     wavesNumber: wavesNumber || 1,
     durations: getDurations(useHoldAnimation ?? true)
 });
 
-const render = function(args) {
+export const render = function(args) {
     const config = initConfig(args);
 
     return {
@@ -83,7 +83,7 @@ const getWaveStyleConfig = function(args, config) {
     };
 };
 
-function showWave(args, config) {
+export function showWave(args, config) {
     const $wave = getWaves(config.element, args.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
 
     args.hidingTimeout && clearTimeout(args.hidingTimeout);
@@ -114,7 +114,7 @@ function hideSelectedWave($wave) {
         .css('transitionDuration', '');
 }
 
-function hideWave(args, config) {
+export function hideWave(args, config) {
     args.showingTimeout && clearTimeout(args.showingTimeout);
 
     const $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
@@ -129,11 +129,3 @@ function hideWave(args, config) {
     const animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
     args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);
 }
-
-export {
-    initConfig,
-    hideWave,
-    render,
-    showWave
-};
-

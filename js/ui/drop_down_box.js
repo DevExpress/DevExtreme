@@ -3,7 +3,7 @@ import DataExpressionMixin from './editor/ui.data_expression';
 import { ensureDefined, noop, grep } from '../core/utils/common';
 import { isObject } from '../core/utils/type';
 import { map } from '../core/utils/iterator';
-import selectors from './widget/selectors';
+import { tabbable } from './widget/selectors';
 import { when, Deferred } from '../core/utils/deferred';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
@@ -45,7 +45,7 @@ const DropDownBox = DropDownEditor.inherit({
     ///#ENDDEBUG
 
     _getTabbableElements: function() {
-        return this._getElements().filter(selectors.tabbable);
+        return this._getElements().filter(tabbable);
     },
 
     _getElements: function() {

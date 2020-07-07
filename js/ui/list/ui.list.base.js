@@ -49,7 +49,7 @@ const groupItemsGetter = compileGetter('items');
 
 let _scrollView;
 
-const ListBase = CollectionWidget.inherit({
+export const ListBase = CollectionWidget.inherit({
 
     _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
 
@@ -997,11 +997,6 @@ function getScrollView() {
     return _scrollView || ScrollView;
 }
 
-function setScrollView(value) {
+export function setScrollView(value) {
     _scrollView = value;
 }
-
-export {
-    ListBase,
-    setScrollView
-};

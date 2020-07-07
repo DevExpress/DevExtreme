@@ -45,7 +45,7 @@ function unwrap(value, options) {
     return options.unwrapObservables ? unwrapVariable(value) : value;
 }
 
-const compileGetter = function(expr) {
+export const compileGetter = function(expr) {
     if(arguments.length > 1) {
         expr = [].slice.call(arguments);
     }
@@ -147,7 +147,7 @@ const ensurePropValueDefined = function(obj, propName, value, options) {
     return newValue;
 };
 
-const compileSetter = function(expr) {
+export const compileSetter = function(expr) {
     expr = bracketsToDots(expr || 'this').split('.');
     const lastLevelIndex = expr.length - 1;
 
@@ -179,7 +179,7 @@ const compileSetter = function(expr) {
     };
 };
 
-const toComparable = function(value, caseSensitive) {
+export const toComparable = function(value, caseSensitive) {
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -193,10 +193,4 @@ const toComparable = function(value, caseSensitive) {
     }
 
     return value;
-};
-
-export {
-    compileGetter,
-    compileSetter,
-    toComparable
 };

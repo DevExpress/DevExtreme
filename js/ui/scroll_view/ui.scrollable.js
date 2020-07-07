@@ -11,7 +11,7 @@ import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
-import selectors from '../widget/selectors';
+import { focusable } from '../widget/selectors';
 import { addNamespace } from '../../events/utils';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
 import { SimulatedStrategy } from './ui.scrollable.simulated';
@@ -127,7 +127,7 @@ const Scrollable = DOMComponent.inherit({
 
         if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
             eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
-                if(!$(e.target).is(selectors.focusable)) {
+                if(!$(e.target).is(focusable)) {
                     e.preventDefault();
                 }
             });

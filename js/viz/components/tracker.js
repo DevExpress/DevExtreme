@@ -5,7 +5,7 @@ import { down as downPointerEventName } from '../../events/pointer';
 import { move as movePointerEventName } from '../../events/pointer';
 import eventsEngine from '../../events/core/events_engine';
 
-function Tracker(parameters) {
+export function Tracker(parameters) {
     this._initHandlers(parameters);
 }
 
@@ -100,5 +100,3 @@ function processTooltip(e, params) {
         params.widget.hideTooltip();
     }
 }
-
-export { Tracker };

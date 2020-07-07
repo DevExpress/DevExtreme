@@ -16,7 +16,7 @@ import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
-import selectors from '../widget/selectors';
+import { focusable } from '../widget/selectors';
 import messageLocalization from '../../localization/message';
 import holdEvent from '../../events/hold';
 import { compileGetter } from '../../core/utils/data';
@@ -718,13 +718,13 @@ const CollectionWidget = Widget.inherit({
     },
 
     _closestFocusable: function($target) {
-        if($target.is(selectors.focusable)) {
+        if($target.is(focusable)) {
             return $target;
         } else {
             $target = $target.parent();
 
             while($target.length && !domAdapter.isDocument($target.get(0))) {
-                if($target.is(selectors.focusable)) {
+                if($target.is(focusable)) {
                     return $target;
                 }
                 $target = $target.parent();

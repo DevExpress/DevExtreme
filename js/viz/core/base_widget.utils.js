@@ -3,7 +3,7 @@ import { format as _stringFormat } from '../../core/utils/string';
 import { ERROR_MESSAGES } from './errors_warnings';
 import { each } from '../../core/utils/iterator';
 
-function createEventTrigger(eventsMap, callbackGetter) {
+export function createEventTrigger(eventsMap, callbackGetter) {
     let triggers = {};
 
     each(eventsMap, function(name, info) {
@@ -45,7 +45,7 @@ function createEventTrigger(eventsMap, callbackGetter) {
     }
 }
 
-let createIncidentOccurred = function(widgetName, eventTrigger) {
+export let createIncidentOccurred = function(widgetName, eventTrigger) {
     return function incidentOccurred(id, args) {
         eventTrigger('incidentOccurred', {
             target: {
@@ -60,7 +60,7 @@ let createIncidentOccurred = function(widgetName, eventTrigger) {
     };
 };
 
-function createResizeHandler(callback) {
+export function createResizeHandler(callback) {
     let timeout;
     const handler = function() {
         clearTimeout(timeout);
@@ -74,12 +74,6 @@ function createResizeHandler(callback) {
 
     return handler;
 }
-
-export {
-    createEventTrigger,
-    createResizeHandler,
-    createIncidentOccurred
-};
 
 ///#DEBUG
 export { createEventTrigger as DEBUG_createEventTrigger };

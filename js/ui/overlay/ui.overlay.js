@@ -31,7 +31,7 @@ import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
-import selectors from '../widget/selectors';
+import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import * as zIndexPool from './z_index';
@@ -749,11 +749,11 @@ const Overlay = Widget.inherit({
         const result = { first: null, last: null };
 
         for(let i = 0; i <= elementsCount; i++) {
-            if(!result.first && $elements.eq(i).is(selectors.tabbable)) {
+            if(!result.first && $elements.eq(i).is(tabbable)) {
                 result.first = $elements.eq(i);
             }
 
-            if(!result.last && $elements.eq(elementsCount - i).is(selectors.tabbable)) {
+            if(!result.last && $elements.eq(elementsCount - i).is(tabbable)) {
                 result.last = $elements.eq(elementsCount - i);
             }
 

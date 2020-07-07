@@ -56,7 +56,7 @@ function readThemeMarker() {
 // FYI
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
-function waitForThemeLoad(themeName) {
+export function waitForThemeLoad(themeName) {
     let waitStartTime;
 
     pendingThemeName = themeName;
@@ -170,7 +170,7 @@ function initContext(newContext) {
     context = newContext;
 }
 
-function init(options) {
+export function init(options) {
     options = options || {};
     initContext(options.context || domAdapter.getDocument());
 
@@ -180,7 +180,7 @@ function init(options) {
     current(options);
 }
 
-function current(options) {
+export function current(options) {
     if(!arguments.length) {
         currentThemeName = currentThemeName || readThemeMarker();
         return currentThemeName;
@@ -254,7 +254,7 @@ function getCssClasses(themeName) {
 }
 
 let themeClasses;
-function attachCssClasses(element, themeName) {
+export function attachCssClasses(element, themeName) {
     themeClasses = getCssClasses(themeName).join(' ');
     $(element).addClass(themeClasses);
 
@@ -278,7 +278,7 @@ function attachCssClasses(element, themeName) {
     activateHairlines();
 }
 
-function detachCssClasses(element) {
+export function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
@@ -294,19 +294,19 @@ function isTheme(themeRegExp, themeName) {
     return new RegExp(themeRegExp).test(themeName);
 }
 
-function isMaterial(themeName) {
+export function isMaterial(themeName) {
     return isTheme('material', themeName);
 }
 
-function isGeneric(themeName) {
+export function isGeneric(themeName) {
     return isTheme('generic', themeName);
 }
 
-function isDark(themeName) {
+export function isDark(themeName) {
     return isTheme('dark', themeName);
 }
 
-function isWebFontLoaded(text, fontWeight) {
+export function isWebFontLoaded(text, fontWeight) {
     const testedFont = 'Roboto, RobotoFallback, Arial';
     const etalonFont = 'Arial';
 
@@ -333,7 +333,7 @@ function isWebFontLoaded(text, fontWeight) {
     return etalonFontWidth !== testedFontWidth;
 }
 
-function waitWebFont(text, fontWeight) {
+export function waitWebFont(text, fontWeight) {
     const interval = 15;
     const timeout = 2000;
 
@@ -388,17 +388,7 @@ devices.changed.add(function() {
 });
 
 export {
-    current,
     themeReady as ready,
-    init,
-    attachCssClasses,
-    detachCssClasses,
-    waitForThemeLoad,
-    isMaterial,
-    isGeneric,
-    isDark,
-    isWebFontLoaded,
-    waitWebFont
 };
 
 export function resetTheme() {

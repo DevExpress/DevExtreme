@@ -5,7 +5,7 @@ import { each } from '../../core/utils/iterator';
 import eventUtils from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
-import selectors from '../widget/selectors';
+import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { noop } from '../../core/utils/common';
@@ -133,7 +133,7 @@ const TextEditorMask = TextEditorBase.inherit({
         const input = this._input();
         const eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
         const mouseWheelAction = this._createAction((function(e) {
-            if(selectors.focused(input)) {
+            if(focused(input)) {
                 const dxEvent = e.event;
 
                 this._onMouseWheel(dxEvent);
@@ -291,7 +291,7 @@ const TextEditorMask = TextEditorBase.inherit({
         const showMaskMode = this.option('showMaskMode');
 
         if(showMaskMode === 'onFocus') {
-            return selectors.focused(this._input()) || !this._isValueEmpty();
+            return focused(this._input()) || !this._isValueEmpty();
         }
 
         return true;

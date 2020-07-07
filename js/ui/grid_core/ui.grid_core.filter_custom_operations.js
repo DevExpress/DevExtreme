@@ -104,7 +104,7 @@ function baseOperation(grid) {
     };
 }
 
-function anyOf(grid) {
+export function anyOf(grid) {
     return extend(baseOperation(grid), {
         name: 'anyof',
         icon: 'selectall',
@@ -112,7 +112,7 @@ function anyOf(grid) {
     });
 }
 
-function noneOf(grid) {
+export function noneOf(grid) {
     const baseOp = baseOperation(grid);
     return extend({}, baseOp, {
         calculateFilterExpression: function(filterValue, field, fields) {
@@ -126,8 +126,3 @@ function noneOf(grid) {
         caption: messageLocalization.format('dxFilterBuilder-filterOperationNoneOf')
     });
 }
-
-export {
-    anyOf,
-    noneOf
-};
