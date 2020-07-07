@@ -18,7 +18,7 @@ const SRC = ['js/renovation/**/*.tsx', '!js/renovation/**/*.j.tsx'];
 const DEST = 'js/renovation/';
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
-const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
+const COMMON_SRC = ['js/**/*.*', '!js/renovation/**/*.tsx'];
 
 const knownErrors = [
     'Cannot find module \'preact\'',
@@ -107,7 +107,7 @@ function addGenerationTask(
     generator.defaultOptionsModule = 'js/core/options/utils';
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
-        return gulp.src('js/**/*.tsx')
+        return gulp.src(SRC, { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
