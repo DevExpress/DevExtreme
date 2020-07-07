@@ -2588,7 +2588,6 @@ const SchedulerWorkSpace = Widget.inherit({
             this.dragBehavior.addTo(this.getAllDayContainer());
             this.dragBehavior.addTo(this._$allDayPanel);
         }
-        this._attachTablesEvents();
     },
 
     _isApplyCompactAppointmentOffset: function() {
