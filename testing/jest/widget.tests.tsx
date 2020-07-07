@@ -555,7 +555,7 @@ describe('Widget', () => {
         it('should add width and height as functions', () => {
           const widget = new Widget({ width: () => 50, height: () => 'auto' });
 
-          expect(widget.styles).toEqual({ width: 50, height: 'auto' });
+          expect(widget.styles).toEqual({ width: '50px', height: 'auto' });
         });
 
         it('should add width and height as string values', () => {
@@ -567,13 +567,19 @@ describe('Widget', () => {
         it('should add width and height as number values', () => {
           const widget = new Widget({ width: 50, height: 70 });
 
-          expect(widget.styles).toEqual({ width: 50, height: 70 });
+          expect(widget.styles).toEqual({ width: '50px', height: '70px' });
         });
 
         it('should ignore width and height undefined values', () => {
           const widget = new Widget({ width: undefined, height: undefined });
 
           expect(widget.styles).toEqual({});
+        });
+
+        it('should convert string without unit into number', () => {
+          const widget = new Widget({ width: '50', height: '100' });
+
+          expect(widget.styles).toEqual({ width: '50px', height: '100px' });
         });
       });
 
