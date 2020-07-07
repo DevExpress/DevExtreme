@@ -13,7 +13,6 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
-require('./build/gulp/css-bundles');
 require('./build/gulp/npm');
 require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
@@ -22,7 +21,6 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
-require('./build/gulp/scss/tasks');
 
 const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
@@ -34,7 +32,7 @@ if(TEST_CI) {
 function createStyleCompilerBatch() {
     return gulp.series(TEST_CI
         ? ['style-compiler-themes-ci']
-        : ['style-compiler-themes', 'style-compiler-tb-assets']
+        : ['style-compiler-themes']
     );
 }
 
@@ -70,4 +68,4 @@ gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
 gulp.task('default', createDefaultBatch());
 
-gulp.task('dev', gulp.parallel('bundler-config-dev', 'generate-components-watch', 'js-bundles-dev', 'style-compiler-themes-dev'));
+gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));

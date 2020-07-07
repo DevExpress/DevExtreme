@@ -4,13 +4,7 @@
 /js/bundles/dx.custom.js
 /js/localization/default_messages.js
 /js/localization/cldr-data
-/js/renovation/**/*.p.d.ts
-/js/renovation/**/*.p.js
-/js/renovation/**/*.j.d.ts
-/js/renovation/**/*.j.js
-/themebuilder/data/less
-/themebuilder/data/metadata
-/scss
+/js/renovation/**/*.j.tsx
 bin
 node_modules
 obj

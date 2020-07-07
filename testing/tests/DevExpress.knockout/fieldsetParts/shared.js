@@ -2,7 +2,6 @@ const $ = require('jquery');
 const ko = require('knockout');
 const browser = require('core/utils/browser');
 const devices = require('core/devices');
-const themes = require('ui/themes');
 
 require('../../../helpers/executeAsyncMock.js');
 require('integration/knockout');
@@ -288,9 +287,7 @@ module.exports = function(themeName, options) {
 
             const offsetLeftForSimpleOnField = getFullOffsetLeft($('#simpleTextOnField ' + VALUE));
 
-            const currentTheme = themes.current();
-
-            const paddingTextAreaDifference = currentTheme === 'ios.default' || currentTheme === 'ios7.default' ? 3 : 0;
+            const paddingTextAreaDifference = 0;
 
             assert.equal(offsetLeftForTextBoxOnField, offsetLeftForAutocompleteOnField, 'Horizontal align for textbox and autocomplete');
 

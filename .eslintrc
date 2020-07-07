@@ -1,5 +1,6 @@
 {
     "extends": ["devextreme/spell-check"],
+    "root": true,
     "parserOptions": {
         "createDefaultProgram": true,
         "project": "./tsconfig.json",
@@ -96,6 +97,7 @@
         }
     }, {
         "files": ["*.ts", "*.tsx"],
-        "parser": "@typescript-eslint/parser"
+        "parser": "@typescript-eslint/parser",
+        "extends": ["devextreme/typescript"]
     }]
 }

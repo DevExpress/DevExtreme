@@ -724,7 +724,7 @@ module.exports = {
                     }
                 },
 
-                _afterSaveEditData: function() {
+                _afterSaveEditData: function(cancel) {
                     let $firstErrorRow;
                     each(this._editData, (_, editData) => {
                         const $errorRow = this._showErrorRow(editData);
@@ -736,6 +736,16 @@ module.exports = {
                             scrollable.update();
                             scrollable.scrollToElement($firstErrorRow);
                         }
+                    }
+
+                    if(cancel && this.getEditMode() === EDIT_MODE_CELL && this._needUpdateRow()) {
+                        const editRowIndex = this.getEditRowIndex();
+
+                        this._dataController.updateItems({
+                            changeType: 'update',
+                            rowIndices: [editRowIndex]
+                        });
+                        this._focusEditingCell();
                     }
                 },
 
@@ -764,7 +774,11 @@ module.exports = {
                             rowKey: e.key,
                             columnIndex: e.column.index
                         });
-                        when(currentValidator && validatingController.validateCell(currentValidator)).done(deferred.resolve);
+                        when(currentValidator && validatingController.validateCell(currentValidator))
+                            .done((validationResult) => {
+                                this.getController('editorFactory').refocus();
+                                deferred.resolve(validationResult);
+                            });
                     });
                     return deferred.promise();
                 },

@@ -98,7 +98,6 @@ describe('BootstrapExtractor', () => {
     expect(extractor.getCollectorServiceCode()).toBe(expectedStyleStringWithoutPostfix);
   });
 
-
   test('extract (bootstrap 3)', async () => {
     const input = '@var1: test1;@var2: test2;@custom-var: test3;';
     const extractor = new BootstrapExtractor(input, 3);

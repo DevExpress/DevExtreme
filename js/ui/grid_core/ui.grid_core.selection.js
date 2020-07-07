@@ -79,12 +79,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         const component = options.component;
         const rowsView = component.getView('rowsView');
 
-        if(component.option('renderAsync')) {
-            const selectedRowKeys = component.getSelectedRowKeys();
-
-            if(selectedRowKeys.indexOf(options.row.key) !== -1) {
-                options.value = true;
-            }
+        if(component.option('renderAsync') && !component.option('selection.deferred')) {
+            options.value = component.isRowSelected(options.row.key);
         }
 
         rowsView.renderSelectCheckBoxContainer($(container), options);
@@ -582,6 +578,12 @@ module.exports = {
                         this._changes = [{ changeType: 'updateSelection', itemIndexes }];
                     }
                     this.callBase.apply(this, arguments);
+                },
+
+                push: function(changes) {
+                    this.callBase.apply(this, arguments);
+                    const removedKeys = changes.filter(change => change.type === 'remove').map(change => change.key);
+                    removedKeys.length && this.getController('selection').deselectRows(removedKeys);
                 }
             },
             contextMenu: {

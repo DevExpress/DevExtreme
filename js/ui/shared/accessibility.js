@@ -3,6 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { normalizeKeyName } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
 import domAdapter from '../../core/dom_adapter';
+import { noop } from '../../core/utils/common';
 
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -108,83 +109,87 @@ function onDocumentVisibilityChange() {
     isHiddenFocusing = domAdapter.getDocument().visibilityState === 'visible';
 }
 
-module.exports = {
-    subscribeVisibilityChange: function() {
-        eventsEngine.on(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
-    },
+export function subscribeVisibilityChange() {
+    eventsEngine.on(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
+}
 
-    unsubscribeVisibilityChange: function() {
-        eventsEngine.off(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
-    },
+export function unsubscribeVisibilityChange() {
+    eventsEngine.off(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
+}
 
-    hiddenFocus: function(element) {
-        isHiddenFocusing = true;
-        element.focus();
-        isHiddenFocusing = false;
-    },
+export function hiddenFocus(element) {
+    isHiddenFocusing = true;
+    element.focus();
+    isHiddenFocusing = false;
+}
 
-    registerKeyboardAction: function(viewName, instance, $element, selector, action, executeKeyDown) {
-        if(instance.option('useLegacyKeyboardNavigation')) {
-            return;
+export function registerKeyboardAction(viewName, instance, $element, selector, action, executeKeyDown) {
+    if(instance.option('useLegacyKeyboardNavigation')) {
+        return noop;
+    }
+
+    const $mainElement = $(instance.element());
+    const keyDownHandler = e => processKeyDown(viewName, instance, e, action, $mainElement, executeKeyDown);
+    const mouseDownHandler = () => {
+        isMouseDown = true;
+        $mainElement.removeClass(FOCUS_STATE_CLASS);
+    };
+    const focusinHandler = () => {
+        const needShowOverlay = !isMouseDown && !isHiddenFocusing;
+        if(needShowOverlay) {
+            $mainElement.addClass(FOCUS_STATE_CLASS);
         }
+        isMouseDown = false;
+    };
 
-        const $mainElement = $(instance.element());
+    eventsEngine.on($element, 'keydown', selector, keyDownHandler);
+    eventsEngine.on($element, 'mousedown', selector, mouseDownHandler);
+    eventsEngine.on($element, 'focusin', selector, focusinHandler);
+    return () => {
+        eventsEngine.off($element, 'keydown', selector, keyDownHandler);
+        eventsEngine.off($element, 'mousedown', selector, mouseDownHandler);
+        eventsEngine.off($element, 'focusin', selector, focusinHandler);
+    };
+}
 
-        eventsEngine.on($element, 'keydown', selector, e => processKeyDown(viewName, instance, e, action, $mainElement, executeKeyDown));
-        eventsEngine.on($element, 'mousedown', selector, () => {
-            isMouseDown = true;
-            $mainElement.removeClass(FOCUS_STATE_CLASS);
-        });
+export function restoreFocus(instance) {
+    if(!instance.option('useLegacyKeyboardNavigation') && focusedElementInfo) {
+        const viewInstance = focusedElementInfo.viewInstance;
+        if(viewInstance) {
+            const $activeElements = getActiveAccessibleElements(focusedElementInfo.ariaLabel, viewInstance.element());
+            const $targetElement = $activeElements.eq(focusedElementInfo.index);
 
-        eventsEngine.on($element, 'focusin', selector, () => {
-            const needShowOverlay = !isMouseDown && !isHiddenFocusing;
-            if(needShowOverlay) {
-                $mainElement.addClass(FOCUS_STATE_CLASS);
-            }
+            focusedElementInfo = null;
 
-            isMouseDown = false;
-        });
-    },
-
-    restoreFocus: function(instance) {
-        if(!instance.option('useLegacyKeyboardNavigation') && focusedElementInfo) {
-            const viewInstance = focusedElementInfo.viewInstance;
-            if(viewInstance) {
-                const $activeElements = getActiveAccessibleElements(focusedElementInfo.ariaLabel, viewInstance.element());
-                const $targetElement = $activeElements.eq(focusedElementInfo.index);
-
-                focusedElementInfo = null;
-
-                eventsEngine.trigger($targetElement, 'focus');
-            }
-        }
-    },
-
-    selectView: function(viewName, instance, event) {
-        const keyName = normalizeKeyName(event);
-
-        if(event.ctrlKey && (keyName === 'upArrow' || keyName === 'downArrow')) {
-            const viewNames = Object.keys(viewItemSelectorMap);
-            let viewItemIndex = viewNames.indexOf(viewName);
-
-            while(viewItemIndex >= 0 && viewItemIndex < viewNames.length) {
-                viewItemIndex = keyName === 'upArrow' ? --viewItemIndex : ++viewItemIndex;
-                const viewName = viewNames[viewItemIndex];
-                const viewSelectors = viewItemSelectorMap[viewName];
-                const $focusViewElement = findFocusedViewElement(viewSelectors);
-                if($focusViewElement && $focusViewElement.length) {
-                    $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
-                    eventsEngine.trigger($focusViewElement, 'focus');
-                    $focusViewElement.removeClass(FOCUS_DISABLED_CLASS);
-                    break;
-                }
-            }
-        }
-    },
-
-    setTabIndex: function(instance, $element) {
-        if(!instance.option('useLegacyKeyboardnavigation')) {
-            $element.attr('tabindex', instance.option('tabindex') || 0);
+            eventsEngine.trigger($targetElement, 'focus');
         }
     }
-};
+}
+
+export function selectView(viewName, instance, event) {
+    const keyName = normalizeKeyName(event);
+
+    if(event.ctrlKey && (keyName === 'upArrow' || keyName === 'downArrow')) {
+        const viewNames = Object.keys(viewItemSelectorMap);
+        let viewItemIndex = viewNames.indexOf(viewName);
+
+        while(viewItemIndex >= 0 && viewItemIndex < viewNames.length) {
+            viewItemIndex = keyName === 'upArrow' ? --viewItemIndex : ++viewItemIndex;
+            const viewName = viewNames[viewItemIndex];
+            const viewSelectors = viewItemSelectorMap[viewName];
+            const $focusViewElement = findFocusedViewElement(viewSelectors);
+            if($focusViewElement && $focusViewElement.length) {
+                $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
+                eventsEngine.trigger($focusViewElement, 'focus');
+                $focusViewElement.removeClass(FOCUS_DISABLED_CLASS);
+                break;
+            }
+        }
+    }
+}
+
+export function setTabIndex(instance, $element) {
+    if(!instance.option('useLegacyKeyboardnavigation')) {
+        $element.attr('tabindex', instance.option('tabindex') || 0);
+    }
+}

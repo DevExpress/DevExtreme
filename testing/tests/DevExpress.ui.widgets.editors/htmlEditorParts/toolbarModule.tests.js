@@ -78,6 +78,7 @@ const simpleModuleConfig = {
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
                 },
+                _saveValueChangeEvent: noop,
                 option: noop,
                 on: noop
             }
@@ -127,6 +128,7 @@ const dialogModuleConfig = {
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
                 },
+                _saveValueChangeEvent: noop,
                 on: noop,
                 option: noop,
                 formDialogOption: this.formDialogOptionStub,

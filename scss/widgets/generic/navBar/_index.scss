@@ -1,0 +1,73 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+// adduse
+
+
+$GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px $navbar-tab-focused-border-color;
+
+
+.dx-navbar {
+  padding: 0;
+  border: none;
+}
+
+.dx-nav-item,
+.dx-rtl .dx-nav-item {
+  background: $navbar-tab-bg;
+
+  .dx-tab-text {
+    line-height: normal;
+    color: $navbar-tab-color;
+  }
+
+  .dx-navbar & .dx-icon {
+    @include dx-icon-sizing($GENERIC_NAVBAR_ICON_SIZE);
+
+    color: $navbar-tab-color;
+  }
+
+  &.dx-tab-selected,
+  &.dx-state-focused,
+  &.dx-state-active {
+    &:after {
+      content: none;
+    }
+  }
+
+  &.dx-tab-selected {
+    background: $navbar-tab-selected-bg;
+
+    .dx-tab-text,
+    .dx-icon {
+      color: $navbar-tab-selected-color;
+    }
+  }
+
+  &.dx-state-active {
+    border: none;
+    box-shadow: none;
+  }
+
+  &.dx-state-focused {
+    box-shadow: $GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW;
+  }
+
+  &.dx-state-disabled {
+    .dx-icon {
+      opacity: 0.5;
+    }
+  }
+}
+
+.dx-navbar-item-badge {
+  margin-right: -26px;
+  top: $GENERIC_NAVBAR_BADGE_TOP;
+}
+
+.dx-rtl .dx-navbar-item-badge {
+  margin-left: -26px;
+}

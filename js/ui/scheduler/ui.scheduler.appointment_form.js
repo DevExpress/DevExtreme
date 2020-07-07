@@ -70,7 +70,7 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    _getTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
+    _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
         return {
             dataField: timeZoneExpr,
             editorType: 'dxSchedulerTimezoneEditor',
@@ -93,7 +93,7 @@ const SchedulerAppointmentForm = {
         };
     },
 
-    _getDateBoxEditor: function(dataExpr, colSpan, firstDayOfWeek, label, callback) {
+    _createDateBoxEditor: function(dataExpr, colSpan, firstDayOfWeek, label, callback) {
         return {
             dataField: dataExpr,
             editorType: 'dxDateBox',
@@ -114,27 +114,27 @@ const SchedulerAppointmentForm = {
         };
     },
 
-    _getDateBoxItems: function(dataExprs, schedulerInst, allowTimeZoneEditing) {
+    _createDateBoxItems: function(dataExprs, schedulerInst, allowTimeZoneEditing) {
         const colSpan = allowTimeZoneEditing ? 2 : 1;
         const firstDayOfWeek = schedulerInst.option('firstDayOfWeek');
         return [
-            this._getDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate',
+            this._createDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate',
                 (args) => {
                     this._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                 }),
 
-            this._getTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, true, allowTimeZoneEditing),
+            this._createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, true, allowTimeZoneEditing),
 
-            this._getDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
+            this._createDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
                 (args) => {
                     this._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                 }),
 
-            this._getTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, false, allowTimeZoneEditing)
+            this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, false, allowTimeZoneEditing)
         ];
     },
 
-    _getMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
+    _createMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
         return [
             {
                 dataField: dataExprs.textExpr,
@@ -151,7 +151,7 @@ const SchedulerAppointmentForm = {
                     lg: 2,
                     xs: 1
                 },
-                items: this._getDateBoxItems(dataExprs, schedulerInst, allowTimeZoneEditing),
+                items: this._createDateBoxItems(dataExprs, schedulerInst, allowTimeZoneEditing),
             },
             {
                 itemType: 'group',
@@ -203,8 +203,13 @@ const SchedulerAppointmentForm = {
                     editorOptions: {
                         onValueChanged: (args) => {
                             const form = this._appointmentForm;
-                            form.option('items[0].colSpan', args.value ? 1 : 2);
-                            form.getEditor(dataExprs.recurrenceRuleExpr).option('visible', args.value);
+                            const colSpan = args.value ? 1 : 2;
+
+                            form.option('items[0].colSpan', colSpan);
+                            form.option('items[1].colSpan', colSpan);
+
+                            this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
+
                             changeSize(args.value);
                             triggerResize();
                         }
@@ -230,9 +235,17 @@ const SchedulerAppointmentForm = {
         ];
     },
 
+    _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
+        form.itemOption(recurrenceRuleExpr, 'visible', value);
+
+        !value && form.updateData(recurrenceRuleExpr, '');
+        form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
+    },
+
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
         const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
 
+        changeSize(recurrenceEditorVisibility);
         this._editors = [
             {
                 itemType: 'group',
@@ -241,29 +254,32 @@ const SchedulerAppointmentForm = {
                     xs: 1
                 },
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
-                items: this._getMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
+                items: this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
             },
             {
-                dataField: dataExprs.recurrenceRuleExpr,
-                editorType: 'dxRecurrenceEditor',
-                editorOptions: {
-                    readOnly: readOnly,
-                    firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
-                    onInitialized: (e) => {
-                        const form = this._appointmentForm;
-                        if(form.option) {
-                            e.component.option('visible', !!this.getRecurrenceRule(form.option('formData'), dataExprs));
-                        }
-                    }
-                },
-                label: {
-                    text: ' ',
-                    visible: false
-                }
+                itemType: 'group',
+                colSpan: recurrenceEditorVisibility ? 1 : 2,
+                items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
             }
         ];
 
         return this._editors;
+    },
+
+    _createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly) {
+        return [{
+            dataField: dataExprs.recurrenceRuleExpr,
+            editorType: 'dxRecurrenceEditor',
+            visible: recurrenceEditorVisibility,
+            editorOptions: {
+                readOnly: readOnly,
+                firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
+            },
+            label: {
+                text: ' ',
+                visible: false
+            }
+        }];
     },
 
     getRecurrenceRule(data, dataExprs) {

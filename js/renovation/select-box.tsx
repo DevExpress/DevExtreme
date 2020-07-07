@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './widget';
 import DataSource, { DataSourceOptions } from '../data/data_source';
-import DxSelectBox from '../ui/select_box';
+import DxSelectBox, { Options } from '../ui/select_box';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
@@ -17,7 +17,7 @@ export class SelectBoxProps extends WidgetProps {
 
   @OneWay() valueExpr?: string;
 
-  @Event() valueChange?: ((value: number) => void) = () => {};
+  @Event() valueChange?: ((value: number) => void) = () => { };
 }
 @Component({
   defaultOptionRules: null,
@@ -28,14 +28,20 @@ export default class SelectBox extends JSXComponent(SelectBoxProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  setupWidget() {
-    const { valueChange } = this.props;
+  updateWidget(): void {
+    const widget = DxSelectBox.getInstance(this.widgetRef);
+    widget?.option(this.properties);
+  }
 
-    new DxSelectBox(this.widgetRef, { // eslint-disable-line no-new
-      ...this.props as any,
-      onValueChanged: (e) => {
-        valueChange!(e.value);
-      },
-    });
+  @Effect({ run: 'once' })
+  setupWidget(): () => void {
+    const widget = new DxSelectBox(this.widgetRef, this.properties);
+
+    return (): void => widget.dispose();
+  }
+
+  get properties(): Options {
+    const { valueChange, ...restProps } = this.props;
+    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
   }
 }

@@ -35,13 +35,17 @@
     },
     "outDir": "dist"
   },
-  "include": [
-    "./js/renovation",
-  ],
   "exclude": [
     "artifacts",
     "node_modules",
-    "**/*.tests.ts*",
-    "**/dist"
+    "**/dist",
+    "playground"
+  ],
+  "include": [
+    "js/renovation",
+    "themebuilder-scss",
+    "themebuilder",
+    "testing/jest",
+    "testing/testcafe"
   ]
 }

@@ -1,5 +1,4 @@
 const $ = require('../core/renderer');
-const themes = require('./themes');
 const registerComponent = require('../core/component_registrator');
 const grep = require('../core/utils/common').grep;
 const extend = require('../core/utils/extend').extend;
@@ -93,21 +92,6 @@ const Toolbar = ToolbarBase.inherit({
             */
         });
 
-    },
-
-    _defaultOptionsRules: function() {
-        const themeName = themes.current();
-
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    submenuType: 'actionSheet'
-                }
-            }
-        ]);
     },
 
     _dimensionChanged: function(dimension) {

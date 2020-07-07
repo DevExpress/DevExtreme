@@ -242,6 +242,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
 
             getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);
                 return scrollableContainer.scrollHeight > scrollableContainer.clientHeight;
@@ -278,7 +279,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             setStartDate: (value) => this.appointmentForm.getEditor('startDate').option('value', value),
             setEndDate: (value) => this.appointmentForm.getEditor('endDate').option('value', value),
 
-            hasFormSingleColumn: () => this.appointmentPopup.getPopup().find('.dx-responsivebox').hasClass('dx-responsivebox-screen-xs'),
+            hasFormSingleColumn: () => $('.dx-responsivebox').first().hasClass('dx-responsivebox-screen-xs'),
             getRecurrentAppointmentFormDialogButtons: () => $('.dx-dialog-buttons .dx-button'),
             clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger('dxclick'),
             getPendingEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find('.dx-validation-pending').length,

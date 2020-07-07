@@ -2,7 +2,7 @@ const Calendar = require('../calendar');
 const DateBoxStrategy = require('./ui.date_box.strategy');
 const dateUtils = require('../../core/utils/date');
 const commonUtils = require('../../core/utils/common');
-const isFunction = require('../../core/utils/type').isFunction;
+const typeUtils = require('../../core/utils/type');
 const extend = require('../../core/utils/extend').extend;
 const messageLocalization = require('../../localization/message');
 
@@ -78,7 +78,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             onValueChanged: this._valueChangedHandler.bind(this),
             onCellClick: this._cellClickHandler.bind(this),
             tabIndex: null,
-            disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
+            disabledDates: typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
             onContouredChanged: this._refreshActiveDescendant.bind(this),
             hasFocus: function() { return true; }
         });
@@ -109,7 +109,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             position = ['bottom', 'center'];
         }
 
-        if(this.dateBox.option('applyValueMode') === 'useButtons') {
+        if(this.dateBox.option('applyValueMode') === 'useButtons' && this._isCalendarVisible()) {
             toolbarItems.unshift({
                 widget: 'dxButton',
                 toolbar: position[0],
@@ -131,6 +131,10 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                 collision: 'flipfit flip'
             }
         });
+    },
+
+    _isCalendarVisible: function() {
+        return typeUtils.isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
     },
 
     _escapeHandler: function() {

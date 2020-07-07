@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
-import { executeAsync, noop } from '../../core/utils/common';
+import { executeAsync, noop, ensureDefined } from '../../core/utils/common';
 import registerComponent from '../../core/component_registrator';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import Editor from '../editor/editor';
@@ -227,8 +227,19 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+        this._addKeyPressHandler();
 
         return renderContentPromise;
+    },
+
+    _addKeyPressHandler: function() {
+        const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
+
+        eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
+    },
+
+    _keyDownHandler: function(e) {
+        this._saveValueChangeEvent(e);
     },
 
     _renderHtmlEditor: function() {
@@ -381,7 +392,7 @@ const HtmlEditor = Editor.inherit({
             return;
         }
 
-        const currentValue = value || this.option('value');
+        const currentValue = ensureDefined(value, this.option('value'));
 
         return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
     },

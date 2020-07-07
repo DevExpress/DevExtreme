@@ -5,9 +5,6 @@
         "paths": {
             "sass": [
                 "../node_modules/@types/node-sass"
-            ],
-            "clean-css": [
-                "../src/types/clean-css.d.ts"
             ]
         }
     },

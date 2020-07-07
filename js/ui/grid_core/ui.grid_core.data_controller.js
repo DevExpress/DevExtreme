@@ -213,6 +213,7 @@ module.exports = {
                         case 'columns':
                             dataSource = that.dataSource();
                             if(dataSource && dataSource.isLoading() && args.name === args.fullName) {
+                                this._useSortingGroupingFromColumns = true;
                                 dataSource.load();
                             }
                             break;
@@ -288,7 +289,7 @@ module.exports = {
                         columnsController.updateColumnDataTypes(dataSource);
                     }
                     this._columnsUpdating = true;
-                    columnsController.updateSortingGrouping(dataSource, !this._isFirstLoading);
+                    columnsController.updateSortingGrouping(dataSource, !this._useSortingGroupingFromColumns);
                     this._columnsUpdating = false;
 
                     storeLoadOptions.sort = columnsController.getSortDataSourceParameters();
@@ -354,7 +355,7 @@ module.exports = {
                     const columnsController = that._columnsController;
                     let isAsyncDataSourceApplying = false;
 
-                    this._isFirstLoading = false;
+                    this._useSortingGroupingFromColumns = false;
 
                     if(dataSource && !that._isDataSourceApplying) {
                         that._isDataSourceApplying = true;
@@ -454,7 +455,7 @@ module.exports = {
 
                     that.callBase();
                     dataSource = that._dataSource;
-                    that._isFirstLoading = true;
+                    that._useSortingGroupingFromColumns = true;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
                         that.setDataSource(dataSource);
@@ -1033,12 +1034,12 @@ module.exports = {
                     const oldDataSource = that._dataSource;
 
                     if(!dataSource && oldDataSource) {
+                        oldDataSource.cancelAll();
                         oldDataSource.changed.remove(that._dataChangedHandler);
                         oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
-                        oldDataSource.cancelAll();
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
