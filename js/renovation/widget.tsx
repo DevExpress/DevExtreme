@@ -19,6 +19,7 @@ import {
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils/index';
+import { normalizeStyleProp } from '../core/utils/style';
 import BaseWidgetProps from './utils/base-props';
 
 const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
@@ -286,8 +287,8 @@ export default class Widget extends JSXComponent(WidgetProps) {
     const { width, height } = this.props;
     const style = this.restAttributes.style || {};
 
-    const computedWidth = typeof width === 'function' ? width() : width;
-    const computedHeight = typeof height === 'function' ? height() : height;
+    const computedWidth = normalizeStyleProp('width', typeof width === 'function' ? width() : width);
+    const computedHeight = normalizeStyleProp('height', typeof height === 'function' ? height() : height);
 
     return {
       ...style,
