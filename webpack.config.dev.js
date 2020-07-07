@@ -33,14 +33,7 @@ module.exports = Object.assign({
                     loader: 'babel-loader'
                 }
             },
-            {
-                test: /version\.js$/,
-                loader: 'string-replace-loader',
-                options: {
-                    search: '%VERSION%',
-                    replace: require('./package.json').version,
-                }
-            }]
+        ],
     },
     resolve: {
         extensions: ['.js', '.tsx'],
