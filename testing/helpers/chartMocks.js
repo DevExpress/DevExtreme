@@ -1098,7 +1098,8 @@ export const MockAxis = function(renderOptions) {
         refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy(),
         setCustomVisualRange: sinon.spy(),
-        handleZoomEnd: sinon.spy()
+        handleZoomEnd: sinon.spy(),
+        resolveOverlappingForCustomPositioning: sinon.spy()
     };
 };
 

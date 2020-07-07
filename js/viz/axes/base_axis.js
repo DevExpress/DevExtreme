@@ -371,6 +371,8 @@ Axis.prototype = {
 
     getCustomBoundaryPosition: _noop,
 
+    resolveOverlappingForCustomPositioning: _noop,
+
     hasCustomPosition() {
         return false;
     },

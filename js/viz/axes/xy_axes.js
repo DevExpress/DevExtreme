@@ -1329,99 +1329,141 @@ module.exports = {
         resolveOverlappingForCustomPositioning(oppositeAxes) {
             const that = this;
 
-            if(!that.hasCustomPosition()) {
+            if(!that.hasCustomPosition() && !that.customPositionIsBoundary() && !oppositeAxes.some(a => a.hasCustomPosition())) {
                 return;
             }
 
-            oppositeAxes.forEach(oppositeAxis => {
-                const oppositeAxisPosition = oppositeAxis.getAxisPosition();
-                const oppositeAxisLabelOptions = oppositeAxis.getOptions().label;
-                const oppositeAxisLabelPosition = oppositeAxisLabelOptions.position;
-                const oppositeAxisLabelIndent = oppositeAxisLabelOptions.indentFromAxis / 2;
+            const overlappingTicks = [];
 
+            oppositeAxes.forEach(oppositeAxis => {
                 that._majorTicks.forEach(tick => {
                     const label = tick.label;
                     if(label) {
-                        const labelBBox = tick.label.getBBox();
-                        let shift;
-                        if(that._isHorizontal) {
-                            let translateX = label.attr('translateX');
-                            const labelX = labelBBox.x + translateX;
-                            const left = oppositeAxisPosition - labelX;
-                            const right = labelX + labelBBox.width - oppositeAxisPosition;
-                            if(left > 0 && right > 0) {
-                                if(right - left > 1) {
-                                    shift = left + oppositeAxisLabelIndent;
-                                } else if(left - right > 1) {
-                                    shift = -(right + oppositeAxisLabelIndent);
-                                } else {
-                                    shift = oppositeAxisLabelPosition === LEFT ? left + oppositeAxisLabelIndent : -(right + oppositeAxisLabelIndent);
-                                }
-                                translateX += shift;
-                                label.attr({ translateX });
-                            }
-                        } else {
-                            let translateY = label.attr('translateY');
-                            const labelY = labelBBox.y + translateY;
-                            const top = oppositeAxisPosition - labelY;
-                            const bottom = labelY + labelBBox.height - oppositeAxisPosition;
-                            if(top > 0 && bottom > 0) {
-                                if(bottom - top > 1) {
-                                    shift = top + oppositeAxisLabelIndent;
-                                } else if(top - bottom > 1) {
-                                    shift = -(bottom + oppositeAxisLabelIndent);
-                                } else {
-                                    shift = oppositeAxisLabelPosition === TOP ? top + oppositeAxisLabelIndent : -(bottom + oppositeAxisLabelIndent);
-                                }
-
-                                translateY += shift;
-                                label.attr({ translateY });
-                            }
-                        }
-
-                        let translateX = label.attr('translateX');
-                        const labelX = labelBBox.x + translateX;
-                        let translateY = label.attr('translateY');
-                        const labelY = labelBBox.y + translateY;
+                        that._resolveLabelOverlappedWithOppositeAxis(label, oppositeAxis);
 
                         oppositeAxis._majorTicks.forEach(oppositeTick => {
                             const oppositeLabel = oppositeTick.label;
-                            if(oppositeLabel) {
-                                const oppositeLabelBBox = oppositeTick.label.getBBox();
-                                const oppositeTranslateX = oppositeLabel.attr('translateX');
-                                const oppositeLabelX = oppositeLabelBBox.x + oppositeTranslateX;
-                                const oppositeTranslateY = oppositeLabel.attr('translateY');
-                                const oppositeLabelY = oppositeLabelBBox.y + oppositeTranslateY;
-
-                                if((oppositeLabelX >= labelX && oppositeLabelX <= labelX + labelBBox.width
-                                    || labelX >= oppositeLabelX && labelX <= oppositeLabelX + oppositeLabelBBox.width)
-                                    && (oppositeLabelY >= labelY && oppositeLabelY <= labelY + labelBBox.height
-                                    || labelY >= oppositeLabelY && labelY <= oppositeLabelY + oppositeLabelBBox.height)) {
-
-                                    let shift;
-                                    if(that._isHorizontal) {
-                                        if(oppositeAxisLabelPosition === LEFT) {
-                                            shift = -(labelX + labelBBox.width - oppositeLabelX + 1);
-                                        } else {
-                                            shift = oppositeLabelX + oppositeLabelBBox.width - labelX + 1;
-                                        }
-                                        translateX += shift;
-                                        label.attr({ translateX });
-                                    } else {
-                                        if(oppositeAxisLabelPosition === TOP) {
-                                            shift = -(labelY + labelBBox.height - oppositeLabelY + 1);
-                                        } else {
-                                            shift = oppositeLabelY + oppositeLabelBBox.height - labelY + 1;
-                                        }
-                                        translateY += shift;
-                                        label.attr({ translateY });
-                                    }
-                                }
+                            if(oppositeLabel && that._detectOverlappingExistence(label, oppositeLabel)) {
+                                overlappingTicks.push(tick);
+                                that._shiftThroughAxisOverlappedTick(tick);
                             }
                         });
                     }
+
+                    if(tick.mark && overlappingTicks.indexOf(tick) < 0) {
+                        if(that._isHorizontal && tick.mark.attr('translateY')) {
+                            tick.mark.attr({ translateY: 0 });
+                        } else if(!that._isHorizontal && tick.mark.attr('translateX')) {
+                            tick.mark.attr({ translateX: 0 });
+                        }
+                    }
                 });
             });
+        },
+
+        _resolveLabelOverlappedWithOppositeAxis(label, oppositeAxis) {
+            const that = this;
+            const oppositeAxisPosition = oppositeAxis.getAxisPosition();
+            const oppositeAxisLabelOptions = oppositeAxis.getOptions().label;
+            const oppositeAxisLabelPosition = oppositeAxisLabelOptions.position;
+            const oppositeAxisLabelIndent = oppositeAxisLabelOptions.indentFromAxis / 2;
+            const labelBBox = label.getBBox();
+            let shift;
+
+            if(that._detectOverlappingExistence(label, oppositeAxis._axisElement)) {
+                if(that._isHorizontal) {
+                    let translateX = label.attr('translateX');
+                    const labelX = labelBBox.x + translateX;
+                    const left = oppositeAxisPosition - labelX;
+                    const right = labelX + labelBBox.width - oppositeAxisPosition;
+                    if(left > 0 && right > 0) {
+                        if(right - left > 1) {
+                            shift = left + oppositeAxisLabelIndent;
+                        } else if(left - right > 1) {
+                            shift = -(right + oppositeAxisLabelIndent);
+                        } else {
+                            shift = oppositeAxisLabelPosition === LEFT ? left + oppositeAxisLabelIndent : -(right + oppositeAxisLabelIndent);
+                        }
+                        translateX += shift;
+                        label.attr({ translateX });
+                    }
+                } else {
+                    let translateY = label.attr('translateY');
+                    const labelY = labelBBox.y + translateY;
+                    const top = oppositeAxisPosition - labelY;
+                    const bottom = labelY + labelBBox.height - oppositeAxisPosition;
+                    if(top > 0 && bottom > 0) {
+                        if(bottom - top > 1) {
+                            shift = top + oppositeAxisLabelIndent;
+                        } else if(top - bottom > 1) {
+                            shift = -(bottom + oppositeAxisLabelIndent);
+                        } else {
+                            shift = oppositeAxisLabelPosition === TOP ? top + oppositeAxisLabelIndent : -(bottom + oppositeAxisLabelIndent);
+                        }
+
+                        translateY += shift;
+                        label.attr({ translateY });
+                    }
+                }
+            }
+        },
+
+        _shiftThroughAxisOverlappedTick(tick) {
+            const that = this;
+            const label = tick.label;
+
+            if(!label) {
+                return;
+            }
+
+            const axisPosition = that.getAxisPosition();
+            const labelOptions = that.getOptions().label;
+            const labelIndent = labelOptions.indentFromAxis;
+            const labelPosition = labelOptions.position;
+
+            let translateX = label.attr('translateX');
+            let translateY = label.attr('translateY');
+            const labelBBox = label.getBBox();
+            const x = labelBBox.x + translateX;
+            const y = labelBBox.y + translateY;
+            const tickMarkBBox = tick.mark?.getBBox();
+
+            if(that._isHorizontal) {
+                translateY += labelPosition === TOP
+                    ? axisPosition - y + labelIndent
+                    : -(y - axisPosition + labelBBox.height + labelIndent);
+                label.attr({ translateY });
+
+                if(tick.mark) {
+                    tick.mark.attr({ translateY: 2 * (axisPosition - tickMarkBBox.y) - tickMarkBBox.height + 1 });
+                }
+            } else {
+                translateX += labelPosition === LEFT
+                    ? axisPosition - x + labelIndent
+                    : -(x - axisPosition + labelBBox.width + labelIndent);
+                label.attr({ translateX });
+
+                if(tick.mark) {
+                    tick.mark.attr({ translateX: 2 * (axisPosition - tickMarkBBox.x) - tickMarkBBox.width + 1 });
+                }
+            }
+        },
+
+        _detectOverlappingExistence(element1, element2) {
+            if(!element1 || !element2) {
+                return false;
+            }
+
+            const bBox1 = element1.getBBox();
+            const x1 = bBox1.x + element1.attr('translateX');
+            const y1 = bBox1.y + element1.attr('translateY');
+
+            const bBox2 = element2.getBBox();
+            const x2 = bBox2.x + element2.attr('translateX');
+            const y2 = bBox2.y + element2.attr('translateY');
+
+            return (x2 >= x1 && x2 <= x1 + bBox1.width || x1 >= x2 && x1 <= x2 + bBox2.width)
+                && (y2 >= y1 && y2 <= y1 + bBox1.height || y1 >= y2 && y1 <= y2 + bBox2.height);
         }
     }
 };
