@@ -298,25 +298,30 @@ const VirtualScrollingRowsViewExtender = (function() {
 
     return {
         init: function() {
-            const that = this;
-            const dataController = that.getController('data');
+            const dataController = this.getController('data');
 
-            that.callBase();
+            this.callBase();
 
-            dataController.pageChanged.add(function() {
-                that.scrollToPage(dataController.pageIndex());
+            dataController.pageChanged.add(() => {
+                this.scrollToPage(dataController.pageIndex());
             });
 
             dataController.stateLoaded?.add(() => {
-                that.scrollToPage(dataController.pageIndex());
+                this._scrollToCurrentPageOnResize();
             });
 
-            if(!that.option('legacyRendering') && dataController.pageIndex() > 0) {
-                const resizeHandler = function() {
-                    that.resizeCompleted.remove(resizeHandler);
-                    that.scrollToPage(dataController.pageIndex());
+            this._scrollToCurrentPageOnResize();
+        },
+
+        _scrollToCurrentPageOnResize: function() {
+            const dataController = this.getController('data');
+
+            if(!this.option('legacyRendering') && dataController.pageIndex() > 0) {
+                const resizeHandler = () => {
+                    this.resizeCompleted.remove(resizeHandler);
+                    this.scrollToPage(dataController.pageIndex());
                 };
-                that.resizeCompleted.add(resizeHandler);
+                this.resizeCompleted.add(resizeHandler);
             }
         },
 
