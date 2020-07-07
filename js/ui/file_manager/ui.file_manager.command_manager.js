@@ -87,6 +87,7 @@ export class FileManagerCommandManager {
             },
             {
                 name: 'showNavPane',
+                hint: messageLocalization.format('dxFileManager-commandShowNavPane'),
                 icon: 'menu',
                 enabled: false,
                 noFileItemRequired: true
