@@ -152,8 +152,8 @@ const TextEditorMask = TextEditorBase.inherit({
     _onMouseWheel: noop,
 
     _render: function() {
-        this.callBase();
         this._renderMask();
+        this.callBase();
         this._attachMouseWheelEventHandlers();
     },
 
