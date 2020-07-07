@@ -2916,7 +2916,7 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
 
     form = this.instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption(AppointmentForm.getRecurrenceGroupName()).visible, false, 'Recurrence editor is hidden. Popup is correct');
+    assert.equal(form.itemOption(AppointmentForm.recurrenceGroupName).visible, false, 'Recurrence editor is hidden. Popup is correct');
 });
 
 QUnit.test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {

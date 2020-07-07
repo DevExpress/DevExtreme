@@ -211,8 +211,8 @@ export default class AppointmentPopup {
         }
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
-        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, AppointmentForm.getRecurrenceGroupName());
-        this._setEditorOptions(recurrenceRuleExpr, AppointmentForm.getRecurrenceGroupName(), extend({}, recurrenceEditorOptions, { startDate: startDate }));
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, AppointmentForm.recurrenceGroupName);
+        this._setEditorOptions(recurrenceRuleExpr, AppointmentForm.recurrenceGroupName, extend({}, recurrenceEditorOptions, { startDate: startDate }));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
@@ -220,20 +220,14 @@ export default class AppointmentPopup {
     }
 
     _getEditorOptions(name, groupName) {
-        if(!name) {
-            return;
-        }
-
         const editor = this._appointmentForm.itemOption(`${groupName}.${name}`);
         return editor ? editor.editorOptions : {};
     }
 
     _setEditorOptions(name, groupName, options) {
-        if(!name) {
-            return;
-        }
-        const editor = this._appointmentForm.itemOption(`${groupName}.${name}`);
-        editor && this._appointmentForm.itemOption(`${groupName}.${name}`, 'editorOptions', options);
+        const editorPath = `${groupName}.${name}`;
+        const editor = this._appointmentForm.itemOption(editorPath);
+        editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', options);
     }
 
     _isDeviceMobile() {
