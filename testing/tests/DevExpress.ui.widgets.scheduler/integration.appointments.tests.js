@@ -17,6 +17,7 @@ import dateSerialization from 'core/utils/date_serialization';
 import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import browser from 'core/utils/browser';
 import { Deferred } from 'core/utils/deferred';
+import AppointmentForm from 'ui/scheduler/ui.scheduler.appointment_form';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -2915,7 +2916,7 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
 
     form = this.instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption('recurrenceGroup').visible, false, 'Recurrence editor is hidden. Popup is correct');
+    assert.equal(form.itemOption(AppointmentForm.getRecurrenceGroupName()).visible, false, 'Recurrence editor is hidden. Popup is correct');
 });
 
 QUnit.test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {

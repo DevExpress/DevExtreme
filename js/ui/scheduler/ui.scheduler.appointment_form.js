@@ -205,8 +205,8 @@ const SchedulerAppointmentForm = {
                             const form = this._appointmentForm;
                             const colSpan = args.value ? 1 : 2;
 
-                            form.itemOption('mainGroup', 'colSpan', colSpan);
-                            form.itemOption('recurrenceGroup', 'colSpan', colSpan);
+                            form.itemOption(this.getMainGroupName(), 'colSpan', colSpan);
+                            form.itemOption(this.getRecurrenceGroupName(), 'colSpan', colSpan);
 
                             this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
 
@@ -236,7 +236,7 @@ const SchedulerAppointmentForm = {
     },
 
     _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
-        form.itemOption('recurrenceGroup', 'visible', value);
+        form.itemOption(this.getRecurrenceGroupName(), 'visible', value);
         !value && form.updateData(recurrenceRuleExpr, '');
         form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
     },
@@ -248,7 +248,7 @@ const SchedulerAppointmentForm = {
         this._editors = [
             {
                 itemType: 'group',
-                name: 'mainGroup',
+                name: this.getMainGroupName(),
                 colCountByScreen: {
                     lg: 2,
                     xs: 1
@@ -258,7 +258,7 @@ const SchedulerAppointmentForm = {
             },
             {
                 itemType: 'group',
-                name: 'recurrenceGroup',
+                name: this.getRecurrenceGroupName(),
                 visible: recurrenceEditorVisibility,
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
                 items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
@@ -266,6 +266,14 @@ const SchedulerAppointmentForm = {
         ];
 
         return this._editors;
+    },
+
+    getMainGroupName() {
+        return 'mainGroup';
+    },
+
+    getRecurrenceGroupName() {
+        return 'recurrenceGroup';
     },
 
     _createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly) {
@@ -292,8 +300,11 @@ const SchedulerAppointmentForm = {
     },
 
     setEditorsType: function(form, startDateExpr, endDateExpr, allDay) {
-        const startDateFormItem = form.itemOption(`mainGroup.${startDateExpr}`);
-        const endDateFormItem = form.itemOption(`mainGroup.${endDateExpr}`);
+        const startDateItemPath = `${this.getMainGroupName()}.${startDateExpr}`;
+        const endDateItemPath = `${this.getMainGroupName()}.${endDateExpr}`;
+
+        const startDateFormItem = form.itemOption(startDateItemPath);
+        const endDateFormItem = form.itemOption(endDateItemPath);
 
         if(startDateFormItem && endDateFormItem) {
             const startDateEditorOptions = startDateFormItem.editorOptions;
@@ -301,8 +312,8 @@ const SchedulerAppointmentForm = {
 
             startDateEditorOptions.type = endDateEditorOptions.type = allDay ? 'date' : 'datetime';
 
-            form.itemOption(`mainGroup.${startDateExpr}`, 'editorOptions', startDateEditorOptions);
-            form.itemOption(`mainGroup.${endDateExpr}`, 'editorOptions', endDateEditorOptions);
+            form.itemOption(startDateItemPath, 'editorOptions', startDateEditorOptions);
+            form.itemOption(endDateItemPath, 'editorOptions', endDateEditorOptions);
         }
     },
 
