@@ -9,8 +9,6 @@ import {
   Effect,
   Event,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import InkRipple from './ink-ripple';
@@ -18,8 +16,10 @@ import Widget from './widget';
 import BaseComponent from './preact-wrapper/check_box';
 import BaseWidgetProps from './utils/base-props';
 
-const getCssClasses = (model: CheckBoxProps, value: boolean): string => {
-  const { text, readOnly, isValid } = model;
+const getCssClasses = (model: CheckBoxProps): string => {
+  const {
+    text, readOnly, isValid, value,
+  } = model;
   const classNames = ['dx-checkbox'];
 
   const checked = value;
@@ -198,8 +198,7 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   get cssClasses(): string {
-    // NOTE: second parameter needs for generator bug workaround
-    return getCssClasses(this.props, this.props.value);
+    return getCssClasses(this.props);
   }
 
   get aria(): object {

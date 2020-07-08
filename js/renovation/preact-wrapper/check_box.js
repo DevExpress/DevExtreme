@@ -30,7 +30,6 @@ export default class CheckBox extends Component {
     _getDefaultOptions() {
         return extend(
             super._getDefaultOptions(),
-            this._viewComponent.defaultProps,
             {
                 validationMessageOffset: { h: 0, v: 0 },
                 validationTooltipOptions: {}
@@ -38,8 +37,8 @@ export default class CheckBox extends Component {
         );
     }
 
-    getAllProps() {
-        const props = super.getAllProps();
+    getProps() {
+        const props = super.getProps();
         props.onFocusin = () => {
             const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
 
