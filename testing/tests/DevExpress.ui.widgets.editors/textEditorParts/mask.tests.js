@@ -2143,7 +2143,7 @@ QUnit.module('Hidden input', {}, () => {
 });
 
 QUnit.module('Strategies', () => {
-    QUnit.test('default strategy should be used for browser supports Input Events Level 1', function(assert) {
+    QUnit.test('default strategy should be used for browser supports Input Events Level 2', function(assert) {
         const instance = $('#texteditor').dxTextEditor({
             mask: '0'
         }).dxTextEditor('instance');
