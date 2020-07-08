@@ -10,7 +10,7 @@ import windowUtils from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import Popup from '../popup';
-import AppointmentForm from './ui.scheduler.appointment_form';
+import { APPOINTMENT_FORM_GROUP_NAMES, AppointmentForm } from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -211,8 +211,8 @@ export default class AppointmentPopup {
         }
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
-        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, AppointmentForm.recurrenceGroupName);
-        this._setEditorOptions(recurrenceRuleExpr, AppointmentForm.recurrenceGroupName, extend({}, recurrenceEditorOptions, { startDate: startDate }));
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, APPOINTMENT_FORM_GROUP_NAMES.Recurrence);
+        this._setEditorOptions(recurrenceRuleExpr, APPOINTMENT_FORM_GROUP_NAMES.Recurrence, extend({}, recurrenceEditorOptions, { startDate: startDate }));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
