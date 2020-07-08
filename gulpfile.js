@@ -12,7 +12,6 @@ gulp.task('clean', function(callback) {
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
-require('./build/gulp/check_licenses');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
 require('./build/gulp/themebuilder-npm');

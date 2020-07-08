@@ -16,6 +16,6 @@ const checkRruleLicenseNotice = lazyPipe()
     });
 
 gulp.task('check-license-notices', function() {
-    return gulp.src('artifacts/js/dx.all.debug.js')
+    return gulp.src('artifacts/js/dx.all.js')
         .pipe(checkRruleLicenseNotice());
 });
