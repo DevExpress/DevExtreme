@@ -288,7 +288,6 @@ QUnit.test('Recurrent Task dragging with \'occurrence\' recurrenceEditMode, \'ho
     delete updatedSingleItem.initialSize;
 
     assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
-
     assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
 });
 
