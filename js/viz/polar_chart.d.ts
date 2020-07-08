@@ -12,6 +12,8 @@ import {
     format
 } from '../ui/widget/ui.widget';
 
+import { HatchingDirectionType } from './common';
+
 import {
     baseSeriesObject,
     chartAxisObject
@@ -27,12 +29,16 @@ import {
 } from './chart_components/base_chart';
 
 import {
-    VizRange
+    VizRange,
+    DashStyleType,
+    TimeIntervalType
 } from './common';
 
 import {
     Font
 } from './core/base_widget';
+
+export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
 
 export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
@@ -58,7 +64,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+    type?: PolarChartSeriesType;
 }
 
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
@@ -457,7 +463,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.originValue
      * @type number
@@ -504,7 +510,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    tickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.type
      * @type Enums.AxisScaleType
@@ -783,7 +789,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -998,7 +1004,7 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+    type?: PolarChartSeriesType;
 }
 export interface dxPolarChartLegend extends BaseChartLegend {
     /**
@@ -1125,7 +1131,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minVisualRangeLength?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickCount
      * @type number
@@ -1140,7 +1146,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.showZero
      * @type boolean
@@ -1171,7 +1177,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    tickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.type
      * @type Enums.AxisScaleType
@@ -1497,7 +1503,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
+    border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.closed
      * @type boolean
@@ -1523,7 +1529,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode
      * @type Enums.ChartSeriesHoverMode
@@ -1539,7 +1545,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    hoverStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, width?: number };
+    hoverStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, dashStyle?: DashStyleType, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
      * @type boolean
@@ -1604,7 +1610,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    selectionStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, width?: number };
+    selectionStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, dashStyle?: DashStyleType, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend
      * @type boolean
@@ -1688,7 +1694,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
+    border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector
      * @type object
