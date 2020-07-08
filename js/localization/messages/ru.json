@@ -287,6 +287,7 @@
         "dxFileManager-commandDetails": "Режим списка",
         "dxFileManager-commandClearSelection": "Очистить выделение",
         "dxFileManager-dialogButtonCancel": "Отмена",
+        "dxFileManager-commandShowNavPane": "Переключить панель навигации",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Переместить в",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Переместить",
