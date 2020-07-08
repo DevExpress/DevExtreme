@@ -140,8 +140,9 @@ exports.DataProvider = Class.inherit({
     },
 
     getColumnsWidths: function() {
-        return isDefined(this._options.columns)
-            ? this._options.columns.map(c => c.width)
+        const columns = this.getColumns();
+        return isDefined(columns)
+            ? columns.map(c => c.width)
             : undefined;
     },
 

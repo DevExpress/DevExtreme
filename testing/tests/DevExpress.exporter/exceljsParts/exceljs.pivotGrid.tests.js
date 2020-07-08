@@ -3679,5 +3679,3 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, function() { return $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'); });
-
-
