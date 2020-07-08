@@ -55,8 +55,8 @@ export const viewFunction = (viewModel: CheckBox): any => {
       hint={viewModel.props.hint}
       hoverStateEnabled={viewModel.props.hoverStateEnabled}
       onActive={viewModel.onActive}
-      onFocusin={viewModel.onFocusin}
-      onFocusout={viewModel.onFocusout}
+      onFocusIn={viewModel.onFocusIn}
+      onFocusOut={viewModel.onFocusOut}
       aria={viewModel.aria}
       onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
@@ -108,7 +108,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() useInkRipple?: boolean = false;
 
-  @Event() onFocusin?: (e: Event) => void;
+  @Event() onFocusIn?: (e: Event) => void;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
@@ -159,14 +159,14 @@ export default class CheckBox extends JSXComponent(CheckBoxProps) {
     useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 1 });
   }
 
-  onFocusin(event: Event): void {
-    const { useInkRipple, onFocusin } = this.props;
+  onFocusIn(event: Event): void {
+    const { useInkRipple, onFocusIn } = this.props;
 
     useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 0 });
-    onFocusin?.(event);
+    onFocusIn?.(event);
   }
 
-  onFocusout(event: Event): void {
+  onFocusOut(event: Event): void {
     const { useInkRipple } = this.props;
 
     useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 0 });

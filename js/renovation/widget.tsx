@@ -90,9 +90,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
-  @Event() onFocusin?: (e: Event) => void;
+  @Event() onFocusIn?: (e: Event) => void;
 
-  @Event() onFocusout?: (e: Event) => void;
+  @Event() onFocusOut?: (e: Event) => void;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   @Event() onKeyboardHandled?: (args: any) => any | undefined;
@@ -200,21 +200,31 @@ export default class Widget extends JSXComponent(WidgetProps) {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   focusEffect(): any {
     const {
-      disabled, focusStateEnabled, name, onFocusin, onFocusout,
+      disabled, focusStateEnabled, name, onFocusIn, onFocusOut,
     } = this.props;
     const namespace = `${name}Focus`;
     const isFocusable = focusStateEnabled && !disabled;
 
     if (isFocusable) {
       focus.on(this.widgetRef,
-        (e) => { onFocusin?.(e); !e.isDefaultPrevented() && (this.focused = true); },
-        (e) => { onFocusout?.(e); !e.isDefaultPrevented() && (this.focused = false); },
+        (e) => {
+          if (!e.isDefaultPrevented()) {
+            this.focused = true;
+              onFocusIn?.(e);
+          }
+        },
+        (e) => {
+          if (!e.isDefaultPrevented()) {
+            this.focused = false;
+            onFocusOut?.(e);
+          }
+        },
         {
           isFocusable: focusable,
           namespace,
         });
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => focus.off(this.widgetRef, { namespace });
+      return (): void => focus.off(this.widgetRef, { namespace });
     }
 
     return undefined;
@@ -234,7 +244,7 @@ export default class Widget extends JSXComponent(WidgetProps) {
         () => { this.hovered = false; },
         { selector, namespace });
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => hover.off(this.widgetRef, { selector, namespace });
+      return (): void => hover.off(this.widgetRef, { selector, namespace });
     }
 
     return undefined;
@@ -249,7 +259,7 @@ export default class Widget extends JSXComponent(WidgetProps) {
       // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
       const id = keyboard.on(this.widgetRef, this.widgetRef, (e) => onKeyDown!(e));
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => keyboard.off(id);
+      return (): void => keyboard.off(id);
     }
 
     return undefined;
@@ -264,7 +274,7 @@ export default class Widget extends JSXComponent(WidgetProps) {
     if (onDimensionChanged) {
       resize.on(this.widgetRef, onDimensionChanged, { namespace });
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => resize.off(this.widgetRef, { namespace });
+      return (): void => resize.off(this.widgetRef, { namespace });
     }
 
     return undefined;
@@ -284,7 +294,7 @@ export default class Widget extends JSXComponent(WidgetProps) {
         () => onVisibilityChange!(false),
         { namespace });
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => visibility.off(this.widgetRef, { namespace });
+      return (): void => visibility.off(this.widgetRef, { namespace });
     }
 
     return undefined;

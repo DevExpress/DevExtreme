@@ -39,7 +39,7 @@ export default class CheckBox extends Component {
 
     getProps() {
         const props = super.getProps();
-        props.onFocusin = () => {
+        props.onFocusIn = () => {
             const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
 
             // NOTE: The click should be processed before the validation message is shown because
