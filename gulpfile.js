@@ -59,7 +59,7 @@ function createMainBatch() {
 function createDefaultBatch() {
     const tasks = [ 'clean', 'localization', createMainBatch() ];
     if(!TEST_CI) {
-        tasks.push('npm', 'themebuilder-npm', 'check-license-notices');
+        tasks.push('npm', 'themebuilder-npm');
     }
     return gulp.series(tasks);
 }
