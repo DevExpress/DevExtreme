@@ -21,6 +21,7 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
+require('./build/gulp/check_licenses');
 
 const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
