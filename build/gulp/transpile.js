@@ -24,7 +24,7 @@ gulp.task('transpile-npm', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(babel())
-        .pipe(gulp.dest(context.TRANSPILED_NPM_PATH));
+        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 });
 
 gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-npm', function() {
