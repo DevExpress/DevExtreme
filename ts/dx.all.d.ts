@@ -7862,6 +7862,8 @@ declare module DevExpress.viz {
         indentFromAxis?: number;
         /** @name dxChart.Options.commonAxisSettings.label.overlappingBehavior */
         overlappingBehavior?: 'rotate' | 'stagger' | 'none' | 'hide';
+        /** @name dxChart.Options.commonAxisSettings.label.position */
+        position?: 'inside' | 'outside' | 'bottom' | 'left' | 'right' | 'top';
         /** @name dxChart.Options.commonAxisSettings.label.rotationAngle */
         rotationAngle?: number;
         /** @name dxChart.Options.commonAxisSettings.label.staggeringSpacing */
