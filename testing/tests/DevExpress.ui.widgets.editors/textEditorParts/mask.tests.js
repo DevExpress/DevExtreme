@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
+import { isInputEventsL2Supported } from 'ui/text_box/utils.support';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -487,6 +488,22 @@ QUnit.module('typing', moduleConfig, () => {
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('"valueChanged" and "input" events should handle correctly when "valueChangeEvent" is "input"', function(assert) {
+        assert.expect(2);
+
+        $('#texteditor').dxTextEditor({
+            onInput: () => assert.ok(true, '"input" event triggered'),
+            onValueChanged: ({ value }) => assert.strictEqual(value, '1', 'value applies to the editor'),
+            valueChangeEvent: 'input',
+            mask: '9'
+        });
+
+        const $input = $('#texteditor .dx-texteditor-input');
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+        keyboard.type('1');
     });
 });
 
@@ -2130,10 +2147,7 @@ QUnit.module('Strategies', () => {
         const instance = $('#texteditor').dxTextEditor({
             mask: '0'
         }).dxTextEditor('instance');
-        const { InputEvent } = window || {};
-        const beforeInputEvent = InputEvent && new InputEvent('beforeinput');
-        const isEventSupported = beforeInputEvent && beforeInputEvent.type === 'beforeinput';
-        const expectedMaskStrategy = isEventSupported ? 'inputEvents' : 'default';
+        const expectedMaskStrategy = isInputEventsL2Supported() ? 'inputEvents' : 'default';
 
         assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, 'strategy name is correct');
     });

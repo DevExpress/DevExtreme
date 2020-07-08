@@ -12,7 +12,7 @@ const stringUtils = require('../../core/utils/string');
 const wheelEvent = require('../../events/core/wheel');
 const MaskRules = require('./ui.text_editor.mask.rule');
 const TextEditorBase = require('./ui.text_editor.base');
-const { getWindow } = require('../../core/utils/window');
+const { isInputEventsL2Supported } = require('./utils.support');
 const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default;
 const InputEventsMaskStrategy = require('./ui.text_editor.mask.strategy.input_events').default;
 
@@ -110,13 +110,10 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        const { InputEvent } = getWindow() || {};
-
-        // Input Events L1 detection
-        const event = InputEvent && new InputEvent('beforeinput');
-        this._maskStrategy = event?.type === 'beforeinput' ?
+        this._maskStrategy = isInputEventsL2Supported() ?
             new InputEventsMaskStrategy(this) :
-            new DefaultMaskStrategy(this); // FF, old Safari and desktop Chrome
+            // FF, old Safari and desktop Chrome (https://bugs.chromium.org/p/chromium/issues/detail?id=947408)
+            new DefaultMaskStrategy(this);
     },
 
     _initMarkup: function() {
