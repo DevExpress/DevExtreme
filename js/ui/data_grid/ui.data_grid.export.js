@@ -139,6 +139,12 @@ exports.DataProvider = Class.inherit({
         return getColumnsByAllRows ? columns : columns[columns.length - 1];
     },
 
+    getColumnsWidths: function() {
+        return isDefined(this._options.columns)
+            ? this._options.columns.map(c => c.width)
+            : undefined;
+    },
+
     getRowsCount: function() {
         return this._options.items.length + this.getHeaderRowCount();
     },

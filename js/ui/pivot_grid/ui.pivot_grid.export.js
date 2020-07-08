@@ -115,6 +115,8 @@ exports.ExportMixin = extend({}, exportMixin, {
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),
             customizeExcelCell: this.option('export.customizeExcelCell'),
+            rowsArea: this._rowsArea,
+            columnsArea: this._columnsArea
         });
     }
 });
@@ -183,6 +185,10 @@ exports.DataProvider = Class.inherit({
 
     getColumns: function() {
         return this._options.columns;
+    },
+
+    getColumnsWidths: function() {
+        return this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth());
     },
 
     getRowsCount: function() {
