@@ -1019,6 +1019,7 @@ const BaseChart = BaseWidget.inherit({
         argumentAxis: 'AXES_AND_PANES',
         commonAxisSettings: 'AXES_AND_PANES',
         panes: 'AXES_AND_PANES',
+        commonPaneSettings: 'AXES_AND_PANES',
         defaultPane: 'AXES_AND_PANES',
         useAggregation: 'AXES_AND_PANES',
         containerBackgroundColor: 'AXES_AND_PANES',
