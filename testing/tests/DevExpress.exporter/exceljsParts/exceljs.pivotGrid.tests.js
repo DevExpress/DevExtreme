@@ -18,16 +18,9 @@ import 'common.css!';
 import 'generic_light.css!';
 
 import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
+import { Export } from 'exporter/exceljs/export';
 
 let helper;
-
-// TODO: Support the WYSIWYG column width. We are supporting the default column value width equal 100px for each column.
-// const excelColumnWidthFromColumn100Pixels = 14.28;
-// const excelColumnWidthFromGrid500Pixels = 71.42;
-// const excelColumnWidthFromColumn150Pixels = 21.42;
-// const excelColumnWidthFromColumn200Pixels = 28.57;
-// const excelColumnWidthFromColumn250Pixels = 35.71;
-// const excelColumnWidthFromColumn300Pixels = 42.85;
 
 const alignLeftTopWrap = { horizontal: 'left', vertical: 'top', wrapText: true };
 const alignLeftTopNoWrap = { horizontal: 'left', vertical: 'top', wrapText: false };
@@ -71,13 +64,16 @@ const moduleConfig = {
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
 
+    const toExcelWidth = (width) => {
+        const excelWidth = parseInt(width) / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS;
+        return Math.floor(excelWidth * 100) / 100;
+    };
+
     const calculateColumnWidths = (gridInstance) => {
         return $(gridInstance.element())
             .find('.dx-bottom-row col')
             .map((ind, col) => toExcelWidth(col.style.width));
     };
-
-    const toExcelWidth = width => Math.floor(parseInt(width) / 7 * 100) / 100;
 
     const getOptions = (context, pivotGrid, expectedCustomizeCellArgs, options) => {
         const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};

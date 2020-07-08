@@ -242,7 +242,7 @@ const Export = {
 };
 
 //#DEBUG
-Export.__internals = { MAX_EXCEL_COLUMN_WIDTH };
+Export.__internals = { MAX_EXCEL_COLUMN_WIDTH, MAX_DIGIT_WIDTH_IN_PIXELS };
 //#ENDDEBUG
 
 export { Export };
