@@ -20,14 +20,14 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile-npm', function() {
+gulp.task('transpile-prod', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 });
 
-gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-npm', function() {
+gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-prod', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
