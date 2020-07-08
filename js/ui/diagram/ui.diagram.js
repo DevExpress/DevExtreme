@@ -1855,7 +1855,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.customShapes.template
                 * @type template|function
-                * @type_function_param1 container:dxElement
+                * @type_function_param1 container:dxSVGElement
                 * @type_function_param2 data:object
                 * @type_function_param2_field1 item:dxDiagramShape
                 */
