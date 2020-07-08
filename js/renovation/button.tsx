@@ -8,7 +8,6 @@ import {
   OneWay,
   Ref,
   Template,
-  Slot,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
