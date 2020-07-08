@@ -10,7 +10,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import messageLocalization from 'localization/message';
-
+import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointment_form';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
@@ -21,11 +21,11 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const colSpan = visibility === true ? 1 : 2;
     const form = instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption('recurrenceRule').visible,
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible,
         visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
 
-    assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');
-    assert.equal(form.option('items')[1].colSpan, colSpan, 'colSpan of recurrence group is correct');
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main).colSpan, colSpan, 'colSpan of main group is correct');
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).colSpan, colSpan, 'colSpan of recurrence group is correct');
 
     assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup is correct');
 };
@@ -239,6 +239,21 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
             testCase();
         });
+    });
+
+    QUnit.test('Appointment popup form should have two named groups', function(assert) {
+        const scheduler = createScheduler({ dataSource: [] });
+        const data = {
+            text: 'appointment',
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+        };
+
+        scheduler.instance.showAppointmentPopup(data);
+        const form = scheduler.instance.getAppointmentDetailsForm();
+
+        assert.equal(form.option('items')[0].name, APPOINTMENT_FORM_GROUP_NAMES.Main, 'first group name is correct');
+        assert.equal(form.option('items')[1].name, APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'second group name is correct');
     });
 
     QUnit.test('Appointment popup should be with correct dates after change allDay switch and w/o saving (T832711)', function(assert) {
@@ -1123,7 +1138,7 @@ QUnit.test('Popup should not contain endDateTimeZone editor by default', functio
 
 QUnit.test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('startDateTimeZone', { visible: true });
+        e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
@@ -1136,7 +1151,7 @@ QUnit.test('It should be possible to render startDateTimeZone editor on appt for
 
 QUnit.test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('endDateTimeZone', { visible: true });
+        e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
 
@@ -1322,8 +1337,8 @@ QUnit.test('startDateBox & endDateBox should have required validation rules', fu
 
     const form = this.instance.getAppointmentDetailsForm();
 
-    assert.deepEqual(form.itemOption('startDate').validationRules, [{ type: 'required' }]);
-    assert.deepEqual(form.itemOption('endDate').validationRules, [{ type: 'required' }]);
+    assert.deepEqual(form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDate`).validationRules, [{ type: 'required' }]);
+    assert.deepEqual(form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDate`).validationRules, [{ type: 'required' }]);
 });
 
 QUnit.test('Changes shouldn\'t be saved if form is invalid', function(assert) {
