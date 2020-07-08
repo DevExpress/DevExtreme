@@ -63,6 +63,7 @@ const moduleConfig = {
 
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
+    const epsilon = 0.2;
 
     const toExcelWidth = (width) => {
         const excelWidth = parseInt(width) / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS;
@@ -110,7 +111,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -153,7 +154,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -204,7 +205,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -255,7 +256,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -305,7 +306,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -357,7 +358,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -407,7 +408,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -459,7 +460,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -518,7 +519,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -579,7 +580,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -623,7 +624,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -670,7 +671,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -715,7 +716,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -763,7 +764,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -811,7 +812,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -862,7 +863,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -917,7 +918,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -973,7 +974,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1112,7 +1113,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1155,7 +1156,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1263,7 +1264,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1348,7 +1349,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                    helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1395,7 +1396,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1439,7 +1440,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1505,7 +1506,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1548,7 +1549,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1562,7 +1563,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, newTopLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1612,7 +1613,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1665,7 +1666,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1718,7 +1719,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1771,7 +1772,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1828,7 +1829,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1885,7 +1886,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1944,7 +1945,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2002,7 +2003,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2053,7 +2054,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2105,7 +2106,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2161,7 +2162,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2221,7 +2222,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2267,7 +2268,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2319,7 +2320,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2367,7 +2368,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2418,7 +2419,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2473,7 +2474,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2532,7 +2533,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2583,7 +2584,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2628,7 +2629,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2680,7 +2681,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2735,7 +2736,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2793,7 +2794,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2857,7 +2858,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 5 }, { row: 4, column: 5 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2912,7 +2913,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2958,7 +2959,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3018,7 +3019,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3083,7 +3084,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 4 }, { row: 5, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3153,7 +3154,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3213,7 +3214,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3259,7 +3260,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3320,7 +3321,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3381,7 +3382,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3442,7 +3443,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column);
+                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
