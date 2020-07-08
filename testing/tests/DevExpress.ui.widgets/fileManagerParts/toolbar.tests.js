@@ -942,4 +942,46 @@ QUnit.module('Toolbar', moduleConfig, () => {
         renderer.fn.width = originalWidth;
     });
 
+    test('buttons without text have tooltip', function(assert) {
+        createFileManager(true);
+        this.clock.tick(400);
+
+        const $refresh = this.wrapper.getToolbarButton('Refresh');
+        assert.strictEqual($refresh.length, 2, 'refresh button exists');
+        assert.strictEqual($refresh.eq(0).attr('title'), 'Refresh', 'refresh button has tooltip');
+        assert.strictEqual($refresh.eq(1).attr('title'), 'Refresh', 'refresh button has tooltip');
+
+        const $showNavPane = this.wrapper.getGeneralToolbarElements().eq(0);
+        assert.strictEqual($showNavPane.attr('title'), 'Toggle navigation pane', 'showNavPane button has tooltip');
+    });
+
+    test('buttons in compact mode have tooltips', function(assert) {
+        createFileManager(true);
+        this.clock.tick(400);
+
+        this.wrapper.getInstance().option('permissons.download', true);
+        this.clock.tick(400);
+
+        const toolbar = this.wrapper.getInstance()._toolbar;
+        toolbar._toolbarHasItemsOverflow = () => true;
+        toolbar.update();
+        this.clock.tick(800);
+
+        const $generalElements = this.wrapper.getGeneralToolbarElements();
+        assert.strictEqual($generalElements.eq(1).attr('title'), 'New directory', 'create button has tooltip');
+        assert.strictEqual($generalElements.eq(2).attr('title'), 'Upload files', 'upload button has tooltip');
+
+        const $item = this.wrapper.findThumbnailsItem('File 1.txt');
+        $item.trigger('dxclick');
+        this.clock.tick(400);
+
+        const $selectionElements = this.wrapper.getFileSelectionToolbarElements();
+        assert.strictEqual($selectionElements.eq(0).attr('title'), 'Download', 'download button has tooltip');
+        assert.strictEqual($selectionElements.eq(1).attr('title'), 'Move to', 'move button has tooltip');
+        assert.strictEqual($selectionElements.eq(2).attr('title'), 'Copy to', 'copy button has tooltip');
+        assert.strictEqual($selectionElements.eq(3).attr('title'), 'Rename', 'rename button has tooltip');
+        assert.strictEqual($selectionElements.eq(4).attr('title'), 'Delete', 'delete button has tooltip');
+        assert.strictEqual($selectionElements.eq(5).attr('title'), 'Clear selection', 'clear selection button has tooltip');
+    });
+
 });

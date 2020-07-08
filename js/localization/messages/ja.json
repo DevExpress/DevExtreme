@@ -287,6 +287,7 @@
         "dxFileManager-commandThumbnails": "縮小表示",
         "dxFileManager-commandDetails": "詳細表示",
         "dxFileManager-commandClearSelection": "選択のクリア",
+        "dxFileManager-commandShowNavPane": "TODO",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "移動先",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "移動",
