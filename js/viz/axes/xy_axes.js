@@ -1343,7 +1343,7 @@ module.exports = {
 
                         oppositeAxis._majorTicks.forEach(oppositeTick => {
                             const oppositeLabel = oppositeTick.label;
-                            if(oppositeLabel && that._detectOverlappingExistence(label, oppositeLabel)) {
+                            if(oppositeLabel && that._detectElementsOverlapping(label, oppositeLabel)) {
                                 overlappingTicks.push(tick);
                                 that._shiftThroughAxisOverlappedTick(tick);
                             }
@@ -1363,6 +1363,11 @@ module.exports = {
 
         _resolveLabelOverlappedWithOppositeAxis(label, oppositeAxis) {
             const that = this;
+
+            if(!that._detectElementsOverlapping(label, oppositeAxis._axisElement)) {
+                return;
+            }
+
             const oppositeAxisPosition = oppositeAxis.getAxisPosition();
             const oppositeAxisLabelOptions = oppositeAxis.getOptions().label;
             const oppositeAxisLabelPosition = oppositeAxisLabelOptions.position;
@@ -1370,40 +1375,38 @@ module.exports = {
             const labelBBox = label.getBBox();
             let shift;
 
-            if(that._detectOverlappingExistence(label, oppositeAxis._axisElement)) {
-                if(that._isHorizontal) {
-                    let translateX = label.attr('translateX');
-                    const labelX = labelBBox.x + translateX;
-                    const left = oppositeAxisPosition - labelX;
-                    const right = labelX + labelBBox.width - oppositeAxisPosition;
-                    if(left > 0 && right > 0) {
-                        if(right - left > 1) {
-                            shift = left + oppositeAxisLabelIndent;
-                        } else if(left - right > 1) {
-                            shift = -(right + oppositeAxisLabelIndent);
-                        } else {
-                            shift = oppositeAxisLabelPosition === LEFT ? left + oppositeAxisLabelIndent : -(right + oppositeAxisLabelIndent);
-                        }
-                        translateX += shift;
-                        label.attr({ translateX });
+            if(that._isHorizontal) {
+                let translateX = label.attr('translateX');
+                const labelX = labelBBox.x + translateX;
+                const left = oppositeAxisPosition - labelX;
+                const right = labelX + labelBBox.width - oppositeAxisPosition;
+                if(left > 0 && right > 0) {
+                    if(right - left > 1) {
+                        shift = left + oppositeAxisLabelIndent;
+                    } else if(left - right > 1) {
+                        shift = -(right + oppositeAxisLabelIndent);
+                    } else {
+                        shift = oppositeAxisLabelPosition === LEFT ? left + oppositeAxisLabelIndent : -(right + oppositeAxisLabelIndent);
                     }
-                } else {
-                    let translateY = label.attr('translateY');
-                    const labelY = labelBBox.y + translateY;
-                    const top = oppositeAxisPosition - labelY;
-                    const bottom = labelY + labelBBox.height - oppositeAxisPosition;
-                    if(top > 0 && bottom > 0) {
-                        if(bottom - top > 1) {
-                            shift = top + oppositeAxisLabelIndent;
-                        } else if(top - bottom > 1) {
-                            shift = -(bottom + oppositeAxisLabelIndent);
-                        } else {
-                            shift = oppositeAxisLabelPosition === TOP ? top + oppositeAxisLabelIndent : -(bottom + oppositeAxisLabelIndent);
-                        }
+                    translateX += shift;
+                    label.attr({ translateX });
+                }
+            } else {
+                let translateY = label.attr('translateY');
+                const labelY = labelBBox.y + translateY;
+                const top = oppositeAxisPosition - labelY;
+                const bottom = labelY + labelBBox.height - oppositeAxisPosition;
+                if(top > 0 && bottom > 0) {
+                    if(bottom - top > 1) {
+                        shift = top + oppositeAxisLabelIndent;
+                    } else if(top - bottom > 1) {
+                        shift = -(bottom + oppositeAxisLabelIndent);
+                    } else {
+                        shift = oppositeAxisLabelPosition === TOP ? top + oppositeAxisLabelIndent : -(bottom + oppositeAxisLabelIndent);
+                    }
 
-                        translateY += shift;
-                        label.attr({ translateY });
-                    }
+                    translateY += shift;
+                    label.attr({ translateY });
                 }
             }
         },
@@ -1449,7 +1452,7 @@ module.exports = {
             }
         },
 
-        _detectOverlappingExistence(element1, element2) {
+        _detectElementsOverlapping(element1, element2) {
             if(!element1 || !element2) {
                 return false;
             }
