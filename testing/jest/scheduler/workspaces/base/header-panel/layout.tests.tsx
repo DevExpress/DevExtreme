@@ -39,7 +39,7 @@ describe('HeaderPanelLayoutBase', () => {
 
       expect(layout.find('table').exists())
         .toBe(true);
-      expect(layout.find('tbody').exists())
+      expect(layout.find('thead').exists())
         .toBe(true);
 
       const row = layout.find(Row);

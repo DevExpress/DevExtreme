@@ -10,7 +10,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
-    <tbody>
+    <thead>
       <Row>
         {viewModel.props.viewCellsData![0].map(({ startDate, endDate, today }) => (
           <viewModel.props.cellTemplate
@@ -21,7 +21,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
           />
         ))}
       </Row>
-    </tbody>
+    </thead>
   </table>
 );
 
