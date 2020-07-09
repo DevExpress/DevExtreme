@@ -366,7 +366,9 @@ export let Legend = function(settings) {
     that._titleGroupClass = settings.titleGroupClass;
     that._allowInsidePosition = settings.allowInsidePosition;
     that._widget = settings.widget;
+
     that._asyncFirstDrawing = true;
+    that._updated = false;
 };
 
 const _Legend = Legend;
@@ -384,6 +386,7 @@ extend(legendPrototype, {
         const that = this;
         options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
         const initMarkerSize = options.markerSize;
+        this._updated = true;
         this._data = data.map((dataItem) => {
             dataItem.size = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
             dataItem.marker = getAttributes(dataItem, dataItem.states.normal);
@@ -443,7 +446,6 @@ extend(legendPrototype, {
     draw: function(width, height) {
         // TODO check multiple groups creation
         const that = this;
-        const options = that._options;
         const items = that._getItemData();
 
         that._isAsyncRendering = false;
@@ -469,6 +471,33 @@ extend(legendPrototype, {
         that._markersGroup = that._renderer.g().attr({ class: that._itemGroupClass }).append(that._insideLegendGroup);
         that._createItems(items);
 
+        that._updateElementsPosition(width, height);
+
+        return that;
+    },
+
+    _measureElements: function() {
+        const options = this._options;
+        let maxBBoxHeight = 0;
+        this._items.forEach(item => {
+            const labelBBox = item.label.getBBox();
+            const markerBBox = item.marker.getBBox();
+            item.markerBBox = markerBBox;
+            item.markerSize = Math.max(markerBBox.width, markerBBox.height);
+            const bBox = getSizeItem(options, markerBBox, labelBBox);
+            item.labelBBox = labelBBox;
+            item.bBox = bBox;
+            maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
+        });
+        if(options.equalRowHeight) {
+            this._items.forEach(item => item.bBox.height = maxBBoxHeight);
+        }
+    },
+
+    _updateElementsPosition: function(width, height) {
+        const that = this;
+        const options = that._options;
+        that._measureElements();
         that._locateElements(options);
         that._finalUpdate(options);
 
@@ -476,15 +505,12 @@ extend(legendPrototype, {
         if(size.width > width || size.height > height) {
             that.freeSpace();
         }
-
-        return that;
     },
 
     _createItems: function(items) {
         const that = this;
         const options = that._options;
         const renderer = that._renderer;
-        let maxBBoxHeight = 0;
         const createMarker = getMarkerCreator(options.markerShape);
 
         that._markersId = {};
@@ -560,21 +586,8 @@ extend(legendPrototype, {
                 that._markersId[dataItem.id] = i;
             }
 
-            const labelBBox = item.label.getBBox();
-            const markerBBox = item.marker.getBBox();
-            item.markerBBox = markerBBox;
-            item.markerSize = Math.max(markerBBox.width, markerBBox.height);
-            const bBox = getSizeItem(options, markerBBox, labelBBox);
-            item.labelBBox = labelBBox;
-            item.bBox = bBox;
-            maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
-
             return item;
         });
-
-        if(options.equalRowHeight) {
-            that._items.forEach(item => item.bBox.height = maxBBoxHeight);
-        }
 
         when.apply(this, deferredItems).done(() => {
             if(that._isAsyncRendering) {
@@ -1082,7 +1095,12 @@ extend(legendPrototype, {
     },
 
     measure: function(size) {
-        this.draw(size[0], size[1]);
+        if(this._updated) {
+            this.draw(size[0], size[1]);
+            this._updated = false;
+        } else {
+            this._updateElementsPosition(size[0], size[1]);
+        }
         const rect = this.getLayoutOptions();
         return [rect.width, rect.height];
     },
