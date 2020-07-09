@@ -35,14 +35,6 @@ export default class PreactWrapper extends DOMComponent {
         return options;
     }
 
-    _bindInnerWidgetOptions(innerWidget, optionsContainer) {
-        const syncOptions = () =>
-            this._options.silent(optionsContainer, extend({}, innerWidget.option()));
-
-        syncOptions();
-        innerWidget.on('optionChanged', syncOptions);
-    }
-
     _initMarkup() {
         const props = this.getProps();
         if(this._shouldRefresh) {
@@ -55,9 +47,6 @@ export default class PreactWrapper extends DOMComponent {
         this._renderPreact(props);
     }
 
-    _canValueBeChangedByClick() {
-        return false;
-    }
 
     _renderPreact(props) {
         const containerNode = this.$element().get(0);

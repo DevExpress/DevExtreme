@@ -148,6 +148,14 @@ export default class CheckBox extends Component {
         }
     }
 
+    _bindInnerWidgetOptions(innerWidget, optionsContainer) {
+        const syncOptions = () =>
+            this._options.silent(optionsContainer, extend({}, innerWidget.option()));
+
+        syncOptions();
+        innerWidget.on('optionChanged', syncOptions);
+    }
+
     _getValidationMessageTarget() {
         return this.$element();
     }
