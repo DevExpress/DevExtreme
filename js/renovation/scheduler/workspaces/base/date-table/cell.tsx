@@ -2,8 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
 
-const getCssClasses = (model: DateTableCellBaseProps): string => {
-  const { className } = model;
+const getCssClasses = ({ className }: DateTableCellBaseProps): string => {
   const classNames = [
     'dx-scheduler-date-table-cell',
     'dx-scheduler-cell-sizes-horizontal',

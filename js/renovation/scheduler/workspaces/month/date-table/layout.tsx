@@ -42,6 +42,5 @@ export class MonthDateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
 })
 export default class MonthDateTableLayout extends JSXComponent(MonthDateTableLayoutProps) {}

@@ -6,7 +6,7 @@ import { ViewCellData } from '../../types';
 
 export const viewFunction = (viewModel: HeaderPanelLayout) => (
   <table
-    className="dx-scheduler-header-panel"
+    className={`dx-scheduler-header-panel ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
@@ -27,6 +27,8 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
 
 @ComponentBindings()
 export class HeaderPanelLayoutProps {
+  @OneWay() className?: string;
+
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 
   @Template() cellTemplate?: any;

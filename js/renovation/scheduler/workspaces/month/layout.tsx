@@ -29,7 +29,6 @@ export class MonthLayoutProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
   view: viewFunction,
 })
 export default class MonthLayout extends JSXComponent(MonthLayoutProps) {}
