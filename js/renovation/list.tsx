@@ -1,6 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, Event,
 } from 'devextreme-generator/component_declaration/common';
+/* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../data/data_source';
 import { WidgetProps } from './widget';
 import DxList, { dxListItem, Options } from '../ui/list';
@@ -158,7 +159,7 @@ export class ListProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class List extends JSXComponent(ListProps) {
+export class List extends JSXComponent(ListProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 

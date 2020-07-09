@@ -169,9 +169,9 @@ factory.createIndicator = function(parameters, type) {
     return pointer;
 };
 
-loadingIndicatorModule.LoadingIndicator = function(parameters) {
+loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
     return new vizMocks.LoadingIndicator(parameters);
-};
+});
 
 sinon.stub(rendererModule, 'Renderer', function() {
     return currentTest().renderer;

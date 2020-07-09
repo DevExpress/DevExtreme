@@ -1,9 +1,9 @@
-const $ = require('../core/renderer');
-const Editor = require('./editor/editor');
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const windowUtils = require('../core/utils/window');
-const fx = require('../animation/fx');
+import $ from '../core/renderer';
+import Editor from './editor/editor';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import { hasWindow } from '../core/utils/window';
+import fx from '../animation/fx';
 
 const TRACKBAR_CLASS = 'dx-trackbar';
 const TRACKBAR_CONTAINER_CLASS = 'dx-trackbar-container';
@@ -102,7 +102,7 @@ const TrackBar = Editor.inherit({
             return;
         }
 
-        if(this._needPreventAnimation || !windowUtils.hasWindow()) {
+        if(this._needPreventAnimation || !hasWindow()) {
             return;
         }
 
@@ -136,4 +136,4 @@ const TrackBar = Editor.inherit({
 
 registerComponent('dxTrackBar', TrackBar);
 
-module.exports = TrackBar;
+export default TrackBar;

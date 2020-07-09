@@ -1,4 +1,4 @@
-module.exports = (currencySymbol, accountingFormat) => {
+export default (currencySymbol, accountingFormat) => {
     if(!accountingFormat) {
         return;
     }

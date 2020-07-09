@@ -58,7 +58,7 @@ function restoreSetSelectedRange(controller) {
     delete controller.setSelectedRange;
 }
 
-function SlidersController(params) {
+export function SlidersController(params) {
     const that = this;
     const sliderParams = { renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator };
     that._params = params;
@@ -476,5 +476,3 @@ SlidersController.prototype = {
         this._sliders[index].toForeground();
     }
 };
-
-exports.SlidersController = SlidersController;

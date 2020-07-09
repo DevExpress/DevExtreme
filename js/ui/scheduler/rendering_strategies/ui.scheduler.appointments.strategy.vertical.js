@@ -331,4 +331,4 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 }
 
-module.exports = VerticalRenderingStrategy;
+export default VerticalRenderingStrategy;

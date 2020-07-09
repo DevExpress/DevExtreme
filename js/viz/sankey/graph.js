@@ -119,7 +119,7 @@ const struct = {
     }
 };
 
-module.exports = {
+export default {
     struct: struct,
     routines: routines,
     getVertices: getVertices,

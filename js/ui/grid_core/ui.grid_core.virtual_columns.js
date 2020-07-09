@@ -230,7 +230,7 @@ const ColumnsControllerExtender = (function() {
     return members;
 })();
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             scrolling: {

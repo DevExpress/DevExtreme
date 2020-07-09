@@ -1,10 +1,10 @@
-const $ = require('../../core/renderer');
-const Callbacks = require('../../core/utils/callbacks');
-const translator = require('../../animation/translator');
-const eventUtils = require('../../events/utils');
-const NativeStrategy = require('./ui.scrollable.native');
-const LoadIndicator = require('../load_indicator');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import $ from '../../core/renderer';
+import Callbacks from '../../core/utils/callbacks';
+import translator from '../../animation/translator';
+import { eventData } from '../../events/utils';
+import NativeStrategy from './ui.scrollable.native';
+import LoadIndicator from '../load_indicator';
+import { Deferred } from '../../core/utils/deferred';
 
 const SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
@@ -84,14 +84,14 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase(e);
 
         if(this._state === STATE_RELEASED && this._location === 0) {
-            this._startClientY = eventUtils.eventData(e.originalEvent).y;
+            this._startClientY = eventData(e.originalEvent).y;
             this._state = STATE_TOUCHED;
         }
     },
 
     handleMove: function(e) {
         this.callBase(e);
-        this._deltaY = eventUtils.eventData(e.originalEvent).y - this._startClientY;
+        this._deltaY = eventData(e.originalEvent).y - this._startClientY;
 
         if(this._state === STATE_TOUCHED) {
             if(this._pullDownEnabled && this._deltaY > 0) {
@@ -242,4 +242,4 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     }
 });
 
-module.exports = SwipeDownNativeScrollViewStrategy;
+export default SwipeDownNativeScrollViewStrategy;

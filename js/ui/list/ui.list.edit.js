@@ -4,7 +4,7 @@ import { extend } from '../../core/utils/extend';
 import GroupedEditStrategy from './ui.list.edit.strategy.grouped';
 import { format as formatMessage } from '../../localization/message';
 import EditProvider from './ui.list.edit.provider';
-import ListBase from './ui.list.base';
+import { ListBase } from './ui.list.base';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
@@ -368,4 +368,4 @@ const ListEdit = ListBase.inherit({
 
 });
 
-module.exports = ListEdit;
+export default ListEdit;

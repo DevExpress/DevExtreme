@@ -1,5 +1,7 @@
 /* !!! This file is auto-generated. Any modification will be lost! */
 
+/* eslint-disable import/no-commonjs */
+
 /// BUNDLER_PARTS
 /* Renovation (dx.module-renovation.js) */
 

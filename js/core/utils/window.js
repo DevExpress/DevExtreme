@@ -1,6 +1,6 @@
 /* global window */
 
-const domAdapter = require('../dom_adapter');
+import domAdapter from '../dom_adapter';
 
 const hasWindow = () => typeof window !== 'undefined';
 
@@ -36,7 +36,7 @@ const getCurrentScreenFactor = (screenFactorCallback) => {
 
 const getNavigator = () => hasWindow() ? windowObject.navigator : { userAgent: '' };
 
-module.exports = {
+export {
     hasWindow,
     getWindow,
     hasProperty,

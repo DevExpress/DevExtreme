@@ -8,7 +8,7 @@ module.exports = Object.assign({
     module: {
         rules: [
             {
-                test: /\.tsx$/,
+                test: /\.tsx?$/,
                 loaders: [
                     {
                         loader: 'babel-loader',
@@ -43,6 +43,6 @@ module.exports = Object.assign({
             }]
     },
     resolve: {
-        extensions: ['.js', '.tsx'],
+        extensions: ['.js', '.tsx', '.ts'],
     }
 }, baseConfig);

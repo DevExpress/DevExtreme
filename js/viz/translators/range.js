@@ -1,9 +1,9 @@
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const _isDefined = typeUtils.isDefined;
-const _isDate = typeUtils.isDate;
-const _isFunction = typeUtils.isFunction;
-const unique = require('../core/utils').unique;
+import { isDefined, isDate, isFunction } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+const _isDefined = isDefined;
+const _isDate = isDate;
+const _isFunction = isFunction;
+import { unique } from '../core/utils';
 
 const minSelector = 'min';
 const maxSelector = 'max';
@@ -32,9 +32,11 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
     }
 }
 
-const _Range = exports.Range = function(range) {
+export const Range = function(range) {
     range && extend(this, range);
 };
+
+const _Range = Range;
 
 _Range.prototype = {
     constructor: _Range,

@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
 
-import clickEvent from '../../events/click';
+import { name } from '../../events/click';
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import eventsEngine from '../../events/core/events_engine';
 import { PAGER_CLASS } from './consts';
@@ -12,13 +12,11 @@ type dxClickEffectFn = (HTMLDivElement, Function) => (() => void) | undefined;
 
 export const dxClickEffect: dxClickEffectFn = (element, handler) => {
   if (handler) {
-    eventsEngine.on(element, clickEvent.name, handler);
-    return (): void => eventsEngine.off(element, clickEvent.name, handler);
+    eventsEngine.on(element, name, handler);
+    return (): void => eventsEngine.off(element, name, handler);
   }
   return undefined;
 };
-
-
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   widgetRef,
@@ -55,7 +53,7 @@ function createActionByOption(): () => void {
 }
 // tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class LightButton extends JSXComponent(LightButtonProps) {
+export class LightButton extends JSXComponent(LightButtonProps) {
   @Ref() widgetRef!: HTMLDivElement;
 
   @Effect() keyboardEffect(): (() => void) {

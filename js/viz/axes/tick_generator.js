@@ -777,7 +777,7 @@ function dateGenerator(options) {
     );
 }
 
-exports.tickGenerator = function(options) {
+export const tickGenerator = function(options) {
     let result;
 
     if(options.rangeIsEmpty) {

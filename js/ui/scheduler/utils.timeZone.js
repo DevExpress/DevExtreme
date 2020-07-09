@@ -84,4 +84,4 @@ const utils = {
     correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
 };
 
-module.exports = utils;
+export default utils;

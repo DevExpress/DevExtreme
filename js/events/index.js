@@ -1,24 +1,16 @@
-const eventsEngine = require('./core/events_engine');
+import eventsEngine from './core/events_engine';
 
 /**
 * @name events
 */
 
 
-exports.on = eventsEngine.on;
+export const on = eventsEngine.on;
 
-
-exports.one = eventsEngine.one;
-
-
-exports.off = eventsEngine.off;
-
-
-exports.trigger = eventsEngine.trigger;
-
-
-exports.triggerHandler = eventsEngine.triggerHandler;
-
+export const one = eventsEngine.one;
+export const off = eventsEngine.off;
+export const trigger = eventsEngine.trigger;
+export const triggerHandler = eventsEngine.triggerHandler;
 
 /**
 * @name events.Event
@@ -31,4 +23,4 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 * @hidden
 */
 
-exports.Event = eventsEngine.Event;
+export const Event = eventsEngine.Event;

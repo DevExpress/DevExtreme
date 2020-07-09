@@ -43,4 +43,4 @@ const DefaultAdapter = Class.inherit({
     }
 });
 
-module.exports = DefaultAdapter;
+export default DefaultAdapter;

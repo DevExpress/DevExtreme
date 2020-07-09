@@ -622,4 +622,4 @@ const DateBoxMask = DateBoxBase.inherit({
     }
 });
 
-module.exports = DateBoxMask;
+export default DateBoxMask;

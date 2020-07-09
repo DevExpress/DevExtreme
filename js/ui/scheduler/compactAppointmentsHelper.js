@@ -3,7 +3,7 @@ import Button from '../button';
 import translator from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import deferredUtils from '../../core/utils/deferred';
+import { when } from '../../core/utils/deferred';
 import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
@@ -157,7 +157,7 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundColor($button, colors, color) {
-        deferredUtils.when.apply(null, colors).done(function() {
+        when.apply(null, colors).done(function() {
             this._makeBackgroundColorCore($button, color, arguments);
         }.bind(this));
     }

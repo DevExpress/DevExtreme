@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import PageIndexSelector from '../../../js/renovation/pager/page-index-selector';
-import PagerContent, { PagerContentProps, viewFunction as PagerContentComponent } from '../../../js/renovation/pager/pager-content';
-import PageSizeSelector from '../../../js/renovation/pager/page-size-selector';
-import InfoText from '../../../js/renovation/pager/info';
+import { PageIndexSelector } from '../../../js/renovation/pager/page-index-selector';
+import { PagerContentComponent as PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../../../js/renovation/pager/pager-content';
+import { PageSizeSelector } from '../../../js/renovation/pager/page-size-selector';
+import { InfoText } from '../../../js/renovation/pager/info';
 
-jest.mock('../../../js/renovation/pager/page-size-selector', () => jest.fn());
-jest.mock('../../../js/renovation/pager/page-index-selector', () => jest.fn());
-jest.mock('../../../js/renovation/pager/info', () => jest.fn());
+jest.mock('../../../js/renovation/pager/page-size-selector', () => ({ __esModule: true, PageSizeSelector: jest.fn() }));
+jest.mock('../../../js/renovation/pager/page-index-selector', () => ({ __esModule: true, PageIndexSelector: jest.fn() }));
+jest.mock('../../../js/renovation/pager/info', () => ({ __esModule: true, InfoText: jest.fn() }));
 
 describe('PagerContent', () => {
   describe('View', () => {

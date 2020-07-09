@@ -22,28 +22,33 @@ QUnit.testDone(function() {
     renderers.SvgElement.reset && renderers.SvgElement.reset();
 });
 
-const elementsName = ['SvgElement', 'RectSvgElement', 'PathSvgElement', 'ArcSvgElement', 'TextSvgElement'];
+// const elementsName = ['DEBUG_set_SvgElement', 'DEBUG_set_RectSvgElement', 'DEBUG_set_PathSvgElement', 'DEBUG_set_ArcSvgElement', 'DEBUG_set_TextSvgElement'];
+const methodsName = ['SvgElement', 'RectSvgElement', 'PathSvgElement', 'ArcSvgElement', 'TextSvgElement'];
+const origMethods = {};
 
 function setMockElements() {
     function wrapElement(elementName) {
-        sinon.stub(renderers, elementName, vizMocks.stubClass(renderers[elementName], null, {
+        renderers[`DEBUG_set_${elementName}`](sinon.spy(vizMocks.stubClass(renderers[elementName], null, {
             $constructor: function() {
                 this.renderer = arguments[0];
                 this.element = getMockElement();
                 this._settings = {};
             },
             $thisReturnFunctions: ['attr', 'css', 'append']
-        }));
+        })));
     }
+    methodsName.forEach(name => {
+        origMethods[name] = renderers[name];
+    });
 
-    elementsName.forEach(function(elementName) {
+    methodsName.forEach(function(elementName) {
         wrapElement(elementName);
     });
 }
 
 function resetMockElements() {
-    elementsName.forEach(function(elementName) {
-        renderers[elementName].restore();
+    methodsName.forEach(function(elementName) {
+        renderers[`DEBUG_set_${elementName}`](origMethods[elementName]);
     });
 }
 

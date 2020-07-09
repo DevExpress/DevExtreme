@@ -1,13 +1,18 @@
 const _Number = Number;
-const _getAppropriateFormat = require('../core/utils').getAppropriateFormat;
-const extend = require('../../core/utils/extend').extend;
-const translator1DModule = require('../translators/translator1d');
+import { getAppropriateFormat as _getAppropriateFormat } from '../core/utils';
+import { extend } from '../../core/utils/extend';
+import translator1DModule from '../translators/translator1d';
 const _extend = extend;
-const BaseWidget = require('../core/base_widget');
-const themeManagerModule = require('./theme_manager');
-const Tracker = require('./tracker');
+import BaseWidget from '../core/base_widget';
+import themeManagerModule from './theme_manager';
+import Tracker from './tracker';
+import { format as _format } from '../../format_helper';
+import { plugin as exportPlugin } from '../core/export';
+import { plugin as titlePlugin } from '../core/title';
+import { plugin as tooltipPlugin } from '../core/tooltip';
+import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
 
-const dxBaseGauge = BaseWidget.inherit({
+export const dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: 'dxg',
 
     _themeSection: 'gauge',
@@ -217,12 +222,8 @@ const dxBaseGauge = BaseWidget.inherit({
     }
 });
 
-exports.dxBaseGauge = dxBaseGauge;
-
-const _format = require('../../format_helper').format;
-
 //  TODO: find a better place for it
-const formatValue = function(value, options, extra) {
+export const formatValue = function(value, options, extra) {
     options = options || {};
     const text = _format(value, options.format);
     let formatObject;
@@ -234,18 +235,15 @@ const formatValue = function(value, options, extra) {
 };
 
 //  TODO: find a better place for it
-const getSampleText = function(translator, options) {
+export const getSampleText = function(translator, options) {
     const text1 = formatValue(translator.getDomainStart(), options);
     const text2 = formatValue(translator.getDomainEnd(), options);
     return text1.length >= text2.length ? text1 : text2;
 };
 
-exports.formatValue = formatValue;
-exports.getSampleText = getSampleText;
-
-exports.compareArrays = function(array1, array2) {
+export function compareArrays(array1, array2) {
     return array1 && array2 && array1.length === array2.length && compareArraysElements(array1, array2);
-};
+}
 
 function compareArraysElements(array1, array2) {
     let i;
@@ -267,10 +265,10 @@ function compareArraysElements(array1, array2) {
 }
 
 // PLUGINS_SECTION
-dxBaseGauge.addPlugin(require('../core/export').plugin);
-dxBaseGauge.addPlugin(require('../core/title').plugin);
-dxBaseGauge.addPlugin(require('../core/tooltip').plugin);
-dxBaseGauge.addPlugin(require('../core/loading_indicator').plugin);
+dxBaseGauge.addPlugin(exportPlugin);
+dxBaseGauge.addPlugin(titlePlugin);
+dxBaseGauge.addPlugin(tooltipPlugin);
+dxBaseGauge.addPlugin(loadingIndicatorPlugin);
 
 // These are gauges specifics on using tooltip - they require refactoring.
 const _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;

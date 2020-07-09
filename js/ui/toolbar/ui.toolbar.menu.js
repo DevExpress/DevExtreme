@@ -1,7 +1,7 @@
-const $ = require('../../core/renderer');
-const registerComponent = require('../../core/component_registrator');
-const each = require('../../core/utils/iterator').each;
-const List = require('../list/ui.list.base');
+import $ from '../../core/renderer';
+import registerComponent from '../../core/component_registrator';
+import { each } from '../../core/utils/iterator';
+import { ListBase } from '../list/ui.list.base';
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
@@ -9,7 +9,7 @@ const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
-const ToolbarMenu = List.inherit({
+const ToolbarMenu = ListBase.inherit({
     _activeStateUnit: '.' + TOOLBAR_MENU_ACTION_CLASS,
 
     _initMarkup: function() {
@@ -102,4 +102,4 @@ const ToolbarMenu = List.inherit({
 
 registerComponent('dxToolbarMenu', ToolbarMenu);
 
-module.exports = ToolbarMenu;
+export default ToolbarMenu;

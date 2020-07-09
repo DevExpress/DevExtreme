@@ -1,1 +1,1 @@
-require('./modules/parts/viz');
+import './modules/parts/viz';

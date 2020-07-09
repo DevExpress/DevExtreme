@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 const PARENT_LOCALE_SEPARATOR = '-';
 
 module.exports = (parentLocales, locale) => {

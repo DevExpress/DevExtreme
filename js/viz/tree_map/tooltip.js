@@ -1,7 +1,9 @@
-const proto = require('./tree_map.base').prototype;
-const expand = require('../core/helpers').expand;
+import { expand } from '../core/helpers';
+import TreeMapBase from './tree_map.base';
 
-require('./api');
+const proto = TreeMapBase.prototype;
+
+import './api';
 
 expand(proto, '_extendProxyType', function(proto) {
     const that = this;
@@ -61,5 +63,6 @@ proto.hideTooltip = function() {
     }
 };
 
-// PLUGINS_SECTION
-require('./tree_map.base').addPlugin(require('../core/tooltip').plugin);
+// PLUGINS_SECTION\
+import { plugin as tooltipPlugin } from '../core/tooltip';
+TreeMapBase.addPlugin(tooltipPlugin);

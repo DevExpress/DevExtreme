@@ -108,5 +108,5 @@ class SpeedDialAction extends Widget {
 
 registerComponent('dxSpeedDialAction', SpeedDialAction);
 
-module.exports = SpeedDialAction;
+export default SpeedDialAction;
 

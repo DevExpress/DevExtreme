@@ -3,8 +3,7 @@ import AdaptivePositioningStrategy from './ui.scheduler.appointmentsPositioning.
 import { extend } from '../../../core/utils/extend';
 import errors from '../../widget/ui.errors';
 import dateUtils from '../../../core/utils/date';
-import { isNumeric } from '../../../core/utils/type';
-import typeUtils from '../../../core/utils/type';
+import { isNumeric, isObject } from '../../../core/utils/type';
 import themes from '../../themes';
 
 import timeZoneUtils from '../utils.timeZone';
@@ -598,7 +597,7 @@ class BaseRenderingStrategy {
     _getMaxAppointmentCountPerCellByType(isAllDay) {
         const appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
 
-        if(typeUtils.isObject(appointmentCountPerCell)) {
+        if(isObject(appointmentCountPerCell)) {
             return isAllDay ? this._getMaxAppointmentCountPerCell().allDay : this._getMaxAppointmentCountPerCell().simple;
         } else {
             return appointmentCountPerCell;
@@ -780,4 +779,4 @@ class BaseRenderingStrategy {
     }
 }
 
-module.exports = BaseRenderingStrategy;
+export default BaseRenderingStrategy;

@@ -1,4 +1,4 @@
-const Callbacks = require('../../core/utils/callbacks');
+import Callbacks from '../../core/utils/callbacks';
 
 const eventEmitterMethods = {
     _initEvents: function() {
@@ -39,14 +39,14 @@ const eventEmitterMethods = {
     }
 };
 
-exports.makeEventEmitter = function(target) {
+export function makeEventEmitter(target) {
     const proto = target.prototype;
     let name;
     for(name in eventEmitterMethods) {
         proto[name] = eventEmitterMethods[name];
     }
-};
+}
 
 ///#DEBUG
-exports._TESTS_eventEmitterMethods = eventEmitterMethods;
+export { eventEmitterMethods as _TESTS_eventEmitterMethods };
 ///#ENDDEBUG

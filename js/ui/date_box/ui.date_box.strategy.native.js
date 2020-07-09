@@ -1,9 +1,9 @@
-const noop = require('../../core/utils/common').noop;
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const support = require('../../core/utils/support');
-const inArray = require('../../core/utils/array').inArray;
-const dateUtils = require('./ui.date_utils');
-const dateSerialization = require('../../core/utils/date_serialization');
+import { noop } from '../../core/utils/common';
+import DateBoxStrategy from './ui.date_box.strategy';
+import support from '../../core/utils/support';
+import { inArray } from '../../core/utils/array';
+import dateUtils from './ui.date_utils';
+import dateSerialization from '../../core/utils/date_serialization';
 
 const NativeStrategy = DateBoxStrategy.inherit({
 
@@ -79,4 +79,4 @@ const NativeStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = NativeStrategy;
+export default NativeStrategy;
