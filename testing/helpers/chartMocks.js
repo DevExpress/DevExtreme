@@ -1081,7 +1081,7 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
-        getOppositeAxis: commonUtils.noop,
+        getOrthogonalAxis: commonUtils.noop,
         customPositionIsAvailable() {
             return false;
         },

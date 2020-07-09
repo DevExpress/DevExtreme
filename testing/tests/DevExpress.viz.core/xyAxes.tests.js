@@ -4959,8 +4959,8 @@ QUnit.module('Custom positioning', {
         const horizontalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, argumentType: 'numeric' }, horizontalAxisOptions));
         const verticalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, isHorizontal: false, valueType: 'numeric' }, verticalAxisOptions));
 
-        horizontalAxis.getOppositeAxis = () => { return verticalAxis; };
-        verticalAxis.getOppositeAxis = () => { return horizontalAxis; };
+        horizontalAxis.getOrthogonalAxis = () => { return verticalAxis; };
+        verticalAxis.getOrthogonalAxis = () => { return horizontalAxis; };
 
         horizontalAxis.draw(this.canvas);
         verticalAxis.draw(this.canvas);
@@ -5215,8 +5215,8 @@ QUnit.test('Resolve label overlapping by opposite label (labels position by defa
         }
     });
 
-    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(16).args[0], { translateY: 218 });
-    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(18).args[0], { translateX: 469 });
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 218 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(17).args[0], { translateX: 469 });
 });
 
 QUnit.test('Resolve label overlapping by opposite label (other labels position)', function(assert) {
@@ -5242,6 +5242,6 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
         }
     });
 
-    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(16).args[0], { translateY: 246 });
-    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(18).args[0], { translateX: 439 });
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(17).args[0], { translateX: 439 });
 });

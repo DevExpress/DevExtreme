@@ -365,7 +365,7 @@ Axis.prototype = {
         return false;
     },
 
-    getOppositeAxis: _noop,
+    getOrthogonalAxis: _noop,
 
     getCustomPosition: _noop,
 
@@ -377,7 +377,7 @@ Axis.prototype = {
         return false;
     },
 
-    customPositionIsBoundaryOppositeAxis() {
+    customPositionIsBoundaryOrthogonalAxis() {
         return false;
     },
 
@@ -1675,7 +1675,7 @@ Axis.prototype = {
         const viewPort = that.getViewport();
         const screenDelta = that._getScreenDelta();
         const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
-        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOppositeAxis();
+        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOrthogonalAxis();
 
         const translator = that._translator;
 
