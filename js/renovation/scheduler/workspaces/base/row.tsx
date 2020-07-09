@@ -1,7 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { CSSProperties } from 'react';
 
 export const viewFunction = (viewModel: Row) => (
   <tr
@@ -27,8 +26,8 @@ export class RowProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class Row extends JSXComponent(RowProps) {
-  get style(): CSSProperties {
+export class Row extends JSXComponent(RowProps) {
+  get style() {
     const { height } = this.props;
 
     return { height: height ? `${height}px` : undefined };

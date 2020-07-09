@@ -1,10 +1,10 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import DateTableCell from '../../base/date-table/cell';
+import { DateTableCellBase } from '../../base/date-table/cell';
 
 export const viewFunction = (viewModel: MonthDateTableCell) => (
-  <DateTableCell
+  <DateTableCellBase
     className={viewModel.classes}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -12,7 +12,7 @@ export const viewFunction = (viewModel: MonthDateTableCell) => (
     <div>
       {viewModel.props.startDate!.getDate()}
     </div>
-  </DateTableCell>
+  </DateTableCellBase>
 );
 
 @ComponentBindings()
@@ -32,7 +32,7 @@ export class MonthDateTableCellProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class MonthDateTableCell extends JSXComponent(MonthDateTableCellProps) {
+export class MonthDateTableCell extends JSXComponent(MonthDateTableCellProps) {
   get classes(): string | undefined {
     const { otherMonth, today, className } = this.props;
     const classes: string[] = [];

@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
-import Row from '../row';
+import { Row } from '../row';
 import { ViewCellData } from '../../types';
 
 export const viewFunction = (viewModel: HeaderPanelLayout) => (
@@ -38,4 +38,4 @@ export class HeaderPanelLayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {}
+export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {}

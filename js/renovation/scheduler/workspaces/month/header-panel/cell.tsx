@@ -1,8 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line import/named
-import { getDayNames } from '../../../../../localization/date';
+import dateLocalization from '../../../../../localization/date';
 
 export const viewFunction = (viewModel: MonthHeaderPanelCell) => (
   <td
@@ -31,10 +30,10 @@ export class MonthHeaderPanelCellProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class MonthHeaderPanelCell extends JSXComponent(MonthHeaderPanelCellProps) {
+export class MonthHeaderPanelCell extends JSXComponent(MonthHeaderPanelCellProps) {
   get weekDay(): string {
     const { startDate } = this.props;
 
-    return getDayNames('abbreviated')[startDate!.getDay()];
+    return dateLocalization.getDayNames('abbreviated')[startDate!.getDay()];
   }
 }

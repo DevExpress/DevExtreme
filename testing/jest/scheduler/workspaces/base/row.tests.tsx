@@ -1,6 +1,8 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import Row, { viewFunction as RowView } from '../../../../../js/renovation/scheduler/workspaces/base/row';
+import {
+  Row, viewFunction as RowView,
+} from '../../../../../js/renovation/scheduler/workspaces/base/row';
 
 describe('RowBase', () => {
   describe('Render', () => {

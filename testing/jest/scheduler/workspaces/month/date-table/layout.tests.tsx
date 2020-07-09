@@ -1,7 +1,9 @@
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/month/date-table/layout';
-import Row from '../../../../../../js/renovation/scheduler/workspaces/base/row';
-import Cell from '../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell';
+import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
+import {
+  MonthDateTableCell as Cell,
+} from '../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell';
 
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => () => null);
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell', () => () => null);

@@ -1,8 +1,8 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import Row from '../../base/row';
-import Cell from './cell';
+import { Row } from '../../base/row';
+import { MonthDateTableCell as Cell } from './cell';
 import { ViewCellData } from '../../types';
 
 export const viewFunction = (viewModel: MonthDateTableLayout) => (
@@ -45,4 +45,4 @@ export class MonthDateTableLayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class MonthDateTableLayout extends JSXComponent(MonthDateTableLayoutProps) {}
+export class MonthDateTableLayout extends JSXComponent(MonthDateTableLayoutProps) {}

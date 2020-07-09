@@ -38,7 +38,7 @@ export class DateTableCellBaseProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
+export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
   get classes(): string {
     return getCssClasses(this.props);
   }

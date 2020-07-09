@@ -24,4 +24,4 @@ export class LayoutBaseProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class LayoutBase extends JSXComponent(LayoutBaseProps) {}
+export class LayoutBase extends JSXComponent(LayoutBaseProps) {}

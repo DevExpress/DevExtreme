@@ -1,6 +1,9 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import Cell, { viewFunction as CellView } from '../../../../../../js/renovation/scheduler/workspaces/base/date-table/cell';
+import {
+  DateTableCellBase as Cell,
+  viewFunction as CellView,
+} from '../../../../../../js/renovation/scheduler/workspaces/base/date-table/cell';
 
 describe('DateTableCellBase', () => {
   describe('Render', () => {

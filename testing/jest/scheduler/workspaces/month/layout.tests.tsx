@@ -1,11 +1,11 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../js/renovation/scheduler/workspaces/month/layout';
-import MonthDateTableLayout from '../../../../../js/renovation/scheduler/workspaces/month/date-table/layout';
+import { MonthDateTableLayout } from '../../../../../js/renovation/scheduler/workspaces/month/date-table/layout';
 
-jest.mock('../../../../../js/renovation/scheduler/workspaces/base/layout', () => (props) => (
-  <div {...props} />
-));
+jest.mock('../../../../../js/renovation/scheduler/workspaces/base/layout', () => ({
+  DateTableLayoutBase: (props) => <div {...props} />,
+}));
 
 describe('MonthLayout', () => {
   describe('Render', () => {

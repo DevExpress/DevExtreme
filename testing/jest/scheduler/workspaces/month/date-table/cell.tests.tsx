@@ -1,10 +1,13 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import Cell, { viewFunction as CellView } from '../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell';
+import {
+  MonthDateTableCell as Cell,
+  viewFunction as CellView,
+} from '../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date-table/cell', () => (props) => (
-  <div {...props} />
-));
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date-table/cell', () => ({
+  DateTableCellBase: (props) => <div {...props} />,
+}));
 
 describe('MonthDateTableCell', () => {
   describe('Render', () => {

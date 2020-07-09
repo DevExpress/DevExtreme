@@ -1,7 +1,9 @@
 import { shallow } from 'enzyme';
-import Cell, { viewFunction as CellView } from '../../../../../../js/renovation/scheduler/workspaces/month/header-panel/cell';
-// eslint-disable-next-line import/named
-import { getDayNames } from '../../../../../../js/localization/date';
+import {
+  MonthHeaderPanelCell as Cell,
+  viewFunction as CellView,
+} from '../../../../../../js/renovation/scheduler/workspaces/month/header-panel/cell';
+import dateLocalization from '../../../../../../js/localization/date';
 
 jest.mock('../../../../../../js/localization/date', () => ({
   getDayNames: jest.fn(() => [0, 1, 2, 3, 4, 5, 6, 7]),
@@ -55,7 +57,7 @@ describe('MonthHeaderPanelCell', () => {
           const cell = new Cell({ startDate: new Date(2020, 6, 9) });
 
           const { weekDay } = cell;
-          expect(getDayNames)
+          expect(dateLocalization.getDayNames)
             .toHaveBeenCalledWith('abbreviated');
           expect(weekDay)
             .toBe(4);
