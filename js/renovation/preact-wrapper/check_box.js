@@ -51,8 +51,9 @@ export default class CheckBox extends Component {
                 clearTimeout(this.showValidationMessageTimeout);
 
                 // NOTE: Show the validation message after a click changes the value
-                this.showValidationMessageTimeout = setTimeout(
-                    () => this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO), 150
+                this.showValidationMessageTimeout = setTimeout(() => {
+                    this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO);
+                }, 150
                 );
             }
         };

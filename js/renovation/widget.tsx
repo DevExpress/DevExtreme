@@ -210,7 +210,7 @@ export default class Widget extends JSXComponent(WidgetProps) {
         (e) => {
           if (!e.isDefaultPrevented()) {
             this.focused = true;
-              onFocusIn?.(e);
+            onFocusIn?.(e);
           }
         },
         (e) => {
