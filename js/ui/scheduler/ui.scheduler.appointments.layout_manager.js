@@ -84,14 +84,14 @@ class AppointmentLayoutManager {
         return currentAppointment.needRepaint && sourceAppointment.needRemove;
     }
 
-    _isSettingChanged(settingList, oldSettingList) {
-        if(settingList.length !== oldSettingList.length) {
+    _isSettingChanged(settings, sourceSetting) {
+        if(settings.length !== sourceSetting.length) {
             return true;
         }
 
-        for(let i = 0; i < settingList.length; i++) {
-            const newSettings = settingList[i];
-            const oldSettings = oldSettingList[i];
+        for(let i = 0; i < settings.length; i++) {
+            const newSettings = settings[i];
+            const oldSettings = sourceSetting[i];
 
             if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
