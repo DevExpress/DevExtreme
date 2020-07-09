@@ -16,11 +16,11 @@ const packagePath = context.RESULT_NPM_PATH + '/devextreme';
 const scssPackagePath = packagePath + '/scss';
 
 const TRANSPILED_GLOBS = [
-    context.TRANSPILED_PATH + '/**/*.js',
-    '!' + context.TRANSPILED_PATH + '/bundles/*.js',
-    '!' + context.TRANSPILED_PATH + '/bundles/modules/parts/*.js',
-    '!' + context.TRANSPILED_PATH + '/viz/vector_map.utils/*.js',
-    '!' + context.TRANSPILED_PATH + '/viz/docs/*.js'
+    context.TRANSPILED_PROD_PATH + '/**/*.js',
+    '!' + context.TRANSPILED_PROD_PATH + '/bundles/*.js',
+    '!' + context.TRANSPILED_PROD_PATH + '/bundles/modules/parts/*.js',
+    '!' + context.TRANSPILED_PROD_PATH + '/viz/vector_map.utils/*.js',
+    '!' + context.TRANSPILED_PROD_PATH + '/viz/docs/*.js'
 ];
 
 const JSON_GLOBS = [
@@ -30,7 +30,7 @@ const JSON_GLOBS = [
 
 const DIST_GLOBS = [
     'artifacts/**/*.*',
-    '!' + context.TRANSPILED_PATH + '/**/*.*',
+    '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',
@@ -70,7 +70,6 @@ gulp.task('npm-sources', gulp.series('ts-sources', function() {
     return merge(
 
         gulp.src(TRANSPILED_GLOBS)
-            .pipe(compressionPipes.removeDebug())
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())

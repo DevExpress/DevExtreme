@@ -300,11 +300,11 @@ function checkOverlapping(firstRect, secondRect) {
             (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
 }
 
-const overlapping = {
+export const overlapping = {
     resolveLabelOverlappingInOneDirection: resolveLabelOverlappingInOneDirection
 };
 
-const BaseChart = BaseWidget.inherit({
+export const BaseChart = BaseWidget.inherit({
     _eventsMap: {
         onSeriesClick: { name: 'seriesClick' },
         onPointClick: { name: 'pointClick' },
@@ -1432,16 +1432,18 @@ REFRESH_SERIES_FAMILIES_ACTION_OPTIONS.forEach(function(name) {
     BaseChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_FAMILIES';
 });
 
-exports.overlapping = overlapping;
-
-exports.BaseChart = BaseChart;
-
 // PLUGINS_SECTION
-BaseChart.addPlugin(require('../core/export').plugin);
-BaseChart.addPlugin(require('../core/title').plugin);
-BaseChart.addPlugin(require('../core/tooltip').plugin);
-BaseChart.addPlugin(require('../core/loading_indicator').plugin);
-BaseChart.addPlugin(require('../core/data_source').plugin);
+import { plugin as exportPlugin } from '../core/export';
+import { plugin as titlePlugin } from '../core/title';
+import { plugin as dataSourcePlugin } from '../core/data_source';
+import { plugin as tooltipPlugin } from '../core/tooltip';
+import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
+
+BaseChart.addPlugin(exportPlugin);
+BaseChart.addPlugin(titlePlugin);
+BaseChart.addPlugin(dataSourcePlugin);
+BaseChart.addPlugin(tooltipPlugin);
+BaseChart.addPlugin(loadingIndicatorPlugin);
 
 // These are charts specifics on using title - they cannot be omitted because of charts custom layout.
 const _change_TITLE = BaseChart.prototype._change_TITLE;

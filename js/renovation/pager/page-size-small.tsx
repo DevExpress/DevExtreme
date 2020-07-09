@@ -2,7 +2,7 @@ import {
   ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
-import SelectBox from '../select-box';
+import { SelectBox } from '../select-box';
 import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
 import { FullPageSize } from './pager.types.d';
 import { PAGER_SELECTION_CLASS } from './consts';
@@ -44,7 +44,7 @@ export class PageSizeSmallProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageSizeSmall extends JSXComponent(PageSizeSmallProps) {
+export class PageSizeSmall extends JSXComponent(PageSizeSmallProps) {
   @InternalState() private minWidth = 10;
 
   get width(): number {

@@ -239,7 +239,7 @@ export const getMarkup = widgets => combineMarkups(widgets).markup;
 
 export const exportWidgets = function(widgets, options) {
     options = options || {};
-    const markupInfo = exports.combineMarkups(widgets, {
+    const markupInfo = combineMarkups(widgets, {
         gridLayout: options.gridLayout,
         verticalAlignment: options.verticalAlignment,
         horizontalAlignment: options.horizontalAlignment
@@ -249,7 +249,7 @@ export const exportWidgets = function(widgets, options) {
     exportFromMarkup(markupInfo.markup, options);
 };
 
-export const combineMarkups = function(widgets, options = { }) {
+export let combineMarkups = function(widgets, options = { }) {
     if(!Array.isArray(widgets)) {
         widgets = [[widgets]];
     } else if(!Array.isArray(widgets[0])) {
@@ -322,7 +322,7 @@ export const combineMarkups = function(widgets, options = { }) {
     };
 };
 
-export const ExportMenu = function(params) {
+export let ExportMenu = function(params) {
     const renderer = this._renderer = params.renderer;
     this._incidentOccurred = params.incidentOccurred;
     this._exportTo = params.exportTo;
@@ -606,7 +606,7 @@ function getExportOptions(widget, exportOptions, fileName, format) {
 export const plugin = {
     name: 'export',
     init() {
-        this._exportMenu = new exports.ExportMenu({
+        this._exportMenu = new ExportMenu({
             renderer: this._renderer,
             incidentOccurred: this._incidentOccurred,
             print: () => this.print(),
@@ -704,3 +704,13 @@ export const plugin = {
     },
     fontFields: ['export.font']
 };
+
+///#DEBUG
+export const DEBUG_set_combineMarkups = function(value) {
+    combineMarkups = value;
+};
+
+export const DEBUG_set_ExportMenu = function(value) {
+    ExportMenu = value;
+};
+///#ENDDEBUG

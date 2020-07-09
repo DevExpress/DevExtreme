@@ -1,22 +1,20 @@
-import { renderValueText } from '../filter_builder/filter_builder';
-
-const $ = require('../../core/renderer');
-const messageLocalization = require('../../localization/message');
-const extend = require('../../core/utils/extend').extend;
-const DataSource = require('../../data/data_source/data_source').DataSource;
-const deferredUtils = require('../../core/utils/deferred');
-const utils = require('../filter_builder/utils');
+import $ from '../../core/renderer';
+import messageLocalization from '../../localization/message';
+import { extend } from '../../core/utils/extend';
+import { DataSource } from '../../data/data_source/data_source';
+import { Deferred } from '../../core/utils/deferred';
+import { isGroup, isCondition, getFilterExpression, renderValueText } from '../filter_builder/utils';
 
 function baseOperation(grid) {
     const calculateFilterExpression = function(filterValue, field, fields) {
         let result = [];
         const lastIndex = filterValue.length - 1;
         filterValue && filterValue.forEach(function(value, index) {
-            if(utils.isCondition(value) || utils.isGroup(value)) {
-                const filterExpression = utils.getFilterExpression(value, fields, [], 'headerFilter');
+            if(isCondition(value) || isGroup(value)) {
+                const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
                 result.push(filterExpression);
             } else {
-                result.push(utils.getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter'));
+                result.push(getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter'));
             }
             index !== lastIndex && result.push('or');
         });
@@ -54,7 +52,7 @@ function baseOperation(grid) {
             const dataSourceOptions = headerFilterController.getDataSource(column);
             dataSourceOptions.paginate = false;
             const dataSource = new DataSource(dataSourceOptions);
-            const result = new deferredUtils.Deferred();
+            const result = new Deferred();
 
             const key = dataSource.store().key();
             if(key) {
@@ -106,7 +104,7 @@ function baseOperation(grid) {
     };
 }
 
-function anyOf(grid) {
+export function anyOf(grid) {
     return extend(baseOperation(grid), {
         name: 'anyof',
         icon: 'selectall',
@@ -114,7 +112,7 @@ function anyOf(grid) {
     });
 }
 
-function noneOf(grid) {
+export function noneOf(grid) {
     const baseOp = baseOperation(grid);
     return extend({}, baseOp, {
         calculateFilterExpression: function(filterValue, field, fields) {
@@ -128,6 +126,3 @@ function noneOf(grid) {
         caption: messageLocalization.format('dxFilterBuilder-filterOperationNoneOf')
     });
 }
-
-exports.anyOf = anyOf;
-exports.noneOf = noneOf;

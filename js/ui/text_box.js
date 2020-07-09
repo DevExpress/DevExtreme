@@ -1,2 +1,2 @@
-
-module.exports = require('./text_box/text_box');
+import TextBox from './text_box/text_box';
+export default TextBox;

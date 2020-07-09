@@ -11,7 +11,7 @@ import '../switch';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 
-const APPOINTMENT_FORM_GROUP_NAMES = {
+export const APPOINTMENT_FORM_GROUP_NAMES = {
     Main: 'mainGroup',
     Recurrence: 'recurrenceGroup'
 };
@@ -321,7 +321,6 @@ const SchedulerAppointmentForm = {
     }
 };
 
-module.exports = {
-    AppointmentForm: SchedulerAppointmentForm,
-    APPOINTMENT_FORM_GROUP_NAMES: APPOINTMENT_FORM_GROUP_NAMES
+export {
+    SchedulerAppointmentForm as AppointmentForm
 };

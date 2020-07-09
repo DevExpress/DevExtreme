@@ -1,16 +1,12 @@
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const isDefined = typeUtils.isDefined;
-const getKeyHash = commonUtils.getKeyHash;
-const dataQuery = require('../../data/query');
-const deferredUtils = require('../../core/utils/deferred');
-const SelectionFilterCreator = require('../../core/utils/selection_filter').SelectionFilterCreator;
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
-const errors = require('../widget/ui.errors');
-const SelectionStrategy = require('./selection.strategy');
+import { getKeyHash } from '../../core/utils/common';
+import { isDefined, isObject } from '../../core/utils/type';
+import dataQuery from '../../data/query';
+import { Deferred, when } from '../../core/utils/deferred';
+import { SelectionFilterCreator } from '../../core/utils/selection_filter';
+import errors from '../widget/ui.errors';
+import SelectionStrategy from './selection.strategy';
 
-module.exports = SelectionStrategy.inherit({
+export default SelectionStrategy.inherit({
     ctor: function(options) {
         this.callBase(options);
         this._initSelectedItemKeyHash();
@@ -191,7 +187,7 @@ module.exports = SelectionStrategy.inherit({
         const keyHash = this._getKeyHash(key);
 
         if(this._indexOfSelectedItemKey(keyHash) === -1) {
-            if(!typeUtils.isObject(keyHash) && this.options.keyHashIndices) {
+            if(!isObject(keyHash) && this.options.keyHashIndices) {
                 this.options.keyHashIndices[keyHash] = [this.options.selectedItemKeys.length];
             }
 
@@ -230,7 +226,7 @@ module.exports = SelectionStrategy.inherit({
 
         if(this.options.equalByReference) {
             selectedIndex = this.options.selectedItemKeys.indexOf(key);
-        } else if(typeUtils.isObject(key)) {
+        } else if(isObject(key)) {
             selectedIndex = this._getSelectedIndexByKey(key, ignoreIndicesMap);
         } else {
             selectedIndex = this._getSelectedIndexByHash(key, ignoreIndicesMap);
@@ -274,7 +270,7 @@ module.exports = SelectionStrategy.inherit({
         this.options.selectedItemKeys.splice(keyIndex, 1);
         this.options.selectedItems.splice(keyIndex, 1);
 
-        if(typeUtils.isObject(keyHash) || !this.options.keyHashIndices) {
+        if(isObject(keyHash) || !this.options.keyHashIndices) {
             return keyIndex;
         }
 

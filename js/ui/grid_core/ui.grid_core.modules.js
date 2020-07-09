@@ -391,7 +391,7 @@ const callModuleItemsMethod = function(that, methodName, args) {
     }
 };
 
-module.exports = {
+export default {
     modules: [],
 
     View: View,

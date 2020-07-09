@@ -1,5 +1,6 @@
 const states = ['normal', 'hover'];
-const isDefined = require('../../core/utils/type').isDefined;
+import { isDefined } from '../../core/utils/type';
+import { patchFontOptions } from '../core/utils';
 
 function compileAttrs(color, itemOptions, itemBaseOptions) {
 
@@ -21,7 +22,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
 }
 
 function compileLabelAttrs(labelOptions, filter, node) {
-    const _patchFontOptions = require('../core/utils').patchFontOptions;
+    const _patchFontOptions = patchFontOptions;
 
     if(labelOptions.useNodeColors) {
         labelOptions.font.color = node.color;
@@ -145,4 +146,4 @@ Node.prototype = {
 
 };
 
-module.exports = Node;
+export default Node;

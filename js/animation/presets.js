@@ -1,3 +1,3 @@
+import { presets } from './presets/presets';
 
-
-module.exports = require('./presets/presets').presets;
+export default presets;

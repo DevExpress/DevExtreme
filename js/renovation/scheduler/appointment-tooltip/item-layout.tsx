@@ -4,13 +4,14 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import BaseComponent from '../../preact-wrapper/tooltip-item-content';
 import noop from '../../utils/noop';
+/* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
 import {
   AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
 } from './types';
-import Marker from './marker';
-import Button from '../../button';
-import TooltipItemContent from './item-content';
+import { Marker } from './marker';
+import { Button } from '../../button';
+import { TooltipItemContent } from './item-content';
 import getCurrentAppointment from './utils/get-current-appointment';
 import { defaultGetTextAndFormatDate } from './utils/default-functions';
 
@@ -84,7 +85,7 @@ export class TooltipItemLayoutProps {
     component: BaseComponent,
   },
 })
-export default class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
+export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
   get currentAppointment(): dxSchedulerAppointment {
     const { item } = this.props;
 

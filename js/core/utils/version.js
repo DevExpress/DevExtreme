@@ -1,4 +1,4 @@
-exports.compare = function(x, y, maxLevel) {
+export function compare(x, y, maxLevel) {
 
     function normalizeArg(value) {
         if(typeof value === 'string') {
@@ -32,4 +32,4 @@ exports.compare = function(x, y, maxLevel) {
     }
 
     return 0;
-};
+}

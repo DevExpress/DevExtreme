@@ -2,7 +2,12 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
-import ResizableContainer, { viewFunction as ResizableContainerComponent, ResizableContainerProps, updateChildProps } from '../../../js/renovation/pager/resizable-container';
+import {
+  ResizableContainer,
+  viewFunction as ResizableContainerComponent,
+  ResizableContainerProps,
+  updateChildProps,
+} from '../../../js/renovation/pager/resizable-container';
 import { GetHtmlElement } from '../../../js/renovation/pager/pager.types.d';
 
 jest.mock('../../../js/renovation/pager/utils/get-computed-style');

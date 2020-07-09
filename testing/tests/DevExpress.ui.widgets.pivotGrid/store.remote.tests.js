@@ -2,8 +2,9 @@ import '../../../testing/content/orders.js';
 
 import $ from 'jquery';
 import RemoteStore from 'ui/pivot_grid/remote_store';
-import pivotGridDataSource from 'ui/pivot_grid/data_source';
+import { sort } from 'ui/pivot_grid/data_source.utils';
 import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
+import { forEachGroup } from 'ui/pivot_grid/remote_store.utils';
 import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
 
@@ -50,7 +51,7 @@ function getCustomArrayStore(data) {
                     }
                 }
 
-                RemoteStore.__forEachGroup(data, function(item, level) {
+                forEachGroup(data, function(item, level) {
                     path[level] = item.key;
                     for(let i = 0; i < (loadOptions.groupSummary && loadOptions.groupSummary.length || 0); i++) {
                         if(item.items) {
@@ -109,7 +110,7 @@ const moduleConfig = {
 
             d.done(function(data) {
                 if(!options.rowTake && !options.columnTake) {
-                    pivotGridDataSource.sort(options, data);
+                    sort(options, data);
                 }
             });
 

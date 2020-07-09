@@ -1,18 +1,18 @@
-const eventsEngine = require('../events/core/events_engine');
-const dataUtils = require('../core/element_data');
-const Class = require('../core/class');
-const devices = require('../core/devices');
-const registerEvent = require('./core/event_registrator');
-const eventUtils = require('./utils');
-const pointerEvents = require('./pointer');
+import eventsEngine from '../events/core/events_engine';
+import { removeData, data as elementData } from '../core/element_data';
+import Class from '../core/class';
+import devices from '../core/devices';
+import registerEvent from './core/event_registrator';
+import { addNamespace, isTouchEvent, fireEvent } from './utils';
+import pointerEvents from './pointer';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';
-const POINTERENTER_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE);
+const POINTERENTER_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE);
 
 const HOVEREND_NAMESPACE = 'dxHoverEnd';
 const HOVEREND = 'dxhoverend';
-const POINTERLEAVE_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
+const POINTERLEAVE_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
 
 
 const Hover = Class.inherit({
@@ -24,7 +24,7 @@ const Hover = Class.inherit({
     },
 
     setup: function(element) {
-        dataUtils.data(element, this._handlerArrayKeyPath, {});
+        elementData(element, this._handlerArrayKeyPath, {});
     },
 
     add: function(element, handleObj) {
@@ -34,15 +34,15 @@ const Hover = Class.inherit({
         };
 
         eventsEngine.on(element, this._originalEventName, handleObj.selector, handler);
-        dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
+        elementData(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
     },
 
     _handler: function(e) {
-        if(eventUtils.isTouchEvent(e) || devices.isSimulator()) {
+        if(isTouchEvent(e) || devices.isSimulator()) {
             return;
         }
 
-        eventUtils.fireEvent({
+        fireEvent({
             type: this._eventName,
             originalEvent: e,
             delegateTarget: e.delegateTarget
@@ -50,13 +50,13 @@ const Hover = Class.inherit({
     },
 
     remove: function(element, handleObj) {
-        const handler = dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid];
+        const handler = elementData(element, this._handlerArrayKeyPath)[handleObj.guid];
 
         eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
     },
 
     teardown: function(element) {
-        dataUtils.removeData(element, this._handlerArrayKeyPath);
+        removeData(element, this._handlerArrayKeyPath);
     }
 
 });
@@ -107,5 +107,7 @@ const HoverEnd = Hover.inherit({
 registerEvent(HOVERSTART, new HoverStart());
 registerEvent(HOVEREND, new HoverEnd());
 
-exports.start = HOVERSTART;
-exports.end = HOVEREND;
+export {
+    HOVERSTART as start,
+    HOVEREND as end
+};

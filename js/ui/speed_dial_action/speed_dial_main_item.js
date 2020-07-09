@@ -287,7 +287,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     }
 }
 
-exports.initAction = function(newAction) {
+export function initAction(newAction) {
     // TODO: workaround for Angular/React/Vue
     newAction._options.silent('onInitializing', null);
 
@@ -336,9 +336,9 @@ exports.initAction = function(newAction) {
             }));
         }
     }
-};
+}
 
-exports.disposeAction = function(actionId) {
+export function disposeAction(actionId) {
     if(!speedDialMainItem) return;
 
     let savedActions = speedDialMainItem.option('actions');
@@ -364,9 +364,9 @@ exports.disposeAction = function(actionId) {
             actions: savedActions
         });
     }
-};
+}
 
-exports.repaint = function() {
+export function repaint() {
     if(!speedDialMainItem) return;
 
     const visibleActions = speedDialMainItem._getVisibleActions();
@@ -388,4 +388,4 @@ exports.repaint = function() {
         maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount,
         direction: speedDialMainItem._getDefaultOptions().direction
     });
-};
+}

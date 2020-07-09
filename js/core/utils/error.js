@@ -1,11 +1,12 @@
-const extend = require('./extend').extend;
-const consoleUtils = require('./console');
-const stringUtils = require('./string');
-const version = require('../version');
+/* eslint-disable import/no-commonjs */
+import { extend } from './extend';
+import { logger } from './console';
+import stringUtils from './string';
+import version from '../version';
 
 const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 
-module.exports = function(baseErrors, errors) {
+export default function(baseErrors, errors) {
 
     const exports = {
 
@@ -24,7 +25,7 @@ module.exports = function(baseErrors, errors) {
                 method = 'warn';
             }
 
-            consoleUtils.logger[method](method === 'log' ? id : combineMessage([].slice.call(arguments)));
+            logger[method](method === 'log' ? id : combineMessage([].slice.call(arguments)));
         }
     };
 
@@ -63,4 +64,4 @@ module.exports = function(baseErrors, errors) {
 
     return exports;
 
-};
+}

@@ -10,7 +10,7 @@ const SORT_INDEX_ICON_CLASS = 'dx-sort-index-icon';
 const HEADERS_ACTION_CLASS = 'action';
 
 
-module.exports = {
+export default {
     _applyColumnState: function(options) {
         const that = this;
         let ariaSortState;

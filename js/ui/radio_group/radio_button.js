@@ -1,12 +1,12 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const devices = require('../../core/devices');
-const extend = require('../../core/utils/extend').extend;
-const inkRipple = require('../widget/utils.ink_ripple');
-const registerComponent = require('../../core/component_registrator');
-const Editor = require('../editor/editor');
-const eventUtils = require('../../events/utils');
-const clickEvent = require('../../events/click');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import devices from '../../core/devices';
+import { extend } from '../../core/utils/extend';
+import inkRipple from '../widget/utils.ink_ripple';
+import registerComponent from '../../core/component_registrator';
+import Editor from '../editor/editor';
+import { addNamespace } from '../../events/utils';
+import { name as clickEventName } from '../../events/click';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
@@ -126,7 +126,7 @@ const RadioButton = Editor.inherit({
     },
 
     _renderClick: function() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         this._clickAction = this._createAction((function(args) {
             this._clickHandler(args.event);
@@ -166,4 +166,4 @@ const RadioButton = Editor.inherit({
 
 registerComponent('dxRadioButton', RadioButton);
 
-module.exports = RadioButton;
+export default RadioButton;

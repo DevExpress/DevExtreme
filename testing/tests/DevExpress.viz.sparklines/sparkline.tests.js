@@ -37,9 +37,9 @@ QUnit.begin(function() {
         return currentTest().series;
     });
 
-    tooltipModule.Tooltip = sinon.spy(function() {
+    tooltipModule.DEBUG_set_tooltip(sinon.spy(function() {
         return currentTest().tooltip;
-    });
+    }));
 
     QUnit.testStart(function() {
         translator2DModule.Translator2D.reset();

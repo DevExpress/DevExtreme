@@ -6,7 +6,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import objectUtils from '../../core/utils/object';
 import { isDefined } from '../../core/utils/type';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import Popup from '../popup';
@@ -243,8 +243,8 @@ export default class AppointmentPopup {
     }
 
     _tryGetWindowWidth() {
-        if(windowUtils.hasWindow()) {
-            const window = windowUtils.getWindow();
+        if(hasWindow()) {
+            const window = getWindow();
             return $(window).width();
         }
     }

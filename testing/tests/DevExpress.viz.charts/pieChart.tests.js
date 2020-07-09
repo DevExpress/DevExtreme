@@ -82,13 +82,13 @@ const environment = {
         const that = this;
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
-        that.templateManager = sinon.createStubInstance(TemplateManagerModule.default);
+        that.templateManager = sinon.createStubInstance(TemplateManagerModule.TemplateManager);
         that.templateManager._tempTemplates = [];
-        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'default', function() {
+        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager', function() {
             return that.templateManager;
         });
 
-        TemplateManagerModule.default.createDefaultOptions = function() { return {}; };
+        TemplateManagerModule.TemplateManager.createDefaultOptions = function() { return {}; };
 
         that.themeManager.theme.withArgs('legend').returns({ title: {} });
         $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {

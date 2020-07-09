@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import Marker, { viewFunction as MarkerView } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
+import { Marker, viewFunction as MarkerView } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
 import { Deferred } from '../../../../js/core/utils/deferred';
 
 describe('Marker', () => {

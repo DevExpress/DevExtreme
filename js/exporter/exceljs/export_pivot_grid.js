@@ -23,7 +23,7 @@ const privateOptions = {
     }
 };
 
-function exportPivotGrid(options) {
+export function exportPivotGrid(options) {
     return Export.export(_getFullOptions(options), privateOptions);
 }
 
@@ -40,5 +40,3 @@ function _getFullOptions(options) {
 //#DEBUG
 exportPivotGrid.__internals = { _getFullOptions };
 //#ENDDEBUG
-
-export { exportPivotGrid };

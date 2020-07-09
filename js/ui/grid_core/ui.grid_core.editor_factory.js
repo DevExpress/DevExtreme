@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import pointerEvents from '../../events/pointer';
 import positionUtils from '../../animation/position';
 import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
@@ -19,7 +19,7 @@ const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
 const ROW_CLASS = 'dx-row';
 const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
-const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEvent.name].join(' '), MODULE_NAMESPACE);
+const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
 const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
 const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const DX_HIDDEN = 'dx-hidden';
@@ -229,7 +229,7 @@ const EditorFactory = modules.ViewController.inherit({
 
         $currentTarget.removeClass(DX_HIDDEN);
 
-        if(e.type === clickEvent.name && element.tagName === 'INPUT') {
+        if(e.type === clickEventName && element.tagName === 'INPUT') {
             eventsEngine.trigger($(element), 'focus');
         }
     },
@@ -241,7 +241,7 @@ const EditorFactory = modules.ViewController.inherit({
     }
 }).include(EditorFactoryMixin);
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
 

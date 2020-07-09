@@ -606,4 +606,4 @@ Widget.getOptionsFromContainer = ({ name, fullName, value }) => {
     return options;
 };
 
-module.exports = Widget;
+export default Widget;

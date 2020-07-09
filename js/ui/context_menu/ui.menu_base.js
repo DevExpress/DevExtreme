@@ -692,4 +692,4 @@ class MenuBase extends HierarchicalCollectionWidget {
 }
 
 MenuBase.ItemClass = MenuItem;
-module.exports = MenuBase;
+export default MenuBase;

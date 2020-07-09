@@ -330,4 +330,4 @@ class DiagramToolbox extends DiagramFloatingPanel {
         }
     }
 }
-module.exports = DiagramToolbox;
+export default DiagramToolbox;

@@ -1,3 +1,2 @@
-const Callbacks = require('../core/utils/callbacks');
-
-module.exports = new Callbacks();
+import Callbacks from '../core/utils/callbacks';
+export default new Callbacks();

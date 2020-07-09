@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { each, map } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -102,7 +102,7 @@ const BounceAnimator = InertiaAnimator.inherit({
     }
 });
 
-const Scroller = Class.inherit({
+export const Scroller = Class.inherit({
 
     ctor: function(options) {
         this._initOptions(options);
@@ -548,7 +548,7 @@ const Scroller = Class.inherit({
 let hoveredScrollable;
 let activeScrollable;
 
-const SimulatedStrategy = Class.inherit({
+export const SimulatedStrategy = Class.inherit({
 
     ctor: function(scrollable) {
         this._init(scrollable);
@@ -1102,13 +1102,11 @@ const SimulatedStrategy = Class.inherit({
     }
 
 });
-
-exports.SimulatedStrategy = SimulatedStrategy;
-exports.Scroller = Scroller;
-
 ///#DEBUG
-exports.ACCELERATION = ACCELERATION;
-exports.MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT;
-exports.FRAME_DURATION = FRAME_DURATION;
-exports.SCROLL_LINE_HEIGHT = SCROLL_LINE_HEIGHT;
+export {
+    ACCELERATION,
+    MIN_VELOCITY_LIMIT,
+    FRAME_DURATION,
+    SCROLL_LINE_HEIGHT
+};
 ///#ENDDEBUG

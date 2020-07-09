@@ -1,8 +1,8 @@
-const getKeyHash = require('./common').getKeyHash;
-const equalByValue = require('./common').equalByValue;
-const typeUtils = require('./type');
+import { getKeyHash } from './common';
+import { equalByValue } from './common';
+import { isString, isObject } from './type';
 
-const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
+export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
     this.getLocalFilter = function(keyGetter, equalKeys, equalByReference, keyExpr) {
         equalKeys = equalKeys === undefined ? equalByValue : equalKeys;
@@ -25,7 +25,7 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
                 filterExpr.push(isSelectAll ? 'and' : 'or');
             }
 
-            if(typeUtils.isString(keyExpr)) {
+            if(isString(keyExpr)) {
                 filterExprPart = getFilterForPlainKey(keyExpr, key);
             } else {
                 filterExprPart = getFilterForCompositeKey(keyExpr, key);
@@ -81,7 +81,7 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
         if(!equalByReference) {
             keyHash = getKeyHash(key);
-            if(!typeUtils.isObject(keyHash)) {
+            if(!isObject(keyHash)) {
                 const selectedKeyHashesMap = getSelectedItemKeyHashesMap(normalizeKeys(selectedItemKeys, keyOf, keyExpr));
                 if(selectedKeyHashesMap[keyHash]) {
                     return !isSelectAll;
@@ -127,5 +127,3 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         return filterExpr;
     }
 };
-
-exports.SelectionFilterCreator = SelectionFilterCreator;

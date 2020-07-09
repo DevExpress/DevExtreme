@@ -51,7 +51,7 @@ function processKeyDown(viewName, instance, event, action, $mainElement, execute
     } else if(keyName === 'tab') {
         $mainElement.addClass(FOCUS_STATE_CLASS);
     } else {
-        module.exports.selectView(viewName, instance, event);
+        selectView(viewName, instance, event);
     }
 }
 

@@ -216,4 +216,4 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     }
 }
 
-module.exports = DiagramPropertiesPanel;
+export default DiagramPropertiesPanel;

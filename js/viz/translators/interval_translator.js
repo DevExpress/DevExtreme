@@ -1,13 +1,9 @@
-const typeUtils = require('../../core/utils/type');
-const isNumber = typeUtils.isNumeric;
-const isDefined = typeUtils.isDefined;
-const dateUtils = require('../../core/utils/date');
-const addInterval = dateUtils.addInterval;
-const dateToMilliseconds = dateUtils.dateToMilliseconds;
+import { isNumeric as isNumber, isDefined } from '../../core/utils/type';
+import { addInterval, dateToMilliseconds, correctDateWithUnitBeginning } from '../../core/utils/date';
 const floor = Math.floor;
-const adjust = require('../../core/utils/math').adjust;
+import { adjust } from '../../core/utils/math';
 
-module.exports = {
+export default {
     _intervalize: function(value, interval) {
         if(!isDefined(value)) {
             return undefined;
@@ -18,7 +14,7 @@ module.exports = {
             } else {
                 value = new Date(value.getTime());
             }
-            value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
+            value = correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
         } else {
             value = adjust(floor(adjust(value / interval)) * interval, interval);
         }

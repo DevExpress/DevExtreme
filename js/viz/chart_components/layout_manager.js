@@ -404,4 +404,4 @@ LayoutManager.prototype = {
     }
 };
 
-exports.LayoutManager = LayoutManager;
+export { LayoutManager };

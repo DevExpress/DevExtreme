@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 
-const allowScroll = function(container, delta, shiftKey) {
+export const allowScroll = function(container, delta, shiftKey) {
     const $container = $(container);
     const scrollTopPos = shiftKey ? $container.scrollLeft() : $container.scrollTop();
 
@@ -18,8 +18,4 @@ const allowScroll = function(container, delta, shiftKey) {
     if(isScrollFromTop || isScrollFromBottom || isScrollFromMiddle) {
         return true;
     }
-};
-
-export {
-    allowScroll
 };

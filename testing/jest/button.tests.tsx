@@ -10,15 +10,17 @@ import {
   getEventHandlers,
   EVENT,
 } from './utils/events-mock';
-import Button, { ButtonProps, defaultOptionRules, viewFunction } from '../../js/renovation/button';
-import Widget from '../../js/renovation/widget';
-import Icon from '../../js/renovation/icon';
-import InkRipple from '../../js/renovation/ink-ripple';
+import {
+  Button, ButtonProps, defaultOptionRules, viewFunction,
+} from '../../js/renovation/button';
+import { Widget } from '../../js/renovation/widget';
+import { Icon } from '../../js/renovation/icon';
+import { InkRipple } from '../../js/renovation/ink-ripple';
 
 type Mock = jest.Mock;
 
 jest.mock('../../js/core/devices', () => {
-  const actualDevices = require.requireActual('../../js/core/devices');
+  const actualDevices = require.requireActual('../../js/core/devices').default;
   const isSimulator = actualDevices.isSimulator.bind(actualDevices);
   const real = actualDevices.real.bind(actualDevices);
 
@@ -505,19 +507,19 @@ describe('Button', () => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (devices as any).isSimulator.mockImplementation(() => false);
-        (themes.current as Mock).mockImplementation(() => 'generic');
+        ((themes as any).current as Mock).mockImplementation(() => 'generic');
       });
 
       afterEach(() => jest.resetAllMocks());
 
       describe('useInkRiple', () => {
         it('should be true if material theme', () => {
-          (themes.current as Mock).mockImplementation(() => 'material');
+          ((themes as any).current as Mock).mockImplementation(() => 'material');
           expect(getDefaultOptions().useInkRipple).toBe(true);
         });
 
         it('should be false if theme is not material', () => {
-          (themes.current as Mock).mockImplementation(() => 'generic');
+          ((themes as any).current as Mock).mockImplementation(() => 'generic');
           expect(getDefaultOptions().useInkRipple).toBe(false);
         });
       });

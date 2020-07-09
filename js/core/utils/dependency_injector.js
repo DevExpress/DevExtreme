@@ -1,9 +1,9 @@
-module.exports = function(object) {
-    const extend = require('./extend').extend;
-    const isFunction = require('./type').isFunction;
-    const each = require('./iterator').each;
-    const Class = require('../class');
+import { extend } from './extend';
+import { isFunction } from './type';
+import { each } from './iterator';
+import Class from '../class';
 
+export default function(object) {
     const BaseClass = Class.inherit(object);
     let InjectedClass = BaseClass;
     let instance = new InjectedClass(object);
@@ -41,4 +41,4 @@ module.exports = function(object) {
     };
 
     return object;
-};
+}

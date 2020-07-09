@@ -285,7 +285,7 @@ function removeBinding(chart) {
     unbind && unbind();
 }
 
-module.exports = {
+export default {
     bindChart: function(chart, integrationOptions) {
         integrationOptions = extend({}, integrationOptions);
 

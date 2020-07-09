@@ -223,4 +223,4 @@ class FileManagerContextMenu extends Widget {
 
 }
 
-module.exports = FileManagerContextMenu;
+export default FileManagerContextMenu;

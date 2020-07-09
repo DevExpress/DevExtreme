@@ -1,12 +1,7 @@
-const typeUtils = require('./type');
-const adjust = require('./math').adjust;
-const each = require('./iterator').each;
-const camelize = require('./inflector').camelize;
-
-const isObject = typeUtils.isObject;
-const isString = typeUtils.isString;
-const isDate = typeUtils.isDate;
-const isDefined = typeUtils.isDefined;
+import { isObject, isString, isDate, isDefined, isNumeric } from './type';
+import { adjust } from './math';
+import { each } from './iterator';
+import { camelize } from './inflector';
 
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
@@ -244,7 +239,7 @@ const getDatesDifferences = function(date1, date2) {
 function addDateInterval(value, interval, dir) {
     const result = new Date(value.getTime());
     const intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
-        : typeUtils.isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
+        : isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
             : interval;
     if(intervalObject.years) {
         result.setFullYear(result.getFullYear() + intervalObject.years * dir);
@@ -681,4 +676,4 @@ dateUtils.sameView = function(view, date1, date2) {
     return dateUtils[camelize('same ' + view)](date1, date2);
 };
 
-module.exports = dateUtils;
+export default dateUtils;

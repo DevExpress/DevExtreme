@@ -1,11 +1,18 @@
-const dxFunnel = require('./funnel/funnel');
+import dxFunnel from './funnel/funnel';
+import { plugin as pluginLabel } from './funnel/label';
+import { plugin as pluginExport } from './core/export';
+import { plugin as pluginTitle } from './core/title';
+import { plugin as pluginLegend } from './components/legend';
+import { plugin as pluginTracker } from './funnel/tracker';
+import { plugin as pluginTooltip } from './funnel/tooltip';
+import { plugin as pluginLoadingIndicator } from './core/loading_indicator';
 
-dxFunnel.addPlugin(require('./funnel/label').plugin);
-dxFunnel.addPlugin(require('./core/export').plugin);
-dxFunnel.addPlugin(require('./core/title').plugin);
-dxFunnel.addPlugin(require('./components/legend').plugin);
-dxFunnel.addPlugin(require('./funnel/tracker').plugin);
-dxFunnel.addPlugin(require('./funnel/tooltip').plugin);
-dxFunnel.addPlugin(require('./core/loading_indicator').plugin);
+dxFunnel.addPlugin(pluginLabel);
+dxFunnel.addPlugin(pluginExport);
+dxFunnel.addPlugin(pluginTitle);
+dxFunnel.addPlugin(pluginLegend);
+dxFunnel.addPlugin(pluginTracker);
+dxFunnel.addPlugin(pluginTooltip);
+dxFunnel.addPlugin(pluginLoadingIndicator);
 
-module.exports = dxFunnel;
+export default dxFunnel;

@@ -1,4 +1,4 @@
-import dataUtils from '../core/element_data';
+import { data as elementData } from '../core/element_data';
 import Callbacks from '../core/utils/callbacks';
 import errors from './widget/ui.errors';
 import DOMComponent from '../core/dom_component';
@@ -110,7 +110,7 @@ const Validator = DOMComponent.inherit({
 
     _initAdapter() {
         const element = this.$element()[0];
-        const dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
+        const dxStandardEditor = elementData(element, 'dx-validation-target');
         let adapter = this.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
@@ -301,4 +301,4 @@ const Validator = DOMComponent.inherit({
 
 registerComponent('dxValidator', Validator);
 
-module.exports = Validator;
+export default Validator;
