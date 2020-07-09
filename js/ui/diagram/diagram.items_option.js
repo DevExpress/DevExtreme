@@ -166,4 +166,4 @@ class ItemsOption extends Component {
 }
 ItemsOption.include(DataHelperMixin);
 
-module.exports = ItemsOption;
+export default ItemsOption;

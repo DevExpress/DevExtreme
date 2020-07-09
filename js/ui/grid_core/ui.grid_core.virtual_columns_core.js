@@ -1,6 +1,6 @@
 import { extend } from '../../core/utils/extend';
 
-function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastProcessedIndexes) {
+export function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastProcessedIndexes) {
     rowIndex = rowIndex || 0;
     offsets = offsets || [];
     lastProcessedIndexes = lastProcessedIndexes || [];
@@ -45,7 +45,7 @@ function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastP
     lastProcessedIndexes[rowIndex] = colIndex;
 }
 
-function createColumnsInfo(info, startIndex, endIndex) {
+export function createColumnsInfo(info, startIndex, endIndex) {
     const newInfo = [];
 
     foreachColumnInfo(info, function(columnInfo, visibleIndex, rowIndex) {
@@ -87,7 +87,3 @@ function createColumnsInfo(info, startIndex, endIndex) {
 
     return newInfo;
 }
-
-exports.foreachColumnInfo = foreachColumnInfo;
-exports.createColumnsInfo = createColumnsInfo;
-

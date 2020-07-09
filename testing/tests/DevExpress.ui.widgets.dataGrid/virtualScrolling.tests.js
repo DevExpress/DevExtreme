@@ -791,7 +791,7 @@ QUnit.module('Subscribe to external scrollable events', {
         assert.equal(virtualScrollingCore.getContentHeightLimit({ msie: true }), 4000000, 'content height limit for ie');
         assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, 'content height limit for firefox');
         assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, 'content height limit for other browsers');
-        virtualScrollingCore.getPixelRatio = () => 2;
+        virtualScrollingCore._setPixelRatioFn(function() { return 2; });
         assert.equal(virtualScrollingCore.getContentHeightLimit({}), 7500000, 'content height limit depends on devicePixelRatio for other browsers'); // T692460
     });
 });

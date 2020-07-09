@@ -1,10 +1,10 @@
-const Calendar = require('../calendar');
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const dateUtils = require('../../core/utils/date');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const messageLocalization = require('../../localization/message');
+import Calendar from '../calendar';
+import DateBoxStrategy from './ui.date_box.strategy';
+import dateUtils from '../../core/utils/date';
+import { splitPair } from '../../core/utils/common';
+import { isFunction, isEmptyObject } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
 
 const CalendarStrategy = DateBoxStrategy.inherit({
 
@@ -78,7 +78,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             onValueChanged: this._valueChangedHandler.bind(this),
             onCellClick: this._cellClickHandler.bind(this),
             tabIndex: null,
-            disabledDates: typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
+            disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
             onContouredChanged: this._refreshActiveDescendant.bind(this),
             hasFocus: function() { return true; }
         });
@@ -104,7 +104,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         let position = [];
 
         if(buttonsLocation !== 'default') {
-            position = commonUtils.splitPair(buttonsLocation);
+            position = splitPair(buttonsLocation);
         } else {
             position = ['bottom', 'center'];
         }
@@ -134,7 +134,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _isCalendarVisible: function() {
-        return typeUtils.isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
+        return isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
     },
 
     _escapeHandler: function() {
@@ -182,4 +182,4 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = CalendarStrategy;
+export default CalendarStrategy;

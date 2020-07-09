@@ -6,7 +6,7 @@ import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import 'ui/slider';
 import Tooltip from 'ui/tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';

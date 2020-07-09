@@ -2,9 +2,9 @@ import {
   Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 
-import ResizableContainer from './resizable-container';
+import { ResizableContainer } from './resizable-container';
 import PagerProps from './pager-props';
-import PagerContentComponent from './pager-content';
+import { PagerContentComponent } from './pager-content';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -27,7 +27,7 @@ export const viewFunction = ({
   jQuery: { register: true },
   view: viewFunction,
 })
-export default class Pager extends JSXComponent(PagerProps) {
+export class Pager extends JSXComponent(PagerProps) {
   pageIndexChange(newPageIndex: number): void {
     this.props.pageIndex = newPageIndex;
   }

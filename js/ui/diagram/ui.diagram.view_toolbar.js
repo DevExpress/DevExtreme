@@ -7,4 +7,4 @@ class DiagramViewToolbar extends DiagramToolbar {
     }
 }
 
-module.exports = DiagramViewToolbar;
+export default DiagramViewToolbar;

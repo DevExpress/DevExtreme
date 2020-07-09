@@ -1,8 +1,8 @@
-const $ = require('../../core/renderer');
-const dateSerialization = require('../../core/utils/date_serialization');
-const isDate = require('../../core/utils/type').isDate;
-const each = require('../../core/utils/iterator').each;
-const dateLocalization = require('../../localization/date');
+import $ from '../../core/renderer';
+import dateSerialization from '../../core/utils/date_serialization';
+import { isDate } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import dateLocalization from '../../localization/date';
 
 // TODO: move to dx.utils
 
@@ -270,4 +270,4 @@ dateUtils.DATE_COMPONENTS_INFO = {
     }
 };
 
-module.exports = dateUtils;
+export default dateUtils;

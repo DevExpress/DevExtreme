@@ -7,7 +7,7 @@ const translator2DModule = require('viz/translators/translator2d');
 const crosshairModule = require('viz/chart_components/crosshair');
 const trackerModule = require('viz/chart_components/tracker');
 const Translator = vizMocks.stubClass(translator2DModule.Translator2D);
-const chartModule = require('viz/chart');
+const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
 const chartMocks = require('../../helpers/chartMocks.js');
 const MockSeries = chartMocks.MockSeries;
 const MockPoint = chartMocks.MockPoint;
@@ -1278,7 +1278,7 @@ QUnit.module('Panes border preparations', $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
         this.prepareSegmentRectPoints.restore();
-        this.prepareSegmentRectPoints = chartModule._test_prepareSegmentRectPoints();
+        this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints();
     },
     afterEach: commons.environment.afterEach
 }));

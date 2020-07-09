@@ -195,4 +195,4 @@ if(hasIntl) {
     dateLocalization.inject(intlDateLocalization);
 }
 
-module.exports = dateLocalization;
+export default dateLocalization;

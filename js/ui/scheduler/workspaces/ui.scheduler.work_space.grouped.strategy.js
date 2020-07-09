@@ -24,4 +24,4 @@ class GroupedStrategy {
     }
 }
 
-module.exports = GroupedStrategy;
+export default GroupedStrategy;

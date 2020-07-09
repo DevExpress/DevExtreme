@@ -11,7 +11,7 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 // support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3 - "Column width limit - 255 characters"
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
-const Export = {
+export const Export = {
     getFullOptions: function(options) {
         const fullOptions = extend({}, options);
         if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
@@ -244,5 +244,3 @@ const Export = {
 //#DEBUG
 Export.__internals = { MAX_EXCEL_COLUMN_WIDTH, MAX_DIGIT_WIDTH_IN_PIXELS };
 //#ENDDEBUG
-
-export { Export };

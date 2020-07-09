@@ -15,7 +15,7 @@ const ROW_HEADER_STYLE_ID = 1;
 const DATA_STYLE_OFFSET = 2;
 const DEFAUL_COLUMN_WIDTH = 100;
 
-exports.ExportMixin = extend({}, exportMixin, {
+export const ExportMixin = extend({}, exportMixin, {
     exportToExcel: function() {
         const that = this;
 
@@ -111,7 +111,7 @@ exports.ExportMixin = extend({}, exportMixin, {
             dataController.endLoading();
         });
 
-        return new exports.DataProvider({
+        return new DataProvider({
             items: items,
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),
@@ -143,7 +143,7 @@ function getCellDataType(field) {
     return DEFAULT_DATA_TYPE;
 }
 
-exports.DataProvider = Class.inherit({
+export const DataProvider = Class.inherit({
     ctor: function(options) {
         this._options = options;
         this._styles = [];

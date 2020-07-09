@@ -4,7 +4,7 @@ import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { getBoundingRect } from '../../../core/utils/position';
-import windowUtils from '../../../core/utils/window';
+import { hasWindow } from '../../../core/utils/window';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -27,7 +27,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     needRenderDateTimeIndication() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return false;
         }
 
@@ -276,5 +276,4 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 }
 
 registerComponent('dxSchedulerWorkSpace', SchedulerWorkSpaceIndicator);
-
-module.exports = SchedulerWorkSpaceIndicator;
+export default SchedulerWorkSpaceIndicator;

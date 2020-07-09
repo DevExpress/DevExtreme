@@ -4,8 +4,8 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../utils/noop';
-import List from '../../list';
-import TooltipItemLayout from './item-layout';
+import { List } from '../../list';
+import { TooltipItemLayout } from './item-layout';
 import {
   GetTextAndFormatDateFn, GetSingleAppointmentFn,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
@@ -76,7 +76,7 @@ export class AppointmentListProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class AppointmentList extends JSXComponent(AppointmentListProps) {
+export class AppointmentList extends JSXComponent(AppointmentListProps) {
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;

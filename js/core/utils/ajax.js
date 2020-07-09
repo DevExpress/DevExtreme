@@ -1,12 +1,12 @@
-const Deferred = require('./deferred').Deferred;
-const domAdapter = require('../../core/dom_adapter');
-const httpRequest = require('../../core/http_request');
-const windowUtils = require('../../core/utils/window');
-const window = windowUtils.getWindow();
-const extendFromObject = require('./extend').extendFromObject;
-const isDefined = require('./type').isDefined;
-const Promise = require('../polyfills/promise');
-const injector = require('./dependency_injector');
+import { Deferred } from './deferred';
+import domAdapter from '../../core/dom_adapter';
+import httpRequest from '../../core/http_request';
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
+import { extendFromObject } from './extend';
+import { isDefined } from './type';
+import Promise from '../polyfills/promise';
+import injector from './dependency_injector';
 
 const SUCCESS = 'success';
 const ERROR = 'error';
@@ -151,7 +151,7 @@ const postProcess = function(deferred, xhr, dataType) {
 };
 
 const isCrossDomain = function(url) {
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         return true;
     }
 
@@ -353,4 +353,4 @@ const sendRequest = function(options) {
     return result;
 };
 
-module.exports = injector({ sendRequest: sendRequest });
+export default injector({ sendRequest: sendRequest });

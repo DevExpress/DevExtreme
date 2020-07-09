@@ -1,4 +1,4 @@
-const locale = require('./core').locale;
+import { locale } from './core';
 const LANGUAGE_CODES = {
     'ar': 1,
     'bg': 2,
@@ -353,6 +353,6 @@ const LANGUAGE_CODES = {
     'ha-Latn': 31848
 };
 
-exports.getLanguageId = function() {
+export function getLanguageId() {
     return LANGUAGE_CODES[locale()];
-};
+}

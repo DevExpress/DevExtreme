@@ -144,7 +144,7 @@ function mergePointOptions(base, extra) {
     return options;
 }
 
-function Series(settings, options) {
+export function Series(settings, options) {
     const that = this;
     that.fullState = 0;
     that._extGroups = settings;
@@ -161,10 +161,6 @@ function Series(settings, options) {
 function getData(pointData) {
     return pointData.data;
 }
-
-exports.Series = Series;
-
-exports.mixins = seriesNS.mixins;
 
 function getValueChecker(axisType, axis) {
     if(!axis || axisType !== 'logarithmic' || axis.getOptions().allowNegatives !== false) {
@@ -1251,3 +1247,5 @@ Series.prototype = {
         return this._renderer;
     }
 };
+
+export const mixins = seriesNS.mixins;

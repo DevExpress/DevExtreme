@@ -5,7 +5,7 @@ import { inArray } from '../../core/utils/array';
 import iteratorUtils from '../../core/utils/iterator';
 import Class from '../../core/class';
 import stringUtils from '../../core/utils/string';
-import commonUtils from '../../core/utils/common';
+import { deferUpdate } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
 import virtualScrolling from '../grid_core/ui.grid_core.virtual_scrolling_core';
 import virtualColumnsCore from '../grid_core/ui.grid_core.virtual_columns_core';
@@ -34,7 +34,7 @@ const proxyMethod = function(instance, methodName, defaultResult) {
     }
 };
 
-exports.DataController = Class.inherit((function() {
+export const DataController = Class.inherit((function() {
 
     function getHeaderItemText(item, description, options) {
         let text = item.text;
@@ -893,7 +893,7 @@ exports.DataController = Class.inherit((function() {
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
                 columnsScrollController.setContentSize(contentParams.itemWidths);
 
-                commonUtils.deferUpdate(function() {
+                deferUpdate(function() {
                     columnsScrollController.loadIfNeed();
                     rowsScrollController.loadIfNeed();
                 });
@@ -1241,7 +1241,7 @@ exports.DataController = Class.inherit((function() {
 
 
 //#DEBUG
-exports.DataController.__internals = {
+export const DataController__internals = {
     NO_DATA_AVAILABLE_TEXT: NOT_AVAILABLE
 };
 //#ENDDEBUG

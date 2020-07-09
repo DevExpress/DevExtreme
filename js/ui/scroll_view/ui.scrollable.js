@@ -2,20 +2,21 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import support from '../../core/utils/support';
 import browser from '../../core/utils/browser';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
+import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
-import selectors from '../widget/selectors';
+import { focusable } from '../widget/selectors';
 import { addNamespace } from '../../events/utils';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
-import simulatedStrategy from './ui.scrollable.simulated';
+import { SimulatedStrategy } from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';
+import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE = 'dxScrollable';
@@ -28,30 +29,6 @@ const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
-
-const deviceDependentOptions = function() {
-    return [{
-        device: function() {
-            return !support.nativeScrolling;
-        },
-        options: {
-            useNative: false
-        }
-    }, {
-        device: function(device) {
-            return !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
-        },
-        options: {
-            bounceEnabled: false,
-
-            scrollByThumb: true,
-
-            scrollByContent: support.touch,
-
-            showScrollbar: 'onHover'
-        }
-    }];
-};
 
 const Scrollable = DOMComponent.inherit({
 
@@ -150,7 +127,7 @@ const Scrollable = DOMComponent.inherit({
 
         if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
             eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
-                if(!$(e.target).is(selectors.focusable)) {
+                if(!$(e.target).is(focusable)) {
                     e.preventDefault();
                 }
             });
@@ -185,10 +162,10 @@ const Scrollable = DOMComponent.inherit({
     _updateRtlPosition: function() {
         this._updateBounds();
         if(this.option('rtlEnabled') && this.option('direction') !== VERTICAL) {
-            commonUtils.deferUpdate(() => {
+            deferUpdate(() => {
                 const containerElement = this._container().get(0);
                 const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
-                commonUtils.deferRender(() => {
+                deferRender(() => {
                     this.scrollTo({ left: maxLeftOffset });
                 });
             });
@@ -263,7 +240,7 @@ const Scrollable = DOMComponent.inherit({
     _createStrategy: function() {
         this._strategy = (this.option('useNative'))
             ? new NativeStrategy(this)
-            : new simulatedStrategy.SimulatedStrategy(this);
+            : new SimulatedStrategy(this);
     },
 
     _createActions: function() {
@@ -319,7 +296,7 @@ const Scrollable = DOMComponent.inherit({
 
     _resetInactiveDirection: function() {
         const inactiveProp = this._getInactiveProp();
-        if(!inactiveProp || !windowUtils.hasWindow()) {
+        if(!inactiveProp || !hasWindow()) {
             return;
         }
 
@@ -343,12 +320,12 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _normalizeLocation: function(location) {
-        if(typeUtils.isPlainObject(location)) {
-            const left = commonUtils.ensureDefined(location.left, location.x);
-            const top = commonUtils.ensureDefined(location.top, location.y);
+        if(isPlainObject(location)) {
+            const left = ensureDefined(location.left, location.x);
+            const top = ensureDefined(location.top, location.y);
             return {
-                left: typeUtils.isDefined(left) ? -left : undefined,
-                top: typeUtils.isDefined(top) ? -top : undefined
+                left: isDefined(left) ? -left : undefined,
+                top: isDefined(top) ? -top : undefined
             };
         } else {
             const direction = this.option('direction');
@@ -479,8 +456,8 @@ const Scrollable = DOMComponent.inherit({
         }
 
         const distance = this._normalizeLocation({
-            left: location.left - commonUtils.ensureDefined(targetLocation.left, location.left),
-            top: location.top - commonUtils.ensureDefined(targetLocation.top, location.top)
+            left: location.left - ensureDefined(targetLocation.left, location.left),
+            top: location.top - ensureDefined(targetLocation.top, location.top)
         });
 
         if(!distance.top && !distance.left) {
@@ -584,6 +561,4 @@ const Scrollable = DOMComponent.inherit({
 
 registerComponent(SCROLLABLE, Scrollable);
 
-module.exports = Scrollable;
-
-module.exports.deviceDependentOptions = deviceDependentOptions;
+export default Scrollable;

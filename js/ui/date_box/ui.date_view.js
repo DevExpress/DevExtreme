@@ -1,12 +1,12 @@
-const $ = require('../../core/renderer');
-const Editor = require('../editor/editor');
-const DateViewRoller = require('./ui.date_view_roller');
-const dateUtils = require('../../core/utils/date');
-const each = require('../../core/utils/iterator').each;
-const extend = require('../../core/utils/extend').extend;
-const uiDateUtils = require('./ui.date_utils');
-const registerComponent = require('../../core/component_registrator');
-const dateLocalization = require('../../localization/date');
+import $ from '../../core/renderer';
+import Editor from '../editor/editor';
+import DateViewRoller from './ui.date_view_roller';
+import dateUtils from '../../core/utils/date';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import uiDateUtils from './ui.date_utils';
+import registerComponent from '../../core/component_registrator';
+import dateLocalization from '../../localization/date';
 
 const DATEVIEW_CLASS = 'dx-dateview';
 const DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact';
@@ -353,4 +353,4 @@ const DateView = Editor.inherit({
 
 registerComponent('dxDateView', DateView);
 
-module.exports = DateView;
+export default DateView;

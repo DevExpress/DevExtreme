@@ -159,7 +159,7 @@ const RowDraggingExtender = {
 };
 
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             rowDragging: {

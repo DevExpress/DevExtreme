@@ -54,10 +54,11 @@ function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
 }
 
 ///#DEBUG
-exports.getRealElementWidth = getRealElementWidth;
+export { getRealElementWidth };
+
 ///#ENDDEBUG
 
-exports.AreaItem = Class.inherit({
+export const AreaItem = Class.inherit({
     _getRowElement: function(index) {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {

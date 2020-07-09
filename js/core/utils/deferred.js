@@ -1,8 +1,6 @@
-const typeUtils = require('../utils/type');
-const isPromise = typeUtils.isPromise;
-const isDeferred = typeUtils.isDeferred;
-const extend = require('../utils/extend').extend;
-const Callbacks = require('../utils/callbacks');
+import { isDeferred, isDefined, isPromise } from '../utils/type';
+import { extend } from '../utils/extend';
+import Callbacks from '../utils/callbacks';
 
 const deferredConfig = [{
     method: 'resolve',
@@ -17,7 +15,7 @@ const deferredConfig = [{
     handler: 'progress'
 }];
 
-let Deferred = function() {
+let DeferredObj = function() {
     const that = this;
     this._state = 'pending';
     this._promise = {};
@@ -54,7 +52,7 @@ let Deferred = function() {
     };
 
     this._promise.then = function(resolve, reject) {
-        const result = new Deferred();
+        const result = new DeferredObj();
 
         ['done', 'fail'].forEach(function(method) {
             const callback = method === 'done' ? resolve : reject;
@@ -71,7 +69,7 @@ let Deferred = function() {
                 } else if(isPromise(callbackResult)) {
                     callbackResult.then(result.resolve, result.reject);
                 } else {
-                    result.resolve.apply(this, typeUtils.isDefined(callbackResult) ? [callbackResult] : arguments);
+                    result.resolve.apply(this, isDefined(callbackResult) ? [callbackResult] : arguments);
                 }
             });
         }.bind(this));
@@ -94,7 +92,7 @@ deferredConfig.forEach(function(config) {
     const methodName = config.method;
     const state = config.state;
 
-    Deferred.prototype[methodName + 'With'] = function(context, args) {
+    DeferredObj.prototype[methodName + 'With'] = function(context, args) {
         const callbacks = this[methodName + 'Callbacks'];
 
         if(this.state() === 'pending') {
@@ -108,11 +106,11 @@ deferredConfig.forEach(function(config) {
     };
 });
 
-exports.fromPromise = function(promise, context) {
+export function fromPromise(promise, context) {
     if(isDeferred(promise)) {
         return promise;
     } else if(isPromise(promise)) {
-        const d = new Deferred();
+        const d = new DeferredObj();
         promise.then(function() {
             d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
         }, function() {
@@ -121,18 +119,18 @@ exports.fromPromise = function(promise, context) {
         return d;
     }
 
-    return new Deferred().resolveWith(context, [promise]);
-};
+    return new DeferredObj().resolveWith(context, [promise]);
+}
 
-let when = function() {
+let whenFunc = function() {
     if(arguments.length === 1) {
-        return exports.fromPromise(arguments[0]);
+        return fromPromise(arguments[0]);
     }
 
     const values = [].slice.call(arguments);
     const contexts = [];
     let resolvedCount = 0;
-    const deferred = new Deferred();
+    const deferred = new DeferredObj();
 
     const updateState = function(i) {
         return function(value) {
@@ -162,16 +160,16 @@ let when = function() {
     return deferred.promise();
 };
 
-exports.setStrategy = function(value) {
-    Deferred = value.Deferred;
-    when = value.when;
-};
+export function setStrategy(value) {
+    DeferredObj = value.Deferred;
+    whenFunc = value.when;
+}
 
-exports.Deferred = function() {
-    return new Deferred();
-};
+export function Deferred() {
+    return new DeferredObj();
+}
 
-exports.when = function() {
-    return when.apply(this, arguments);
-};
+export function when() {
+    return whenFunc.apply(this, arguments);
+}
 

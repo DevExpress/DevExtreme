@@ -1,11 +1,12 @@
-const $ = require('../../core/renderer');
-const window = require('../../core/utils/window').getWindow();
-const DateView = require('./ui.date_view');
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const support = require('../../core/utils/support');
-const extend = require('../../core/utils/extend').extend;
-const dateUtils = require('./ui.date_utils');
-const messageLocalization = require('../../localization/message');
+import $ from '../../core/renderer';
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
+import DateView from './ui.date_view';
+import DateBoxStrategy from './ui.date_box.strategy';
+import support from '../../core/utils/support';
+import { extend } from '../../core/utils/extend';
+import dateUtils from './ui.date_utils';
+import messageLocalization from '../../localization/message';
 
 const DateViewStrategy = DateBoxStrategy.inherit({
 
@@ -126,4 +127,4 @@ const DateViewStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = DateViewStrategy;
+export default DateViewStrategy;

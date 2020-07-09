@@ -4,6 +4,9 @@ import { getAlgorithm as _getTilingAlgorithm } from './tiling';
 import { getColorizer as _getColorizer } from './colorizing';
 import { patchFontOptions as _patchFontOptions } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
+import { setDefaultAlgorithm } from './tiling';
+import { setDefaultColorizer } from './colorizing';
+import baseWidget from '../core/base_widget';
 
 const _max = Math.max;
 const directions = {
@@ -14,18 +17,18 @@ const directions = {
 };
 
 // At least one algorithm is required.
-require('./tiling.squarified');
-require('./tiling').setDefaultAlgorithm('squarified');
+import './tiling.squarified';
+setDefaultAlgorithm('squarified');
 
 // By design discrete colorizing is used by default.
-require('./colorizing.discrete');
-require('./colorizing').setDefaultColorizer('discrete');
+import './colorizing.discrete';
+setDefaultColorizer('discrete');
 
 function pickPositiveInteger(val) {
     return val > 0 ? Math.round(val) : 0;
 }
 
-const dxTreeMap = require('../core/base_widget').inherit({
+const dxTreeMap = baseWidget.inherit({
     _handlers: {
         beginBuildNodes: _noop,
 
@@ -581,10 +584,11 @@ function layoutTextNode(node, params) {
         rect[1] + paddingTopBottom - bBox.y
     );
 }
+import componentRegistrator from '../../core/component_registrator';
+componentRegistrator('dxTreeMap', dxTreeMap);
 
-require('../../core/component_registrator')('dxTreeMap', dxTreeMap);
-
-module.exports = dxTreeMap;
+export default dxTreeMap;
 
 // PLUGINS_SECTION
-dxTreeMap.addPlugin(require('../core/data_source').plugin);
+import { plugin } from '../core/data_source';
+dxTreeMap.addPlugin(plugin);

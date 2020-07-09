@@ -309,4 +309,4 @@ const ValidationSummary = CollectionWidget.inherit({
 
 registerComponent('dxValidationSummary', ValidationSummary);
 
-module.exports = ValidationSummary;
+export default ValidationSummary;

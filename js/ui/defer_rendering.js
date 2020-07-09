@@ -2,20 +2,19 @@ import TransitionExecutorModule from '../animation/transition_executor/transitio
 import registerComponent from '../core/component_registrator';
 import domAdapter from '../core/dom_adapter';
 import $ from '../core/renderer';
-import commonUtils from '../core/utils/common';
-import deferredUtils from '../core/utils/deferred';
+import { noop, executeAsync } from '../core/utils/common';
+import { Deferred, fromPromise } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import { isPromise } from '../core/utils/type';
-import windowUtils from '../core/utils/window';
+import { getWindow, hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { triggerShownEvent } from '../events/visibility_change';
 import LoadIndicator from './load_indicator';
 import Widget from './widget/ui.widget';
 import { getBoundingRect } from '../core/utils/position';
 
-const window = windowUtils.getWindow();
-const Deferred = deferredUtils.Deferred;
+const window = getWindow();
 
 const WIDGET_CLASS = 'dx-widget';
 const DEFER_RENDERING_CLASS = 'dx-deferrendering';
@@ -76,7 +75,7 @@ const DeferRendering = Widget.inherit({
         };
 
         if(isPromise(renderWhen)) {
-            deferredUtils.fromPromise(renderWhen).done(doRender);
+            fromPromise(renderWhen).done(doRender);
         } else {
             $element.data('dx-render-delegate', doRender);
             if(renderWhen === undefined) {
@@ -89,7 +88,7 @@ const DeferRendering = Widget.inherit({
         this._actions = {};
 
         each(ACTIONS, (_, action) => {
-            this._actions[action] = this._createActionByOption(action) || commonUtils.noop;
+            this._actions[action] = this._createActionByOption(action) || noop;
         });
     },
 
@@ -120,7 +119,7 @@ const DeferRendering = Widget.inherit({
         $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
 
         this._abortRenderTask();
-        this._renderTask = commonUtils.executeAsync(() => {
+        this._renderTask = executeAsync(() => {
             that._renderImpl()
                 .done(() => {
                     const shownArgs = { element: $element };
@@ -147,7 +146,7 @@ const DeferRendering = Widget.inherit({
     _animate: function() {
         const that = this;
         const $element = this.$element();
-        const animation = windowUtils.hasWindow() && this.option('animation');
+        const animation = hasWindow() && this.option('animation');
         const staggerItemSelector = this.option('staggerItemSelector');
         let animatePromise;
 
@@ -290,4 +289,4 @@ const DeferRendering = Widget.inherit({
 
 registerComponent('dxDeferRendering', DeferRendering);
 
-module.exports = DeferRendering;
+export default DeferRendering;

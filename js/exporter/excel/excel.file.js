@@ -141,5 +141,3 @@ export default class ExcelFile {
         }
     }
 }
-
-module.exports = ExcelFile;

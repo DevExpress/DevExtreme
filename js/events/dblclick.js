@@ -6,4 +6,6 @@
 */
 
 // NOTE: The "double_click" module created to overcome adblock issue https://isc.devexpress.com/Thread/WorkplaceDetails/T465804. This file was kept as a fasade not to create a BC.
-module.exports = require('./double_click');
+import dblclick from './double_click';
+
+export default dblclick;

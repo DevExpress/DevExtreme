@@ -8,7 +8,7 @@ module.exports = Object.assign({
     module: {
         rules: [
             {
-                test: /\.tsx$/,
+                test: /\.tsx?$/,
                 loaders: [
                     {
                         loader: 'babel-loader',
@@ -20,7 +20,7 @@ module.exports = Object.assign({
                             defaultOptionsModule: 'js/core/options/utils',
                             jqueryComponentRegistratorModule: 'js/core/component_registrator',
                             jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component',
-                            tsConfig: path.resolve('./webpack.tsconfig.json')
+                            tsConfig: path.resolve('build/gulp/generator/ts-configs/preact.tsconfig.json')
                         },
                     },
                 ],
@@ -43,6 +43,6 @@ module.exports = Object.assign({
             }]
     },
     resolve: {
-        extensions: ['.js', '.tsx'],
+        extensions: ['.js', '.tsx', '.ts'],
     }
 }, baseConfig);

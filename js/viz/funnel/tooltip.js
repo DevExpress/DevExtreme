@@ -1,4 +1,5 @@
-const noop = require('../../core/utils/common').noop;
+import { noop } from '../../core/utils/common';
+import { plugin as pluginTooltip } from '../core/tooltip';
 
 function getCoords(figureCoords, renderer) {
     const offset = renderer.getRootOffset();
@@ -6,7 +7,7 @@ function getCoords(figureCoords, renderer) {
     return [(figureCoords[0] + figureCoords[2]) / 2 + offset.left, (figureCoords[1] + figureCoords[5]) / 2 + offset.top];
 }
 
-exports.plugin = {
+export const plugin = {
     name: 'funnel-tooltip',
     init: noop,
     dispose: noop,
@@ -58,7 +59,7 @@ exports.plugin = {
         }
     },
     customize: function(constructor) {
-        constructor.addPlugin(require('../core/tooltip').plugin);
+        constructor.addPlugin(pluginTooltip);
     }
 };
 

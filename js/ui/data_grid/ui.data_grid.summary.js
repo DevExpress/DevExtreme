@@ -23,7 +23,7 @@ const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
 
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 
-const renderSummaryCell = function(cell, options) {
+export const renderSummaryCell = function(cell, options) {
     const $cell = $(cell);
     const column = options.column;
     const summaryItems = options.summaryItems;
@@ -61,7 +61,7 @@ const recalculateWhileEditing = function(that) {
     return that.option('summary.recalculateWhileEditing');
 };
 
-exports.FooterView = columnsView.ColumnsView.inherit((function() {
+export const FooterView = columnsView.ColumnsView.inherit((function() {
     return {
         _getRows: function() {
             return this._dataController.footerItems();
@@ -371,8 +371,6 @@ const SummaryDataSourceAdapterClientExtender = (function() {
 dataSourceAdapter.extend(SummaryDataSourceAdapterExtender);
 dataSourceAdapter.extend(SummaryDataSourceAdapterClientExtender);
 
-exports.renderSummaryCell = renderSummaryCell;
-
 gridCore.registerModule('summary', {
     defaultOptions: function() {
         return {
@@ -598,7 +596,7 @@ gridCore.registerModule('summary', {
         };
     },
     views: {
-        footerView: exports.FooterView
+        footerView: FooterView
     },
     extenders: {
         controllers: {

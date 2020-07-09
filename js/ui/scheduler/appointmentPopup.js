@@ -6,11 +6,11 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import objectUtils from '../../core/utils/object';
 import { isDefined } from '../../core/utils/type';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import Popup from '../popup';
-import AppointmentForm from './ui.scheduler.appointment_form';
+import { APPOINTMENT_FORM_GROUP_NAMES, AppointmentForm } from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -211,28 +211,23 @@ export default class AppointmentPopup {
         }
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
-        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        this._setEditorOptions(recurrenceRuleExpr, extend({}, recurrenceEditorOptions, { startDate: startDate }));
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, APPOINTMENT_FORM_GROUP_NAMES.Recurrence);
+        this._setEditorOptions(recurrenceRuleExpr, APPOINTMENT_FORM_GROUP_NAMES.Recurrence, extend({}, recurrenceEditorOptions, { startDate: startDate }));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
         AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
     }
 
-    _getEditorOptions(name) {
-        if(!name) {
-            return;
-        }
-        const editor = this._appointmentForm.itemOption(name);
+    _getEditorOptions(name, groupName) {
+        const editor = this._appointmentForm.itemOption(`${groupName}.${name}`);
         return editor ? editor.editorOptions : {};
     }
 
-    _setEditorOptions(name, options) {
-        if(!name) {
-            return;
-        }
-        const editor = this._appointmentForm.itemOption(name);
-        editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
+    _setEditorOptions(name, groupName, options) {
+        const editorPath = `${groupName}.${name}`;
+        const editor = this._appointmentForm.itemOption(editorPath);
+        editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', options);
     }
 
     _isDeviceMobile() {
@@ -248,8 +243,8 @@ export default class AppointmentPopup {
     }
 
     _tryGetWindowWidth() {
-        if(windowUtils.hasWindow()) {
-            const window = windowUtils.getWindow();
+        if(hasWindow()) {
+            const window = getWindow();
             return $(window).width();
         }
     }

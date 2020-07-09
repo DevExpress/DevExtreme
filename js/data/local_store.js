@@ -1,11 +1,11 @@
-const eventsEngine = require('../events/core/events_engine');
-const domAdapter = require('../core/dom_adapter');
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.getWindow();
-const Class = require('../core/class');
+import eventsEngine from '../events/core/events_engine';
+import domAdapter from '../core/dom_adapter';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import Class from '../core/class';
 const abstract = Class.abstract;
-const errors = require('./errors').errors;
-const ArrayStore = require('./array_store');
+import { errors } from './errors';
+import ArrayStore from './array_store';
 
 const LocalStoreBackend = Class.inherit({
 
@@ -123,4 +123,4 @@ const LocalStore = ArrayStore.inherit({
     }
 }, 'local');
 
-module.exports = LocalStore;
+export default LocalStore;

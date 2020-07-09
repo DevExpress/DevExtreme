@@ -1,2 +1,2 @@
-
-module.exports = require('./html_editor/ui.html_editor');
+import HtmlEditor from './html_editor/ui.html_editor';
+export default HtmlEditor;

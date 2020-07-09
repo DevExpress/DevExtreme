@@ -139,4 +139,4 @@ class FileManagerDialogBase extends Widget {
 
 }
 
-module.exports = FileManagerDialogBase;
+export default FileManagerDialogBase;

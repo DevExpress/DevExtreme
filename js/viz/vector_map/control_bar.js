@@ -5,7 +5,7 @@ const _round = _math.round;
 const _floor = _math.floor;
 const _sqrt = _math.sqrt;
 
-const vizUtils = require('../core/utils');
+import vizUtils from '../core/utils';
 const _parseScalar = vizUtils.parseScalar;
 const parseHorizontalAlignment = vizUtils.enumParser(['left', 'center', 'right']);
 const parseVerticalAlignment = vizUtils.enumParser(['top', 'bottom']);
@@ -52,7 +52,7 @@ COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] =
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_IN] = COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_OUT] = ZoomCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_DRAG] = ZoomDragCommand;
 
-function ControlBar(parameters) {
+export function ControlBar(parameters) {
     const that = this;
     that._params = parameters;
     that._createElements(parameters.renderer, parameters.container, parameters.dataKey);
@@ -405,14 +405,14 @@ ZoomDragCommand.prototype.finish = function() {
     disposeCommand(this);
 };
 
-exports.ControlBar = ControlBar;
-
 ///#DEBUG
 const COMMAND_TO_TYPE_MAP__ORIGINAL = COMMAND_TO_TYPE_MAP;
-exports._TESTS_stubCommandToTypeMap = function(map) {
+
+export function _TESTS_stubCommandToTypeMap(map) {
     COMMAND_TO_TYPE_MAP = map;
-};
-exports._TESTS_restoreCommandToTypeMap = function() {
+}
+
+export function _TESTS_restoreCommandToTypeMap() {
     COMMAND_TO_TYPE_MAP = COMMAND_TO_TYPE_MAP__ORIGINAL;
-};
+}
 ///#ENDDEBUG

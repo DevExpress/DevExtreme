@@ -287,6 +287,7 @@
         "dxFileManager-commandThumbnails": "Miniaturansicht",
         "dxFileManager-commandDetails": "Detailansicht",
         "dxFileManager-commandClearSelection": "Auswahl aufheben",
+        "dxFileManager-commandShowNavPane": "TODO",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Verschieben nach",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Verschieben",

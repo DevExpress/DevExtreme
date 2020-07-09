@@ -14,11 +14,11 @@ const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 const generator = new PreactGenerator();
 
-const SRC = ['js/renovation/**/*.tsx', '!js/renovation/**/*.j.tsx'];
+const SRC = ['js/renovation/**/*.{tsx,ts}', '!js/renovation/**/*.j.tsx', '!js/renovation/**/*.d.ts'];
 const DEST = 'js/renovation/';
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
-const COMMON_SRC = ['js/**/*.*', `!${SRC}`];
+const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 
 const knownErrors = [
     'Cannot find module \'preact\'',
@@ -26,7 +26,7 @@ const knownErrors = [
     'Cannot find module \'preact/compat\''
 ];
 
-function generateJQueryComponents() {
+function generateJQueryComponents(isWatch) {
     const generator = new PreactGenerator();
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
@@ -35,13 +35,20 @@ function generateJQueryComponents() {
         generateJQueryOnly: true
     };
 
-    return gulp.src(SRC)
+    const pipe = isWatch ? watch(SRC) : gulp.src(SRC);
+    return pipe
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
         .pipe(gulp.dest(DEST));
 }
 
 const context = require('../context.js');
+
+const processErrors = (knownErrors) => (e) => {
+    if(!knownErrors.some(i => e.message.includes(i))) {
+        console.log(e.message);
+    }
+};
 
 function generatePreactComponents() {
     const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
@@ -56,15 +63,12 @@ function generatePreactComponents() {
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
         .pipe(tsProject({
-            error(e) {
-                if(!knownErrors.some(i => e.message.includes(i))) {
-                    console.log(e.message);
-                }
-            },
+            error: processErrors(knownErrors),
             finish() {}
         }))
         .pipe(babel())
-        .pipe(gulp.dest(context.TRANSPILED_PATH));
+        .pipe(gulp.dest(context.TRANSPILED_PATH))
+        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 }
 
 function processRenovationMeta() {
@@ -85,7 +89,12 @@ function processRenovationMeta() {
     return file('widgets.json', metaJson, { src: true })
         .pipe(gulp.dest(COMPAT_TESTS_PARTS));
 }
-gulp.task('generate-components', gulp.series(generateJQueryComponents, generatePreactComponents, processRenovationMeta));
+
+gulp.task('generate-jquery-components', function generateJQuery() { return generateJQueryComponents(false); });
+
+gulp.task('generate-jquery-components-watch', function watchJQueryComponents() { return generateJQueryComponents(true); });
+
+gulp.task('generate-components', gulp.series('generate-jquery-components', generatePreactComponents, processRenovationMeta));
 
 function addGenerationTask(
     frameworkName,
@@ -104,15 +113,11 @@ function addGenerationTask(
     generator.defaultOptionsModule = 'js/core/options/utils';
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
-        return gulp.src('js/**/*.tsx')
+        return gulp.src(SRC, { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
-                error(e) {
-                    if(!knownErrors.some(i => e.message.endsWith(i))) {
-                        console.log(e.message);
-                    }
-                },
+                error: processErrors(knownErrors),
                 finish() { }
             })))
             .pipe(gulpIf(babelGeneratedFiles, babel()))
@@ -179,9 +184,10 @@ function addGenerationTask(
 
 addGenerationTask('react', ['Cannot find module \'csstype\'.'], false, true, false);
 addGenerationTask('angular', [
-    'Cannot find module \'@angular/core\'.',
-    'Cannot find module \'@angular/common\'.'
-]);
+    'Cannot find module \'@angular/core\'',
+    'Cannot find module \'@angular/common\'',
+    'Cannot find module \'@angular/forms\''
+].concat(knownErrors));
 
 addGenerationTask('vue', [], false, true, false);
 

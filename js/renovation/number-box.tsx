@@ -1,6 +1,7 @@
 import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method,
 } from 'devextreme-generator/component_declaration/common';
+/* eslint-disable-next-line import/named */
 import DxNumberBox, { Options } from '../ui/number_box';
 import { WidgetProps } from './widget';
 
@@ -44,7 +45,7 @@ export class NumberBoxProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class NumberBox extends JSXComponent(NumberBoxProps) {
+export class NumberBox extends JSXComponent(NumberBoxProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 

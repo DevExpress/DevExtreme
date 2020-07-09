@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { noop, ensureDefined } from '../core/utils/common';
-import windowUtils from '../core/utils/window';
+import { getWindow } from '../core/utils/window';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
@@ -183,7 +183,7 @@ const TextArea = TextBox.inherit({
         return sizeUtils.getVerticalOffsets(this._$element.get(0), false)
             + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
             + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
-            + sizeUtils.getElementBoxParams('height', windowUtils.getWindow().getComputedStyle($input.get(0))).margin;
+            + sizeUtils.getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
     },
 
     _updateInputHeight: function() {
@@ -286,4 +286,4 @@ const TextArea = TextBox.inherit({
 
 registerComponent('dxTextArea', TextArea);
 
-module.exports = TextArea;
+export default TextArea;

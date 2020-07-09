@@ -1,5 +1,5 @@
-const extend = require('../../../core/utils/extend').extend;
-const symbolPoint = require('./symbol_point');
+import { extend } from '../../../core/utils/extend';
+import symbolPoint from './symbol_point';
 
 const _extend = extend;
 const _round = Math.round;
@@ -7,14 +7,14 @@ const _sqrt = Math.sqrt;
 const _acos = Math.acos;
 const DEG = 180 / Math.PI;
 const _abs = Math.abs;
-const vizUtils = require('../../core/utils');
+import vizUtils from '../../core/utils';
 const _normalizeAngle = vizUtils.normalizeAngle;
 const _getCosAndSin = vizUtils.getCosAndSin;
-const _isDefined = require('../../../core/utils/type').isDefined;
+import { isDefined as _isDefined } from '../../../core/utils/type';
 const getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords;
-const RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent;
+import { radialLabelIndent as RADIAL_LABEL_INDENT } from '../../components/consts';
 
-module.exports = _extend({}, symbolPoint, {
+export default _extend({}, symbolPoint, {
     _updateData: function(data, argumentChanged) {
         const that = this;
         symbolPoint._updateData.call(this, data);

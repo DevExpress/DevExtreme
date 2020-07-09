@@ -1,16 +1,16 @@
-const $ = require('../../core/renderer');
-const readyCallbacks = require('../../core/utils/ready_callbacks');
-const domAdapter = require('../../core/dom_adapter');
-const eventsEngine = require('../../events/core/events_engine');
-const dataUtils = require('../../core/element_data');
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const each = require('../../core/utils/iterator').each;
-const registerEvent = require('./event_registrator');
-const eventUtils = require('../utils');
-const pointerEvents = require('../pointer');
-const wheelEvent = require('./wheel');
+import $ from '../../core/renderer';
+import readyCallbacks from '../../core/utils/ready_callbacks';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import { data as elementData } from '../../core/element_data';
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import registerEvent from './event_registrator';
+import { addNamespace, isMouseEvent } from '../utils';
+import pointerEvents from '../pointer';
+import { name as wheelEventName } from './wheel';
 
 const MANAGER_EVENT = 'dxEventManager';
 const EMITTER_DATA = 'dxEmitter';
@@ -28,10 +28,10 @@ const EventManager = Class.inherit({
     _attachHandlers: function() {
         readyCallbacks.add(function() {
             const document = domAdapter.getDocument();
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, addNamespace(wheelEventName, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
         }.bind(this));
     },
 
@@ -67,7 +67,7 @@ const EventManager = Class.inherit({
     },
 
     _pointerDownHandler: function(e) {
-        if(eventUtils.isMouseEvent(e) && e.which > 1) {
+        if(isMouseEvent(e) && e.which > 1) {
             return;
         }
 
@@ -114,7 +114,7 @@ const EventManager = Class.inherit({
         }
 
         while($element.length) {
-            const emitters = dataUtils.data($element.get(0), EMITTER_DATA) || [];
+            const emitters = elementData($element.get(0), EMITTER_DATA) || [];
             each(emitters, handleEmitter);
             $element = $element.parent();
         }
@@ -246,20 +246,20 @@ const registerEmitter = function(emitterConfig) {
             noBubble: !emitterConfig.bubble,
 
             setup: function(element) {
-                const subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA) || {};
+                const subscriptions = elementData(element, EMITTER_SUBSCRIPTION_DATA) || {};
 
-                const emitters = dataUtils.data(element, EMITTER_DATA) || {};
+                const emitters = elementData(element, EMITTER_DATA) || {};
                 const emitter = emitters[emitterName] || new emitterClass(element);
 
                 subscriptions[eventName] = true;
                 emitters[emitterName] = emitter;
 
-                dataUtils.data(element, EMITTER_DATA, emitters);
-                dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
+                elementData(element, EMITTER_DATA, emitters);
+                elementData(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
             },
 
             add: function(element, handleObj) {
-                const emitters = dataUtils.data(element, EMITTER_DATA);
+                const emitters = elementData(element, EMITTER_DATA);
                 const emitter = emitters[emitterName];
 
                 emitter.configure(extend({
@@ -268,9 +268,9 @@ const registerEmitter = function(emitterConfig) {
             },
 
             teardown: function(element) {
-                const subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA);
+                const subscriptions = elementData(element, EMITTER_SUBSCRIPTION_DATA);
 
-                const emitters = dataUtils.data(element, EMITTER_DATA);
+                const emitters = elementData(element, EMITTER_DATA);
                 const emitter = emitters[emitterName];
 
                 delete subscriptions[eventName];
@@ -295,4 +295,4 @@ const registerEmitter = function(emitterConfig) {
     });
 };
 
-module.exports = registerEmitter;
+export default registerEmitter;

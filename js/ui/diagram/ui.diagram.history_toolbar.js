@@ -14,4 +14,4 @@ class DiagramHistoryToolbar extends DiagramToolbar {
     }
 }
 
-module.exports = DiagramHistoryToolbar;
+export default DiagramHistoryToolbar;
