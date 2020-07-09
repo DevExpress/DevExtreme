@@ -2,9 +2,9 @@ import {
   Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 
-import { ResizableContainer } from './resizable-container';
-import PagerProps from './pager-props';
-import { PagerContentComponent } from './pager-content';
+import { ResizableContainer } from './resizable_container';
+import PagerProps from './common/pager_props';
+import { PagerContentComponent } from './content';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -21,7 +21,6 @@ export const viewFunction = ({
   />
 );
 
-// tslint:disable-next-line: max-classes-per-file
 @Component({
   defaultOptionRules: null,
   jQuery: { register: true },

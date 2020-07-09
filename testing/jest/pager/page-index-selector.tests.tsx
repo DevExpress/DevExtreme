@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '../../../js/renovation/pager/page-index-selector';
+import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '../../../js/renovation/pager/pages/page_index_selector';
 
 describe('Page index selector', () => {
   describe('View', () => {

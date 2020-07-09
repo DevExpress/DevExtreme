@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { format } from '../../core/utils/string';
-import { GetHtmlElement } from './pager.types.d';
+import { GetHtmlElement } from './common/types.d';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

@@ -4,9 +4,9 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../core/utils/resize_callbacks';
-import PagerProps from './pager-props';
-import { GetHtmlElement } from './pager.types.d';
-import { getElementWidth } from './utils/get-element-width';
+import PagerProps from './common/pager_props';
+import { GetHtmlElement } from './common/types.d';
+import { getElementWidth } from './utils/get_element_width';
 // bug in generator: Max call stack
 // import { TwoWayProps } from './pager-content';
 // import type PagerContentProps from './pager-content';
@@ -120,7 +120,6 @@ export class ResizableContainerProps extends PagerProps {
   // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
   @Template() contentTemplate: any;
 }
-// tslint:disable-next-line: max-classes-per-file
 @Component({
   defaultOptionRules: null,
   view: viewFunction,

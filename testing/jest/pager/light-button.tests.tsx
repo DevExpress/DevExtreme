@@ -4,8 +4,8 @@ import {
   EVENT, emit, getEventHandlers, clear,
 } from '../utils/events-mock';
 import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
-import { LightButton, viewFunction as LightButtonComponent } from '../../../js/renovation/pager/light-button';
-import * as LightButtonModule from '../../../js/renovation/pager/light-button';
+import { LightButton, viewFunction as LightButtonComponent } from '../../../js/renovation/pager/common/light_button';
+import * as LightButtonModule from '../../../js/renovation/pager/common/light_button';
 import { closestClass } from '../../../js/renovation/pager/utils/closest_class';
 
 const { dxClickEffect } = LightButtonModule;

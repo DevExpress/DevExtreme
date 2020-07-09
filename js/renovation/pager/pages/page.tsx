@@ -2,8 +2,8 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
 
-import { LightButton } from './light-button';
-import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from './consts';
+import { LightButton } from '../common/light_button';
+import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -30,7 +30,6 @@ export class PageProps {
   @OneWay() className?: string;
 }
 
-// tslint:disable-next-line: max-classes-per-file
 @Component({
   defaultOptionRules: null,
   view: viewFunction,

@@ -3,9 +3,9 @@ import {
   ComponentBindings, JSXComponent, OneWay, Component, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
 
-import { LightButton } from './light-button';
-import { FullPageSize } from './pager.types.d';
-import { PAGER_SELECTION_CLASS } from './consts';
+import { LightButton } from '../common/light_button';
+import { FullPageSize } from '../common/types.d';
+import { PAGER_SELECTION_CLASS } from '../common/consts';
 
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
 export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;

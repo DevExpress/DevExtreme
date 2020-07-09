@@ -1,4 +1,4 @@
-import getElementComputedStyle from './get-computed-style';
+import getElementComputedStyle from './get_computed_style';
 
 function toNumber(attribute: string | undefined): number {
   return attribute ? Number(attribute.replace('px', '')) : 0;
