@@ -3667,6 +3667,7 @@ QUnit.test('Argument axis. Set customPosition and offset options', function(asse
     const axis = chart.getArgumentAxis();
 
     assert.roughEqual(axis._axisPosition, 862, 8);
+    assert.ok(chart.getValueAxis('axis2')._majorTicks[2].label.attr('translateY') > 0);
 
     chart.option('argumentAxis.offset', -50);
     assert.roughEqual(axis._axisPosition, 808, 10);
@@ -3696,6 +3697,7 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
 
     chart.option('valueAxis[2].customPosition', 1100);
     assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 990, 5);
+    assert.ok(chart.getValueAxis('axis2')._majorTicks[0].label.attr('translateY') < 0);
 
     chart.option('valueAxis[1].offset', -18);
     assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 970, 5);
@@ -3723,6 +3725,7 @@ QUnit.test('Zoom and pan', function(assert) {
 
     chart.option('valueAxis[2].customPosition', 320);
     assert.roughEqual(valAxis2._axisPosition, 164, 6);
+    assert.ok(valAxis2._majorTicks[0].label.attr('translateY') < 0);
 
     const $root = $(chart._renderer.root.element);
     chart._lastRenderingTime = 0;
@@ -3731,6 +3734,7 @@ QUnit.test('Zoom and pan', function(assert) {
     $root.trigger(new $.Event('dxdragend', {}));
 
     assert.roughEqual(valAxis2._axisPosition, 264, 6);
+    assert.ok(valAxis2._majorTicks[0].label.attr('translateY') < 0);
 
     chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
@@ -3738,6 +3742,7 @@ QUnit.test('Zoom and pan', function(assert) {
     $root.trigger(new $.Event('dxdragend', {}));
 
     assert.roughEqual(valAxis2._axisPosition, 111, 6);
+    assert.ok(valAxis2._majorTicks[0].label.attr('translateY') > 0);
 
     chart.option('valueAxis[1]', {
         position: 'left',
@@ -3830,4 +3835,68 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
 
     assert.roughEqual(chart.getArgumentAxis()._axisPosition, 490, 5);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
+});
+
+QUnit.test('Resolve overlapping: labels and axes', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            customPositionAxis: 'axis2',
+            customPosition: 200
+        }
+    });
+    const argAxis = chart.getArgumentAxis();
+    const valAxis2 = chart.getValueAxis('axis2');
+
+    chart.option('valueAxis[2].customPosition', 500);
+    assert.ok(valAxis2._majorTicks[4].label.attr('translateY') < 0);
+    assert.ok(argAxis._majorTicks[5].label.attr('translateX') > 0);
+
+    chart.option('argumentAxis.label', { position: 'top' });
+    assert.ok(valAxis2._majorTicks[4].label.attr('translateY') > 0);
+    assert.ok(valAxis2._majorTicks[4].label.attr('translateY') > valAxis2._majorTicks[3].label.attr('translateY') * 2);
+
+    chart.option('valueAxis[2].label', { position: 'right' });
+    assert.ok(argAxis._majorTicks[5].label.attr('translateX') < 0);
+    assert.ok(argAxis._majorTicks[5].label.attr('translateX') < argAxis._majorTicks[4].label.attr('translateX') * 2);
+
+    chart.option('argumentAxis.label', { position: 'bottom' });
+    assert.ok(valAxis2._majorTicks[4].label.attr('translateY') < 0);
+});
+
+QUnit.test('Resolve overlapping: labels', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            customPositionAxis: 'axis2',
+            customPosition: 220
+        }
+    });
+    const argAxis = chart.getArgumentAxis();
+    const valAxis2 = chart.getValueAxis('axis2');
+
+    chart.option('valueAxis[2].customPosition', 520);
+    assert.ok(valAxis2._majorTicks[5].label.attr('translateX') > 0);
+    assert.equal(valAxis2._majorTicks[5].mark.attr('translateX'), 6);
+    assert.ok(argAxis._majorTicks[5].label.attr('translateY') < 0);
+    assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), -6);
+
+    chart.option('argumentAxis.label', { position: 'top' });
+    assert.ok(valAxis2._majorTicks[4].label.attr('translateX') > 0);
+    assert.equal(valAxis2._majorTicks[4].mark.attr('translateX'), 6);
+    assert.ok(argAxis._majorTicks[5].label.attr('translateY') > 0);
+    assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), 6);
+
+    chart.option('argumentAxis.customPosition', 180);
+    chart.option('valueAxis[2].customPosition', 480);
+
+    chart.option('valueAxis[2].label', { position: 'right' });
+    assert.ok(valAxis2._majorTicks[3].label.attr('translateX') < 0);
+    assert.equal(valAxis2._majorTicks[3].mark.attr('translateX'), -6);
+    assert.ok(argAxis._majorTicks[5].label.attr('translateY') > 0);
+    assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), 6);
+
+    chart.option('argumentAxis.label', { position: 'bottom' });
+    assert.ok(valAxis2._majorTicks[4].label.attr('translateX') < 0);
+    assert.equal(valAxis2._majorTicks[4].mark.attr('translateX'), -6);
+    assert.ok(argAxis._majorTicks[5].label.attr('translateY') < 0);
+    assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), -6);
 });

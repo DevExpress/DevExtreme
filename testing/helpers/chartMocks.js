@@ -1082,7 +1082,7 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
-        getOppositeAxis: commonUtils.noop,
+        getOrthogonalAxis: commonUtils.noop,
         customPositionIsAvailable() {
             return false;
         },
@@ -1099,7 +1099,8 @@ export const MockAxis = function(renderOptions) {
         refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy(),
         setCustomVisualRange: sinon.spy(),
-        handleZoomEnd: sinon.spy()
+        handleZoomEnd: sinon.spy(),
+        resolveOverlappingForCustomPositioning: sinon.spy()
     };
 };
 
