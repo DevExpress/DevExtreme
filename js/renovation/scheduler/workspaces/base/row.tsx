@@ -17,7 +17,7 @@ export const viewFunction = (viewModel: Row) => (
 export class RowProps {
   @OneWay() height?: number;
 
-  @OneWay() className?: string = '';
+  @OneWay() className?: string;
 
   @Slot() children?: any;
 }

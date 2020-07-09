@@ -38,7 +38,7 @@ describe('RowBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('style', () => {
-        it('should return an empty if height is undefined', () => {
+        it('should return an empty obbject if height is undefined', () => {
           const row = new Row({});
 
           expect(row.style)
