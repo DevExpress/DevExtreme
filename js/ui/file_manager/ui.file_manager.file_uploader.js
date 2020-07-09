@@ -7,7 +7,7 @@ import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
 import FileUploader from '../file_uploader';
 
-import whenSome from './ui.file_manager.common';
+import { whenSome } from './ui.file_manager.common';
 
 const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
 
@@ -255,4 +255,4 @@ class FileManagerFileUploader extends Widget {
 
 }
 
-module.exports = FileManagerFileUploader;
+export default FileManagerFileUploader;

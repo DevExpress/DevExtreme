@@ -1,2 +1,2 @@
-
-module.exports = require('./radio_group/radio_group');
+import RadioGroup from './radio_group/radio_group';
+export default RadioGroup;

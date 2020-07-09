@@ -1,10 +1,11 @@
-const errorUtils = require('../../core/utils/error');
-const errors = require('../../core/errors');
+import errorUtils from '../../core/utils/error';
+import errors from '../../core/errors';
+
 /**
 * @docid
 * @name ErrorsViz
 */
-module.exports = errorUtils(errors.ERROR_MESSAGES, {
+export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsViz.E2001
     */

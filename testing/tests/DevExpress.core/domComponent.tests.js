@@ -3,7 +3,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import DOMComponent from 'core/dom_component';
 import dataUtils from 'core/element_data';
-import TemplateManager from 'core/template_manager';
+import { TemplateManager } from 'core/template_manager';
 import { noop } from 'core/utils/common';
 import publicComponentUtils from 'core/utils/public_component';
 import resizeCallbacks from 'core/utils/resize_callbacks';

@@ -10,4 +10,4 @@ const ErrorCode = {
     Other: 32767
 };
 
-module.exports = ErrorCode;
+export default ErrorCode;

@@ -17,6 +17,7 @@ import dateSerialization from 'core/utils/date_serialization';
 import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import browser from 'core/utils/browser';
 import { Deferred } from 'core/utils/deferred';
+import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointment_form';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -91,6 +92,67 @@ QUnit.module('Integration: Appointments', {
         fx.off = false;
         this.clock.restore();
     }
+});
+
+QUnit.test('Removed appointments should render, if appointment appeared after filtering(T903973)', function(assert) {
+    const dataSource = new DataSource({
+        store: [{
+            text: 'A',
+            ownerId: 1,
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }, {
+            text: 'B',
+            ownerId: 2,
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }, {
+            text: 'C',
+            ownerId: 3,
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }]
+    });
+
+    const owners = [{
+        text: 'O1',
+        id: 1
+    }, {
+        text: 'O2',
+        id: 2
+    }, {
+        text: 'O3',
+        id: 3
+    }];
+
+    const scheduler = createWrapper({
+        dataSource: dataSource,
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 22),
+        groups: ['ownerId'],
+        resources: [{
+            fieldExpr: 'ownerId',
+            dataSource: owners
+        }],
+        height: 600
+    });
+
+    const isIncludes = (array, value) => array.indexOf(value) !== -1;
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'At the initial stage all appointments should be rendered');
+
+    dataSource.filter(item => isIncludes([1], item.ownerId));
+    dataSource.load();
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'After filtering should be rendered appointment "A"');
+
+    dataSource.filter(item => isIncludes([1, 2], item.ownerId));
+    dataSource.load();
+    assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'After filtering should be rendered appointments "A", "B"');
+
+    dataSource.filter(item => isIncludes([1, 2, 3], item.ownerId));
+    dataSource.load();
+    assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'After filtering should be rendered appointments "A", "B", "C"');
 });
 
 QUnit.test('DataSource option should be passed to the appointments collection after wrap by layout manager', function(assert) {
@@ -2915,7 +2977,7 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
 
     form = this.instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption('recurrenceRule').visible, false, 'Recurrence editor is hidden. Popup is correct');
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible, false, 'Recurrence editor is hidden. Popup is correct');
 });
 
 QUnit.test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {

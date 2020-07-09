@@ -1,7 +1,7 @@
 import $ from './renderer';
 import callbacks from './component_registrator_callbacks';
 import errors from './errors';
-import publicComponentUtils from './utils/public_component';
+import { name as publicComponentName } from './utils/public_component';
 
 const registerComponent = function(name, namespace, componentClass) {
     if(!componentClass) {
@@ -10,7 +10,7 @@ const registerComponent = function(name, namespace, componentClass) {
         namespace[name] = componentClass;
     }
 
-    publicComponentUtils.name(componentClass, name);
+    publicComponentName(componentClass, name);
     callbacks.fire(name, componentClass);
 };
 
@@ -56,4 +56,4 @@ const registerRendererComponent = function(name, componentClass) {
 
 callbacks.add(registerRendererComponent);
 
-module.exports = registerComponent;
+export default registerComponent;

@@ -289,11 +289,11 @@ QUnit.module('Tooltip', $.extend({}, environment, {
         this.tooltip.stub('isEnabled').returns(true);
         this.tooltip.stub('show').returns(true);
         this.__Tooltip = tooltipModule.Tooltip;
-        tooltipModule.Tooltip = common.returnValue(this.tooltip);
+        tooltipModule.DEBUG_set_tooltip(common.returnValue(this.tooltip));
     },
 
     afterEach: function() {
-        tooltipModule.Tooltip = this.__Tooltip;
+        tooltipModule.DEBUG_set_tooltip(this.__Tooltip);
     }
 }));
 

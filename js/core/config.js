@@ -124,4 +124,4 @@ if(typeof DevExpress !== 'undefined' && DevExpress.config) {
     configMethod(DevExpress.config);
 }
 
-module.exports = configMethod;
+export default configMethod;

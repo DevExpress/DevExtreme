@@ -1,19 +1,19 @@
-const $ = require('../../core/renderer');
-const typeUtils = require('../../core/utils/type');
-const noop = require('../../core/utils/common').noop;
-const isDefined = require('../../core/utils/type').isDefined;
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const inArray = require('../../core/utils/array').inArray;
-const camelize = require('../../core/utils/inflector').camelize;
-const registerComponent = require('../../core/component_registrator');
-const Widget = require('../widget/ui.widget');
-const publisherMixin = require('./ui.scheduler.publisher_mixin');
-const SchedulerNavigator = require('./ui.scheduler.navigator');
-const DropDownMenu = require('../drop_down_menu');
-const Tabs = require('../tabs');
-const errors = require('../../core/errors');
-const messageLocalization = require('../../localization/message');
+import $ from '../../core/renderer';
+import { isObject, isDefined } from '../../core/utils/type';
+import { noop } from '../../core/utils/common';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { inArray } from '../../core/utils/array';
+import { camelize } from '../../core/utils/inflector';
+import registerComponent from '../../core/component_registrator';
+import Widget from '../widget/ui.widget';
+import publisherMixin from './ui.scheduler.publisher_mixin';
+import SchedulerNavigator from './ui.scheduler.navigator';
+import DropDownMenu from '../drop_down_menu';
+import Tabs from '../tabs';
+import { TABS_EXPANDED_CLASS } from '../tabs/constants';
+import errors from '../../core/errors';
+import messageLocalization from '../../localization/message';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
@@ -144,7 +144,7 @@ const SchedulerHeader = Widget.inherit({
         const views = this.option('views');
 
         each(views, function(_, view) {
-            const isViewIsObject = typeUtils.isObject(view);
+            const isViewIsObject = isObject(view);
             const viewType = isViewIsObject && view.type ? view.type : view;
 
             if(inArray(viewType, VIEWS) === -1) {
@@ -161,7 +161,7 @@ const SchedulerHeader = Widget.inherit({
     _renderViewSwitcherTabs: function($element) {
         const that = this;
 
-        $element.addClass(Tabs.getTabsExpandedClass);
+        $element.addClass(TABS_EXPANDED_CLASS);
 
         this._viewSwitcher = this._createComponent($element, Tabs, {
             selectionRequired: true,
@@ -235,7 +235,7 @@ const SchedulerHeader = Widget.inherit({
     },
 
     _getCurrentViewName: function(currentView) {
-        return typeUtils.isObject(currentView) ? currentView.name || currentView.type : currentView;
+        return isObject(currentView) ? currentView.name || currentView.type : currentView;
     },
 
     _updateCurrentView: function(e) {
@@ -252,4 +252,4 @@ const SchedulerHeader = Widget.inherit({
 
 registerComponent('dxSchedulerHeader', SchedulerHeader);
 
-module.exports = SchedulerHeader;
+export default SchedulerHeader;

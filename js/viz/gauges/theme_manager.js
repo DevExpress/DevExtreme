@@ -1,6 +1,6 @@
-const extend = require('../../core/utils/extend').extend;
+import { extend } from '../../core/utils/extend';
 const _extend = extend;
-const BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager;
+import { BaseThemeManager } from '../core/base_theme_manager';
 
 const ThemeManager = BaseThemeManager.inherit({
     ctor(options) {
@@ -19,4 +19,4 @@ const ThemeManager = BaseThemeManager.inherit({
     }
 });
 
-module.exports = { ThemeManager };
+export default { ThemeManager };

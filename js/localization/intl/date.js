@@ -138,7 +138,7 @@ const monthNameStrategies = {
     }
 };
 
-module.exports = {
+export default {
     engine: function() {
         return 'intl';
     },

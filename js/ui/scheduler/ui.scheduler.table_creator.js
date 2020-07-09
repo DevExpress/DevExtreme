@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import dataUtils from '../../core/element_data';
-import typeUtils from '../../core/utils/type';
+import { data as elementData } from '../../core/element_data';
+import { isFunction } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
 
 const ROW_SELECTOR = 'tr';
@@ -57,7 +57,7 @@ class SchedulerTableCreator {
                 row.appendChild(td);
 
                 if(options.cellClass) {
-                    if(typeUtils.isFunction(options.cellClass)) {
+                    if(isFunction(options.cellClass)) {
                         td.className = options.cellClass(i, j);
                     } else {
                         td.className = options.cellClass;
@@ -73,7 +73,7 @@ class SchedulerTableCreator {
                     cellDataObject = options.getCellData(td, i, j, groupIndex);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
-                    dataKey && dataUtils.data(td, dataKey, dataValue);
+                    dataKey && elementData(td, dataKey, dataValue);
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
@@ -267,7 +267,7 @@ class SchedulerTableCreator {
                     $container = $('<div>').append($container);
                 }
 
-                const cssClass = typeUtils.isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
+                const cssClass = isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
 
                 cell.element = $container.addClass(cssClass);
 
@@ -404,7 +404,7 @@ class SchedulerTableCreator {
 
                 let cssClass;
 
-                if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
+                if(isFunction(cssClasses.groupHeaderClass)) {
                     cssClass = cssClasses.groupHeaderClass(j);
                 } else {
                     cssClass = cssClasses.groupHeaderClass;
@@ -420,6 +420,6 @@ class SchedulerTableCreator {
     }
 }
 
-module.exports = {
+export default {
     tableCreator: new SchedulerTableCreator()
 };

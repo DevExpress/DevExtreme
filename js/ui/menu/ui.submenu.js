@@ -171,4 +171,4 @@ class Submenu extends ContextMenu {
     }
 }
 
-module.exports = Submenu;
+export default Submenu;

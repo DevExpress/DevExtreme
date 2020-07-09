@@ -18,7 +18,7 @@ import ArrayStore from '../../data/array_store';
 
 const PATH_DELIMETER = '/./';
 
-exports.LocalStore = Class.inherit((function() {
+export const LocalStore = Class.inherit((function() {
 
     const DATE_INTERVAL_SELECTORS = {
         'year': function(date) {

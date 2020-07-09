@@ -488,7 +488,7 @@ const ValidatingController = modules.Controller.inherit((function() {
     };
 })());
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             editing: {

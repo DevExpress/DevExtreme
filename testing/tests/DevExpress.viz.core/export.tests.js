@@ -2,6 +2,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const exportModule = require('viz/core/export');
 const themeModule = require('viz/themes');
 const clientExporter = require('exporter');
+const combineMarkupsOrig = exportModule.combineMarkups;
 
 themeModule.registerTheme({
     name: 'someTheme.light',
@@ -523,13 +524,12 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-
 QUnit.module('API. Export methods', {
     beforeEach: function() {
         sinon.stub(clientExporter, 'export');
-        sinon.stub(exportModule, 'combineMarkups');
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
     },
     afterEach: function() {
         clientExporter.export.restore();
-        exportModule.combineMarkups.restore();
+        exportModule.DEBUG_set_combineMarkups(combineMarkupsOrig);
         this.toDataURLStub.restore();
     }
 });
@@ -693,7 +693,9 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
 
 QUnit.test('exportWidgets method. Defaults', function(assert) {
     // arrange
-    exportModule.combineMarkups.returns({ markup: 'testMarkup', width: 600, height: 400 });
+    exportModule.DEBUG_set_combineMarkups(sinon.spy(function() {
+        return { markup: 'testMarkup', width: 600, height: 400 };
+    }));
 
     // act
     exportModule.exportWidgets([{ widget1: true }, { widget2: true }]);
@@ -740,7 +742,9 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
         verticalAlignment: 'bottom',
         horizontalAlignment: 'right'
     };
-    exportModule.combineMarkups.returns({ markup: 'testMarkup', width: 600, height: 400 });
+    exportModule.DEBUG_set_combineMarkups(sinon.spy(function() {
+        return { markup: 'testMarkup', width: 600, height: 400 };
+    }));
 
     // act
     exportModule.exportWidgets([{ widget1: true }, { widget2: true }], options);

@@ -362,4 +362,4 @@ const Views = {
     })
 };
 
-module.exports = Views;
+export default Views;

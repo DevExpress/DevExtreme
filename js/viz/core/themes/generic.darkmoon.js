@@ -1,4 +1,4 @@
-const themeModule = require('../../themes');
+import themeModule from '../../themes';
 const registerTheme = themeModule.registerTheme;
 const registerThemeAlias = themeModule.registerThemeAlias;
 const ACCENT_COLOR = '#3debd3';

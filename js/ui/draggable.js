@@ -1,37 +1,39 @@
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const eventsEngine = require('../events/core/events_engine');
-const stringUtils = require('../core/utils/string');
-const registerComponent = require('../core/component_registrator');
-const translator = require('../animation/translator');
-const Animator = require('./scroll_view/animator');
-const browser = require('../core/utils/browser');
-const dasherize = require('../core/utils/inflector').dasherize;
-const extend = require('../core/utils/extend').extend;
-const DOMComponent = require('../core/dom_component');
-const getPublicElement = require('../core/element').getPublicElement;
-const eventUtils = require('../events/utils');
-const pointerEvents = require('../events/pointer');
-const dragEvents = require('../events/drag');
-const positionUtils = require('../animation/position');
-const typeUtils = require('../core/utils/type');
-const noop = require('../core/utils/common').noop;
-const viewPortUtils = require('../core/utils/view_port');
-const commonUtils = require('../core/utils/common');
-const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
-const deferredUtils = require('../core/utils/deferred');
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const when = deferredUtils.when;
-const fromPromise = deferredUtils.fromPromise;
-const Deferred = deferredUtils.Deferred;
-
+import $ from '../core/renderer';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import eventsEngine from '../events/core/events_engine';
+import stringUtils from '../core/utils/string';
+import registerComponent from '../core/component_registrator';
+import translator from '../animation/translator';
+import Animator from './scroll_view/animator';
+import browser from '../core/utils/browser';
+import { dasherize } from '../core/utils/inflector';
+import { extend } from '../core/utils/extend';
+import DOMComponent from '../core/dom_component';
+import { getPublicElement } from '../core/element';
+import { addNamespace, needSkipEvent } from '../events/utils';
+import pointerEvents from '../events/pointer';
+import {
+    start as dragEventStart,
+    move as dragEventMove,
+    end as dragEventEnd,
+    enter as dragEventEnter,
+    leave as dragEventLeave
+} from '../events/drag';
+import positionUtils from '../animation/position';
+import { isFunction, isObject } from '../core/utils/type';
+import { noop, splitPair } from '../core/utils/common';
+import { value as viewPort } from '../core/utils/view_port';
+import { EmptyTemplate } from '../core/templates/empty_template';
+import { when, fromPromise, Deferred } from '../core/utils/deferred';
+import { getBoundingRect } from '../core/utils/position';
 const DRAGGABLE = 'dxDraggable';
-const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE);
-const DRAG_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, DRAGGABLE);
-const DRAGEND_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, DRAGGABLE);
-const DRAG_ENTER_EVENT_NAME = eventUtils.addNamespace(dragEvents.enter, DRAGGABLE);
-const DRAGEND_LEAVE_EVENT_NAME = eventUtils.addNamespace(dragEvents.leave, DRAGGABLE);
-const POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE);
+const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
+const DRAG_EVENT_NAME = addNamespace(dragEventMove, DRAGGABLE);
+const DRAGEND_EVENT_NAME = addNamespace(dragEventEnd, DRAGGABLE);
+const DRAG_ENTER_EVENT_NAME = addNamespace(dragEventEnter, DRAGGABLE);
+const DRAGEND_LEAVE_EVENT_NAME = addNamespace(dragEventLeave, DRAGGABLE);
+const POINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, DRAGGABLE);
 
 const CLONE_CLASS = 'clone';
 
@@ -312,13 +314,13 @@ const Draggable = DOMComponent.inherit({
     },
 
     _normalizeCursorOffset: function(offset) {
-        if(typeUtils.isObject(offset)) {
+        if(isObject(offset)) {
             offset = {
                 h: offset.x,
                 v: offset.y
             };
         }
-        offset = commonUtils.splitPair(offset).map((value) => parseFloat(value));
+        offset = splitPair(offset).map((value) => parseFloat(value));
 
         return {
             left: offset[0],
@@ -327,7 +329,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _getNormalizedCursorOffset: function(offset, options) {
-        if(typeUtils.isFunction(offset)) {
+        if(isFunction(offset)) {
             offset = offset.call(this, options);
         }
 
@@ -537,7 +539,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _pointerDownHandler: function(e) {
-        if(eventUtils.needSkipEvent(e)) {
+        if(needSkipEvent(e)) {
             return;
         }
 
@@ -648,7 +650,7 @@ const Draggable = DOMComponent.inherit({
     _getBoundOffset: function() {
         let boundOffset = this.option('boundOffset');
 
-        if(typeUtils.isFunction(boundOffset)) {
+        if(isFunction(boundOffset)) {
             boundOffset = boundOffset.call(this);
         }
 
@@ -658,7 +660,7 @@ const Draggable = DOMComponent.inherit({
     _getArea: function() {
         let area = this.option('boundary');
 
-        if(typeUtils.isFunction(area)) {
+        if(isFunction(area)) {
             area = area.call(this);
         }
         return $(area);
@@ -668,7 +670,7 @@ const Draggable = DOMComponent.inherit({
         let container = this.option('container');
 
         if(container === undefined) {
-            container = viewPortUtils.value();
+            container = viewPort();
         }
 
         return $(container);
@@ -996,4 +998,4 @@ const Draggable = DOMComponent.inherit({
 
 registerComponent(DRAGGABLE, Draggable);
 
-module.exports = Draggable;
+export default Draggable;

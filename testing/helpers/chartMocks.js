@@ -11,6 +11,7 @@ import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
 import { isDefined } from '../../js/core/utils/type.js';
+const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
 const firstCategory = 'First';
 const secondCategory = 'Second';
@@ -363,22 +364,22 @@ export const insertMockFactory = function insertMockFactory() {
         throw 'Unexpected series request';
     });
 
-    mockItem('LoadingIndicator', loadingIndicatorModule, function(parameters) {
-        return new vizMocks.LoadingIndicator(parameters);
-    });
-
     axisModule && mockItem('Axis', axisModule, function(parameters) {
         const axis = new MockAxis(parameters);
         axis.draw = sinon.spy(axis.draw);
         return axis;
+    });
+
+    loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
+        return new vizMocks.LoadingIndicator(parameters);
     });
 };
 
 export const restoreMockFactory = function() {
     restoreItem('Point', pointModule);
     restoreItem('Series', seriesModule);
-    restoreItem('LoadingIndicator', loadingIndicatorModule);
     axisModule && restoreItem('Axis', axisModule);
+    loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicatorOrig);
 };
 
 export const resetMockFactory = function resetMockFactory() {

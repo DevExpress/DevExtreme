@@ -9,7 +9,7 @@ $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height
 QUnit.module('Title', {
     beforeEach: function() {
         const title = this.title = new vizMocks.Title();
-        titleModule.Title = sinon.spy(function() { return title; });
+        titleModule.DEBUG_set_title(sinon.spy(function() { return title; }));
         this.$container = $('#test-container');
     },
 

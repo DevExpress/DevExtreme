@@ -1,3 +1,3 @@
 
-
-module.exports = require('./data_grid/ui.data_grid');
+import DataGrid from './data_grid/ui.data_grid';
+export default DataGrid;

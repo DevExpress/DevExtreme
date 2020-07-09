@@ -1,12 +1,12 @@
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
-const noop = require('../../core/utils/common').noop;
-const Node = require('./node_item');
-const Link = require('./link_item');
-const defaultLayoutBuilder = require('./layout');
-const typeUtils = require('../../core/utils/type');
-const _isString = typeUtils.isString;
-const _isNumber = typeUtils.isNumeric;
+import { noop } from '../../core/utils/common';
+import Node from './node_item';
+import Link from './link_item';
+import defaultLayoutBuilder from './layout';
+import { isString as _isString, isNumeric as _isNumber } from '../../core/utils/type';
+import baseWidget from '../core/base_widget';
+import componentRegistrator from '../../core/component_registrator';
 
 function moveLabel(node, labelOptions, availableLabelWidth, rect) {
     if(node._label.getBBox().width > availableLabelWidth) {
@@ -48,7 +48,7 @@ function getConnectedLinks(layout, nodeName, linkType) {
     return result;
 }
 
-const dxSankey = require('../core/base_widget').inherit({
+const dxSankey = baseWidget.inherit({
     _rootClass: 'dxs-sankey',
 
     _rootClassPrefix: 'dxs',
@@ -420,8 +420,9 @@ const dxSankey = require('../core/base_widget').inherit({
     }
 });
 
-require('../../core/component_registrator')('dxSankey', dxSankey);
-module.exports = dxSankey;
+componentRegistrator('dxSankey', dxSankey);
+export default dxSankey;
 
 // PLUGINS_SECTION
-dxSankey.addPlugin(require('../core/data_source').plugin);
+import { plugin as pluginDataSource } from '../core/data_source';
+dxSankey.addPlugin(pluginDataSource);

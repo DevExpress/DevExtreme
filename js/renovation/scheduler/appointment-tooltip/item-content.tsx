@@ -28,4 +28,4 @@ export class TooltipItemContentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class TooltipItemContent extends JSXComponent(TooltipItemContentProps) {}
+export class TooltipItemContent extends JSXComponent(TooltipItemContentProps) {}

@@ -436,4 +436,4 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
 }
 
-module.exports = FileManagerDetailsItemList;
+export default FileManagerDetailsItemList;

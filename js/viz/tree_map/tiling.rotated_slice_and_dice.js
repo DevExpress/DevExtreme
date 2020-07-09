@@ -1,4 +1,4 @@
-const tiling = require('./tiling');
+import tiling from './tiling';
 const sliceAndDiceAlgorithm = tiling.getAlgorithm('sliceanddice');
 
 function rotatedSliceAndDice(data) {

@@ -4,8 +4,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { GetHtmlElement, FullPageSize } from './pager.types.d';
-import PageSizeSmall from './page-size-small';
-import PageSizeLarge from './page-size-large';
+import { PageSizeSmall } from './page-size-small';
+import { PageSizeLarge } from './page-size-large';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
@@ -51,7 +51,7 @@ export class PageSizeSelectorProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageSizeSelector
+export class PageSizeSelector
   extends JSXComponent(PageSizeSelectorProps)
   implements GetHtmlElement {
   @Ref() htmlRef!: HTMLDivElement;

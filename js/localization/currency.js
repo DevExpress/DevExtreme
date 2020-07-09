@@ -1,6 +1,6 @@
 import { extend } from '../core/utils/extend';
 
-module.exports = {
+export default {
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === 'currency') {
             formatConfig.precision = formatConfig.precision || 0;

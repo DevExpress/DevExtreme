@@ -1,8 +1,8 @@
-const commonModule = require('./common');
+import commonModule from './common';
 const animationSettings = commonModule.utils.animationSettings;
 const formatValue = commonModule.formatValue;
-const SliderMarker = require('./slider_marker');
-const support = require('../../core/utils/support');
+import SliderMarker from './slider_marker';
+import support from '../../core/utils/support';
 
 const SPLITTER_WIDTH = 8;
 const TOUCH_SPLITTER_WIDTH = 20;
@@ -106,4 +106,4 @@ Slider.prototype = {
     }
 };
 
-module.exports = Slider;
+export default Slider;

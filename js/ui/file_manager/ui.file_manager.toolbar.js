@@ -605,4 +605,4 @@ class FileManagerToolbar extends Widget {
 
 }
 
-module.exports = FileManagerToolbar;
+export default FileManagerToolbar;

@@ -1,18 +1,22 @@
-const swipeEvents = require('../swipe');
-const eventsEngine = require('../../events/core/events_engine');
-const DOMComponent = require('../../core/dom_component');
-const each = require('../../core/utils/iterator').each;
-const eventUtils = require('../utils');
-const extend = require('../../core/utils/extend').extend;
-const publicComponentUtils = require('../../core/utils/public_component');
+import {
+    start as swipeEventStart,
+    swipe as swipeEventSwipe,
+    end as swipeEventEnd
+} from '../swipe';
+import eventsEngine from '../../events/core/events_engine';
+import DOMComponent from '../../core/dom_component';
+import { each } from '../../core/utils/iterator';
+import { addNamespace } from '../utils';
+import { extend } from '../../core/utils/extend';
+import publicComponentUtils from '../../core/utils/public_component';
 
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';
 
 const ACTION_TO_EVENT_MAP = {
-    'onStart': swipeEvents.start,
-    'onUpdated': swipeEvents.swipe,
-    'onEnd': swipeEvents.end,
+    'onStart': swipeEventStart,
+    'onUpdated': swipeEventSwipe,
+    'onEnd': swipeEventEnd,
     'onCancel': 'dxswipecancel'
 };
 
@@ -53,7 +57,7 @@ const Swipeable = DOMComponent.inherit({
         each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
             const action = this._createActionByOption(actionName, { context: this });
 
-            eventName = eventUtils.addNamespace(eventName, NAME);
+            eventName = addNamespace(eventName, NAME);
 
             eventsEngine.on(this.$element(), eventName, this._eventData, function(e) {
                 return action({ event: e });
@@ -103,4 +107,4 @@ const Swipeable = DOMComponent.inherit({
 
 publicComponentUtils.name(Swipeable, DX_SWIPEABLE);
 
-module.exports = Swipeable;
+export default Swipeable;

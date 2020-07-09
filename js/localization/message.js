@@ -118,4 +118,4 @@ const messageLocalization = dependencyInjector({
     }
 });
 
-module.exports = messageLocalization;
+export default messageLocalization;

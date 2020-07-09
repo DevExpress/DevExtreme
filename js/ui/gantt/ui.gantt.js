@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import typeUtils from '../../core/utils/type';
+import { isString } from '../../core/utils/type';
 import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
 import dataCoreUtils from '../../core/utils/data';
@@ -246,7 +246,7 @@ class Gantt extends Widget {
 
         this._$treeListWrapper.width(leftPanelWidth);
 
-        const isPercentage = typeUtils.isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
+        const isPercentage = isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
         this._$treeList.width(isPercentage ? '100%' : leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
@@ -834,4 +834,4 @@ class Gantt extends Widget {
 }
 
 registerComponent('dxGantt', Gantt);
-module.exports = Gantt;
+export default Gantt;

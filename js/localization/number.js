@@ -367,4 +367,4 @@ if(hasIntl) {
     numberLocalization.inject(intlNumberLocalization);
 }
 
-module.exports = numberLocalization;
+export default numberLocalization;

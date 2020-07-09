@@ -1,6 +1,6 @@
 const _Number = Number;
 
-function Translator1D() {
+export function Translator1D() {
     this.setDomain(arguments[0], arguments[1]).setCodomain(arguments[2], arguments[3]);
 }
 
@@ -73,5 +73,3 @@ Translator1D.prototype = {
         return result;
     }
 };
-
-exports.Translator1D = Translator1D;

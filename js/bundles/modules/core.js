@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 const windowUtils = require('../../core/utils/window');
 const window = windowUtils.getWindow();
 

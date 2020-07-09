@@ -1,10 +1,10 @@
-const isDefined = require('../../core/utils/type').isDefined;
-const adjust = require('../../core/utils/math').adjust;
+import { isDefined } from '../../core/utils/type';
+import { adjust } from '../../core/utils/math';
 const round = Math.round;
 
 function getValue(value) { return value; }
 
-module.exports = {
+export default {
     translate: function(category, directionOffset) {
         const that = this;
         const canvasOptions = that._canvasOptions;

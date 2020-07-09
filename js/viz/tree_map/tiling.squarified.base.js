@@ -1,6 +1,6 @@
 const _max = Math.max;
 const _round = Math.round;
-const tiling = require('./tiling');
+import tiling from './tiling';
 
 function compare(a, b) { return b.value - a.value; }
 
@@ -55,7 +55,7 @@ function doStep(nodes, head, context) {
     return head + rowData.count;
 }
 
-module.exports = function(data, accumulate, isFixedStaticSide) {
+export default function(data, accumulate, isFixedStaticSide) {
     const items = data.items;
     const ii = items.length;
     let i;
@@ -72,4 +72,4 @@ module.exports = function(data, accumulate, isFixedStaticSide) {
     for(i = 0; i < ii;) {
         i = doStep(items, i, context);
     }
-};
+}

@@ -3,7 +3,7 @@ import {
   ComponentBindings, JSXComponent, OneWay, Component, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
 
-import LightButton from './light-button';
+import { LightButton } from './light-button';
 import { FullPageSize } from './pager.types.d';
 import { PAGER_SELECTION_CLASS } from './consts';
 
@@ -33,7 +33,7 @@ export class PageSizeLargeProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PageSizeLarge extends JSXComponent(PageSizeLargeProps) {
+export class PageSizeLarge extends JSXComponent(PageSizeLargeProps) {
   get pageSizesText() {
     const { pageSize, pageSizes } = this.props;
     return pageSizes.map(({ value: processedPageSize, text }) => {

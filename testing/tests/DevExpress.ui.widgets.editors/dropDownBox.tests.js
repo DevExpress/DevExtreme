@@ -661,9 +661,8 @@ QUnit.module('popup options', moduleConfig, () => {
                 assert.expect(0);
                 return;
             }
-
-            const originalRealDeviceIsMac = DropDownBox.realDevice.mac;
-            DropDownBox.realDevice.mac = isMac;
+            const originalRealDeviceIsMac = DropDownBox.prototype._realDevice.mac;
+            DropDownBox.prototype._realDevice.mac = isMac;
 
             try {
                 const $content = $('<input type="text" />');
@@ -678,7 +677,7 @@ QUnit.module('popup options', moduleConfig, () => {
 
                 assert.strictEqual(instance.option('opened'), isMac);
             } finally {
-                DropDownBox.realDevice.mac = originalRealDeviceIsMac;
+                DropDownBox.prototype._realDevice.mac = originalRealDeviceIsMac;
             }
         });
     });

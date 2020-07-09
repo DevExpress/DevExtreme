@@ -1,5 +1,7 @@
-const window = require('../../core/utils/window').getWindow();
-const typeUtils = require('../utils/type');
+import { getWindow } from '../../core/utils/window';
+import { isWindow, isString, isNumeric } from '../utils/type';
+
+const window = getWindow();
 
 const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 
@@ -66,7 +68,7 @@ const getSize = function(element, name, include) {
 };
 
 const getContainerHeight = function(container) {
-    return typeUtils.isWindow(container) ? container.innerHeight : container.offsetHeight;
+    return isWindow(container) ? container.innerHeight : container.offsetHeight;
 };
 
 const parseHeight = function(value, container) {
@@ -90,11 +92,11 @@ const getHeightWithOffset = function(value, offset, container) {
         return offset ? null : value;
     }
 
-    if(typeUtils.isString(value)) {
+    if(isString(value)) {
         value = parseHeight(value, container);
     }
 
-    if(typeUtils.isNumeric(value)) {
+    if(isNumeric(value)) {
         return Math.max(0, value + offset);
     }
 
@@ -137,10 +139,12 @@ const getVisibleHeight = function(element) {
     return 0;
 };
 
-exports.getSize = getSize;
-exports.getElementBoxParams = getElementBoxParams;
-exports.addOffsetToMaxHeight = addOffsetToMaxHeight;
-exports.addOffsetToMinHeight = addOffsetToMinHeight;
-exports.getVerticalOffsets = getVerticalOffsets;
-exports.getVisibleHeight = getVisibleHeight;
-exports.parseHeight = parseHeight;
+export {
+    getSize,
+    getElementBoxParams,
+    addOffsetToMaxHeight,
+    addOffsetToMinHeight,
+    getVerticalOffsets,
+    getVisibleHeight,
+    parseHeight
+};

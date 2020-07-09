@@ -1,5 +1,5 @@
-const errors = require('./errors');
-const typeUtils = require('./utils/type');
+import errors from './errors';
+import { isWindow } from './utils/type';
 
 const wrapOverridden = function(baseProto, methodName, method) {
     return function() {
@@ -122,7 +122,7 @@ const classImpl = function() { };
 
 classImpl.inherit = function(members) {
     const inheritor = function() {
-        if(!this || typeUtils.isWindow(this) || typeof this.constructor !== 'function') {
+        if(!this || isWindow(this) || typeof this.constructor !== 'function') {
             throw errors.Error('E0003');
         }
 
@@ -167,4 +167,4 @@ classImpl.inherit = function(members) {
 
 classImpl.abstract = abstract;
 
-module.exports = classImpl;
+export default classImpl;

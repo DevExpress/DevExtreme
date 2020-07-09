@@ -1,8 +1,8 @@
-const eventsEngine = require('../../events/core/events_engine');
-const browser = require('../../core/utils/browser');
-const domAdapter = require('../../core/dom_adapter');
-const Class = require('../../core/class');
-const eventUtils = require('../utils');
+import eventsEngine from '../../events/core/events_engine';
+import browser from '../../core/utils/browser';
+import domAdapter from '../../core/dom_adapter';
+import Class from '../../core/class';
+import { addNamespace, eventSource, fireEvent } from '../utils';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
@@ -11,7 +11,7 @@ const BaseStrategy = Class.inherit({
 
     ctor: function(eventName, originalEvents) {
         this._eventName = eventName;
-        this._originalEvents = eventUtils.addNamespace(originalEvents, POINTER_EVENTS_NAMESPACE);
+        this._originalEvents = addNamespace(originalEvents, POINTER_EVENTS_NAMESPACE);
         this._handlerCount = 0;
         this.noBubble = this._isNoBubble();
     },
@@ -28,7 +28,7 @@ const BaseStrategy = Class.inherit({
 
         return this._fireEvent({
             type: this._eventName,
-            pointerType: e.pointerType || eventUtils.eventSource(e),
+            pointerType: e.pointerType || eventSource(e),
             originalEvent: e,
             delegateTarget: delegateTarget,
             // NOTE: TimeStamp normalization (FF bug #238041) (T277118)
@@ -47,7 +47,7 @@ const BaseStrategy = Class.inherit({
     },
 
     _fireEvent: function(args) {
-        return eventUtils.fireEvent(args);
+        return fireEvent(args);
     },
 
     _setSelector: function(handleObj) {
@@ -105,4 +105,4 @@ const BaseStrategy = Class.inherit({
     }
 });
 
-module.exports = BaseStrategy;
+export default BaseStrategy;

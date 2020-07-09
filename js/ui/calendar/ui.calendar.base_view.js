@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import dataUtils from '../../core/element_data';
+import { data as elementData } from '../../core/element_data';
 import { getPublicElement } from '../../core/element';
 import Widget from '../widget/ui.widget';
 import { fixTimezoneGap, getShortDateFormat, getFirstDateView } from '../../core/utils/date';
@@ -130,7 +130,7 @@ const BaseView = Widget.inherit({
         cell.className = this._getClassNameByDate(cellDate);
 
         cell.setAttribute('data-value', serializeDate(cellDate, getShortDateFormat()));
-        dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
+        elementData(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
 
         this.setAria({
             'role': 'gridcell',
@@ -331,4 +331,4 @@ const BaseView = Widget.inherit({
     }
 });
 
-module.exports = BaseView;
+export default BaseView;

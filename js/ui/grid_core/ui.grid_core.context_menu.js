@@ -100,7 +100,7 @@ const ContextMenuView = modules.View.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             onContextMenuPreparing: null

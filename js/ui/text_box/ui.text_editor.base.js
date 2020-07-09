@@ -814,4 +814,4 @@ const TextEditorBase = Editor.inherit({
     }
 });
 
-module.exports = TextEditorBase;
+export default TextEditorBase;

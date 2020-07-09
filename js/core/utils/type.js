@@ -85,19 +85,21 @@ const isDeferred = function(object) {
     return object && isFunction(object.done) && isFunction(object.fail);
 };
 
-exports.isBoolean = isBoolean;
-exports.isExponential = isExponential;
-exports.isDate = isDate;
-exports.isDefined = isDefined;
-exports.isFunction = isFunction;
-exports.isString = isString;
-exports.isNumeric = isNumeric;
-exports.isObject = isObject;
-exports.isEmptyObject = isEmptyObject;
-exports.isPlainObject = isPlainObject;
-exports.isPrimitive = isPrimitive;
-exports.isWindow = isWindow;
-exports.isRenderer = isRenderer;
-exports.isPromise = isPromise;
-exports.isDeferred = isDeferred;
-exports.type = type;
+export {
+    isBoolean,
+    isExponential,
+    isDate,
+    isDefined,
+    isFunction,
+    isString,
+    isNumeric,
+    isObject,
+    isEmptyObject,
+    isPlainObject,
+    isPrimitive,
+    isWindow,
+    isRenderer,
+    isPromise,
+    isDeferred,
+    type
+};
