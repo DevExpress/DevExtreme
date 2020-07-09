@@ -2,6 +2,7 @@ import Class from '../../core/class';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
+import { hasWindow } from '../../core/utils/window';
 import { format } from '../../format_helper';
 import { parse } from '../../localization/number';
 import clientExporter, { excel as excelExporter } from '../../exporter';
@@ -188,7 +189,9 @@ exports.DataProvider = Class.inherit({
     },
 
     getColumnsWidths: function() {
-        return this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth());
+        return hasWindow()
+            ? this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth())
+            : this._options.columns.map(col => col.width);
     },
 
     getRowsCount: function() {
