@@ -594,25 +594,25 @@ const dxChart = AdvancedChart.inherit({
         const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane && (!valueAxisName || valueAxisName === v.name))[0];
 
         that._valueAxes.forEach(v => {
-            if(argumentAxis !== v.getOppositeAxis()) {
-                v.getOppositeAxis = () => {
+            if(argumentAxis !== v.getOrthogonalAxis()) {
+                v.getOrthogonalAxis = () => {
                     return argumentAxis;
                 };
-                v.customPositionIsBoundaryOppositeAxis = () => {
+                v.customPositionIsBoundaryOrthogonalAxis = () => {
                     return argumentAxis.customPositionIsBoundary();
                 };
             }
         });
 
-        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getOppositeAxis()) {
-            argumentAxis.getOppositeAxis = () => {
+        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getOrthogonalAxis()) {
+            argumentAxis.getOrthogonalAxis = () => {
                 return valueAxis;
             };
-            argumentAxis.customPositionIsBoundaryOppositeAxis = () => {
+            argumentAxis.customPositionIsBoundaryOrthogonalAxis = () => {
                 return that._valueAxes.some(v => v.customPositionIsBoundary());
             };
-        } else if(_isDefined(argumentAxis.getOppositeAxis()) && !_isDefined(valueAxis)) {
-            argumentAxis.getOppositeAxis = noop;
+        } else if(_isDefined(argumentAxis.getOrthogonalAxis()) && !_isDefined(valueAxis)) {
+            argumentAxis.getOrthogonalAxis = noop;
         }
     },
 
@@ -998,6 +998,8 @@ const dxChart = AdvancedChart.inherit({
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             performActionOnAxes(allAxes, 'prepareAnimation');
             that._renderScaleBreaks();
+            horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
+            verticalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(horizontalAxes));
             return false;
         }
         if(needCustomAdjustAxes) {
@@ -1070,8 +1072,11 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
         }
+
+        horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
+        verticalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(horizontalAxes));
 
         return cleanPanesCanvases;
     },
