@@ -14,7 +14,7 @@ define(function(require) {
 
     const $ = require('jquery');
     const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
-    const pivotGridDataSource = require('ui/pivot_grid/data_source');
+    const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source.utils');
     const XmlaStore = require('ui/pivot_grid/xmla_store');
 
     const CATEGORIES_DATA = [
@@ -145,7 +145,7 @@ define(function(require) {
 
             this.load = function(options) {
                 return this.store.load(options).done(function(data) {
-                    pivotGridDataSource.sort(options, data);
+                    pivotGridDataSourceUtils.sort(options, data);
                 });
             };
 
