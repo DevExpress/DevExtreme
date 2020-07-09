@@ -189,9 +189,10 @@ export const DataProvider = Class.inherit({
     },
 
     getColumnsWidths: function() {
-        return hasWindow()
-            ? this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth())
-            : this._options.columns.map(col => col.width);
+        const useDefaultWidth = !hasWindow() || this._options.columnsArea.option('scrolling.mode') === 'virtual';
+        return useDefaultWidth
+            ? this._options.columns.map(_ => DEFAUL_COLUMN_WIDTH)
+            : this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth());
     },
 
     getRowsCount: function() {
@@ -290,3 +291,9 @@ export const DataProvider = Class.inherit({
         }
     },
 });
+
+//#DEBUG
+export const PivotGridExport = {
+    DEFAUL_COLUMN_WIDTH
+};
+//#ENDDEBUG
