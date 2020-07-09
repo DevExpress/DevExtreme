@@ -62,11 +62,11 @@ export class RenovatedPagerForTest extends RenovatedPager {
         return super.option.apply(this, arguments);
     }
     _dimensionChanged() {
-        if(!this.theRoofIsOnFire) {
-            this.theRoofIsOnFire = true;
+        if(!this.firing) {
+            this.firing = true;
             act(() => resizeCallbacks.fire());
         }
-        this.theRoofIsOnFire = false;
+        this.firing = false;
     }
     _selectPageByValue(pageIndex) {
         const pages = this._pages;

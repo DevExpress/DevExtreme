@@ -54,7 +54,7 @@ QUnit.module_r('Pager', {
     const getPagesElement = function(rootElement) {
         return rootElement.find('.dx-pages')[0].childNodes;
     };
-    QUnit.test('Disscus with renovation Default options init', function(assert) {
+    QUnit.test('Default options init', function(assert) {
         const $pager = $('#container').dxPager();
         const instance = $pager.dxPager('instance');
 
