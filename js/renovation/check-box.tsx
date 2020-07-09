@@ -13,6 +13,7 @@ import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import { InkRipple } from './ink-ripple';
 import { Widget } from './widget';
+import * as themes from '../ui/themes';
 import BaseComponent from './preact-wrapper/check_box';
 import BaseWidgetProps from './utils/base-props';
 
@@ -69,7 +70,7 @@ export const viewFunction = (viewModel: CheckBox): any => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.submitInputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
+      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
       <div className="dx-checkbox-container">
         <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
@@ -115,6 +116,10 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   device: (): boolean => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
+}, {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  device: (): boolean => (themes as any).isMaterial((themes as any).current()),
+  options: { useInkRipple: true },
 }]);
 
 @Component({
@@ -131,7 +136,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Ref() inkRippleRef!: InkRipple;
 
-  @Ref() submitInputRef!: HTMLInputElement;
+  @Ref() inputRef!: HTMLInputElement;
 
   @Ref() widgetRef!: Widget;
 
@@ -144,7 +149,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   contentReadyEffect(): void {
     const { onContentReady } = this.props;
     // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-    onContentReady!({ element: this.submitInputRef.parentNode });
+    onContentReady!({ element: this.widgetRef });
   }
 
   onActive(event: Event): void {
@@ -208,7 +213,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
     return {
       role: 'checkbox',
-      checked: indeterminate ? 'mixed' : checked || 'false',
+      checked: indeterminate ? 'mixed' : `${checked}` || 'false',
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
     };
