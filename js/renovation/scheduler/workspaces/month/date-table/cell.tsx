@@ -1,31 +1,18 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-
-const getCssClasses = (model: MonthDateTableCellProps): string => {
-  const {
-    otherMonth,
-  } = model;
-  const classNames = [
-    'dx-scheduler-date-table-cell',
-    'dx-scheduler-cell-sizes-horizontal',
-    'dx-scheduler-cell-sizes-vertical',
-  ];
-  otherMonth && classNames.push('dx-scheduler-date-table-other-month');
-
-  return classNames.join(' ');
-};
+import DateTableCell from '../../base/date-table/cell';
 
 export const viewFunction = (viewModel: MonthDateTableCell) => (
-  <td
-    className={viewModel.classes}
+  <DateTableCell
+    className={viewModel.className}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
     <div>
       {viewModel.props.startDate!.getDate()}
     </div>
-  </td>
+  </DateTableCell>
 );
 
 @ComponentBindings()
@@ -42,7 +29,8 @@ export class MonthDateTableCellProps {
   view: viewFunction,
 })
 export default class MonthDateTableCell extends JSXComponent(MonthDateTableCellProps) {
-  get classes(): string {
-    return getCssClasses(this.props);
+  get className(): string | undefined {
+    const { otherMonth } = this.props;
+    return otherMonth ? 'dx-scheduler-date-table-other-month' : undefined;
   }
 }
