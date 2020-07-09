@@ -1,22 +1,30 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../js/renovation/scheduler/workspaces/month/layout';
 import { MonthDateTableLayout } from '../../../../../js/renovation/scheduler/workspaces/month/date-table/layout';
+import { HeaderPanelLayout } from '../../../../../js/renovation/scheduler/workspaces/base/header-panel/layout';
 
 jest.mock('../../../../../js/renovation/scheduler/workspaces/base/layout', () => ({
-  LayoutBase: (props) => <div {...props} />,
+  LayoutBase: (props) => (
+    <div {...props}>
+      <props.headerPanelTemplate />
+      <props.dateTableTemplate />
+    </div>
+  ),
+}));
+jest.mock('../../../../../js/renovation/scheduler/workspaces/month/date-table/layout', () => ({
+  MonthDateTableLayout: () => null,
+}));
+jest.mock('../../../../../js/renovation/scheduler/workspaces/base/header-panel/layout', () => ({
+  HeaderPanelLayout: () => null,
 }));
 
 describe('MonthLayout', () => {
   describe('Render', () => {
-    const headerPanelTemplate = () => null;
-    const dateTableTemplate = () => null;
     const viewCellsData = 'Test data';
-    const render = (viewModel) => shallow(LayoutView({
+    const render = (viewModel) => mount(LayoutView({
       ...viewModel,
       props: {
-        headerPanelTemplate,
-        dateTableTemplate,
         viewCellsData,
         ...viewModel.props,
       },
@@ -38,6 +46,10 @@ describe('MonthLayout', () => {
           headerPanelTemplate: expect.any(Function),
           viewCellsData,
         });
+      expect(layout.find(MonthDateTableLayout).exists())
+        .toBe(true);
+      expect(layout.find(HeaderPanelLayout).exists())
+        .toBe(true);
     });
   });
 });
