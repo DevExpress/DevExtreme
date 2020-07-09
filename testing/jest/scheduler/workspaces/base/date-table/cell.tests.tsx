@@ -1,7 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import {
-  DateTableCellBase as Cell,
   viewFunction as CellView,
 } from '../../../../../../js/renovation/scheduler/workspaces/base/date-table/cell';
 
@@ -12,10 +11,16 @@ describe('DateTableCellBase', () => {
       props: { ...viewModel.props },
     } as any) as any);
 
-    it('should pass correct class', () => {
-      const cell = render({ classes: 'test' });
+    it('should combine `className` with predefined classes', () => {
+      const cell = render({ props: { className: 'test' } });
 
-      expect(cell.is('.test'))
+      expect(cell.hasClass('test'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-date-table-cell'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-cell-sizes-horizontal'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-cell-sizes-vertical'))
         .toBe(true);
     });
 
@@ -31,28 +36,6 @@ describe('DateTableCellBase', () => {
 
       expect(cell.find('.child').exists())
         .toBe(true);
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Getters', () => {
-      describe('classes', () => {
-        it('should combine predefined classes with custom className', () => {
-          const cell = new Cell({
-            className: 'test',
-          });
-
-          expect(cell.classes)
-            .toEqual('dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal dx-scheduler-cell-sizes-vertical test');
-        });
-
-        it('should return predefined classes if className is undefined', () => {
-          const cell = new Cell({});
-
-          expect(cell.classes)
-            .toEqual('dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal dx-scheduler-cell-sizes-vertical');
-        });
-      });
     });
   });
 });

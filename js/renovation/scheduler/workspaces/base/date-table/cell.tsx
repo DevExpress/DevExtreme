@@ -2,20 +2,12 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
 
-const getCssClasses = ({ className }: DateTableCellBaseProps): string => {
-  const classNames = [
-    'dx-scheduler-date-table-cell',
-    'dx-scheduler-cell-sizes-horizontal',
-    'dx-scheduler-cell-sizes-vertical',
-  ];
-  className && classNames.push(className);
-
-  return classNames.join(' ');
-};
-
 export const viewFunction = (viewModel: DateTableCellBase) => (
   <td
-    className={viewModel.classes}
+    className={
+      `dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal
+      dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`
+    }
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
@@ -38,8 +30,4 @@ export class DateTableCellBaseProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
-  get classes(): string {
-    return getCssClasses(this.props);
-  }
-}
+export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {}
