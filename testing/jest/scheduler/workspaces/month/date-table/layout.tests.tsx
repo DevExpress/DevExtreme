@@ -6,7 +6,7 @@ import Cell from '../../../../../../js/renovation/scheduler/workspaces/month/dat
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => () => null);
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell', () => () => null);
 
-describe('HeaderPanelLayoutBase', () => {
+describe('Month DateTableLayout', () => {
   describe('Render', () => {
     const viewCellsData = [[
       { startDate: new Date(2020, 6, 9), endDate: new Date(2020, 6, 10), today: true },
