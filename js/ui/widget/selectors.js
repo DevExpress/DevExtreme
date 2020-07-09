@@ -1,7 +1,7 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
 
-const focusable = function(element, tabIndex) {
+const focusableFn = function(element, tabIndex) {
     if(!visible(element)) {
         return false;
     }
@@ -31,18 +31,16 @@ function visible(element) {
     return $element.is(':visible') && $element.css('visibility') !== 'hidden' && $element.parents().css('visibility') !== 'hidden';
 }
 
-module.exports = {
-    focusable: function(index, element) {
-        return focusable(element, $(element).attr('tabIndex'));
-    },
-    tabbable: function(index, element) {
-        const tabIndex = $(element).attr('tabIndex');
-        return (isNaN(tabIndex) || tabIndex >= 0) && focusable(element, tabIndex);
-    },
+export const focusable = function(index, element) {
+    return focusableFn(element, $(element).attr('tabIndex'));
+};
+export const tabbable = function(index, element) {
+    const tabIndex = $(element).attr('tabIndex');
+    return (isNaN(tabIndex) || tabIndex >= 0) && focusableFn(element, tabIndex);
+};
     // note: use this method instead of is(":focus")
-    focused: function($element) {
-        const element = $($element).get(0);
-        return domAdapter.getActiveElement() === element;
-    }
+export const focused = function($element) {
+    const element = $($element).get(0);
+    return domAdapter.getActiveElement() === element;
 };
 

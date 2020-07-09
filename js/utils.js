@@ -1,3 +1,7 @@
+import { compileGetter, compileSetter } from './core/utils/data';
 
-exports.compileGetter = require('./core/utils/data').compileGetter;
-exports.compileSetter = require('./core/utils/data').compileSetter;
+
+export {
+    compileGetter,
+    compileSetter
+};

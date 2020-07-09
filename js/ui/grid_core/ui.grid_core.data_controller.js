@@ -6,13 +6,13 @@ import CustomStore from '../../data/custom_store';
 import errors from '../widget/ui.errors';
 import { noop, deferRender, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import typeUtils from '../../core/utils/type';
+import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import DataHelperMixin from '../../data_helper';
 import { when, Deferred } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             loadingTimeout: 0,
@@ -326,7 +326,7 @@ module.exports = {
                             filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
                             filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
 
-                            if(Array.isArray(filterValues) || e.columnIndex === undefined || typeUtils.isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
+                            if(Array.isArray(filterValues) || e.columnIndex === undefined || isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
                                 that._applyFilter();
                                 filterApplied = true;
                             }
@@ -337,9 +337,9 @@ module.exports = {
                             that._columnsController.columnsChanged.add(updateItemsHandler);
                         }
 
-                        if(typeUtils.isDefined(optionNames.visible)) {
+                        if(isDefined(optionNames.visible)) {
                             const column = that._columnsController.columnOption(e.columnIndex);
-                            if(column && (typeUtils.isDefined(column.filterValue) || typeUtils.isDefined(column.filterValues))) {
+                            if(column && (isDefined(column.filterValue) || isDefined(column.filterValues))) {
                                 that._applyFilter();
                                 filterApplied = true;
                             }
@@ -498,7 +498,7 @@ module.exports = {
                     const result = [];
 
                     each(items, function(index, item) {
-                        if(typeUtils.isDefined(item)) {
+                        if(isDefined(item)) {
                             options.rowIndex = index - rowIndexDelta;
                             item = that._processItem(item, options);
                             result.push(item);
@@ -1034,12 +1034,12 @@ module.exports = {
                     const oldDataSource = that._dataSource;
 
                     if(!dataSource && oldDataSource) {
+                        oldDataSource.cancelAll();
                         oldDataSource.changed.remove(that._dataChangedHandler);
                         oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
-                        oldDataSource.cancelAll();
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1235,7 +1235,7 @@ module.exports = {
                 repaintRows: function(rowIndexes, changesOnly) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
-                    if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
+                    if(rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
                         this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
                     }
                 },

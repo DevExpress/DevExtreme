@@ -17,6 +17,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
+import { setScrollView } from 'ui/list/ui.list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
@@ -131,7 +132,7 @@ const moduleSetup = {
         this.element = $('#list');
 
         this.originalScrollView = ScrollView;
-        List.mockScrollView(ScrollViewMock);
+        setScrollView(ScrollViewMock);
         registerComponent('dxScrollView', ScrollViewMock);
 
         this.clock = sinon.useFakeTimers();
@@ -140,7 +141,7 @@ const moduleSetup = {
     afterEach: function() {
         executeAsyncMock.teardown();
 
-        List.mockScrollView(ScrollView);
+        setScrollView(ScrollView);
         registerComponent('dxScrollView', this.originalScrollView);
 
         this.clock.restore();
@@ -527,7 +528,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('scrollView should be updated after group collapsed', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const $element = this.element.dxList({
@@ -560,7 +561,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('scrollView should update its position after a group has been collapsed', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const $element = this.element.dxList({
@@ -623,7 +624,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('more button shouldn\'t disappear after group collapsed with array store', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const $element = this.element.dxList({
@@ -655,7 +656,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('more button shouldn\'t disappear after group collapsed with custom store', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const data = [
@@ -1446,7 +1447,7 @@ QUnit.module('events', moduleSetup, () => {
 
 QUnit.module('dataSource integration', moduleSetup, () => {
     QUnit.test('pageLoading should be ordered for async dataSource (T233998)', function(assert) {
-        List.mockScrollView(ScrollViewMock.inherit({
+        setScrollView(ScrollViewMock.inherit({
             isFull() {
                 return false;
             }
@@ -1686,7 +1687,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
     });
 
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
-        List.mockScrollView(ScrollViewMock.inherit({
+        setScrollView(ScrollViewMock.inherit({
             isFull() {
                 return false;
             }

@@ -10,17 +10,15 @@ import {
   Template,
   Slot,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
 import * as themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
-import Icon from './icon';
-import InkRipple from './ink-ripple';
-import Widget from './widget';
+import { Icon } from './icon';
+import { InkRipple } from './ink-ripple';
+import { Widget } from './widget';
 import BaseWidgetProps from './utils/base-props';
 import BaseComponent from './preact-wrapper/button';
 
@@ -147,7 +145,7 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   view: viewFunction,
 })
 
-export default class Button extends JSXComponent(ButtonProps) {
+export class Button extends JSXComponent(ButtonProps) {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;

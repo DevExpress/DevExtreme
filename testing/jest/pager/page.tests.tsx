@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import Page, { viewFunction as PageComponent } from '../../../js/renovation/pager/page';
+import { Page, viewFunction as PageComponent } from '../../../js/renovation/pager/page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../../js/renovation/pager/consts';
 
 describe('Small pager pages', () => {

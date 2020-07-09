@@ -1743,4 +1743,4 @@ const PivotGrid = Widget.inherit({
 
 registerComponent('dxPivotGrid', PivotGrid);
 
-module.exports = PivotGrid;
+export default PivotGrid;

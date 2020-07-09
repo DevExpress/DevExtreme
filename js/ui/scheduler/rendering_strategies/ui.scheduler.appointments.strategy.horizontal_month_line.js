@@ -55,4 +55,4 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     }
 }
 
-module.exports = HorizontalMonthLineRenderingStrategy;
+export default HorizontalMonthLineRenderingStrategy;

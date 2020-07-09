@@ -403,4 +403,4 @@ class Button extends Widget {
 
 registerComponent('dxButton', Button);
 
-module.exports = Button;
+export default Button;

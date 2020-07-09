@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, Effect, OneWay,
 } from 'devextreme-generator/component_declaration/common';
@@ -29,7 +27,7 @@ export class MarkerProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class Marker extends JSXComponent(MarkerProps) {
+export class Marker extends JSXComponent(MarkerProps) {
   appointmentColor!: Color;
 
   @Effect()

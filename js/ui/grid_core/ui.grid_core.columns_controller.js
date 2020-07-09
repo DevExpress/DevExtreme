@@ -36,7 +36,7 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             commonColumnSettings: {

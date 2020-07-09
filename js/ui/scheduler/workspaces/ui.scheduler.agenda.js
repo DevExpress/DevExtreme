@@ -485,4 +485,5 @@ class SchedulerAgenda extends SchedulerWorkSpace {
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);
-module.exports = SchedulerAgenda;
+
+export default SchedulerAgenda;

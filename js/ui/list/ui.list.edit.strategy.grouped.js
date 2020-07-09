@@ -1,9 +1,9 @@
-const $ = require('../../core/renderer');
-const isNumeric = require('../../core/utils/type').isNumeric;
-const each = require('../../core/utils/iterator').each;
-const queryByOptions = require('../../data/store_helper').queryByOptions;
-const query = require('../../data/query');
-const EditStrategy = require('../collection/ui.collection_widget.edit.strategy.plain');
+import $ from '../../core/renderer';
+import { isNumeric } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { queryByOptions } from '../../data/store_helper';
+import query from '../../data/query';
+import EditStrategy from '../collection/ui.collection_widget.edit.strategy.plain';
 
 
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -251,4 +251,4 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
 });
 
-module.exports = GroupedEditStrategy;
+export default GroupedEditStrategy;

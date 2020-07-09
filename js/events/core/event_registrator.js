@@ -32,4 +32,4 @@ const registerEvent = function(name, eventObject) {
 };
 registerEvent.callbacks = callbacks;
 
-module.exports = registerEvent;
+export default registerEvent;

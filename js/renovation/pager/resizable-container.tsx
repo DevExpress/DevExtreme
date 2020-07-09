@@ -2,8 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent,
   Ref, Effect, Template, InternalState, Event,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import PagerProps from './pager-props';
 import { GetHtmlElement } from './pager.types.d';
@@ -126,7 +125,7 @@ export class ResizableContainerProps extends PagerProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class ResizableContainer extends JSXComponent(ResizableContainerProps) {
+export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
   @Ref() parentRef!: HTMLElement;
 
   @Ref() pageSizesRef!: GetHtmlElement;

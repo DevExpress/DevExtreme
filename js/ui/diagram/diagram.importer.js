@@ -1,12 +1,10 @@
-const Errors = require('../widget/ui.errors');
-const Diagram = require('devexpress-diagram');
+import Errors from '../widget/ui.errors';
+import * as Diagram from 'devexpress-diagram';
 
-function getDiagram() {
-    if(!Diagram) {
+export function getDiagram() {
+    if(!Diagram.DiagramCommand) {
         throw Errors.Error('E1041', 'devexpress-diagram');
     }
 
     return Diagram;
 }
-
-module.exports.getDiagram = getDiagram;

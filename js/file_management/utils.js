@@ -1,23 +1,23 @@
 import { each } from '../core/utils/iterator';
 
-const PATH_SEPARATOR = '/';
+export const PATH_SEPARATOR = '/';
 
-const getFileExtension = path => {
+export const getFileExtension = path => {
     const index = path.lastIndexOf('.');
     return index !== -1 ? path.substr(index) : '';
 };
 
-const getName = path => {
+export const getName = path => {
     const index = path.lastIndexOf(PATH_SEPARATOR);
     return index !== -1 ? path.substr(index + PATH_SEPARATOR.length) : path;
 };
 
-const getParentPath = path => {
+export const getParentPath = path => {
     const index = path.lastIndexOf(PATH_SEPARATOR);
     return index !== -1 ? path.substr(0, index) : '';
 };
 
-const getPathParts = (path, includeFullPath) => {
+export const getPathParts = (path, includeFullPath) => {
     if(!path || path === '/') {
         return [];
     }
@@ -53,11 +53,11 @@ const getPathParts = (path, includeFullPath) => {
     return result;
 };
 
-const getEscapedFileName = function(fileName) {
+export const getEscapedFileName = function(fileName) {
     return fileName.replace(/\//g, '//');
 };
 
-const pathCombine = function() {
+export const pathCombine = function() {
     let result = '';
 
     each(arguments, (_, arg) => {
@@ -72,11 +72,3 @@ const pathCombine = function() {
 
     return result;
 };
-
-module.exports.getFileExtension = getFileExtension;
-module.exports.getName = getName;
-module.exports.getParentPath = getParentPath;
-module.exports.getPathParts = getPathParts;
-module.exports.getEscapedFileName = getEscapedFileName;
-module.exports.pathCombine = pathCombine;
-module.exports.PATH_SEPARATOR = PATH_SEPARATOR;

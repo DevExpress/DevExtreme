@@ -1,5 +1,5 @@
-const $ = require('../../core/renderer');
-const CollectionWidgetItem = require('../collection/item');
+import $ from '../../core/renderer';
+import CollectionWidgetItem from '../collection/item';
 
 const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 const BADGE_CLASS = 'dx-badge';
@@ -29,4 +29,4 @@ const TabsItem = CollectionWidgetItem.inherit({
 
 });
 
-module.exports = TabsItem;
+export default TabsItem;

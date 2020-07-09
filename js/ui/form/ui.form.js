@@ -16,13 +16,13 @@ import Widget from '../widget/ui.widget';
 import Editor from '../editor/editor';
 import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import ValidationEngine from '../validation_engine';
-import LayoutManager from './ui.form.layout_manager';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import themes from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
+import './ui.form.layout_manager';
 import {
     concatPaths,
     createItemPathByIndex,
@@ -1385,14 +1385,4 @@ const Form = Widget.inherit({
 
 registerComponent('dxForm', Form);
 
-module.exports = Form;
-
-//#DEBUG
-module.exports.__internals = extend({
-    FORM_CLASS: FORM_CLASS,
-    FORM_GROUP_CLASS: FORM_GROUP_CLASS,
-    FORM_GROUP_CAPTION_CLASS: FORM_GROUP_CAPTION_CLASS,
-    FORM_FIELD_ITEM_COL_CLASS: FORM_FIELD_ITEM_COL_CLASS
-}, LayoutManager.__internals);
-
-//#ENDDEBUG
+export default Form;

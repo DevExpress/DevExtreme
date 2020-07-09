@@ -2,7 +2,7 @@ import { isDefined } from '../../core/utils/type';
 import treeListCore from './ui.tree_list.core';
 import columnsControllerModule from '../grid_core/ui.grid_core.columns_controller';
 
-exports.ColumnsController = columnsControllerModule.controllers.columns.inherit((function() {
+export const ColumnsController = columnsControllerModule.controllers.columns.inherit((function() {
     return {
         _getFirstItems: function(dataSourceAdapter) {
             return this.callBase(dataSourceAdapter).map(function(node) {
@@ -29,7 +29,7 @@ exports.ColumnsController = columnsControllerModule.controllers.columns.inherit(
 treeListCore.registerModule('columns', {
     defaultOptions: columnsControllerModule.defaultOptions,
     controllers: {
-        columns: exports.ColumnsController
+        columns: ColumnsController
     }
 });
 

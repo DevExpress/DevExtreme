@@ -166,7 +166,7 @@ const escapeChars = function(pattern, defaultPattern, processedIndexes, patternP
     return pattern;
 };
 
-const getFormat = function(formatter) {
+export const getFormat = function(formatter) {
     const processedIndexes = [];
     const defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter);
     const patternPositions = defaultPattern.split('').map(function(_, index) { return index; });
@@ -200,5 +200,3 @@ const getFormat = function(formatter) {
         return result;
     }
 };
-
-exports.getFormat = getFormat;

@@ -1,7 +1,7 @@
 
-const ko = require('knockout');
+import ko from 'knockout';
 
-const getClosestNodeWithContext = (node) => {
+export const getClosestNodeWithContext = (node) => {
     const context = ko.contextFor(node);
     if(!context && node.parentNode) {
         return getClosestNodeWithContext(node.parentNode);
@@ -9,5 +9,3 @@ const getClosestNodeWithContext = (node) => {
 
     return node;
 };
-
-module.exports.getClosestNodeWithContext = getClosestNodeWithContext;

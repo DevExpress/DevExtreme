@@ -11,7 +11,7 @@ const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const ROW_LINES_CLASS = 'dx-row-lines';
 
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             masterDetail: {

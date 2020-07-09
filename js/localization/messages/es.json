@@ -286,6 +286,7 @@
         "dxFileManager-commandThumbnails": "TODO",
         "dxFileManager-commandDetails": "TODO",
         "dxFileManager-commandClearSelection": "TODO",
+        "dxFileManager-commandShowNavPane": "TODO",
 
         "dxFileManager-dialogDirectoryChooserTitle": "TODO",
         "dxFileManager-dialogDirectoryChooserButtonText": "TODO",

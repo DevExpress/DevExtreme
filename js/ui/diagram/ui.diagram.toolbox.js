@@ -268,17 +268,16 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 this._updateScrollAnimateSubscription(e.component);
             },
             onContentReady: (e) => {
+                for(let i = 0; i < data.length; i++) {
+                    if(data[i].expanded === false) {
+                        e.component.collapseItem(i);
+                    } else if(data[i].expanded === true) {
+                        e.component.expandItem(i);
+                    }
+                }
                 this._updateScrollAnimateSubscription(e.component);
             }
         });
-
-        for(let i = 0; i < data.length; i++) {
-            if(data[i].expanded === false) {
-                this._accordion.collapseItem(i);
-            } else if(data[i].expanded === true) {
-                this._accordion.expandItem(i);
-            }
-        }
     }
     _updateScrollAnimateSubscription(component) {
         component._deferredAnimate = new Deferred();
@@ -331,4 +330,4 @@ class DiagramToolbox extends DiagramFloatingPanel {
         }
     }
 }
-module.exports = DiagramToolbox;
+export default DiagramToolbox;

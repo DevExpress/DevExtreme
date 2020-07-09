@@ -79,5 +79,6 @@ function discreteGroupColorizer(palette, root) {
     };
 }
 
-require('./colorizing').addColorizer('discrete', discreteColorizer);
-module.exports = discreteColorizer;
+import { addColorizer } from './colorizing';
+addColorizer('discrete', discreteColorizer);
+export default discreteColorizer;

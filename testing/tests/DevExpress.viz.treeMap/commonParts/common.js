@@ -7,9 +7,10 @@ const loadingIndicatorModule = require('viz/core/loading_indicator');
 
 const $ = require('jquery');
 
-titleModule.Title = vizMocks.Title;
-tooltipModule.Tooltip = vizMocks.Tooltip;
-loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
+titleModule.DEBUG_set_title(vizMocks.Title);
+tooltipModule.DEBUG_set_tooltip(vizMocks.Tooltip);
+
+loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
 
 require('viz/tree_map/tree_map.base');
 

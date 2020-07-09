@@ -1,8 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Method,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 
 // TODO: remake old ink ripple in new JSX component
@@ -22,7 +20,7 @@ export class InkRippleProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class InkRipple extends JSXComponent(InkRippleProps) {
+export class InkRipple extends JSXComponent(InkRippleProps) {
   @Method()
   hideWave(event) {
     hideWave(this.getConfig, event);

@@ -7,7 +7,7 @@ fixture`Week view in adaptive mode`
 
 const scheduler = new Scheduler('#container');
 
-const createScheduler = async (data) => {
+const createScheduler = async (data, width = '100%') => {
   createWidget('dxScheduler', {
     dataSource: data,
     views: ['week'],
@@ -16,7 +16,7 @@ const createScheduler = async (data) => {
     currentDate: new Date(2017, 4, 25),
     startDayHour: 9,
     height: 600,
-    width: '100%',
+    width,
   }, true);
 };
 
@@ -59,6 +59,43 @@ const roughEqual = (actual: number, expected: number) => {
 
   return delta <= epsilon;
 };
+
+[{
+  top: 623,
+  bottom: 700,
+  left: 0,
+  width: 350,
+  windowWidth: 350,
+  name: 'snap to bottom in phone',
+}, {
+  top: 312,
+  bottom: 389,
+  left: 80,
+  width: 640,
+  windowWidth: 800,
+  name: 'align by center in tablet',
+}].forEach((testCase) => {
+  test(`Mobile tooltip should be ${testCase.name} screen`, async (t) => {
+    await t.resizeWindow(testCase.windowWidth, 700);
+    await t
+      .click(scheduler.getAppointmentCollectorByIndex(0).element);
+
+    const leftPosition = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('left');
+    const bottomPosition = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('bottom');
+    const topPosition = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('top');
+    const width = await scheduler.appointmentTooltip.mobileElement.getBoundingClientRectProperty('width');
+
+    await t
+      .expect(roughEqual(leftPosition, testCase.left))
+      .ok()
+      .expect(roughEqual(bottomPosition, testCase.bottom))
+      .ok()
+      .expect(roughEqual(topPosition, testCase.top))
+      .ok()
+      .expect(roughEqual(width, testCase.width))
+      .ok();
+  }).before(() => createScheduler(sampleData, '80%'));
+});
 
 test('Compact appointment should be center by vertical alignment', async (t) => {
   await t.resizeWindow(350, 600);

@@ -42,7 +42,7 @@ function isSearchEnabled(that, options) {
     return that.option('headerFilter.allowSearch');
 }
 
-exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
+export function updateHeaderFilterItemSelectionState(item, filterValuesMatch, isExcludeFilter) {
     if(filterValuesMatch ^ isExcludeFilter) {
         item.selected = true;
 
@@ -58,9 +58,9 @@ exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch,
         item.selected = false;
         resetChildrenItemSelection(item.items);
     }
-};
+}
 
-exports.HeaderFilterView = modules.View.inherit({
+export const HeaderFilterView = modules.View.inherit({
     getPopupContainer: function() {
         return this._popupContainer;
     },
@@ -354,12 +354,12 @@ exports.HeaderFilterView = modules.View.inherit({
     }
 });
 
-const allowHeaderFiltering = exports.allowHeaderFiltering = function(column) {
+export const allowHeaderFiltering = function(column) {
     return isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
 };
 
 
-exports.headerFilterMixin = {
+export const headerFilterMixin = {
     _applyColumnState: function(options) {
         let $headerFilterIndicator;
         const rootElement = options.rootElement;

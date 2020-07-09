@@ -1,3 +1,6 @@
-const angular = require('angular');
-
-module.exports = angular.module('dx', []);
+import angular from 'angular';
+let ngModule;
+if(angular) {
+    ngModule = angular.module('dx', []);
+}
+export default ngModule;

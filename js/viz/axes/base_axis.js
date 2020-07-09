@@ -147,7 +147,7 @@ function updateTicksPosition(ticks, options, animate) {
 function updateGridsPosition(ticks, animate) {
     callAction(ticks, 'updateGridPosition', animate);
 }
-const measureLabels = exports.measureLabels = function(items) {
+export const measureLabels = function(items) {
     items.forEach(function(item) {
         item.labelBBox = item.label ? item.label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
     });
@@ -285,7 +285,7 @@ function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
-const calculateCanvasMargins = exports.calculateCanvasMargins = function(bBoxes, canvas) {
+export const calculateCanvasMargins = function(bBoxes, canvas) {
     const cLeft = canvas.left;
     const cTop = canvas.top;
     const cRight = canvas.width - canvas.right;
@@ -309,7 +309,7 @@ const calculateCanvasMargins = exports.calculateCanvasMargins = function(bBoxes,
         });
 };
 
-const Axis = exports.Axis = function(renderSettings) {
+export const Axis = function(renderSettings) {
     const that = this;
 
     that._renderer = renderSettings.renderer;
@@ -1812,7 +1812,7 @@ Axis.prototype = {
             maxPadding = maxExpectedPadding / coeff;
         }
 
-        if(!that.isArgumentAxis) {
+        if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
                 minValue = 0;

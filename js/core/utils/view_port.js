@@ -1,7 +1,8 @@
-const $ = require('../renderer');
-const readyCallbacks = require('./ready_callbacks');
+import $ from '../renderer';
+import readyCallbacks from './ready_callbacks';
 const ready = readyCallbacks.add;
-const changeCallback = require('./callbacks')();
+import callbacks from './callbacks';
+const changeCallback = callbacks();
 let $originalViewPort = $();
 
 const value = (function() {
@@ -25,8 +26,11 @@ ready(function() {
     value('.dx-viewport');
 });
 
-exports.value = value;
-exports.changeCallback = changeCallback;
-exports.originalViewPort = function() {
-    return $originalViewPort;
+export {
+    value,
+    changeCallback
 };
+
+export function originalViewPort() {
+    return $originalViewPort;
+}

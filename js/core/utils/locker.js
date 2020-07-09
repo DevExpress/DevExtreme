@@ -1,4 +1,4 @@
-const errors = require('../errors');
+import errors from '../errors';
 
 const Locker = function() {
     const info = {};
@@ -32,4 +32,4 @@ const Locker = function() {
     };
 };
 
-module.exports = Locker;
+export default Locker;

@@ -490,6 +490,156 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
   }, 'lastName'],
 })));
 
+test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiAddRow();
+
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '123')
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(0, 1).isInvalid)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).element.textContent)
+    .eql('testb');
+}).before(() => createWidget('dxDataGrid', getGridConfig({
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+  },
+  columns: [{
+    dataField: 'age',
+    setCellValue: (rowData, value) => {
+      rowData.age = value;
+      rowData.name = 'testb';
+    },
+  }, {
+    dataField: 'name',
+    validationRules: [{
+      type: 'async',
+      validationCallback() {
+        const d = $.Deferred();
+        setTimeout(() => {
+          d.resolve(false);
+        }, 50);
+        return d.promise();
+      },
+    }],
+  }, 'lastName'],
+})));
+
+test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiEditCell(0, 0);
+
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '123')
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(0, 1).isInvalid)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).element.textContent)
+    .eql('testb');
+}).before(() => createWidget('dxDataGrid', getGridConfig({
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+  },
+  columns: [{
+    dataField: 'age',
+    setCellValue: (rowData, value) => {
+      rowData.age = value;
+      rowData.name = 'testb';
+    },
+  }, {
+    dataField: 'name',
+    validationRules: [{
+      type: 'async',
+      validationCallback() {
+        const d = $.Deferred();
+        setTimeout(() => {
+          d.resolve(false);
+        }, 50);
+        return d.promise();
+      },
+    }],
+  }, 'lastName'],
+})));
+
+test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiAddRow();
+
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '123')
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(0, 1).isInvalid)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).element.textContent)
+    .eql('123b');
+}).before(() => createWidget('dxDataGrid', getGridConfig({
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+  },
+  columns: [{
+    dataField: 'age',
+  }, {
+    dataField: 'name',
+    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
+    validationRules: [{
+      type: 'async',
+      validationCallback() {
+        const d = $.Deferred();
+        setTimeout(() => {
+          d.resolve(false);
+        }, 50);
+        return d.promise();
+      },
+    }],
+  }, 'lastName'],
+})));
+
+test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiEditCell(0, 0);
+
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '123')
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(0, 1).isInvalid)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).element.textContent)
+    .eql('15123b');
+}).before(() => createWidget('dxDataGrid', getGridConfig({
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+  },
+  columns: [{
+    dataField: 'age',
+  }, {
+    dataField: 'name',
+    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
+    validationRules: [{
+      type: 'async',
+      validationCallback() {
+        const d = $.Deferred();
+        setTimeout(() => {
+          d.resolve(false);
+        }, 50);
+        return d.promise();
+      },
+    }],
+  }, 'lastName'],
+})));
+
 test('Async Validation(Batch) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');
 

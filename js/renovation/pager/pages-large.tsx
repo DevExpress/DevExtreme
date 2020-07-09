@@ -6,9 +6,8 @@ import {
   OneWay,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
-import Page, { PageProps } from './page';
+
+import { Page, PageProps } from './page';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -92,7 +91,7 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PagesLarge extends JSXComponent(PagesLargeProps) {
+export class PagesLarge extends JSXComponent(PagesLargeProps) {
   get pages(): PageType[] {
     const { pageIndex } = this.props as Required<PagesLargeProps>;
     const createPage = (index = 0): PageType => ({

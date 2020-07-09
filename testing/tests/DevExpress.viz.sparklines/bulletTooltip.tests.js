@@ -16,9 +16,9 @@ $('<div>')
 const StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
 const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
 
-tooltipModule.Tooltip = function(parameters) {
+tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
-};
+});
 rendererModule.Renderer = function() {
     return currentTest().renderer;
 };

@@ -5,7 +5,7 @@ import { equalByValue } from '../../core/utils/common';
 import dataSourceAdapterProvider from './ui.tree_list.data_source_adapter';
 import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
 
-exports.DataController = dataControllerModule.controllers.data.inherit((function() {
+export const DataController = dataControllerModule.controllers.data.inherit((function() {
     return {
         _getDataSourceAdapter: function() {
             return dataSourceAdapterProvider;
@@ -204,7 +204,7 @@ treeListCore.registerModule('data', {
         });
     },
     controllers: {
-        data: exports.DataController
+        data: DataController
     }
 });
 /**

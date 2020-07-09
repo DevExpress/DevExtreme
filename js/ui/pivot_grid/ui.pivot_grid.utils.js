@@ -1,5 +1,5 @@
 import { isNumeric, isDefined, type } from '../../core/utils/type';
-import { sendRequest } from '../../core/utils/ajax';
+import { sendRequest as ajaxRequest } from '../../core/utils/ajax';
 import { compileGetter } from '../../core/utils/data';
 import { each, map } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -13,7 +13,7 @@ import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { when, Deferred } from '../../core/utils/deferred';
 
-const setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
+export const setFieldProperty = function(field, property, value, isInitialization) {
     const initProperties = field._initProperties = field._initProperties || {};
     const initValue = isInitialization ? value : field[property];
 
@@ -24,9 +24,9 @@ const setFieldProperty = exports.setFieldProperty = function(field, property, va
     field[property] = value;
 };
 
-exports.sendRequest = function(options) {
-    return sendRequest(options);
-};
+export function sendRequest(options) {
+    return ajaxRequest(options);
+}
 
 let foreachTreeAsyncDate = new Date();
 
@@ -90,11 +90,10 @@ function createForeachTreeFunc(isAsync) {
     return foreachTreeFunc;
 }
 
-exports.foreachTree = createForeachTreeFunc(false);
+export const foreachTree = createForeachTreeFunc(false);
+export const foreachTreeAsync = createForeachTreeFunc(true);
 
-exports.foreachTreeAsync = createForeachTreeFunc(true);
-
-exports.findField = function(fields, id) {
+export function findField(fields, id) {
 
     if(fields && isDefined(id)) {
         for(let i = 0; i < fields.length; i++) {
@@ -105,9 +104,9 @@ exports.findField = function(fields, id) {
         }
     }
     return -1;
-};
+}
 
-exports.formatValue = function(value, options) {
+export function formatValue(value, options) {
     // because isNaN function works incorrectly with strings and undefined (T889965)
     const valueText = value === value && format(value, options.format);
     const formatObject = {
@@ -115,9 +114,9 @@ exports.formatValue = function(value, options) {
         valueText: valueText || ''
     };
     return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
-};
+}
 
-exports.getCompareFunction = function(valueSelector) {
+export function getCompareFunction(valueSelector) {
     return function(a, b) {
         let result = 0;
         const valueA = valueSelector(a);
@@ -143,17 +142,17 @@ exports.getCompareFunction = function(valueSelector) {
 
         return result;
     };
-};
+}
 
-exports.createPath = function(items) {
+export function createPath(items) {
     const result = [];
     for(let i = items.length - 1; i >= 0; i--) {
         result.push(items[i].key || items[i].value);
     }
     return result;
-};
+}
 
-exports.foreachDataLevel = function foreachDataLevel(data, callback, index, childrenField) {
+export function foreachDataLevel(data, callback, index, childrenField) {
     index = index || 0;
     childrenField = childrenField || 'children';
 
@@ -167,19 +166,18 @@ exports.foreachDataLevel = function foreachDataLevel(data, callback, index, chil
             foreachDataLevel(item[childrenField], callback, index + 1, childrenField);
         }
     }
-};
+}
 
-
-exports.mergeArraysByMaxValue = function(values1, values2) {
+export function mergeArraysByMaxValue(values1, values2) {
     const result = [];
 
     for(let i = 0; i < values1.length; i++) {
         result.push(Math.max(values1[i] || 0, values2[i] || 0));
     }
     return result;
-};
+}
 
-exports.getExpandedLevel = function(options, axisName) {
+export function getExpandedLevel(options, axisName) {
     const dimensions = options[axisName];
     let expandLevel = 0;
     const expandedPaths = (axisName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
@@ -199,7 +197,7 @@ exports.getExpandedLevel = function(options, axisName) {
     }
 
     return expandLevel;
-};
+}
 
 function createGroupFields(item) {
     return map(['year', 'quarter', 'month'], function(value, index) {
@@ -249,18 +247,18 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
     return result;
 }
 
-exports.discoverObjectFields = function(items, fields) {
-    const fieldsDataType = exports.getFieldsDataType(fields);
+export function discoverObjectFields(items, fields) {
+    const fieldsDataType = getFieldsDataType(fields);
     return parseFields(items, items[0], '', fieldsDataType);
-};
+}
 
-exports.getFieldsDataType = function(fields) {
+export function getFieldsDataType(fields) {
     const result = {};
     each(fields, function(_, field) {
         result[field.dataField] = result[field.dataField] || field.dataType;
     });
     return result;
-};
+}
 
 const DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -274,7 +272,7 @@ const DATE_INTERVAL_FORMATS = {
     }
 };
 
-exports.setDefaultFieldValueFormatting = function(field) {
+export function setDefaultFieldValueFormatting(field) {
     if(field.dataType === 'date') {
         if(!field.format) {
             setFieldProperty(field, 'format', DATE_INTERVAL_FORMATS[field.groupInterval]);
@@ -291,9 +289,9 @@ exports.setDefaultFieldValueFormatting = function(field) {
             });
         }
     }
-};
+}
 
-exports.getFiltersByPath = function(fields, path) {
+export function getFiltersByPath(fields, path) {
     const result = [];
     path = path || [];
 
@@ -307,9 +305,9 @@ exports.getFiltersByPath = function(fields, path) {
     }
 
     return result;
-};
+}
 
-exports.storeDrillDownMixin = {
+export const storeDrillDownMixin = {
     createDrillDownDataSource: function(descriptions, params) {
         const items = this.getDrillDownItems(descriptions, params);
         let arrayStore;
@@ -342,6 +340,6 @@ exports.storeDrillDownMixin = {
     }
 };
 
-exports.capitalizeFirstLetter = function(string) {
+export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-};
+}

@@ -136,6 +136,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiAddRow(): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).addRow(),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
   apiEditRow(rowIndex: number): Promise<void> {
     const { getGridInstance } = this;
 

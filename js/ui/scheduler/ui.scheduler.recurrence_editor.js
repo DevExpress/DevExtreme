@@ -4,7 +4,6 @@ import $ from '../../core/renderer';
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import { triggerShownEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
 import Form from '../form';
@@ -13,7 +12,6 @@ import DateBox from '../date_box';
 import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import { getRecurrenceProcessor } from './recurrence';
-import typeUtils from '../../core/utils/type';
 import '../radio_group';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
@@ -183,23 +181,12 @@ class RecurrenceEditor extends Editor {
 
         this._prepareEditors();
         this._renderEditors(this._$container);
-
-        this._renderContainerVisibility(this.option('value'));
-    }
-
-    _renderContainerVisibility(value) {
-        if(value) {
-            this._$container.show();
-            triggerShownEvent(this._$container);
-        } else {
-            this._$container.hide();
-        }
     }
 
     getEditorByField(fieldName) {
         let editor = this.getRecurrenceForm().getEditor(fieldName);
 
-        if(!typeUtils.isDefined(editor)) {
+        if(!isDefined(editor)) {
             switch(fieldName) {
                 case 'byday':
                     editor = this._weekEditor;
@@ -464,9 +451,7 @@ class RecurrenceEditor extends Editor {
         return this._recurrenceForm;
     }
 
-    _changeValueByVisibility(value) {
-        this._renderContainerVisibility(value);
-
+    changeValueByVisibility(value) {
         if(value) {
             if(!this.option('value')) {
                 this._handleDefaults();
@@ -717,10 +702,6 @@ class RecurrenceEditor extends Editor {
                     this._repeatUntilDate.option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
                 }
                 break;
-            case 'visible':
-                this._changeValueByVisibility(args.value);
-                super._optionChanged(args);
-                break;
             default:
                 super._optionChanged(args);
         }
@@ -827,4 +808,4 @@ class RecurrenceEditor extends Editor {
 
 registerComponent('dxRecurrenceEditor', RecurrenceEditor);
 
-module.exports = RecurrenceEditor;
+export default RecurrenceEditor;

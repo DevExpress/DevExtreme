@@ -1,3 +1,3 @@
-require('./widgets-mobile');
-require('./widgets-web');
-require('./widgets-renovation');
+import './widgets-mobile';
+import './widgets-web';
+import './widgets-renovation';

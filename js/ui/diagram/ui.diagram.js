@@ -3,12 +3,12 @@ import Widget from '../widget/ui.widget';
 import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import typeUtils from '../../core/utils/type';
+import { isFunction } from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
@@ -795,7 +795,7 @@ class Diagram extends Widget {
     }
     _createOptionSetter(optionName) {
         const expr = this.option(optionName);
-        if(typeUtils.isFunction(expr)) {
+        if(isFunction(expr)) {
             return expr;
         }
         return expr && dataCoreUtils.compileSetter(expr);
@@ -945,6 +945,26 @@ class Diagram extends Widget {
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
+    reloadContent(itemKey, applyLayout) {
+        const getData = () => {
+            let nodeDataSource;
+            let edgeDataSource;
+            this._beginUpdateDiagram();
+            if(this._nodesOption) {
+                this._nodesOption.getDataSource().reload();
+                nodeDataSource = this._nodesOption.getItems();
+            }
+            if(this._edgesOption) {
+                this._edgesOption.getDataSource().reload();
+                edgeDataSource = this._edgesOption.getItems();
+            }
+            this._endUpdateDiagram(true);
+            return { nodeDataSource, edgeDataSource };
+        };
+        this._diagramInstance.reloadContent(itemKey, getData,
+            applyLayout && this._getDataBindingLayoutParameters()
+        );
+    }
     _getConnectorLineOption(lineType) {
         const { ConnectorLineOption } = getDiagram();
         switch(lineType) {
@@ -1018,9 +1038,9 @@ class Diagram extends Widget {
     _beginUpdateDiagram() {
         this._updateDiagramLockCount++;
     }
-    _endUpdateDiagram() {
+    _endUpdateDiagram(preventBindDiagram) {
         this._updateDiagramLockCount = Math.max(this._updateDiagramLockCount - 1, 0);
-        if(!this._updateDiagramLockCount) {
+        if(!this._updateDiagramLockCount && !preventBindDiagram) {
             this._bindDiagramData();
         }
     }
@@ -1853,7 +1873,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.customShapes.template
                 * @type template|function
-                * @type_function_param1 container:dxElement
+                * @type_function_param1 container:dxSVGElement
                 * @type_function_param2 data:object
                 * @type_function_param2_field1 item:dxDiagramShape
                 */
@@ -2438,4 +2458,4 @@ class Diagram extends Widget {
 }
 
 registerComponent('dxDiagram', Diagram);
-module.exports = Diagram;
+export default Diagram;

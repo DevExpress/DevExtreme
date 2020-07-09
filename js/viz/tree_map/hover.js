@@ -1,15 +1,15 @@
-const proto = require('./tree_map.base').prototype;
-const nodeProto = require('./node').prototype;
-const expand = require('../core/helpers').expand;
-const common = require('./common');
-
-const _parseScalar = require('../core/utils').parseScalar;
+import TreeMapBase from './tree_map.base';
+import { prototype as nodeProto } from './node';
+import { expand } from '../core/helpers';
+import common from './common';
+import { parseScalar as _parseScalar } from '../core/utils';
 const _buildRectAppearance = common.buildRectAppearance;
+const proto = TreeMapBase.prototype;
 
 const STATE_CODE = 1;
 
-require('./api');
-require('./states');
+import './api';
+import './states';
 
 proto._eventsMap.onHoverChanged = { name: 'hoverChanged' };
 
@@ -17,7 +17,7 @@ expand(proto._handlers, 'calculateAdditionalStates', function(states, options) {
     states[1] = options.hoverStyle ? _buildRectAppearance(options.hoverStyle) : {};
 });
 
-require('./tree_map.base').addChange({
+TreeMapBase.addChange({
     code: 'HOVER_ENABLED',
     handler: function() {
         const hoverEnabled = _parseScalar(this._getOption('hoverEnabled', true), true);

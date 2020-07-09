@@ -2,8 +2,6 @@
 import {
   ComponentBindings, OneWay, JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 
 export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (
   <div
@@ -26,4 +24,4 @@ export class ErrorMessageProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class ErrorMessage extends JSXComponent(ErrorMessageProps) {}
+export class ErrorMessage extends JSXComponent(ErrorMessageProps) {}

@@ -1,17 +1,16 @@
 import { inArray } from './array';
-import { createElement } from '../dom_adapter';
+import domAdapter from '../dom_adapter';
 import { ensureDefined } from './common';
 import callOnce from './call_once';
-import windowUtils from './window';
+import { getNavigator, hasProperty } from './window';
 import devices from '../devices';
-import styleUtils from './style';
+import { stylePropPrefix, styleProp } from './style';
 
 const {
     maxTouchPoints,
     msMaxTouchPoints, // TODO: remove this line when we drop IE support
     pointerEnabled
-} = windowUtils.getNavigator();
-const hasProperty = windowUtils.hasProperty.bind(windowUtils);
+} = getNavigator();
 const transitionEndEventNames = {
     'webkitTransition': 'webkitTransitionEnd',
     'MozTransition': 'transitionend',
@@ -21,7 +20,7 @@ const transitionEndEventNames = {
 };
 
 const supportProp = function(prop) {
-    return !!styleUtils.styleProp(prop);
+    return !!styleProp(prop);
 };
 
 const isNativeScrollingSupported = function() {
@@ -37,7 +36,7 @@ const inputType = function(type) {
         return true;
     }
 
-    const input = createElement('input');
+    const input = domAdapter.createElement('input');
     try {
         input.setAttribute('type', type);
         input.value = 'wrongValue';
@@ -64,19 +63,22 @@ const pointerEvents = detectPointerEvent(hasProperty, pointerEnabled);
 const touchPointersPresent = !!maxTouchPoints || !!msMaxTouchPoints;
 
 ///#DEBUG
-exports.detectTouchEvents = detectTouchEvents;
-exports.detectPointerEvent = detectPointerEvent;
+export {
+    detectTouchEvents,
+    detectPointerEvent
+};
 ///#ENDDEBUG
-exports.touchEvents = touchEvents;
-exports.pointerEvents = pointerEvents;
-exports.touch = touchEvents || pointerEvents && touchPointersPresent;
-exports.transition = callOnce(function() { return supportProp('transition'); });
-exports.transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleUtils.styleProp('transition')]; });
-exports.animation = callOnce(function() { return supportProp('animation'); });
-exports.nativeScrolling = isNativeScrollingSupported();
+export {
+    touchEvents,
+    pointerEvents,
+    styleProp,
+    stylePropPrefix,
+    supportProp,
+    inputType
+};
 
-exports.styleProp = styleUtils.styleProp;
-exports.stylePropPrefix = styleUtils.stylePropPrefix;
-exports.supportProp = supportProp;
-
-exports.inputType = inputType;
+export const touch = touchEvents || pointerEvents && touchPointersPresent;
+export const transition = callOnce(function() { return supportProp('transition'); });
+export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleProp('transition')]; });
+export const animation = callOnce(function() { return supportProp('animation'); });
+export const nativeScrolling = isNativeScrollingSupported();

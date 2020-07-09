@@ -13,6 +13,8 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import '../../../testing/content/orders.js';
 
+import PivotGridTestSettings from '../../helpers/pivotGridTestSettings.js';
+
 function createDataSource(options) {
     const dataSource = new DataSource(options);
     dataSource.load();
@@ -4094,7 +4096,7 @@ QUnit.module('dxPivotGrid dataSource with Store', {
                 },
                 store: {
                     type: 'xmla',
-                    url: 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
+                    url: PivotGridTestSettings.XMLA_STORE_URL,
                     catalog: 'Adventure Works DW Standard Edition',
                     cube: 'Adventure Works'
                 }
@@ -4136,7 +4138,7 @@ QUnit.module('dxPivotGrid dataSource with Store', {
                 },
                 store: {
                     type: 'xmla',
-                    url: 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
+                    url: PivotGridTestSettings.XMLA_STORE_URL,
                     catalog: 'Adventure Works DW Standard Edition',
                     cube: 'Adventure Works'
                 }

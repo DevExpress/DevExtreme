@@ -34,7 +34,7 @@ const DEBUG_BUNDLES = BUNDLES.concat([
 
 function processBundles(bundles) {
     return bundles.map(function(bundle) {
-        return context.TRANSPILED_PATH + bundle;
+        return context.TRANSPILED_PROD_PATH + bundle;
     });
 }
 

@@ -3,11 +3,13 @@ import { extend } from '../../../core/utils/extend';
 
 import Popup from '../../popup';
 import Form from '../../form';
-import { getActiveElement } from '../../../core/dom_adapter';
+import domAdapter from '../../../core/dom_adapter';
 import { resetActiveElement } from '../../../core/utils/dom';
 import { Deferred } from '../../../core/utils/deferred';
 import { format } from '../../../localization/message';
 import browser from '../../../core/utils/browser';
+
+const getActiveElement = domAdapter.getActiveElement;
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';

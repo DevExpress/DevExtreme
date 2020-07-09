@@ -74,4 +74,4 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
 
 registerComponent('dxSchedulerWorkSpaceWorkWeek', SchedulerWorkSpaceWorkWeek);
 
-module.exports = SchedulerWorkSpaceWorkWeek;
+export default SchedulerWorkSpaceWorkWeek;
