@@ -8,6 +8,7 @@ import {
   OneWay,
   Ref,
   Template,
+  Slot,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
@@ -118,6 +119,8 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  @Slot() children?: any;
+
   @Template({ canBeAnonymous: true }) template?: any = '';
 
   @OneWay() text?: string = '';

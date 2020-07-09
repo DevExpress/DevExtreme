@@ -14,7 +14,7 @@ const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 
-export default class CheckBox extends Component {
+export class CheckBox extends Component {
     _init() {
         super._init();
 
