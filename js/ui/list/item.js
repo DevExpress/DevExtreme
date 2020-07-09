@@ -1,5 +1,5 @@
-const $ = require('../../core/renderer');
-const CollectionWidgetItem = require('../collection/item');
+import $ from '../../core/renderer';
+import CollectionWidgetItem from '../collection/item';
 
 const LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
@@ -51,4 +51,4 @@ const ListItem = CollectionWidgetItem.inherit({
 
 });
 
-module.exports = ListItem;
+export default ListItem;

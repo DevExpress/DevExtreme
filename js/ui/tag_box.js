@@ -1,7 +1,6 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import dataUtils from '../core/element_data';
-import typeUtils from '../core/utils/type';
+import { data as elementData } from '../core/element_data';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import browser from '../core/utils/browser';
@@ -912,7 +911,7 @@ const TagBox = SelectBox.inherit({
             let currentValue;
             for(let i = 0; i < values.length; i++) {
                 currentValue = values[i];
-                if(typeUtils.isObject(currentValue)) {
+                if(isObject(currentValue)) {
                     if(this._isValueEquals(dataItem, currentValue)) {
                         return true;
                     }
@@ -1039,7 +1038,7 @@ const TagBox = SelectBox.inherit({
 
         for(let i = 0; i < tagsLength; i++) {
             const $tag = $tags[i];
-            const tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
+            const tagData = elementData($tag, TAGBOX_TAG_DATA_KEY);
 
             if(value === tagData || (equalByValue(value, tagData))) {
                 result = $($tag);
@@ -1476,4 +1475,4 @@ const TagBox = SelectBox.inherit({
 
 registerComponent('dxTagBox', TagBox);
 
-module.exports = TagBox;
+export default TagBox;

@@ -1,14 +1,14 @@
-const Class = require('../core/class');
+import Class from '../core/class';
 const abstract = Class.abstract;
-const EventsStrategy = require('../core/events_strategy').EventsStrategy;
-const each = require('../core/utils/iterator').each;
-const errorsModule = require('./errors');
-const dataUtils = require('./utils');
-const compileGetter = require('../core/utils/data').compileGetter;
-const storeHelper = require('./store_helper');
+import { EventsStrategy } from '../core/events_strategy';
+import { each } from '../core/utils/iterator';
+import errorsModule from './errors';
+import dataUtils from './utils';
+import { compileGetter } from '../core/utils/data';
+import storeHelper from './store_helper';
 const queryByOptions = storeHelper.queryByOptions;
-const Deferred = require('../core/utils/deferred').Deferred;
-const noop = require('../core/utils/common').noop;
+import { Deferred } from '../core/utils/deferred';
+import { noop } from '../core/utils/common';
 
 const storeImpl = {};
 
@@ -216,4 +216,4 @@ Store.inherit = function(inheritor) {
     };
 }(Store.inherit);
 
-module.exports = Store;
+export default Store;

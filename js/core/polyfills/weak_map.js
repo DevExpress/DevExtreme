@@ -1,6 +1,6 @@
-const inArray = require('../../core/utils/array').inArray;
-const windowUtils = require('../../core/utils/window');
-let weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
+import { inArray } from '../utils/array';
+import { hasWindow, getWindow } from '../utils/window';
+let weakMap = hasWindow() ? getWindow().WeakMap : WeakMap;
 
 if(!weakMap) {
     // NOTE: This is an incomplete WeakMap polyfill but it is enough for creation purposes
@@ -46,4 +46,4 @@ if(!weakMap) {
     };
 }
 
-module.exports = weakMap;
+export default weakMap;

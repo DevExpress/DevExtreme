@@ -39,4 +39,7 @@ import { exportPivotGrid } from './exporter/exceljs/export_pivot_grid';
 * @type any
 */
 
-export { exportDataGrid, exportPivotGrid };
+export {
+    exportDataGrid,
+    exportPivotGrid
+};

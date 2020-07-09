@@ -1,9 +1,9 @@
 import { when, Deferred } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 
-const whenSome = function(arg, onSuccess, onError) {
+export const whenSome = function(arg, onSuccess, onError) {
     onSuccess = onSuccess || noop;
     onError = onError || noop;
 
@@ -15,7 +15,7 @@ const whenSome = function(arg, onSuccess, onError) {
         return when(item)
             .then(
                 result => {
-                    typeUtils.isFunction(onSuccess) && onSuccess({ item, index, result });
+                    isFunction(onSuccess) && onSuccess({ item, index, result });
                     return result;
                 },
                 error => {
@@ -23,7 +23,7 @@ const whenSome = function(arg, onSuccess, onError) {
                         error = { };
                     }
                     error.index = index;
-                    typeUtils.isFunction(onError) && onError(error);
+                    isFunction(onError) && onError(error);
                     return new Deferred().resolve().promise();
                 });
     });
@@ -31,7 +31,7 @@ const whenSome = function(arg, onSuccess, onError) {
     return when.apply(null, deferreds);
 };
 
-const getDisplayFileSize = function(byteSize) {
+export const getDisplayFileSize = function(byteSize) {
     const sizesTitles = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
     let index = 0;
     let displaySize = byteSize;
@@ -43,16 +43,16 @@ const getDisplayFileSize = function(byteSize) {
     return `${displaySize} ${sizesTitles[index]}`;
 };
 
-const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
+export const extendAttributes = function(targetObject, sourceObject, objectKeysArray) {
     objectKeysArray.forEach(objectKey => {
-        extend(true, targetObject, typeUtils.isDefined(sourceObject[objectKey])
+        extend(true, targetObject, isDefined(sourceObject[objectKey])
             ? { [objectKey]: sourceObject[objectKey] }
             : {});
     });
     return targetObject;
 };
 
-const findItemsByKeys = (itemInfos, keys) => {
+export const findItemsByKeys = (itemInfos, keys) => {
     const itemMap = {};
     keys.forEach(key => {
         itemMap[key] = null;
@@ -75,8 +75,3 @@ const findItemsByKeys = (itemInfos, keys) => {
 
     return result;
 };
-
-module.exports = whenSome;
-module.exports.getDisplayFileSize = getDisplayFileSize;
-module.exports.extendAttributes = extendAttributes;
-module.exports.findItemsByKeys = findItemsByKeys;

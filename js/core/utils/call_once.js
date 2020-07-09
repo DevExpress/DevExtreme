@@ -14,4 +14,4 @@ const callOnce = function(handler) {
     };
 };
 
-module.exports = callOnce;
+export default callOnce;

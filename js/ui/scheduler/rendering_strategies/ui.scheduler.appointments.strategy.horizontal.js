@@ -110,4 +110,4 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 }
 
-module.exports = HorizontalRenderingStrategy;
+export default HorizontalRenderingStrategy;

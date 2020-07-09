@@ -1112,7 +1112,7 @@ AxisWrapper.prototype = {
 
 registerComponent('dxRangeSelector', dxRangeSelector);
 
-module.exports = dxRangeSelector;
+export default dxRangeSelector;
 
 // PLUGINS_SECTION
 import { plugin as exportPlugin } from '../core/export';

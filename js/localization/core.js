@@ -4,7 +4,7 @@ import getParentLocale from './parentLocale';
 
 const DEFAULT_LOCALE = 'en';
 
-module.exports = dependencyInjector({
+export default dependencyInjector({
     locale: (() => {
         let currentLocale = DEFAULT_LOCALE;
 

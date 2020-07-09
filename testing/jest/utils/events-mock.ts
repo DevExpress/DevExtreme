@@ -77,7 +77,7 @@ keyboard.on = (el, focusTarget, handler): string => {
 keyboard.off = (id): boolean => delete keyboardHandlers[id];
 
 jest.mock('../../../js/events/core/events_engine', () => {
-  const originalEventsEngine = jest.requireActual('../../../js/events/core/events_engine');
+  const originalEventsEngine = jest.requireActual('../../../js/events/core/events_engine').default;
 
   return (
     {

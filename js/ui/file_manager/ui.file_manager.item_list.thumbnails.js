@@ -187,4 +187,4 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
 }
 
-module.exports = FileManagerThumbnailsItemList;
+export default FileManagerThumbnailsItemList;

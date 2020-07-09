@@ -1,12 +1,17 @@
 // there are pie, doughnut
-const noop = require('../../core/utils/common').noop;
-const each = require('../../core/utils/iterator').each;
-const scatterSeries = require('./scatter_series');
-const vizUtils = require('../core/utils');
-const extend = require('../../core/utils/extend').extend;
+import { noop } from '../../core/utils/common';
+
+import { each } from '../../core/utils/iterator';
+import scatterSeries from './scatter_series';
+import vizUtils from '../core/utils';
+import { extend } from '../../core/utils/extend';
+import { chart as barChart } from './bar_series';
+///#DEBUG
+import { debug } from '../../core/utils/console';
+///#ENDDEBUG
 
 const chartScatterSeries = scatterSeries.chart;
-const barSeries = require('./bar_series').chart.bar;
+const barSeries = barChart.bar;
 
 const _extend = extend;
 const _each = each;
@@ -20,7 +25,7 @@ const _max = Math.max;
 const ANIMATION_DURATION = 0.7;
 const INSIDE = 'inside';
 
-exports.pie = _extend({}, barSeries, {
+export const pie = _extend({}, barSeries, {
     _setGroupsSettings: function() {
         chartScatterSeries._setGroupsSettings.apply(this, arguments);
         this._labelsGroup.attr({ 'pointer-events': null });
@@ -232,7 +237,6 @@ exports.pie = _extend({}, barSeries, {
 
     correctPosition: function(correction, canvas) {
         ///#DEBUG
-        const debug = require('../../core/utils/console').debug;
         debug.assert(correction, 'correction was not passed');
         debug.assertParam(correction.centerX, 'correction.centerX was not passed');
         debug.assertParam(correction.centerY, 'correction.centerY was not passed');
@@ -300,4 +304,5 @@ exports.pie = _extend({}, barSeries, {
     }
 });
 
-exports.doughnut = exports.donut = exports.pie;
+export const doughnut = pie;
+export const donut = pie;

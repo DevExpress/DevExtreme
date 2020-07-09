@@ -1,25 +1,25 @@
-const $ = require('../../core/renderer');
-const windowUtils = require('../../core/utils/window');
-const eventsEngine = require('../../events/core/events_engine');
-const Guid = require('../../core/guid');
-const registerComponent = require('../../core/component_registrator');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const DropDownEditor = require('./ui.drop_down_editor');
-const List = require('../list');
-const errors = require('../widget/ui.errors');
-const eventUtils = require('../../events/utils');
-const devices = require('../../core/devices');
-const dataQuery = require('../../data/query');
-const each = require('../../core/utils/iterator').each;
-const DataExpressionMixin = require('../editor/ui.data_expression');
-const messageLocalization = require('../../localization/message');
-const ChildDefaultTemplate = require('../../core/templates/child_default_template').ChildDefaultTemplate;
-const Deferred = require('../../core/utils/deferred').Deferred;
-const DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
-const window = windowUtils.getWindow();
+import $ from '../../core/renderer';
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
+import eventsEngine from '../../events/core/events_engine';
+import Guid from '../../core/guid';
+import registerComponent from '../../core/component_registrator';
+import { noop, ensureDefined, grep } from '../../core/utils/common';
+import { isWindow, isDefined, isObject } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import DropDownEditor from './ui.drop_down_editor';
+import List from '../list';
+import errors from '../widget/ui.errors';
+import { addNamespace } from '../../events/utils';
+import devices from '../../core/devices';
+import dataQuery from '../../data/query';
+import { each } from '../../core/utils/iterator';
+import DataExpressionMixin from '../editor/ui.data_expression';
+import messageLocalization from '../../localization/message';
+import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
+import { Deferred } from '../../core/utils/deferred';
+import DataConverterMixin from '../shared/grouped_data_converter_mixin';
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
@@ -45,9 +45,9 @@ const DropDownList = DropDownEditor.inherit({
 
                 parent.tab.apply(this, arguments);
             },
-            space: commonUtils.noop,
-            home: commonUtils.noop,
-            end: commonUtils.noop
+            space: noop,
+            home: noop,
+            end: noop
         });
     },
 
@@ -86,7 +86,7 @@ const DropDownList = DropDownEditor.inherit({
 
             onSelectionChanged: null,
 
-            onItemClick: commonUtils.noop,
+            onItemClick: noop,
 
             showDataBeforeSearch: false,
 
@@ -267,7 +267,7 @@ const DropDownList = DropDownEditor.inherit({
         const customContainer = this.option('dropDownOptions.container');
         const $container = customContainer && $(customContainer);
 
-        if($container && $container.length && !typeUtils.isWindow($container.get(0))) {
+        if($container && $container.length && !isWindow($container.get(0))) {
             const $containerWithParents = [].slice.call($container.parents());
             $containerWithParents.unshift($container.get(0));
 
@@ -314,7 +314,7 @@ const DropDownList = DropDownEditor.inherit({
 
         if(!selectedItem) {
             plainItems = this._getPlainItems();
-            selectedItem = commonUtils.grep(plainItems, (function(item) {
+            selectedItem = grep(plainItems, (function(item) {
                 return this._isValueEquals(this._valueGetter(item), value);
             }).bind(this))[0];
         }
@@ -348,7 +348,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _setSelectedItem: function(item) {
         const displayValue = this._displayValue(item);
-        this.option('selectedItem', commonUtils.ensureDefined(item, null));
+        this.option('selectedItem', ensureDefined(item, null));
         this.option('displayValue', displayValue);
     },
 
@@ -452,7 +452,7 @@ const DropDownList = DropDownEditor.inherit({
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
 
-    _fireContentReadyAction: commonUtils.noop,
+    _fireContentReadyAction: noop,
 
     _setAriaTargetForList: function() {
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
@@ -474,7 +474,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _renderPreventBlur: function($target) {
-        const eventName = eventUtils.addNamespace('mousedown', 'dxDropDownList');
+        const eventName = addNamespace('mousedown', 'dxDropDownList');
 
         eventsEngine.off($target, eventName);
         eventsEngine.on($target, eventName, function(e) {
@@ -583,7 +583,7 @@ const DropDownList = DropDownEditor.inherit({
         this._itemClickAction(e);
     },
 
-    _listItemClickHandler: commonUtils.noop,
+    _listItemClickHandler: noop,
 
     _setListDataSource: function() {
         if(!this._list) {
@@ -623,11 +623,11 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _getSearchEvent: function() {
-        return eventUtils.addNamespace(SEARCH_EVENT, this.NAME + 'Search');
+        return addNamespace(SEARCH_EVENT, this.NAME + 'Search');
     },
 
     _getSetFocusPolicyEvent: function() {
-        return eventUtils.addNamespace('input', this.NAME + 'FocusPolicy');
+        return addNamespace('input', this.NAME + 'FocusPolicy');
     },
 
     _renderEvents: function() {
@@ -745,7 +745,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupMinWidth() {
-        windowUtils.hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
+        hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
     },
 
     _popupShowingHandler: function() {
@@ -763,7 +763,7 @@ const DropDownList = DropDownEditor.inherit({
         }
 
         const currentPageIndex = this._dataSource.pageIndex();
-        const needRepaint = typeUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 
         this._pageIndex = currentPageIndex;
 
@@ -812,7 +812,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _shouldUseDisplayValue: function(value) {
-        return this.option('valueExpr') === 'this' && typeUtils.isObject(value);
+        return this.option('valueExpr') === 'this' && isObject(value);
     },
 
     _optionChanged: function(args) {
@@ -886,4 +886,4 @@ const DropDownList = DropDownEditor.inherit({
 
 registerComponent('dxDropDownList', DropDownList);
 
-module.exports = DropDownList;
+export default DropDownList;

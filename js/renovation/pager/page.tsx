@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
 
-import LightButton from './light-button';
+import { LightButton } from './light-button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from './consts';
 
 const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
@@ -36,7 +36,7 @@ export class PageProps {
   view: viewFunction,
 })
 
-export default class Page extends JSXComponent(PageProps) {
+export class Page extends JSXComponent(PageProps) {
   get label(): string {
     return `Page ${this.value}`;
   }

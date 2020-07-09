@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
-const eventsEngine = require('../../events/core/events_engine');
-const Widget = require('../widget/ui.widget');
-const extend = require('../../core/utils/extend').extend;
-const eventUtils = require('../../events/utils');
-const pointerEvents = require('../../events/pointer');
-const feedbackEvents = require('../../events/core/emitter.feedback');
-const holdEvent = require('../../events/hold');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import Widget from '../widget/ui.widget';
+import { extend } from '../../core/utils/extend';
+import { addNamespace } from '../../events/utils';
+import pointerEvents from '../../events/pointer';
+import { lock } from '../../events/core/emitter.feedback';
+import holdEvent from '../../events/hold';
+import { Deferred } from '../../core/utils/deferred';
 
 const SPIN_CLASS = 'dx-numberbox-spin';
 const SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button';
@@ -15,8 +15,8 @@ const SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button';
 const SPIN_HOLD_DELAY = 100;
 
 const NUMBER_BOX = 'dxNumberBox';
-const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, NUMBER_BOX);
-const POINTERCANCEL_EVENT_NAME = eventUtils.addNamespace(pointerEvents.cancel, NUMBER_BOX);
+const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, NUMBER_BOX);
+const POINTERCANCEL_EVENT_NAME = addNamespace(pointerEvents.cancel, NUMBER_BOX);
 
 const SpinButton = Widget.inherit({
 
@@ -44,7 +44,7 @@ const SpinButton = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        const eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const eventName = addNamespace(pointerEvents.down, this.NAME);
         const $element = this.$element();
 
         eventsEngine.off($element, eventName);
@@ -60,7 +60,7 @@ const SpinButton = Widget.inherit({
 
         eventsEngine.on(this.$element(), holdEvent.name, (function() {
             this._feedBackDeferred = new Deferred();
-            feedbackEvents.lock(this._feedBackDeferred);
+            lock(this._feedBackDeferred);
             this._spinChangeHandler({ event: e });
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { event: e });
         }).bind(this));
@@ -104,4 +104,4 @@ const SpinButton = Widget.inherit({
     }
 });
 
-module.exports = SpinButton;
+export default SpinButton;

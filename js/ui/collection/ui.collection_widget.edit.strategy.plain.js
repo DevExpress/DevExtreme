@@ -1,5 +1,5 @@
-const inArray = require('../../core/utils/array').inArray;
-const EditStrategy = require('./ui.collection_widget.edit.strategy');
+import { inArray } from '../../core/utils/array';
+import EditStrategy from './ui.collection_widget.edit.strategy';
 
 
 const PlainEditStrategy = EditStrategy.inherit({
@@ -98,4 +98,4 @@ const PlainEditStrategy = EditStrategy.inherit({
 
 });
 
-module.exports = PlainEditStrategy;
+export default PlainEditStrategy;

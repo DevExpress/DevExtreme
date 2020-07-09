@@ -1,7 +1,7 @@
 const TOOLTIP_OFFSET = 12;
 
 // TODO: Somehow it should be merged with the core.Tooltip
-function TooltipViewer(params) {
+export function TooltipViewer(params) {
     this._subscribeToTracker(params.tracker, params.tooltip, params.layerCollection);
 }
 
@@ -39,5 +39,3 @@ TooltipViewer.prototype = {
         });
     }
 };
-
-exports.TooltipViewer = TooltipViewer;

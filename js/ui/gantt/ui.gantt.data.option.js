@@ -81,4 +81,4 @@ class DataOption extends Component {
 }
 DataOption.include(DataHelperMixin);
 
-module.exports = DataOption;
+export default DataOption;

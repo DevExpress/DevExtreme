@@ -81,7 +81,7 @@ const getPatternGetter = (patternChar) => {
     return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
 };
 
-const renderDateParts = (text, regExpInfo) => {
+export const renderDateParts = (text, regExpInfo) => {
     const result = regExpInfo.regexp.exec(text);
 
     let start = 0;
@@ -132,7 +132,7 @@ const getLimits = (pattern, date, forcedPattern) => {
     return limits[forcedPattern || pattern] || limits['getAmPm'];
 };
 
-const getDatePartIndexByPosition = (dateParts, position) => {
+export const getDatePartIndexByPosition = (dateParts, position) => {
     for(let i = 0; i < dateParts.length; i++) {
         const caretInGroup = dateParts[i].caret.end >= position;
 
@@ -143,5 +143,3 @@ const getDatePartIndexByPosition = (dateParts, position) => {
 
     return null;
 };
-
-export { getDatePartIndexByPosition, renderDateParts };

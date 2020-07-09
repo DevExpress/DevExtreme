@@ -1,10 +1,10 @@
-const $ = require('../../core/renderer');
-const EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper');
-const messageLocalization = require('../../localization/message');
-const registerDecorator = require('./ui.list.edit.decorator_registry').register;
-const EditDecorator = require('./ui.list.edit.decorator');
-const Overlay = require('../overlay');
-const ListBase = require('./ui.list.base');
+import $ from '../../core/renderer';
+import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
+import messageLocalization from '../../localization/message';
+import { register as registerDecorator } from './ui.list.edit.decorator_registry';
+import EditDecorator from './ui.list.edit.decorator';
+import Overlay from '../overlay';
+import { ListBase } from './ui.list.base';
 
 const CONTEXTMENU_CLASS = 'dx-list-context-menu';
 const CONTEXTMENU_MENUCONTENT_CLASS = 'dx-list-context-menucontent';

@@ -5,7 +5,7 @@ import RemoteFileSystemProvider from '../../file_management/remote_provider';
 import CustomFileSystemProvider from '../../file_management/custom_provider';
 import ErrorCode from '../../file_management/errors';
 import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
-import whenSome from './ui.file_manager.common';
+import { whenSome } from './ui.file_manager.common';
 
 import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';

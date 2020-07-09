@@ -24,4 +24,4 @@ export class ErrorMessageProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class ErrorMessage extends JSXComponent(ErrorMessageProps) {}
+export class ErrorMessage extends JSXComponent(ErrorMessageProps) {}

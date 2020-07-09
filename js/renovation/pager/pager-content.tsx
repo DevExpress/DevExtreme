@@ -4,9 +4,9 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
 
-import InfoText from './info';
-import PageIndexSelector from './page-index-selector';
-import PageSizeSelector from './page-size-selector';
+import { InfoText } from './info';
+import { PageIndexSelector } from './page-index-selector';
+import { PageSizeSelector } from './page-size-selector';
 import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './consts';
 import PagerProps from './pager-props';
 
@@ -98,7 +98,7 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export default class PagerContentComponent extends JSXComponent(PagerContentProps) {
+export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
     return showInfo && infoTextVisible;

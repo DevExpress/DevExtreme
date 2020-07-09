@@ -1,10 +1,9 @@
-const mathUtils = require('../core/utils/math');
-const iteratorUtils = require('../core/utils/iterator');
-const errors = require('../core/errors');
-const eventUtils = require('./utils');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
-
+import { sign as mathSign, fitIntoRange } from '../core/utils/math';
+import iteratorUtils from '../core/utils/iterator';
+import errors from '../core/errors';
+import { hasTouches } from './utils';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
 
 const DX_PREFIX = 'dx';
 
@@ -17,7 +16,6 @@ const ROTATE = 'rotate';
 const START_POSTFIX = 'start';
 const UPDATE_POSTFIX = '';
 const END_POSTFIX = 'end';
-
 
 const eventAliases = [];
 const addAlias = function(eventName, eventArgs) {
@@ -88,8 +86,8 @@ const getRotation = function(firstVector, secondVector) {
         return 0;
     }
 
-    const sign = mathUtils.sign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
-    const angle = Math.acos(mathUtils.fitIntoRange(scalarProduct / distanceProduct, -1, 1));
+    const sign = mathSign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
+    const angle = Math.acos(fitIntoRange(scalarProduct / distanceProduct, -1, 1));
 
     return sign * angle;
 };
@@ -112,7 +110,7 @@ const TransformEmitter = Emitter.inherit({
     },
 
     validatePointers: function(e) {
-        return eventUtils.hasTouches(e) > 1;
+        return hasTouches(e) > 1;
     },
 
     start: function(e) {
@@ -319,7 +317,25 @@ registerEmitter({
     emitter: TransformEmitter,
     events: eventNames
 });
-
+const exportNames = {};
 iteratorUtils.each(eventNames, function(_, eventName) {
-    exports[eventName.substring(DX_PREFIX.length)] = eventName;
+    exportNames[eventName.substring(DX_PREFIX.length)] = eventName;
 });
+/* eslint-disable spellcheck/spell-checker */
+export const {
+    transformstart,
+    transform,
+    transformend,
+    translatestart,
+    translate,
+    translateend,
+    zoomstart,
+    zoom,
+    zoomend,
+    pinchstart,
+    pinch,
+    pinchend,
+    rotatestart,
+    rotate,
+    rotateend
+} = exportNames;

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import PagerContentComponent from '../../../js/renovation/pager/pager-content';
-import PagerComponent from '../../../js/renovation/pager/pager';
+import { PagerContentComponent } from '../../../js/renovation/pager/pager-content';
+import { Pager as PagerComponent } from '../../../js/renovation/pager/pager';
 
-jest.mock('../../../js/renovation/select-box', jest.fn());
+jest.mock('../../../js/renovation/select-box', () => ({ __esModule: true, SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {

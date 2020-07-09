@@ -29,4 +29,4 @@ const notify = function(message, /* optional */ type, displayTime) {
     new Toast($notify, options).show();
 };
 
-module.exports = notify;
+export default notify;

@@ -17,7 +17,7 @@ import 'ui/pivot_grid/ui.pivot_grid';
 import 'common.css!';
 import 'generic_light.css!';
 
-import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
+import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';
 
 let helper;
 
@@ -3522,12 +3522,12 @@ QUnit.module('Text customization', moduleConfig, () => {
                         { area: 'column' },
                         { area: 'data', format: format }
                     ],
-                    values: [[ DataController.__internals.NO_DATA_AVAILABLE_TEXT ]]
+                    values: [[ DataController__internals.NO_DATA_AVAILABLE_TEXT ]]
                 },
             }).dxPivotGrid('instance');
 
             const done = assert.async();
-            const expectedText = format === undefined ? userDefinedText : DataController.__internals.NO_DATA_AVAILABLE_TEXT;
+            const expectedText = format === undefined ? userDefinedText : DataController__internals.NO_DATA_AVAILABLE_TEXT;
             exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
                 assert.equal(this.worksheet.getCell('B2').value, expectedText);
                 done();

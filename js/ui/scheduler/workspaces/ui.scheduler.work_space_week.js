@@ -54,4 +54,4 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
 
 registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);
 
-module.exports = SchedulerWorkSpaceWeek;
+export default SchedulerWorkSpaceWeek;

@@ -63,7 +63,7 @@ function normalizeAggregate(aggregate) {
     };
 }
 
-module.exports = Class.inherit({
+export default Class.inherit({
     ctor: function(options) {
         this._data = options.data;
         this._groupLevel = options.groupLevel || 0;

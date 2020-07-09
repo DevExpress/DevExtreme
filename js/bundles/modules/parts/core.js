@@ -1,7 +1,7 @@
 /// BUNDLER_PARTS
 
 /* Core (dx.module-core.js) */
-
+/* eslint-disable import/no-commonjs */
 const DevExpress = require('../../../bundles/modules/core');
 
 /* Integrations (dx.module-core.js) */

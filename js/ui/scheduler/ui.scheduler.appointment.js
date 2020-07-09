@@ -213,4 +213,4 @@ const Appointment = DOMComponent.inherit({
 
 registerComponent('dxSchedulerAppointment', Appointment);
 
-module.exports = Appointment;
+export default Appointment;

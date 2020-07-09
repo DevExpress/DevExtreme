@@ -164,7 +164,7 @@ function getViewPortFilter(viewport) {
     return argument => argument >= viewport.startValue && argument <= viewport.endValue;
 }
 
-module.exports = {
+export default {
     getViewPortFilter,
 
     getArgumentRange: function(series) {

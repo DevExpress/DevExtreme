@@ -90,4 +90,4 @@ class DiagramContextToolbox extends Widget {
     }
 }
 
-module.exports = DiagramContextToolbox;
+export default DiagramContextToolbox;

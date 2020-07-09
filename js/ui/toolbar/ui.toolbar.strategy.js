@@ -1,9 +1,9 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const each = require('../../core/utils/iterator').each;
-const compileGetter = require('../../core/utils/data').compileGetter;
-const Class = require('../../core/class');
-const Button = require('../button');
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
+import { compileGetter } from '../../core/utils/data';
+import Class from '../../core/class';
+import Button from '../button';
 const abstract = Class.abstract;
 
 const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
@@ -123,4 +123,4 @@ const ToolbarStrategy = Class.inherit({
 
 });
 
-module.exports = ToolbarStrategy;
+export default ToolbarStrategy;

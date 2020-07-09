@@ -46,4 +46,4 @@ class FileManagerDeleteItemDialog extends FileManagerDialogBase {
     }
 }
 
-module.exports = FileManagerDeleteItemDialog;
+export default FileManagerDeleteItemDialog;

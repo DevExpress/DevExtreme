@@ -1,13 +1,26 @@
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
-import { GroupingHelper, createOffsetFilter } from './ui.data_grid.grouping.core';
+import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './ui.data_grid.grouping.core';
 import { createGroupFilter } from './ui.data_grid.utils';
 import errors from '../widget/ui.errors';
 import { errors as dataErrors } from '../../data/errors';
 import { when, Deferred } from '../../core/utils/deferred';
 
-exports.GroupingHelper = GroupingHelper.inherit((function() {
+function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
+    groupIndex = groupIndex || 0;
+    if(pageSize > 1 && groupSize > 0) {
+        let pageOffset = (groupOffset - Math.floor(groupOffset / pageSize) * pageSize) || pageSize;
+        pageOffset += groupSize - groupIndex - 2;
+        if(pageOffset < 0) {
+            pageOffset += pageSize;
+        }
+        return Math.floor(pageOffset / (pageSize - groupIndex - 1));
+    }
+    return 0;
+}
+
+export const GroupingHelper = GroupingHelperCore.inherit((function() {
     const foreachExpandedGroups = function(that, callback, updateGroups) {
         return that.foreachGroups(function(groupInfo, parents) {
             if(groupInfo.isExpanded) {
@@ -141,23 +154,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
         return totalOffset;
     };
-
-    function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
-        groupIndex = groupIndex || 0;
-        if(pageSize > 1 && groupSize > 0) {
-            let pageOffset = (groupOffset - Math.floor(groupOffset / pageSize) * pageSize) || pageSize;
-            pageOffset += groupSize - groupIndex - 2;
-            if(pageOffset < 0) {
-                pageOffset += pageSize;
-            }
-            return Math.floor(pageOffset / (pageSize - groupIndex - 1));
-        }
-        return 0;
-    }
-
-    ///#DEBUG
-    exports.getContinuationGroupCount = getContinuationGroupCount;
-    ///#ENDDEBUG
 
     function applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex) {
         const item = expandedInfo.items[expandedItemIndex];
@@ -669,3 +665,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         }
     };
 })());
+
+///#DEBUG
+export { getContinuationGroupCount };
+///#ENDDEBUG

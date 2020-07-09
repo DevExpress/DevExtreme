@@ -1,20 +1,32 @@
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import AppointmentList, {
+import {
+  AppointmentList,
   viewFunction as AppointmentListView,
 } from '../../../../js/renovation/scheduler/appointment-tooltip/appointment-list';
-import List from '../../../../js/renovation/list';
-import TooltipItemLayout from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
+import { List } from '../../../../js/renovation/list';
+import { TooltipItemLayout } from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
 import getCurrentAppointment from '../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
 
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-layout', () => () => null);
-jest.mock('../../../../js/renovation/list', () => (props) => (
-  <props.itemTemplate
-    item={props.dataSource[0]}
-    index={0}
-    container="container"
-  />
-));
+jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-layout', () => ({
+  __esModule: true,
+  TooltipItemLayout: () => null,
+}));
+
+jest.mock('../../../../js/renovation/list', () => ({
+  __esModule: true,
+  List: (props) => {
+    const { dataSource } = props;
+    return (
+      <props.itemTemplate
+        item={dataSource[0]}
+        index={0}
+        container="container"
+      />
+    );
+  },
+}));
+
 jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));

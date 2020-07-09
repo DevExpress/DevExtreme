@@ -41,4 +41,4 @@ class DiagramBar {
     }
 }
 
-module.exports = DiagramBar;
+export default DiagramBar;

@@ -3,7 +3,7 @@ import errors from '../widget/ui.errors';
 import dataSourceAdapterProvider from './ui.data_grid.data_source_adapter';
 import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
 
-exports.DataController = dataControllerModule.controllers.data.inherit((function() {
+export const DataController = dataControllerModule.controllers.data.inherit((function() {
     return {
         _getDataSourceAdapter: function() {
             return dataSourceAdapterProvider;
@@ -24,6 +24,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 gridCore.registerModule('data', {
     defaultOptions: dataControllerModule.defaultOptions,
     controllers: {
-        data: exports.DataController
+        data: DataController
     }
 });

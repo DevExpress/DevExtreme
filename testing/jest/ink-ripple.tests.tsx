@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import InkRipple, { viewFunction } from '../../js/renovation/ink-ripple';
+import { InkRipple, viewFunction } from '../../js/renovation/ink-ripple';
 import { initConfig, showWave, hideWave } from '../../js/ui/widget/utils.ink_ripple';
 
 jest.mock('../../js/ui/widget/utils.ink_ripple', () => ({

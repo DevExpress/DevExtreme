@@ -1,21 +1,21 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const noop = require('../../core/utils/common').noop;
-const clickEvent = require('../../events/click');
-const messageLocalization = require('../../localization/message');
-const translator = require('../../animation/translator');
-const eventUtils = require('../../events/utils');
-const feedbackEvents = require('../../events/core/emitter.feedback');
-const EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper');
-const registerDecorator = require('./ui.list.edit.decorator_registry').register;
-const SwitchableEditDecorator = require('./ui.list.edit.decorator.switchable');
-const fx = require('../../animation/fx');
-const themes = require('../themes');
-const ActionSheet = require('../action_sheet');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { noop } from '../../core/utils/common';
+import { name as clickEventName } from '../../events/click';
+import messageLocalization from '../../localization/message';
+import translator from '../../animation/translator';
+import { addNamespace } from '../../events/utils';
+import { active } from '../../events/core/emitter.feedback';
+import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
+import { register as registerDecorator } from './ui.list.edit.decorator_registry';
+import SwitchableEditDecorator from './ui.list.edit.decorator.switchable';
+import fx from '../../animation/fx';
+import themes from '../themes';
+import ActionSheet from '../action_sheet';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
-const CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, LIST_EDIT_DECORATOR);
-const ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR);
+const CLICK_EVENT_NAME = addNamespace(clickEventName, LIST_EDIT_DECORATOR);
+const ACTIVE_EVENT_NAME = addNamespace(active, LIST_EDIT_DECORATOR);
 
 const SLIDE_MENU_CLASS = 'dx-list-slide-menu';
 const SLIDE_MENU_WRAPPER_CLASS = 'dx-list-slide-menu-wrapper';

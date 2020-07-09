@@ -6,7 +6,14 @@ import { each } from '../../core/utils/iterator';
 import { addNamespace } from '../../events/utils';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
-import dragEvents from '../../events/drag';
+import {
+    start as dragEventStart,
+    move as dragEventMove,
+    end as dragEventEnd,
+    enter as dragEventEnter,
+    leave as dragEventLeave,
+    drop as dragEventDrop
+} from '../../events/drag';
 import { getSwatchContainer } from '../widget/swatch_container';
 
 const SORTABLE_NAMESPACE = 'dxSortable';
@@ -213,7 +220,7 @@ const Sortable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        const dragEventsString = [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(' ');
+        const dragEventsString = [dragEventMove, dragEventStart, dragEventEnd, dragEventEnter, dragEventLeave, dragEventDrop].join(' ');
         eventsEngine.off(this._getEventListener(), addNamespace(dragEventsString, SORTABLE_NAMESPACE));
     },
 
@@ -305,7 +312,7 @@ const Sortable = DOMComponent.inherit({
         if(that.option('allowDragging')) {
             const $eventListener = that._getEventListener();
 
-            eventsEngine.on($eventListener, addNamespace(dragEvents.start, SORTABLE_NAMESPACE), itemSelector, function(e) {
+            eventsEngine.on($eventListener, addNamespace(dragEventStart, SORTABLE_NAMESPACE), itemSelector, function(e) {
                 $sourceItem = $(e.currentTarget);
                 const $sourceGroup = $sourceItem.closest(groupSelector);
                 sourceGroup = $sourceGroup.attr('group');
@@ -326,7 +333,7 @@ const Sortable = DOMComponent.inherit({
                 $groups = createGroups();
                 that._indicator = $('<div>').addClass('dx-position-indicator');
             });
-            eventsEngine.on($eventListener, addNamespace(dragEvents.move, SORTABLE_NAMESPACE), function(e) {
+            eventsEngine.on($eventListener, addNamespace(dragEventMove, SORTABLE_NAMESPACE), function(e) {
                 let $item;
                 let $lastItem;
                 let $prevItem;
@@ -424,7 +431,7 @@ const Sortable = DOMComponent.inherit({
                 }
 
             });
-            eventsEngine.on($eventListener, addNamespace(dragEvents.end, SORTABLE_NAMESPACE), function() {
+            eventsEngine.on($eventListener, addNamespace(dragEventEnd, SORTABLE_NAMESPACE), function() {
                 disposeScrollWrapper();
 
                 if(!$sourceItem) {
@@ -521,4 +528,4 @@ Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 // TODO remove dxSortableOld component
 registerComponent('dxSortableOld', Sortable);
 
-module.exports = Sortable;
+export default Sortable;

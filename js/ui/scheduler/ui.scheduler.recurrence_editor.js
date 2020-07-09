@@ -12,7 +12,6 @@ import DateBox from '../date_box';
 import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import { getRecurrenceProcessor } from './recurrence';
-import typeUtils from '../../core/utils/type';
 import '../radio_group';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
@@ -187,7 +186,7 @@ class RecurrenceEditor extends Editor {
     getEditorByField(fieldName) {
         let editor = this.getRecurrenceForm().getEditor(fieldName);
 
-        if(!typeUtils.isDefined(editor)) {
+        if(!isDefined(editor)) {
             switch(fieldName) {
                 case 'byday':
                     editor = this._weekEditor;
@@ -809,4 +808,4 @@ class RecurrenceEditor extends Editor {
 
 registerComponent('dxRecurrenceEditor', RecurrenceEditor);
 
-module.exports = RecurrenceEditor;
+export default RecurrenceEditor;

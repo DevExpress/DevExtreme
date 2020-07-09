@@ -3516,7 +3516,7 @@ const timezones = [{
     'untils': '-133j6sk|18x8f0k|c8uu0|6u7w0|c8tg0|6h980|c8tg0|6h980|c8tg0|6h980|c8tg0|777y0|b5w20|7k6m0|biuq0|7k6m0|biuq0|777y0|biuq0|6ham0|c8s20|6ham0|c8s20|6ham0|c8s20|6u9a0|c8s20|6ham0|c8s20|6ham0|c8s20|7x5a0|asxe0|7x5a0|asxe0|7x5a0|asxe0|7x5a0|b5w20|7k6m0|7x820|asum0|b5w20|7x5a0|asxe0|7x5a0|asxe0|7x5a0|b5w20|7k6m0|b5w20|7x5a0|asxe0|7k6m0|b5w20|8a3y0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9pym0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|Infinity'
 }];
 
-module.exports = {
+export default {
     displayNames: displayNames,
     timezones: timezones
 };
