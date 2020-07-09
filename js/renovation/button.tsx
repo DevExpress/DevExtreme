@@ -118,11 +118,9 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Template() template?: any = '';
-
   @Slot() children?: any;
 
-  @Template({ canBeAnonymous: true }) template?: any = '';
+  @Template() template?: any = '';
 
   @OneWay() text?: string = '';
 
