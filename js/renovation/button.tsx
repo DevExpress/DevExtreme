@@ -118,7 +118,8 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  @Template() template?: any = '';
+
   @Slot() children?: any;
 
   @Template({ canBeAnonymous: true }) template?: any = '';

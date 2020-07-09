@@ -11,8 +11,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
-import InkRipple from './ink-ripple';
-import Widget from './widget';
+import { InkRipple } from './ink-ripple';
+import { Widget } from './widget';
 import BaseComponent from './preact-wrapper/check_box';
 import BaseWidgetProps from './utils/base-props';
 
@@ -126,7 +126,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   view: viewFunction,
 })
 
-export default class CheckBox extends JSXComponent(CheckBoxProps) {
+export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() iconRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
