@@ -5,7 +5,7 @@ import DateTableCell from '../../base/date-table/cell';
 
 export const viewFunction = (viewModel: MonthDateTableCell) => (
   <DateTableCell
-    className={viewModel.className}
+    className={viewModel.classes}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
@@ -22,6 +22,8 @@ export class MonthDateTableCellProps {
   @OneWay() endDate?: Date = new Date();
 
   @OneWay() otherMonth?: boolean = false;
+
+  @OneWay() today?: boolean = false;
 }
 
 @Component({
@@ -29,8 +31,13 @@ export class MonthDateTableCellProps {
   view: viewFunction,
 })
 export default class MonthDateTableCell extends JSXComponent(MonthDateTableCellProps) {
-  get className(): string | undefined {
-    const { otherMonth } = this.props;
-    return otherMonth ? 'dx-scheduler-date-table-other-month' : undefined;
+  get classes(): string | undefined {
+    const { otherMonth, today } = this.props;
+    const classes: string[] = [];
+
+    otherMonth && classes.push('dx-scheduler-date-table-other-month');
+    today && classes.push('dx-scheduler-date-table-current-date');
+
+    return classes.length !== 0 ? classes.join(' ') : undefined;
   }
 }

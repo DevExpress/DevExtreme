@@ -17,11 +17,14 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
           key={cellsRow[0].startDate.toString()}
           className="dx-scheduler-date-table-row"
         >
-          {cellsRow.map(({ startDate, endDate, otherMonth }) => (
+          {cellsRow.map(({
+            startDate, endDate, otherMonth, today,
+          }: ViewCellData) => (
             <Cell
               startDate={startDate}
               endDate={endDate}
               otherMonth={otherMonth}
+              today={today}
               key={startDate.toString()}
             />
           ))}
