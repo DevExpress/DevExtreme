@@ -1102,6 +1102,17 @@ export const BaseChart = BaseWidget.inherit({
         this._processRefreshData(REINIT_REFRESH_ACTION);
     },
 
+    _change_FORCE_DRAWING: function() {
+        this.series.forEach((s) => { s.resetAnimation(); });
+        this._resetAxesAnimation();
+    },
+
+    _change_FORCE_FIRST_DRAWING: function() {
+        this.series.forEach((s) => { s.resetAnimation(true); });
+    },
+
+    _forceAxesAnimation: noop,
+
     _refreshSeries: function(actionName) {
         this.needToPopulateSeries = true;
         this._requestChange([actionName]);

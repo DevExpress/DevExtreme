@@ -9,6 +9,7 @@ import { processHatchingAttrs, getFuncIri } from '../core/renderers/renderer';
 ///#DEBUG
 import { debug } from '../../core/utils/console';
 ///#ENDDEBUG
+import { Deferred, when } from '../../core/utils/deferred';
 
 const _Number = Number;
 
@@ -365,6 +366,7 @@ export let Legend = function(settings) {
     that._titleGroupClass = settings.titleGroupClass;
     that._allowInsidePosition = settings.allowInsidePosition;
     that._widget = settings.widget;
+    that._asyncFirstDrawing = true;
 };
 
 const _Legend = Legend;
@@ -444,6 +446,8 @@ extend(legendPrototype, {
         const options = that._options;
         const items = that._getItemData();
 
+        that._isAsyncRendering = false;
+
         that._size = { width: width, height: height };
         that.erase();
 
@@ -501,6 +505,8 @@ extend(legendPrototype, {
 
         markersGroup.css(patchFontOptions(options.font));
 
+        const deferredItems = [];
+
         that._items = (items || []).map((dataItem, i) => {
             const stateOfDataItem = dataItem.states;
             const normalState = stateOfDataItem.normal;
@@ -517,6 +523,8 @@ extend(legendPrototype, {
             const itemGroup = renderer.g().append(markersGroup);
 
             const markerGroup = renderer.g().attr({ class: 'dxl-marker' }).append(itemGroup);
+
+            deferredItems[i] = new Deferred();
 
             const item = {
                 label: that._createLabel(dataItem, itemGroup),
@@ -535,12 +543,12 @@ extend(legendPrototype, {
                     template.render({
                         model: dataItem, container: markerGroup.element, onRendered: () => {
                             isRendered = true;
-                            if(isAsyncRendering) {
-                                that._widget._requestChange(['LAYOUT']);
-                            }
+                            deferredItems[i].resolve();
                         }
                     });
-                    const isAsyncRendering = !isRendered && markerGroup.element.childNodes.length === 0;
+                    if(!isRendered && markerGroup.element.childNodes.length === 0) {
+                        that._isAsyncRendering = true;
+                    }
                 }
             };
 
@@ -552,8 +560,6 @@ extend(legendPrototype, {
                 that._markersId[dataItem.id] = i;
             }
 
-            return item;
-        }).map(item => {
             const labelBBox = item.label.getBBox();
             const markerBBox = item.marker.getBBox();
             item.markerBBox = markerBBox;
@@ -565,9 +571,23 @@ extend(legendPrototype, {
 
             return item;
         });
+
         if(options.equalRowHeight) {
             that._items.forEach(item => item.bBox.height = maxBBoxHeight);
         }
+
+        when.apply(this, deferredItems).done(() => {
+            if(that._isAsyncRendering) {
+                const changes = ['LAYOUT', 'FULL_RENDER'];
+                if(that._asyncFirstDrawing) {
+                    changes.push('FORCE_FIRST_DRAWING');
+                    that._asyncFirstDrawing = false;
+                } else {
+                    changes.push('FORCE_DRAWING');
+                }
+                that._widget._requestChange(changes);
+            }
+        });
     },
 
     _getItemData: function() {

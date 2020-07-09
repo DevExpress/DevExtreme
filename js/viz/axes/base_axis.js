@@ -798,6 +798,10 @@ Axis.prototype = {
         this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
     },
 
+    resetAnimation: function() {
+        this._resetAnimation = true;
+    },
+
     getMargins: function() {
         const that = this;
         if(that.hasCustomPosition()) {
@@ -2016,6 +2020,10 @@ Axis.prototype = {
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
 
+        if(this._resetAnimation) {
+            that._resetStartCoordinates();
+        }
+
         cleanUpInvalidTicks(that._majorTicks);
         cleanUpInvalidTicks(that._minorTicks);
         cleanUpInvalidTicks(that._boundaryTicks);
@@ -2053,6 +2061,16 @@ Axis.prototype = {
     prepareAnimation() {
         const that = this;
         const action = 'saveCoords';
+        callAction(that._majorTicks, action);
+        callAction(that._minorTicks, action);
+        callAction(that._insideConstantLines, action);
+        callAction(that._outsideConstantLines, action);
+        callAction(that._strips, action);
+    },
+
+    _resetStartCoordinates() {
+        const that = this;
+        const action = 'resetCoordinates';
         callAction(that._majorTicks, action);
         callAction(that._minorTicks, action);
         callAction(that._insideConstantLines, action);
