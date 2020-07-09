@@ -222,9 +222,7 @@ QUnit.module_r('Pager', {
         // assert
         assert.ok(this.checkPages(pages(), [1, 2, 3, 4, 5, 13], '1'), 'page value = 1');
         instance._useDefaultOptionUpdate = true;
-        $(instance._pages[1]._$page).trigger('dxclick');
 
-        assert.ok(this.checkPages(pages(), [1, 2, 3, 4, 5, 13], '2'), 'page value = 2');
         instance._selectPageByValue(2);
 
         assert.ok(this.checkPages(pages(), [1, 2, 3, 4, 5, 13], '2'), 'page value = 2');
@@ -911,7 +909,6 @@ QUnit.module_r('Pager', {
     });
 
     QUnit.test('Light mode', function(assert) {
-        // Vitik: render in large mode because .dx-pager .dx-pages { white-space: nowrap; }
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
@@ -1353,7 +1350,7 @@ QUnit.module_r('Pager', {
         $pager.width(800);
         pager._dimensionChanged();
 
-        assert.ok(!isLightMode(pager), 'pager is not displayed in the light mode width:880');
+        assert.ok(!isLightMode(pager), 'pager is not displayed in the light mode width:800');
         assert.equal(pageSizeEl, $pager.find('.dx-page-sizes')[0].children[0], 'pages not re-render width:880');
 
         $pager.width(100);
@@ -1526,7 +1523,7 @@ QUnit.module_r('Pager', {
     });
 
     if(!isRenovatedComponent) {
-        QUnit.test('ToRemove: Rewrite private API _renderContentImpl Pager is not re-rendered in the Light mode when width is not changed', function(assert) {
+        QUnit.test('Pager is not re-rendered in the Light mode when width is not changed', function(assert) {
             const pager = $('#container')
                 .width(PAGER_LIGHT_MODE_WIDTH)
                 .dxPager({
