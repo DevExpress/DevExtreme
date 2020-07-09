@@ -17,6 +17,8 @@ export const viewFunction = (viewModel: MonthDateTableCell) => (
 
 @ComponentBindings()
 export class MonthDateTableCellProps {
+  @OneWay() className?: string;
+
   @OneWay() startDate?: Date = new Date();
 
   @OneWay() endDate?: Date = new Date();
@@ -32,11 +34,12 @@ export class MonthDateTableCellProps {
 })
 export default class MonthDateTableCell extends JSXComponent(MonthDateTableCellProps) {
   get classes(): string | undefined {
-    const { otherMonth, today } = this.props;
+    const { otherMonth, today, className } = this.props;
     const classes: string[] = [];
 
     otherMonth && classes.push('dx-scheduler-date-table-other-month');
     today && classes.push('dx-scheduler-date-table-current-date');
+    className && classes.push(className);
 
     return classes.length !== 0 ? classes.join(' ') : undefined;
   }
