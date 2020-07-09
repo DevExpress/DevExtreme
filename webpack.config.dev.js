@@ -33,7 +33,21 @@ module.exports = Object.assign({
                     loader: 'babel-loader'
                 }
             },
-        ],
+            {
+                test: /version\.js$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: '%VERSION%',
+                    replace: require('./package.json').version,
+                }
+            }, {
+                test: /renovation_state\.js$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: '%RENOVATION_STATE%',
+                    replace: 'true',
+                }
+            }]
     },
     resolve: {
         extensions: ['.js', '.tsx'],

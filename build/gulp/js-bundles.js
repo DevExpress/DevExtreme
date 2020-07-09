@@ -92,6 +92,6 @@ gulp.task('js-bundles-debug', gulp.series('version-replace', function() {
     return createDebugBundlesStream(false);
 }));
 
-gulp.task('js-bundles-dev', gulp.series('version-replace', function() {
+gulp.task('js-bundles-dev', function() {
     return createDebugBundlesStream(true);
-}));
+});

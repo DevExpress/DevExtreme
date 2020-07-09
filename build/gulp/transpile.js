@@ -18,6 +18,7 @@ const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
+const RENOVATION_STATE_PATH = 'core/renovation_state.js';
 
 gulp.task('transpile', gulp.series('generate-components', 'bundler-config', function() {
     return gulp.src(SRC)
@@ -25,7 +26,13 @@ gulp.task('transpile', gulp.series('generate-components', 'bundler-config', func
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 
-gulp.task('version-replace', gulp.series('transpile', function() {
+gulp.task('renovated-replace', gulp.series('transpile', function() {
+    return gulp.src(path.join(context.TRANSPILED_PATH, RENOVATION_STATE_PATH), { base: './' })
+        .pipe(replace('%RENOVATION_STATE%', process.env.RENOVATION_STATE))
+        .pipe(gulp.dest('./'));
+}));
+
+gulp.task('version-replace', gulp.series('renovated-replace', function() {
     return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
         .pipe(replace('%VERSION%', context.version.script))
         .pipe(gulp.dest('./'));
