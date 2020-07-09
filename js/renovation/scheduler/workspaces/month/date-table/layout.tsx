@@ -7,7 +7,7 @@ import { ViewCellData } from '../../types';
 
 export const viewFunction = (viewModel: MonthDateTableLayout) => (
   <table
-    className="dx-scheduler-date-table"
+    className={`dx-scheduler-date-table ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
@@ -37,6 +37,8 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
 @ComponentBindings()
 export class MonthDateTableLayoutProps {
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+
+  @OneWay() className?: string;
 }
 
 @Component({
