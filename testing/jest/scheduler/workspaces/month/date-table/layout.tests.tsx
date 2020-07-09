@@ -5,10 +5,14 @@ import {
   MonthDateTableCell as Cell,
 } from '../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => () => null);
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell', () => () => null);
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
+  Row: () => null,
+}));
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date-table/cell', () => ({
+  MonthDateTableCell: () => null,
+}));
 
-describe('Month DateTableLayout', () => {
+describe('MonthDateTableLayout', () => {
   describe('Render', () => {
     const viewCellsData = [[
       { startDate: new Date(2020, 6, 9), endDate: new Date(2020, 6, 10), today: true },

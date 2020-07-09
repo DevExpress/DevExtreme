@@ -4,7 +4,7 @@ import { viewFunction as LayoutView } from '../../../../../js/renovation/schedul
 import { MonthDateTableLayout } from '../../../../../js/renovation/scheduler/workspaces/month/date-table/layout';
 
 jest.mock('../../../../../js/renovation/scheduler/workspaces/base/layout', () => ({
-  DateTableLayoutBase: (props) => <div {...props} />,
+  LayoutBase: (props) => <div {...props} />,
 }));
 
 describe('MonthLayout', () => {
