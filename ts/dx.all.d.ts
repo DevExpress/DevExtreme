@@ -940,7 +940,9 @@ declare module DevExpress.core {
         on(events: any): this;
     }
     /** @name dxElement */
-    export type dxElement = Element & JQuery;
+    export type dxElement = HTMLElement & JQuery;
+    /** @name dxSVGElement */
+    export type dxSVGElement = SVGElement & JQuery;
     /** @name dxTemplate.Options */
     export interface dxTemplateOptions {
         /** @name dxTemplate.Options.name */
