@@ -371,7 +371,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     const adapter = validator.option('adapter');
                     if(adapter) {
                         adapter.getValue = getValue;
-                        adapter.validationRequestsCallbacks.empty();
+                        adapter.validationRequestsCallbacks = [];
                     }
                 }
 

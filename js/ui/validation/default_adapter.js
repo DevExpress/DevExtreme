@@ -1,13 +1,12 @@
-import Callbacks from '../../core/utils/callbacks';
 import Class from '../../core/class';
 
 const DefaultAdapter = Class.inherit({
     ctor(editor, validator) {
         this.editor = editor;
         this.validator = validator;
-        this.validationRequestsCallbacks = Callbacks();
+        this.validationRequestsCallbacks = [];
         const handler = (args) => {
-            this.validationRequestsCallbacks.fire(args);
+            this.validationRequestsCallbacks.forEach(item => item(args));
         };
         editor.validationRequest.add(handler);
         editor.on('disposing', function() {
