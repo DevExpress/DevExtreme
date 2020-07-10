@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import caretUtils from './utils.caret';
-import devices from '../../core/devices';
+import { isInputEventsL2Supported } from './utils.support';
 import { each } from '../../core/utils/iterator';
 import eventUtils from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
@@ -14,7 +14,7 @@ import wheelEvent from '../../events/core/wheel';
 import MaskRules from './ui.text_editor.mask.rule';
 import TextEditorBase from './ui.text_editor.base';
 import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
-import AndroidMaskStrategy from './ui.text_editor.mask.strategy.android';
+import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
 
 const stubCaret = function() {
     return {};
@@ -112,9 +112,9 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        const device = devices.real();
-        this._maskStrategy = device.android && device.version[0] > 4 ?
-            new AndroidMaskStrategy(this) :
+        this._maskStrategy = isInputEventsL2Supported() ?
+            new InputEventsMaskStrategy(this) :
+            // FF, old Safari and desktop Chrome (https://bugs.chromium.org/p/chromium/issues/detail?id=947408)
             new DefaultMaskStrategy(this);
     },
 
@@ -151,8 +151,8 @@ const TextEditorMask = TextEditorBase.inherit({
     _onMouseWheel: noop,
 
     _render: function() {
-        this.callBase();
         this._renderMask();
+        this.callBase();
         this._attachMouseWheelEventHandlers();
     },
 
