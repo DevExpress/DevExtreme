@@ -121,17 +121,29 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return options;
     }
     _renderPopupContent($parent) {
-        const $inputContainer = $('<div>')
-            .addClass(DIAGRAM_TOOLBOX_INPUT_CONTAINER_CLASS)
-            .appendTo($parent);
-        this._renderSearchInput($inputContainer);
+        let panelHeight = '100%';
+        if(this.option('showSearch')) {
+            const $inputContainer = $('<div>')
+                .addClass(DIAGRAM_TOOLBOX_INPUT_CONTAINER_CLASS)
+                .appendTo($parent);
+            this._updateElementWidth($inputContainer);
+            this._renderSearchInput($inputContainer);
+            if(hasWindow()) {
+                panelHeight = 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
+            }
+        }
 
-        const panelHeight = !hasWindow() ? '100%' : 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
         const $panel = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_PANEL_CLASS)
             .appendTo($parent)
             .height(panelHeight);
+        this._updateElementWidth($panel);
         this._renderScrollView($panel);
+    }
+    _updateElementWidth($element) {
+        if(this.option('toolboxWidth') !== undefined) {
+            $element.css('width', this.option('toolboxWidth'));
+        }
     }
     updateMaxHeight() {
         if(this.isMobileView()) return;
@@ -185,7 +197,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
         const $accordion = $('<div>')
             .appendTo(this._scrollView.content());
-
+        this._updateElementWidth($accordion);
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
@@ -321,6 +333,10 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 break;
             case 'onFilterChanged':
                 this._createOnFilterChangedAction();
+                break;
+            case 'showSearch':
+            case 'toolboxWidth':
+                this._invalidate();
                 break;
             case 'toolboxGroups':
                 this._accordion.option('dataSource', this._getAccordionDataSource());
