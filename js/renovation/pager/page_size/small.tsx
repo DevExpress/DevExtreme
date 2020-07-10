@@ -2,11 +2,11 @@ import {
   ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
-import { SelectBox } from '../select-box';
-import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
-import { FullPageSize } from './pager.types.d';
-import { PAGER_SELECTION_CLASS } from './consts';
-import { getElementMinWidth } from './utils/get-element-width';
+import { SelectBox } from '../../select-box';
+import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
+import { FullPageSize } from '../common/types.d';
+import { PAGER_SELECTION_CLASS } from '../common/consts';
+import { getElementMinWidth } from '../utils/get_element_width';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';

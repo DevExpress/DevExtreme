@@ -537,18 +537,25 @@ class AppointmentModel {
     }
 
     fixWrongEndDate(appointment, startDate, endDate) {
-        if(this._isEndDateWrong(appointment, startDate, endDate)) {
-            if(this._dataAccessors.getter.allDay(appointment)) {
-                endDate = dateUtils.setToDayEnd(new Date(startDate));
-            } else {
-                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
-            }
+        if(this._isEndDateWrong(startDate, endDate)) {
+            const isAllDay = this._dataAccessors.getter.allDay(appointment);
+
+            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
+
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
         return endDate;
     }
 
-    _isEndDateWrong(appointment, startDate, endDate) {
+    _calculateAppointmentEndDate(isAllDay, startDate) {
+        if(isAllDay) {
+            return dateUtils.setToDayEnd(new Date(startDate));
+        }
+
+        return new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
+    }
+
+    _isEndDateWrong(startDate, endDate) {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 

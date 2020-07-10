@@ -701,7 +701,7 @@ QUnit.module('Custom Adapters', {
         const validator = that.fixture.createValidator({
             adapter: {
                 getValue: noop,
-                validationRequestsCallbacks: $.Callbacks()
+                validationRequestsCallbacks: []
             },
             validationRules: [{
                 type: 'required'
@@ -723,7 +723,7 @@ QUnit.module('Custom Adapters', {
         const that = this;
         const adapter = {
             getValue: sinon.stub(),
-            validationRequestsCallbacks: $.Callbacks()
+            validationRequestsCallbacks: []
         };
         const validatedHandler = sinon.stub();
 
@@ -737,7 +737,7 @@ QUnit.module('Custom Adapters', {
 
         adapter.getValue.returns('123');
         // act
-        adapter.validationRequestsCallbacks.fire();
+        adapter.validationRequestsCallbacks.forEach(item => item());
         // assert
         assert.ok(adapter.getValue.calledOnce, 'Value should be requested');
         assert.ok(validatedHandler.calledOnce, 'Validated handler should be called');
@@ -747,7 +747,7 @@ QUnit.module('Custom Adapters', {
         const that = this;
         const adapter = {
             getValue: sinon.stub(),
-            validationRequestsCallbacks: $.Callbacks()
+            validationRequestsCallbacks: []
         };
         const validatedHandler = sinon.stub();
 
@@ -760,9 +760,9 @@ QUnit.module('Custom Adapters', {
         });
 
         adapter.getValue.returns('123');
-        adapter.validationRequestsCallbacks.fire({
+        adapter.validationRequestsCallbacks.forEach(item => item({
             value: ''
-        });
+        }));
 
         assert.strictEqual(validatedHandler.firstCall.args[0].isValid, false, 'empty value should be validated');
     });
@@ -771,7 +771,7 @@ QUnit.module('Custom Adapters', {
         const that = this;
         const adapter = {
             getValue: sinon.stub(),
-            validationRequestsCallbacks: $.Callbacks(),
+            validationRequestsCallbacks: [],
             applyValidationResults: sinon.stub()
         };
         const validatedHandler = sinon.stub();
@@ -786,7 +786,7 @@ QUnit.module('Custom Adapters', {
 
         adapter.getValue.returns('123');
         // act
-        adapter.validationRequestsCallbacks.fire();
+        adapter.validationRequestsCallbacks.forEach(item => item());
         // assert
         assert.ok(adapter.getValue.calledOnce, 'Value should be requested');
         assert.ok(validatedHandler.calledOnce, 'Validated handler should be called');

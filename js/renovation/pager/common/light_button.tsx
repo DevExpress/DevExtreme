@@ -2,11 +2,11 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
 
-import { name } from '../../events/click';
-import { registerKeyboardAction } from '../../ui/shared/accessibility';
-import eventsEngine from '../../events/core/events_engine';
+import { name } from '../../../events/click';
+import { registerKeyboardAction } from '../../../ui/shared/accessibility';
+import eventsEngine from '../../../events/core/events_engine';
 import { PAGER_CLASS } from './consts';
-import { closestClass } from './utils/closest_class';
+import { closestClass } from '../utils/closest_class';
 
 type dxClickEffectFn = (HTMLDivElement, Function) => (() => void) | undefined;
 
@@ -51,7 +51,6 @@ export class LightButtonProps {
 function createActionByOption(): () => void {
   return (): void => { };
 }
-// tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class LightButton extends JSXComponent(LightButtonProps) {
   @Ref() widgetRef!: HTMLDivElement;

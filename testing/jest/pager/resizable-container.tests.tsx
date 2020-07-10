@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
+import getElementComputedStyle from '../../../js/renovation/pager/utils/get_computed_style';
 import {
   ResizableContainer,
   viewFunction as ResizableContainerComponent,
   ResizableContainerProps,
   updateChildProps,
-} from '../../../js/renovation/pager/resizable-container';
-import { GetHtmlElement } from '../../../js/renovation/pager/pager.types.d';
+} from '../../../js/renovation/pager/resizable_container';
+import { GetHtmlElement } from '../../../js/renovation/pager/common/types.d';
 
-jest.mock('../../../js/renovation/pager/utils/get-computed-style');
+jest.mock('../../../js/renovation/pager/utils/get_computed_style');
 
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 describe('resizable-container', () => {

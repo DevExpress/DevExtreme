@@ -62,6 +62,16 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      */
     customShapeTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any);
     /**
+     * @docid dxDiagramOptions.customShapeToolboxTemplate
+     * @type template|function
+     * @type_function_param1 container:dxSVGElement
+     * @type_function_param2 data:object
+     * @type_function_param2_field1 item:dxDiagramShape
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    customShapeToolboxTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any);
+    /**
      * @docid dxDiagramOptions.customShapes
      * @type Array<Object>
      * @default []

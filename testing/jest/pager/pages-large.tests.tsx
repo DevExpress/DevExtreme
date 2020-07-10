@@ -2,8 +2,8 @@
 /* eslint-disable spellcheck/spell-checker */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { PagesLarge, viewFunction as PagesLargeComponent } from '../../../js/renovation/pager/pages-large';
-import { Page } from '../../../js/renovation/pager/page';
+import { PagesLarge, viewFunction as PagesLargeComponent } from '../../../js/renovation/pager/pages/large';
+import { Page } from '../../../js/renovation/pager/pages/page';
 
 describe('View', () => {
   it('render', () => {

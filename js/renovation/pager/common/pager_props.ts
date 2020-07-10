@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay, TwoWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../../localization/message';
 
 @ComponentBindings()
 export default class PagerProps {
