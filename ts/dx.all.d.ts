@@ -6539,7 +6539,7 @@ declare module DevExpress.ui {
     /** @name dxValidator.Options */
     export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
         /** @name dxValidator.Options.adapter */
-        adapter?: { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> | JQueryCallback };
+        adapter?: { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> };
         /** @name dxValidator.Options.name */
         name?: string;
         /** @name dxValidator.Options.onValidated */
