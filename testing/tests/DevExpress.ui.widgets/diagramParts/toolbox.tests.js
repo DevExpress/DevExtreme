@@ -74,16 +74,16 @@ QUnit.module('Toolbox', {
         let $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
         let $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
         assert.equal($input.length, 1);
-        assert.equal($input.css('width'), '175px');
+        assert.equal($input.width(), 175);
         assert.equal($accordion.length, 1);
-        assert.equal($accordion.css('width'), '175px');
+        assert.equal($accordion.width(), 175);
         this.instance.option('toolbox.width', 300);
         $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
         $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
         assert.equal($input.length, 1);
-        assert.equal($input.css('width'), '300px');
+        assert.equal($input.width(), 300);
         assert.equal($accordion.length, 1);
-        assert.equal($accordion.css('width'), '300px');
+        assert.equal($accordion.width(), 300);
     });
     test('call .update() after accordion item collapsing/expanding', function(assert) {
         const clock = sinon.useFakeTimers();

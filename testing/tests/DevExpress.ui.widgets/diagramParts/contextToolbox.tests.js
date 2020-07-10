@@ -38,11 +38,11 @@ QUnit.module('Context Toolbox', {
         this.instance._contextToolbox._show(0, 0, 0, 'general', () => {});
         $contextToolbox = $('body').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
         assert.equal($contextToolbox.length, 1);
-        assert.equal($contextToolbox.css('width'), '152px');
+        assert.equal($contextToolbox.width(), 152);
         this.instance.option('contextToolbox.width', 300);
         this.instance._contextToolbox._show(0, 0, 0, 'general', () => {});
         $contextToolbox = $('body').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
         assert.equal($contextToolbox.length, 1);
-        assert.equal($contextToolbox.css('width'), '300px');
+        assert.equal($contextToolbox.width(), 300);
     });
 });
