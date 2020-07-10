@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import devices from 'core/devices';
 import browser from 'core/utils/browser';
+import { isInputEventsL2Supported } from 'ui/text_box/utils.support';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
@@ -488,6 +488,22 @@ QUnit.module('typing', moduleConfig, () => {
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('"valueChanged" and "input" events should handle correctly when "valueChangeEvent" is "input"', function(assert) {
+        assert.expect(2);
+
+        $('#texteditor').dxTextEditor({
+            onInput: () => assert.ok(true, '"input" event triggered'),
+            onValueChanged: ({ value }) => assert.strictEqual(value, '1', 'value applies to the editor'),
+            valueChangeEvent: 'input',
+            mask: '9'
+        });
+
+        const $input = $('#texteditor .dx-texteditor-input');
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+        keyboard.type('1');
     });
 });
 
@@ -2127,31 +2143,12 @@ QUnit.module('Hidden input', {}, () => {
 });
 
 QUnit.module('Strategies', () => {
-    QUnit.test('default strategy should be used for all devices, except android 5+', function(assert) {
+    QUnit.test('inputEvents strategy should be used for browser supports Input Events Level 2', function(assert) {
         const instance = $('#texteditor').dxTextEditor({
             mask: '0'
         }).dxTextEditor('instance');
-
-        const { android, version } = devices.real();
-        const isModernAndroidDevice = android && version[0] >= 5;
-        const expectedMaskStrategy = isModernAndroidDevice ? 'android' : 'default';
+        const expectedMaskStrategy = isInputEventsL2Supported() ? 'inputEvents' : 'default';
 
         assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, 'strategy name is correct');
-    });
-
-    QUnit.test('default strategy should be used for devices with android less than v5', function(assert) {
-        const currentDevice = devices.real();
-
-        devices.real({
-            platform: 'android',
-            version: [4, 4, 1]
-        });
-
-        const instance = $('#texteditor').dxTextEditor({
-            mask: '0'
-        }).dxTextEditor('instance');
-
-        assert.strictEqual(instance._maskStrategy.NAME, 'default', 'strategy name is correct');
-        devices.real(currentDevice);
     });
 });
