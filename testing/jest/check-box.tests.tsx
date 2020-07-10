@@ -214,6 +214,25 @@ describe('CheckBox', () => {
               expect(onClick).not.toBeCalled();
             });
           });
+
+          describe('Click', () => {
+            it('should change value by Widget click', () => {
+              const checkBox = new CheckBox({
+                value: false,
+              });
+              checkBox.onWidgetClick();
+              expect(checkBox.props.value).toBe(true);
+            });
+
+            it('should not change value by Widget click of readOnly is true', () => {
+              const checkBox = new CheckBox({
+                value: false,
+                readOnly: true,
+              });
+              checkBox.onWidgetClick();
+              expect(checkBox.props.value).toBe(false);
+            });
+          });
         });
       });
     });
@@ -262,6 +281,63 @@ describe('CheckBox', () => {
           element: iconRef,
           wave: 1,
         });
+      });
+    });
+
+    describe('FocusIn/FocusOut', () => {
+      it('should ignore inkripple effects if the useInkRipple is "false"', () => {
+        const checkBox = new CheckBox({ useInkRipple: false });
+        checkBox.inkRippleRef = {
+          showWave: jest.fn(),
+          hideWave: jest.fn(),
+        } as any;
+
+        checkBox.onFocusIn({} as Event);
+        checkBox.onFocusOut({} as Event);
+        expect(checkBox.inkRippleRef.showWave).not.toHaveBeenCalled();
+        expect(checkBox.inkRippleRef.hideWave).not.toHaveBeenCalled();
+      });
+
+      it('should show inkripple effect on focusin action', () => {
+        const checkBox = new CheckBox({ useInkRipple: true });
+        const iconRef = {};
+        const event = {} as Event;
+        checkBox.iconRef = iconRef as any;
+        checkBox.inkRippleRef = { showWave: jest.fn() } as any;
+        checkBox.onFocusIn(event);
+
+        expect(checkBox.inkRippleRef.showWave).toHaveBeenCalledTimes(1);
+        expect(checkBox.inkRippleRef.showWave).toHaveBeenCalledWith({
+          event,
+          element: iconRef,
+          wave: 0,
+        });
+      });
+
+      it('should hide inkripple effect on focusout action', () => {
+        const checkBox = new CheckBox({ useInkRipple: true });
+        const iconRef = {};
+        const event = {} as Event;
+        checkBox.iconRef = iconRef as any;
+        checkBox.inkRippleRef = { hideWave: jest.fn() } as any;
+        checkBox.onFocusOut(event);
+
+        expect(checkBox.inkRippleRef.hideWave).toHaveBeenCalledTimes(1);
+        expect(checkBox.inkRippleRef.hideWave).toHaveBeenCalledWith({
+          event,
+          element: iconRef,
+          wave: 0,
+        });
+      });
+
+      it('should raise onFocusIn prop event', () => {
+        const onFocusIn = jest.fn();
+        const checkBox = new CheckBox({ onFocusIn });
+        const event = {} as Event;
+
+        checkBox.onFocusIn(event);
+
+        expect(onFocusIn).toHaveBeenCalledTimes(1);
       });
     });
   });

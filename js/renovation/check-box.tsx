@@ -213,7 +213,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
     return {
       role: 'checkbox',
-      checked: indeterminate ? 'mixed' : `${checked}` || 'false',
+      checked: indeterminate ? 'mixed' : `${checked}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
     };
