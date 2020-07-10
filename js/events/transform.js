@@ -1,6 +1,5 @@
 import { sign as mathSign, fitIntoRange } from '../core/utils/math';
 import iteratorUtils from '../core/utils/iterator';
-import errors from '../core/errors';
 import { hasTouches } from './utils';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
@@ -9,7 +8,6 @@ const DX_PREFIX = 'dx';
 
 const TRANSFORM = 'transform';
 const TRANSLATE = 'translate';
-const ZOOM = 'zoom';
 const PINCH = 'pinch';
 const ROTATE = 'rotate';
 
@@ -37,11 +35,6 @@ addAlias(TRANSFORM, {
 addAlias(TRANSLATE, {
     translation: true,
     deltaTranslation: true
-});
-
-addAlias(ZOOM, {
-    scale: true,
-    deltaScale: true
 });
 
 addAlias(PINCH, {
@@ -100,14 +93,6 @@ const getTranslation = function(firstVector, secondVector) {
 };
 
 const TransformEmitter = Emitter.inherit({
-
-    configure: function(data, eventName) {
-        if(eventName.indexOf(ZOOM) > -1) {
-            errors.log('W0005', eventName, '15.1', 'Use \'' + eventName.replace(ZOOM, PINCH) + '\' event instead');
-        }
-
-        this.callBase(data);
-    },
 
     validatePointers: function(e) {
         return hasTouches(e) > 1;
