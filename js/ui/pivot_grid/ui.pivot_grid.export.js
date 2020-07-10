@@ -244,6 +244,11 @@ export const DataProvider = Class.inherit({
         } else {
             result.value = item.value;
         }
+
+        if(result.cellSourceData.isWhiteSpace) {
+            result.value = '';
+        }
+
         return result;
     },
 
