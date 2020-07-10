@@ -2041,13 +2041,24 @@ class Scheduler extends Widget {
         const target = options.data || options;
         const cellData = this.getTargetCellData();
         const targetAllDay = this.fire('getField', 'allDay', target);
-        const targetStartDate = new Date(this.fire('getField', 'startDate', target));
-        const targetEndDate = new Date(this.fire('getField', 'endDate', target));
-        let date = cellData.date || targetStartDate;
-        const duration = targetEndDate.getTime() - targetStartDate.getTime();
+        let targetStartDate = new Date(this.fire('getField', 'startDate', target));
+        let targetEndDate = new Date(this.fire('getField', 'endDate', target));
+        let date = cellData.startDate || targetStartDate;
 
-        if(this._workSpace.keepOriginalHours() && !isNaN(targetStartDate.getTime())) {
-            const diff = targetStartDate.getTime() - dateUtils.trimTime(targetStartDate).getTime();
+        if(!targetStartDate || isNaN(targetStartDate)) {
+            targetStartDate = date;
+        }
+        const targetStartTime = targetStartDate.getTime();
+
+        if(!targetEndDate || isNaN(targetEndDate)) {
+            targetEndDate = cellData.endDate;
+        }
+        const targetEndTime = targetEndDate.getTime() || cellData.endData;
+
+        const duration = targetEndTime - targetStartTime;
+
+        if(this._workSpace.keepOriginalHours()) {
+            const diff = targetStartTime - dateUtils.trimTime(targetStartDate).getTime();
             date = new Date(dateUtils.trimTime(date).getTime() + diff);
         }
 
