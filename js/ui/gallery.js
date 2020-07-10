@@ -598,9 +598,9 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _toggleIndicatorInteraction: function(clickEnabled) {
-        const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR);
+        const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR) || [];
 
-        if($indicatorItems?.length) {
+        if($indicatorItems.length) {
             $indicatorItems.each(function(index, element) {
                 clickEnabled ?
                     this._attachIndicatorClickHandler($(element), index) :
