@@ -71,12 +71,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
         return Math.floor(excelWidth * 100) / 100;
     };
 
-    const calculateColumnWidths = (gridInstance) => {
-        return $(gridInstance.element())
-            .find('.dx-bottom-row col')
-            .map((ind, col) => toExcelWidth(col.style.width));
-    };
-
     const getOptions = (context, pivotGrid, expectedCustomizeCellArgs, options) => {
         const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
@@ -98,7 +92,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.test('Empty pivot', function(assert) {
         const done = assert.async();
 
-        const pivotGrid = $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance');
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000
+        }).dxPivotGrid('instance');
 
         const expectedCells = [[
             { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
@@ -112,7 +108,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -138,6 +134,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -155,7 +152,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -182,6 +179,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataFieldArea: 'column',
@@ -206,7 +204,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(345), toExcelWidth(584)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -233,6 +231,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataFieldArea: 'row',
@@ -257,7 +256,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -284,6 +283,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -307,7 +307,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -336,6 +336,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -359,7 +360,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -386,6 +387,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -409,7 +411,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -438,6 +440,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -461,7 +464,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -489,6 +492,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -520,7 +524,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(422), toExcelWidth(436)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -550,6 +554,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -581,7 +586,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(422), toExcelWidth(436)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -605,6 +610,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -625,7 +631,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -652,6 +658,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -672,7 +679,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -697,6 +704,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -717,7 +725,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -745,6 +753,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -765,7 +774,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -790,6 +799,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -813,7 +823,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(448), toExcelWidth(481)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -841,6 +851,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -864,7 +875,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(448), toExcelWidth(481)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -892,6 +903,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -919,7 +931,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -948,6 +960,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -975,7 +988,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(457), toExcelWidth(472)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1003,6 +1016,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: true,
             showRowGrandTotals: true,
             dataSource: ds
@@ -1072,6 +1086,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: true,
             showRowGrandTotals: true,
             rtlEnabled: true,
@@ -1114,7 +1129,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(71), toExcelWidth(70), toExcelWidth(169), toExcelWidth(277), toExcelWidth(412)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1140,6 +1155,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -1157,7 +1173,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1265,7 +1280,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1350,7 +1364,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1379,6 +1392,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             wordWrapEnabled: false,
@@ -1397,7 +1411,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1424,6 +1438,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -1441,7 +1456,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1473,6 +1488,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             }
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 dataSource: ds,
@@ -1507,7 +1523,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(296), toExcelWidth(292), toExcelWidth(341)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1533,6 +1549,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             ]
         };
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
             dataSource: ds
@@ -1550,7 +1567,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -1564,7 +1581,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, newTopLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1593,6 +1610,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'standard',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -1614,7 +1632,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1641,6 +1659,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'tree',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -1667,7 +1686,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1694,6 +1713,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'standard',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -1720,7 +1740,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1747,6 +1767,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'tree',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -1773,7 +1794,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1800,6 +1821,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'standard',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: true,
@@ -1830,7 +1852,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1857,6 +1879,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'tree',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: true,
@@ -1887,7 +1910,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1914,6 +1937,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'standard',
                 showTotalsPrior: 'rows',
                 showColumnGrandTotals: false,
@@ -1946,7 +1970,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1973,6 +1997,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'tree',
                 showTotalsPrior: 'rows',
                 showColumnGrandTotals: false,
@@ -2004,7 +2029,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(71), toExcelWidth(909)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2032,6 +2057,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 rowHeaderLayout: 'tree',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: true,
@@ -2069,7 +2095,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 4 }, { row: 5, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(19), toExcelWidth(20), toExcelWidth(71), toExcelWidth(889)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2099,6 +2125,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: false,
@@ -2120,7 +2147,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2147,6 +2174,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: false,
@@ -2172,7 +2200,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2199,6 +2227,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: true,
                 showColumnTotals: false,
@@ -2228,7 +2257,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2255,6 +2284,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: false,
@@ -2288,7 +2318,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(234), toExcelWidth(624)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2315,6 +2345,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: false,
@@ -2334,7 +2365,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2361,6 +2392,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: false,
@@ -2386,7 +2418,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2413,6 +2445,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: false,
@@ -2434,7 +2467,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2461,6 +2494,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: true,
@@ -2485,7 +2519,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(361), toExcelWidth(568)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2512,6 +2546,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -2540,7 +2575,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(361), toExcelWidth(568)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2567,6 +2602,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -2599,7 +2635,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(198), toExcelWidth(311), toExcelWidth(420)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2626,6 +2662,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -2650,7 +2687,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(361), toExcelWidth(568)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2677,6 +2714,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -2695,7 +2733,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2723,6 +2761,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: false,
@@ -2747,7 +2786,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(858)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2775,6 +2814,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: true,
@@ -2802,7 +2842,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2830,6 +2870,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: false,
                 showColumnTotals: true,
@@ -2860,7 +2901,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(183), toExcelWidth(287), toExcelWidth(388)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2888,6 +2929,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -2924,7 +2966,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 5 }, { row: 4, column: 5 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(183), toExcelWidth(287), toExcelWidth(388)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -2952,6 +2994,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -2979,7 +3022,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3007,6 +3050,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -3025,7 +3069,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3053,6 +3097,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 showColumnTotals: true,
@@ -3085,7 +3130,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3113,6 +3158,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -3150,7 +3196,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 4 }, { row: 5, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3178,6 +3224,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -3220,7 +3267,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 5 }, { row: 5, column: 5 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(183), toExcelWidth(287), toExcelWidth(388)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3248,6 +3295,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -3280,7 +3328,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3308,6 +3356,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: true,
                 showRowGrandTotals: true,
                 showColumnTotals: true,
@@ -3326,7 +3375,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(929)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3354,6 +3403,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showTotalsPrior: 'columns',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -3387,7 +3437,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(584), toExcelWidth(274)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3415,6 +3465,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showTotalsPrior: 'rows',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -3448,7 +3499,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(334), toExcelWidth(524)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3476,6 +3527,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showTotalsPrior: 'both',
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
@@ -3509,7 +3561,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.extendExpectedCells(expectedCells, topLeft);
             exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
+                helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(71), toExcelWidth(584), toExcelWidth(274)], topLeft.column, epsilon);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -3523,185 +3575,203 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     QUnit.module('fields[].width', moduleConfig, () => {
-        QUnit.test('Export [row1.width=100]', function(assert) {
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string', width: 100 },
-                    { area: 'column', dataField: 'col1', dataType: 'string' },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', row2: 'B', col1: 'a' },
-                ]
-            };
+        const PADDING_WIDTH = 10;
+        const BORDER_WIDTH = 1;
+        [1000, 600].forEach(pivotWidth => {
+            QUnit.test(`Export [row1.width=100], grid.width=${pivotWidth}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string', width: 100 },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A', row2: 'B', col1: 'a' },
+                    ]
+                };
 
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                showColumnGrandTotals: false,
-                showRowGrandTotals: false,
-                dataSource: ds
-            }).dxPivotGrid('instance');
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    width: pivotWidth,
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataSource: ds
+                }).dxPivotGrid('instance');
 
-            const expectedCells = [[
-                { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-                { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
-            ], [
-                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D', width: 100 } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
-            ]];
+                const expectedCells = [[
+                    { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+                ], [
+                    { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D', width: 100 } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
+                ]];
 
-            helper.extendExpectedCells(expectedCells, topLeft);
-            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
-                helper.checkValues(expectedCells);
-                helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
-                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
-                done();
+                helper.extendExpectedCells(expectedCells, topLeft);
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkColumnWidths([
+                        toExcelWidth(100 + 2 * PADDING_WIDTH),
+                        toExcelWidth(pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH)], topLeft.column, epsilon);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
             });
-        });
 
-        QUnit.test('Export [row1.width=100,column1.width=200]', function(assert) {
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string', width: 100 },
-                    { area: 'column', dataField: 'col1', dataType: 'string', width: 200 },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', row2: 'B', col1: 'a' },
-                ]
-            };
+            QUnit.test(`Export [row1.width=100,column1.width=200], grid.width=${pivotWidth}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string', width: 100 },
+                        { area: 'column', dataField: 'col1', dataType: 'string', width: 200 },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A', row2: 'B', col1: 'a' },
+                    ]
+                };
 
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                showColumnGrandTotals: false,
-                showRowGrandTotals: false,
-                dataSource: ds
-            }).dxPivotGrid('instance');
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    width: pivotWidth,
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataSource: ds
+                }).dxPivotGrid('instance');
 
-            const expectedCells = [[
-                { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-                { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
-            ], [
-                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D', width: 100 } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
-            ]];
+                const expectedCells = [[
+                    { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+                ], [
+                    { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D', width: 100 } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
+                ]];
 
-            helper.extendExpectedCells(expectedCells, topLeft);
-            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
-                helper.checkValues(expectedCells);
-                helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
-                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
-                done();
+                helper.extendExpectedCells(expectedCells, topLeft);
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkColumnWidths([
+                        toExcelWidth(100 + 2 * PADDING_WIDTH),
+                        toExcelWidth(pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH)], topLeft.column, epsilon);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
             });
-        });
 
-        QUnit.test('Export [row1.width=100,row2=150]', function(assert) {
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string', width: 100, expanded: true },
-                    { area: 'row', dataField: 'row2', dataType: 'string', width: 150 },
-                    { area: 'column', dataField: 'col1', dataType: 'string' },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', row2: 'B', col1: 'a' },
-                ]
-            };
+            QUnit.test(`Export [row1.width=100,row2=150], grid.width=${pivotWidth}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string', width: 100, expanded: true },
+                        { area: 'row', dataField: 'row2', dataType: 'string', width: 150 },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A', row2: 'B', col1: 'a' },
+                    ]
+                };
 
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                showColumnGrandTotals: false,
-                showRowGrandTotals: false,
-                dataSource: ds
-            }).dxPivotGrid('instance');
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    width: pivotWidth,
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataSource: ds
+                }).dxPivotGrid('instance');
 
-            const expectedCells = [[
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-                { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'a', width: 100, path: ['a'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } },
-            ], [
-                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'A', width: 100, path: ['A'], type: 'D', dataSourceIndex: 1, area: 'row', expanded: true } },
-                { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'B', width: 150, path: ['A', 'B'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A', 'B'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'D', columnType: 'D' } },
-            ], [
-                { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 2, rowspan: 1, text: 'A Total', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
-                { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'T', columnType: 'D' } },
-            ]];
+                const expectedCells = [[
+                    { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'a', width: 100, path: ['a'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } },
+                ], [
+                    { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'A', width: 100, path: ['A'], type: 'D', dataSourceIndex: 1, area: 'row', expanded: true } },
+                    { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'B', width: 150, path: ['A', 'B'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A', 'B'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'D', columnType: 'D' } },
+                ], [
+                    { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 2, rowspan: 1, text: 'A Total', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
+                    { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'T', columnType: 'D' } },
+                ]];
 
-            helper.extendExpectedCells(expectedCells, topLeft);
-            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
-                helper.checkValues(expectedCells);
-                helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
-                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
-                done();
+                helper.extendExpectedCells(expectedCells, topLeft);
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                    helper.checkColumnWidths([
+                        toExcelWidth(100 + 2 * PADDING_WIDTH),
+                        toExcelWidth(150 + 2 * PADDING_WIDTH + BORDER_WIDTH),
+                        toExcelWidth(pivotWidth - 100 - 150 - 4 * PADDING_WIDTH - 2 * BORDER_WIDTH)], topLeft.column, epsilon);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
+                    helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+                    done();
+                });
             });
-        });
 
-        QUnit.test('Export [row1.width=100,row2=150,column1.width=200]', function(assert) {
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string', width: 100, expanded: true },
-                    { area: 'row', dataField: 'row2', dataType: 'string', width: 150 },
-                    { area: 'column', dataField: 'col1', dataType: 'string', width: 200 },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', row2: 'B', col1: 'a' },
-                ]
-            };
+            QUnit.test(`Export [row1.width=100,row2=150,column1.width=200], grid.width=${pivotWidth}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string', width: 100, expanded: true },
+                        { area: 'row', dataField: 'row2', dataType: 'string', width: 150 },
+                        { area: 'column', dataField: 'col1', dataType: 'string', width: 200 },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A', row2: 'B', col1: 'a' },
+                    ]
+                };
 
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                showColumnGrandTotals: false,
-                showRowGrandTotals: false,
-                dataSource: ds
-            }).dxPivotGrid('instance');
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    width: pivotWidth,
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataSource: ds
+                }).dxPivotGrid('instance');
 
-            const expectedCells = [[
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
-                { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-                { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'a', width: 100, path: ['a'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } },
-            ], [
-                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'A', width: 100, path: ['A'], type: 'D', dataSourceIndex: 1, area: 'row', expanded: true } },
-                { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'B', width: 150, path: ['A', 'B'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A', 'B'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'D', columnType: 'D' } },
-            ], [
-                { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 2, rowspan: 1, text: 'A Total', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
-                { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
-                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'T', columnType: 'D' } },
-            ]];
+                const expectedCells = [[
+                    { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 2, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'a', width: 100, path: ['a'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } },
+                ], [
+                    { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'A', width: 100, path: ['A'], type: 'D', dataSourceIndex: 1, area: 'row', expanded: true } },
+                    { excelCell: { value: 'B', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'B', width: 150, path: ['A', 'B'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A', 'B'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'D', columnType: 'D' } },
+                ], [
+                    { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 2, rowspan: 1, text: 'A Total', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
+                    { excelCell: { value: 'A Total', master: [3, 1], alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '', path: ['A'], type: 'T', isLast: true, dataSourceIndex: 1, area: 'row' } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '1', rowPath: ['A'], columnPath: ['a'], area: 'data', dataIndex: 0, dataType: 'number', rowType: 'T', columnType: 'D' } },
+                ]];
 
-            helper.extendExpectedCells(expectedCells, topLeft);
-            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkColumnWidths(calculateColumnWidths(pivotGrid), topLeft.column, epsilon);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
-                helper.checkValues(expectedCells);
-                helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
-                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
-                done();
+                helper.extendExpectedCells(expectedCells, topLeft);
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                    helper.checkColumnWidths([
+                        toExcelWidth(100 + 2 * PADDING_WIDTH),
+                        toExcelWidth(150 + 2 * PADDING_WIDTH + BORDER_WIDTH),
+                        toExcelWidth(pivotWidth - 100 - 150 - 4 * PADDING_WIDTH - 2 * BORDER_WIDTH)], topLeft.column, epsilon);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
+                    helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+                    done();
+                });
             });
         });
     });
@@ -3721,6 +3791,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 dataSource: ds,
@@ -3769,6 +3840,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             };
 
             const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                width: 1000,
                 showColumnGrandTotals: false,
                 showRowGrandTotals: false,
                 dataSource: ds,
@@ -3811,6 +3883,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
 QUnit.module('Text customization', moduleConfig, () => {
     QUnit.test('noData text', function(assert) {
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
             texts: { noData: 'any text' },
             dataSource: {
                 store: [ ]
