@@ -2,10 +2,10 @@ import {
   Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
 
-import { LightButton } from './light-button';
-import { PagesLarge } from './pages-large';
-import { PagesSmall } from './pages-small';
-import messageLocalization from '../../localization/message';
+import { LightButton } from '../common/light_button';
+import { PagesLarge } from './large';
+import { PagesSmall } from './small';
+import messageLocalization from '../../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';

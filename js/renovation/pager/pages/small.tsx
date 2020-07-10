@@ -10,11 +10,11 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { Page } from './page';
-import { PAGER_INFO_CLASS } from './info';
-import { NumberBox } from '../number-box';
-import messageLocalization from '../../localization/message';
-import { calculateValuesFittedWidth } from './calculate-values-fitted-width';
-import { getElementMinWidth } from './utils/get-element-width';
+import { PAGER_INFO_CLASS } from '../info';
+import { NumberBox } from '../../number-box';
+import messageLocalization from '../../../localization/message';
+import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
+import { getElementMinWidth } from '../utils/get_element_width';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
@@ -57,7 +57,6 @@ export class PagesSmallProps {
 
   @OneWay() pageIndex?: number = 0;
 
-  // tslint:disable-next-line: max-line-length
   @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
 
   @OneWay() rtlEnabled?: boolean = false;
@@ -65,7 +64,6 @@ export class PagesSmallProps {
   @Event() pageIndexChange?: (pageIndex: number) => void = () => { }; // commonUtils.noop
 }
 
-// tslint:disable-next-line: max-classes-per-file
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesSmall extends JSXComponent(PagesSmallProps) {
   @Ref() pageIndexRef!: NumberBox;

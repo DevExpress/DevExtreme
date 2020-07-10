@@ -3,9 +3,9 @@ import {
   ComponentBindings, JSXComponent, Event, OneWay, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
-import { GetHtmlElement, FullPageSize } from './pager.types.d';
-import { PageSizeSmall } from './page-size-small';
-import { PageSizeLarge } from './page-size-large';
+import { GetHtmlElement, FullPageSize } from '../common/types.d';
+import { PageSizeSmall } from './small';
+import { PageSizeLarge } from './large';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 

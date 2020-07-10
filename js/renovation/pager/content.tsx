@@ -5,10 +5,10 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
-import { PageIndexSelector } from './page-index-selector';
-import { PageSizeSelector } from './page-size-selector';
-import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './consts';
-import PagerProps from './pager-props';
+import { PageIndexSelector } from './pages/page_index_selector';
+import { PageSizeSelector } from './page_size/selector';
+import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './common/consts';
+import PagerProps from './common/pager_props';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

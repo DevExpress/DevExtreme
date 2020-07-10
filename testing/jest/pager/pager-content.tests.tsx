@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import { PageIndexSelector } from '../../../js/renovation/pager/page-index-selector';
-import { PagerContentComponent as PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../../../js/renovation/pager/pager-content';
-import { PageSizeSelector } from '../../../js/renovation/pager/page-size-selector';
+import { PageIndexSelector } from '../../../js/renovation/pager/pages/page_index_selector';
+import { PagerContentComponent as PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../../../js/renovation/pager/content';
+import { PageSizeSelector } from '../../../js/renovation/pager/page_size/selector';
 import { InfoText } from '../../../js/renovation/pager/info';
 
-jest.mock('../../../js/renovation/pager/page-size-selector', () => ({ __esModule: true, PageSizeSelector: jest.fn() }));
-jest.mock('../../../js/renovation/pager/page-index-selector', () => ({ __esModule: true, PageIndexSelector: jest.fn() }));
-jest.mock('../../../js/renovation/pager/info', () => ({ __esModule: true, InfoText: jest.fn() }));
+jest.mock('../../../js/renovation/pager/page_size/selector', () => ({ PageSizeSelector: jest.fn() }));
+jest.mock('../../../js/renovation/pager/pages/page_index_selector', () => ({ PageIndexSelector: jest.fn() }));
+jest.mock('../../../js/renovation/pager/info', () => ({ InfoText: jest.fn() }));
 
 describe('PagerContent', () => {
   describe('View', () => {
@@ -153,76 +153,82 @@ describe('PagerContent', () => {
   });
 
   describe('Logic', () => {
-    it('pagesContainerVisible, pagesNavigatorVisible', () => {
-      const component = new PagerContent({
-        pageCount: 1,
-        pagesNavigatorVisible: 'auto',
-      } as PagerContentProps);
-      expect(component.pagesContainerVisible).toBe(true);
-      component.props.pagesNavigatorVisible = false;
-      expect(component.pagesContainerVisible).toBe(false);
+    describe('pagesContainerVisible', () => {
+      it('pagesNavigatorVisible', () => {
+        const component = new PagerContent({
+          pageCount: 1,
+          pagesNavigatorVisible: 'auto',
+        } as PagerContentProps);
+        expect(component.pagesContainerVisible).toBe(true);
+        component.props.pagesNavigatorVisible = false;
+        expect(component.pagesContainerVisible).toBe(false);
+      });
+      it('pageCount', () => {
+        const component = new PagerContent({
+          pageCount: 0,
+          pagesNavigatorVisible: 'auto',
+        } as PagerContentProps);
+        expect(component.pagesContainerVisible).toBe(false);
+        component.props.pageCount = 1;
+        expect(component.pagesContainerVisible).toBe(true);
+      });
     });
-    it('pagesContainerVisible, pageCount', () => {
-      const component = new PagerContent({
-        pageCount: 0,
-        pagesNavigatorVisible: 'auto',
-      } as PagerContentProps);
-      expect(component.pagesContainerVisible).toBe(false);
-      component.props.pageCount = 1;
-      expect(component.pagesContainerVisible).toBe(true);
+    describe('pagesContainerVisibility', () => {
+      it('hidden because pageCount = 1', () => {
+        const component = new PagerContent({
+          pageCount: 1,
+          hasKnownLastPage: true,
+          pagesNavigatorVisible: 'auto',
+        } as PagerContentProps);
+        expect(component.pagesContainerVisibility).toBe('hidden');
+      });
+      it('visible because pageCount > 1', () => {
+        const component = new PagerContent({
+          pagesNavigatorVisible: 'auto',
+          pageCount: 2,
+        } as PagerContentProps);
+        expect(component.pagesContainerVisibility).toBeUndefined();
+      });
+      it('visible because navigatorVisible', () => {
+        const component = new PagerContent({
+          pagesNavigatorVisible: true,
+          pageCount: 1,
+        } as PagerContentProps);
+        expect(component.pagesContainerVisibility).toBeUndefined();
+      });
+      it('pagesContainerVisibility, visible because hasKnownLastPage is false', () => {
+        const component = new PagerContent({
+          hasKnownLastPage: false,
+          pagesNavigatorVisible: 'auto',
+          pageCount: 1,
+        } as PagerContentProps);
+        expect(component.pagesContainerVisibility).toBeUndefined();
+      });
     });
-    it('pagesContainerVisibility, hidden because pageCount = 1', () => {
-      const component = new PagerContent({
-        pageCount: 1,
-        hasKnownLastPage: true,
-        pagesNavigatorVisible: 'auto',
-      } as PagerContentProps);
-      expect(component.pagesContainerVisibility).toBe('hidden');
-    });
-    it('pagesContainerVisibility, visible because pageCount > 1', () => {
-      const component = new PagerContent({
-        pagesNavigatorVisible: 'auto',
-        pageCount: 2,
-      } as PagerContentProps);
-      expect(component.pagesContainerVisibility).toBeUndefined();
-    });
-    it('pagesContainerVisibility, visible because navigatorVisible', () => {
-      const component = new PagerContent({
-        pagesNavigatorVisible: true,
-        pageCount: 1,
-      } as PagerContentProps);
-      expect(component.pagesContainerVisibility).toBeUndefined();
-    });
-    it('pagesContainerVisibility, visible because hasKnownLastPage is false', () => {
-      const component = new PagerContent({
-        hasKnownLastPage: false,
-        pagesNavigatorVisible: 'auto',
-        pageCount: 1,
-      } as PagerContentProps);
-      expect(component.pagesContainerVisibility).toBeUndefined();
-    });
-    it('className, isLargeDisplayMode', () => {
-      let component = new PagerContent({
-        lightModeEnabled: false,
-        isLargeDisplayMode: true,
-      } as PagerContentProps);
-      expect(component.isLargeDisplayMode).toBe(true);
-      expect(component.className.indexOf('dx-light-mode')).toBe(-1);
+    describe('className', () => {
+      it('isLargeDisplayMode', () => {
+        let component = new PagerContent({
+          lightModeEnabled: false,
+          isLargeDisplayMode: true,
+        } as PagerContentProps);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.className.indexOf('dx-light-mode')).toBe(-1);
 
-      component = new PagerContent({
-        lightModeEnabled: true,
-        isLargeDisplayMode: true,
-      } as PagerContentProps);
-      expect(component.isLargeDisplayMode).toBe(false);
-      expect(component.className.indexOf('dx-light-mode')).not.toBe(-1);
-    });
-    it('className, visible', () => {
-      const component = new PagerContent({
-        visible: false,
-      } as PagerContentProps);
-      expect(component.className.indexOf('dx-state-invisible')).not.toBe(-1);
-      component.props.visible = true;
-      expect(component.className.indexOf('dx-state-invisible')).toBe(-1);
+        component = new PagerContent({
+          lightModeEnabled: true,
+          isLargeDisplayMode: true,
+        } as PagerContentProps);
+        expect(component.isLargeDisplayMode).toBe(false);
+        expect(component.className.indexOf('dx-light-mode')).not.toBe(-1);
+      });
+      it('visible', () => {
+        const component = new PagerContent({
+          visible: false,
+        } as PagerContentProps);
+        expect(component.className.indexOf('dx-state-invisible')).not.toBe(-1);
+        component.props.visible = true;
+        expect(component.className.indexOf('dx-state-invisible')).toBe(-1);
+      });
     });
     it('isLargeDisplayMode', () => {
       let component = new PagerContent({
