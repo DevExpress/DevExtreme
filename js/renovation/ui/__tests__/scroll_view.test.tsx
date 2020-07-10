@@ -1,6 +1,6 @@
 import { h, createRef } from 'preact';
 import { mount, shallow } from 'enzyme';
-import ScrollView, { viewFunction } from '../../js/renovation/scroll-view';
+import ScrollView, { viewFunction, Location } from '../../js/renovation/scroll-view';
 import Widget from '../../js/renovation/widget';
 
 describe('ScrollView', () => {
@@ -51,11 +51,81 @@ describe('ScrollView', () => {
 
   describe('Behavior', () => {
     describe('Methods', () => {
-      it('should get the content of the widget', () => {
-        const scrollView = new ScrollView({});
-        const content = { };
-        scrollView.contentRef = content as any;
-        expect(scrollView.content()).toMatchObject(content);
+      describe('Content', () => {
+        it('should get the content of the widget', () => {
+          const scrollView = new ScrollView({});
+          const content = { };
+          scrollView.contentRef = content as any;
+          expect(scrollView.content()).toMatchObject(content);
+        });
+      });
+
+      describe('ScrollBy', () => {
+        it('should scroll by distance in the vertical direction', () => {
+          const containerRefMock = { scrollTop: 150, scrollLeft: 0 };
+          const scrollView = new ScrollView({ direction: 'vertical' });
+          scrollView.containerRef = containerRefMock as any;
+
+          scrollView.scrollBy(100);
+
+          expect(containerRefMock.scrollTop).toEqual(250);
+          expect(containerRefMock.scrollLeft).toEqual(0);
+        });
+
+        it('should scroll by distance in the horizontal direction', () => {
+          const containerRefMock = { scrollLeft: 150, scrollTop: 0 };
+          const scrollView = new ScrollView({ direction: 'horizontal' });
+          scrollView.containerRef = containerRefMock as any;
+
+          scrollView.scrollBy(100);
+
+          expect(containerRefMock.scrollLeft).toEqual(250);
+          expect(containerRefMock.scrollTop).toEqual(0);
+        });
+
+        it('should scroll by distance in the both direction', () => {
+          const containerRefMock = { scrollTop: 150, scrollLeft: 150 };
+          const scrollView = new ScrollView({ direction: 'both' });
+          scrollView.containerRef = containerRefMock as any;
+
+          scrollView.scrollBy(100);
+
+          expect(containerRefMock.scrollTop).toEqual(250);
+          expect(containerRefMock.scrollLeft).toEqual(250);
+        });
+
+        it('should scroll by distance as object in the vertical direction', () => {
+          const containerRefMock = { scrollTop: 150, scrollLeft: 0 };
+          const scrollView = new ScrollView({ direction: 'vertical' });
+          scrollView.containerRef = containerRefMock as any;
+
+          scrollView.scrollBy({ top: 100, left: 70 } as Location);
+
+          expect(containerRefMock.scrollTop).toEqual(250);
+          expect(containerRefMock.scrollLeft).toEqual(0);
+        });
+
+        it('should scroll by distance as object in the horizontal direction', () => {
+          const containerRefMock = { scrollLeft: 150, scrollTop: 0 };
+          const scrollView = new ScrollView({ direction: 'horizontal' });
+          scrollView.containerRef = containerRefMock as any;
+
+          scrollView.scrollBy({ top: 70, left: 100 } as Location);
+
+          expect(containerRefMock.scrollLeft).toEqual(250);
+          expect(containerRefMock.scrollTop).toEqual(0);
+        });
+
+        it('should scroll by distance as object in the both direction', () => {
+          const containerRefMock = { scrollTop: 150, scrollLeft: 150 };
+          const scrollView = new ScrollView({ direction: 'both' });
+          scrollView.containerRef = containerRefMock as any;
+
+          scrollView.scrollBy({ top: 70, left: 70 } as Location);
+
+          expect(containerRefMock.scrollTop).toEqual(220);
+          expect(containerRefMock.scrollLeft).toEqual(220);
+        });
       });
     });
   });
