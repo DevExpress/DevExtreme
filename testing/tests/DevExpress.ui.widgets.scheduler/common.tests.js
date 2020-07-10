@@ -1118,6 +1118,26 @@ QUnit.module('Initialization', {
         assert.ok(this.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
         assert.ok(!this.instance._appointmentTooltip.show.called, 'show tooltip is not called');
     });
+
+    QUnit.test('_getUpdatedData for the empty data item (T906240)', function(assert) {
+        const startCellDate = new Date(2020, 1, 2, 3);
+        const endCellDate = new Date(2020, 1, 2, 4);
+        const scheduler = createWrapper({});
+
+        scheduler.instance.getTargetCellData = () => {
+            return {
+                startDate: startCellDate,
+                endDate: endCellDate
+            };
+        };
+
+        const updatedData = scheduler.instance._getUpdatedData({ text: 'test' });
+        assert.deepEqual(updatedData, {
+            allDay: undefined,
+            endDate: endCellDate,
+            startDate: startCellDate
+        }, 'Updated data is correct');
+    });
 })('Methods');
 
 (function() {

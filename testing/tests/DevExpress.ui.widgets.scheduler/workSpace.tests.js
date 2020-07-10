@@ -329,8 +329,9 @@ QUnit.testStart(function() {
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
-            date: new Date(2015, 1, 18, 1),
             allDay: false,
+            startDate: new Date(2015, 1, 18, 1),
+            endDate: undefined,
             groups: {
                 res: 2
             }
@@ -364,7 +365,8 @@ QUnit.testStart(function() {
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
-            date: new Date(2015, 1, 18, 0, 30),
+            startDate: new Date(2015, 1, 18, 0, 30),
+            endDate: undefined,
             allDay: false,
             groups: {
                 one: 2,
