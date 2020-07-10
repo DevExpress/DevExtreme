@@ -53,9 +53,11 @@ const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
 const DIAGRAM_DEFAULT_PAGE_COLOR = '#ffffff';
 
 const DIAGRAM_MAX_MOBILE_WINDOW_WIDTH = 576;
-const DIAGRAM_TOOLBOX_ITEM_SPACING = 12;
-const DIAGRAM_TOOLBOX_ITEM_COUNT_IN_ROW = 3;
-const DIAGRAM_CONTEXT_TOOLBOX_ITEM_COUNT_IN_ROW = 4;
+const DIAGRAM_TOOLBOX_SHAPE_SPACING = 12;
+const DIAGRAM_TOOLBOX_SHAPES_PER_ROW = 3;
+const DIAGRAM_CONTEXT_TOOLBOX_SHAPE_SPACING = 12;
+const DIAGRAM_CONTEXT_TOOLBOX_SHAPES_PER_ROW = 4;
+const DIAGRAM_CONTEXT_TOOLBOX_DEFAULT_WIDTH = 152;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
 const FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
@@ -308,7 +310,9 @@ class Diagram extends Widget {
             offsetParent: $parent,
             offsetX: bounds.offsetX,
             offsetY: bounds.offsetY,
+            showSearch: this.option('toolbox.showSearch'),
             toolboxGroups: this._getToolboxGroups(),
+            toolboxWidth: this.option('toolbox.width'),
 
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
@@ -316,8 +320,8 @@ class Diagram extends Widget {
                 this._diagramInstance.createToolbox(e.$element[0],
                     e.displayMode === 'texts', e.shapes || e.category,
                     {
-                        shapeIconSpacing: DIAGRAM_TOOLBOX_ITEM_SPACING,
-                        shapeIconCountInRow: DIAGRAM_TOOLBOX_ITEM_COUNT_IN_ROW,
+                        shapeIconSpacing: DIAGRAM_TOOLBOX_SHAPE_SPACING,
+                        shapeIconCountInRow: this.option('toolbox.shapeIconsPerRow'),
                         shapeIconAttributes: { 'data-toggle': e.dataToggle }
                     }
                 );
@@ -563,6 +567,7 @@ class Diagram extends Widget {
         const $contextToolbox = $('<div>')
             .appendTo($parent);
         this._contextToolbox = this._createComponent($contextToolbox, DiagramContextToolbox, {
+            toolboxWidth: this.option('contextToolbox.width'),
             onShown: (e) => {
                 if(isServerSide) return;
 
@@ -579,8 +584,8 @@ class Diagram extends Widget {
                 this._diagramInstance.createContextToolbox($toolboxContainer[0],
                     isTextGroup, shapes || category || e.category,
                     {
-                        shapeIconSpacing: DIAGRAM_TOOLBOX_ITEM_SPACING,
-                        shapeIconCountInRow: DIAGRAM_CONTEXT_TOOLBOX_ITEM_COUNT_IN_ROW
+                        shapeIconSpacing: DIAGRAM_CONTEXT_TOOLBOX_SHAPE_SPACING,
+                        shapeIconCountInRow: this.option('contextToolbox.shapeIconsPerRow'),
                     },
                     (shapeType) => {
                         e.callback(shapeType);
@@ -1061,6 +1066,8 @@ class Diagram extends Widget {
                 (s) => {
                     const templateOption = s.template || this.option('customShapeTemplate');
                     const template = templateOption && this._getTemplate(templateOption);
+                    const toolboxTemplateOption = s.toolboxTemplate || this.option('customShapeToolboxTemplate');
+                    const toolboxTemplate = toolboxTemplateOption && this._getTemplate(toolboxTemplateOption);
                     return {
                         category: s.category,
                         type: s.type,
@@ -1074,6 +1081,8 @@ class Diagram extends Widget {
                         svgHeight: s.backgroundImageHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
+                        toolboxWidth: s.toolboxWidth,
+                        toolboxHeight: s.toolboxHeight,
                         minWidth: s.minWidth,
                         minHeight: s.minHeight,
                         maxWidth: s.maxWidth,
@@ -1096,6 +1105,12 @@ class Diagram extends Widget {
                         }),
                         createTemplate: template && ((container, item) => {
                             template.render({
+                                model: this._nativeItemToDiagramItem(item),
+                                container: getPublicElement($(container))
+                            });
+                        }),
+                        createToolboxTemplate: toolboxTemplate && ((container, item) => {
+                            toolboxTemplate.render({
                                 model: this._nativeItemToDiagramItem(item),
                                 container: getPublicElement($(container))
                             });
@@ -1791,6 +1806,14 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.toolboxWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.toolboxHeight
+                * @type Number
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.minWidth
                 * @type Number
                 */
@@ -1878,6 +1901,13 @@ class Diagram extends Widget {
                 * @type_function_param2_field1 item:dxDiagramShape
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.toolboxTemplate
+                * @type template|function
+                * @type_function_param1 container:dxSVGElement
+                * @type_function_param2 data:object
+                * @type_function_param2_field1 item:dxDiagramShape
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.templateLeft
                 * @type Number
                 */
@@ -1901,6 +1931,23 @@ class Diagram extends Widget {
                 * @default 'auto'
                 */
                 visibility: 'auto',
+                /**
+                * @name dxDiagramOptions.toolbox.shapeIconsPerRow
+                * @type Number
+                * @default 3
+                */
+                shapeIconsPerRow: DIAGRAM_TOOLBOX_SHAPES_PER_ROW,
+                /**
+                * @name dxDiagramOptions.toolbox.showSearch
+                * @type Boolean
+                * @default true
+                */
+                showSearch: true,
+                /**
+                * @name dxDiagramOptions.toolbox.width
+                * @type Number
+                * @default undefined
+                */
                 /**
                 * @name dxDiagramOptions.toolbox.groups
                 * @type Array<Object>|Array<Enums.DiagramShapeCategory>
@@ -1986,6 +2033,18 @@ class Diagram extends Widget {
                 * @default true
                 */
                 enabled: true,
+                /**
+                * @name dxDiagramOptions.contextToolbox.shapeIconsPerRow
+                * @type Number
+                * @default 4
+                */
+                shapeIconsPerRow: DIAGRAM_CONTEXT_TOOLBOX_SHAPES_PER_ROW,
+                /**
+                * @name dxDiagramOptions.contextToolbox.width
+                * @type Number
+                * @default 152
+                */
+                width: DIAGRAM_CONTEXT_TOOLBOX_DEFAULT_WIDTH
                 /**
                 * @name dxDiagramOptions.contextToolbox.category
                 * @type Enums.DiagramShapeCategory|String
@@ -2390,9 +2449,7 @@ class Diagram extends Widget {
                 }
                 break;
             case 'contextToolbox':
-                if(args.fullName === 'contextToolbox.enabled') {
-                    this._invalidate();
-                }
+                this._invalidate();
                 break;
             case 'propertiesPanel':
                 if(args.name === 'propertiesPanel.tabs') {
