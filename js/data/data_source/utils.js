@@ -26,9 +26,19 @@ const mapGroup = (group, level, mapper) => map(group, item => {
         key: item.key,
         items: mapRecursive(item.items, level - 1, mapper)
     };
+
     if('aggregates' in item) {
         result.aggregates = item.aggregates;
     }
+
+    if('isContinuationOnNextPage' in item) {
+        result.isContinuationOnNextPage = item.isContinuationOnNextPage;
+    }
+
+    if('isContinuation' in item) {
+        result.isContinuation = item.isContinuation;
+    }
+
     return result;
 });
 
