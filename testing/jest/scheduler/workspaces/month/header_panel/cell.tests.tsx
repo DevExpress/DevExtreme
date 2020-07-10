@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import {
   MonthHeaderPanelCell as Cell,
   viewFunction as CellView,
-} from '../../../../../../js/renovation/scheduler/workspaces/month/header-panel/cell';
+} from '../../../../../../js/renovation/scheduler/workspaces/month/header_panel/cell';
 import dateLocalization from '../../../../../../js/localization/date';
 
 jest.mock('../../../../../../js/localization/date', () => ({

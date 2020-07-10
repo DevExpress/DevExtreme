@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DateTableCellBase } from '../../base/date-table/cell';
+import { DateTableCellBase } from '../../base/date_table/cell';
 
 export const viewFunction = (viewModel: MonthDateTableCell) => (
   <DateTableCellBase

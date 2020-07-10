@@ -2,9 +2,9 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { LayoutBase } from '../base/layout';
-import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../base/header-panel/layout';
-import { MonthHeaderPanelCell } from './header-panel/cell';
-import { MonthDateTableLayout } from './date-table/layout';
+import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../base/header_panel/layout';
+import { MonthHeaderPanelCell } from './header_panel/cell';
+import { MonthDateTableLayout } from './date_table/layout';
 import { ViewCellData } from '../types';
 
 export const viewFunction = (viewModel: MonthLayout) => (
@@ -30,5 +30,6 @@ export class MonthLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
 export class MonthLayout extends JSXComponent(MonthLayoutProps) {}
