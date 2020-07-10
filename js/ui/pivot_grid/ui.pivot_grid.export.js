@@ -245,7 +245,7 @@ export const DataProvider = Class.inherit({
             result.value = item.value;
         }
 
-        if(result.cellSourceData.isWhiteSpace) {
+        if(result.cellSourceData && result.cellSourceData.isWhiteSpace) {
             result.value = '';
         }
 
