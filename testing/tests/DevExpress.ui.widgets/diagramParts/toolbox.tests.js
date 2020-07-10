@@ -74,9 +74,9 @@ QUnit.module('Toolbox', {
         let $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
         let $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
         assert.equal($input.length, 1);
-        assert.equal($input.width(), 175);
+        assert.notEqual($input.width(), 300);
         assert.equal($accordion.length, 1);
-        assert.equal($accordion.width(), 175);
+        assert.notEqual($accordion.width(), 300);
         this.instance.option('toolbox.width', 300);
         $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
         $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
