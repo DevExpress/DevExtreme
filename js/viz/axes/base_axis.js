@@ -798,8 +798,11 @@ Axis.prototype = {
         this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
     },
 
-    resetAnimation: function() {
+    resetAnimation: function(isFirstDrawing) {
         this._resetAnimation = true;
+        if(isFirstDrawing) {
+            this._firstDrawing = true;
+        }
     },
 
     getMargins: function() {
@@ -2020,7 +2023,7 @@ Axis.prototype = {
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
 
-        if(this._resetAnimation) {
+        if(this._resetAnimation && !this._firstDrawing) {
             that._resetStartCoordinates();
         }
 
@@ -2056,6 +2059,7 @@ Axis.prototype = {
         if(!that._translator.getBusinessRange().isEmpty()) {
             that._firstDrawing = false;
         }
+        this._resetAnimation = false;
     },
 
     prepareAnimation() {

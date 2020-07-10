@@ -541,8 +541,8 @@ const dxChart = AdvancedChart.inherit({
         }
     },
 
-    _resetAxesAnimation() {
-        this._argumentAxes.concat(this._valueAxes).forEach((a) => { a.resetAnimation(); });
+    _resetAxesAnimation(isFirstRendering) {
+        this._argumentAxes.concat(this._valueAxes).forEach((a) => { a.resetAnimation(isFirstRendering); });
     },
 
     _axesBoundaryPositioning() {

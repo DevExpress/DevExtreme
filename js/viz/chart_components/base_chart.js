@@ -1027,7 +1027,7 @@ export const BaseChart = BaseWidget.inherit({
 
     _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
 
-    _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES',
+    _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
         'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],
 
     _change_ANIMATION: function() {
@@ -1109,9 +1109,10 @@ export const BaseChart = BaseWidget.inherit({
 
     _change_FORCE_FIRST_DRAWING: function() {
         this.series.forEach((s) => { s.resetAnimation(true); });
+        this._resetAxesAnimation(true);
     },
 
-    _forceAxesAnimation: noop,
+    _resetAxesAnimation: noop,
 
     _refreshSeries: function(actionName) {
         this.needToPopulateSeries = true;

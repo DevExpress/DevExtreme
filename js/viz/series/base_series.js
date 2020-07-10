@@ -656,7 +656,7 @@ Series.prototype = {
     resetAnimation: function(isFirstDrawing) {
         this._resetAnimation = true;
         if(isFirstDrawing) {
-            this._defineDrawingState();
+            this._firstDrawing = true;
         }
     },
 
