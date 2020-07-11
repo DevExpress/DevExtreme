@@ -10,6 +10,7 @@ import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHel
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.option.tests.js';
+import browser from 'core/utils/browser';
 
 import typeUtils from 'core/utils/type';
 import 'ui/pivot_grid/ui.pivot_grid';
@@ -64,7 +65,7 @@ const moduleConfig = {
 
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
-    const epsilon = 0.02;
+    const epsilon = browser.chrome ? 1.01 : 4;
 
     const toExcelWidth = (width) => {
         const excelWidth = parseFloat(width) / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS;
@@ -3577,7 +3578,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.module('fields[].width', moduleConfig, () => {
         const PADDING_WIDTH = 10;
         const BORDER_WIDTH = 1;
-        const MIN_SYMBOL_WIDTH = 28;
+        const MIN_SYMBOL_WIDTH = 2 * PADDING_WIDTH + 8;
         [1000, 600, 300, 50].forEach(pivotWidth => {
             QUnit.test(`Export [row1.width=100], grid.width=${pivotWidth}`, function(assert) {
                 const done = assert.async();
@@ -3612,7 +3613,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     const rowWidth = 100 + 2 * PADDING_WIDTH;
                     let columnWidth = pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH;
-                    if(columnWidth < 0) {
+                    if(columnWidth < MIN_SYMBOL_WIDTH) {
                         columnWidth = MIN_SYMBOL_WIDTH;
                     }
                     helper.checkColumnWidths([toExcelWidth(rowWidth), toExcelWidth(columnWidth)], topLeft.column, epsilon);
