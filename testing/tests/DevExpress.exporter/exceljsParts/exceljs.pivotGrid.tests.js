@@ -65,7 +65,7 @@ const moduleConfig = {
 
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
-    const epsilon = browser.chrome ? 1.01 : 4;
+    const epsilon = browser.chrome ? 1.15 : 4;
 
     const toExcelWidth = (width) => {
         const excelWidth = parseFloat(width) / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS;
