@@ -3871,7 +3871,6 @@ QUnit.module('Scenarios', moduleConfig, () => {
 QUnit.module('Text customization', moduleConfig, () => {
     QUnit.test('noData text', function(assert) {
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
-            width: 1000,
             texts: { noData: 'any text' },
             dataSource: {
                 store: [ ]
