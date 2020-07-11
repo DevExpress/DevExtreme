@@ -3577,7 +3577,8 @@ QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.module('fields[].width', moduleConfig, () => {
         const PADDING_WIDTH = 10;
         const BORDER_WIDTH = 1;
-        [1000, 600].forEach(pivotWidth => {
+        const MIN_SYMBOL_WIDTH = 28;
+        [1000, 600, 300, 50].forEach(pivotWidth => {
             QUnit.test(`Export [row1.width=100], grid.width=${pivotWidth}`, function(assert) {
                 const done = assert.async();
                 const ds = {
@@ -3609,16 +3610,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.extendExpectedCells(expectedCells, topLeft);
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkColumnWidths([
-                        toExcelWidth(100 + 2 * PADDING_WIDTH),
-                        toExcelWidth(pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH)], topLeft.column, epsilon);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkOutlineLevel([0, 0], topLeft.row);
-                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
-                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    const rowWidth = 100 + 2 * PADDING_WIDTH;
+                    let columnWidth = pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH;
+                    if(columnWidth < 0) {
+                        columnWidth = MIN_SYMBOL_WIDTH;
+                    }
+                    helper.checkColumnWidths([toExcelWidth(rowWidth), toExcelWidth(columnWidth)], topLeft.column, epsilon);
                     done();
                 });
             });
@@ -3654,16 +3651,13 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.extendExpectedCells(expectedCells, topLeft);
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkColumnWidths([
-                        toExcelWidth(100 + 2 * PADDING_WIDTH),
-                        toExcelWidth(pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH)], topLeft.column, epsilon);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkOutlineLevel([0, 0], topLeft.row);
-                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
-                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    const rowWidth = 100 + 2 * PADDING_WIDTH;
+                    const minColumnWidth = 200 + 2 * PADDING_WIDTH;
+                    let columnWidth = pivotWidth - 100 - 2 * PADDING_WIDTH - BORDER_WIDTH;
+                    if(columnWidth < minColumnWidth) {
+                        columnWidth = minColumnWidth;
+                    }
+                    helper.checkColumnWidths([toExcelWidth(rowWidth), toExcelWidth(columnWidth)], topLeft.column, epsilon);
                     done();
                 });
             });
@@ -3706,17 +3700,13 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.extendExpectedCells(expectedCells, topLeft);
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkColumnWidths([
-                        toExcelWidth(100 + 2 * PADDING_WIDTH),
-                        toExcelWidth(150 + 2 * PADDING_WIDTH + BORDER_WIDTH),
-                        toExcelWidth(pivotWidth - 100 - 150 - 4 * PADDING_WIDTH - 2 * BORDER_WIDTH)], topLeft.column, epsilon);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkOutlineLevel([0, 0], topLeft.row);
-                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
-                    helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+                    const row1Width = 100 + 2 * PADDING_WIDTH;
+                    const row2Width = 150 + 2 * PADDING_WIDTH + BORDER_WIDTH;
+                    let columnWidth = pivotWidth - row1Width - row2Width - BORDER_WIDTH;
+                    if(columnWidth < MIN_SYMBOL_WIDTH) {
+                        columnWidth = MIN_SYMBOL_WIDTH;
+                    }
+                    helper.checkColumnWidths([toExcelWidth(row1Width), toExcelWidth(row2Width), toExcelWidth(columnWidth)], topLeft.column, epsilon);
                     done();
                 });
             });
@@ -3759,17 +3749,14 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.extendExpectedCells(expectedCells, topLeft);
                 exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkColumnWidths([
-                        toExcelWidth(100 + 2 * PADDING_WIDTH),
-                        toExcelWidth(150 + 2 * PADDING_WIDTH + BORDER_WIDTH),
-                        toExcelWidth(pivotWidth - 100 - 150 - 4 * PADDING_WIDTH - 2 * BORDER_WIDTH)], topLeft.column, epsilon);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkOutlineLevel([0, 0], topLeft.row);
-                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
-                    helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+                    const row1Width = 100 + 2 * PADDING_WIDTH;
+                    const row2Width = 150 + 2 * PADDING_WIDTH + BORDER_WIDTH;
+                    let columnWidth = pivotWidth - row1Width - row2Width - BORDER_WIDTH;
+                    const minColumnWidth = 200 + 2 * PADDING_WIDTH;
+                    if(columnWidth < minColumnWidth) {
+                        columnWidth = minColumnWidth;
+                    }
+                    helper.checkColumnWidths([toExcelWidth(row1Width), toExcelWidth(row2Width), toExcelWidth(columnWidth)], topLeft.column, epsilon);
                     done();
                 });
             });
