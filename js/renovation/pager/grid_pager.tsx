@@ -1,5 +1,5 @@
 import {
-  Component, JSXComponent, TwoWay, ComponentBindings, Event,
+  Component, JSXComponent, TwoWay, ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
 
 import PagerProps from './common/pager_props';
@@ -8,6 +8,7 @@ import { Pager } from './pager';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   pageIndex,
+  className,
   pageIndexChange,
   props,
   restAttributes,
@@ -15,7 +16,7 @@ export const viewFunction = ({
   <Pager
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...{
-      ...props, pageIndex, pageIndexChange,
+      ...props, className, pageIndex, pageIndexChange,
     } as PagerProps}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -24,10 +25,6 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class GridPagerProps extends PagerProps {
-  @Event() pageIndexChanged?: (newPageIndex: number) => void;
-
-  @Event() pageSizeChanged?: (newPageSize: number) => void;
-
   @TwoWay() pageIndex?: number = 1;
 }
 
@@ -43,5 +40,9 @@ export class GridPager extends JSXComponent(GridPagerProps) {
 
   get pageIndex(): number {
     return this.props.pageIndex! - 1;
+  }
+
+  get className(): string {
+    return this.props.className ? `${this.props.className} dx-gridpager` : ' dx-gridpager';
   }
 }

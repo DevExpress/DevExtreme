@@ -211,28 +211,35 @@ describe('PagerContent', () => {
       });
     });
     describe('className', () => {
+      it('customClass', () => {
+        const component = new PagerContent({
+        } as PagerContentProps);
+        expect(component.className).toBe('dx-widget dx-pager dx-datagrid-pager dx-state-invisible dx-light-mode');
+        component.props.className = 'custom';
+        expect(component.className).toEqual(expect.stringContaining('custom'));
+      });
       it('isLargeDisplayMode', () => {
         let component = new PagerContent({
           lightModeEnabled: false,
           isLargeDisplayMode: true,
         } as PagerContentProps);
         expect(component.isLargeDisplayMode).toBe(true);
-        expect(component.className.indexOf('dx-light-mode')).toBe(-1);
+        expect(component.className).not.toEqual(expect.stringContaining('dx-light-mode'));
 
         component = new PagerContent({
           lightModeEnabled: true,
           isLargeDisplayMode: true,
         } as PagerContentProps);
         expect(component.isLargeDisplayMode).toBe(false);
-        expect(component.className.indexOf('dx-light-mode')).not.toBe(-1);
+        expect(component.className).toEqual(expect.stringContaining('dx-light-mode'));
       });
       it('visible', () => {
         const component = new PagerContent({
           visible: false,
         } as PagerContentProps);
-        expect(component.className.indexOf('dx-state-invisible')).not.toBe(-1);
+        expect(component.className).toEqual(expect.stringContaining('dx-state-invisible'));
         component.props.visible = true;
-        expect(component.className.indexOf('dx-state-invisible')).toBe(-1);
+        expect(component.className).not.toEqual(expect.stringContaining('dx-state-invisible'));
       });
     });
     it('isLargeDisplayMode', () => {

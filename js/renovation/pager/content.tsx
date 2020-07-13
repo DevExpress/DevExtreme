@@ -120,7 +120,7 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get className(): string {
-    const customClasses = this.restAttributes.className;
+    const customClasses = this.props.className!;
     const classesMap = {
       'dx-widget': true,
       [customClasses]: customClasses,
