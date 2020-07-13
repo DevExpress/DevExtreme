@@ -825,6 +825,9 @@ class Diagram extends Widget {
                 getKey: this._createOptionGetter('nodes.keyExpr'),
                 setKey: this._createOptionSetter('nodes.keyExpr'),
 
+                getCustomData: this._createOptionGetter('nodes.customDataExpr'),
+                setCustomData: this._createOptionSetter('nodes.customDataExpr'),
+
                 getLocked: this._createOptionGetter('nodes.lockedExpr'),
                 setLocked: this._createOptionSetter('nodes.lockedExpr'),
 
@@ -864,6 +867,9 @@ class Diagram extends Widget {
             edgeDataImporter: {
                 getKey: this._createOptionGetter('edges.keyExpr'),
                 setKey: this._createOptionSetter('edges.keyExpr'),
+
+                getCustomData: this._createOptionGetter('edges.customDataExpr'),
+                setCustomData: this._createOptionSetter('edges.customDataExpr'),
 
                 getLocked: this._createOptionGetter('edges.lockedExpr'),
                 setLocked: this._createOptionSetter('edges.lockedExpr'),
@@ -1530,6 +1536,13 @@ class Diagram extends Widget {
                 */
                 keyExpr: 'id',
                 /**
+                * @name dxDiagramOptions.nodes.customDataExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                customDataExpr: undefined,
+                /**
                 * @name dxDiagramOptions.nodes.lockedExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
@@ -1663,6 +1676,13 @@ class Diagram extends Widget {
                 * @default "id"
                 */
                 keyExpr: 'id',
+                /**
+                * @name dxDiagramOptions.edges.customDataExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                customDataExpr: undefined,
                 /**
                 * @name dxDiagramOptions.edges.lockedExpr
                 * @type string|function(data)
