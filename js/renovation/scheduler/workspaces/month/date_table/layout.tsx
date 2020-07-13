@@ -4,6 +4,7 @@ import {
 import { Row } from '../../base/row';
 import { MonthDateTableCell as Cell } from './cell';
 import { ViewCellData, GroupedViewData } from '../../types';
+import { getKeyByDateAndGroup } from '../../utils';
 
 export const viewFunction = (viewModel: MonthDateTableLayout) => (
   <table
@@ -15,18 +16,18 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
       {viewModel.props.viewCellsData!
         .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
           <Row
-            key={cellsRow[0].startDate.toString()}
+            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
             className="dx-scheduler-date-table-row"
           >
             {cellsRow.map(({
-              startDate, endDate, otherMonth, today,
+              startDate, endDate, otherMonth, today, groups,
             }: ViewCellData) => (
               <Cell
                 startDate={startDate}
                 endDate={endDate}
                 otherMonth={otherMonth}
                 today={today}
-                key={startDate.toString()}
+                key={getKeyByDateAndGroup(startDate, groups)}
               />
             ))}
           </Row>
@@ -45,5 +46,6 @@ export class MonthDateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
 export class MonthDateTableLayout extends JSXComponent(MonthDateTableLayoutProps) {}

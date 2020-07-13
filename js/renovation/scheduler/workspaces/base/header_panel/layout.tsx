@@ -3,6 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { ViewCellData } from '../../types';
+import { getKeyByDateAndGroup } from '../../utils';
 
 export const viewFunction = (viewModel: HeaderPanelLayout) => (
   <table
@@ -12,12 +13,14 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
   >
     <thead>
       <Row>
-        {viewModel.props.viewCellsData![0].map(({ startDate, endDate, today }) => (
+        {viewModel.props.viewCellsData![0].map(({
+          startDate, endDate, today, groups,
+        }) => (
           <viewModel.props.cellTemplate
             startDate={startDate}
             endDate={endDate}
             today={today}
-            key={startDate.toString()}
+            key={getKeyByDateAndGroup(startDate, groups)}
           />
         ))}
       </Row>
