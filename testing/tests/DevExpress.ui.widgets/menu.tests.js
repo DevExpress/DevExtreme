@@ -2621,7 +2621,7 @@ QUnit.module('itemRendered event', () => { // T906117
     }
 
     ['property', 'event'].forEach(bindingOption => {
-        QUnit.test(`itemRendered callback is fired for all level nodes. Binding via ${bindingOption}`, function(assert) {
+        QUnit.test(`itemRendered callback is called for all level nodes. Binding via ${bindingOption}`, function(assert) {
             const expectedItemsArray = [];
             const callback = (e) => expectedItemsArray.push(e.itemData.text);
 
@@ -2638,7 +2638,7 @@ QUnit.module('itemRendered event', () => { // T906117
             assert.equal(expectedItemsArray[2], 'item1_1_1');
         });
 
-        QUnit.test(`removing callback from menu before rendering removes callbacks from submenu too. Binding via ${bindingOption}`, function(assert) {
+        QUnit.test(`removing callback from menu removes callbacks from submenu too. Binding via ${bindingOption}`, function(assert) {
             const expectedItemsArray = [];
             const callback = (e) => expectedItemsArray.push(e.itemData.text);
 
