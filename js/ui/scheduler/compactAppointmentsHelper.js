@@ -48,17 +48,17 @@ export class CompactAppointmentsHelper {
     }
 
     _createAppointmentsData(items) {
-
         return items.data.map((appointment, index) => {
-            const { info } = items.settings[index];
-
             const adapter = this.instance.createAppointmentAdapter(appointment);
             const targetedAdapter = adapter.clone();
 
-            targetedAdapter.startDate = info.sourceAppointment.startDate;
-            targetedAdapter.endDate = info.sourceAppointment.endDate;
+            if(items.settings?.length > 0) {
+                const { info } = items.settings[index];
+                targetedAdapter.startDate = info.sourceAppointment.startDate;
+                targetedAdapter.endDate = info.sourceAppointment.endDate;
+            }
 
-            return new AppointmentTooltipInfo(adapter.source, targetedAdapter.source, items.colors[index]);
+            return new AppointmentTooltipInfo(adapter.source, targetedAdapter.source, items.colors[index], items.settings[index]); // TODO
         });
     }
 
@@ -83,9 +83,12 @@ export class CompactAppointmentsHelper {
     _clickEvent(onAppointmentClick) {
         return (e) => {
             const config = {
-                itemData: e.itemData.data,
+                itemData: e.itemData.appointment,
                 itemElement: e.itemElement
             };
+
+            // TODO e.itemData.targetedAppointment,
+
             const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
             delete createClickEvent.itemData;
             delete createClickEvent.itemIndex;
@@ -117,9 +120,9 @@ export class CompactAppointmentsHelper {
                     const event = e.event;
                     const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
-                    if(itemData && !itemData.data.disabled) {
+                    if(itemData && !itemData.appointment.disabled) {
                         event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.settings);
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings); // TODO
 
                         dragBehavior.onDragStart(event.data);
                         translator.resetPosition($(dragElement));
@@ -127,7 +130,7 @@ export class CompactAppointmentsHelper {
                 },
                 onDragEnd: (e) => {
                     const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
-                    if(itemData && !itemData.data.disabled) {
+                    if(itemData && !itemData.appointment.disabled) {
                         dragBehavior.onDragEnd(e);
                     }
                 }

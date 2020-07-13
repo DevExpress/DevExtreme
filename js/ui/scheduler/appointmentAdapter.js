@@ -18,7 +18,7 @@ class AppointmentAdapter {
     }
 
     get startDate() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment);
+        return new Date(this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment));
     }
 
     set startDate(value) {
@@ -26,7 +26,7 @@ class AppointmentAdapter {
     }
 
     get endDate() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.endDate, this.appointment);
+        return new Date(this.scheduler.fire('getField', PROPERTY_NAMES.endDate, this.appointment));
     }
 
     set endDate(value) {

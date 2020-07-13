@@ -15,9 +15,8 @@ const stubShowAppointmentPopup = sinon.stub();
 const stubAddDefaultTemplates = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
 const stubCheckAndDeleteAppointment = sinon.stub();
-const stubGetTextAndFormatDate = sinon.stub().returns('text');
+const stubCreateFormattedDateText = sinon.stub().returns('text');
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
-const stubGetSingleAppointmentData = sinon.stub().returns('currentData');
 
 const environment = {
     createSimpleTooltip: function(tooltipOptions) {
@@ -29,10 +28,9 @@ const environment = {
         addDefaultTemplates: stubAddDefaultTemplates,
         getAppointmentTemplate: stubGetAppointmentTemplate,
         showAppointmentPopup: stubShowAppointmentPopup,
-        getTextAndFormatDate: stubGetTextAndFormatDate,
+        createFormattedDateText: stubCreateFormattedDateText,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
         isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
-        getSingleAppointmentData: stubGetSingleAppointmentData
     },
     extraOptions: {
         rtlEnabled: true,
@@ -47,9 +45,8 @@ const environment = {
         stubShowAppointmentPopup.reset();
         stubAddDefaultTemplates.reset();
         stubGetAppointmentTemplate.reset();
-        stubGetTextAndFormatDate.reset();
+        stubCreateFormattedDateText.reset();
         stubCheckAndDeleteAppointment.reset();
-        stubGetSingleAppointmentData.reset();
     }
 };
 
@@ -238,7 +235,7 @@ QUnit.test('onContentReady passed to createComponent should work correct, with d
 QUnit.test('onItemClick passed to createComponent should work correct', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const event = { itemData: { data: 'data', currentData: 'currentData' } };
+    const event = { itemData: { appointment: 'appointment', targetedAppointment: 'targetedAppointment' } };
 
     tooltip.show('target', dataList, this.extraOptions);
     stubComponent.option.reset();
@@ -246,13 +243,13 @@ QUnit.test('onItemClick passed to createComponent should work correct', function
     stubCreateComponent.getCall(1).args[2].onItemClick(event);
 
     assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
-    assert.deepEqual(stubShowAppointmentPopup.getCall(0).args, [event.itemData.data, false, event.itemData.currentData]);
+    assert.deepEqual(stubShowAppointmentPopup.getCall(0).args, [event.itemData.appointment, false, event.itemData.targetedAppointment]);
 });
 
 QUnit.test('onItemClick passed to createComponent should work correct, with clickEvent', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const event = { itemData: { data: 'data', currentData: 'currentData' } };
+    const event = { itemData: { appointment: 'appointment', targetedAppointment: 'targetedAppointment' } };
     const clickEvent = sinon.spy();
 
     tooltip.show('target', dataList, extend(this.extraOptions, { clickEvent: clickEvent }));
@@ -261,14 +258,14 @@ QUnit.test('onItemClick passed to createComponent should work correct, with clic
     stubCreateComponent.getCall(1).args[2].onItemClick(event);
 
     assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
-    assert.deepEqual(stubShowAppointmentPopup.getCall(0).args, [event.itemData.data, false, event.itemData.currentData]);
+    assert.deepEqual(stubShowAppointmentPopup.getCall(0).args, [event.itemData.appointment, false, event.itemData.targetedAppointment]);
     assert.ok(clickEvent.called);
 });
 
 QUnit.test('itemTemplate passed to createComponent should work correct', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { data: 'data', currentData: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: 'data', targetedAppointment: 'currentData', color: { done: sinon.spy() } };
 
     tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -278,7 +275,7 @@ QUnit.test('itemTemplate passed to createComponent should work correct', functio
     assert.ok(itemTemplate instanceof FunctionTemplate);
     assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
     assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
-    assert.deepEqual(stubGetTextAndFormatDate.getCall(0).args, [item.data, item.currentData]);
+    assert.deepEqual(stubCreateFormattedDateText.getCall(0).args, [item.appointment, item.targetedAppointment]);
 
     // create delete button
     assert.equal(stubCreateComponent.getCall(2).args[0][0].className, 'dx-tooltip-appointment-item-delete-button');
@@ -293,13 +290,13 @@ QUnit.test('itemTemplate passed to createComponent should work correct', functio
     stubCreateComponent.getCall(2).args[2].onClick(e);
     assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
     assert.ok(e.event.stopPropagation.called);
-    assert.deepEqual(stubCheckAndDeleteAppointment.getCall(0).args, [item.data, item.currentData]);
+    assert.deepEqual(stubCheckAndDeleteAppointment.getCall(0).args, [item.appointment, item.targetedAppointment]);
 });
 
 QUnit.test('Delete button shouldn\'t createed, editing = false', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { data: 'data', currentData: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: 'appointment', targetedAppointment: 'appointment', color: { done: sinon.spy() } };
 
     tooltip.show('target', dataList, extend(this.extraOptions, { editing: false }));
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -311,7 +308,7 @@ QUnit.test('Delete button shouldn\'t createed, editing = false', function(assert
 QUnit.test('Delete button shouldn\'t created, appointment is disabled', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = [{ data: 'data1', disabled: true }, { data: 'data2', disabled: true }];
-    const item = { data: dataList[0], currentData: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: dataList[0], targetedAppointment: 'currentData', color: { done: sinon.spy() } };
 
     tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -362,7 +359,7 @@ QUnit.test('isAlreadyShown method, tooltip is hide', function(assert) {
 QUnit.test('dropDownAppointmentTemplate equal to "dropDownAppointment"', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { data: 'data', currentData: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
     tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: 'dropDownAppointment' }));
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
@@ -375,7 +372,7 @@ QUnit.test('dropDownAppointmentTemplate equal to "dropDownAppointment"', functio
 QUnit.test('dropDownAppointmentTemplate equal to custom template', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { data: 'data', currentData: 'currentData', color: { done: sinon.spy() } };
+    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
     tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: 'custom_template' }));
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');

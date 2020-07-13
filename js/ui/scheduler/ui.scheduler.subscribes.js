@@ -183,7 +183,7 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(appointment, targetedAppointment, format) {
+    getTextAndFormatDate(appointment, targetedAppointment, format) { // TODO: rename to createFormattedDateText
         const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
             .clone({ pathTimeZone: 'toGrid' });
 
@@ -406,7 +406,7 @@ const subscribes = {
         return this._workSpace._getGroupCount();
     },
 
-    mapAppointmentFields: function(config) {
+    mapAppointmentFields: function(config) { // TODO
         const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
 
         return {
@@ -695,18 +695,18 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, needConvertByTimezones) {
+    getTargetedAppointmentData: function(appointment, appointmentElement, needConvertByTimezones) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
-        const targetedData = this._getAppointmentData(appointmentData, {
+        const targetedAppointment = this._getAppointmentData(appointment, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: needConvertByTimezones ? false : true
         });
         const result = {};
 
-        extend(true, result, appointmentData, targetedData);
+        extend(true, result, appointment, targetedAppointment);
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 

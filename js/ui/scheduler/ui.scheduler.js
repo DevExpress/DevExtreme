@@ -2279,8 +2279,8 @@ class Scheduler extends Widget {
 
                     // TODO
                     if(settings) {
-                        appointmentStartDate = settings.info.appointment.startDate;
-                        appointmentEndDate = settings.info.appointment.endDate;
+                        appointmentStartDate = settings.info?.sourceAppointment.startDate;
+                        appointmentEndDate = settings.info?.sourceAppointment.endDate;
                     }
 
                     // if(this._isAppointmentRecurrence(appointmentData)) {
