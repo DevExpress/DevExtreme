@@ -24,7 +24,6 @@ export const viewFunction = ({
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
   view: viewFunction,
 })
 export class Pager extends JSXComponent(PagerProps) {

@@ -11,12 +11,12 @@ describe('GridPager', () => {
         pageIndexChange: jest.fn(),
         props: {},
         restAttributes: { restAttribute: {} },
-      } as any as GridPager;
+      } as Partial<GridPager>;
       const tree = shallow(<GridPagerComponent {...props as any} /> as any);
       expect(tree.at(0).props()).toMatchObject({
         pageIndex: 3,
         pageIndexChange: props.pageIndexChange,
-        restAttribute: props.restAttributes.restAttribute,
+        restAttribute: props.restAttributes?.restAttribute,
       });
     });
   });
