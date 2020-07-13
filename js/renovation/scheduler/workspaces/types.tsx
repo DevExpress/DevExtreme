@@ -3,6 +3,17 @@ export interface ViewCellData {
   endDate: Date;
   otherMonth?: boolean;
   today?: boolean;
+  allDay?: boolean;
+  groups?: object;
+}
+
+interface ViewCellsData {
+  dateTable: ViewCellData[][];
+  allDayPanel?: ViewCellData[];
+}
+
+export interface GroupedViewData {
+  groupedData: ViewCellsData[];
 }
 
 export interface GroupItem {
