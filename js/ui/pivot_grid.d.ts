@@ -123,15 +123,14 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field9 columnFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field11 dataFields:Array<PivotGridDataSourceOptions.fields>
-     * @type_function_param1_field12 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field13 event:event
-     * @type_function_param1_field14 cancel:boolean
+     * @type_function_param1_field12 event:event
+     * @type_function_param1_field13 cancel:boolean
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any);
+    onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: event, cancel?: boolean }) => any);
     /**
      * @docid dxPivotGridOptions.onCellPrepared
      * @type function(e)

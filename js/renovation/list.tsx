@@ -75,7 +75,7 @@ export class ListProps extends WidgetProps {
   // @Event() onItemContextMenu?: ((e: {
   //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
   //   itemElement?: dxElement, itemIndex?: number | any,
-  //   jQueryEvent?: JQueryEventObject, event?: event
+  //   event?: event
   // }) => any);
 
   // @Event()onItemDeleted?: ((e: {
@@ -92,7 +92,7 @@ export class ListProps extends WidgetProps {
   // @Event()onItemHold?: ((e: {
   //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
   //   itemElement?: dxElement, itemIndex?: number | any,
-  // jQueryEvent?: JQueryEventObject, event?: event
+  //   event?: event
   // }) => any);
 
   // @Event()onItemReordered?: ((e: {
@@ -102,7 +102,7 @@ export class ListProps extends WidgetProps {
 
   // @Event()onItemSwipe?: ((e: {
   //   component?: dxList, element?: dxElement, model?: any,
-  //   jQueryEvent?: JQueryEventObject, event?: event,
+  //   event?: event,
   //   itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string
   // }) => any);
 
@@ -111,7 +111,7 @@ export class ListProps extends WidgetProps {
   // @Event()onPullRefresh?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
 
   // @Event()onScroll?: ((e: {
-  // component?: dxList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject,
+  // component?: dxList, element?: dxElement, model?: any,
   // event?: event, scrollOffset?: any, reachedLeft?: boolean,
   // reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean
   // }) => any);

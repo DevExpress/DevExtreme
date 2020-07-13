@@ -54,14 +54,13 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 validationGroup:object
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 validationGroup:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any);
+    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
     /**
      * @docid dxButtonOptions.stylingMode
      * @type Enums.ButtonStylingMode
