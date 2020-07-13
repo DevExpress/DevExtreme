@@ -501,6 +501,7 @@ class Menu extends MenuBase {
         const $submenuTarget = $('<div>');
         const isMenuHorizontal = this._isMenuHorizontal();
 
+        const that = this;
         return {
             itemTemplate: this.option('itemTemplate'),
             target: $submenuTarget,
@@ -525,7 +526,13 @@ class Menu extends MenuBase {
             },
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
-            onItemRendered: this.option('onItemRendered'),
+            onItemRendered: (e) => {
+                if(that.option('onItemRendered')) {
+                    that.option('onItemRendered')(e);
+                } else if(that._eventsStrategy.hasEvent('itemRendered')) {
+                    that._eventsStrategy.fireEvent('itemRendered', [e]);
+                }
+            },
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
