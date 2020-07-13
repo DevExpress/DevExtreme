@@ -244,7 +244,7 @@ const Drawer = Widget.inherit({
     },
 
     _renderShader() {
-        this._$shader = this._$shader || $('<div>').addClass(DRAWER_SHADER_CLASS);
+        this._$shader = this._$shader || $('<div>').addClass(DRAWER_SHADER_CLASS).css('zIndex', 1);
         this._$shader.appendTo(this.viewContent());
 
         this._toggleShaderVisibility(this.option('opened'));
