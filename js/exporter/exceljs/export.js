@@ -70,12 +70,12 @@ const Export = {
         excelCell.alignment.vertical = 'top';
     },
 
-    setColumnsWidth: function(worksheet, columns, startColumnIndex) {
-        if(!isDefined(columns)) {
+    setColumnsWidth: function(worksheet, widths, startColumnIndex) {
+        if(!isDefined(widths)) {
             return;
         }
-        for(let i = 0; i < columns.length; i++) {
-            const columnWidth = columns[i].width;
+        for(let i = 0; i < widths.length; i++) {
+            const columnWidth = widths[i];
             if((typeof columnWidth === 'number') && isFinite(columnWidth)) {
                 worksheet.getColumn(startColumnIndex + i).width =
                     Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
@@ -148,7 +148,7 @@ const Export = {
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(keepColumnWidths) {
-                    this.setColumnsWidth(worksheet, columns, cellRange.from.column);
+                    this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
                 const mergedCells = [];
@@ -242,7 +242,7 @@ const Export = {
 };
 
 //#DEBUG
-Export.__internals = { MAX_EXCEL_COLUMN_WIDTH };
+Export.__internals = { MAX_EXCEL_COLUMN_WIDTH, MAX_DIGIT_WIDTH_IN_PIXELS };
 //#ENDDEBUG
 
 export { Export };
