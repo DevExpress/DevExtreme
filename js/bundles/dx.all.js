@@ -1,5 +1,12 @@
 import './modules/parts/widgets-all';
 import './modules/parts/viz';
-import coreModule from './modules/core';
+import DevExpress from './modules/core';
+import { EventsStrategy } from '../core/events_strategy';
+import { Options } from '../core/options';
 
-export default coreModule;
+DevExpress.integration = {
+    EventsStrategy,
+    Options
+};
+
+export default DevExpress;
