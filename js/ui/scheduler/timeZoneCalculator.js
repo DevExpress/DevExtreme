@@ -11,10 +11,6 @@ export default class TimeZoneCalculator {
         this.scheduler = scheduler;
     }
 
-    /**
-     * @param {Date} sourceDate
-     * @param {{ appointmentTimeZone:'', path: '' }} info
-     */
     createDate(sourceDate, info) {
         switch(info.path) {
             case PathTimeZoneConversion.fromSourceToAppointment:
