@@ -3578,7 +3578,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.module('fields[].width', moduleConfig, () => {
         const PADDING_WIDTH = 10;
         const BORDER_WIDTH = 1;
-        const MIN_SYMBOL_WIDTH = 7;
+        const CHAR_WIDTH = 7;
 
         [1000, 600, 300, 50].forEach(pivotWidth => {
             [200, 100, undefined].forEach(columnWidth => {
@@ -3613,7 +3613,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     helper.extendExpectedCells(expectedCells, topLeft);
                     exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then(() => {
                         const rowWidth = 100 + 2 * PADDING_WIDTH;
-                        const minColumnWidth = (columnWidth || MIN_SYMBOL_WIDTH) + 2 * PADDING_WIDTH + BORDER_WIDTH;
+                        const minColumnWidth = (columnWidth || CHAR_WIDTH) + 2 * PADDING_WIDTH + BORDER_WIDTH;
                         let expectedColumnWidth = pivotWidth - rowWidth - BORDER_WIDTH;
                         if(expectedColumnWidth < minColumnWidth) {
                             expectedColumnWidth = minColumnWidth;
@@ -3663,7 +3663,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then(() => {
                         const row1Width = 100 + 2 * PADDING_WIDTH;
                         const row2Width = 150 + 2 * PADDING_WIDTH + BORDER_WIDTH;
-                        const minColumnWidth = (columnWidth || MIN_SYMBOL_WIDTH) + 2 * PADDING_WIDTH + BORDER_WIDTH;
+                        const minColumnWidth = (columnWidth || CHAR_WIDTH) + 2 * PADDING_WIDTH + BORDER_WIDTH;
                         let expectedColumnWidth = pivotWidth - row1Width - row2Width - BORDER_WIDTH;
                         if(expectedColumnWidth < minColumnWidth) {
                             expectedColumnWidth = minColumnWidth;
