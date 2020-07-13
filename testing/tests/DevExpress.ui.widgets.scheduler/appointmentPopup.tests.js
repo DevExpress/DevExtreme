@@ -114,71 +114,6 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
-    QUnit.module('toolbar', () => {
-        [true, false].forEach(allowUpdatingValue => {
-            const data = [{
-                text: 'Website Re-Design Plan',
-                startDate: new Date(2017, 4, 22, 9, 30),
-                endDate: new Date(2017, 4, 22, 11, 30),
-                disabled: true
-            }, {
-                text: 'Book Flights to San Fran for Sales Trip',
-                startDate: new Date(2017, 4, 22, 12, 0),
-                endDate: new Date(2017, 4, 22, 13, 0),
-            }];
-
-            QUnit.test(`done button visibility in case allowUpdatingValue = ${allowUpdatingValue}`, function(assert) {
-                const scheduler = createWrapper({
-                    dataSource: data,
-                    views: ['week'],
-                    currentView: 'week',
-                    currentDate: new Date(2017, 4, 25),
-                    editing: {
-                        allowUpdating: allowUpdatingValue
-                    }
-                });
-
-                const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
-                for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
-                    scheduler.appointments.dblclick(i);
-                    assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
-                    scheduler.appointmentPopup.clickCancelButton();
-                }
-            });
-        });
-
-        QUnit.test('toolbar should be re-rendered after change editing option', function(assert) {
-            const scheduler = createWrapper({
-                dataSource: [],
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2017, 4, 25),
-                editing: {
-                    allowUpdating: true
-                }
-            });
-
-            const dataObj = {
-                text: 'a',
-                startDate: new Date(2015, 5, 15, 10),
-                endDate: new Date(2015, 5, 15, 11)
-            };
-
-            scheduler.instance.showAppointmentPopup(dataObj);
-            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible');
-
-            scheduler.option('editing', {
-                allowUpdating: false
-            });
-
-            scheduler.instance.showAppointmentPopup(dataObj);
-            assert.notOk(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button shouldn\'t be visible after set allowUpdating option to false');
-
-            scheduler.instance.showAppointmentPopup();
-            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible in case \'create new appointment\'');
-        });
-    });
-
     QUnit.test('showAppointmentPopup method should be work properly with no argument', function(assert) {
         const cases = [
             () => {
@@ -484,6 +419,151 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         deferred.done(() => {
             assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'has no load panel');
             assert.equal(scheduler.appointments.getTitleText(0), 'New Subject', 'Subject is correct');
+        });
+    });
+
+    [true, false].forEach(cancel => {
+        QUnit.test(`onAppointmentUpdating and e.cancel=${cancel} (T907281)`, function(assert) {
+            const data = [{
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11),
+                text: 'Subject'
+            }];
+            const scheduler = createScheduler({
+                views: ['day'],
+                dataSource: data,
+                currentDate: new Date(2015, 4, 24),
+                startDayHour: 8,
+                endDayHour: 18,
+                onAppointmentUpdating: e => e.cancel = cancel
+            });
+
+            scheduler.instance.showAppointmentPopup(data[0]);
+
+            scheduler.appointmentForm.setSubject('New Subject');
+
+            scheduler.appointmentPopup.saveAppointmentData();
+
+            assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
+
+            const subject = cancel ? 'Subject' : 'New Subject';
+            assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
+        });
+
+        QUnit.test(`onAppointmentAdding and e.cancel=${cancel}`, function(assert) {
+            const scheduler = createScheduler({
+                views: ['day'],
+                dataSource: [],
+                currentDate: new Date(2015, 4, 24),
+                startDayHour: 8,
+                endDayHour: 18,
+                onAppointmentAdding: e => e.cancel = cancel
+            });
+
+            scheduler.instance.showAppointmentPopup();
+
+            scheduler.appointmentForm.setStartDate(new Date(2015, 4, 24, 9));
+            scheduler.appointmentForm.setEndDate(new Date(2015, 4, 24, 11));
+            scheduler.appointmentForm.setSubject('New Subject');
+
+            scheduler.appointmentPopup.saveAppointmentData();
+
+            assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
+
+            const subject = cancel ? '' : 'New Subject';
+            assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
+        });
+
+        QUnit.test(`onAppointmentDeleting and e.cancel=${cancel}`, function(assert) {
+            const clock = sinon.useFakeTimers();
+            const data = [{
+                text: 'Some Text',
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11)
+            }];
+            const scheduler = createScheduler({
+                views: ['day'],
+                dataSource: data,
+                currentDate: new Date(2015, 4, 24),
+                startDayHour: 8,
+                endDayHour: 18,
+                onAppointmentDeleting: e => e.cancel = cancel
+            });
+
+            scheduler.instance.deleteAppointment(data[0]);
+            clock.tick();
+
+            assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
+
+            const subject = cancel ? 'Some Text' : '';
+            assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
+
+            clock.restore();
+        });
+    });
+
+    QUnit.module('toolbar', () => {
+        [true, false].forEach(allowUpdatingValue => {
+            const data = [{
+                text: 'Website Re-Design Plan',
+                startDate: new Date(2017, 4, 22, 9, 30),
+                endDate: new Date(2017, 4, 22, 11, 30),
+                disabled: true
+            }, {
+                text: 'Book Flights to San Fran for Sales Trip',
+                startDate: new Date(2017, 4, 22, 12, 0),
+                endDate: new Date(2017, 4, 22, 13, 0),
+            }];
+
+            QUnit.test(`done button visibility in case allowUpdatingValue = ${allowUpdatingValue}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: data,
+                    views: ['week'],
+                    currentView: 'week',
+                    currentDate: new Date(2017, 4, 25),
+                    editing: {
+                        allowUpdating: allowUpdatingValue
+                    }
+                });
+
+                const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
+                for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+                    scheduler.appointments.dblclick(i);
+                    assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
+                    scheduler.appointmentPopup.clickCancelButton();
+                }
+            });
+        });
+
+        QUnit.test('toolbar should be re-rendered after change editing option', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(2017, 4, 25),
+                editing: {
+                    allowUpdating: true
+                }
+            });
+
+            const dataObj = {
+                text: 'a',
+                startDate: new Date(2015, 5, 15, 10),
+                endDate: new Date(2015, 5, 15, 11)
+            };
+
+            scheduler.instance.showAppointmentPopup(dataObj);
+            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible');
+
+            scheduler.option('editing', {
+                allowUpdating: false
+            });
+
+            scheduler.instance.showAppointmentPopup(dataObj);
+            assert.notOk(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button shouldn\'t be visible after set allowUpdating option to false');
+
+            scheduler.instance.showAppointmentPopup();
+            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible in case \'create new appointment\'');
         });
     });
 });

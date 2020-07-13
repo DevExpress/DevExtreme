@@ -2228,9 +2228,11 @@ const Scheduler = Widget.inherit({
                         });
                 } catch(err) {
                     performFailAction(err);
+                    deferred.resolve();
                 }
             } else {
                 performFailAction();
+                deferred.resolve();
             }
 
             return deferred.promise();
