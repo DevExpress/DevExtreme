@@ -27,6 +27,7 @@ import fx from 'animation/fx';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
+import browser from 'core/utils/browser';
 
 const device = devices.real();
 
@@ -1307,6 +1308,25 @@ QUnit.module('Filter Row', {
         // assert
         const $firstCell = $(this.columnHeadersView.element()).find('.dx-datagrid-filter-row').children().first();
         assert.ok($firstCell.children().first().hasClass('dx-editor-with-menu'), 'editor with menu');
+    });
+
+    // T904124
+    [true, false].forEach(rtlEnabled => {
+        const leftTextAlign = browser.msie ? 'left' : 'start';
+        const textAlign = rtlEnabled ? 'right' : leftTextAlign;
+        QUnit.test(`input's textAlign should be ${textAlign} if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+
+            $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, alignment: 'center' }]);
+            this.options.rtlEnabled = rtlEnabled;
+
+            // act
+            this.columnHeadersView.render($testElement);
+
+            // assert
+            assert.equal($testElement.find(TEXTEDITOR_INPUT_SELECTOR).css('textAlign'), textAlign, 'text align');
+        });
     });
 });
 
