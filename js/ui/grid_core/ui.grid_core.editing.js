@@ -1457,7 +1457,7 @@ const EditingController = modules.ViewController.inherit((function() {
             };
 
             if(that._beforeSaveEditData() || that._saving) {
-                that._afterSaveEditData();
+                that._afterSaveEditData(true);
                 return result.resolve().promise();
             }
 
@@ -1727,6 +1727,19 @@ const EditingController = modules.ViewController.inherit((function() {
             };
         },
 
+        _needUpdateRow: function(column) {
+            const visibleColumns = this._columnsController.getVisibleColumns();
+
+            if(!column) {
+                column = visibleColumns[this._editColumnIndex];
+            }
+
+            const isCustomSetCellValue = column && column.setCellValue !== column.defaultSetCellValue;
+            const isCustomCalculateCellValue = visibleColumns.some((visibleColumn) => visibleColumn.calculateCellValue !== visibleColumn.defaultCalculateCellValue);
+
+            return isCustomSetCellValue || isCustomCalculateCellValue;
+        },
+
         updateFieldValue: function(options, value, text, forceUpdateRow) {
             const that = this;
             const rowKey = options.key;
@@ -1757,9 +1770,6 @@ const EditingController = modules.ViewController.inherit((function() {
             const showEditorAlways = options.column.showEditorAlways;
             const isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.isNewRow;
             const focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex);
-            const columns = that._columnsController.getVisibleColumns();
-            const isCustomCalculateCellValue = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
-            let focusCellAfterRowUpdate = false;
 
             if(focusPreviousEditingCell) {
                 that._focusEditingCell();
@@ -1770,23 +1780,18 @@ const EditingController = modules.ViewController.inherit((function() {
             that._addEditData(params, options.row);
             that._updateEditButtons();
 
-            if(editMode === EDIT_MODE_CELL && (isCustomSetCellValue || isCustomCalculateCellValue)) {
-                forceUpdateRow = focusCellAfterRowUpdate = true;
-            }
-
             if(showEditorAlways && !forceUpdateRow) {
                 if(isUpdateInCellMode) {
                     that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
                     that._editColumnIndex = options.columnIndex;
                     return that.saveEditData();
                 } else if(editMode === EDIT_MODE_BATCH) {
-                    forceUpdateRow = isCustomSetCellValue || isCustomCalculateCellValue;
+                    forceUpdateRow = that._needUpdateRow(options.column);
                 }
             }
 
             if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
                 that._updateEditRow(options.row, forceUpdateRow, isCustomSetCellValue);
-                focusCellAfterRowUpdate && that._focusEditingCell();
             }
         },
         _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
