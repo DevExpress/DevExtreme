@@ -50,7 +50,7 @@ import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month'
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import AppointmentAdapter from './appointmentAdapter';
-import TimeZoneCalculator from './timeZoneCalculator';
+import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 
 // STYLE scheduler

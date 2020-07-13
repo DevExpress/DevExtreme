@@ -1,12 +1,4 @@
-export const PathTimeZoneConversion = {
-    fromSourceToAppointment: 'toAppointment',
-    fromAppointmentToSource: 'fromAppointment',
-
-    fromSourceToGrid: 'toGrid',
-    fromGridToSource: 'fromGrid',
-};
-
-export default class TimeZoneCalculator {
+export class TimeZoneCalculator {
     constructor(scheduler) {
         this.scheduler = scheduler;
     }
@@ -25,3 +17,11 @@ export default class TimeZoneCalculator {
         throw new Error('not specified pathTimeZoneConversion');
     }
 }
+
+export const PathTimeZoneConversion = {
+    fromSourceToAppointment: 'toAppointment',
+    fromAppointmentToSource: 'fromAppointment',
+
+    fromSourceToGrid: 'toGrid',
+    fromGridToSource: 'fromGrid',
+};
