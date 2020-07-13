@@ -46,7 +46,7 @@ fixture`Row dragging`
   .page(url(__dirname, '../container.html'));
 
 // T903351
-test('test1', async (t) => {
+test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
     const dataGrid = new DataGrid('#container');
     const treeList = new TreeList('#otherContainer');
 
