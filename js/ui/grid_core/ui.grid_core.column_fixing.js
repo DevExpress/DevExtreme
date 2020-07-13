@@ -863,7 +863,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
 const FooterViewFixedColumnsExtender = baseFixedColumns;
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             columnFixing: {

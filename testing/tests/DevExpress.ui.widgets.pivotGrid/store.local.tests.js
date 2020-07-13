@@ -4,7 +4,7 @@ import 'data/odata/store';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { LocalStore } from 'ui/pivot_grid/local_store';
-import pivotGridDataSource from 'ui/pivot_grid/data_source';
+import { sort } from 'ui/pivot_grid/data_source.utils';
 import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
 import config from 'core/config';
 import formatHelper from 'format_helper';
@@ -15,7 +15,7 @@ const moduleConfig = {
         this.store = new LocalStore(window.orders);
         this.load = function(options) {
             return this.store.load(options).done(function(data) {
-                pivotGridDataSource.sort(options, data);
+                sort(options, data);
             });
         };
     }

@@ -12,7 +12,7 @@ QUnit.module('Basics', {
         this.tooltip.stub('isEnabled').returns(true);
         this.tooltip.stub('show').returns(true);
         this.tooltip.stub('formatValue').returns('formatted');
-        tooltipModule.Tooltip = common.returnValue(this.tooltip);
+        tooltipModule.DEBUG_set_tooltip(common.returnValue(this.tooltip));
     }
 });
 

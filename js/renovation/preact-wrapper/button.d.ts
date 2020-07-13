@@ -2,7 +2,7 @@
 import Component from './component';
 
 export default class Button extends Component {
-  getAllProps(isFirstRender: boolean): any;
+  getProps(): any;
 
   _init(): any;
 

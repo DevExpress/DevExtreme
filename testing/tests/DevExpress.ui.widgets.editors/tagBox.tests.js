@@ -1734,6 +1734,119 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         assert.expect(0);
     });
+
+    QUnit.test('dataSource should not load item on item selection if valueExpr is used', function(assert) {
+        const items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }, { name: 'three', value: 3 }];
+        const loadSpy = sinon.spy((loadOptions) => {
+            const deferred = $.Deferred();
+            setTimeout(() => {
+                if(loadOptions.take) {
+                    deferred.resolve(items.slice().splice(loadOptions.skip, loadOptions.take));
+                }
+                deferred.resolve();
+            }, 500);
+
+            return deferred.promise();
+        });
+
+
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: loadSpy
+            }),
+            paginate: true,
+            pageSize: 4
+
+        });
+        $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'name',
+            valueExpr: 'value',
+            opened: true,
+            showSelectionControls: true
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+        pointerMock($('.dx-list-item').eq(1)).start().click();
+        pointerMock($('.dx-list-item').eq(2)).start().click();
+
+        assert.strictEqual(loadSpy.callCount, 1, 'selected items are correct');
+    });
+
+    QUnit.test('dataSource should not load item on item selection if dataSource key is used (T888848)', function(assert) {
+        const items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }, { name: 'three', value: 3 }];
+        const loadSpy = sinon.spy((loadOptions) => {
+            const deferred = $.Deferred();
+            setTimeout(() => {
+                if(loadOptions.take) {
+                    deferred.resolve(items.slice().splice(loadOptions.skip, loadOptions.take));
+                }
+                deferred.resolve();
+            }, 500);
+
+            return deferred.promise();
+        });
+
+
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: loadSpy
+            }),
+            key: 'value',
+            paginate: true,
+            pageSize: 4
+
+        });
+        $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'name',
+            opened: true,
+            showSelectionControls: true
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+        pointerMock($('.dx-list-item').eq(1)).start().click();
+        pointerMock($('.dx-list-item').eq(2)).start().click();
+
+        assert.strictEqual(loadSpy.callCount, 1, 'selected items are correct');
+    });
+
+    QUnit.test('dataSource should not load item on item selection if no dataSource key is used', function(assert) {
+        const items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }, { name: 'three', value: 3 }];
+        const loadSpy = sinon.spy((loadOptions) => {
+            const deferred = $.Deferred();
+            setTimeout(() => {
+                if(loadOptions.take) {
+                    deferred.resolve(items.slice().splice(loadOptions.skip, loadOptions.take));
+                }
+                deferred.resolve();
+            }, 500);
+
+            return deferred.promise();
+        });
+
+
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: loadSpy
+            }),
+            paginate: true,
+            pageSize: 4
+
+        });
+        $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'name',
+            opened: true,
+            showSelectionControls: true
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+        pointerMock($('.dx-list-item').eq(1)).start().click();
+        pointerMock($('.dx-list-item').eq(2)).start().click();
+
+        assert.strictEqual(loadSpy.callCount, 1, 'selected items are correct');
+    });
 });
 
 QUnit.module('keyboard navigation', {
@@ -2790,9 +2903,11 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: false
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const input = $tagBox.find(`.${TEXTBOX_CLASS}`).get(0);
+        const { width: inputWidth } = input.getBoundingClientRect();
+
         // NOTE: width should be 0.1 because of T393423
-        assert.roughEqual($input.width(), 0.1, 0.101, 'input has correct width');
+        assert.roughEqual(inputWidth, 0.1, 0.101, 'input has correct width');
     });
 
     QUnit.test('no placeholder when textbox is not empty', function(assert) {
@@ -5346,8 +5461,8 @@ QUnit.module('performance', () => {
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
         // assert
-        assert.equal(keyGetterCounter, 513, 'key getter call count');
-        assert.equal(isValueEqualsSpy.callCount, 0, '_isValueEquals is not called');
+        assert.equal(keyGetterCounter, 613, 'key getter call count');
+        assert.equal(isValueEqualsSpy.callCount, 100, '_isValueEquals call count');
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {

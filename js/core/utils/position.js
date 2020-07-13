@@ -1,5 +1,5 @@
 import config from '../config';
-import typeUtils from '../utils/type';
+import { isWindow } from '../utils/type';
 
 const getDefaultAlignment = function(isRtlEnabled) {
     const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
@@ -8,7 +8,7 @@ const getDefaultAlignment = function(isRtlEnabled) {
 };
 
 const getBoundingRect = (element) => {
-    if(typeUtils.isWindow(element)) {
+    if(isWindow(element)) {
         return {
             width: element.outerWidth,
             height: element.outerHeight
@@ -34,5 +34,7 @@ const getBoundingRect = (element) => {
     return rect;
 };
 
-exports.getDefaultAlignment = getDefaultAlignment;
-exports.getBoundingRect = getBoundingRect;
+export {
+    getBoundingRect,
+    getDefaultAlignment
+};

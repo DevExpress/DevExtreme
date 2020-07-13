@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { getDiagram } from './diagram.importer';
 import messageLocalization from '../../localization/message';
 
-const FileUploader = require('../file_uploader');
+import FileUploader from '../file_uploader';
 import { getWindow } from '../../core/utils/window';
 
 const DiagramDialogManager = {
@@ -49,4 +49,4 @@ const DiagramDialogManager = {
     }
 };
 
-module.exports = DiagramDialogManager;
+export default DiagramDialogManager;

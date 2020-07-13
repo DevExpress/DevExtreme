@@ -1,13 +1,13 @@
-const GroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
+import { getBoundingRect } from '../../../core/utils/position';
+import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
 
 const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
 
 const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
 
-const VerticalGroupedStrategy = GroupedStrategy.inherit({
-    prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDayRow) {
+class VerticalGroupedStrategy extends GroupedStrategy {
+    prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
         let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
@@ -22,69 +22,69 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
             rowIndex: rowIndex,
             cellIndex: cellCoordinates.cellIndex
         };
-    },
+    }
 
-    calculateCellIndex: function(rowIndex, cellIndex) {
+    calculateCellIndex(rowIndex, cellIndex) {
         rowIndex = rowIndex % this._workSpace._getRowCount();
 
         return this._workSpace._getRowCount() * cellIndex + rowIndex;
-    },
+    }
 
-    getGroupIndex: function(rowIndex, cellIndex) {
+    getGroupIndex(rowIndex) {
         return Math.floor(rowIndex / this._workSpace._getRowCount());
-    },
+    }
 
-    calculateHeaderCellRepeatCount: function() {
+    calculateHeaderCellRepeatCount() {
         return 1;
-    },
+    }
 
-    insertAllDayRowsIntoDateTable: function() {
+    insertAllDayRowsIntoDateTable() {
         return this._workSpace.option('showAllDayPanel');
-    },
+    }
 
-    getTotalCellCount: function(groupCount) {
+    getTotalCellCount() {
         return this._workSpace._getCellCount();
-    },
+    }
 
-    getTotalRowCount: function() {
+    getTotalRowCount() {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
-    },
+    }
 
-    addAdditionalGroupCellClasses: function(cellClass, index, i, j) {
+    addAdditionalGroupCellClasses(cellClass, index, i, j) {
         cellClass = this._addLastGroupCellClass(cellClass, i + 1);
 
         return this._addFirstGroupCellClass(cellClass, i + 1);
-    },
+    }
 
-    _addLastGroupCellClass: function(cellClass, index) {
+    _addLastGroupCellClass(cellClass, index) {
         if(index % this._workSpace._getRowCount() === 0) {
             return cellClass + ' ' + this.getLastGroupCellClass();
         }
 
         return cellClass;
-    },
+    }
 
-    _addFirstGroupCellClass: function(cellClass, index) {
+    _addFirstGroupCellClass(cellClass, index) {
         if((index - 1) % this._workSpace._getRowCount() === 0) {
             return cellClass + ' ' + this.getFirstGroupCellClass();
         }
 
         return cellClass;
-    },
+    }
 
-    getHorizontalMax: function(groupIndex) {
+    getHorizontalMax() {
         return this._workSpace.getMaxAllowedPosition()[0];
-    },
+    }
 
-    getVerticalMax: function(groupIndex) {
+    getVerticalMax(groupIndex) {
         let maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
 
         maxAllowedPosition += this._getOffsetByAllDayPanel(groupIndex);
 
         return maxAllowedPosition;
-    },
+    }
 
-    _getOffsetByAllDayPanel: function(groupIndex) {
+    _getOffsetByAllDayPanel(groupIndex) {
         let result = 0;
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
@@ -92,17 +92,17 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return result;
-    },
+    }
 
-    _getGroupTop: function(groupIndex) {
+    _getGroupTop(groupIndex) {
         return this._workSpace.getMaxAllowedVerticalPosition()[groupIndex] - this._workSpace.getCellHeight() * this._workSpace._getRowCount();
-    },
+    }
 
-    calculateTimeCellRepeatCount: function() {
+    calculateTimeCellRepeatCount() {
         return this._workSpace._getGroupCount() || 1;
-    },
+    }
 
-    getWorkSpaceMinWidth: function() {
+    getWorkSpaceMinWidth() {
         let minWidth = this._workSpace._getWorkSpaceWidth();
         const workspaceContainerWidth = getBoundingRect(this._workSpace.$element().get(0)).width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth() - 2 * WORK_SPACE_BORDER;
 
@@ -111,28 +111,28 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return minWidth;
-    },
+    }
 
-    getAllDayOffset: function() {
+    getAllDayOffset() {
         return 0;
-    },
+    }
 
-    getAllDayTableHeight: function() {
+    getAllDayTableHeight() {
         return 0;
-    },
+    }
 
-    getGroupCountAttr: function() {
+    getGroupCountAttr() {
         return {
             attr: VERTICAL_GROUPED_ATTR,
             count: this._workSpace.option('groups') && this._workSpace.option('groups').length
         };
-    },
+    }
 
-    getLeftOffset: function() {
+    getLeftOffset() {
         return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
-    },
+    }
 
-    getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
+    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
         const groupIndex = coordinates.groupIndex;
         const startOffset = $cells.eq(0).offset().left;
         const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
@@ -152,9 +152,9 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
             top: topOffset,
             bottom: bottomOffset
         };
-    },
+    }
 
-    shiftIndicator: function($indicator, height, rtlOffset, i) {
+    shiftIndicator($indicator, height, rtlOffset, i) {
         const offset = this._workSpace.getIndicatorOffset(0);
         const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
         const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
@@ -166,18 +166,18 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
 
         $indicator.css('left', horizontalOffset + tableOffset);
         $indicator.css('top', height + verticalOffset);
-    },
+    }
 
-    getShaderOffset: function(i, width) {
+    getShaderOffset(i, width) {
         const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
         return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
-    },
+    }
 
-    getShaderTopOffset: function(i) {
+    getShaderTopOffset(i) {
         return 0;
-    },
+    }
 
-    getShaderHeight: function() {
+    getShaderHeight() {
         let height = this._workSpace.getIndicationHeight();
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
@@ -185,9 +185,9 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return height;
-    },
+    }
 
-    getShaderMaxHeight: function() {
+    getShaderMaxHeight() {
         let height = this._workSpace._getRowCount() * this._workSpace.getCellHeight();
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
@@ -195,22 +195,22 @@ const VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return height;
-    },
+    }
 
-    getShaderWidth: function(i) {
+    getShaderWidth() {
         return this._workSpace.getIndicationWidth(0);
-    },
+    }
 
-    getScrollableScrollTop: function(allDay) {
+    getScrollableScrollTop() {
         return this._workSpace.getScrollable().scrollTop();
-    },
+    }
 
-    getGroupIndexByCell: function($cell) {
+    getGroupIndexByCell($cell) {
         const rowIndex = $cell.parent().index();
         const rowCount = this._workSpace._getRowCountWithAllDayRows();
 
         return Math.ceil((rowIndex + 1) / rowCount);
-    },
-});
+    }
+}
 
-module.exports = VerticalGroupedStrategy;
+export default VerticalGroupedStrategy;

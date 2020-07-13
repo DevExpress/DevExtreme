@@ -1,2 +1,2 @@
-
-module.exports = require('./scheduler/ui.scheduler');
+import Scheduler from './scheduler/ui.scheduler';
+export default Scheduler;

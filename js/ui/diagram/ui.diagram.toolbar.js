@@ -572,4 +572,4 @@ class DiagramToolbarSubItemHelper extends DiagramToolbarItemHelper {
     }
 }
 
-module.exports = DiagramToolbar;
+export default DiagramToolbar;

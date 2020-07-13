@@ -55,14 +55,14 @@ themeManagerModule.ThemeManager = sinon.spy(function() {
     return currentTest().themeManager;
 });
 
-tooltipModule.Tooltip = function(parameters) {
+tooltipModule.DEBUG_set_tooltip(function(parameters) {
     currentTest().tooltip = new StubTooltip(parameters);
     return currentTest().tooltip;
-};
+});
 
-titleModule.Title = function() {
+titleModule.DEBUG_set_title(function() {
     return currentTest().title;
-};
+});
 
 $.extend(factory, {
     createTranslator: sinon.spy(function() {
@@ -100,7 +100,7 @@ const environment = {
         this.clock = sinon.useFakeTimers();
         // this.setAbstractField("_width", 200);
         // this.setAbstractField("_height", 100);
-        loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
+        loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
     },
     afterEach: function() {
         this.$container.remove();

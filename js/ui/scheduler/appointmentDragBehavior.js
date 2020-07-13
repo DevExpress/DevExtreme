@@ -139,5 +139,3 @@ export default class AppointmentDragBehavior {
         }
     }
 }
-
-module.exports = AppointmentDragBehavior;

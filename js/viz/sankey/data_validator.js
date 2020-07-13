@@ -1,4 +1,4 @@
-const graphModule = require('./graph');
+import graphModule from './graph';
 
 const validator = {
     validate: function(data, incidentOccurred) {
@@ -14,4 +14,4 @@ const validator = {
     }
 };
 
-module.exports = validator;
+export default validator;

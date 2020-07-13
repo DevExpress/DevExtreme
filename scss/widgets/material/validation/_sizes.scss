@@ -1,0 +1,15 @@
+@use "../sizes" as *;
+// adduse
+
+$MATERIAL_VALIDATION_MESSAGE_PADDING: null !default;
+$MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: null !default;
+
+@if $size == "default" {
+  $MATERIAL_VALIDATION_MESSAGE_PADDING: 6px;
+  $MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: 10px;
+}
+
+@else if $size == "compact" {
+  $MATERIAL_VALIDATION_MESSAGE_PADDING: 4px;
+  $MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: 6px;
+}

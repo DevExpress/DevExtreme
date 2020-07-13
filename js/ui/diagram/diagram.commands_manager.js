@@ -857,4 +857,4 @@ const DiagramCommandsManager = {
     }
 };
 
-module.exports = DiagramCommandsManager;
+export default DiagramCommandsManager;

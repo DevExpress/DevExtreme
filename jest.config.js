@@ -10,32 +10,33 @@ module.exports = {
             diagnostics: false, // set to true to enable type checking
         }
     },
-    collectCoverage: true,
     collectCoverageFrom: [
-        './js/renovation/**/*.p.js',
-        '!./js/renovation/error-message.p.js',
-        '!./js/renovation/number-box.p.js',
-        '!./js/renovation/select-box.p.js',
+        './js/renovation/**/*.tsx',
+        '!./js/renovation/number-box.tsx',
+        '!./js/renovation/list.tsx',
+        '!./js/renovation/utils/render-template.tsx',
     ],
     coverageDirectory: './testing/jest/code_coverage',
     coverageThreshold: {
-        './js/renovation/**/*.p.js': {
+        './js/renovation/**/*.tsx': {
             functions: 0, // Should set code coverage to 100%
             statements: 0, // (after start testing declarations)
             lines: 0,
             branches: 0
         }
     },
+    roots: ['<rootDir>/testing/jest'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
         path.join(path.resolve('.'), './testing/jest/setup-enzyme.ts'),
     ],
     testMatch: [
-        path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')
+        '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)'
     ],
     transform: {
-        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/declaration-transformer.js'),
-        '\\.(js|jsx|ts|tsx)$': resolve.sync('ts-jest')
+        'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/transformers/declaration-transformer.js'),
+        '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
+        '\\.(tsx)$': path.resolve('./testing/jest/utils/transformers/tsx-transformer.js')
     }
 };

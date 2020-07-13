@@ -1,16 +1,16 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const translator = require('../../animation/translator');
-const extend = require('../../core/utils/extend').extend;
-const Color = require('../../color');
-const messageLocalization = require('../../localization/message');
-const devices = require('../../core/devices');
-const registerComponent = require('../../core/component_registrator');
-const Editor = require('../editor/editor');
-const NumberBox = require('../number_box');
-const TextBox = require('../text_box');
-const Draggable = require('../draggable');
-const clickEvent = require('../../events/click');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import translator from '../../animation/translator';
+import { extend } from '../../core/utils/extend';
+import Color from '../../color';
+import messageLocalization from '../../localization/message';
+import devices from '../../core/devices';
+import registerComponent from '../../core/component_registrator';
+import Editor from '../editor/editor';
+import NumberBox from '../number_box';
+import TextBox from '../text_box';
+import Draggable from '../draggable';
+import { name as clickEventName } from '../../events/click';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -573,8 +573,8 @@ const ColorView = Editor.inherit({
             .text(options.labelText + ':')
             .append($editor);
 
-        eventsEngine.off($label, clickEvent.name);
-        eventsEngine.on($label, clickEvent.name, function(e) {
+        eventsEngine.off($label, clickEventName);
+        eventsEngine.on($label, clickEventName, function(e) {
             e.preventDefault();
         });
 
@@ -867,4 +867,4 @@ const ColorView = Editor.inherit({
 
 registerComponent('dxColorView', ColorView);
 
-module.exports = ColorView;
+export default ColorView;

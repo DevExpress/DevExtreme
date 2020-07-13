@@ -12,7 +12,7 @@ const FOCUSED_ROW_SELECTOR = '.dx-row' + '.' + ROW_FOCUSED_CLASS;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
-exports.FocusController = core.ViewController.inherit((function() {
+const FocusController = core.ViewController.inherit((function() {
     return {
         init: function() {
             this._dataController = this.getController('data');
@@ -377,7 +377,7 @@ exports.FocusController = core.ViewController.inherit((function() {
     };
 })());
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             focusedRowEnabled: false,
@@ -393,7 +393,7 @@ module.exports = {
     },
 
     controllers: {
-        focus: exports.FocusController
+        focus: FocusController
     },
 
     extenders: {

@@ -1,9 +1,10 @@
 export default class Field {
-    element: Selector;
-    text: Promise<string>;
+  element: Selector;
 
-    constructor(element: Selector) {
-        this.element = element;
-        this.text = element.textContent;
-    }
+  text: Promise<string>;
+
+  constructor(element: Selector) {
+    this.element = element;
+    this.text = element.textContent;
+  }
 }

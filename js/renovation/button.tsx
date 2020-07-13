@@ -8,31 +8,21 @@ import {
   OneWay,
   Ref,
   Template,
+  Slot,
 } from 'devextreme-generator/component_declaration/common';
-import createDefaultOptionRules from '../core/options/utils';
+import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
-import themes from '../ui/themes';
+import * as themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
-import Icon from './icon';
-import InkRipple from './ink-ripple';
-import Widget from './widget';
+import { Icon } from './icon';
+import { InkRipple } from './ink-ripple';
+import { Widget } from './widget';
 import BaseWidgetProps from './utils/base-props';
 import BaseComponent from './preact-wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
-
-const getInkRippleConfig = ({ text, icon, type }: ButtonProps) => {
-  const isOnlyIconButton = (!text && icon) || (type === 'back');
-  const config: any = isOnlyIconButton ? {
-    isCentered: true,
-    useHoldAnimation: false,
-    waveSizeCoefficient: 1,
-  } : {};
-
-  return config;
-};
 
 const getCssClasses = (model: ButtonProps) => {
   const {
@@ -51,23 +41,13 @@ const getCssClasses = (model: ButtonProps) => {
   return classNames.join(' ');
 };
 
-const getAriaLabel = (text, icon) => {
-  let label = text || icon;
-
-  if (!text && getImageSourceType(icon) === 'image') {
-    label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
-  }
-
-  return label ? { label } : {};
-};
-
 export const viewFunction = (viewModel: Button) => {
   const {
-    icon, iconPosition, template, text,
+    children, icon, iconPosition, template, text,
   } = viewModel.props;
-  const renderText = !template && text;
+  const renderText = !template && !children && text;
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !template && viewModel.iconSource
+  const iconComponent = !template && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
 
   return (
@@ -78,7 +58,6 @@ export const viewFunction = (viewModel: Button) => {
       aria={viewModel.aria}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
-      elementAttr={viewModel.elementAttr}
       focusStateEnabled={viewModel.props.focusStateEnabled}
       height={viewModel.props.height}
       hint={viewModel.props.hint}
@@ -99,12 +78,11 @@ export const viewFunction = (viewModel: Button) => {
                 && (
                 <viewModel.props.template
                   data={{ icon, text }}
-                  parentRef={viewModel.contentRef}
                 />
                 )}
+        {!template && children}
         {isIconLeft && iconComponent}
-        {renderText
-                && <span className="dx-button-text">{text}</span>}
+        {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
         {viewModel.props.useSubmitBehavior
                 && <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
@@ -136,7 +114,9 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Template({ canBeAnonymous: true }) template?: any = '';
+  @Template() template?: any = '';
+
+  @Slot() children?: any;
 
   @OneWay() text?: string = '';
 
@@ -149,11 +129,11 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() validationGroup?: string = undefined;
 }
 
-const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
+export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  device: () => (themes as any).isMaterial(themes.current()),
+  device: () => (themes as any).isMaterial((themes as any).current()),
   options: { useInkRipple: true },
 }]);
 @Component({
@@ -165,7 +145,7 @@ const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   view: viewFunction,
 })
 
-export default class Button extends JSXComponent(ButtonProps) {
+export class Button extends JSXComponent(ButtonProps) {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
@@ -204,7 +184,7 @@ export default class Button extends JSXComponent(ButtonProps) {
   onWidgetClick(event: Event) {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
-    onClick!({ event, validationGroup });
+    onClick?.({ event, validationGroup });
     useSubmitBehavior && this.submitInputRef.click();
   }
 
@@ -230,27 +210,34 @@ export default class Button extends JSXComponent(ButtonProps) {
     const namespace = 'UIFeedback';
     const { useSubmitBehavior, onSubmit } = this.props;
 
-    if (useSubmitBehavior) {
+    if (useSubmitBehavior && onSubmit) {
       click.on(this.submitInputRef,
-        (event) => onSubmit!({ event, submitInput: this.submitInputRef }),
+        (event) => onSubmit({ event, submitInput: this.submitInputRef }),
         { namespace });
 
-      return () => click.off(this.submitInputRef, { namespace });
+      return (): void => click.off(this.submitInputRef, { namespace });
     }
 
     return undefined;
   }
 
   get aria() {
-    return getAriaLabel(this.props.text, this.props.icon);
+    const { text, icon } = this.props;
+
+    let label = text || icon;
+
+    if (!text && icon && getImageSourceType(icon) === 'image') {
+      label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+    }
+
+    return {
+      role: 'button',
+      ...(label ? { label } : {}),
+    };
   }
 
   get cssClasses(): string {
     return getCssClasses(this.props);
-  }
-
-  get elementAttr() {
-    return { ...this.props.elementAttr, role: 'button' };
   }
 
   get iconSource(): string {
@@ -260,6 +247,11 @@ export default class Button extends JSXComponent(ButtonProps) {
   }
 
   get inkRippleConfig() {
-    return getInkRippleConfig(this.props);
+    const { text, icon, type } = this.props;
+    return ((!text && icon) || (type === 'back')) ? {
+      isCentered: true,
+      useHoldAnimation: false,
+      waveSizeCoefficient: 1,
+    } : {};
   }
 }

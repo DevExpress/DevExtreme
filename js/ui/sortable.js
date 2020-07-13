@@ -422,30 +422,12 @@ const Sortable = Draggable.inherit({
         this._updateItemPoints();
     },
 
-    _getScrollable: function($element) {
-        const that = this;
-        let $scrollable;
-
-        $element.parents().toArray().some(function(parent) {
-            const $parent = $(parent);
-
-            if(that._horizontalScrollHelper.isScrollable($parent) || that._verticalScrollHelper.isScrollable($parent)) {
-                $scrollable = $parent;
-
-                return true;
-            }
-        });
-
-        return $scrollable;
-    },
-
     _makeWidthCorrection: function($item, width) {
-        const that = this;
-        that._$scrollable = that._getScrollable($item);
+        this._$scrollable = this._getScrollable($item);
 
-        if(that._$scrollable && that._$scrollable.width() < width) {
-            const scrollableWidth = that._$scrollable.width();
-            const offsetLeft = $item.offset().left - that._$scrollable.offset().left;
+        if(this._$scrollable && this._$scrollable.width() < width) {
+            const scrollableWidth = this._$scrollable.width();
+            const offsetLeft = $item.offset().left - this._$scrollable.offset().left;
             const offsetRight = scrollableWidth - $item.outerWidth() - offsetLeft;
 
             if(offsetLeft > 0) {
@@ -544,9 +526,19 @@ const Sortable = Draggable.inherit({
             case 'moveItemOnDrop':
             case 'dropFeedbackMode':
             case 'itemPoints':
-            case 'fromIndex':
             case 'animation':
             case 'allowReordering':
+                break;
+            case 'fromIndex':
+                if(!this._$sourceElement) {
+                    [false, true].forEach((isDragSource) => {
+                        const fromIndex = isDragSource ? args.value : args.previousValue;
+                        if(fromIndex !== null) {
+                            const $fromElement = $(this._getItems()[fromIndex]);
+                            this._toggleDragSourceClass(isDragSource, $fromElement);
+                        }
+                    });
+                }
                 break;
             case 'dropInsideItem':
                 this._optionChangedDropInsideItem(args);
@@ -778,4 +770,4 @@ const Sortable = Draggable.inherit({
 
 registerComponent(SORTABLE, Sortable);
 
-module.exports = Sortable;
+export default Sortable;

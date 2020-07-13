@@ -1,24 +1,26 @@
-const $ = require('../../core/renderer');
-let caret = require('./utils.caret');
-const devices = require('../../core/devices');
-const each = require('../../core/utils/iterator').each;
-const eventUtils = require('../../events/utils');
-const eventsEngine = require('../../events/core/events_engine');
-const extend = require('../../core/utils/extend').extend;
-const focused = require('../widget/selectors').focused;
-const isDefined = require('../../core/utils/type').isDefined;
-const messageLocalization = require('../../localization/message');
-const noop = require('../../core/utils/common').noop;
-const stringUtils = require('../../core/utils/string');
-const wheelEvent = require('../../events/core/wheel');
-const MaskRules = require('./ui.text_editor.mask.rule');
-const TextEditorBase = require('./ui.text_editor.base');
-const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default;
-const AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
+import $ from '../../core/renderer';
+import caretUtils from './utils.caret';
+import { isInputEventsL2Supported } from './utils.support';
+import { each } from '../../core/utils/iterator';
+import eventUtils from '../../events/utils';
+import eventsEngine from '../../events/core/events_engine';
+import { extend } from '../../core/utils/extend';
+import { focused } from '../widget/selectors';
+import { isDefined } from '../../core/utils/type';
+import messageLocalization from '../../localization/message';
+import { noop } from '../../core/utils/common';
+import stringUtils from '../../core/utils/string';
+import wheelEvent from '../../events/core/wheel';
+import MaskRules from './ui.text_editor.mask.rule';
+import TextEditorBase from './ui.text_editor.base';
+import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
+import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
 
 const stubCaret = function() {
     return {};
 };
+
+let caret = caretUtils;
 
 const EMPTY_CHAR = ' ';
 const ESCAPED_CHAR = '\\';
@@ -110,9 +112,9 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        const device = devices.real();
-        this._maskStrategy = device.android && device.version[0] > 4 ?
-            new AndroidMaskStrategy(this) :
+        this._maskStrategy = isInputEventsL2Supported() ?
+            new InputEventsMaskStrategy(this) :
+            // FF, old Safari and desktop Chrome (https://bugs.chromium.org/p/chromium/issues/detail?id=947408)
             new DefaultMaskStrategy(this);
     },
 
@@ -149,8 +151,8 @@ const TextEditorMask = TextEditorBase.inherit({
     _onMouseWheel: noop,
 
     _render: function() {
-        this.callBase();
         this._renderMask();
+        this.callBase();
         this._attachMouseWheelEventHandlers();
     },
 
@@ -184,12 +186,11 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _suppressCaretChanging: function(callback, args) {
-        const originalCaret = caret;
         caret = stubCaret;
         try {
             callback.apply(this, args);
         } finally {
-            caret = originalCaret;
+            caret = caretUtils;
         }
     },
 
@@ -565,4 +566,4 @@ const TextEditorMask = TextEditorBase.inherit({
 
 });
 
-module.exports = TextEditorMask;
+export default TextEditorMask;

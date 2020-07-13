@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_BADGE_HORIZONTAL_PADDING: null !default;
+
+@if $size == "default" {
+  $GENERIC_BADGE_HORIZONTAL_PADDING: 6px;
+}
+
+@else if $size == "compact" {
+  $GENERIC_BADGE_HORIZONTAL_PADDING: 5px;
+}

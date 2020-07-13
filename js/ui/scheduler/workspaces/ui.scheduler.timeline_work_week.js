@@ -2,7 +2,6 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import dateUtils from '../../../core/utils/date';
 import workWeekUtils from './utils.work_week';
-
 const toMs = dateUtils.dateToMilliseconds;
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
@@ -51,4 +50,4 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
 
 registerComponent('dxSchedulerTimelineWorkWeek', SchedulerTimelineWorkWeek);
 
-module.exports = SchedulerTimelineWorkWeek;
+export default SchedulerTimelineWorkWeek;

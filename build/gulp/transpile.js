@@ -7,19 +7,27 @@ const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const path = require('path');
 const notify = require('gulp-notify');
+const compressionPipes = require('./compression-pipes.js');
 
 const context = require('./context.js');
 
 require('./generator/gulpfile');
 
 const GLOB_TS = require('./ts').GLOB_TS;
-const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.tsx'];
+const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.{tsx,ts}'];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile', gulp.series('generate-components', 'bundler-config', function() {
+gulp.task('transpile-prod', function() {
+    return gulp.src(SRC)
+        .pipe(compressionPipes.removeDebug())
+        .pipe(babel())
+        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
+});
+
+gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-prod', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));

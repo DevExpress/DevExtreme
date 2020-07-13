@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { deferRender, noop } from '../../core/utils/common';
+import { isFunction, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { logger } from '../../core/utils/console';
@@ -61,7 +61,7 @@ const DataGrid = Widget.inherit({
         const result = that.callBase();
 
         each(gridCore.modules, function() {
-            if(typeUtils.isFunction(this.defaultOptions)) {
+            if(isFunction(this.defaultOptions)) {
                 extend(true, result, this.defaultOptions());
             }
         });
@@ -152,7 +152,7 @@ const DataGrid = Widget.inherit({
         callModuleItemsMethod(that, 'init');
     },
 
-    _clean: commonUtils.noop,
+    _clean: noop,
 
     _optionChanged: function(args) {
         const that = this;
@@ -185,7 +185,7 @@ const DataGrid = Widget.inherit({
     _renderContent: function() {
         const that = this;
 
-        commonUtils.deferRender(function() {
+        deferRender(function() {
             that._renderContentImpl();
         });
     },
@@ -193,7 +193,7 @@ const DataGrid = Widget.inherit({
     _getTemplate: function(templateName) {
         let template = templateName;
 
-        if(typeUtils.isString(template) && template[0] === '#') {
+        if(isString(template) && template[0] === '#') {
             template = $(templateName);
             logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
         }
@@ -243,4 +243,4 @@ DataGrid.registerModule = gridCore.registerModule.bind(gridCore);
 
 registerComponent('dxDataGrid', DataGrid);
 
-module.exports = DataGrid;
+export default DataGrid;

@@ -396,4 +396,4 @@ const multiAxesSynchronizer = {
     }
 };
 
-module.exports = multiAxesSynchronizer;
+export default multiAxesSynchronizer;

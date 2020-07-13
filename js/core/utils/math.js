@@ -1,4 +1,4 @@
-const isExponential = require('./type').isExponential;
+import { isExponential } from './type';
 
 const sign = function(value) {
     if(value === 0) {
@@ -144,12 +144,14 @@ function trunc(value) {
     return Math.trunc ? Math.trunc(value) : (value > 0 ? Math.floor(value) : Math.ceil(value));
 }
 
-exports.sign = sign;
-exports.fitIntoRange = fitIntoRange;
-exports.inRange = inRange;
-exports.adjust = adjust;
-exports.getPrecision = getPrecision;
-exports.getExponent = getExponent;
-exports.getRoot = getRoot;
-exports.solveCubicEquation = solveCubicEquation;
-exports.trunc = trunc;
+export {
+    sign,
+    fitIntoRange,
+    inRange,
+    adjust,
+    getPrecision,
+    getExponent,
+    getRoot,
+    solveCubicEquation,
+    trunc
+};

@@ -1,5 +1,6 @@
 {
-    "extends": [
-        "devextreme/renovation-declarations"
-    ]
+    "overrides": [{
+        "files": ["*.ts", "*.tsx"],
+        "extends": ["devextreme/renovation-declarations"]
+    }]
 }

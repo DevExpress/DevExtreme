@@ -1,0 +1,19 @@
+$SCHEDULER_APPOINTMENT_BASE_COLOR: null !default;
+
+.dx-scheduler-overlay-panel {
+  .dx-overlay-content {
+    position: relative;
+    background: #fff;
+  }
+}
+
+.dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
+.dx-scheduler-overlay-panel {
+  .dx-overlay-content {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .dx-tooltip-appointment-item-marker-body {
+    background: $SCHEDULER_APPOINTMENT_BASE_COLOR;
+  }
+}

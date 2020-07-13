@@ -1,8 +1,8 @@
-const dataUtils = require('../../core/element_data');
-const eventsEngine = require('../../events/core/events_engine');
-const WeakMap = require('../polyfills/weak_map');
-const isDefined = require('./type').isDefined;
-const removeEvent = require('../remove_event');
+import { data as elementData } from '../../core/element_data';
+import eventsEngine from '../../events/core/events_engine';
+import WeakMap from '../polyfills/weak_map';
+import { isDefined } from './type';
+import removeEvent from '../remove_event';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
 const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
@@ -10,7 +10,7 @@ const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 const componentNames = new WeakMap();
 let nextAnonymousComponent = 0;
 
-const getName = exports.name = function(componentClass, newName) {
+const getName = function(componentClass, newName) {
     if(isDefined(newName)) {
         componentNames.set(componentClass, newName);
         return;
@@ -25,8 +25,8 @@ const getName = exports.name = function(componentClass, newName) {
     return componentNames.get(componentClass);
 };
 
-exports.attachInstanceToElement = function($element, componentInstance, disposeFn) {
-    const data = dataUtils.data($element.get(0));
+export function attachInstanceToElement($element, componentInstance, disposeFn) {
+    const data = elementData($element.get(0));
     const name = getName(componentInstance.constructor);
 
     data[name] = componentInstance;
@@ -42,10 +42,12 @@ exports.attachInstanceToElement = function($element, componentInstance, disposeF
     }
 
     data[COMPONENT_NAMES_DATA_KEY].push(name);
-};
+}
 
-exports.getInstanceByElement = function($element, componentClass) {
+export function getInstanceByElement($element, componentClass) {
     const name = getName(componentClass);
 
-    return dataUtils.data($element.get(0), name);
-};
+    return elementData($element.get(0), name);
+}
+
+export { getName as name };

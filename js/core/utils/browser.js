@@ -1,6 +1,6 @@
-const extend = require('./extend').extend;
-const windowUtils = require('./window');
-const navigator = windowUtils.getNavigator();
+import { extend } from './extend';
+import { getNavigator } from './window';
+const navigator = getNavigator();
 
 const webkitRegExp = /(webkit)[ /]([\w.]+)/;
 const ieRegExp = /(msie) (\d{1,2}\.\d)/;
@@ -55,4 +55,4 @@ const browserFromUA = function(ua) {
 
     return result;
 };
-module.exports = extend({ _fromUA: browserFromUA }, browserFromUA(navigator.userAgent));
+export default extend({ _fromUA: browserFromUA }, browserFromUA(navigator.userAgent));

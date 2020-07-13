@@ -27,7 +27,7 @@ function getCellPath(tableElement, cell) {
     }
 }
 
-exports.HorizontalHeadersArea = AreaItem.inherit({
+export const HorizontalHeadersArea = AreaItem.inherit({
     _getAreaName: function() {
         return 'column';
     },
@@ -158,7 +158,7 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
     }
 });
 
-exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
+export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     _getAreaClassName: function() {
         return PIVOTGRID_AREA_ROW_CLASS;
     },

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import baseWidgetModule from 'viz/core/base_widget';
+import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from 'viz/core/base_widget.utils';
 import commons from './rangeSelectorParts/commons.js';
 import slidersControllerModule from 'viz/range_selector/sliders_controller';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
@@ -37,11 +37,11 @@ QUnit.module('Parsing data', $.extend({}, commons.environment, {
             { x: 'g', y1: 8, y2: 10 }
         ];
         this.incidentOccurred = sinon.spy();
-        baseWidgetModule.DEBUG_stub_createIncidentOccurred(commons.returnValue(this.incidentOccurred));
+        DEBUG_stub_createIncidentOccurred(commons.returnValue(this.incidentOccurred));
     },
 
     afterEach: function() {
-        baseWidgetModule.DEBUG_restore_createIncidentOccurred();
+        DEBUG_restore_createIncidentOccurred();
         commons.environment.afterEach.apply(this, arguments);
     }
 }));

@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import typeUtils from '../../core/utils/type';
+import { isString } from '../../core/utils/type';
 import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
 import dataCoreUtils from '../../core/utils/data';
@@ -131,6 +131,7 @@ class Gantt extends Widget {
             selectedRowKey: this.option('selectedRowKey'),
             showResources: this.option('showResources'),
             taskTitlePosition: this.option('taskTitlePosition'),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
@@ -245,7 +246,7 @@ class Gantt extends Widget {
 
         this._$treeListWrapper.width(leftPanelWidth);
 
-        const isPercentage = typeUtils.isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
+        const isPercentage = isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
         this._$treeList.width(isPercentage ? '100%' : leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
@@ -395,8 +396,10 @@ class Gantt extends Widget {
                     const parentId = record.parentId;
                     if(parentId !== undefined) {
                         const expandedRowKeys = this._treeList.option('expandedRowKeys');
-                        expandedRowKeys.push(parentId);
-                        this._treeList.option('expandedRowKeys', expandedRowKeys);
+                        if(expandedRowKeys.indexOf(parentId) === -1) {
+                            expandedRowKeys.push(parentId);
+                            this._treeList.option('expandedRowKeys', expandedRowKeys);
+                        }
                     }
                     this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
@@ -685,6 +688,7 @@ class Gantt extends Widget {
             taskListWidth: 300,
             showResources: true,
             taskTitlePosition: 'inside',
+            firstDayOfWeek: undefined,
             selectedRowKey: undefined,
             onSelectionChanged: null,
             allowSelection: true,
@@ -791,6 +795,9 @@ class Gantt extends Widget {
             case 'taskTitlePosition':
                 this._setGanttViewOption('taskTitlePosition', args.value);
                 break;
+            case 'firstDayOfWeek':
+                this._setGanttViewOption('firstDayOfWeek', args.value);
+                break;
             case 'selectedRowKey':
                 this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(args.value));
                 break;
@@ -827,4 +834,4 @@ class Gantt extends Widget {
 }
 
 registerComponent('dxGantt', Gantt);
-module.exports = Gantt;
+export default Gantt;

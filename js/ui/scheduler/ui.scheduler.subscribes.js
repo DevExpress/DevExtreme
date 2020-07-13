@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
 import { getRecurrenceProcessor } from './recurrence';
-import typeUtils from '../../core/utils/type';
+import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
@@ -269,7 +269,7 @@ const subscribes = {
     },
 
     _createAppointmentTitle(data) {
-        if(typeUtils.isPlainObject(data)) {
+        if(isPlainObject(data)) {
             return data.text;
         }
 
@@ -488,7 +488,7 @@ const subscribes = {
             const resizableInst = $el.dxResizable('instance');
             const area = resizableInst.option('area');
 
-            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && typeUtils.isPlainObject(area);
+            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && isPlainObject(area);
         });
 
         each(horizontalResizables, (function(_, el) {
@@ -506,7 +506,7 @@ const subscribes = {
     },
 
     getField: function(field, obj) {
-        if(!typeUtils.isDefined(this._dataAccessors.getter[field])) {
+        if(!isDefined(this._dataAccessors.getter[field])) {
             return;
         }
 
@@ -514,7 +514,7 @@ const subscribes = {
     },
 
     setField: function(field, obj, value) {
-        if(!typeUtils.isDefined(this._dataAccessors.setter[field])) {
+        if(!isDefined(this._dataAccessors.setter[field])) {
             return;
         }
 
@@ -820,6 +820,9 @@ const subscribes = {
     fixWrongEndDate: function(appointment, startDate, endDate) {
         return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
     },
+    calculateAppointmentEndDate: function(isAllDay, startDate) {
+        return this._appointmentModel._calculateAppointmentEndDate(isAllDay, startDate);
+    },
 
     getEndDayHour: function() {
         return this._workSpace.option('endDayHour') || this.option('endDayHour');
@@ -852,4 +855,4 @@ const subscribes = {
         this._workSpace.removeDroppableCellClass();
     }
 };
-module.exports = subscribes;
+export default subscribes;

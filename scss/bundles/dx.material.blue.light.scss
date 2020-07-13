@@ -1,0 +1,5 @@
+@use "../widgets/material" with (
+$color: "blue",
+$mode: "light",
+$size: "default"
+);

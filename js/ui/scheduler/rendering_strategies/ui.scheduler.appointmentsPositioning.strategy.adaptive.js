@@ -71,4 +71,4 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
 
 }
 
-module.exports = AdaptivePositioningStrategy;
+export default AdaptivePositioningStrategy;

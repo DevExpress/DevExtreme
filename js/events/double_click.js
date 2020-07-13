@@ -1,14 +1,14 @@
-const eventsEngine = require('../events/core/events_engine');
-const domUtils = require('../core/utils/dom');
-const domAdapter = require('../core/dom_adapter');
-const Class = require('../core/class');
-const registerEvent = require('./core/event_registrator');
-const clickEvent = require('./click');
-const eventUtils = require('./utils');
+import eventsEngine from '../events/core/events_engine';
+import domUtils from '../core/utils/dom';
+import domAdapter from '../core/dom_adapter';
+import Class from '../core/class';
+import registerEvent from './core/event_registrator';
+import { name as clickEventName } from './click';
+import { addNamespace, fireEvent } from './utils';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';
-const NAMESPACED_CLICK_EVENT = eventUtils.addNamespace(clickEvent.name, DBLCLICK_NAMESPACE);
+const NAMESPACED_CLICK_EVENT = addNamespace(clickEventName, DBLCLICK_NAMESPACE);
 
 const DBLCLICK_TIMEOUT = 300;
 
@@ -36,7 +36,7 @@ const DblClick = Class.inherit({
         const timeStamp = e.timeStamp || Date.now();
 
         if(timeStamp - this._lastClickTimeStamp < DBLCLICK_TIMEOUT) {
-            eventUtils.fireEvent({
+            fireEvent({
                 type: DBLCLICK_EVENT_NAME,
                 target: domUtils.closestCommonParent(this._firstClickTarget, e.target),
                 originalEvent: e
@@ -60,4 +60,4 @@ const DblClick = Class.inherit({
 
 registerEvent(DBLCLICK_EVENT_NAME, new DblClick());
 
-exports.name = DBLCLICK_EVENT_NAME;
+export { DBLCLICK_EVENT_NAME as name };

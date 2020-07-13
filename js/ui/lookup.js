@@ -1,8 +1,9 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import support from '../core/utils/support';
-import commonUtils from '../core/utils/common';
+import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -13,7 +14,7 @@ import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import themes from './themes';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import Popover from './popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
@@ -33,9 +34,11 @@ const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const GROUP_LIST_HEADER_CLASS = 'dx-list-group-header';
 
-const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
+const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 5;
 const MATERIAL_LOOKUP_LIST_PADDING = 8;
 
 
@@ -309,8 +312,8 @@ const Lookup = DropDownList.inherit({
                     dropDownOptions: {
                         closeOnOutsideClick: true,
 
-                        width: () => { return this._getPopupWidth(); },
-                        height: () => { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); },
+                        width: (function() { return this._getPopupWidth(); }).bind(this),
+                        height: (function() { return this._getPopupHeight(); }).bind(this),
                         showTitle: false,
 
                         shading: false
@@ -383,7 +386,7 @@ const Lookup = DropDownList.inherit({
         });
     },
 
-    _fireContentReadyAction: commonUtils.noop, // TODO: why not symmetric to other dropdowns?
+    _fireContentReadyAction: noop, // TODO: why not symmetric to other dropdowns?
 
     _popupWrapperClass: function() {
         return '';
@@ -395,7 +398,7 @@ const Lookup = DropDownList.inherit({
         });
 
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-        eventsEngine.on(this._$field, addNamespace(clickEvent.name, this.NAME), e => {
+        eventsEngine.on(this._$field, addNamespace(clickEventName, this.NAME), e => {
             fieldClickAction({ event: e });
         });
 
@@ -482,7 +485,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._dimensionChanged();
+        this.callBase.apply(this, arguments);
 
         if(this.option('cleanSearchOnOpening')) {
             if(this.option('searchEnabled') && this._searchBox.option('value')) {
@@ -513,47 +516,140 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _getDifferenceOffsets: function(selectedListItem) {
+        return selectedListItem.offset().top - $(this.element()).offset().top;
+    },
+
+    _isCenteringEnabled(index, count) {
+        return 1 < index && index < (count - 2);
+    },
+
+    _getPopupOffset: function() {
+        const listItemsCount = this._listItemElements().length;
+
+        if(listItemsCount === 0) return;
+
+        const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
+        const selectedIndex = this._listItemElements().index(selectedListItem);
+        const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
+        const lookupOffset = $(this._list.element()).offset().top;
+        const dropDownHeightOption = this.option('dropDownOptions.height');
+        const popupHeight = (typeof dropDownHeightOption === 'function') ? dropDownHeightOption() : dropDownHeightOption;
+        const windowHeight = $(window).height();
+
+        let offsetTop = 0;
+
+        if(selectedIndex !== -1) {
+            if(this._isCenteringEnabled(selectedIndex, listItemsCount)) {
+                this._scrollToSelectedItem();
+
+                const scrollOffsetTop = (popupHeight - selectedListItem.height()) / 2 - this._getDifferenceOffsets(selectedListItem);
+
+                this._list.scrollTo(this._list.scrollTop() + MATERIAL_LOOKUP_LIST_PADDING / 2 - scrollOffsetTop);
+
+                offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+
+                if(lookupOffset < offsetTop && selectedIndex !== (listItemsCount - 3)) {
+                    this._list.scrollTo(this._list.scrollTop() + this._getDifferenceOffsets(selectedListItem) / 2);
+
+                    offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+                }
+            } else if(selectedIndex <= 1) {
+                this._list.scrollTo(0);
+
+                offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+            } else if(selectedIndex >= (listItemsCount - 2)) {
+                this._scrollToSelectedItem();
+
+                offsetTop = differenceOfHeights + this._getDifferenceOffsets(selectedListItem);
+            }
+
+            if(lookupOffset < offsetTop) {
+                this._scrollToSelectedItem();
+                offsetTop = differenceOfHeights + MATERIAL_LOOKUP_LIST_PADDING;
+            }
+        }
+
+        const offsetBottom = popupHeight - offsetTop - $(this.element()).height();
+
+        if(windowHeight - lookupOffset < offsetBottom) {
+            this._list.scrollTo(this._list.scrollTop() + differenceOfHeights - offsetBottom);
+            offsetTop = popupHeight - $(this.element()).height() - MATERIAL_LOOKUP_LIST_PADDING;
+        }
+
+        return offsetTop;
+    },
+
     _setPopupPosition: function() {
         if(!this.option('itemCenteringEnabled')) return;
 
-
-        const selectedIndex = this._list.option('selectedIndex');
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
-        if(selectedIndex === -1 || flipped) return;
+        if(flipped) return;
 
-        const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
-
-        if(selectedListItem.offset().top < 0 || this._list.scrollTop() !== selectedListItem.position().top) {
-            this._scrollToSelectedItem();
-        }
-
-        const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
         const popupContentParent = $(this._popup.content()).parent();
-        const differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top;
-        const lookupTop = $(this.element()).offset().top;
-        let popupOffsetY = differenceOfHeights;
-
-        if(lookupTop > differenceOfOffsets) {
-            popupOffsetY += differenceOfOffsets;
-        } else {
-            this._scrollToSelectedItem();
-        }
+        const popupOffset = this._getPopupOffset();
 
         const position = translator.locate(popupContentParent);
 
         translator.move(popupContentParent, {
-            top: position.top - popupOffsetY
+            top: position.top - popupOffset
         });
     },
 
-    _getPopupHeight: function(listItemsCount) {
-        return (this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) ?
-            (this._list.itemElements().height() * listItemsCount) +
-            MATERIAL_LOOKUP_LIST_PADDING * 2 +
-            (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
-            (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
-            (this._popup._$title ? this._popup._$title.outerHeight() : 0) :
-            'auto';
+
+    _listItemGroupedElements: function() {
+        const groups = this._list._itemContainer().children();
+        const items = [];
+
+        groups.each((_, group) => {
+            items.push($(group).find('.' + GROUP_LIST_HEADER_CLASS)[0]);
+
+            const groupedItems = $(group).find('.' + LIST_ITEM_CLASS);
+            groupedItems.each((_, item) => {
+                items.push(item);
+            });
+        });
+
+        return $(items);
+    },
+
+    _calculateListHeight: function(grouped) {
+        const listItems = grouped ? this._listItemGroupedElements() : this._listItemElements();
+        const selectedListItem = $('.' + LIST_ITEM_SELECTED_CLASS);
+        const selectedIndex = listItems.index(selectedListItem);
+        let listHeight = 0;
+        let requireListItems = [];
+
+        if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
+            listItems.each((_, item) => {
+                listHeight += $(item).outerHeight();
+            });
+        } else {
+            if(selectedIndex <= 1) {
+                requireListItems = listItems.slice(0, MATERIAL_LOOKUP_LIST_ITEMS_COUNT);
+            } else if(this._isCenteringEnabled(selectedIndex, listItems.length)) {
+                requireListItems = listItems.slice(selectedIndex - 2, selectedIndex + 3);
+            } else {
+                requireListItems = listItems.slice(listItems.length - MATERIAL_LOOKUP_LIST_ITEMS_COUNT, listItems.length);
+            }
+
+            requireListItems.each((_, item) => {
+                listHeight += $(item).outerHeight();
+            });
+        }
+
+        return listHeight + (grouped ? MATERIAL_LOOKUP_LIST_PADDING : MATERIAL_LOOKUP_LIST_PADDING * 2);
+    },
+
+    _getPopupHeight: function() {
+        if(this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) {
+            return this._calculateListHeight(this.option('grouped')) +
+                (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
+                (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
+                (this._popup._$title ? this._popup._$title.outerHeight() : 0);
+        } else {
+            return 'auto';
+        }
     },
 
     _getPopupWidth: function() {
@@ -617,7 +713,7 @@ const Lookup = DropDownList.inherit({
         }
     },
 
-    _preventFocusOnPopup: commonUtils.noop,
+    _preventFocusOnPopup: noop,
 
     _popupConfig: function() {
         const result = extend(this.callBase(), {
@@ -731,7 +827,7 @@ const Lookup = DropDownList.inherit({
             this.option('dropDownOptions.width', this.$element().width());
         }
 
-        this.callBase();
+        this._popup && this._updatePopupDimensions();
     },
 
     _input: function() {
@@ -802,8 +898,8 @@ const Lookup = DropDownList.inherit({
         this._searchBox.registerKeyHandler('escape', this.close.bind(this));
         this._searchBox.registerKeyHandler('enter', this._selectListItemHandler.bind(this));
         this._searchBox.registerKeyHandler('space', this._selectListItemHandler.bind(this));
-        this._searchBox.registerKeyHandler('end', commonUtils.noop);
-        this._searchBox.registerKeyHandler('home', commonUtils.noop);
+        this._searchBox.registerKeyHandler('end', noop);
+        this._searchBox.registerKeyHandler('home', noop);
     },
 
     _toggleSearchClass: function(isSearchEnabled) {
@@ -827,7 +923,7 @@ const Lookup = DropDownList.inherit({
         this._searchBox.option('placeholder', placeholder);
     },
 
-    _setAriaTargetForList: commonUtils.noop,
+    _setAriaTargetForList: noop,
 
     _renderList: function() {
         this.callBase();
@@ -859,7 +955,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getSelectionChangedHandler: function() {
-        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
+        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
     },
 
     _listContentReadyHandler: function() {
@@ -1057,4 +1153,4 @@ const Lookup = DropDownList.inherit({
 
 registerComponent('dxLookup', Lookup);
 
-module.exports = Lookup;
+export default Lookup;

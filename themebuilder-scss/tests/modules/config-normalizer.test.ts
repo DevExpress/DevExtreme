@@ -69,7 +69,6 @@ describe('Cli arguments normalizer', () => {
       themeName: 'generic',
     });
 
-
     config = { command: 'build-theme', inputFile: 'vars.scss' };
     normalizeConfig(config);
 

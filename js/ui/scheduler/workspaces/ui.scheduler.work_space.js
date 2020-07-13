@@ -1,10 +1,9 @@
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
-import dataUtils from '../../../core/element_data';
+import { data as elementData } from '../../../core/element_data';
 import dateUtils from '../../../core/utils/date';
-import typeUtils from '../../../core/utils/type';
-import windowUtils from '../../../core/utils/window';
+import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
 import { each } from '../../../core/utils/iterator';
@@ -16,9 +15,13 @@ import { isDefined } from '../../../core/utils/type';
 import { addNamespace, isMouseEvent } from '../../../events/utils';
 import pointerEvents from '../../../events/pointer';
 import errors from '../../widget/ui.errors';
-import clickEvent from '../../../events/click';
+import { name as clickEventName } from '../../../events/click';
 import contextMenuEvent from '../../../events/contextmenu';
-import dragEvents from '../../../events/drag';
+import {
+    enter as dragEventEnter,
+    leave as dragEventLeave,
+    drop as dragEventDrop
+} from '../../../events/drag';
 import Scrollable from '../../scroll_view/ui.scrollable';
 import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
 import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
@@ -81,10 +84,10 @@ const SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = 'dx-scheduler-date-table-scrollabl
 
 const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerWorkSpace');
 
-const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = addNamespace(dragEvents.enter, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEvents.drop, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = addNamespace(dragEvents.leave, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEvent.name, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = addNamespace(dragEventEnter, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEventDrop, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = addNamespace(dragEventLeave, 'dxSchedulerDateTable');
+const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedulerDateTable');
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
@@ -993,11 +996,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._updateGroupTableHeight();
 
-        this._shader = new VerticalShader();
+        this._shader = new VerticalShader(this);
     }
 
     _updateGroupTableHeight() {
-        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
+        if(this._isVerticalGroupedWorkSpace() && hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
     }
@@ -1302,8 +1305,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellTemplate = this._getDateHeaderTemplate();
         const repeatCount = this._calculateHeaderCellRepeatCount();
         const templateCallbacks = [];
-        const colspan = this.option('groupByDate') ? this._getGroupCount() : 1;
-        const groupByDate = this.option('groupByDate');
+        const groupByDate = this.isGroupedByDate();
+        const colspan = groupByDate ? this._getGroupCount() : 1;
+
         let i;
         let j;
 
@@ -2029,15 +2033,18 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _isOutsideScrollable(target, event) {
-        const $scrollableElement = this._dateTableScrollable.$element();
+        const $dateTableScrollableElement = this._dateTableScrollable.$element();
+        const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
+        const window = getWindow();
+        const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
+        const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
+        const isOutsideVerticalScrollable = event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
 
-        if(!$(target).closest($scrollableElement).length) {
+        if(isTargetInAllDayPanel && !isOutsideHorizontalScrollable) {
             return false;
         }
 
-        const scrollableSize = getBoundingRect($scrollableElement.get(0));
-
-        return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
+        return isOutsideVerticalScrollable || isOutsideHorizontalScrollable;
     }
 
     setCellDataCache(cellCoordinates, groupIndex, $cell) {
@@ -2113,19 +2120,19 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = [];
 
         for(let i = 0; i < $cells.length; i++) {
-            data.push(dataUtils.data($cells[i], CELL_DATA));
+            data.push(elementData($cells[i], CELL_DATA));
         }
 
         return data;
     }
 
     getCellData($cell) {
-        const data = $cell[0] ? dataUtils.data($cell[0], CELL_DATA) : undefined;
+        const data = $cell[0] ? elementData($cell[0], CELL_DATA) : undefined;
         return extend(true, {}, data);
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.option('groupByDate') ? this._getGroupCount() - 1 : groupIndex;
+        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
@@ -2247,10 +2254,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getDataByDroppableCell() {
         const cellData = this.getCellData(this._getDroppableCell());
+        const allDay = cellData.allDay;
+        const startDate = cellData.startDate;
+        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
 
         return {
-            date: cellData.startDate,
-            allDay: cellData.allDay,
+            startDate: startDate,
+            endDate: endDate,
+            allDay: allDay,
             groups: cellData.groups
         };
     }
@@ -2283,7 +2294,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         cellCount = cellCount || this._getCellCount();
 
-        if(!typeUtils.isDefined(startIndex)) {
+        if(!isDefined(startIndex)) {
             startIndex = totalCellCount;
         }
 
@@ -2415,7 +2426,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowIndex = this._getRowCount() - 1;
         let cellIndex = this._getCellCount();
 
-        if(this.option('groupByDate') && this._getGroupCount() > 0) {
+        if(this.isGroupedByDate()) {
             cellIndex = cellIndex * this._getGroupCount() - 1;
         } else {
             cellIndex = cellIndex - 1;
@@ -2585,7 +2596,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.dragBehavior.addTo(this.getAllDayContainer());
             this.dragBehavior.addTo(this._$allDayPanel);
         }
-        this._attachTablesEvents();
     }
 
     _isApplyCompactAppointmentOffset() {
@@ -2609,4 +2619,4 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 }
 
-module.exports = SchedulerWorkSpace;
+export default SchedulerWorkSpace;

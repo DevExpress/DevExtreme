@@ -1,20 +1,18 @@
 import { h } from 'preact';
-import { mount, ReactWrapper } from 'enzyme';
-import Icon from '../../js/renovation/icon.p';
+import { shallow } from 'enzyme';
+import { Icon } from '../../js/renovation/icon';
 
 describe('Icon', () => {
-  const render = (props = {}): ReactWrapper => mount(<Icon {...props} />);
-
   describe('Props', () => {
     describe('source', () => {
       it('should draw nothing by default', () => {
-        const icon = render();
+        const icon = shallow(<Icon />);
 
         expect(icon.children()).toHaveLength(0);
       });
 
       it('should draw dxIcon', () => {
-        const icon = render({ source: 'icon_-190' });
+        const icon = shallow(<Icon source="icon_-190" />);
 
         expect(icon.children()).toHaveLength(1);
 
@@ -23,7 +21,7 @@ describe('Icon', () => {
       });
 
       it('should draw fontIcon', () => {
-        const icon = render({ source: 'glyphicon glyphicon-icon' });
+        const icon = shallow(<Icon source="glyphicon glyphicon-icon" />);
 
         expect(icon.children()).toHaveLength(1);
 
@@ -32,7 +30,7 @@ describe('Icon', () => {
       });
 
       it('should draw image icon', () => {
-        const icon = render({ source: 'localhost/JFLSKDksjdhfolHWThr30oi' });
+        const icon = shallow(<Icon source="localhost/JFLSKDksjdhfolHWThr30oi" />);
 
         expect(icon.children()).toHaveLength(1);
 
@@ -42,7 +40,7 @@ describe('Icon', () => {
       });
 
       it('should draw svg icon', () => {
-        const icon = render({ source: '<svg><path /></svg>' });
+        const icon = shallow(<Icon source="<svg><path /></svg>" />);
 
         expect(icon.children()).toHaveLength(1);
 
@@ -54,13 +52,13 @@ describe('Icon', () => {
 
     describe('position', () => {
       it('should not add any modificator by default', () => {
-        const icon = render({ source: 'icon_-190' });
+        const icon = shallow(<Icon source="icon_-190" />);
 
         expect(icon.childAt(0).hasClass('dx-icon-right')).toBe(false);
       });
 
       it('should draw icon after text with "right" modificator', () => {
-        const icon = render({ position: 'right', source: 'icon_-190' });
+        const icon = shallow(<Icon source="icon_-190" position="right" />);
 
         expect(icon.childAt(0).hasClass('dx-icon dx-icon-icon_-190')).toBe(true);
         expect(icon.childAt(0).hasClass('dx-icon-right')).toBe(true);

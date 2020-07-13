@@ -4,7 +4,6 @@ const uiThemeModule = require('ui/themes');
 
 require('viz/core/themes/generic.light');
 require('viz/core/themes/generic.dark');
-require('viz/core/themes/ios');
 
 QUnit.moduleStart(function() {
     $.each([

@@ -1496,52 +1496,6 @@ QUnit.module('State Storing with real controllers', {
         }
     });
 
-    // T643374
-    QUnit.test('ScrollTop should be correct after loading pageIndex from state', function(assert) {
-    // arrange
-        this.clock.restore();
-
-        const that = this;
-        const done = assert.async();
-        const $testElement = $('#container').height(60);
-
-        that.$element = function() {
-            return $testElement;
-        };
-
-        that.setupDataGridModules({
-            stateStoring: {
-                enabled: true,
-                type: 'custom',
-                customLoad: function() {
-                    return { pageIndex: 3 };
-                },
-                customSave: function() {
-                }
-            },
-            scrolling: {
-                mode: 'virtual'
-            },
-            loadingTimeout: null,
-            dataSource: {
-                pageSize: 2,
-                store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
-            }
-        });
-
-        // act
-        that.gridView.render($testElement);
-        that.gridView.update();
-
-        setTimeout(function() {
-        // assert
-            const scrollTop = that.getScrollable().scrollTop();
-            assert.ok(scrollTop > 0, 'scrollTop');
-            assert.ok($testElement.find('.dx-virtual-row').first().children().first().height() <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
-            done();
-        });
-    });
-
     QUnit.test('Load focusedRowKey state', function(assert) {
     // arrange, act
         this.setupDataGridModules({

@@ -102,4 +102,4 @@ class DiagramOptionsUpdateBar extends DiagramBar {
     }
 }
 
-module.exports = DiagramOptionsUpdateBar;
+export default DiagramOptionsUpdateBar;

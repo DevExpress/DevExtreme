@@ -593,4 +593,4 @@ class ListBoxLayoutUtils {
     }
 }
 
-module.exports = FileManagerThumbnailListBox;
+export default FileManagerThumbnailListBox;

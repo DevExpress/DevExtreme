@@ -1,5 +1,5 @@
-const merge = require('./array').merge;
-const domAdapter = require('../dom_adapter');
+import { merge } from './array';
+import domAdapter from '../dom_adapter';
 
 const isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
 
@@ -34,7 +34,7 @@ const tagWrappers = {
 tagWrappers.tbody = tagWrappers.colgroup = tagWrappers.caption = tagWrappers.tfoot = tagWrappers.thead;
 tagWrappers.th = tagWrappers.td;
 
-const parseHTML = function(html) {
+export const parseHTML = function(html) {
     if(typeof html !== 'string') {
         return null;
     }
@@ -54,10 +54,7 @@ const parseHTML = function(html) {
     return merge([], container.childNodes);
 };
 
-const isTablePart = function(html) {
+export const isTablePart = function(html) {
     const tags = isTagName.exec(html);
     return tags && tags[1] in tagWrappers;
 };
-
-exports.parseHTML = parseHTML;
-exports.isTablePart = isTablePart;

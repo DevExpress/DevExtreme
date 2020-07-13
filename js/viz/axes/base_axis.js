@@ -147,7 +147,7 @@ function updateTicksPosition(ticks, options, animate) {
 function updateGridsPosition(ticks, animate) {
     callAction(ticks, 'updateGridPosition', animate);
 }
-const measureLabels = exports.measureLabels = function(items) {
+export const measureLabels = function(items) {
     items.forEach(function(item) {
         item.labelBBox = item.label ? item.label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
     });
@@ -285,7 +285,7 @@ function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
-const calculateCanvasMargins = exports.calculateCanvasMargins = function(bBoxes, canvas) {
+export const calculateCanvasMargins = function(bBoxes, canvas) {
     const cLeft = canvas.left;
     const cTop = canvas.top;
     const cRight = canvas.width - canvas.right;
@@ -309,7 +309,7 @@ const calculateCanvasMargins = exports.calculateCanvasMargins = function(bBoxes,
         });
 };
 
-const Axis = exports.Axis = function(renderSettings) {
+export const Axis = function(renderSettings) {
     const that = this;
 
     that._renderer = renderSettings.renderer;
@@ -365,17 +365,19 @@ Axis.prototype = {
         return false;
     },
 
-    getOppositeAxis: _noop,
+    getOrthogonalAxis: _noop,
 
     getCustomPosition: _noop,
 
     getCustomBoundaryPosition: _noop,
 
+    resolveOverlappingForCustomPositioning: _noop,
+
     hasCustomPosition() {
         return false;
     },
 
-    customPositionIsBoundaryOppositeAxis() {
+    customPositionIsBoundaryOrthogonalAxis() {
         return false;
     },
 
@@ -500,7 +502,6 @@ Axis.prototype = {
         let swap;
         let startCategoryIndex;
         let endCategoryIndex;
-        const min = range.minVisible;
 
         if(!isContinuous) {
             if(isDefined(startValue) && isDefined(endValue)) {
@@ -509,7 +510,7 @@ Axis.prototype = {
                 startCategoryIndex = inArray(isDefined(parsedStartValue) ? parsedStartValue.valueOf() : undefined, categories);
                 endCategoryIndex = inArray(isDefined(parsedEndValue) ? parsedEndValue.valueOf() : undefined, categories);
                 if(startCategoryIndex === -1 || endCategoryIndex === -1) {
-                    return { from: 0, to: 0 };
+                    return { from: 0, to: 0, outOfCanvas: true };
                 }
                 if(startCategoryIndex > endCategoryIndex) {
                     swap = endValue;
@@ -522,9 +523,6 @@ Axis.prototype = {
         if(isDefined(startValue)) {
             startValue = this.validateUnit(startValue, 'E2105', 'strip');
             start = this._getTranslatedCoord(startValue, -1);
-            if(!isDefined(start) && isContinuous) {
-                start = (startValue < min) ? canvasStart : canvasEnd;
-            }
         } else {
             start = canvasStart;
         }
@@ -532,14 +530,17 @@ Axis.prototype = {
         if(isDefined(endValue)) {
             endValue = this.validateUnit(endValue, 'E2105', 'strip');
             end = this._getTranslatedCoord(endValue, 1);
-            if(!isDefined(end) && isContinuous) {
-                end = (endValue > min) ? canvasEnd : canvasStart;
-            }
         } else {
             end = canvasEnd;
         }
 
-        return (start < end) ? { from: start, to: end } : { from: end, to: start };
+        const stripPosition = (start < end) ? { from: start, to: end } : { from: end, to: start };
+        const visibleArea = this.getVisibleArea();
+
+        if(stripPosition.from <= visibleArea[0] && stripPosition.to <= visibleArea[0] || stripPosition.from >= visibleArea[1] && stripPosition.to >= visibleArea[1]) {
+            stripPosition.outOfCanvas = true;
+        }
+        return stripPosition;
     },
 
     _getStripGraphicAttributes: function(fromPoint, toPoint) {
@@ -1674,7 +1675,7 @@ Axis.prototype = {
         const viewPort = that.getViewport();
         const screenDelta = that._getScreenDelta();
         const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
-        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOppositeAxis();
+        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOrthogonalAxis();
 
         const translator = that._translator;
 
@@ -1813,7 +1814,7 @@ Axis.prototype = {
             maxPadding = maxExpectedPadding / coeff;
         }
 
-        if(!that.isArgumentAxis) {
+        if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
                 minValue = 0;

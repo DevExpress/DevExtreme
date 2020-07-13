@@ -7,7 +7,8 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
-import themes from '../themes';
+import { current, isMaterial } from '../themes';
+import devices from '../../core/devices';
 import Editor from '../editor/editor';
 import { addNamespace } from '../../events/utils';
 import { normalizeKeyName } from '../../events/utils';
@@ -144,12 +145,12 @@ const TextEditorBase = Editor.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
+        const themeName = current();
 
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isMaterial(themeName);
+                    return isMaterial(themeName);
                 },
                 options: {
                     stylingMode: config().editorStylingMode || 'underlined'
@@ -323,10 +324,25 @@ const TextEditorBase = Editor.inherit({
     },
 
     _applyInputAttributes: function($input, customAttributes) {
-        $input.attr('autocomplete', 'off')
-            .attr(customAttributes)
+        const inputAttributes = extend(this._getDefaultAttributes(), customAttributes);
+        $input
+            .attr(inputAttributes)
             .addClass(TEXTEDITOR_INPUT_CLASS)
             .css('minHeight', this.option('height') ? '0' : '');
+    },
+
+    _getDefaultAttributes: function() {
+        const defaultAttributes = {
+            autocomplete: 'off'
+        };
+
+        if(devices.real().ios) {
+            // WA to fix vAlign (T898735)
+            // https://bugs.webkit.org/show_bug.cgi?id=142968
+            defaultAttributes.placeholder = '&nbsp;';
+        }
+
+        return defaultAttributes;
     },
 
     _updateButtons: function(names) {
@@ -798,4 +814,4 @@ const TextEditorBase = Editor.inherit({
     }
 });
 
-module.exports = TextEditorBase;
+export default TextEditorBase;

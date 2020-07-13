@@ -863,4 +863,4 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 });
 
-module.exports = CollectionWidget;
+export default CollectionWidget;

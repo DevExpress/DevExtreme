@@ -1,14 +1,13 @@
-const $ = require('../core/renderer');
-const themes = require('./themes');
-const registerComponent = require('../core/component_registrator');
-const grep = require('../core/utils/common').grep;
-const extend = require('../core/utils/extend').extend;
-const arrayUtils = require('../core/utils/array');
-const iteratorUtils = require('../core/utils/iterator');
-const ActionSheetStrategy = require('./toolbar/ui.toolbar.strategy.action_sheet');
-const DropDownMenuStrategy = require('./toolbar/ui.toolbar.strategy.drop_down_menu');
-const ToolbarBase = require('./toolbar/ui.toolbar.base');
-const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+import $ from '../core/renderer';
+import registerComponent from '../core/component_registrator';
+import { grep } from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import arrayUtils from '../core/utils/array';
+import iteratorUtils from '../core/utils/iterator';
+import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
+import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
+import ToolbarBase from './toolbar/ui.toolbar.base';
+import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 
 const STRATEGIES = {
     actionSheet: ActionSheetStrategy,
@@ -93,21 +92,6 @@ const Toolbar = ToolbarBase.inherit({
             */
         });
 
-    },
-
-    _defaultOptionsRules: function() {
-        const themeName = themes.current();
-
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    submenuType: 'actionSheet'
-                }
-            }
-        ]);
     },
 
     _dimensionChanged: function(dimension) {
@@ -340,4 +324,4 @@ const Toolbar = ToolbarBase.inherit({
 
 registerComponent('dxToolbar', Toolbar);
 
-module.exports = Toolbar;
+export default Toolbar;

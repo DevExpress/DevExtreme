@@ -1,6 +1,6 @@
 import TreeList from './ui.tree_list.base';
 
-module.exports = TreeList;
+export default TreeList;
 
 import './ui.tree_list.state_storing';
 import './ui.tree_list.column_chooser';

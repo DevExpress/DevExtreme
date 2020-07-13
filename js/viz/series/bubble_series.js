@@ -1,18 +1,23 @@
-const lineSeries = require('./line_series').chart.line;
-const scatterSeries = require('./scatter_series').chart;
-const areaSeries = require('./area_series').chart.area;
-const barSeries = require('./bar_series');
+import { chart as lineChart } from './line_series';
+import { chart as scatterSeries } from './scatter_series';
+import { chart as areaChart } from './area_series';
+import barSeries from './bar_series';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { noop } from '../../core/utils/common';
+
+const lineSeries = lineChart.line;
+const areaSeries = areaChart.area;
+
 const chartBarSeries = barSeries.chart.bar;
 const polarBarSeries = barSeries.polar.bar;
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
 
 const _extend = extend;
 const _each = each;
-const _noop = require('../../core/utils/common').noop;
+const _noop = noop;
 
-exports.chart = {};
-exports.chart.bubble = _extend({}, scatterSeries, {
+const chart = {};
+chart.bubble = _extend({}, scatterSeries, {
     _calculateErrorBars: _noop,
 
     _getMainColor: chartBarSeries._getMainColor,
@@ -99,3 +104,7 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         return options;
     }
 });
+
+export {
+    chart
+};

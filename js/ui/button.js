@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import devices from '../core/devices';
 import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
-import themes from './themes';
+import * as themes from './themes';
 import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
@@ -403,4 +403,4 @@ class Button extends Widget {
 
 registerComponent('dxButton', Button);
 
-module.exports = Button;
+export default Button;

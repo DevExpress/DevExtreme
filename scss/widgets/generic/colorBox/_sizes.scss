@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+// adduse
+
+$GENERIC_COLORBOX_OVERLAY_PADDING: null !default;
+
+@if $size == "default" {
+  $GENERIC_COLORBOX_OVERLAY_PADDING: 20px;
+}
+
+@else if $size == "compact" {
+  $GENERIC_COLORBOX_OVERLAY_PADDING: 10px;
+}
