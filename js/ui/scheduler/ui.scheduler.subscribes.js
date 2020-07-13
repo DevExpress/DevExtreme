@@ -1,11 +1,6 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
-<<<<<<< HEAD
-import { getRecurrenceProcessor } from './recurrence';
 import { isDefined, isPlainObject } from '../../core/utils/type';
-=======
-import typeUtils from '../../core/utils/type';
->>>>>>> acc223ae0... Refactoring tooltip: remove time: removed extra timezone conversions
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
