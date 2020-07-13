@@ -34,9 +34,14 @@ describe('PagerContent', () => {
           showNavigationButtons: true,
           totalCount: 100,
         },
-      } as Partial<PagerContent> as PagerContent;
+        restAttributes: { restAttribute: {} },
+      } as any as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
       expect((tree.instance() as unknown as Element).className).toEqual('className');
+      expect(tree.props()).toEqual({
+        className: 'className',
+        restAttribute: props.restAttributes.restAttribute,
+      });
       expect(tree.children()).toHaveLength(2);
       expect(tree.find(PageSizeSelector)).toHaveLength(1);
       expect(tree.childAt(0).props()).toEqual({

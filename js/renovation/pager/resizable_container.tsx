@@ -23,6 +23,7 @@ export const viewFunction = ({
   infoTextVisible,
   isLargeDisplayMode,
   props: { contentTemplate: Content, ...pagerProps },
+  restAttributes,
 }: ResizableContainer) => (
   <Content
     parentRef={parentRef}
@@ -32,7 +33,7 @@ export const viewFunction = ({
     infoTextVisible={infoTextVisible}
     isLargeDisplayMode={isLargeDisplayMode}
       // eslint-disable-next-line react/jsx-props-no-spreading
-    {...pagerProps as PagerProps}
+    {...{ ...pagerProps as PagerProps, ...restAttributes }}
   />
 );
 type ChildElementsName = 'pageSizes' | 'pages' | 'info';
