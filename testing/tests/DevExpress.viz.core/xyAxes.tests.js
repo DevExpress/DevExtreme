@@ -5089,9 +5089,9 @@ QUnit.test('Resolve label overlapping by axis (in the middle, labels position by
     this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
     this.bBoxes[19] = { x: 1, y: 10, height: 18, width: 20 };
 
+    this.bBoxes[40] = { x: 10, y: -43, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
     this.bBoxes[42] = { x: 10, y: -43, height: 18, width: 20 };
-    this.bBoxes[43] = { x: 20, y: 264, height: 0, width: 890 };
-    this.bBoxes[44] = { x: 10, y: -43, height: 18, width: 20 };
 
     const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
         customPosition: 57,
@@ -5116,9 +5116,9 @@ QUnit.test('Resolve label overlapping by axis (labels shifted outside)', functio
     this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
     this.bBoxes[19] = { x: -1, y: 10, height: 18, width: 20 };
 
+    this.bBoxes[40] = { x: 10, y: -41, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
     this.bBoxes[42] = { x: 10, y: -41, height: 18, width: 20 };
-    this.bBoxes[43] = { x: 20, y: 264, height: 0, width: 890 };
-    this.bBoxes[44] = { x: 10, y: -41, height: 18, width: 20 };
 
     const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
         customPosition: 57,
@@ -5143,9 +5143,9 @@ QUnit.test('Resolve label overlapping by axis (labels shifted inside)', function
     this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
     this.bBoxes[19] = { x: 3, y: 10, height: 18, width: 20 };
 
+    this.bBoxes[40] = { x: 10, y: -45, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
     this.bBoxes[42] = { x: 10, y: -45, height: 18, width: 20 };
-    this.bBoxes[43] = { x: 20, y: 264, height: 0, width: 890 };
-    this.bBoxes[44] = { x: 10, y: -45, height: 18, width: 20 };
 
     const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
         customPosition: 57,
@@ -5170,9 +5170,9 @@ QUnit.test('Resolve label overlapping by axis (in the middle, other labels posit
     this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
     this.bBoxes[19] = { x: 1, y: 10, height: 18, width: 20 };
 
+    this.bBoxes[40] = { x: 10, y: -43, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
     this.bBoxes[42] = { x: 10, y: -43, height: 18, width: 20 };
-    this.bBoxes[43] = { x: 20, y: 264, height: 0, width: 890 };
-    this.bBoxes[44] = { x: 10, y: -43, height: 18, width: 20 };
 
     const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
         customPosition: 57,
@@ -5197,9 +5197,9 @@ QUnit.test('Resolve label overlapping by opposite label (labels position by defa
     this.bBoxes[22] = { x: 6, y: 2, height: 18, width: 20 };
     this.bBoxes[23] = { x: 1, y: 18, height: 18, width: 20 };
 
-    this.bBoxes[46] = { x: 6, y: 2, height: 18, width: 20 };
-    this.bBoxes[47] = { x: 1, y: 72, height: 18, width: 20 };
-    this.bBoxes[48] = { x: 6, y: 2, height: 18, width: 20 };
+    this.bBoxes[36] = { x: 6, y: 2, height: 18, width: 20 };
+    this.bBoxes[37] = { x: 1, y: 72, height: 18, width: 20 };
+    this.bBoxes[38] = { x: 6, y: 2, height: 18, width: 20 };
 
     const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
         customPosition: 57,
@@ -5216,7 +5216,7 @@ QUnit.test('Resolve label overlapping by opposite label (labels position by defa
     });
 
     assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 218 });
-    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(17).args[0], { translateX: 469 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 469 });
 });
 
 QUnit.test('Resolve label overlapping by opposite label (other labels position)', function(assert) {
@@ -5224,9 +5224,9 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
     this.bBoxes[22] = { x: -4, y: -18, height: 18, width: 20 };
     this.bBoxes[23] = { x: 16, y: 28, height: 18, width: 20 };
 
-    this.bBoxes[46] = { x: -4, y: -28, height: 18, width: 20 };
-    this.bBoxes[47] = { x: 6, y: 14, height: 18, width: 20 };
-    this.bBoxes[48] = { x: -4, y: -28, height: 18, width: 20 };
+    this.bBoxes[36] = { x: -4, y: -28, height: 18, width: 20 };
+    this.bBoxes[37] = { x: 6, y: 14, height: 18, width: 20 };
+    this.bBoxes[38] = { x: -4, y: -28, height: 18, width: 20 };
 
     const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
         customPosition: 57,
@@ -5243,5 +5243,5 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
     });
 
     assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
-    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(17).args[0], { translateX: 439 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 439 });
 });

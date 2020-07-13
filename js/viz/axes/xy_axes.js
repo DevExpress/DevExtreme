@@ -1333,40 +1333,42 @@ module.exports = {
                 return;
             }
 
-            const overlappingTicks = [];
+            const overlappingObj = {
+                axes: [],
+                ticks: []
+            };
 
-            oppositeAxes.forEach(orthogonalAxis => {
-                that._majorTicks.forEach(tick => {
+            oppositeAxes.filter(orthogonalAxis => orthogonalAxis.pane === that.pane).forEach(orthogonalAxis => {
+                for(let i = 0; i < that._majorTicks.length; i++) {
+                    const tick = that._majorTicks[i];
                     const label = tick.label;
                     if(label) {
-                        that._resolveLabelOverlappedWithOrthogonalAxis(label, orthogonalAxis);
+                        if(overlappingObj.axes.indexOf(orthogonalAxis) < 0 && that._detectElementsOverlapping(label, orthogonalAxis._axisElement)) {
+                            overlappingObj.axes.push(orthogonalAxis);
+                            that._shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis);
+                        }
 
-                        orthogonalAxis._majorTicks.forEach(oppositeTick => {
+                        for(let j = 0; j < orthogonalAxis._majorTicks.length; j++) {
+                            const oppositeTick = orthogonalAxis._majorTicks[j];
                             const oppositeLabel = oppositeTick.label;
                             if(oppositeLabel && that._detectElementsOverlapping(label, oppositeLabel)) {
-                                overlappingTicks.push(tick);
+                                overlappingObj.ticks.push(tick);
                                 that._shiftThroughAxisOverlappedTick(tick);
+                                i = that._majorTicks.length;
+                                break;
                             }
-                        });
+                        }
                     }
 
-                    if(tick.mark && overlappingTicks.indexOf(tick) < 0) {
+                    if(tick.mark && overlappingObj.ticks.indexOf(tick) < 0) {
                         if(that._isHorizontal && tick.mark.attr('translateY')) {
                             tick.mark.attr({ translateY: 0 });
                         } else if(!that._isHorizontal && tick.mark.attr('translateX')) {
                             tick.mark.attr({ translateX: 0 });
                         }
                     }
-                });
+                }
             });
-        },
-
-        _resolveLabelOverlappedWithOrthogonalAxis(label, orthogonalAxis) {
-            const that = this;
-
-            if(that._detectElementsOverlapping(label, orthogonalAxis._axisElement)) {
-                that._shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis);
-            }
         },
 
         _shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis) {
