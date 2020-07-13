@@ -27,7 +27,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
 
 @ComponentBindings()
 export class HeaderPanelLayoutProps {
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 

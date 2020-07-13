@@ -21,7 +21,7 @@ export class DateTableCellBaseProps {
 
   @OneWay() endDate?: Date = new Date();
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 
   @Slot() children?: any;
 }

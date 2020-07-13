@@ -38,7 +38,7 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
 export class MonthDateTableLayoutProps {
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 }
 
 @Component({

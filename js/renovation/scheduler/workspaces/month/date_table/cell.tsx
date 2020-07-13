@@ -17,7 +17,7 @@ export const viewFunction = (viewModel: MonthDateTableCell) => (
 
 @ComponentBindings()
 export class MonthDateTableCellProps {
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 
   @OneWay() startDate?: Date = new Date();
 
