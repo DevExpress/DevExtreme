@@ -4,9 +4,9 @@ import DevExpress from './modules/core';
 import { EventsStrategy } from '../core/events_strategy';
 import { Options } from '../core/options';
 
-DevExpress.integration = {
-    EventsStrategy,
-    Options
-};
+DevExpress.integration = {};
+
+DevExpress.integration.EventsStrategy = EventsStrategy;
+DevExpress.integration.Options = Options;
 
 export default DevExpress;
