@@ -815,6 +815,11 @@ module.exports = {
                             columnIndex: parameters.column.index
                         });
                         const isValidated = isDefined(validationResult);
+                        if(!isValidated) {
+                            delete parameters.validationStatus;
+                        } else {
+                            parameters.validationStatus = validationResult.status;
+                        }
                         const skipValidation = parameters.row.isNewRow || !isValidated;
                         this.showHighlighting($cell, skipValidation);
                         return;
@@ -1139,7 +1144,23 @@ module.exports = {
                         return getWidgetInstance($editor);
                     }
                 };
-            })()
+            })(),
+            data: {
+                _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
+                    const cell = oldRow.cells[columnIndex];
+                    const oldValidationStatus = cell && cell.validationStatus;
+                    const validatingController = this.getController('validating');
+                    const validationResult = validatingController.getCellValidationResult({
+                        rowKey: oldRow.key,
+                        columnIndex
+                    });
+                    const newValidationStatus = validationResult && validationResult.status;
+                    if(oldValidationStatus !== newValidationStatus) {
+                        return true;
+                    }
+                    return this.callBase.apply(this, arguments);
+                }
+            }
         },
         views: {
             rowsView: {
