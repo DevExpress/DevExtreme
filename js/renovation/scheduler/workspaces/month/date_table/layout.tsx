@@ -27,6 +27,7 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
                 endDate={endDate}
                 otherMonth={otherMonth}
                 today={today}
+                groups={groups}
                 key={getKeyByDateAndGroup(startDate, groups)}
               />
             ))}
@@ -46,6 +47,5 @@ export class MonthDateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
 })
 export class MonthDateTableLayout extends JSXComponent(MonthDateTableLayoutProps) {}

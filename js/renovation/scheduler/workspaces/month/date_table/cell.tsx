@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DateTableCellBase } from '../../base/date_table/cell';
+import { DateTableCellBase, DateTableCellBaseProps } from '../../base/date_table/cell';
 
 export const viewFunction = (viewModel: MonthDateTableCell) => (
   <DateTableCellBase
@@ -16,13 +16,7 @@ export const viewFunction = (viewModel: MonthDateTableCell) => (
 );
 
 @ComponentBindings()
-export class MonthDateTableCellProps {
-  @OneWay() className?: string = '';
-
-  @OneWay() startDate?: Date = new Date();
-
-  @OneWay() endDate?: Date = new Date();
-
+export class MonthDateTableCellProps extends DateTableCellBaseProps {
   @OneWay() otherMonth?: boolean = false;
 
   @OneWay() today?: boolean = false;

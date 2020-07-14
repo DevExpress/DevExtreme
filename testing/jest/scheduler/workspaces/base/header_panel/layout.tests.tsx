@@ -1,22 +1,32 @@
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/base/header_panel/layout';
 import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
+import { getKeyByDateAndGroup } from '../../../../../../js/renovation/scheduler/workspaces/utils';
 
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
   Row: () => null,
+}));
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+  getKeyByDateAndGroup: jest.fn(),
 }));
 
 describe('HeaderPanelLayoutBase', () => {
   describe('Render', () => {
     const cellTemplate = () => null;
     const viewCellsData = [[
-      { startDate: new Date(2020, 6, 9), endDate: new Date(2020, 6, 10), today: true },
-      { startDate: new Date(2020, 6, 10), endDate: new Date(2020, 6, 11), today: false },
+      {
+        startDate: new Date(2020, 6, 9), endDate: new Date(2020, 6, 10), today: true, groups: 1,
+      },
+      {
+        startDate: new Date(2020, 6, 10), endDate: new Date(2020, 6, 11), today: false, groups: 1,
+      },
     ]];
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
       props: { cellTemplate, ...viewModel.props, viewCellsData },
     } as any) as any);
+
+    afterEach(() => jest.resetAllMocks());
 
     it('should combine `className` with predefined classes', () => {
       const layout = render({ props: { className: 'custom-class' } });
@@ -70,6 +80,24 @@ describe('HeaderPanelLayoutBase', () => {
           endDate: viewCellsData[0][1].endDate,
           today: viewCellsData[0][1].today,
         });
+    });
+
+    it('should call getKeyByDateAndGroup with correct parameters', () => {
+      render({});
+
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenCalledTimes(2);
+
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenNthCalledWith(
+          1, viewCellsData[0][0].startDate,
+          viewCellsData[0][0].groups,
+        );
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenNthCalledWith(
+          1, viewCellsData[0][0].startDate,
+          viewCellsData[0][0].groups,
+        );
     });
   });
 });

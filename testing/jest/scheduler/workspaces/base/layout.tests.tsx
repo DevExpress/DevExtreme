@@ -5,7 +5,37 @@ describe('LayoutBase', () => {
   describe('Render', () => {
     const headerPanelTemplate = () => null;
     const dateTableTemplate = () => null;
-    const viewCellsData = 'Test data';
+    const viewCellsData = {
+      groupedData: [{
+        dateTable: [[
+          {
+            startDate: new Date(2020, 6, 9),
+            endDate: new Date(2020, 6, 10),
+            today: true,
+            groups: 1,
+          },
+          {
+            startDate: new Date(2020, 6, 10),
+            endDate: new Date(2020, 6, 11),
+            today: false,
+            groups: 2,
+          },
+        ], [
+          {
+            startDate: new Date(2020, 6, 11),
+            endDate: new Date(2020, 6, 12),
+            today: false,
+            groups: 3,
+          },
+          {
+            startDate: new Date(2020, 6, 12),
+            endDate: new Date(2020, 6, 13),
+            today: false,
+            groups: 4,
+          },
+        ]],
+      }],
+    };
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
       props: {
@@ -30,7 +60,9 @@ describe('LayoutBase', () => {
       expect(header.exists())
         .toBe(true);
       expect(header.props())
-        .toMatchObject({ viewCellsData });
+        .toMatchObject({
+          viewCellsData: viewCellsData.groupedData[0].dateTable,
+        });
 
       const dateTable = layout.find(dateTableTemplate);
       expect(dateTable.exists())
