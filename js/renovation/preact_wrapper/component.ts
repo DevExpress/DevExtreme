@@ -29,7 +29,8 @@ export default class PreactWrapper extends DOMComponent {
   _getDefaultTwoWayProps() {
     const { defaultProps } = this._viewComponent;
     const options = {};
-    (this._twoWayProps || []).forEach(([name, defaultName, eventName]) => {
+    const twoWayProps = this._twoWayProps || [];
+    twoWayProps.forEach(([name, defaultName, eventName]) => {
       options[name] = defaultProps[defaultName];
       options[eventName] = (value) => this.option(name, value);
     });
