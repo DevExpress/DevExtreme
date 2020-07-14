@@ -13,6 +13,7 @@ module.exports = {
     collectCoverageFrom: [
         './js/renovation/**/*.tsx',
         '!./js/renovation/list.tsx',
+        '!./js/renovation/**/*.j.tsx',
         '!./js/renovation/utils/render-template.tsx',
     ],
     coverageDirectory: './js/renovation/code_coverage',
