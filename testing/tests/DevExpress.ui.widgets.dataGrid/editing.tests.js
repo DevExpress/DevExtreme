@@ -8408,6 +8408,62 @@ QUnit.module('Editing with real dataController', {
             });
         });
     });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.repaintChangesOnly = true;
+            this.options.editing = {
+                mode: editMode.toLowerCase(),
+                allowUpdating: true
+            };
+
+            this.options.columns = [{
+                dataField: 'name'
+            }, {
+                dataField: 'age',
+                showEditorAlways: true,
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback: function(params) {
+                        return params.data.name.length > 0;
+                    }
+                }]
+            }];
+
+
+            rowsView.render($testElement);
+            this.columnsController.init();
+            this.editCell(0, 0);
+
+            const $firstCell = $(this.getCellElement(0, 0));
+            $firstCell.focus();
+
+            const $targetInput = $firstCell.find('input').first();
+
+            // act
+            $targetInput.val('').trigger('change');
+            this.closeEditCell();
+            this.clock.tick();
+
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as invalid');
+
+            // act
+            this.cancelEditData();
+            this.clock.tick();
+
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
+        });
+    });
 });
 
 QUnit.module('Refresh modes', {
