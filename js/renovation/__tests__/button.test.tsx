@@ -9,7 +9,7 @@ import {
   emit,
   getEventHandlers,
   EVENT,
-} from './utils/events-mock';
+} from './utils/events_mock';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';

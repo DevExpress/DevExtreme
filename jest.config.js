@@ -6,7 +6,7 @@ const resolve = require('resolve');
 module.exports = {
     'globals': {
         'ts-jest': {
-            tsConfig: './testing/jest/tsconfig.json',
+            tsConfig: './jest.tsconfig.json',
             diagnostics: false, // set to true to enable type checking
         }
     },
