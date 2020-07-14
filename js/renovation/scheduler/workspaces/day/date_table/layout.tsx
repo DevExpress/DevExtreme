@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from '../../base/row';
+import { DateTableRow } from '../../base/date_table/row';
 import { DayDateTableCell as Cell } from './cell';
 import { ViewCellData } from '../../types';
 
@@ -13,7 +13,7 @@ export const viewFunction = (viewModel: DayDateTableLayout) => (
   >
     <tbody>
       {viewModel.props.viewCellsData!.map((cellsRow) => (
-        <Row
+        <DateTableRow
           key={cellsRow[0].startDate.toString()}
         >
           {cellsRow.map(({
@@ -26,7 +26,7 @@ export const viewFunction = (viewModel: DayDateTableLayout) => (
               key={startDate.toString()}
             />
           ))}
-        </Row>
+        </DateTableRow>
       ))}
     </tbody>
   </table>
@@ -42,9 +42,6 @@ export class DayDateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: {
-    register: true,
-  },
 })
 export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
 }

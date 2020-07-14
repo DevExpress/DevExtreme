@@ -1,11 +1,12 @@
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/day/date_table/layout';
-import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
+import { DateTableRow as Row } from '../../../../../../js/renovation/scheduler/workspaces/base/date_table/row';
 import {
   DayDateTableCell as Cell,
 } from '../../../../../../js/renovation/scheduler/workspaces/day/date_table/cell';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row', () => ({
+  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row'),
   Row: () => null,
 }));
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/day/date_table/cell', () => ({

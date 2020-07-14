@@ -6,7 +6,7 @@ export const viewFunction = (viewModel: Row) => (
   <tr
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={`${viewModel.props.className} dx-scheduler-date-table-row`}
+    className={`${viewModel.props.className}`}
     style={viewModel.style}
   >
     {viewModel.props.children}

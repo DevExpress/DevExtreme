@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from '../../base/row';
+import { DateTableRow as Row } from '../../base/date_table/row';
 import { MonthDateTableCell as Cell } from './cell';
 import { ViewCellData } from '../../types';
 
