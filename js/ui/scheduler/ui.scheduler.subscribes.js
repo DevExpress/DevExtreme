@@ -33,8 +33,8 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(appointment) {
-        return this._createAppointmentSettings(appointment); // TODO: temporary solution
+    createAppointmentSettings: function(info) {
+        return this._createAppointmentSettings(info); // TODO: temporary solution
     },
 
     isGroupedByDate: function() {
@@ -179,13 +179,14 @@ const subscribes = {
     },
 
     getTextAndFormatDate(appointment, targetedAppointment, format) { // TODO: rename to createFormattedDateText
+        const appointmentAdapter = this.createAppointmentAdapter(appointment);
         const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
             .clone({ pathTimeZone: 'toGrid' });
 
         const formatType = format || this.fire('_getTypeFormat', adapter.startDate, adapter.endDate, adapter.allDay);
 
         return {
-            text: adapter.text,
+            text: adapter.text || appointmentAdapter.text,
             formatDate: this.fire('_formatDates', adapter.startDate, adapter.endDate, formatType)
         };
     },

@@ -198,8 +198,11 @@ class BaseRenderingStrategy {
     //     });
     // }
 
-    _getAppointmentCoordinates(appointment) {
-        return this.instance.fire('createAppointmentSettings', appointment);
+    _getAppointmentCoordinates(appointmentData) {
+        return this.instance.fire('createAppointmentSettings', {
+            appointmentData: appointmentData,
+            originalStartDate: this.startDate(appointmentData, true),
+        });
     }
 
     _isRtl() {
@@ -503,6 +506,8 @@ class BaseRenderingStrategy {
     }
 
     startDate(appointment, skipNormalize, position) {
+        // TODO:
+        // let startDate = position && position.startDate;
         let startDate = position && position.info.appointment.startDate;
         const rangeStartDate = this.instance._getStartDate(appointment, skipNormalize);
         const text = this.instance.fire('getField', 'text', appointment);
@@ -526,8 +531,8 @@ class BaseRenderingStrategy {
         const info = position?.info;
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            const recurrencePartStartDate = info ? info.appointment.startDate : realStartDate;
-            const recurrencePartCroppedByViewStartDate = info ? info.appointment.startDate : realStartDate;
+            const recurrencePartStartDate = info.appointment.startDate || realStartDate;
+            const recurrencePartCroppedByViewStartDate = info.appointment.startDate || realStartDate;
 
             let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
                 this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :

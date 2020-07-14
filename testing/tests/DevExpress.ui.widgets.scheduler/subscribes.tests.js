@@ -130,8 +130,7 @@ QUnit.test('\'createAppointmentSettings\' should return workSpace date table scr
         appointmentData: {
             'startDate': new Date(2015, 2, 3, 22),
             'endDate': new Date(2015, 2, 17, 10, 30)
-        },
-        startDate: new Date(2015, 2, 3, 22),
+        }
     });
     assert.roughEqual(coordinate[0].top, 0, 1.001, 'Top coordinate is OK');
 });
@@ -323,9 +322,8 @@ QUnit.test('\'createAppointmentSettings\' should work correct with custom data f
 
     const result = this.instance.fire('createAppointmentSettings', {
         appointmentData: {
-            startDate: new Date(2015, 2, 2, 0)
-        },
-        startDate: new Date(2015, 2, 2, 0),
+            Start: new Date(2015, 2, 2, 0)
+        }
     });
     assert.equal(result.length, 1, 'Coordinates are OK');
 });
@@ -1707,8 +1705,7 @@ QUnit.test('\'createAppointmentSettings\' should work correct for recurrenceAppo
             endDate: new Date(2018, 4, 23, 12),
             priorityId: 2,
             recurrenceRule: 'FREQ=DAILY;COUNT=3'
-        },
-        startDate: new Date(2018, 4, 22, 10, 0),
+        }
     });
 
     assert.equal(results.length, 6, 'Coordinates count is ok');
