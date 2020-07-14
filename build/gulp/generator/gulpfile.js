@@ -31,7 +31,7 @@ function generateJQueryComponents(isWatch) {
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
         jqueryComponentRegistratorModule: 'js/core/component_registrator',
-        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component',
+        jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
         generateJQueryOnly: true
     };
 
@@ -56,7 +56,7 @@ function generatePreactComponents() {
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
         jqueryComponentRegistratorModule: 'js/core/component_registrator',
-        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+        jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component'
     };
 
     return gulp.src(SRC, { base: 'js' })
