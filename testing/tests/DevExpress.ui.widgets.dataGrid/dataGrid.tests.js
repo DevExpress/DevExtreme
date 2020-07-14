@@ -12296,10 +12296,10 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     // arrange
         let loadCallCount = 0;
         let changeEditorValue;
-        const data = [{ 'name': 'Alex', 'age': 22 }];
+        const data = [{ 'name': 'Alex', 'age': 22, 'id': 1 }];
         const dataGrid = createDataGrid({
             dataSource: {
-                key: 'name',
+                key: 'id',
                 load: () => {
                     if(loadCallCount > 0) {
                         data[0]['name'] = 'foo';

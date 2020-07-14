@@ -1,7 +1,7 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Event, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
@@ -88,13 +88,13 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 
   @OneWay() isLargeDisplayMode = true;
 
-  @OneWay() pageSizesRef: any = null;
+  @ForwardRef() pageSizesRef: any = null;
 
-  @OneWay() parentRef: any = null;
+  @ForwardRef() parentRef: any = null;
 
-  @OneWay() pagesRef: any = null;
+  @ForwardRef() pagesRef: any = null;
 
-  @OneWay() infoTextRef: any = null;
+  @ForwardRef() infoTextRef: any = null;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })

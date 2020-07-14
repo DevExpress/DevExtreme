@@ -38,7 +38,11 @@ describe('resizable-container', () => {
         pagesRef: 'pagesRef',
         infoTextVisible: true,
         isLargeDisplayMode: true,
-        props: { contentTemplate, pagerContentProps: 'pagerContentProps' },
+        pagerProps: {
+          pagerPropsProp1: 'pagerPropsProp1',
+          pagerPropsProp2: 'pagerPropsProp2',
+        },
+        props: { contentTemplate },
         restAttributes: { restAttribute: {} },
       } as any as ResizableContainer;
 
@@ -46,7 +50,8 @@ describe('resizable-container', () => {
         <ResizableContainerComponent {...props as any} /> as any,
       );
       expect(tree.props()).toEqual({
-        pagerContentProps: 'pagerContentProps',
+        pagerPropsProp1: 'pagerPropsProp1',
+        pagerPropsProp2: 'pagerPropsProp2',
         children: [],
         restAttribute: props.restAttributes.restAttribute,
         infoTextRef: 'infoTextRef',
@@ -113,6 +118,22 @@ describe('resizable-container', () => {
       expect(component.isLargeDisplayMode).toBe(true);
       expect(component.infoTextVisible).toBe(true);
       expect(elementsWidth).not.toBe(component.elementsWidth);
+    });
+    it('pagerProps', () => {
+      const props: ResizableContainerProps = {
+        contentTemplate: 'template',
+        pageIndexChange: () => { },
+        pageSizeChange: () => { },
+        pageIndex: 1,
+        pageCount: 2,
+        pageSize: 10,
+        pageSizes: [1, 2],
+        pagesCountText: 'count',
+      };
+      const component = new ResizableContainer(props);
+
+      const { contentTemplate, ...expected } = props;
+      expect(component.pagerProps).toMatchObject(expected);
     });
   });
   describe('updateChildProps', () => {

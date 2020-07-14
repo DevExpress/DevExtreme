@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  Ref, Effect, Template, InternalState, Event,
+  Effect, Template, InternalState, Event, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../core/utils/resize_callbacks';
@@ -22,7 +22,8 @@ export const viewFunction = ({
   pagesRef,
   infoTextVisible,
   isLargeDisplayMode,
-  props: { contentTemplate: Content, ...pagerProps },
+  pagerProps,
+  props: { contentTemplate: Content },
   restAttributes,
 }: ResizableContainer) => (
   <Content
@@ -126,13 +127,13 @@ export class ResizableContainerProps extends PagerProps {
   view: viewFunction,
 })
 export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
-  @Ref() parentRef!: HTMLElement;
+  @ForwardRef() parentRef!: HTMLElement;
 
-  @Ref() pageSizesRef!: GetHtmlElement;
+  @ForwardRef() pageSizesRef!: GetHtmlElement;
 
-  @Ref() infoTextRef!: GetHtmlElement;
+  @ForwardRef() infoTextRef!: GetHtmlElement;
 
-  @Ref() pagesRef!: HTMLElement | undefined;
+  @ForwardRef() pagesRef!: HTMLElement | undefined;
 
   @InternalState() infoTextVisible = true;
 
@@ -156,6 +157,11 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
     if ((this.parentWidth === -1 && parentWidth > 0) || this.parentWidth === parentWidth) {
       this.updateChildrenProps();
     }
+  }
+
+  get pagerProps(): PagerProps {
+    const { contentTemplate, ...pagerProps } = this.props;
+    return pagerProps;
   }
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps

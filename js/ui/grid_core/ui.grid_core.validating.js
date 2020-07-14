@@ -691,7 +691,7 @@ export default {
                                         break;
                                     case EDIT_MODE_BATCH:
                                         if(!isFullValid) {
-                                            this._editRowIndex = -1;
+                                            this._editRowKey = null;
                                             this._editColumnIndex = -1;
                                             this.getController('data').updateItems();
                                         }

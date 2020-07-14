@@ -5,9 +5,10 @@ import {
 import DxNumberBox, { Options } from '../ui/number_box';
 import { WidgetProps } from './widget';
 
-export const viewFunction = ({ widgetRef, restAttributes }: NumberBox) => (
+export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: NumberBox) => (
   <div
     ref={widgetRef as any}
+    className={className}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
