@@ -6,7 +6,6 @@ import { GroupItem } from '../../../types';
 export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
   const useTemplate = !!viewModel.props.cellTemplate;
 
-  console.log(viewModel.props.cellTemplate);
   return (
     <div
       className={`dx-scheduler-group-header ${viewModel.props.className}`}
