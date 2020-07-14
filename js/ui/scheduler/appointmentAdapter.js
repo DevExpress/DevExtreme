@@ -18,7 +18,8 @@ class AppointmentAdapter {
     }
 
     get startDate() {
-        return new Date(this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment));
+        const result = this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment);
+        return result === undefined ? result : new Date(result);
     }
 
     set startDate(value) {
@@ -26,7 +27,8 @@ class AppointmentAdapter {
     }
 
     get endDate() {
-        return new Date(this.scheduler.fire('getField', PROPERTY_NAMES.endDate, this.appointment));
+        const result = this.scheduler.fire('getField', PROPERTY_NAMES.endDate, this.appointment);
+        return result === undefined ? result : new Date(result);
     }
 
     set endDate(value) {

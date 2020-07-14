@@ -197,15 +197,14 @@ export default class AppointmentPopup {
         const adapter = this.scheduler.createAppointmentAdapter(data);
 
         const allDay = adapter.allDay;
-        const startDate = adapter.calculateStartDate('toAppointment');
-        const endDate = adapter.calculateEndDate('toAppointment');
+        const startDate = adapter.startDate && adapter.calculateStartDate('toAppointment');
+        const endDate = adapter.endDate && adapter.calculateEndDate('toAppointment');
 
         this.state.appointment.isEmptyText = data === undefined || adapter.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || adapter.description === undefined;
 
         const formData = extend({ text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
-        // TODO:
         if(startDate) {
             this.scheduler.fire('setField', 'startDate', formData, startDate);
         }
