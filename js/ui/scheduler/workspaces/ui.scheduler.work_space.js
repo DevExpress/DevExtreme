@@ -992,7 +992,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
         this._updateGroupTableHeight();
 
-        this._shader = new VerticalShader();
+        this._shader = new VerticalShader(this);
     },
 
     _updateGroupTableHeight: function() {
@@ -1301,8 +1301,9 @@ const SchedulerWorkSpace = Widget.inherit({
         const cellTemplate = this._getDateHeaderTemplate();
         const repeatCount = this._calculateHeaderCellRepeatCount();
         const templateCallbacks = [];
-        const colspan = this.option('groupByDate') ? this._getGroupCount() : 1;
-        const groupByDate = this.option('groupByDate');
+        const groupByDate = this.isGroupedByDate();
+        const colspan = groupByDate ? this._getGroupCount() : 1;
+
         let i;
         let j;
 
@@ -2027,16 +2028,19 @@ const SchedulerWorkSpace = Widget.inherit({
         return this.getCoordinatesByDate(currentDate);
     },
 
-    _isOutsideScrollable: function(target, event) {
-        const $scrollableElement = this._dateTableScrollable.$element();
+    _isOutsideScrollable(target, event) {
+        const $dateTableScrollableElement = this._dateTableScrollable.$element();
+        const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
+        const window = windowUtils.getWindow();
+        const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
+        const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
+        const isOutsideVerticalScrollable = event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
 
-        if(!$(target).closest($scrollableElement).length) {
+        if(isTargetInAllDayPanel && !isOutsideHorizontalScrollable) {
             return false;
         }
 
-        const scrollableSize = getBoundingRect($scrollableElement.get(0));
-
-        return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
+        return isOutsideVerticalScrollable || isOutsideHorizontalScrollable;
     },
 
     setCellDataCache: function(cellCoordinates, groupIndex, $cell) {
@@ -2123,8 +2127,8 @@ const SchedulerWorkSpace = Widget.inherit({
         return extend(true, {}, data);
     },
 
-    _getHorizontalMax: function(groupIndex) {
-        groupIndex = this.option('groupByDate') ? this._getGroupCount() - 1 : groupIndex;
+    _getHorizontalMax(groupIndex) {
+        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     },
@@ -2246,10 +2250,14 @@ const SchedulerWorkSpace = Widget.inherit({
 
     getDataByDroppableCell: function() {
         const cellData = this.getCellData(this._getDroppableCell());
+        const allDay = cellData.allDay;
+        const startDate = cellData.startDate;
+        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
 
         return {
-            date: cellData.startDate,
-            allDay: cellData.allDay,
+            startDate: startDate,
+            endDate: endDate,
+            allDay: allDay,
             groups: cellData.groups
         };
     },
@@ -2414,7 +2422,7 @@ const SchedulerWorkSpace = Widget.inherit({
         const rowIndex = this._getRowCount() - 1;
         let cellIndex = this._getCellCount();
 
-        if(this.option('groupByDate') && this._getGroupCount() > 0) {
+        if(this.isGroupedByDate()) {
             cellIndex = cellIndex * this._getGroupCount() - 1;
         } else {
             cellIndex = cellIndex - 1;
@@ -2584,7 +2592,6 @@ const SchedulerWorkSpace = Widget.inherit({
             this.dragBehavior.addTo(this.getAllDayContainer());
             this.dragBehavior.addTo(this._$allDayPanel);
         }
-        this._attachTablesEvents();
     },
 
     _isApplyCompactAppointmentOffset: function() {

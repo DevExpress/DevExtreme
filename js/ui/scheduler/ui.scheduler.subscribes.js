@@ -816,6 +816,9 @@ const subscribes = {
     fixWrongEndDate: function(appointment, startDate, endDate) {
         return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
     },
+    calculateAppointmentEndDate: function(isAllDay, startDate) {
+        return this._appointmentModel._calculateAppointmentEndDate(isAllDay, startDate);
+    },
 
     getEndDayHour: function() {
         return this._workSpace.option('endDayHour') || this.option('endDayHour');

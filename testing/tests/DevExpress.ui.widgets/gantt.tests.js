@@ -406,6 +406,65 @@ QUnit.module('Actions', moduleConfig, () => {
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
     });
+    test('collapse and expand after inserting', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date('2019-02-21');
+        const newEnd = new Date('2019-02-22');
+        const newTitle = 'New';
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '2');
+        this.clock.tick();
+
+        assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
+        const createdTask = tasks[tasks.length - 1];
+        assert.equal(createdTask.title, newTitle, 'new task title is right');
+        assert.equal(createdTask.start, newStart, 'new task start is right');
+        assert.equal(createdTask.end, newEnd, 'new task end is right');
+
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).eq(1);
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
+        collapsedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
+    });
+
+    test('collapse and expand after inserting in auto update mode', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date('2019-02-21');
+        const newEnd = new Date('2019-02-22');
+        const newTitle = 'New';
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '2');
+        this.clock.tick();
+
+        assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
+        const createdTask = tasks[tasks.length - 1];
+        assert.equal(createdTask.title, newTitle, 'new task title is right');
+        assert.equal(createdTask.start, newStart, 'new task start is right');
+        assert.equal(createdTask.end, newEnd, 'new task end is right');
+
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).eq(1);
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+
+
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
+        collapsedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
+    });
 
     test('move splitter', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1220,5 +1279,39 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
+    });
+});
+
+QUnit.module('First day of week', moduleConfig, () => {
+    test('common', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('scaleType', 'days');
+        this.instance.option('firstDayOfWeek', 0);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 0, 'incorrect first day');
+
+        this.instance.option('firstDayOfWeek', 1);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 1, 'incorrect first day');
+
+        this.instance.option('firstDayOfWeek', 2);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 2, 'incorrect first day');
+
+        this.instance.option('firstDayOfWeek', 3);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 3, 'incorrect first day');
+
+        this.instance.option('firstDayOfWeek', 4);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 4, 'incorrect first day');
+
+        this.instance.option('firstDayOfWeek', 5);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 5, 'incorrect first day');
+
+        this.instance.option('firstDayOfWeek', 6);
+        this.clock.tick();
+        assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 6, 'incorrect first day');
     });
 });

@@ -104,13 +104,13 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
-  await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+  await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.1 })
     .expect(appointmentPopup.subjectElement.value)
     .eql(APPOINTMENT_TEXT)
 
     .click(appointmentPopup.allDayElement)
     .click(appointmentPopup.cancelButton)
-    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.1 })
 
     .expect(appointmentPopup.endDateElement.value)
     .eql('5/5/2017');

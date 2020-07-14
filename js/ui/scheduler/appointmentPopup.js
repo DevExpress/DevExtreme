@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import Popup from '../popup';
 import windowUtils from '../../core/utils/window';
-import AppointmentForm from './ui.scheduler.appointment_form';
 import devices from '../../core/devices';
 import domUtils from '../../core/utils/dom';
 import objectUtils from '../../core/utils/object';
@@ -11,6 +10,7 @@ import { each } from '../../core/utils/iterator';
 import { Deferred, when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
+import { APPOINTMENT_FORM_GROUP_NAMES, AppointmentForm } from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -209,29 +209,23 @@ export default class AppointmentPopup {
         }
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
-        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        const isRecurrence = AppointmentForm.getRecurrenceRule(formData, this.scheduler._dataAccessors.expr);
-        this._setEditorOptions(recurrenceRuleExpr, extend({}, recurrenceEditorOptions, { startDate: startDate, visible: !!isRecurrence }));
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr, APPOINTMENT_FORM_GROUP_NAMES.Recurrence);
+        this._setEditorOptions(recurrenceRuleExpr, APPOINTMENT_FORM_GROUP_NAMES.Recurrence, extend({}, recurrenceEditorOptions, { startDate: startDate }));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
         AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
     }
 
-    _getEditorOptions(name) {
-        if(!name) {
-            return;
-        }
-        const editor = this._appointmentForm.itemOption(name);
+    _getEditorOptions(name, groupName) {
+        const editor = this._appointmentForm.itemOption(`${groupName}.${name}`);
         return editor ? editor.editorOptions : {};
     }
 
-    _setEditorOptions(name, options) {
-        if(!name) {
-            return;
-        }
-        const editor = this._appointmentForm.itemOption(name);
-        editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
+    _setEditorOptions(name, groupName, options) {
+        const editorPath = `${groupName}.${name}`;
+        const editor = this._appointmentForm.itemOption(editorPath);
+        editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', options);
     }
 
     _isDeviceMobile() {
@@ -333,6 +327,7 @@ export default class AppointmentPopup {
             if(state.isEmptyDescription && formData.description === '') {
                 delete formData.description;
             }
+
             if(state.data.recurrenceRule === undefined && formData.recurrenceRule === '') { // TODO: plug for recurrent editor
                 delete formData.recurrenceRule;
             }

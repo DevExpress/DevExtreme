@@ -585,6 +585,21 @@ QUnit.module('getCombinedFilter', {
         ], 'combined filter');
     });
 
+    // T900270
+    QUnit.test('anyOf with filter expression for another field', function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ dataField: 'Test1', filterType: 'include' }, { dataField: 'Test2' }],
+            filterValue: ['Test1', 'anyof', [
+                ['Test2', '<', 3000]
+            ]]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ['Test2', '<', 3000], 'combined filter');
+    });
+
     QUnit.test('group in value - exclude', function(assert) {
         // act
         this.setupDataGrid({

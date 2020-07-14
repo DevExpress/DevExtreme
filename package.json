@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "20.1.4",
+  "version": "20.1.5",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -28,8 +28,8 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "1.0.8",
-    "devexpress-gantt": "1.0.5",
+    "devexpress-diagram": "1.0.10",
+    "devexpress-gantt": "1.0.7",
     "jszip": "^2.0.0 || ^3.0.0",
     "quill": "^1.3.7",
     "showdown": "^1.8.6",
@@ -56,7 +56,7 @@
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
     "devextreme-internal-tools": "stable",
-    "eslint": "^7.0.0",
+    "eslint": "^7.3.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-qunit": "^4.0.0",
     "eslint-plugin-spellcheck": "0.0.11",
@@ -143,9 +143,9 @@
     "dev": "gulp dev",
     "transpile-tests": "gulp transpile-tests",
     "test-env": "node testing/launch",
-    "update-ts": "dx-tools update-ts-bundle --output=./ts/dx.all.d.ts",
+    "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts",
     "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations",
+    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner"
   },
   "browserslist": [

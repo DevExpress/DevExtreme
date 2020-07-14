@@ -1140,8 +1140,19 @@ const Scheduler = Widget.inherit({
     },
 
     _fireContentReadyAction: function(result) {
-        this.callBase();
-        result && result.resolve();
+        const contentReadyBase = this.callBase.bind(this);
+        const fireContentReady = () => {
+            contentReadyBase();
+            result?.resolve();
+        };
+
+        if(this._workSpaceRecalculation) {
+            this._workSpaceRecalculation?.done(() => {
+                fireContentReady();
+            });
+        } else {
+            fireContentReady();
+        }
     },
 
     _dimensionChanged: function() {
@@ -1667,6 +1678,7 @@ const Scheduler = Widget.inherit({
         const countConfig = this._getViewCountConfig();
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this._getCurrentViewType()].workSpace, this._workSpaceConfig(groups, countConfig));
         this._allowDragging() && this._workSpace.initDragBehavior(this);
+        this._workSpace._attachTablesEvents();
         this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();
@@ -1988,24 +2000,24 @@ const Scheduler = Widget.inherit({
 
     _makeDateAsRecurrenceException: function(exceptionDate, targetAppointment) {
         const startDate = this._getStartDate(targetAppointment, true);
+        const isAllDay = this.fire('getField', 'allDay', targetAppointment);
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', targetAppointment);
-        const exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate, startDateTimeZone);
+        const exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate, startDateTimeZone, isAllDay);
         const recurrenceException = this.fire('getField', 'recurrenceException', targetAppointment);
 
         return recurrenceException ? recurrenceException + ',' + exceptionByDate : exceptionByDate;
     },
 
-    _getRecurrenceExceptionDate: function(exceptionStartDate, targetStartDate, startDateTimeZone) {
+    _getRecurrenceExceptionDate: function(exceptionStartDate, targetStartDate, startDateTimeZone, isAllDay) {
         exceptionStartDate = this.fire('convertDateByTimezoneBack', exceptionStartDate, startDateTimeZone);
         const appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
 
-        exceptionStartDate.setHours(appointmentStartDate.getHours(),
+        exceptionStartDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(exceptionStartDate, appointmentStartDate, this.option('timeZone'), startDateTimeZone, true);
+
+        isAllDay && exceptionStartDate.setHours(appointmentStartDate.getHours(),
             appointmentStartDate.getMinutes(),
             appointmentStartDate.getSeconds(),
             appointmentStartDate.getMilliseconds());
-
-        const timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionStartDate.getTimezoneOffset();
-        exceptionStartDate = new Date(exceptionStartDate.getTime() + timezoneDiff * toMs('minute'));
 
         return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
     },
@@ -2030,13 +2042,24 @@ const Scheduler = Widget.inherit({
         const target = options.data || options;
         const cellData = this.getTargetCellData();
         const targetAllDay = this.fire('getField', 'allDay', target);
-        const targetStartDate = new Date(this.fire('getField', 'startDate', target));
-        const targetEndDate = new Date(this.fire('getField', 'endDate', target));
-        let date = cellData.date || targetStartDate;
-        const duration = targetEndDate.getTime() - targetStartDate.getTime();
+        let targetStartDate = new Date(this.fire('getField', 'startDate', target));
+        let targetEndDate = new Date(this.fire('getField', 'endDate', target));
+        let date = cellData.startDate || targetStartDate;
 
-        if(this._workSpace.keepOriginalHours() && !isNaN(targetStartDate.getTime())) {
-            const diff = targetStartDate.getTime() - dateUtils.trimTime(targetStartDate).getTime();
+        if(!targetStartDate || isNaN(targetStartDate)) {
+            targetStartDate = date;
+        }
+        const targetStartTime = targetStartDate.getTime();
+
+        if(!targetEndDate || isNaN(targetEndDate)) {
+            targetEndDate = cellData.endDate;
+        }
+        const targetEndTime = targetEndDate.getTime() || cellData.endData;
+
+        const duration = targetEndTime - targetStartTime;
+
+        if(this._workSpace.keepOriginalHours()) {
+            const diff = targetStartTime - dateUtils.trimTime(targetStartDate).getTime();
             date = new Date(dateUtils.trimTime(date).getTime() + diff);
         }
 
@@ -2205,9 +2228,11 @@ const Scheduler = Widget.inherit({
                         });
                 } catch(err) {
                     performFailAction(err);
+                    deferred.resolve();
                 }
             } else {
                 performFailAction();
+                deferred.resolve();
             }
 
             return deferred.promise();

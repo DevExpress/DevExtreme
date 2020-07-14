@@ -164,8 +164,8 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         this.callBase(options);
     },
 
-    _getCellText: function(rowIndex, cellIndex) {
-        if(this.option('groupByDate') && this._getGroupCount()) {
+    _getCellText(rowIndex, cellIndex) {
+        if(this.isGroupedByDate()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         } else {
             cellIndex = cellIndex % this._getCellCount();

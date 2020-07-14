@@ -322,17 +322,29 @@ class AppointmentModel {
     }
 
     _initStoreChangeHandlers() {
-        this._dataSource && this._dataSource.store()
-            .on('updating', ((newItem) => {
-                this._updatedAppointment = newItem;
-            }).bind(this));
+        const dataSource = this._dataSource;
+        const store = dataSource?.store();
 
-        this._dataSource && this._dataSource.store()
-            .on('push', ((items) => {
-                items.forEach(((item) => {
-                    this._updatedAppointmentKeys.push({ key: this._dataSource.store().key(), value: item.key });
-                }).bind(this));
-            }).bind(this));
+        if(store) {
+            store.on('updating', newItem => {
+                this._updatedAppointment = newItem;
+            });
+
+            store.on('push', pushItems => {
+                const items = dataSource.items();
+                const keyName = store.key();
+
+                pushItems.forEach(pushItem => {
+                    const itemExists = items.filter(item => item[keyName] === pushItem.key).length !== 0;
+
+                    if(itemExists) {
+                        this._updatedAppointmentKeys.push({ key: keyName, value: pushItem.key });
+                    } else {
+                        items.push(pushItem.data);
+                    }
+                });
+            });
+        }
     }
 
     getUpdatedAppointment() {
@@ -524,18 +536,25 @@ class AppointmentModel {
     }
 
     fixWrongEndDate(appointment, startDate, endDate) {
-        if(this._isEndDateWrong(appointment, startDate, endDate)) {
-            if(this._dataAccessors.getter.allDay(appointment)) {
-                endDate = dateUtils.setToDayEnd(new Date(startDate));
-            } else {
-                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
-            }
+        if(this._isEndDateWrong(startDate, endDate)) {
+            const isAllDay = this._dataAccessors.getter.allDay(appointment);
+
+            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
+
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
         return endDate;
     }
 
-    _isEndDateWrong(appointment, startDate, endDate) {
+    _calculateAppointmentEndDate(isAllDay, startDate) {
+        if(isAllDay) {
+            return dateUtils.setToDayEnd(new Date(startDate));
+        }
+
+        return new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
+    }
+
+    _isEndDateWrong(startDate, endDate) {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 

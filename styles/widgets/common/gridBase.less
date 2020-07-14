@@ -500,8 +500,6 @@
                 &.dx-command-edit-with-icons {
                     width: @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
                     min-width: @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
-                    line-height: 1;
-                    white-space: nowrap;
 
                     .dx-link {
                         text-decoration: none;
@@ -525,6 +523,11 @@
                 padding: 0;
                 vertical-align: middle;
             }
+        }
+
+        .dx-data-row .dx-command-edit-with-icons {
+            line-height: 1;
+            white-space: nowrap;
         }
 
         .dx-filter-range-content {

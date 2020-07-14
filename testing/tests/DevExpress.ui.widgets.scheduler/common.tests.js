@@ -23,6 +23,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import themes from 'ui/themes';
 import { SchedulerTestWrapper, createWrapper } from './helpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { Deferred } from 'core/utils/deferred';
 
 import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
@@ -639,6 +640,39 @@ QUnit.module('Initialization', {
         assert.equal(appointment.eq(1).text(), 'Update-2', 'Appointment is rerendered');
     });
 
+    QUnit.test('Push new item to the store (remoteFiltering: true) (T900529)', function(assert) {
+        const data = [{
+            id: 0,
+            text: 'Test Appointment',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }];
+
+        const pushItem = {
+            id: 1,
+            text: 'Pushed Appointment',
+            startDate: new Date(2017, 4, 23, 9, 30),
+            endDate: new Date(2017, 4, 23, 11, 30)
+        };
+
+        const scheduler = createWrapper({
+            dataSource: {
+                load: () => data,
+                key: 'id'
+            },
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25)
+        });
+
+        const dataSource = scheduler.instance.getDataSource();
+        dataSource.store().push([{ type: 'update', key: pushItem.id, data: pushItem }]);
+        dataSource.load();
+
+        assert.equal(scheduler.appointments.getTitleText(0), 'Test Appointment', 'Appointment is rerendered');
+        assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
+    });
+
     QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
@@ -1083,6 +1117,26 @@ QUnit.module('Initialization', {
 
         assert.ok(this.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
         assert.ok(!this.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+    });
+
+    QUnit.test('_getUpdatedData for the empty data item (T906240)', function(assert) {
+        const startCellDate = new Date(2020, 1, 2, 3);
+        const endCellDate = new Date(2020, 1, 2, 4);
+        const scheduler = createWrapper({});
+
+        scheduler.instance.getTargetCellData = () => {
+            return {
+                startDate: startCellDate,
+                endDate: endCellDate
+            };
+        };
+
+        const updatedData = scheduler.instance._getUpdatedData({ text: 'test' });
+        assert.deepEqual(updatedData, {
+            allDay: undefined,
+            endDate: endCellDate,
+            startDate: startCellDate
+        }, 'Updated data is correct');
     });
 })('Methods');
 
@@ -3585,6 +3639,30 @@ QUnit.module('Initialization', {
         resizeCallbacks.fire();
 
         assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
+    });
+
+    QUnit.test('ContentReady event should be fired after render completely ready (T902483)', function(assert) {
+        let contentReadyFiresCount = 0;
+
+        const scheduler = createWrapper({
+            onContentReady: () => ++contentReadyFiresCount
+        });
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation = new Deferred();
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation.resolve();
+
+        assert.equal(contentReadyFiresCount, 2, 'contentReadyFiresCount === 2');
+
+        scheduler.instance._workSpaceRecalculation = null;
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');
     });
 })('Events');
 

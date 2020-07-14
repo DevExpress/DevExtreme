@@ -1,6 +1,5 @@
 const $ = require('../../core/renderer');
 let caret = require('./utils.caret');
-const devices = require('../../core/devices');
 const each = require('../../core/utils/iterator').each;
 const eventUtils = require('../../events/utils');
 const eventsEngine = require('../../events/core/events_engine');
@@ -13,8 +12,9 @@ const stringUtils = require('../../core/utils/string');
 const wheelEvent = require('../../events/core/wheel');
 const MaskRules = require('./ui.text_editor.mask.rule');
 const TextEditorBase = require('./ui.text_editor.base');
+const { isInputEventsL2Supported } = require('./utils.support');
 const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default;
-const AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
+const InputEventsMaskStrategy = require('./ui.text_editor.mask.strategy.input_events').default;
 
 const stubCaret = function() {
     return {};
@@ -110,9 +110,9 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        const device = devices.real();
-        this._maskStrategy = device.android && device.version[0] > 4 ?
-            new AndroidMaskStrategy(this) :
+        this._maskStrategy = isInputEventsL2Supported() ?
+            new InputEventsMaskStrategy(this) :
+            // FF, old Safari and desktop Chrome (https://bugs.chromium.org/p/chromium/issues/detail?id=947408)
             new DefaultMaskStrategy(this);
     },
 
@@ -149,8 +149,8 @@ const TextEditorMask = TextEditorBase.inherit({
     _onMouseWheel: noop,
 
     _render: function() {
-        this.callBase();
         this._renderMask();
+        this.callBase();
         this._attachMouseWheelEventHandlers();
     },
 

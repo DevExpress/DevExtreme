@@ -8,10 +8,11 @@ import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
-import { MAX_EXCEL_COLUMN_WIDTH, _getFullOptions } from 'exporter/exceljs/export_data_grid';
+import { Export } from 'exporter/exceljs/export';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
+import { ExcelJSOptionTests } from './exceljs.option.tests.js';
 
 import typeUtils from 'core/utils/type';
 import 'ui/data_grid/ui.data_grid';
@@ -229,7 +230,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
-                helper.checkColumnWidths([MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
+                helper.checkColumnWidths([Export.__internals.MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
                 done();
             });
         });
@@ -6423,68 +6424,6 @@ const moduleConfig = {
     });
 });
 
-QUnit.module('_getFullOptions', moduleConfig, () => {
-    QUnit.test('topLeftCell', function(assert) {
-        assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
-        assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
-        assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'null');
-
-        assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, '{ row: 2, column: 3 }');
-        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'A1' }).topLeftCell, { row: 1, column: 1 }, 'A1');
-        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'D38' }).topLeftCell, { row: 38, column: 4 }, 'D38');
-        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AD8' }).topLeftCell, { row: 8, column: 30 }, 'AD8');
-
-        let errorMessage;
-        try {
-            _getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AA' });
-        } catch(e) {
-            errorMessage = e.message;
-        }
-        assert.strictEqual(errorMessage, 'Invalid Address: AA', 'Exception was thrown');
-    });
-
-    QUnit.test('keepColumnWidths', function(assert) {
-        assert.deepEqual(_getFullOptions({}).keepColumnWidths, true, 'no member');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: undefined }).keepColumnWidths, true, 'undefined');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: null }).keepColumnWidths, true, 'null');
-
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: false }).keepColumnWidths, false, 'false');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: true }).keepColumnWidths, true, 'true');
-    });
-
-    QUnit.test('selectedRowsOnly', function(assert) {
-        assert.deepEqual(_getFullOptions({}).selectedRowsOnly, false, 'no member');
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: undefined }).selectedRowsOnly, false, 'undefined');
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: null }).selectedRowsOnly, false, 'null');
-
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: false }).selectedRowsOnly, false, 'false');
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: true }).selectedRowsOnly, true, 'true');
-    });
-
-    QUnit.test('autoFilterEnabled', function(assert) {
-        assert.deepEqual(_getFullOptions({}).autoFilterEnabled, false, 'no member');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: undefined }).autoFilterEnabled, false, 'undefined');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: null }).autoFilterEnabled, false, 'null');
-
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
-    });
-
-    QUnit.test('loadPanel', function(assert) {
-        const defaultLoadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
-        assert.deepEqual(_getFullOptions({}).loadPanel, defaultLoadPanel, 'no member');
-        assert.deepEqual(_getFullOptions({ loadPanel: undefined }).loadPanel, defaultLoadPanel, 'undefined');
-        assert.deepEqual(_getFullOptions({ loadPanel: null }).loadPanel, defaultLoadPanel, 'null');
-
-        assert.deepEqual(_getFullOptions({ loadPanel: {} }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, 'loadPanel: {}');
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: true } }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, '{ enabled: true } }');
-        assert.deepEqual(_getFullOptions({ loadPanel: { text: 'my text' } }).loadPanel, { enabled: true, text: 'my text' }, '{ text: my text }');
-
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
-    });
-});
-
 QUnit.module('Deprecated warnings', moduleConfig, () => {
     QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
         assert.expect(4);
@@ -6635,3 +6574,4 @@ ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
+ExcelJSOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });

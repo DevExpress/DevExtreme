@@ -2239,7 +2239,6 @@
                 opacity: 1;
                 font-weight: bold;
                 font-size: @SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE - 3px;
-                margin-top: 4px;
             }
         }
 
@@ -2300,7 +2299,12 @@
             }
 
             .dx-scheduler-group-header-content {
+                display: flex;
                 height: 40px;
+
+                > div {
+                    margin: auto;
+                }
             }
 
             .dx-scheduler-header-panel {
@@ -2717,8 +2721,15 @@
     }
 }
 
+.dx-scheduler-overlay-panel {
+    .dx-overlay-content {
+        position: relative;
+        background: #fff;
+    }
+}
+
 .dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
-.dx-scheduler .dx-scheduler-overlay-panel {
+.dx-scheduler-overlay-panel {
     .dx-overlay-content {
         box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
     }
