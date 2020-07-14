@@ -501,7 +501,6 @@ class Menu extends MenuBase {
         const $submenuTarget = $('<div>');
         const isMenuHorizontal = this._isMenuHorizontal();
 
-        const that = this;
         return {
             itemTemplate: this.option('itemTemplate'),
             target: $submenuTarget,
@@ -526,13 +525,7 @@ class Menu extends MenuBase {
             },
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
-            onItemRendered: (e) => {
-                if(that.option('onItemRendered')) {
-                    that.option('onItemRendered')(e);
-                } else if(that._eventsStrategy.hasEvent('itemRendered')) {
-                    that._eventsStrategy.fireEvent('itemRendered', [e]);
-                }
-            },
+            onItemRendered: this._nestedItemOnItemRenderedHandler.bind(this),
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
@@ -616,6 +609,18 @@ class Menu extends MenuBase {
 
     _nestedItemOnItemClickHandler(e) {
         this._actions['onItemClick'](e);
+    }
+
+    _nestedItemOnItemRenderedHandler(e) {
+        const newArg = extend(e, {
+            component: this,
+            element: this.element()
+        });
+        if(this.option('onItemRendered')) {
+            this.option('onItemRendered')(newArg);
+        } else if(this._eventsStrategy.hasEvent('itemRendered')) {
+            this._eventsStrategy.fireEvent('itemRendered', [newArg]);
+        }
     }
 
     _attachSubmenuHandlers($rootItem, submenu) {

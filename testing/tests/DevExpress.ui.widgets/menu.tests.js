@@ -2623,7 +2623,12 @@ QUnit.module('itemRendered event', () => { // T906117
     ['property', 'event'].forEach(bindingOption => {
         QUnit.test(`itemRendered callback is called for all level nodes. Binding via ${bindingOption}`, function(assert) {
             const expectedItemsArray = [];
-            const callback = (e) => expectedItemsArray.push(e.itemData.text);
+            const callback = (e) => {
+                assert.equal(e.component, menu, 'component arg is menu');
+                assert.equal(e.element, menu.element(), 'element arg is menu');
+                assert.equal($(e.itemElement).text().trim(), e.itemData.text, 'item element text is equals to the item text');
+                expectedItemsArray.push(e.itemData.text);
+            };
 
             const menu = $('#menu').dxMenu().dxMenu('instance');
             bindCallback(menu, bindingOption, callback);
