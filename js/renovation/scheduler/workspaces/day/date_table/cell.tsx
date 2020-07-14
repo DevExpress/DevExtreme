@@ -1,8 +1,9 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
+  Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 import {
   DateTableCellBase,
+  DateTableCellBaseProps,
 } from '../../base/date_table/cell';
 
 export const viewFunction = (viewModel: DayDateTableCell) => (
@@ -13,18 +14,9 @@ export const viewFunction = (viewModel: DayDateTableCell) => (
   />
 );
 
-@ComponentBindings()
-export class DayDateTableCellProps {
-  @OneWay() startDate?: Date = new Date();
-
-  @OneWay() endDate?: Date = new Date();
-
-  @Slot() children?: any;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DayDateTableCell extends JSXComponent(DayDateTableCellProps) {
+export class DayDateTableCell extends JSXComponent(DateTableCellBaseProps) {
 }

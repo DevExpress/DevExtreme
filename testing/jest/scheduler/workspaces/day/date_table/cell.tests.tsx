@@ -5,6 +5,7 @@ import {
 } from '../../../../../../js/renovation/scheduler/workspaces/day/date_table/cell';
 
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/cell', () => ({
+  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/cell'),
   DateTableCellBase: (props) => <div {...props} />,
 }));
 

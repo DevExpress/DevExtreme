@@ -57,6 +57,12 @@ describe('DayDateTableLayout', () => {
           startDate: viewCellsData[0][0].startDate,
           endDate: viewCellsData[0][0].endDate,
         });
+
+      expect(cells.at(1).props())
+        .toMatchObject({
+          startDate: viewCellsData[1][0].startDate,
+          endDate: viewCellsData[1][0].endDate,
+        });
     });
   });
 });
