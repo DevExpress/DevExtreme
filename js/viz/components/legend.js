@@ -1099,6 +1099,9 @@ extend(legendPrototype, {
             this.draw(size[0], size[1]);
             this._updated = false;
         } else {
+            this._items.forEach((item) => {
+                item.bBoxes = [];
+            });
             this._updateElementsPosition(size[0], size[1]);
         }
         const rect = this.getLayoutOptions();

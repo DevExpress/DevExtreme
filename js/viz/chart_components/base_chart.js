@@ -1103,13 +1103,16 @@ export const BaseChart = BaseWidget.inherit({
     },
 
     _change_FORCE_DRAWING: function() {
-        this.series.forEach((s) => { s.resetAnimation(); });
-        this._resetAxesAnimation();
+        this._resetComponentsAnimation();
     },
 
     _change_FORCE_FIRST_DRAWING: function() {
-        this.series.forEach((s) => { s.resetAnimation(true); });
-        this._resetAxesAnimation(true);
+        this._resetComponentsAnimation(true);
+    },
+
+    _resetComponentsAnimation: function(isFirstDrawing) {
+        this.series.forEach((s) => { s.resetAnimation(isFirstDrawing); });
+        this._resetAxesAnimation(isFirstDrawing);
     },
 
     _resetAxesAnimation: noop,

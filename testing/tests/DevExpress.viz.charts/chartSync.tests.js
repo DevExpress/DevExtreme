@@ -1320,6 +1320,42 @@ const environment = {
         assert.ok(!chart.series[1].wasAnimated, 'Series should not be animated as point animation limit is exceeded');
     });
 
+    QUnit.module('Reset animation', environment);
+
+    QUnit.test('Reset animation on first drawing', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        const chart = this.createChart({
+            series: [{ type: 'line' }],
+        });
+
+        chart._resetComponentsAnimation(true);
+
+        assert.ok(chart.series[0].resetAnimation.called);
+        assert.ok(chart.getArgumentAxis().resetAnimation.called);
+        assert.ok(chart._valueAxes[0].resetAnimation.called);
+
+        assert.equal(chart.series[0].resetAnimation.lastCall.args[0], true);
+        assert.equal(chart.getArgumentAxis().resetAnimation.lastCall.args[0], true);
+        assert.equal(chart._valueAxes[0].resetAnimation.lastCall.args[0], true);
+    });
+
+    QUnit.test('Reset animation on second drawing', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        const chart = this.createChart({
+            series: [{ type: 'line' }],
+        });
+
+        chart._resetComponentsAnimation();
+
+        assert.ok(chart.series[0].resetAnimation.called);
+        assert.ok(chart.getArgumentAxis().resetAnimation.called);
+        assert.ok(chart._valueAxes[0].resetAnimation.called);
+
+        assert.equal(chart.series[0].resetAnimation.lastCall.args[0], undefined);
+        assert.equal(chart.getArgumentAxis().resetAnimation.lastCall.args[0], undefined);
+        assert.equal(chart._valueAxes[0].resetAnimation.lastCall.args[0], undefined);
+    });
+
     QUnit.module('Life cycle', environment);
 
     QUnit.test('Dispose', function(assert) {
