@@ -43,6 +43,7 @@ describe('resizable-container', () => {
           pagerPropsProp2: 'pagerPropsProp2',
         },
         props: { contentTemplate },
+        restAttributes: { restAttribute: {} },
       } as any as ResizableContainer;
 
       const tree = shallow<typeof ResizableContainerComponent>(
@@ -52,6 +53,7 @@ describe('resizable-container', () => {
         pagerPropsProp1: 'pagerPropsProp1',
         pagerPropsProp2: 'pagerPropsProp2',
         children: [],
+        restAttribute: props.restAttributes.restAttribute,
         infoTextRef: 'infoTextRef',
         infoTextVisible: true,
         isLargeDisplayMode: true,
