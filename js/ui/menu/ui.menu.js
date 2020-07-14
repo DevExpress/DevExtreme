@@ -50,7 +50,7 @@ const DEFAULT_DELAY = {
     'hide': 300
 };
 
-const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged'];
+const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged', 'onItemRendered'];
 
 class Menu extends MenuBase {
 
@@ -612,15 +612,7 @@ class Menu extends MenuBase {
     }
 
     _nestedItemOnItemRenderedHandler(e) {
-        const newArg = extend(e, {
-            component: this,
-            element: this.element()
-        });
-        if(this.option('onItemRendered')) {
-            this.option('onItemRendered')(newArg);
-        } else if(this._eventsStrategy.hasEvent('itemRendered')) {
-            this._eventsStrategy.fireEvent('itemRendered', [newArg]);
-        }
+        this._actions['onItemRendered'](e);
     }
 
     _attachSubmenuHandlers($rootItem, submenu) {
