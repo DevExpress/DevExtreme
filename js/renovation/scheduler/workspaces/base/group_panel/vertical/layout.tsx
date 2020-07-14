@@ -60,7 +60,6 @@ export class GroupPanelVerticalLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
 })
 export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
   get style(): object {
