@@ -1,4 +1,4 @@
-import { getKeyByDateAndGroup } from './utils';
+import { getKeyByDateAndGroup } from '../../../../js/renovation/scheduler/workspaces/utils';
 
 describe('Workspaces utils', () => {
   describe('getKeyByDateAndGroup', () => {
