@@ -1,4 +1,6 @@
 /* global initTree */
+import ArrayStore from 'data/array_store';
+import { DataSource } from 'data/data_source/data_source';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import $ from 'jquery';
 QUnit.module('Initialization', () => {
@@ -24,19 +26,21 @@ QUnit.module('Initialization', () => {
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
         [false, true].forEach((virtualModeEnabled) => {
-            [0, -1, 1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
-                QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
-                    const options = createOptions({
-                        dataSourceOption, virtualModeEnabled, rootValue, testItems: [
-                            { id: 1, text: 'item1', parentId: rootValue },
-                            { id: 2, text: 'item2', parentId: 1 }]
+            ['single', 'multiple'].forEach(selectionMode => {
+                [0, -1, 1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
+                    QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
+                        const options = createOptions({
+                            selectionMode, dataSourceOption, virtualModeEnabled, rootValue, testItems: [
+                                { id: 1, text: 'item1', parentId: rootValue },
+                                { id: 2, text: 'item2', parentId: 1 }]
+                        });
+
+                        const wrapper = new TreeViewTestWrapper(options);
+                        const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                        assert.notEqual(wrapper.instance, undefined);
+                        assert.notEqual($item1.length, 0, 'item1 must be rendered');
                     });
-
-                    const wrapper = new TreeViewTestWrapper(options);
-                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
-
-                    assert.notEqual(wrapper.instance, undefined);
-                    assert.notEqual($item1.length, 0, 'item1 must be rendered');
                 });
             });
 
@@ -71,6 +75,31 @@ QUnit.module('Initialization', () => {
                         assert.equal($rootNode.length, 0);
                     }
                     wrapper.instance.dispose();
+                });
+            });
+        });
+    });
+
+    [true, false].forEach(virtualModeEnabled => {
+        [null, -1, 0, ''].forEach(rootValue => {
+            ['single', 'multiple'].forEach(selectionMode => {
+                QUnit.test(`Adding new item to store with ${rootValue} value in parentId`, function(assert) { // T906787
+                    const store = new ArrayStore({ data: [ { id: 1, parentId: rootValue, text: 'item1' } ] });
+                    const wrapper = new TreeViewTestWrapper({
+                        selectionMode,
+                        virtualModeEnabled,
+                        rootValue: rootValue,
+                        dataStructure: 'plain',
+                        dataSource: new DataSource({
+                            store: store,
+                        }),
+                    });
+
+                    store.insert({ id: 2, parentId: rootValue, text: 'item2' });
+                    const nodes = wrapper.getNodes();
+                    assert.equal(nodes.length, 2);
+                    assert.equal(nodes.get(0).innerText, 'item1');
+                    assert.equal(nodes.get(1).innerText, 'item2');
                 });
             });
         });
