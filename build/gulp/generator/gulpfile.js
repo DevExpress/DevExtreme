@@ -23,7 +23,8 @@ const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 const knownErrors = [
     'Cannot find module \'preact\'',
     'Cannot find module \'preact/hooks\'',
-    'Cannot find module \'preact/compat\''
+    'Cannot find module \'preact/compat\'',
+    'js/renovation/preact_wrapper/'
 ];
 
 function generateJQueryComponents(isWatch) {
