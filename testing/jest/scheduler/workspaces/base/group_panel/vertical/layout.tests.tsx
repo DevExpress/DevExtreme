@@ -4,9 +4,13 @@ import {
   viewFunction as LayoutView,
 } from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/layout';
 import { Row } from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/row';
+import { addHeightToStyle } from '../../../../../../../js/renovation/scheduler/workspaces/utils';
 
 jest.mock('../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/row', () => ({
   Row: () => null,
+}));
+jest.mock('../../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+  addHeightToStyle: jest.fn(() => 'style'),
 }));
 
 describe('GroupPanel Vertical Layout', () => {
@@ -96,42 +100,16 @@ describe('GroupPanel Vertical Layout', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('style', () => {
-        it('should return an empty obbject if height is undefined', () => {
-          const layout = new Layout({});
-
-          expect(layout.style)
-            .toEqual({});
-        });
-
-        it('should return ucorrect style if height is provided', () => {
+        it('should call addHeightToStyle with proper parameters', () => {
+          const style = { width: '555px', height: '666px' };
           const layout = new Layout({ height: 500 });
+          layout.restAttributes = { style };
 
           expect(layout.style)
-            .toEqual({
-              height: '500px',
-            });
-        });
+            .toBe('style');
 
-        it('should spread styles', () => {
-          const layout = new Layout({ height: 500 });
-          layout.restAttributes = { style: { width: '300px' } };
-
-          expect(layout.style)
-            .toEqual({
-              height: '500px',
-              width: '300px',
-            });
-        });
-
-        it('should spread styles when height is defined in restAttributes', () => {
-          const layout = new Layout({ height: 500 });
-          layout.restAttributes = { style: { width: '300px', height: '400px' } };
-
-          expect(layout.style)
-            .toEqual({
-              height: '500px',
-              width: '300px',
-            });
+          expect(addHeightToStyle)
+            .toHaveBeenCalledWith(500, style);
         });
       });
 

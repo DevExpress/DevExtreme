@@ -7,3 +7,14 @@ export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
     keyFromDate,
   );
 };
+
+export const addHeightToStyle = (
+  height?: number, style?: Partial<CSSStyleDeclaration>,
+): Partial<CSSStyleDeclaration> => {
+  const nextStyle: Partial<CSSStyleDeclaration> = style || {};
+
+  return {
+    ...nextStyle,
+    height: height ? `${height}px` : nextStyle.height,
+  };
+};

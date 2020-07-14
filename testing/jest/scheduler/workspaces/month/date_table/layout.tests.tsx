@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/layout';
 import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
@@ -8,6 +9,9 @@ import { getKeyByDateAndGroup } from '../../../../../../js/renovation/scheduler/
 
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell', () => ({
   MonthDateTableCell: () => null,
+}));
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
+  Row: ({ children, ...restProps }) => <div {...restProps}>{children}</div>,
 }));
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
   getKeyByDateAndGroup: jest.fn(),

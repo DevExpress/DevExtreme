@@ -3,6 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Group, GroupRenderItem, GroupItem } from '../../../types';
 import { Row } from './row';
+import { addHeightToStyle } from '../../../utils';
 
 const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
   let repeatCount = 1;
@@ -62,14 +63,11 @@ export class GroupPanelVerticalLayoutProps {
   jQuery: { register: true },
 })
 export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
-  get style() {
+  get style(): object {
     const { height } = this.props;
-    const style = this.restAttributes.style || {};
+    const { style } = this.restAttributes;
 
-    return {
-      ...style,
-      height: height ? `${height}px` : style.height,
-    };
+    return addHeightToStyle(height, style);
   }
 
   get groupsRenderData(): GroupRenderItem[][] {

@@ -1,6 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay,
 } from 'devextreme-generator/component_declaration/common';
+import { addHeightToStyle } from '../utils';
 
 export const viewFunction = (viewModel: Row) => (
   <tr
@@ -27,9 +28,10 @@ export class RowProps {
   view: viewFunction,
 })
 export class Row extends JSXComponent(RowProps) {
-  get style() {
+  get style(): object {
     const { height } = this.props;
+    const { style } = this.restAttributes;
 
-    return { height: height ? `${height}px` : undefined };
+    return addHeightToStyle(height, style);
   }
 }

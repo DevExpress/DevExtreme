@@ -3,6 +3,11 @@ import { shallow } from 'enzyme';
 import {
   Row, viewFunction as RowView,
 } from '../../../../../js/renovation/scheduler/workspaces/base/row';
+import { addHeightToStyle } from '../../../../../js/renovation/scheduler/workspaces/utils';
+
+jest.mock('../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+  addHeightToStyle: jest.fn(() => 'style'),
+}));
 
 describe('RowBase', () => {
   describe('Render', () => {
@@ -38,20 +43,16 @@ describe('RowBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('style', () => {
-        it('should return an empty obbject if height is undefined', () => {
-          const row = new Row({});
-
-          expect(row.style)
-            .toEqual({});
-        });
-
-        it('should return ucorrect style if height is provided', () => {
+        it('should call addHeightToStyle with proper parameters', () => {
+          const style = { width: '555px', height: '666px' };
           const row = new Row({ height: 500 });
+          row.restAttributes = { style };
 
           expect(row.style)
-            .toEqual({
-              height: '500px',
-            });
+            .toBe('style');
+
+          expect(addHeightToStyle)
+            .toHaveBeenCalledWith(500, style);
         });
       });
     });
