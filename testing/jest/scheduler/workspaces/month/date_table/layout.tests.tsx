@@ -53,10 +53,6 @@ describe('MonthDateTableLayout', () => {
       const rows = layout.find(Row);
       expect(rows)
         .toHaveLength(2);
-      expect(rows.at(0).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
-      expect(rows.at(1).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
     });
 
     it('should render cells and pass correct props to them', () => {

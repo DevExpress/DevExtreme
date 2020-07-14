@@ -4,10 +4,10 @@ import {
 
 export const viewFunction = (viewModel: Row) => (
   <tr
-    className={viewModel.props.className}
-    style={viewModel.style}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    className={`${viewModel.props.className} dx-scheduler-date-table-row`}
+    style={viewModel.style}
   >
     {viewModel.props.children}
   </tr>
@@ -17,7 +17,7 @@ export const viewFunction = (viewModel: Row) => (
 export class RowProps {
   @OneWay() height?: number;
 
-  @OneWay() className?: string;
+  @OneWay() className = '';
 
   @Slot() children?: any;
 }
