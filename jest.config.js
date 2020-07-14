@@ -32,7 +32,7 @@ module.exports = {
     ],
     testMatch: [
         '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)',
-        '<rootDir>/js/renovation/**/*.test.[jt]s?(x)'
+        '<rootDir>/js/renovation/**/__tests__/**/*.test.[jt]s?(x)'
     ],
     transform: {
         'test_components.+\\.tsx$': path.resolve('./testing/jest/utils/transformers/declaration-transformer.js'),
