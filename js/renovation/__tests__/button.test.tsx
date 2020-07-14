@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { mount, shallow } from 'enzyme';
-import devices from '../../js/core/devices';
-import { convertRulesToOptions } from '../../js/core/options/utils';
-import themes from '../../js/ui/themes';
+import devices from '../../core/devices';
+import { convertRulesToOptions } from '../../core/options/utils';
+import themes from '../../ui/themes';
 import {
   clear as clearEventHandlers,
   defaultEvent,
@@ -12,15 +12,15 @@ import {
 } from './utils/events-mock';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
-} from '../../js/renovation/button';
-import { Widget } from '../../js/renovation/widget';
-import { Icon } from '../../js/renovation/icon';
-import { InkRipple } from '../../js/renovation/ink-ripple';
+} from '../button';
+import { Widget } from '../widget';
+import { Icon } from '../icon';
+import { InkRipple } from '../ink-ripple';
 
 type Mock = jest.Mock;
 
-jest.mock('../../js/core/devices', () => {
-  const actualDevices = require.requireActual('../../js/core/devices').default;
+jest.mock('../../core/devices', () => {
+  const actualDevices = require.requireActual('../../core/devices').default;
   const isSimulator = actualDevices.isSimulator.bind(actualDevices);
   const real = actualDevices.real.bind(actualDevices);
 
@@ -30,8 +30,8 @@ jest.mock('../../js/core/devices', () => {
   return actualDevices;
 });
 
-jest.mock('../../js/ui/themes', () => ({
-  ...require.requireActual('../../js/ui/themes'),
+jest.mock('../../ui/themes', () => ({
+  ...require.requireActual('../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
 
