@@ -11,7 +11,7 @@ export const viewFunction = (viewModel: Row) => (
     {...viewModel.restAttributes}
   >
     {viewModel.props.groupItems!.map(({
-      text, id, data, key,
+      text, id, data, key, color,
     }, index) => (
       <GroupPanelVerticalCell
         key={key}
@@ -19,6 +19,7 @@ export const viewFunction = (viewModel: Row) => (
         id={id}
         data={data}
         index={index}
+        color={color}
         cellTemplate={viewModel.props.cellTemplate}
       />
     ))}

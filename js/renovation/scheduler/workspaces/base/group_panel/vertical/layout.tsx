@@ -64,8 +64,12 @@ export class GroupPanelVerticalLayoutProps {
 export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
   get style() {
     const { height } = this.props;
+    const style = this.restAttributes.style || {};
 
-    return { height: height ? `${height}px` : undefined };
+    return {
+      ...style,
+      height: height ? `${height}px` : style.height,
+    };
   }
 
   get groupsRenderData(): GroupRenderItem[][] {
