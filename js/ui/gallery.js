@@ -572,11 +572,39 @@ const Gallery = CollectionWidget.inherit({
             .addClass(GALLERY_INDICATOR_CLASS)
             .appendTo(this._$wrapper);
 
+        const isIndicatorEnabled = this.option('indicatorEnabled');
+
         for(let i = 0; i < this._pagesCount(); i++) {
-            $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
+            const $indicatorItem = $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
+
+            if(isIndicatorEnabled) {
+                this._attachIndicatorClickHandler($indicatorItem, i);
+            }
         }
 
         this._renderSelectedPageIndicator();
+    },
+
+    _attachIndicatorClickHandler: function($element, index) {
+        eventsEngine.on($element, eventUtils.addNamespace(clickEvent.name, this.NAME), function(event) {
+            this._indicatorSelectHandler(event, index);
+        }.bind(this));
+    },
+
+    _detachIndicatorClickHandler: function($element) {
+        eventsEngine.off($element, eventUtils.addNamespace(clickEvent.name, this.NAME));
+    },
+
+    _toggleIndicatorInteraction: function(clickEnabled) {
+        const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR) || [];
+
+        if($indicatorItems.length) {
+            $indicatorItems.each(function(index, element) {
+                clickEnabled ?
+                    this._attachIndicatorClickHandler($(element), index) :
+                    this._detachIndicatorClickHandler($(element));
+            }.bind(this));
+        }
     },
 
     _cleanIndicators: function() {
@@ -649,30 +677,19 @@ const Gallery = CollectionWidget.inherit({
             onEnd: this._swipeEndHandler.bind(this),
             itemSizeFunc: this._elementWidth.bind(this)
         });
-
-        const indicatorSelectAction = this._createAction(this._indicatorSelectHandler);
-
-        eventsEngine.off(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
-        eventsEngine.on(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
-            indicatorSelectAction({ event: e });
-        });
     },
 
-    _indicatorSelectHandler: function(args) {
-        const e = args.event;
-        const instance = args.component;
-
-        if(!instance.option('indicatorEnabled')) {
+    _indicatorSelectHandler: function(e, indicatorIndex) {
+        if(!this.option('indicatorEnabled')) {
             return;
         }
 
-        const indicatorIndex = $(e.target).index();
-        const itemIndex = instance._fitPaginatedIndex(indicatorIndex * instance._itemsPerPage());
+        const itemIndex = this._fitPaginatedIndex(indicatorIndex * this._itemsPerPage());
 
-        instance._needLongMove = true;
+        this._needLongMove = true;
 
-        instance.option('selectedIndex', itemIndex);
-        instance._loadNextPageIfNeeded(itemIndex);
+        this.option('selectedIndex', itemIndex);
+        this._loadNextPageIfNeeded(itemIndex);
     },
 
     _renderNavButtons: function() {
@@ -1104,8 +1121,10 @@ const Gallery = CollectionWidget.inherit({
                 }
                 break;
             case 'swipeEnabled':
-            case 'indicatorEnabled':
                 this._renderUserInteraction();
+                break;
+            case 'indicatorEnabled':
+                this._toggleIndicatorInteraction(args.value);
                 break;
             default:
                 this.callBase(args);
