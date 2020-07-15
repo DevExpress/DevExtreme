@@ -4,6 +4,7 @@ import {
 
 import PagerProps from './common/pager_props';
 import { Pager } from './pager';
+import { combineClasses } from '../utils/combine_classes';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -43,6 +44,9 @@ export class GridPager extends JSXComponent(GridPagerProps) {
   }
 
   get className(): string {
-    return this.props.className ? `${this.props.className} dx-gridpager` : ' dx-gridpager';
+    return combineClasses({
+      'dx-datagrid-pager': true,
+      [this.props.className!]: !!this.props.className,
+    });
   }
 }

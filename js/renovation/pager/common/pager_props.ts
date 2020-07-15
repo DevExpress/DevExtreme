@@ -5,7 +5,7 @@ import messageLocalization from '../../../localization/message';
 
 @ComponentBindings()
 export default class PagerProps {
-  @OneWay() className?: string = '';
+  @OneWay() className?: string;
 
   @OneWay() showInfo?: boolean = false;
 
