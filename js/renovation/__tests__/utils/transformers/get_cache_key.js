@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const crypto = require('crypto');
 
 module.exports = function (fileData, filePath, configStr, transformerFileSrc) {
@@ -11,4 +12,4 @@ module.exports = function (fileData, filePath, configStr, transformerFileSrc) {
     .update('\0', 'utf8')
     .update(configStr)
     .digest('hex');
-}
+};

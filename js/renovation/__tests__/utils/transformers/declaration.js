@@ -1,24 +1,22 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { compileCode } = require('devextreme-generator/component-compiler');
-const { getTsConfig } = require("devextreme-generator/utils/typescript-utils");
+const { getTsConfig } = require('devextreme-generator/utils/typescript-utils');
 const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');
-const getCacheKey = require("./getCacheKey");
+const tsJest = require('ts-jest');
+const getCacheKey = require('./get_cache_key');
 
 const THIS_FILE = fs.readFileSync(__filename);
-const tsJest = require('ts-jest');
-
 const jestTransformer = tsJest.createTransformer();
-
 const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/preact.tsconfig.json';
-
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
 generator.options = {
-    defaultOptionsModule: 'js/core/options/utils',
-    jqueryComponentRegistratorModule: 'js/core/component_registrator',
-    jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component'
+  defaultOptionsModule: 'js/core/options/utils',
+  jqueryComponentRegistratorModule: 'js/core/component_registrator',
+  jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
 };
 
 module.exports = {
@@ -37,6 +35,7 @@ module.exports = {
         }
 
         return jestTransformer.process(
+          // eslint-disable-next-line spellcheck/spell-checker
           ts.transpileModule(
             `${result[0].code}
                 ${result[1].code
