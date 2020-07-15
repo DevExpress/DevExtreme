@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable-next-line import/named */
 import DxNumberBox, { Options } from '../ui/number_box';
-import { WidgetProps } from './widget';
+import { WidgetProps } from './common/widget';
 
 export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: NumberBox) => (
   <div

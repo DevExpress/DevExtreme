@@ -13,9 +13,9 @@ import {
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';
-import { Widget } from '../widget';
-import { Icon } from '../icon';
-import { InkRipple } from '../ink-ripple';
+import { Widget } from '../common/widget';
+import { Icon } from '../common/icon';
+import { InkRipple } from '../common/ink_ripple';
 
 type Mock = jest.Mock;
 

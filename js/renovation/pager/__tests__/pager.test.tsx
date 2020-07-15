@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { PagerContentComponent } from '../content';
 import { Pager as PagerComponent } from '../pager';
 
-jest.mock('../../select-box', () => ({ __esModule: true, SelectBox: jest.fn() }));
+jest.mock('../../select_box', () => ({ __esModule: true, SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {

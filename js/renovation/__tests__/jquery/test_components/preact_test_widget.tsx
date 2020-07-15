@@ -11,7 +11,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import {
   keyboard,
-} from '../../../js/events/short';
+} from '../../../../events/short';
 
 export const view = (viewModel: PreactTestWidget) => (
   <div
