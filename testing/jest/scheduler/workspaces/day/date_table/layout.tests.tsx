@@ -4,6 +4,7 @@ import { DateTableRow as Row } from '../../../../../../js/renovation/scheduler/w
 import {
   DayDateTableCell as Cell,
 } from '../../../../../../js/renovation/scheduler/workspaces/day/date_table/cell';
+import { getKeyByDateAndGroup } from '../../../../../../js/renovation/scheduler/workspaces/utils';
 
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row', () => ({
   ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row'),
@@ -12,17 +13,26 @@ jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/day/date_table/cell', () => ({
   DayDateTableCell: () => null,
 }));
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+  getKeyByDateAndGroup: jest.fn(),
+}));
 
 describe('DayDateTableLayout', () => {
   describe('Render', () => {
-    const viewCellsData = [
-      [{ startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30) }],
-      [{ startDate: new Date(2020, 6, 9, 0, 30), endDate: new Date(2020, 6, 9, 1) }],
-    ];
+    const viewCellsData = {
+      groupedData: [{
+        dateTable: [
+          [{ startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30), groups: 1 }],
+          [{ startDate: new Date(2020, 6, 9, 0, 30), endDate: new Date(2020, 6, 9, 1), groups: 2 }],
+        ],
+      }],
+    };
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
       props: { ...viewModel.props, viewCellsData },
     } as any) as any);
+
+    afterEach(() => jest.resetAllMocks());
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
@@ -54,15 +64,45 @@ describe('DayDateTableLayout', () => {
 
       expect(cells.at(0).props())
         .toMatchObject({
-          startDate: viewCellsData[0][0].startDate,
-          endDate: viewCellsData[0][0].endDate,
+          startDate: viewCellsData.groupedData[0].dateTable[0][0].startDate,
+          endDate: viewCellsData.groupedData[0].dateTable[0][0].endDate,
+          groups: viewCellsData.groupedData[0].dateTable[0][0].groups,
         });
 
       expect(cells.at(1).props())
         .toMatchObject({
-          startDate: viewCellsData[1][0].startDate,
-          endDate: viewCellsData[1][0].endDate,
+          startDate: viewCellsData.groupedData[0].dateTable[1][0].startDate,
+          endDate: viewCellsData.groupedData[0].dateTable[1][0].endDate,
+          groups: viewCellsData.groupedData[0].dateTable[1][0].groups,
         });
+    });
+
+    it('should call getKeyByDateAndGroup with correct parameters', () => {
+      render({});
+
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenCalledTimes(4);
+
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenNthCalledWith(
+          1, viewCellsData.groupedData[0].dateTable[0][0].startDate,
+          viewCellsData.groupedData[0].dateTable[0][0].groups,
+        );
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenNthCalledWith(
+          2, viewCellsData.groupedData[0].dateTable[0][0].startDate,
+          viewCellsData.groupedData[0].dateTable[0][0].groups,
+        );
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenNthCalledWith(
+          3, viewCellsData.groupedData[0].dateTable[1][0].startDate,
+          viewCellsData.groupedData[0].dateTable[1][0].groups,
+        );
+      expect(getKeyByDateAndGroup)
+        .toHaveBeenNthCalledWith(
+          4, viewCellsData.groupedData[0].dateTable[1][0].startDate,
+          viewCellsData.groupedData[0].dateTable[1][0].groups,
+        );
     });
   });
 });

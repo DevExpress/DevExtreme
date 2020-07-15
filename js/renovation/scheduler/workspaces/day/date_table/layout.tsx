@@ -3,7 +3,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow } from '../../base/date_table/row';
 import { DayDateTableCell as Cell } from './cell';
-import { ViewCellData } from '../../types';
+import { GroupedViewData, ViewCellData } from '../../types';
+import { getKeyByDateAndGroup } from '../../utils';
 
 export const viewFunction = (viewModel: DayDateTableLayout) => (
   <table
@@ -12,29 +13,32 @@ export const viewFunction = (viewModel: DayDateTableLayout) => (
     {...viewModel.restAttributes}
   >
     <tbody>
-      {viewModel.props.viewCellsData!.map((cellsRow) => (
-        <DateTableRow
-          key={cellsRow[0].startDate.toString()}
-        >
-          {cellsRow.map(({
-            startDate,
-            endDate,
-          }: ViewCellData) => (
-            <Cell
-              startDate={startDate}
-              endDate={endDate}
-              key={startDate.toString()}
-            />
-          ))}
-        </DateTableRow>
-      ))}
+      {viewModel.props.viewCellsData!
+        .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
+          <DateTableRow
+            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+          >
+            {cellsRow.map(({
+              startDate,
+              endDate,
+              groups,
+            }: ViewCellData) => (
+              <Cell
+                startDate={startDate}
+                endDate={endDate}
+                groups={groups}
+                key={getKeyByDateAndGroup(startDate, groups)}
+              />
+            ))}
+          </DateTableRow>
+        )))}
     </tbody>
   </table>
 );
 
 @ComponentBindings()
 export class DayDateTableLayoutProps {
-  @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+  @OneWay() viewCellsData?: GroupedViewData;
 
   @OneWay() className?: string;
 }
