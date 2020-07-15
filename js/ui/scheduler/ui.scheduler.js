@@ -2160,6 +2160,8 @@ class Scheduler extends Widget {
                 }
                 resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
             }
+
+            appointment.initialStartDate = appointment.startDate;
             appointment.startDate = dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
 
             return appointment;
