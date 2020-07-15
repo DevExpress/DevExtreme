@@ -65,24 +65,25 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             return super._getItemPosition(appointment);
         }
 
-
-        const position = this._getAppointmentCoordinates(appointment);
+        const settings = this._getAppointmentCoordinates(appointment);
         let result = [];
 
-        for(let j = 0; j < position.length; j++) {
-            const height = this.calculateAppointmentHeight(appointment, position[j], isRecurring);
-            const width = this.calculateAppointmentWidth(appointment, position[j], isRecurring);
+        for(let j = 0; j < settings.length; j++) {
+            const currentSetting = settings[j];
+            const height = this.calculateAppointmentHeight(appointment, currentSetting, isRecurring);
+            const width = this.calculateAppointmentWidth(appointment, currentSetting, isRecurring);
+
             let resultHeight = height;
             let appointmentReduced = null;
             let multiDaysAppointmentParts = [];
-            const currentMaxAllowedPosition = position[j].vMax;
+            const currentMaxAllowedPosition = currentSetting.vMax;
 
-            if(this._isMultiDayAppointment(position[j], height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
-                if(dateUtils.sameDate(appointmentStartDate, position[j].startDate) || isRecurring) {
+            if(this._isMultiDayAppointment(currentSetting, height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
+                if(dateUtils.sameDate(appointmentStartDate, currentSetting.info.appointment.startDate) || isRecurring) {
                     appointmentReduced = 'head';
 
                     resultHeight = this._reduceMultiDayAppointment(height, {
-                        top: position[j].top,
+                        top: currentSetting.top,
                         bottom: currentMaxAllowedPosition
                     });
 
@@ -90,23 +91,23 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                         sourceAppointmentHeight: height,
                         reducedHeight: resultHeight,
                         width: width
-                    }, position[j]);
+                    }, currentSetting);
                 } else {
                     appointmentReduced = 'tail';
                 }
             }
 
-            extend(position[j], {
+            extend(currentSetting, {
                 height: resultHeight,
                 width: width,
                 allDay: allDay,
                 originalAppointmentStartDate: adapter.startDate, // TODO: remove
                 originalAppointmentEndDate: adapter.endDate, // TODO: remove
-                endDate: this.endDate(appointment, position[j], isRecurring),
+                endDate: this.endDate(appointment, currentSetting, isRecurring),
                 appointmentReduced: appointmentReduced
             });
 
-            result = this._getAppointmentPartsPosition(multiDaysAppointmentParts, position[j], result);
+            result = this._getAppointmentPartsPosition(multiDaysAppointmentParts, currentSetting, result);
         }
 
         return result;
