@@ -48,9 +48,7 @@ describe('TooltipItemLayout', () => {
     // Have to use JSX because Fragment causes errors
     const render = (viewModel) => shallow(
       <TooltipItemLayoutView
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...defaultViewModel}
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel}
         props={{ ...defaultProps, ...viewModel.props }}
       /> as any,
@@ -142,7 +140,6 @@ describe('TooltipItemLayout', () => {
       const renderWithTemplate = () => shallow(
         <TooltipItemLayoutView
           props={{ ...defaultProps, itemContentTemplate: template }}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...defaultViewModel}
           currentAppointment={currentAppointment}
         />,
@@ -173,7 +170,6 @@ describe('TooltipItemLayout', () => {
         const tooltipItemLayout = shallow(
           <TooltipItemLayoutView
             props={{ ...defaultProps }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...defaultViewModel}
           />,
         );
