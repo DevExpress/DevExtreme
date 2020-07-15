@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { ErrorMessage } from '../../js/renovation/error-message';
+import { ErrorMessage } from '../error_message';
 
 describe('ErrorMessage', () => {
   describe('Props', () => {

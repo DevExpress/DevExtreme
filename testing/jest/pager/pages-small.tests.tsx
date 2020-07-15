@@ -2,9 +2,9 @@ import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../../../js/renovation/pager/pages/small';
 import getElementComputedStyle from '../../../js/renovation/pager/utils/get_computed_style';
-import { NumberBox } from '../../../js/renovation/number-box';
+import { NumberBox } from '../../../js/renovation/number_box';
 
-jest.mock('../../../js/renovation/number-box', () => ({ __esModule: true, NumberBox: jest.fn() }));
+jest.mock('../../../js/renovation/number_box', () => ({ __esModule: true, NumberBox: jest.fn() }));
 jest.mock('../../../js/renovation/pager/pages/page', () => ({ __esModule: true, Page: jest.fn() }));
 jest.mock('../../../js/renovation/pager/utils/get_computed_style');
 
