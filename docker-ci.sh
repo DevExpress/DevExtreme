@@ -180,12 +180,15 @@ function run_test_testcafe {
 }
 
 function run_test_jest {
-    export DEVEXTREME_TEST_CI=true
-
     npm i
     npx gulp localization
-    npx gulp generate-components
     npm run test-jest
+}
+
+function run_native_components {
+    npm i
+    npx gulp localization
+    npx gulp react-compilation-check
 }
 
 function run_test_scss {

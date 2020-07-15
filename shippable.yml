@@ -45,6 +45,7 @@ env:
     - TARGET=test_testcafe COMPONENT=editors
     - TARGET=test_testcafe COMPONENT=navigation
     - TARGET=test_jest
+    - TARGET=native_components
     - TARGET=test_scss
 
 build:
