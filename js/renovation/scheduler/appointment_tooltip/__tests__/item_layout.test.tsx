@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { Fragment } from 'devextreme-generator/component_declaration/common';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
