@@ -6,22 +6,33 @@ import {
   OneWay,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
-
 import { Page, PageProps } from './page';
+
+function isObject<T>(object: string| T): object is T {
+  return typeof object === 'object';
+}
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({ pages }: PagesLarge) => {
-  const PagesMarkup = pages.map((pageProps) => (pageProps !== null
+  const PagesMarkup = pages.map((pagePropsOrDelimiterKey) => (isObject(pagePropsOrDelimiterKey)
     ? (
       <Page
-        key={pageProps.index}
-        index={pageProps.index}
-        selected={pageProps.selected}
-        onClick={pageProps.onClick}
+        key={pagePropsOrDelimiterKey.index}
+        index={pagePropsOrDelimiterKey.index}
+        selected={pagePropsOrDelimiterKey.selected}
+        onClick={pagePropsOrDelimiterKey.onClick}
       />
     )
-    : <div key="delimiter" className={PAGER_PAGE_SEPARATOR_CLASS}>. . .</div>));
+    : (
+      <div
+        key={pagePropsOrDelimiterKey as string}
+        className={PAGER_PAGE_SEPARATOR_CLASS}
+      >
+        . . .
+      </div>
+    )
+  ));
   return (<Fragment>{PagesMarkup}</Fragment>);
 };
 
@@ -39,13 +50,13 @@ export class PagesLargeProps {
 }
 
 const PAGES_LIMITER = 4;
-type PageType = Partial<PageProps> | null;
+type PageType = Partial<PageProps> | 'low' | 'high';
 type SlidingWindowState = {
   indexesForReuse: number[];
   slidingWindowIndexes: number[];
 };
-
-type PageIndexes = (number | null)[];
+type PageIndex = number | 'low' | 'high';
+type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
 function getDelimiterType(
   startIndex: number, slidingWindowSize: number, pageCount: number,
@@ -65,13 +76,13 @@ function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[],
   if (delimiter === 'none') {
     pageIndexes = [...slidingWindowIndexes];
   } else if (delimiter === 'both') {
-    pageIndexes = [0, null, ...slidingWindowIndexes, null, pageCount - 1];
+    pageIndexes = [0, 'low', ...slidingWindowIndexes, 'high', pageCount - 1];
     indexesForReuse = slidingWindowIndexes.slice(1, -1);
   } else if (delimiter === 'high') {
-    pageIndexes = [0, ...slidingWindowIndexes, null, pageCount - 1];
+    pageIndexes = [0, ...slidingWindowIndexes, 'high', pageCount - 1];
     indexesForReuse = slidingWindowIndexes.slice(0, -1);
   } else if (delimiter === 'low') {
-    pageIndexes = [0, null, ...slidingWindowIndexes, pageCount - 1];
+    pageIndexes = [0, 'low', ...slidingWindowIndexes, pageCount - 1];
     indexesForReuse = slidingWindowIndexes.slice(1);
   }
   return {
@@ -94,14 +105,19 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 export class PagesLarge extends JSXComponent(PagesLargeProps) {
   get pages(): PageType[] {
     const { pageIndex } = this.props as Required<PagesLargeProps>;
-    const createPage = (index = 0): PageType => ({
-      index,
-      onClick: () => this.onPageClick(index),
-      selected: pageIndex === index,
-    } as PageType);
+    const createPage = (index: PageIndex): PageType => {
+      if (index === 'low' || index === 'high') {
+        return index;
+      }
+      return {
+        index,
+        onClick: (): void => this.onPageClick(index),
+        selected: pageIndex === index,
+      };
+    };
     const rtlPageIndexes = this.props.rtlEnabled
       ? [...this.pageIndexes].reverse() : this.pageIndexes;
-    return rtlPageIndexes.map((index): PageType => (index === null ? null : createPage(index)));
+    return rtlPageIndexes.map((index): PageType => createPage(index));
   }
 
   canReuseSlidingWindow(currentPageCount: number, pageIndex = 0): boolean {
