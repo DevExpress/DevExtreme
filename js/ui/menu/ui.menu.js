@@ -525,7 +525,7 @@ class Menu extends MenuBase {
             },
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
-            onItemRendered: this._nestedItemOnItemRenderedHandler.bind(this),
+            onItemRendered: (e) => this._actions['onItemRendered'](e),
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
@@ -609,10 +609,6 @@ class Menu extends MenuBase {
 
     _nestedItemOnItemClickHandler(e) {
         this._actions['onItemClick'](e);
-    }
-
-    _nestedItemOnItemRenderedHandler(e) {
-        this._actions['onItemRendered'](e);
     }
 
     _attachSubmenuHandlers($rootItem, submenu) {
