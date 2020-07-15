@@ -1,25 +1,36 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount, shallow } from 'enzyme';
-import DxNumberBox from '../../ui/number_box';
-import { viewFunction as NumberBoxView, NumberBoxProps, NumberBox } from '../number_box';
+import DxDataGrid from '../../../ui/data_grid';
+import { viewFunction as DataGridView, DataGrid } from '../data_grid';
+import { DataGridProps } from '../props';
 
-jest.mock('../../ui/number_box');
+const mockDispose = jest.fn();
+const mockOption = jest.fn();
 
-describe('NumberBox', () => {
+jest.mock('../../../ui/data_grid', () => {
+  const MockDxDataGrid = jest.fn().mockImplementation(() => ({
+    dispose: mockDispose,
+    option: mockOption,
+  }));
+  (MockDxDataGrid as any).getInstance = jest.fn();
+  return MockDxDataGrid;
+});
+
+describe('DataGrid', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('View', () => {
     it('default render', () => {
       const widgetRef = createRef();
       const props = {
-        props: new NumberBoxProps(),
+        props: new DataGridProps(),
         widgetRef,
         restAttributes: { restAttributes: true },
-      } as any as Partial<NumberBox>;
-      const tree = mount<typeof NumberBoxView>(<NumberBoxView {...props as any} /> as any);
+      } as any as Partial<DataGrid>;
+      const tree = mount(<DataGridView {...props as any} /> as any);
 
       expect(tree.find('div').props()).toEqual({
         className: '',
@@ -33,61 +44,36 @@ describe('NumberBox', () => {
         props: {
           className: 'custom-class',
         },
-      } as any as Partial<NumberBox>;
+      } as any as Partial<DataGrid>;
 
-      const tree = shallow<NumberBox>(<NumberBoxView {...props as any} /> as any);
+      const tree = shallow<DataGrid>(<DataGridView {...props as any} /> as any);
 
       expect(tree.props().className).toEqual('custom-class');
     });
   });
 
   describe('Logic', () => {
-    it('getHtmlElement', () => {
-      const widgetRef = {} as HTMLDivElement;
-      const component = new NumberBox({});
-      component.widgetRef = widgetRef;
-
-      expect(component.getHtmlElement()).toEqual(widgetRef);
-    });
-
     describe('properties', () => {
-      it('picks props except valueChange', () => {
-        const component = new NumberBox({
-          valueChange: () => { },
+      it('picks props', () => {
+        const dataSource = [];
+        const component = new DataGrid({
+          dataSource,
           tabIndex: 2,
           disabled: true,
         });
 
         const { properties } = component;
 
-        expect('valueChange' in properties).toStrictEqual(false);
+        expect(properties.dataSource).toStrictEqual(dataSource);
         expect(properties.tabIndex).toStrictEqual(2);
         expect(properties.disabled).toStrictEqual(true);
-      });
-
-      it('default onValueChange', () => {
-        const component = new NumberBox(new NumberBoxProps());
-
-        const { onValueChanged } = component.properties;
-
-        expect(onValueChanged!({ value: 5 })).toStrictEqual(undefined);
-      });
-
-      it('onValueChange wraps valueChange prop', () => {
-        const fn = jest.fn();
-        const component = new NumberBox({ valueChange: fn });
-        const { onValueChanged } = component.properties;
-
-        onValueChanged!({ value: 5 });
-
-        expect(fn.mock.calls).toEqual([[5]]);
       });
     });
 
     describe('effects', () => {
       const widgetRef = {} as HTMLDivElement;
       const createWidget = () => {
-        const component = new NumberBox({});
+        const component = new DataGrid({});
         component.widgetRef = widgetRef;
         return component;
       };
@@ -98,8 +84,8 @@ describe('NumberBox', () => {
 
         component.setupWidget();
 
-        expect(DxNumberBox).toBeCalledTimes(1);
-        expect(DxNumberBox).toBeCalledWith(widgetRef, spy.mock.results[0].value);
+        expect(DxDataGrid).toBeCalledTimes(1);
+        expect(DxDataGrid).toBeCalledWith(widgetRef, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -108,7 +94,7 @@ describe('NumberBox', () => {
 
         dispose();
 
-        expect((DxNumberBox as any).mock.instances[0].dispose).toBeCalledTimes(1);
+        expect(mockDispose).toBeCalledTimes(1);
       });
 
       it('updateWidget. Widget is not initialized', () => {
@@ -117,19 +103,17 @@ describe('NumberBox', () => {
 
         component.updateWidget();
 
-        expect(DxNumberBox).toBeCalledTimes(0);
+        expect(DxDataGrid).toBeCalledTimes(0);
         expect(spy).toBeCalledTimes(0);
       });
 
       it('updateWidget. Widget is initialized', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
-        (DxNumberBox as any).getInstance.mockReturnValue(new DxNumberBox('ref' as any as Element, {}));
-
+        (DxDataGrid as any).getInstance.mockReturnValue(new DxDataGrid('ref' as any as Element, {}));
         component.updateWidget();
 
-        const DxNumberBoxMockInstance = (DxNumberBox as any).mock.instances[0];
-        expect(DxNumberBoxMockInstance.option).toBeCalledWith(spy.mock.results[0].value);
+        expect(mockOption).toBeCalledWith(spy.mock.results[0].value);
       });
     });
   });
