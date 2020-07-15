@@ -8,20 +8,19 @@ import {
   OneWay,
   Ref,
   Template,
+  Slot,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 import { createDefaultOptionRules } from '../core/options/utils';
 import devices from '../core/devices';
 import noop from './utils/noop';
-import themes from '../ui/themes';
+import * as themes from '../ui/themes';
 import { click } from '../events/short';
 import { getImageSourceType } from '../core/utils/icon';
-import Icon from './icon';
-import InkRipple from './ink-ripple';
-import Widget from './widget';
+import { Icon } from './icon';
+import { InkRipple } from './ink-ripple';
+import { Widget } from './widget';
 import BaseWidgetProps from './utils/base-props';
-import BaseComponent from './preact-wrapper/button';
+import BaseComponent from './preact_wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -44,11 +43,11 @@ const getCssClasses = (model: ButtonProps) => {
 
 export const viewFunction = (viewModel: Button) => {
   const {
-    icon, iconPosition, template, text,
+    children, icon, iconPosition, template, text,
   } = viewModel.props;
-  const renderText = !template && text;
+  const renderText = !template && !children && text;
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !template && viewModel.iconSource
+  const iconComponent = !template && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
 
   return (
@@ -79,9 +78,9 @@ export const viewFunction = (viewModel: Button) => {
                 && (
                 <viewModel.props.template
                   data={{ icon, text }}
-                  parentRef={viewModel.contentRef}
                 />
                 )}
+        {!template && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
@@ -115,7 +114,9 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Template({ canBeAnonymous: true }) template?: any = '';
+  @Template() template?: any = '';
+
+  @Slot() children?: any;
 
   @OneWay() text?: string = '';
 
@@ -132,7 +133,7 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  device: () => (themes as any).isMaterial(themes.current()),
+  device: () => (themes as any).isMaterial((themes as any).current()),
   options: { useInkRipple: true },
 }]);
 @Component({
@@ -144,7 +145,7 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   view: viewFunction,
 })
 
-export default class Button extends JSXComponent(ButtonProps) {
+export class Button extends JSXComponent(ButtonProps) {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;

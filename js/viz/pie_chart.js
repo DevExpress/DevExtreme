@@ -512,4 +512,4 @@ _each(OPTIONS_FOR_REFRESH_SERIES, function(_, name) {
 
 registerComponent('dxPieChart', dxPieChart);
 
-module.exports = dxPieChart;
+export default dxPieChart;

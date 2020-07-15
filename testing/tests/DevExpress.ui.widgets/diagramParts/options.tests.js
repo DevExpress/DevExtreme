@@ -18,7 +18,16 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Options', moduleConfig, () => {
+QUnit.module('Options', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach.apply(this, arguments);
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test('should change readOnly property', function(assert) {
         assert.notOk(this.instance._diagramInstance.settings.readOnly);
         this.instance.option('readOnly', true);
@@ -416,16 +425,22 @@ QUnit.module('Options', moduleConfig, () => {
                 text: 'text2'
             }
         ]);
-        assert.equal(this.instance.option('hasChanges'), true, 'on data bind');
-        assert.ok(this.onOptionChanged.called);
-        this.instance.option('hasChanges', false);
+        assert.equal(this.instance.option('hasChanges'), false, 'on data bind');
         this.instance._diagramInstance.selection.set(['1']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
         assert.equal(this.instance.option('hasChanges'), true, 'on edit');
     });
 });
 
-QUnit.module('Options (initially set)', {}, () => {
+QUnit.module('Options (initially set)', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test('hasChanges changes on a data bound diagram', function(assert) {
         const onOptionChanged = sinon.spy();
         const $element = $('#diagram').dxDiagram({
@@ -550,6 +565,63 @@ QUnit.module('Options (initially set)', {}, () => {
         assert.equal(instance._nodesOption._getIndexByKey('1'), 0);
         assert.equal(instance._nodesOption._getIndexByKey('2'), 1);
         assert.equal(instance._nodesOption._getIndexByKey('3'), 2);
+    });
+
+    test('items_option keys cache must be updated on data source changes (hierarchical data)', function(assert) {
+        const store = new ArrayStore({
+            key: 'id',
+            data: [
+                {
+                    id: '1',
+                    text: 'text1',
+                    items: [
+                        {
+                            id: '3',
+                            text: 'text3'
+                        }
+                    ],
+                    children: [
+                        {
+                            id: '4',
+                            text: 'text4'
+                        }
+                    ]
+                },
+                {
+                    id: '2',
+                    text: 'text2'
+                }
+            ],
+        });
+        const dataSource = new DataSource({
+            store
+        });
+        const $element = $('#diagram').dxDiagram({
+            nodes: {
+                dataSource,
+                itemsExpr: 'items'
+            }
+        });
+        const instance = $element.dxDiagram('instance');
+
+        assert.equal(instance._nodesOption._items.length, 2);
+        assert.equal(instance._nodesOption._items[0].items.length, 1);
+        assert.equal(instance._nodesOption._getIndexByKey('1'), 0);
+        assert.equal(instance._nodesOption._getIndexByKey('2'), 1);
+        assert.equal(instance._nodesOption._getIndexByKey('3'), 2);
+        assert.equal(instance._nodesOption._getIndexByKey('4'), 3);
+
+        store.insert({
+            id: '5',
+            text: 'text5'
+        });
+        dataSource.reload();
+        assert.equal(instance._nodesOption._items.length, 3);
+        assert.equal(instance._nodesOption._getIndexByKey('1'), 0);
+        assert.equal(instance._nodesOption._getIndexByKey('2'), 1);
+        assert.equal(instance._nodesOption._getIndexByKey('3'), 3);
+        assert.equal(instance._nodesOption._getIndexByKey('4'), 4);
+        assert.equal(instance._nodesOption._getIndexByKey('5'), 2);
     });
 
 });

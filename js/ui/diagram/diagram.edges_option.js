@@ -6,4 +6,4 @@ class EdgesOption extends ItemsOption {
     }
 }
 
-module.exports = EdgesOption;
+export default EdgesOption;

@@ -3,6 +3,11 @@ import {
 } from '../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from './palette';
+
+import {
     template
 } from '../core/templates/template';
 
@@ -158,7 +163,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid dxBarGaugeOptions.paletteExtensionMode
      * @default 'blend'
@@ -166,7 +171,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid dxBarGaugeOptions.relativeInnerRadius
      * @type number

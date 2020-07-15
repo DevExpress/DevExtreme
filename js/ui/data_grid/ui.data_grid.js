@@ -1,6 +1,6 @@
 import DataGrid from './ui.data_grid.base';
 
-module.exports = DataGrid;
+export default DataGrid;
 
 import './ui.data_grid.state_storing';
 import './ui.data_grid.selection';

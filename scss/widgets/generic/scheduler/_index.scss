@@ -509,9 +509,11 @@ $GENERIC_SCHEDULER_AGENDA_GROUP_HEADER_PADDING: $GENERIC_SCHEDULER_AGENDA_TIME_C
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-timeline):not(.dx-scheduler-agenda):not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-work-space-horizontal-grouped) {
     $headerScrollBarTopOffset: $GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP;
 
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($headerScrollBarTopOffset);
     @include baseScheduler.dx-scheduler-group-mixin($headerScrollBarTopOffset);
 
     &.dx-scheduler-work-space-day {
+      @include baseScheduler.dx-scheduler-header-scrollable-mixin($headerScrollBarTopOffset - $GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
       @include baseScheduler.dx-scheduler-group-mixin($headerScrollBarTopOffset - $GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
     }
   }
@@ -520,6 +522,8 @@ $GENERIC_SCHEDULER_AGENDA_GROUP_HEADER_PADDING: $GENERIC_SCHEDULER_AGENDA_TIME_C
 .dx-scheduler-work-space.dx-scheduler-timeline-week,
 .dx-scheduler-work-space.dx-scheduler-timeline-work-week,
 .dx-scheduler-work-space.dx-scheduler-work-space-count.dx-scheduler-timeline-day {
+  @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2 + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+
   &.dx-scheduler-work-space-grouped {
     .dx-scheduler-sidebar-scrollable {
       padding-bottom: $GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2 + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP;
@@ -545,6 +549,53 @@ $GENERIC_SCHEDULER_AGENDA_GROUP_HEADER_PADDING: $GENERIC_SCHEDULER_AGENDA_TIME_C
     &:before {
       background-color: $SCHEDULER_WORKSPACE_BACKGROUND_COLOR,;
     }
+  }
+
+  @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+
+
+  &.dx-scheduler-work-space-day {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin(0);
+  }
+
+  &.dx-scheduler-work-space.dx-scheduler-work-space-all-day {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+
+    &.dx-scheduler-work-space-vertical-grouped {
+      @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+    }
+
+    &:not(.dx-scheduler-work-space-vertical-grouped) {
+      &.dx-scheduler-work-space-all-day-collapsed {
+        @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+      }
+
+      &.dx-scheduler-work-space-day {
+        &:not(.dx-scheduler-work-space-count) {
+          @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+
+          &.dx-scheduler-work-space-all-day-collapsed {
+            @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+          }
+        }
+
+        &:not(.dx-scheduler-work-space-grouped) {
+          @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT);
+
+          &.dx-scheduler-work-space-all-day-collapsed {
+            @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+          }
+        }
+      }
+    }
+  }
+
+  &.dx-scheduler-work-space.dx-scheduler-work-space-month {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+  }
+
+  &.dx-scheduler-work-space-vertical-grouped {
+    @include baseScheduler.dx-scheduler-header-scrollable-mixin($GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + $GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
   }
 }
 

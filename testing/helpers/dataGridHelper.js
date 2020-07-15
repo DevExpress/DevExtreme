@@ -1,5 +1,14 @@
-import 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid/ui.data_grid';
 import $ from 'jquery';
+
+import 'common.css!';
+import 'generic_light.css!';
+
+DataGrid.defaultOptions({
+    options: {
+        loadingTimeout: 0
+    }
+});
 
 export const baseModuleConfig = {
     beforeEach: function() {

@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
-import fx from '../animation/fx';
 import translator from '../animation/translator';
-import mathUtils from '../core/utils/math';
+import { _translator, animation } from './multi_view/ui.multi_view.animation';
+import { sign } from '../core/utils/math';
 import { extend } from '../core/utils/extend';
 import { noop, deferRender } from '../core/utils/common';
 import { triggerResizeEvent } from '../events/visibility_change';
@@ -27,27 +27,6 @@ const MULTIVIEW_ANIMATION_DURATION = 200;
 const toNumber = value => +(value);
 
 const position = $element => translator.locate($element).left;
-
-const _translator = {
-    move($element, position) {
-        translator.move($element, { left: position });
-    }
-};
-
-const animation = {
-    moveTo($element, position, duration, completeAction) {
-        fx.animate($element, {
-            type: 'slide',
-            to: { left: position },
-            duration: duration,
-            complete: completeAction
-        });
-    },
-
-    complete($element) {
-        fx.stop($element, true);
-    }
-};
 
 const MultiView = CollectionWidget.inherit({
 
@@ -321,7 +300,7 @@ const MultiView = CollectionWidget.inherit({
 
         const directionSignVariable = isSwipePresent ? containerPosition : indexDifference;
 
-        return mathUtils.sign(directionSignVariable);
+        return sign(directionSignVariable);
     },
 
     _getSwipeDisabledState() {
@@ -355,7 +334,7 @@ const MultiView = CollectionWidget.inherit({
 
     _swipeUpdateHandler: function(e) {
         const offset = e.offset;
-        const swipeDirection = mathUtils.sign(offset) * this._getRTLSignCorrection();
+        const swipeDirection = sign(offset) * this._getRTLSignCorrection();
 
         _translator.move(this._$itemContainer, offset * this._itemWidth());
 
@@ -459,8 +438,4 @@ const MultiView = CollectionWidget.inherit({
 
 registerComponent('dxMultiView', MultiView);
 
-module.exports = MultiView;
-///#DEBUG
-module.exports.animation = animation;
-module.exports._translator = _translator;
-///#ENDDEBUG
+export default MultiView;

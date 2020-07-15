@@ -1,7 +1,7 @@
-const _extend = require('../../core/utils/extend').extend;
-const windowUtils = require('../../core/utils/window');
-const noop = require('../../core/utils/common').noop;
-const isServerSide = !windowUtils.hasWindow();
+import { extend as _extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
+import { noop } from '../../core/utils/common';
+const isServerSide = !hasWindow();
 
 function Flags() {
     this.reset();
@@ -80,7 +80,7 @@ function createChainExecutor() {
     return executeChain;
 }
 
-function expand(target, name, expander) {
+export function expand(target, name, expander) {
     let current = target[name];
     if(!current) {
         current = expander;
@@ -119,7 +119,7 @@ function addPlugin(plugin) {
     }
 }
 
-exports.replaceInherit = isServerSide
+export const replaceInherit = isServerSide
     ? function(widget) {
         const _inherit = widget.inherit;
         widget.inherit = function() {
@@ -185,8 +185,6 @@ exports.replaceInherit = isServerSide
         widget.addPlugin = addPlugin;
     };
 
-exports.changes = function() {
+export function changes() {
     return new Flags();
-};
-
-exports.expand = expand;
+}

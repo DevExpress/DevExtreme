@@ -197,4 +197,4 @@ SliderMarker.prototype = {
     }
 };
 
-module.exports = SliderMarker;
+export default SliderMarker;

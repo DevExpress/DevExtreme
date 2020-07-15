@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import PagerContentComponent from '../../../js/renovation/pager/pager-content';
-import PagerComponent from '../../../js/renovation/pager/pager';
+import { PagerContentComponent } from '../../../js/renovation/pager/content';
+import { Pager as PagerComponent } from '../../../js/renovation/pager/pager';
 
-jest.mock('../../../js/renovation/select-box', jest.fn());
+jest.mock('../../../js/renovation/select-box', () => ({ __esModule: true, SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {
@@ -12,9 +12,14 @@ describe('Pager', () => {
       const tree = shallow<PagerComponent>(<PagerComponent /> as any);
       expect(tree.props()).toEqual({
         children: [],
+        className: '',
+        restAttributes: 'restAttributes',
+        pagesNavigatorVisible: 'auto',
+        visible: true,
         contentTemplate: PagerContentComponent,
         pageIndexChange: tree.instance().pageIndexChange,
         pageSizeChange: tree.instance().pageSizeChange,
+        hasKnownLastPage: true,
         infoText: 'Page {0} of {1} ({2} items)',
         lightModeEnabled: false,
         maxPagesCount: 10,
@@ -31,7 +36,7 @@ describe('Pager', () => {
       });
     });
   });
-  describe('Logic', () => {
+  describe('Behaviour', () => {
     it('pageSizeChange', () => {
       const component = new PagerComponent({ pageSize: 5 });
       expect(component.props.pageSize).toBe(5);

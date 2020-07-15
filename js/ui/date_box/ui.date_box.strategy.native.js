@@ -1,9 +1,9 @@
-const noop = require('../../core/utils/common').noop;
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const support = require('../../core/utils/support');
-const inArray = require('../../core/utils/array').inArray;
-const dateUtils = require('./ui.date_utils');
-const dateSerialization = require('../../core/utils/date_serialization');
+import { noop } from '../../core/utils/common';
+import DateBoxStrategy from './ui.date_box.strategy';
+import support from '../../core/utils/support';
+import { inArray } from '../../core/utils/array';
+import dateUtils from './ui.date_utils';
+import dateSerialization from '../../core/utils/date_serialization';
 
 const NativeStrategy = DateBoxStrategy.inherit({
 
@@ -11,7 +11,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
 
     popupConfig: noop,
 
-    getParsedText: function(text) {
+    getParsedText: function(text, format) {
         if(!text) {
             return null;
         }
@@ -21,7 +21,16 @@ const NativeStrategy = DateBoxStrategy.inherit({
             return new Date(text.replace(/-/g, '/').replace('T', ' ').split('.')[0]);
         }
 
-        return dateUtils.fromStandardDateFormat(text);
+        if(this._isTextInput()) {
+            return this.callBase(text, format);
+        } else {
+            return dateUtils.fromStandardDateFormat(text);
+        }
+    },
+
+    // IE11 fallback (T902036)
+    _isTextInput: function() {
+        return this.dateBox._input().prop('type') === 'text';
     },
 
     renderPopupContent: noop,
@@ -70,4 +79,4 @@ const NativeStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = NativeStrategy;
+export default NativeStrategy;

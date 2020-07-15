@@ -5,32 +5,32 @@ const _floor = Math.floor;
 const _min = Math.min;
 const _max = Math.max;
 
-const registerComponent = require('../../core/component_registrator');
-const objectUtils = require('../../core/utils/object');
-const commonUtils = require('../../core/utils/common');
-const extend = require('../../core/utils/extend').extend;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-
-const baseGaugeModule = require('./base_gauge');
+import registerComponent from '../../core/component_registrator';
+import objectUtils from '../../core/utils/object';
+import { noop } from '../../core/utils/common';
+import { extend } from '../../core/utils/extend';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import baseGaugeModule from './base_gauge';
 const dxBaseGauge = baseGaugeModule.dxBaseGauge;
 const _getSampleText = baseGaugeModule.getSampleText;
 const _formatValue = baseGaugeModule.formatValue;
 const _compareArrays = baseGaugeModule.compareArrays;
-const dxCircularGauge = require('./circular_gauge');
+import dxCircularGauge from './circular_gauge';
 const _isArray = Array.isArray;
-const vizUtils = require('../core/utils');
+import vizUtils from '../core/utils';
 const _convertAngleToRendererSpace = vizUtils.convertAngleToRendererSpace;
 const _getCosAndSin = vizUtils.getCosAndSin;
 const _patchFontOptions = vizUtils.patchFontOptions;
 const _Number = Number;
 const _isFinite = isFinite;
-const _noop = commonUtils.noop;
+const _noop = noop;
 const _extend = extend;
+import { plugin as pluginLegend } from '../components/legend';
 
 const OPTION_VALUES = 'values';
 let BarWrapper;
 
-const dxBarGauge = dxBaseGauge.inherit({
+export const dxBarGauge = dxBaseGauge.inherit({
     _rootClass: 'dxbg-bar-gauge',
 
     _themeSection: 'barGauge',
@@ -648,18 +648,18 @@ function compareFloats(value1, value2) {
 
 registerComponent('dxBarGauge', dxBarGauge);
 
-exports.dxBarGauge = dxBarGauge;
-
-dxBarGauge.addPlugin(require('../components/legend').plugin);
+dxBarGauge.addPlugin(pluginLegend);
 
 ///#DEBUG
 const __BarWrapper = BarWrapper;
 
-exports.BarWrapper = __BarWrapper;
-exports.stubBarWrapper = function(barWrapperType) {
+export { __BarWrapper as BarWrapper };
+
+export function stubBarWrapper(barWrapperType) {
     BarWrapper = barWrapperType;
-};
-exports.restoreBarWrapper = function() {
+}
+
+export function restoreBarWrapper() {
     BarWrapper = __BarWrapper;
-};
+}
 ///#ENDDEBUG

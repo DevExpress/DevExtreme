@@ -43,31 +43,42 @@ const RowDraggingExtender = {
     },
 
     _renderContent: function() {
-        const that = this;
         const rowDragging = this.option('rowDragging');
         const allowReordering = this._allowReordering();
-        const $content = that.callBase.apply(that, arguments);
+        const $content = this.callBase.apply(this, arguments);
+        const isFixedTableRendering = this._isFixedTableRendering;
+        const sortableName = '_sortable';
+        const sortableFixedName = '_sortableFixed';
+        const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
+        const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
 
         if(allowReordering && $content.length) {
-            that._sortable = that._createComponent($content, Sortable, extend({
-                component: that.component,
+            this[currentSortableName] = this._createComponent($content, Sortable, extend({
+                component: this.component,
                 contentTemplate: null,
                 filter: '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)',
-                dragTemplate: that._getDraggableRowTemplate(),
+                dragTemplate: this._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: 'indicate'
             }, rowDragging, {
-                onDragStart: function(e) {
+                onDragStart: (e) => {
                     const row = e.component.getVisibleRows()[e.fromIndex];
                     e.itemData = row && row.data;
 
                     const isDataRow = row && row.rowType === 'data';
                     e.cancel = !isDataRow;
 
-                    const onDragStart = rowDragging.onDragStart;
-                    onDragStart && onDragStart(e);
+                    rowDragging.onDragStart?.(e);
                 },
-                dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode
+                dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
+                onOptionChanged: (e) => {
+                    const hasFixedSortable = this[sortableFixedName];
+                    if(hasFixedSortable) {
+                        if(e.name === 'fromIndex' || e.name === 'toIndex') {
+                            this[anotherSortableName].option(e.name, e.value);
+                        }
+                    }
+                }
             }));
 
             $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, !rowDragging.showDragIcons);
@@ -148,7 +159,7 @@ const RowDraggingExtender = {
 };
 
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             rowDragging: {

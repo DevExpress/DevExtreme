@@ -1,4 +1,4 @@
-const tiling = require('./tiling');
+import tiling from './tiling';
 
 function sliceAndDice(data) {
     const items = data.items;
@@ -12,4 +12,4 @@ function sliceAndDice(data) {
 }
 
 tiling.addAlgorithm('sliceanddice', sliceAndDice);
-module.exports = sliceAndDice;
+export default sliceAndDice;

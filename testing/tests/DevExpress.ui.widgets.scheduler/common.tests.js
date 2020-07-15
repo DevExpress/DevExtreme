@@ -25,6 +25,7 @@ import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { Deferred } from 'core/utils/deferred';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
@@ -227,6 +228,23 @@ QUnit.module('Initialization', {
 
             assert.equal(errors.log.callCount, 0, 'there are not any warnings');
         });
+    });
+
+    QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [],
+            views: [{
+                type: 'day',
+                intervalCount: 2
+            }],
+            crossScrollingEnabled: true,
+            showAllDayPanel: false
+        });
+
+        const headerScrollableHeight = scheduler.workSpace.getHeaderScrollable().height();
+        const headerHeight = scheduler.header.getElement().height();
+
+        assert.ok(headerScrollableHeight >= headerHeight, 'HeaderScrollable height is correct');
     });
 });
 
@@ -1114,6 +1132,26 @@ QUnit.module('Initialization', {
 
         assert.ok(this.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
         assert.ok(!this.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+    });
+
+    QUnit.test('_getUpdatedData for the empty data item (T906240)', function(assert) {
+        const startCellDate = new Date(2020, 1, 2, 3);
+        const endCellDate = new Date(2020, 1, 2, 4);
+        const scheduler = createWrapper({});
+
+        scheduler.instance.getTargetCellData = () => {
+            return {
+                startDate: startCellDate,
+                endDate: endCellDate
+            };
+        };
+
+        const updatedData = scheduler.instance._getUpdatedData({ text: 'test' });
+        assert.deepEqual(updatedData, {
+            allDay: undefined,
+            endDate: endCellDate,
+            startDate: startCellDate
+        }, 'Updated data is correct');
     });
 })('Methods');
 
@@ -3616,6 +3654,30 @@ QUnit.module('Initialization', {
         resizeCallbacks.fire();
 
         assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
+    });
+
+    QUnit.test('ContentReady event should be fired after render completely ready (T902483)', function(assert) {
+        let contentReadyFiresCount = 0;
+
+        const scheduler = createWrapper({
+            onContentReady: () => ++contentReadyFiresCount
+        });
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation = new Deferred();
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
+
+        scheduler.instance._workSpaceRecalculation.resolve();
+
+        assert.equal(contentReadyFiresCount, 2, 'contentReadyFiresCount === 2');
+
+        scheduler.instance._workSpaceRecalculation = null;
+        scheduler.instance._fireContentReadyAction();
+
+        assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');
     });
 })('Events');
 

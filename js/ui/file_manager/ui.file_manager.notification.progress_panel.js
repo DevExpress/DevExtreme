@@ -364,4 +364,4 @@ class FileManagerProgressPanel extends Widget {
 
 }
 
-module.exports = FileManagerProgressPanel;
+export default FileManagerProgressPanel;

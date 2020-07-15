@@ -307,6 +307,29 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.strictEqual(loadingSpy.callCount, 1, 'loading called once');
     });
 
+    // T899513
+    QUnit.test('loading should be canceled after change dataSource to null', function(assert) {
+        const loadingChangedSpy = sinon.spy();
+
+        // act
+        const dataSource = new DataSource({
+            load: function() {
+                return $.Deferred().promise();
+            },
+            onLoadingChanged: loadingChangedSpy
+        });
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        this.dataController.setDataSource(null);
+
+        // assert
+        assert.strictEqual(loadingChangedSpy.callCount, 2, 'loadingChanged call count');
+        assert.deepEqual(loadingChangedSpy.getCalls().map(c => c.args[0]), [true, false], 'loadingChanged call args');
+    });
+
     QUnit.test('update rows on columnsChanged (changeType == \'columns\')', function(assert) {
         let changedCount = 0;
         const array = [
@@ -8015,7 +8038,7 @@ QUnit.module('Error handling', {
         this.editingController.saveEditData();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.deepEqual(dataErrors, ['Update error']);
     });
 });

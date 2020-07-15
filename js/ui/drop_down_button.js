@@ -6,7 +6,7 @@ import ButtonGroup from './button_group';
 import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import { getPublicElement } from '../core/element';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
@@ -318,7 +318,7 @@ const DropDownButton = Widget.inherit({
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
             minWidth: () => {
-                if(!windowUtils.hasWindow()) {
+                if(!hasWindow()) {
                     return;
                 }
                 return this.$element().outerWidth();
@@ -624,5 +624,4 @@ const DropDownButton = Widget.inherit({
 }).include(DataHelperMixin);
 
 registerComponent('dxDropDownButton', DropDownButton);
-
-module.exports = DropDownButton;
+export default DropDownButton;

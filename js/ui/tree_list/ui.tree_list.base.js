@@ -1,6 +1,6 @@
 import registerComponent from '../../core/component_registrator';
-import commonUtils from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { noop, deferRender } from '../../core/utils/common';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
@@ -61,7 +61,7 @@ const TreeList = Widget.inherit({
         const result = that.callBase();
 
         each(treeListCore.modules, function() {
-            if(typeUtils.isFunction(this.defaultOptions)) {
+            if(isFunction(this.defaultOptions)) {
                 extend(true, result, this.defaultOptions());
             }
         });
@@ -98,7 +98,7 @@ const TreeList = Widget.inherit({
         callModuleItemsMethod(that, 'init');
     },
 
-    _clean: commonUtils.noop,
+    _clean: noop,
 
     _optionChanged: function(args) {
         const that = this;
@@ -132,7 +132,7 @@ const TreeList = Widget.inherit({
     _renderContent: function() {
         const that = this;
 
-        commonUtils.deferRender(function() {
+        deferRender(function() {
             that._renderContentImpl();
         });
     },
@@ -173,7 +173,7 @@ const TreeList = Widget.inherit({
     focus: function(element) {
         this.callBase();
 
-        if(typeUtils.isDefined(element)) {
+        if(isDefined(element)) {
             this.getController('keyboardNavigation').focus(element);
         }
     }
@@ -183,4 +183,4 @@ TreeList.registerModule = treeListCore.registerModule.bind(treeListCore);
 
 registerComponent('dxTreeList', TreeList);
 
-module.exports = TreeList;
+export default TreeList;

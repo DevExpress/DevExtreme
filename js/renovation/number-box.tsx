@@ -1,14 +1,14 @@
 import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
-import DxNumberBox from '../ui/number_box';
+/* eslint-disable-next-line import/named */
+import DxNumberBox, { Options } from '../ui/number_box';
 import { WidgetProps } from './widget';
 
-export const viewFunction = ({ widgetRef, restAttributes }: NumberBox) => (
+export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: NumberBox) => (
   <div
     ref={widgetRef as any}
+    className={className}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -46,7 +46,7 @@ export class NumberBoxProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class NumberBox extends JSXComponent(NumberBoxProps) {
+export class NumberBox extends JSXComponent(NumberBoxProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 
@@ -56,18 +56,20 @@ export default class NumberBox extends JSXComponent(NumberBoxProps) {
   }
 
   @Effect()
-  setupWidget() {
-    const { valueChange } = this.props;
-    const instance = DxNumberBox.getInstance(this.widgetRef);
-    if (instance) {
-      instance.option({ ...this.props });
-    } else {
-      new DxNumberBox(this.widgetRef, { // eslint-disable-line no-new
-        ...this.props as any,
-        onValueChanged: (e) => {
-          valueChange!(e.value);
-        },
-      });
-    }
+  updateWidget(): void {
+    const widget = DxNumberBox.getInstance(this.widgetRef);
+    widget?.option(this.properties);
+  }
+
+  @Effect({ run: 'once' })
+  setupWidget(): () => void {
+    const widget = new DxNumberBox(this.widgetRef, this.properties);
+
+    return (): void => widget.dispose();
+  }
+
+  get properties(): Options {
+    const { valueChange, ...restProps } = this.props;
+    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
   }
 }

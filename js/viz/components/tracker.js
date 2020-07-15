@@ -1,11 +1,11 @@
-const _eventData = require('../../events/utils').eventData;
-const domAdapter = require('../../core/dom_adapter');
-const clickEventName = require('../../events/click').name;
-const downPointerEventName = require('../../events/pointer').down;
-const movePointerEventName = require('../../events/pointer').move;
-const eventsEngine = require('../../events/core/events_engine');
+import { eventData as _eventData } from '../../events/utils';
+import domAdapter from '../../core/dom_adapter';
+import { name as clickEventName } from '../../events/click';
+import { down as downPointerEventName } from '../../events/pointer';
+import { move as movePointerEventName } from '../../events/pointer';
+import eventsEngine from '../../events/core/events_engine';
 
-function Tracker(parameters) {
+export function Tracker(parameters) {
     this._initHandlers(parameters);
 }
 
@@ -100,5 +100,3 @@ function processTooltip(e, params) {
         params.widget.hideTooltip();
     }
 }
-
-module.exports.Tracker = Tracker;

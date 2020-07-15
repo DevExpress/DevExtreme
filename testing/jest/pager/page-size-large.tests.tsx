@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import PageSizeLarge, {
+import {
+  PageSizeLarge,
   PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS,
-} from '../../../js/renovation/pager/page-size-large';
+} from '../../../js/renovation/pager/page_size/large';
 
 describe('Pager size selector', () => {
   const pageSizes = [{ text: '5', value: 5 }, { text: '10', value: 10 }];

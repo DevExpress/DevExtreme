@@ -211,6 +211,7 @@ QUnit.testStart(function() {
 
                 this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
                 this.instance.initDragBehavior();
+                this.instance._attachTablesEvents();
                 stubInvokeMethod(this.instance, options);
             };
 
@@ -325,8 +326,9 @@ QUnit.testStart(function() {
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
-            date: new Date(2015, 1, 18, 1),
             allDay: false,
+            startDate: new Date(2015, 1, 18, 1),
+            endDate: undefined,
             groups: {
                 res: 2
             }
@@ -360,7 +362,8 @@ QUnit.testStart(function() {
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
-            date: new Date(2015, 1, 18, 0, 30),
+            startDate: new Date(2015, 1, 18, 0, 30),
+            endDate: undefined,
             allDay: false,
             groups: {
                 one: 2,
@@ -2362,6 +2365,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             }
         });
 
@@ -2389,6 +2393,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
             currentDate: new Date(2015, 3, 1),
             onContentReady: function(e) {
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             }
         });
 
@@ -2418,6 +2423,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             }
         });
 
@@ -2464,6 +2470,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             }
         });
         const instance = $element.dxSchedulerWorkSpaceWeek('instance');
@@ -2513,6 +2520,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             }
         });
         const instance = $element.dxSchedulerWorkSpaceMonth('instance');
@@ -2680,6 +2688,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             },
             intervalCount: 3,
             groupOrientation: 'horizontal',
@@ -2723,6 +2732,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 const scrollable = e.component.getScrollable();
                 scrollable.option('scrollByContent', false);
                 e.component.initDragBehavior();
+                e.component._attachTablesEvents();
             },
             intervalCount: 3,
             groupOrientation: 'horizontal',
@@ -2793,6 +2803,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         const scrollable = e.component.getScrollable();
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
+                        e.component._attachTablesEvents();
                     },
                     intervalCount: 2,
                     groupOrientation: 'vertical',
@@ -2870,6 +2881,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         const scrollable = e.component.getScrollable();
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
+                        e.component._attachTablesEvents();
                     },
                     intervalCount: 2,
                     groupOrientation: 'horizontal',

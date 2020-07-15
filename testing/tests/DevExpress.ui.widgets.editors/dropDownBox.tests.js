@@ -394,6 +394,23 @@ QUnit.module('common', moduleConfig, () => {
 });
 
 QUnit.module('popup options', moduleConfig, () => {
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        const instance = $('#dropDownBox').dxDropDownBox({
+            width: 600,
+            dropDownOptions: {
+                width: '50%'
+            },
+            opened: true
+        }).dxDropDownBox('instance');
+
+        const $overlayContent = $('.dx-overlay-content');
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+
+        instance.option('width', 400);
+
+        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
+    });
+
     QUnit.test('customize width and height', function(assert) {
         const instance = new DropDownBox(this.$element, {
             width: 200,
@@ -644,9 +661,8 @@ QUnit.module('popup options', moduleConfig, () => {
                 assert.expect(0);
                 return;
             }
-
-            const originalRealDeviceIsMac = DropDownBox.realDevice.mac;
-            DropDownBox.realDevice.mac = isMac;
+            const originalRealDeviceIsMac = DropDownBox.prototype._realDevice.mac;
+            DropDownBox.prototype._realDevice.mac = isMac;
 
             try {
                 const $content = $('<input type="text" />');
@@ -661,7 +677,7 @@ QUnit.module('popup options', moduleConfig, () => {
 
                 assert.strictEqual(instance.option('opened'), isMac);
             } finally {
-                DropDownBox.realDevice.mac = originalRealDeviceIsMac;
+                DropDownBox.prototype._realDevice.mac = originalRealDeviceIsMac;
             }
         });
     });

@@ -1,4 +1,7 @@
+// https://github.com/benmosher/eslint-plugin-import/issues/1699
+// eslint-disable-next-line import/named
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
+/* eslint-disable-next-line import/named */
 import { dxPromise } from '../../../core/utils/deferred';
 
 export type Color = string | undefined;
@@ -9,7 +12,9 @@ export type AppointmentItem = {
   currentData?: dxSchedulerAppointment;
   settings?: AppointmentItemSettings;
   color?: DeferredColor;
+  disabled?: boolean;
 };
+
 export type AppointmentItemSettings = {
   targetedAppointmentData?: dxSchedulerAppointment;
   originalAppointmentStartDate?: Date;
@@ -24,7 +29,25 @@ export type AppointmentItemSettings = {
   appointmentReduced?: boolean;
   sortedIndex?: number;
 };
+
 export type FormattedContent = {
   text: string;
   formatDate: string;
 };
+
+export type GetTextAndFormatDateFn = (
+  appointment?: dxSchedulerAppointment, currentAppointment?: dxSchedulerAppointment,
+) => FormattedContent;
+
+export type GetSingleAppointmentFn = (
+  appointment: dxSchedulerAppointment, target: HTMLElement,
+) => dxSchedulerAppointment;
+
+export type CheckAndDeleteAppointmentFn = (
+  appointment: dxSchedulerAppointment, currentAppointment: dxSchedulerAppointment,
+) => void;
+
+export type ShowAppointmentPopupFn = (
+  appointment: dxSchedulerAppointment, visibleButtons: boolean,
+  currentAppointment: dxSchedulerAppointment,
+) => void;

@@ -2,7 +2,7 @@ import { noop } from '../../core/utils/common';
 import commonModule from './common';
 import Slider from './slider';
 import { normalizeEnum as _normalizeEnum, rangesAreEqual, adjustVisualRange } from '../core/utils';
-import { isNumeric } from '../../core/utils/type';
+import { isNumeric, isDefined } from '../../core/utils/type';
 import { adjust } from '../../core/utils/math';
 const animationSettings = commonModule.utils.animationSettings;
 const emptySliderMarkerText = commonModule.consts.emptySliderMarkerText;
@@ -58,7 +58,7 @@ function restoreSetSelectedRange(controller) {
     delete controller.setSelectedRange;
 }
 
-function SlidersController(params) {
+export function SlidersController(params) {
     const that = this;
     const sliderParams = { renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator };
     that._params = params;
@@ -419,16 +419,26 @@ SlidersController.prototype = {
                     if(isValid && translator.isValueProlonged) {
                         isValid = !compareMin(pos, translator.to(value, dir));
                     }
+                    let invalidStateValue;
                     // Check - if moving slider is closer to static slider than it is allowed "minRange".
                     if(isValid && that._minRange) {
                         isValid = !compareMin(pos, translator.to(translator.add(value, that._minRange, dir), dir));
+                        if(!isValid) {
+                            invalidStateValue = translator.add(value, that._minRange, dir);
+                        }
                     }
                     // Check - if moving slider is farther from static slider than it is allowed by "maxRange"
                     if(isValid && that._maxRange) {
                         isValid = !compareMax(pos, translator.to(translator.add(value, that._maxRange, dir), dir));
+                        if(!isValid) {
+                            invalidStateValue = translator.add(value, that._maxRange, dir);
+                        }
                     }
                     slider._setValid(isValid);
-                    slider.setDisplayValue(isValid ? selectClosestValue(translator.from(pos, dir), that._values) : slider.getValue());
+                    slider.setDisplayValue(isValid
+                        ? selectClosestValue(translator.from(pos, dir), that._values)
+                        : (isDefined(invalidStateValue) ? invalidStateValue : slider.getValue())
+                    );
                     slider._position = pos;
                     that._applyTotalPosition(false);
                     slider.toForeground();
@@ -466,5 +476,3 @@ SlidersController.prototype = {
         this._sliders[index].toForeground();
     }
 };
-
-exports.SlidersController = SlidersController;

@@ -7,14 +7,12 @@ const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 class CurrentTimeShader {
     constructor(workSpace) {
         this._workSpace = workSpace;
-
         this._$container = this._workSpace._dateTableScrollable.$content();
-        this._$shader = this.createShader();
-        this._shader = [];
-        this._shader.push(this._$shader);
     }
 
     render() {
+        this.initShaderElements();
+
         this.renderShader();
 
         this.applyShaderMargin(this._$shader);
@@ -22,6 +20,12 @@ class CurrentTimeShader {
         this._shader.forEach((shader, index) => {
             this._$container.append(shader);
         });
+    }
+
+    initShaderElements() {
+        this._$shader = this.createShader();
+        this._shader = [];
+        this._shader.push(this._$shader);
     }
 
     renderShader() {}
@@ -42,4 +46,4 @@ class CurrentTimeShader {
     }
 }
 
-module.exports = CurrentTimeShader;
+export default CurrentTimeShader;

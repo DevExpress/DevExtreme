@@ -163,7 +163,7 @@ const PagerView = modules.View.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             pager: {

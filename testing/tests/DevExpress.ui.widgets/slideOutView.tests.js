@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
-import { animation } from 'ui/slide_out_view';
+import { animation } from 'ui/slide_out_view/ui.slide_out_view.animation';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'common.css!';

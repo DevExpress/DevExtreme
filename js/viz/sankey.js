@@ -1,11 +1,17 @@
-const dxSankey = require('./sankey/sankey');
-const setTooltipCustomOptions = require('./sankey/tooltip').setTooltipCustomOptions;
+import dxSankey from './sankey/sankey';
+import { setTooltipCustomOptions } from './sankey/tooltip';
 
-dxSankey.addPlugin(require('./core/export').plugin);
-dxSankey.addPlugin(require('./core/title').plugin);
-dxSankey.addPlugin(require('./sankey/tracker').plugin);
-dxSankey.addPlugin(require('./core/loading_indicator').plugin);
-dxSankey.addPlugin(require('./core/tooltip').plugin);
+import { plugin as pluginExport } from './core/export';
+import { plugin as pluginTitle } from './core/title';
+import { plugin as pluginTracker } from './sankey/tracker';
+import { plugin as pluginTooltip } from './core/tooltip';
+import { plugin as pluginLoadingIndicator } from './core/loading_indicator';
+
+dxSankey.addPlugin(pluginExport);
+dxSankey.addPlugin(pluginTitle);
+dxSankey.addPlugin(pluginTracker);
+dxSankey.addPlugin(pluginLoadingIndicator);
+dxSankey.addPlugin(pluginTooltip);
 setTooltipCustomOptions(dxSankey);
 
-module.exports = dxSankey;
+export default dxSankey;

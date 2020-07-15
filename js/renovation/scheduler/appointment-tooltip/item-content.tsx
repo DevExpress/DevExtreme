@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
@@ -30,4 +28,4 @@ export class TooltipItemContentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export default class TooltipItemContent extends JSXComponent(TooltipItemContentProps) {}
+export class TooltipItemContent extends JSXComponent(TooltipItemContentProps) {}

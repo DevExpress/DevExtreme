@@ -9,6 +9,7 @@ import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import rendererModule from 'viz/core/renderers/renderer';
 import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+const TitleOrig = titleModule.Title;
 
 rendererModule.Renderer = sinon.stub();
 
@@ -59,7 +60,7 @@ const environment = {
             return this.legend;
         });
 
-        this.titleStub = sinon.stub(titleModule, 'Title', () => {
+        titleModule.DEBUG_set_title(() => {
             return this.title;
         });
     },
@@ -69,7 +70,7 @@ const environment = {
         this.axisStub.restore();
         this.scrollBarStub && this.scrollBarStub.restore();
         this.legendStub.restore();
-        this.titleStub.restore();
+        titleModule.DEBUG_set_title(TitleOrig);
     }
 };
 

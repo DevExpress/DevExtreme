@@ -1,4 +1,12 @@
-require('./modules/parts/widgets-all');
-require('./modules/parts/viz');
+import './modules/parts/widgets-all';
+import './modules/parts/viz';
+import DevExpress from './modules/core';
+import { EventsStrategy } from '../core/events_strategy';
+import { Options } from '../core/options/index';
 
-module.exports = require('./modules/core');
+DevExpress.integration = {};
+
+DevExpress.integration.EventsStrategy = EventsStrategy;
+DevExpress.integration.Options = Options;
+
+export default DevExpress;

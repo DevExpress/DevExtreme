@@ -23,6 +23,14 @@ $gantt_successor_background_color: white;
     }
   }
 
+  .dx-treelist-text-content {
+    min-height: $GANTT_TREELIST_TEXT_MIN_HEIGHT;
+  }
+
+  .dx-treelist-icon-container {
+    max-height: $GANTT_TREELIST_TEXT_MIN_HEIGHT;
+  }
+
   .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > td,
   .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row:hover > td,
   .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > tr > td,

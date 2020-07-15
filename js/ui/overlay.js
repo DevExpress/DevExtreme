@@ -1,2 +1,2 @@
-
-module.exports = require('./overlay/ui.overlay');
+import Overlay from './overlay/ui.overlay';
+export default Overlay;

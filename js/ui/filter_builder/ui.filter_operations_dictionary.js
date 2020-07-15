@@ -29,7 +29,7 @@ const OPERATION_NAME = {
     'between': 'between'
 };
 
-module.exports = {
+export default {
     getIconByFilterOperation: function(filterOperation) {
         return OPERATION_ICONS[filterOperation];
     },

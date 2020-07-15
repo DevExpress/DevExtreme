@@ -244,4 +244,4 @@ const ButtonGroup = Widget.inherit({
 
 registerComponent('dxButtonGroup', ButtonGroup);
 
-module.exports = ButtonGroup;
+export default ButtonGroup;

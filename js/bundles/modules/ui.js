@@ -1,5 +1,5 @@
 /* global DevExpress */
-
-require('./core');
+/* eslint-disable import/no-commonjs */
+import './core';
 
 module.exports = DevExpress.ui = {};

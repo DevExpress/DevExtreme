@@ -371,7 +371,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     const adapter = validator.option('adapter');
                     if(adapter) {
                         adapter.getValue = getValue;
-                        adapter.validationRequestsCallbacks.empty();
+                        adapter.validationRequestsCallbacks = [];
                     }
                 }
 
@@ -488,7 +488,7 @@ const ValidatingController = modules.Controller.inherit((function() {
     };
 })());
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             editing: {
@@ -691,7 +691,7 @@ module.exports = {
                                         break;
                                     case EDIT_MODE_BATCH:
                                         if(!isFullValid) {
-                                            this._editRowIndex = -1;
+                                            this._editRowKey = null;
                                             this._editColumnIndex = -1;
                                             this.getController('data').updateItems();
                                         }
@@ -724,7 +724,7 @@ module.exports = {
                     }
                 },
 
-                _afterSaveEditData: function() {
+                _afterSaveEditData: function(cancel) {
                     let $firstErrorRow;
                     each(this._editData, (_, editData) => {
                         const $errorRow = this._showErrorRow(editData);
@@ -736,6 +736,16 @@ module.exports = {
                             scrollable.update();
                             scrollable.scrollToElement($firstErrorRow);
                         }
+                    }
+
+                    if(cancel && this.getEditMode() === EDIT_MODE_CELL && this._needUpdateRow()) {
+                        const editRowIndex = this.getEditRowIndex();
+
+                        this._dataController.updateItems({
+                            changeType: 'update',
+                            rowIndices: [editRowIndex]
+                        });
+                        this._focusEditingCell();
                     }
                 },
 

@@ -1,14 +1,15 @@
-const $ = require('../../core/renderer');
-const window = require('../../core/utils/window').getWindow();
-const List = require('../list');
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const noop = require('../../core/utils/common').noop;
-const ensureDefined = require('../../core/utils/common').ensureDefined;
-const isDate = require('../../core/utils/type').isDate;
-const extend = require('../../core/utils/extend').extend;
-const dateUtils = require('./ui.date_utils');
-const dateLocalization = require('../../localization/date');
-const dateSerialization = require('../../core/utils/date_serialization');
+import $ from '../../core/renderer';
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
+import List from '../list';
+import DateBoxStrategy from './ui.date_box.strategy';
+import { noop } from '../../core/utils/common';
+import { ensureDefined } from '../../core/utils/common';
+import { isDate } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import dateUtils from './ui.date_utils';
+import dateLocalization from '../../localization/date';
+import dateSerialization from '../../core/utils/date_serialization';
 
 const DATE_FORMAT = 'date';
 
@@ -45,9 +46,7 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        return extend(popupConfig, {
-            width: this._getPopupWidth()
-        });
+        return popupConfig;
     },
 
     useCurrentDateByDefault: function() {
@@ -56,10 +55,6 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     getDefaultDate: function() {
         return new Date(null);
-    },
-
-    _getPopupWidth: function() {
-        return this.dateBox.$element().outerWidth();
     },
 
     popupShowingHandler: function() {
@@ -256,16 +251,9 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _dimensionChanged: function() {
-        this._getPopup() && this._updatePopupDimensions();
-    },
-
-    _updatePopupDimensions: function() {
-        this._updatePopupWidth();
-        this._updatePopupHeight();
-    },
-
-    _updatePopupWidth: function() {
-        this.dateBox._setPopupOption('width', this._getPopupWidth());
+        if(this._getPopup()) {
+            this._updatePopupHeight();
+        }
     },
 
     _updatePopupHeight: function() {
@@ -288,4 +276,4 @@ const ListStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = ListStrategy;
+export default ListStrategy;

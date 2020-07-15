@@ -1,1 +1,1 @@
-module.exports = require('./templates/template_engine_registry').setTemplateEngine;
+export { setTemplateEngine as default } from './templates/template_engine_registry';

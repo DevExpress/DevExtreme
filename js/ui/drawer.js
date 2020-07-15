@@ -1,2 +1,2 @@
-
-module.exports = require('./drawer/ui.drawer');
+import Drawer from './drawer/ui.drawer';
+export default Drawer;

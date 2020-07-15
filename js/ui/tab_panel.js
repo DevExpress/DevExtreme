@@ -11,7 +11,7 @@ import { getImageContainer } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 
 // STYLE tabPanel
 
@@ -178,7 +178,7 @@ const TabPanel = MultiView.inherit({
     },
 
     _updateLayout: function() {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             const tabsHeight = this._$tabContainer.outerHeight();
             this._$container.css({
                 'marginTop': -tabsHeight,
@@ -382,4 +382,4 @@ TabPanel.ItemClass = TabPanelItem;
 
 registerComponent('dxTabPanel', TabPanel);
 
-module.exports = TabPanel;
+export default TabPanel;

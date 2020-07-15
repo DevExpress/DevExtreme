@@ -24,6 +24,9 @@ import {
     triggerKeyDown,
     focusCell,
     dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
+import devices from 'core/devices';
+
+const device = devices.real();
 
 QUnit.module('Real DataController and ColumnsController', {
     setupModule: function() {
@@ -114,6 +117,70 @@ QUnit.module('Real DataController and ColumnsController', {
         assert.ok($(rowsView.getCellElement(0, 1)).hasClass('dx-focused'), 'cell(0, 1) is focused');
         assert.ok(this.gridView.component.editorFactoryController.focus(), 'has overlay focus');
     });
+
+    if(device.deviceType === 'desktop') {
+        QUnit.testInActiveWindow('Focus on first cell when insert Row', function(assert) {
+            this.options = {
+                editing: {
+                    allowUpdating: true,
+                    mode: 'row',
+                    allowAdding: true
+                }
+            };
+
+            this.setupModule();
+            this.keyboardNavigationController._focusedView = this.rowsView;
+
+            this.gridView.render($('#container'));
+
+            this.editingController.addRow();
+            this.clock.tick();
+            const $newRow = $('#container').find('.dx-data-row').first();
+
+            assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
+            assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass('dx-focused'));
+
+            // act
+            this.triggerKeyDown('tab', false, false, $('#container').find('input'));
+
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
+            assert.ok($newRow.find('input').eq(1).parents('.dx-editor-cell').hasClass('dx-focused'));
+        });
+
+        QUnit.testInActiveWindow('Focus on first cell when insert Row via API when not editing', function(assert) {
+            this.options = {
+                editing: {
+                    allowUpdating: false,
+                    mode: 'row'
+                }
+            };
+
+            this.setupModule();
+            this.keyboardNavigationController._focusedView = this.rowsView;
+
+            this.gridView.render($('#container'));
+
+            this.editingController.addRow();
+            this.clock.tick();
+
+            const $newRow = $('#container').find('.dx-data-row').first();
+
+            assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
+            assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass('dx-focused'));
+
+            // act
+            this.triggerKeyDown('tab', false, false, $('#container').find('input'));
+
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
+            assert.ok($newRow.find('input').eq(1).parents('.dx-editor-cell').hasClass('dx-focused'));
+        });
+    }
 
     QUnit.testInActiveWindow('Cell is focused when clicked on self', function(assert) {
         // arrange

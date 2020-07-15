@@ -133,6 +133,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     taskTitlePosition?: 'inside' | 'outside' | 'none';
     /**
+     * @docid dxGanttOptions.firstDayOfWeek
+     * @extends FirstDayOfWeek
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    /**
      * @docid dxGanttOptions.tasks
      * @type Object
      * @default null

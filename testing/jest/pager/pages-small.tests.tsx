@@ -1,12 +1,12 @@
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import PagesSmall, { viewFunction as PagesSmallComponent } from '../../../js/renovation/pager/pages-small';
-import getElementComputedStyle from '../../../js/renovation/pager/utils/get-computed-style';
-import NumberBox from '../../../js/renovation/number-box';
+import { PagesSmall, viewFunction as PagesSmallComponent } from '../../../js/renovation/pager/pages/small';
+import getElementComputedStyle from '../../../js/renovation/pager/utils/get_computed_style';
+import { NumberBox } from '../../../js/renovation/number-box';
 
-jest.mock('../../../js/renovation/number-box', jest.fn());
-jest.mock('../../../js/renovation/pager/page', jest.fn());
-jest.mock('../../../js/renovation/pager/utils/get-computed-style');
+jest.mock('../../../js/renovation/number-box', () => ({ __esModule: true, NumberBox: jest.fn() }));
+jest.mock('../../../js/renovation/pager/pages/page', () => ({ __esModule: true, Page: jest.fn() }));
+jest.mock('../../../js/renovation/pager/utils/get_computed_style');
 
 describe('Small pager pages', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -41,11 +41,11 @@ describe('Small pager pages', () => {
 
     expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toEqual({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: props.valueChange, width: 40,
+      children: [], className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: props.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toEqual({
-      index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
+      children: [], index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
     });
   });
   it('updateWidth effect', () => {
