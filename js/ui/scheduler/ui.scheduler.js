@@ -2125,11 +2125,44 @@ class Scheduler extends Widget {
         });
     }
 
-    cropAppointmentsByStartDayHour(list) {
+    updateAppointmentStartDate(options) {
+        const appointment = options.appointment;
+        const firstViewDate = this._workSpace.getStartViewDate();
+        let startDate = new Date(options.startDate);
         const startDayHour = this._getCurrentViewOption('startDayHour');
-        return list.map(app => {
-            app.startDate = dateUtils.roundDateByStartDayHour(app.startDate, startDayHour);
-            return app;
+        let updatedStartDate;
+
+        if(this.appointmentTakesAllDay(appointment)) {
+            updatedStartDate = dateUtils.normalizeDate(startDate, firstViewDate);
+        } else {
+            if(startDate < firstViewDate) {
+                startDate = firstViewDate;
+            }
+            updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
+        }
+
+        return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
+    }
+
+    _cropAppointmentsByStartDayHour(appointments) {
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const firstViewDate = this._workSpace.getStartViewDate();
+
+        return appointments.map(appointment => {
+            let startDate = new Date(appointment.startDate);
+            let resultDate = new Date(appointment.startDate);
+
+            if(this.appointmentTakesAllDay(appointment)) {
+                resultDate = dateUtils.normalizeDate(startDate, firstViewDate);
+            } else {
+                if(startDate < firstViewDate) {
+                    startDate = firstViewDate;
+                }
+                resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
+            }
+            appointment.startDate = dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
+
+            return appointment;
         });
     }
 
@@ -2181,7 +2214,8 @@ class Scheduler extends Widget {
                 })
             };
         });
-        gridAppointmentList = this.cropAppointmentsByStartDayHour(gridAppointmentList);
+
+        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList);
 
         // recurrenceDates = this.getCorrectedDatesByDaylightOffsets(adapter.startDate, recurrenceDates, appointment); // TODO:
         // initialDates = recurrenceDates;
