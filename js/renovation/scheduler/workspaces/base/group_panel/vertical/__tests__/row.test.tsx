@@ -1,12 +1,12 @@
 import { shallow } from 'enzyme';
 import {
   viewFunction as RowView,
-} from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/row';
+} from '../row';
 import {
   GroupPanelVerticalCell as Cell,
-} from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/cell';
+} from '../cell';
 
-jest.mock('../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/cell', () => ({
+jest.mock('../cell', () => ({
   GroupPanelVerticalCell: (): null => null,
 }));
 

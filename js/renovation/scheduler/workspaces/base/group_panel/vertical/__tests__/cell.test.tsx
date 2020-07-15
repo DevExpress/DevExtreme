@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import {
   viewFunction as CellView,
-} from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/cell';
+} from '../cell';
 
 describe('GroupPanel Vertical Cell', () => {
   describe('Render', () => {

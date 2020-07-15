@@ -1,8 +1,9 @@
-import { getKeyByDateAndGroup, addHeightToStyle } from '../../../../js/renovation/scheduler/workspaces/utils';
+import { getKeyByDateAndGroup, addHeightToStyle } from '../utils';
 
 describe('Workspaces utils', () => {
   describe('getKeyByDateAndGroup', () => {
     const testDate = new Date(2020, 6, 13);
+
     it('should generate key from date', () => {
       expect(getKeyByDateAndGroup(testDate))
         .toBe(testDate.toString());

@@ -2,14 +2,14 @@ import { mount } from 'enzyme';
 import {
   GroupPanelVerticalLayout as Layout,
   viewFunction as LayoutView,
-} from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/layout';
-import { Row } from '../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/row';
-import { addHeightToStyle } from '../../../../../../../js/renovation/scheduler/workspaces/utils';
+} from '../layout';
+import { Row } from '../row';
+import { addHeightToStyle } from '../../../../utils';
 
-jest.mock('../../../../../../../js/renovation/scheduler/workspaces/base/group_panel/vertical/row', () => ({
+jest.mock('../row', () => ({
   Row: () => null,
 }));
-jest.mock('../../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+jest.mock('../../../../utils', () => ({
   addHeightToStyle: jest.fn(() => 'style'),
 }));
 
