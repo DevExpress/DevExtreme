@@ -11,7 +11,7 @@ import {
   defaultEvent,
   emitKeyboard,
   KEY,
-} from '../utils/events_mock';
+} from '../../__tests__/utils/events_mock';
 import { setPublicElementWrapper } from '../../../core/element';
 
 beforeEach(() => {
