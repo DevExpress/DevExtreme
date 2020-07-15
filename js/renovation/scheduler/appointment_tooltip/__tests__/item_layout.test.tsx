@@ -1,26 +1,25 @@
-import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { Fragment } from 'devextreme-generator/component_declaration/common';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
-import { dxSchedulerAppointment } from '../../../../js/ui/scheduler';
+import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
   TooltipItemLayout,
   viewFunction as TooltipItemLayoutView,
   TooltipItemLayoutProps,
-} from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
-import { Button as DeleteButton } from '../../../../js/renovation/button';
-import { Marker } from '../../../../js/renovation/scheduler/appointment-tooltip/marker';
-import { TooltipItemContent } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
-import getCurrentAppointment from '../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
+} from '../item_layout';
+import { Button as DeleteButton } from '../../../button';
+import { Marker } from '../marker';
+import { TooltipItemContent } from '../item_content';
+import getCurrentAppointment from '../utils/get_current_appointment';
 
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment', () => jest.fn(() => ({
+jest.mock('../utils/get_current_appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));
 
-jest.mock('../../../../js/renovation/button', () => ({ __esModule: true, Button: () => null }));
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/marker', () => ({ __esModule: true, Marker: () => null }));
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-content', () => ({ __esModule: true, TooltipItemContent: () => null }));
+jest.mock('../../../button', () => ({ __esModule: true, Button: () => null }));
+jest.mock('../marker', () => ({ __esModule: true, Marker: () => null }));
+jest.mock('../item_content', () => ({ __esModule: true, TooltipItemContent: () => null }));
 
 describe('TooltipItemLayout', () => {
   describe('Render', () => {
@@ -48,7 +47,9 @@ describe('TooltipItemLayout', () => {
     // Have to use JSX because Fragment causes errors
     const render = (viewModel) => shallow(
       <TooltipItemLayoutView
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...defaultViewModel}
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel}
         props={{ ...defaultProps, ...viewModel.props }}
       /> as any,
@@ -140,6 +141,7 @@ describe('TooltipItemLayout', () => {
       const renderWithTemplate = () => shallow(
         <TooltipItemLayoutView
           props={{ ...defaultProps, itemContentTemplate: template }}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...defaultViewModel}
           currentAppointment={currentAppointment}
         />,
@@ -170,6 +172,7 @@ describe('TooltipItemLayout', () => {
         const tooltipItemLayout = shallow(
           <TooltipItemLayoutView
             props={{ ...defaultProps }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...defaultViewModel}
           />,
         );

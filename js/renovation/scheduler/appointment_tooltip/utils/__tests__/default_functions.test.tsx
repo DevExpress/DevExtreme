@@ -1,6 +1,6 @@
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
-} from '../../../../../js/renovation/scheduler/appointment-tooltip/utils/default-functions';
+} from '../default_functions';
 
 describe('AppointmentTooltip Default Functions', () => {
   describe('defaultGetTextAndFormatDate', () => {

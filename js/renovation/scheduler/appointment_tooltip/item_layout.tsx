@@ -11,9 +11,9 @@ import {
 } from './types';
 import { Marker } from './marker';
 import { Button } from '../../button';
-import { TooltipItemContent } from './item-content';
-import getCurrentAppointment from './utils/get-current-appointment';
-import { defaultGetTextAndFormatDate } from './utils/default-functions';
+import { TooltipItemContent } from './item_content';
+import getCurrentAppointment from './utils/get_current_appointment';
+import { defaultGetTextAndFormatDate } from './utils/default_functions';
 
 export const viewFunction = (viewModel: TooltipItemLayout) => {
   const useTemplate = !!viewModel.props.itemContentTemplate;

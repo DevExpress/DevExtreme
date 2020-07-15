@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { viewFunction as TooltipItemContentView } from '../../../../js/renovation/scheduler/appointment-tooltip/item-content';
+import { viewFunction as TooltipItemContentView } from '../item_content';
 
 describe('TooltipItemContent', () => {
   describe('Render', () => {
