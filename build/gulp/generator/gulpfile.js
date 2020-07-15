@@ -196,8 +196,8 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
     gulp.watch(SRC, gulp.series('generate-components'));
 }));
 
-gulp.task("react-compilation-check", function () {
-    const generator = require(`devextreme-generator/react-generator`).default;
+gulp.task('react-compilation-check', function() {
+    const generator = require('devextreme-generator/react-generator').default;
 
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils'
@@ -205,7 +205,7 @@ gulp.task("react-compilation-check", function () {
 
     const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
 
-    return gulp.src([...SRC, "!js/renovation/preact_wrapper/**/*.*"], { base: 'js' })
-    .pipe(generateComponents(generator))
-    .pipe(tsProject())
+    return gulp.src([...SRC, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
+        .pipe(generateComponents(generator))
+        .pipe(tsProject());
 });
