@@ -14,7 +14,7 @@ const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 const generator = new PreactGenerator();
 
-const SRC = ['js/renovation/**/*.{tsx,ts}', '!js/renovation/**/*.j.tsx', '!js/renovation/**/*.d.ts'];
+const SRC = ['js/renovation/**/*.{tsx,ts}', '!js/renovation/**/*.j.tsx', '!js/renovation/**/*.d.ts', '!js/renovation/**/__tests__/**/*'];
 const DEST = 'js/renovation/';
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
