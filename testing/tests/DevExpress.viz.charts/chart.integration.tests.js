@@ -3847,9 +3847,18 @@ QUnit.test('Resolve overlapping: labels and axes', function(assert) {
     const argAxis = chart.getArgumentAxis();
     const valAxis2 = chart.getValueAxis('axis2');
 
+    const argFunction = argAxis._detectElementsOverlapping;
+    const valFunction = valAxis2._detectElementsOverlapping;
+
+    argAxis._detectElementsOverlapping = sinon.spy(function() { return argFunction.apply(argAxis, arguments); });
+    valAxis2._detectElementsOverlapping = sinon.spy(function() { return valFunction.apply(valAxis2, arguments); });
+
     chart.option('valueAxis[2].customPosition', 500);
     assert.ok(valAxis2._majorTicks[4].label.attr('translateY') < 0);
     assert.ok(argAxis._majorTicks[5].label.attr('translateX') > 0);
+
+    assert.equal(argAxis._detectElementsOverlapping.callCount, 138);
+    assert.equal(valAxis2._detectElementsOverlapping.callCount, 137);
 
     chart.option('argumentAxis.label', { position: 'top' });
     assert.ok(valAxis2._majorTicks[4].label.attr('translateY') > 0);
@@ -3873,11 +3882,20 @@ QUnit.test('Resolve overlapping: labels', function(assert) {
     const argAxis = chart.getArgumentAxis();
     const valAxis2 = chart.getValueAxis('axis2');
 
+    const argFunction = argAxis._detectElementsOverlapping;
+    const valFunction = valAxis2._detectElementsOverlapping;
+
+    argAxis._detectElementsOverlapping = sinon.spy(function() { return argFunction.apply(argAxis, arguments); });
+    valAxis2._detectElementsOverlapping = sinon.spy(function() { return valFunction.apply(valAxis2, arguments); });
+
     chart.option('valueAxis[2].customPosition', 520);
     assert.ok(valAxis2._majorTicks[5].label.attr('translateX') > 0);
     assert.equal(valAxis2._majorTicks[5].mark.attr('translateX'), 6);
     assert.ok(argAxis._majorTicks[5].label.attr('translateY') < 0);
     assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), -6);
+
+    assert.equal(argAxis._detectElementsOverlapping.callCount, 71);
+    assert.equal(valAxis2._detectElementsOverlapping.callCount, 67);
 
     chart.option('argumentAxis.label', { position: 'top' });
     assert.ok(valAxis2._majorTicks[4].label.attr('translateX') > 0);

@@ -5,10 +5,10 @@ import { addHeightToStyle } from '../utils';
 
 export const viewFunction = (viewModel: Row) => (
   <tr
-    className={viewModel.props.className}
-    style={viewModel.style}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    className={`${viewModel.props.className}`}
+    style={viewModel.style}
   >
     {viewModel.props.children}
   </tr>

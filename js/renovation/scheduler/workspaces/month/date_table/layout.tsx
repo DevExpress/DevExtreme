@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from '../../base/row';
+import { DateTableRow as Row } from '../../base/date_table/row';
 import { MonthDateTableCell as Cell } from './cell';
 import { ViewCellData, GroupedViewData } from '../../types';
 import { getKeyByDateAndGroup } from '../../utils';
@@ -17,7 +17,6 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
         .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
           <Row
             key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-            className="dx-scheduler-date-table-row"
           >
             {cellsRow.map(({
               startDate, endDate, otherMonth, today, groups,

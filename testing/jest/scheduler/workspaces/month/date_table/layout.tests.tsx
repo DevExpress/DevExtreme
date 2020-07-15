@@ -1,12 +1,14 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/layout';
-import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
-import {
-  MonthDateTableCell as Cell,
-} from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell';
+import { DateTableRow as Row } from '../../../../../../js/renovation/scheduler/workspaces/base/date_table/row';
+import { MonthDateTableCell as Cell } from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell';
 import { getKeyByDateAndGroup } from '../../../../../../js/renovation/scheduler/workspaces/utils';
 
+jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row', () => ({
+  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row'),
+  DateTableRow: ({ children, ...restProps }) => <div {...restProps}>{children}</div>,
+}));
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell', () => ({
   MonthDateTableCell: () => null,
 }));
@@ -84,10 +86,6 @@ describe('MonthDateTableLayout', () => {
       const rows = layout.find(Row);
       expect(rows)
         .toHaveLength(2);
-      expect(rows.at(0).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
-      expect(rows.at(1).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
     });
 
     it('should render cells and pass correct props to them', () => {

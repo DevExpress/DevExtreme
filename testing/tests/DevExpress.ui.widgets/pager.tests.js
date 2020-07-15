@@ -109,19 +109,13 @@ QUnit.module_r('Pager', {
                 testPageSize = pageSize;
             }
         });
-        const instance = $pager.dxPager('instance');
-
-
         let testPageIndex = null;
         let testPageSize = null;
 
-        instance._useDefaultOptionUpdate = true;
         $($pager.find('.dx-page')[1]).trigger('dxclick');
-
         assert.equal(testPageIndex, 2, 'pageIndex is changed');
 
         $($pager.find('.dx-page-size')[1]).trigger('dxclick');
-
         assert.equal(testPageSize, 10, 'pageSize is changed');
     });
 
@@ -221,8 +215,6 @@ QUnit.module_r('Pager', {
 
         // assert
         assert.ok(this.checkPages(pages(), [1, 2, 3, 4, 5, 13], '1'), 'page value = 1');
-        instance._useDefaultOptionUpdate = true;
-
         instance._selectPageByValue(2);
 
         assert.ok(this.checkPages(pages(), [1, 2, 3, 4, 5, 13], '2'), 'page value = 2');
@@ -293,9 +285,8 @@ QUnit.module_r('Pager', {
         const testElement = $('#container');
         const $pager = testElement.dxPager({ maxPagesCount: 7, pageCount: 8 });
         const instance = $pager.dxPager('instance');
-        instance._useDefaultOptionUpdate = true;
-        $(instance._pages[4]._$page).trigger('dxclick');
 
+        $(instance._pages[4]._$page).trigger('dxclick');
         const pagesElement = getPagesElement(testElement);
         assert.equal(pagesElement.length, 8, 'pages elements count');
         assert.equal(getText(pagesElement[0]), '1', 'page 1');
@@ -313,7 +304,6 @@ QUnit.module_r('Pager', {
         const $pager = testElement.dxPager({ maxPagesCount: 7, pageCount: 8 });
         const instance = $pager.dxPager('instance');
 
-        instance._useDefaultOptionUpdate = true;
         $(instance._pages[4]._$page).trigger('dxpointerup');
         $(instance._pages[4]._$page).trigger('dxclick');
 
@@ -374,9 +364,9 @@ QUnit.module_r('Pager', {
         const instance = $pager.dxPager('instance');
         let pagesElement;
 
-        instance._useDefaultOptionUpdate = true;
+
         $(instance._pages[4]._$page).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
+
 
         pagesElement = getPagesElement(testElement);
         assert.equal(instance.selectedPage.value(), '5', 'selected page');
@@ -656,21 +646,17 @@ QUnit.module_r('Pager', {
         const instance = $pager.dxPager('instance');
 
         let $button = $('.dx-next-button');
-        instance._useDefaultOptionUpdate = true;
         $($button).trigger('dxclick');
         $button = $('.dx-next-button');
         $($button).trigger('dxclick');
         $button = $('.dx-next-button');
         $($button).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
 
         assert.equal(instance.selectedPage.value(), '4', 'selected page index 4');
 
         instance.option('pageIndex', 10);
-        instance._useDefaultOptionUpdate = true;
-        $($button).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
 
+        $($button).trigger('dxclick');
         assert.equal(instance.selectedPage.value(), '10', 'selected page index 10');
     });
 
@@ -688,22 +674,22 @@ QUnit.module_r('Pager', {
         const instance = $pager.dxPager('instance');
 
         instance.option('pageIndex', 8);
-        instance._useDefaultOptionUpdate = true;
+
         let $prevButton = $('.dx-prev-button');
         $($prevButton).trigger('dxclick');
         $prevButton = $('.dx-prev-button');
         $($prevButton).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
+
 
         assert.equal(instance.selectedPage.value(), '6', 'selected page index 6');
 
         instance.option('pageIndex', 1);
-        instance._useDefaultOptionUpdate = true;
+
         $prevButton = $('.dx-prev-button');
         $($prevButton).trigger('dxclick');
         $prevButton = $('.dx-prev-button');
         $($prevButton).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
+
 
         assert.equal(instance.selectedPage.value(), '1', 'selected page index 1');
     });
@@ -722,17 +708,13 @@ QUnit.module_r('Pager', {
         instance.option('pageIndex', 8);
         assert.equal(instance.option('pageIndex'), 8);
 
-        instance._useDefaultOptionUpdate = true;
         $button = $('.dx-next-button');
         $($button).trigger('dxclick');
 
-        instance._useDefaultOptionUpdate = false;
         assert.equal(instance.option('pageIndex'), 9);
 
-        instance._useDefaultOptionUpdate = true;
         $button = $('.dx-prev-button');
         $($button).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
         assert.equal(instance.option('pageIndex'), 8);
     });
 
@@ -784,10 +766,8 @@ QUnit.module_r('Pager', {
         const instance = $pager.dxPager('instance');
 
 
-        instance._useDefaultOptionUpdate = true;
         $pager.find('.dx-page').eq(4).trigger('dxpointerup');
         $pager.find('.dx-page').eq(4).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
 
         assert.equal(instance.option('pageIndex'), 5, 'pageIndex is correct');
     });
@@ -957,19 +937,16 @@ QUnit.module_r('Pager', {
     });
 
     QUnit.test('Light mode. Change page index after clicked on the pages count element', function(assert) {
-        const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
+        $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 110,
             pageSizes: [5, 10, 20],
             showPageSizes: false,
             pagesCountText: 'of'
         });
-        const instance = $pager.dxPager('instance');
-
         const editor = $('.dx-page-index').dxNumberBox('instance');
         const $pagesCount = $('.dx-pages-count');
 
-        instance._useDefaultOptionUpdate = true;
         $($pagesCount).trigger('dxclick');
 
         assert.equal($pagesCount.text(), '110', 'pages count');
@@ -1153,9 +1130,6 @@ QUnit.module_r('Pager', {
                 pageIndex = value;
             }
         });
-        const instance = $pager.dxPager('instance');
-
-        instance._useDefaultOptionUpdate = true;
         const $pageIndex = $pager.find('.dx-page-index');
         const numberBox = $pageIndex.dxNumberBox('instance');
 
@@ -1183,8 +1157,7 @@ QUnit.module_r('Pager', {
 
     QUnit.test('Light mode. Change page index via the navigation buttons', function(assert) {
         let pageIndex;
-
-        const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
+        $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
             pageSizes: [5, 10, 20],
@@ -1196,18 +1169,13 @@ QUnit.module_r('Pager', {
                 pageIndex = value;
             }
         });
-        const instance = $pager.dxPager('instance');
-
-        instance._useDefaultOptionUpdate = true;
         const $nextButton = $('.dx-next-button');
         const $prevButton = $('.dx-prev-button');
 
         $($nextButton).trigger('dxclick');
-
         assert.equal(pageIndex, 2, 'next page index');
 
         $($prevButton).trigger('dxclick');
-
         assert.equal(pageIndex, 1, 'prev page index');
     });
 
@@ -1226,9 +1194,7 @@ QUnit.module_r('Pager', {
                 pageIndex = value;
             }
         });
-        const instance = $pager.dxPager('instance');
         const $input = $pager.find('.dx-page-index .dx-texteditor-input').first();
-        instance._useDefaultOptionUpdate = true;
 
         $input.val(-12);
         $input.change();
@@ -1514,7 +1480,7 @@ QUnit.module_r('Pager', {
         instance.pageIndexChanged = function() {
             isPageChanged = true;
         };
-        instance._useDefaultOptionUpdate = true;
+
         const $button = $('.dx-next-button');
         $button.click();
 
@@ -1559,18 +1525,12 @@ QUnit.module_r('Pager', {
 
         assert.equal(instance.option('pageIndex'), 8);
 
-        instance._useDefaultOptionUpdate = true;
         $button = $('.dx-next-button');
         $($button).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
-
         assert.equal(instance.option('pageIndex'), 7);
 
-        instance._useDefaultOptionUpdate = true;
         $button = $('.dx-prev-button');
         $($button).trigger('dxclick');
-        instance._useDefaultOptionUpdate = false;
-
         assert.equal(instance.option('pageIndex'), 8);
     });
 

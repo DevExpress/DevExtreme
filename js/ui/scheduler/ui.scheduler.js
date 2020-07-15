@@ -2227,9 +2227,11 @@ class Scheduler extends Widget {
                         });
                 } catch(err) {
                     performFailAction(err);
+                    deferred.resolve();
                 }
             } else {
                 performFailAction();
+                deferred.resolve();
             }
 
             return deferred.promise();
