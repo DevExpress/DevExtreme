@@ -611,6 +611,10 @@ $MATERIAL_GRID_BASE_CELL_PADDING: $MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING $MAT
             padding-bottom: 12px;
             vertical-align: bottom;
             border-right: 1px solid $MATERIAL_GRID_BASE_BORDER_COLOR;
+
+            &:last-child {
+              border-right: none;
+            }
           }
         }
       }
