@@ -2258,6 +2258,31 @@ class Scheduler extends Widget {
         });
     }
 
+    getTargetedAppointmentNew(appointment, element) { // TODO: rename
+        const settings = $(element).data('dxAppointmentSettings');
+        const appointmentIndex = $(element).data(this._appointments._itemIndexKey());
+
+        const adapter = this.createAppointmentAdapter(appointment);
+        const targetedAdapter = adapter.clone();
+
+        if(this._isAgenda()) {
+            const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
+            const newStartDate = getStartDate(element, adapter.startDate).startDate;
+
+            targetedAdapter.startDate = newStartDate;
+            targetedAdapter.endDate = new Date(newStartDate.getTime() + adapter.duration);
+
+        } else {
+            targetedAdapter.startDate = settings.info.sourceAppointment.startDate;
+            targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
+        }
+
+        if(element) {
+            this.setTargetedAppointmentResources(targetedAdapter.source, element, appointmentIndex);
+        }
+        return targetedAdapter.source;
+    }
+
     _getAppointmentData(appointmentData, options) {
         options = options || {};
 

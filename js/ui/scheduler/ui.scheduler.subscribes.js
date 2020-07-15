@@ -42,13 +42,8 @@ const subscribes = {
     },
 
     showAppointmentTooltip: function(options) { // TODO:
-        const settings = $(options.target).data('dxAppointmentSettings');
-
-        const targetedAdapter = this.createAppointmentAdapter(options.data).clone();
-        targetedAdapter.startDate = settings.info.sourceAppointment.startDate;
-        targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
-
-        this.showAppointmentTooltip(options.data, options.target, targetedAdapter.source);
+        const targetedAppointment = this.getTargetedAppointmentNew(options.data, options.target);
+        this.showAppointmentTooltip(options.data, options.target, targetedAppointment);
     },
 
     hideAppointmentTooltip: function() {
@@ -72,7 +67,7 @@ const subscribes = {
         const appointmentData = options.data;
 
         options.$appointment = $(options.target);
-        options.skipHoursProcessing = true;
+        options.skipHoursProcessing = true; // TODO
 
         const targetedData = this._getAppointmentData(appointmentData, options);
         this.showAppointmentPopup(appointmentData, false, targetedData);
@@ -691,7 +686,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointment, appointmentElement, needConvertByTimezones) {
+    getTargetedAppointmentData: function(appointment, appointmentElement, needConvertByTimezones) { // TODO: replace on getTargetedAppointmentNew
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 

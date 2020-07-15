@@ -17,6 +17,10 @@ class AppointmentAdapter {
         this.appointment = appointment;
     }
 
+    get duration() {
+        return this.endDate.getTime() - this.startDate.getTime();
+    }
+
     get startDate() {
         const result = this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment);
         return result === undefined ? result : new Date(result);
