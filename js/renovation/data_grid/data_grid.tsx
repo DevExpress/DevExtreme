@@ -1,5 +1,5 @@
 import {
-  Ref, Effect, Component, JSXComponent, Method,
+  Ref, Effect, Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../ui/data_grid';
 
@@ -25,11 +25,6 @@ export const viewFunction = ({ widgetRef, props: { className }, restAttributes }
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
-
-  @Method()
-  getHtmlElement(): HTMLDivElement {
-    return this.widgetRef;
-  }
 
   @Effect()
   updateWidget(): void {

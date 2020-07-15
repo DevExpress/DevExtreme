@@ -54,14 +54,6 @@ describe('DataGrid', () => {
     });
   });
   describe('Logic', () => {
-    it('getHtmlElement', () => {
-      const widgetRef = 'ref' as any as HTMLDivElement;
-      const component = new DataGrid({});
-      component.widgetRef = widgetRef;
-
-      expect(component.getHtmlElement()).toEqual('ref');
-    });
-
     describe('properties', () => {
       it('picks props', () => {
         const dataSource = [];
