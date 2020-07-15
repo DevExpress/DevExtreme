@@ -9,6 +9,7 @@ describe('AppointmentTooltip Default Functions', () => {
         .toEqual({ text: '', formatDate: '' });
     });
   });
+
   describe('defaultGetSingleAppointment', () => {
     it('should return default appointment', () => {
       expect(defaultGetSingleAppointment())
