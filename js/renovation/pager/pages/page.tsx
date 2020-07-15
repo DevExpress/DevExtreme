@@ -4,8 +4,8 @@ import {
 
 import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
+import { combineClasses } from '../../utils/combine_classes';
 
-const PAGER_PAGE_SELECTION_CLASS = `${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   className, value, label, props: { onClick },
@@ -47,6 +47,10 @@ export class Page extends JSXComponent(PageProps) {
   get className(): string {
     const
       { selected } = this.props;
-    return ([selected ? PAGER_PAGE_SELECTION_CLASS : PAGER_PAGE_CLASS, this.props.className].join(' ')).trim();
+    return combineClasses({
+      [PAGER_PAGE_CLASS]: true,
+      [this.props.className!]: !!this.props.className,
+      [PAGER_SELECTION_CLASS]: !!selected,
+    });
   }
 }

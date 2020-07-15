@@ -6,6 +6,7 @@ import widgetsMeta from './widgets.json!';
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
 const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout'];
+const CUSTOM_ROOT_CLASSE_WIDGET = { 'dxrGridPager': 'datagrid-pager' };
 
 const widgetsInBundle = [];
 for(const name in DevExpress.renovation) {
@@ -46,9 +47,9 @@ QUnit.module('Mandatory component setup', {
 
             let message = 'You should always set `dx-widget` class to the root of your component';
             assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
-
+            const className = CUSTOM_ROOT_CLASSE_WIDGET[meta.widgetName] || meta.name.toLowerCase();
             message = 'Use `dx-` followed by lowercase Component name as css class name';
-            assert.equal($('#component').get(0), $(`.dx-${meta.name.toLowerCase()}`).get(0), message);
+            assert.equal($('#component').get(0), $(`.dx-${className}`).get(0), message);
         });
     });
 
@@ -73,8 +74,8 @@ QUnit.module('Mandatory component setup', {
 
             $('#component').addClass('custom-class');
             $('#component')[meta.widgetName]();
-
-            assert.equal($('#component').get(0), $(`.custom-class.dx-${meta.name.toLowerCase()}`).get(0), message);
+            const className = CUSTOM_ROOT_CLASSE_WIDGET[meta.widgetName] || meta.name.toLowerCase();
+            assert.equal($('#component').get(0), $(`.custom-class.dx-${className}`).get(0), message);
         });
     });
 

@@ -214,7 +214,7 @@ describe('PagerContent', () => {
       it('customClass', () => {
         const component = new PagerContent({
         } as PagerContentProps);
-        expect(component.className).toBe('dx-widget dx-pager dx-datagrid-pager dx-state-invisible dx-light-mode');
+        expect(component.className).toBe('dx-widget dx-pager dx-state-invisible dx-light-mode');
         component.props.className = 'custom';
         expect(component.className).toEqual(expect.stringContaining('custom'));
       });
