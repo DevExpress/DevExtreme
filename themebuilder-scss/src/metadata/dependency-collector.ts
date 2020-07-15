@@ -3,9 +3,8 @@
 
 import { readFileSync, existsSync } from 'fs';
 import cabinet from 'filing-cabinet';
+import precinct from 'precinct';
 import WidgetsHandler from '../modules/widgets-handler';
-
-const precinct = require('precinct');
 
 const stylesRegex = /\sSTYLE (.*)/;
 
