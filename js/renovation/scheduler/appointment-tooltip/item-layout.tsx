@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
-import BaseComponent from '../../preact-wrapper/tooltip-item-content';
+import BaseComponent from '../../preact_wrapper/tooltip_item_content';
 import noop from '../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../ui/scheduler';
