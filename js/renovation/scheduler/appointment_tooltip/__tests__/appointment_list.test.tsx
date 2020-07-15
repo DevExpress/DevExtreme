@@ -3,19 +3,20 @@ import { mount } from 'enzyme';
 import {
   AppointmentList,
   viewFunction as AppointmentListView,
-} from '../../../../js/renovation/scheduler/appointment-tooltip/appointment-list';
-import { List } from '../../../../js/renovation/list';
-import { TooltipItemLayout } from '../../../../js/renovation/scheduler/appointment-tooltip/item-layout';
-import getCurrentAppointment from '../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
+} from '../appointment_list';
+import { List } from '../../../list';
+import { TooltipItemLayout } from '../item_layout';
+import getCurrentAppointment from '../utils/get_current_appointment';
 
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/item-layout', () => ({
+jest.mock('../item_layout', () => ({
   __esModule: true,
   TooltipItemLayout: () => null,
 }));
 
-jest.mock('../../../../js/renovation/list', () => ({
+jest.mock('../../../list', () => ({
   __esModule: true,
   List: (props) => {
+    // eslint-disable-next-line react/prop-types
     const { dataSource } = props;
     return (
       <props.itemTemplate
@@ -27,7 +28,7 @@ jest.mock('../../../../js/renovation/list', () => ({
   },
 }));
 
-jest.mock('../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment', () => jest.fn(() => ({
+jest.mock('../utils/get_current_appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));
 
