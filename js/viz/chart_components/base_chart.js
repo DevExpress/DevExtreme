@@ -1111,7 +1111,7 @@ export const BaseChart = BaseWidget.inherit({
     },
 
     _resetComponentsAnimation: function(isFirstDrawing) {
-        this.series.forEach((s) => { s.resetAnimation(isFirstDrawing); });
+        this.series.forEach((s) => { s.resetApplyingAnimation(isFirstDrawing); });
         this._resetAxesAnimation(isFirstDrawing);
     },
 

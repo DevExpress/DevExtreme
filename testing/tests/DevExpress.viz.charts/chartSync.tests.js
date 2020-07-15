@@ -1330,13 +1330,13 @@ const environment = {
 
         chart._resetComponentsAnimation(true);
 
-        assert.ok(chart.series[0].resetAnimation.called);
-        assert.ok(chart.getArgumentAxis().resetAnimation.called);
-        assert.ok(chart._valueAxes[0].resetAnimation.called);
+        assert.ok(chart.series[0].resetApplyingAnimation.called);
+        assert.ok(chart.getArgumentAxis().resetApplyingAnimation.called);
+        assert.ok(chart._valueAxes[0].resetApplyingAnimation.called);
 
-        assert.equal(chart.series[0].resetAnimation.lastCall.args[0], true);
-        assert.equal(chart.getArgumentAxis().resetAnimation.lastCall.args[0], true);
-        assert.equal(chart._valueAxes[0].resetAnimation.lastCall.args[0], true);
+        assert.equal(chart.series[0].resetApplyingAnimation.lastCall.args[0], true);
+        assert.equal(chart.getArgumentAxis().resetApplyingAnimation.lastCall.args[0], true);
+        assert.equal(chart._valueAxes[0].resetApplyingAnimation.lastCall.args[0], true);
     });
 
     QUnit.test('Reset animation on second drawing', function(assert) {
@@ -1347,13 +1347,13 @@ const environment = {
 
         chart._resetComponentsAnimation();
 
-        assert.ok(chart.series[0].resetAnimation.called);
-        assert.ok(chart.getArgumentAxis().resetAnimation.called);
-        assert.ok(chart._valueAxes[0].resetAnimation.called);
+        assert.ok(chart.series[0].resetApplyingAnimation.called);
+        assert.ok(chart.getArgumentAxis().resetApplyingAnimation.called);
+        assert.ok(chart._valueAxes[0].resetApplyingAnimation.called);
 
-        assert.equal(chart.series[0].resetAnimation.lastCall.args[0], undefined);
-        assert.equal(chart.getArgumentAxis().resetAnimation.lastCall.args[0], undefined);
-        assert.equal(chart._valueAxes[0].resetAnimation.lastCall.args[0], undefined);
+        assert.equal(chart.series[0].resetApplyingAnimation.lastCall.args[0], undefined);
+        assert.equal(chart.getArgumentAxis().resetApplyingAnimation.lastCall.args[0], undefined);
+        assert.equal(chart._valueAxes[0].resetApplyingAnimation.lastCall.args[0], undefined);
     });
 
     QUnit.module('Life cycle', environment);

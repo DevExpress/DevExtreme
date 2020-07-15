@@ -11389,7 +11389,7 @@ QUnit.test('Animate tick to the new position on second drawing', function(assert
     });
 });
 
-QUnit.test('Not animate ticks to the new position after resetAnimation with first drawing (T876376)', function(assert) {
+QUnit.test('Not animate ticks to the new position after resetApplyingAnimation with first drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -11414,7 +11414,7 @@ QUnit.test('Not animate ticks to the new position after resetAnimation with firs
 
     // act
     this.translator.stub('translate').withArgs(1).returns(50);
-    this.axis.resetAnimation(true);
+    this.axis.resetApplyingAnimation(true);
 
     this.axis.draw(this.zeroMarginCanvas);
     this.axis.updateSize(this.canvas, true);
@@ -11427,7 +11427,7 @@ QUnit.test('Not animate ticks to the new position after resetAnimation with firs
     });
 });
 
-QUnit.test('Animate ticks to the new position after updating, resetAnimation and drawing (T876376)', function(assert) {
+QUnit.test('Animate ticks to the new position after updating, resetApplyingAnimation and drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -11444,7 +11444,7 @@ QUnit.test('Animate ticks to the new position after updating, resetAnimation and
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
 
-        this.axis.resetAnimation(firstDrawing);
+        this.axis.resetApplyingAnimation(firstDrawing);
 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
@@ -11623,7 +11623,7 @@ QUnit.test('Animate grid line to the new position on second drawing', function(a
 });
 
 
-QUnit.test('Not animate grid to the new position after resetAnimation with first drawing (T876376)', function(assert) {
+QUnit.test('Not animate grid to the new position after resetApplyingAnimation with first drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -11647,7 +11647,7 @@ QUnit.test('Not animate grid to the new position after resetAnimation with first
 
     // act
     this.translator.stub('translate').withArgs(1).returns(50);
-    this.axis.resetAnimation(true);
+    this.axis.resetApplyingAnimation(true);
 
     this.axis.draw(this.zeroMarginCanvas);
     this.axis.updateSize(this.canvas, true);
@@ -11660,7 +11660,7 @@ QUnit.test('Not animate grid to the new position after resetAnimation with first
     });
 });
 
-QUnit.test('Animate grid to the new position after updating, resetAnimation and drawing (T876376)', function(assert) {
+QUnit.test('Animate grid to the new position after updating, resetApplyingAnimation and drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -11676,7 +11676,7 @@ QUnit.test('Animate grid to the new position after updating, resetAnimation and 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
 
-        this.axis.resetAnimation(firstDrawing);
+        this.axis.resetApplyingAnimation(firstDrawing);
 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
@@ -11911,7 +11911,7 @@ QUnit.test('Animate label to the new position on second drawing', function(asser
     });
 });
 
-QUnit.test('Not animate label to the new position after resetAnimation with first drawing (T876376)', function(assert) {
+QUnit.test('Not animate label to the new position after resetApplyingAnimation with first drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -11929,7 +11929,7 @@ QUnit.test('Not animate label to the new position after resetAnimation with firs
 
     // act
     this.translator.stub('translate').withArgs(1).returns(50);
-    this.axis.resetAnimation(true);
+    this.axis.resetApplyingAnimation(true);
 
     this.axis.draw(this.zeroMarginCanvas);
     this.axis.updateSize(this.canvas, true);
@@ -11942,7 +11942,7 @@ QUnit.test('Not animate label to the new position after resetAnimation with firs
     assert.notOk(label.stub('animate').called);
 });
 
-QUnit.test('Animate label to the new position after updating, resetAnimation and drawing (T876376)', function(assert) {
+QUnit.test('Animate label to the new position after updating, resetApplyingAnimation and drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -11959,7 +11959,7 @@ QUnit.test('Animate label to the new position after updating, resetAnimation and
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
 
-        this.axis.resetAnimation(firstDrawing);
+        this.axis.resetApplyingAnimation(firstDrawing);
 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
@@ -12418,7 +12418,7 @@ QUnit.test('Animate minor grid line to the new position on second drawing', func
     });
 });
 
-QUnit.test('Not animate minor grid to the new position after resetAnimation with first drawing (T876376)', function(assert) {
+QUnit.test('Not animate minor grid to the new position after resetApplyingAnimation with first drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -12436,7 +12436,7 @@ QUnit.test('Not animate minor grid to the new position after resetAnimation with
 
     // act
     this.translator.stub('translate').withArgs(1).returns(50);
-    this.axis.resetAnimation(true);
+    this.axis.resetApplyingAnimation(true);
 
     this.axis.draw(this.zeroMarginCanvas);
     this.axis.updateSize(this.canvas, true);
@@ -12449,7 +12449,7 @@ QUnit.test('Not animate minor grid to the new position after resetAnimation with
     });
 });
 
-QUnit.test('Animate minor grid to the new position after updating, resetAnimation and drawing (T876376)', function(assert) {
+QUnit.test('Animate minor grid to the new position after updating, resetApplyingAnimation and drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -12466,7 +12466,7 @@ QUnit.test('Animate minor grid to the new position after updating, resetAnimatio
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
 
-        this.axis.resetAnimation(firstDrawing);
+        this.axis.resetApplyingAnimation(firstDrawing);
 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
@@ -12699,7 +12699,7 @@ QUnit.test('Animate constant line on second drawing', function(assert) {
     }]);
 });
 
-QUnit.test('Not animate constant line to the new position after resetAnimation with first drawing (T876376)', function(assert) {
+QUnit.test('Not animate constant line to the new position after resetApplyingAnimation with first drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -12720,7 +12720,7 @@ QUnit.test('Not animate constant line to the new position after resetAnimation w
     this.axis.updateSize(this.canvas, true);
 
     // act
-    this.axis.resetAnimation(true);
+    this.axis.resetApplyingAnimation(true);
 
     this.axis.draw(this.zeroMarginCanvas);
     this.axis.updateSize(this.canvas, true);
@@ -12741,7 +12741,7 @@ QUnit.test('Not animate constant line to the new position after resetAnimation w
     }]);
 });
 
-QUnit.test('Animate constant line to the new position after updating, resetAnimation and drawing (T876376)', function(assert) {
+QUnit.test('Animate constant line to the new position after updating, resetApplyingAnimation and drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -12760,7 +12760,7 @@ QUnit.test('Animate constant line to the new position after updating, resetAnima
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
 
-        this.axis.resetAnimation(firstDrawing);
+        this.axis.resetApplyingAnimation(firstDrawing);
 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
@@ -12931,7 +12931,7 @@ QUnit.test('Animate strip to new position on second drawing', function(assert) {
     }]);
 });
 
-QUnit.test('Not animate strip to the new position after resetAnimation with first drawing (T876376)', function(assert) {
+QUnit.test('Not animate strip to the new position after resetApplyingAnimation with first drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -12955,7 +12955,7 @@ QUnit.test('Not animate strip to the new position after resetAnimation with firs
     this.axis.updateSize(this.canvas, true);
 
     // act
-    this.axis.resetAnimation(true);
+    this.axis.resetApplyingAnimation(true);
 
     this.translator.stub('translate').withArgs(1).returns(60);
     this.translator.stub('translate').withArgs(4).returns(70);
@@ -12982,7 +12982,7 @@ QUnit.test('Not animate strip to the new position after resetAnimation with firs
     }]);
 });
 
-QUnit.test('Animate strip to the new position after updating, resetAnimation and drawing (T876376)', function(assert) {
+QUnit.test('Animate strip to the new position after updating, resetApplyingAnimation and drawing (T876376)', function(assert) {
     // arrange
     const renderer = this.renderer;
     this.createAxis();
@@ -13006,7 +13006,7 @@ QUnit.test('Animate strip to the new position after updating, resetAnimation and
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);
 
-        this.axis.resetAnimation(firstDrawing);
+        this.axis.resetApplyingAnimation(firstDrawing);
 
         this.axis.draw(this.zeroMarginCanvas);
         this.axis.updateSize(this.canvas, true);

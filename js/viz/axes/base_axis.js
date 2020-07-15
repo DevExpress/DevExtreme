@@ -798,8 +798,8 @@ Axis.prototype = {
         this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
     },
 
-    resetAnimation: function(isFirstDrawing) {
-        this._resetAnimation = true;
+    resetApplyingAnimation: function(isFirstDrawing) {
+        this._resetApplyingAnimation = true;
         if(isFirstDrawing) {
             this._firstDrawing = true;
         }
@@ -2023,7 +2023,7 @@ Axis.prototype = {
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
 
-        if(this._resetAnimation && !this._firstDrawing) {
+        if(this._resetApplyingAnimation && !this._firstDrawing) {
             that._resetStartCoordinates();
         }
 
@@ -2059,7 +2059,7 @@ Axis.prototype = {
         if(!that._translator.getBusinessRange().isEmpty()) {
             that._firstDrawing = false;
         }
-        this._resetAnimation = false;
+        this._resetApplyingAnimation = false;
     },
 
     prepareAnimation() {

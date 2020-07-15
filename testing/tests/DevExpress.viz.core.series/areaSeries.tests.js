@@ -1749,7 +1749,7 @@ function setDiscreteType(series) {
         checkGroups(assert, series);
     });
 
-    QUnit.test('resetAnimation with first drawing should not call attr for path (T876376)', function(assert) {
+    QUnit.test('resetApplyingAnimation with first drawing should not call attr for path (T876376)', function(assert) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
@@ -1768,7 +1768,7 @@ function setDiscreteType(series) {
         series.draw(true);
         this.renderer.stub('path').lastCall.returnValue.attr.reset();
 
-        series.resetAnimation(true);
+        series.resetApplyingAnimation(true);
 
         series.draw(true);
 
@@ -1776,7 +1776,7 @@ function setDiscreteType(series) {
         assert.notOk(this.renderer.stub('path').lastCall.returnValue.attr.called);
     });
 
-    QUnit.test('resetAnimation with second drawing should call attr for path only one time (T876376)', function(assert) {
+    QUnit.test('resetApplyingAnimation with second drawing should call attr for path only one time (T876376)', function(assert) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
@@ -1794,14 +1794,14 @@ function setDiscreteType(series) {
 
         // first drawing
         series.draw(true);
-        series.resetAnimation(true);
+        series.resetApplyingAnimation(true);
         series.draw(true);
 
         this.renderer.stub('path').lastCall.returnValue.attr.reset();
 
         // second drawing
         series.draw(true);
-        series.resetAnimation();
+        series.resetApplyingAnimation();
         series.draw(true);
 
 
