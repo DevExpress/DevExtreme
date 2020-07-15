@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import DxNumberBox from '../../js/ui/number_box';
-import { viewFunction as NumberBoxView, NumberBoxProps, NumberBox } from '../../js/renovation/number-box';
+import DxNumberBox from '../../ui/number_box';
+import { viewFunction as NumberBoxView, NumberBoxProps, NumberBox } from '../number_box';
 
-jest.mock('../../js/ui/number_box');
+jest.mock('../../ui/number_box');
 
 describe('NumberBox', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
+
   describe('View', () => {
     it('default render', () => {
       const widgetRef = createRef();
@@ -42,6 +43,7 @@ describe('NumberBox', () => {
       expect(tree.find('div').props().className).toEqual('custom-class');
     });
   });
+
   describe('Logic', () => {
     it('getHtmlElement', () => {
       const widgetRef = 'ref' as any as HTMLDivElement;
@@ -65,6 +67,7 @@ describe('NumberBox', () => {
         expect(properties.tabIndex).toStrictEqual(2);
         expect(properties.disabled).toStrictEqual(true);
       });
+
       it('default onValueChange', () => {
         const component = new NumberBox(new NumberBoxProps());
 
@@ -91,6 +94,7 @@ describe('NumberBox', () => {
         component.widgetRef = widgetRef;
         return component;
       };
+
       it('setupWidget', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
