@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import getElementComputedStyle from '../../../js/renovation/pager/utils/get_computed_style';
+import getElementComputedStyle from '../utils/get_computed_style';
 import {
   ResizableContainer,
   viewFunction as ResizableContainerComponent,
   ResizableContainerProps,
   updateChildProps,
-} from '../../../js/renovation/pager/resizable_container';
-import { GetHtmlElement } from '../../../js/renovation/pager/common/types.d';
+} from '../resizable_container';
+import { GetHtmlElement } from '../common/types.d';
 
-jest.mock('../../../js/renovation/pager/utils/get_computed_style');
+jest.mock('../utils/get_computed_style');
 
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
+
 describe('resizable-container', () => {
   function getFakeHtml(width: number | null): HTMLElement | undefined {
     return width ? { width: `${width}px` } as unknown as HTMLElement : undefined;
@@ -28,6 +29,7 @@ describe('resizable-container', () => {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };
   }
+
   describe('View', () => {
     it('render', () => {
       const contentTemplate = jest.fn();
@@ -63,6 +65,7 @@ describe('resizable-container', () => {
       });
     });
   });
+
   describe('Logic', () => {
     function createComponent(sizes: {
       width; pageSizes; info; pages;
@@ -77,6 +80,7 @@ describe('resizable-container', () => {
       component.infoTextRef = infoHtmlEl;
       return component;
     }
+
     it('effectUpdateChildProps', () => {
       const component = createComponent({
         width: 400, pageSizes: 100, info: 50, pages: 100,
@@ -90,6 +94,7 @@ describe('resizable-container', () => {
       expect(component.infoTextVisible).toBe(true);
       expect(component.isLargeDisplayMode).toBe(true);
     });
+
     it('effectUpdateChildProps, visible change from false to true', () => {
       // visible false
       const component = createComponent({
@@ -119,6 +124,7 @@ describe('resizable-container', () => {
       expect(component.infoTextVisible).toBe(true);
       expect(elementsWidth).not.toBe(component.elementsWidth);
     });
+
     it('pagerProps', () => {
       const props: ResizableContainerProps = {
         contentTemplate: 'template',
@@ -136,6 +142,7 @@ describe('resizable-container', () => {
       expect(component.pagerProps).toMatchObject(expected);
     });
   });
+
   describe('updateChildProps', () => {
     it('updateChildProps: init', () => {
       const prevElementsWidth = {
@@ -162,6 +169,7 @@ describe('resizable-container', () => {
       expect(infoTextVisible).toBe(true);
       expect(isLargeDisplayMode).toBe(true);
     });
+
     it('updateChildProps: second update not mutate elementsWidth', () => {
       const prevElementsWidth = {
         pageSizes: 0,
@@ -179,6 +187,7 @@ describe('resizable-container', () => {
         pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, elementsWidth);
       expect(elementsWidth === nextElementsWidth).toBe(true);
     });
+
     it('updateChildProps: update from large to small not mutate elementsWidth', () => {
       const largeElementsWidth = {
         pageSizes: 100,
@@ -194,6 +203,7 @@ describe('resizable-container', () => {
         pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, largeElementsWidth);
       expect(elementsWidth === largeElementsWidth).toBe(true);
     });
+
     function testChildProps(widths: Parameters<typeof getElementsRef>[0]) {
       const {
         parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
@@ -205,6 +215,7 @@ describe('resizable-container', () => {
           info: 0,
         } as any);
     }
+
     it('updateChildProps: fit size', () => {
       const {
         infoTextVisible,
@@ -226,6 +237,7 @@ describe('resizable-container', () => {
       expect(infoTextVisible).toBe(true);
       expect(isLargeDisplayMode).toBe(true);
     });
+
     it('updateChildProps: info text not fit', () => {
       const {
         infoTextVisible,
@@ -236,6 +248,7 @@ describe('resizable-container', () => {
       expect(infoTextVisible).toBe(false);
       expect(isLargeDisplayMode).toBe(true);
     });
+
     it('updateChildProps: info text not fit and isLargeDisplayMode not possible', () => {
       const {
         infoTextVisible,

@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { GridPager, viewFunction as GridPagerComponent } from '../../../js/renovation/pager/grid_pager';
+import { GridPager, viewFunction as GridPagerComponent } from '../grid_pager';
 
 describe('GridPager', () => {
   describe('View', () => {
@@ -20,11 +20,13 @@ describe('GridPager', () => {
       });
     });
   });
+
   describe('Behaviuor', () => {
     it('pageIndex', () => {
       const component = new GridPager({ pageIndex: 4 });
       expect(component.pageIndex).toBe(3);
     });
+
     it('pageIndexChange', () => {
       const pageIndexChange = jest.fn();
       const component = new GridPager({ pageIndexChange });

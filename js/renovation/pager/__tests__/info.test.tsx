@@ -1,6 +1,6 @@
 import { h, createRef } from 'preact';
 import { shallow } from 'enzyme';
-import { InfoText, viewFunction as InfoTextComponent } from '../../../js/renovation/pager/info';
+import { InfoText, viewFunction as InfoTextComponent } from '../info';
 
 describe('Info, separate view and component approach', () => {
   describe('View', () => {
@@ -9,6 +9,7 @@ describe('Info, separate view and component approach', () => {
       expect(tree.html())
         .toBe('<div class="dx-info">some text</div>');
     });
+
     it('ref test', () => {
       const ref = createRef();
       shallow(<InfoTextComponent {...{ htmlRef: ref, text: 'text' } as any} /> as any);
@@ -23,6 +24,7 @@ describe('Info, separate view and component approach', () => {
       infoText.htmlRef = {} as any;
       expect(infoText.getHtmlElement()).toBe(infoText.htmlRef);
     });
+
     it('text with changed infoText', () => {
       const infoText = new InfoText({
         infoText: 'Page {0} of {1} ({2} items) (custom)', pageCount: 20, pageIndex: 5, totalCount: 200,

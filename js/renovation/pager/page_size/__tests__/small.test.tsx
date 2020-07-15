@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../../../js/renovation/pager/page_size/small';
-import getElementComputedStyle from '../../../js/renovation/pager/utils/get_computed_style';
+import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../small';
+import getElementComputedStyle from '../../utils/get_computed_style';
 
-jest.mock('../../../js/renovation/pager/utils/get_computed_style');
-jest.mock('../../../js/renovation/select_box', () => ({ SelectBox: () => { } }));
+jest.mock('../../utils/get_computed_style');
+jest.mock('../../../select_box', () => ({ SelectBox: () => { } }));
 
 describe('Pager size selector', () => {
   const pageSizes = [{ text: '5', value: 5 }, { text: '10', value: 10 }];
+
   it('View', () => {
     const props = {
       width: 30,
@@ -32,6 +33,7 @@ describe('Pager size selector', () => {
       width: 30,
     });
   });
+
   it('Effect updateWidth selectBox width', () => {
     (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '42px' });
     const parentRef = { minWidth: '42px' };

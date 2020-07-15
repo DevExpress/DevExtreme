@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '../../../js/renovation/pager/pages/page_index_selector';
+import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '../page_index_selector';
 
 describe('Page index selector', () => {
   describe('View', () => {
@@ -22,6 +22,7 @@ describe('Page index selector', () => {
         rtlEnabled: true,
       },
     } as Partial<PageIndexSelector>);
+
     it('renderPrevButton: true, renderNextButton: true, isLargeDisplayMode:true', () => {
       const props = defaultProps();
 
@@ -46,6 +47,7 @@ describe('Page index selector', () => {
         children: [], className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
       });
     });
+
     it('renderPrevButton: false, renderNextButton: true, isLargeDisplayMode: true', () => {
       const props = {
         ...defaultProps(),
@@ -70,6 +72,7 @@ describe('Page index selector', () => {
         children: [], className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
       });
     });
+
     it('renderPrevButton: true, renderNextButton: false, isLargeDisplayMode: true', () => {
       const props = {
         ...defaultProps(),
@@ -94,6 +97,7 @@ describe('Page index selector', () => {
         rtlEnabled: true,
       });
     });
+
     it('renderPrevButton: false, renderNextButton: false,isLargeDisplayMode: false', () => {
       const defProps = defaultProps();
       const props = {
@@ -117,6 +121,7 @@ describe('Page index selector', () => {
       });
     });
   });
+
   describe('Logic', () => {
     it('renderPrevButtons', () => {
       const component = new PageIndexSelector({
@@ -131,6 +136,7 @@ describe('Page index selector', () => {
       component.props.isLargeDisplayMode = true;
       expect(component.renderPrevButton).toBe(false);
     });
+
     it('renderPrevButtons, hasKnownLastPage = true', () => {
       const component = new PageIndexSelector({
         hasKnownLastPage: true,
@@ -145,6 +151,7 @@ describe('Page index selector', () => {
       component.props.isLargeDisplayMode = true;
       expect(component.renderNextButton).toBe(false);
     });
+
     it('renderNextButton, hasKnownLastPage = false', () => {
       const component = new PageIndexSelector({
         isLargeDisplayMode: true,
@@ -153,6 +160,7 @@ describe('Page index selector', () => {
       });
       expect(component.renderNextButton).toBe(true);
     });
+
     it('nextClassName, rtlEnabled: false', () => {
       const component = new PageIndexSelector({
         rtlEnabled: false, pageIndex: 3, pageCount: 5, hasKnownLastPage: true,
@@ -161,6 +169,7 @@ describe('Page index selector', () => {
       component.props.pageIndex = 4;
       expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
+
     it('prevClassName, rtlEnabled: false', () => {
       const component = new PageIndexSelector({
         rtlEnabled: false, pageIndex: 1, pageCount: 5, hasKnownLastPage: true,
@@ -169,6 +178,7 @@ describe('Page index selector', () => {
       component.props.pageIndex = 0;
       expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
+
     it('nextClassName, rtlEnabled: false, hasKnownLastPage = false', () => {
       const component = new PageIndexSelector({
         rtlEnabled: false, pageIndex: 3, pageCount: 3, hasKnownLastPage: false,
@@ -177,6 +187,7 @@ describe('Page index selector', () => {
       component.props.pageIndex = 4;
       expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
     });
+
     it('nextClassName, rtlEnabled: true', () => {
       const component = new PageIndexSelector({
         rtlEnabled: true, pageIndex: 1, pageCount: 5, hasKnownLastPage: true,
@@ -185,6 +196,7 @@ describe('Page index selector', () => {
       component.props.pageIndex = 0;
       expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
+
     it('prevClassName, rtlEnabled: true', () => {
       const component = new PageIndexSelector({
         rtlEnabled: true, pageIndex: 3, pageCount: 5, hasKnownLastPage: true,
@@ -193,6 +205,7 @@ describe('Page index selector', () => {
       component.props.pageIndex = 4;
       expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
+
     it('navigateToNextPage, rtlEnabled: false, can navigate', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({
@@ -221,6 +234,7 @@ describe('Page index selector', () => {
       component.navigateToNextPage();
       expect(pageIndexChange).toBeCalledWith(0);
     });
+
     it('navigateToNextPage, rtlEnabled: true, cannot navigate', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({
@@ -229,6 +243,7 @@ describe('Page index selector', () => {
       component.navigateToNextPage();
       expect(pageIndexChange).not.toBeCalled();
     });
+
     it('navigateToPrevPage, rtlEnabled: false, can navigate', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({
@@ -238,6 +253,7 @@ describe('Page index selector', () => {
       component.navigateToPrevPage();
       expect(pageIndexChange).toBeCalledWith(0);
     });
+
     it('navigateToPrevPage, rtlEnabled: false, cannot navigate', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({
@@ -247,6 +263,7 @@ describe('Page index selector', () => {
       component.navigateToPrevPage();
       expect(pageIndexChange).not.toBeCalled();
     });
+
     it('navigateToPrevPage, rtlEnabled: true, can navigate', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({
@@ -256,6 +273,7 @@ describe('Page index selector', () => {
       component.navigateToPrevPage();
       expect(pageIndexChange).toBeCalledWith(4);
     });
+
     it('navigateToPrevPage, rtlEnabled: true, cannot navigate', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({
@@ -265,6 +283,7 @@ describe('Page index selector', () => {
       component.navigateToPrevPage();
       expect(pageIndexChange).not.toBeCalled();
     });
+
     it('pageIndexChange', () => {
       const pageIndexChange = jest.fn();
       const component = new PageIndexSelector({

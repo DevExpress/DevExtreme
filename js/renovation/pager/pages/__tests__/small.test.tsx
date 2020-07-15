@@ -1,12 +1,12 @@
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import { PagesSmall, viewFunction as PagesSmallComponent } from '../../../js/renovation/pager/pages/small';
-import getElementComputedStyle from '../../../js/renovation/pager/utils/get_computed_style';
-import { NumberBox } from '../../../js/renovation/number_box';
+import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
+import getElementComputedStyle from '../../utils/get_computed_style';
+import { NumberBox } from '../../../number_box';
 
-jest.mock('../../../js/renovation/number_box', () => ({ __esModule: true, NumberBox: jest.fn() }));
-jest.mock('../../../js/renovation/pager/pages/page', () => ({ __esModule: true, Page: jest.fn() }));
-jest.mock('../../../js/renovation/pager/utils/get_computed_style');
+jest.mock('../../../number_box', () => ({ __esModule: true, NumberBox: jest.fn() }));
+jest.mock('../page', () => ({ __esModule: true, Page: jest.fn() }));
+jest.mock('../../utils/get_computed_style');
 
 describe('Small pager pages', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -48,6 +48,7 @@ describe('Small pager pages', () => {
       children: [], index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
     });
   });
+
   it('updateWidth effect', () => {
     (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
     const component = new PagesSmall({ pageCount: 100 });
@@ -57,6 +58,7 @@ describe('Small pager pages', () => {
     expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
     expect(component.width).toBe(19 + 10 * 3);
   });
+
   it('selectLastPageIndex', () => {
     const pageIndexChangeHandler = jest.fn();
     const component = new PagesSmall({
@@ -67,6 +69,7 @@ describe('Small pager pages', () => {
     component.selectLastPageIndex();
     expect(pageIndexChangeHandler).toBeCalledWith(2);
   });
+
   it('setValue', () => {
     const pageIndexChangeHandler = jest.fn();
     const component = new PagesSmall({

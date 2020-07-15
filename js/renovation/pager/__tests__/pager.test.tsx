@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { PagerContentComponent } from '../../../js/renovation/pager/content';
-import { Pager as PagerComponent } from '../../../js/renovation/pager/pager';
+import { PagerContentComponent } from '../content';
+import { Pager as PagerComponent } from '../pager';
 
-jest.mock('../../../js/renovation/select_box', () => ({ __esModule: true, SelectBox: jest.fn() }));
+jest.mock('../../select_box', () => ({ __esModule: true, SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {
@@ -35,6 +35,7 @@ describe('Pager', () => {
       });
     });
   });
+
   describe('Behaviour', () => {
     it('pageSizeChange', () => {
       const component = new PagerComponent({ pageSize: 5 });
@@ -42,6 +43,7 @@ describe('Pager', () => {
       component.pageSizeChange(10);
       expect(component.props.pageSize).toBe(10);
     });
+
     it('pageIndexChange', () => {
       const component = new PagerComponent({ pageIndex: 5 });
       expect(component.props.pageIndex).toBe(5);

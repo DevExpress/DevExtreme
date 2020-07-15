@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../../../js/renovation/pager/page_size/selector';
+import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../selector';
 
-jest.mock('../../../js/renovation/pager/page_size/small', () => ({ PageSizeSmall: jest.fn() }));
-jest.mock('../../../js/renovation/pager/page_size/large', () => ({ PageSizeLarge: jest.fn() }));
+jest.mock('../small', () => ({ PageSizeSmall: jest.fn() }));
+jest.mock('../large', () => ({ PageSizeLarge: jest.fn() }));
 
 describe('Pager size selector', () => {
   function defaultProps(): PageSizeSelector {
@@ -29,6 +29,7 @@ describe('Pager size selector', () => {
       },
     } as Partial<PageSizeSelector> as PageSizeSelector;
   }
+
   it('View, isLargeDisplayMode = true', () => {
     const props = defaultProps();
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
@@ -49,6 +50,7 @@ describe('Pager size selector', () => {
       ],
     });
   });
+
   it('View, isLargeDisplayMode = false', () => {
     const props = defaultProps();
     props.props.isLargeDisplayMode = false;
@@ -73,6 +75,7 @@ describe('Pager size selector', () => {
       parentRef: props.htmlRef,
     });
   });
+
   describe('Logic', () => {
     it('normalizedPageSizes', () => {
       const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });

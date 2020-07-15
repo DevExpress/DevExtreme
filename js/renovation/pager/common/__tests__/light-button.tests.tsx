@@ -2,16 +2,16 @@ import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import {
   EVENT, emit, getEventHandlers, clear,
-} from '../utils/events-mock';
-import { registerKeyboardAction } from '../../../js/ui/shared/accessibility';
-import { LightButton, viewFunction as LightButtonComponent } from '../../../js/renovation/pager/common/light_button';
-import * as LightButtonModule from '../../../js/renovation/pager/common/light_button';
-import { closestClass } from '../../../js/renovation/pager/utils/closest_class';
+} from '../../../__tests__/utils/events_mock';
+import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
+import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
+import * as LightButtonModule from '../light_button';
+import { closestClass } from '../../utils/closest_class';
 
 const { dxClickEffect } = LightButtonModule;
 
-jest.mock('../../../js/ui/shared/accessibility');
-jest.mock('../../../js/renovation/pager/utils/closest_class');
+jest.mock('../../../../ui/shared/accessibility');
+jest.mock('../../utils/closest_class');
 
 describe('LightButton', () => {
   describe('View', () => {
@@ -41,6 +41,7 @@ describe('LightButton', () => {
 
   describe('Effect', () => {
     afterEach(() => { clear(); });
+
     describe('ClickEffect', () => {
       it('clickEffect', () => {
         const dxClickEffectSpy = jest.spyOn(LightButtonModule, 'dxClickEffect');
@@ -55,6 +56,7 @@ describe('LightButton', () => {
         expect(dxClickEffectSpy).toBeCalledTimes(1);
       });
     });
+
     describe('dxClickEffect', () => {
       it('should not subscribe to click event without handler', () => {
         dxClickEffect(null, null);
@@ -89,6 +91,7 @@ describe('LightButton', () => {
       beforeEach(() => {
         jest.resetAllMocks();
       });
+
       it('should call registerKeyboardAction with right parameters', () => {
         const widgetRef = {} as HTMLDivElement;
         const onClick = jest.fn();
