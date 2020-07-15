@@ -401,8 +401,8 @@ describe('events/actions', () => {
     });
 
     expect(getPublicElement).toBeCalledTimes(2);
-    expect(getPublicElement.mock.calls[0][0].get(0)).toBe(element1);
-    expect(getPublicElement.mock.calls[1][0].get(0)).toBe($('#component').get(0));
+    expect(getPublicElement).toHaveBeenNthCalledWith(1, $(element1));
+    expect(getPublicElement).toHaveBeenNthCalledWith(2, $('#component'));
   });
 
   it('re-wraps event props if it is changed', () => {
