@@ -12,9 +12,6 @@ jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell', () => ({
   MonthDateTableCell: () => null,
 }));
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
-  Row: ({ children, ...restProps }) => <div {...restProps}>{children}</div>,
-}));
 jest.mock('../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
   getKeyByDateAndGroup: jest.fn(),
 }));
