@@ -1,11 +1,13 @@
 export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
-  const keyFromDate = date.toString();
-  if (!group) return keyFromDate;
+  let key = date.toString();
+  if (group) {
+    key = Object.keys(group).reduce(
+      (currentKey, resourceName) => `${currentKey}_${resourceName}_${group[resourceName]}`,
+      key,
+    );
+  }
 
-  return Object.keys(group).reduce(
-    (currentKey, resourceName) => `${currentKey}_${resourceName}_${group[resourceName]}`,
-    keyFromDate,
-  );
+  return key;
 };
 
 export const addHeightToStyle = (
