@@ -41,7 +41,7 @@ export default class MetadataCollector {
   }
 
   static getStringFromObject(
-    object: Array<MetaItem> | Array<string> | FlatStylesDependencyTree,
+    object: Array<MetaItem> | Array<string> | FlatStylesDependencies,
   ): string {
     return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
   }
@@ -50,7 +50,7 @@ export default class MetadataCollector {
     filePath: string,
     version: string,
     browsersList: Array<string>,
-    dependencies: FlatStylesDependencyTree,
+    dependencies: FlatStylesDependencies,
   ): Promise<void> {
     const absolutePath = resolve(filePath);
     const metadata = this.generator.getMetadata();
@@ -61,7 +61,7 @@ export default class MetadataCollector {
     const metaContent = `export const metadata: Array<MetaItem> = ${metaString};
 export const version: string = '${version}';
 export const browsersList: Array<string> = ${browsersListString};
-export const dependencies: FlatStylesDependencyTree = ${dependenciesString};
+export const dependencies: FlatStylesDependencies = ${dependenciesString};
 `;
     await fs.mkdir(dirname(absolutePath), { recursive: true });
     await fs.writeFile(absolutePath, metaContent);

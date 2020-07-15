@@ -88,7 +88,7 @@ describe('MetadataCollector', () => {
     let metaContent = 'export const metadata: Array<MetaItem> = [{\'Key\':\'$var\',\'Value\':\'"ON"\'}];\n';
     metaContent += `export const version: string = '${version}';\n`;
     metaContent += 'export const browsersList: Array<string> = [];\n';
-    metaContent += 'export const dependencies: FlatStylesDependencyTree = {};\n';
+    metaContent += 'export const dependencies: FlatStylesDependencies = {};\n';
 
     await collector.saveMetadata(fileName, version, [], {});
 

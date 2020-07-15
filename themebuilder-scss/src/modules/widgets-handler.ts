@@ -10,9 +10,9 @@ export default class WidgetsHandler {
 
   baseIndexContent: string;
 
-  dependencies: FlatStylesDependencyTree;
+  dependencies: FlatStylesDependencies;
 
-  constructor(widgets: Array<string>, bundlePath: string, dependencies: FlatStylesDependencyTree) {
+  constructor(widgets: Array<string>, bundlePath: string, dependencies: FlatStylesDependencies) {
     const theme = /material/.test(bundlePath) ? 'material' : 'generic';
     this.dependencies = dependencies || {};
     this.widgets = widgets ? widgets.map((w) => w.toLowerCase()) : [];

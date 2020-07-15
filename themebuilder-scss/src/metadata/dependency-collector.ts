@@ -1,73 +1,96 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 /* eslint no-console: 0 */
 
-import dependencyTree, { DependencyObj } from 'dependency-tree';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
+import cabinet from 'filing-cabinet';
 import WidgetsHandler from '../modules/widgets-handler';
 
-const stylesRegex = /\/\/\sSTYLE (.*)/;
-const themes = ['generic', 'material'];
+const precinct = require('precinct');
+
+const stylesRegex = /\sSTYLE (.*)/;
 
 export default class DependencyCollector {
-  fullDependencyTree: DependencyObj = {};
+  flatStylesDependencyTree: FlatStylesDependencies = {};
 
-  stylesDependencyTree: StylesDependencyTree = {};
+  scriptsCache: ScriptsDependencyCache = {};
 
-  flatStylesDependencyTree: FlatStylesDependencyTree = {};
+  themes = ['generic', 'material'];
 
-  stylesCache: { [key: string]: string | null } = {};
+  static getWidgetFromAst(ast: SyntaxTree): string {
+    if (ast.comments?.length) {
+      const styleComment = ast.comments
+        .find((comment: AstComment): boolean => comment.value.indexOf('STYLE') >= 0);
 
-  readFile: (path: string) => string = (path: string) => readFileSync(path, 'utf8');
-
-  fillFullDependencyTree(): void {
-    this.fullDependencyTree = dependencyTree({
-      filename: '../js/bundles/dx.all.js',
-      directory: '../js/',
-      filter: (path) => path.indexOf('node_modules') === -1,
-    });
-  }
-
-  treeProcessor(node: DependencyObj, parentStyleNode: StylesDependencyTree): void {
-    Object.keys(node).forEach((fileName) => {
-      let widget: string | null = this.stylesCache[fileName];
-      if (widget === undefined) {
-        const content = this.readFile(fileName);
-        const matches = stylesRegex.exec(content);
-        widget = matches !== null ? matches[1].toLowerCase() : null;
-        this.stylesCache[fileName] = widget;
+      if (styleComment) {
+        return stylesRegex.exec(styleComment.value)[1].toLowerCase();
       }
+    }
 
-      let styleNode = parentStyleNode;
+    return '';
+  }
 
-      if (widget !== null) {
-        styleNode[widget] = {};
-        styleNode = styleNode[widget];
+  static getUniqueWidgets(widgetsArray: Array<string>, currentWidget?: string): Array<string> {
+    const fullArray = currentWidget ? [...widgetsArray, currentWidget] : widgetsArray;
+
+    return [...new Set(fullArray)];
+  }
+
+  treeProcessor(node: ScriptsDependencyTree): Array<string> {
+    let result: Array<string> = [];
+    const { widget, dependencies } = node;
+
+    if (this.flatStylesDependencyTree[widget] !== undefined) {
+      const cachedWidgets = this.flatStylesDependencyTree[widget];
+      return DependencyCollector.getUniqueWidgets(cachedWidgets, widget);
+    }
+
+    Object.values(dependencies).forEach((nextNode) => {
+      result.push(...this.treeProcessor(nextNode));
+    });
+
+    result = DependencyCollector.getUniqueWidgets(result);
+
+    if (widget) {
+      this.flatStylesDependencyTree[widget] = [...result];
+      if (!result.includes(widget)) {
+        result.push(widget);
       }
+    }
 
-      this.treeProcessor(node[fileName], styleNode);
-    });
+    return result;
   }
 
-  fillStylesDependencyTree(): void {
-    this.treeProcessor(this.fullDependencyTree, this.stylesDependencyTree);
-  }
+  getFullDependencyTree(filePath: string): ScriptsDependencyTree {
+    let cacheItem = this.scriptsCache[filePath];
 
-  static getFlatDependencyArray(dependencyObject: StylesDependencyTree): Array<string> {
-    const dependencyArray = Object.keys(dependencyObject).reduce((accumulator, current) => [
-      ...accumulator,
-      current,
-      ...DependencyCollector.getFlatDependencyArray(dependencyObject[current]),
-    ], []);
+    if (cacheItem === undefined) {
+      const deps = precinct.paperwork(filePath, {
+        es6: { mixedImports: true },
+      })
+        .map((relativeDependency: string): string => cabinet({
+          partial: relativeDependency,
+          directory: '../js',
+          filename: filePath,
+          ast: precinct.ast,
+        }))
+        .filter((path: string): boolean => path !== null
+          && existsSync(path)
+          && path.indexOf('node_modules') < 0
+          && path.indexOf('viz') < 0);
 
+      cacheItem = {
+        widget: DependencyCollector.getWidgetFromAst(precinct.ast),
+        dependencies: {},
+      };
 
-    return [...new Set(dependencyArray)];
-  }
+      deps.forEach((absolutePath: string) => {
+        cacheItem.dependencies[absolutePath] = this.getFullDependencyTree(absolutePath);
+      });
 
-  fillFlatStylesDependencyTree(): void {
-    Object.keys(this.stylesDependencyTree).forEach((style) => {
-      this.flatStylesDependencyTree[style] = DependencyCollector
-        .getFlatDependencyArray(this.stylesDependencyTree[style]);
-    });
+      this.scriptsCache[filePath] = cacheItem;
+    }
+
+    return cacheItem;
   }
 
   static isArraysEqual(array1: Array<string>, array2: Array<string>): boolean {
@@ -76,9 +99,9 @@ export default class DependencyCollector {
   }
 
   validate(): void {
-    themes.forEach((theme) => {
+    this.themes.forEach((theme) => {
       const indexFileName = `../scss/widgets/${theme}/_index.scss`;
-      const indexContent = this.readFile(indexFileName);
+      const indexContent = readFileSync(indexFileName, 'utf8');
       const indexPublicWidgetsList = (new WidgetsHandler([], '', {}))
         .getIndexWidgetItems(indexContent)
         .map((item: WidgetItem): string => item.widgetName.toLowerCase())
@@ -94,9 +117,8 @@ export default class DependencyCollector {
   }
 
   collect(): void {
-    this.fillFullDependencyTree();
-    this.fillStylesDependencyTree();
-    this.fillFlatStylesDependencyTree();
+    const fullDependencyTree = this.getFullDependencyTree('../js/bundles/dx.all.js');
+    this.treeProcessor(fullDependencyTree);
     this.validate();
   }
 }
