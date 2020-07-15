@@ -18,7 +18,7 @@ const tsConfig = getTsConfig(TS_CONFIG_PATH);
 generator.options = {
     defaultOptionsModule: 'js/core/options/utils',
     jqueryComponentRegistratorModule: 'js/core/component_registrator',
-    jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+    jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component'
 };
 
 module.exports = {

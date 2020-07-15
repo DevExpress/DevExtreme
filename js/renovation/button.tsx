@@ -20,7 +20,7 @@ import { Icon } from './icon';
 import { InkRipple } from './ink-ripple';
 import { Widget } from './widget';
 import BaseWidgetProps from './utils/base-props';
-import BaseComponent from './preact-wrapper/button';
+import BaseComponent from './preact_wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
