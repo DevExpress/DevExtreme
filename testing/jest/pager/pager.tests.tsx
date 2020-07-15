@@ -12,6 +12,8 @@ describe('Pager', () => {
       const tree = shallow<PagerComponent>(<PagerComponent /> as any);
       expect(tree.props()).toEqual({
         children: [],
+        className: '',
+        restAttributes: 'restAttributes',
         pagesNavigatorVisible: 'auto',
         visible: true,
         contentTemplate: PagerContentComponent,
@@ -34,7 +36,7 @@ describe('Pager', () => {
       });
     });
   });
-  describe('Logic', () => {
+  describe('Behaviour', () => {
     it('pageSizeChange', () => {
       const component = new PagerComponent({ pageSize: 5 });
       expect(component.props.pageSize).toBe(5);

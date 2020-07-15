@@ -14,7 +14,7 @@ const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 const generator = new PreactGenerator();
 
-const SRC = ['js/renovation/**/*.{tsx,ts}', '!js/renovation/**/*.j.tsx', '!js/renovation/**/*.d.ts'];
+const SRC = ['js/renovation/**/*.{tsx,ts}', '!js/renovation/**/*.j.tsx', '!js/renovation/**/*.d.ts', '!js/renovation/**/__tests__/**/*'];
 const DEST = 'js/renovation/';
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
@@ -23,7 +23,8 @@ const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 const knownErrors = [
     'Cannot find module \'preact\'',
     'Cannot find module \'preact/hooks\'',
-    'Cannot find module \'preact/compat\''
+    'Cannot find module \'preact/compat\'',
+    'js/renovation/preact_wrapper/'
 ];
 
 function generateJQueryComponents(isWatch) {
@@ -31,7 +32,7 @@ function generateJQueryComponents(isWatch) {
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
         jqueryComponentRegistratorModule: 'js/core/component_registrator',
-        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component',
+        jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
         generateJQueryOnly: true
     };
 
@@ -56,7 +57,7 @@ function generatePreactComponents() {
     generator.options = {
         defaultOptionsModule: 'js/core/options/utils',
         jqueryComponentRegistratorModule: 'js/core/component_registrator',
-        jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component'
+        jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component'
     };
 
     return gulp.src(SRC, { base: 'js' })

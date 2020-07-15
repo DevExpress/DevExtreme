@@ -853,10 +853,6 @@ export default {
 
                         this._isForceRowAdaptiveExpand = !this._adaptiveController.hasAdaptiveDetailRowExpanded();
 
-                        if(oldExpandRowIndex >= 0 && rowIndex > oldExpandRowIndex) {
-                            this._editRowIndex--;
-                        }
-
                         if(oldExpandRowIndex >= 0) {
                             rowIndices.push(oldExpandRowIndex + 1);
                         }

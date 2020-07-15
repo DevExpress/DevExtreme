@@ -1,40 +1,39 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DateTableRow as Row } from '../../base/date_table/row';
-import { MonthDateTableCell as Cell } from './cell';
+import { DateTableRow } from '../../base/date_table/row';
+import { DayDateTableCell as Cell } from './cell';
 import { ViewCellData } from '../../types';
 
-export const viewFunction = (viewModel: MonthDateTableLayout) => (
+export const viewFunction = (viewModel: DayDateTableLayout) => (
   <table
-    className={`dx-scheduler-date-table ${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+    className={`${viewModel.props.className} dx-scheduler-date-table`}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
     <tbody>
       {viewModel.props.viewCellsData!.map((cellsRow) => (
-        <Row
+        <DateTableRow
           key={cellsRow[0].startDate.toString()}
         >
           {cellsRow.map(({
-            startDate, endDate, otherMonth, today,
+            startDate,
+            endDate,
           }: ViewCellData) => (
             <Cell
               startDate={startDate}
               endDate={endDate}
-              otherMonth={otherMonth}
-              today={today}
               key={startDate.toString()}
             />
           ))}
-        </Row>
+        </DateTableRow>
       ))}
     </tbody>
   </table>
 );
 
 @ComponentBindings()
-export class MonthDateTableLayoutProps {
+export class DayDateTableLayoutProps {
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 
   @OneWay() className?: string;
@@ -44,4 +43,5 @@ export class MonthDateTableLayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class MonthDateTableLayout extends JSXComponent(MonthDateTableLayoutProps) {}
+export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
+}

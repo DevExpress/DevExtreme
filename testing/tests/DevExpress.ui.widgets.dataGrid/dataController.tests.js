@@ -8038,7 +8038,7 @@ QUnit.module('Error handling', {
         this.editingController.saveEditData();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.deepEqual(dataErrors, ['Update error']);
     });
 });

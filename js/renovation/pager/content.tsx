@@ -29,7 +29,7 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef as any} {...restAttributes} className={className}>
+  <div ref={parentRef as any} className={className} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef as any}
@@ -120,10 +120,10 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get className(): string {
-    const customClasses = this.restAttributes.className;
+    const customClasses = this.props.className!;
     const classesMap = {
       'dx-widget': true,
-      [customClasses]: true,
+      [customClasses]: customClasses,
       [PAGER_CLASS_FULL]: true,
       [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,
