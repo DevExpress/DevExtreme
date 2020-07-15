@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import {
   PageSizeLarge,
   PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS,
-} from '../../../js/renovation/pager/page_size/large';
+} from '../large';
 
 describe('Pager size selector', () => {
   const pageSizes = [{ text: '5', value: 5 }, { text: '10', value: 10 }];
@@ -21,6 +21,7 @@ describe('Pager size selector', () => {
       },
     ]);
   });
+
   it('change pagesize in large selector', () => {
     const pageSizeHandler = jest.fn();
     const component = new PageSizeLarge({ pageSizes, pageSizeChange: pageSizeHandler });
