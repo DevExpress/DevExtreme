@@ -12,6 +12,7 @@ import {
   emitKeyboard,
   KEY,
 } from '../utils/events_mock';
+import { setPublicElementWrapper } from '../../../core/element';
 
 beforeEach(() => {
   document.body.innerHTML = `
@@ -377,7 +378,34 @@ describe('events/actions', () => {
     });
   });
 
-  it('re-wraps event props if it changed', () => {
+  it('wraps DOM nodes in "*Element" args with jQuery and gets public element', () => {
+    const getPublicElement = jest.fn(($el) => $el.get(0));
+    setPublicElementWrapper(getPublicElement);
+
+    const onEventProp = jest.fn();
+    const element1 = document.createElement('div');
+    const element2 = document.createElement('div');
+    act(() => $('#component').dxrPreactTestWidget({
+      onEventProp,
+    }));
+
+    $('#component').dxrPreactTestWidget('eventPropCheck', {
+      eventElement: element1,
+      nonWrappedNode: element2,
+    });
+
+    expect(onEventProp.mock.calls[0][0]).toMatchObject({
+      eventElement: element1,
+      nonWrappedNode: element2,
+      element: $('#component').get(0),
+    });
+
+    expect(getPublicElement).toBeCalledTimes(2);
+    expect(getPublicElement.mock.calls[0][0].get(0)).toBe(element1);
+    expect(getPublicElement.mock.calls[1][0].get(0)).toBe($('#component').get(0));
+  });
+
+  it('re-wraps event props if it is changed', () => {
     const onEventProp1 = jest.fn();
     const onEventProp2 = jest.fn();
     act(() => $('#component').dxrPreactTestWidget({

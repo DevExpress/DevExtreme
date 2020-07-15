@@ -136,9 +136,20 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _addAction(event, action) {
-    this._actionsMap[event] = action
-            || this._createActionByOption(event, this._getActionConfigs()[event]);
-  }
+    if(!action) {
+      const actionByOption = this._createActionByOption(event, this._getActionConfigs()[event]);
+
+      action = function(args) {
+        for(const name in args) {
+          if(name.match(/element$/i)) {
+            args[name] = getPublicElement($(args[name]));
+          }
+        }
+        return actionByOption(args);
+      };
+    }
+    this._actionsMap[event] = action;
+}
 
   _optionChanged(option) {
     const { name } = option || {};
@@ -148,10 +159,6 @@ export default class PreactWrapper extends DOMComponent {
 
     super._optionChanged(option);
     this._invalidate();
-  }
-
-  _stateChange(name) {
-    return (value) => this.option(name, value);
   }
 
   _extractDefaultSlot() {
