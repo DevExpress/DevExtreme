@@ -1,4 +1,4 @@
-import getCurrentAppointment from '../../../../../js/renovation/scheduler/appointment-tooltip/utils/get-current-appointment';
+import getCurrentAppointment from '../get_current_appointment';
 
 describe('getCurrentAppointment', () => {
   it('should return data if others are undefiend', () => {

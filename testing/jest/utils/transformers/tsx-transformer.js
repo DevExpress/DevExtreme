@@ -6,7 +6,7 @@ const THIS_FILE = fs.readFileSync(__filename);
 const tsJest = require('ts-jest');
 const jestTransformer = tsJest.createTransformer();
 
-const addCreateElementImport = src => `import { h } from 'preact';\n${src}`;
+const addCreateElementImport = src => `import { h } from 'preact'; ${src}`;
 
 module.exports = {
     process(src, filename, config) {

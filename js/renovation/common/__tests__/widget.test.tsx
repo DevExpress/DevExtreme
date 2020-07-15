@@ -4,13 +4,13 @@ import { shallow } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
-} from './utils/events-mock';
-import { Widget, viewFunction, WidgetProps } from '../../js/renovation/widget';
-import { isFakeClickEvent } from '../../js/events/utils';
-import config from '../../js/core/config';
+} from '../../__tests__/utils/events_mock';
+import { Widget, viewFunction, WidgetProps } from '../widget';
+import { isFakeClickEvent } from '../../../events/utils';
+import config from '../../../core/config';
 
-jest.mock('../../js/events/utils', () => ({
-  ...require.requireActual('../../js/events/utils'),
+jest.mock('../../../events/utils', () => ({
+  ...require.requireActual('../../../events/utils'),
   isFakeClickEvent: jest.fn(),
 }));
 
@@ -81,6 +81,7 @@ describe('Widget', () => {
     describe('Effects', () => {
       describe('accessKeyEffect', () => {
         const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() };
+
         beforeEach(() => {
           (isFakeClickEvent as any).mockImplementation(() => true);
         });
@@ -270,8 +271,10 @@ describe('Widget', () => {
           expect(detach).toBe(undefined);
         });
       });
+
       describe('focusEffect', () => {
         const e = { ...defaultEvent, isDefaultPrevented: jest.fn() };
+
         it('should subscribe to focus event', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
           widget.widgetRef = {} as any;
@@ -323,6 +326,7 @@ describe('Widget', () => {
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
         });
       });
+
       describe('hoverEffect', () => {
         it('should subscribe to hover event', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
@@ -387,6 +391,7 @@ describe('Widget', () => {
 
       describe('keyboardEffect', () => {
         const onKeyDown = jest.fn();
+
         it('should subscribe to keyboard event', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
           widget.widgetRef = {} as any;
@@ -431,6 +436,7 @@ describe('Widget', () => {
 
       describe('resizeEffect', () => {
         const onDimensionChanged = jest.fn();
+
         it('should subscribe to resize event', () => {
           const e = { ...defaultEvent };
           const widget = new Widget({ onDimensionChanged });
@@ -462,6 +468,7 @@ describe('Widget', () => {
 
       describe('visibilityEffect', () => {
         const onVisibilityChange = jest.fn();
+
         it('should subscribe to visible events', () => {
           const widget = new Widget({ onVisibilityChange });
           widget.widgetRef = {} as any;

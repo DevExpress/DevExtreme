@@ -5,15 +5,15 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../utils/noop';
 import { List } from '../../list';
-import { TooltipItemLayout } from './item-layout';
+import { TooltipItemLayout } from './item_layout';
 import {
   GetTextAndFormatDateFn, GetSingleAppointmentFn,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
 } from './types';
-import getCurrentAppointment from './utils/get-current-appointment';
+import getCurrentAppointment from './utils/get_current_appointment';
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
-} from './utils/default-functions';
+} from './utils/default_functions';
 
 type ItemTemplateProps = {
   item: AppointmentItem;

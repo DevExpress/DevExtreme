@@ -2,7 +2,7 @@ import {
   ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
-import { SelectBox } from '../../select-box';
+import { SelectBox } from '../../select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types.d';
 import { PAGER_SELECTION_CLASS } from '../common/consts';
