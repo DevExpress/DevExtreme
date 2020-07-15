@@ -1095,7 +1095,7 @@ extend(legendPrototype, {
     },
 
     measure: function(size) {
-        if(this._updated) {
+        if(this._updated || !this._insideLegendGroup) {
             this.draw(size[0], size[1]);
             this._updated = false;
         } else {

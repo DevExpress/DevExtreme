@@ -1749,6 +1749,16 @@ QUnit.test('Legend should redraw if the options is updated', function(assert) {
     assert.equal(this.renderer.rect.callCount, 6);
 });
 
+QUnit.test('Legend should redraw if it is was erased', function(assert) {
+    const legend = this.createSimpleLegend();
+    legend.measure([100, 200]);
+    legend.freeSpace();
+    legend.measure([100, 200]);
+
+    assert.equal(this.renderer.text.callCount, 6);
+    assert.equal(this.renderer.rect.callCount, 6);
+});
+
 QUnit.module('Legend Options', environment);
 
 QUnit.test('Default center for not-set align', function(assert) {
