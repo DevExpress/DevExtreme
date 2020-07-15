@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount, shallow } from 'enzyme';
-import DxDataGrid from '../../js/ui/data_grid';
-import { viewFunction as DataGridView, DataGrid } from '../../js/renovation/data_grid/data_grid';
-import { DataGridProps } from '../../js/renovation/data_grid/props';
+import DxDataGrid from '../../../ui/data_grid';
+import { viewFunction as DataGridView, DataGrid } from '../data_grid';
+import { DataGridProps } from '../props';
 
 const mockDispose = jest.fn();
 const mockOption = jest.fn();
 
-jest.mock('../../js/ui/data_grid', () => {
+jest.mock('../../../ui/data_grid', () => {
   const MockDxDataGrid = jest.fn().mockImplementation(() => ({
     dispose: mockDispose,
     option: mockOption,
@@ -21,6 +21,7 @@ describe('DataGrid', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
   describe('View', () => {
     it('default render', () => {
       const widgetRef = createRef();
@@ -50,6 +51,7 @@ describe('DataGrid', () => {
       expect(tree.props().className).toEqual('custom-class');
     });
   });
+
   describe('Logic', () => {
     describe('properties', () => {
       it('picks props', () => {
@@ -75,6 +77,7 @@ describe('DataGrid', () => {
         component.widgetRef = widgetRef;
         return component;
       };
+
       it('setupWidget', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
