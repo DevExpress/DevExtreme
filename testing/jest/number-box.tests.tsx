@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import DxNumberBox from '../../js/ui/number_box';
 import { viewFunction as NumberBoxView, NumberBoxProps, NumberBox } from '../../js/renovation/number-box';
 
@@ -28,27 +28,24 @@ describe('NumberBox', () => {
     });
 
     it('set className', () => {
-      const widgetRef = createRef();
       const props = {
         props: {
           className: 'custom-class',
         },
-        widgetRef,
-        restAttributes: { restAttributes: true },
       } as any as Partial<NumberBox>;
 
-      const tree = mount<typeof NumberBoxView>(<NumberBoxView {...props as any} /> as any);
+      const tree = shallow<NumberBox>(<NumberBoxView {...props as any} /> as any);
 
-      expect(tree.find('div').props().className).toEqual('custom-class');
+      expect(tree.props().className).toEqual('custom-class');
     });
   });
   describe('Logic', () => {
     it('getHtmlElement', () => {
-      const widgetRef = 'ref' as any as HTMLDivElement;
+      const widgetRef = {} as HTMLDivElement;
       const component = new NumberBox({});
       component.widgetRef = widgetRef;
 
-      expect(component.getHtmlElement()).toEqual('ref');
+      expect(component.getHtmlElement()).toEqual(widgetRef);
     });
 
     describe('properties', () => {
@@ -85,8 +82,8 @@ describe('NumberBox', () => {
     });
 
     describe('effects', () => {
+      const widgetRef = {} as HTMLDivElement;
       const createWidget = () => {
-        const widgetRef = 'ref' as any as HTMLDivElement;
         const component = new NumberBox({});
         component.widgetRef = widgetRef;
         return component;
@@ -97,10 +94,8 @@ describe('NumberBox', () => {
 
         component.setupWidget();
 
-        const DxNumberBoxMock = (DxNumberBox as any).mock;
-        expect(DxNumberBoxMock.instances.length).toBe(1);
-        expect(DxNumberBoxMock.calls[0][0]).toBe('ref');
-        expect(DxNumberBoxMock.calls[0][1]).toBe(spy.mock.results[0].value);
+        expect(DxNumberBox).toBeCalledTimes(1);
+        expect(DxNumberBox).toBeCalledWith(widgetRef, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -109,7 +104,7 @@ describe('NumberBox', () => {
 
         dispose();
 
-        expect((DxNumberBox as any).mock.instances[0].dispose.mock.calls.length).toBe(1);
+        expect((DxNumberBox as any).mock.instances[0].dispose).toBeCalledTimes(1);
       });
 
       it('updateWidget. Widget is not initialized', () => {
@@ -118,8 +113,8 @@ describe('NumberBox', () => {
 
         component.updateWidget();
 
-        expect((DxNumberBox as any).mock.instances.length).toBe(0);
-        expect(spy.mock.calls.length).toBe(0);
+        expect(DxNumberBox).toBeCalledTimes(0);
+        expect(spy).toBeCalledTimes(0);
       });
 
       it('updateWidget. Widget is initialized', () => {
@@ -130,7 +125,7 @@ describe('NumberBox', () => {
         component.updateWidget();
 
         const DxNumberBoxMockInstance = (DxNumberBox as any).mock.instances[0];
-        expect(DxNumberBoxMockInstance.option.mock.calls[0][0]).toBe(spy.mock.results[0].value);
+        expect(DxNumberBoxMockInstance.option).toBeCalledWith(spy.mock.results[0].value);
       });
     });
   });

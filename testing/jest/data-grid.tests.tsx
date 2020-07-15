@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import DxDataGrid from '../../js/ui/data_grid';
 import { viewFunction as DataGridView, DataGrid } from '../../js/renovation/data_grid/data_grid';
 import { DataGridProps } from '../../js/renovation/data_grid/props';
@@ -29,7 +29,7 @@ describe('DataGrid', () => {
         widgetRef,
         restAttributes: { restAttributes: true },
       } as any as Partial<DataGrid>;
-      const tree = mount<typeof DataGridView>(<DataGridView {...props as any} /> as any);
+      const tree = mount(<DataGridView {...props as any} /> as any);
 
       expect(tree.find('div').props()).toEqual({
         className: '',
@@ -39,18 +39,15 @@ describe('DataGrid', () => {
     });
 
     it('set className', () => {
-      const widgetRef = createRef();
       const props = {
         props: {
           className: 'custom-class',
         },
-        widgetRef,
-        restAttributes: { restAttributes: true },
       } as any as Partial<DataGrid>;
 
-      const tree = mount<typeof DataGridView>(<DataGridView {...props as any} /> as any);
+      const tree = shallow<DataGrid>(<DataGridView {...props as any} /> as any);
 
-      expect(tree.find('div').props().className).toEqual('custom-class');
+      expect(tree.props().className).toEqual('custom-class');
     });
   });
   describe('Logic', () => {
@@ -72,8 +69,8 @@ describe('DataGrid', () => {
     });
 
     describe('effects', () => {
+      const widgetRef = {} as HTMLDivElement;
       const createWidget = () => {
-        const widgetRef = 'ref' as any as HTMLDivElement;
         const component = new DataGrid({});
         component.widgetRef = widgetRef;
         return component;
@@ -84,10 +81,8 @@ describe('DataGrid', () => {
 
         component.setupWidget();
 
-        const DxDataGridMock = (DxDataGrid as any).mock;
-        expect(DxDataGridMock.instances.length).toBe(1);
-        expect(DxDataGridMock.calls[0][0]).toBe('ref');
-        expect(DxDataGridMock.calls[0][1]).toBe(spy.mock.results[0].value);
+        expect(DxDataGrid).toBeCalledTimes(1);
+        expect(DxDataGrid).toBeCalledWith(widgetRef, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -96,7 +91,7 @@ describe('DataGrid', () => {
 
         dispose();
 
-        expect(mockDispose.mock.calls.length).toBe(1);
+        expect(mockDispose).toBeCalledTimes(1);
       });
 
       it('updateWidget. Widget is not initialized', () => {
@@ -105,8 +100,8 @@ describe('DataGrid', () => {
 
         component.updateWidget();
 
-        expect((DxDataGrid as any).mock.instances.length).toBe(0);
-        expect(spy.mock.calls.length).toBe(0);
+        expect(DxDataGrid).toBeCalledTimes(0);
+        expect(spy).toBeCalledTimes(0);
       });
 
       it('updateWidget. Widget is initialized', () => {
@@ -115,7 +110,7 @@ describe('DataGrid', () => {
         (DxDataGrid as any).getInstance.mockReturnValue(new DxDataGrid('ref' as any as Element, {}));
         component.updateWidget();
 
-        expect(mockOption.mock.calls[0][0]).toBe(spy.mock.results[0].value);
+        expect(mockOption).toBeCalledWith(spy.mock.results[0].value);
       });
     });
   });
