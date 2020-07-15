@@ -33,11 +33,22 @@ describe('DayDateTableLayout', () => {
     });
 
     it('should render components correctly', () => {
-      const layout = render({});
+      const layout = render({ props: { className: 'test-class' } });
 
-      expect(layout.find('table').exists())
+      const table = layout.find('table');
+
+      expect(table.exists())
         .toBe(true);
-      expect(layout.find('tbody').exists())
+
+      expect(table.hasClass('dx-scheduler-time-panel'))
+        .toBe(true);
+
+      const tbody = layout.find('tbody');
+
+      expect(tbody.exists())
+        .toBe(true);
+
+      expect(tbody.hasClass(''))
         .toBe(true);
 
       const rows = layout.find(Row);
