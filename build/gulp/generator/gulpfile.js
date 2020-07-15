@@ -24,7 +24,8 @@ const knownErrors = [
     'Cannot find module \'preact\'',
     'Cannot find module \'preact/hooks\'',
     'Cannot find module \'preact/compat\'',
-    'js/renovation/preact_wrapper/'
+    'js/renovation/preact_wrapper/',
+    'js\\renovation\\preact_wrapper\\'
 ];
 
 function generateJQueryComponents(isWatch) {
