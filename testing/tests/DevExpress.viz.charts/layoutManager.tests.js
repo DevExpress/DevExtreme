@@ -2,6 +2,7 @@ const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
 const labelModule = require('viz/series/points/label');
 const layoutManagerModule = require('viz/chart_components/layout_manager');
+const layoutElementModule = require('viz/core/layout_element');
 
 const canvasTemplate = {
     width: 1000,
@@ -12,6 +13,7 @@ const canvasTemplate = {
     right: 40
 };
 let canvas;
+const LayoutElement = vizMocks.stubClass(layoutElementModule.LayoutElement);
 
 const environment = {
     beforeEach: function() {
@@ -27,7 +29,16 @@ const environment = {
         const layoutManager = new layoutManagerModule.LayoutManager();
         layoutManager.setOptions(options || { width: 10, height: 10 });
         return layoutManager;
-    }
+    },
+    createLayoutElement: function(opt) {
+        const options = $.extend({}, this.commonBBox, opt);
+        const layoutElement = new LayoutElement(options);
+
+        layoutElement.stub('getLayoutOptions').returns(options);
+        layoutElement.stub('position').returnsThis();
+
+        return layoutElement;
+    },
 };
 
 function setupCanvas() {
@@ -761,4 +772,32 @@ QUnit.test('space with radius', function(assert) {
     const updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, false);
 
     assert.deepEqual(updateSide, { height: 20, width: 10 });
+});
+
+QUnit.module('Layout legend inside', environment);
+
+QUnit.test('position legend, vertical, bottom', function(assert) {
+    const LE = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'bottom' }, cutSide: 'vertical', cutLayoutSide: 'bottom' });
+    const LM = this.createLayoutManager();
+
+    LM.layoutInsideLegend(LE, this.canvas);
+
+    assert.deepEqual(LE.position.getCall(0).args[0], {
+        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 100, height: 80 }),
+        my: { horizontal: 'center', vertical: 'top' },
+        at: { horizontal: 'center', vertical: 'bottom' },
+    });
+});
+
+QUnit.test('position legend, horizontal, left', function(assert) {
+    const LE = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'top' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
+    const LM = this.createLayoutManager();
+
+    LM.layoutInsideLegend(LE, this.canvas);
+
+    assert.deepEqual(LE.position.getCall(0).args[0], {
+        of: new layoutElementModule.WrapperLayoutElement(null, { x: 20, y: 0, width: 80, height: 100 }),
+        my: { horizontal: 'right', vertical: 'top' },
+        at: { horizontal: 'left', vertical: 'top' },
+    });
 });
