@@ -64,6 +64,9 @@ class DiagramContextToolbox extends Widget {
 
         const $content = $('<div>')
             .addClass(DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
+        if(this.option('toolboxWidth') !== undefined) {
+            $content.css('width', this.option('toolboxWidth'));
+        }
         this._$popoverTargetElement
             .css({
                 left: x + this._popoverPositionData[side].offset.x,

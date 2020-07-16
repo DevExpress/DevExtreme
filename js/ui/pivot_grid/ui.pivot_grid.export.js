@@ -2,6 +2,7 @@ import Class from '../../core/class';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
+import { hasWindow } from '../../core/utils/window';
 import { format } from '../../format_helper';
 import { parse } from '../../localization/number';
 import clientExporter, { excel as excelExporter } from '../../exporter';
@@ -115,6 +116,8 @@ export const ExportMixin = extend({}, exportMixin, {
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),
             customizeExcelCell: this.option('export.customizeExcelCell'),
+            rowsArea: this._rowsArea,
+            columnsArea: this._columnsArea
         });
     }
 });
@@ -185,6 +188,13 @@ export const DataProvider = Class.inherit({
         return this._options.columns;
     },
 
+    getColumnsWidths: function() {
+        const useDefaultWidth = !hasWindow() || this._options.columnsArea.option('scrolling.mode') === 'virtual';
+        return useDefaultWidth
+            ? this._options.columns.map(_ => DEFAUL_COLUMN_WIDTH)
+            : this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth());
+    },
+
     getRowsCount: function() {
         return this._options.items.length;
     },
@@ -234,6 +244,11 @@ export const DataProvider = Class.inherit({
         } else {
             result.value = item.value;
         }
+
+        if(result.cellSourceData && result.cellSourceData.isWhiteSpace) {
+            result.value = '';
+        }
+
         return result;
     },
 
@@ -281,3 +296,9 @@ export const DataProvider = Class.inherit({
         }
     },
 });
+
+//#DEBUG
+export const PivotGridExport = {
+    DEFAUL_COLUMN_WIDTH
+};
+//#ENDDEBUG

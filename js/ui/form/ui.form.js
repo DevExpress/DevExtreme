@@ -37,6 +37,8 @@ import {
 import '../validation_summary';
 import '../validation_group';
 
+// STYLE form
+
 const FORM_CLASS = 'dx-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';

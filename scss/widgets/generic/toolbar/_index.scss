@@ -9,6 +9,7 @@
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
 // adduse
+@use "../dropDownMenu";
 
 
 $GENERIC_TOOLBAR_HEIGHT: $GENERIC_BASE_INLINE_WIDGET_HEIGHT;

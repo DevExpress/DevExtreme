@@ -31,7 +31,7 @@ const Validator = DOMComponent.inherit({
             */
             /**
             * @name dxValidatorOptions.adapter.validationRequestsCallbacks
-            * @type Array<function> | jquery.callbacks
+            * @type Array<function>
             */
             /**
             * @name dxValidatorOptions.adapter.applyValidationResults
@@ -115,7 +115,7 @@ const Validator = DOMComponent.inherit({
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
-                adapter.validationRequestsCallbacks.add((args) => {
+                adapter.validationRequestsCallbacks.push((args) => {
                     if(this._validationInfo.skipValidation) {
                         return;
                     }
@@ -128,16 +128,9 @@ const Validator = DOMComponent.inherit({
         }
         const callbacks = adapter.validationRequestsCallbacks;
         if(callbacks) {
-            if(Array.isArray(callbacks)) {
-                callbacks.push((args) => {
-                    this.validate(args);
-                });
-            } else {
-                errors.log('W0014', 'validationRequestsCallbacks', 'jQuery.Callbacks', '17.2', 'Use the array instead');
-                callbacks.add((args) => {
-                    this.validate(args);
-                });
-            }
+            callbacks.push((args) => {
+                this.validate(args);
+            });
         }
     },
 

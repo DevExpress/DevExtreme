@@ -9,6 +9,8 @@ import translator from '../animation/translator';
 import fx from '../animation/fx';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE sortable
+
 const SORTABLE = 'dxSortable';
 
 const PLACEHOLDER_CLASS = 'placeholder';

@@ -5,6 +5,8 @@ import { extend } from '../core/utils/extend';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE autocomplete
+
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 

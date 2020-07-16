@@ -23,6 +23,8 @@ import { normalizeLoadResult } from '../data/data_source/utils';
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
 
+// STYLE tagBox
+
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
 
 const TAGBOX_CLASS = 'dx-tagbox';

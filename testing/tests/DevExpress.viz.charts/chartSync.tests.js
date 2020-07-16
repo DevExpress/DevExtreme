@@ -200,49 +200,6 @@ const environment = {
 };
 
 (function mainTest() {
-    QUnit.module('Legend', environment);
-
-    QUnit.test('Check the canvas when the legend position is inside', function(assert) {
-        const stubSeries = new MockSeries({
-            name: 'First series',
-            visible: true,
-            showInLegend: true
-        });
-        const rect = { width: 100, height: 110, top: 1, bottom: 2, left: 3, right: 4 };
-        const spyLayoutManager = layoutManagerModule.LayoutManager;
-
-        vizUtils.updatePanesCanvases.restore();
-        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes) {
-            panes[0].canvas = rect;
-        });
-
-        chartMocks.seriesMockData.series.push(stubSeries);
-        this.createChart({
-            series: {
-                type: 'line'
-            },
-            legend: {
-                position: 'inside'
-            }
-        });
-
-        assert.ok(spyLayoutManager.calledTwice, 'layout manager was called twice');
-        const layoutManagerForLegend = spyLayoutManager.returnValues[1];
-        const legend = getLegendStub();
-
-        assert.deepEqual(layoutManagerForLegend.setOptions.lastCall.args, [{ width: 0, height: 0 }], 'options for legend in layout manager');
-        assert.ok(layoutManagerForLegend.layoutElements.called, 'legend drawn');
-        assert.deepEqual(layoutManagerForLegend.layoutElements.lastCall.args[0][0], legend, 'legend for layout manager');
-        assert.deepEqual(layoutManagerForLegend.layoutElements.getCall(0).args[1], rect, 'rect for layout manager');
-        assert.deepEqual(layoutManagerForLegend.layoutElements.getCall(0).args[3][0], { canvas: rect }, 'canvas for layout manager');
-
-        const legendData = legend.update.lastCall.args[0];
-
-        assert.ok(legendData, 'Series were passed to legend');
-        assert.deepEqual(legendData[0].states, { hover: {}, selection: {}, normal: {} }, 'Legend item color');
-        assert.strictEqual(legendData[0].text, 'First series');
-    });
-
     QUnit.module('Adaptive layout', {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -1361,6 +1318,42 @@ const environment = {
         // assert
         assert.ok(chart.series[0].wasAnimated, 'Series should be animated as point animation limit is not exceeded');
         assert.ok(!chart.series[1].wasAnimated, 'Series should not be animated as point animation limit is exceeded');
+    });
+
+    QUnit.module('Reset animation', environment);
+
+    QUnit.test('Reset animation on first drawing', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        const chart = this.createChart({
+            series: [{ type: 'line' }],
+        });
+
+        chart._resetComponentsAnimation(true);
+
+        assert.ok(chart.series[0].resetApplyingAnimation.called);
+        assert.ok(chart.getArgumentAxis().resetApplyingAnimation.called);
+        assert.ok(chart._valueAxes[0].resetApplyingAnimation.called);
+
+        assert.equal(chart.series[0].resetApplyingAnimation.lastCall.args[0], true);
+        assert.equal(chart.getArgumentAxis().resetApplyingAnimation.lastCall.args[0], true);
+        assert.equal(chart._valueAxes[0].resetApplyingAnimation.lastCall.args[0], true);
+    });
+
+    QUnit.test('Reset animation on second drawing', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        const chart = this.createChart({
+            series: [{ type: 'line' }],
+        });
+
+        chart._resetComponentsAnimation();
+
+        assert.ok(chart.series[0].resetApplyingAnimation.called);
+        assert.ok(chart.getArgumentAxis().resetApplyingAnimation.called);
+        assert.ok(chart._valueAxes[0].resetApplyingAnimation.called);
+
+        assert.equal(chart.series[0].resetApplyingAnimation.lastCall.args[0], undefined);
+        assert.equal(chart.getArgumentAxis().resetApplyingAnimation.lastCall.args[0], undefined);
+        assert.equal(chart._valueAxes[0].resetApplyingAnimation.lastCall.args[0], undefined);
     });
 
     QUnit.module('Life cycle', environment);

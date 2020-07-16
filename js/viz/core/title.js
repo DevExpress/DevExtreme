@@ -178,11 +178,6 @@ extend(Title.prototype, LayoutElement.prototype, {
         return that;
     },
 
-    probeDraw: function(width, height) {
-        this.draw(width, height);
-        return this;
-    },
-
     _correctTitleLength: function(width) {
         const that = this;
         const options = that._options;

@@ -62,6 +62,29 @@ QUnit.module('Toolbox', {
         const accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR).dxAccordion('instance');
         assert.equal(accordion.option('dataSource').length, 1);
     });
+    test('should hide toolbox search input', function(assert) {
+        let $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
+        assert.equal($input.length, 1);
+        assert.equal($input.is(':visible'), true);
+        this.instance.option('toolbox.showSearch', false);
+        $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
+        assert.equal($input.length, 0);
+    });
+    test('should set toolbox width', function(assert) {
+        let $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
+        let $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
+        assert.equal($input.length, 1);
+        assert.notEqual($input.width(), 300);
+        assert.equal($accordion.length, 1);
+        assert.notEqual($accordion.width(), 300);
+        this.instance.option('toolbox.width', 300);
+        $input = $('body').find(Consts.TOOLBOX_INPUT_CONTAINER_SELECTOR);
+        $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
+        assert.equal($input.length, 1);
+        assert.equal($input.width(), 300);
+        assert.equal($accordion.length, 1);
+        assert.equal($accordion.width(), 300);
+    });
     test('call .update() after accordion item collapsing/expanding', function(assert) {
         const clock = sinon.useFakeTimers();
         const $scrollView = $('body').find(Consts.TOOLBOX_SCROLLVIEW_SELECTOR);

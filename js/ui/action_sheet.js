@@ -12,6 +12,8 @@ import Popover from './popover';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE actionSheet
+
 const ACTION_SHEET_CLASS = 'dx-actionsheet';
 const ACTION_SHEET_CONTAINER_CLASS = 'dx-actionsheet-container';
 const ACTION_SHEET_POPUP_WRAPPER_CLASS = 'dx-actionsheet-popup-wrapper';

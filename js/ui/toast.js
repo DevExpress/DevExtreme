@@ -18,6 +18,8 @@ import themes from './themes';
 
 const ready = readyCallbacks.add;
 
+// STYLE toast
+
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
 const TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper';

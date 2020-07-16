@@ -14,6 +14,8 @@ import SplitterControl from '../splitter';
 import { GanttDialog } from './ui.gantt.dialogs';
 import LoadPanel from '../load_panel';
 
+// STYLE gantt
+
 const GANTT_CLASS = 'dx-gantt';
 const GANTT_VIEW_CLASS = 'dx-gantt-view';
 const GANTT_COLLAPSABLE_ROW = 'dx-gantt-collapsable-row';

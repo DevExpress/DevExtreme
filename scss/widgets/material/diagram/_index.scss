@@ -185,8 +185,12 @@ $DIAGRAM_TOOLBOX_TITLE_SIZE: 18px;
     }
   }
 
-  .dx-accordion {
-    width: $DIAGRAM_TOOLBOX_WIDTH;
+  .dx-popup-content {
+    .dx-diagram-toolbox-input-container,
+    .dx-diagram-toolbox-panel,
+    .dx-diagram-toolbox-panel .dx-accordion {
+      width: $DIAGRAM_TOOLBOX_WIDTH;
+    }
   }
 
   .dx-diagram-toolbox-input-container {
@@ -194,7 +198,6 @@ $DIAGRAM_TOOLBOX_TITLE_SIZE: 18px;
   }
 
   .dx-diagram-toolbox-input {
-    width: $DIAGRAM_TOOLBOX_WIDTH - 2 * $DIAGRAM_TOOLBOX_INPUT_MARGIN;
     margin: $DIAGRAM_TOOLBOX_INPUT_MARGIN;
 
     .dx-texteditor-input,

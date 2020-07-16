@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import RenovatedPager from 'renovation/pager/pager.j.js';
+import RenovatedPager from 'renovation/pager/grid_pager.j.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { act } from 'preact/test-utils';
 
@@ -27,12 +27,7 @@ export class RenovatedPagerForTest extends RenovatedPager {
     option(name, value) {
         if(!this._useDefaultOptionUpdate) {
             if(name instanceof Object) {
-                const { pageIndex, pageSizeChanged, pageIndexChanged, ...restOption } = name;
-                if(pageIndex && !this._useDefaultOptionUpdate) {
-                    super.option({ pageIndex: pageIndex - 1, ...restOption });
-                } else {
-                    super.option({ pageIndex, ...restOption });
-                }
+                const { pageSizeChanged, pageIndexChanged } = name;
                 if(pageSizeChanged) {
                     super.on('optionChanged', ({ name, value }) => {
                         if(name === 'pageSize') {
@@ -43,19 +38,9 @@ export class RenovatedPagerForTest extends RenovatedPager {
                 if(pageIndexChanged) {
                     super.on('optionChanged', ({ name, value }) => {
                         if(name === 'pageIndex') {
-                            pageIndexChanged(value + 1);
+                            pageIndexChanged(value);
                         }
                     });
-                }
-                return;
-            }
-            if(name === 'pageIndex' && !this._useDefaultOptionUpdate) {
-                if(value !== undefined) {
-                    super.option(name, value - 1);
-                    return;
-                } else {
-                    const val = super.option(name);
-                    return (val || 0) + 1;
                 }
             }
         }

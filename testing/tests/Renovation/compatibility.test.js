@@ -1,11 +1,14 @@
 import $ from 'jquery';
-import '/artifacts/js/dx.all.debug.js';
 import widgetsMeta from './widgets.json!';
+import 'bundles/modules/parts/widgets-renovation';
+import { act } from 'preact/test-utils';
 
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
 const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout'];
+const WRAPPER_WIDGETS = ['DataGrid'];
+const CUSTOM_ROOT_WIDGET_CLASS = { 'dxrGridPager': 'datagrid-pager', 'dxrDataGrid': 'widget' };
 
 const widgetsInBundle = [];
 for(const name in DevExpress.renovation) {
@@ -42,13 +45,15 @@ QUnit.module('Mandatory component setup', {
 }, () => {
     widgets.forEach((meta) => {
         QUnit.test(`${meta.widgetName} - check css class names`, function(assert) {
-            $('#component')[meta.widgetName]();
+            act(() => {
+                $('#component')[meta.widgetName]();
+            });
 
             let message = 'You should always set `dx-widget` class to the root of your component';
             assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
-
+            const className = CUSTOM_ROOT_WIDGET_CLASS[meta.widgetName] || meta.name.toLowerCase();
             message = 'Use `dx-` followed by lowercase Component name as css class name';
-            assert.equal($('#component').get(0), $(`.dx-${meta.name.toLowerCase()}`).get(0), message);
+            assert.equal($('#component').get(0), $(`.dx-${className}`).get(0), message);
         });
     });
 
@@ -57,8 +62,10 @@ QUnit.module('Mandatory component setup', {
             const message = 'You should pass restAttributes to the component\'s root\n'
             + '<root {...viewModel.restAttributes} />';
 
-            $('#component')[meta.widgetName]({
-                'data-custom-option': 'custom-value',
+            act(() => {
+                $('#component')[meta.widgetName]({
+                    'data-custom-option': 'custom-value',
+                });
             });
 
             assert.equal($('#component').attr('data-custom-option'), 'custom-value', message);
@@ -72,9 +79,11 @@ QUnit.module('Mandatory component setup', {
             + 'get className() { return \`${this.restAttributes.className} dx-my-component\` }'; // eslint-disable-line
 
             $('#component').addClass('custom-class');
-            $('#component')[meta.widgetName]();
-
-            assert.equal($('#component').get(0), $(`.custom-class.dx-${meta.name.toLowerCase()}`).get(0), message);
+            act(() => {
+                $('#component')[meta.widgetName]();
+            });
+            const className = CUSTOM_ROOT_WIDGET_CLASS[meta.widgetName] || meta.name.toLowerCase();
+            assert.equal($('#component').get(0), $(`.custom-class.dx-${className}`).get(0), message);
         });
     });
 
@@ -90,7 +99,9 @@ QUnit.module('Mandatory component setup', {
                 width: '100px', height: '50px', display: 'inline-block',
             });
 
-            $('#component')[meta.widgetName]();
+            act(() => {
+                $('#component')[meta.widgetName]();
+            });
 
             assert.equal($('#component').css('width'), '100px', message);
             assert.equal($('#component').css('height'), '50px', message);
@@ -116,9 +127,11 @@ QUnit.module('Mandatory component setup', {
                     width: '100px', height: '50px',
                 });
 
-                $('#component')[meta.widgetName]({
-                    width: '110px',
-                    height: '55px',
+                act(() => {
+                    $('#component')[meta.widgetName]({
+                        width: '110px',
+                        height: '55px',
+                    });
                 });
 
                 assert.equal($('#component').css('width'), '110px', message);
@@ -127,7 +140,7 @@ QUnit.module('Mandatory component setup', {
         });
 
     widgets
-        .filter((m) => m.props.template.length)
+        .filter((m) => m.props.template.length && WRAPPER_WIDGETS.indexOf(m.name) === -1)
         .forEach((meta) => {
             QUnit.test(`${meta.widgetName} - pass right props to template`, function(assert) {
                 const message = 'For templates that jQuery users set.\n'

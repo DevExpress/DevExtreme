@@ -4,9 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/gantt" as *;
-@use "../splitter" as *;
 @use "../gridBase/colors" as *;
 // adduse
+@use "../splitter";
 
 
 $gantt_successor_background_color: white;
@@ -21,6 +21,14 @@ $gantt_successor_background_color: white;
     .dx-gantt-toolbar-separator {
       border-left-color: $base-border-color;
     }
+  }
+
+  .dx-treelist-text-content {
+    min-height: $GANTT_TREELIST_TEXT_MIN_HEIGHT;
+  }
+
+  .dx-treelist-icon-container {
+    max-height: $GANTT_TREELIST_TEXT_MIN_HEIGHT;
   }
 
   .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > td,
