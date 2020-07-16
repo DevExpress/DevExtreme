@@ -200,6 +200,36 @@ const environment = {
 };
 
 (function mainTest() {
+    QUnit.module('Legend', environment);
+
+    QUnit.test('Layout legend, inside', function(assert) {
+        const rect = { width: 100, height: 55, top: 1, bottom: 2, left: 3, right: 4 };
+        const spyLayoutManager = layoutManagerModule.LayoutManager;
+
+        vizUtils.updatePanesCanvases.restore();
+        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes) {
+            panes[0].canvas = rect;
+        });
+
+        chartMocks.seriesMockData.series.push(new MockSeries());
+        this.createChart({
+            series: {
+                type: 'line'
+            },
+            legend: {
+                position: 'inside'
+            }
+        });
+
+        assert.ok(spyLayoutManager.calledTwice, 'layout manager was called twice');
+        const layoutManagerForLegend = spyLayoutManager.returnValues[1];
+        const legend = getLegendStub();
+
+        assert.ok(layoutManagerForLegend.layoutInsideLegend.called);
+        assert.deepEqual(layoutManagerForLegend.layoutInsideLegend.lastCall.args[0], legend);
+        assert.deepEqual(layoutManagerForLegend.layoutInsideLegend.lastCall.args[1], rect);
+    });
+
     QUnit.module('Adaptive layout', {
         beforeEach: function() {
             environment.beforeEach.call(this);
