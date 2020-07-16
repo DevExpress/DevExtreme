@@ -666,7 +666,8 @@ export const MockSeries = function MockSeries(options) {
         getViewport: sinon.stub().returns({}),
         getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
         useAggregation: sinon.stub().returns(false),
-        usePointsToDefineAutoHiding: sinon.stub().returns(false)
+        usePointsToDefineAutoHiding: sinon.stub().returns(false),
+        resetApplyingAnimation: sinon.stub()
     };
 };
 
@@ -1100,7 +1101,8 @@ export const MockAxis = function(renderOptions) {
         prepareAnimation: sinon.spy(),
         setCustomVisualRange: sinon.spy(),
         handleZoomEnd: sinon.spy(),
-        resolveOverlappingForCustomPositioning: sinon.spy()
+        resolveOverlappingForCustomPositioning: sinon.spy(),
+        resetApplyingAnimation: sinon.spy()
     };
 };
 
