@@ -929,9 +929,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getRowCount() { return noop(); }
 
     _getRowCountWithAllDayRows() {
-        const allDayRowCounted = this.option('showAllDayPanel') ? 1 : 0;
+        const allDayRowCount = this.option('showAllDayPanel') ? 1 : 0;
 
-        return this._getRowCount() + allDayRowCounted;
+        return this._getRowCount() + allDayRowCount;
     }
 
     _getCellCount() { return noop(); }
