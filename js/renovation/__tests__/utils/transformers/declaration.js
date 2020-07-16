@@ -6,17 +6,14 @@ const path = require('path');
 const fs = require('fs');
 const tsJest = require('ts-jest');
 const getCacheKey = require('./get_cache_key');
+const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../../build/gulp/generator/generator-options');
 
 const THIS_FILE = fs.readFileSync(__filename);
 const jestTransformer = tsJest.createTransformer();
 const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/preact.tsconfig.json';
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
-generator.options = {
-    defaultOptionsModule: 'js/core/options/utils',
-    jqueryComponentRegistratorModule: 'js/core/component_registrator',
-    jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
-};
+generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
 module.exports = {
     process(src, filename, config) {
