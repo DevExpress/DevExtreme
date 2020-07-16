@@ -3,7 +3,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow as Row } from '../../base/date_table/row';
 import { MonthDateTableCell as Cell } from './cell';
-import { ViewCellData } from '../../types';
+import { ViewCellData, GroupedViewData } from '../../types';
+import { getKeyByDateAndGroup } from '../../utils';
 
 export const viewFunction = (viewModel: MonthDateTableLayout) => (
   <table
@@ -12,32 +13,34 @@ export const viewFunction = (viewModel: MonthDateTableLayout) => (
     {...viewModel.restAttributes}
   >
     <tbody>
-      {viewModel.props.viewCellsData!.map((cellsRow) => (
-        <Row
-          key={cellsRow[0].startDate.toString()}
-        >
-          {cellsRow.map(({
-            startDate, endDate, otherMonth, today,
-          }: ViewCellData) => (
-            <Cell
-              startDate={startDate}
-              endDate={endDate}
-              otherMonth={otherMonth}
-              today={today}
-              key={startDate.toString()}
-            />
-          ))}
-        </Row>
-      ))}
+      {viewModel.props.viewCellsData!
+        .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
+          <Row
+            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+          >
+            {cellsRow.map(({
+              startDate, endDate, otherMonth, today, groups,
+            }: ViewCellData) => (
+              <Cell
+                startDate={startDate}
+                endDate={endDate}
+                otherMonth={otherMonth}
+                today={today}
+                groups={groups}
+                key={getKeyByDateAndGroup(startDate, groups)}
+              />
+            ))}
+          </Row>
+        )))}
     </tbody>
   </table>
 );
 
 @ComponentBindings()
 export class MonthDateTableLayoutProps {
-  @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+  @OneWay() viewCellsData?: GroupedViewData;
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 }
 
 @Component({
