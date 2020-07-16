@@ -26,7 +26,8 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
         }
 
         const lastCellGroup = this.getCellData($last).groups;
-        const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
+        const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace()
+            ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
 
         let newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference;
         let newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;

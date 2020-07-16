@@ -2927,6 +2927,44 @@ QUnit.module('Workspace Mouse Interaction', () => {
             });
         });
     });
+    QUnit.test('Mouse Multiselection should work correctly when appointments'
+        + 'are grouped vertically by more than one resource and allDayPanel is enabled', function(assert) {
+        const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            focusStateEnabled: true,
+            onContentReady: function(e) {
+                const scrollable = e.component.getScrollable();
+                scrollable.option('scrollByContent', false);
+                e.component._attachTablesEvents();
+            },
+            groupOrientation: 'vertical',
+            startDayHour: 0,
+            endDayHour: 2,
+            showAllDayPanel: true,
+        });
+
+        const instance = $element.dxSchedulerWorkSpaceWeek('instance');
+
+        stubInvokeMethod(instance);
+        instance.option('groups', [
+            { name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] },
+            { name: 'b', items: [{ id: 10, text: 'b.1' }, { id: 20, text: 'b.2' }] },
+        ]);
+
+        const cells = $element.find('.' + CELL_CLASS);
+        const $table = $element.find('.dx-scheduler-date-table');
+
+        pointerMock(cells.eq(0)).start().click();
+
+        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(0).get(0), which: 1, pointerType: 'mouse' }));
+        $($table).trigger($.Event('dxpointermove', { target: cells.eq(1).get(0), which: 1 }));
+
+        assert.equal(cells.filter('.dx-state-focused').length, 5, 'the amount of focused cells is correct');
+        assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'the start cell is focused');
+        assert.ok(cells.eq(1).hasClass('dx-state-focused'), 'the end cell is focused');
+        assert.ok(cells.eq(21).hasClass('dx-state-focused'), 'the last cell of the first column in the first group is focused');
+        assert.notOk(cells.eq(28).hasClass('dx-state-focused'), 'a cell in the next group is not focused');
+    });
+
 });
 
 
