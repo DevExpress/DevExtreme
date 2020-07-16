@@ -165,7 +165,6 @@ const lineMethods = {
     _drawSegment: function(points, animationEnabled, segmentCount, lastSegment) {
         const that = this;
         const rotated = that._options.rotated;
-        const forceDefaultSegment = false;
         const segment = that._prepareSegment(points, rotated, lastSegment);
 
         that._segments.push(segment);
@@ -173,8 +172,6 @@ const lineMethods = {
             that._graphics[segmentCount] = that._drawElement(animationEnabled ? that._getDefaultSegment(segment) : segment, that._elementsGroup);
         } else if(!animationEnabled) {
             that._updateElement(that._graphics[segmentCount], segment);
-        } else if(forceDefaultSegment) {
-            that._updateElement(that._graphics[segmentCount], that._getDefaultSegment(segment));
         }
     },
 

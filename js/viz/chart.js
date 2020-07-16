@@ -13,7 +13,6 @@ import {
 import { type } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
 import { overlapping } from './chart_components/base_chart';
-import LayoutManagerModule from './chart_components/layout_manager';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
@@ -580,6 +579,10 @@ const dxChart = AdvancedChart.inherit({
         return inArray(seriesTheme.pane, paneList) !== -1;
     },
 
+    _resetAxesAnimation(isFirstDrawing) {
+        this._argumentAxes.concat(this._valueAxes).forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+    },
+
     _getValueAxis: function(paneName, axisName) {
         const that = this;
         const valueAxes = that._valueAxes;
@@ -818,26 +821,6 @@ const dxChart = AdvancedChart.inherit({
             that._valueAxes[i].applyClipRects(that._getElementsClipRectID(that._valueAxes[i].pane), canvasClipRectID);
         }
         that._fillPanesBackground();
-    },
-
-    _updateLegendPosition: function(drawOptions, legendHasInsidePosition) {
-        const that = this;
-        if(drawOptions.drawLegend && that._legend && legendHasInsidePosition) {
-            const panes = that.panes;
-            const newCanvas = _extend({}, panes[0].canvas);
-            const layoutManager = new LayoutManagerModule.LayoutManager();
-
-            newCanvas.right = panes[panes.length - 1].canvas.right;
-            newCanvas.bottom = panes[panes.length - 1].canvas.bottom;
-            layoutManager.setOptions({ width: 0, height: 0 });
-            layoutManager.layoutElements(
-                [that._legend],
-                newCanvas,
-                noop,
-                [{ canvas: newCanvas }],
-                undefined
-            );
-        }
     },
 
     _allowLegendInsidePosition() {
