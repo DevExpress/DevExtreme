@@ -1,4 +1,6 @@
 /* global initTree */
+import ArrayStore from 'data/array_store';
+import { DataSource } from 'data/data_source/data_source';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import $ from 'jquery';
 QUnit.module('Initialization', () => {
@@ -24,53 +26,81 @@ QUnit.module('Initialization', () => {
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
         [false, true].forEach((virtualModeEnabled) => {
-            [0, -1, 1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
-                QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
-                    const options = createOptions({
-                        dataSourceOption, virtualModeEnabled, rootValue, testItems: [
-                            { id: 1, text: 'item1', parentId: rootValue },
-                            { id: 2, text: 'item2', parentId: 1 }]
+            ['single', 'multiple'].forEach(selectionMode => {
+                [0, -1, 1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
+                    QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
+                        const options = createOptions({
+                            selectionMode, dataSourceOption, virtualModeEnabled, rootValue, testItems: [
+                                { id: 1, text: 'item1', parentId: rootValue },
+                                { id: 2, text: 'item2', parentId: 1 }]
+                        });
+
+                        const wrapper = new TreeViewTestWrapper(options);
+                        const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                        assert.notEqual(wrapper.instance, undefined);
+                        assert.notEqual($item1.length, 0, 'item1 must be rendered');
                     });
+                });
 
-                    const wrapper = new TreeViewTestWrapper(options);
-                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
+                QUnit.test(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, function(assert) {
+                    const configs = [
+                        { rootValue: 1, expectedItemId: 2, rootItemIndex: 1 },
+                        { rootValue: 2, expectedItemId: 3, rootItemIndex: 2 },
+                        { rootValue: 3, expectedItemId: 1, rootItemIndex: 0 },
+                        { rootValue: 0, expectedItemId: undefined, rootItemIndex: 1 },
+                        { rootValue: null, expectedItemId: undefined, rootItemIndex: 1 },
+                        { rootValue: undefined, expectedItemId: undefined, rootItemIndex: 1 }
+                    ];
 
-                    assert.notEqual(wrapper.instance, undefined);
-                    assert.notEqual($item1.length, 0, 'item1 must be rendered');
+                    configs.forEach((config) => {
+                        const options = createOptions({
+                            selectionMode,
+                            dataSourceOption,
+                            virtualModeEnabled,
+                            testRootItemIndex: config.rootItemIndex,
+                            testItems: [
+                                { id: 1, text: 'item1', parentId: 3 },
+                                { id: 2, text: 'item2', parentId: 1 },
+                                { id: 3, text: 'item3', parentId: 2 }]
+                        });
+                        options['rootValue'] = config.rootValue;
+                        const wrapper = new TreeViewTestWrapper(options);
+
+                        assert.notEqual(wrapper.instance, undefined);
+                        const $rootNode = wrapper.getElement().find('[aria-level="1"]');
+                        if(config.expectedItemId !== undefined) {
+                            assert.equal($rootNode.attr('data-item-id'), config.expectedItemId);
+                        } else {
+                            assert.equal($rootNode.length, 0);
+                        }
+                        wrapper.instance.dispose();
+                    });
                 });
             });
+        });
+    });
 
-            QUnit.test(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, function(assert) {
-                const configs = [
-                    { rootValue: 1, expectedItemId: 2, rootItemIndex: 1 },
-                    { rootValue: 2, expectedItemId: 3, rootItemIndex: 2 },
-                    { rootValue: 3, expectedItemId: 1, rootItemIndex: 0 },
-                    { rootValue: 0, expectedItemId: undefined, rootItemIndex: 1 },
-                    { rootValue: null, expectedItemId: undefined, rootItemIndex: 1 },
-                    { rootValue: undefined, expectedItemId: undefined, rootItemIndex: 1 }
-                ];
-
-                configs.forEach((config) => {
-                    const options = createOptions({
-                        dataSourceOption,
+    [true, false].forEach(virtualModeEnabled => {
+        [null, -1, 0, ''].forEach(rootValue => {
+            ['single', 'multiple'].forEach(selectionMode => {
+                QUnit.test(`Adding new item to store with ${rootValue} value in parentId`, function(assert) { // T906787
+                    const store = new ArrayStore({ data: [ { id: 1, parentId: rootValue, text: 'item1' } ] });
+                    const wrapper = new TreeViewTestWrapper({
+                        selectionMode,
                         virtualModeEnabled,
-                        testRootItemIndex: config.rootItemIndex,
-                        testItems: [
-                            { id: 1, text: 'item1', parentId: 3 },
-                            { id: 2, text: 'item2', parentId: 1 },
-                            { id: 3, text: 'item3', parentId: 2 }]
+                        rootValue: rootValue,
+                        dataStructure: 'plain',
+                        dataSource: new DataSource({
+                            store: store,
+                        }),
                     });
-                    options['rootValue'] = config.rootValue;
-                    const wrapper = new TreeViewTestWrapper(options);
 
-                    assert.notEqual(wrapper.instance, undefined);
-                    const $rootNode = wrapper.getElement().find('[aria-level="1"]');
-                    if(config.expectedItemId !== undefined) {
-                        assert.equal($rootNode.attr('data-item-id'), config.expectedItemId);
-                    } else {
-                        assert.equal($rootNode.length, 0);
-                    }
-                    wrapper.instance.dispose();
+                    store.insert({ id: 2, parentId: rootValue, text: 'item2' });
+                    const nodes = wrapper.getNodes();
+                    assert.equal(nodes.length, 2);
+                    assert.equal(nodes.get(0).innerText.trim(), 'item1');
+                    assert.equal(nodes.get(1).innerText.trim(), 'item2');
                 });
             });
         });
