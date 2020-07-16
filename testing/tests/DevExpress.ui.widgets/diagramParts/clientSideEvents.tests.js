@@ -32,7 +32,12 @@ QUnit.module('ClientSideEvents', {
         this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShape('107').toNative());
         assert.equal(clickedItem.id, '107');
         assert.equal(clickedItem.text, 'A new ticket');
-        assert.equal(clickedItem.dataItem, null);
+        assert.equal(clickedItem.dataItem, undefined);
+        let count = 0;
+        for(const key in clickedItem) {
+            if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
+        }
+        assert.equal(count, 5);
     });
     test('selectionchanged on unbound diagram', function(assert) {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
@@ -73,6 +78,11 @@ QUnit.module('ClientSideEvents', {
         assert.equal(clickedItem.dataItem.foo, 'bar');
         assert.equal(clickedItem.text, 'mytext');
         assert.equal(clickedItem.dataItem, nodes[0]);
+        let count = 0;
+        for(const key in clickedItem) {
+            if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
+        }
+        assert.equal(count, 5);
         assert.equal(dblClickedItem, undefined);
 
         this.instance._diagramInstance.onNativeAction.raise('notifyItemDblClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative());

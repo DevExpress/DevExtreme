@@ -2317,12 +2317,13 @@ class Diagram extends Widget {
             this._nativeShapeToDiagramShape.bind(this) :
             this._nativeConnectorToDiagramConnector.bind(this);
         return extend({
-            id: nativeItem.id
+            id: nativeItem.id,
+            dataItem: undefined
         }, createMethod(nativeItem));
     }
     _nativeShapeToDiagramShape(nativeShape) {
         return {
-            dataItem: this._nodesOption && this._nodesOption.findItem(nativeShape.key) || null,
+            dataItem: this._nodesOption && this._nodesOption.findItem(nativeShape.key),
             itemType: 'shape',
             text: nativeShape.text,
             type: nativeShape.type
@@ -2330,7 +2331,7 @@ class Diagram extends Widget {
     }
     _nativeConnectorToDiagramConnector(nativeConnector) {
         return {
-            dataItem: this._edgesOption && this._edgesOption.findItem(nativeConnector.key) || null,
+            dataItem: this._edgesOption && this._edgesOption.findItem(nativeConnector.key),
             itemType: 'connector',
             texts: nativeConnector.texts,
             fromKey: nativeConnector.fromKey,
