@@ -1,5 +1,6 @@
 import { isNumeric as _isNumber } from '../../core/utils/type';
 import consts from '../components/consts';
+import layoutElementModule from '../core/layout_element';
 const { floor, sqrt } = Math;
 const _min = Math.min;
 const _max = Math.max;
@@ -137,6 +138,15 @@ function correctAvailableRadius(availableRadius, canvas, series, minR, paneCente
     return availableRadius;
 }
 
+function toLayoutElementCoords(canvas) {
+    return new layoutElementModule.WrapperLayoutElement(null, {
+        x: canvas.left,
+        y: canvas.top,
+        width: canvas.width - canvas.left - canvas.right,
+        height: canvas.height - canvas.top - canvas.bottom
+    });
+}
+
 LayoutManager.prototype = {
     constructor: LayoutManager,
 
@@ -220,7 +230,40 @@ LayoutManager.prototype = {
         });
 
         return needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
-    }
+    },
+
+    layoutInsideLegend: function(legend, canvas) {
+        const inverseAlign = {
+            left: 'right',
+            right: 'left',
+            top: 'bottom',
+            bottom: 'top',
+            center: 'center'
+        };
+
+        const layoutOptions = legend.getLayoutOptions();
+
+        if(!layoutOptions) {
+            return;
+        }
+
+        const position = layoutOptions.position;
+        const cutSide = layoutOptions.cutSide;
+        const my = {
+            horizontal: position.horizontal,
+            vertical: position.vertical
+        };
+
+        canvas[layoutOptions.cutLayoutSide] += layoutOptions.cutSide === 'horizontal' ? layoutOptions.width : layoutOptions.height;
+
+        my[cutSide] = inverseAlign[my[cutSide]];
+
+        legend.position({
+            of: toLayoutElementCoords(canvas),
+            my: my,
+            at: position
+        });
+    },
 };
 
 exports.LayoutManager = LayoutManager;
