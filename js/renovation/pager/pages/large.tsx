@@ -21,12 +21,7 @@ export const viewFunction = ({ pages }: PagesLarge) => {
       />
     )
     : (
-      <div
-        key={key}
-        className={PAGER_PAGE_SEPARATOR_CLASS}
-      >
-        . . .
-      </div>
+      <div key={key} className={PAGER_PAGE_SEPARATOR_CLASS}>. . .</div>
     )
   ));
   return (<Fragment>{PagesMarkup}</Fragment>);

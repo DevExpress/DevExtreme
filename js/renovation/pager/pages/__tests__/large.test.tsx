@@ -16,9 +16,11 @@ describe('View', () => {
     ];
     const tree = shallow(<PagesLargeComponent {...{ pages } as any} /> as any);
     expect(tree.find(Page).at(0).props()).toEqual({ children: [], ...page1.pageProps });
+    expect(tree.find(Page).at(0).key()).toBe('0');
     expect(tree.childAt(1).html()).toBe('<div class="dx-separator">. . .</div>');
     expect(tree.childAt(1).key()).toBe('low');
     expect(tree.find(Page).at(1).props()).toEqual({ children: [], ...page2.pageProps });
+    expect(tree.find(Page).at(1).key()).toBe('1');
   });
 });
 
