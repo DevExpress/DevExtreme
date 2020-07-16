@@ -53,6 +53,14 @@ const VALIDATION_STATUS = {
 
 const EDIT_DATA_INSERT_TYPE = 'insert';
 
+const cellValueShouldBeValidated = function(value, rowOptions) {
+    return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
+};
+
+const rowIsValidated = function(editData) {
+    return !!editData && !!editData.validated;
+};
+
 const ValidatingController = modules.Controller.inherit((function() {
     return {
         init: function() {
@@ -710,8 +718,9 @@ module.exports = {
                     if(this.getEditMode() === EDIT_MODE_CELL) {
                         const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
                         const validator = $cell && $cell.data('dxValidator');
+                        const rowOptions = $cell && $cell.closest('.dx-row').data('options');
                         const value = validator && validator.option('adapter').getValue();
-                        if(validator && value !== undefined) {
+                        if(validator && cellValueShouldBeValidated(value, rowOptions)) {
                             const validatingController = this.getController('validating');
                             const deferred = new Deferred();
                             when(validatingController.validateCell(validator), result).done((validationResult, result) => {
@@ -829,12 +838,11 @@ module.exports = {
                 isCellModified: function(parameters) {
                     const cellModified = this.callBase(parameters);
                     const editData = this.getEditDataByKey(parameters.key);
-                    const isRowValidated = !!editData && !!editData.validated;
                     const isCellInvalid = !!parameters.row && this.getController('validating').isInvalidCell({
                         rowKey: parameters.key,
                         columnIndex: parameters.column.index
                     });
-                    return cellModified || (isRowValidated && isCellInvalid);
+                    return cellModified || (rowIsValidated(editData) && isCellInvalid);
                 }
             },
             editorFactory: (function() {
@@ -1112,7 +1120,8 @@ module.exports = {
 
                         if(validator) {
                             validatingController.setValidator(validator);
-                            if(validator.option('adapter').getValue() !== undefined || editData && editData.validated) {
+                            const value = validator.option('adapter').getValue();
+                            if(cellValueShouldBeValidated(value, rowOptions) || rowIsValidated(editData)) {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
