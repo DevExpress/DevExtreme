@@ -2169,7 +2169,7 @@ class Scheduler extends Widget {
     }
 
     _createAppointmentSettings(info) {
-        const { appointmentData, originalStartDate } = info;
+        const { appointmentData } = info;
         const adapter = this.createAppointmentAdapter(appointmentData);
 
         const recurrenceRule = adapter.recurrenceRule;
@@ -2177,7 +2177,6 @@ class Scheduler extends Widget {
         const dateRange = this._workSpace.getDateRange();
         let allDay = this.appointmentTakesAllDay(appointmentData);
 
-        // TODO
         const startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0];
 
         const renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
@@ -2186,7 +2185,8 @@ class Scheduler extends Widget {
         const recurrenceOptions = {
             rule: recurrenceRule,
             exception: recurrenceException,
-            start: originalStartDate || adapter.startDate, // TODO:
+            // start: originalStartDate || adapter.startDate, // TODO:
+            start: adapter.startDate,
             end: adapter.endDate,
             min: startViewDate,
             max: dateRange[1],
