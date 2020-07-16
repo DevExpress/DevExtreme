@@ -7277,7 +7277,7 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T816256
-    QUnit.test('Validation state should not be reseted after change value for column with setCellValue if editing mode is form', function(assert) {
+    QUnit.test('Validation state should not be reset after change value for column with setCellValue if editing mode is form', function(assert) {
     // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -9893,9 +9893,10 @@ QUnit.module('Editing with validation', {
         const $testElement = $('#container .dx-datagrid');
 
         that.applyOptions({
+            dataSource: [{ id: 1, boolean: true }],
+            keyExpr: 'id',
             onEditorPreparing(e) {
                 e.editorName = 'dxSwitch';
-                e.editorOptions.value = true;
             },
             editing: {
                 mode: 'batch'
