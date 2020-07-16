@@ -18,6 +18,7 @@ import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
 import crosshairModule from './chart_components/crosshair';
 import { getViewPortFilter } from './series/helpers/range_data_calculator';
+import LayoutManagerModule from './chart_components/layout_manager';
 import rangeModule from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
@@ -868,6 +869,22 @@ const dxChart = AdvancedChart.inherit({
         that._createClipRectsForPanes();
         that._applyClipRectsForAxes();
         that._fillPanesBackground();
+    },
+
+    _updateLegendPosition: function(drawOptions, legendHasInsidePosition) {
+        const that = this;
+        if(drawOptions.drawLegend && that._legend && legendHasInsidePosition) {
+            const panes = that.panes;
+            const newCanvas = _extend({}, panes[0].canvas);
+            const layoutManager = new LayoutManagerModule.LayoutManager();
+
+            newCanvas.right = panes[panes.length - 1].canvas.right;
+            newCanvas.bottom = panes[panes.length - 1].canvas.bottom;
+            layoutManager.layoutInsideLegend(
+                that._legend,
+                newCanvas
+            );
+        }
     },
 
     _allowLegendInsidePosition() {
