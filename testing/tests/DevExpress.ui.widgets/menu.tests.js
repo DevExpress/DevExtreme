@@ -2612,3 +2612,67 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
         assert.equal(handler.callCount, 0, 'handler for option was not executed after unsubscribe');
     });
 }
+
+QUnit.module('itemRendered event', () => { // T906117
+    const testDataSource = [{
+        text: 'item1',
+        items: [{
+            text: 'item1_1',
+            items: [{
+                text: 'item1_1_1'
+            }]
+        }]
+    }];
+
+    function bindCallback(menu, bindingOption, callback) {
+        if(bindingOption === 'property') {
+            menu.option('onItemRendered', callback);
+        } else {
+            menu.on('itemRendered', callback);
+        }
+    }
+
+    ['property', 'event'].forEach(bindingOption => {
+        QUnit.test(`itemRendered callback is called for all level nodes. Binding via ${bindingOption}`, function(assert) {
+            const expectedItemsArray = [];
+            const callback = (e) => {
+                assert.equal(e.component, menu, 'component arg is menu');
+                assert.equal(e.element, menu.element(), 'element arg is menu');
+                assert.equal($(e.itemElement).text().trim(), e.itemData.text, 'item element text is equals to the item text');
+                expectedItemsArray.push(e.itemData.text);
+            };
+
+            const menu = $('#menu').dxMenu().dxMenu('instance');
+            bindCallback(menu, bindingOption, callback);
+
+            menu.option('dataSource', testDataSource);
+            ['item1', 'item1_1']
+                .forEach(item => $(`.${DX_MENU_ITEM_TEXT_CLASS}:contains("${item}")`).trigger('dxclick'));
+
+            assert.equal(expectedItemsArray.length, 3);
+            assert.equal(expectedItemsArray[0], 'item1');
+            assert.equal(expectedItemsArray[1], 'item1_1');
+            assert.equal(expectedItemsArray[2], 'item1_1_1');
+        });
+
+        QUnit.test(`removing callback from menu removes callbacks from submenu too. Binding via ${bindingOption}`, function(assert) {
+            const expectedItemsArray = [];
+            const callback = (e) => expectedItemsArray.push(e.itemData.text);
+
+            const menu = $('#menu').dxMenu().dxMenu('instance');
+            bindCallback(menu, bindingOption, callback);
+
+            if(bindingOption === 'property') {
+                menu.option('onItemRendered', null);
+            } else {
+                menu.off('itemRendered');
+            }
+
+            menu.option('dataSource', testDataSource);
+            ['item1', 'item1_1']
+                .forEach(item => $(`.${DX_MENU_ITEM_TEXT_CLASS}:contains("${item}")`).trigger('dxclick'));
+
+            assert.equal(expectedItemsArray.length, 0);
+        });
+    });
+});

@@ -50,7 +50,7 @@ const DEFAULT_DELAY = {
     'hide': 300
 };
 
-const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged'];
+const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged', 'onItemRendered'];
 
 class Menu extends MenuBase {
 
@@ -523,7 +523,7 @@ class Menu extends MenuBase {
             },
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
-            onItemRendered: this.option('onItemRendered'),
+            onItemRendered: this._nestedItemOnItemRenderedHandler.bind(this),
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
@@ -607,6 +607,10 @@ class Menu extends MenuBase {
 
     _nestedItemOnItemClickHandler(e) {
         this._actions['onItemClick'](e);
+    }
+
+    _nestedItemOnItemRenderedHandler(e) {
+        this._actions['onItemRendered'](e);
     }
 
     _attachSubmenuHandlers($rootItem, submenu) {
