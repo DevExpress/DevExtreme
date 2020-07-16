@@ -709,6 +709,8 @@ const BaseChart = BaseWidget.inherit({
         that._renderer.unlock();
     },
 
+    _updateLegendPosition: noop,
+
     _createCrosshairCursor: noop,
 
     _appendSeriesGroups: function() {
@@ -870,8 +872,6 @@ const BaseChart = BaseWidget.inherit({
     _allowLegendInsidePosition() {
         return false;
     },
-
-    _updateLegendPosition: noop,
 
     _createLegend: function() {
         const that = this;
@@ -1035,7 +1035,7 @@ const BaseChart = BaseWidget.inherit({
 
     _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
 
-    _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES',
+    _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
         'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],
 
     _change_ANIMATION: function() {
@@ -1109,6 +1109,21 @@ const BaseChart = BaseWidget.inherit({
     _change_REINIT: function() {
         this._processRefreshData(REINIT_REFRESH_ACTION);
     },
+
+    _change_FORCE_DRAWING: function() {
+        this._resetComponentsAnimation();
+    },
+
+    _change_FORCE_FIRST_DRAWING: function() {
+        this._resetComponentsAnimation(true);
+    },
+
+    _resetComponentsAnimation: function(isFirstDrawing) {
+        this.series.forEach((s) => { s.resetApplyingAnimation(isFirstDrawing); });
+        this._resetAxesAnimation(isFirstDrawing);
+    },
+
+    _resetAxesAnimation: noop,
 
     _refreshSeries: function(actionName) {
         this.needToPopulateSeries = true;

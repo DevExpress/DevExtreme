@@ -5,6 +5,7 @@ import { extend } from '../../core/utils/extend';
 export default function createStrip(axis, options) {
 
     let storedCoord;
+    let lastStoredCoordinates;
 
     const labelOptions = options.label || {};
 
@@ -71,7 +72,12 @@ export default function createStrip(axis, options) {
         },
 
         saveCoords() {
+            lastStoredCoordinates = storedCoord;
             storedCoord = this._getCoord();
+        },
+
+        resetCoordinates() {
+            storedCoord = lastStoredCoordinates;
         }
     };
 }

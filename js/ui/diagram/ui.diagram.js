@@ -1165,7 +1165,7 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._onToggleFullScreen(false);
+            this.option('fullScreen', false);
         }
     }
     _onShowContextMenu(x, y, selection) {
