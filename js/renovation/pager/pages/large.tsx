@@ -8,25 +8,21 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 
-function isObject<T>(object: string| T): object is T {
-  return typeof object === 'object';
-}
-
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({ pages }: PagesLarge) => {
-  const PagesMarkup = pages.map((pagePropsOrDelimiterKey) => (isObject(pagePropsOrDelimiterKey)
+  const PagesMarkup = pages.map(({ key, pageProps }) => (pageProps
     ? (
       <Page
-        key={pagePropsOrDelimiterKey.index}
-        index={pagePropsOrDelimiterKey.index}
-        selected={pagePropsOrDelimiterKey.selected}
-        onClick={pagePropsOrDelimiterKey.onClick}
+        key={key}
+        index={pageProps.index}
+        selected={pageProps.selected}
+        onClick={pageProps.onClick}
       />
     )
     : (
       <div
-        key={pagePropsOrDelimiterKey as string}
+        key={key}
         className={PAGER_PAGE_SEPARATOR_CLASS}
       >
         . . .
@@ -50,7 +46,10 @@ export class PagesLargeProps {
 }
 
 const PAGES_LIMITER = 4;
-type PageType = Partial<PageProps> | 'low' | 'high';
+type PageType = {
+  key: string;
+  pageProps: Partial<PageProps> | null;
+};
 type SlidingWindowState = {
   indexesForReuse: number[];
   slidingWindowIndexes: number[];
@@ -106,13 +105,15 @@ export class PagesLarge extends JSXComponent(PagesLargeProps) {
   get pages(): PageType[] {
     const { pageIndex } = this.props as Required<PagesLargeProps>;
     const createPage = (index: PageIndex): PageType => {
-      if (index === 'low' || index === 'high') {
-        return index;
-      }
+      const pagerProps = (index === 'low' || index === 'high') ? null
+        : {
+          index,
+          onClick: (): void => this.onPageClick(index),
+          selected: pageIndex === index,
+        };
       return {
-        index,
-        onClick: (): void => this.onPageClick(index),
-        selected: pageIndex === index,
+        key: index.toString(),
+        pageProps: pagerProps,
       };
     };
     const rtlPageIndexes = this.props.rtlEnabled

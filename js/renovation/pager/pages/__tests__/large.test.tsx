@@ -3,22 +3,22 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { PagesLarge, viewFunction as PagesLargeComponent } from '../large';
-import { Page, PageProps } from '../page';
+import { Page } from '../page';
 
 describe('View', () => {
   it('render', () => {
-    const page1 = { index: 0, selected: true, onClick: jest.fn() };
-    const page2 = { index: 1, selected: false, onClick: jest.fn() };
+    const page1 = { key: '0', pageProps: { index: 0, selected: true, onClick: jest.fn() } };
+    const page2 = { key: '1', pageProps: { index: 1, selected: false, onClick: jest.fn() } };
     const pages = [
       page1,
-      'low',
+      { key: 'low' },
       page2,
     ];
     const tree = shallow(<PagesLargeComponent {...{ pages } as any} /> as any);
-    expect(tree.find(Page).at(0).props()).toEqual({ children: [], ...page1 });
+    expect(tree.find(Page).at(0).props()).toEqual({ children: [], ...page1.pageProps });
     expect(tree.childAt(1).html()).toBe('<div class="dx-separator">. . .</div>');
     expect(tree.childAt(1).key()).toBe('low');
-    expect(tree.find(Page).at(1).props()).toEqual({ children: [], ...page2 });
+    expect(tree.find(Page).at(1).props()).toEqual({ children: [], ...page2.pageProps });
   });
 });
 
@@ -140,12 +140,13 @@ describe('Pager pages logic', () => {
     const pages = new PagesLarge({
       pageCount: 30, maxPagesCount: 10, pageIndex: 4, pageIndexChange,
     });
-    expect(pages.pages[0]).toMatchObject({ index: 0, selected: false });
-    expect(pages.pages[1]).toEqual('low');
-    expect(pages.pages[3]).toMatchObject({ index: 4, selected: true });
+    expect(pages.pages[0].pageProps).toMatchObject({ index: 0, selected: false });
+    expect(pages.pages[0].key).toEqual('0');
+    expect(pages.pages[1].key).toEqual('low');
+    expect(pages.pages[3].pageProps).toMatchObject({ index: 4, selected: true });
     expect(pages.pages).toHaveLength(8);
     expect(pageIndexChange).not.toBeCalledWith(0);
-    (pages.pages[0] as PageProps).onClick?.();
+    (pages.pages[0].pageProps!).onClick?.();
     expect(pageIndexChange).toBeCalledWith(0);
   });
 
@@ -153,12 +154,12 @@ describe('Pager pages logic', () => {
     const pages = new PagesLarge({
       pageCount: 30, maxPagesCount: 10, pageIndex: 4, rtlEnabled: true,
     });
-    expect(pages.pages[0]).toMatchObject({ index: 29, selected: false });
-    expect(pages.pages[1]).toEqual('high');
-    expect(pages.pages[2]).toMatchObject({ index: 6, selected: false });
-    expect(pages.pages[3]).toMatchObject({ index: 5, selected: false });
-    expect(pages.pages[4]).toMatchObject({ index: 4, selected: true });
-    expect(pages.pages[7]).toMatchObject({ index: 0, selected: false });
+    expect(pages.pages[0].pageProps).toMatchObject({ index: 29, selected: false });
+    expect(pages.pages[1].key).toEqual('high');
+    expect(pages.pages[2].pageProps).toMatchObject({ index: 6, selected: false });
+    expect(pages.pages[3].pageProps).toMatchObject({ index: 5, selected: false });
+    expect(pages.pages[4].pageProps).toMatchObject({ index: 4, selected: true });
+    expect(pages.pages[7].pageProps).toMatchObject({ index: 0, selected: false });
     expect(pages.pages).toHaveLength(8);
   });
 });
