@@ -31,8 +31,9 @@
 @use "../button/colors" as *;
 @use "../button" as *;
 @use "../tooltip/colors" as *;
-@use "../recurrenceEditor" as *;
 // adduse
+@use "../recurrenceEditor" as *;
+@use "../scrollable";
 
 
 $GENERIC_SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 40px;

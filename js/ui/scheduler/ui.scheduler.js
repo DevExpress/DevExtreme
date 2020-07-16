@@ -50,6 +50,7 @@ import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month'
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 
+// STYLE scheduler
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 

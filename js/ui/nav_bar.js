@@ -3,6 +3,8 @@ import { extend } from '../core/utils/extend';
 import NavBarItem from './nav_bar/item';
 import Tabs from './tabs';
 
+// STYLE navBar
+
 const NAVBAR_CLASS = 'dx-navbar';
 const ITEM_CLASS = 'dx-item-content';
 const NAVBAR_ITEM_CLASS = 'dx-nav-item';

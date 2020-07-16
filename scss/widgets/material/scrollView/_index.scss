@@ -5,6 +5,7 @@
 @use "../sizes" as *;
 @use "../scrollable/colors" as *;
 // adduse
+@use "../scrollable";
 
 
 $SCROLLVIEW_LOADING_INDICATOR_SIZE: 42px;

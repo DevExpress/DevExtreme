@@ -4,10 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../menuBase" as *;
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 // adduse
+@use "../overlay";
+@use "../menuBase" as *; // need as private
 
 
 $GENERIC_MENU_POPUP_BORDER: 1px solid $menu-popup-border-color;

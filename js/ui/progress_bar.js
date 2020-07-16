@@ -4,6 +4,8 @@ import { extend } from '../core/utils/extend';
 import { isFunction } from '../core/utils/type';
 import registerComponent from '../core/component_registrator';
 
+// STYLE progressBar
+
 const PROGRESSBAR_CLASS = 'dx-progressbar';
 const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
 const PROGRESSBAR_RANGE_CONTAINER_CLASS = 'dx-progressbar-range-container';

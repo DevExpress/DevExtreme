@@ -8,6 +8,8 @@ import { applyServerDecimalSeparator } from '../core/utils/common';
 import { eventData } from '../events/utils';
 import messageLocalization from '../localization/message';
 
+// STYLE rangeSlider
+
 const RANGE_SLIDER_CLASS = 'dx-rangeslider';
 const RANGE_SLIDER_START_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-start-handle';
 const RANGE_SLIDER_END_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-end-handle';

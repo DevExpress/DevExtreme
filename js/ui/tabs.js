@@ -19,6 +19,8 @@ import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 
+// STYLE tabs
+
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';

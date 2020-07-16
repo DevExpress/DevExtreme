@@ -21,6 +21,8 @@ import getWordMatcher from './matchers/wordLists';
 import getTextDecorationMatcher from './matchers/textDecoration';
 import FormDialog from './ui/formDialog';
 
+// STYLE htmlEditor
+
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';

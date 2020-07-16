@@ -8,7 +8,8 @@
 @use "../textEditor" as *;
 @use "../textEditor/colors" as *;
 // adduse
-
+@use "../timeView";
+@use "../dateView";
 
 .dx-datebox-wrapper {
   .dx-popup-title {

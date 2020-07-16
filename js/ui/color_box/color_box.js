@@ -6,6 +6,8 @@ import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import DropDownEditor from '../drop_down_editor/ui.drop_down_editor';
 
+// STYLE colorBox
+
 const COLOR_BOX_CLASS = 'dx-colorbox';
 const COLOR_BOX_INPUT_CLASS = COLOR_BOX_CLASS + '-input';
 const COLOR_BOX_INPUT_CONTAINER_CLASS = COLOR_BOX_INPUT_CLASS + '-container';

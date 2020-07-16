@@ -13,8 +13,10 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
-@use "../pager" as *;
 // adduse
+@use "../scrollable";
+@use "../overlay";
+@use "../pager";
 
 
 $MATERIAL_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;

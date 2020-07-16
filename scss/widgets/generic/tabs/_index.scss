@@ -7,6 +7,8 @@
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
 // adduse
+@use "../scrollable";
+@use "../badge";
 
 
 $GENERIC_TABS_BORDER_WIDTH: $GENERIC_BASE_BORDER_WIDTH;

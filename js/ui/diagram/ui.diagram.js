@@ -35,6 +35,8 @@ import DiagramCommandsManager from './diagram.commands_manager';
 import NodesOption from './diagram.nodes_option';
 import EdgesOption from './diagram.edges_option';
 
+// STYLE diagram
+
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';

@@ -9,6 +9,7 @@
 @use "../toolbar/sizes" as *;
 @use "../button" as *;
 // adduse
+@use "../overlay";
 
 
 $GENERIC_POPUP_CLOSEBUTTON_OFFSET: ($GENERIC_POPUP_CLOSEBUTTON_SIZE - $GENERIC_POPUP_CLOSEBUTTON_ICON_SIZE) / 2;

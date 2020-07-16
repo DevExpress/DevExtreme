@@ -20,6 +20,8 @@ import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import translator from '../animation/translator';
 
+// STYLE lookup
+
 const LOOKUP_CLASS = 'dx-lookup';
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
 const LOOKUP_SEARCH_WRAPPER_CLASS = 'dx-lookup-search-wrapper';

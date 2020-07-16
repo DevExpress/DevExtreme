@@ -11,6 +11,8 @@ import { deferRender } from '../core/utils/common';
 import ScrollView from './scroll_view';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
+// STYLE tileView
+
 const TILEVIEW_CLASS = 'dx-tileview';
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
 const TILEVIEW_ITEM_CLASS = 'dx-tile';

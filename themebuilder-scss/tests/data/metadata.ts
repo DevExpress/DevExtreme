@@ -13,3 +13,4 @@ export const metadata: Array<MetaItem> = [
   },
 ];
 export const version = '';
+export const dependencies: FlatStylesDependencies = {};

@@ -13,6 +13,8 @@ import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 
+// STYLE selectBox
+
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';

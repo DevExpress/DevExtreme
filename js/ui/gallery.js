@@ -17,6 +17,8 @@ import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE gallery
+
 const GALLERY_CLASS = 'dx-gallery';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
 const GALLERY_LOOP_CLASS = 'dx-gallery-loop';
