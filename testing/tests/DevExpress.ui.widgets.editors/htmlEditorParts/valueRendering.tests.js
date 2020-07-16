@@ -265,6 +265,22 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
             .find(getSelector(CONTENT_CLASS))
             .html('');
     });
+
+    test('render widget in detached container', function(assert) {
+        const $container = $('#htmlEditor');
+        const listMarkup = '<ul><li>t1</li><li>t2</li></ul>';
+
+        $container.detach();
+
+        $container.dxHtmlEditor({
+            value: listMarkup
+        });
+
+        $container.appendTo('#qunit-fixture');
+
+        const content = $container.find('.dx-htmleditor-content').html();
+        assert.strictEqual(content, listMarkup);
+    });
 });
 
 
