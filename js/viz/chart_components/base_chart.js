@@ -698,11 +698,14 @@ export const BaseChart = BaseWidget.inherit({
         }
 
         that._updateTracker(trackerCanvases);
+        that._updateLegendPosition(drawOptions, isLegendInside);
         that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
     },
+
+    _updateLegendPosition: noop,
 
     _createCrosshairCursor: noop,
 
