@@ -2193,6 +2193,14 @@ class Scheduler extends Widget {
             firstDayOfWeek: firstDayOfWeek
         };
 
+        const createAppointmentInfo = (startDate, endDate, source) => {
+            return {
+                startDate,
+                endDate,
+                source
+            };
+        };
+
         // TODO: fix tests
         const appointmentDuration = adapter.endDate ? adapter.endDate.getTime() - adapter.startDate.getTime() : 0;
         const appointmentList = this.createRecurrenceAppointments(recurrenceOptions, appointmentDuration);
@@ -2204,17 +2212,18 @@ class Scheduler extends Widget {
             });
         }
 
-        let gridAppointmentList = appointmentList.map(a => {
-            return {
-                startDate: this.timeZoneCalculator.createDate(a.startDate, {
-                    appointmentTimeZone: adapter.timeZone,
-                    path: 'toGrid'
-                }),
-                endDate: this.timeZoneCalculator.createDate(a.endDate, {
-                    appointmentTimeZone: adapter.timeZone,
-                    path: 'toGrid'
-                })
-            };
+        let gridAppointmentList = appointmentList.map(source => {
+            const startDate = this.timeZoneCalculator.createDate(source.startDate, {
+                appointmentTimeZone: adapter.timeZone,
+                path: 'toGrid'
+            });
+            const endDate = this.timeZoneCalculator.createDate(source.endDate, {
+                appointmentTimeZone: adapter.timeZone,
+                path: 'toGrid'
+            });
+
+
+            return createAppointmentInfo(startDate, endDate, source);
         });
 
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList);
@@ -2228,37 +2237,35 @@ class Scheduler extends Widget {
             let longParts = [];
             let resultDates = [];
 
-            for(let i = 0; i < gridAppointmentList.length; i++) {
+            gridAppointmentList.forEach(gridAppointment => {
+                const maxDate = new Date(dateRange[1]);
                 const endDateOfPart = renderingStrategy.endDate(appointmentData, {
                     info: {
                         appointment: {
-                            startDate: gridAppointmentList[i].startDate
+                            startDate: gridAppointment.startDate
                         }
                     }
                 }, !!recurrenceRule);
 
-                longParts = dateUtils.getDatesOfInterval(gridAppointmentList[i].startDate, endDateOfPart, {
+                longParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
-                const maxDate = new Date(dateRange[1]);
-                resultDates = resultDates.concat(longParts.filter(el => new Date(el) < maxDate));
-            }
 
-            gridAppointmentList = resultDates.map(startDate => {
-                return {
-                    startDate: startDate,
-                    endDate: new Date(new Date(startDate).setMilliseconds(appointmentDuration))
-                };
+                resultDates = resultDates
+                    .concat(longParts.filter(el => new Date(el) < maxDate))
+                    .map(date => createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointmentDuration)), gridAppointment));
             });
+
+            gridAppointmentList = resultDates;
         }
 
         const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
-        return this._createAppointmentInfos(appointmentList, gridAppointmentList, itemResources, allDay);
+        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
     }
 
-    _createAppointmentInfos(sourceAppointments, gridAppointments, appointmentResources, allDay) {
+    _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
@@ -2268,7 +2275,7 @@ class Scheduler extends Widget {
                 extend(coordinate, {
                     info: {
                         appointment: gridAppointments[i],
-                        sourceAppointment: sourceAppointments[i]
+                        sourceAppointment: gridAppointments[i].source
                     }
                 });
             });
