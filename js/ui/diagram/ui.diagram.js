@@ -2317,7 +2317,8 @@ class Diagram extends Widget {
             this._nativeShapeToDiagramShape.bind(this) :
             this._nativeConnectorToDiagramConnector.bind(this);
         return extend({
-            id: nativeItem.id
+            id: nativeItem.id,
+            dataItem: undefined
         }, createMethod(nativeItem));
     }
     _nativeShapeToDiagramShape(nativeShape) {
