@@ -22,24 +22,7 @@ export const normalizeStoreLoadOptionAccessorArguments = (originalArguments) => 
 };
 
 const mapGroup = (group, level, mapper) => map(group, item => {
-    const result = {
-        key: item.key,
-        items: mapRecursive(item.items, level - 1, mapper)
-    };
-
-    if('aggregates' in item) {
-        result.aggregates = item.aggregates;
-    }
-
-    if('isContinuationOnNextPage' in item) {
-        result.isContinuationOnNextPage = item.isContinuationOnNextPage;
-    }
-
-    if('isContinuation' in item) {
-        result.isContinuation = item.isContinuation;
-    }
-
-    return result;
+    return { ...item, items: mapRecursive(item.items, level - 1, mapper) };
 });
 
 const mapRecursive = (items, level, mapper) => {
@@ -47,7 +30,7 @@ const mapRecursive = (items, level, mapper) => {
     return level ? mapGroup(items, level, mapper) : map(items, mapper);
 };
 
-export const mapDataRespectingGrouping = (items, mapper, groupInfo) => {
+export const mapDataForGrouping = (items, mapper, groupInfo) => {
     const level = groupInfo ? normalizeSortingInfo(groupInfo).length : 0;
 
     return mapRecursive(items, level, mapper);

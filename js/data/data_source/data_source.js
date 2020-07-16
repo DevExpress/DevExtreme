@@ -18,7 +18,7 @@ import {
     CANCELED_TOKEN,
     isPending,
     normalizeLoadResult,
-    mapDataRespectingGrouping
+    mapDataForGrouping
 } from './utils';
 
 export const DataSource = Class.inherit({
@@ -630,7 +630,7 @@ export const DataSource = Class.inherit({
 
     _applyMapFunction(data) {
         if(this._mapFunc) {
-            return mapDataRespectingGrouping(data, this._mapFunc, this.group());
+            return mapDataForGrouping(data, this._mapFunc, this.group());
         }
 
         return data;
