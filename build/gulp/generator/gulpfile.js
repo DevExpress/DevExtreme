@@ -12,10 +12,20 @@ const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
+const {
+    BASE_GENERATOR_OPTIONS,
+    BASE_GENERATOR_OPTIONS_WITH_JQUERY
+} = require('./generator-options');
+
 const generator = new PreactGenerator();
 
-const SRC = ['js/renovation/**/*.{tsx,ts}', '!js/renovation/**/*.j.tsx', '!js/renovation/**/*.d.ts', '!js/renovation/**/__tests__/**/*'];
-const DEST = 'js/renovation/';
+const SRC = [
+    'js/renovation/**/*.{tsx,ts}',
+    '!js/renovation/**/*.j.tsx',
+    '!js/renovation/**/*.d.ts',
+    '!js/renovation/**/__tests__/**/*'
+];
+
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
 const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
@@ -31,9 +41,7 @@ const knownErrors = [
 function generateJQueryComponents(isWatch) {
     const generator = new PreactGenerator();
     generator.options = {
-        defaultOptionsModule: 'js/core/options/utils',
-        jqueryComponentRegistratorModule: 'js/core/component_registrator',
-        jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
+        ...BASE_GENERATOR_OPTIONS_WITH_JQUERY,
         generateJQueryOnly: true
     };
 
@@ -41,36 +49,40 @@ function generateJQueryComponents(isWatch) {
     return pipe
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
-        .pipe(gulp.dest(DEST));
+        .pipe(gulp.dest('js/renovation/'));
 }
 
 const context = require('../context.js');
 
-const processErrors = (knownErrors) => (e) => {
+const processErrors = (knownErrors, errors = []) => (e) => {
     if(!knownErrors.some(i => e.message.includes(i))) {
+        errors.push(e);
         console.log(e.message);
     }
 };
 
-function generatePreactComponents() {
-    const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
+function generatePreactComponents(dev = false) {
+    return function(done) {
+        const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
 
-    generator.options = {
-        defaultOptionsModule: 'js/core/options/utils',
-        jqueryComponentRegistratorModule: 'js/core/component_registrator',
-        jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component'
+        generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
+
+        const errors = [];
+
+        return gulp.src(SRC, { base: 'js' })
+            .pipe(generateComponents(generator))
+            .pipe(plumber(()=>null))
+            .pipe(tsProject({
+                error: processErrors(knownErrors, errors),
+                finish() {}
+            }))
+            .pipe(babel())
+            .pipe(gulp.dest(context.TRANSPILED_PATH))
+            .pipe(gulp.dest(context.TRANSPILED_PROD_PATH))
+            .on('end', function() {
+                done(!dev && errors.length || undefined);
+            });
     };
-
-    return gulp.src(SRC, { base: 'js' })
-        .pipe(generateComponents(generator))
-        .pipe(plumber(()=>null))
-        .pipe(tsProject({
-            error: processErrors(knownErrors),
-            finish() {}
-        }))
-        .pipe(babel())
-        .pipe(gulp.dest(context.TRANSPILED_PATH))
-        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 }
 
 function processRenovationMeta() {
@@ -92,11 +104,25 @@ function processRenovationMeta() {
         .pipe(gulp.dest(COMPAT_TESTS_PARTS));
 }
 
-gulp.task('generate-jquery-components', function generateJQuery() { return generateJQueryComponents(false); });
+gulp.task('generate-jquery-components', function generateJQuery() {
+    return generateJQueryComponents(false);
+});
 
-gulp.task('generate-jquery-components-watch', function watchJQueryComponents() { return generateJQueryComponents(true); });
+gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
+    return generateJQueryComponents(true);
+});
 
-gulp.task('generate-components', gulp.series('generate-jquery-components', generatePreactComponents, processRenovationMeta));
+gulp.task('generate-components', gulp.series(
+    'generate-jquery-components',
+    generatePreactComponents(),
+    processRenovationMeta
+));
+
+gulp.task('generate-components-dev', gulp.series(
+    'generate-jquery-components',
+    generatePreactComponents(true),
+    processRenovationMeta
+));
 
 function addGenerationTask(
     frameworkName,
@@ -194,15 +220,13 @@ addGenerationTask('angular', [
 addGenerationTask('vue', [], false, true, false);
 
 gulp.task('generate-components-watch', gulp.series('generate-components', function() {
-    gulp.watch(SRC, gulp.series('generate-components'));
+    gulp.watch(SRC, gulp.series('generate-components-dev'));
 }));
 
 gulp.task('react-compilation-check', function() {
     const generator = require('devextreme-generator/react-generator').default;
 
-    generator.options = {
-        defaultOptionsModule: 'js/core/options/utils'
-    };
+    generator.options = BASE_GENERATOR_OPTIONS;
 
     const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
 
