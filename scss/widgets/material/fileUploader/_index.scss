@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+
 // adduse
 
 
@@ -51,7 +52,8 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
     display: block;
     width: 100%;
     padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE;
-    //NOTE: height of the widget should be the same in default and drag over states
+
+    // NOTE: height of the widget should be the same in default and drag over states
     margin-bottom: 1px;
     box-sizing: content-box;
   }

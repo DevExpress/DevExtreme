@@ -8,15 +8,14 @@
 @use "../button/sizes" as *;
 @use "../button" as *;
 @use "../checkBox/colors" as *;
+
 // adduse
 @use "../badge";
 
 
 $MATERIAL_LIST_ITEM_BORDER_WIDTH: 1px;
 $MATERIAL_LIST_BORDER_WIDTH: 1px;
-
 $MATERIAL_MOBILE_LIST_ITEM_HORIZONTAL_PADDING: 15px;
-
 $MATERIAL_LIST_BORDER: $MATERIAL_LIST_BORDER_WIDTH solid $list-border-color;
 $MATERIAL_LIST_ITEM_BORDER: $MATERIAL_LIST_ITEM_BORDER_WIDTH solid $list-border-color;
 

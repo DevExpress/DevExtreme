@@ -259,6 +259,7 @@ $icons: (
     hidepanel: "\f11c",
     showpanel: "\f11d"
 );
+
 // stylelint-enable
 
 @mixin dx-icon($name) {
@@ -299,20 +300,20 @@ $icons: (
 
 .dx-rtl {
   .dx-icon-spinnext:before {
-    content: "\f04f"; //.dx-icon-spinleft
+    content: "\f04f"; // .dx-icon-spinleft
   }
 
   .dx-icon-spinprev:before {
-    content: "\f04e"; //.dx-icon-spinright
+    content: "\f04e"; // .dx-icon-spinright
   }
 
   .dx-icon-chevronnext:before {
-    content: "\f012"; //.dx-icon-chevronleft
+    content: "\f012"; // .dx-icon-chevronleft
   }
 
   .dx-icon-chevronprev:before,
   .dx-icon-back:before {
-    content: "\f010"; //.dx-icon-chevronright
+    content: "\f010"; // .dx-icon-chevronright
   }
 
   .dx-icon-undo:before {

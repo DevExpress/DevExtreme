@@ -13,6 +13,7 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
+
 // adduse
 @use "../scrollable";
 @use "../overlay";
@@ -187,6 +188,7 @@ $MATERIAL_GRID_BASE_CELL_PADDING: $MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING $MAT
     .dx-row-alt {
       & > td {
         background-color: $datagrid-row-alternation-bg;
+
         // T838734
         border-top: 1px solid $datagrid-row-alternation-bg;
         border-bottom: 1px solid $datagrid-row-alternation-bg;

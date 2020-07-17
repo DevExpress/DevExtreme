@@ -6,6 +6,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
+
 // adduse
 .dx-theme-marker {
   font-family: "dx.material.#{$MATERIAL_COLOR_ACCENT_MODIFICATOR}.#{$MATERIAL_COLOR_THEME_MODIFICATOR}#{$MATERIAL_SIZE_POSTFIX}";
@@ -63,6 +64,7 @@
 .dx-theme-border-color {
   border-color: $base-border-color !important;
 }
+
 // stylelint-enable declaration-no-important
 
 @mixin dx-base-typography() {

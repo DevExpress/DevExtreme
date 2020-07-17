@@ -335,6 +335,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     }
 
     td {
+
       // max-width: 150px;
       min-width: 50px;
       border-right: $PIVOTGRID_BORDER;
@@ -383,6 +384,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
       &.dx-pivotgrid-collapsed {
         text-align: left;
       }
+
       // B234718
       border: $PIVOTGRID_BORDER;
     }

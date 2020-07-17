@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -251,6 +252,7 @@
     vertical-align: middle;
     cursor: pointer;
     z-index: 10000;
+
     // T105728
     box-sizing: content-box;
 
