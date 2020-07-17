@@ -3,7 +3,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
-import { ViewCellData } from '../../types';
+import { GroupedViewData, ViewCellData } from '../../types';
+import { getKeyByDateAndGroup } from '../../utils';
 
 export const viewFunction = (viewModel: TimePanelTableLayout) => (
   <table
@@ -12,30 +13,32 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
     {...viewModel.restAttributes}
   >
     <tbody>
-      {viewModel.props.viewCellsData!.map((cellsRow) => (
-        <Row
-          className="dx-scheduler-time-panel-row"
-          key={cellsRow[0].startDate.toString()}
-        >
-          {cellsRow.map(({
-            startDate,
-            text,
-          }: ViewCellData) => (
-            <Cell
-              startDate={startDate}
-              text={text}
-              key={startDate.toString()}
-            />
-          ))}
-        </Row>
-      ))}
+      {viewModel.props.viewData!
+        .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
+          <Row
+            className="dx-scheduler-time-panel-row"
+            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+          >
+            {cellsRow.map(({
+              startDate,
+              text,
+              groups,
+            }: ViewCellData) => (
+              <Cell
+                startDate={startDate}
+                text={text}
+                key={getKeyByDateAndGroup(startDate, groups)}
+              />
+            ))}
+          </Row>
+        )))}
     </tbody>
   </table>
 );
 
 @ComponentBindings()
 export class TimePanelTableLayoutProps {
-  @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+  @OneWay() viewData?: GroupedViewData;
 
   @OneWay() className?: string;
 }

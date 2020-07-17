@@ -9,38 +9,40 @@ import { Table } from '../../base/table';
 import { VirtualTable } from '../../base/virtual_table';
 
 export const viewFunction = (viewModel: DayDateTableLayout): object => {
-  const rows = viewModel.props.viewCellsData!
-    .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
-      <DateTableRow
-        key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-      >
-        {cellsRow.map(({
-          startDate,
-          endDate,
-          groups,
-        }: ViewCellData) => (
-          <Cell
-            startDate={startDate}
-            endDate={endDate}
-            groups={groups}
-            key={getKeyByDateAndGroup(startDate, groups)}
-          />
-          ))}
-        </DateTableRow>
-  ));
+  const { DateTable } = viewModel;
 
-  const tableClassName = `dx-scheduler-date-table ${viewModel.props.className}`;
-
-  if (viewModel.props.isVirtual) {
-    return <VirtualTable className={`${tableClassName}`}>{rows}</VirtualTable>;
-  }
-
-  return <Table className={`${tableClassName}`}>{rows}</Table>;
+  return (
+    <DateTable
+      className={`dx-scheduler-date-table ${viewModel.props.className}`}
+    >
+      {
+        viewModel.props.viewData!
+          .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
+            <DateTableRow
+              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+            >
+              {cellsRow.map(({
+                startDate,
+                endDate,
+                groups,
+              }: ViewCellData) => (
+                <Cell
+                  startDate={startDate}
+                  endDate={endDate}
+                  groups={groups}
+                  key={getKeyByDateAndGroup(startDate, groups)}
+                />
+              ))}
+            </DateTableRow>
+          )))
+    }
+    </DateTable>
+  );
 };
 
 @ComponentBindings()
 export class DayDateTableLayoutProps {
-  @OneWay() viewCellsData?: GroupedViewData;
+  @OneWay() viewData?: GroupedViewData;
 
   @OneWay() className?: string;
 
@@ -52,6 +54,7 @@ export class DayDateTableLayoutProps {
   view: viewFunction,
 })
 export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
+  get DateTable(): typeof VirtualTable | typeof Table {
+    return this.props.isVirtual ? VirtualTable : Table;
+  }
 }
-
-
