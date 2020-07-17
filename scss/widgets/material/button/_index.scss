@@ -85,10 +85,10 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
 // NOTE: Button styles
 
 @mixin dx-button-styling-variant(
-    $background-color, $text-color, $shadow-color,
-    $hover-background-color, $hover-shadow-color, $focused-background-color,
-    $focused-shadow-color, $active-background-color, $active-shadow-color,
-    $disabled-background-color, $icon-color
+  $background-color, $text-color, $shadow-color,
+  $hover-background-color, $hover-shadow-color, $focused-background-color,
+  $focused-shadow-color, $active-background-color, $active-shadow-color,
+  $disabled-background-color, $icon-color
 ) {
   background-color: $background-color;
   color: $text-color;
@@ -132,56 +132,56 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
 }
 
 @mixin dx-button-styling(
-    $button-bg, $button-color, $button-hover-bg,
-    $button-focused-bg, $button-active-bg, $button-icon-color
+  $button-bg, $button-color, $button-hover-bg,
+  $button-focused-bg, $button-active-bg, $button-icon-color
 ) {
   border-radius: $button-border-radius;
 
   @include dx-button-styling-variant(
-        $button-bg,
-        $button-color,
-        $MATERIAL_NORMAL_BUTTON_SHADOW,
-        $button-hover-bg,
-        $MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW,
-        $button-focused-bg,
-        $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW,
-        $button-active-bg,
-        $MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW,
-        $button-disabled-background,
-        $button-icon-color
-    );
+    $button-bg,
+    $button-color,
+    $MATERIAL_NORMAL_BUTTON_SHADOW,
+    $button-hover-bg,
+    $MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW,
+    $button-focused-bg,
+    $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW,
+    $button-active-bg,
+    $MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW,
+    $button-disabled-background,
+    $button-icon-color
+  );
 }
 
 @mixin dx-button-flat-color-styling($button-color, $hover-bg, $focused-bg, $active-bg) {
   @include dx-button-styling-variant(
-        transparent,
-        $button-color,
-        none,
-        $hover-bg,
-        none,
-        $focused-bg,
-        none,
-        $active-bg,
-        none,
-        transparent,
-        $button-color
-    );
+    transparent,
+    $button-color,
+    none,
+    $hover-bg,
+    none,
+    $focused-bg,
+    none,
+    $active-bg,
+    none,
+    transparent,
+    $button-color
+  );
 }
 
 @mixin dx-button-outlined-color-styling($button-color, $border-color, $hover-bg, $focused-bg, $active-bg) {
   @include dx-button-styling-variant(
-        transparent,
-        $button-color,
-        none,
-        $hover-bg,
-        none,
-        $focused-bg,
-        none,
-        $active-bg,
-        none,
-        transparent,
-        $button-color
-    );
+    transparent,
+    $button-color,
+    none,
+    $hover-bg,
+    none,
+    $focused-bg,
+    none,
+    $active-bg,
+    none,
+    transparent,
+    $button-color
+  );
 
   border: 1px solid $border-color;
 }
@@ -207,45 +207,45 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
   }
 
   @include dx-button-styling(
-        $button-normal-bg,
-        $button-normal-color,
-        $button-normal-hover-bg,
-        $button-normal-focused-bg,
-        $button-normal-active-bg,
-        $button-normal-icon-color
-    );
+    $button-normal-bg,
+    $button-normal-color,
+    $button-normal-hover-bg,
+    $button-normal-focused-bg,
+    $button-normal-active-bg,
+    $button-normal-icon-color
+  );
 
   &.dx-button-default {
     @include dx-button-styling(
-            $button-default-bg,
-            $button-default-color,
-            $button-default-hover-bg,
-            $button-default-focused-bg,
-            $button-default-active-bg,
-            $button-default-icon-color
-        );
+      $button-default-bg,
+      $button-default-color,
+      $button-default-hover-bg,
+      $button-default-focused-bg,
+      $button-default-active-bg,
+      $button-default-icon-color
+    );
   }
 
   &.dx-button-danger {
     @include dx-button-styling(
-            $button-danger-bg,
-            $button-danger-color,
-            $button-danger-hover-bg,
-            $button-danger-focused-bg,
-            $button-danger-active-bg,
-            $button-danger-icon-color
-        );
+      $button-danger-bg,
+      $button-danger-color,
+      $button-danger-hover-bg,
+      $button-danger-focused-bg,
+      $button-danger-active-bg,
+      $button-danger-icon-color
+    );
   }
 
   &.dx-button-success {
     @include dx-button-styling(
-            $button-success-bg,
-            $button-success-color,
-            $button-success-hover-bg,
-            $button-success-focused-bg,
-            $button-success-active-bg,
-            $button-success-icon-color
-        );
+      $button-success-bg,
+      $button-success-color,
+      $button-success-hover-bg,
+      $button-success-focused-bg,
+      $button-success-active-bg,
+      $button-success-icon-color
+    );
   }
 
   &.dx-button-back {
