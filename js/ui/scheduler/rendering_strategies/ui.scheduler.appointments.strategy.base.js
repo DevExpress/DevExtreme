@@ -531,8 +531,8 @@ class BaseRenderingStrategy {
         const info = position?.info;
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            const recurrencePartStartDate = info?.appointment.initialStartDate || realStartDate;
-            const recurrencePartCroppedByViewStartDate = info?.appointment.startDate || realStartDate;
+            // TODO: most likely in this condition, 'realStartDate' do not need anymore
+            const recurrencePartStartDate = info?.appointment.startDate || realStartDate;
 
             let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
                 this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
@@ -546,8 +546,8 @@ class BaseRenderingStrategy {
                 endDate = new Date(endDate.getTime() + fullDuration);
             }
 
-            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartCroppedByViewStartDate.getTime() < viewStartDate.getTime()) {
-                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime();
+            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
+                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime();
                 const tailDuration = fullDuration - headDuration || fullDuration;
 
                 endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);

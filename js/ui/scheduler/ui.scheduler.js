@@ -2161,7 +2161,6 @@ class Scheduler extends Widget {
                 resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
             }
 
-            appointment.initialStartDate = appointment.startDate;
             appointment.startDate = dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
 
             return appointment;
@@ -2241,9 +2240,7 @@ class Scheduler extends Widget {
                 const maxDate = new Date(dateRange[1]);
                 const endDateOfPart = renderingStrategy.endDate(appointmentData, {
                     info: {
-                        appointment: {
-                            startDate: gridAppointment.startDate
-                        }
+                        appointment: gridAppointment
                     }
                 }, !!recurrenceRule);
 
