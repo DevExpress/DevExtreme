@@ -3,10 +3,10 @@ import { shallow } from 'enzyme';
 import {
   MonthDateTableCell as Cell,
   viewFunction as CellView,
-} from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell';
+} from '../cell';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/cell', () => ({
-  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/cell'),
+jest.mock('../../../base/date_table/cell', () => ({
+  ...require.requireActual('../../../base/date_table/cell'),
   DateTableCellBase: (props) => <div {...props} />,
 }));
 
