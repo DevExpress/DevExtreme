@@ -524,13 +524,14 @@ class BaseRenderingStrategy {
     }
 
     endDate(appointment, position, isRecurring, ignoreViewDates = false) {
+        const info = position?.info;
         let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
         const realStartDate = this.startDate(appointment, true);
         const viewStartDate = this.startDate(appointment, false, position);
 
-        const info = position?.info;
-
-        if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
+        if(info?.appointment.endDate) {
+            endDate = info?.appointment.endDate;
+        } else if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             // TODO: most likely in this condition, 'realStartDate' do not need anymore
             const recurrencePartStartDate = info?.appointment.startDate || realStartDate;
 
