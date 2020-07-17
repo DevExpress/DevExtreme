@@ -23,7 +23,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     }
 
     _getBoundary(dataList) {
-        return this._options.isAppointmentInAllDayPanel(dataList[0].data) ? this._options.container : this._options.getScrollableContainer();
+        return this._options.isAppointmentInAllDayPanel(dataList[0].appointment) ? this._options.container : this._options.getScrollableContainer();
     }
 
     _onShown() {
