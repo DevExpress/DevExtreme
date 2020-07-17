@@ -9,8 +9,11 @@ import {
   updateChildProps,
 } from '../resizable_container';
 import { GetHtmlElement } from '../common/types.d';
+import resizeCallbacks from '../../../core/utils/resize_callbacks';
 
 jest.mock('../utils/get_computed_style');
+jest.mock('../../../core/utils/resize_callbacks');
+
 
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
@@ -66,7 +69,7 @@ describe('resizable-container', () => {
     });
   });
 
-  describe('Logic', () => {
+  describe('behaviour', () => {
     function createComponent(sizes: {
       width; pageSizes; info; pages;
     }) {
@@ -125,6 +128,16 @@ describe('resizable-container', () => {
       expect(elementsWidth).not.toBe(component.elementsWidth);
     });
 
+    it('subscribeToResize', () => {
+      const component = createComponent({
+        width: 0, pageSizes: 0, info: 0, pages: 0,
+      });
+      const dispose = component.subscribeToResize();
+      expect(resizeCallbacks.add).toBeCalledWith(component.updateChildrenProps);
+      dispose();
+      expect(resizeCallbacks.remove).toBeCalledTimes(1);
+    });
+
     it('pagerProps', () => {
       const props: ResizableContainerProps = {
         contentTemplate: 'template',
@@ -144,7 +157,7 @@ describe('resizable-container', () => {
   });
 
   describe('updateChildProps', () => {
-    it('updateChildProps: init', () => {
+    it('init', () => {
       const prevElementsWidth = {
         pageSizes: 0,
         pages: 0,
@@ -170,7 +183,7 @@ describe('resizable-container', () => {
       expect(isLargeDisplayMode).toBe(true);
     });
 
-    it('updateChildProps: second update not mutate elementsWidth', () => {
+    it('second update not mutate elementsWidth', () => {
       const prevElementsWidth = {
         pageSizes: 0,
         pages: 0,
@@ -188,7 +201,7 @@ describe('resizable-container', () => {
       expect(elementsWidth === nextElementsWidth).toBe(true);
     });
 
-    it('updateChildProps: update from large to small not mutate elementsWidth', () => {
+    it('update from large to small not mutate elementsWidth', () => {
       const largeElementsWidth = {
         pageSizes: 100,
         pages: 200,
@@ -216,7 +229,7 @@ describe('resizable-container', () => {
         } as any);
     }
 
-    it('updateChildProps: fit size', () => {
+    it('fit size', () => {
       const {
         infoTextVisible,
         isLargeDisplayMode,
@@ -227,7 +240,7 @@ describe('resizable-container', () => {
       expect(isLargeDisplayMode).toBe(true);
     });
 
-    it('updateChildProps: showInfo false and infoRef null', () => {
+    it('showInfo false and infoRef null', () => {
       const {
         infoTextVisible,
         isLargeDisplayMode,
@@ -238,7 +251,7 @@ describe('resizable-container', () => {
       expect(isLargeDisplayMode).toBe(true);
     });
 
-    it('updateChildProps: info text not fit', () => {
+    it('info text not fit', () => {
       const {
         infoTextVisible,
         isLargeDisplayMode,
@@ -249,7 +262,7 @@ describe('resizable-container', () => {
       expect(isLargeDisplayMode).toBe(true);
     });
 
-    it('updateChildProps: info text not fit and isLargeDisplayMode not possible', () => {
+    it('info text not fit and isLargeDisplayMode not possible', () => {
       const {
         infoTextVisible,
         isLargeDisplayMode,

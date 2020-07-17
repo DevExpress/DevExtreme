@@ -37,7 +37,7 @@ export class PagesLargeProps {
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageIndexChange?: (pageIndex: number) => void = () => { }; // commonUtils.noop
+  @Event() pageIndexChange?: (pageIndex: number) => void;
 }
 
 const PAGES_LIMITER = 4;
@@ -52,6 +52,7 @@ type SlidingWindowState = {
 type PageIndex = number | 'low' | 'high';
 type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
+
 function getDelimiterType(
   startIndex: number, slidingWindowSize: number, pageCount: number,
 ): DelimiterType {
@@ -67,17 +68,23 @@ function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[],
   delimiter: DelimiterType): SlidingWindowState & { pageIndexes: PageIndexes } {
   let pageIndexes: PageIndexes = [];
   let indexesForReuse: number[] = [];
-  if (delimiter === 'none') {
-    pageIndexes = [...slidingWindowIndexes];
-  } else if (delimiter === 'both') {
-    pageIndexes = [0, 'low', ...slidingWindowIndexes, 'high', pageCount - 1];
-    indexesForReuse = slidingWindowIndexes.slice(1, -1);
-  } else if (delimiter === 'high') {
-    pageIndexes = [0, ...slidingWindowIndexes, 'high', pageCount - 1];
-    indexesForReuse = slidingWindowIndexes.slice(0, -1);
-  } else if (delimiter === 'low') {
-    pageIndexes = [0, 'low', ...slidingWindowIndexes, pageCount - 1];
-    indexesForReuse = slidingWindowIndexes.slice(1);
+  // eslint-disable-next-line default-case
+  switch (delimiter) {
+    case 'none':
+      pageIndexes = [...slidingWindowIndexes];
+      break;
+    case 'both':
+      pageIndexes = [0, 'low', ...slidingWindowIndexes, 'high', pageCount - 1];
+      indexesForReuse = slidingWindowIndexes.slice(1, -1);
+      break;
+    case 'high':
+      pageIndexes = [0, ...slidingWindowIndexes, 'high', pageCount - 1];
+      indexesForReuse = slidingWindowIndexes.slice(0, -1);
+      break;
+    case 'low':
+      pageIndexes = [0, 'low', ...slidingWindowIndexes, pageCount - 1];
+      indexesForReuse = slidingWindowIndexes.slice(1);
+      break;
   }
   return {
     slidingWindowIndexes, indexesForReuse, pageIndexes,
@@ -116,7 +123,7 @@ export class PagesLarge extends JSXComponent(PagesLargeProps) {
     return rtlPageIndexes.map((index): PageType => createPage(index));
   }
 
-  canReuseSlidingWindow(currentPageCount: number, pageIndex = 0): boolean {
+  canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
     const { indexesForReuse } = this.slidingWindowState;
     const currentPageNotExistInIndexes = indexesForReuse.indexOf(currentPageCount) === -1;
     const pageIndexExistInIndexes = indexesForReuse.indexOf(pageIndex) !== -1;
@@ -126,30 +133,20 @@ export class PagesLarge extends JSXComponent(PagesLargeProps) {
   generatePageIndexes(): PageIndexes {
     const { pageIndex, pageCount } = this.props as Required<PagesLargeProps>;
     let startIndex = 0;
-    let slidingWindowSize = 0;
-    let delimiter: DelimiterType = 'none';
     const slidingWindow = this.slidingWindowState.slidingWindowIndexes;
     if (pageIndex === slidingWindow[0]) {
       startIndex = pageIndex - 1;
-      slidingWindowSize = PAGES_LIMITER;
-      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     } else if (pageIndex === slidingWindow[slidingWindow.length - 1]) {
       startIndex = pageIndex + 2 - PAGES_LIMITER;
-      slidingWindowSize = PAGES_LIMITER;
-      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     } else if (pageIndex < PAGES_LIMITER) {
       startIndex = 1;
-      slidingWindowSize = PAGES_LIMITER;
-      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     } else if (pageIndex >= pageCount - PAGES_LIMITER) {
       startIndex = pageCount - PAGES_LIMITER - 1;
-      slidingWindowSize = PAGES_LIMITER;
-      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     } else {
       startIndex = pageIndex - 1;
-      slidingWindowSize = PAGES_LIMITER;
-      delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     }
+    const slidingWindowSize = PAGES_LIMITER;
+    const delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     const {
       pageIndexes,
       ...state
@@ -173,7 +170,7 @@ export class PagesLarge extends JSXComponent(PagesLargeProps) {
     if (this.isSlidingWindowMode()) {
       return createPageIndexes(0, pageCount, pageCount, 'none').pageIndexes;
     }
-    if (this.canReuseSlidingWindow(pageCount, this.props.pageIndex)) {
+    if (this.canReuseSlidingWindow(pageCount, this.props.pageIndex!)) {
       const { slidingWindowIndexes } = this.slidingWindowState;
       const delimiter = getDelimiterType(
         slidingWindowIndexes[0], PAGES_LIMITER, pageCount,

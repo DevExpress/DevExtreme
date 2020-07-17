@@ -34,7 +34,7 @@ export class InfoText extends JSXComponent(InfoTextProps) implements GetHtmlElem
 
   get text(): string {
     const {
-      infoText = '', pageIndex, pageCount, totalCount,
+      infoText, pageIndex, pageCount, totalCount,
     } = this.props as Required<InfoTextProps>;
     return format(infoText,
       (pageIndex + 1).toString(),

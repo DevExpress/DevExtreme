@@ -97,8 +97,8 @@ export function updateChildProps(
   { elementsWidth: ChildElementsWidth } & ChildElementProps {
   const { parent: parentWidth, ...currentElementsWidth } = getElementsWidth({
     parent: parentRef,
-    pageSizes: pageSizesHtmlRef?.getHtmlElement(),
-    info: infoTextRef?.getHtmlElement(),
+    pageSizes: pageSizesHtmlRef.getHtmlElement(),
+    info: infoTextRef.getHtmlElement(),
     pages: pagesRef,
   });
   const newElementsWidth = updateElementsWidthIfNeed(elementsWidth, currentElementsWidth);
