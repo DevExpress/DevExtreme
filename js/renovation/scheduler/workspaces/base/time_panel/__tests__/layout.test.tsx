@@ -1,26 +1,21 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
 
-jest.mock('../../row', () => ({
-  ...require.requireActual('../../row'),
-  Row: () => null,
-}));
-jest.mock('../cell', () => ({
-  ...require.requireActual('../cell'),
-  TimePanelCell: () => null,
-}));
-
 describe('DayDateTableLayout', () => {
   describe('Render', () => {
-    const viewCellsData = [
-      [{ startDate: new Date(2020, 6, 9, 0), text: '0:00 AM' }],
-      [{ startDate: new Date(2020, 6, 9, 1), text: '1:00 AM' }],
-    ];
-    const render = (viewModel) => shallow(LayoutView({
+    const viewData = {
+      groupedData: [{
+        dateTable: [
+          [{ startDate: new Date(2020, 6, 9, 0), text: '0:00 AM' }],
+          [{ startDate: new Date(2020, 6, 9, 1), text: '1:00 AM' }],
+        ],
+      }],
+    };
+    const render = (viewModel) => mount(LayoutView({
       ...viewModel,
-      props: { ...viewModel.props, viewCellsData },
+      props: { ...viewModel.props, viewData },
     } as any) as any);
 
     it('should spread restAttributes', () => {
@@ -62,16 +57,18 @@ describe('DayDateTableLayout', () => {
       expect(cells)
         .toHaveLength(2);
 
+      const { dateTable } = viewData.groupedData[0];
+
       expect(cells.at(0).props())
         .toMatchObject({
-          startDate: viewCellsData[0][0].startDate,
-          text: viewCellsData[0][0].text,
+          startDate: dateTable[0][0].startDate,
+          text: dateTable[0][0].text,
         });
 
       expect(cells.at(1).props())
         .toMatchObject({
-          startDate: viewCellsData[1][0].startDate,
-          text: viewCellsData[1][0].text,
+          startDate: dateTable[1][0].startDate,
+          text: dateTable[1][0].text,
         });
     });
   });

@@ -4,9 +4,9 @@ import {
 
 export const viewFunction = (viewModel: Table) => (
   <table
-    className={`${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    className={`${viewModel.props.className}`}
   >
     <tbody>
       {viewModel.props.children}

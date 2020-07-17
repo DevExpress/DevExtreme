@@ -5,35 +5,34 @@ import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
 import { GroupedViewData, ViewCellData } from '../../types';
 import { getKeyByDateAndGroup } from '../../utils';
+import { Table } from '../table';
 
 export const viewFunction = (viewModel: TimePanelTableLayout) => (
-  <table
-    className={`${viewModel.props.className} dx-scheduler-time-panel`}
+  <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    className={`dx-scheduler-time-panel ${viewModel.props.className}`}
   >
-    <tbody>
-      {viewModel.props.viewData!
-        .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
-          <Row
-            className="dx-scheduler-time-panel-row"
-            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-          >
-            {cellsRow.map(({
-              startDate,
-              text,
-              groups,
-            }: ViewCellData) => (
-              <Cell
-                startDate={startDate}
-                text={text}
-                key={getKeyByDateAndGroup(startDate, groups)}
-              />
-            ))}
-          </Row>
-        )))}
-    </tbody>
-  </table>
+    {viewModel.props.viewData!
+      .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
+        <Row
+          className="dx-scheduler-time-panel-row"
+          key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+        >
+          {cellsRow.map(({
+            startDate,
+            text,
+            groups,
+          }: ViewCellData) => (
+            <Cell
+              startDate={startDate}
+              text={text}
+              key={getKeyByDateAndGroup(startDate, groups)}
+            />
+          ))}
+        </Row>
+      )))}
+  </Table>
 );
 
 @ComponentBindings()

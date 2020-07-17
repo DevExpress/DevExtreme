@@ -9,33 +9,35 @@ import { Table } from '../../base/table';
 import { VirtualTable } from '../../base/virtual_table';
 
 export const viewFunction = (viewModel: DayDateTableLayout): object => {
-  const { DateTable } = viewModel;
+  const DateTable = viewModel.props.isVirtual ? VirtualTable : Table;
 
   return (
     <DateTable
+        // eslint-disable-next-line react/jsx-props-no-spreading
+      {...viewModel.restAttributes}
       className={`dx-scheduler-date-table ${viewModel.props.className}`}
     >
       {
-        viewModel.props.viewData!
-          .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
-            <DateTableRow
-              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-            >
-              {cellsRow.map(({
-                startDate,
-                endDate,
-                groups,
-              }: ViewCellData) => (
-                <Cell
-                  startDate={startDate}
-                  endDate={endDate}
-                  groups={groups}
-                  key={getKeyByDateAndGroup(startDate, groups)}
-                />
-              ))}
-            </DateTableRow>
-          )))
-    }
+          viewModel.props.viewData!
+            .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
+              <DateTableRow
+                key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+              >
+                {cellsRow.map(({
+                  startDate,
+                  endDate,
+                  groups,
+                }: ViewCellData) => (
+                  <Cell
+                    startDate={startDate}
+                    endDate={endDate}
+                    groups={groups}
+                    key={getKeyByDateAndGroup(startDate, groups)}
+                  />
+                ))}
+              </DateTableRow>
+            )))
+      }
     </DateTable>
   );
 };
@@ -46,7 +48,7 @@ export class DayDateTableLayoutProps {
 
   @OneWay() className?: string;
 
-  @OneWay() isVirtual?: boolean = true;
+  @OneWay() isVirtual?: boolean;
 }
 
 @Component({
