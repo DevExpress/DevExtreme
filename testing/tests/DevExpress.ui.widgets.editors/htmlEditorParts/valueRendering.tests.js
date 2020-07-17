@@ -34,6 +34,20 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         assert.equal($content.get(0).dataset.placeholder, 'test placeholder');
     });
 
+    test('the container must adjust to the placeholder', function(assert) {
+        const instance = $('#htmlEditor').dxHtmlEditor({
+            width: 50
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const initialHeight = $element.outerHeight();
+
+        instance.option('placeholder', '1234 567 89 0123 4567 89 012 345 67 890');
+
+        const actualHeight = $element.outerHeight();
+
+        assert.ok(actualHeight > initialHeight, 'editor height has been increased');
+    });
+
     test('render default value', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
             value: '<h1>Hi!</h1><p>Test</p>'
