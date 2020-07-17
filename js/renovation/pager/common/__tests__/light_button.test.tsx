@@ -1,17 +1,13 @@
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import {
-  EVENT, emit, getEventHandlers, clear,
-} from '../../../__tests__/utils/events_mock';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
-import * as LightButtonModule from '../light_button';
+import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
 import { closestClass } from '../../utils/closest_class';
-
-const { dxClickEffect } = LightButtonModule;
 
 jest.mock('../../../../ui/shared/accessibility');
 jest.mock('../../utils/closest_class');
+jest.mock('../../../utils/subscribe_to_event');
 
 describe('LightButton', () => {
   describe('View', () => {
@@ -40,58 +36,21 @@ describe('LightButton', () => {
   });
 
   describe('Effect', () => {
-    afterEach(() => { clear(); });
-
     describe('ClickEffect', () => {
       it('clickEffect', () => {
-        const dxClickEffectSpy = jest.spyOn(LightButtonModule, 'dxClickEffect');
         const click = jest.fn();
         const widgetRef = {} as HTMLDivElement;
         const component = new LightButton({ onClick: click });
         component.widgetRef = widgetRef;
-        const unsubscribeFn = component.clickEffect();
-        expect(dxClickEffectSpy).toBeCalledTimes(1);
-        expect(dxClickEffectSpy).toBeCalledWith(widgetRef, click);
+        const unsubscribeFn = component.subscribeToClick();
+        expect(subscribeToClickEvent).toBeCalledTimes(1);
+        expect(subscribeToClickEvent).toBeCalledWith(widgetRef, click);
         unsubscribeFn?.();
-        expect(dxClickEffectSpy).toBeCalledTimes(1);
-      });
-    });
-
-    describe('dxClickEffect', () => {
-      it('should not subscribe to click event without handler', () => {
-        dxClickEffect(null, null);
-
-        expect(getEventHandlers(EVENT.dxClick)).toBe(undefined);
-      });
-
-      it('should subscribe to click event', () => {
-        const clickHandler = jest.fn();
-        dxClickEffect(null, clickHandler);
-        expect(clickHandler).toHaveBeenCalledTimes(0);
-
-        emit(EVENT.dxClick);
-        expect(clickHandler).toHaveBeenCalledTimes(1);
-      });
-
-      it('should return unsubscribe function', () => {
-        const clickHandler = jest.fn();
-        const unsubscribeFn = dxClickEffect(null, clickHandler);
-
-        emit(EVENT.dxClick);
-        expect(clickHandler).toHaveBeenCalledTimes(1);
-
-        unsubscribeFn?.();
-
-        emit(EVENT.dxClick);
-        expect(clickHandler).toHaveBeenCalledTimes(1);
+        expect(subscribeToClickEvent).toBeCalledTimes(1);
       });
     });
 
     describe('keyboardEffect', () => {
-      beforeEach(() => {
-        jest.resetAllMocks();
-      });
-
       it('should call registerKeyboardAction with right parameters', () => {
         const widgetRef = {} as HTMLDivElement;
         const onClick = jest.fn();
@@ -111,6 +70,10 @@ describe('LightButton', () => {
           undefined,
           onClick,
         );
+        const fakeWidget = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
+        expect(fakeWidget.option()).toBe(false);
+        // eslint-disable-next-line no-underscore-dangle
+        expect(fakeWidget._createActionByOption()()).toBe(undefined);
       });
 
       it('should use the `closest` function inside parameters', () => {
