@@ -165,7 +165,7 @@ $LIST_SEARCHBOX_MARGIN_BOTTOM: 5px;
 .dx-list-select-all-label {
   display: inline-block;
 
-  @include dx-overflow;
+  @include dx-overflow();
 }
 
 .dx-list-item-after-bag {

@@ -1838,7 +1838,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
       box-shadow: $SCHEDULER_VERTICAL_APPOINTMENT_RESIZING_SHADOW;
     }
 
-    @include dx-scheduler-appointment-focused-mixin;
+    @include dx-scheduler-appointment-focused-mixin();
 
     &.dx-state-hover {
       box-shadow: $SCHEDULER_VERTICAL_APPOINTMENT_HOVERING_SHADOW;
@@ -1916,7 +1916,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
       box-shadow: $SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW;
     }
 
-    @include dx-scheduler-appointment-focused-mixin;
+    @include dx-scheduler-appointment-focused-mixin();
 
     &.dx-state-hover {
       box-shadow: $SCHEDULER_HORIZONTAL_APPOINTMENT_HOVERING_SHADOW;

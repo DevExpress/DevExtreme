@@ -133,7 +133,7 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
   $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;
 
-  $list-item-hover-color:  $base-hover-color !default;
+  $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
   $list-header-indicator-color: $base-icon-color !default;
 
