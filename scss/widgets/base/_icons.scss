@@ -3,7 +3,7 @@
 @mixin dx-icon-sizing($icon_size, $container_size: $icon_size, $borders_size: 0) {
   $icon_paddings_dirty: $container_size - $icon_size;
   $icon_paddings: $icon_paddings_dirty - $borders_size;
-  $icon_padding: floor($icon_paddings/2);
+  $icon_padding: floor($icon_paddings / 2);
 
   // Geometry
   width: $container_size;
@@ -32,9 +32,9 @@
     display: block;
     width: $icon_size;
     top: 50%;
-    margin-top: -$icon_size/2;
+    margin-top: -$icon_size / 2;
     left: 50%;
-    margin-left: -$icon_size/2;
+    margin-left: -$icon_size / 2;
   }
 }
 

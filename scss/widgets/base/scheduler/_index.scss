@@ -403,7 +403,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
     }
 
     .dx-scheduler-date-table-scrollable {
-      margin-left: $size + $SCHEDULER_LEFT_COLUMN_WIDTH  + 1px + $offset;
+      margin-left: $size + $SCHEDULER_LEFT_COLUMN_WIDTH + 1px + $offset;
     }
 
     .dx-scheduler-header-scrollable.dx-scrollable {
@@ -413,7 +413,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
     &.dx-rtl {
       .dx-scheduler-date-table-scrollable {
         margin-left: 0;
-        margin-right: $size + $SCHEDULER_LEFT_COLUMN_WIDTH  + 1px + $offset;
+        margin-right: $size + $SCHEDULER_LEFT_COLUMN_WIDTH + 1px + $offset;
       }
 
       .dx-scheduler-date-table {
@@ -2123,7 +2123,7 @@ $SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
           padding-right: $SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH * $SCHEDULER_SMALL_SIZE_FACTOR;
         }
 
-        padding-left: $SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH  * $SCHEDULER_SMALL_SIZE_FACTOR;
+        padding-left: $SCHEDULER_AGENDA_LEFT_COLUMN_WIDTH * $SCHEDULER_SMALL_SIZE_FACTOR;
       }
 
       width: 100%;

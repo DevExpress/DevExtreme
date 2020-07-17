@@ -44,7 +44,7 @@ $GENERIC_SLIDER_RADIUS: 2px;
 }
 
 .dx-slider-bar {
-  margin: $GENERIC_SLIDER_HEIGHT/2 $GENERIC_SLIDER_WIDTH / 2;
+  margin: $GENERIC_SLIDER_HEIGHT / 2 $GENERIC_SLIDER_WIDTH / 2;
   height: $GENERIC_SLIDER_TRACK_HEIGHT;
   background: $slider-bar-bg;
   border-radius: $GENERIC_SLIDER_RADIUS;

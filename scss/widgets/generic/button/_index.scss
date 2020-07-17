@@ -45,7 +45,7 @@ $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN: 1px;
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($GENERIC_BUTTON_PADDING, $GENERIC_BUTTON_ICON_SIZE, $GENERIC_BUTTON_ICON_SIZE/2);
+  @include dx-button-sizing($GENERIC_BUTTON_PADDING, $GENERIC_BUTTON_ICON_SIZE, $GENERIC_BUTTON_ICON_SIZE / 2);
 }
 
 .dx-button {

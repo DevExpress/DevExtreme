@@ -57,7 +57,7 @@ $MATERIAL_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($MATERIAL_FIELD_MIN_HEIGHT - $size)/2 0;
+    margin: ($MATERIAL_FIELD_MIN_HEIGHT - $size) / 2 0;
   }
 }
 

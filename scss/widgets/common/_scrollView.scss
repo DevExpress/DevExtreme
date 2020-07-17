@@ -144,7 +144,7 @@ $PULLDOWN_PADDING: 15px;
   width: 100%;
   height: $PULLDOWN_HEIGHT;
   padding: $PULLDOWN_PADDING 0;
-  top: -($PULLDOWN_HEIGHT + $PULLDOWN_PADDING*2);
+  top: -($PULLDOWN_HEIGHT + $PULLDOWN_PADDING * 2);
   overflow: hidden;
   transform: translate(0, 0);
   -webkit-user-drag: none;

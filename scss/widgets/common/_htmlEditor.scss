@@ -17,7 +17,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 
 @function add-counter-reset($counter, $start: 1) {
   @if $counter > $start {
-    @return add-counter-reset($counter - 1, $start)+ " " + list-#{$counter};
+    @return add-counter-reset($counter - 1, $start) + " " + list-#{$counter};
   }
 
   @return list-#{$counter};

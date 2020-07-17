@@ -100,7 +100,7 @@ $badge-invalid-bg: $base-invalid-color;
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$MATERIAL_INVALID_BADGE_SIZE/2;
+  margin-top: -$MATERIAL_INVALID_BADGE_SIZE / 2;
   width: $MATERIAL_INVALID_BADGE_SIZE;
   height: $MATERIAL_INVALID_BADGE_SIZE;
   text-align: center;
@@ -135,7 +135,7 @@ $badge-invalid-bg: $base-invalid-color;
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$MATERIAL_INVALID_BADGE_SIZE/2;
+  margin-top: -$MATERIAL_INVALID_BADGE_SIZE / 2;
   width: $MATERIAL_INVALID_BADGE_SIZE;
   height: $MATERIAL_INVALID_BADGE_SIZE;
 }

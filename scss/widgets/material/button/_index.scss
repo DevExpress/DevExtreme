@@ -49,7 +49,7 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($MATERIAL_BUTTON_PADDING, $MATERIAL_BUTTON_ICON_SIZE - 6, $MATERIAL_BUTTON_ICON_SIZE/2);
+  @include dx-button-sizing($MATERIAL_BUTTON_PADDING, $MATERIAL_BUTTON_ICON_SIZE - 6, $MATERIAL_BUTTON_ICON_SIZE / 2);
 }
 
 @mixin dx-button-text-and-icon-sizing() {
