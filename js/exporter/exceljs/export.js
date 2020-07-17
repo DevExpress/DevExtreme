@@ -2,7 +2,7 @@ import { isDefined, isString, isDate, isObject } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
 import { extend } from '../../core/utils/extend';
-import { isFunction } from 'jquery';
+import { isFunction } from '../../core/utils/type';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
