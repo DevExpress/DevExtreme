@@ -25,8 +25,10 @@ describe('resizable-container', () => {
     width, pageSizes, info, pages,
   }) {
     const parentHtmlEl = getFakeHtml(width) as HTMLElement;
-    const pageSizesHtmlEl: GetHtmlElement = { getHtmlElement: () => getFakeHtml(pageSizes) };
-    const infoHtmlEl: GetHtmlElement = { getHtmlElement: () => getFakeHtml(info) };
+    const pageSizesHtmlEl: GetHtmlElement | undefined = pageSizes
+      ? { getHtmlElement: () => getFakeHtml(pageSizes) } : undefined;
+    const infoHtmlEl: GetHtmlElement | undefined = info
+      ? { getHtmlElement: () => getFakeHtml(info) } : undefined;
     const pagesHtmlEl = getFakeHtml(info + pages);
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
@@ -178,6 +180,32 @@ describe('resizable-container', () => {
         info: 50,
         pageSizes: 100,
         pages: 150,
+      });
+      expect(infoTextVisible).toBe(true);
+      expect(isLargeDisplayMode).toBe(true);
+    });
+
+    it('no pageSizes and info', () => {
+      const prevElementsWidth = {
+        pageSizes: 0,
+        pages: 0,
+        info: 0,
+      };
+      const {
+        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
+      } = getElementsRef({
+        width: 400, pageSizes: null, info: null, pages: 100,
+      });
+      const {
+        elementsWidth,
+        infoTextVisible,
+        isLargeDisplayMode,
+      } = updateChildProps(parentHtmlEl,
+        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, prevElementsWidth);
+      expect(elementsWidth).toEqual({
+        info: 0,
+        pageSizes: 0,
+        pages: 100,
       });
       expect(infoTextVisible).toBe(true);
       expect(isLargeDisplayMode).toBe(true);
