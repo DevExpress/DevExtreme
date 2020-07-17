@@ -30,6 +30,8 @@
         "scss/dollar-variable-colon-space-before": "never",
         "scss/dollar-variable-no-missing-interpolation": true,
         "scss/double-slash-comment-empty-line-before": "always",
-        "scss/double-slash-comment-whitespace-inside": "always"
+        "scss/double-slash-comment-whitespace-inside": "always",
+        "scss/dimension-no-non-numeric-values": true,
+        "scss/map-keys-quotes": "always"
     }
 }
