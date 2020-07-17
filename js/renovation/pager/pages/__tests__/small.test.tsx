@@ -49,35 +49,59 @@ describe('Small pager pages', () => {
     });
   });
 
-  it('updateWidth effect', () => {
-    (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
-    const component = new PagesSmall({ pageCount: 100 });
-    const numberBoxElement = {};
-    component.pageIndexRef = { getHtmlElement: () => numberBoxElement }as any;
-    component.updateWidth();
-    expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
-    expect(component.width).toBe(19 + 10 * 3);
-  });
-
-  it('selectLastPageIndex', () => {
-    const pageIndexChangeHandler = jest.fn();
-    const component = new PagesSmall({
-      pageCount: 3,
-      pageIndex: 2,
-      pageIndexChange: pageIndexChangeHandler,
+  describe('Behaviour', () => {
+    it('updateWidth effect', () => {
+      (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
+      const component = new PagesSmall({ pageCount: 100 });
+      const numberBoxElement = {};
+      component.pageIndexRef = { getHtmlElement: () => numberBoxElement } as any;
+      component.updateWidth();
+      expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
+      expect(component.width).toBe(19 + 10 * 3);
     });
-    component.selectLastPageIndex();
-    expect(pageIndexChangeHandler).toBeCalledWith(2);
-  });
 
-  it('setValue', () => {
-    const pageIndexChangeHandler = jest.fn();
-    const component = new PagesSmall({
-      pageCount: 3,
-      pageIndex: 2,
-      pageIndexChange: pageIndexChangeHandler,
+    it('Effect updateWidth default width', () => {
+      (getElementComputedStyle as jest.Mock).mockReturnValue(null);
+      const component = new PagesSmall({ pageCount: 100 });
+      const numberBoxElement = {};
+      component.pageIndexRef = { getHtmlElement: () => numberBoxElement }as any;
+      component.updateWidth();
+      expect(component.width).toBe(10 + 10 * 3);
     });
-    component.valueChange(1);
-    expect(pageIndexChangeHandler).toBeCalledWith(0);
+
+    it('selectLastPageIndex', () => {
+      const pageIndexChangeHandler = jest.fn();
+      const component = new PagesSmall({
+        pageCount: 3,
+        pageIndex: 2,
+      });
+      expect(() => component.selectLastPageIndex()).not.toThrow();
+      component.props.pageIndexChange = pageIndexChangeHandler;
+      component.selectLastPageIndex();
+      expect(pageIndexChangeHandler).toBeCalledWith(2);
+    });
+
+    it('valueChange', () => {
+      const pageIndexChangeHandler = jest.fn();
+      const component = new PagesSmall({
+        pageCount: 3,
+        pageIndex: 2,
+
+      });
+      expect(() => component.valueChange(4)).not.toThrow();
+      component.props.pageIndexChange = pageIndexChangeHandler;
+      component.valueChange(1);
+      expect(pageIndexChangeHandler).toBeCalledWith(0);
+    });
+
+    it('get value', () => {
+      const pageIndexChangeHandler = jest.fn();
+      const component = new PagesSmall({
+        pageCount: 3,
+        pageIndex: 2,
+        pageIndexChange: pageIndexChangeHandler,
+      });
+      expect(component.value).toBe(3);
+    });
   });
 });
