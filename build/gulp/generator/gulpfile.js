@@ -68,7 +68,8 @@ function generatePreactComponents() {
         }))
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH))
-        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
+        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH))
+        .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
 }
 
 function processRenovationMeta() {

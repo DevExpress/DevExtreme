@@ -1,7 +1,9 @@
 'use strict';
 
 const gulp = require('gulp');
+const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
+const gulpEach = require('gulp-each');
 const watch = require('gulp-watch');
 const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
@@ -20,12 +22,34 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile-prod', function() {
+function isRenovated(file) {
+    const isRenovatedName = !!file.basename.match(/^button\b/g); // only renovated files
+    const isNotRenovationFolder = file.path.match(/renovation/g) === null; // without renovation folder
+    const isJsFile = file.extname === '.js';
+    const isWidget = !!file.path.match(/ui\/button/g); // ui/text_box/../button.js
+
+    return isRenovatedName && isNotRenovationFolder && isJsFile && isWidget;
+}
+
+gulp.task('transpile-prod-renovation', function() {
+    return gulp.src(SRC)
+        .pipe(compressionPipes.removeDebug())
+        .pipe(gulpIf(isRenovated, gulpEach((content, file, callback) => {
+            const pathToRenovatedFile = 'import Widget from "../renovation/' + file.stem + '.j";export default Widget;';
+            callback(null, pathToRenovatedFile);
+        })))
+        .pipe(babel())
+        .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
+});
+
+gulp.task('transpile-prod-old', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 });
+
+gulp.task('transpile-prod', gulp.series('transpile-prod-old', 'transpile-prod-renovation'));
 
 gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-prod', function() {
     return gulp.src(SRC)

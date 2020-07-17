@@ -12,16 +12,15 @@ const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
 const version = require('../../package.json').version;
-const packagePath = context.RESULT_NPM_PATH + '/devextreme';
+const packagePath = context.RESULT_NPM_PATH + '/devextreme-renovation';
 const scssPackagePath = packagePath + '/scss';
 
 const TRANSPILED_GLOBS = [
-    context.TRANSPILED_PROD_PATH + '/**/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/renovation/**/*',
-    '!' + context.TRANSPILED_PROD_PATH + '/bundles/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/bundles/modules/parts/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/viz/vector_map.utils/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/viz/docs/*.js'
+    context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.js',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/bundles/*.js',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/bundles/modules/parts/*.js',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/viz/vector_map.utils/*.js',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/viz/docs/*.js'
 ];
 
 const JSON_GLOBS = [
@@ -31,7 +30,7 @@ const JSON_GLOBS = [
 
 const DIST_GLOBS = [
     'artifacts/**/*.*',
-    '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',
@@ -67,7 +66,7 @@ const addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-gulp.task('npm-sources', gulp.series('ts-sources', function() {
+gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
     return merge(
 
         gulp.src(TRANSPILED_GLOBS)
@@ -98,7 +97,7 @@ gulp.task('npm-sources', gulp.series('ts-sources', function() {
     );
 }));
 
-gulp.task('npm-sass', gulp.parallel(() => {
+gulp.task('renovation-npm-sass', gulp.parallel(() => {
     return gulp
         .src('scss/**/*')
         .pipe(dataUri())
@@ -115,6 +114,24 @@ gulp.task('npm-sass', gulp.parallel(() => {
 }));
 
 
-gulp.task('npm-check', gulp.series('ts-modules-check'));
+// gulp.task('npm-check', gulp.series('ts-modules-check'));  // from old code
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-check', 'npm-sass'));
+gulp.task('renovation-npm', gulp.series('renovation-npm-sources', 'npm-check', 'renovation-npm-sass'));
+
+// const renovationWidgets = [];
+
+// gulp.task('renovation-npm', function() {
+//     return gulp.src([context.RESULT_NPM_PATH + '/devextreme/**/*'])
+//         .pipe(replace(/renovation\.dxr[A-Z, a-z]*/g, (match) => {
+//             const widgetName = match.match(/([A-Z])\w+/g)[0];
+//             renovationWidgets.push(widgetName);
+//             return match.replace('renovation.dxr', 'renovation.dx');
+//         }))
+//         .pipe(replace('renovation.dxr', (match, p1, offset, string) => {
+//             // console.log(match);
+//             // renovationWidgets.push(String(p1).match(/renovation\.dxr[A-Z, a-z]*/g));
+//             // console.log(renovationWidgets.join(' - '));
+//             return match;
+//         }))
+//         .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation'));
+// });

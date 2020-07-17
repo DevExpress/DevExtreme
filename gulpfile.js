@@ -14,6 +14,7 @@ require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
+require('./build/gulp/renovation-npm');
 require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
@@ -58,7 +59,7 @@ function createMainBatch() {
 function createDefaultBatch() {
     const tasks = [ 'clean', 'localization', createMainBatch() ];
     if(!TEST_CI) {
-        tasks.push('npm', 'themebuilder-npm');
+        tasks.push('npm', 'renovation-npm', 'themebuilder-npm');
     }
     return gulp.series(tasks);
 }

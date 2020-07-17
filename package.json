@@ -88,6 +88,7 @@
     "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.0",
     "gulp-dart-sass": "^1.0.0",
+    "gulp-each": "^0.5.0",
     "gulp-eol": "^0.1.2",
     "gulp-eslint": "^6.0.0",
     "gulp-file": "^0.4.0",
@@ -180,7 +181,8 @@
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage",
-    "test-jest:watch": "jest --watch"
+    "test-jest:watch": "jest --watch",
+    "transpile": "gulp transpile-prod"
   },
   "browserslist": [
     "last 2 versions",
