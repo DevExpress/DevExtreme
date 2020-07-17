@@ -1,18 +1,18 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/layout';
-import { DateTableRow as Row } from '../../../../../../js/renovation/scheduler/workspaces/base/date_table/row';
-import { MonthDateTableCell as Cell } from '../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell';
-import { getKeyByDateAndGroup } from '../../../../../../js/renovation/scheduler/workspaces/utils';
+import { viewFunction as LayoutView } from '../layout';
+import { DateTableRow as Row } from '../../../base/date_table/row';
+import { MonthDateTableCell as Cell } from '../cell';
+import { getKeyByDateAndGroup } from '../../../utils';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row', () => ({
-  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/row'),
+jest.mock('../../../base/date_table/row', () => ({
+  ...require.requireActual('../../../base/date_table/row'),
   DateTableRow: ({ children, ...restProps }) => <div {...restProps}>{children}</div>,
 }));
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/month/date_table/cell', () => ({
+jest.mock('../cell', () => ({
   MonthDateTableCell: () => null,
 }));
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+jest.mock('../../../utils', () => ({
   getKeyByDateAndGroup: jest.fn(),
 }));
 

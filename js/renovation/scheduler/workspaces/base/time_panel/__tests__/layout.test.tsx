@@ -1,17 +1,15 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/base/time_panel/layout';
-import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
-import {
-  TimePanelCell as Cell,
-} from '../../../../../../js/renovation/scheduler/workspaces/base/time_panel/cell';
+import { viewFunction as LayoutView } from '../layout';
+import { Row } from '../../row';
+import { TimePanelCell as Cell } from '../cell';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
-  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/row'),
+jest.mock('../../row', () => ({
+  ...require.requireActual('../../row'),
   Row: () => null,
 }));
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/time_panel/cell', () => ({
-  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/time_panel/cell'),
-  DayDateTableCell: () => null,
+jest.mock('../cell', () => ({
+  ...require.requireActual('../cell'),
+  TimePanelCell: () => null,
 }));
 
 describe('DayDateTableLayout', () => {

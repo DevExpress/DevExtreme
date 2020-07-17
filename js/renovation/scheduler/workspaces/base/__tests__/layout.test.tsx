@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView } from '../../../../../js/renovation/scheduler/workspaces/base/layout';
+import { viewFunction as LayoutView } from '../layout';
 
 describe('LayoutBase', () => {
   describe('Render', () => {

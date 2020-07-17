@@ -1,10 +1,10 @@
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import { viewFunction as LayoutView } from '../../../../../js/renovation/scheduler/workspaces/month/layout';
-import { MonthDateTableLayout } from '../../../../../js/renovation/scheduler/workspaces/month/date_table/layout';
-import { HeaderPanelLayout } from '../../../../../js/renovation/scheduler/workspaces/base/header_panel/layout';
+import { viewFunction as LayoutView } from '../layout';
+import { MonthDateTableLayout } from '../date_table/layout';
+import { HeaderPanelLayout } from '../../base/header_panel/layout';
 
-jest.mock('../../../../../js/renovation/scheduler/workspaces/base/layout', () => ({
+jest.mock('../../base/layout', () => ({
   LayoutBase: (props) => (
     <div {...props}>
       <props.headerPanelTemplate />
@@ -12,10 +12,10 @@ jest.mock('../../../../../js/renovation/scheduler/workspaces/base/layout', () =>
     </div>
   ),
 }));
-jest.mock('../../../../../js/renovation/scheduler/workspaces/month/date_table/layout', () => ({
+jest.mock('../date_table/layout', () => ({
   MonthDateTableLayout: () => null,
 }));
-jest.mock('../../../../../js/renovation/scheduler/workspaces/base/header_panel/layout', () => ({
+jest.mock('../../base/header_panel/layout', () => ({
   HeaderPanelLayout: () => null,
 }));
 

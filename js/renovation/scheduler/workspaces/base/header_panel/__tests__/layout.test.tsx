@@ -1,12 +1,12 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView } from '../../../../../../js/renovation/scheduler/workspaces/base/header_panel/layout';
-import { Row } from '../../../../../../js/renovation/scheduler/workspaces/base/row';
-import { getKeyByDateAndGroup } from '../../../../../../js/renovation/scheduler/workspaces/utils';
+import { viewFunction as LayoutView } from '../layout';
+import { Row } from '../../row';
+import { getKeyByDateAndGroup } from '../../../utils';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/row', () => ({
+jest.mock('../../row', () => ({
   Row: () => null,
 }));
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+jest.mock('../../../utils', () => ({
   getKeyByDateAndGroup: jest.fn(),
 }));
 

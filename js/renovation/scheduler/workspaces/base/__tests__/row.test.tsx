@@ -1,11 +1,9 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import {
-  Row, viewFunction as RowView,
-} from '../../../../../js/renovation/scheduler/workspaces/base/row';
-import { addHeightToStyle } from '../../../../../js/renovation/scheduler/workspaces/utils';
+import { Row, viewFunction as RowView } from '../row';
+import { addHeightToStyle } from '../../utils';
 
-jest.mock('../../../../../js/renovation/scheduler/workspaces/utils', () => ({
+jest.mock('../../utils', () => ({
   addHeightToStyle: jest.fn(() => 'style'),
 }));
 

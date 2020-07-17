@@ -2,10 +2,10 @@ import { shallow } from 'enzyme';
 import {
   MonthHeaderPanelCell as Cell,
   viewFunction as CellView,
-} from '../../../../../../js/renovation/scheduler/workspaces/month/header_panel/cell';
-import dateLocalization from '../../../../../../js/localization/date';
+} from '../cell';
+import dateLocalization from '../../../../../../localization/date';
 
-jest.mock('../../../../../../js/localization/date', () => ({
+jest.mock('../../../../../../localization/date', () => ({
   getDayNames: jest.fn(() => [0, 1, 2, 3, 4, 5, 6, 7]),
 }));
 

@@ -1,13 +1,5 @@
-import { h } from 'preact';
 import { shallow } from 'enzyme';
-import {
-  viewFunction as CellView,
-} from '../../../../../../js/renovation/scheduler/workspaces/base/time_panel/cell';
-
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/time_panel/cell', () => ({
-  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/time_panel/cell'),
-  DateTableCellBase: (props) => <div {...props} />,
-}));
+import { viewFunction as CellView } from '../cell';
 
 describe('TimePanelTableCell', () => {
   describe('Render', () => {

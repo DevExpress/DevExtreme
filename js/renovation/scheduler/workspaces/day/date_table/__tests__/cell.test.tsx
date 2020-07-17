@@ -1,11 +1,9 @@
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import {
-  viewFunction as CellView,
-} from '../../../../../../js/renovation/scheduler/workspaces/day/date_table/cell';
+import { viewFunction as CellView } from '../cell';
 
-jest.mock('../../../../../../js/renovation/scheduler/workspaces/base/date_table/cell', () => ({
-  ...require.requireActual('../../../../../../js/renovation/scheduler/workspaces/base/date_table/cell'),
+jest.mock('../../../base/date_table/cell', () => ({
+  ...require.requireActual('../../../base/date_table/cell'),
   DateTableCellBase: (props) => <div {...props} />,
 }));
 
