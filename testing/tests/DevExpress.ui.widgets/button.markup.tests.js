@@ -164,6 +164,15 @@ QUnit.module('Button markup', () => {
         assert.ok($button.find('.' + BUTTON_CONTENT_CLASS).hasClass(TEMPLATE_WRAPPER_CLASS), 'template has content class');
     });
 
+    QUnit.test('init with parentIndependentState option', function(assert) {
+        const element = $('#button').dxButton({
+            text: 'text',
+            parentIndependentState: true
+        });
+
+        assert.ok(element.hasClass('dx-state-independent'), 'button with icon has icon class');
+    });
+
     QUnit.test('dxButton with anonymous template', function(assert) {
         const $button = $('#buttonWithAnonymousTemplate').dxButton();
 
