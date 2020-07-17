@@ -52,6 +52,11 @@ const VALIDATION_STATUS = {
 };
 
 const EDIT_DATA_INSERT_TYPE = 'insert';
+const VALIDATION_CANCELLED = 'cancel';
+
+const validationResultIsValid = function(result) {
+    return isDefined(result) && result !== VALIDATION_CANCELLED;
+};
 
 const cellValueShouldBeValidated = function(value, rowOptions) {
     return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
@@ -265,8 +270,8 @@ const ValidatingController = modules.Controller.inherit((function() {
                 rowKey: editData.key,
                 columnIndex: column.index
             });
-            if(result && result.status === VALIDATION_STATUS.pending) {
-                this.removeCellValidationResult({
+            if(validationResultIsValid(result) && result.status === VALIDATION_STATUS.pending) {
+                this.cancelCellValidationResult({
                     editData,
                     columnIndex: column.index
                 });
@@ -287,7 +292,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     rowKey: editData.key,
                     columnIndex: column.index
                 });
-                const requestIsDisabled = validationResult && validationResult.disabledPendingId === result.id;
+                const requestIsDisabled = validationResultIsValid(validationResult) && validationResult.disabledPendingId === result.id;
                 if(this._disableApplyValidationResults || requestIsDisabled) {
                     return;
                 }
@@ -406,8 +411,8 @@ const ValidatingController = modules.Controller.inherit((function() {
                 columnIndex: validator.option('dataGetter')().column.index
             };
             let validationResult = this.getCellValidationResult(cellParams);
-            const stateRestored = !!validationResult;
-            if(!validationResult) {
+            const stateRestored = validationResultIsValid(validationResult);
+            if(!stateRestored) {
                 validationResult = validator.validate();
             }
             const deferred = new Deferred();
@@ -463,9 +468,18 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         removeCellValidationResult: function({ editData, columnIndex }) {
             if(editData && editData.validationResults) {
-                const result = editData.validationResults[columnIndex];
-                result && result.deferred && result.deferred.reject('cancel');
+                this.cancelCellValidationResult({ editData, columnIndex });
                 delete editData.validationResults[columnIndex];
+            }
+        },
+
+        cancelCellValidationResult: function({ editData, columnIndex }) {
+            if(editData && editData.validationResults) {
+                const result = editData.validationResults[columnIndex];
+                if(result) {
+                    result.deferred && result.deferred.reject(VALIDATION_CANCELLED);
+                    editData.validationResults[columnIndex] = VALIDATION_CANCELLED;
+                }
             }
         },
 
@@ -481,7 +495,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 rowKey,
                 columnIndex
             });
-            return !!result && result.status === VALIDATION_STATUS.invalid;
+            return validationResultIsValid(result) && result.status === VALIDATION_STATUS.invalid;
         },
 
         getCellValidator: function({ rowKey, columnIndex }) {
@@ -492,6 +506,19 @@ const ValidatingController = modules.Controller.inherit((function() {
                 const column = v.option('dataGetter')().column;
                 return column ? column.index === columnIndex : false;
             })[0];
+        },
+
+        setCellValidationStatus: function(cellOptions) {
+            const validationResult = this.getCellValidationResult({
+                rowKey: cellOptions.key,
+                columnIndex: cellOptions.column.index
+            });
+
+            if(isDefined(validationResult)) {
+                cellOptions.validationStatus = validationResult !== VALIDATION_CANCELLED ? validationResult.status : VALIDATION_CANCELLED;
+            } else {
+                delete cellOptions.validationStatus;
+            }
         }
     };
 })());
@@ -795,6 +822,7 @@ module.exports = {
                 showHighlighting: function($cell, skipValidation) {
                     let isValid = true;
                     const callBase = this.callBase;
+                    const deferred = new Deferred();
 
                     if(!skipValidation) {
                         const validator = $cell.data('dxValidator');
@@ -804,28 +832,31 @@ module.exports = {
                                 if(isValid) {
                                     callBase.call(this, $cell);
                                 }
+                                deferred.resolve();
                             });
-                            return;
+                            return deferred.promise();
                         }
                     }
 
                     if(isValid) {
                         callBase.call(this, $cell);
                     }
+                    return deferred.resolve().promise();
                 },
 
                 highlightDataCell: function($cell, parameters) {
                     const isEditableCell = !!parameters.setValue;
                     const cellModified = this.isCellModified(parameters);
+                    const validatingController = this.getController('validating');
+
 
                     if(!cellModified && isEditableCell) {
-                        const validationResult = this.getController('validating').getCellValidationResult({
-                            rowKey: parameters.key,
-                            columnIndex: parameters.column.index
-                        });
-                        const isValidated = isDefined(validationResult);
+                        validatingController.setCellValidationStatus(parameters);
+                        const isValidated = isDefined(parameters.validationStatus);
                         const skipValidation = parameters.row.isNewRow || !isValidated;
-                        this.showHighlighting($cell, skipValidation);
+                        when(this.showHighlighting($cell, skipValidation)).done(() => {
+                            validatingController.setCellValidationStatus(parameters);
+                        });
                         return;
                     }
                     this.callBase.apply(this, arguments);
@@ -1148,7 +1179,25 @@ module.exports = {
                         return getWidgetInstance($editor);
                     }
                 };
-            })()
+            })(),
+            data: {
+                _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
+                    const cell = oldRow.cells[columnIndex];
+                    const oldValidationStatus = cell && cell.validationStatus;
+                    const validatingController = this.getController('validating');
+                    const validationResult = validatingController.getCellValidationResult({
+                        rowKey: oldRow.key,
+                        columnIndex
+                    });
+                    const newValidationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
+                    const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
+                    if(oldValidationStatus !== newValidationStatus && rowIsModified) {
+                        return true;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                }
+            }
         },
         views: {
             rowsView: {
