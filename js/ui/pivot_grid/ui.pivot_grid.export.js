@@ -189,10 +189,13 @@ export const DataProvider = Class.inherit({
     },
 
     getColumnsWidths: function() {
-        const useDefaultWidth = !hasWindow() || this._options.columnsArea.option('scrolling.mode') === 'virtual';
+        const colsArea = this._options.columnsArea;
+        const rowsArea = this._options.rowsArea;
+        const columns = this._options.columns;
+        const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().get(0).clientWidth === 0;
         return useDefaultWidth
-            ? this._options.columns.map(_ => DEFAUL_COLUMN_WIDTH)
-            : this._options.rowsArea.getColumnsWidth().concat(this._options.columnsArea.getColumnsWidth());
+            ? columns.map(_ => DEFAUL_COLUMN_WIDTH)
+            : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());
     },
 
     getRowsCount: function() {
