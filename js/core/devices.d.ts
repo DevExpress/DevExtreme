@@ -149,6 +149,14 @@ declare class DevicesObject {
      * @public
      */
     real(): Device;
+    /**
+     * @docid DevicesObjectMethods.isSimulator
+     * @publicName isSimulator()
+     * @return Boolean
+     * @prevFileNamespace DevExpress.core
+     * @hidden
+     */
+    isSimulator(): boolean;
 }
 
 /**
