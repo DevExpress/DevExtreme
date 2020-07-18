@@ -1,15 +1,15 @@
 import { h } from 'preact';
 import { mount, shallow } from 'enzyme';
-import devices from '../../core/devices';
-import { convertRulesToOptions } from '../../core/options/utils';
-import themes from '../../ui/themes';
+import devices from '../../../core/devices';
+import { convertRulesToOptions } from '../../../core/options/utils';
+import themes from '../../../ui/themes';
 import {
   clear as clearEventHandlers,
   defaultEvent,
   emit,
   getEventHandlers,
   EVENT,
-} from './utils/events_mock';
+} from '../../__tests__/events_mock';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';
@@ -19,8 +19,8 @@ import { InkRipple } from '../common/ink_ripple';
 
 type Mock = jest.Mock;
 
-jest.mock('../../core/devices', () => {
-  const actualDevices = require.requireActual('../../core/devices').default;
+jest.mock('../../../core/devices', () => {
+  const actualDevices = require.requireActual('../../../core/devices').default;
   const isSimulator = actualDevices.isSimulator.bind(actualDevices);
   const real = actualDevices.real.bind(actualDevices);
 
@@ -30,8 +30,8 @@ jest.mock('../../core/devices', () => {
   return actualDevices;
 });
 
-jest.mock('../../ui/themes', () => ({
-  ...require.requireActual('../../ui/themes'),
+jest.mock('../../../ui/themes', () => ({
+  ...require.requireActual('../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
 

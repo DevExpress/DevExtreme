@@ -1,4 +1,4 @@
-import { keyboard } from '../../../events/short';
+import { keyboard } from '../../events/short';
 
 let eventHandlers = {};
 let keyboardHandlers = {};
@@ -76,8 +76,8 @@ keyboard.on = (el, focusTarget, handler): string => {
 
 keyboard.off = (id): boolean => delete keyboardHandlers[id];
 
-jest.mock('../../../events/core/events_engine', () => {
-  const originalEventsEngine = jest.requireActual('../../../events/core/events_engine').default;
+jest.mock('../../events/core/events_engine', () => {
+  const originalEventsEngine = jest.requireActual('../../events/core/events_engine').default;
 
   return (
     {
