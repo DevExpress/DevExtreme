@@ -8,15 +8,14 @@
 @use "../button/sizes" as *;
 @use "../button" as *;
 @use "../checkBox/colors" as *;
+
 // adduse
 @use "../badge";
 
 
 $MATERIAL_LIST_ITEM_BORDER_WIDTH: 1px;
 $MATERIAL_LIST_BORDER_WIDTH: 1px;
-
 $MATERIAL_MOBILE_LIST_ITEM_HORIZONTAL_PADDING: 15px;
-
 $MATERIAL_LIST_BORDER: $MATERIAL_LIST_BORDER_WIDTH solid $list-border-color;
 $MATERIAL_LIST_ITEM_BORDER: $MATERIAL_LIST_ITEM_BORDER_WIDTH solid $list-border-color;
 
@@ -283,7 +282,7 @@ $MATERIAL_LIST_ITEM_BORDER: $MATERIAL_LIST_ITEM_BORDER_WIDTH solid $list-border-
   }
 
   .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
-    padding: $MATERIAL_LIST_ITEM_VERTICAL_PADDING/2 + 1px $item_horizontal_padding $MATERIAL_LIST_ITEM_VERTICAL_PADDING/2;
+    padding: $MATERIAL_LIST_ITEM_VERTICAL_PADDING / 2 + 1px $item_horizontal_padding $MATERIAL_LIST_ITEM_VERTICAL_PADDING / 2;
     color: color.change($list-normal-color, $alpha: 0.54);
     font-size: 12px;
   }
@@ -302,7 +301,7 @@ $MATERIAL_LIST_ITEM_BORDER: $MATERIAL_LIST_ITEM_BORDER_WIDTH solid $list-border-
 
   .dx-list-item-chevron-container {
     width: 11px + $item_horizontal_padding;
-    padding-top: $MATERIAL_LIST_ITEM_VERTICAL_PADDING/2;
+    padding-top: $MATERIAL_LIST_ITEM_VERTICAL_PADDING / 2;
   }
 
   .dx-list-border-visible {
@@ -445,7 +444,7 @@ $MATERIAL_LIST_ITEM_BORDER: $MATERIAL_LIST_ITEM_BORDER_WIDTH solid $list-border-
   }
 
   .dx-list-switchable-delete-button-inner-wrapper {
-    padding-right: ($MATERIAL_LIST_ITEM_HEIGHT - $MATERIAL_BUTTON_HEIGHT)/2;
+    padding-right: ($MATERIAL_LIST_ITEM_HEIGHT - $MATERIAL_BUTTON_HEIGHT) / 2;
     background-color: $base-bg;
   }
 
@@ -498,7 +497,7 @@ $MATERIAL_LIST_ITEM_BORDER: $MATERIAL_LIST_ITEM_BORDER_WIDTH solid $list-border-
     }
 
     .dx-list-switchable-delete-button-inner-wrapper {
-      padding-left: ($MATERIAL_LIST_ITEM_HEIGHT - $MATERIAL_BUTTON_HEIGHT)/2;
+      padding-left: ($MATERIAL_LIST_ITEM_HEIGHT - $MATERIAL_BUTTON_HEIGHT) / 2;
       padding-right: 0;
     }
   }

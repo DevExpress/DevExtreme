@@ -9,26 +9,27 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
-    $datagrid-border: $datagrid-border,
-    $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
-    $datagrid-row-error-bg: $datagrid-row-error-bg,
-    $datagrid-base-color: $datagrid-base-color,
-    $datagrid-base-background-color: $datagrid-base-background-color,
-    $datagrid-border-color: $datagrid-border-color,
-    $datagrid-focused-border-color: $datagrid-focused-border-color,
-    $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
-    $datagrid-row-error-color: $datagrid-row-error-color,
-    $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
-    $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
-    $base-focus-color: $base-focus-color,
+  $datagrid-border: $datagrid-border,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
+  $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
+  $base-focus-color: $base-focus-color,
 );
+
 // adduse
 
 
 @include grid-base(treelist);
 
 $TREELIST_EMPTY_SPACE_WIDTH: 14px;
-$TREELIST_SELECT_ALL_CHECKBOX_MARGIN_TOP: floor((round($GENERIC_BASE_LINE_HEIGHT*$GENERIC_BASE_FONT_SIZE) - $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE)/2);
+$TREELIST_SELECT_ALL_CHECKBOX_MARGIN_TOP: floor((round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_BASE_FONT_SIZE) - $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE) / 2);
 $TREELIST_CHECKBOX_OFFSET_LEFT: $TREELIST_EMPTY_SPACE_WIDTH + $GENERIC_GRID_BASE_CELL_PADDING;
 $TREELIST_CHECKBOX_OFFSET_LEFT_RTL: $TREELIST_CHECKBOX_OFFSET_LEFT + $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
 $TREELIST_EDITOR_CELL_PADDING_LEFT: $TREELIST_CHECKBOX_OFFSET_LEFT_RTL + $GENERIC_GRID_BASE_CELL_PADDING;
@@ -117,7 +118,7 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE + 
 
   .dx-checkbox {
     top: 50%;
-    margin-top: -$GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE/2;
+    margin-top: -$GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE / 2;
   }
 }
 

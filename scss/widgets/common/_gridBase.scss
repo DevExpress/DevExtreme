@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -251,6 +252,7 @@
     vertical-align: middle;
     cursor: pointer;
     z-index: 10000;
+
     // T105728
     box-sizing: content-box;
 
@@ -617,31 +619,31 @@
       }
 
       &.dx-text-content-alignment-left.dx-text-content-alignment-right {
-        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + $GRID_TEXT_CONTENT_MARGIN*2)});
+        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH * 2 + $GRID_TEXT_CONTENT_MARGIN * 2)});
       }
     }
 
     .dx-sort-indicator.dx-header-filter-indicator {
-      max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + $GRID_TEXT_CONTENT_MARGIN)});
+      max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH * 2 + $GRID_TEXT_CONTENT_MARGIN)});
     }
 
     .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
-      max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + $GRID_TEXT_CONTENT_MARGIN*2)});
+      max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH * 4 + $GRID_TEXT_CONTENT_MARGIN * 2)});
     }
 
     .dx-sort-indicator.dx-sort-index-indicator {
       max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH + $GRID_TEXT_CONTENT_MARGIN + $GRID_SORT_INDEX_WIDTH)});
 
       &.dx-header-filter-indicator {
-        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + $GRID_TEXT_CONTENT_MARGIN + $GRID_SORT_INDEX_WIDTH)});
+        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH * 2 + $GRID_TEXT_CONTENT_MARGIN + $GRID_SORT_INDEX_WIDTH)});
       }
 
       &.dx-text-content-alignment-left.dx-text-content-alignment-right {
-        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + $GRID_TEXT_CONTENT_MARGIN*2 + $GRID_SORT_INDEX_WIDTH)});
+        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH * 2 + $GRID_TEXT_CONTENT_MARGIN * 2 + $GRID_SORT_INDEX_WIDTH)});
       }
 
       &.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
-        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + $GRID_TEXT_CONTENT_MARGIN*2 + $GRID_SORT_INDEX_WIDTH)});
+        max-width: calc(100% - #{round($GRID_COLUMN_HEADER_INDICATOR_WIDTH * 4 + $GRID_TEXT_CONTENT_MARGIN * 2 + $GRID_SORT_INDEX_WIDTH)});
       }
     }
   }

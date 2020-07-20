@@ -9,19 +9,20 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
-    $datagrid-border: $datagrid-border,
-    $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
-    $datagrid-row-error-bg: $datagrid-row-error-bg,
-    $datagrid-base-color: $datagrid-base-color,
-    $datagrid-base-background-color: $datagrid-base-background-color,
-    $datagrid-border-color: $datagrid-border-color,
-    $datagrid-focused-border-color: $datagrid-focused-border-color,
-    $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
-    $datagrid-row-error-color: $datagrid-row-error-color,
-    $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
-    $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
-    $base-focus-color: $base-focus-color,
+  $datagrid-border: $datagrid-border,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
+  $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
+  $base-focus-color: $base-focus-color,
 );
+
 // adduse
 
 
@@ -127,7 +128,7 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
 
     .dx-checkbox {
       top: 50%;
-      margin-top: -$MATERIAL_GRID_BASE_CHECKBOX_SIZE/2;
+      margin-top: -$MATERIAL_GRID_BASE_CHECKBOX_SIZE / 2;
     }
   }
 }
@@ -137,7 +138,7 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
 
   .dx-checkbox {
     left: $TREELIST_CHECKBOX_OFFSET_LEFT;
-    top: ($MATERIAL_GRID_BASE_HEADER_HEIGHT - $MATERIAL_GRID_BASE_CHECKBOX_SIZE)/2;
+    top: ($MATERIAL_GRID_BASE_HEADER_HEIGHT - $MATERIAL_GRID_BASE_CHECKBOX_SIZE) / 2;
   }
 }
 

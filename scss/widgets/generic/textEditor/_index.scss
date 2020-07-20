@@ -8,6 +8,7 @@
 @use "../button/sizes" as *;
 @use "../common" as *;
 @use "../button" as *;
+
 // adduse
 
 
@@ -26,7 +27,7 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
 @mixin dx-texteditor-icon() {
   position: absolute;
   top: 50%;
-  margin-top: -$GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE/2;
+  margin-top: -$GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE / 2;
 
   @include dx-icon-sizing($GENERIC_TEXTEDITOR_ICON_SIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }

@@ -1,7 +1,10 @@
 @use "../base/mixins" as *;
+
 // adduse
 .dx-color-scheme {
+
   // NOTE: To override 'font-family' default value.
+
   // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
   font-family: "#";
 }

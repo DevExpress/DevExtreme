@@ -6,6 +6,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
+
 // adduse
 .dx-theme-marker {
   font-family: "dx.generic#{$GENERIC_COLOR_POSTFIX}#{$GENERIC_SIZE_POSTFIX}";
@@ -63,6 +64,7 @@
 .dx-theme-border-color {
   border-color: $base-border-color !important;
 }
+
 // stylelint-enable declaration-no-important
 
 @mixin dx-base-typography() {
@@ -98,7 +100,7 @@ $badge-invalid-bg: $base-invalid-color;
   font-weight: bold;
   position: absolute;
   top: 50%;
-  margin-top: -$GENERIC_INVALID_BADGE_SIZE/2;
+  margin-top: -$GENERIC_INVALID_BADGE_SIZE / 2;
   width: $GENERIC_INVALID_BADGE_SIZE;
   height: $GENERIC_INVALID_BADGE_SIZE;
   text-align: center;
@@ -129,7 +131,7 @@ $badge-invalid-bg: $base-invalid-color;
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$GENERIC_PENDING_INDICATOR_SIZE/2;
+  margin-top: -$GENERIC_PENDING_INDICATOR_SIZE / 2;
   width: $GENERIC_PENDING_INDICATOR_SIZE;
   height: $GENERIC_PENDING_INDICATOR_SIZE;
 }

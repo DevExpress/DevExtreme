@@ -7,6 +7,7 @@
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/colors" as *;
+
 // adduse
 @use "../timeView";
 @use "../dateView";
@@ -70,12 +71,12 @@
 .dx-datebox-wrapper-calendar {
   .dx-popup-content {
     padding: 0;
-    margin: 0 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin: 0 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
   }
 
   .dx-calendar {
     border: none;
-    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
   }
 
   .dx-datebox-container-cell {
@@ -86,14 +87,14 @@
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
   .dx-calendar {
-    margin-bottom: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin-bottom: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
   }
 
   .dx-timeview {
-    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
 
     @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin: 0 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
     }
   }
 
