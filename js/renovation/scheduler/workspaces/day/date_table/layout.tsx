@@ -56,7 +56,4 @@ export class DayDateTableLayoutProps {
   view: viewFunction,
 })
 export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
-  get DateTable(): typeof VirtualTable | typeof Table {
-    return this.props.isVirtual ? VirtualTable : Table;
-  }
 }
