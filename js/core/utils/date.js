@@ -596,24 +596,6 @@ const makeDate = function(date) {
     return new Date(date);
 };
 
-const getDatesOfInterval = function(startDate, endDate, step) {
-    const result = [];
-
-    let currentDate = new Date(startDate.getTime());
-
-    if(startDate.getTime() === endDate.getTime()) {
-        result.push(new Date(startDate.getTime()));
-    }
-
-    while(currentDate < endDate) {
-        result.push(new Date(currentDate.getTime()));
-
-        currentDate = this.addInterval(currentDate, step);
-    }
-
-    return result;
-};
-
 const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -667,9 +649,7 @@ const dateUtils = {
 
     makeDate: makeDate,
 
-    getDatesInterval: getDatesInterval,
-
-    getDatesOfInterval: getDatesOfInterval
+    getDatesInterval: getDatesInterval
 };
 
 dateUtils.sameView = function(view, date1, date2) {

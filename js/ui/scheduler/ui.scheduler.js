@@ -2144,15 +2144,20 @@ class Scheduler extends Widget {
         return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
     }
 
-    _cropAppointmentsByStartDayHour(appointments) {
+    _cropAppointmentsByStartDayHour(appointments, appointmentData) {
         const startDayHour = this._getCurrentViewOption('startDayHour');
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+
         const firstViewDate = this._workSpace.getStartViewDate();
 
         return appointments.map(appointment => {
             let startDate = new Date(appointment.startDate);
             let resultDate = new Date(appointment.startDate);
 
-            if(this.appointmentTakesAllDay(appointment)) {
+            if(this.appointmentTakesAllDay(appointmentData)) {
+                if(appointment.endDate.getHours() < endDayHour) {
+                    appointment.endDate.setHours(endDayHour, 0, 0, 0);
+                }
                 resultDate = dateUtils.normalizeDate(startDate, firstViewDate);
             } else {
                 if(startDate < firstViewDate) {
@@ -2168,7 +2173,7 @@ class Scheduler extends Widget {
     }
 
     _createAppointmentSettings(info) {
-        const { appointmentData } = info;
+        const { appointmentData } = info; // TODO:
         const adapter = this.createAppointmentAdapter(appointmentData);
 
         const recurrenceRule = adapter.recurrenceRule;
@@ -2225,7 +2230,7 @@ class Scheduler extends Widget {
             return createAppointmentInfo(startDate, endDate, source);
         });
 
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList);
+        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, appointmentData);
 
         // recurrenceDates = this.getCorrectedDatesByDaylightOffsets(adapter.startDate, recurrenceDates, appointment); // TODO:
         // initialDates = recurrenceDates;
@@ -2244,7 +2249,7 @@ class Scheduler extends Widget {
                     }
                 }, !!recurrenceRule);
 
-                longParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
+                longParts = this._getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
 
@@ -2260,6 +2265,24 @@ class Scheduler extends Widget {
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
         return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+    }
+
+    _getDatesOfInterval(startDate, endDate, step) {
+        const result = [];
+
+        let currentDate = new Date(startDate.getTime());
+
+        if(startDate.getTime() === endDate.getTime()) { // TODO: special for fix T845632
+            result.push(new Date(startDate.getTime()));
+        }
+
+        while(currentDate < endDate) {
+            result.push(new Date(currentDate.getTime()));
+
+            currentDate = dateUtils.addInterval(currentDate, step);
+        }
+
+        return result;
     }
 
     _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
