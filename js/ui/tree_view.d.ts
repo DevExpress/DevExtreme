@@ -114,14 +114,13 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
-     * @type_function_param1_field9 node:dxTreeViewNode
+     * @type_function_param1_field7 event:event
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
+    onItemClick?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event, node?: dxTreeViewNode }) => any);
     /**
      * @docid dxTreeViewOptions.onItemCollapsed
      * @extends Action
@@ -130,14 +129,13 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:Number
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
-     * @type_function_param1_field9 node:dxTreeViewNode
+     * @type_function_param1_field7 event:event
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemCollapsed?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
+    onItemCollapsed?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
     /**
      * @docid dxTreeViewOptions.onItemContextMenu
      * @extends Action
@@ -146,14 +144,13 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
-     * @type_function_param1_field9 node:dxTreeViewNode
+     * @type_function_param1_field7 event:event
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
+    onItemContextMenu?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event, node?: dxTreeViewNode }) => any);
     /**
      * @docid dxTreeViewOptions.onItemExpanded
      * @extends Action
@@ -162,14 +159,13 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:Number
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
-     * @type_function_param1_field9 node:dxTreeViewNode
+     * @type_function_param1_field7 event:event
+     * @type_function_param1_field8 node:dxTreeViewNode
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemExpanded?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
+    onItemExpanded?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
     /**
      * @docid dxTreeViewOptions.onItemHold
      * @extends Action

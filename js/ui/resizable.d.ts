@@ -65,43 +65,40 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 width:number
-     * @type_function_param1_field7 height:number
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: dxResizable, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
+    onResize?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
     /**
      * @docid dxResizableOptions.onResizeEnd
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 width:number
-     * @type_function_param1_field7 height:number
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: dxResizable, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
+    onResizeEnd?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
     /**
      * @docid dxResizableOptions.onResizeStart
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 width:number
-     * @type_function_param1_field7 height:number
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
+    onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
     /**
      * @docid dxResizableOptions.width
      * @fires dxResizableOptions.onResize

@@ -28,13 +28,12 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field6 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     /**
      * @docid EditorOptions.readOnly
      * @type boolean
