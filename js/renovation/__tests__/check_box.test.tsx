@@ -24,8 +24,8 @@ jest.mock('../../core/devices', () => {
   return actualDevices;
 });
 
-jest.mock('../../js/ui/themes', () => ({
-  ...require.requireActual('../../js/ui/themes'),
+jest.mock('../../ui/themes', () => ({
+  ...require.requireActual('../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
 
