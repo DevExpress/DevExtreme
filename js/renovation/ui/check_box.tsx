@@ -9,13 +9,13 @@ import {
   Effect,
   Event,
 } from 'devextreme-generator/component_declaration/common';
-import { createDefaultOptionRules } from '../core/options/utils';
-import devices from '../core/devices';
+import { createDefaultOptionRules } from '../../core/options/utils';
+import devices from '../../core/devices';
 import { InkRipple } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import * as themes from '../ui/themes';
-import BaseComponent from './preact_wrapper/check_box';
-import BaseWidgetProps from './utils/base_props';
+import * as themes from '../../ui/themes';
+import BaseComponent from '../preact_wrapper/check_box';
+import BaseWidgetProps from '../utils/base_props';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
