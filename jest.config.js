@@ -12,7 +12,7 @@ module.exports = {
     },
     collectCoverageFrom: [
         './js/renovation/**/*.tsx',
-        '!./js/renovation/list.tsx',
+        '!./js/renovation/ui/list.tsx',
         '!./js/renovation/**/*.j.tsx',
         '!./js/renovation/utils/render_template.tsx',
     ],
@@ -29,15 +29,15 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './js/renovation/__tests__/utils/setup_enzyme.ts'),
+        path.join(path.resolve('.'), './js/renovation/__tests__/setup_enzyme.ts'),
     ],
     testMatch: [
         '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)',
         '<rootDir>/js/renovation/**/__tests__/**/*.test.[jt]s?(x)'
     ],
     transform: {
-        'test_components.+\\.tsx$': path.resolve('./js/renovation/__tests__/utils/transformers/declaration.js'),
+        'test_components.+\\.tsx$': path.resolve('./js/renovation/__tests__/transformers/declaration.js'),
         '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
-        '\\.(tsx)$': path.resolve('./js/renovation/__tests__/utils/transformers/tsx.js')
+        '\\.(tsx)$': path.resolve('./js/renovation/__tests__/transformers/tsx.js')
     }
 };

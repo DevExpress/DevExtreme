@@ -11,7 +11,7 @@
 
 <script>
 
-import Button from "./artifacts/vue/renovation/button";
+import Button from "./artifacts/vue/renovation/ui/button";
 
 export default {
   name: 'App',

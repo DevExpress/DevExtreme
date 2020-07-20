@@ -7278,7 +7278,7 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T816256
-    QUnit.test('Validation state should not be reseted after change value for column with setCellValue if editing mode is form', function(assert) {
+    QUnit.test('Validation state should not be reset after change value for column with setCellValue if editing mode is form', function(assert) {
     // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -8407,6 +8407,61 @@ QUnit.module('Editing with real dataController', {
                 });
             });
         });
+    });
+
+    QUnit.testInActiveWindow('Batch - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        this.options.repaintChangesOnly = true;
+        this.options.editing = {
+            mode: 'batch',
+            allowUpdating: true
+        };
+
+        this.options.columns = [{
+            dataField: 'name'
+        }, {
+            dataField: 'age',
+            showEditorAlways: true,
+            validationRules: [{
+                type: 'custom',
+                reevaluate: true,
+                validationCallback: function(params) {
+                    return params.data.name.length > 0;
+                }
+            }]
+        }];
+
+
+        rowsView.render($testElement);
+        this.columnsController.init();
+        this.editCell(0, 0);
+
+        const $firstCell = $(this.getCellElement(0, 0));
+        $firstCell.focus();
+
+        const $targetInput = $firstCell.find('input').first();
+
+        // act
+        $targetInput.val('').trigger('change');
+        this.closeEditCell();
+        this.clock.tick();
+
+        let $secondCell = $(this.getCellElement(0, 1));
+
+        // assert
+        assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as invalid');
+
+        // act
+        this.cancelEditData();
+        this.clock.tick();
+
+        $secondCell = $(this.getCellElement(0, 1));
+
+        // assert
+        assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
     });
 });
 
@@ -9894,9 +9949,10 @@ QUnit.module('Editing with validation', {
         const $testElement = $('#container .dx-datagrid');
 
         that.applyOptions({
+            dataSource: [{ id: 1, boolean: true }],
+            keyExpr: 'id',
             onEditorPreparing(e) {
                 e.editorName = 'dxSwitch';
-                e.editorOptions.value = true;
             },
             editing: {
                 mode: 'batch'
@@ -12807,8 +12863,8 @@ QUnit.module('Editing with validation', {
         assert.equal(this.editingController._deferreds.length, 0, 'deferreds should be empty');
     });
 
-    QUnit.test('validatingController - validation result should be removed from cache', function(assert) {
-    // arrange
+    QUnit.test('validatingController - validation result should be cancelled', function(assert) {
+        // arrange
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
@@ -12835,7 +12891,45 @@ QUnit.module('Editing with validation', {
         let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
         // assert
-        assert.ok(result, 'result should be restored from cache');
+        assert.ok(result.status, 'result should be restored from cache');
+
+        const editData = this.editingController.getEditDataByKey(rowKey);
+        this.validatingController.cancelCellValidationResult({ editData, columnIndex: 0 });
+        result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+        // assert
+        assert.equal(result, 'cancel', 'result should be cancelled');
+    });
+
+    QUnit.test('validatingController - validation result should be removed from cache', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'cell'
+            },
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        this.editCell(0, 0);
+        this.clock.tick();
+        const rowKey = this.getKeyByRowIndex(0);
+
+        const $firstCell = $(this.getCellElement(0, 0));
+        this.focus($firstCell);
+        this.clock.tick();
+
+        let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+        // assert
+        assert.ok(result.status, 'result should be restored from cache');
 
         const editData = this.editingController.getEditDataByKey(rowKey);
         this.validatingController.removeCellValidationResult({ editData, columnIndex: 0 });
@@ -12880,8 +12974,8 @@ QUnit.module('Editing with validation', {
         const editData = this.editingController.getEditDataByKey(rowKey);
 
         // assert
-        assert.ok(result1, 'result1 should be restored from cache');
-        assert.ok(result2, 'result2 should be restored from cache');
+        assert.ok(result1.status, 'result1 should be restored from cache');
+        assert.ok(result2.status, 'result2 should be restored from cache');
         assert.ok(editData.validated, 'editData should be validated');
 
         this.validatingController.resetRowValidationResults(editData);

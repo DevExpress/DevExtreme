@@ -11,7 +11,7 @@ import {
 
 import { Page } from './page';
 import { PAGER_INFO_CLASS } from '../info';
-import { NumberBox } from '../../number_box';
+import { NumberBox } from '../../ui/number_box';
 import messageLocalization from '../../../localization/message';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getElementMinWidth } from '../utils/get_element_width';
@@ -61,7 +61,7 @@ export class PagesSmallProps {
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageIndexChange?: (pageIndex: number) => void = () => { }; // commonUtils.noop
+  @Event() pageIndexChange?: (pageIndex: number) => void;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
@@ -69,7 +69,7 @@ export class PagesSmall extends JSXComponent(PagesSmallProps) {
   @Ref() pageIndexRef!: NumberBox;
 
   get value(): number {
-    return (this.props.pageIndex as number) + 1;
+    return this.props.pageIndex! + 1;
   }
 
   get width(): number {
@@ -89,6 +89,6 @@ export class PagesSmall extends JSXComponent(PagesSmallProps) {
   }
 
   valueChange(value: number): void {
-      this.props.pageIndexChange?.(value - 1);
+    this.props.pageIndexChange?.(value - 1);
   }
 }

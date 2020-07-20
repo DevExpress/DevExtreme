@@ -8,49 +8,50 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/dataGrid" as baseGrid with (
-    $datagrid-border: $datagrid-border,
-    $datagrid-border-color: $datagrid-border-color,
-    $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
-    $datagrid-row-error-bg: $datagrid-row-error-bg,
-    $datagrid-row-error-color: $datagrid-row-error-color,
-    $datagrid-base-color: $datagrid-base-color,
-    $datagrid-base-background-color: $datagrid-base-background-color,
-    $datagrid-focused-border-color: $datagrid-focused-border-color,
-    $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
-    $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
-    $base-focus-color: $base-focus-color,
-    $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-border: $datagrid-border,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
 );
+
 // adduse
 
 
 @include grid-base(datagrid);
 
 .dx-datagrid-group-panel {
-  font-size: $GENERIC_BASE_FONT_SIZE;
+  font-size: $generic-base-font-size;
   touch-action: pinch-zoom;
 
   .dx-group-panel-message {
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    padding: $GENERIC_DATAGRID_CELL_PADDING;
-    border-top: $GENERIC_GRID_BASE_BORDER_HIDDEN;
-    border-bottom: $GENERIC_GRID_BASE_BORDER_HIDDEN;
+    padding: $generic-datagrid-cell-padding;
+    border-top: $generic-grid-base-border-hidden;
+    border-bottom: $generic-grid-base-border-hidden;
   }
 
   .dx-group-panel-item {
-    margin-right: $GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+    margin-right: $generic-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
     border: $datagrid-border;
-    padding: $GENERIC_DATAGRID_CELL_PADDING;
+    padding: $generic-datagrid-cell-padding;
   }
 
   .dx-block-separator {
-    margin-right: $GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+    margin-right: $generic-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    padding: $GENERIC_DATAGRID_CELL_PADDING + 1;
+    padding: $generic-datagrid-cell-padding + 1;
     background-color: $datagrid-block-separator-bg;
   }
 
@@ -73,22 +74,22 @@
     font-weight: bold;
 
     td {
-      border-top-color: $GENERIC_GRID_BASE_BORDER_COLOR;
-      border-bottom-color: $GENERIC_GRID_BASE_BORDER_COLOR;
+      border-top-color: $generic-grid-base-border-color;
+      border-bottom-color: $generic-grid-base-border-color;
     }
   }
 }
 
 .dx-datagrid-group-opened {
   @include dx-icon(spindown);
-  @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+  @include dx-icon-sizing($generic-base-icon-size);
 
   color: $datagrid-spin-icon-color;
 }
 
 .dx-datagrid-group-closed {
   @include dx-icon(spinright);
-  @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+  @include dx-icon-sizing($generic-base-icon-size);
 
   color: $datagrid-spin-icon-color;
 }
@@ -115,7 +116,7 @@
   .dx-datagrid-group-panel {
     .dx-group-panel-item,
     .dx-block-separator {
-      margin-left: $GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+      margin-left: $generic-grid-base-grouppanel-item-margin;
     }
   }
 }

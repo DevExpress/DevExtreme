@@ -2,6 +2,7 @@ import {
   Component, JSXComponent, TwoWay, ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
 
+import { GridPagerWrapper } from '../preact_wrapper/grid_pager';
 import PagerProps from './common/pager_props';
 import { Pager } from './pager';
 import { combineClasses } from '../utils/combine_classes';
@@ -31,7 +32,7 @@ export class GridPagerProps extends PagerProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  jQuery: { register: true, component: GridPagerWrapper },
   view: viewFunction,
 })
 export class GridPager extends JSXComponent(GridPagerProps) {

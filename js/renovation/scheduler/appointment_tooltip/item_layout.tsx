@@ -10,7 +10,7 @@ import {
   AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
 } from './types';
 import { Marker } from './marker';
-import { Button } from '../../button';
+import { Button } from '../../ui/button';
 import { TooltipItemContent } from './item_content';
 import getCurrentAppointment from './utils/get_current_appointment';
 import { defaultGetTextAndFormatDate } from './utils/default_functions';

@@ -205,13 +205,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
+     * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
+    onItemClick?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any) | string;
     /**
      * @docid dxListOptions.onItemContextMenu
      * @extends Action
@@ -220,13 +219,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
+     * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onItemContextMenu?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any);
     /**
      * @docid dxListOptions.onItemDeleted
      * @extends Action
@@ -264,13 +262,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
+     * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onItemHold?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any);
     /**
      * @docid dxListOptions.onItemReordered
      * @extends Action
@@ -292,17 +289,16 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 itemData:object
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 itemIndex:number | object
-     * @type_function_param1_field9 direction:string
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field7 itemIndex:number | object
+     * @type_function_param1_field8 direction:string
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSwipe?: ((e: { component?: dxList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string }) => any);
+    onItemSwipe?: ((e: { component?: dxList, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string }) => any);
     /**
      * @docid dxListOptions.onPageLoading
      * @extends Action
@@ -324,18 +320,17 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 scrollOffset:object
-     * @type_function_param1_field7 reachedLeft:boolean
-     * @type_function_param1_field8 reachedRight:boolean
-     * @type_function_param1_field9 reachedTop:boolean
-     * @type_function_param1_field10 reachedBottom:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 scrollOffset:object
+     * @type_function_param1_field6 reachedLeft:boolean
+     * @type_function_param1_field7 reachedRight:boolean
+     * @type_function_param1_field8 reachedTop:boolean
+     * @type_function_param1_field9 reachedBottom:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxList, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid dxListOptions.onSelectAllValueChanged
      * @extends Action

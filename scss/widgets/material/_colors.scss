@@ -2,10 +2,10 @@
 $color: null !default;
 $mode: null !default;
 
-$MATERIAL_COLOR_ACCENT_MODIFICATOR: null !default;
+$material-color-accent-modificator: null !default;
 $base-accent: null !default;
-$gantt_parent_task_background_color: null !default;
-$MATERIAL_COLOR_THEME_MODIFICATOR: null !default;
+$gantt-parent-task-background-color: null !default;
+$material-color-theme-modificator: null !default;
 $base-font-family: null !default;
 $base-text-color: null !default;
 $base-label-color: null !default;
@@ -33,13 +33,13 @@ $base-disabled-opacity: null !default;
 $base-dropdown-shadow-color: null !default;
 $base-invalid-color: null !default;
 $base-invalid-faded-border-color: null !default;
-$SCROLLVIEW_PULLDOWN_PATH: null !default;
-$LOADINDICATOR_IMAGE_PATH: null !default;
-$LOADINDICATOR_IMAGE_SMALL_PATH: null !default;
-$LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
+$scrollview-pulldown-path: null !default;
+$loadindicator-image-path: null !default;
+$loadindicator-image-small-path: null !default;
+$loadindicator-image-large-path: null !default;
 
 @if $color == "blue" {
-  $MATERIAL_COLOR_ACCENT_MODIFICATOR: "blue" !default;
+  $material-color-accent-modificator: "blue" !default;
 
   /**
     * $name 10. Accent color
@@ -47,11 +47,11 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     */
   $base-accent: #03a9f4 !default;
 
-  $gantt_parent_task_background_color: #8bc34a !default;
+  $gantt-parent-task-background-color: #8bc34a !default;
 }
 
 @if $color == "lime" {
-  $MATERIAL_COLOR_ACCENT_MODIFICATOR: "lime" !default;
+  $material-color-accent-modificator: "lime" !default;
 
   /**
     * $name 10. Accent color
@@ -59,11 +59,11 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     */
   $base-accent: #cddc39 !default;
 
-  $gantt_parent_task_background_color: #f44336 !default;
+  $gantt-parent-task-background-color: #f44336 !default;
 }
 
 @if $color == "orange" {
-  $MATERIAL_COLOR_ACCENT_MODIFICATOR: "orange" !default;
+  $material-color-accent-modificator: "orange" !default;
 
   /**
     * $name 10. Accent color
@@ -77,11 +77,11 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     */
   $base-danger: #e91e63 !default;
 
-  $gantt_parent_task_background_color: #8bc34a !default;
+  $gantt-parent-task-background-color: #8bc34a !default;
 }
 
 @if $color == "purple" {
-  $MATERIAL_COLOR_ACCENT_MODIFICATOR: "purple" !default;
+  $material-color-accent-modificator: "purple" !default;
 
   /**
     * $name 10. Accent color
@@ -89,11 +89,11 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     */
   $base-accent: #9c27b0 !default;
 
-  $gantt_parent_task_background_color: #8bc34a !default;
+  $gantt-parent-task-background-color: #8bc34a !default;
 }
 
 @if $color == "teal" {
-  $MATERIAL_COLOR_ACCENT_MODIFICATOR: "teal" !default;
+  $material-color-accent-modificator: "teal" !default;
 
   /**
     * $name 10. Accent color
@@ -101,11 +101,11 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     */
   $base-accent: #009688 !default;
 
-  $gantt_parent_task_background_color: #8bc34a !default;
+  $gantt-parent-task-background-color: #8bc34a !default;
 }
 
 @if $mode == "light" {
-  $MATERIAL_COLOR_THEME_MODIFICATOR: "light" !default;
+  $material-color-theme-modificator: "light" !default;
 
   /**
     * $name 10. Font family
@@ -164,20 +164,20 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     * $type color
     */
 
-  $base-success:         #8bc34a !default;
+  $base-success: #8bc34a !default;
 
   /**
     * $name 60. Warning color
     * $type color
     */
 
-  $base-warning:         #ffc107 !default;
+  $base-warning: #ffc107 !default;
 
   /**
     * $name 70. Danger color
     * $type color
     */
-  $base-danger:          #f44336 !default; /* TODO move outside @if */
+  $base-danger: #f44336 !default; /* TODO move outside @if */
 
   /**
     * $name 80. Hovered state text color
@@ -217,14 +217,14 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/material/color-schemes/light/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/material/color-schemes/light/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/material/color-schemes/light/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/material/color-schemes/light/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/light/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/material/color-schemes/light/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/material/color-schemes/light/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/material/color-schemes/light/loader64.gif') !default;
 }
 
 @if $mode == "dark" {
-  $MATERIAL_COLOR_THEME_MODIFICATOR: "dark" !default;
+  $material-color-theme-modificator: "dark" !default;
 
 
   /**
@@ -284,20 +284,20 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
     * $type color
     */
 
-  $base-success:         #8bc34a !default;
+  $base-success: #8bc34a !default;
 
   /**
     * $name 60. Warning color
     * $type color
     */
 
-  $base-warning:         #ffc107 !default;
+  $base-warning: #ffc107 !default;
 
   /**
     * $name 70. Danger color
     * $type color
     */
-  $base-danger:          #f44336 !default; /* TODO move outside @if */
+  $base-danger: #f44336 !default; /* TODO move outside @if */
 
   /**
     * $name 80. Hovered state text color
@@ -335,9 +335,9 @@ $LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/material/color-schemes/dark/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/material/color-schemes/dark/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/material/color-schemes/dark/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/material/color-schemes/dark/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/material/color-schemes/dark/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/material/color-schemes/dark/loader64.gif') !default;
 }
 

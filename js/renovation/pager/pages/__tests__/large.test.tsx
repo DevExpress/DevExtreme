@@ -140,7 +140,7 @@ describe('Pager pages logic', () => {
   it('pages: pageIndex: 4', () => {
     const pageIndexChange = jest.fn();
     const pages = new PagesLarge({
-      pageCount: 30, maxPagesCount: 10, pageIndex: 4, pageIndexChange,
+      pageCount: 30, maxPagesCount: 10, pageIndex: 4,
     });
     expect(pages.pages[0].pageProps).toMatchObject({ index: 0, selected: false });
     expect(pages.pages[0].key).toEqual('0');
@@ -148,6 +148,8 @@ describe('Pager pages logic', () => {
     expect(pages.pages[3].pageProps).toMatchObject({ index: 4, selected: true });
     expect(pages.pages).toHaveLength(8);
     expect(pageIndexChange).not.toBeCalledWith(0);
+    (pages.pages[0].pageProps!).onClick?.();
+    pages.props.pageIndexChange = pageIndexChange;
     (pages.pages[0].pageProps!).onClick?.();
     expect(pageIndexChange).toBeCalledWith(0);
   });

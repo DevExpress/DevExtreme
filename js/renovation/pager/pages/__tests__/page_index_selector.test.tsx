@@ -206,42 +206,51 @@ describe('Page index selector', () => {
       expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
 
-    it('navigateToNextPage, rtlEnabled: false, can navigate', () => {
-      const pageIndexChange = jest.fn();
-      const component = new PageIndexSelector({
-        rtlEnabled: false, pageIndex: 3, pageCount: 5, pageIndexChange,
+    describe('navigateToNextPage', () => {
+      it('pageIndexChange is undefined', () => {
+        const component = new PageIndexSelector({
+          rtlEnabled: false, pageIndex: 3, pageCount: 5,
+        });
+        expect(() => component.navigateToNextPage()).not.toThrow();
       });
-      expect(pageIndexChange).not.toBeCalled();
-      component.navigateToNextPage();
-      expect(pageIndexChange).toBeCalledWith(4);
-    });
 
-    it('navigateToNextPage, rtlEnabled: false, cannot navigate', () => {
-      const pageIndexChange = jest.fn();
-      const component = new PageIndexSelector({
-        rtlEnabled: false, pageIndex: 4, pageCount: 5, hasKnownLastPage: true, pageIndexChange,
+      it('rtlEnabled: false, can navigate', () => {
+        const pageIndexChange = jest.fn();
+        const component = new PageIndexSelector({
+          rtlEnabled: false, pageIndex: 3, pageCount: 5, pageIndexChange,
+        });
+        expect(pageIndexChange).not.toBeCalled();
+        component.navigateToNextPage();
+        expect(pageIndexChange).toBeCalledWith(4);
       });
-      component.navigateToNextPage();
-      expect(pageIndexChange).not.toBeCalled();
-    });
 
-    it('navigateToNextPage, rtlEnabled: true, can navigate', () => {
-      const pageIndexChange = jest.fn();
-      const component = new PageIndexSelector({
-        rtlEnabled: true, pageIndex: 1, pageCount: 5, pageIndexChange,
+      it('rtlEnabled: false, cannot navigate', () => {
+        const pageIndexChange = jest.fn();
+        const component = new PageIndexSelector({
+          rtlEnabled: false, pageIndex: 4, pageCount: 5, hasKnownLastPage: true, pageIndexChange,
+        });
+        component.navigateToNextPage();
+        expect(pageIndexChange).not.toBeCalled();
       });
-      expect(pageIndexChange).not.toBeCalled();
-      component.navigateToNextPage();
-      expect(pageIndexChange).toBeCalledWith(0);
-    });
 
-    it('navigateToNextPage, rtlEnabled: true, cannot navigate', () => {
-      const pageIndexChange = jest.fn();
-      const component = new PageIndexSelector({
-        rtlEnabled: true, pageIndex: 0, pageCount: 5, hasKnownLastPage: true, pageIndexChange,
+      it('rtlEnabled: true, can navigate', () => {
+        const pageIndexChange = jest.fn();
+        const component = new PageIndexSelector({
+          rtlEnabled: true, pageIndex: 1, pageCount: 5, pageIndexChange,
+        });
+        expect(pageIndexChange).not.toBeCalled();
+        component.navigateToNextPage();
+        expect(pageIndexChange).toBeCalledWith(0);
       });
-      component.navigateToNextPage();
-      expect(pageIndexChange).not.toBeCalled();
+
+      it('rtlEnabled: true, cannot navigate', () => {
+        const pageIndexChange = jest.fn();
+        const component = new PageIndexSelector({
+          rtlEnabled: true, pageIndex: 0, pageCount: 5, hasKnownLastPage: true, pageIndexChange,
+        });
+        component.navigateToNextPage();
+        expect(pageIndexChange).not.toBeCalled();
+      });
     });
 
     it('navigateToPrevPage, rtlEnabled: false, can navigate', () => {
