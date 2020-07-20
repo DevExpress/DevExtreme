@@ -13,7 +13,7 @@ export const viewFunction = (viewModel: DayDateTableLayout): object => {
 
   return (
     <DateTable
-        // eslint-disable-next-line react/jsx-props-no-spreading
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
       className={`dx-scheduler-date-table ${viewModel.props.className}`}
     >

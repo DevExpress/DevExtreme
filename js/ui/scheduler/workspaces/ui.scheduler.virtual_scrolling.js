@@ -1,5 +1,4 @@
 import typeUtils from '../../../core/utils/type';
-import consoleUtils from '../../../core/utils/console';
 
 const ROW_HEIGHT = 50;
 
@@ -78,7 +77,6 @@ export default class VirtualScrolling {
             const scrollOffset = e?.scrollOffset;
             if(scrollOffset && this._updateState(scrollOffset)) {
                 // Renovative render
-                this._updateLayoutMap();
             }
         });
     }
@@ -243,27 +241,13 @@ export default class VirtualScrolling {
 
             if(cellClass) {
                 if(options.cellClass) {
-                    // TODO move to the top level
                     if(typeUtils.isFunction(options.cellClass)) {
                         cellModel.className = options.cellClass(rowIndex, cellIndex);
                     } else {
                         cellModel.className = options.cellClass;
                     }
-                    //
                 }
             }
-
-            // TODO move to the top level or get rid of the Data in the element
-            // let cellDataObject;
-            // let dataKey;
-            // let dataValue;
-            // if(options.getCellData) {
-            //     cellDataObject = options.getCellData(undefined, rowIndex, cellIndex, options.groupIndex);
-            //     dataKey = cellDataObject.key;
-            //     dataValue = cellDataObject.value;
-            //     dataKey && dataUtils.data(undefined, dataKey, dataValue);
-            // }
-            //
 
             cellModel.cellTemplate = options.cellTemplate;
             cellsMap.push(cellModel);
@@ -291,13 +275,7 @@ export default class VirtualScrolling {
         return logArgs;
     }
 
-    _logState() {
-        consoleUtils.logger.info(...this._getStateLogRecursive(this._state));
-    }
-
     _validateState() {
-        this._logState();
-
         const dataItems = this.getLayoutMap().dataItems;
 
         for(let i = 1; i < dataItems.length; ++i) {
@@ -313,5 +291,3 @@ export default class VirtualScrolling {
         return true;
     }
 }
-
-module.exports = VirtualScrolling;
