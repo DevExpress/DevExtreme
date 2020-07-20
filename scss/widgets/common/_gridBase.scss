@@ -65,6 +65,8 @@
             visibility: hidden;
             background-color: transparent;
             pointer-events: none;
+            border-top-color: transparent; // T913696
+            border-bottom-color: transparent; // T913696
           }
         }
 
