@@ -10,17 +10,17 @@ import {
   Template,
   Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { createDefaultOptionRules } from '../core/options/utils';
-import devices from '../core/devices';
-import noop from './utils/noop';
-import * as themes from '../ui/themes';
-import { click } from '../events/short';
-import { getImageSourceType } from '../core/utils/icon';
+import { createDefaultOptionRules } from '../../core/options/utils';
+import devices from '../../core/devices';
+import noop from '../utils/noop';
+import * as themes from '../../ui/themes';
+import { click } from '../../events/short';
+import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
 import { InkRipple } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import BaseWidgetProps from './utils/base_props';
-import BaseComponent from './preact_wrapper/button';
+import BaseWidgetProps from '../utils/base_props';
+import BaseComponent from '../preact_wrapper/button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 

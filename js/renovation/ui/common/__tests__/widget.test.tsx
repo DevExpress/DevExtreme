@@ -4,13 +4,13 @@ import { shallow } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
-} from '../../__tests__/utils/events_mock';
+} from '../../../__tests__/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../events/utils';
-import config from '../../../core/config';
+import { isFakeClickEvent } from '../../../../events/utils';
+import config from '../../../../core/config';
 
-jest.mock('../../../events/utils', () => ({
-  ...require.requireActual('../../../events/utils'),
+jest.mock('../../../../events/utils', () => ({
+  ...require.requireActual('../../../../events/utils'),
   isFakeClickEvent: jest.fn(),
 }));
 

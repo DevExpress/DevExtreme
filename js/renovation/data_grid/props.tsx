@@ -8,7 +8,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../ui/data_grid';
 import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../ui/data_grid';
-import { WidgetProps } from '../common/widget';
+import { WidgetProps } from '../ui/common/widget';
 
 import type { dxFilterBuilderOptions } from '../../ui/filter_builder';
 import type { dxElement } from '../../core/element';

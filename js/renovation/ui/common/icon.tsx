@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
-import { getImageSourceType } from '../../core/utils/icon';
+import { getImageSourceType } from '../../../core/utils/icon';
 
 export const viewFunction = ({ sourceType, cssClass, props: { source } }: Icon) => (
   <Fragment>
