@@ -1,10 +1,10 @@
 import {
-  ComponentBindings, OneWay, JSXComponent, Component,
+  ComponentBindings, OneWay, JSX, JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
 
 export const viewFunction = (
   { props: { message, className }, restAttributes }: ErrorMessage,
-): React.ReactElement => (
+): JSX.Element => (
   <div
     className={`dx-validationsummary dx-validationsummary-item ${className}`}
       /* eslint-disable react/jsx-props-no-spreading */

@@ -3,6 +3,7 @@ import {
   ComponentBindings,
   Effect,
   Event,
+  JSX,
   JSXComponent,
   Method,
   OneWay,
@@ -42,7 +43,7 @@ const getCssClasses = (model: ButtonProps): string => {
 
   return classNames.join(' ');
 };
-export const viewFunction = (viewModel: Button): React.ReactElement => {
+export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
     children, icon, iconPosition, template: ButtonTemplate, text,
   } = viewModel.props;
@@ -115,9 +116,9 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Template() template?: (props: {data: {icon?: string; text?: string}}) => React.ReactElement;
+  @Template() template?: (props: {data: {icon?: string; text?: string}}) => JSX.Element;
 
-  @Slot() children?: React.ReactElement;
+  @Slot() children?: JSX.Element;
 
   @OneWay() text?: string = '';
 

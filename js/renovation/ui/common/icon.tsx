@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
+  Component, ComponentBindings, JSX, JSXComponent, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
 import { getImageSourceType } from '../../../core/utils/icon';
 
@@ -7,7 +7,7 @@ export const viewFunction = ({
   sourceType,
   cssClass,
   props: { source },
-}: Icon): React.ReactElement => (
+}: Icon): JSX.Element => (
   <Fragment>
     {sourceType === 'dxIcon' && <i className={`dx-icon dx-icon-${source} ${cssClass}`} />}
     {sourceType === 'fontIcon' && <i className={`dx-icon ${source} ${cssClass}`} />}

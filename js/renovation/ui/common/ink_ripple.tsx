@@ -1,10 +1,10 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Method,
+  Component, ComponentBindings, JSX, JSXComponent, OneWay, Method,
 } from 'devextreme-generator/component_declaration/common';
 import { initConfig, showWave, hideWave } from '../../../ui/widget/utils.ink_ripple';
 
 // TODO: remake old ink ripple in new JSX component
-export const viewFunction = (model: InkRipple): React.ReactElement => (
+export const viewFunction = (model: InkRipple): JSX.Element => (
   <div
     className="dx-inkripple"
     {...model.restAttributes} // eslint-disable-line react/jsx-props-no-spreading

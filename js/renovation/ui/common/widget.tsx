@@ -4,6 +4,7 @@ import {
   Effect,
   Event,
   InternalState,
+  JSX,
   JSXComponent,
   Method,
   OneWay,
@@ -51,7 +52,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
   return className.join(' ');
 };
 
-export const viewFunction = (viewModel: Widget): React.ReactElement => (
+export const viewFunction = (viewModel: Widget): JSX.Element => (
   <div
     ref={viewModel.widgetRef as any}
     {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
@@ -75,7 +76,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() aria?: object = {};
 
-  @Slot() children?: React.ReactElement;
+  @Slot() children?: JSX.Element;
 
   @OneWay() classes?: string | undefined = '';
 
