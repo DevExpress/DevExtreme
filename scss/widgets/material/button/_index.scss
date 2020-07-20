@@ -31,9 +31,9 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   text-decoration: none;
 }
 
-@mixin dx-button-sizing($-p-a-d-d-i-n-g, $icon-size, $icon-margin) {
+@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
   .dx-button-content {
-    padding: $-p-a-d-d-i-n-g;
+    padding: $padding;
   }
 
   .dx-icon {
