@@ -6,7 +6,7 @@ export const viewFunction = (viewModel: Table) => (
   <table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={`${viewModel.props.className}`}
+    className={viewModel.props.className}
   >
     <tbody>
       {viewModel.props.children}
