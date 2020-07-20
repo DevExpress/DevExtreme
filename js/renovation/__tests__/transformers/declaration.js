@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const tsJest = require('ts-jest');
 const getCacheKey = require('./get_cache_key');
-const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../../build/gulp/generator/generator-options');
+const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../build/gulp/generator/generator-options');
 
 const THIS_FILE = fs.readFileSync(__filename);
 const jestTransformer = tsJest.createTransformer();

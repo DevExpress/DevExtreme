@@ -10,7 +10,7 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import { act } from 'preact/test-utils';
 
-import 'renovation/button.j';
+import 'renovation/ui/button.j';
 import 'common.css!';
 import 'generic_light.css!';
 

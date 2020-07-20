@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { h, createRef } from 'preact';
 import { mount, shallow } from 'enzyme';
-import DxNumberBox from '../../ui/number_box';
+import DxNumberBox from '../../../ui/number_box';
 import { viewFunction as NumberBoxView, NumberBoxProps, NumberBox } from '../number_box';
 
-jest.mock('../../ui/number_box');
+jest.mock('../../../ui/number_box');
 
 describe('NumberBox', () => {
   beforeEach(() => {
