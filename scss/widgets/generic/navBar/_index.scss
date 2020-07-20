@@ -9,7 +9,7 @@
 @use "../badge";
 
 
-$GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px $navbar-tab-focused-border-color;
+$generic-navbar-focused-item-shadow: inset 0 0 0 1px $navbar-tab-focused-border-color;
 
 
 .dx-navbar {
@@ -27,7 +27,7 @@ $GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px $navbar-tab-focused-border-
   }
 
   .dx-navbar & .dx-icon {
-    @include dx-icon-sizing($GENERIC_NAVBAR_ICON_SIZE);
+    @include dx-icon-sizing($generic-navbar-icon-size);
 
     color: $navbar-tab-color;
   }
@@ -55,7 +55,7 @@ $GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px $navbar-tab-focused-border-
   }
 
   &.dx-state-focused {
-    box-shadow: $GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW;
+    box-shadow: $generic-navbar-focused-item-shadow;
   }
 
   &.dx-state-disabled {
@@ -67,7 +67,7 @@ $GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px $navbar-tab-focused-border-
 
 .dx-navbar-item-badge {
   margin-right: -26px;
-  top: $GENERIC_NAVBAR_BADGE_TOP;
+  top: $generic-navbar-badge-top;
 }
 
 .dx-rtl .dx-navbar-item-badge {

@@ -2,15 +2,15 @@
 
 // adduse
 
-$MATERIAL_TOOLBAR_HEIGHT: null !default;
-$MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING: null !default;
+$material-toolbar-height: null !default;
+$material-toolbar-menu-vertical-padding: null !default;
 
 @if $size == "default" {
-  $MATERIAL_TOOLBAR_HEIGHT: 76px;
-  $MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING: 7px;
+  $material-toolbar-height: 76px;
+  $material-toolbar-menu-vertical-padding: 7px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_TOOLBAR_HEIGHT: 56px;
-  $MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING: 5px;
+  $material-toolbar-height: 56px;
+  $material-toolbar-menu-vertical-padding: 5px;
 }

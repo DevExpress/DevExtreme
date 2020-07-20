@@ -9,11 +9,11 @@
 @use "../dropDownList";
 
 @mixin autocomplete-editor-container-offset() {
-  right: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+  right: $material-invalid-badge-horizontal-padding;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    left: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+    left: $material-invalid-badge-horizontal-padding;
   }
 }
 

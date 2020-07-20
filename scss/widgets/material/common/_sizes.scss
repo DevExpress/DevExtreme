@@ -2,12 +2,12 @@
 
 // adduse
 
-$MATERIAL_INVALID_BADGE_SIZE: null !default;
+$material-invalid-badge-size: null !default;
 
 @if $size == "default" {
-  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
+  $material-invalid-badge-size: $material-base-icon-size - 2px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
+  $material-invalid-badge-size: $material-base-icon-size - 2px;
 }

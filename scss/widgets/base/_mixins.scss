@@ -18,14 +18,14 @@
   background-image: linear-gradient($options);
 }
 
-@mixin gradient-radial-circle2($startColor, $startPosition, $middleColor, $middlePosition, $endColor, $endPosition) {
-  background: $startColor;
-  background: radial-gradient(circle closest-side at center, $startColor $startPosition, $middleColor $middlePosition, $endColor $endPosition);
+@mixin gradient-radial-circle2($start-color, $start-position, $middle-color, $middle-position, $end-color, $end-position) {
+  background: $start-color;
+  background: radial-gradient(circle closest-side at center, $start-color $start-position, $middle-color $middle-position, $end-color $end-position);
 }
 
-@mixin gradient-radial-circle($startColor, $startPosition, $endColor, $endPosition) {
-  background: $startColor;
-  background: radial-gradient(circle closest-side at center, $startColor $startPosition, $endColor $endPosition);
+@mixin gradient-radial-circle($start-color, $start-position, $end-color, $end-position) {
+  background: $start-color;
+  background: radial-gradient(circle closest-side at center, $start-color $start-position, $end-color $end-position);
 }
 
 /* flex */

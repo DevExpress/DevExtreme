@@ -3,8 +3,8 @@
 // adduse
 
 
-$PULLDOWN_HEIGHT: 50px;
-$PULLDOWN_PADDING: 15px;
+$pulldown-height: 50px;
+$pulldown-padding: 15px;
 
 .dx-scrollable-native {
   &.dx-scrollable-native-generic {
@@ -142,9 +142,9 @@ $PULLDOWN_PADDING: 15px;
 
 .dx-scrollview-pull-down {
   width: 100%;
-  height: $PULLDOWN_HEIGHT;
-  padding: $PULLDOWN_PADDING 0;
-  top: -($PULLDOWN_HEIGHT + $PULLDOWN_PADDING * 2);
+  height: $pulldown-height;
+  padding: $pulldown-padding 0;
+  top: -($pulldown-height + $pulldown-padding * 2);
   overflow: hidden;
   transform: translate(0, 0);
   -webkit-user-drag: none;

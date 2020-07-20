@@ -5,19 +5,19 @@
 // adduse
 
 
-$VALIDATION_MESSAGE_COLOR: null !default;
-$VALIDATION_MESSAGE_BACKGROUND_COLOR: null !default;
-$VALIDATION_SUMMARY_COLOR: null !default;
+$validation-message-color: null !default;
+$validation-message-background-color: null !default;
+$validation-summary-color: null !default;
 $validation-overlay-border-radius: null !default;
 
 
 @if $color == "carmine" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
 
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
 
   $validation-overlay-border-radius: $base-border-radius !default;
 }
@@ -25,10 +25,10 @@ $validation-overlay-border-radius: null !default;
 @if $color == "contrast" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
 
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
 
   $validation-overlay-border-radius: $base-border-radius !default;
 }
@@ -36,54 +36,54 @@ $validation-overlay-border-radius: null !default;
 @if $color == "dark" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
   $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkmoon" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
   $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkviolet" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
   $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "greenmist" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
   $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "light" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
   $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "softblue" {
 
 
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
+  $validation-message-color: $base-inverted-text-color !default;
+  $validation-message-background-color: $base-invalid-color !default;
+  $validation-summary-color: $base-invalid-color !default;
   $validation-overlay-border-radius: $base-border-radius !default;
 }
 
