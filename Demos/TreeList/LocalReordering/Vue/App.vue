@@ -57,7 +57,7 @@
 </template>
 <script>
 import { DxTreeList, DxColumn, DxRowDragging } from 'devextreme-vue/tree-list';
-import { DxCheckBox } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
 import { employees } from './data.js';
 
 export default {

@@ -18,10 +18,8 @@
   </DxTileView>
 </template>
 <script>
-import { DxTileView } from 'devextreme-vue';
+import DxTileView from 'devextreme-vue/tile-view';
 import { homes } from './data.js';
-import Globalize from 'globalize';
-import 'devextreme/localization/globalize/currency';
 
 export default {
   components: {
@@ -29,9 +27,12 @@ export default {
   },
   filters: {
     formatCurrency(value) {
-      return Globalize.formatCurrency(value, 'USD', {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
         maximumFractionDigits: 0
-      });
+      }).format(value);
     }
   },
   data() {

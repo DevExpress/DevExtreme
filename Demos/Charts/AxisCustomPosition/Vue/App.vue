@@ -5,8 +5,14 @@
       :data-source="dataSource"
     >
       <DxCommonSeriesSettings type="scatter"/>
-      <DxSeries argument-field="x1" value-field="y1"/>
-      <DxSeries argument-field="x2" value-field="y2">
+      <DxSeries
+        argument-field="x1"
+        value-field="y1"
+      />
+      <DxSeries
+        argument-field="x2"
+        value-field="y2"
+      >
         <DxPoint symbol="triangleDown"/>
       </DxSeries>
       <DxArgumentAxis

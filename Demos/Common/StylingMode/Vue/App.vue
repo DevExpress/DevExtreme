@@ -73,7 +73,13 @@
 </template>
 <script>
 
-import { DxSelectBox, DxTextBox, DxTextArea, DxTagBox, DxDateBox, DxButton, DxValidator } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxTextBox from 'devextreme-vue/text-box';
+import DxTextArea from 'devextreme-vue/text-area';
+import DxTagBox from 'devextreme-vue/tag-box';
+import DxDateBox from 'devextreme-vue/date-box';
+import DxButton from 'devextreme-vue/button';
+import DxValidator from 'devextreme-vue/validator';
 import validationEngine from 'devextreme/ui/validation_engine';
 import notify from 'devextreme/ui/notify';
 

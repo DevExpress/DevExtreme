@@ -1,6 +1,6 @@
 import React from 'react';
 import { TreeList, Column, SearchPanel } from 'devextreme-react/tree-list';
-import { SelectBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
 import { employees } from './data.js';
 
 class App extends React.Component {

@@ -6,7 +6,9 @@ $(function() {
         },
         contextToolbox: {
             enabled: true,
-            category: "flowchart"
+            category: "flowchart",
+            shapeIconsPerRow: 5,
+            width: 200
         },
         propertiesPanel: {
             visibility: 'visible',
@@ -24,14 +26,32 @@ $(function() {
         },
         mainToolbar: {
             visible: true,
-            commands: ["undo","redo","separator","fontName","fontSize","separator","bold","italic","underline","separator",
-                "fontColor","lineColor","fillColor","separator",{ name: "clear", icon: "clearsquare", text: "Clear Diagram" }]
+            commands: [
+                { name: "undo" },
+                { name: "redo" },
+                { name: "separator" },
+                { name: "fontName" },
+                { name: "fontSize" },
+                { name: "separator" },
+                { name: "bold" },
+                { name: "italic" },
+                { name: "underline" },
+                { name: "separator" },
+                { name: "fontColor" },
+                { name: "lineColor" },
+                { name: "fillColor" },
+                { name: "separator" },
+                { name: "clear", icon: "clearsquare", text: "Clear Diagram" }
+            ]
         },
         toolbox: {
             visibility: 'visible',
             groups: [
                 "general", { category: "flowchart", title: "Flowchart", expanded: true }
-            ]
+            ],
+            showSearch: false,
+            shapeIconsPerRow: 4,
+            width: 220
         },
         onCustomCommand: function(e) {
             if(e.name === "clear") {

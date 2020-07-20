@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { TextBox, TextArea } from 'devextreme-react';
+import TextBox from 'devextreme-react/text-box';
+import TextArea from 'devextreme-react/text-area';
 
 class App extends React.Component {
   render() {

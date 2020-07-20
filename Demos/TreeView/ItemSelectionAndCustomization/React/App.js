@@ -112,11 +112,8 @@ class App extends React.Component {
 
   syncSelection(treeView) {
     const selectedEmployees = treeView.getSelectedNodes()
-      .map((node) => { return {
-        fullName: node.itemData.fullName,
-        prefix: node.itemData.prefix,
-        position: node.itemData.position
-      }; });
+      .map((node) => node.itemData);
+
     this.setState(() => {
       return { selectedEmployees: selectedEmployees };
     });

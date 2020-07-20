@@ -69,7 +69,8 @@ import {
   DxEditing,
   DxLookup
 } from 'devextreme-vue/data-grid';
-import { DxCheckBox, DxSelectBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
 import { employees, states } from './data.js';
 
 export default {

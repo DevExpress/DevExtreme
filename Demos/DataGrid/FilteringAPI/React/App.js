@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import { SelectBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
 import 'devextreme/data/odata/store';
 
 const dataSourceOptions = {

@@ -57,7 +57,9 @@
   </div>
 </template>
 <script>
-import { DxAccordion, DxTagBox, DxCheckBox } from 'devextreme-vue';
+import DxAccordion from 'devextreme-vue/accordion';
+import DxTagBox from 'devextreme-vue/tag-box';
+import DxCheckBox from 'devextreme-vue/check-box';
 import DxSlider, { DxTooltip, DxLabel } from 'devextreme-vue/slider';
 import CustomTitle from './CustomTitle.vue';
 import CustomItem from './CustomItem.vue';

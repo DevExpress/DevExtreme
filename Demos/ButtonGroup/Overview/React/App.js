@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { ButtonGroup } from 'devextreme-react';
+import { ButtonGroup } from 'devextreme-react/button-group';
 import { alignments, fontStyles } from './data.js';
 import notify from 'devextreme/ui/notify';
 

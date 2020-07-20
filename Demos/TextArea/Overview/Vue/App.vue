@@ -46,11 +46,9 @@
   </div>
 </template>
 <script>
-import {
-  DxTextArea,
-  DxCheckBox,
-  DxSelectBox
-} from 'devextreme-vue';
+import DxTextArea from 'devextreme-vue/text-area';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxSelectBox from 'devextreme-vue/select-box';
 
 import service from './data.js';
 

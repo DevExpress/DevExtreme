@@ -3,26 +3,16 @@
     justify-content: flex-end;
     padding-bottom: 10px;
 }
-::ng-deep #container .dx-button-danger {
-    margin-left: 4px;
-}
-::ng-deep .dx-tabs-wrapper .dx-tab {
+::ng-deep .dx-tabs-wrapper .dx-item.dx-tab {
     width: auto;
     padding-left: 20px;
 }
-::ng-deep .dx-tab-content .dx-icon-close {
-    opacity: 0.6;
-    font-size: 15px;
-    margin-right: 0;
-    margin-left: 3px;
-}
-::ng-deep .dx-theme-material .dx-tab-content .dx-icon-close {
+::ng-deep .dx-tab-content .dx-icon.dx-icon-close {
     display: inline-block;
+    opacity: 0.6;
+    margin-right: 0;
+    margin-left: 7px;
     font-size: 18px;
-}
-::ng-deep .dx-theme-material .dx-tab-content span {
-    vertical-align: middle;
-    line-height: initial;
 }
 ::ng-deep .dx-sortable-dragging .dx-tab {
     box-sizing: border-box;
@@ -31,18 +21,39 @@
 ::ng-deep .employeeInfo .employeePhoto {
     height: 100px;
     float: left;
-    padding: 10px 10px 10px 20px;
+    padding: 10px 20px 10px 20px;
 }
 ::ng-deep .caption {
-    padding: 0 0 5px 10px;
+    padding: 0px 0px 10px 30px;
     font-size: 14px;
     font-weight: bold;
+}
+::ng-deep .task-list {
+    padding: 0px 20px;
+}
+::ng-deep .task-list .dx-state-disabled {
+    opacity: 1;
+}
+::ng-deep .task-list .dx-state-disabled .dx-list-item {
+    opacity: 1;
 }
 ::ng-deep .employeeInfo .employeeNotes {
     min-height: 100px;
     padding: 20px;
     text-align: justify;
     white-space: normal;
+}
+::ng-deep .dx-theme-generic .dx-tabs-wrapper  .dx-item.dx-tab {
+    padding-left: 14px;
+    padding-right: 9px;
+    line-height: 1.618;
+}
+::ng-deep .dx-theme-generic .dx-icon.dx-icon-close {
+    font-size: 15px;
+}
+::ng-deep .dx-theme-material .dx-tab-content span {
+    vertical-align: middle;
+    line-height: initial;
 }
 ::ng-deep .dx-theme-material .employeeNotes {
     margin: 0;

@@ -451,6 +451,7 @@
           "Widget": "DataGrid",
           "DemoType": "Web",
           "Modules": "devextreme-aspnet-data-nojquery",
+          "Equivalents": "Drag and Drop Between Two Grids",
           "MvcAdditionalFiles": [
             "/Views/DataGrid/DnDBetweenGridsPartial.cshtml",
             "/Controllers/ApiControllers/DnDBetweenGridsController.cs",
@@ -1315,6 +1316,7 @@
             "Title": "Node Drag & Drop",
             "Name": "LocalReordering",
             "Widget": "TreeList",
+            "Equivalents": "Node Drag and Drop",
             "Modules": "devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
               "/Scripts/data/employees.js"
@@ -1596,7 +1598,6 @@
           {
             "Title": "Google Calendar Integration",
             "Name": "GoogleCalendarIntegration",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
             "Widget": "Scheduler",
             "DemoType": "Web",
             "Modules": "whatwg-fetch"
@@ -1698,6 +1699,7 @@
             "Title": "Custom Drag & Drop",
             "Name": "CustomDragAndDrop",
             "Widget": "Scheduler",
+            "Equivalents": "Custom Drag and Drop",
             "MvcAdditionalFiles": [
               "/Models/Appointment.cs",
               "/Models/SampleData/Appointments.cs"
@@ -3640,6 +3642,7 @@
             "Name": "SortableClosableTabs",
             "DocUrl": "Guide/Widgets/TabPanel/Overview/",
             "Widget": "TabPanel",
+            "Equivalents": "Tab Drag and Drop",
             "Badge": "New",
             "MvcAdditionalFiles": [
               "/Views/TabPanel/_SortableTabPanel.cshtml",

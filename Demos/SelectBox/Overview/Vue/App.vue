@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import { DxSelectBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
 import ArrayStore from 'devextreme/data/array_store';
 import Field from './Field.vue';
 import Item from './Item.vue';

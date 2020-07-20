@@ -99,13 +99,11 @@
   </div>
 </template>
 <script>
-import {
-  DxScrollView,
-  DxSortable,
-  DxSelectBox,
-  DxCheckBox,
-  DxNumberBox
-} from 'devextreme-vue';
+import DxScrollView from 'devextreme-vue/scroll-view';
+import DxSortable from 'devextreme-vue/sortable';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxNumberBox from 'devextreme-vue/number-box';
 import { tasks } from './data.js';
 
 export default {

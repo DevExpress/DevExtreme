@@ -2,7 +2,8 @@
               [views]='["week", "month"]'
               currentView="month"
               [adaptivityEnabled]="true"
-              [currentDate]="currentDate"
+              [(currentDate)]="currentDate"
+              [cellDuration]="cellDuration"
               [startDayHour]="9"
               [height]="590">
     <dxi-resource fieldExpr="priorityId"

@@ -1,6 +1,5 @@
 import React from 'react';
-import { FilterBuilder } from 'devextreme-react';
-import { CustomOperation } from 'devextreme-react/filter-builder';
+import FilterBuilder, { CustomOperation } from 'devextreme-react/filter-builder';
 import { filter, fields, groupOperations } from './data.js';
 import { formatValue } from './helpers.js';
 import { EditorComponent } from './EditorComponent.js';

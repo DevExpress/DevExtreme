@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Button } from 'devextreme-react';
+import { Button } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 
 class App extends React.Component {

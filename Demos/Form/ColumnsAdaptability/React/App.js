@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { CheckBox, Form } from 'devextreme-react';
+import CheckBox from 'devextreme-react/check-box';
+import Form from 'devextreme-react/form';
 import employee from './data.js';
 
 const colCountByScreen = {

@@ -6,7 +6,7 @@
                 [dataSource]="simpleProducts"
                 valueExpr="ID"
                 [value]="[17, 19]"
-                grouped="true"
+                [grouped]="true"
                 displayExpr="Name">
             </dx-tag-box>
         </div>
@@ -19,9 +19,9 @@
                     [dataSource]="simpleProducts"
                     valueExpr="ID"
                     [value]="[17, 19]"
-                    grouped="true"
+                    [grouped]="true"
                     displayExpr="Name"
-                    searchEnabled="true">
+                    [searchEnabled]="true">
             </dx-tag-box>
         </div>
     </div>
@@ -33,7 +33,7 @@
                     [dataSource]="simpleProducts"
                     valueExpr="ID"
                     [value]="[18]"
-                    grouped="true"
+                    [grouped]="true"
                     displayExpr="Name"
                     searchEnabled="true"
                     groupTemplate="group"

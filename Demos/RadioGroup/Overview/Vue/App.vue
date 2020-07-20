@@ -68,7 +68,7 @@
   </div>
 </template>
 <script>
-import { DxRadioGroup } from 'devextreme-vue';
+import DxRadioGroup from 'devextreme-vue/radio-group';
 import { priorities, tasks } from './data.js';
 
 export default {

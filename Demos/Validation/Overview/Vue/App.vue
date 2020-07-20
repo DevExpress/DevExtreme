@@ -171,7 +171,12 @@
   </form>
 </template>
 <script>
-import { DxSelectBox, DxCheckBox, DxTextBox, DxDateBox, DxButton, DxValidationSummary } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxTextBox from 'devextreme-vue/text-box';
+import DxDateBox from 'devextreme-vue/date-box';
+import DxButton from 'devextreme-vue/button';
+import DxValidationSummary from 'devextreme-vue/validation-summary';
 import {
   DxValidator,
   DxRequiredRule,

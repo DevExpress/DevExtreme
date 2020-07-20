@@ -60,7 +60,7 @@
 </template>
 <script>
 import { sales } from './data.js';
-import { DxSelectBox } from 'devextreme-vue';
+import { DxSelectBox } from 'devextreme-vue/select-box';
 import {
   DxDataGrid,
   DxColumn,

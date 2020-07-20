@@ -69,7 +69,8 @@
   </div>
 </template>
 <script>
-import { DxDropDownButton, DxToolbar } from 'devextreme-vue';
+import DxDropDownButton from 'devextreme-vue/drop-down-button';
+import DxToolbar from 'devextreme-vue/toolbar';
 import service from './data.js';
 import notify from 'devextreme/ui/notify';
 import 'whatwg-fetch';

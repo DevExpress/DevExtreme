@@ -1,7 +1,7 @@
 <dx-diagram #diagram id="diagram" (onCustomCommand)="onCustomCommand($event)">
     <dxo-context-menu [enabled]="true" [commands]='["bringToFront", "sendToBack", "lock", "unlock"]'>
     </dxo-context-menu>
-    <dxo-context-toolbox [enabled]="true" category="flowchart">
+    <dxo-context-toolbox [enabled]="true" category="flowchart" [width]="200" [shapeIconsPerRow]="5">
     </dxo-context-toolbox>
     <dxo-properties-panel visibility="visible">
         <dxi-tab>
@@ -29,7 +29,7 @@
         <dxi-command name="separator"></dxi-command>
         <dxi-command name="clear" icon="clearsquare" text="Clear Diagram"></dxi-command>
     </dxo-main-toolbar>
-    <dxo-toolbox visibility="visible">
+    <dxo-toolbox visibility="visible" [showSearch]="false" [shapeIconsPerRow]="4" [width]="220">
         <dxi-group category="general" title="General"></dxi-group>
         <dxi-group category="flowchart" title="Flowchart" [expanded]="true"></dxi-group>
     </dxo-toolbox>

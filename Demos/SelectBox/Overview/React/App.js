@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { SelectBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
 import ArrayStore from 'devextreme/data/array_store';
 
 import service from './data.js';

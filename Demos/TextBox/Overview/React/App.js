@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { TextBox } from 'devextreme-react';
+import TextBox from 'devextreme-react/text-box';
 
 class App extends React.Component {
   constructor(props) {

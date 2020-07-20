@@ -76,7 +76,9 @@
 </template>
 <script>
 
-import { DxButton, DxPopup, DxPopover } from 'devextreme-vue';
+import DxButton from 'devextreme-vue/button';
+import DxPopup from 'devextreme-vue/popup';
+import DxPopover from 'devextreme-vue/popover';
 
 import notify from 'devextreme/ui/notify';
 

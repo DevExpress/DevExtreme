@@ -100,7 +100,7 @@
   </div>
 </template>
 <script>
-import { DxDateBox } from 'devextreme-vue';
+import DxDateBox from 'devextreme-vue/date-box';
 
 import service from './data.js';
 

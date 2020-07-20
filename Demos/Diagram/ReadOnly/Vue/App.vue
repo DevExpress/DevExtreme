@@ -3,8 +3,7 @@
     id="diagram"
     ref="diagram"
     :read-only="true"
-  >
-  </DxDiagram>
+  />
 </template>
 <script>
 import { DxDiagram } from 'devextreme-vue/diagram';

@@ -62,7 +62,8 @@ import {
   DxDataGrid,
   DxSelection
 } from 'devextreme-vue/data-grid';
-import { DxButton, DxSelectBox } from 'devextreme-vue';
+import DxButton from 'devextreme-vue/button';
+import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
 function getEmployeeNames(selectedRowsData) {

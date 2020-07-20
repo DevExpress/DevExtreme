@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { TreeView, Sortable } from 'devextreme-react';
+import TreeView from 'devextreme-react/tree-view';
+import Sortable from 'devextreme-react/sortable';
 
 import service from './data.js';
 

@@ -1,4 +1,11 @@
 $(function(){
+    var formatCurrency = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format;
+
     $("#tileview").dxTileView({
         items: homes,
         height: 390,
@@ -6,7 +13,7 @@ $(function(){
         baseItemWidth: 185,
         itemMargin: 10,
         itemTemplate: function (itemData, itemIndex, itemElement) {
-            itemElement.append("<div class=\"price\">" + Globalize.formatCurrency(itemData.Price, "USD", { maximumFractionDigits: 0 }) + 
+            itemElement.append("<div class=\"price\">" + formatCurrency(itemData.Price) + 
                 "</div><div class=\"image\" style=\"background-image: url('" + itemData.ImageSrc + "')\"></div>");
         }
     });

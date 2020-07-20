@@ -39,7 +39,7 @@ class App extends React.Component {
     return (
       <Diagram id="diagram" ref={this.diagramRef} onCustomCommand={this.onCustomCommand}>
         <ContextMenu enabled={true} commands={['bringToFront', 'sendToBack', 'lock', 'unlock']} />
-        <ContextToolbox enabled={true} category="flowchart" />
+        <ContextToolbox enabled={true} category="flowchart" shapeIconsPerRow={5} width={200} />
         <PropertiesPanel visibility="visible">
           <Tab>
             <Group title="Page Properties" commands={['pageSize', 'pageOrientation', 'pageColor']} />
@@ -64,7 +64,7 @@ class App extends React.Component {
           <Command name="separator" />
           <Command name="clear" icon="clearsquare" text="Clear Diagram" />
         </MainToolbar>
-        <Toolbox visibility="visible">
+        <Toolbox visibility="visible" showSearch={false} shapeIconsPerRow={4} width={220}>
           <Group category="general" title="General" />
           <Group category="flowchart" title="Flowchart" expanded={true} />
         </Toolbox>

@@ -7,7 +7,7 @@ import DataGrid, {
   Paging,
   SearchPanel,
 } from 'devextreme-react/data-grid';
-import { CheckBox } from 'devextreme-react';
+import CheckBox from 'devextreme-react/check-box';
 import { customers } from './data.js';
 
 class App extends React.Component {

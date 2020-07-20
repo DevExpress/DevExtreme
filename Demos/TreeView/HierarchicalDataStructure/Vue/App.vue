@@ -17,9 +17,7 @@
   </div>
 </template>
 <script>
-import {
-  DxTreeView
-} from 'devextreme-vue';
+import DxTreeView from 'devextreme-vue/tree-view';
 
 import service from './data.js';
 

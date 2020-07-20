@@ -7,7 +7,8 @@ import DataGrid, {
   Lookup,
   KeyboardNavigation
 } from 'devextreme-react/data-grid';
-import { SelectBox, CheckBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import { employees, states } from './data.js';
 
 class App extends React.Component {

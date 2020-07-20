@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { RangeSlider, NumberBox } from 'devextreme-react';
+import RangeSlider from 'devextreme-react/range-slider';
+import NumberBox from 'devextreme-react/number-box';
 
 class App extends React.Component {
   constructor(props) {

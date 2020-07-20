@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumberBox } from 'devextreme-react';
+import NumberBox from 'devextreme-react/number-box';
 
 class App extends React.Component {
   render() {

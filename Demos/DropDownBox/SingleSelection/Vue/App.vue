@@ -64,7 +64,8 @@
   </div>
 </template>
 <script>
-import { DxDropDownBox, DxTreeView } from 'devextreme-vue';
+import DxDropDownBox from 'devextreme-vue/drop-down-box';
+import DxTreeView from 'devextreme-vue/tree-view';
 import { DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling } from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';

@@ -1,1 +1,1 @@
-If&nbsp;your data is&nbsp;stored in&nbsp;JSON format, the **DataGrid** does not require making a&nbsp;request for data manually. You can simply assign the URL of&nbsp;your JSON data storage to&nbsp;the **dataSource** option, and the **DataGrid** will fetch the data and display&nbsp;it.
+If your data is stored in JSON format, the **DataGrid** does not require making a request for data manually. You can simply assign the URL of your JSON data storage to the **dataSource** option, and the **DataGrid** will fetch the data and display it.

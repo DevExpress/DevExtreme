@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { FileUploader } from 'devextreme-react';
+import FileUploader from 'devextreme-react/file-uploader';
 
 class App extends React.Component {
   constructor(props) {

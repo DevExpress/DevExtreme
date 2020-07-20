@@ -27,7 +27,9 @@
   </div>
 </template>
 <script>
-import { DxTreeView, DxList, DxContextMenu } from 'devextreme-vue';
+import DxTreeView from 'devextreme-vue/tree-view';
+import DxList from 'devextreme-vue/list';
+import DxContextMenu from 'devextreme-vue/context-menu';
 import service from './data.js';
 
 const treeViewRef = 'treeView';

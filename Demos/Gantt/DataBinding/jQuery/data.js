@@ -610,435 +610,315 @@ var tasks = [{
 }];
 
 var dependencies = [{
-    'id': 0,
-    'predecessorId': 1,
-    'successorId': 2,
-    'type': 0
-}, {
-    'id': 1,
-    'predecessorId': 2,
-    'successorId': 3,
-    'type': 0
-}, {
-    'id': 2,
-    'predecessorId': 3,
-    'successorId': 4,
-    'type': 0
-}, {
-    'id': 3,
-    'predecessorId': 4,
-    'successorId': 5,
-    'type': 0
-}, {
-    'id': 4,
-    'predecessorId': 5,
-    'successorId': 6,
-    'type': 0
-}, {
-    'id': 5,
-    'predecessorId': 6,
-    'successorId': 7,
-    'type': 0
-}, {
-    'id': 6,
-    'predecessorId': 7,
-    'successorId': 8,
-    'type': 0
-}, {
-    'id': 7,
-    'predecessorId': 8,
-    'successorId': 9,
-    'type': 0
-}, {
-    'id': 8,
-    'predecessorId': 9,
-    'successorId': 10,
-    'type': 0
-}, {
-    'id': 9,
-    'predecessorId': 10,
-    'successorId': 11,
-    'type': 0
-}, {
-    'id': 10,
-    'predecessorId': 11,
-    'successorId': 12,
-    'type': 0
-}, {
-    'id': 11,
-    'predecessorId': 12,
-    'successorId': 13,
-    'type': 0
-}, {
-    'id': 12,
-    'predecessorId': 13,
-    'successorId': 14,
-    'type': 0
-}, {
-    'id': 13,
-    'predecessorId': 14,
-    'successorId': 15,
-    'type': 0
-}, {
-    'id': 14,
-    'predecessorId': 15,
-    'successorId': 16,
-    'type': 0
-}, {
-    'id': 15,
-    'predecessorId': 16,
-    'successorId': 17,
-    'type': 0
-}, {
-    'id': 16,
-    'predecessorId': 17,
-    'successorId': 18,
-    'type': 0
-}, {
-    'id': 17,
-    'predecessorId': 18,
-    'successorId': 19,
-    'type': 0
-}, {
-    'id': 18,
-    'predecessorId': 19,
-    'successorId': 20,
-    'type': 0
-}, {
-    'id': 19,
-    'predecessorId': 20,
-    'successorId': 21,
-    'type': 0
-}, {
-    'id': 20,
-    'predecessorId': 21,
-    'successorId': 22,
-    'type': 0
-}, {
-    'id': 21,
-    'predecessorId': 22,
-    'successorId': 23,
-    'type': 0
-}, {
-    'id': 22,
-    'predecessorId': 23,
-    'successorId': 24,
-    'type': 0
-}, {
-    'id': 23,
-    'predecessorId': 24,
-    'successorId': 25,
-    'type': 0
-}, {
-    'id': 24,
-    'predecessorId': 25,
-    'successorId': 26,
-    'type': 0
-}, {
-    'id': 25,
-    'predecessorId': 26,
-    'successorId': 27,
-    'type': 0
-}, {
-    'id': 26,
-    'predecessorId': 27,
-    'successorId': 28,
-    'type': 0
-}, {
-    'id': 27,
-    'predecessorId': 28,
-    'successorId': 29,
-    'type': 0
-}, {
-    'id': 28,
-    'predecessorId': 29,
-    'successorId': 30,
-    'type': 0
-}, {
-    'id': 29,
-    'predecessorId': 30,
-    'successorId': 31,
-    'type': 0
-}, {
-    'id': 30,
-    'predecessorId': 31,
-    'successorId': 32,
-    'type': 0
-}, {
-    'id': 31,
-    'predecessorId': 32,
-    'successorId': 33,
-    'type': 0
-}, {
-    'id': 32,
-    'predecessorId': 33,
-    'successorId': 34,
-    'type': 0
-}, {
-    'id': 33,
-    'predecessorId': 34,
-    'successorId': 35,
-    'type': 0
-}, {
-    'id': 34,
-    'predecessorId': 35,
-    'successorId': 36,
-    'type': 0
-}, {
-    'id': 35,
-    'predecessorId': 36,
-    'successorId': 37,
-    'type': 0
-}, {
-    'id': 36,
-    'predecessorId': 37,
-    'successorId': 38,
-    'type': 0
-}, {
-    'id': 37,
-    'predecessorId': 38,
-    'successorId': 39,
-    'type': 0
-}, {
-    'id': 38,
-    'predecessorId': 39,
-    'successorId': 40,
-    'type': 0
-}, {
-    'id': 39,
-    'predecessorId': 40,
-    'successorId': 41,
-    'type': 0
-}, {
-    'id': 40,
-    'predecessorId': 41,
-    'successorId': 42,
-    'type': 0
-}, {
-    'id': 41,
-    'predecessorId': 42,
-    'successorId': 43,
-    'type': 0
-}, {
-    'id': 42,
-    'predecessorId': 43,
-    'successorId': 44,
-    'type': 0
-}, {
-    'id': 43,
-    'predecessorId': 44,
-    'successorId': 45,
-    'type': 0
-}, {
-    'id': 44,
-    'predecessorId': 45,
-    'successorId': 46,
-    'type': 0
-}, {
-    'id': 45,
-    'predecessorId': 46,
-    'successorId': 47,
-    'type': 0
-}, {
-    'id': 46,
-    'predecessorId': 47,
-    'successorId': 48,
-    'type': 0
-}, {
-    'id': 47,
-    'predecessorId': 48,
-    'successorId': 49,
-    'type': 0
-}, {
-    'id': 48,
-    'predecessorId': 49,
-    'successorId': 50,
-    'type': 0
-}, {
-    'id': 49,
-    'predecessorId': 50,
-    'successorId': 51,
-    'type': 0
-}, {
-    'id': 50,
-    'predecessorId': 51,
-    'successorId': 52,
-    'type': 0
-}, {
-    'id': 51,
-    'predecessorId': 52,
-    'successorId': 53,
-    'type': 0
-}, {
-    'id': 52,
-    'predecessorId': 53,
-    'successorId': 54,
-    'type': 0
-}, {
-    'id': 53,
-    'predecessorId': 54,
-    'successorId': 55,
-    'type': 0
-}, {
-    'id': 54,
-    'predecessorId': 55,
-    'successorId': 56,
-    'type': 0
-}, {
-    'id': 55,
-    'predecessorId': 56,
-    'successorId': 57,
-    'type': 0
-}, {
-    'id': 56,
-    'predecessorId': 57,
-    'successorId': 58,
-    'type': 0
-}, {
-    'id': 57,
-    'predecessorId': 58,
-    'successorId': 59,
-    'type': 0
-}, {
-    'id': 58,
-    'predecessorId': 59,
-    'successorId': 60,
-    'type': 0
-}, {
-    'id': 59,
-    'predecessorId': 60,
-    'successorId': 61,
-    'type': 0
-}, {
-    'id': 60,
-    'predecessorId': 61,
-    'successorId': 62,
-    'type': 0
-}, {
-    'id': 61,
-    'predecessorId': 62,
-    'successorId': 63,
-    'type': 0
-}, {
-    'id': 62,
-    'predecessorId': 63,
-    'successorId': 64,
-    'type': 0
-}, {
-    'id': 63,
-    'predecessorId': 64,
-    'successorId': 65,
-    'type': 0
-}, {
-    'id': 64,
-    'predecessorId': 65,
-    'successorId': 66,
-    'type': 0
-}, {
-    'id': 65,
-    'predecessorId': 66,
-    'successorId': 67,
-    'type': 0
-}, {
-    'id': 66,
-    'predecessorId': 67,
-    'successorId': 68,
-    'type': 0
-}, {
-    'id': 67,
-    'predecessorId': 68,
-    'successorId': 69,
-    'type': 0
-}, {
-    'id': 68,
-    'predecessorId': 69,
-    'successorId': 70,
-    'type': 0
-}, {
-    'id': 69,
-    'predecessorId': 70,
-    'successorId': 71,
-    'type': 0
-}, {
-    'id': 70,
-    'predecessorId': 71,
-    'successorId': 72,
-    'type': 0
-}, {
-    'id': 71,
-    'predecessorId': 72,
-    'successorId': 73,
-    'type': 0
-}, {
-    'id': 72,
-    'predecessorId': 73,
-    'successorId': 74,
-    'type': 0
-}, {
-    'id': 73,
-    'predecessorId': 74,
-    'successorId': 75,
-    'type': 0
-}, {
-    'id': 74,
-    'predecessorId': 75,
-    'successorId': 76,
-    'type': 0
-}, {
-    'id': 75,
-    'predecessorId': 76,
-    'successorId': 77,
-    'type': 0
-}, {
-    'id': 76,
-    'predecessorId': 77,
-    'successorId': 78,
-    'type': 0
-}, {
-    'id': 77,
-    'predecessorId': 78,
-    'successorId': 79,
-    'type': 0
-}, {
-    'id': 78,
-    'predecessorId': 79,
-    'successorId': 80,
-    'type': 0
-}, {
-    'id': 79,
-    'predecessorId': 80,
-    'successorId': 81,
-    'type': 0
-}, {
-    'id': 80,
-    'predecessorId': 81,
-    'successorId': 82,
-    'type': 0
-}, {
-    'id': 81,
-    'predecessorId': 82,
-    'successorId': 83,
-    'type': 0
-}, {
-    'id': 82,
-    'predecessorId': 83,
-    'successorId': 84,
-    'type': 0
-}, {
-    'id': 83,
-    'predecessorId': 84,
-    'successorId': 85,
-    'type': 0
-}, {
-    'id': 84,
-    'predecessorId': 85,
-    'successorId': 86,
-    'type': 0
-}, {
-    'id': 85,
-    'predecessorId': 86,
-    'successorId': 87,
-    'type': 0
+    "id": 1,
+    "predecessorId": 3,
+    "successorId": 4,
+    "type": 0
+}, {
+    "id": 2,
+    "predecessorId": 4,
+    "successorId": 5,
+    "type": 0
+}, {
+    "id": 3,
+    "predecessorId": 5,
+    "successorId": 6,
+    "type": 0
+}, {
+    "id": 4,
+    "predecessorId": 6,
+    "successorId": 7,
+    "type": 0
+}, {
+    "id": 5,
+    "predecessorId": 7,
+    "successorId": 9,
+    "type": 0
+}, {
+    "id": 6,
+    "predecessorId": 9,
+    "successorId": 10,
+    "type": 0
+}, {
+    "id": 7,
+    "predecessorId": 10,
+    "successorId": 11,
+    "type": 0
+}, {
+    "id": 8,
+    "predecessorId": 11,
+    "successorId": 12,
+    "type": 0
+}, {
+    "id": 9,
+    "predecessorId": 12,
+    "successorId": 13,
+    "type": 0
+}, {
+    "id": 10,
+    "predecessorId": 13,
+    "successorId": 14,
+    "type": 0
+}, {
+    "id": 11,
+    "predecessorId": 14,
+    "successorId": 15,
+    "type": 0
+}, {
+    "id": 12,
+    "predecessorId": 15,
+    "successorId": 16,
+    "type": 0
+}, {
+    "id": 13,
+    "predecessorId": 16,
+    "successorId": 17,
+    "type": 0
+}, {
+    "id": 14,
+    "predecessorId": 17,
+    "successorId": 19,
+    "type": 0
+}, {
+    "id": 15,
+    "predecessorId": 19,
+    "successorId": 20,
+    "type": 0
+}, {
+    "id": 16,
+    "predecessorId": 20,
+    "successorId": 21,
+    "type": 0
+}, {
+    "id": 17,
+    "predecessorId": 21,
+    "successorId": 22,
+    "type": 0
+}, {
+    "id": 18,
+    "predecessorId": 22,
+    "successorId": 23,
+    "type": 0
+}, {
+    "id": 19,
+    "predecessorId": 23,
+    "successorId": 24,
+    "type": 0
+}, {
+    "id": 20,
+    "predecessorId": 24,
+    "successorId": 25,
+    "type": 0
+}, {
+    "id": 21,
+    "predecessorId": 25,
+    "successorId": 27,
+    "type": 0
+}, {
+    "id": 22,
+    "predecessorId": 27,
+    "successorId": 28,
+    "type": 0
+}, {
+    "id": 23,
+    "predecessorId": 28,
+    "successorId": 29,
+    "type": 0
+}, {
+    "id": 24,
+    "predecessorId": 29,
+    "successorId": 30,
+    "type": 0
+}, {
+    "id": 25,
+    "predecessorId": 31,
+    "successorId": 32,
+    "type": 0
+}, {
+    "id": 26,
+    "predecessorId": 37,
+    "successorId": 38,
+    "type": 0
+}, {
+    "id": 27,
+    "predecessorId": 38,
+    "successorId": 39,
+    "type": 0
+}, {
+    "id": 28,
+    "predecessorId": 39,
+    "successorId": 40,
+    "type": 0
+}, {
+    "id": 29,
+    "predecessorId": 40,
+    "successorId": 41,
+    "type": 0
+}, {
+    "id": 30,
+    "predecessorId": 41,
+    "successorId": 42,
+    "type": 0
+}, {
+    "id": 31,
+    "predecessorId": 42,
+    "successorId": 44,
+    "type": 0
+}, {
+    "id": 32,
+    "predecessorId": 44,
+    "successorId": 45,
+    "type": 0
+}, {
+    "id": 33,
+    "predecessorId": 45,
+    "successorId": 46,
+    "type": 0
+}, {
+    "id": 34,
+    "predecessorId": 46,
+    "successorId": 47,
+    "type": 0
+}, {
+    "id": 35,
+    "predecessorId": 47,
+    "successorId": 48,
+    "type": 0
+}, {
+    "id": 36,
+    "predecessorId": 53,
+    "successorId": 54,
+    "type": 0
+}, {
+    "id": 37,
+    "predecessorId": 54,
+    "successorId": 55,
+    "type": 0
+}, {
+    "id": 38,
+    "predecessorId": 55,
+    "successorId": 56,
+    "type": 0
+}, {
+    "id": 39,
+    "predecessorId": 56,
+    "successorId": 57,
+    "type": 0
+}, {
+    "id": 40,
+    "predecessorId": 59,
+    "successorId": 60,
+    "type": 0
+}, {
+    "id": 41,
+    "predecessorId": 60,
+    "successorId": 61,
+    "type": 0
+}, {
+    "id": 42,
+    "predecessorId": 61,
+    "successorId": 62,
+    "type": 0
+}, {
+    "id": 43,
+    "predecessorId": 63,
+    "successorId": 64,
+    "type": 0
+}, {
+    "id": 44,
+    "predecessorId": 64,
+    "successorId": 65,
+    "type": 0
+}, {
+    "id": 45,
+    "predecessorId": 65,
+    "successorId": 66,
+    "type": 0
+}, {
+    "id": 46,
+    "predecessorId": 66,
+    "successorId": 67,
+    "type": 0
+}, {
+    "id": 47,
+    "predecessorId": 69,
+    "successorId": 70,
+    "type": 0
+}, {
+    "id": 48,
+    "predecessorId": 70,
+    "successorId": 71,
+    "type": 0
+}, {
+    "id": 49,
+    "predecessorId": 71,
+    "successorId": 72,
+    "type": 0
+}, {
+    "id": 50,
+    "predecessorId": 72,
+    "successorId": 73,
+    "type": 0
+}, {
+    "id": 51,
+    "predecessorId": 73,
+    "successorId": 74,
+    "type": 0
+}, {
+    "id": 52,
+    "predecessorId": 74,
+    "successorId": 76,
+    "type": 0
+}, {
+    "id": 53,
+    "predecessorId": 76,
+    "successorId": 77,
+    "type": 0
+}, {
+    "id": 54,
+    "predecessorId": 77,
+    "successorId": 78,
+    "type": 0
+}, {
+    "id": 55,
+    "predecessorId": 78,
+    "successorId": 79,
+    "type": 0
+}, {
+    "id": 56,
+    "predecessorId": 79,
+    "successorId": 80,
+    "type": 0
+}, {
+    "id": 57,
+    "predecessorId": 80,
+    "successorId": 81,
+    "type": 0
+}, {
+    "id": 58,
+    "predecessorId": 81,
+    "successorId": 83,
+    "type": 0
+}, {
+    "id": 59,
+    "predecessorId": 83,
+    "successorId": 84,
+    "type": 0
+}, {
+    "id": 60,
+    "predecessorId": 84,
+    "successorId": 85,
+    "type": 0
+}, {
+    "id": 61,
+    "predecessorId": 85,
+    "successorId": 86,
+    "type": 0
+}, {
+    "id": 62,
+    "predecessorId": 86,
+    "successorId": 87,
+    "type": 0
 }];
 
 var resources = [{

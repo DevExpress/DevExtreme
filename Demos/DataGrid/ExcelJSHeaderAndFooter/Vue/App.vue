@@ -110,8 +110,6 @@ export default {
         footerRow.getCell(1).value = 'www.wikipedia.org';
         footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
         footerRow.getCell(1).alignment = { horizontal: 'right' };
-
-        return Promise.resolve();
       }).then(function() {
         // https://github.com/exceljs/exceljs#writing-xlsx
         workbook.xlsx.writeBuffer().then(function(buffer) {

@@ -11,11 +11,18 @@ $(function(){
       group: "Category.CategoryName",
       filter: [ 'UnitPrice', '>', 15 ],
     });
+
+    var formatCurrency = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+  }).format
   
     $("#list").dxList({
         dataSource: listData,
         itemTemplate: function(data) {
-            var price = Globalize.formatCurrency(data.UnitPrice, "USD", { maximumFractionDigits: 2 });
+            var price = formatCurrency(data.UnitPrice);
             return $("<div>")
               .append($("<div>").text(data.CategoryName))
               .append($("<div>").text(data.ProductName))

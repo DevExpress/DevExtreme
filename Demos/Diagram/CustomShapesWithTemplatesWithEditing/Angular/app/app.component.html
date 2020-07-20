@@ -1,0 +1,101 @@
+<dx-diagram id="diagram" #diagram customShapeTemplate="customShapeTemplate" customShapeToolboxTemplate="customShapeToolboxTemplate">
+    <dxi-custom-shape type="employee"
+                      baseType="rectangle"
+                      category="employee"
+                      [defaultWidth]="1.5"
+                      [defaultHeight]="1"
+                      [toolboxWidth]="2"
+                      [toolboxHeight]="1"
+                      [minWidth]="1.5"
+                      [minHeight]="1"
+                      [maxWidth]="3"
+                      [maxHeight]="2"
+                      [allowEditText]="false">
+    </dxi-custom-shape>
+    <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
+        <text class="template-name" x="50%" y="20%">{{item.dataItem ? item.dataItem.Full_Name : "Employee's Name"}}</text>
+        <text class="template-title" x="50%" y="45%">{{item.dataItem ? item.dataItem.Title : "Employee's Title"}}</text>
+        <text class="template-button" x="40%" y="85%" (click)="editEmployee(item.dataItem)">Edit</text>
+        <text class="template-button" x="62%" y="85%" (click)="deleteEmployee(item.dataItem)">Delete</text>
+    </svg>
+    <svg *dxTemplate="let item of 'customShapeToolboxTemplate'" class="template">
+        <text class="template-name" x="50%" y="40%">New</text>
+        <text class="template-title" x="50%" y="70%">Employee</text>
+    </svg>
+    <dxo-nodes [dataSource]="dataSource" keyExpr="ID" [typeExpr]="itemTypeExpr" [customDataExpr]="itemCustomDataExpr" parentKeyExpr="Head_ID">
+        <dxo-auto-layout type="tree"></dxo-auto-layout>
+    </dxo-nodes>
+    <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="1">
+    </dxo-context-toolbox>
+    <dxo-toolbox [showSearch]="false" [shapeIconsPerRow]="1">
+        <dxi-group category="employee" title="Employee" [expanded]="true"></dxi-group>
+    </dxo-toolbox>
+    <dxo-properties-panel>
+        <dxi-tab>
+            <dxi-group title="Page Properties" [commands]='["pageSize","pageOrientation","pageColor"]'></dxi-group>
+        </dxi-tab>
+    </dxo-properties-panel>
+</dx-diagram>
+
+<dx-popup [width]="400"
+          [height]="480"
+          [showTitle]="true"
+          title="Edit Employee"
+          [dragEnabled]="false"
+          [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">Name</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.Full_Name"></dx-text-box>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Title</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.Title"></dx-text-box>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">City</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.City"></dx-text-box>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">State</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.State"></dx-text-box>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Email</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.Email"></dx-text-box>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Skype</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.Skype"></dx-text-box>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Phone</div>
+                <div class="dx-field-value">
+                    <dx-text-box [(value)]="currentEmployee.Mobile_Phone"></dx-text-box>
+                </div>
+            </div>
+        </div>
+        <div class="dx-fieldset buttons">
+            <dx-button text="Update"
+                       type="default"
+                       (click)="this.updateEmployee()">
+            </dx-button>
+            <dx-button text="Cancel"
+                       (click)="this.cancelEditEmployee()">
+            </dx-button>
+        </div>
+    </div>
+</dx-popup>

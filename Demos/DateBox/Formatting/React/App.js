@@ -1,5 +1,5 @@
 import React from 'react';
-import { DateBox } from 'devextreme-react';
+import DateBox from 'devextreme-react/date-box';
 
 const date = new Date(2018, 9, 16, 15, 8, 12);
 

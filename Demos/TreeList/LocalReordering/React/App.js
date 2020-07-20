@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
-import { CheckBox } from 'devextreme-react';
+import CheckBox from 'devextreme-react/check-box';
 import { employees } from './data.js';
 
 const expandedRowKeys = [1];

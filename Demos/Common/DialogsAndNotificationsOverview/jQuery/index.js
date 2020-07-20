@@ -1,6 +1,13 @@
 $(function(){
     var currentHouse;
-  
+    
+    window.formatCurrency = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format;
+
     var popupOptions = {
         width: 660,
         height: 540,

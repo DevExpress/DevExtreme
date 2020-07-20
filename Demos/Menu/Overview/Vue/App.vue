@@ -54,7 +54,9 @@
   </div>
 </template>
 <script>
-import { DxMenu, DxSelectBox, DxCheckBox } from 'devextreme-vue';
+import DxMenu from 'devextreme-vue/menu';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.js';
 
 export default {

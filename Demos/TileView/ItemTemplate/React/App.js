@@ -1,8 +1,13 @@
 ﻿import React from 'react';
-import { TileView } from 'devextreme-react';
+import TileView from 'devextreme-react/tile-view';
 import { homes } from './data.js';
-import Globalize from 'globalize';
-import 'devextreme/localization/globalize/currency';
+
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +23,7 @@ class App extends React.Component {
 function TileViewItem({ data }) {
   return (
     <div className="dx-tile-content">
-      <div className="price">{Globalize.formatCurrency(data.Price, 'USD', { maximumFractionDigits: 0 })}</div>
+      <div className="price">{currencyFormatter.format(data.Price)}</div>
       <div className="image" style={{ backgroundImage: `url(${data.ImageSrc})` }}></div>
     </div>
   );

@@ -107,7 +107,14 @@
 </template>
 <script>
 
-import { DxSelectBox, DxAutocomplete, DxCheckBox, DxSwitch, DxTextArea, DxTextBox, DxNumberBox, DxTagBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxAutocomplete from 'devextreme-vue/autocomplete';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxSwitch from 'devextreme-vue/switch';
+import DxTextArea from 'devextreme-vue/text-area';
+import DxTextBox from 'devextreme-vue/text-box';
+import DxNumberBox from 'devextreme-vue/number-box';
+import DxTagBox from 'devextreme-vue/tag-box';
 import { europeanUnion } from './data.js';
 
 export default {

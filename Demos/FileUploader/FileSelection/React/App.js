@@ -1,5 +1,7 @@
 ﻿import React from 'react';
-import { FileUploader, Button, TextBox } from 'devextreme-react';
+import FileUploader from 'devextreme-react/file-uploader';
+import Button from 'devextreme-react/button';
+import TextBox from 'devextreme-react/text-box';
 import notify from 'devextreme/ui/notify';
 
 class App extends React.Component {

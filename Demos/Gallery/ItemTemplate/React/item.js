@@ -1,9 +1,12 @@
 import React from 'react';
-import Globalize from 'globalize';
-import 'devextreme/localization/globalize/currency';
 
 function formatPrice(price) {
-  return Globalize.formatCurrency(price, 'USD', { maximumFractionDigits: 0 });
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
 }
 
 export default function Item({ Address, City, State, Price, Image }) {

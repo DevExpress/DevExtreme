@@ -1,5 +1,7 @@
 ﻿import React from 'react';
-import { Menu, SelectBox, CheckBox } from 'devextreme-react';
+import Menu from 'devextreme-react/menu';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import service from './data.js';
 
 class App extends React.Component {

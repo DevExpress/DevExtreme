@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { DxDateBox } from 'devextreme-vue';
+import DxDateBox from 'devextreme-vue/date-box';
 
 export default {
   components: {
@@ -67,3 +67,8 @@ export default {
   }
 };
 </script>
+<style>
+.dx-fieldset {
+  min-height: 500px;
+}
+</style>

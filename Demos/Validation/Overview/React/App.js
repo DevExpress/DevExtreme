@@ -1,5 +1,10 @@
 ﻿import React from 'react';
-import { SelectBox, CheckBox, TextBox, DateBox, Button, ValidationSummary } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
+import TextBox from 'devextreme-react/text-box';
+import DateBox from 'devextreme-react/date-box';
+import Button from 'devextreme-react/button';
+import ValidationSummary from 'devextreme-react/validation-summary';
 import {
   Validator,
   RequiredRule,

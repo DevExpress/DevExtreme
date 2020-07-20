@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { Gallery, CheckBox } from 'devextreme-react';
+import Gallery from 'devextreme-react/gallery';
+import CheckBox from 'devextreme-react/check-box';
 import { gallery } from './data.js';
 
 class App extends React.Component {

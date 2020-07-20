@@ -80,8 +80,8 @@
 </template>
 <script>
 
-import { DxButton, DxTabPanel } from 'devextreme-vue';
-import { DxItem } from 'devextreme-vue/tab-panel';
+import DxButton from 'devextreme-vue/button';
+import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import ExcelJS from 'exceljs';

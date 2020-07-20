@@ -53,7 +53,7 @@ import {
   DxColumn,
   DxDataGrid
 } from 'devextreme-vue/data-grid';
-import { DxSelectBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
 import 'devextreme/data/odata/store';
 
 export default {

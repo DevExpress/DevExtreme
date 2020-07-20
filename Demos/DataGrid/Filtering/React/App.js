@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import DataGrid, { Column, FilterRow, HeaderFilter, SearchPanel } from 'devextreme-react/data-grid';
-import { SelectBox, CheckBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 
 import service from './data.js';
 

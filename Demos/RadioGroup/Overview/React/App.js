@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { RadioGroup } from 'devextreme-react';
+import RadioGroup from 'devextreme-react/radio-group';
 import { priorities, tasks } from './data.js';
 
 class App extends React.Component {

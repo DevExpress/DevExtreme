@@ -31,8 +31,7 @@
   </div>
 </template>
 <script>
-import { DxFilterBuilder } from 'devextreme-vue';
-import { DxCustomOperation } from 'devextreme-vue/filter-builder';
+import DxFilterBuilder, { DxCustomOperation } from 'devextreme-vue/filter-builder';
 import { filter, fields } from './data.js';
 import { formatValue } from './helpers.js';
 import EditorComponent from './EditorComponent.vue';

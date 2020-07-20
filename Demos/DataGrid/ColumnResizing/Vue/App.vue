@@ -28,7 +28,7 @@
 import {
   DxDataGrid,
 } from 'devextreme-vue/data-grid';
-import { DxSelectBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
 
 import orders from './data.js';
 

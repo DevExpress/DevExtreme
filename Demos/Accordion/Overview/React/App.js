@@ -1,5 +1,7 @@
 ﻿import React from 'react';
-import { Accordion, CheckBox, TagBox } from 'devextreme-react';
+import Accordion from 'devextreme-react/accordion';
+import CheckBox from 'devextreme-react/check-box';
+import TagBox from 'devextreme-react/tag-box';
 import Slider, { Tooltip, Label } from 'devextreme-react/slider';
 
 import service from './data.js';

@@ -4,13 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDateBoxModule } from 'devextreme-angular';
 import { Service } from './app.service';
 
-import 'devextreme/localization/globalize/number';
-import 'devextreme/localization/globalize/date';
-import 'devextreme/localization/globalize/currency';
-import 'devextreme/localization/globalize/message';
-
-import Globalize from 'globalize';
-
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();
 }

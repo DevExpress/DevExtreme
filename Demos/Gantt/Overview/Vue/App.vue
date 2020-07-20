@@ -25,7 +25,7 @@
     </DxToolbar>
 
     <DxEditing :enabled="true"/>
-    <DxValidation :autoUpdateParentTasks="true"/>
+    <DxValidation :auto-update-parent-tasks="true"/>
 
     <DxColumn
       :width="300"

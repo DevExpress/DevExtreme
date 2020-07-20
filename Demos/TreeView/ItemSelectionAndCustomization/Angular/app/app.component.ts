@@ -2,7 +2,7 @@ import { NgModule, Component, Pipe, PipeTransform, enableProdMode, ViewChild } f
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxTreeViewModule, dxTreeViewNode, DxListModule, DxTemplateModule, DxCheckBoxModule, DxSelectBoxModule, DxTreeViewComponent } from 'devextreme-angular';
+import { DxTreeViewModule, DxListModule, DxTemplateModule, DxCheckBoxModule, DxSelectBoxModule, DxTreeViewComponent } from 'devextreme-angular';
 
 import { Service, Employee } from './app.service';
 
@@ -28,7 +28,7 @@ export class AppComponent {
     @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
 
     employees: Employee[];
-    selectedEmployees: dxTreeViewNode[] = [];
+    selectedEmployees: Employee[] = [];
 
     showCheckBoxesModes: string[] = ["normal", "selectAll", "none"];
     showCheckBoxesMode: string = this.showCheckBoxesModes[0];
@@ -55,11 +55,7 @@ export class AppComponent {
 
     syncSelection(treeView) {
         const selectedEmployees = treeView.getSelectedNodes()
-            .map((node: dxTreeViewNode) => { return { 
-                fullName: node.itemData.fullName,
-                prefix: node.itemData.prefix,
-                position: node.itemData.position
-            } });
+            .map(node => node.itemData);
         
         this.selectedEmployees = selectedEmployees;
     }

@@ -11,6 +11,8 @@
     <DxContextToolbox
       :enabled="true"
       :category="'flowchart'"
+      :shape-icons-per-row="5"
+      :width="200"
     />
     <DxPropertiesPanel
       :visibility="'visible'"
@@ -79,7 +81,12 @@
         :text="'Clear Diagram'"
       />
     </DxMainToolbar>
-    <DxToolbox :visibility="'visible'">
+    <DxToolbox
+      :visibility="'visible'"
+      :show-search="false"
+      :shape-icons-per-row="4"
+      :width="220"
+    >
       <DxGroup
         :category="'general'"
         :title="'General'"

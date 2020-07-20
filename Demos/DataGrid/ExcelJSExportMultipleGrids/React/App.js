@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Button } from 'devextreme-react';
+import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import ExcelJS from 'exceljs';

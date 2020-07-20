@@ -74,7 +74,8 @@ import {
   DxColumn,
   DxKeyboardNavigation
 } from 'devextreme-vue/tree-list';
-import { DxCheckBox, DxSelectBox } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
 export default {

@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
-import { SelectBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
 
 import deMessages from 'npm:devextreme/localization/messages/de.json!json';
 import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';

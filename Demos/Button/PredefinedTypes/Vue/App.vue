@@ -137,7 +137,7 @@
   </div>
 </template>
 <script>
-import { DxButton } from 'devextreme-vue';
+import DxButton from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
 
 export default {

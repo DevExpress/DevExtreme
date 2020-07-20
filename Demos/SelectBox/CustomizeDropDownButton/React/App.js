@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { SelectBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
 
 import { products, simpleProducts } from './data.js';
 import ImageIcon from './imageIcon.js';

@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { DropDownButton, Toolbar } from 'devextreme-react';
+import DropDownButton from 'devextreme-react/drop-down-button';
+import Toolbar from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
 import service from './data.js';
 import notify from 'devextreme/ui/notify';

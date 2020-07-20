@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { DateBox } from 'devextreme-react';
+import DateBox from 'devextreme-react/date-box';
 
 import service from './data.js';
 

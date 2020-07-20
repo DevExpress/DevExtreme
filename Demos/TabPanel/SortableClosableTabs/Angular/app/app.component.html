@@ -1,40 +1,30 @@
 <div id="container">
     <dx-button
-        [disabled]="isAddButtonDisabled"
+        [disabled]="disableButton()"
         text="Add Tab"
         icon="add"
         type="default"
         (onClick)="addButtonHandler()"
-    ></dx-button>
-    <dx-button
-        [disabled]="isRemoveButtonDisabled"
-        text="Remove Tab"
-        icon="trash"
-        type="danger"
-        stylingMode="outlined"
-        (onClick)="closeButtonHandler(selectedItem)"
     ></dx-button>
 </div>
 <dx-sortable
     filter=".dx-tab"
     [data]="employees"
     itemOrientation="horizontal"
+    dragDirection="horizontal"
     (onDragStart)="onTabDragStart($event)"
     (onReorder)="onTabDrop($event)">
     <dx-tab-panel
         [dataSource]="employees"
-        [height]="472"
+        [height]="410"
         itemTitleTemplate="title"
         itemTemplate="item"
         [deferRendering]="false"
         [showNavButtons]="true"
         [repaintChangesOnly]="true"
-        [animationEnabled]="true"
-        [(selectedItem)]="selectedItem"
-        [(selectedIndex)]="selectedIndex">
+        [selectedIndex]="selectedIndex">
         <div *dxTemplate="let content of 'title'">
-            <span>{{content.FirstName}} {{content.LastName}}</span>
-            <i class="dx-icon dx-icon-close" (click)="closeButtonHandler(content)"></i>
+            <span>{{content.FirstName}} {{content.LastName}}</span><i *ngIf="showCloseButton()" class="dx-icon dx-icon-close" (click)="closeButtonHandler(content)"></i>
         </div>
         <div *dxTemplate="let employee of 'item'">
             <div class="employeeInfo">
@@ -42,18 +32,18 @@
                 <p class="employeeNotes"><b>Position: {{employee.Position}}</b><br/>{{employee.Notes}}</p>
             </div>
             <div class="caption">{{employee.FirstName + " " + employee.LastName + "'s Tasks:"}}</div>
-            <dx-data-grid
-                [dataSource]="getTasks(employee.ID)"
-                [showBorders]="false"
-                [showColumnLines]="false"
-                [rowAlternationEnabled]="true"
-                [columnAutoWidth]="true">
-                    <dxi-column dataField="Subject"></dxi-column>
-                    <dxi-column dataField="StartDate" dataType="date"></dxi-column>
-                    <dxi-column dataField="DueDate" dataType="date"></dxi-column>
-                    <dxi-column dataField="Priority"></dxi-column>
-                    <dxi-column dataType="boolean" caption="Completed" [calculateCellValue]="completedValue"></dxi-column>
-            </dx-data-grid>
+            <div class="task-list">
+                <dx-list
+                    [dataSource]="getTasks(employee.ID)"
+                    [showSelectionControls]="true"
+                    [selectedItems]="getCompletedTasks(employee.ID)"
+                    [disabled]="true"
+                    selectionMode="multiple">
+                    <div *dxTemplate="let item of 'item'">
+                        <div>{{item.Subject}}</div>
+                    </div>
+                </dx-list>
+            </div>
         </div>
     </dx-tab-panel>
 </dx-sortable>

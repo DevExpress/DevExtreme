@@ -4,7 +4,8 @@ import DataGrid, {
   Column,
   Selection
 } from 'devextreme-react/data-grid';
-import { Button, SelectBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
+import Button from 'devextreme-react/button';
 import { employees } from './data.js';
 
 class App extends React.Component {

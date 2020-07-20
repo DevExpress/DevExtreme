@@ -1,5 +1,7 @@
 ﻿import React from 'react';
-import { ActionSheet, Button, Switch } from 'devextreme-react';
+import ActionSheet from 'devextreme-react/action-sheet';
+import Button from 'devextreme-react/button';
+import Switch from 'devextreme-react/switch';
 import { actionSheetItems } from './data.js';
 import notify from 'devextreme/ui/notify';
 

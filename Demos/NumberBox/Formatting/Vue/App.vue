@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import { DxNumberBox } from 'devextreme-vue';
+import DxNumberBox from 'devextreme-vue/number-box';
 
 export default {
   components: {

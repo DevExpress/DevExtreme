@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { Appointment, Resource, Service } from './app.service';
-import { DxSpeedDialActionModule, DxSpeedDialActionComponent } from 'devextreme-angular';
+import { DxSpeedDialActionModule } from 'devextreme-angular';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -18,10 +18,10 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
-    @ViewChild('speedDialAction', { static: false }) speedDialAction: DxSpeedDialActionComponent;
 
     appointments: Appointment[];
     currentDate: Date = new Date(2017, 4, 25);
+    cellDuration: number = 30;
     priorities: Resource[];
 
     constructor(service: Service) {
@@ -30,16 +30,10 @@ export class AppComponent {
     }
 
     showAppointmentPopup(e) {
-        this.scheduler.instance.showAppointmentPopup(this.createAppointmentPopupData());
-    }
-    
-    createAppointmentPopupData() {
-        const currentDate = this.scheduler.instance.option('currentDate');
-        const cellDuration = this.scheduler.instance.option('cellDuration');
-        return {
-            startDate: new Date(currentDate),
-            endDate: new Date(currentDate.setMinutes(cellDuration))
-        };
+        this.scheduler.instance.showAppointmentPopup({
+            startDate: new Date(this.currentDate),
+            endDate: new Date(this.currentDate.setMinutes(this.cellDuration))
+        });
     }
 }
 

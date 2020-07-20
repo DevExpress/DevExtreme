@@ -69,7 +69,10 @@
   </div>
 </template>
 <script>
-import { DxTreeView, DxList, DxSelectBox, DxCheckBox } from 'devextreme-vue';
+import DxTreeView from 'devextreme-vue/tree-view';
+import DxList from 'devextreme-vue/list';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
 
 import { employees } from './data.js';
 
@@ -115,11 +118,7 @@ export default {
 
     syncSelection(treeView) {
       const selectedEmployees = treeView.getSelectedNodes()
-        .map((node) => { return {
-          fullName: node.itemData.fullName,
-          prefix: node.itemData.prefix,
-          position: node.itemData.position
-        }; });
+        .map((node) => node.itemData);
 
       this.selectedEmployees = selectedEmployees;
     },

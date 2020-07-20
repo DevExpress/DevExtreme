@@ -60,7 +60,7 @@
 <script>
 
 import { DxDataGrid, DxColumn, DxEditing, DxFilterRow } from 'devextreme-vue/data-grid';
-import { DxSelectBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
 
 import 'devextreme/localization/globalize/number';
 import 'devextreme/localization/globalize/date';

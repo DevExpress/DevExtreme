@@ -68,7 +68,7 @@
 </template>
 <script>
 
-import { DxColorBox } from 'devextreme-vue';
+import DxColorBox from 'devextreme-vue/color-box';
 
 export default {
   components: {

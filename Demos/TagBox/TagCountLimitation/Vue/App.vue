@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import { DxTagBox } from 'devextreme-vue';
+import DxTagBox from 'devextreme-vue/tag-box';
 import { products } from './data.js';
 
 export default {

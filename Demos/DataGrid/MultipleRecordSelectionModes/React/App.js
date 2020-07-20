@@ -6,7 +6,7 @@ import DataGrid, {
   FilterRow,
   Paging
 } from 'devextreme-react/data-grid';
-import { SelectBox } from 'devextreme-react';
+import { SelectBox } from 'devextreme-react/select-box';
 import { sales } from './data.js';
 
 class App extends React.Component {

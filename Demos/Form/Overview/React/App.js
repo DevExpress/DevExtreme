@@ -1,5 +1,8 @@
 ﻿import React from 'react';
-import { CheckBox, SelectBox, NumberBox, Form } from 'devextreme-react';
+import CheckBox from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+import NumberBox from 'devextreme-react/number-box';
+import Form from 'devextreme-react/form';
 import service from './data.js';
 
 class App extends React.Component {

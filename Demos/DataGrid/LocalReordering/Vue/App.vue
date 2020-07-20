@@ -53,7 +53,7 @@
 </template>
 <script>
 import { DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting } from 'devextreme-vue/data-grid';
-import { DxCheckBox } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
 import { tasks, employees, statuses } from './data.js';
 
 export default {

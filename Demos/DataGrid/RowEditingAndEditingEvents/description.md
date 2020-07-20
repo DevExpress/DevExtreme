@@ -1,1 +1,12 @@
-To&nbsp;help address your specific business needs, the **DataGrid** widget offers different data editing options. In&nbsp;this demo, editing is&nbsp;initiated by&nbsp;pressing the _&laquo;Edit&raquo;_ link within the command button column. Once in&nbsp;edit mode, cell values can be&nbsp;modified by&nbsp;using the appropriate DevExtreme cell editor (for instance, a&nbsp;drop-down calendar is&nbsp;used to&nbsp;edit date values). To&nbsp;enable editing, the **editing**&nbsp;| **mode** field is&nbsp;set to _&quot;row&quot;_. In&nbsp;addition, the **editing**&nbsp;| **allowDeleting** and **editing**&nbsp;| **allowAdding** fields are set to _true_ so&nbsp;end users can add new rows and delete existing rows from the **DataGrid**.
+The **DataGrid** allows users to edit data in multiple modes. This demo shows the *"row"* edit mode. To start editing any row, click *"Edit"* in it. Only one row can be in the edit state at a time.
+
+To enable row edit mode, set the [mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#mode) option to "row" and assign true to the editing object's [allowUpdating](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowUpdating), [allowAdding](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowAdding), and [allowDeleting](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowDeleting) options.
+
+Edit operations raise events that you can handle with the following functions:    
+- [onEditingStart](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onEditingStart)
+- [onInitNewRow](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onInitNewRow)
+- [onRowInserting](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onRowInserting) / [onRowInserted](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onRowInserted)
+- [onRowUpdating](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onRowUpdating) / [onRowUpdated](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onRowUpdated)
+- [onRowRemoving](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onRowRemoving) / [onRowRemoved](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onRowRemoved)
+ 
+This demo shows an event log under the grid.

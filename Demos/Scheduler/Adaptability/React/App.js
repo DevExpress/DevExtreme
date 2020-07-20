@@ -5,17 +5,19 @@ import SpeedDialAction from 'devextreme-react/speed-dial-action';
 
 import { data, priorities } from './data.js';
 
-const currentDate = new Date(2017, 4, 25);
 const views = ['week', 'month'];
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scheduler: null
+      scheduler: null,
+      currentDate: new Date(2017, 4, 25),
+      cellDuration: 30
     };
     this.showAppointmentPopup = this.showAppointmentPopup.bind(this);
     this.onContentReady = this.onContentReady.bind(this);
+    this.onOptionChanged = this.onOptionChanged.bind(this);
   }
 
   render() {
@@ -26,8 +28,10 @@ class App extends React.Component {
           views={views}
           adaptivityEnabled={true}
           onContentReady={this.onContentReady}
+          onOptionChanged={this.onOptionChanged}
           defaultCurrentView="month"
-          defaultCurrentDate={currentDate}
+          currentDate={this.state.currentDate}
+          cellDuration={this.state.cellDuration}
           height={590}
           startDayHour={9}>
           <Resource
@@ -48,17 +52,20 @@ class App extends React.Component {
     this.state.scheduler === null && this.setState({ scheduler: e.component });
   }
 
-  showAppointmentPopup() {
-    this.state.scheduler.showAppointmentPopup(this.createAppointmentPopupData());
+  onOptionChanged(e) {
+    if(e.name === 'currentDate') {
+      this.setState({ currentDate: e.value });
+    }
   }
 
-  createAppointmentPopupData() {
-    const currentDate = this.state.scheduler.option('currentDate');
-    const cellDuration = this.state.scheduler.option('cellDuration');
-    return {
+  showAppointmentPopup() {
+    const currentDate = this.state.currentDate;
+    const cellDuration = this.state.cellDuration;
+
+    this.state.scheduler.showAppointmentPopup({
       startDate: new Date(currentDate),
       endDate: new Date(currentDate.setMinutes(cellDuration))
-    };
+    });
   }
 }
 

@@ -42,7 +42,8 @@
   </div>
 </template>
 <script>
-import { DxCheckBox, DxGallery } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxGallery from 'devextreme-vue/gallery';
 import { gallery } from './data.js';
 
 export default {

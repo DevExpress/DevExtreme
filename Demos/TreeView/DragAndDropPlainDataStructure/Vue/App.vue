@@ -1,7 +1,7 @@
 <template>
   <div class="form">
     <div class="drive-panel">
-      <div class="drive-header dx-treeview-item"><i class="dx-icon dx-icon-activefolder"></i><span>Drive C:</span></div>
+      <div class="drive-header dx-treeview-item"><i class="dx-icon dx-icon-activefolder"/><span>Drive C:</span></div>
       <DxSortable
         filter=".dx-treeview-item"
         group="shared"
@@ -27,7 +27,7 @@
       </DxSortable>
     </div>
     <div class="drive-panel">
-      <div class="drive-header dx-treeview-item"><i class="dx-icon dx-icon-activefolder"></i><span>Drive D:</span></div>
+      <div class="drive-header dx-treeview-item"><i class="dx-icon dx-icon-activefolder"/><span>Drive D:</span></div>
       <DxSortable
         filter=".dx-treeview-item"
         group="shared"
@@ -55,7 +55,8 @@
   </div>
 </template>
 <script>
-import { DxTreeView, DxSortable } from 'devextreme-vue';
+import DxTreeView from 'devextreme-vue/tree-view';
+import DxSortable from 'devextreme-vue/sortable';
 import service from './data.js';
 
 const treeViewDriveCRef = 'treeViewDriveC';

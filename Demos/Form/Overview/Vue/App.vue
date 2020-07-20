@@ -64,7 +64,10 @@
   </div>
 </template>
 <script>
-import { DxCheckBox, DxSelectBox, DxNumberBox, DxForm } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxNumberBox from 'devextreme-vue/number-box';
+import DxForm from 'devextreme-vue/form';
 import service from './data.js';
 
 export default {

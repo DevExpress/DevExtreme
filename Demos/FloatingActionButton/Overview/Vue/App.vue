@@ -83,7 +83,8 @@ import {
   DxTexts
 } from 'devextreme-vue/data-grid';
 
-import { DxSpeedDialAction, DxSelectBox } from 'devextreme-vue';
+import DxSpeedDialAction from 'devextreme-vue/speed-dial-action';
+import DxSelectBox from 'devextreme-vue/select-box';
 import { employees, states, directions } from './data.js';
 
 export default {

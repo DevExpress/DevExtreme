@@ -3,20 +3,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDateBoxModule } from 'devextreme-angular';
 
-import 'devextreme/localization/globalize/number';
-import 'devextreme/localization/globalize/date';
-import 'devextreme/localization/globalize/currency';
-import 'devextreme/localization/globalize/message';
-
-import Globalize from 'globalize';
-
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();
 }
 
 @Component({
     selector: 'demo-app',
-    templateUrl: 'app/app.component.html'
+    templateUrl: 'app/app.component.html',
+    styleUrls: ['app/app.component.css']
 })
 
 export class AppComponent {

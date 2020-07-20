@@ -5,7 +5,7 @@
   />
 </template>
 <script>
-import { DxDiagram } from 'devextreme-vue';
+import DxDiagram from 'devextreme-vue/diagram';
 import 'whatwg-fetch';
 
 export default {

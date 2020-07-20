@@ -80,7 +80,7 @@
   </div>
 </template>
 <script>
-import { DxTextBox } from 'devextreme-vue';
+import DxTextBox from 'devextreme-vue/text-box';
 
 export default {
   components: {

@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { TreeView } from 'devextreme-react';
+import TreeView from 'devextreme-react/tree-view';
 
 import service from './data.js';
 

@@ -4,30 +4,17 @@
     padding-bottom: 10px;
 }
 
-#container .dx-button-danger {
-    margin-left: 4px;
-}
-
 .dx-tabs-wrapper .dx-tab {
     width: auto;
     padding-left: 20px;
 }
 
 .dx-tab-content .dx-icon-close {
-    opacity: 0.6;
-    font-size: 15px;
-    margin-right: 0;
-    margin-left: 3px;
-}
-
-.dx-theme-material .dx-tab-content .dx-icon-close {
     display: inline-block;
+    opacity: 0.6;
+    margin-right: 0;
+    margin-left: 7px;
     font-size: 18px;
-}
-
-.dx-theme-material .dx-tab-content span {
-    vertical-align: middle;
-    line-height: initial;
 }
 
 .dx-sortable-dragging .dx-tab {
@@ -38,13 +25,25 @@
 .employeeInfo .employeePhoto {
     height: 100px;
     float: left;
-    padding: 10px 10px 10px 20px;
+    padding: 10px 20px 10px 20px;
 }
 
 .caption {
-    padding: 0 0 5px 10px;
+    padding: 0px 0px 10px 30px;
     font-size: 14px;
     font-weight: bold;
+}
+
+.task-list {
+    padding: 0px 20px;
+}
+
+.task-list.dx-state-disabled {
+    opacity: 1;
+}
+
+.task-list.dx-state-disabled .dx-list-item {
+    opacity: 1;
 }
 
 .employeeInfo .employeeNotes {
@@ -53,6 +52,21 @@
     text-align: justify;
     white-space: normal;
 }
+
+.dx-theme-generic .dx-tabs-wrapper .dx-tab {
+    padding-left: 14px;
+    padding-right: 9px;
+    line-height: 1.618;
+}
+
+.dx-theme-generic .dx-icon-close {
+    font-size: 15px;
+}
+
+.dx-theme-material .dx-tab-content span {
+    vertical-align: middle;
+    line-height: initial;
+} 
 
 .dx-theme-material .employeeNotes {
     margin: 0;

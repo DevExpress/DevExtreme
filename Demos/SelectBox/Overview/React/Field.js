@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextBox } from 'devextreme-react';
+import TextBox from 'devextreme-react/text-box';
 
 export default function Field(data) {
   return (

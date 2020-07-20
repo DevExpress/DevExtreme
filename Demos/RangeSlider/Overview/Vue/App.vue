@@ -109,7 +109,8 @@
   </div>
 </template>
 <script>
-import { DxRangeSlider, DxNumberBox } from 'devextreme-vue';
+import DxRangeSlider from 'devextreme-vue/range-slider';
+import DxNumberBox from 'devextreme-vue/number-box';
 
 const format = value => `${value}%`;
 

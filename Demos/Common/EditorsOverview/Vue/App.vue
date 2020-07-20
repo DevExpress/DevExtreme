@@ -81,7 +81,11 @@
 </template>
 <script>
 
-import { DxTextBox, DxColorBox, DxNumberBox, DxSwitch, DxSelectBox } from 'devextreme-vue';
+import DxTextBox from 'devextreme-vue/text-box';
+import DxColorBox from 'devextreme-vue/color-box';
+import DxNumberBox from 'devextreme-vue/number-box';
+import DxSwitch from 'devextreme-vue/switch';
+import DxSelectBox from 'devextreme-vue/select-box';
 
 import SuperheroLogo from './SuperheroLogo.vue';
 

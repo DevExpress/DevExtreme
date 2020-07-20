@@ -91,7 +91,8 @@ import {
   DxSearchPanel,
   DxFilterRow
 } from 'devextreme-vue/data-grid';
-import { DxSelectBox, DxCheckBox } from 'devextreme-vue';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxCheckBox from 'devextreme-vue/check-box';
 
 import service from './data.js';
 

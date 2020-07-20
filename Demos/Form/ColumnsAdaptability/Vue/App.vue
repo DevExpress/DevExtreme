@@ -21,7 +21,8 @@
   </div>
 </template>
 <script>
-import { DxCheckBox, DxForm } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxForm from 'devextreme-vue/form';
 import employee from './data.js';
 
 export default {

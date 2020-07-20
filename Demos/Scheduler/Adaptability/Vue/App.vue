@@ -2,7 +2,8 @@
   <div>
     <DxScheduler
       :data-source="dataSource"
-      :current-date="currentDate"
+      :current-date.sync="currentDate"
+      :cell-duration="cellDuration"
       :views="views"
       :height="590"
       :start-day-hour="9"
@@ -39,6 +40,7 @@ export default {
     return {
       views: ['week', 'month'],
       currentDate: new Date(2017, 4, 25),
+      cellDuration: 30,
       dataSource: data,
       priorities: priorities,
       scheduler: null
@@ -50,14 +52,12 @@ export default {
     },
 
     showPopup: function() {
-      const currentDate = this.scheduler.option('currentDate');
-      const cellDuration = this.scheduler.option('cellDuration');
-      const data = {
-        startDate: new Date(currentDate),
-        endDate: new Date(currentDate.setMinutes(cellDuration))
+      const appointment = {
+        startDate: new Date(this.currentDate),
+        endDate: new Date(this.currentDate.setMinutes(this.cellDuration))
       };
 
-      this.scheduler.showAppointmentPopup(data);
+      this.scheduler.showAppointmentPopup(appointment);
     }
   }
 };

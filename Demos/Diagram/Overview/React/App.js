@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Diagram } from 'devextreme-react';
+import Diagram from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
 class App extends React.Component {

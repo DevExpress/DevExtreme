@@ -1,9 +1,7 @@
 ﻿import React from 'react';
-import {
-  CheckBox,
-  SelectBox,
-  TextArea
-} from 'devextreme-react';
+import CheckBox from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+import TextArea from 'devextreme-react/text-area';
 
 import service from './data.js';
 

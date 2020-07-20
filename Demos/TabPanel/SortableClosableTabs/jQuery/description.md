@@ -1,21 +1,24 @@
-This demo shows how to allow users to reorder, add, and remove tabs in a [TabPanel](/Documentation/ApiReference/UI_Widgets/dxTabPanel/) widget.     
+This demo illustrates how you can allow end-users to reorder, add, and remove tabs within the DevExtreme [TabPanel](/Documentation/ApiReference/UI_Widgets/dxTabPanel/) widget.     
 
-**Reorder items**       
-Link the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) widget to the **TabPanel** and set the following options:       
+**Reorder Items**
+Wrap the **TabPanel** into the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) widget and set the following options as needed:
 
-- [filter](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#filter)     
-Specify a CSS selector to indicate draggable items. This demo sets the filter to `.dx-tab`.
+- [filter](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#filter)
+Specify a CSS selector to indicate draggable items. This demo sets filter to `.dx-tab`.
 
-- [itemOrientation](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#itemOrientation)       
-Set this options to *"horizontal"*. When a user drags a tab, the remaining items move left and right to indicate the drop target.
+- [itemOrientation](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#itemOrientation)
+Set this options to *"horizontal."* When a user drags a tab, remaining items move left and right to designate the drop target.
 
-- [onReorder](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#onReorder)       
-Implement this handler to synchronize the dataSource with the reordered tabs.
+- [onReorder](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#onReorder)
+Implement this handler to synchronize the dataSource with reordered tabs.
 
-- [moveItemOnDrop](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#moveItemOnDrop)           
-Set this option to **true** to update the markup after a tab is dropped.
+- [moveItemOnDrop](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#moveItemOnDrop)
+Set this option to **true** to update markup after a tab is dropped.
 
-**Add or remove tabs**      
-In this demo, you can use two external buttons to add and remove tabs. These buttons call the `addButtonHandler` and `closeButtonHandler` functions that modify the **TabPanel**'s [dataSource](/Documentation/ApiReference/UI_Widgets/dxTabPanel/Configuration/#dataSource).       
+**Add or remove tabs**
+This demo adds and removes tabs in the following two functions:
 
-You can also click a tab's Close icon to remove this tab. This icon is added via the [itemTitleTemplate](/Documentation/ApiReference/UI_Widgets/dxTabPanel/Configuration/#itemTitleTemplate) option. A click on this icon calls the `closeButtonHandler` function.
+- `addButtonHandler` - a click handler for the *"Add Tab"* button.
+- `closeButtonHandler` - a click handler for a tab's Close icon. The demo uses the [itemTitleTemplate](/Documentation/ApiReference/UI_Widgets/dxTabPanel/Configuration/#itemTitleTemplate) option to display this icon.
+
+Both handlers modify the **TabPanel**'s [dataSource](/Documentation/ApiReference/UI_Widgets/dxTabPanel/Configuration/#dataSource).

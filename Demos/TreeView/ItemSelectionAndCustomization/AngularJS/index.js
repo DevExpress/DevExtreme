@@ -19,11 +19,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     function syncSelection(treeView){
         var selectedEmployees = treeView.getSelectedNodes()
-            .map(function(node) { return { 
-                fullName: node.itemData.fullName,
-                prefix: node.itemData.prefix,
-                position: node.itemData.position
-            } });
+            .map(function(node) { return node.itemData; });
 
         $scope.selectedEmployees = selectedEmployees;
     }    

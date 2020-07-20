@@ -1,5 +1,5 @@
 import React from 'react';
-import { TagBox } from 'devextreme-react';
+import TagBox from 'devextreme-react/tag-box';
 import { categories } from './data.js';
 
 export class EditorComponent extends React.Component {

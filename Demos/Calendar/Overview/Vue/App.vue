@@ -82,7 +82,10 @@
   </div>
 </template>
 <script>
-import { DxCheckBox, DxSelectBox, DxDateBox, DxCalendar } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxDateBox from 'devextreme-vue/date-box';
+import DxCalendar from 'devextreme-vue/calendar';
 
 export default {
   components: {

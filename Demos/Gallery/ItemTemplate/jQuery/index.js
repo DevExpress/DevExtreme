@@ -1,4 +1,11 @@
 $(function(){
+    var formatCurrency = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format;
+
     $("#gallery").dxGallery({
         dataSource: gallery,
         height: 440,
@@ -8,7 +15,7 @@ $(function(){
         itemTemplate: function (item, index) {
             var result = $("<div>");
             $("<img>").attr("src", item.Image).appendTo(result);
-            $("<div>").addClass("item-price").text(Globalize.formatCurrency(item.Price, "USD", { maximumFractionDigits: 0 })).appendTo(result);
+            $("<div>").addClass("item-price").text(formatCurrency(item.Price, "USD")).appendTo(result);
             $("<div>").addClass("item-address").text(item.Address + ", " + item.City + ", " + item.State).appendTo(result);
             return result;
         }

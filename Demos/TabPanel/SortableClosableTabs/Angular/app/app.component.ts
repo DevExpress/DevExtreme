@@ -4,10 +4,8 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxButtonModule, DxSortableModule, DxTabPanelModule, DxDataGridModule, DxTemplateModule } from 'devextreme-angular';
+import { DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule, DxTemplateModule } from 'devextreme-angular';
 import { Employee, Service, Task } from './app.service';
-import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store';
 
 if(!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,20 +22,14 @@ if(!/localhost/.test(document.location.host)) {
 export class AppComponent {
   allEmployees: Employee[];
   employees: Employee[];
-  selectedItem: Employee;
   selectedIndex: number;
-  isAddButtonDisabled: boolean;
-  isRemoveButtonDisabled: boolean;
   tasks: Task[];
   tasksDataSourceStorage: any;
 
   constructor(private service: Service) {
     this.allEmployees = service.getEmployees();
     this.employees = service.getEmployees().slice(0, 3);
-    this.selectedItem = this.employees[0];
     this.selectedIndex = 0;
-    this.isAddButtonDisabled = false;
-    this.isRemoveButtonDisabled = false;
     this.tasks = service.getTasks();
     this.tasksDataSourceStorage = [];
   }
@@ -54,47 +46,40 @@ export class AppComponent {
   addButtonHandler() {
     const newItem = this.allEmployees.filter(employee => this.employees.indexOf(employee) === -1)[0];
 
+    this.selectedIndex = this.employees.length;
     this.employees.push(newItem);
-    this.selectedItem = newItem;
-
-    this.updateButtonsAppearance();
   }
 
   closeButtonHandler(itemData) {
-    if(!itemData) return;
     const index = this.employees.indexOf(itemData);
 
     this.employees.splice(index, 1);
     if(index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
-
-    this.updateButtonsAppearance();
   }
 
-  updateButtonsAppearance() {
-    this.isAddButtonDisabled = this.employees.length === this.allEmployees.length;
-    this.isRemoveButtonDisabled = this.employees.length === 0;
+  showCloseButton() {
+    return this.employees.length > 1;
   }
 
-  completedValue(rowData) {
-    return rowData.Status == "Completed";
+  disableButton() {
+    return this.employees.length === this.allEmployees.length;
   }
 
-  getTasks(key) {
-    let item = this.tasksDataSourceStorage.find((i) => i.key === key);
+  getTasks(id) {
+    let item = this.tasksDataSourceStorage.find(i => i.key === id);
     if (!item) {
       item = {
-        key: key,
-        dataSourceInstance: new DataSource({
-          store: new ArrayStore({
-            data: this.tasks,
-            key: "ID"
-          }),
-          filter: ["EmployeeID", "=", key]
-        })
+        key: id,
+        dataSourceInstance: this.tasks.filter(task => task.EmployeeID === id)
       };
       this.tasksDataSourceStorage.push(item)
     }
+
     return item.dataSourceInstance;
+  }
+
+  getCompletedTasks(id) {
+    return this.tasks.filter(task => task.EmployeeID === id).filter(task => task.Status === 'Completed');
   }
 }
 
@@ -104,7 +89,7 @@ export class AppComponent {
     DxButtonModule,
     DxSortableModule,
     DxTabPanelModule,
-    DxDataGridModule,
+    DxListModule,
     DxTemplateModule
   ],
   declarations: [AppComponent],

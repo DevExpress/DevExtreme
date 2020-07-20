@@ -34,7 +34,7 @@
 </template>
 <script>
 import { customers } from './data.js';
-import { DxCheckBox } from 'devextreme-vue';
+import DxCheckBox from 'devextreme-vue/check-box';
 import {
   DxDataGrid,
   DxColumn,

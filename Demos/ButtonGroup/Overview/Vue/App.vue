@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { DxButtonGroup } from 'devextreme-vue';
+import DxButtonGroup from 'devextreme-vue/button-group';
 import { alignments, fontStyles } from './data.js';
 import notify from 'devextreme/ui/notify';
 

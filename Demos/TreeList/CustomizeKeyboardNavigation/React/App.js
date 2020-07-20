@@ -5,7 +5,8 @@ import TreeList, {
   Editing,
   KeyboardNavigation
 } from 'devextreme-react/tree-list';
-import { SelectBox, CheckBox } from 'devextreme-react';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import { employees } from './data.js';
 
 const expandedRowKeys = [1, 2, 4, 5];

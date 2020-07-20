@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { DxTagBox } from 'devextreme-vue';
+import DxTagBox from 'devextreme-vue/tag-box';
 import { categories } from './data.js';
 
 export default {

@@ -79,7 +79,8 @@
 </template>
 <script>
 
-import { DxTabPanel, DxTreeView } from 'devextreme-vue';
+import DxTabPanel from 'devextreme-vue/tab-panel';
+import DxTreeView from 'devextreme-vue/tree-view';
 import { continents } from './data.js';
 export default {
   components: {

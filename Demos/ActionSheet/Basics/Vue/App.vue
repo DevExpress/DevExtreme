@@ -30,7 +30,9 @@
   </div>
 </template>
 <script>
-import { DxActionSheet, DxButton, DxSwitch } from 'devextreme-vue';
+import DxActionSheet from 'devextreme-vue/action-sheet';
+import DxSwitch from 'devextreme-vue/switch';
+import DxButton from 'devextreme-vue/button';
 import { actionSheetItems } from './data.js';
 import notify from 'devextreme/ui/notify';
 
