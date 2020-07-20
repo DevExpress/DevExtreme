@@ -15,11 +15,11 @@
 }
 
 @mixin autocomplete-badge-offset() {
-  right: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+  right: $generic-invalid-badge-horizontal-padding;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    left: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+    left: $generic-invalid-badge-horizontal-padding;
   }
 }
 

@@ -4,7 +4,7 @@
 // adduse
 
 
-$LIST_SEARCHBOX_MARGIN_BOTTOM: 5px;
+$list-searchbox-margin-bottom: 5px;
 
 .dx-list {
   margin: 0;
@@ -315,7 +315,7 @@ $LIST_SEARCHBOX_MARGIN_BOTTOM: 5px;
 }
 
 .dx-list-search {
-  margin-bottom: $LIST_SEARCHBOX_MARGIN_BOTTOM;
+  margin-bottom: $list-searchbox-margin-bottom;
 }
 
 .dx-rtl .dx-list,

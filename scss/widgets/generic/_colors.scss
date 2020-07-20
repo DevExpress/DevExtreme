@@ -2,7 +2,7 @@
 @use "./color" as extcolor;
 $color: null !default;
 
-$GENERIC_COLOR_POSTFIX: null !default;
+$generic-color-postfix: null !default;
 $base-font-family: null !default;
 $base-accent: null !default;
 $base-label-color: null !default;
@@ -37,10 +37,10 @@ $base-invalid-faded-border-color: null !default;
 $base-header-color: null !default;
 $base-border-radius-small: null !default;
 $base-border-radius-large: null !default;
-$SCROLLVIEW_PULLDOWN_PATH: null !default;
-$LOADINDICATOR_IMAGE_PATH: null !default;
-$LOADINDICATOR_IMAGE_SMALL_PATH: null !default;
-$LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
+$scrollview-pulldown-path: null !default;
+$loadindicator-image-path: null !default;
+$loadindicator-image-small-path: null !default;
+$loadindicator-image-large-path: null !default;
 $base-default: null !default;
 $base-info: null !default;
 $screen-text-color: null !default;
@@ -53,7 +53,7 @@ $base-grid-selection-background: null !default;
 $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "carmine" {
-  $GENERIC_COLOR_POSTFIX: ".carmine" !default;
+  $generic-color-postfix: ".carmine" !default;
 
   /**
     * $name 10. Font family
@@ -186,14 +186,14 @@ $base-grid-selectedrow-border-color: null !default;
     */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/carmine/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/carmine/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/carmine/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/carmine/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/carmine/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/carmine/loader64.gif') !default;
 }
 
 @if $color == "contrast" {
-  $GENERIC_COLOR_POSTFIX: ".contrast" !default;
+  $generic-color-postfix: ".contrast" !default;
 
   /**
     * $name 1. Font family
@@ -262,14 +262,14 @@ $base-grid-selectedrow-border-color: null !default;
   $base-label-color: $base-text-color !default;
   $base-dropdown-shadow-color: $base-shadow-color !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/contrast/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/contrast/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/contrast/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/contrast/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/contrast/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/contrast/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/contrast/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/contrast/loader64.gif') !default;
 }
 
 @if $color == "dark" {
-  $GENERIC_COLOR_POSTFIX: ".dark" !default;
+  $generic-color-postfix: ".dark" !default;
 
   /**
     * $name 10. Font family
@@ -400,14 +400,14 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/dark/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/dark/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/dark/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/dark/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkmoon" {
-  $GENERIC_COLOR_POSTFIX: ".darkmoon" !default;
+  $generic-color-postfix: ".darkmoon" !default;
 
   /**
     * $name 10. Font family
@@ -543,14 +543,14 @@ $base-grid-selectedrow-border-color: null !default;
   $screen-text-color: extcolor.screen($base-bg, #686868) !default;
   $base-grid-selected-border-color: #45c7de !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkmoon/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader64.gif') !default;
 }
 
 @if $color == "darkviolet" {
-  $GENERIC_COLOR_POSTFIX: ".darkviolet" !default;
+  $generic-color-postfix: ".darkviolet" !default;
 
   /**
     * $name 1. Font family
@@ -684,14 +684,14 @@ $base-grid-selectedrow-border-color: null !default;
     */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader64.gif') !default;
 }
 
 @if $color == "greenmist" {
-  $GENERIC_COLOR_POSTFIX: ".greenmist" !default;
+  $generic-color-postfix: ".greenmist" !default;
 
   /**
     * $name 10. Font family
@@ -823,14 +823,14 @@ $base-grid-selectedrow-border-color: null !default;
     */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader64.gif') !default;
 }
 
 @if $color == "light" {
-  $GENERIC_COLOR_POSTFIX: ".light" !default;
+  $generic-color-postfix: ".light" !default;
 
   /**
     * $name 10. Font family
@@ -962,14 +962,14 @@ $base-grid-selectedrow-border-color: null !default;
     */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/light/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/light/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/light/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/light/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "softblue" {
-  $GENERIC_COLOR_POSTFIX: ".softblue" !default;
+  $generic-color-postfix: ".softblue" !default;
 
   /**
     * $name 1. Font family
@@ -1107,9 +1107,9 @@ $base-grid-selectedrow-border-color: null !default;
     */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/softblue/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/softblue/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/softblue/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/softblue/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/softblue/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/softblue/loader64.gif') !default;
 }
 

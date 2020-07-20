@@ -2,18 +2,18 @@
 
 // adduse
 
-$GENERIC_BUTTON_HORIZONTAL_PADDING: null !default;
-$GENERIC_BUTTON_ICON_HORIZONTAL_PADDING: null !default;
-$GENERIC_BUTTON_BOX_SHADOW_SIZE: null !default;
+$generic-button-horizontal-padding: null !default;
+$generic-button-icon-horizontal-padding: null !default;
+$generic-button-box-shadow-size: null !default;
 
 @if $size == "default" {
-  $GENERIC_BUTTON_HORIZONTAL_PADDING: 18px;
-  $GENERIC_BUTTON_ICON_HORIZONTAL_PADDING: 8px;
-  $GENERIC_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
+  $generic-button-horizontal-padding: 18px;
+  $generic-button-icon-horizontal-padding: 8px;
+  $generic-button-box-shadow-size: 0 1px 3px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_BUTTON_HORIZONTAL_PADDING: 10px;
-  $GENERIC_BUTTON_ICON_HORIZONTAL_PADDING: 5px;
-  $GENERIC_BUTTON_BOX_SHADOW_SIZE: 0 1px 2px;
+  $generic-button-horizontal-padding: 10px;
+  $generic-button-icon-horizontal-padding: 5px;
+  $generic-button-box-shadow-size: 0 1px 2px;
 }

@@ -10,22 +10,22 @@
 @use "../overlay";
 
 
-$MATERIAL_MAIN_FA_BUTTON_SIZE: 56px;
-$MATERIAL_MAIN_FA_BUTTON_LABEL_PADDING: 0 20px 0 12px;
-$MATERIAL_FA_BUTTON_SIZE: 40px;
-$MATERIAL_FA_BUTTON_LABEL_OFFSET: 16px;
-$MATERIAL_FA_BUTTON_LABEL_HEIGHT: 32px;
-$MATERIAL_FA_BUTTON_LABEL_PADDING: 0 12px;
+$material-main-fa-button-size: 56px;
+$material-main-fa-button-label-padding: 0 20px 0 12px;
+$material-fa-button-size: 40px;
+$material-fa-button-label-offset: 16px;
+$material-fa-button-label-height: 32px;
+$material-fa-button-label-padding: 0 12px;
 
 
 @include dx-fa-button-mixin(
-  $MATERIAL_MAIN_FA_BUTTON_SIZE,
-  $MATERIAL_FA_BUTTON_SIZE,
-  $MATERIAL_BASE_ICON_SIZE,
-  $MATERIAL_BASE_FONT_SIZE,
-  $MATERIAL_FA_BUTTON_LABEL_HEIGHT,
-  $MATERIAL_FA_BUTTON_LABEL_PADDING,
-  $MATERIAL_FA_BUTTON_LABEL_OFFSET,
+  $material-main-fa-button-size,
+  $material-fa-button-size,
+  $material-base-icon-size,
+  $material-base-font-size,
+  $material-fa-button-label-height,
+  $material-fa-button-label-padding,
+  $material-fa-button-label-offset,
   $speed-dial-action-color,
   $speed-dial-action-bg,
   $speed-dial-action-shadow,
@@ -41,8 +41,8 @@ $MATERIAL_FA_BUTTON_LABEL_PADDING: 0 12px;
   &.dx-fa-button-main {
     .dx-overlay-content {
       .dx-fa-button-label {
-        padding: $MATERIAL_MAIN_FA_BUTTON_LABEL_PADDING;
-        font-size: $MATERIAL_BASE_FONT_SIZE;
+        padding: $material-main-fa-button-label-padding;
+        font-size: $material-base-font-size;
         text-transform: uppercase;
         letter-spacing: 1.25px;
         font-weight: 500;

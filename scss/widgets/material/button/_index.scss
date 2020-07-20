@@ -8,20 +8,20 @@
 // adduse
 
 
-$MATERIAL_BUTTON_PADDING: $MATERIAL_BUTTON_VERTICAL_PADDING $MATERIAL_BUTTON_HORIZONTAL_PADDING;
-$MATERIAL_BUTTON_ICONONLY_PADDING: $MATERIAL_BUTTON_VERTICAL_PADDING;
-$MATERIAL_BUTTON_ICON_SIZE: $MATERIAL_BASE_ICON_SIZE;
-$MATERIAL_NORMAL_BUTTON_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $button-shadow-color;
-$MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW: $MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE $button-active-shadow-color;
-$MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $button-hover-shadow-color;
-$MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $button-focused-shadow-color;
+$material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
+$material-button-icononly-padding: $material-button-vertical-padding;
+$material-button-icon-size: $material-base-icon-size;
+$material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
+$material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
+$material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
+$material-normal-button-focused-state-shadow: $material-button-box-shadow-size $button-focused-shadow-color;
 
 .dx-button-content {
   line-height: 0;
 }
 
 .dx-button-text {
-  line-height: $MATERIAL_BUTTON_HEIGHT - 2 * $MATERIAL_BUTTON_VERTICAL_PADDING - 1;
+  line-height: $material-button-height - 2 * $material-button-vertical-padding - 1;
   text-transform: uppercase;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -31,29 +31,29 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
   text-decoration: none;
 }
 
-@mixin dx-button-sizing($PADDING, $ICON_SIZE, $ICON_MARGIN) {
+@mixin dx-button-sizing($-p-a-d-d-i-n-g, $icon-size, $icon-margin) {
   .dx-button-content {
-    padding: $PADDING;
+    padding: $-p-a-d-d-i-n-g;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($ICON_SIZE);
-    @include dx-icon-margin($ICON_MARGIN);
+    @include dx-icon-sizing($icon-size);
+    @include dx-icon-margin($icon-margin);
   }
 }
 
 @mixin dx-button-onlyicon-sizing() {
-  min-width: $MATERIAL_BUTTON_HEIGHT;
+  min-width: $material-button-height;
 
-  @include dx-button-sizing($MATERIAL_BUTTON_ICONONLY_PADDING, $MATERIAL_BUTTON_ICON_SIZE, 0);
+  @include dx-button-sizing($material-button-icononly-padding, $material-button-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($MATERIAL_BUTTON_PADDING, $MATERIAL_BUTTON_ICON_SIZE - 6, $MATERIAL_BUTTON_ICON_SIZE / 2);
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, $material-button-icon-size / 2);
 }
 
 @mixin dx-button-text-and-icon-sizing() {
-  @include dx-button-sizing($MATERIAL_BUTTON_PADDING, $MATERIAL_BUTTON_ICON_SIZE - 6, 8px);
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, 8px);
 }
 
 .dx-button {
@@ -65,7 +65,7 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
 }
 
 .dx-button-has-text {
-  min-width: $MATERIAL_BUTTON_MIN_WIDTH;
+  min-width: $material-button-min-width;
 
   @include dx-button-withtext-sizing();
 }
@@ -141,13 +141,13 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
   @include dx-button-styling-variant(
     $button-bg,
     $button-color,
-    $MATERIAL_NORMAL_BUTTON_SHADOW,
+    $material-normal-button-shadow,
     $button-hover-bg,
-    $MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW,
+    $material-normal-button-hovered-state-shadow,
     $button-focused-bg,
-    $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW,
+    $material-normal-button-focused-state-shadow,
     $button-active-bg,
-    $MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW,
+    $material-normal-button-active-state-shadow,
     $button-disabled-background,
     $button-icon-color
   );
@@ -194,7 +194,7 @@ $MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: $MATERIAL_BUTTON_BOX_SHADOW_SIZE $
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
-  height: $MATERIAL_BUTTON_HEIGHT;
+  height: $material-button-height;
   position: relative;
   overflow: hidden;
 

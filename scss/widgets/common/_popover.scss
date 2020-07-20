@@ -4,29 +4,29 @@
 
 
 @mixin dx-popover-arrow-size($width) {
-  $SQRT_2: 1.4142;
-  $POPOVER_ARROW_WIDTH: $width;
-  $POPOVER_ARROW_HEIHT: $POPOVER_ARROW_WIDTH / 2;
+  $sqrt-2: 1.4142;
+  $popover-arrow-width: $width;
+  $popover-arrow-heiht: $popover-arrow-width / 2;
 
   .dx-popover-wrapper {
     .dx-popover-arrow:after {
-      width: $POPOVER_ARROW_WIDTH / $SQRT_2;
-      height: $POPOVER_ARROW_WIDTH / $SQRT_2;
+      width: $popover-arrow-width / $sqrt-2;
+      height: $popover-arrow-width / $sqrt-2;
     }
 
     &.dx-position-top,
     &.dx-position-bottom {
       .dx-popover-arrow {
-        width: $POPOVER_ARROW_WIDTH;
-        height: $POPOVER_ARROW_HEIHT;
+        width: $popover-arrow-width;
+        height: $popover-arrow-heiht;
       }
     }
 
     &.dx-position-right,
     &.dx-position-left {
       .dx-popover-arrow {
-        width: $POPOVER_ARROW_HEIHT;
-        height: $POPOVER_ARROW_WIDTH;
+        width: $popover-arrow-heiht;
+        height: $popover-arrow-width;
       }
     }
   }

@@ -9,15 +9,15 @@
 
 
 .dx-form-group-caption {
-  font-size: $MATERIAL_FORM_GROUP_CAPTION_FONT_SIZE;
+  font-size: $material-form-group-caption-font-size;
 }
 
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
     border-top: 1px solid $form-group-border-color;
-    padding-bottom: $MATERIAL_FORM_GROUP_CONTENT_PADDING_BOTTOM;
-    padding-top: $MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING;
-    margin-top: $MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN;
+    padding-bottom: $material-form-group-content-padding-bottom;
+    padding-top: $material-form-group-caption-bottom-padding;
+    margin-top: $material-form-group-caption-bottom-margin;
   }
 }
 
@@ -40,7 +40,7 @@
 
 .dx-field-item {
   padding-bottom: 10px;
-  font-size: $MATERIAL_FORM_LABEL_FONT_SIZE;
+  font-size: $material-form-label-font-size;
 
   .dx-field-item {
     &.dx-last-row {
@@ -73,7 +73,7 @@
 }
 
 .dx-field-item-label-location-top {
-  padding: $MATERIAL_FORM_TOP_LABEL_PADDING;
+  padding: $material-form-top-label-padding;
 }
 
 .dx-field-item-label-text {

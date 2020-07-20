@@ -8,14 +8,14 @@
 // adduse
 
 
-$GENERIC_BUTTON_BORDER_WEIGHT: $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_BUTTON_PADDING:
-  $GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - $GENERIC_BUTTON_BORDER_WEIGHT
-  $GENERIC_BUTTON_HORIZONTAL_PADDING
-  $GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - $GENERIC_BUTTON_BORDER_WEIGHT;
-$GENERIC_BUTTON_ICONONLY_PADDING: $GENERIC_BUTTON_ICON_HORIZONTAL_PADDING;
-$GENERIC_BUTTON_ICON_SIZE: $GENERIC_BASE_ICON_SIZE;
-$GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN: 1px;
+$generic-button-border-weight: $generic-base-border-width;
+$generic-button-padding:
+  $generic-base-inline-widget-top-padding - $generic-button-border-weight
+  $generic-button-horizontal-padding
+  $generic-base-inline-widget-bottom-padding - $generic-button-border-weight;
+$generic-button-icononly-padding: $generic-button-icon-horizontal-padding;
+$generic-button-icon-size: $generic-base-icon-size;
+$generic-editor-custom-button-margin: 1px;
 
 .dx-button-content {
   line-height: 0;
@@ -29,23 +29,23 @@ $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN: 1px;
   text-decoration: none;
 }
 
-@mixin dx-button-sizing($PADDING, $ICON_SIZE, $ICON_MARGIN) {
+@mixin dx-button-sizing($-p-a-d-d-i-n-g, $icon-size, $icon-margin) {
   .dx-button-content {
-    padding: $PADDING;
+    padding: $-p-a-d-d-i-n-g;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($ICON_SIZE);
-    @include dx-icon-margin($ICON_MARGIN);
+    @include dx-icon-sizing($icon-size);
+    @include dx-icon-margin($icon-margin);
   }
 }
 
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($GENERIC_BUTTON_ICONONLY_PADDING, $GENERIC_BUTTON_ICON_SIZE, 0);
+  @include dx-button-sizing($generic-button-icononly-padding, $generic-button-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($GENERIC_BUTTON_PADDING, $GENERIC_BUTTON_ICON_SIZE, $GENERIC_BUTTON_ICON_SIZE / 2);
+  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, $generic-button-icon-size / 2);
 }
 
 .dx-button {
@@ -104,7 +104,7 @@ $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN: 1px;
 
 @mixin dx-button-styling() {
   border-radius: $button-border-radius;
-  border-width: $GENERIC_BUTTON_BORDER_WEIGHT;
+  border-width: $generic-button-border-weight;
   border-style: solid;
 
   @at-root #{selector-append(".dx-state-disabled", &)},
@@ -264,11 +264,11 @@ $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN: 1px;
 
 .dx-texteditor-buttons-container {
   > .dx-button {
-    margin: 1px $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+    margin: 1px $generic-editor-custom-button-margin;
 
     > .dx-button-content {
-      padding-top: $GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - $GENERIC_BUTTON_BORDER_WEIGHT - 2px;
-      padding-bottom: $GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - $GENERIC_BUTTON_BORDER_WEIGHT - 2px;
+      padding-top: $generic-base-inline-widget-top-padding - $generic-button-border-weight - 2px;
+      padding-bottom: $generic-base-inline-widget-bottom-padding - $generic-button-border-weight - 2px;
     }
   }
 }
