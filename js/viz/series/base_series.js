@@ -144,7 +144,7 @@ function mergePointOptions(base, extra) {
     return options;
 }
 
-function Series(settings, options) {
+export function Series(settings, options) {
     const that = this;
     that.fullState = 0;
     that._extGroups = settings;
@@ -161,10 +161,6 @@ function Series(settings, options) {
 function getData(pointData) {
     return pointData.data;
 }
-
-exports.Series = Series;
-
-exports.mixins = seriesNS.mixins;
 
 function getValueChecker(axisType, axis) {
     if(!axis || axisType !== 'logarithmic' || axis.getOptions().allowNegatives !== false) {
@@ -548,7 +544,7 @@ Series.prototype = {
         that._applyVisibleArea();
         that._setGroupsSettings(animationEnabled, firstDrawing);
 
-        !firstDrawing && that._drawElements(false, firstDrawing, false);
+        !firstDrawing && !that._resetApplyingAnimation && that._drawElements(false, firstDrawing, false);
         that._drawElements(animationEnabled, firstDrawing, true);
 
         hideLayoutLabels && that.hideLabels();
@@ -560,6 +556,7 @@ Series.prototype = {
         } else {
             that._applyStyle(that._styles.normal);
         }
+        that._resetApplyingAnimation = false;
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
@@ -654,6 +651,13 @@ Series.prototype = {
 
     isStackedSeries: function() {
         return this.type.indexOf('stacked') === 0;
+    },
+
+    resetApplyingAnimation: function(isFirstDrawing) {
+        this._resetApplyingAnimation = true;
+        if(isFirstDrawing) {
+            this._firstDrawing = true;
+        }
     },
 
     isFinancialSeries: function() {
@@ -1251,3 +1255,5 @@ Series.prototype = {
         return this._renderer;
     }
 };
+
+export const mixins = seriesNS.mixins;

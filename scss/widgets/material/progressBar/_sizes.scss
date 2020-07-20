@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-progressbar-status-padding: null !default;
+
+@if $size == "default" {
+  $material-progressbar-status-padding: 8px;
+}
+
+@else if $size == "compact" {
+  $material-progressbar-status-padding: 4px;
+}

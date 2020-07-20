@@ -10,7 +10,7 @@ import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
-import { animation } from 'ui/drawer/ui.drawer.rendering.strategy';
+import { animation } from 'ui/drawer/ui.drawer.animation';
 import Overlay from 'ui/overlay';
 
 
@@ -747,11 +747,21 @@ QUnit.module('Drawer behavior', () => {
 
         clock.tick(100);
         const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
-        const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
 
-        assert.strictEqual($panel.css('zIndex'), '2001', 'panel.zIndex');
-        assert.strictEqual($shader.css('zIndex'), '2000', 'shader.zIndex');
+        assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
         clock.restore();
+    });
+
+    QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            openedStateMode: 'overlap',
+            shading: true
+        });
+
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+
+        assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
     });
 
     QUnit.test('drawer panel should have correct margin when async template is used', function(assert) {

@@ -1,19 +1,20 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const devices = require('../core/devices');
-const extend = require('../core/utils/extend').extend;
-const inkRipple = require('./widget/utils.ink_ripple');
-const registerComponent = require('../core/component_registrator');
-const Editor = require('./editor/editor');
-const eventUtils = require('../events/utils');
-const feedbackEvents = require('../events/core/emitter.feedback');
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const themes = require('./themes');
-const fx = require('../animation/fx');
-const messageLocalization = require('../localization/message');
-const clickEvent = require('../events/click');
-const Swipeable = require('../events/gesture/swipeable');
-const Deferred = require('../core/utils/deferred').Deferred;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import { extend } from '../core/utils/extend';
+import inkRipple from './widget/utils.ink_ripple';
+import registerComponent from '../core/component_registrator';
+import Editor from './editor/editor';
+import { addNamespace } from '../events/utils';
+import { lock } from '../events/core/emitter.feedback';
+import { getBoundingRect } from '../core/utils/position';
+import fx from '../animation/fx';
+import messageLocalization from '../localization/message';
+import { name as clickEventName } from '../events/click';
+import Swipeable from '../events/gesture/swipeable';
+import { Deferred } from '../core/utils/deferred';
+
+// STYLE switch
 
 const SWITCH_CLASS = 'dx-switch';
 const SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper';
@@ -59,15 +60,11 @@ const Switch = Editor.inherit({
 
             value: false,
 
-            useInkRipple: false,
-            _animateHandle: true
-
+            useInkRipple: false
         });
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
-
         return this.callBase().concat([
             {
                 device: function() {
@@ -76,15 +73,7 @@ const Switch = Editor.inherit({
                 options: {
                     focusStateEnabled: true
                 }
-            },
-            {
-                device: function(device) {
-                    return themes.isIos7(themeName);
-                },
-                options: {
-                    _animateHandle: false
-                }
-            },
+            }
         ]);
     },
 
@@ -251,10 +240,8 @@ const Switch = Editor.inherit({
         const innerOffset = this._getInnerOffset(state, swipeOffset);
         const handleOffset = this._getHandleOffset(state, swipeOffset);
 
-        if(this.option('_animateHandle')) {
-            this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
-            this._$handle.css('transform', ' translateX(' + handleOffset + ')');
-        }
+        this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
+        this._$handle.css('transform', ' translateX(' + handleOffset + ')');
     },
 
     _validateValue: function() {
@@ -265,7 +252,7 @@ const Switch = Editor.inherit({
     },
 
     _renderClick: function() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const $element = this.$element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
 
@@ -343,7 +330,7 @@ const Switch = Editor.inherit({
         this._swiping = true;
 
         this._feedbackDeferred = new Deferred();
-        feedbackEvents.lock(this._feedbackDeferred);
+        lock(this._feedbackDeferred);
         this._toggleActiveState(this.$element(), this.option('activeStateEnabled'));
     },
 
@@ -424,8 +411,6 @@ const Switch = Editor.inherit({
                 this._renderValue();
                 this.callBase(args);
                 break;
-            case '_animateHandle':
-                break;
             default:
                 this.callBase(args);
         }
@@ -439,4 +424,4 @@ const Switch = Editor.inherit({
 
 registerComponent('dxSwitch', Switch);
 
-module.exports = Switch;
+export default Switch;

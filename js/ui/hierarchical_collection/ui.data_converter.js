@@ -1,8 +1,8 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const errors = require('../../ui/widget/ui.errors');
-const each = require('../../core/utils/iterator').each;
-const typeUtils = require('../../core/utils/type');
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import errors from '../../ui/widget/ui.errors';
+import { each } from '../../core/utils/iterator';
+import { isDefined, isPrimitive } from '../../core/utils/type';
 
 const DataConverter = Class.inherit({
 
@@ -18,7 +18,7 @@ const DataConverter = Class.inherit({
         const that = this;
 
         each(items, function(_, item) {
-            const parentId = typeUtils.isDefined(parentKey) ? parentKey : that._getParentId(item);
+            const parentId = isDefined(parentKey) ? parentKey : that._getParentId(item);
             const node = that._convertItemToNode(item, parentId);
 
             that._dataStructure.push(node);
@@ -33,7 +33,7 @@ const DataConverter = Class.inherit({
     },
 
     _checkForDuplicateId: function(key) {
-        if(typeUtils.isDefined(this._indexByKey[key])) {
+        if(isDefined(this._indexByKey[key])) {
             throw errors.Error('E1040', key);
         }
     },
@@ -53,7 +53,7 @@ const DataConverter = Class.inherit({
     _getUniqueKey: function(item) {
         const keyGetter = this._dataAccessors.getters.key;
         const itemKey = keyGetter(item);
-        const isCorrectKey = keyGetter && (itemKey || itemKey === 0) && typeUtils.isPrimitive(itemKey);
+        const isCorrectKey = keyGetter && (itemKey || itemKey === 0) && isPrimitive(itemKey);
 
         return isCorrectKey ? itemKey : this.getItemsCount();
     },
@@ -69,7 +69,7 @@ const DataConverter = Class.inherit({
                 expanded: that._dataAccessors.getters.expanded(item, { defaultValue: false }),
                 selected: that._dataAccessors.getters.selected(item, { defaultValue: false }),
                 key: that._getUniqueKey(item),
-                parentKey: typeUtils.isDefined(parentKey) ? parentKey : that._rootValue,
+                parentKey: isDefined(parentKey) ? parentKey : that._rootValue,
                 item: that._makeObjectFromPrimitive(item),
                 childrenKeys: []
             }
@@ -94,7 +94,7 @@ const DataConverter = Class.inherit({
     },
 
     _makeObjectFromPrimitive: function(item) {
-        if(typeUtils.isPrimitive(item)) {
+        if(isPrimitive(item)) {
             const key = item;
             item = {};
             this._dataAccessors.setters.key(item, key);
@@ -135,7 +135,7 @@ const DataConverter = Class.inherit({
         const publicNodes = [];
 
         each(data, function(_, node) {
-            node = typeUtils.isPrimitive(node) ? that._getByKey(node) : node;
+            node = isPrimitive(node) ? that._getByKey(node) : node;
 
             const publicNode = that._convertToPublicNode(node, parent);
 
@@ -162,6 +162,10 @@ const DataConverter = Class.inherit({
     },
 
     getByKey: function(data, key) {
+        if(key === null || key === undefined) {
+            return null;
+        }
+
         let result = null;
         const that = this;
 
@@ -229,4 +233,4 @@ const DataConverter = Class.inherit({
 
 });
 
-module.exports = DataConverter;
+export default DataConverter;

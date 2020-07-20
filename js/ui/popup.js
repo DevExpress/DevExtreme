@@ -14,15 +14,17 @@ import sizeUtils from '../core/utils/size';
 import { getBoundingRect } from '../core/utils/position';
 import { isDefined } from '../core/utils/type';
 import { compare as compareVersions } from '../core/utils/version';
-import windowUtils from '../core/utils/window';
+import { getWindow, hasWindow } from '../core/utils/window';
 import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
 import Button from './button';
 import Overlay from './overlay';
 import themes from './themes';
-const window = require('../core/utils/window').getWindow();
+const window = getWindow();
 
-require('./toolbar/ui.toolbar.base');
+import './toolbar/ui.toolbar.base';
+
+// STYLE popup
 
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
@@ -554,7 +556,7 @@ const Popup = Overlay.inherit({
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
                 const overlayHeight = this.option('fullScreen')
-                    ? Math.min(getBoundingRect(overlayContent).height, windowUtils.getWindow().innerHeight)
+                    ? Math.min(getBoundingRect(overlayContent).height, getWindow().innerHeight)
                     : getBoundingRect(overlayContent).height;
                 const contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
                 cssStyles = {
@@ -629,7 +631,7 @@ const Popup = Overlay.inherit({
         } else {
             this.callBase(...arguments);
         }
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             this._renderFullscreenWidthClass();
         }
     },
@@ -732,4 +734,4 @@ const Popup = Overlay.inherit({
 
 registerComponent('dxPopup', Popup);
 
-module.exports = Popup;
+export default Popup;

@@ -1,7 +1,9 @@
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const NavBarItem = require('./nav_bar/item');
-const Tabs = require('./tabs');
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import NavBarItem from './nav_bar/item';
+import Tabs from './tabs';
+
+// STYLE navBar
 
 const NAVBAR_CLASS = 'dx-navbar';
 const ITEM_CLASS = 'dx-item-content';
@@ -62,4 +64,4 @@ NavBar.ItemClass = NavBarItem;
 
 registerComponent('dxNavBar', NavBar);
 
-module.exports = NavBar;
+export default NavBar;

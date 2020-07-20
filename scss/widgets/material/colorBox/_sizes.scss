@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-colorbox-overlay-padding: null !default;
+$material-colorbox-preview-left: null !default;
+
+@if $size == "default" {
+  $material-colorbox-overlay-padding: 20px;
+  $material-colorbox-preview-left: 13px;
+}
+
+@else if $size == "compact" {
+  $material-colorbox-overlay-padding: 16px;
+  $material-colorbox-preview-left: 8px;
+}

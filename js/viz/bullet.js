@@ -1,1 +1,2 @@
-module.exports = require('./sparklines/bullet');
+import Bullet from './sparklines/bullet';
+export default Bullet;

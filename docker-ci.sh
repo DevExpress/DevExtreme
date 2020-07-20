@@ -166,17 +166,7 @@ function run_test {
     exit $runner_result
 }
 
-function run_test_themebuilder {
-    dotnet build build/build-dotnet.sln
-    npm i
-    npm run build-themes
-    npm run build-themebuilder-assets
-    cd themebuilder
-    npm i
-    npm run test
-}
-
-function run_test_functional {
+function run_test_testcafe {
     export DEVEXTREME_TEST_CI=true
 
     npm i
@@ -186,23 +176,24 @@ function run_test_functional {
     [ -n "$COMPONENT" ] && args="$args --componentFolder=$COMPONENT";
     [ -n "$QUARANTINE_MODE" ] && args="$args --quarantineMode=true";
 
-    npm run test-functional -- $args
+    npm run test-testcafe -- $args
 }
 
 function run_test_jest {
-    export DEVEXTREME_TEST_CI=true
-
     npm i
-    npx gulp generate-components
+    npx gulp localization
     npm run test-jest
+}
+
+function run_native_components {
+    npm i
+    npx gulp localization
+    npx gulp react-compilation-check
 }
 
 function run_test_scss {
     npm i
-    npx gulp generate-scss
     npm run build-themes
-    node build/gulp/scss/tests/identical.test.js
-
     cd themebuilder-scss
     npm i && npm run build && npm run test
 }

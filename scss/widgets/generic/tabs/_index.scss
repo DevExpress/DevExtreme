@@ -1,0 +1,146 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button" as *;
+@use "../button/colors" as *;
+@use "../../base/icons" as *;
+
+// adduse
+@use "../scrollable";
+@use "../badge";
+
+
+$generic-tabs-border-width: $generic-base-border-width;
+$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color;
+$generic-tabs-transparent-border: $generic-tabs-border-width solid $tabs-tab-bg;
+$generic-tab-focus-border: $generic-tabs-border-width solid $tabs-focused-border-color;
+
+
+@mixin dx-tabs-border-mixin($border-horizontal, $border-vertical) {
+  &:after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    right: -1px;
+    left: -1px;
+    border-right: $border-horizontal;
+    border-left: $border-horizontal;
+    border-top: $border-vertical;
+    border-bottom: $border-vertical;
+    z-index: 1;
+  }
+}
+
+.dx-tabs {
+  border: $generic-tabs-border;
+}
+
+.dx-tabs-scrollable {
+  margin: -$generic-tabs-border-width;
+  height: calc(100% + 2px);
+
+  .dx-tabs-wrapper {
+    border: $generic-tabs-border;
+
+    .dx-tabs-nav-buttons & {
+      border-left: $generic-tabs-transparent-border;
+      border-right: $generic-tabs-transparent-border;
+    }
+  }
+}
+
+.dx-tabs-nav-button {
+  border: none;
+  background-color: $tabs-tab-bg;
+  border-radius: 0;
+  box-shadow: none;
+
+  .dx-button-content {
+    padding: 0;
+  }
+
+  &.dx-state-active {
+    border: none;
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+
+    .dx-button-content {
+      opacity: $tabs-tab-button-disabled-opacity;
+    }
+  }
+}
+
+.dx-tab {
+  padding: $generic-tabs-item-padding;
+  background-color: $tabs-tab-bg;
+  color: $tabs-tab-color;
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+    display: inline-block;
+    vertical-align: middle;
+
+    @include dx-icon-sizing($generic-base-icon-size);
+    @include dx-icon-margin($generic-base-icon-size / 2);
+  }
+
+  &.dx-state-hover {
+    background-color: $tabs-tab-hover-bg;
+  }
+
+  &.dx-state-active {
+    background-color: $tabs-tab-active-bg;
+    color: $tabs-tab-selected-color;
+  }
+
+  &.dx-state-focused {
+    @include dx-tabs-border-mixin($generic-tab-focus-border, $generic-tab-focus-border);
+  }
+
+  &.dx-tab-selected {
+    background-color: $tabs-tab-selected-bg;
+    color: $tabs-tab-selected-color;
+  }
+}
+
+.dx-tab-selected {
+  @include dx-tabs-border-mixin($generic-tabs-border, none);
+
+  .dx-icon {
+    color: $tabs-tab-icon-selected-color;
+  }
+
+  &:not(.dx-state-focused) {
+    & + & {
+      &:after {
+        border-left: $generic-tabs-transparent-border;
+
+        .dx-rtl & {
+          border-left: $generic-tabs-border;
+          border-right: $generic-tabs-transparent-border;
+        }
+      }
+    }
+  }
+}
+
+.dx-tab-text {
+  vertical-align: middle;
+  line-height: $generic-tab-text-line-height;
+}
+
+.dx-state-disabled {
+  &.dx-tabs {
+    opacity: 1;
+  }
+
+  .dx-tab-content {
+    opacity: 0.3;
+  }
+}

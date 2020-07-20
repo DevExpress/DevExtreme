@@ -230,4 +230,4 @@ class DiagramContextMenuBar extends DiagramBar {
     }
 }
 
-module.exports = { DiagramContextMenuWrapper, DiagramContextMenu };
+export default { DiagramContextMenuWrapper, DiagramContextMenu };

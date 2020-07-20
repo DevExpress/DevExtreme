@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-pivotgrid-cell-padding: null !default;
+
+@if $size == "default" {
+  $material-pivotgrid-cell-padding: 10px 14px;
+}
+
+@else if $size == "compact" {
+  $material-pivotgrid-cell-padding: 7px 8px;
+}

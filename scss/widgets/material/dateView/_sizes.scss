@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-dateview-roller-height: null !default;
+$material-dateview-roller-item-height: null !default;
+
+@if $size == "default" {
+  $material-dateview-roller-height: 182px;
+  $material-dateview-roller-item-height: 40px;
+}
+
+@else if $size == "compact" {
+  $material-dateview-roller-height: 182px;
+  $material-dateview-roller-item-height: 40px;
+}

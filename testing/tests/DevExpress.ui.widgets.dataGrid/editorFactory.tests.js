@@ -31,6 +31,7 @@ import 'common.css!';
 
 import 'ui/data_grid/ui.data_grid';
 import 'ui/lookup';
+import 'ui/switch';
 import TextArea from 'ui/text_area';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -440,12 +441,39 @@ QUnit.module('Editor Factory', {
         assert.ok(checkBox.option('hoverStateEnabled'), 'hover enabled');
         assert.ok(checkBox.option('focusStateEnabled'), 'focus enabled');
         assert.ok(!checkBox.option('activeStateEnabled'), 'active disabled');
+        assert.ok($container.parent().hasClass('dx-editor-inline-block'), 'parent has dx-editor-inline-block class');
 
         // act
         checkBox.option('value', false);
 
         // assert
         assert.equal(value, false, 'value after change');
+    });
+
+    QUnit.test('Switch editor (T897363)', function(assert) {
+        const $container = $('#container');
+        let value = true;
+
+        this.options.onEditorPreparing = (e) => {
+            e.editorName = 'dxSwitch';
+        };
+        this.editorFactoryController.init();
+
+        // act
+        this.editorFactoryController.createEditor($container, {
+            dataType: 'boolean',
+            value: value,
+            setValue: function(newValue) {
+                value = newValue;
+            }
+        });
+
+        // assert
+        const switchInstance = $container.dxSwitch('instance');
+
+        assert.ok(switchInstance, 'dxSwitch is created');
+        assert.equal(switchInstance.option('value'), true, 'editor value');
+        assert.ok($container.parent().hasClass('dx-editor-inline-block'), 'parent has dx-editor-inline-block class');
     });
 
     QUnit.test('Boolean editor when inOnForm is true', function(assert) {

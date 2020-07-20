@@ -3,7 +3,7 @@ import DataExpressionMixin from './editor/ui.data_expression';
 import { ensureDefined, noop, grep } from '../core/utils/common';
 import { isObject } from '../core/utils/type';
 import { map } from '../core/utils/iterator';
-import selectors from './widget/selectors';
+import { tabbable } from './widget/selectors';
 import { when, Deferred } from '../core/utils/deferred';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
@@ -13,8 +13,11 @@ import registerComponent from '../core/component_registrator';
 import { normalizeKeyName } from '../events/utils';
 import { keyboard } from '../events/short';
 import devices from '../core/devices';
-import { getActiveElement } from '../core/dom_adapter';
+import domAdapter from '../core/dom_adapter';
 import { getPublicElement } from '../core/element';
+
+// STYLE dropDownBox
+const getActiveElement = domAdapter.getActiveElement;
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
@@ -38,8 +41,12 @@ const DropDownBox = DropDownEditor.inherit({
         });
     },
 
+    ///#DEBUG
+    _realDevice: realDevice,
+    ///#ENDDEBUG
+
     _getTabbableElements: function() {
-        return this._getElements().filter(selectors.tabbable);
+        return this._getElements().filter(tabbable);
     },
 
     _getElements: function() {
@@ -328,8 +335,4 @@ const DropDownBox = DropDownEditor.inherit({
 
 registerComponent('dxDropDownBox', DropDownBox);
 
-module.exports = DropDownBox;
-
-///#DEBUG
-module.exports.realDevice = realDevice;
-///#ENDDEBUG
+export default DropDownBox;

@@ -1,0 +1,191 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+
+// adduse
+
+
+$material-switch-shadow-blur-radius: 10px;
+$material-switch-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$material-on-value-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($switch-handle-on-bg, $alpha: 0.1);
+$material-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($base-text-color, $alpha: 0.1);
+$material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($switch-invalid-handle-bg, $alpha: 0.1);
+
+.dx-switch-wrapper {
+  position: relative;
+  padding: $material-switch-shadow-blur-radius;
+  box-sizing: content-box;
+  left: -$material-switch-shadow-blur-radius;
+  top: -$material-switch-shadow-blur-radius;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.dx-switch {
+  width: $material-switch-width;
+  height: $material-switch-height;
+
+  &.dx-state-readonly,
+  &.dx-state-disabled {
+    .dx-switch-handle:before {
+      background-color: $switch-handle-disabled-bg;
+    }
+
+    .dx-switch-container:before {
+      background-color: color.change($base-text-color, $alpha: 0.12);
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-switch-handle:before {
+      box-shadow: $material-switch-shadow;
+      border-radius: 50%;
+    }
+  }
+}
+
+.dx-switch-on-value,
+.dx-switch {
+  &.dx-state-readonly.dx-state-focused {
+    .dx-switch-handle:before {
+      box-shadow: $material-switch-shadow;
+      border-radius: 50%;
+    }
+  }
+}
+
+.dx-switch-container {
+  height: $material-switch-height;
+  overflow: visible;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 14px;
+    border-radius: 500px;
+    background-color: $switch-bg;
+    margin: $material-switch-container-margin 0;
+  }
+}
+
+.dx-switch-inner {
+  width: 200%;
+  height: 100%;
+}
+
+.dx-switch-on,
+.dx-switch-off {
+  flex-shrink: 0;
+  float: left;
+  padding: 4px 0;
+  width: 50%;
+  height: $material-switch-height;
+  color: transparent;
+  text-align: center;
+  line-height: 100%;
+}
+
+.dx-switch-on {
+  background: transparent;
+}
+
+.dx-switch-off {
+  display: none;
+  padding-bottom: 10px;
+  background-color: transparent;
+}
+
+.dx-switch-handle {
+  flex-basis: $material-switch-height;
+  flex-shrink: 0;
+  position: relative;
+  float: left;
+  width: $material-switch-height;
+  height: $material-switch-height;
+  background-color: $switch-handle-off-bg;
+  box-shadow: $material-switch-handle-shadow;
+  border-radius: $switch-handle-border-radius;
+
+  &:before {
+    display: block;
+    content: ' ';
+    width: 100%;
+    height: 100%;
+    background-color: $switch-handle-off-bg;
+    border-radius: $switch-handle-border-radius;
+    transition: $material-switch-transition;
+  }
+}
+
+.dx-switch-on-value {
+  .dx-switch-container:before {
+    background-color: $switch-on-bg;
+  }
+
+  .dx-switch-handle:before {
+    background-color: $switch-handle-on-bg;
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-switch-handle:before {
+      box-shadow: $material-on-value-switch-shadow;
+      border-radius: 50%;
+    }
+  }
+}
+
+.dx-rtl .dx-switch,
+.dx-switch.dx-rtl {
+  .dx-switch-on,
+  .dx-switch-off {
+    float: right;
+    padding-left: $material-switch-handle-width + $material-switch-on-off-adding-padding;
+    padding-right: $material-switch-handle-offset;
+  }
+
+  .dx-switch-off {
+    margin-left: 0;
+  }
+
+  .dx-switch-handle {
+    float: right;
+    margin-left: 0;
+    margin-right: -$material-switch-height;
+  }
+
+  .dx-switch-wrapper {
+    left: $material-switch-shadow-blur-radius;
+  }
+
+  .dx-switch-container {
+    margin: 0 0 0 (-$material-switch-container-adjustment);
+  }
+}
+
+.dx-invalid {
+  &.dx-switch {
+    .dx-switch-container:before {
+      background-color: $switch-invalid-container-bg;
+    }
+  }
+
+  &.dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled) {
+    .dx-switch-container .dx-switch-handle:before {
+      background-color: $switch-invalid-handle-bg;
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+      .dx-switch-container .dx-switch-handle:before {
+        box-shadow: $material-invalid-switch-shadow;
+      }
+    }
+  }
+}

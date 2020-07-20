@@ -6,35 +6,38 @@ const resolve = require('resolve');
 module.exports = {
     'globals': {
         'ts-jest': {
-            tsConfig: './testing/jest/tsconfig.json',
+            tsConfig: './jest.tsconfig.json',
             diagnostics: false, // set to true to enable type checking
         }
     },
-    collectCoverage: true,
     collectCoverageFrom: [
-        './js/renovation/**/*.p.js',
-        '!./js/renovation/error-message.p.js',
-        '!./js/renovation/number-box.p.js',
-        '!./js/renovation/select-box.p.js',
+        './js/renovation/**/*.tsx',
+        '!./js/renovation/ui/list.tsx',
+        '!./js/renovation/**/*.j.tsx',
+        '!./js/renovation/utils/render_template.tsx',
     ],
-    coverageDirectory: './testing/jest/code_coverage',
+    coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
-        './js/renovation/**/*.p.js': {
-            functions: 93,
-            statements: 98,
-            lines: 100,
-            branches: 96
+        './js/renovation/**/*.tsx': {
+            functions: 0, // Should set code coverage to 100%
+            statements: 0, // (after start testing declarations)
+            lines: 0,
+            branches: 0
         }
     },
+    roots: ['<rootDir>/testing/jest', '<rootDir>/js/renovation'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './testing/jest/setup-enzyme.ts'),
+        path.join(path.resolve('.'), './js/renovation/__tests__/setup_enzyme.ts'),
     ],
     testMatch: [
-        path.join(path.resolve('.'), './testing/jest/**/*.tests.[jt]s?(x)')
+        '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)',
+        '<rootDir>/js/renovation/**/__tests__/**/*.test.[jt]s?(x)'
     ],
     transform: {
-        '.(js|jsx|ts|tsx)': resolve.sync('ts-jest')
+        'test_components.+\\.tsx$': path.resolve('./js/renovation/__tests__/transformers/declaration.js'),
+        '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
+        '\\.(tsx)$': path.resolve('./js/renovation/__tests__/transformers/tsx.js')
     }
 };

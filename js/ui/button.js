@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import devices from '../core/devices';
 import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
-import themes from './themes';
+import * as themes from './themes';
 import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
@@ -11,6 +11,8 @@ import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
+
+// STYLE button
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
@@ -403,4 +405,4 @@ class Button extends Widget {
 
 registerComponent('dxButton', Button);
 
-module.exports = Button;
+export default Button;

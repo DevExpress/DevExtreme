@@ -1,6 +1,8 @@
-const domAdapter = require('../../core/dom_adapter');
-const window = require('./window').getWindow();
-const $ = require('../../core/renderer');
+import domAdapter from '../../core/dom_adapter';
+import { getWindow } from './window';
+import $ from '../../core/renderer';
+
+const window = getWindow();
 
 function getMarkup(element, backgroundColor) {
     const temp = domAdapter.createElement('div');
@@ -41,14 +43,14 @@ function decodeHtmlEntities(markup) {
         .replace(/&shy;/gi, '&#173;');
 }
 
-exports.getSvgMarkup = function(element, backgroundColor) {
+export function getSvgMarkup(element, backgroundColor) {
     return fixNamespaces(decodeHtmlEntities(getMarkup(element, backgroundColor)));
-};
+}
 
-exports.getSvgElement = function(markup) {
+export function getSvgElement(markup) {
     return domAdapter.isNode(markup)
         ? markup
         : (new window.DOMParser()
             .parseFromString(markup, 'image/svg+xml')
             .childNodes[0]);
-};
+}

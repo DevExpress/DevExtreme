@@ -60,10 +60,13 @@ const TODAY_CELL_CLASS = 'dx-calendar-today';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const POPUP_CLASS = 'dx-popup';
 
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
 const widgetName = 'dxDateBox';
+const { module: testModule, test } = QUnit;
 
 const getShortDate = date => {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -105,6 +108,8 @@ const getExpectedResult = (date, mode, stringDate) => {
     return support.inputType(mode) ? stringDate : localizedDate;
 };
 
+const prepareDateString = (type, year, month, day) => type === 'text' ? `${month}/${day}/${year}` : `${year}-${month}-${day}`;
+
 QUnit.module('datebox tests', moduleConfig, () => {
     QUnit.test('value is null after reset', function(assert) {
         const date = new Date(2012, 10, 26, 16, 40, 23);
@@ -120,8 +125,11 @@ QUnit.module('datebox tests', moduleConfig, () => {
             type: 'date'
         });
 
-        $(this.$input())
-            .val('2012-11-26')
+        const $input = $(this.$input());
+        const newValue = prepareDateString($input.prop('type'), 2012, 11, 26);
+
+        $input
+            .val(newValue)
             .trigger('change');
 
         const value = this.instance.option('value');
@@ -955,12 +963,13 @@ QUnit.module('merging dates', moduleConfig, () => {
 
         const instance = $element.dxDateBox('instance');
         const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const inputType = $input.prop('type');
 
-        $input.val('2014-10-31');
+        $input.val(prepareDateString(inputType, 2014, 10, 31));
         $input.triggerHandler('change');
         assert.equal(instance.option('value').valueOf(), new Date(2014, 9, 31, 11, 22).valueOf(), 'date merged correctly');
 
-        $input.val('2014-11-01');
+        $input.val(prepareDateString(inputType, 2014, 11, '01'));
         $input.triggerHandler('change');
         assert.equal(instance.option('value').valueOf(), new Date(2014, 10, 1, 11, 22).valueOf(), 'date merged correctly');
     });
@@ -969,8 +978,11 @@ QUnit.module('merging dates', moduleConfig, () => {
         this.instance.option('type', 'date');
         this.instance.option('value', new Date(2000, 6, 31, 1, 1, 1));
 
-        $(this.$input())
-            .val('2000-09-10')
+        const $input = $(this.$input());
+        const inputType = $input.prop('type');
+
+        $input
+            .val(prepareDateString(inputType, 2000, '09', '10'))
             .trigger('change');
 
         assert.deepEqual(this.instance.option('value'), new Date(2000, 8, 10, 1, 1, 1));
@@ -979,14 +991,17 @@ QUnit.module('merging dates', moduleConfig, () => {
     QUnit.test('incorrect work of mergeDates function if previous value not valid (Q568689)', function(assert) {
         this.instance.option('type', 'time');
 
-        $(this.$input())
+        const $input = $(this.$input());
+        const inputType = $input.prop('type');
+
+        $input
             .val('')
             .trigger('change');
 
         assert.strictEqual(this.instance.option('value'), null);
 
-        $(this.$input())
-            .val('12:30')
+        $input
+            .val(inputType === 'text' ? '12:30 PM' : '12:30')
             .trigger('change');
 
         const date = new Date(null);
@@ -1964,6 +1979,96 @@ QUnit.module('datebox and calendar integration', () => {
 
         assert.equal(stub.callCount, 2, '\'opened\' optionChanged event has been raised');
     });
+
+    QUnit.test('check popup margins', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            opened: true
+        });
+
+        const instance = $element.dxDateBox('instance');
+        const $content = $(instance.content());
+
+        const leftPopupMargin = parseInt($content.css('marginLeft'));
+        const leftCalendarMargin = parseInt($content.find('.dx-calendar').css('marginLeft'));
+        const rightPopupMargin = parseInt($content.css('marginRight'));
+        const rightCalendarMargin = parseInt($content.find('.dx-timeview').css('marginRight'));
+
+        assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
+    });
+
+    QUnit.test('check popup margins if analogClocks is hidden', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            showAnalogClock: false,
+            opened: true
+        });
+
+        const instance = $element.dxDateBox('instance');
+        const $content = $(instance.content());
+
+        const leftPopupMargin = parseInt($content.css('marginLeft'));
+        const leftCalendarMargin = parseInt($content.find('.dx-calendar').css('marginLeft'));
+        const rightPopupMargin = parseInt($content.css('marginRight'));
+        const rightCalendarMargin = parseInt($content.find('.dx-calendar').css('marginRight'));
+
+        assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
+    });
+
+    QUnit.test('check popup margins if calendar is hidden (T896846)', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            displayFormat: 'HH:mm',
+            calendarOptions: {
+                visible: false
+            },
+            opened: true
+        });
+
+        const instance = $element.dxDateBox('instance');
+        const $content = $(instance.content());
+
+        const leftPopupMargin = parseInt($content.css('marginLeft'));
+        const leftCalendarMargin = parseInt($content.find('.dx-timeview').css('marginLeft'));
+        const rightPopupMargin = parseInt($content.css('marginRight'));
+        const rightCalendarMargin = parseInt($content.find('.dx-timeview').css('marginRight'));
+
+        assert.strictEqual(leftPopupMargin + leftCalendarMargin, rightPopupMargin + rightCalendarMargin);
+    });
+
+    QUnit.test('Today button should be hidden if calendar is hidden', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            calendarOptions: {
+                visible: false
+            },
+            opened: true
+        });
+        const instance = $element.dxDateBox('instance');
+        const $todayButton = $(instance.content()).parent().find('.dx-button-today');
+
+        assert.strictEqual($todayButton.length, 0);
+    });
+
+
+    QUnit.test('Today button should be hidden if calendar visibility is changed', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            type: 'datetime',
+            opened: true
+        });
+        const instance = $element.dxDateBox('instance');
+
+        instance.option('calendarOptions.visible', false);
+        assert.strictEqual($(instance.content()).parent().find('.dx-button-today').length, 0);
+
+        instance.option('calendarOptions.visible', true);
+        assert.strictEqual($(instance.content()).parent().find('.dx-button-today').length, 1);
+    });
 });
 
 QUnit.module('datebox w/ calendar', {
@@ -2054,6 +2159,26 @@ QUnit.module('datebox w/ calendar', {
         this.fixture.dateBox.option('value', date);
         this.fixture.dateBox.open();
         assert.deepEqual(getInstanceWidget(this.fixture.dateBox).option('value'), date);
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        this.fixture.dateBox.option('width', 300);
+        this.fixture.dateBox.option('dropDownOptions.width', '50%');
+        this.fixture.dateBox.option('opened', true);
+
+        this.fixture.dateBox.option('width', 700);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width when editor width is defined (T897820)', function(assert) {
+        const editorWidth = 200;
+        this.fixture.dateBox.option('width', editorWidth);
+        this.fixture.dateBox.option('opened', true);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
     });
 
     QUnit.test('DateBox must update its value when a date is selected in the calendar when applyValueMode=\'instantly\'', function(assert) {
@@ -3305,19 +3430,74 @@ QUnit.module('datebox w/ time list', {
         assert.ok(getInstanceWidget(this.dateBox).$element().hasClass('dx-list'), 'list initialized');
     });
 
-    QUnit.test('width option test', function(assert) {
-        this.dateBox.option('opened', false);
-        this.dateBox.option('width', 'auto');
+    QUnit.test('popup width shoud be equal to the editor width when dropDownOptions.width in not defined', function(assert) {
         this.dateBox.option('opened', true);
 
-        const popup = this.$dateBox.find('.dx-popup').dxPopup('instance');
-
-        assert.equal(this.$dateBox.outerWidth(), popup.option('width'), 'timebox popup has equal width with timebox with option width \'auto\'');
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), this.$dateBox.outerWidth(), 'popup width is correct');
 
         this.dateBox.option('opened', false);
-        this.dateBox.option('width', '153px');
+        this.dateBox.option('width', '153');
         this.dateBox.option('opened', true);
-        assert.equal(this.$dateBox.outerWidth(), popup.option('width'), 'timebox popup has equal width with timebox with option width in pixels');
+        assert.strictEqual($overlayContent.outerWidth(), this.$dateBox.outerWidth(), 'popup width is correct');
+    });
+
+    QUnit.test('popup should have width equal to dropDownOptions.width if it\'s defined (T897820)', function(assert) {
+        this.dateBox.option('dropDownOptions.width', 500);
+        this.dateBox.option('opened', true);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
+        this.dateBox.option('dropDownOptions.width', 500);
+        this.dateBox.option('opened', true);
+
+        this.dateBox.option('width', 300);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width auto if dropDownOptions.width is set to auto (T897820)', function(assert) {
+        this.dateBox.option('dropDownOptions.width', 'auto');
+        this.dateBox.option('opened', true);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 'auto', 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), this.dateBox.$element().outerWidth(), 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
+        this.dateBox.option('width', 600);
+        this.dateBox.option('dropDownOptions.width', '50%');
+        this.dateBox.option('opened', true);
+
+        const popup = this.dateBox.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), '50%', 'popup width option value is correct');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
+        this.dateBox.option('width', 300);
+        this.dateBox.option('dropDownOptions.width', '50%');
+        this.dateBox.option('opened', true);
+
+        this.dateBox.option('width', 700);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
     });
 
     QUnit.test('list should contain correct values if min/max does not specified', function(assert) {
@@ -5039,4 +5219,46 @@ QUnit.module('DateBox number and string value support', {
         });
     });
 
+});
+
+testModule('native picker', function() {
+    [
+        { editorType: 'date', checkDate: true, checkTime: false },
+        { editorType: 'time', checkDate: false, checkTime: true },
+        { editorType: 'datetime', checkDate: true, checkTime: true }
+    ].forEach(({ editorType, checkDate, checkTime }) => {
+        test(`set new value for editor with ${editorType} type`, function(assert) {
+            const $editor = $('#dateBox').dxDateBox({
+                pickerType: 'native',
+                type: editorType,
+                value: new Date(2020, 10, 11, 13, 0, 0)
+            });
+            const instance = $editor.dxDateBox('instance');
+            const newEditorInstance = $('<div>').appendTo('#qunit-fixture').dxDateBox({
+                pickerType: 'native',
+                type: editorType,
+                value: new Date(2020, 10, 12, 13, 1, 0)
+            }).dxDateBox('instance');
+            const newValue = newEditorInstance.option('text');
+
+            $editor
+                .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+                .val(newValue)
+                .trigger('change');
+
+            assert.ok(instance.option('isValid'), 'New value is valid');
+
+            const currentDate = instance.option('value');
+            if(checkDate) {
+                assert.strictEqual(currentDate.getFullYear(), 2020);
+                assert.strictEqual(currentDate.getMonth(), 10);
+                assert.strictEqual(currentDate.getDate(), 12);
+            }
+
+            if(checkTime) {
+                assert.strictEqual(currentDate.getHours(), 13);
+                assert.strictEqual(currentDate.getMinutes(), 1);
+            }
+        });
+    });
 });

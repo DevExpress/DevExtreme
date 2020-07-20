@@ -5,6 +5,11 @@ import {
 } from '../../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from '../palette';
+
+import {
     template
 } from '../../core/templates/template';
 
@@ -21,7 +26,8 @@ import {
 } from '../../ui/widget/ui.widget';
 
 import {
-    Font
+    Font,
+    VizTextOverflowType
 } from '../core/base_widget';
 
 import {
@@ -35,12 +41,14 @@ import {
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
+    DashStyleType
 } from '../common';
 
 import BaseWidget, {
     BaseWidgetOptions,
-    BaseWidgetTooltip
+    BaseWidgetTooltip,
+    WordWrapType
 } from '../core/base_widget';
 
 export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
@@ -105,15 +113,14 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:basePointObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:basePointObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
+    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, target?: basePointObject }) => any) | string;
     /**
      * @docid BaseChartOptions.onPointHoverChanged
      * @type function(e)
@@ -170,7 +177,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid BaseChartOptions.paletteExtensionMode
      * @type Enums.VizPaletteExtensionMode
@@ -178,7 +185,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid BaseChartOptions.pointSelectionMode
      * @type Enums.ChartElementSelectionMode
@@ -418,7 +425,7 @@ export interface BaseChartAnnotationConfig {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+    border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
     /**
      * @docid BaseChartAnnotationConfig.color
      * @type string
@@ -557,7 +564,7 @@ export interface BaseChartAnnotationConfig {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    textOverflow?: 'ellipsis' | 'hide' | 'none';
+    textOverflow?: VizTextOverflowType;
     /**
      * @docid BaseChartAnnotationConfig.tooltipEnabled
      * @type boolean
@@ -608,7 +615,7 @@ export interface BaseChartAnnotationConfig {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    wordWrap?: 'normal' | 'breakWord' | 'none';
+    wordWrap?: WordWrapType;
     /**
      * @docid BaseChartAnnotationConfig.x
      * @type number

@@ -1,0 +1,64 @@
+@use "../base/mixins" as *;
+
+// adduse
+
+
+.dx-checkbox {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 0;
+  -webkit-user-drag: none;
+
+  @include user-select(none);
+
+  &.dx-state-readonly {
+    cursor: default;
+  }
+}
+
+.dx-checkbox-icon {
+  display: inline-block;
+  position: relative;
+  background-position: 0 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.dx-checkbox-container {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+
+  @include dx-overflow();
+}
+
+.dx-checkbox-has-text {
+  .dx-checkbox-icon,
+  .dx-checkbox-text {
+    vertical-align: middle;
+  }
+}
+
+.dx-checkbox-text {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: normal;
+  height: 100%;
+  width: 100%;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.dx-state-disabled {
+  &.dx-checkbox,
+  .dx-checkbox {
+    cursor: default;
+  }
+}

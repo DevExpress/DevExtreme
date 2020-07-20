@@ -1,0 +1,63 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+@use "../overlay";
+
+
+$generic-toast-shadow: 0 2px 3px 0 $toast-shadow-color;
+
+
+.dx-toast-content {
+  color: $toast-color;
+  font-size: $generic-base-font-size;
+  font-weight: 600;
+  line-height: $generic-toast-line-height;
+  padding: $generic-toast-content-padding;
+  box-shadow: $generic-toast-shadow;
+  border-radius: $toast-border-radius;
+}
+
+.dx-toast-icon {
+  width: $generic-toast-icon-size;
+  height: $generic-toast-icon-size;
+}
+
+.dx-toast-info {
+  background-color: $toast-info-bg;
+
+  .dx-toast-icon {
+    background-image: $toast-info-icon-image-bg;
+  }
+}
+
+.dx-toast-message {
+  line-height: 16px;
+}
+
+.dx-toast-warning {
+  background-color: $toast-warning-bg;
+
+  .dx-toast-icon {
+    background-image: $toast-warning-icon-image-bg;
+  }
+}
+
+.dx-toast-error {
+  background-color: $toast-error-bg;
+
+  .dx-toast-icon {
+    background-image: $toast-error-icon-image-bg;
+  }
+}
+
+.dx-toast-success {
+  background-color: $toast-success-bg;
+
+  .dx-toast-icon {
+    background-image: $toast-success-icon-image-bg;
+  }
+}

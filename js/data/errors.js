@@ -1,5 +1,5 @@
-const errorUtils = require('../core/utils/error');
-const coreErrors = require('../core/errors');
+import errorUtils from '../core/utils/error';
+import coreErrors from '../core/errors';
 let handlers = {};
 
 /**
@@ -176,4 +176,4 @@ handlers = {
     _errorHandler: _errorHandler
 };
 
-module.exports = handlers;
+export default handlers;

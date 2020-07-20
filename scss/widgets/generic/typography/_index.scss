@@ -1,0 +1,61 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+
+// adduse
+@mixin dx-s-font-mixin() {
+  font-weight: 500;
+  font-size: $generic-s-font-size;
+}
+
+.dx-theme-generic-typography {
+  background-color: $typography-bg;
+
+  @include dx-base-typography();
+
+  h1,
+  .dx-font-xl {
+    font-weight: 200;
+    font-size: $generic-xl-font-size;
+  }
+
+  h2,
+  .dx-font-l {
+    font-weight: normal;
+    font-size: $generic-l-font-size;
+  }
+
+  h3 {
+    font-weight: normal;
+    font-size: $generic-h3-font-size;
+  }
+
+  .dx-font-m {
+    font-weight: normal;
+    font-size: $generic-m-font-size;
+  }
+
+  h4,
+  .dx-font-s {
+    @include dx-s-font-mixin();
+  }
+
+  h5 {
+    font-weight: 700;
+    font-size: $generic-h5-font-size;
+  }
+
+  h6,
+  small,
+  .dx-font-xs {
+    font-weight: 800;
+    font-size: $generic-xs-font-size;
+  }
+
+  a {
+    color: $typography-link-color;
+  }
+}

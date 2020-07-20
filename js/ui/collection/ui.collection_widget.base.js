@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import commonUtils from '../../core/utils/common';
+import { ensureDefined, deferRenderer, noop } from '../../core/utils/common';
 import { findTemplates } from '../../core/utils/template_manager';
 import { getPublicElement } from '../../core/element';
 import domAdapter from '../../core/dom_adapter';
@@ -16,11 +16,11 @@ import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
-import selectors from '../widget/selectors';
+import { focusable } from '../widget/selectors';
 import messageLocalization from '../../localization/message';
 import holdEvent from '../../events/hold';
 import { compileGetter } from '../../core/utils/data';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import contextMenuEvent from '../../events/contextmenu';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
@@ -181,7 +181,7 @@ const CollectionWidget = Widget.inherit({
                     if(fieldsMap && isFunction(fieldsMap.text)) {
                         data = fieldsMap.text(data);
                     }
-                    $container.text(String(commonUtils.ensureDefined(data, '')));
+                    $container.text(String(ensureDefined(data, '')));
                 }
             }).bind(this), this._getBindableFields(), this.option('integrationOptions.watchMethod'), fieldsMap)
         });
@@ -650,7 +650,7 @@ const CollectionWidget = Widget.inherit({
         this._prepareContent();
     },
 
-    _prepareContent: commonUtils.deferRenderer(function() {
+    _prepareContent: deferRenderer(function() {
         this._renderContentImpl();
     }),
 
@@ -668,7 +668,7 @@ const CollectionWidget = Widget.inherit({
 
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
-        const clickEventNamespace = addNamespace(clickEvent.name, this.NAME);
+        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
         const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
         const that = this;
 
@@ -718,13 +718,13 @@ const CollectionWidget = Widget.inherit({
     },
 
     _closestFocusable: function($target) {
-        if($target.is(selectors.focusable)) {
+        if($target.is(focusable)) {
             return $target;
         } else {
             $target = $target.parent();
 
             while($target.length && !domAdapter.isDocument($target.get(0))) {
-                if($target.is(selectors.focusable)) {
+                if($target.is(focusable)) {
                     return $target;
                 }
                 $target = $target.parent();
@@ -849,7 +849,7 @@ const CollectionWidget = Widget.inherit({
             return;
         }
 
-        eventsEngine.on($itemElement, clickEvent.name, (function(e) {
+        eventsEngine.on($itemElement, clickEventName, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                 event: e
             });
@@ -924,7 +924,7 @@ const CollectionWidget = Widget.inherit({
         };
     },
 
-    _postprocessRenderItem: commonUtils.noop,
+    _postprocessRenderItem: noop,
 
     _executeItemRenderAction: function(index, itemData, itemElement) {
         this._getItemRenderAction()({
@@ -1087,4 +1087,4 @@ const CollectionWidget = Widget.inherit({
 
 CollectionWidget.ItemClass = CollectionWidgetItem;
 
-module.exports = CollectionWidget;
+export default CollectionWidget;

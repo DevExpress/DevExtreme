@@ -1,0 +1,12 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+.dx-card {
+  border: 1px solid $base-border-color;
+  border-radius: $base-border-radius;
+  background-color: $base-bg;
+}

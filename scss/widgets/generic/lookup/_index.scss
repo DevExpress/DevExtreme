@@ -1,0 +1,121 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dropDownEditor" as *;
+@use "../common" as *;
+
+// adduse
+@use "../dropDownList";
+
+$generic-lookup-field-padding:
+  $generic-base-inline-borderedwidget-top-padding
+  $generic-base-inline-borderedwidget-inner-size
+  $generic-base-inline-borderedwidget-bottom-padding
+  $generic-base-inline-borderedwidget-horizontal-padding;
+$generic-lookup-field-padding-rtl:
+  $generic-base-inline-borderedwidget-top-padding
+  $generic-base-inline-borderedwidget-horizontal-padding
+  $generic-base-inline-borderedwidget-bottom-padding
+  $generic-base-inline-borderedwidget-inner-size;
+
+
+.dx-lookup {
+  height: $generic-lookup-height;
+  border: 1px solid $texteditor-border-color;
+  background: $texteditor-bg;
+
+  &.dx-editor-underlined {
+    background: $texteditor-underlined-bg;
+  }
+}
+
+.dx-lookup-field {
+  padding: $generic-lookup-field-padding;
+  font-size: 1em;
+
+  .dx-rtl & {
+    padding: $generic-lookup-field-padding-rtl;
+  }
+}
+
+.dx-lookup-arrow {
+  @include dx-icon(spinnext);
+
+  width: $generic-base-inline-borderedwidget-inner-size;
+  color: $lookup-icon-color;
+
+  @include dx-icon-font-centered-sizing($generic-base-icon-size);
+}
+
+.dx-state-readonly .dx-lookup-field:before {
+  opacity: 0.5,;
+}
+
+.dx-lookup-popup-wrapper {
+  .dx-list-item {
+    border-top: none;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .dx-list-item-content {
+    padding-left: $generic-lookup-popup-content-padding;
+    padding-right: $generic-lookup-popup-content-padding;
+  }
+
+  .dx-popup-content {
+    top: 0;
+    padding: 0;
+  }
+
+  .dx-popup-title + .dx-popup-content {
+    top: $generic-lookup-popup-content-top;
+  }
+}
+
+.dx-lookup-empty {
+  .dx-lookup-field {
+    color: $texteditor-placeholder-color;
+  }
+}
+
+@mixin lookup-badge-offset() {
+  right: $generic-dropdowneditor-invalid-badge-offset;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    right: auto;
+    left: $generic-dropdowneditor-invalid-badge-offset;
+  }
+}
+
+.dx-invalid.dx-lookup .dx-lookup-field:after {
+  @include lookup-badge-offset();
+  @include dx-invalid-generic-badge();
+}
+
+.dx-valid.dx-lookup .dx-lookup-field:after {
+  @include lookup-badge-offset();
+  @include dx-valid-generic-badge();
+}
+
+.dx-validation-pending.dx-lookup .dx-lookup-field-wrapper .dx-pending-indicator {
+  @include lookup-badge-offset();
+  @include dx-pending-indicator-generic();
+}
+
+.dx-lookup-popup-search .dx-list {
+  height: calc(100% - #{$generic-lookup-list-top});
+}
+
+.dx-lookup-search-wrapper {
+  padding: $generic-lookup-popup-content-padding;
+  padding-bottom: $generic-lookup-popup-content-padding - 6px;
+}

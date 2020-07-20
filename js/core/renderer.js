@@ -1,4 +1,2 @@
-const rendererBase = require('./renderer_base');
-
-
-module.exports = rendererBase.get();
+import rendererBase from './renderer_base';
+export default rendererBase.get();

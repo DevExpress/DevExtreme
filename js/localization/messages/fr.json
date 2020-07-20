@@ -319,6 +319,7 @@
         "dxFileManager-commandThumbnails": "Mode vignette",
         "dxFileManager-commandDetails": "Mode détails",
         "dxFileManager-commandClearSelection": "Vider sélection",
+        "dxFileManager-commandShowNavPane": "TODO",
 
         "dxFileManager-dialogDirectoryChooserTitle": "Sélectionner répertoire de destination",
         "dxFileManager-dialogDirectoryChooserButtonText": "Sélectionner",

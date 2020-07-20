@@ -1,8 +1,8 @@
 import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
-import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
+import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
 
-class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
+class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     _getCellsBetween($first, $last) {
         if(this._hasAllDayClass($last)) {
             return super._getCellsBetween($first, $last);
@@ -26,7 +26,8 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
         }
 
         const lastCellGroup = this.getCellData($last).groups;
-        const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
+        const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace()
+            ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
 
         let newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference;
         let newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
@@ -52,6 +53,21 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpace {
         }
         return $cells;
     }
+
+    _getCellFromNextColumn(direction, isMultiSelection) {
+        let $nextCell = super._getCellFromNextColumn(direction, isMultiSelection);
+        const $focusedCell = this._$focusedCell;
+
+        if($focusedCell.parent().index() !== $nextCell.parent().index() && isMultiSelection) {
+            $nextCell = $focusedCell;
+        }
+
+        return $nextCell;
+    }
+
+    _getFormat() {
+        return this._formatWeekdayAndDay;
+    }
 }
 
-module.exports = SchedulerWorkspaceVertical;
+export default SchedulerWorkspaceVertical;

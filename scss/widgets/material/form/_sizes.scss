@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-form-group-caption-bottom-margin: null !default;
+$material-form-group-caption-bottom-padding: null !default;
+$material-form-top-label-padding: null !default;
+
+@if $size == "default" {
+  $material-form-group-caption-bottom-margin: 6px;
+  $material-form-group-caption-bottom-padding: 19px;
+  $material-form-top-label-padding: 16px 0 3px;
+}
+
+@else if $size == "compact" {
+  $material-form-group-caption-bottom-margin: 4px;
+  $material-form-group-caption-bottom-padding: 10px;
+  $material-form-top-label-padding: 4px 0 2px;
+}

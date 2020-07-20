@@ -98,7 +98,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
-            onFocusedRowChanged: this._onFocusedRowChanged.bind(this),
+            onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
             onOptionChanged: this._onFilesViewOptionChanged.bind(this)
         });
     }
@@ -304,13 +304,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onFocusedRowChanged(e) {
+    _onFilesViewFocusedRowChanged(e) {
         if(!this._isMultipleSelectionMode()) {
             this._selectItemSingleSelection(e.row?.data);
         }
 
         const fileSystemItem = e.row?.data.fileItem || null;
-        this._raiseFocusedItemChanged({
+        this._onFocusedItemChanged({
             item: fileSystemItem,
             itemKey: fileSystemItem?.key,
             itemElement: e.rowElement
@@ -436,4 +436,4 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
 }
 
-module.exports = FileManagerDetailsItemList;
+export default FileManagerDetailsItemList;

@@ -1,0 +1,147 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/treeView" as *;
+@use "../../base/icons" as *;
+@use "../checkBox/colors" as *;
+
+// adduse
+
+
+$material-treeview-container-with-border-offset: 8px;
+$material-treeview-border-padding: 1px;
+$material-treeview-container-padding:
+  $material-treeview-border-padding
+  $material-treeview-border-padding
+  $material-treeview-border-padding
+  $material-treeview-container-with-border-offset;
+
+$material-treeview-search-editor-height: 33px;
+$material-select-all-item-left-padding: 26px;
+$material-treeview-node-offset: $material-treeview-toggle-item-width;
+$material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5;
+
+.dx-treeview-node-loadindicator {
+  top: $material-treeview-loadincicator-offset-top;
+  left: $material-treeview-loadincicator-offset-left;
+  width: $material-treeview-loadincicator-size;
+  height: $material-treeview-loadincicator-size;
+}
+
+.dx-rtl {
+  @include dx-treeview-make-rtl($material-treeview-container-with-border-offset, $material-treeview-node-offset, $material-treeview-item-with-checkbox-offset, $material-treeview-checkbox-offset, $material-select-all-text-offset, $material-select-all-item-left-padding, $material-treeview-border-padding);
+
+  .dx-treeview-toggle-item-visibility {
+    right: 0;
+  }
+
+  .dx-treeview-item-with-checkbox .dx-checkbox {
+    overflow: visible;
+  }
+}
+
+.dx-treeview-search {
+  margin-bottom: $material-treeview-searchbox-margin-bottom;
+}
+
+.dx-treeview-with-search > .dx-scrollable {
+  height: calc(100% - #{round($material-treeview-search-editor-height + $material-treeview-searchbox-margin-bottom)});
+}
+
+.dx-treeview-border-visible {
+  border: 1px solid $treeview-border-color;
+
+  .dx-treeview-select-all-item {
+    padding-left: $material-select-all-item-left-padding;
+  }
+
+  .dx-scrollable-content {
+    > .dx-treeview-node-container {
+      padding: $material-treeview-container-padding;
+    }
+  }
+}
+
+.dx-treeview-select-all-item {
+  border-bottom: 1px solid $treeview-border-color;
+  padding: $material-select-all-item-padding;
+
+  .dx-checkbox-text {
+    padding-left: $material-select-all-text-offset;
+  }
+}
+
+.dx-treeview-node {
+  padding-left: $material-treeview-node-offset;
+}
+
+.dx-state-selected {
+  > .dx-treeview-item {
+    color: $treeview-item-selected-color;
+  }
+}
+
+.dx-treeview-item-with-checkbox {
+  .dx-treeview-item {
+    color: $base-text-color;
+    padding-left: $material-treeview-item-with-checkbox-offset;
+  }
+
+  .dx-checkbox {
+    top: $material-treeview-checkbox-vertical-offset;
+    left: $material-treeview-checkbox-offset;
+  }
+}
+
+.dx-treeview-item-without-checkbox {
+  &.dx-state-selected {
+    > .dx-treeview-item {
+      color: $treeview-item-selected-color;
+      background-color: $treeview-item-selected-bg;
+
+      &.dx-state-hover:not(.dx-state-focused) {
+        background-color: $treeview-item-selected-hover-bg;
+      }
+    }
+  }
+
+  &.dx-state-focused {
+    > .dx-treeview-item {
+      background-color: $treeview-focused-bg;
+      color: $treeview-focus-color;
+    }
+  }
+}
+
+.dx-treeview-item {
+  padding: $material-treeview-item-padding;
+  min-height: $material-treeview-min-item-height;
+  line-height: $material-treeview-min-item-height / 2 - 2;
+
+  .dx-icon {
+    @include dx-icon-sizing($material-base-icon-size);
+  }
+
+  &.dx-state-hover {
+    background-color: $treeview-hover-bg;
+    color: $treeview-item-hover-color;
+  }
+}
+
+.dx-treeview-toggle-item-visibility {
+  @include dx-icon(chevronright);
+  @include dx-icon-font-centered-sizing($material-base-icon-size);
+
+  color: $treeview-spin-icon-color;
+  width: $material-treeview-toggle-item-width;
+  height: $material-treeview-min-item-height;
+  top: 0;
+  left: 0;
+
+  &.dx-treeview-toggle-item-visibility-opened {
+    @include dx-icon(chevrondown);
+    @include dx-icon-font-centered-sizing($material-base-icon-size);
+  }
+}

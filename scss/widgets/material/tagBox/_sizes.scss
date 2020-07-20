@@ -1,0 +1,40 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-tagbox-tag-content-padding-left: null !default;
+$material-tagbox-tag-content-padding-right: null !default;
+$material-tagbox-tag-content-padding: null !default;
+$material-tagbox-remove-button-right: null !default;
+$material-tagbox-remove-button-width: null !default;
+$material-tagbox-select-all-padding-bottom: null !default;
+$material-tagbox-select-all-margin-bottom: null !default;
+$material-tagbox-tag-margin: null !default;
+$material-tagbox-tag-container-padding: null !default;
+$material-tagbox-tag-height: null !default;
+
+@if $size == "default" {
+  $material-tagbox-tag-content-padding-left: 12px;
+  $material-tagbox-tag-content-padding-right: 32px;
+  $material-tagbox-tag-content-padding: 8px $material-tagbox-tag-content-padding-right 7px $material-tagbox-tag-content-padding-left;
+  $material-tagbox-remove-button-right: 4px;
+  $material-tagbox-remove-button-width: 24px;
+  $material-tagbox-select-all-padding-bottom: 12px;
+  $material-tagbox-select-all-margin-bottom: 3px;
+  $material-tagbox-tag-margin: 8px;
+  $material-tagbox-tag-container-padding: 4px 12px 12px 12px;
+  $material-tagbox-tag-height: 32px;
+}
+
+@else if $size == "compact" {
+  $material-tagbox-tag-content-padding-left: 8px;
+  $material-tagbox-tag-content-padding-right: 32px;
+  $material-tagbox-tag-content-padding: 5px $material-tagbox-tag-content-padding-right 5px $material-tagbox-tag-content-padding-left;
+  $material-tagbox-remove-button-right: 4px;
+  $material-tagbox-remove-button-width: 24px;
+  $material-tagbox-select-all-padding-bottom: 12px;
+  $material-tagbox-select-all-margin-bottom: 3px;
+  $material-tagbox-tag-margin: 5px;
+  $material-tagbox-tag-container-padding: 2px 8px 7px 8px;
+  $material-tagbox-tag-height: 26px;
+}

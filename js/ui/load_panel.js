@@ -1,12 +1,14 @@
-const $ = require('../core/renderer');
-const noop = require('../core/utils/common').noop;
-const messageLocalization = require('../localization/message');
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const LoadIndicator = require('./load_indicator');
-const Overlay = require('./overlay');
-const Deferred = require('../core/utils/deferred').Deferred;
-const themes = require('./themes');
+import $ from '../core/renderer';
+import { noop } from '../core/utils/common';
+import messageLocalization from '../localization/message';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import LoadIndicator from './load_indicator';
+import Overlay from './overlay';
+import { Deferred } from '../core/utils/deferred';
+import themes from './themes';
+
+// STYLE loadPanel
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
@@ -47,6 +49,8 @@ const LoadPanel = Overlay.inherit({
             showPane: true,
 
             delay: 0,
+
+            templatesRenderAsynchronously: false,
 
             hideTopOverlayHandler: null,
 
@@ -108,11 +112,6 @@ const LoadPanel = Overlay.inherit({
 
     _init: function() {
         this.callBase.apply(this, arguments);
-    },
-
-    _initOptions: function() {
-        this.callBase.apply(this, arguments);
-        this.option('templatesRenderAsynchronously', false);
     },
 
     _render: function() {
@@ -248,4 +247,4 @@ const LoadPanel = Overlay.inherit({
 
 registerComponent('dxLoadPanel', LoadPanel);
 
-module.exports = LoadPanel;
+export default LoadPanel;

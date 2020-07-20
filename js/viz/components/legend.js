@@ -6,6 +6,10 @@ import title from '../core/title';
 import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
 import { processHatchingAttrs, getFuncIri } from '../core/renderers/renderer';
+///#DEBUG
+import { debug } from '../../core/utils/console';
+///#ENDDEBUG
+import { Deferred, when } from '../../core/utils/deferred';
 
 const _Number = Number;
 
@@ -134,7 +138,6 @@ function parseOptions(options, textField, allowInsidePosition) {
     if(!options) return null;
 
     ///#DEBUG
-    const debug = require('../../core/utils/console').debug;
     debug.assertParam(options.visible, 'Visibility was not passed');
     debug.assertParam(options.markerSize, 'markerSize was not passed');
     debug.assertParam(options.font.color, 'fontColor was not passed');
@@ -352,7 +355,7 @@ function getTitleHorizontalAlignment(options) {
     }
 }
 
-const _Legend = exports.Legend = function(settings) {
+export let Legend = function(settings) {
     const that = this;
     that._renderer = settings.renderer;
     that._legendGroup = settings.group;
@@ -363,7 +366,12 @@ const _Legend = exports.Legend = function(settings) {
     that._titleGroupClass = settings.titleGroupClass;
     that._allowInsidePosition = settings.allowInsidePosition;
     that._widget = settings.widget;
+
+    that._asyncFirstDrawing = true;
+    that._updated = false;
 };
+
+const _Legend = Legend;
 
 const legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
 
@@ -378,6 +386,7 @@ extend(legendPrototype, {
         const that = this;
         options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
         const initMarkerSize = options.markerSize;
+        this._updated = true;
         this._data = data.map((dataItem) => {
             dataItem.size = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
             dataItem.marker = getAttributes(dataItem, dataItem.states.normal);
@@ -437,10 +446,10 @@ extend(legendPrototype, {
     draw: function(width, height) {
         // TODO check multiple groups creation
         const that = this;
-        const options = that._options;
         const items = that._getItemData();
 
-        that._size = { width: width, height: height };
+        that._isAsyncRendering = false;
+
         that.erase();
 
         if(!(that.isVisible() && items && items.length)) {
@@ -461,6 +470,34 @@ extend(legendPrototype, {
         that._markersGroup = that._renderer.g().attr({ class: that._itemGroupClass }).append(that._insideLegendGroup);
         that._createItems(items);
 
+        that._updateElementsPosition(width, height);
+
+        return that;
+    },
+
+    _measureElements: function() {
+        const options = this._options;
+        let maxBBoxHeight = 0;
+        this._items.forEach(item => {
+            const labelBBox = item.label.getBBox();
+            const markerBBox = item.marker.getBBox();
+            item.markerBBox = markerBBox;
+            item.markerSize = Math.max(markerBBox.width, markerBBox.height);
+            const bBox = getSizeItem(options, markerBBox, labelBBox);
+            item.labelBBox = labelBBox;
+            item.bBox = bBox;
+            maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
+        });
+        if(options.equalRowHeight) {
+            this._items.forEach(item => item.bBox.height = maxBBoxHeight);
+        }
+    },
+
+    _updateElementsPosition: function(width, height) {
+        const that = this;
+        const options = that._options;
+        this._size = { width: width, height: height };
+        that._measureElements();
         that._locateElements(options);
         that._finalUpdate(options);
 
@@ -468,19 +505,12 @@ extend(legendPrototype, {
         if(size.width > width || size.height > height) {
             that.freeSpace();
         }
-
-        return that;
-    },
-
-    probeDraw: function(width, height) {
-        return this.draw(width, height);
     },
 
     _createItems: function(items) {
         const that = this;
         const options = that._options;
         const renderer = that._renderer;
-        let maxBBoxHeight = 0;
         const createMarker = getMarkerCreator(options.markerShape);
 
         that._markersId = {};
@@ -501,6 +531,8 @@ extend(legendPrototype, {
 
         markersGroup.css(patchFontOptions(options.font));
 
+        const deferredItems = [];
+
         that._items = (items || []).map((dataItem, i) => {
             const stateOfDataItem = dataItem.states;
             const normalState = stateOfDataItem.normal;
@@ -517,6 +549,8 @@ extend(legendPrototype, {
             const itemGroup = renderer.g().append(markersGroup);
 
             const markerGroup = renderer.g().attr({ class: 'dxl-marker' }).append(itemGroup);
+
+            deferredItems[i] = new Deferred();
 
             const item = {
                 label: that._createLabel(dataItem, itemGroup),
@@ -535,12 +569,12 @@ extend(legendPrototype, {
                     template.render({
                         model: dataItem, container: markerGroup.element, onRendered: () => {
                             isRendered = true;
-                            if(isAsyncRendering) {
-                                that._widget._requestChange(['LAYOUT']);
-                            }
+                            deferredItems[i].resolve();
                         }
                     });
-                    const isAsyncRendering = !isRendered && markerGroup.element.childNodes.length === 0;
+                    if(!isRendered && markerGroup.element.childNodes.length === 0) {
+                        that._isAsyncRendering = true;
+                    }
                 }
             };
 
@@ -553,21 +587,20 @@ extend(legendPrototype, {
             }
 
             return item;
-        }).map(item => {
-            const labelBBox = item.label.getBBox();
-            const markerBBox = item.marker.getBBox();
-            item.markerBBox = markerBBox;
-            item.markerSize = Math.max(markerBBox.width, markerBBox.height);
-            const bBox = getSizeItem(options, markerBBox, labelBBox);
-            item.labelBBox = labelBBox;
-            item.bBox = bBox;
-            maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
-
-            return item;
         });
-        if(options.equalRowHeight) {
-            that._items.forEach(item => item.bBox.height = maxBBoxHeight);
-        }
+
+        when.apply(this, deferredItems).done(() => {
+            if(that._isAsyncRendering) {
+                const changes = ['LAYOUT', 'FULL_RENDER'];
+                if(that._asyncFirstDrawing) {
+                    changes.push('FORCE_FIRST_DRAWING');
+                    that._asyncFirstDrawing = false;
+                } else {
+                    changes.push('FORCE_DRAWING');
+                }
+                that._widget._requestChange(changes);
+            }
+        });
     },
 
     _getItemData: function() {
@@ -1062,7 +1095,15 @@ extend(legendPrototype, {
     },
 
     measure: function(size) {
-        this.draw(size[0], size[1]);
+        if(this._updated || !this._insideLegendGroup) {
+            this.draw(size[0], size[1]);
+            this._updated = false;
+        } else {
+            this._items.forEach((item) => {
+                item.bBoxes = [];
+            });
+            this._updateElementsPosition(size[0], size[1]);
+        }
         const rect = this.getLayoutOptions();
         return [rect.width, rect.height];
     },
@@ -1079,7 +1120,7 @@ extend(legendPrototype, {
 });
 
 
-exports.plugin = {
+export const plugin = {
     name: 'legend',
     init: function() {
         const that = this;
@@ -1090,7 +1131,7 @@ exports.plugin = {
             .enableLinks()
             .append(that._renderer.root);
 
-        that._legend = new exports.Legend({
+        that._legend = new Legend({
             renderer: that._renderer,
             group: group,
             widget: this,
@@ -1169,13 +1210,17 @@ exports.plugin = {
 };
 
 ///#DEBUG
+export const _setLegend = function(value) {
+    Legend = value;
+};
+
 const __getMarkerCreator = getMarkerCreator;
-exports._DEBUG_stubMarkerCreator = function(callback) {
+export const _DEBUG_stubMarkerCreator = function(callback) {
     getMarkerCreator = function() {
         return callback;
     };
 };
-exports._DEBUG_restoreMarkerCreator = function() {
+export const _DEBUG_restoreMarkerCreator = function() {
     getMarkerCreator = __getMarkerCreator;
 };
 ///#ENDDEBUG

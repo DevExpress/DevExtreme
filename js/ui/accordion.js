@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import fx from '../animation/fx';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
@@ -16,6 +16,8 @@ import { when, Deferred } from '../core/utils/deferred';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { getImageContainer } from '../core/utils/icon';
 import themes from './themes';
+
+// STYLE accordion
 
 const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
@@ -223,7 +225,7 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _attachItemTitleClickAction: function(itemTitle) {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         eventsEngine.off(itemTitle, eventName);
         eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
@@ -439,4 +441,4 @@ const Accordion = CollectionWidget.inherit({
 
 registerComponent('dxAccordion', Accordion);
 
-module.exports = Accordion;
+export default Accordion;

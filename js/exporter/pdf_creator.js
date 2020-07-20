@@ -1,8 +1,9 @@
-const VERSION = require('../core/version');
-const window = require('../core/utils/window').getWindow();
-const imageCreator = require('./image_creator').imageCreator;
-const isFunction = require('../core/utils/type').isFunction;
-const extend = require('../core/utils/extend').extend;
+import VERSION from '../core/version';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import { imageCreator } from './image_creator';
+import { isFunction } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
 
 const mainPageTemplate = '%PDF-1.3\r\n2 0 obj\r\n<</ProcSet[/PDF/ImageB/ImageC/ImageI]/XObject<</I0 5 0 R>>>>\r\nendobj\r\n4 0 obj\r\n<</Type/Pages/Kids[1 0 R]/Count 1>>\r\nendobj\r\n7 0 obj\r\n<</OpenAction[1 0 R /FitH null]/Type/Catalog/Pages 4 0 R/PageLayout/OneColumn>>\r\nendobj\r\n1 0 obj\r\n<</Type/Page/Resources 2 0 R/MediaBox[0 0 _width_ _height_]/Contents 3 0 R/Parent 4 0 R>>\r\nendobj\r\n';
 const contentTemplate = '3 0 obj\r\n<</Length 52>>stream\r\n0.20 w\n0 G\nq _width_ 0 0 _height_ 0.00 0.00 cm /I0 Do Q\r\nendstream\r\nendobj\r\n';
@@ -60,7 +61,7 @@ let getBase64 = function(binaryData) {
     return window.btoa(binaryData);
 };
 
-exports.getData = function(data, options) {
+export function getData(data, options) {
     return imageCreator.getImageData(data, extend({}, options, { format: 'JPEG' })).then(imageString => {
         const binaryData = composePdfString(imageString, options, getCurDate());
         const pdfData = isFunction(window.Blob) ?
@@ -69,48 +70,48 @@ exports.getData = function(data, options) {
 
         return pdfData;
     });
-};
+}
 
 ///#DEBUG
-exports.__tests = {
+export const __tests = {
     set_composePdfString: function(func) {
-        exports.__tests.composePdfString = composePdfString;
+        __tests.composePdfString = composePdfString;
         composePdfString = func;
     },
     restore_composePdfString: function(func) {
-        if(exports.__tests.composePdfString) {
-            composePdfString = exports.__tests.composePdfString;
-            exports.__tests.composePdfString = null;
+        if(__tests.composePdfString) {
+            composePdfString = __tests.composePdfString;
+            __tests.composePdfString = null;
         }
     },
     set_getCurDate: function(func) {
-        exports.__tests.getCurDate = getCurDate;
+        __tests.getCurDate = getCurDate;
         getCurDate = func;
     },
     restore_getCurDate: function(func) {
-        if(exports.__tests.getCurDate) {
-            getCurDate = exports.__tests.getCurDate;
-            exports.__tests.getCurDate = null;
+        if(__tests.getCurDate) {
+            getCurDate = __tests.getCurDate;
+            __tests.getCurDate = null;
         }
     },
     set_getBlob: function(func) {
-        exports.__tests.getBlob = getBlob;
+        __tests.getBlob = getBlob;
         getBlob = func;
     },
     restore_getBlob: function(func) {
-        if(exports.__tests.getBlob) {
-            getBlob = exports.__tests.getBlob;
-            exports.__tests.getBlob = null;
+        if(__tests.getBlob) {
+            getBlob = __tests.getBlob;
+            __tests.getBlob = null;
         }
     },
     set_getBase64: function(func) {
-        exports.__tests.getBase64 = getBase64;
+        __tests.getBase64 = getBase64;
         getBase64 = func;
     },
     restore_getBase64: function(func) {
-        if(exports.__tests.getBase64) {
-            getBase64 = exports.__tests.getBase64;
-            exports.__tests.getBase64 = null;
+        if(__tests.getBase64) {
+            getBase64 = __tests.getBase64;
+            __tests.getBase64 = null;
         }
     }
 };

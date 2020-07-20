@@ -1,0 +1,62 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-colorview-container-width: null !default;
+$generic-colorview-palette-width: null !default;
+$generic-colorview-palette-height: null !default;
+$generic-colorview-alpha-margin: null !default;
+$generic-colorview-hue-scale-width: null !default;
+$generic-colorview-hue-scale-margin: null !default;
+$generic-colorview-color-preview-height: null !default;
+$generic-colorview-preview-container-margin: null !default;
+$generic-colorview-container-line-height: null !default;
+$generic-colorview-container-hex-margin: null !default;
+$generic-colorview-container-alpha-label-width: null !default;
+$generic-colorview-container-alpha-label-margin: null !default;
+$generic-colorview-container-textbox-width: null !default;
+$generic-colorview-container-textbox-margin: null !default;
+$generic-colorview-controls-container-width: null !default;
+$generic-colorview-controls-container-margin: null !default;
+
+@if $size == "default" {
+  $generic-colorview-container-width: 450px;
+  $generic-colorview-palette-width: 288px;
+  $generic-colorview-palette-height: 299px;
+  $generic-colorview-alpha-margin: 10px;
+  $generic-colorview-hue-scale-width: 18px;
+  $generic-colorview-hue-scale-margin: 19px;
+  $generic-colorview-color-preview-height: 40px;
+  $generic-colorview-preview-container-margin: 34px;
+
+  $generic-colorview-container-line-height: 36px;
+  $generic-colorview-container-hex-margin: 10px 0 0 0;
+  $generic-colorview-container-alpha-label-width: 115px;
+  $generic-colorview-container-alpha-label-margin: 43px;
+  $generic-colorview-container-textbox-width: 69px;
+  $generic-colorview-container-textbox-margin: 1px 1px 10px 0;
+
+  $generic-colorview-controls-container-width: 90px;
+  $generic-colorview-controls-container-margin: 27px;
+}
+
+@else if $size == "compact" {
+  $generic-colorview-container-width: 316px;
+  $generic-colorview-palette-width: 190px;
+  $generic-colorview-palette-height: 200px;
+  $generic-colorview-alpha-margin: 5px;
+  $generic-colorview-hue-scale-width: 18px;
+  $generic-colorview-hue-scale-margin: 15px;
+  $generic-colorview-color-preview-height: 25px;
+  $generic-colorview-preview-container-margin: 15px;
+
+  $generic-colorview-container-line-height: 25px;
+  $generic-colorview-container-hex-margin: 5px 0 0 0;
+  $generic-colorview-container-alpha-label-width: 92px;
+  $generic-colorview-container-alpha-label-margin: 29px;
+  $generic-colorview-container-textbox-width: 51px;
+  $generic-colorview-container-textbox-margin: 1px 1px 8px 0;
+
+  $generic-colorview-controls-container-width: 70px;
+  $generic-colorview-controls-container-margin: 15px;
+}

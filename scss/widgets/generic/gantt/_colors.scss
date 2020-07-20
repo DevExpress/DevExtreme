@@ -1,0 +1,78 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../gridBase/colors" as *;
+
+// adduse
+
+
+$gantt-collapsable-row-bg: null !default;
+$gantt-selection-bg: null !default;
+$gantt-parent-task-bg: null !default;
+$gantt-icon-color: null !default;
+
+
+@if $color == "carmine" {
+
+  $gantt-collapsable-row-bg: darken($base-bg, 5%) !default;
+  $gantt-selection-bg: color.change($datagrid-selection-bg, $alpha: 0.25) !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: lighten($base-text-color, 20%) !default;
+}
+
+@if $color == "contrast" {
+
+  $gantt-collapsable-row-bg: lighten($base-bg, 5%) !default;
+  $gantt-selection-bg: color.change($datagrid-selection-bg, $alpha: 0.3) !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: $base-text-color !default;
+}
+
+@if $color == "dark" {
+
+  $gantt-collapsable-row-bg: lighten($base-bg, 5%) !default;
+  $gantt-selection-bg: $datagrid-selection-bg !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: darken($base-text-color, 20%) !default;
+}
+
+@if $color == "darkmoon" {
+
+  $gantt-collapsable-row-bg: lighten($base-bg, 4%) !default;
+  $gantt-selection-bg: color.change($datagrid-selection-bg, $alpha: 0.3) !default;
+  $gantt-parent-task-bg: $base-danger !default;
+  $gantt-icon-color: darken($base-text-color, 20%) !default;
+}
+
+@if $color == "darkviolet" {
+
+  $gantt-collapsable-row-bg: lighten($base-bg, 4%) !default;
+  $gantt-selection-bg: color.change($datagrid-selection-bg, $alpha: 0.3) !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: darken($base-text-color, 20%) !default;
+}
+
+@if $color == "greenmist" {
+
+  $gantt-collapsable-row-bg: darken($base-bg, 4%) !default;
+  $gantt-selection-bg: color.change($datagrid-selection-bg, $alpha: 0.25) !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: lighten($base-text-color, 15%) !default;
+}
+
+@if $color == "light" {
+
+  $gantt-collapsable-row-bg: darken($base-bg, 4%) !default;
+  $gantt-selection-bg: $datagrid-selection-bg !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: lighten($base-text-color, 20%) !default;
+}
+
+@if $color == "softblue" {
+
+  $gantt-collapsable-row-bg: darken($base-bg, 4%) !default;
+  $gantt-selection-bg: $datagrid-selection-bg !default;
+  $gantt-parent-task-bg: $base-success !default;
+  $gantt-icon-color: lighten($base-text-color, 20%) !default;
+}
+

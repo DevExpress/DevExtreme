@@ -1,0 +1,89 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+
+// adduse
+
+
+$material-bar-height: 4px;
+$material-background-width: 90%;
+$material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
+
+.dx-progressbar-container {
+  height: $material-bar-height;
+  background-color: $progressbar-bg;
+}
+
+.dx-progressbar-range {
+  position: relative;
+  background-color: $progressbar-range-bg;
+  margin-top: -1px;
+  box-sizing: content-box;
+}
+
+.dx-progressbar-animating-container {
+  height: $material-bar-height;
+  background-color: $progressbar-bg;
+  background-size: $material-background-width 5px;
+  animation: loader 2s linear infinite;
+
+  @include gradient-linear($material-progressbar-interdeterminate-state-gradient);
+
+  background-repeat: repeat;
+}
+
+.dx-state-disabled {
+  .dx-progressbar-range {
+    background-color: $progressbar-range-disabled-bg;
+  }
+
+  .dx-progressbar-animating-container {
+    animation: none;
+    background-position-x: $material-background-width / 2;
+  }
+}
+
+.dx-progressbar-status {
+  padding-top: $material-progressbar-status-padding;
+  color: $progressbar-label-color;
+
+  .dx-progressbar .dx-position-right & {
+    padding-top: 0;
+  }
+}
+
+.dx-rtl {
+  .dx-progressbar,
+  &.dx-progressbar {
+    .dx-progressbar-animating-container {
+      animation: loader-rtl 2s linear infinite;
+
+      @include gradient-linear($material-progressbar-interdeterminate-state-gradient);
+
+      background-repeat: repeat;
+    }
+  }
+}
+
+@keyframes loader {
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: 900%;
+  }
+}
+
+@keyframes loader-rtl {
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: -900%;
+  }
+}

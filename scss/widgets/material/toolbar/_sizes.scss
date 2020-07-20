@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-toolbar-height: null !default;
+$material-toolbar-menu-vertical-padding: null !default;
+
+@if $size == "default" {
+  $material-toolbar-height: 76px;
+  $material-toolbar-menu-vertical-padding: 7px;
+}
+
+@else if $size == "compact" {
+  $material-toolbar-height: 56px;
+  $material-toolbar-menu-vertical-padding: 5px;
+}

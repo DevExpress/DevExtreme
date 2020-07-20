@@ -1,0 +1,54 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../menuBase/sizes" as *;
+@use "../menu/colors" as *;
+
+// adduse
+@use "../overlay";
+@use "../menuBase" as *; // need as private
+
+
+$generic-menu-popup-border: 1px solid $menu-popup-border-color;
+
+.dx-context-menu {
+  color: $menu-color;
+
+  .dx-submenu {
+    background-color: $menu-popup-bg;
+    border: $generic-menu-popup-border;
+    box-shadow: 0 2px 2px $menu-container-shadow-color;
+  }
+
+  .dx-menu-item-popout {
+    @include dx-icon(spinright);
+    @include dx-icon-font-centered-sizing($generic-base-icon-size);
+  }
+
+  .dx-menu-separator {
+    background-color: $menu-separator-bg;
+  }
+
+  .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content .dx-menu-item-text {
+    padding-left: $generic-menu-item-padding-base;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      padding-right: $generic-menu-item-padding-base;
+      padding-left: $generic-menu-padding-big;
+    }
+  }
+
+  &.dx-rtl {
+    .dx-menu-item-content {
+      padding: $generic-menu-item-padding-base $generic-menu-item-padding-reduced $generic-menu-item-padding-base $generic-menu-item-padding-base;
+
+      .dx-menu-item-text {
+        padding: 0 $generic-menu-item-padding-base + $generic-base-icon-size $generic-menu-item-padding-base $generic-menu-padding-big;
+      }
+    }
+  }
+}

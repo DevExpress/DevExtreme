@@ -1,0 +1,27 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+
+
+.dx-tile {
+  color: $tileview-color;
+  background-color: $tileview-bg;
+  border: 1px solid $tileview-border-color;
+  text-align: left;
+
+  &.dx-state-focused,
+  &.dx-state-hover {
+    background-color: $tileview-hover-bg;
+    border-color: $tileview-hover-border-color;
+  }
+
+  &.dx-state-active {
+    background-color: $tileview-active-bg;
+    color: $tileview-active-color;
+    border-color: transparent;
+  }
+}

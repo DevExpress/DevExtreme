@@ -1,5 +1,5 @@
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const toFixed = require('../utils').toFixed;
+import { fitIntoRange } from '../../core/utils/math';
+import { toFixed } from '../utils';
 
 const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };
 const ESCAPING_CHAR = '\'';
@@ -31,14 +31,20 @@ function isPercentFormat(format) {
     return format.indexOf('%') !== -1 && !format.match(/'[^']*%[^']*'/g);
 }
 
+function removeStubs(str) {
+    return str.replace(/'.+'/g, '');
+}
+
 function getNonRequiredDigitCount(floatFormat) {
     if(!floatFormat) return 0;
-    return floatFormat.length - floatFormat.replace(/[#]/g, '').length;
+    const format = removeStubs(floatFormat);
+    return format.length - format.replace(/[#]/g, '').length;
 }
 
 function getRequiredDigitCount(floatFormat) {
     if(!floatFormat) return 0;
-    return floatFormat.length - floatFormat.replace(/[0]/g, '').length;
+    const format = removeStubs(floatFormat);
+    return format.length - format.replace(/[0]/g, '').length;
 }
 
 function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
@@ -104,7 +110,7 @@ function getFloatPointIndex(format) {
     return format.length;
 }
 
-function getFormatter(format, config) {
+export function getFormatter(format, config) {
     config = config || DEFAULT_CONFIG;
 
     return function(value) {
@@ -203,7 +209,7 @@ function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
     return format;
 }
 
-function getFormat(formatter) {
+export function getFormat(formatter) {
     let valueText = '.';
     const isPercent = formatter(1).indexOf('100') >= 0;
 
@@ -215,6 +221,3 @@ function getFormat(formatter) {
 
     return negativeFormat === '-' + positiveFormat ? positiveFormat : positiveFormat + ';' + negativeFormat;
 }
-
-exports.getFormatter = getFormatter;
-exports.getFormat = getFormat;

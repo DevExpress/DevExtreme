@@ -1,13 +1,11 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import typeUtils from './type';
-import windowUtils from './window';
+import { isDefined, isRenderer, isWindow } from './type';
+import { getWindow } from './window';
 
-const window = windowUtils.getWindow();
-const isDefined = typeUtils.isDefined;
-const isRenderer = typeUtils.isRenderer;
+const window = getWindow();
 
-const resetActiveElement = function() {
+export const resetActiveElement = function() {
     const activeElement = domAdapter.getActiveElement();
     const body = domAdapter.getBody();
 
@@ -21,7 +19,7 @@ const resetActiveElement = function() {
     }
 };
 
-const clearSelection = function() {
+export const clearSelection = function() {
     const selection = window.getSelection();
     if(!selection) return;
     if(selection.type === 'Caret') return;
@@ -36,7 +34,7 @@ const clearSelection = function() {
     }
 };
 
-const closestCommonParent = function(startTarget, endTarget) {
+export const closestCommonParent = function(startTarget, endTarget) {
     const $startTarget = $(startTarget);
     const $endTarget = $(endTarget);
 
@@ -55,7 +53,7 @@ const closestCommonParent = function(startTarget, endTarget) {
     }
 };
 
-const extractTemplateMarkup = function(element) {
+export const extractTemplateMarkup = function(element) {
     element = $(element);
 
     const templateTag = element.length && element.filter(function isNotExecutableScript() {
@@ -71,7 +69,7 @@ const extractTemplateMarkup = function(element) {
     }
 };
 
-const normalizeTemplateElement = function(element) {
+export const normalizeTemplateElement = function(element) {
     let $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
         : $('<div>').html(element).contents();
@@ -87,7 +85,7 @@ const normalizeTemplateElement = function(element) {
     return $element;
 };
 
-const clipboardText = function(event, text) {
+export const clipboardText = function(event, text) {
     const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
 
     if(arguments.length === 1) {
@@ -97,7 +95,7 @@ const clipboardText = function(event, text) {
     clipboard && clipboard.setData('Text', text);
 };
 
-const contains = function(container, element) {
+export const contains = function(container, element) {
     if(!element) {
         return false;
     }
@@ -110,12 +108,16 @@ const contains = function(container, element) {
         return container.documentElement.contains(element);
     }
 
+    if(isWindow(container)) {
+        return contains(container.document, element);
+    }
+
     return container.contains
         ? container.contains(element)
         : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
 };
 
-const createTextElementHiddenCopy = function(element, text, options) {
+export const createTextElementHiddenCopy = function(element, text, options) {
     const elementStyles = window.getComputedStyle($(element).get(0));
     const includePaddings = options && options.includePaddings;
 
@@ -137,12 +139,3 @@ const createTextElementHiddenCopy = function(element, text, options) {
         'float': 'left'
     });
 };
-
-exports.resetActiveElement = resetActiveElement;
-exports.extractTemplateMarkup = extractTemplateMarkup; // TODO: extract
-exports.normalizeTemplateElement = normalizeTemplateElement; // TODO: extract
-exports.clearSelection = clearSelection;
-exports.closestCommonParent = closestCommonParent;
-exports.clipboardText = clipboardText;
-exports.contains = contains;
-exports.createTextElementHiddenCopy = createTextElementHiddenCopy; // TODO: extract

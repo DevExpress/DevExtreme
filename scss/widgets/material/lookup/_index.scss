@@ -1,0 +1,210 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dropDownEditor" as *;
+@use "../common" as *;
+
+// adduse
+@use "../dropDownList";
+
+
+.dx-lookup {
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    height: $material-filled-lookup-height;
+
+    .dx-lookup-field {
+      padding: $material-filled-texteditor-input-padding;
+      padding-right: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
+    }
+
+    .dx-lookup-arrow {
+      right: $material-base-icon-size / 2;
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-right: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+      }
+
+      &.dx-rtl {
+        .dx-lookup-field {
+          padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+          padding-right: $material-filled-texteditor-input-horizontal-padding;
+        }
+      }
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-lookup-arrow {
+        left: $material-base-icon-size / 2;
+        right: auto;
+      }
+
+      .dx-lookup-field {
+        padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
+        padding-right: $material-filled-texteditor-input-horizontal-padding;
+      }
+    }
+  }
+
+  &.dx-editor-underlined {
+    height: $material-standard-lookup-height;
+
+    .dx-lookup-field {
+      padding: $material-standard-texteditor-input-padding;
+      padding-right: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-right: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+      }
+
+      &.dx-rtl {
+        .dx-lookup-field {
+          padding-left: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+          padding-right: $material-standard-texteditor-input-horizontal-padding;
+        }
+      }
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-lookup-field {
+        padding-left: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+        padding-right: $material-standard-texteditor-input-horizontal-padding;
+      }
+    }
+  }
+
+  &.dx-invalid {
+    border-bottom-color: $base-invalid-faded-border-color;
+
+    .dx-lookup-arrow:after {
+      @include dx-invalid-material-badge();
+
+      right: $material-base-icon-size;
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-lookup-arrow:after {
+        left: $material-base-icon-size;
+        right: auto;
+      }
+    }
+  }
+
+  &.dx-valid {
+    .dx-lookup-arrow:after {
+      @include dx-valid-material-badge();
+
+      right: $material-base-icon-size;
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-lookup-arrow:after {
+        left: $material-base-icon-size;
+        right: auto;
+      }
+    }
+  }
+
+  &.dx-validation-pending {
+    .dx-lookup-field-wrapper {
+      .dx-pending-indicator {
+        @include dx-pending-indicator-material();
+
+        right: $material-base-icon-size;
+      }
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-lookup-field-wrapper {
+        .dx-pending-indicator {
+          left: $material-base-icon-size;
+          right: auto;
+        }
+      }
+    }
+  }
+}
+
+.dx-lookup-field {
+  font-size: $material-lookup-font-size;
+
+  .dx-texteditor {
+    border: none;
+
+    &:before,
+    &:after {
+      content: none;
+    }
+
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active,
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    & {
+      background-color: transparent;
+    }
+  }
+}
+
+.dx-lookup-arrow {
+  @include dx-icon(spindown);
+
+  width: $material-base-icon-size;
+  color: $lookup-icon-color;
+
+  @include dx-icon-font-centered-sizing($material-base-icon-size);
+}
+
+.dx-state-readonly .dx-lookup-field:before {
+  opacity: 0.5;
+}
+
+.dx-lookup-popup-wrapper {
+  .dx-list-item {
+    border-top: none;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .dx-popup-content {
+    top: 0;
+    padding: 0;
+  }
+
+  .dx-popup-title + .dx-popup-content {
+    top: $material-lookup-popup-content-top;
+  }
+}
+
+.dx-lookup-empty {
+  .dx-lookup-field {
+    color: $texteditor-placeholder-color;
+  }
+}
+
+.dx-lookup-popup-search .dx-list {
+  height: calc(100% - #{$material-lookup-list-top});
+}
+
+.dx-lookup-search-wrapper {
+  padding: $material-lookup-popup-content-padding;
+  padding-bottom: $material-lookup-popup-content-padding - 6px;
+}

@@ -1,12 +1,12 @@
 import eventsEngine from '../../events/core/events_engine';
-import windowUtils from '../../core/utils/window';
+import { getNavigator, hasProperty } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import eventEmitterModule from './event_emitter';
 import { addNamespace } from '../../events/utils';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { parseScalar } from '../core/utils';
 
-const navigator = windowUtils.getNavigator();
+const navigator = getNavigator();
 const _math = Math;
 const _abs = _math.abs;
 const _sqrt = _math.sqrt;
@@ -40,7 +40,7 @@ let Focus;
 
 setupEvents();
 
-function Tracker(parameters) {
+export function Tracker(parameters) {
     const that = this;
     that._root = parameters.root;
     that._createEventHandlers(parameters.dataKey);
@@ -463,20 +463,23 @@ Focus = function(fire) {
 
 eventEmitterModule.makeEventEmitter(Tracker);
 
-exports.Tracker = Tracker;
-
 ///#DEBUG
 const originFocus = Focus;
-exports._DEBUG_forceEventMode = function(mode) {
+
+export function _DEBUG_forceEventMode(mode) {
     setupEvents(mode);
-};
-exports.Focus = Focus;
-exports._DEBUG_stubFocusType = function(focusType) {
+}
+
+export { Focus };
+
+export function _DEBUG_stubFocusType(focusType) {
     Focus = focusType;
-};
-exports._DEBUG_restoreFocusType = function() {
+}
+
+export function _DEBUG_restoreFocusType() {
     Focus = originFocus;
-};
+}
+
 ///#ENDDEBUG
 
 function getDistance(x1, y1, x2, y2) {
@@ -503,7 +506,7 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    let flags = [navigator.pointerEnabled, navigator.msPointerEnabled, windowUtils.hasProperty('ontouchstart')];
+    let flags = [navigator.pointerEnabled, navigator.msPointerEnabled, hasProperty('ontouchstart')];
     ///#DEBUG
     if(arguments.length) {
         flags = [

@@ -1,0 +1,130 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../gridBase" as *;
+@use "../gridBase/colors" as *;
+@use "../gridBase/sizes" as *;
+@use "../../base/dataGrid" as baseGrid with (
+  $datagrid-border: $datagrid-border,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+);
+
+// adduse
+
+
+@include grid-base(datagrid);
+
+.dx-datagrid-group-panel {
+  font-size: $generic-base-font-size;
+  touch-action: pinch-zoom;
+
+  .dx-group-panel-message {
+    color: $datagrid-columnchooser-item-color;
+    font-weight: $datagrid-columnchooser-font-weight;
+    padding: $generic-datagrid-cell-padding;
+    border-top: $generic-grid-base-border-hidden;
+    border-bottom: $generic-grid-base-border-hidden;
+  }
+
+  .dx-group-panel-item {
+    margin-right: $generic-grid-base-grouppanel-item-margin;
+    color: $datagrid-columnchooser-item-color;
+    font-weight: $datagrid-columnchooser-font-weight;
+    border: $datagrid-border;
+    padding: $generic-datagrid-cell-padding;
+  }
+
+  .dx-block-separator {
+    margin-right: $generic-grid-base-grouppanel-item-margin;
+    color: $datagrid-columnchooser-item-color;
+    font-weight: $datagrid-columnchooser-font-weight;
+    padding: $generic-datagrid-cell-padding + 1;
+    background-color: $datagrid-block-separator-bg;
+  }
+
+  .dx-sort {
+    color: $datagrid-menu-icon-color;
+  }
+}
+
+.dx-datagrid-rowsview {
+  .dx-row.dx-group-row:first-child {
+    border-top: none,;
+  }
+
+  .dx-row.dx-group-row {
+    &:not(.dx-row-focused) {
+      color: $datagrid-group-row-color;
+      background-color: $datagrid-group-row-bg;
+    }
+
+    font-weight: bold;
+
+    td {
+      border-top-color: $generic-grid-base-border-color;
+      border-bottom-color: $generic-grid-base-border-color;
+    }
+  }
+}
+
+.dx-datagrid-group-opened {
+  @include dx-icon(spindown);
+  @include dx-icon-sizing($generic-base-icon-size);
+
+  color: $datagrid-spin-icon-color;
+}
+
+.dx-datagrid-group-closed {
+  @include dx-icon(spinright);
+  @include dx-icon-sizing($generic-base-icon-size);
+
+  color: $datagrid-spin-icon-color;
+}
+
+.dx-datagrid-group-opened,
+.dx-datagrid-group-closed {
+  width: 100%;
+}
+
+.dx-row.dx-datagrid-group-footer {
+  &.dx-column-lines {
+    border-bottom: $datagrid-border;
+  }
+
+  & > td {
+    background-color: $datagrid-summary-bg;
+    border-top: $datagrid-border;
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+}
+
+.dx-rtl {
+  .dx-datagrid-group-panel {
+    .dx-group-panel-item,
+    .dx-block-separator {
+      margin-left: $generic-grid-base-grouppanel-item-margin;
+    }
+  }
+}
+
+.dx-datagrid-filter-panel {
+  .dx-icon-filter,
+  .dx-datagrid-filter-panel-text,
+  .dx-datagrid-filter-panel-clear-filter {
+    color: $base-accent;
+  }
+}

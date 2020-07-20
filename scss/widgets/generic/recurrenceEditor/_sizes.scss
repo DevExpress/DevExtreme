@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-recurrence-interval-number-box-margin-top: null !default;
+
+@if $size == "default" {
+  $generic-recurrence-interval-number-box-margin-top: 25px;
+}
+
+@else if $size == "compact" {
+  $generic-recurrence-interval-number-box-margin-top: 18px;
+}

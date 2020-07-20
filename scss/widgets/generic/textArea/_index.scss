@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+
+
+.dx-textarea {
+  height: auto;
+
+  .dx-icon-clear {
+    top: 0;
+    margin-top: 0;
+  }
+
+  &.dx-invalid .dx-texteditor-container:after {
+    top: $generic-base-inline-borderedwidget-top-padding;
+    margin-top: 0;
+  }
+}

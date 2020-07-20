@@ -1,0 +1,380 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../button/colors" as *;
+@use "../button/sizes" as *;
+@use "../button" as *;
+@use "../checkBox/colors" as *;
+
+// adduse
+@use "../badge";
+
+
+$generic-mobile-list-item-horizontal-padding: 15px;
+
+$generic-list-border: $generic-list-border-width solid $list-border-color;
+$generic-list-item-border: $generic-list-item-border-width solid $list-border-color;
+$generic-list-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
+
+
+.dx-list-item-chevron {
+  transform: rotate(0);
+  border: none;
+  opacity: 1;
+
+  .dx-rtl & {
+    transform: rotate(0);
+  }
+
+  @include dx-icon(chevronnext);
+  @include dx-icon-sizing($generic-base-icon-size);
+
+  margin-left: -5px;
+  color: $list-item-chevron-icon-color;
+}
+
+.dx-list-item-icon-container {
+  width: $generic-base-icon-size + $generic-list-item-horizontal-padding;
+  height: $generic-base-icon-size;
+  vertical-align: top;
+}
+
+.dx-list-item-icon {
+  @include dx-icon-sizing($generic-base-icon-size);
+}
+
+.dx-list-search {
+  margin-bottom: $generic-list-searchbox-margin-bottom;
+}
+
+@mixin item-states() {
+  &.dx-state-hover {
+    background-color: $list-item-hover-bg;
+    color: $list-item-hover-color;
+
+    .dx-icon {
+      color: $list-item-hover-color;
+    }
+  }
+
+  &.dx-list-item-selected {
+    background-color: $list-item-selected-bg;
+    color: $list-item-selected-color;
+
+    .dx-icon {
+      color: $list-item-selected-color;
+    }
+
+    &.dx-state-hover:not(.dx-state-focused) {
+      background-color: $list-item-selected-hover-bg;
+      color: $list-item-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $list-focused-bg;
+    color: $list-item-focus-color;
+
+    .dx-icon {
+      color: $list-item-focus-color;
+    }
+
+    .dx-list-item-chevron {
+      border-color: $list-chevron-focus-color;
+    }
+  }
+
+  &.dx-state-focused.dx-list-item-selected {
+    background-color: $list-item-focused-selected-bg;
+    color: $base-inverted-text-color;
+  }
+
+  &.dx-state-active {
+    background-color: $list-item-active-bg;
+    color: $list-item-active-color;
+
+    .dx-icon {
+      color: $list-item-active-color;
+    }
+
+    .dx-list-slide-item-content {
+      background-color: $list-item-active-bg;
+      color: $list-item-active-color;
+    }
+  }
+
+  .dx-icon {
+    color: $list-icon-color;
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-button .dx-icon {
+      color: $button-icon-color;
+    }
+  }
+}
+
+@mixin dx-list-sizing($item-horizontal-padding) {
+  .dx-list {
+    border: none;
+
+    &.dx-list-with-search .dx-scrollable-wrapper {
+      height: calc(100% - #{round($generic-list-search-editor-height + $generic-list-searchbox-margin-bottom)});
+    }
+
+    .dx-empty-message {
+      text-align: left;
+    }
+
+    &.dx-list-select-decorator-enabled {
+      .dx-list-item,
+      .dx-list-select-all {
+        &.dx-state-hover {
+          .dx-radiobutton-icon:before,
+          .dx-checkbox-icon {
+            border-color: $checkbox-hover-border-color;
+          }
+        }
+
+        &.dx-state-focused {
+          .dx-radiobutton-icon:before,
+          .dx-checkbox-icon {
+            border: 1px solid $checkbox-focused-borderd-color;
+          }
+        }
+      }
+    }
+
+    &:not(.dx-list-select-decorator-enabled) {
+      .dx-list-item {
+        @include item-states();
+      }
+    }
+  }
+
+  .dx-list-group-header {
+    font-weight: bold;
+    padding: $generic-list-group-header-vertical-padding $item-horizontal-padding $generic-list-item-vertical-padding $item-horizontal-padding;
+    border-top: $generic-list-item-border;
+    border-bottom: $list-group-header-border-bottom;
+    background: $list-group-header-bg;
+    color: $list-group-color;
+
+    .dx-list-group:first-of-type & {
+      border-top: none;
+    }
+
+    &:before {
+      border-top-color: $list-group-color;
+    }
+
+    .dx-list-group-collapsed &:before {
+      border-bottom-color: $list-group-color;
+    }
+  }
+
+
+  .dx-list-item {
+    &:first-of-type {
+      border-top: none;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .dx-icon-toggle-delete {
+      background-image: $list-item-icon-toggle-delete-bg;
+      background-size: 100%;
+    }
+
+    &.dx-list-item-ghost-reordering {
+      &.dx-state-focused {
+        &.dx-state-hover {
+          color: $list-item-ghost-color;
+          background: $list-item-ghost-bg;
+          border-top: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
+          border-bottom: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
+          box-shadow: 0 0 1px color.change($list-item-ghost-shadow-color, $alpha: 0.1), 0 1px 3px color.change($list-item-ghost-shadow-color, $alpha: 0.2);
+        }
+      }
+    }
+  }
+
+  .dx-list-item,
+  .dx-list .dx-empty-message {
+    border-top: $generic-list-item-border;
+    color: $list-normal-color;
+
+    .dx-list-item-separator-hidden & {
+      border-top: none;
+      border-bottom: none;
+    }
+  }
+
+  .dx-list-item-content,
+  .dx-list .dx-empty-message {
+    padding: $generic-list-item-vertical-padding $item-horizontal-padding;
+  }
+
+  .dx-list-next-button .dx-button {
+    @include dx-button-withtext-sizing();
+  }
+
+  .dx-list-item-chevron-container {
+    width: 6px + $item-horizontal-padding;
+  }
+
+  .dx-list-border-visible {
+    border: $generic-list-border;
+
+    .dx-list-select-all {
+      border-bottom: $generic-list-border;
+    }
+  }
+
+  .dx-list-item-before-bag {
+    &.dx-list-toggle-delete-switch-container {
+      width: $item-horizontal-padding + 19px;
+    }
+
+    &.dx-list-select-checkbox-container,
+    &.dx-list-select-radiobutton-container {
+      width: $item-horizontal-padding + 21px;
+    }
+
+    .dx-button.dx-list-toggle-delete-switch {
+      border: none;
+      background: transparent;
+      box-shadow: none;
+
+      .dx-button-content {
+        padding: 0;
+      }
+    }
+
+    .dx-icon-toggle-delete {
+      margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2 $generic-list-item-vertical-padding / 2 $item-horizontal-padding;
+      width: 9px + $generic-list-item-vertical-padding;
+      height: 9px + $generic-list-item-vertical-padding;
+    }
+
+    .dx-list-select-checkbox,
+    .dx-list-select-radiobutton {
+      margin-top: $generic-list-select-all-margin-top;
+      margin-bottom: -3px;
+      margin-left: $item-horizontal-padding;
+    }
+  }
+
+  .dx-list-select-all {
+    padding: $generic-list-item-vertical-padding - 1px 0 $generic-list-item-vertical-padding - 2px;
+  }
+
+  .dx-list-select-all-checkbox {
+    float: left;
+    margin: -1px $generic-list-select-all-margin-right -3px $item-horizontal-padding;
+  }
+
+  .dx-list-select-all-label {
+    line-height: $generic-list-select-all-label-line-height;
+    padding: 0 $generic-list-item-horizontal-padding;
+    margin-top: $generic-list-select-all-label-margin-top;
+  }
+
+  .dx-list-item-after-bag {
+    &.dx-list-static-delete-button-container {
+      width: $item-horizontal-padding + $generic-button-icon-size + $generic-list-deletebutton-padding * 2 + $generic-button-border-weight * 2;
+    }
+
+    &.dx-list-reorder-handle-container {
+      width: $item-horizontal-padding + $generic-base-icon-size * 1.3;
+    }
+
+    .dx-list-reorder-handle {
+      @include dx-icon(dragvertical);
+      @include dx-icon-sizing($generic-base-icon-size, $generic-base-icon-size * 1.6);
+    }
+  }
+
+  .dx-list-slide-menu-button {
+    bottom: 1px;
+  }
+
+  .dx-list-slide-menu-button-delete {
+    border: 1px solid transparent;
+    color: $list-menu-button-delete-color;
+    background-color: $list-menu-button-delete-bg;
+  }
+
+  .dx-list-slide-menu-button-menu {
+    border: 1px solid transparent;
+    color: $list-menu-button-default-color;
+    background-color: $list-menu-button-default-bg;
+  }
+
+  .dx-list-switchable-delete-button,
+  .dx-list-static-delete-button {
+    margin-right: $item-horizontal-padding;
+    padding: 0;
+
+    .dx-button-content {
+      padding: $generic-list-deletebutton-padding;
+    }
+  }
+
+  .dx-list-context-menucontent {
+    background-color: $list-holdmenu-bg;
+    border: 1px solid $list-holdmenu-border-color;
+    border-radius: 0;
+    box-shadow: 0 3px 10px $list-holdmenu-shadow-color;
+  }
+
+  .dx-state-disabled {
+    &.dx-list-item,
+    .dx-list-item {
+      background-color: transparent;
+      opacity: 0.6;
+    }
+  }
+
+  .dx-rtl .dx-list,
+  .dx-rtl.dx-list {
+    .dx-empty-message {
+      text-align: right;
+    }
+
+    .dx-list-item-before-bag {
+      .dx-icon-toggle-delete {
+        margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2;
+      }
+
+      .dx-list-select-checkbox,
+      .dx-list-select-radiobutton {
+        margin-right: $item-horizontal-padding;
+        margin-left: 1px;
+      }
+    }
+
+    .dx-list-select-all-checkbox {
+      float: right;
+      margin-right: $item-horizontal-padding;
+      margin-left: 1px;
+    }
+
+    .dx-list-switchable-delete-button {
+      margin-left: $item-horizontal-padding;
+      margin-right: 0;
+    }
+  }
+}
+
+@include dx-list-sizing($generic-list-item-horizontal-padding);
+
+.dx-device-mobile {
+  @include dx-list-sizing($generic-mobile-list-item-horizontal-padding);
+}

@@ -1,0 +1,19 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+
+
+$generic-slideout-menu-icon-size: $generic-base-icon-size + $generic-slideout-menu-icon-oversize;
+
+.dx-slideout-menu .dx-list-item .dx-icon {
+  @include dx-icon-sizing($generic-slideout-menu-icon-size);
+  @include dx-icon-margin($generic-slideout-menu-icon-size / 2);
+
+  margin-top: -$generic-slideout-menu-icon-oversize / 2;
+  margin-bottom: -$generic-slideout-menu-icon-oversize / 2;
+}

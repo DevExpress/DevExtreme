@@ -1,0 +1,67 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+
+$scrollview-shadow-color: null !default;
+$scrollview-pull-down-bg: null !default;
+
+
+@if $color == "carmine" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "contrast" {
+
+
+  $scrollview-shadow-color: $base-shadow-color !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "dark" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "darkmoon" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "darkviolet" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "greenmist" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "light" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat !default;
+}
+
+@if $color == "softblue" {
+
+
+  $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+  $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat !default;
+}
+

@@ -1,0 +1,155 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+@use "../common" as *;
+@use "../typography" as *;
+
+// adduse
+
+
+$generic-field-min-height: $generic-base-inline-widget-height;
+$generic-field-value-top-padding: $generic-base-inline-widget-top-padding;
+$generic-field-value-horizontal-padding: $generic-base-inline-horizontal-padding;
+$generic-field-value-bottom-padding: $generic-base-inline-widget-bottom-padding;
+$generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size;
+
+$generic-mobile-fieldset-vertical-margin: 20px;
+$generic-mobile-fieldset-horizontal-margin: 15px;
+$generic-mobile-fieldset-header-vertical-margin: 20px;
+$generic-mobile-field-vertical-margin: 10px;
+
+
+@mixin dx-fieldset-styling() {
+  .dx-field {
+    @include dx-base-typography();
+  }
+
+  .dx-field-label {
+    color: $fieldset-field-label-color;
+    cursor: default;
+  }
+
+  .dx-field-value {
+    &.dx-attention {
+      color: $fieldset-field-value-invalid-color;
+      padding-left: $generic-fieldset-attention-icon-offset;
+
+      &:before {
+        @include dx-invalid-generic-badge();
+      }
+    }
+  }
+
+  .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+  .dx-field-value-static {
+    width: 60%;
+  }
+}
+
+@mixin dx-field-value-widget-position($name, $size) {
+  &.#{$name},
+  &:not(.dx-widget) > .#{$name} {
+    margin: ($generic-field-min-height - $size) / 2 0;
+  }
+}
+
+// TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
+@mixin dx-fieldset-sizing-base() {
+  .dx-field-label {
+    padding: $generic-field-value-top-padding $generic-field-labelvalue-spacing $generic-field-value-bottom-padding 0;
+  }
+
+  .dx-field {
+    min-height: $generic-field-min-height;
+    padding: 0;
+  }
+
+  .dx-field-value {
+    &.dx-widget,
+    &:not(.dx-widget) > .dx-widget {
+      margin: 0;
+    }
+
+    &:not(.dx-widget) {
+      & > .dx-button,
+      & > .dx-checkbox,
+      & > .dx-switch {
+        float: right;
+      }
+    }
+
+    @include dx-field-value-widget-position(dx-checkbox, $generic-checkbox-size);
+    @include dx-field-value-widget-position(dx-switch, $generic-switch-height);
+    @include dx-field-value-widget-position(dx-slider, $generic-slider-height);
+    @include dx-field-value-widget-position(dx-radiogroup, $generic-radiogroup-min-height);
+
+    &.dx-attention {
+      padding: $generic-field-value-top-padding $generic-field-value-horizontal-padding $generic-field-value-bottom-padding;
+      position: relative;
+      padding-left: $generic-fieldset-attention-icon-offset;
+
+      &:before {
+        left: 0;
+      }
+    }
+  }
+
+  .dx-field-value-static {
+    padding: $generic-field-value-top-padding $generic-field-value-horizontal-padding $generic-field-value-bottom-padding;
+  }
+}
+
+@mixin dx-fieldset-sizing($vertical-margin, $horizontal-margin, $header-vertical-margin, $field-vertical-margin) {
+  .dx-fieldset {
+    margin: $vertical-margin $horizontal-margin;
+    padding: 0;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      .dx-field-value {
+        &:not(.dx-widget) {
+          & > .dx-button,
+          & > .dx-checkbox,
+          & > .dx-switch {
+            float: left;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-fieldset-header {
+    margin: 0 0 $header-vertical-margin 0;
+
+    @include dx-s-font-mixin();
+  }
+
+  .dx-field {
+    margin: 0 0 $field-vertical-margin 0;
+  }
+
+  .dx-field:last-of-type {
+    margin: 0;
+  }
+}
+
+@include dx-fieldset-styling();
+@include dx-fieldset-sizing-base();
+@include dx-fieldset-sizing(
+  $generic-fieldset-vertical-margin,
+  $generic-fieldset-horizontal-margin,
+  $generic-fieldset-header-vertical-margin,
+  $generic-field-vertical-margin
+);
+
+.dx-device-mobile {
+  @include dx-fieldset-sizing(
+    $generic-mobile-fieldset-vertical-margin,
+    $generic-mobile-fieldset-horizontal-margin,
+    $generic-mobile-fieldset-header-vertical-margin,
+    $generic-mobile-field-vertical-margin
+  );
+}

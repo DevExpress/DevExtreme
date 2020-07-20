@@ -1,0 +1,133 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../tabs" as *;
+@use "../tabs/colors" as *;
+
+// adduse
+
+
+$generic-tabpanel-inset-shadow-left: inset $generic-tabs-border-width 0;
+$generic-tabpanel-inset-shadow-top: inset 0 $generic-tabs-border-width;
+$generic-tabpanel-inset-shadow-right: inset (-$generic-tabs-border-width) 0;
+$generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
+
+@mixin tabpanel-shadow-mixin($accent-color) {
+  & > .dx-tabpanel-tabs {
+    .dx-tabs {
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
+    }
+
+    .dx-tab {
+      box-shadow: $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-bottom $accent-color;
+
+      &.dx-tab-selected {
+        box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
+      }
+
+      &.dx-tab-selected,
+      &.dx-tab-active {
+        .dx-tab-content {
+          color: $tabs-tab-selected-color;
+        }
+      }
+    }
+
+    .dx-tabs-expanded {
+      .dx-tab:not(.dx-tab-selected) {
+        &:first-of-type {
+          box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+
+          @at-root #{selector-append(".dx-rtl", &)},
+          .dx-rtl & {
+            box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+          }
+        }
+      }
+    }
+
+    .dx-tabs-stretched {
+      .dx-tab:not(.dx-tab-selected) {
+        &:last-of-type {
+          box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
+
+          @at-root #{selector-append(".dx-rtl", &)},
+          .dx-rtl & {
+            box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+          }
+        }
+      }
+    }
+
+    .dx-tabs-nav-button-left {
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
+    }
+
+    .dx-tabs-nav-button-right {
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
+    }
+  }
+
+  .dx-multiview-wrapper {
+    border-color: $accent-color;
+  }
+}
+
+.dx-tabpanel {
+  .dx-tabs {
+    display: block;
+    border: none;
+    background-color: $tabs-tab-bg;
+    color: $tabs-border-color;
+
+    .dx-tab {
+      color: $tabs-border-color;
+
+      .dx-tab-content {
+        color: $tabs-tab-color;
+      }
+
+      &:after,
+      &:before {
+        content: none;
+      }
+    }
+
+    .dx-tabs-nav-button {
+      color: $tabs-border-color;
+    }
+  }
+
+  .dx-tabs-scrollable {
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+
+    .dx-tabs-wrapper {
+      display: block;
+      border: none;
+    }
+  }
+
+  .dx-tab {
+    width: 140px;
+  }
+
+  &:not(.dx-empty-collection) {
+    .dx-multiview-wrapper {
+      border-top: none;
+    }
+  }
+
+  @include tabpanel-shadow-mixin($tabs-border-color);
+
+  &.dx-state-focused {
+    @include tabpanel-shadow-mixin($tabs-focused-border-color);
+  }
+
+  .dx-multiview-wrapper {
+    border: $generic-tabs-border;
+  }
+}

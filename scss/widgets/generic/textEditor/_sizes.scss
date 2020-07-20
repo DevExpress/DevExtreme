@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-texteditor-clear-icon-oversize: null !default;
+
+@if $size == "default" {
+  $generic-texteditor-clear-icon-oversize: 2px;
+}
+
+@else if $size == "compact" {
+  $generic-texteditor-clear-icon-oversize: 1px;
+}

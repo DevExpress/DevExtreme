@@ -1,9 +1,9 @@
-const iterateUtils = require('../../core/utils/iterator');
-const BaseElement = require('./base_indicators').BaseElement;
+import iterateUtils from '../../core/utils/iterator';
+import { BaseElement } from './base_indicators';
 
 const _Number = Number;
 const _abs = Math.abs;
-const _isString = require('../../core/utils/type').isString;
+import { isString as _isString } from '../../core/utils/type';
 const _isArray = Array.isArray;
 const _isFinite = isFinite;
 const _each = iterateUtils.each;
@@ -191,4 +191,4 @@ function isNotEmptySegmentDesc(start, end, threshold) {
     return start - end >= threshold;
 }
 
-module.exports = BaseRangeContainer;
+export default BaseRangeContainer;

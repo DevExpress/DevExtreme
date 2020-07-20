@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -9,24 +8,18 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
-import { patchOptions as patchPreactOptions, restoreOptions as restorePreactOptions } from '../../helpers/preactHelper.js';
+import { act } from 'preact/test-utils';
 
-import 'renovation/button.j';
+import 'renovation/ui/button.j';
 import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
-        <div id="component"></div>
-        <div id="anotherComponent"></div>
-
         <form id="form">\
         <div id="button"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
         <div id="inkButton"></div>\
-            <div data-options="dxTemplate: { name: 'content' }" data-bind="text: text"></div>\
-        </div>\
         </form>
     `);
 
@@ -44,33 +37,26 @@ const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
 const INK_RIPPLE_CLASS = 'dx-inkripple';
 
-const buttonConfig = {
-    beforeEach: function(module) {
-        // it needs for Preact timers https://github.com/preactjs/preact/blob/master/hooks/src/index.js#L273
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.tick(100);
-        this.clock.restore();
+const moduleConfig = {
+    Button(options = {}) {
+        act(() => $('#button').dxrButton(options));
+        return $('#button');
     }
 };
 
-QUnit.module('Props: template', buttonConfig);
+QUnit.module('Props: template', moduleConfig);
 
 QUnit.test('should render button with default template', function(assert) {
-    const $element = $('#component');
-    $element.dxrButton({ text: 'test', icon: 'check' });
+    const $element = this.Button({ text: 'test', icon: 'check' });
     const $contentElements = $element.find('.dx-button-content').children();
 
-    assert.strictEqual($element.dxrButton('instance').option('template'), undefined, 'default template value');
+    assert.strictEqual($element.dxrButton('option', 'template'), '', 'default template value');
     assert.ok($contentElements.eq(0).hasClass('dx-icon'), 'render icon');
     assert.ok($contentElements.eq(1).hasClass('dx-button-text'), 'render test');
 });
 
 QUnit.test('should pass correct container', function(assert) {
-    const $element = $('#component');
-
-    $element.dxrButton({
+    this.Button({
         template: function(data, container) {
             assert.strictEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
             return $('<div>');
@@ -79,9 +65,7 @@ QUnit.test('should pass correct container', function(assert) {
 });
 
 QUnit.test('should pass correct data', function(assert) {
-    const $element = $('#component');
-
-    $element.dxrButton({
+    const element = this.Button({
         text: 'My button',
         icon: 'test',
         template: function(data, container) {
@@ -93,89 +77,73 @@ QUnit.test('should pass correct data', function(assert) {
         }
     });
 
-    assert.strictEqual($element.text(), 'My button123', 'render correct text');
+    assert.strictEqual(element.text(), 'My button123', 'render correct text');
 });
 
 QUnit.test('should render jQuery', function(assert) {
-    const $element = $('#component');
-
-    $element.dxrButton({
+    const element = this.Button({
         template: (data, container) => $('<div id="custom-template">'),
     });
-    assert.strictEqual($element.find('.dx-button-content').length, 1, 'render content');
-    assert.strictEqual($element.find('#custom-template').length, 1, 'render custom template');
+    assert.strictEqual(element.find('.dx-button-content').length, 1, 'render content');
+    assert.strictEqual(element.find('#custom-template').length, 1, 'render custom template');
 });
 
 QUnit.test('should render dom node', function(assert) {
-    const $element = $('#component');
-
-    $element.dxrButton({
+    const element = this.Button({
         template: (data, container) => $('<div id="custom-template">').get(0),
     });
-    assert.strictEqual($element.find('.dx-button-content').length, 1, 'render content');
-    assert.strictEqual($element.find('#custom-template').length, 1, 'render custom template');
+    assert.strictEqual(element.find('.dx-button-content').length, 1, 'render content');
+    assert.strictEqual(element.find('#custom-template').length, 1, 'render custom template');
 });
 
 QUnit.test('should replace content if has "dx-template-wrapper" class', function(assert) {
-    const $element = $('#component');
-
-    $element.dxrButton({
+    const element = this.Button({
         template: (data, container) => {
-            const $element = $('<span>')
-                .addClass('dx-template-wrapper');
-
-            return $element.get(0);
+            return $('<span>')
+                .addClass('dx-template-wrapper')
+                .get(0);
         },
     });
-    assert.ok($element.find('.dx-button-content').hasClass('dx-template-wrapper'), 'template has "dx-button-content" class');
+    assert.ok(element.find('.dx-button-content').hasClass('dx-template-wrapper'), 'template has "dx-button-content" class');
 });
 
 QUnit.test('should rerender template in runtime', function(assert) {
     const template = (data, container) => $('<div id="custom-template">');
     const templateNew = (data, container) => $('<div id="new-template">');
-    const $element = $('#component');
+    const element = this.Button({ template: template });
+    assert.strictEqual(element.find('#custom-template').length, 1, 'render custom template');
 
-    $element.dxrButton({ template: template });
-    assert.strictEqual($element.find('#custom-template').length, 1, 'render custom template');
-
-    $element.dxrButton('instance').option('template', templateNew);
-    assert.strictEqual($element.find('#custom-template').length, 0, 'not render old template');
-    assert.strictEqual($element.find('#new-template').length, 1, 'render new template');
+    this.Button({ template: templateNew });
+    assert.strictEqual(element.find('#custom-template').length, 0, 'not render old template');
+    assert.strictEqual(element.find('#new-template').length, 1, 'render new template');
 });
 
 QUnit.test('should render submit input with custom template', function(assert) {
-    const $element = $('#component');
-
-    $element.dxrButton({
+    const element = this.Button({
         useSubmitBehavior: true,
         template: (data, container) => $('<span>'),
     });
 
-    assert.strictEqual($element.find('.dx-button-submit-input').length, 1, 'render submit input');
+    assert.strictEqual(element.find('.dx-button-submit-input').length, 1, 'render submit input');
 });
 
 // NOTE: legacy tests for button
-QUnit.module('options changed callbacks', {
-    beforeEach: function() {
-        this.element = $('#button').dxrButton();
-        this.instance = this.element.dxrButton('instance');
-    }
-}, () => {
+QUnit.module('options changed callbacks', moduleConfig, () => {
     QUnit.test('text', function(assert) {
-        this.instance.option('text', 'new text');
-        assert.equal(this.element.text(), 'new text');
+        const element = this.Button({ text: 'new text' });
+        assert.equal(element.text(), 'new text');
 
-        this.instance.option('text', 'new text 2');
-        assert.equal(this.element.text(), 'new text 2');
-        assert.ok(!this.element.hasClass(BUTTON_HAS_ICON_CLASS), 'button with text only has not icon class');
-        assert.ok(this.element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with text has text class'));
+        this.Button({ text: 'new text 2' });
+        assert.equal(element.text(), 'new text 2');
+        assert.ok(!element.hasClass(BUTTON_HAS_ICON_CLASS), 'button with text only has not icon class');
+        assert.ok(element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with text has text class'));
     });
 
     QUnit.test('onClick', function(assert) {
         const clickHandler = sinon.spy();
 
-        this.instance.option('onClick', clickHandler);
-        this.element.trigger('dxclick');
+        const element = this.Button({ onClick: clickHandler });
+        element.trigger('dxclick');
 
         assert.ok(clickHandler.calledOnce, 'Handler should be called');
         const params = clickHandler.getCall(0).args[0];
@@ -185,122 +153,124 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('icon', function(assert) {
-        this.instance.option('icon', 'home');
-        assert.equal(this.element.find('.dx-icon-home').length, 1);
+        const element = this.Button({ icon: 'home' });
+        assert.equal(element.find('.dx-icon-home').length, 1);
 
-        this.instance.option('icon', 'add');
-        assert.equal(this.element.find('.dx-icon-add').length, 1);
+        this.Button({ icon: 'add' });
+        assert.equal(element.find('.dx-icon-add').length, 1);
 
-        this.instance.option('icon', undefined);
-        assert.equal(this.element.find('.dx-icon-add').length, 0);
-        assert.equal(this.element.find('.dx-icon-home').length, 0);
+        this.Button({ icon: undefined });
+        assert.equal(element.find('.dx-icon-add').length, 0);
+        assert.equal(element.find('.dx-icon-home').length, 0);
     });
 
     QUnit.test('icon position', function(assert) {
-        this.instance.option({
+        const element = this.Button({
             icon: 'box',
             text: 'Text',
             iconPosition: 'right'
         });
 
-        let $buttonContentElements = this.element.find('.dx-button-content').children();
+        let $buttonContentElements = element.find('.dx-button-content').children();
         assert.ok($buttonContentElements.eq(1).hasClass('dx-icon'), 'icon is after the text');
         assert.ok($buttonContentElements.eq(1).hasClass('dx-icon-right'), 'icon has class for right position');
-        assert.ok(this.element.hasClass('dx-button-icon-right'), 'button has class for right icon position');
+        assert.ok(element.hasClass('dx-button-icon-right'), 'button has class for right icon position');
 
-        this.instance.option('iconPosition', 'left');
-        $buttonContentElements = this.element.find('.dx-button-content').children();
+        this.Button({ iconPosition: 'left' });
+        $buttonContentElements = element.find('.dx-button-content').children();
         assert.ok($buttonContentElements.eq(0).hasClass('dx-icon'), 'icon is before the text');
         assert.notOk($buttonContentElements.eq(0).hasClass('dx-icon-right'), 'icon has no class for right position');
-        assert.notOk(this.element.hasClass('dx-button-icon-right'), 'button has no class for right icon position');
+        assert.notOk(element.hasClass('dx-button-icon-right'), 'button has no class for right icon position');
     });
 
     QUnit.test('type', function(assert) {
-        this.instance.option('type', 'back');
-        assert.ok(this.element.hasClass(BUTTON_BACK_CLASS));
+        const element = this.Button({ type: 'back' });
+        assert.ok(element.hasClass(BUTTON_BACK_CLASS));
     });
 
     QUnit.test('disabled', function(assert) {
-        this.instance.option('disabled', true);
-        assert.ok(this.element.hasClass('dx-state-disabled'));
+        const element = this.Button({ disabled: true });
+        assert.ok(element.hasClass('dx-state-disabled'));
     });
 
     // NOTE: deprecated property
     QUnit.skip('_templateData', function(assert) {
         const template = sinon.stub().returns('TPL');
-        this.instance.option('template', template);
-        this.instance.option('_templateData', { custom: 1 });
+        const element = this.Button({
+            template: template,
+            _templateData: { custom: 1 }
+        });
         template.reset();
-        this.instance.repaint();
+        act(() => element.dxrButton('repaint'));
 
         assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
     });
 
     QUnit.test('stylingMode', function(assert) {
-        assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+        const element = this.Button();
+        assert.ok(element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
 
-        this.instance.option('stylingMode', 'text');
-        assert.ok(this.element.hasClass(BUTTON_TEXT_STYLE_CLASS));
-        assert.notOk(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+        this.Button({ stylingMode: 'text' });
+        assert.ok(element.hasClass(BUTTON_TEXT_STYLE_CLASS));
+        assert.notOk(element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
 
-        this.instance.option('stylingMode', 'outlined');
-        assert.ok(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
-        assert.notOk(this.element.hasClass(BUTTON_TEXT_STYLE_CLASS));
+        this.Button({ stylingMode: 'outlined' });
+        assert.ok(element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
+        assert.notOk(element.hasClass(BUTTON_TEXT_STYLE_CLASS));
 
-        this.instance.option('stylingMode', 'contained');
-        assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
-        assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
+        this.Button({ stylingMode: 'contained' });
+        assert.ok(element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+        assert.notOk(element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
     });
 
     QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
         const clickHandler = sinon.spy();
 
-        this.instance.option({
+        const element = this.Button({
             onClick: clickHandler
         });
 
-        this.element.addClass('dx-state-readonly');
-        this.element.trigger('dxclick');
+        element.addClass('dx-state-readonly');
+        element.trigger('dxclick');
         assert.strictEqual(clickHandler.callCount, 1, 'click handler was executed');
     });
 
     QUnit.test('T325811 - \'text\' option change should not lead to widget clearing', function(assert) {
-        const $testElement = $('<div>').appendTo(this.element);
+        const element = this.Button();
+        const $testElement = $('<div>').appendTo(element);
         assert.ok($testElement.parent().hasClass('dx-button'), 'test element is in button');
-        this.instance.option('text', 'new test button text');
+        this.Button({ text: 'new test button text' });
         assert.ok($testElement.parent().hasClass('dx-button'), 'test element is still in button');
     });
 });
 
-QUnit.module('regressions', {
-    beforeEach: function() {
-        this.element = $('#button').dxrButton();
-        this.instance = this.element.dxrButton('instance');
-    }
-}, () => {
+QUnit.module('regressions', moduleConfig, () => {
     QUnit.test('B230602', function(assert) {
-        this.instance.option('icon', '1.png');
-        assert.equal(this.element.find('img').length, 1);
+        const element = this.Button({ icon: '1.png' });
+        assert.equal(element.find('img').length, 1);
 
-        this.instance.option('icon', '2.png');
-        assert.equal(this.element.find('img').length, 1);
+        this.Button({ icon: '2.png' });
+        assert.equal(element.find('img').length, 1);
     });
 
     QUnit.test('Q513961', function(assert) {
-        this.instance.option({ text: '123', 'icon': 'home' });
-        assert.equal(this.element.find('.dx-icon-home').index(), 0);
+        const element = this.Button({
+            text: '123',
+            icon: 'home'
+        });
+        assert.equal(element.find('.dx-icon-home').index(), 0);
     });
 
     QUnit.test('B238735: Button holds the shape of an arrow after you change it\'s type from back to any other', function(assert) {
-        this.instance.option('type', 'back');
-        assert.equal(this.element.hasClass(BUTTON_BACK_CLASS), true, 'back button css class removed');
+        const element = this.Button({ type: 'back' });
+        assert.equal(element.hasClass(BUTTON_BACK_CLASS), true, 'back button css class removed');
 
-        this.instance.option('type', 'normal');
-        assert.equal(this.element.hasClass(BUTTON_BACK_CLASS), false, 'back button css class removed');
+        this.Button({ type: 'normal' });
+        assert.equal(element.hasClass(BUTTON_BACK_CLASS), false, 'back button css class removed');
     });
 });
 
-QUnit.module('contentReady', {}, () => {
+QUnit.module('contentReady', () => {
     QUnit.test('T355000 - the \'onContentReady\' action should be fired after widget is rendered entirely', function(assert) {
         const done = assert.async();
         const buttonConfig = {
@@ -337,116 +307,105 @@ QUnit.module('contentReady', {}, () => {
             return true;
         };
 
-        const $firstButton = $('#widget').dxrButton(buttonConfig);
+        let $firstButton;
+        act(() => $firstButton = $('#widget').dxrButton(buttonConfig));
 
-        $('#button').dxrButton($.extend({}, buttonConfig, {
+        act(() => $('#button').dxrButton($.extend({}, buttonConfig, {
             onContentReady(e) {
                 assert.ok(areElementsEqual($firstButton, $(e.element)), 'rendered widget and widget with fired action are equals');
                 done();
             }
-        }));
+        })));
     });
 });
 
-QUnit.module('inkRipple', {}, () => {
+QUnit.module('inkRipple', moduleConfig, () => {
     QUnit.test('inkRipple should be removed when widget is removed', function(assert) {
-        const $element = $('#inkButton');
-
-        $element.dxrButton({
+        assert.expect(1);
+        const element = this.Button({
             useInkRipple: true,
-        });
-        $element.dxrButton('instance').option('onClick', (e) => {
-            const $element = $(e.component.$element());
-            $element.triggerHandler({ type: 'dxremove' });
-            $element.trigger('dxinactive');
-            assert.ok(true, 'no exceptions');
+            onClick: (e) => {
+                const $element = $(e.component.$element());
+                $element.triggerHandler({ type: 'dxremove' });
+                $element.trigger('dxinactive');
+                assert.ok(true, 'no exceptions');
+            }
         });
 
-        $element.trigger('dxclick');
+        element.trigger('dxclick');
     });
 
     QUnit.test('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
-        const clock = sinon.useFakeTimers();
-        const $inkButton = $('#inkButton').dxrButton({
+        const element = this.Button({
             text: 'test',
             useInkRipple: true
         });
-        const inkButton = $inkButton.dxrButton('instance');
-        const pointer = pointerMock($inkButton);
+        const pointer = pointerMock(element);
 
         pointer.start('touch').down();
-        clock.tick();
         pointer.start('touch').up();
-        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+        assert.strictEqual(element.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
 
-        inkButton.option('useInkRipple', false);
-        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
+        this.Button({ useInkRipple: false });
+        assert.strictEqual(element.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
 
         pointer.start('touch').down();
-        clock.tick();
         pointer.start('touch').up();
-        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
+        assert.strictEqual(element.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
 
-        inkButton.option('useInkRipple', true);
+        this.Button({ useInkRipple: true });
         pointer.start('touch').down();
-        clock.tick();
         pointer.start('touch').up();
-        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
-
-        clock.restore();
+        assert.strictEqual(element.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
     });
 });
 
-QUnit.module('widget sizing render', {}, () => {
+QUnit.module('widget sizing render', moduleConfig, () => {
     QUnit.test('default', function(assert) {
-        const $element = $('#widget').dxrButton({ text: 'ahoy!' });
+        const element = this.Button({ text: 'ahoy!' });
 
-        assert.ok($element.outerWidth() > 0, 'outer width of the element must be more than zero');
+        assert.ok(element.outerWidth() > 0, 'outer width of the element must be more than zero');
     });
 
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxrButton({ text: 'ahoy!', width: 400 });
-        const instance = $element.dxrButton('instance');
+        const element = this.Button({ text: 'ahoy!', width: 400 });
 
-        assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual($element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(element.dxrButton('option', 'width'), 400);
+        assert.strictEqual(element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('root with custom width', function(assert) {
-        const $element = $('#widthRootStyle').dxrButton({ text: 'ahoy!' });
-        const instance = $element.dxrButton('instance');
+        $('#button').width('300px');
+        const element = this.Button({ text: 'ahoy!' });
 
-        assert.strictEqual(instance.option('width'), undefined);
-        assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(element.dxrButton('option', 'width'), undefined);
+        assert.strictEqual(element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxrButton({ text: 'ahoy!' });
-        const instance = $element.dxrButton('instance');
+        const element = this.Button({ text: 'ahoy!' });
         const customWidth = 400;
 
-        instance.option('width', customWidth);
+        this.Button({ width: customWidth });
 
-        assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 });
 
-QUnit.module('keyboard navigation', {}, () => {
+QUnit.module('keyboard navigation', moduleConfig, () => {
     QUnit.test('click fires on enter', function(assert) {
         assert.expect(2);
 
         let clickFired = 0;
 
-        const $element = $('#button').dxrButton({
+        const element = this.Button({
             focusStateEnabled: true, // NOTE: for ios 9 testing
+            onClick: () => clickFired++
         });
 
-        // NOTE: initialize onClick in constructor doesn't trigger events correctly (dxclick, focusin, etc)
-        $element.dxrButton('instance').option('onClick', () => clickFired++);
+        const keyboard = keyboardMock(element);
 
-        const keyboard = keyboardMock($element);
-
-        $element.trigger('focusin');
+        element.trigger('focusin');
         keyboard.keyDown('enter');
         assert.equal(clickFired, 1, 'press enter on button call click action');
 
@@ -457,16 +416,14 @@ QUnit.module('keyboard navigation', {}, () => {
     QUnit.test('arguments on key press', function(assert) {
         const clickHandler = sinon.spy();
 
-        const $element = $('#button').dxrButton({
+        const element = this.Button({
             focusStateEnabled: true, // NOTE: for ios 9 testing
+            onClick: clickHandler
         });
 
-        // NOTE: initialize onClick in constructor doesn't trigger events correctly (dxclick, focusin, etc)
-        $element.dxrButton('instance').option('onClick', clickHandler);
+        const keyboard = keyboardMock(element);
 
-        const keyboard = keyboardMock($element);
-
-        $element.trigger('focusin');
+        element.trigger('focusin');
         keyboard.keyDown('enter');
 
         assert.ok(clickHandler.calledOnce, 'Handler should be called');
@@ -479,17 +436,13 @@ QUnit.module('keyboard navigation', {}, () => {
 });
 
 QUnit.module('submit behavior', {
+    ...moduleConfig,
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        this.$element = $('#button').dxrButton({ useSubmitBehavior: true });
+        this.$element = this.Button({ useSubmitBehavior: true });
         this.$form = $('#form');
         this.clickButton = function() {
-            this.$element.trigger('dxclick');
-            this.clock.tick();
+            act(() => this.$element.trigger('dxclick'));
         };
-    },
-    afterEach: function() {
-        this.clock.restore();
     }
 }, () => {
     QUnit.test('render input with submit type', function(assert) {
@@ -503,9 +456,9 @@ QUnit.module('submit behavior', {
     QUnit.test('button click call click() on submit input', function(assert) {
         const clickHandlerSpy = sinon.spy();
         // NOTE: workaround to synchronize test
-        const $element = this.$element.dxrButton({ validationGroup: '' });
+        this.Button({ validationGroup: '' });
 
-        $element
+        this.$element
             .find('.' + BUTTON_SUBMIT_INPUT_CLASS)
             .on('click', clickHandlerSpy);
 
@@ -515,13 +468,11 @@ QUnit.module('submit behavior', {
     });
 
     QUnit.test('widget should work correctly if useSubmitBehavior was changed runtime', function(assert) {
-        const instance = this.$element.dxrButton('instance');
-
-        instance.option('useSubmitBehavior', false);
+        this.Button({ useSubmitBehavior: false });
         assert.strictEqual(this.$element.find('input[type=submit]').length, 0, 'no submit input if useSubmitBehavior is false');
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 0, 'no submit class if useSubmitBehavior is false');
 
-        instance.option('useSubmitBehavior', true);
+        this.Button({ useSubmitBehavior: true });
         assert.strictEqual(this.$element.find('input[type=submit]').length, 1, 'has submit input if useSubmitBehavior is false');
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1, 'has submit class if useSubmitBehavior is false');
     });
@@ -535,7 +486,7 @@ QUnit.module('submit behavior', {
                 assert.ok(e.isDefaultPrevented(), 'default is prevented');
             });
 
-            const $element = this.$element.dxrButton({ validationGroup: 'testGroup' });
+            this.Button({ validationGroup: 'testGroup' });
 
             validatorStub.validate = () => {
                 return { isValid: false };
@@ -543,7 +494,7 @@ QUnit.module('submit behavior', {
 
             ValidationEngine.registerValidatorInGroup('testGroup', validatorStub);
 
-            $element
+            this.$element
                 .find('.' + BUTTON_SUBMIT_INPUT_CLASS)
                 .on('click', clickHandlerSpy);
 
@@ -557,7 +508,7 @@ QUnit.module('submit behavior', {
 
     QUnit.test('button onClick event handler should raise once (T443747)', function(assert) {
         const clickHandlerSpy = sinon.spy();
-        this.$element.dxrButton({ onClick: clickHandlerSpy });
+        this.Button({ onClick: clickHandlerSpy });
         this.clickButton();
         assert.ok(clickHandlerSpy.calledOnce);
     });
@@ -577,13 +528,13 @@ QUnit.module('submit behavior', {
             const clickHandlerSpy = sinon.spy(e => {
                 assert.ok(e.isDefaultPrevented(), 'default is prevented');
             });
-            const $element = this.$element.dxrButton({ validationGroup: 'testGroup' });
+            this.Button({ validationGroup: 'testGroup' });
             const buttonInstance = this.$element.dxrButton('instance');
 
 
             ValidationEngine.registerValidatorInGroup('testGroup', validator);
 
-            $element
+            this.$element
                 .find('.' + BUTTON_SUBMIT_INPUT_CLASS)
                 .on('click', clickHandlerSpy);
 
@@ -597,10 +548,10 @@ QUnit.module('submit behavior', {
     });
 });
 
-QUnit.module('templates', () => {
+QUnit.module('templates', moduleConfig, () => {
     checkStyleHelper.testInChromeOnDesktopActiveWindow('parent styles when button is not focused', function(assert) {
         const $template = $('<div>').text('test1');
-        $('#button').dxrButton({
+        this.Button({
             template: function() { return $template; }
         });
         $('#input1').focus();
@@ -613,49 +564,30 @@ QUnit.module('templates', () => {
     });
 });
 
-QUnit.module('events subscriptions', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        patchPreactOptions();
-    },
-    afterEach: function() {
-        this.clock.restore();
-        restorePreactOptions();
-    }
-}, () => {
+QUnit.module('events subscriptions', moduleConfig, () => {
     QUnit.test('click', function(assert) {
-        const clickHandler = sinon.spy();
-        const $button = $('#button').dxrButton({
-            text: 'test'
+        assert.expect(2);
+        const $button = this.Button({
+            text: 'test',
+            onClick: (e) => {
+                assert.ok(e.event, 'Event should be passed');
+                assert.ok(e.validationGroup, 'validationGroup should be passed');
+            }
         });
-        const button = $button.dxrButton('instance');
-        this.clock.tick();
-
-        button.on('click', clickHandler);
 
         $button.trigger('dxclick');
-
-        assert.ok(clickHandler.calledOnce, 'Handler should be called');
-        const params = clickHandler.getCall(0).args[0];
-        assert.ok(params, 'Event params should be passed');
-        assert.ok(params.event, 'Event should be passed');
-        assert.ok(params.validationGroup, 'validationGroup should be passed');
     });
 
     QUnit.test('contentReady', function(assert) {
         assert.expect(3);
 
-        const button = $('#button').dxrButton({
-            text: 'test'
-        }).dxrButton('instance');
-
-        // NOTE: now we shouldn't call repaint, because we call onContentReady async
-        button.on('contentReady', (e) => {
-            assert.ok(e.component, 'Component info should be passed');
-            assert.ok(e.element, 'Element info should be passed');
-            assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
+        this.Button({
+            text: 'test',
+            onContentReady: (e) => {
+                assert.ok(e.component, 'Component info should be passed');
+                assert.ok(e.element, 'Element info should be passed');
+                assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
+            }
         });
-
-        this.clock.tick();
     });
 });

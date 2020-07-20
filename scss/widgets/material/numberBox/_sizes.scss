@@ -1,0 +1,22 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-numberbox-spin-container-width: null !default;
+$material-numberbox-spin-padding: null !default;
+$material-numberbox-touch-friendly-spin-container-width: null !default;
+$material-numberbox-clear-button-area-width: null !default;
+
+@if $size == "default" {
+  $material-numberbox-spin-container-width: 24px;
+  $material-numberbox-spin-padding: 1px;
+  $material-numberbox-touch-friendly-spin-container-width: 74px;
+  $material-numberbox-clear-button-area-width: 32px;
+}
+
+@else if $size == "compact" {
+  $material-numberbox-spin-container-width: 24px;
+  $material-numberbox-spin-padding: 1px;
+  $material-numberbox-touch-friendly-spin-container-width: 74px;
+  $material-numberbox-clear-button-area-width: 32px;
+}

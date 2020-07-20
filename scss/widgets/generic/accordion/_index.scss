@@ -1,0 +1,131 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+
+
+$generic-accordion-disabled-opacity: 0.5;
+
+
+.dx-accordion {
+  background-color: $accordion-background-color;
+  color: $accordion-color;
+}
+
+.dx-accordion-item {
+  border: 1px solid transparent;
+  border-top-color: $accordion-item-border-color;
+
+  &:last-child {
+    border-bottom: 1px solid $accordion-item-border-color;
+  }
+
+  &.dx-state-active:not(.dx-accordion-item-opened) {
+    .dx-icon {
+      color: $accordion-icon-active-color;
+    }
+
+    & > .dx-accordion-item-title {
+      color: $accordion-title-active-color;
+      background-color: $accordion-title-active-bg;
+    }
+  }
+
+  &.dx-state-hover {
+    & > .dx-accordion-item-title {
+      background-color: $accordion-item-hover-bg;
+    }
+
+    &:not(:last-child):not(.dx-accordion-item-opened):not(.dx-state-focused) {
+      border-bottom-color: $accordion-item-hover-bg;
+    }
+  }
+}
+
+.dx-accordion-item-opened {
+  border-color: $accordion-item-border-color;
+
+  &.dx-state-hover {
+    & > .dx-accordion-item-title {
+      background-color: $accordion-item-title-opened-bg;
+    }
+  }
+
+  & > .dx-accordion-item-title {
+    background-color: $accordion-item-title-opened-bg;
+
+    &:before {
+      content: "\f014";
+    }
+  }
+
+  + .dx-accordion-item {
+    border-top-color: transparent;
+
+    &.dx-state-hover:not(.dx-state-focused) {
+      border-top-color: $accordion-item-hover-bg;
+    }
+  }
+}
+
+.dx-accordion-item-title {
+  color: $accordion-title-color;
+  padding: $generic-accordion-title-padding;
+  font-size: $generic-s-font-size;
+
+  &:before {
+    font-weight: normal;
+    color: $accordion-icon-color;
+    content: "\f016";
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+    font-size: $generic-base-icon-size;
+    margin-left: $generic-base-icon-size / 2;
+    margin-right: 0;
+    line-height: $generic-accordion-arrow-line-height;
+  }
+
+  .dx-icon {
+    @include dx-icon-sizing($generic-base-icon-size);
+
+    display: inline-block;
+    color: $accordion-icon-color;
+  }
+
+  .dx-accordion-item-title-caption .dx-icon {
+    @include dx-icon-margin($accordion-title-icon-margin);
+
+    vertical-align: top;
+    position: relative;
+    top: $accordion-title-icon-top-offset;
+  }
+}
+
+.dx-state-disabled {
+  &.dx-accordion-item {
+    opacity: $generic-accordion-disabled-opacity;
+  }
+}
+
+.dx-state-focused {
+  &.dx-accordion-item {
+    border-color: $accordion-item-focused-border-color;
+  }
+}
+
+.dx-accordion-item-body {
+  padding: $generic-accordion-body-padding;
+  font-size: $generic-base-font-size;
+}
+
+.dx-rtl {
+  .dx-accordion-item-title {
+    &:before {
+      margin-left: 0;
+      margin-right: $generic-base-icon-size / 2;
+    }
+  }
+}

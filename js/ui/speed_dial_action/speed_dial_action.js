@@ -6,6 +6,8 @@ import Widget from '../widget/ui.widget';
 import { initAction, disposeAction } from './speed_dial_main_item';
 import { getSwatchContainer } from '../widget/swatch_container';
 
+// STYLE speedDialAction
+
 const ready = readyCallbacks.add;
 
 class SpeedDialAction extends Widget {
@@ -108,5 +110,5 @@ class SpeedDialAction extends Widget {
 
 registerComponent('dxSpeedDialAction', SpeedDialAction);
 
-module.exports = SpeedDialAction;
+export default SpeedDialAction;
 

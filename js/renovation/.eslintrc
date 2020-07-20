@@ -1,5 +1,13 @@
 {
-    "extends": [
-        "devextreme/renovation-declarations"
-    ]
+    "overrides": [{
+        "files": ["*.ts?(x)"],
+        "extends": ["devextreme/renovation-declarations"],
+        "excludedFiles": "**/__tests__/**/*"
+    }, {
+        "files": ["**/__tests__/**/*.ts?(x)"],
+        "extends": ["devextreme/jest"],
+        "settings": {
+            "react": { "pragma": "h" }
+        }
+    }]
 }

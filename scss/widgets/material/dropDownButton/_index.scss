@@ -1,0 +1,86 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../button" as *;
+@use "../button/sizes" as *;
+@use "../common" as *;
+
+// adduse
+
+
+$material-dropdownbutton-horizontal-padding: 8px;
+
+@mixin dx-size-dropdownbutton() {
+  min-width: 0;
+  height: 100%;
+}
+
+.dx-dropdownbutton-toggle {
+  display: flex;
+  flex: 0 0 auto;
+
+  @include dx-size-dropdownbutton();
+
+  &.dx-button {
+    .dx-rtl & {
+      border-right-width: 0;
+    }
+  }
+
+  .dx-button-content {
+    flex: $material-toggle-button-flex;
+  }
+}
+
+.dx-dropdownbutton-action {
+  @include dx-size-dropdownbutton();
+}
+
+.dx-dropdownbutton {
+  height: $material-button-height;
+
+  .dx-buttongroup-last-item .dx-button-content {
+    padding-right: 0;
+
+    .dx-rtl & {
+      padding-left: 0;
+    }
+  }
+
+  .dx-button-has-icon.dx-button-has-text,
+  .dx-button-has-text {
+    min-width: 0;
+
+    .dx-button-content {
+      padding-left: $material-dropdownbutton-horizontal-padding;
+      padding-right: 2px;
+
+      .dx-icon.dx-icon-right.dx-icon-spindown {
+        @include dx-icon-sizing($material-button-icon-size);
+
+        margin-left: 0;
+      }
+
+      .dx-rtl & {
+        padding-left: 2px;
+        padding-right: $material-dropdownbutton-horizontal-padding;
+      }
+    }
+  }
+
+  &:not(.dx-dropdownbutton-has-arrow) {
+    .dx-button.dx-button-has-text {
+      .dx-button-content {
+        padding-left: $material-dropdownbutton-horizontal-padding;
+        padding-right: $material-dropdownbutton-horizontal-padding;
+      }
+    }
+  }
+}
+
+.dx-dropdownbutton-popup-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}

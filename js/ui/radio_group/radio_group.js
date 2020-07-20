@@ -10,6 +10,8 @@ import DataExpressionMixin from '../editor/ui.data_expression';
 import Editor from '../editor/editor';
 import { Deferred } from '../../core/utils/deferred';
 
+// STYLE radioGroup
+
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
@@ -198,6 +200,10 @@ class RadioGroup extends Editor {
         }
     }
 
+    _setSelection(currentValue) {
+        this._setCollectionWidgetOption('selectedItemKeys', [this._unwrappedValue(currentValue)]);
+    }
+
     _optionChanged(args) {
         const { name, value } = args;
 
@@ -218,16 +224,19 @@ class RadioGroup extends Editor {
                 break;
             case 'dataSource':
                 this._setCollectionWidgetOption('dataSource', this._dataSource);
+                this._setSelection(this.option('value'));
                 break;
             case 'valueExpr':
                 this._setCollectionWidgetOption('keyExpr', this._getCollectionKeyExpr());
                 break;
             case 'value':
-                this._setCollectionWidgetOption('selectedItemKeys', [value]);
+                this._setSelection(value);
                 this._setSubmitValue(value);
                 super._optionChanged(args);
                 break;
             case 'items':
+                this._setSelection(this.option('value'));
+                break;
             case 'itemTemplate':
             case 'displayExpr':
                 break;
@@ -355,4 +364,4 @@ RadioGroup.include(DataExpressionMixin);
 
 registerComponent('dxRadioGroup', RadioGroup);
 
-module.exports = RadioGroup;
+export default RadioGroup;

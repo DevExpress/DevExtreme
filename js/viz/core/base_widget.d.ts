@@ -12,6 +12,13 @@ import {
     format
 } from '../../ui/widget/ui.widget';
 
+import {
+    DashStyleType
+} from '../common';
+
+export type WordWrapType = 'normal' | 'breakWord' | 'none';
+export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
+
 export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
     /**
      * @docid BaseWidgetOptions.disabled
@@ -140,7 +147,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
+    theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
     /**
      * @docid BaseWidgetOptions.title
      * @type object|string
@@ -363,7 +370,7 @@ export interface BaseWidgetTitle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'breakWord' | 'none' } | string;
+    subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: VizTextOverflowType, wordWrap?: WordWrapType } | string;
     /**
      * @docid BaseWidgetOptions.title.text
      * @type string
@@ -379,7 +386,7 @@ export interface BaseWidgetTitle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    textOverflow?: 'ellipsis' | 'hide' | 'none';
+    textOverflow?: VizTextOverflowType;
     /**
      * @docid BaseWidgetOptions.title.verticalAlignment
      * @type Enums.VerticalEdge
@@ -395,7 +402,7 @@ export interface BaseWidgetTitle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    wordWrap?: 'normal' | 'breakWord' | 'none';
+    wordWrap?: WordWrapType;
 }
 export interface BaseWidgetTooltip {
     /**
@@ -412,7 +419,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+    border?: { color?: string, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
     /**
      * @docid BaseWidgetOptions.tooltip.color
      * @type string

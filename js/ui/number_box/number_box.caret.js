@@ -1,25 +1,29 @@
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const escapeRegExp = require('../../core/utils/common').escapeRegExp;
-const number = require('../../localization/number');
+import { fitIntoRange } from '../../core/utils/math';
+import { escapeRegExp } from '../../core/utils/common';
+import number from '../../localization/number';
 
-const getCaretBoundaries = function(text, format) {
-    const signParts = format.split(';');
-    const sign = number.getSign(text, format);
+export const getCaretBoundaries = function(text, format) {
+    if(typeof format === 'string') {
+        const signParts = format.split(';');
+        const sign = number.getSign(text, format);
 
-    signParts[1] = signParts[1] || '-' + signParts[0];
-    format = signParts[sign < 0 ? 1 : 0];
+        signParts[1] = signParts[1] || '-' + signParts[0];
+        format = signParts[sign < 0 ? 1 : 0];
 
-    const mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
+        const mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
 
-    format = mockEscapedStubs(format);
+        format = mockEscapedStubs(format);
 
-    const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
-    const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
+        const prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
+        const postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
 
-    return {
-        start: prefixStubLength,
-        end: text.length - postfixStubLength
-    };
+        return {
+            start: prefixStubLength,
+            end: text.length - postfixStubLength
+        };
+    } else {
+        return { start: 0, end: text.length };
+    }
 };
 
 const _getDigitCountBeforeIndex = function(index, text) {
@@ -56,7 +60,11 @@ const _getDigitPositionByIndex = function(digitIndex, text) {
     return index === null ? text.length : index;
 };
 
-const getCaretWithOffset = function(caret, offset) {
+const _trimNonNumericCharsFromEnd = function(text) {
+    return text.replace(/[^0-9e]+$/, '');
+};
+
+export const getCaretWithOffset = function(caret, offset) {
     if(caret.start === undefined) {
         caret = { start: caret, end: caret };
     }
@@ -67,7 +75,7 @@ const getCaretWithOffset = function(caret, offset) {
     };
 };
 
-const getCaretAfterFormat = function(text, formatted, caret, format) {
+export const getCaretAfterFormat = function(text, formatted, caret, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const point = number.getDecimalSeparator();
@@ -85,10 +93,11 @@ const getCaretAfterFormat = function(text, formatted, caret, format) {
 
         return getCaretInBoundaries(newPosition, formatted, format);
     } else {
+        const formattedIntPart = _trimNonNumericCharsFromEnd(formattedParts[0]);
         const positionFromEnd = textParts[0].length - caret.start;
         const digitsFromEnd = _getDigitCountBeforeIndex(positionFromEnd, _reverseText(textParts[0]));
-        const newPositionFromEnd = _getDigitPositionByIndex(digitsFromEnd, _reverseText(formattedParts[0]));
-        const newPositionFromBegin = formattedParts[0].length - (newPositionFromEnd + 1);
+        const newPositionFromEnd = _getDigitPositionByIndex(digitsFromEnd, _reverseText(formattedIntPart));
+        const newPositionFromBegin = formattedIntPart.length - (newPositionFromEnd + 1);
 
         return getCaretInBoundaries(newPositionFromBegin, formatted, format);
     }
@@ -98,14 +107,14 @@ function isSeparatorBasedString(text) {
     return text.length === 1 && !!text.match(/^[,.][0-9]*$/g);
 }
 
-const isCaretInBoundaries = function(caret, text, format) {
+export const isCaretInBoundaries = function(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const boundaries = getCaretInBoundaries(caret, text, format);
     return caret.start >= boundaries.start && caret.end <= boundaries.end;
 };
 
-function getCaretInBoundaries(caret, text, format) {
+export function getCaretInBoundaries(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const boundaries = getCaretBoundaries(text, format);
@@ -117,16 +126,9 @@ function getCaretInBoundaries(caret, text, format) {
     return adjustedCaret;
 }
 
-const getCaretOffset = function(previousText, newText, format) {
+export const getCaretOffset = function(previousText, newText, format) {
     const previousBoundaries = getCaretBoundaries(previousText, format);
     const newBoundaries = getCaretBoundaries(newText, format);
 
     return newBoundaries.start - previousBoundaries.start;
 };
-
-exports.getCaretBoundaries = getCaretBoundaries;
-exports.isCaretInBoundaries = isCaretInBoundaries;
-exports.getCaretWithOffset = getCaretWithOffset;
-exports.getCaretInBoundaries = getCaretInBoundaries;
-exports.getCaretAfterFormat = getCaretAfterFormat;
-exports.getCaretOffset = getCaretOffset;

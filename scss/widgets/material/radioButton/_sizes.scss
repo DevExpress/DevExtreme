@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-radiobutton-size: null !default;
+$material-radiobutton-dot-size: null !default;
+$material-radiobutton-ripple-size: null !default;
+
+@if $size == "default" {
+  $material-radiobutton-size: 20px;
+  $material-radiobutton-dot-size: 10px;
+  $material-radiobutton-ripple-size: 40px;
+}
+
+@else if $size == "compact" {
+  $material-radiobutton-size: 16px;
+  $material-radiobutton-dot-size: 8px;
+  $material-radiobutton-ripple-size: 32px;
+}

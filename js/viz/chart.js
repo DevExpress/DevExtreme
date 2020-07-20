@@ -3,6 +3,7 @@ import { extend as _extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
+import { prepareSegmentRectPoints } from './utils';
 import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
@@ -13,12 +14,12 @@ import {
 import { type } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
 import { overlapping } from './chart_components/base_chart';
-import LayoutManagerModule from './chart_components/layout_manager';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
 import crosshairModule from './chart_components/crosshair';
 import { getViewPortFilter } from './series/helpers/range_data_calculator';
+import LayoutManagerModule from './chart_components/layout_manager';
 import rangeModule from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
@@ -139,68 +140,6 @@ function doesPaneExist(panes, paneName) {
     });
     return found;
 }
-
-// 'var' because JSHint throws W021 error
-let prepareSegmentRectPoints = function(left, top, width, height, borderOptions) {
-    const maxSW = ~~((width < height ? width : height) / 2);
-    const sw = borderOptions.width || 0;
-    const newSW = sw < maxSW ? sw : maxSW;
-
-    left = left + newSW / 2;
-    top = top + newSW / 2;
-    width = width - newSW;
-    height = height - newSW;
-
-    const right = left + width;
-    const bottom = top + height;
-    let points = [];
-    let segments = [];
-    let segmentSequence;
-    let visiblyOpt = 0;
-    let prevSegmentVisibility = 0;
-    const allSegment = {
-        top: [[left, top], [right, top]],
-        right: [[right, top], [right, bottom]],
-        bottom: [[right, bottom], [left, bottom]],
-        left: [[left, bottom], [left, top]]
-    };
-    _each(allSegment, function(seg) {
-        const visibility = !!borderOptions[seg];
-        visiblyOpt = visiblyOpt * 2 + (~~visibility);
-    });
-    switch(visiblyOpt) {
-        case 13:
-        case 9:
-            segmentSequence = ['left', 'top', 'right', 'bottom'];
-            break;
-        case 11:
-            segmentSequence = ['bottom', 'left', 'top', 'right'];
-            break;
-        default:
-            segmentSequence = ['top', 'right', 'bottom', 'left'];
-    }
-
-    _each(segmentSequence, function(_, seg) {
-        const segmentVisibility = !!borderOptions[seg];
-
-        if(!prevSegmentVisibility && segments.length) {
-            points.push(segments);
-            segments = [];
-        }
-
-        if(segmentVisibility) {
-            _each(allSegment[seg].slice(prevSegmentVisibility), function(_, segment) {
-                segments = segments.concat(segment);
-            });
-        }
-        prevSegmentVisibility = ~~segmentVisibility;
-    });
-    segments.length && points.push(segments);
-
-    points.length === 1 && (points = points[0]);
-
-    return { points: points, pathType: visiblyOpt === 15 ? 'area' : 'line' };
-};
 
 // utilities used in axes rendering
 function accumulate(field, src1, src2, auxSpacing) {
@@ -382,7 +321,7 @@ function axisAnimationEnabled(drawOptions, pointsToAnimation) {
 }
 
 function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
-    let points = [];
+    const series = [];
     const overloadedSeries = {};
     const argVisualRange = argAxis.visualRange();
     const argTranslator = argAxis.getTranslator();
@@ -403,7 +342,7 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
             (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)));
         }).forEach(p => {
             const tp = {
-                seriesIndex: seriesIndex,
+                seriesIndex,
                 argument: p.argument,
                 value: p.getMaxValue(true),
                 size: p.bubbleSize || p.getOptions().size
@@ -423,9 +362,9 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
         overloadedSeries[seriesIndex].pointsCount = seriesPoints.length;
         overloadedSeries[seriesIndex].total = 0;
         overloadedSeries[seriesIndex].continuousSeries = 0;
-        points = points.concat(seriesPoints);
+        series.push({ name: s.name, index: seriesIndex, points: seriesPoints });
     });
-    return { points, overloadedSeries };
+    return { series, overloadedSeries };
 }
 
 function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, argAxis) {
@@ -454,7 +393,26 @@ function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, 
     });
 }
 
-function updateMarkersInfo({ overloadedSeries, points }) {
+function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
+    const area = canvas.width * canvas.height;
+    const seriesPoints = markersInfo.series;
+
+    for(let i = seriesPoints.length - 1; i >= 0; i--) {
+        const currentSeries = series.filter(s => s.name === seriesPoints[i].name)[0];
+        const points = seriesPoints[i].points;
+        const pointSize = points.length ? points[0].size : 0;
+        const pointsArea = pointSize * pointSize * points.length;
+        if(pointsArea >= area / seriesPoints.length) {
+            const index = seriesPoints[i].index;
+            currentSeries.autoHidePointMarkers = true;
+            seriesPoints.splice(i, 1);
+            series.splice(series.indexOf(currentSeries), 1);
+            delete markersInfo.overloadedSeries[index];
+        }
+    }
+}
+
+function updateMarkersInfo(points, overloadedSeries) {
     let isContinuousSeries = false;
     for(let i = 0; i < points.length - 1; i++) {
         const curPoint = points[i];
@@ -562,26 +520,30 @@ const dxChart = AdvancedChart.inherit({
         const valueAxis = that._valueAxes.filter(v => v.pane === argumentAxis.pane && (!valueAxisName || valueAxisName === v.name))[0];
 
         that._valueAxes.forEach(v => {
-            if(argumentAxis !== v.getOppositeAxis()) {
-                v.getOppositeAxis = () => {
+            if(argumentAxis !== v.getOrthogonalAxis()) {
+                v.getOrthogonalAxis = () => {
                     return argumentAxis;
                 };
-                v.customPositionIsBoundaryOppositeAxis = () => {
+                v.customPositionIsBoundaryOrthogonalAxis = () => {
                     return argumentAxis.customPositionIsBoundary();
                 };
             }
         });
 
-        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getOppositeAxis()) {
-            argumentAxis.getOppositeAxis = () => {
+        if(_isDefined(valueAxis) && valueAxis !== argumentAxis.getOrthogonalAxis()) {
+            argumentAxis.getOrthogonalAxis = () => {
                 return valueAxis;
             };
-            argumentAxis.customPositionIsBoundaryOppositeAxis = () => {
+            argumentAxis.customPositionIsBoundaryOrthogonalAxis = () => {
                 return that._valueAxes.some(v => v.customPositionIsBoundary());
             };
-        } else if(_isDefined(argumentAxis.getOppositeAxis()) && !_isDefined(valueAxis)) {
-            argumentAxis.getOppositeAxis = noop;
+        } else if(_isDefined(argumentAxis.getOrthogonalAxis()) && !_isDefined(valueAxis)) {
+            argumentAxis.getOrthogonalAxis = noop;
         }
+    },
+
+    _resetAxesAnimation(isFirstDrawing) {
+        this._argumentAxes.concat(this._valueAxes).forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
     _axesBoundaryPositioning() {
@@ -844,13 +806,9 @@ const dxChart = AdvancedChart.inherit({
 
             newCanvas.right = panes[panes.length - 1].canvas.right;
             newCanvas.bottom = panes[panes.length - 1].canvas.bottom;
-            layoutManager.setOptions({ width: 0, height: 0 });
-            layoutManager.layoutElements(
-                [that._legend],
-                newCanvas,
-                noop,
-                [{ canvas: newCanvas }],
-                undefined
+            layoutManager.layoutInsideLegend(
+                that._legend,
+                newCanvas
             );
         }
     },
@@ -892,26 +850,32 @@ const dxChart = AdvancedChart.inherit({
     _applyPointMarkersAutoHiding() {
         const that = this;
         const allSeries = that.series;
+
         if(!that._themeManager.getOptions('autoHidePointMarkers')) {
             allSeries.forEach(s => s.autoHidePointMarkers = false);
             return;
         }
 
-        that.panes.forEach(({ name }) => {
+        that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
             const argAxis = that.getArgumentAxis();
-            const argVisualRange = argAxis.visualRange();
-            const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
-
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
+            fastHidingPointMarkersByArea(borderCoords, markersInfo, series);
 
-            const sortingCallback = argAxisIsDiscrete ?
-                (p1, p2) => argVisualRange.categories.indexOf(p1.argument) - argVisualRange.categories.indexOf(p2.argument) :
-                (p1, p2) => p1.argument - p2.argument;
-            markersInfo.points.sort(sortingCallback);
+            if(markersInfo.series.length) {
+                const argVisualRange = argAxis.visualRange();
+                const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
+                const sortingCallback = argAxisIsDiscrete ?
+                    (p1, p2) => argVisualRange.categories.indexOf(p1.argument) - argVisualRange.categories.indexOf(p2.argument) :
+                    (p1, p2) => p1.argument - p2.argument;
+                let points = [];
 
-            updateMarkersInfo(markersInfo);
-            applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
+                markersInfo.series.forEach(s => points = points.concat(s.points));
+                points.sort(sortingCallback);
+
+                updateMarkersInfo(points, markersInfo.overloadedSeries);
+                applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
+            }
         });
     },
 
@@ -960,6 +924,8 @@ const dxChart = AdvancedChart.inherit({
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             performActionOnAxes(allAxes, 'prepareAnimation');
             that._renderScaleBreaks();
+            horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
+            verticalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(horizontalAxes));
             return false;
         }
         if(needCustomAdjustAxes) {
@@ -1032,8 +998,11 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
         }
+
+        horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
+        verticalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(horizontalAxes));
 
         return cleanPanesCanvases;
     },
@@ -1514,22 +1483,14 @@ const dxChart = AdvancedChart.inherit({
     }
 });
 
-dxChart.addPlugin(require('./chart_components/shutter_zoom'));
-dxChart.addPlugin(require('./chart_components/zoom_and_pan'));
-dxChart.addPlugin(require('./core/annotations').plugins.core);
-dxChart.addPlugin(require('./core/annotations').plugins.chart);
+import shutterZoom from './chart_components/shutter_zoom';
+import zoomAndPan from './chart_components/zoom_and_pan';
+import { plugins } from './core/annotations';
+
+dxChart.addPlugin(shutterZoom);
+dxChart.addPlugin(zoomAndPan);
+dxChart.addPlugin(plugins.core);
+dxChart.addPlugin(plugins.chart);
 
 registerComponent('dxChart', dxChart);
-module.exports = dxChart;
-
-///#DEBUG
-module.exports._test_prepareSegmentRectPoints = function() {
-    const original = prepareSegmentRectPoints.original || prepareSegmentRectPoints;
-    if(arguments[0]) {
-        prepareSegmentRectPoints = arguments[0];
-    }
-    prepareSegmentRectPoints.original = original;
-    prepareSegmentRectPoints.restore = function() { prepareSegmentRectPoints = original; };
-    return prepareSegmentRectPoints;
-};
-///#ENDDEBUG
+export default dxChart;

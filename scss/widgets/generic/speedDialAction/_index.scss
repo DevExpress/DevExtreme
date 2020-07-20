@@ -1,0 +1,50 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/speedDialAction" as *;
+@use "../button/colors" as *;
+
+// adduse
+@use "../overlay";
+
+
+$generic-main-fa-button-size: 48px;
+$generic-main-fa-button-label-padding: 0 16px 0 8px;
+$generic-fa-button-size: 30px;
+$generic-fa-button-label-height: 26px;
+$generic-fa-button-label-padding: 0 10px;
+$generic-fa-button-label-offset: 10px;
+$generic-fa-button-label-shadow: $speed-dial-action-label-shadow;
+
+@include dx-fa-button-mixin(
+  $generic-main-fa-button-size,
+  $generic-fa-button-size,
+  $generic-base-icon-size,
+  $generic-base-font-size,
+  $generic-fa-button-label-height,
+  $generic-fa-button-label-padding,
+  $generic-fa-button-label-offset,
+  $speed-dial-action-color,
+  $speed-dial-action-bg,
+  $speed-dial-action-shadow,
+  $speed-dial-action-shading-color,
+  $speed-dial-action-hover-bg,
+  $speed-dial-action-active-bg,
+  $speed-dial-action-label-shadow,
+  $button-default-bg,
+  $button-default-color
+);
+
+.dx-fa-button {
+  &.dx-fa-button-main {
+    .dx-overlay-content {
+      .dx-fa-button-label {
+        padding: $generic-main-fa-button-label-padding;
+        font-size: $generic-base-font-size;
+        margin-right: 0;
+      }
+    }
+  }
+}

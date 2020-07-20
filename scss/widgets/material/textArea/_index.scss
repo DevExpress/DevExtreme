@@ -1,0 +1,31 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+
+
+.dx-textarea {
+  height: auto;
+
+  .dx-texteditor-input {
+    padding: $textarea-content-padding;
+    line-height: $textarea-content-line-height;
+  }
+
+  .dx-placeholder:before {
+    padding: ($textarea-content-padding + 3) $textarea-content-padding;
+  }
+
+  .dx-icon-clear {
+    top: 0;
+    margin-top: 0;
+  }
+
+  &.dx-invalid .dx-texteditor-container:after {
+    top: $material-base-inline-borderedwidget-top-padding;
+    margin-top: 0;
+  }
+}

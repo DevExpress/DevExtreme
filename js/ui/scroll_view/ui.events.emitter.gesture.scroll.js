@@ -1,13 +1,14 @@
-const eventsEngine = require('../../events/core/events_engine');
-const Class = require('../../core/class');
+import eventsEngine from '../../events/core/events_engine';
+import Class from '../../core/class';
 const abstract = Class.abstract;
-const eventUtils = require('../../events/utils');
-const GestureEmitter = require('../../events/gesture/emitter.gesture');
-const registerEmitter = require('../../events/core/emitter_registrator');
-const animationFrame = require('../../animation/frame');
-const realDevice = require('../../core/devices').real();
-const compareVersions = require('../../core/utils/version').compare;
+import { addNamespace, isDxMouseWheelEvent, isMouseEvent, eventData, eventDelta } from '../../events/utils';
+import GestureEmitter from '../../events/gesture/emitter.gesture';
+import registerEmitter from '../../events/core/emitter_registrator';
+import animationFrame from '../../animation/frame';
+import devices from '../../core/devices';
+import { compare as compareVersions } from '../../core/utils/version';
 
+const realDevice = devices.real();
 
 const SCROLL_INIT_EVENT = 'dxscrollinit';
 const SCROLL_START_EVENT = 'dxscrollstart';
@@ -19,7 +20,7 @@ const SCROLL_CANCEL_EVENT = 'dxscrollcancel';
 
 const Locker = Class.inherit((function() {
 
-    const NAMESPACED_SCROLL_EVENT = eventUtils.addNamespace('scroll', 'dxScrollEmitter');
+    const NAMESPACED_SCROLL_EVENT = addNamespace('scroll', 'dxScrollEmitter');
 
     return {
 
@@ -116,7 +117,7 @@ const WheelLocker = TimeoutLocker.inherit((function() {
         },
 
         _checkDirectionChanged: function(e) {
-            if(!eventUtils.isDxMouseWheelEvent(e)) {
+            if(!isDxMouseWheelEvent(e)) {
                 this._lastWheelDirection = null;
                 return;
             }
@@ -229,21 +230,21 @@ const ScrollEmitter = GestureEmitter.inherit((function() {
 
         _init: function(e) {
             this._wheelLocker.check(e, function() {
-                if(eventUtils.isDxMouseWheelEvent(e)) {
+                if(isDxMouseWheelEvent(e)) {
                     this._accept(e);
                 }
             }.bind(this));
 
             this._pointerLocker.check(e, function() {
-                const skipCheck = this.isNative && eventUtils.isMouseEvent(e);
-                if(!eventUtils.isDxMouseWheelEvent(e) && !skipCheck) {
+                const skipCheck = this.isNative && isMouseEvent(e);
+                if(!isDxMouseWheelEvent(e) && !skipCheck) {
                     this._accept(e);
                 }
             }.bind(this));
 
             this._fireEvent(SCROLL_INIT_EVENT, e);
 
-            this._prevEventData = eventUtils.eventData(e);
+            this._prevEventData = eventData(e);
         },
 
         move: function(e) {
@@ -253,37 +254,37 @@ const ScrollEmitter = GestureEmitter.inherit((function() {
         },
 
         _start: function(e) {
-            this._savedEventData = eventUtils.eventData(e);
+            this._savedEventData = eventData(e);
 
             this._fireEvent(SCROLL_START_EVENT, e);
 
-            this._prevEventData = eventUtils.eventData(e);
+            this._prevEventData = eventData(e);
         },
 
         _move: function(e) {
-            const currentEventData = eventUtils.eventData(e);
+            const currentEventData = eventData(e);
 
             this._fireEvent(SCROLL_MOVE_EVENT, e, {
-                delta: eventUtils.eventDelta(this._prevEventData, currentEventData)
+                delta: eventDelta(this._prevEventData, currentEventData)
             });
 
-            const eventDelta = eventUtils.eventDelta(this._savedEventData, currentEventData);
-            if(eventDelta.time > VELOCITY_CALC_TIMEOUT) {
+            const delta = eventDelta(this._savedEventData, currentEventData);
+            if(delta.time > VELOCITY_CALC_TIMEOUT) {
                 this._savedEventData = this._prevEventData;
             }
 
-            this._prevEventData = eventUtils.eventData(e);
+            this._prevEventData = eventData(e);
         },
 
         _end: function(e) {
-            const endEventDelta = eventUtils.eventDelta(this._prevEventData, eventUtils.eventData(e));
+            const endEventDelta = eventDelta(this._prevEventData, eventData(e));
             let velocity = { x: 0, y: 0 };
 
-            if(!eventUtils.isDxMouseWheelEvent(e) && endEventDelta.time < INERTIA_TIMEOUT) {
-                const eventDelta = eventUtils.eventDelta(this._savedEventData, this._prevEventData);
-                const velocityMultiplier = FRAME_DURATION / eventDelta.time;
+            if(!isDxMouseWheelEvent(e) && endEventDelta.time < INERTIA_TIMEOUT) {
+                const delta = eventDelta(this._savedEventData, this._prevEventData);
+                const velocityMultiplier = FRAME_DURATION / delta.time;
 
-                velocity = { x: eventDelta.x * velocityMultiplier, y: eventDelta.y * velocityMultiplier };
+                velocity = { x: delta.x * velocityMultiplier, y: delta.y * velocityMultiplier };
             }
 
             this._fireEvent(SCROLL_END_EVENT, e, {
@@ -340,7 +341,7 @@ registerEmitter({
     ]
 });
 
-module.exports = {
+export default {
     init: SCROLL_INIT_EVENT,
     start: SCROLL_START_EVENT,
     move: SCROLL_MOVE_EVENT,

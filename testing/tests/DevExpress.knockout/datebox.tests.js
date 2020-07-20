@@ -32,6 +32,9 @@ const FORMATS_MAP = uiDateUtils.FORMATS_MAP;
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const widgetName = 'dxDateBox';
 
+const isTextEditor = function($input) {
+    return $input.prop('type') === 'text';
+};
 
 const getInstanceWidget = function(instance) {
     return instance._strategy._widget;
@@ -74,6 +77,15 @@ QUnit.test('several editors for same value', function(assert) {
 
     ko.applyBindings(vm, $('#several').get(0));
 
+    const getEditorTextByValue = function(value, type) {
+        this.instance.option({
+            type: type,
+            value: value
+        });
+
+        return this.instance.option('text');
+    }.bind(this);
+
     const $date = $('#dateboxWithDateFormat').find('.dx-texteditor-input');
     const $datetime = $('#dateboxWithDateTimeFormat').find('.dx-texteditor-input');
     const $time = $('#dateboxWithTimeFormat').find('.dx-texteditor-input');
@@ -86,8 +98,12 @@ QUnit.test('several editors for same value', function(assert) {
     assert.equal($time.val(), getExpectedResult(value, timeMode, toStandardDateFormat(value, timeMode)), '\'time\' format is displayed correctly');
 
     newValue = new Date(2013, 11, 22, 16, 40, 0);
+
+    let inputValue = isTextEditor($date) ?
+        getEditorTextByValue(newValue, 'date') :
+        toStandardDateFormat(newValue, dateMode);
     $date
-        .val(toStandardDateFormat(newValue, dateMode))
+        .val(inputValue)
         .trigger('change');
 
     assert.equal($date.val(), getExpectedResult(newValue, dateMode, toStandardDateFormat(newValue, dateMode)), '\'date\' format is displayed correctly');
@@ -95,8 +111,11 @@ QUnit.test('several editors for same value', function(assert) {
     assert.equal($time.val(), getExpectedResult(newValue, timeMode, toStandardDateFormat(newValue, timeMode)), '\'time\' format is displayed correctly');
 
     newValue = new Date(2008, 9, 26, 22, 30);
+    inputValue = isTextEditor($datetime) ?
+        getEditorTextByValue(newValue, 'datetime') :
+        toStandardDateFormat(newValue, datetimeMode);
     $datetime
-        .val(toStandardDateFormat(newValue, datetimeMode))
+        .val(inputValue)
         .trigger('change');
 
     assert.equal($date.val(), getExpectedResult(newValue, dateMode, toStandardDateFormat(newValue, dateMode)), '\'date\' format is displayed correctly');
@@ -104,8 +123,11 @@ QUnit.test('several editors for same value', function(assert) {
     assert.equal($time.val(), getExpectedResult(newValue, timeMode, toStandardDateFormat(newValue, timeMode)), '\'time\' format is displayed correctly');
 
     newValue = new Date(2008, 9, 26, 14, 29);
+    inputValue = isTextEditor($time) ?
+        getEditorTextByValue(newValue, 'time') :
+        toStandardDateFormat(newValue, timeMode);
     $time
-        .val(toStandardDateFormat(newValue, timeMode))
+        .val(inputValue)
         .trigger('change');
 
     assert.equal($date.val(), getExpectedResult(newValue, dateMode, toStandardDateFormat(newValue, dateMode)), '\'date\' format is displayed correctly');

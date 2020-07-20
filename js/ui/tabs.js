@@ -10,6 +10,7 @@ import { isPlainObject } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
 import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
+import { TABS_EXPANDED_CLASS } from './tabs/constants';
 import themes from './themes';
 import holdEvent from '../events/hold';
 import Scrollable from './scroll_view/ui.scrollable';
@@ -18,9 +19,10 @@ import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 
+// STYLE tabs
+
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
-const TABS_EXPANDED_CLASS = 'dx-tabs-expanded';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
@@ -468,5 +470,4 @@ Tabs.ItemClass = TabsItem;
 
 registerComponent('dxTabs', Tabs);
 
-module.exports = Tabs;
-module.exports.getTabsExpandedClass = TABS_EXPANDED_CLASS;
+export default Tabs;

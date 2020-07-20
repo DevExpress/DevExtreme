@@ -16,9 +16,11 @@ import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
 import { addNamespace } from '../events/utils';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
+
+// STYLE fileUploader
 
 const window = getWindow();
 
@@ -63,7 +65,7 @@ class FileUploader extends Editor {
         const click = e => {
             e.preventDefault();
             const $selectButton = this._selectButton.$element();
-            eventsEngine.trigger($selectButton, clickEvent.name);
+            eventsEngine.trigger($selectButton, clickEventName);
         };
 
         return extend(super._supportedKeys(), {
@@ -1608,4 +1610,4 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 
 registerComponent('dxFileUploader', FileUploader);
 
-module.exports = FileUploader;
+export default FileUploader;

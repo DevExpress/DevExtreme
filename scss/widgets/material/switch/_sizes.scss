@@ -1,0 +1,31 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-switch-width: null !default;
+$material-switch-handle-width: null !default;
+$material-switch-handle-offset: null !default;
+$material-switch-handle-shadow: null !default;
+$material-switch-container-adjustment: null !default;
+$material-switch-on-off-adding-padding: null !default;
+$material-switch-container-margin: null !default;
+
+@if $size == "default" {
+  $material-switch-width: 36px;
+  $material-switch-handle-width: 14px;
+  $material-switch-handle-offset: 2px;
+  $material-switch-handle-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  $material-switch-container-adjustment: 6px;
+  $material-switch-on-off-adding-padding: 2px;
+  $material-switch-container-margin: 3px;
+}
+
+@else if $size == "compact" {
+  $material-switch-width: 32px;
+  $material-switch-handle-width: 12px;
+  $material-switch-handle-offset: 2px;
+  $material-switch-handle-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  $material-switch-container-adjustment: 6px;
+  $material-switch-on-off-adding-padding: 2px;
+  $material-switch-container-margin: 2px;
+}

@@ -2,8 +2,8 @@ import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import messageLocalization from '../../localization/message';
 
-const Popup = require('../popup');
-const extend = require('../../core/utils/extend').extend;
+import Popup from '../popup';
+import { extend } from '../../core/utils/extend';
 
 class DiagramDialog extends Widget {
     _init() {
@@ -112,4 +112,4 @@ class DiagramDialog extends Widget {
     }
 }
 
-module.exports = DiagramDialog;
+export default DiagramDialog;

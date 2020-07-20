@@ -1,0 +1,106 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+
+
+$generic-checkbox-disable-opacity: 0.4;
+
+.dx-checkbox {
+  line-height: 0;
+
+  &.dx-state-readonly {
+    .dx-checkbox-icon {
+      border-color: $checkbox-readonly-border-color;
+      background-color: $checkbox-readonly-bg;
+    }
+  }
+
+  &.dx-state-hover {
+    .dx-checkbox-icon {
+      border: 1px solid $checkbox-hover-border-color;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-checkbox-icon {
+      border: 1px solid $checkbox-focused-borderd-color;
+    }
+  }
+
+  &.dx-state-active {
+    .dx-checkbox-icon {
+      background-color: $checkbox-active-icon-bg;
+    }
+  }
+}
+
+.dx-checkbox-icon {
+  width: $generic-checkbox-size;
+  height: $generic-checkbox-size;
+  border-radius: $checkbox-icon-border-radius;
+  border: 1px solid $checkbox-border-color;
+  background-color: $checkbox-bg;
+
+  .dx-checkbox-checked & {
+    @include dx-icon(check);
+
+    color: $checkbox-checked-color;
+
+    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size);
+  }
+
+  .dx-checkbox-indeterminate & {
+    @include dx-icon(square);
+
+    color: $checkbox-indeterminate-bg;
+
+    @include dx-icon-font-centered-sizing($generic-checkbox-intermidiate-icon-size);
+  }
+}
+
+.dx-checkbox-text {
+  margin-left: -$generic-checkbox-size;
+  padding-left: $generic-checkbox-size + 5px;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    margin-right: -$generic-checkbox-size;
+    padding-right: $generic-checkbox-size + 5px;
+  }
+}
+
+.dx-state-disabled {
+  &.dx-checkbox,
+  .dx-checkbox {
+    opacity: 1;
+
+    .dx-checkbox-icon {
+      opacity: $generic-checkbox-disable-opacity;
+    }
+  }
+
+  .dx-checkbox-text {
+    opacity: $generic-checkbox-disable-opacity;
+  }
+}
+
+.dx-invalid {
+  .dx-checkbox-container {
+    .dx-checkbox-icon {
+      border: 1px solid $checkbox-invalid-faded-border-color;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-checkbox-container {
+      .dx-checkbox-icon {
+        border-color: $checkbox-invalid-focused-border-color;
+      }
+    }
+  }
+}

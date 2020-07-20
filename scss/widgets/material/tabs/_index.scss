@@ -1,0 +1,118 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button" as *;
+@use "../button/colors" as *;
+@use "../../base/icons" as *;
+
+// adduse
+@use "../scrollable";
+@use "../badge";
+
+
+$material-tabs-background: darken($base-bg, 4%);
+
+.dx-tabs {
+  padding: 0;
+  background-color: $material-tabs-background;
+  position: relative;
+
+  .dx-inkripple {
+    overflow: hidden;
+  }
+}
+
+.dx-tabs-nav-buttons .dx-tabs-scrollable {
+  margin-right: 36px;
+  margin-left: 36px;
+}
+
+.dx-tabs-nav-button {
+  border: none;
+  background-color: $tabs-tab-bg;
+  position: absolute;
+  height: $material-tab-height;
+  border-radius: 0;
+  box-shadow: none;
+
+  &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
+    @include dx-button-flat-color-styling($base-icon-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+
+    border-radius: 0;
+  }
+
+  .dx-button-content {
+    padding: 0;
+  }
+
+  &.dx-state-active {
+    border: none;
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+    background-color: $tabs-tab-bg;
+
+    .dx-button-content {
+      opacity: $tabs-tab-button-disabled-opacity;
+    }
+  }
+}
+
+.dx-tab {
+  padding: $material-tabs-item-padding;
+  min-width: $material-tab-min-width;
+  background-color: $tabs-tab-bg;
+  color: $tabs-tab-color;
+
+  &.dx-state-hover {
+    background-color: $tabs-hovered-tab-bg-color;
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+    vertical-align: middle;
+
+    @include dx-icon-sizing($material-base-icon-size);
+
+    margin: 0 auto;
+  }
+
+  &.dx-tab-selected {
+    color: $tabs-tab-selected-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      left: 0;
+      right: 0;
+      background-color: $tabs-selected-tab-bottom-border-color;
+    }
+  }
+}
+
+.dx-tab-content,
+.dx-tab-text {
+  vertical-align: middle;
+  text-transform: uppercase;
+  line-height: $material-tab-text-line-height;
+  font-weight: 500;
+}
+
+.dx-state-disabled {
+  &.dx-tabs {
+    opacity: 1;
+  }
+
+  .dx-tab-content {
+    opacity: 0.3;
+  }
+}

@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-toolbar-menu-top-padding: null !default;
+$generic-toolbar-menu-bottom-padding: null !default;
+
+@if $size == "default" {
+  $generic-toolbar-menu-top-padding: 7px;
+  $generic-toolbar-menu-bottom-padding: 8px;
+}
+
+@else if $size == "compact" {
+  $generic-toolbar-menu-top-padding: 4px;
+  $generic-toolbar-menu-bottom-padding: 4px;
+}

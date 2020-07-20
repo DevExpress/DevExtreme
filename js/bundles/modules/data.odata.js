@@ -1,5 +1,5 @@
 /* global DevExpress */
-
+/* eslint-disable import/no-commonjs */
 require('./data');
 
 DevExpress.data.ODataStore = require('../../data/odata/store');

@@ -1,0 +1,155 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+@use "../common/sizes" as *;
+@use "../textEditor/sizes" as *;
+@use "../button/colors" as *;
+@use "../../base/icons" as *;
+
+// adduse
+
+
+$material-dropdowneditor-container-button-size: $material-base-icon-size;
+
+$material-dropdowneditor-invalid-badge-offset:
+  $material-dropdowneditor-container-button-size +
+  $material-invalid-badge-halfhorizontal-padding;
+
+$material-dropdowneditor-invalid-badge-with-clear-offset:
+  $material-dropdowneditor-container-button-size * 2 +
+  $material-invalid-badge-halfhorizontal-padding;
+
+$material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $material-invalid-badge-horizontal-padding;
+
+@mixin dx-dropdowneditor-button-icon() {
+  width: $material-dropdowneditor-container-button-size;
+  height: 100%;
+
+  @include dx-icon-font-centered-sizing($material-dropdowneditor-container-button-size);
+}
+
+.dx-dropdowneditor-button {
+  width: $material-dropdowneditor-container-button-size;
+  min-width: $material-dropdowneditor-container-button-size;
+
+  .dx-state-disabled & {
+    .dx-dropdowneditor-icon {
+      opacity: 1;
+    }
+  }
+
+  .dx-state-readonly & {
+    .dx-dropdowneditor-icon {
+      opacity: 1;
+    }
+  }
+}
+
+.dx-dropdowneditor-icon {
+  color: $dropdowneditor-icon-color;
+
+  @include dx-icon(spindown);
+  @include dx-dropdowneditor-button-icon();
+}
+
+.dx-dropdowneditor-input-wrapper {
+  .dx-texteditor {
+    &:before,
+    &:after {
+      content: none;
+    }
+
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    & {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+}
+
+@mixin invalid-dropdowneditor-input-padding() {
+  &.dx-dropdowneditor-button-visible {
+    &.dx-editor-underlined {
+      .dx-texteditor-input {
+        padding-right: $material-dropdowneditor-invalid-badge-size + $material-standard-texteditor-input-horizontal-padding;
+      }
+
+      &.dx-rtl .dx-texteditor-input {
+        padding-right: $material-standard-texteditor-input-horizontal-padding;
+        padding-left: $material-dropdowneditor-invalid-badge-size + $material-standard-texteditor-input-horizontal-padding;
+      }
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
+      .dx-texteditor-input {
+        padding-right: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
+      }
+
+      &.dx-rtl .dx-texteditor-input {
+        padding-right: $material-filled-texteditor-input-horizontal-padding;
+        padding-left: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
+      }
+    }
+  }
+}
+
+.dx-invalid,
+.dx-valid,
+.dx-validation-pending {
+  @include invalid-dropdowneditor-input-padding();
+}
+
+.dx-dropdowneditor.dx-dropdowneditor-active,
+.dx-dropdowneditor-button.dx-state-active {
+  .dx-dropdowneditor-icon {
+    color: $dropdowneditor-icon-active-color;
+    opacity: 1;
+
+    @include dx-icon(spinup);
+    @include dx-dropdowneditor-button-icon();
+  }
+}
+
+.dx-invalid.dx-dropdowneditor,
+.dx-valid.dx-dropdowneditor {
+  .dx-texteditor-buttons-container {
+    &:after {
+      right: $material-dropdowneditor-invalid-badge-offset;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        right: auto;
+        left: $material-dropdowneditor-invalid-badge-offset;
+      }
+    }
+  }
+
+  &.dx-show-clear-button:not(.dx-texteditor-empty) {
+    .dx-texteditor-buttons-container {
+      &:after {
+        right: $material-dropdowneditor-invalid-badge-with-clear-offset;
+
+        @at-root #{selector-append(".dx-rtl", &)},
+        .dx-rtl & {
+          right: auto;
+          left: $material-dropdowneditor-invalid-badge-with-clear-offset;
+        }
+      }
+    }
+  }
+}
+
+.dx-dropdowneditor-overlay.dx-popup-wrapper {
+  .dx-overlay-content {
+    box-shadow: $dropdown-widgets-shadow;
+    overflow: hidden;
+  }
+}

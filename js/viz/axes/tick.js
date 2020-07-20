@@ -1,5 +1,5 @@
-const isDefined = require('../../core/utils/type').isDefined;
-const extend = require('../../core/utils/extend').extend;
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
 
 function getPathStyle(options) {
     return { stroke: options.color, 'stroke-width': options.width, 'stroke-opacity': options.opacity, opacity: 1 };
@@ -48,8 +48,16 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this.labelCoords = axis._getTranslatedValue(value);
             },
             saveCoords() {
+                this._lastStoredCoordinates = {
+                    coords: this._storedCoords,
+                    labelCoords: this._storedLabelsCoords
+                };
                 this._storedCoords = this.coords;
                 this._storedLabelsCoords = this.labelCoords;
+            },
+            resetCoordinates() {
+                this._storedCoords = this._lastStoredCoordinates.coords;
+                this._storedLabelsCoords = this._lastStoredCoordinates.labelCoords;
             },
             drawMark(options) {
                 if(!tickOptions.visible || skippedCategory === value) {
@@ -250,4 +258,4 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
     };
 }
 
-exports.tick = createTick;
+export { createTick as tick };

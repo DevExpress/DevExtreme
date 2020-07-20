@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-fileuploader-vertical-padding: null !default;
+$material-fileuploader-file-container-padding: null !default;
+$material-fileuploader-file-container-text-margin: null !default;
+$material-fileuploader-file-container-button-margin: null !default;
+$material-fileuploader-file-container-button-size: null !default;
+
+@if $size == "default" {
+  $material-fileuploader-vertical-padding: 7px;
+  $material-fileuploader-file-container-padding: 5px 8px;
+  $material-fileuploader-file-container-text-margin: 15px;
+  $material-fileuploader-file-container-button-margin: 5px;
+  $material-fileuploader-file-container-button-size: 36px;
+}
+
+@else if $size == "compact" {
+  $material-fileuploader-vertical-padding: 7px;
+  $material-fileuploader-file-container-padding: 2px 4px;
+  $material-fileuploader-file-container-text-margin: 6px;
+  $material-fileuploader-file-container-button-margin: 2px;
+  $material-fileuploader-file-container-button-size: 28px;
+}

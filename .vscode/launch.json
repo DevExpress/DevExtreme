@@ -10,7 +10,8 @@
       "name": "Jest Tests",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
-        "--runInBand"
+        "--runInBand",
+        "--no-cache"
       ],
       "runtimeArgs": [
         "--harmony"

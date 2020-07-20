@@ -1,0 +1,93 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../menuBase/sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+@use "../menuBase" as *;
+
+
+$material-menu-font-size: 13px;
+
+.dx-context-menu-container-border {
+  background-color: transparent;
+}
+
+.dx-context-menu-content-delimiter {
+  background-color: transparent;
+}
+
+.dx-menu {
+  color: $menu-color;
+
+  .dx-menu-item {
+    font-size: $material-menu-font-size;
+    border-radius: $base-border-radius;
+
+    .dx-menu-item-content {
+      padding: 7px $material-menu-horizontal-padding 8px;
+
+      .dx-menu-item-popout-container {
+        width: 0;
+      }
+    }
+
+    &.dx-menu-item-has-text {
+      &.dx-menu-item-has-icon {
+        .dx-icon {
+          margin-right: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
+        }
+      }
+    }
+  }
+
+  &.dx-rtl {
+    .dx-menu-item {
+      &.dx-menu-item-has-text {
+        &.dx-menu-item-has-icon {
+          .dx-icon {
+            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-menu-adaptive-mode {
+  background-color: $menu-popup-bg;
+
+  .dx-treeview {
+    border: 1px solid $menu-popup-border-color;
+    border-radius: $base-border-radius;
+
+    &,
+    &.dx-state-focused {
+      box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    font-size: 18px;
+  }
+
+  .dx-treeview-node {
+    &.dx-state-focused {
+      .dx-treeview-node .dx-treeview-toggle-item-visibility {
+        color: inherit;
+      }
+
+      .dx-treeview-toggle-item-visibility {
+        color: $menu-popup-bg;
+      }
+    }
+  }
+
+  .dx-treeview-node-container:first-child > .dx-treeview-node {
+    border-bottom: 1px solid $menu-popup-border-color;
+  }
+}

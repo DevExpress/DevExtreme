@@ -5,6 +5,7 @@ import { extend } from '../../core/utils/extend';
 export default function createStrip(axis, options) {
 
     let storedCoord;
+    let lastStoredCoordinates;
 
     const labelOptions = options.label || {};
 
@@ -39,7 +40,7 @@ export default function createStrip(axis, options) {
 
                 this.labelCoords = labelOptions.text ? axis._getStripLabelCoords(stripPos.from, stripPos.to, labelOptions) : null;
 
-                if((stripPos.to - stripPos.from === 0) || (!isDefined(stripPos.to)) || (!isDefined(stripPos.from))) {
+                if(stripPos.outOfCanvas || (!isDefined(stripPos.to)) || (!isDefined(stripPos.from))) {
                     return;
                 }
 
@@ -71,7 +72,12 @@ export default function createStrip(axis, options) {
         },
 
         saveCoords() {
+            lastStoredCoordinates = storedCoord;
             storedCoord = this._getCoord();
+        },
+
+        resetCoordinates() {
+            storedCoord = lastStoredCoordinates;
         }
     };
 }

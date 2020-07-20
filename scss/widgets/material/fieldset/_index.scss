@@ -1,0 +1,161 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+@use "../common" as *;
+@use "../typography" as *;
+
+// adduse
+
+
+$material-field-min-height: $material-base-inline-widget-height;
+$material-field-value-top-padding: 21px;
+$material-field-value-horizontal-padding: $material-base-inline-horizontal-padding;
+$material-field-value-bottom-padding: 20px;
+$material-fieldset-attention-icon-offset: $material-base-inline-horizontal-padding + $material-invalid-badge-size;
+
+$material-mobile-fieldset-vertical-margin: 20px;
+$material-mobile-fieldset-horizontal-margin: 15px;
+$material-mobile-fieldset-header-vertical-margin: 20px;
+$material-mobile-field-vertical-margin: 10px;
+
+
+@mixin dx-fieldset-styling() {
+  .dx-field {
+    @include dx-base-typography();
+  }
+
+  .dx-field-label {
+    color: $fieldset-field-label-color;
+    font-size: $material-form-label-font-size;
+    cursor: default;
+
+    i {
+      font-style: normal;
+    }
+  }
+
+  .dx-field-value {
+    &.dx-attention {
+      color: $fieldset-field-value-invalid-color;
+      padding-left: $material-fieldset-attention-icon-offset;
+
+      &:before {
+        @include dx-invalid-material-badge();
+      }
+    }
+  }
+
+  .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+  .dx-field-value-static {
+    width: 60%;
+  }
+}
+
+@mixin dx-field-value-widget-position($name, $size) {
+  &.#{$name},
+  &:not(.dx-widget) > .#{$name} {
+    margin: ($material-field-min-height - $size) / 2 0;
+  }
+}
+
+// TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
+@mixin dx-fieldset-sizing-base() {
+  .dx-field {
+    padding: 0;
+    display: flex;
+  }
+
+  .dx-field-label {
+    align-self: center;
+    padding-right: $material-field-labelvalue-spacing;
+  }
+
+  .dx-field-value {
+    &.dx-widget,
+    &:not(.dx-widget) > .dx-widget {
+      margin: 0;
+    }
+
+    &:not(.dx-widget) {
+      & > .dx-button,
+      & > .dx-checkbox,
+      & > .dx-switch {
+        float: right;
+      }
+    }
+
+    @include dx-field-value-widget-position(dx-checkbox, $material-checkbox-size);
+    @include dx-field-value-widget-position(dx-switch, $material-switch-height);
+    @include dx-field-value-widget-position(dx-slider, $material-slider-height);
+    @include dx-field-value-widget-position(dx-radiogroup, $material-radiogroup-min-height);
+
+    &.dx-attention {
+      padding: $material-field-value-top-padding $material-field-value-horizontal-padding $material-field-value-bottom-padding;
+      position: relative;
+      padding-left: $material-fieldset-attention-icon-offset;
+
+      &:before {
+        left: 0;
+      }
+    }
+  }
+
+  .dx-field-value-static {
+    padding: $material-field-value-top-padding $material-field-value-horizontal-padding $material-field-value-bottom-padding;
+  }
+}
+
+@mixin dx-fieldset-sizing($vertical-margin, $horizontal-margin, $header-vertical-margin, $field-vertical-margin) {
+  .dx-fieldset {
+    margin: $vertical-margin $horizontal-margin;
+    padding: 0;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      .dx-field-value {
+        &:not(.dx-widget) {
+          & > .dx-button,
+          & > .dx-checkbox,
+          & > .dx-switch {
+            float: left;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-fieldset-header {
+    margin: 0 0 $header-vertical-margin 0;
+
+    @include dx-s-font-mixin();
+  }
+
+  .dx-field {
+    margin: 0 0 $field-vertical-margin 0;
+  }
+
+  .dx-field:last-of-type {
+    margin: 0;
+  }
+}
+
+@include dx-fieldset-styling();
+@include dx-fieldset-sizing-base();
+@include dx-fieldset-sizing(
+  $material-fieldset-vertical-margin,
+  $material-fieldset-horizontal-margin,
+  $material-fieldset-header-vertical-margin,
+  $material-field-vertical-margin
+);
+
+.dx-device-mobile {
+  @include dx-fieldset-sizing(
+    $material-mobile-fieldset-vertical-margin,
+    $material-mobile-fieldset-horizontal-margin,
+    $material-mobile-fieldset-header-vertical-margin,
+    $material-mobile-field-vertical-margin
+  );
+}

@@ -1,0 +1,93 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+
+// adduse
+@use "../textEditor" as *;
+
+
+.dx-numberbox-spin-container {
+  overflow: hidden;
+  width: $generic-numberbox-spin-container-width;
+  border-radius: $numberbox-spin-container-border-radius;
+}
+
+.dx-numberbox-spin-up-icon {
+  @include dx-icon(spinup);
+
+  color: $numberbox-spin-icon-color;
+}
+
+.dx-numberbox-spin-down-icon {
+  @include dx-icon(spindown);
+
+  color: $numberbox-spin-icon-color;
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+  @include dx-icon-font-centered-sizing($generic-base-icon-size);
+
+  border-radius: $numberbox-spin-icon-border-radius;
+}
+
+.dx-numberbox-spin-button {
+  padding: $generic-numberbox-spin-padding;
+
+  .dx-editor-underlined & {
+    background: $texteditor-underlined-bg;
+  }
+}
+
+.dx-state-hover {
+  &.dx-numberbox-spin-button {
+    .dx-numberbox-spin-down-icon,
+    .dx-numberbox-spin-up-icon {
+      box-shadow: 0 0 0 1px $numberbox-spin-hover-border-color inset;
+      background-color: $numberbox-spin-hover-bg;
+    }
+  }
+}
+
+.dx-state-active {
+  &.dx-numberbox-spin-button {
+    .dx-numberbox-spin-down-icon,
+    .dx-numberbox-spin-up-icon {
+      background-color: $numberbox-spin-active-bg;
+      color: $numberbox-spin-active-color;
+    }
+  }
+}
+
+.dx-numberbox-spin-touch-friendly {
+  .dx-numberbox-spin-container {
+    width: $generic-numberbox-touch-friendly-spin-container-width;
+    border-left: none;
+  }
+
+  .dx-numberbox-spin-up-icon,
+  .dx-numberbox-spin-down-icon {
+    background-position: center;
+  }
+}
+
+
+.dx-rtl .dx-numberbox,
+.dx-numberbox.dx-rtl {
+  &.dx-numberbox-spin-touch-friendly {
+    .dx-numberbox-spin-container {
+      border-right: none;
+    }
+  }
+
+  &.dx-numberbox-spin {
+    .dx-texteditor-input {
+      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+    }
+  }
+}

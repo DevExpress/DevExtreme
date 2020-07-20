@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-toggle-button-flex: null !default;
+
+@if $size == "default" {
+  $material-toggle-button-flex: 0 0 24px;
+}
+
+@else if $size == "compact" {
+  $material-toggle-button-flex: 0 0 20px;
+}

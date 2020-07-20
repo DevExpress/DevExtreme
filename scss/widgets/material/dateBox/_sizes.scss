@@ -1,0 +1,22 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-datebox-overlay-item-margin: null !default;
+$material-datebox-overlay-item-margin-adaptive: null !default;
+$material-datebox-popup-content-margin: null !default;
+$material-datebox-input-min-height: null !default;
+
+@if $size == "default" {
+  $material-datebox-overlay-item-margin: 10px;
+  $material-datebox-overlay-item-margin-adaptive: 18px;
+  $material-datebox-popup-content-margin: 0 34px;
+  $material-datebox-input-min-height: 33px;
+}
+
+@else if $size == "compact" {
+  $material-datebox-overlay-item-margin: 10px;
+  $material-datebox-overlay-item-margin-adaptive: 18px;
+  $material-datebox-popup-content-margin: 0 34px;
+  $material-datebox-input-min-height: 33px;
+}

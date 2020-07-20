@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-texteditor-font-size: null !default;
+$material-texteditor-clear-icon-size: null !default;
+$material-filled-texteditor-input-horizontal-padding: null !default;
+$material-filled-texteditor-input-padding: null !default;
+$material-standard-texteditor-input-padding: null !default;
+$material-underlined-editor-button-height: null !default;
+
+@if $size == "default" {
+  $material-texteditor-font-size: 16px;
+  $material-texteditor-clear-icon-size: 12px;
+  $material-filled-texteditor-input-horizontal-padding: 12px;
+  $material-filled-texteditor-input-padding: 19px $material-filled-texteditor-input-horizontal-padding 18px;
+  $material-standard-texteditor-input-padding: 7px $material-standard-texteditor-input-horizontal-padding 6px;
+  $material-underlined-editor-button-height: 28px;
+}
+
+@else if $size == "compact" {
+  $material-texteditor-font-size: 13px;
+  $material-texteditor-clear-icon-size: 10px;
+  $material-filled-texteditor-input-horizontal-padding: 8px;
+  $material-filled-texteditor-input-padding: 13px $material-filled-texteditor-input-horizontal-padding 12px;
+  $material-standard-texteditor-input-padding: 6px $material-standard-texteditor-input-horizontal-padding 5px;
+  $material-underlined-editor-button-height: 22px;
+}

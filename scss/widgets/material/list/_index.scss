@@ -1,0 +1,514 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../button/colors" as *;
+@use "../button/sizes" as *;
+@use "../button" as *;
+@use "../checkBox/colors" as *;
+
+// adduse
+@use "../badge";
+
+
+$material-list-item-border-width: 1px;
+$material-list-border-width: 1px;
+$material-mobile-list-item-horizontal-padding: 15px;
+$material-list-border: $material-list-border-width solid $list-border-color;
+$material-list-item-border: $material-list-item-border-width solid $list-border-color;
+
+.dx-list-item-chevron {
+  transform: rotate(0);
+  border: none;
+  opacity: 1;
+
+  .dx-rtl & {
+    transform: rotate(0);
+  }
+
+  @include dx-icon(chevronnext);
+  @include dx-icon-sizing($material-base-icon-size);
+
+  margin-left: -5px;
+  color: $list-item-chevron-icon-color;
+}
+
+.dx-list-item-icon-container {
+  width: $material-base-icon-size + $material-list-item-horizontal-padding;
+  height: $material-base-icon-size;
+  vertical-align: bottom;
+}
+
+.dx-list-item-icon {
+  @include dx-icon-sizing($material-base-icon-size);
+}
+
+.dx-list-search {
+  padding-top: $material-list-searchbox-vertical-padding - 2px;
+
+  &.dx-searchbox {
+    .dx-placeholder:before {
+      font-size: $material-list-main-font-size;
+    }
+
+
+    .dx-clear-button-area {
+      width: $material-base-icon-size - 1px;
+    }
+  }
+}
+
+.dx-list-select-all,
+.dx-list-item,
+.dx-list-group-header {
+  position: relative;
+
+  .dx-inkripple {
+    overflow: hidden;
+  }
+}
+
+.dx-list-collapsible-groups .dx-list-group-header {
+  &:before {
+    content: none;
+  }
+}
+
+@mixin item-states() {
+  &.dx-list-item-selected {
+    background-color: $list-item-selected-bg;
+    color: $list-item-selected-color;
+
+    &.dx-state-hover:not(.dx-state-focused) {
+      background-color: $list-item-selected-hover-bg;
+      color: $list-item-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $list-item-hover-bg;
+    color: $list-item-hover-color;
+  }
+
+  &.dx-state-focused.dx-list-item-selected {
+    background-color: $list-item-focused-selected-bg;
+    color: $list-item-selected-color;
+  }
+
+  &.dx-state-active {
+    background-color: $list-item-active-bg;
+
+    .dx-list-slide-item-content {
+      background-color: $list-item-active-bg;
+    }
+  }
+}
+
+@mixin dx-list-sizing($item-horizontal-padding) {
+  .dx-list {
+    border: none;
+
+    .dx-list-item .dx-icon {
+      color: $list-icon-color;
+    }
+
+    &.dx-list-with-search .dx-scrollable-wrapper {
+      height: calc(100% - #{$material-list-item-height});
+    }
+
+    .dx-empty-message {
+      text-align: left;
+    }
+
+    &.dx-list-select-decorator-enabled {
+      .dx-list-item {
+        &.dx-state-hover {
+          .dx-radiobutton-icon:before {
+            border-color: $checkbox-hover-border-color;
+          }
+        }
+
+        &.dx-state-focused {
+          .dx-checkbox {
+            .dx-checkbox-icon:after {
+              background-color: color.change($checkbox-border-color, $alpha: 0.1);
+              transform: scale(1);
+            }
+
+            &.dx-checkbox-checked,
+            &.dx-checkbox-indeterminate {
+              .dx-checkbox-icon:after {
+                background-color: color.change($checkbox-bg, $alpha: 0.1);
+                transform: scale(1);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &:not(.dx-list-select-decorator-enabled) {
+      .dx-list-item {
+        @include item-states();
+      }
+    }
+  }
+
+  .dx-list-group {
+    &:not(.dx-list-group-collapsed) {
+      &:not(:last-child) {
+        padding-bottom: $material-list-vertical-padding;
+        border-bottom: $material-list-item-border;
+      }
+    }
+
+    &:not(.dx-list-group-collapsed) + &:not(.dx-list-group-collapsed) {
+      .dx-list-group-header {
+        border-top-color: transparent;
+      }
+    }
+
+    &.dx-list-group-collapsed {
+      .dx-list-group-header-indicator {
+        .dx-list-collapsible-groups & {
+          @include dx-icon(chevrondown);
+
+          font-size: $material-base-icon-size;
+        }
+      }
+
+      .dx-list-group-header {
+        color: $list-group-color;
+      }
+    }
+
+    .dx-list-item {
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .dx-list-group-header {
+    font-weight: normal;
+    padding: $material-list-group-header-vertical-padding $item-horizontal-padding;
+    background: $list-group-header-bg;
+    color: $list-expanded-group-color;
+    border-top: $material-list-item-border;
+    border-top-color: transparent;
+    font-size: $material-list-main-font-size;
+
+    .dx-list-group-header-indicator {
+      color: $list-header-indicator-color;
+
+      .dx-list-collapsible-groups & {
+        @include dx-icon(chevronup);
+
+        font-size: $material-base-icon-size;
+        float: right;
+        margin-top: -2px;
+      }
+    }
+
+    .dx-inkripple {
+      height: auto;
+      top: -1px;
+      bottom: 0;
+    }
+
+    &:before {
+      content: none;
+    }
+  }
+
+  .dx-list-item {
+    &.dx-state-hover,
+    &.dx-state-active {
+      background-color: $list-item-hover-bg;
+      color: $list-item-hover-color;
+
+      .dx-list-switchable-delete-button-inner-wrapper {
+        background-color: $list-item-hover-bg;
+      }
+    }
+
+    &:first-of-type {
+      border-top: none;
+      margin-top: $material-list-vertical-padding;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+      margin-bottom: $material-list-vertical-padding;
+    }
+
+    .dx-icon-toggle-delete {
+      background-image: $list-item-icon-toggle-delete-bg;
+      background-size: 100%;
+    }
+
+    &.dx-list-item-ghost-reordering {
+      &.dx-state-focused {
+        &.dx-state-hover {
+          color: $list-item-ghost-color;
+          background: $list-item-ghost-bg;
+          border-top: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
+          border-bottom: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
+          box-shadow: 0 0 1px color.change($list-item-ghost-shadow-color, $alpha: 0.1), 0 1px 3px color.change($list-item-ghost-shadow-color, $alpha: 0.2);
+        }
+      }
+    }
+  }
+
+  .dx-list-item,
+  .dx-list .dx-empty-message {
+    color: $list-normal-color;
+
+    .dx-list-item-separator-hidden & {
+      border-top: none;
+      border-bottom: none;
+    }
+  }
+
+  .dx-list-item-content {
+    font-size: $material-list-main-font-size;
+    padding: $material-list-item-vertical-padding $item-horizontal-padding $material-list-item-vertical-padding - 1px;
+  }
+
+  .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
+    padding: $material-list-item-vertical-padding / 2 + 1px $item-horizontal-padding $material-list-item-vertical-padding / 2;
+    color: color.change($list-normal-color, $alpha: 0.54);
+    font-size: 12px;
+  }
+
+  .dx-list-next-button .dx-button {
+    margin-top: 20px;
+    padding: 0;
+
+    @include dx-button-withtext-sizing();
+
+    .dx-button-content {
+      padding-left: $material-list-next-button-horizontal-padding;
+      padding-right: $material-list-next-button-horizontal-padding;
+    }
+  }
+
+  .dx-list-item-chevron-container {
+    width: 11px + $item-horizontal-padding;
+    padding-top: $material-list-item-vertical-padding / 2;
+  }
+
+  .dx-list-border-visible {
+    border: $material-list-border;
+  }
+
+  .dx-list-item-before-bag {
+    &.dx-list-toggle-delete-switch-container {
+      width: $item-horizontal-padding + 30px;
+    }
+
+    &.dx-list-select-checkbox-container,
+    &.dx-list-select-radiobutton-container {
+      width: $item-horizontal-padding + 40px;
+    }
+
+    .dx-button.dx-list-toggle-delete-switch {
+      border: none;
+      background: transparent;
+      padding: 0;
+      height: 24px;
+      width: 24px;
+      margin-left: $item-horizontal-padding - 1px;
+      box-shadow: none;
+
+      .dx-button-content {
+        padding: 0;
+
+        .dx-inkripple-wave {
+          display: none;
+        }
+      }
+    }
+
+    .dx-icon-toggle-delete {
+      width: 9px + $material-list-item-vertical-padding;
+      height: 9px + $material-list-item-vertical-padding;
+    }
+
+    .dx-list-select-checkbox,
+    .dx-list-select-radiobutton {
+      margin-top: $material-list-select-all-margin-top;
+      margin-bottom: -3px;
+      margin-left: $item-horizontal-padding;
+    }
+  }
+
+  .dx-list-toggle-delete-switch-container + .dx-list-item-content {
+    padding-left: $item-horizontal-padding + 18px;
+  }
+
+  .dx-list-select-all {
+    padding: $material-list-item-vertical-padding - 1px 0;
+    font-size: $material-list-main-font-size;
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 1px;
+      left: $material-list-item-horizontal-padding;
+      right: $material-list-item-horizontal-padding;
+      height: 1px;
+      background-color: $list-border-color;
+    }
+  }
+
+  .dx-list-select-all-checkbox {
+    float: left;
+    margin: -1px $material-list-select-all-margin-right -3px $item-horizontal-padding;
+  }
+
+  .dx-list-select-all-label {
+    line-height: $material-list-select-all-label-line-height;
+    padding: 0 $material-list-item-horizontal-padding + 19;
+    margin-top: $material-list-select-all-label-margin-top;
+  }
+
+  .dx-list-item-after-bag {
+    &.dx-list-static-delete-button-container {
+      width: $item-horizontal-padding + $material-button-icon-size + $material-list-deletebutton-padding;
+    }
+
+    &.dx-list-reorder-handle-container {
+      width: $item-horizontal-padding + $material-base-icon-size * 1.2;
+    }
+
+    .dx-list-reorder-handle {
+      @include dx-icon(dragvertical);
+
+      color: color.change($base-icon-color, $alpha: 0.27);
+
+      @include dx-icon-sizing($material-base-icon-size, $material-base-icon-size * 1.6);
+    }
+  }
+
+  .dx-list-slide-menu-button {
+    bottom: 1px;
+  }
+
+  .dx-list-slide-menu-button-delete {
+    @include dx-icon(trash);
+
+    color: $base-inverted-text-color;
+    border: 1px solid $list-button-delete-shadow-color;
+    border-right-color: transparent;
+    background-color: $list-menu-button-delete-bg;
+    font-size: $material-base-icon-size;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 $item-horizontal-padding;
+    width: $item-horizontal-padding * 2 + $material-base-icon-size;
+    box-shadow:
+      inset 3px 0 5px -3px $list-button-delete-shadow-color,
+      inset 0 3px 5px -3px $list-button-delete-shadow-color,
+      inset 0 -3px 5px -3px $list-button-delete-shadow-color;
+  }
+
+  .dx-list-slide-menu-button-menu {
+    border: 1px solid transparent;
+    color: $list-menu-button-default-color;
+    background-color: $list-menu-button-default-bg;
+  }
+
+  .dx-list-static-delete-button {
+    margin-right: $item-horizontal-padding;
+    padding: 0;
+    border-radius: 50%;
+    height: $material-base-icon-size + $material-button-vertical-padding * 2 - 2px;
+    margin-top: -2px;
+
+    &.dx-button {
+      box-shadow: none;
+      background-color: transparent;
+
+      .dx-button-content {
+        z-index: 1;
+      }
+    }
+  }
+
+  .dx-list-switchable-delete-button-inner-wrapper {
+    padding-right: ($material-list-item-height - $material-button-height) / 2;
+    background-color: $base-bg;
+  }
+
+  .dx-button.dx-list-switchable-delete-button {
+    @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
+  }
+
+  .dx-list-context-menucontent {
+    background-color: $list-holdmenu-bg;
+    border: 1px solid $list-holdmenu-border-color;
+    border-radius: 0;
+    box-shadow: 0 3px 10px $list-holdmenu-shadow-color;
+  }
+
+  .dx-state-disabled {
+    &.dx-list-item,
+    .dx-list-item {
+      background-color: transparent;
+      opacity: 0.6;
+    }
+  }
+
+  .dx-rtl .dx-list,
+  .dx-rtl.dx-list {
+    .dx-empty-message {
+      text-align: right;
+    }
+
+    .dx-list-item-before-bag {
+      .dx-button.dx-list-toggle-delete-switch {
+        margin-right: $item-horizontal-padding - 1px;
+        margin-left: 0;
+      }
+
+      .dx-list-select-checkbox,
+      .dx-list-select-radiobutton {
+        margin-right: $item-horizontal-padding;
+        margin-left: 1px;
+      }
+    }
+
+    .dx-list-select-all-checkbox {
+      float: right;
+      margin-right: $item-horizontal-padding;
+      margin-left: 1px;
+    }
+
+    .dx-list-switchable-delete-button {
+      margin-right: 0;
+    }
+
+    .dx-list-switchable-delete-button-inner-wrapper {
+      padding-left: ($material-list-item-height - $material-button-height) / 2;
+      padding-right: 0;
+    }
+  }
+
+  .dx-list-item-badge-container {
+    padding-right: $item-horizontal-padding;
+  }
+}
+
+@include dx-list-sizing($material-list-item-horizontal-padding);
+
+.dx-device-mobile {
+  @include dx-list-sizing($material-mobile-list-item-horizontal-padding);
+}

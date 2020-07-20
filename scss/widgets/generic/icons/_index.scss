@@ -1,0 +1,43 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+
+
+@include dx-font-icons();
+
+.dx-tab {
+  .dx-icon,
+  &.dx-tab-selected .dx-icon {
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+  }
+}
+
+.dx-scrollview-pulldown {
+  background-image: $scrollview-pulldown-path;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-image {
+  background-image: $loadindicator-image-path;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-image-small {
+  background-image: $loadindicator-image-small-path;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-image-large {
+  background-image: $loadindicator-image-large-path;
+  background-position: center center;
+  background-repeat: no-repeat;
+}

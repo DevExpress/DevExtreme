@@ -49,12 +49,12 @@ interface ConfigSettings {
 
 interface CompilerResult {
   result: import('node-sass').Result;
-  changedVariables: Array<MetaItem>;
+  changedVariables: { [key: string]: string };
 }
 
 interface PackageResult {
   css: string;
-  compiledMetadata: Array<MetaItem>;
+  compiledMetadata: { [key: string]: string };
   widgets: Array<string>;
   unusedWidgets: Array<string>;
   swatchSelector: string;
@@ -85,4 +85,25 @@ interface WidgetHandlerResult {
 interface SwatchSass {
   sass: string;
   selector: string;
+}
+
+interface ScriptsDependencyTree {
+  widget: string;
+  dependencies: { [key: string]: ScriptsDependencyTree };
+}
+
+interface ScriptsDependencyCache {
+  [key: string]: ScriptsDependencyTree;
+}
+
+interface FlatStylesDependencies {
+  [key: string]: Array<string>;
+}
+
+interface AstComment {
+  value: string;
+}
+
+interface SyntaxTree {
+  comments?: Array<AstComment>;
 }

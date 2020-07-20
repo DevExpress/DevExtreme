@@ -12,7 +12,7 @@ import eventsEngine from 'events/core/events_engine';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import Overlay from 'ui/overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';

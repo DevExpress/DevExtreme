@@ -9,7 +9,7 @@ const buildTimeout = 150000;
 
 const normalizeCss = (css: string): string => css
   .toLowerCase()
-  .replace(/\s*\/\*[\s\S]*?\*\//g, '')
+  .replace(/\s*\/\*[\s\S]*?\*\/\s*/g, '')
   .trim();
 
 describe('Builder integration tests', () => {
@@ -22,7 +22,7 @@ describe('Builder integration tests', () => {
     return buildTheme(config).then((result) => {
       expect(result.css).not.toBe('');
       expect(result.swatchSelector).toBe(null);
-      expect(result.compiledMetadata.length).toBeGreaterThan(100);
+      expect(Object.keys(result.compiledMetadata).length).toBeGreaterThan(100);
       expect(result.widgets.length).toBeGreaterThan(50);
       expect(result.unusedWidgets.length).toBe(0);
       expect(result.version).toBe(version);
@@ -91,8 +91,22 @@ describe('Builder integration tests', () => {
 
     return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
-      // TODO this path should be changed after less->scss migration
-      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/scss-css/dx.light.css'), 'utf8'));
+      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/css/dx.light.css'), 'utf8'));
+      expect(themeBuilderCss).toBe(distributionCss);
+    });
+  }, buildTimeout);
+
+  test('Theme built without parameters is the same that in distribution (material)', () => {
+    const config: ConfigSettings = {
+      command: commands.BUILD_THEME,
+      outputColorScheme: 'custom-scheme',
+      baseTheme: 'material.blue.light',
+      items: [],
+    };
+
+    return buildTheme(config).then((result) => {
+      const themeBuilderCss = normalizeCss(result.css);
+      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/css/dx.material.blue.light.css'), 'utf8'));
       expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);

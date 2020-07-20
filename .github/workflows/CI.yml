@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
+        JQUERY: [ jquery=3, nojquery=true ]
 
     runs-on: windows-latest
     timeout-minutes: 60
@@ -36,6 +37,7 @@ jobs:
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
+        JQUERY: ${{ matrix.JQUERY }}
       run: |
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
         Write-Host "Runner starting"
@@ -57,7 +59,7 @@ jobs:
           exit 1
         }
         Write-Host "Runner started"
-        $url = "$runner_host/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
+        $url = "$runner_host/run?notimers=true&$env:JQUERY&constellation=$env:CONSTEL"
         & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
         Write-Host "IE started"
         Wait-Process -InputObject $runner

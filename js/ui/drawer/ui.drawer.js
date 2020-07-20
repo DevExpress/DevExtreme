@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -11,11 +11,13 @@ import { hasWindow } from '../../core/utils/window';
 import PushStrategy from './ui.drawer.rendering.strategy.push';
 import ShrinkStrategy from './ui.drawer.rendering.strategy.shrink';
 import OverlapStrategy from './ui.drawer.rendering.strategy.overlap';
-import { animation } from './ui.drawer.rendering.strategy';
+import { animation } from './ui.drawer.animation';
 import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
 import { triggerResizeEvent } from '../../events/visibility_change';
+
+// STYLE drawer
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -135,7 +137,7 @@ const Drawer = Widget.inherit({
     _viewContentWrapperClickHandler(e) {
         let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
-        if(typeUtils.isFunction(closeOnOutsideClick)) {
+        if(isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
@@ -292,7 +294,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelWidth() {
         if(hasWindow()) {
-            if(typeUtils.isDefined(this.option('templateSize'))) {
+            if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
                 return this.getElementWidth(this._strategy.getPanelContent());
@@ -310,7 +312,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelHeight() {
         if(hasWindow()) {
-            if(typeUtils.isDefined(this.option('templateSize'))) {
+            if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
                 return this.getElementHeight(this._strategy.getPanelContent());
@@ -343,6 +345,11 @@ const Drawer = Widget.inherit({
         }
     },
 
+    setZIndex(zIndex) {
+        this._$shader.css('zIndex', zIndex - 1);
+        this._$panelContentWrapper.css('zIndex', zIndex);
+    },
+
     resizeContent() { // TODO: keep for ui.file_manager.adaptivity.js
         this.resizeViewContent;
     },
@@ -366,7 +373,7 @@ const Drawer = Widget.inherit({
             return;
         }
 
-        animate = typeUtils.isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
+        animate = isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
 
         if(isDrawerOpened) {
             this._toggleShaderVisibility(isDrawerOpened);
@@ -413,17 +420,6 @@ const Drawer = Widget.inherit({
             this._$shader.css('visibility', visible ? 'visible' : 'hidden');
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
-            this._$shader.css('visibility', 'hidden');
-        }
-
-        this.updateZIndex(visible);
-    },
-
-    updateZIndex(visible) {
-        if(visible) {
-            this._strategy.updateZIndex();
-        } else {
-            this._strategy.clearZIndex();
         }
     },
 
@@ -456,7 +452,6 @@ const Drawer = Widget.inherit({
     _clean() {
         this._cleanFocusState();
 
-        this._strategy.clearZIndex();
         this._removePanelContentWrapper();
         this._removeOverlay();
     },
@@ -512,7 +507,6 @@ const Drawer = Widget.inherit({
                 this._refreshPanel();
                 break;
             case 'shading':
-                this._strategy.clearZIndex();
                 this._toggleShaderVisibility(this.option('opened'));
                 break;
             case 'animationEnabled':
@@ -571,5 +565,5 @@ const Drawer = Widget.inherit({
 
 registerComponent('dxDrawer', Drawer);
 
-module.exports = Drawer;
+export default Drawer;
 

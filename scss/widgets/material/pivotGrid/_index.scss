@@ -1,0 +1,244 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+@use "../../base/icons" as *;
+@use "../gridBase/colors" as *;
+@use "../treeView/sizes" as *;
+@use "../button" as *;
+@use "../button/colors" as *;
+@use "../../base/pivotGrid" as basePivotGrid with (
+    $pivotgrid-drag-header-border-color: $pivotgrid-drag-header-border-color,
+    $pivotgrid-drag-header-first-shadow-color: $pivotgrid-drag-header-first-shadow-color,
+    $pivotgrid-drag-header-second-shadow-color: $pivotgrid-drag-header-second-shadow-color,
+    $pivotgrid-border-color: $pivotgrid-border-color,
+    $pivotgrid-common-left-right-padding: $pivotgrid-common-left-right-padding,
+    $pivotgrid-area-color: $pivotgrid-area-color,
+    $header-filter-color: $header-filter-color,
+    $header-filter-color-empty: $header-filter-color-empty,
+    $pivotgrid-area-background: $pivotgrid-area-background,
+    $pivotgrid-common-top-bottom-padding: $pivotgrid-common-top-bottom-padding,
+    $pivotgrid-field-indicators-offset: $pivotgrid-field-indicators-offset,
+    $pivotgrid-indicators-line-height: $pivotgrid-indicators-line-height,
+    $pivotgrid-totalcolor: $pivotgrid-totalcolor,
+    $pivotgrid-expand-icon-offset: $pivotgrid-expand-icon-offset,
+    $pivotgrid-expand-icon-text-offset: $pivotgrid-expand-icon-text-offset,
+    $pivotgrid-field-area-text-color: $pivotgrid-field-area-text-color,
+    $pivotgrid-data-area-color: $pivotgrid-data-area-color,
+    $pivotgrid-grandtotalcolor: $pivotgrid-grandtotalcolor,
+    $pivotgrid-accent-color: $pivotgrid-accent-color,
+    $pivotgrid-area-all-image: $pivotgrid-area-all-image,
+    $pivotgrid-area-filter-image: $pivotgrid-area-filter-image,
+    $pivotgrid-area-row-image: $pivotgrid-area-row-image,
+    $pivotgrid-area-column-image: $pivotgrid-area-column-image,
+    $pivotgrid-area-data-image: $pivotgrid-area-data-image,
+    $pivotgrid-dimension-image: $pivotgrid-dimension-image,
+    $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
+);
+
+// adduse
+
+
+$material-pivotgrid-headers-font-size: 12px;
+$material-pivotgrid-area-font-size: 13px;
+$material-pivotgrid-chevron-icon-size: 20px;
+
+$material-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15);
+$material-pivotgridfieldchooser-field-min-height: 36px;
+
+.dx-pivotgrid-fields-container {
+  &.dx-drag {
+    .dx-area-field.dx-area-box {
+      background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
+      border: none;
+      box-shadow: $material-pivotgrid-drag-header-shadow;
+    }
+  }
+
+  .dx-area-field.dx-area-box {
+    color: $pivotgrid-field-area-box-text-color;
+    background-color: $pivotgrid-field-area-box-background-color;
+    border-radius: 16px;
+    border: none;
+    font-size: $material-pivotgrid-headers-font-size;
+    font-weight: 500;
+
+    .dx-header-filter {
+      color: $base-accent;
+
+      &.dx-header-filter-empty {
+        color: $pivotgrid-area-color;
+      }
+    }
+  }
+}
+
+
+.dx-pivotgrid {
+  background-color: $pivotgrid-area-background;
+
+  .dx-pivotgrid-area {
+    &.dx-pivotgrid-area-data {
+      font-size: $material-pivotgrid-area-font-size;
+    }
+
+    &.dx-pivotgrid-vertical-headers,
+    &.dx-pivotgrid-horizontal-headers {
+      font-size: $material-pivotgrid-headers-font-size;
+
+      td {
+        font-weight: 500;
+      }
+
+      .dx-grandtotal,
+      .dx-total {
+        color: $base-text-color;
+      }
+    }
+
+    td {
+      padding: $material-pivotgrid-cell-padding;
+    }
+  }
+
+
+  .dx-area-description-cell {
+    .dx-pivotgrid-toolbar {
+      padding-left: 8px;
+
+      .dx-button {
+        @include dx-button-flat-color-styling($base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+      }
+    }
+  }
+
+  .dx-grandtotal.dx-last-cell {
+    padding-left: 22px;
+  }
+
+  .dx-column-header,
+  .dx-filter-header {
+    .dx-pivotgrid-toolbar {
+      .dx-button {
+        margin-top: 7px;
+
+        @include dx-button-flat-color-styling($base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
+      }
+    }
+  }
+
+  .dx-expand-icon-container {
+    margin: 0 10px 0 5px;
+
+    @include dx-icon(chevronright);
+
+    font-size: $material-pivotgrid-headers-font-size;
+
+    &:before {
+      visibility: hidden;
+    }
+  }
+
+  .dx-pivotgrid-collapsed .dx-expand {
+    @include dx-icon(chevronright);
+    @include dx-icon-font-centered-sizing($material-pivotgrid-chevron-icon-size);
+
+    color: $pivotgrid-chevron-icon-color;
+  }
+
+  .dx-pivotgrid-expanded .dx-expand {
+    @include dx-icon(chevrondown);
+    @include dx-icon-font-centered-sizing($material-pivotgrid-chevron-icon-size);
+
+    color: $pivotgrid-chevron-icon-color;
+  }
+
+  .dx-area-tree-view {
+    td.dx-white-space-column {
+      width: $pivotgrid-empty-column-width;
+      min-width: $pivotgrid-empty-column-width;
+    }
+  }
+
+  .dx-ie {
+    .dx-pivotgrid-fields-area {
+      @include dx-base-typography();
+    }
+  }
+}
+
+.dx-pivotgridfieldchooser {
+  background-color: $pivotgrid-area-background;
+
+  .dx-area {
+    .dx-area-icon-filter {
+      background: none;
+
+      @include dx-icon(filter);
+
+      width: 14px;
+      height: 14px;
+    }
+
+    .dx-area-caption {
+      text-transform: uppercase;
+      font-size: $material-pivotgrid-headers-font-size;
+      font-weight: 500;
+      color: $pivotgrid-area-color;
+    }
+
+    .dx-area-fields {
+      margin-top: 8px;
+    }
+  }
+
+  .dx-treeview-border-visible .dx-scrollable-content > .dx-treeview-node-container {
+    padding-right: 8px;
+  }
+
+  .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
+    padding-left: 0;
+
+    .dx-checkbox {
+      left: 8px;
+    }
+  }
+
+  .dx-treeview-node-container-opened {
+    .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
+      padding-left: $material-treeview-toggle-item-width;
+
+      .dx-checkbox {
+        left: $material-treeview-checkbox-offset;
+      }
+    }
+  }
+
+  .dx-treeview-item {
+    min-height: $material-pivotgridfieldchooser-field-min-height;
+    padding: 9px 8px;
+    line-height: normal;
+  }
+
+  .dx-treeview-item-with-checkbox {
+    .dx-checkbox {
+      top: 9px;
+    }
+
+    .dx-treeview-item {
+      padding-left: $material-treeview-item-with-checkbox-offset;
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    height: $material-pivotgridfieldchooser-field-min-height;
+  }
+}
+
+.dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
+  .dx-position-indicator {
+    background-color: $pivotgrid-position-indicator-color;
+  }
+}

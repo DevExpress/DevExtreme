@@ -1,0 +1,24 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-tabs-item-padding: null !default;
+$generic-tab-text-line-height: null !default;
+$generic-tabs-nav-button-position: null !default;
+$generic-tabs-nav-button-size: null !default;
+
+@if $size == "default" {
+  $generic-tabs-item-padding: 9px;
+  $generic-tab-text-line-height: 25px;
+
+  $generic-tabs-nav-button-position: 4px 6px;
+  $generic-tabs-nav-button-size: 20px;
+}
+
+@else if $size == "compact" {
+  $generic-tabs-item-padding: 4px;
+  $generic-tab-text-line-height: 21px;
+
+  $generic-tabs-nav-button-position: 8px 5px;
+  $generic-tabs-nav-button-size: 13px;
+}

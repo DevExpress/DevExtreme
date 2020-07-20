@@ -3,14 +3,16 @@ import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { noop } from '../core/utils/common';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import inflector from '../core/utils/inflector';
 import { isDefined } from '../core/utils/type';
-import styleUtils from '../core/utils/style';
+import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/style';
 import { each } from '../core/utils/iterator';
 import browser from '../core/utils/browser';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
+
+// STYLE box
 
 const BOX_CLASS = 'dx-box';
 const BOX_SELECTOR = '.dx-box';
@@ -49,11 +51,11 @@ const FLEX_DIRECTION_MAP = {
 // FALLBACK STRATEGY FOR IE
 const setFlexProp = (element, prop, value) => {
     // NOTE: workaround for jQuery version < 1.11.1 (T181692)
-    value = styleUtils.normalizeStyleProp(prop, value);
-    element.style[styleUtils.styleProp(prop)] = value;
+    value = normalizeStyleProp(prop, value);
+    element.style[styleProp(prop)] = value;
 
     // NOTE: workaround for Domino issue https://github.com/fgnass/domino/issues/119
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         if(value === '' || !isDefined(value)) {
             return;
         }
@@ -128,7 +130,7 @@ class FlexLayoutStrategy {
 
     renderBox() {
         this._$element.css({
-            display: styleUtils.stylePropPrefix('flexDirection') + 'flex'
+            display: stylePropPrefix('flexDirection') + 'flex'
         });
         setFlexProp(this._$element.get(0), 'flexDirection', FLEX_DIRECTION_MAP[this._option('direction')]);
     }
@@ -156,7 +158,7 @@ class FlexLayoutStrategy {
     }
 
     renderItems($items) {
-        const flexPropPrefix = styleUtils.stylePropPrefix('flexDirection');
+        const flexPropPrefix = stylePropPrefix('flexDirection');
         const direction = this._option('direction');
 
         each($items, function() {
@@ -175,7 +177,7 @@ class FlexLayoutStrategy {
                 $(itemContent).css({
                     width: 'auto',
                     height: 'auto',
-                    display: styleUtils.stylePropPrefix('flexDirection') + 'flex',
+                    display: stylePropPrefix('flexDirection') + 'flex',
                     flexBasis: 0
                 });
 
@@ -709,4 +711,4 @@ Box.ItemClass = BoxItem;
 
 registerComponent('dxBox', Box);
 
-module.exports = Box;
+export default Box;

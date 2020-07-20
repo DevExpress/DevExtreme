@@ -1,0 +1,45 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+@use "../overlay";
+
+
+.dx-toast-content {
+  color: $toast-color;
+  font-size: $material-base-font-size;
+  font-weight: 400;
+  padding: $material-toast-content-padding;
+  border-radius: $toast-border-radius;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, $material-toast-shadow-color);
+  min-height: $material-toast-height;
+  display: flex;
+  align-items: center;
+}
+
+.dx-toast-icon {
+  display: none;
+}
+
+.dx-toast-message {
+  padding: 0;
+}
+
+.dx-toast-info {
+  background-color: $toast-info-bg;
+}
+
+.dx-toast-warning {
+  background-color: $toast-warning-bg;
+}
+
+.dx-toast-error {
+  background-color: $toast-error-bg;
+}
+
+.dx-toast-success {
+  background-color: $toast-success-bg;
+}

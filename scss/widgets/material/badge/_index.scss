@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+
+
+.dx-badge {
+  background-color: $badge-bg;
+  color: $badge-color;
+  font-size: $material-badge-font-size;
+  padding: $material-badge-padding;
+  margin-left: 4px;
+  line-height: normal;
+  margin-top: 1px;
+
+  .dx-rtl & {
+    margin-left: 0;
+    margin-right: 4px;
+  }
+}

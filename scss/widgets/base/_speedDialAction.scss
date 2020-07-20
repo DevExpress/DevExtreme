@@ -1,0 +1,171 @@
+@mixin dx-fa-button-mixin(
+  $main-action-button-size,
+  $action-button-size,
+  $icon-size,
+  $font-size,
+  $label-height,
+  $label-padding,
+  $label-offset,
+  $speed-dial-action-color,
+  $speed-dial-action-bg,
+  $speed-dial-action-shadow,
+  $speed-dial-action-shading-color,
+  $speed-dial-action-hover-bg,
+  $speed-dial-action-active-bg,
+  $speed-dial-action-label-shadow,
+  $button-default-bg,
+  $button-default-color
+) {
+  .dx-fa-button {
+    &.dx-fa-button-main {
+      .dx-overlay-shader {
+        background-color: $speed-dial-action-shading-color;
+      }
+
+      .dx-overlay-content {
+        min-width: $main-action-button-size;
+        max-height: $main-action-button-size;
+        background-color: $button-default-bg;
+        color: $button-default-color;
+        overflow: visible;
+        border-radius: $main-action-button-size / 2;
+        box-shadow: $speed-dial-action-shadow;
+
+        &.dx-state-hover {
+          background-color: darken($button-default-bg, 10%);
+
+          .dx-fa-button-icon {
+            background-color: transparent;
+          }
+        }
+
+        &.dx-state-active {
+          background-color: darken($button-default-bg, 15%);
+
+          .dx-fa-button-icon {
+            background-color: transparent;
+          }
+        }
+
+        .dx-fa-button-icon,
+        .dx-fa-button-icon-close {
+          padding: ($main-action-button-size - $icon-size) / 2;
+          box-shadow: none;
+          background-color: transparent;
+        }
+
+        .dx-fa-button-label-wrapper {
+          position: static;
+
+          .dx-fa-button-label {
+            background: none;
+            color: $button-default-color;
+            box-shadow: none;
+            border-radius: 0;
+            margin-right: 0;
+          }
+        }
+
+        .dx-inkripple {
+          border-radius: $main-action-button-size / 2;
+        }
+      }
+
+      &.dx-fa-button-with-label {
+        .dx-overlay-content {
+          display: flex;
+          flex-direction: row-reverse;
+
+          .dx-fa-button-icon,
+          .dx-fa-button-icon-close {
+            padding: ($main-action-button-size - $icon-size) / 2 0 ($main-action-button-size - $icon-size) / 2 12px;
+          }
+        }
+      }
+    }
+
+    .dx-fa-button-icon,
+    .dx-fa-button-icon-close {
+      padding: ($action-button-size - $icon-size) / 2;
+      width: $icon-size;
+      height: $icon-size;
+      box-sizing: content-box;
+
+      .dx-icon {
+        font-size: $icon-size;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .dx-overlay-content {
+      min-width: $action-button-size;
+      max-height: $action-button-size;
+      background-color: transparent;
+      color: $speed-dial-action-color;
+      overflow: visible;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &.dx-fa-button-content-reverse {
+        flex-direction: row-reverse;
+
+        .dx-fa-button-label-wrapper {
+          right: auto;
+          left: $action-button-size;
+
+          .dx-fa-button-label {
+            margin-left: $label-offset;
+            margin-right: auto;
+          }
+        }
+      }
+
+      &.dx-state-hover {
+        .dx-fa-button-icon {
+          background-color: $speed-dial-action-hover-bg;
+        }
+      }
+
+      &.dx-state-active {
+        .dx-fa-button-icon {
+          background-color: $speed-dial-action-active-bg;
+        }
+      }
+
+      .dx-fa-button-label-wrapper {
+        position: absolute;
+        right: $action-button-size;
+
+        .dx-fa-button-label {
+          background-color: $speed-dial-action-bg;
+          color: $speed-dial-action-color;
+          white-space: nowrap;
+          border-radius: 4px;
+          padding: $label-padding;
+          margin-right: $label-offset;
+          line-height: $label-height;
+          height: $label-height;
+          box-shadow: $speed-dial-action-label-shadow;
+          font-size: $font-size - 2;
+        }
+      }
+
+      .dx-fa-button-icon {
+        box-shadow: $speed-dial-action-shadow;
+        background-color: $speed-dial-action-bg;
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .dx-inkripple {
+        overflow: hidden;
+        border-radius: $action-button-size / 2;
+      }
+    }
+  }
+}

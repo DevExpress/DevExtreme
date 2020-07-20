@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+
+$lookup-icon-color: null !default;
+
+
+@if $mode == "light" {
+
+
+  $lookup-icon-color: $base-icon-color !default;
+}
+
+@if $mode == "dark" {
+
+
+  $lookup-icon-color: $base-icon-color !default;
+}
+

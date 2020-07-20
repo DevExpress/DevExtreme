@@ -5,7 +5,7 @@ import readyCallback from '../../core/utils/ready_callbacks';
 import translator from '../../animation/translator';
 import Widget from '../widget/ui.widget';
 import { addNamespace } from '../../events/utils';
-import commonUtils from '../../core/utils/common';
+import { deferRenderer } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import pointerEvents from '../../events/pointer';
@@ -246,7 +246,7 @@ const Scrollbar = Widget.inherit({
         }
     },
 
-    update: commonUtils.deferRenderer(function() {
+    update: deferRenderer(function() {
         this._adjustVisibility() && this.option('visible', true);
     })
 });
@@ -259,4 +259,4 @@ readyCallback.add(function() {
     });
 });
 
-module.exports = Scrollbar;
+export default Scrollbar;

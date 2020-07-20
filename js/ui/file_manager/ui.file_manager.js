@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
-import typeUtils from '../../core/utils/type';
+import { isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
@@ -193,8 +193,7 @@ class FileManager extends Widget {
         const $breadcrumbs = $('<div>').appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option('rootFolderName'),
-            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory),
-            onOutsideClick: () => this._clearSelection()
+            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory)
         });
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
@@ -389,7 +388,7 @@ class FileManager extends Widget {
 
     _getItemThumbnailInfo(fileInfo) {
         const func = this.option('customizeThumbnail');
-        const thumbnail = typeUtils.isFunction(func) ? func(fileInfo.fileItem) : fileInfo.fileItem.thumbnail;
+        const thumbnail = isFunction(func) ? func(fileInfo.fileItem) : fileInfo.fileItem.thumbnail;
         if(thumbnail) {
             return {
                 thumbnail,
@@ -779,4 +778,4 @@ class FileManager extends Widget {
 
 registerComponent('dxFileManager', FileManager);
 
-module.exports = FileManager;
+export default FileManager;

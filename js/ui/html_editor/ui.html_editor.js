@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
-import { executeAsync, noop } from '../../core/utils/common';
+import { executeAsync, noop, ensureDefined } from '../../core/utils/common';
 import registerComponent from '../../core/component_registrator';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import Editor from '../editor/editor';
@@ -19,7 +19,10 @@ import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import getTextDecorationMatcher from './matchers/textDecoration';
+import getNewLineMatcher from './matchers/newLine';
 import FormDialog from './ui/formDialog';
+
+// STYLE htmlEditor
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
@@ -32,6 +35,7 @@ const MARKDOWN_VALUE_TYPE = 'markdown';
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
 const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
 
 const HtmlEditor = Editor.inherit({
 
@@ -227,8 +231,19 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+        this._addKeyPressHandler();
 
         return renderContentPromise;
+    },
+
+    _addKeyPressHandler: function() {
+        const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
+
+        eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
+    },
+
+    _keyDownHandler: function(e) {
+        this._saveValueChangeEvent(e);
     },
 
     _renderHtmlEditor: function() {
@@ -296,6 +311,7 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
+        const newLineMatcher = getNewLineMatcher();
         const modulesConfig = extend({
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
@@ -308,7 +324,9 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
+                    [ELEMENT_NODE, getTextDecorationMatcher(quill)],
+                    [ELEMENT_NODE, newLineMatcher],
+                    [TEXT_NODE, newLineMatcher]
                 ]
             }
         }, this._getCustomModules());
@@ -381,7 +399,7 @@ const HtmlEditor = Editor.inherit({
             return;
         }
 
-        const currentValue = value || this.option('value');
+        const currentValue = ensureDefined(value, this.option('value'));
 
         return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
     },
@@ -613,4 +631,4 @@ const HtmlEditor = Editor.inherit({
 
 registerComponent('dxHtmlEditor', HtmlEditor);
 
-module.exports = HtmlEditor;
+export default HtmlEditor;

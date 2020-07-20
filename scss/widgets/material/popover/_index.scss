@@ -1,0 +1,33 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../overlay/colors" as *;
+@use "../textEditor/colors" as *;
+
+// adduse
+
+
+$material-popover-toolbar-padding: 15px;
+
+.dx-popover-wrapper {
+  .dx-popup-title {
+    margin: 0;
+
+    &.dx-toolbar {
+      padding-left: $material-popover-toolbar-padding;
+    }
+  }
+
+  .dx-popover-arrow {
+    display: none;
+  }
+
+  .dx-rtl.dx-popup-title {
+    &.dx-toolbar {
+      padding-right: $material-popover-toolbar-padding;
+      padding-left: 0;
+    }
+  }
+}

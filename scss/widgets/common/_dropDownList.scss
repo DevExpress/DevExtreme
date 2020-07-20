@@ -1,0 +1,14 @@
+@use "../base/mixins" as *;
+
+// adduse
+
+
+.dx-dropdownlist-popup-wrapper {
+  .dx-list {
+    min-height: 35px;
+
+    .dx-scrollable-content {
+      margin: 0;
+    }
+  }
+}

@@ -348,7 +348,7 @@ QUnit.module('Update on validator\'s validation', {
             const validator1 = this.fixture.createValidator({
                 adapter: {
                     getValue: function() { return 123; },
-                    validationRequestsCallbacks: $.Callbacks(),
+                    validationRequestsCallbacks: [],
                     applyValidationResults: false
                 },
                 validationGroup: 'group1',

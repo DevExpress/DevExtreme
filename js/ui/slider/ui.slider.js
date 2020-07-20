@@ -4,8 +4,8 @@ import $ from '../../core/renderer';
 import { applyServerDecimalSeparator } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
-import clickEvent from '../../events/click';
-import feedbackEvents from '../../events/core/emitter.feedback';
+import { name as clickName } from '../../events/click';
+import { lock } from '../../events/core/emitter.feedback';
 import eventsEngine from '../../events/core/events_engine';
 import Swipeable from '../../events/gesture/swipeable';
 import pointerEvents from '../../events/pointer';
@@ -16,6 +16,8 @@ import themes from '../themes';
 import TrackBar from '../track_bar';
 import inkRipple from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
+
+// STYLE slider
 
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_WRAPPER_CLASS = 'dx-slider-wrapper';
@@ -429,7 +431,7 @@ const Slider = TrackBar.inherit({
 
     _renderStartHandler: function() {
         const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
-        const clickEventName = addNamespace(clickEvent.name, this.NAME);
+        const clickEventName = addNamespace(clickName, this.NAME);
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
 
@@ -463,7 +465,7 @@ const Slider = TrackBar.inherit({
         }
 
         this._feedbackDeferred = new Deferred();
-        feedbackEvents.lock(this._feedbackDeferred);
+        lock(this._feedbackDeferred);
         this._toggleActiveState(this._activeHandle(), this.option('activeStateEnabled'));
 
         this._startOffset = this._currentRatio;
@@ -654,4 +656,4 @@ const Slider = TrackBar.inherit({
 
 registerComponent('dxSlider', Slider);
 
-module.exports = Slider;
+export default Slider;

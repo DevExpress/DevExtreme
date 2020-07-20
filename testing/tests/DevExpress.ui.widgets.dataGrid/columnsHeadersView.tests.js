@@ -1900,6 +1900,24 @@ QUnit.module('Headers', {
         // assert
         assert.strictEqual($lastContentElement.attr('title'), undefined, 'not has attribute title in last cell');
     });
+
+    // T904770
+    QUnit.test('caption line-height should be correct for buttons column with icons', function(assert) {
+        // arrange
+        const $testElement = $('#container').addClass('dx-widget');
+
+        this.options.editing = { mode: 'row', useIcons: true, allowUpdating: true };
+        this.columns.unshift({ caption: '#', type: 'buttons', cssClass: 'dx-command-edit dx-command-edit-with-icons' }, { caption: 'Column 1' });
+
+        // act
+        this.columnHeadersView.render($testElement);
+        const $cellElements = dataGridMocks.getCells($testElement);
+
+        // assert
+        assert.ok($cellElements.eq(0).hasClass('dx-command-edit-with-icons'), 'command column has with-icons class');
+        assert.roughEqual(parseFloat($cellElements.eq(0).css('line-height')), 19, 0.1, 'command column line-height');
+        assert.roughEqual(parseFloat($cellElements.eq(1).css('line-height')), 19, 0.1, 'data column line-height');
+    });
 });
 
 QUnit.module('Headers with grouping', {
@@ -2510,6 +2528,36 @@ QUnit.module('Headers with band columns', {
 
         const $filterRowFirstColumnElement = $testElement.find('.dx-datagrid-filter-row').first().children().eq(0);
         assert.strictEqual($filterRowFirstColumnElement.attr('rowspan'), undefined);
+    });
+
+    // T881055, T895531
+    QUnit.test('Column header should not overlap filterRow when grouped and showWhenGrouped', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.columns = [{
+            caption: 'Band column',
+            columns: [{
+                caption: 'Column3',
+                showWhenGrouped: true,
+                groupIndex: 0
+            }]
+        }];
+
+        this.options.filterRow = { visible: true };
+        this.setupDataGrid();
+
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const $headerCells = $testElement.find('.dx-row.dx-column-lines.dx-header-row').children();
+
+        // assert
+        assert.equal($headerCells.length, 4, 'header cell count');
+
+        $headerCells.each((_, headerCellElement) => {
+            assert.strictEqual($(headerCellElement).attr('rowspan'), undefined);
+        });
     });
 });
 

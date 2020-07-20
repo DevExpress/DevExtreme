@@ -1,0 +1,56 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-filled-lookup-height: null !default;
+$material-standard-lookup-height: null !default;
+$material-lookup-font-size: null !default;
+$material-lookup-popup-content-top: null !default;
+$material-lookup-popup-content-padding: null !default;
+$material-lookup-list-top: null !default;
+$material-lookup-arrow-margin: null !default;
+$material-lookup-arrow-right: null !default;
+$material-lookup-arrow-left: null !default;
+$material-lookup-invalid-message-font-size: null !default;
+$material-lookup-invalid-message-padding-horizontal: null !default;
+$material-lookup-invalid-message-padding-top: null !default;
+$material-lookup-invalid-message-padding-bottom: null !default;
+$material-lookup-invalid-message-margin-bottom: null !default;
+
+@if $size == "default" {
+  $material-filled-lookup-height: 56px;
+  $material-standard-lookup-height: 32px;
+  $material-lookup-font-size: 16px;
+  $material-lookup-popup-content-top: 49px;
+  $material-lookup-popup-content-padding: 20px;
+  $material-lookup-list-top: 66px;
+
+  $material-lookup-arrow-margin: -6px;
+  $material-lookup-arrow-right: 10px;
+  $material-lookup-arrow-left: 16px;
+
+  $material-lookup-invalid-message-font-size: 14px;
+  $material-lookup-invalid-message-padding-horizontal: 20px;
+  $material-lookup-invalid-message-padding-top: 13px;
+  $material-lookup-invalid-message-padding-bottom: 12px;
+  $material-lookup-invalid-message-margin-bottom: 20px;
+}
+
+@else if $size == "compact" {
+  $material-filled-lookup-height: 40px;
+  $material-standard-lookup-height: 26px;
+  $material-lookup-font-size: 13px;
+  $material-lookup-popup-content-top: 49px;
+  $material-lookup-popup-content-padding: 8px;
+  $material-lookup-list-top: 36px;
+
+  $material-lookup-arrow-margin: -6px;
+  $material-lookup-arrow-right: 10px;
+  $material-lookup-arrow-left: 16px;
+
+  $material-lookup-invalid-message-font-size: 14px;
+  $material-lookup-invalid-message-padding-horizontal: 20px;
+  $material-lookup-invalid-message-padding-top: 13px;
+  $material-lookup-invalid-message-padding-bottom: 12px;
+  $material-lookup-invalid-message-margin-bottom: 20px;
+}

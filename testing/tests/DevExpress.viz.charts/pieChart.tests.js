@@ -15,6 +15,7 @@ const layoutManagerModule = require('viz/chart_components/layout_manager');
 const trackerModule = require('viz/chart_components/tracker');
 const dxPieChart = require('viz/pie_chart');
 const chartMocks = require('../../helpers/chartMocks.js');
+const TemplateManagerModule = require('core/template_manager');
 const MockSeries = chartMocks.MockSeries;
 const MockPoint = chartMocks.MockPoint;
 const resetMockFactory = chartMocks.resetMockFactory;
@@ -80,6 +81,15 @@ const environment = {
         setupMocks.call(this);
         const that = this;
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+
+        that.templateManager = sinon.createStubInstance(TemplateManagerModule.TemplateManager);
+        that.templateManager._tempTemplates = [];
+        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager', function() {
+            return that.templateManager;
+        });
+
+        TemplateManagerModule.TemplateManager.createDefaultOptions = function() { return {}; };
+
         that.themeManager.theme.withArgs('legend').returns({ title: {} });
         $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {
             that.themeManager.getOptions.withArgs(name).returns({});
@@ -157,8 +167,8 @@ const environment = {
         this.createThemeManager.restore();
         this.LayoutManager.restore();
         this.validateData.restore();
+        this.templateManagerCtor.restore();
 
-        this.layoutManager.layoutElements.reset();
         this.layoutManager = null;
 
         this.themeManager.getOptions.reset();
@@ -398,6 +408,43 @@ const overlappingEnvironment = $.extend({}, environment, {
         })[0];
 
         assert.equal(templateGroup, undefined);
+    });
+
+    // T893618
+    QUnit.test('Async tempaltes rendering. OnRendered was not called', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        this.templateManager.getTemplate = sinon.spy(function() {
+            return { render: sinon.spy() };
+        });
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: $.noop
+        });
+
+        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+
+        assert.strictEqual(templateGroup.stub('move').callCount, 0);
+    });
+
+    // T893618
+    QUnit.test('Async tempaltes rendering. OnRendered called, group moved', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const renderSpy = sinon.spy();
+        this.templateManager.getTemplate = sinon.spy(function() {
+            return { render: renderSpy };
+        });
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: $.noop
+        });
+
+        renderSpy.lastCall.args[0].onRendered();
+
+        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+
+        assert.strictEqual(templateGroup.stub('move').callCount, 1);
     });
 
     QUnit.test('Hole template. First rendering', function(assert) {
@@ -1784,19 +1831,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         chart.render({ force: true });
 
         assert.strictEqual(chart.series[0].hideLayoutLabels, false);
-    });
-
-    QUnit.test('Adaptive layout with small canvas does not cause exceptions', function(assert) {
-        chartMocks.seriesMockData.series.push(new MockSeries({}));
-        const chart = this.createPieChart({
-            dataSource: [{}],
-            series: {}
-        });
-        chart.layoutManager.layoutElements = sinon.spy(function() { arguments[2](true); });
-
-        chart.render({ force: true });
-
-        assert.ok(true);
     });
 
     QUnit.module('drawn', {

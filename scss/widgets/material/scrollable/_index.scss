@@ -1,0 +1,201 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+$scrollbar-size-thin: 6px;
+$scrollbar-size: 13px;
+
+.dx-scrollable-content {
+  -webkit-transform: none; // stylelint-disable-line property-no-vendor-prefix
+}
+
+.dx-scrollable-scroll {
+  padding: 2px 0 2px 2px;
+  background-color: transparent;
+  opacity: 1;
+  overflow: hidden;
+  transition: opacity 0s linear;
+
+  .dx-rtl & {
+    padding-left: 0;
+    padding-right: 2px;
+  }
+}
+
+.dx-scrollable-scroll.dx-state-invisible {
+  opacity: 0;
+  transition: opacity 0.5s linear 1s;
+}
+
+.dx-scrollable-scroll-content {
+  width: 100%;
+  height: 100%;
+  background-color: $scrollable-scroll-bg;
+  box-shadow: 0 0 0 1px $scrollable-scroll-shadow-color;
+}
+
+.dx-scrollbar-hoverable {
+  background-color: $scrollable-scrollbar-bg;
+
+  .dx-scrollable-scroll.dx-state-invisible {
+    opacity: 1;
+
+    .dx-scrollable-scroll-content {
+      background-color: transparent;
+      background-color: rgba(0, 0, 0, 0);
+      box-shadow: 0 0 0 1px transparent;
+    }
+  }
+}
+
+.dx-scrollbar-vertical {
+  .dx-scrollable-scroll {
+    float: right;
+    width: $scrollbar-size-thin;
+  }
+
+  &.dx-scrollbar-hoverable {
+    width: $scrollbar-size-thin;
+    transition: width 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
+
+    .dx-scrollable-scroll {
+      transition: background-color 0.5s linear 1s, width 0.2s linear 150ms;
+
+      .dx-scrollable-scroll-content {
+        transition: box-shadow 0.15s linear 0.15s, background-color 0.15s linear 0.15s;
+      }
+
+      &.dx-state-invisible {
+        transition: background-color 0.5s linear 1s, width 0.2s linear 0.15s;
+
+        .dx-scrollable-scroll-content {
+          transition: box-shadow 0.5s linear 1s, background-color 0.5s linear 1s;
+        }
+      }
+    }
+
+    &.dx-state-hover,
+    &.dx-scrollable-scrollbar-active {
+      width: $scrollbar-size;
+
+      .dx-scrollable-scroll {
+        width: $scrollbar-size;
+      }
+    }
+  }
+}
+
+.dx-scrollbar-horizontal {
+  .dx-scrollable-scroll {
+    height: $scrollbar-size-thin;
+
+    &,
+    .dx-rtl & {
+      padding-left: 2px;
+      padding-right: 2px;
+      padding-bottom: 0;
+    }
+  }
+
+  &.dx-scrollbar-hoverable {
+    height: $scrollbar-size-thin;
+    transition: height 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
+
+    .dx-scrollable-scroll {
+      transition: background-color 0.5s linear 1s, height 0.2s linear 0.15s;
+
+      .dx-scrollable-scroll-content {
+        transition: box-shadow 0.15s linear 0.15s, background-color 0.15s linear 0.15s;
+      }
+
+      &.dx-state-invisible {
+        transition: background-color 0.5s linear 1s, height 0.2s linear 0.15s;
+
+        .dx-scrollable-scroll-content {
+          transition: box-shadow 0.5s linear 1s, background-color 0.5s linear 1s;
+        }
+      }
+    }
+
+    &.dx-state-hover,
+    &.dx-scrollable-scrollbar-active {
+      height: $scrollbar-size;
+
+      .dx-scrollable-scroll {
+        height: $scrollbar-size;
+      }
+    }
+  }
+}
+
+.dx-scrollable-scrollbars-alwaysvisible {
+  &.dx-scrollable-vertical,
+  &.dx-scrollable-both {
+    > .dx-scrollable-wrapper {
+      > .dx-scrollable-container {
+        > .dx-scrollable-content {
+          padding-right: $scrollbar-size-thin;
+        }
+      }
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      > .dx-scrollable-wrapper {
+        > .dx-scrollable-container {
+          > .dx-scrollable-content {
+            padding-right: 0;
+            padding-left: $scrollbar-size-thin;
+          }
+        }
+      }
+    }
+  }
+
+  &.dx-scrollable-horizontal,
+  &.dx-scrollable-both {
+    > .dx-scrollable-wrapper {
+      > .dx-scrollable-container {
+        > .dx-scrollable-content {
+          padding-bottom: $scrollbar-size-thin;
+        }
+      }
+    }
+  }
+}
+
+.dx-scrollview-scrollbottom-text,
+.dx-scrollview-pull-down-text {
+  margin-left: 10px;
+  top: (50px - $material-base-font-size) / 2;
+  display: inline-block;
+
+  .dx-rtl & {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
+
+.dx-scrollview-pull-down-text {
+  div {
+    position: relative;
+  }
+}
+
+.dx-scrollview-pull-down-image {
+  display: none;
+}
+
+.dx-scrollview-pull-down {
+  text-align: center;
+}
+
+.dx-rtl .dx-scrollable,
+.dx-rtl.dx-scrollable {
+  .dx-scrollable-scroll {
+    float: left;
+  }
+}

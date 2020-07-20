@@ -1,6 +1,6 @@
-const ToolbarStrategy = require('./ui.toolbar.strategy');
-const extend = require('../../core/utils/extend').extend;
-const ActionSheet = require('../action_sheet');
+import ToolbarStrategy from './ui.toolbar.strategy';
+import { extend } from '../../core/utils/extend';
+import ActionSheet from '../action_sheet';
 
 const ActionSheetStrategy = ToolbarStrategy.inherit({
 
@@ -46,4 +46,4 @@ const ActionSheetStrategy = ToolbarStrategy.inherit({
 
 });
 
-module.exports = ActionSheetStrategy;
+export default ActionSheetStrategy;

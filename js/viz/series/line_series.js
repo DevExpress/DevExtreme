@@ -1,12 +1,13 @@
 // there are line, stepline, stackedline, fullstackedline, spline
-const series = require('./scatter_series');
+import series from './scatter_series';
+
 const chartScatterSeries = series.chart;
 const polarScatterSeries = series.polar;
-const objectUtils = require('../../core/utils/object');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const vizUtils = require('../core/utils');
-const mathUtils = require('../../core/utils/math');
+import objectUtils from '../../core/utils/object';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import vizUtils from '../core/utils';
+import { solveCubicEquation, trunc } from '../../core/utils/math';
 const normalizeAngle = vizUtils.normalizeAngle;
 
 const DISCRETE = 'discrete';
@@ -18,8 +19,8 @@ const _each = each;
 
 const { round, sqrt, pow, min, max, abs } = Math;
 
-exports.chart = {};
-exports.polar = {};
+const chart = {};
+const polar = {};
 
 function clonePoint(point, newX, newY, newAngle) {
     const p = objectUtils.clone(point);
@@ -44,7 +45,7 @@ function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
     const b = 3 * p2 - 6 * p1 + 3 * p0;
     const a = p3 - 3 * p2 + 3 * p1 - p0;
 
-    return mathUtils.solveCubicEquation(a, b, c, d);
+    return solveCubicEquation(a, b, c, d);
 }
 
 const lineMethods = {
@@ -167,7 +168,6 @@ const lineMethods = {
     _drawSegment: function(points, animationEnabled, segmentCount, lastSegment) {
         const that = this;
         const rotated = that._options.rotated;
-        const forceDefaultSegment = false;
         const segment = that._prepareSegment(points, rotated, lastSegment);
 
         that._segments.push(segment);
@@ -175,8 +175,6 @@ const lineMethods = {
             that._graphics[segmentCount] = that._drawElement(animationEnabled ? that._getDefaultSegment(segment) : segment, that._elementsGroup);
         } else if(!animationEnabled) {
             that._updateElement(that._graphics[segmentCount], segment);
-        } else if(forceDefaultSegment) {
-            that._updateElement(that._graphics[segmentCount], that._getDefaultSegment(segment));
         }
     },
 
@@ -220,7 +218,7 @@ const lineMethods = {
     }
 };
 
-const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
+const lineSeries = chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
     getPointCenterByArg(arg) {
         const value = this.getArgumentAxis().getTranslator().translate(arg);
         return { x: value, y: value };
@@ -254,7 +252,7 @@ const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineM
     }
 });
 
-exports.chart['stepline'] = _extend({}, lineSeries, {
+chart['stepline'] = _extend({}, lineSeries, {
     _calculateStepLinePoints(points) {
         const segment = [];
         const coordName = this._options.rotated ? 'x' : 'y';
@@ -309,7 +307,7 @@ exports.chart['stepline'] = _extend({}, lineSeries, {
     }
 });
 
-exports.chart['spline'] = _extend({}, lineSeries, {
+chart['spline'] = _extend({}, lineSeries, {
 
     _calculateBezierPoints: function(src, rotated) {
         const bezierPoints = [];
@@ -477,7 +475,7 @@ exports.chart['spline'] = _extend({}, lineSeries, {
     },
 });
 
-exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
+polar.line = _extend({}, polarScatterSeries, lineMethods, {
     _sortPoints: function(points) {
         return points;
     },
@@ -603,7 +601,7 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
                     const x = (b2 - b1) / (k1 - k2);
                     const y = k1 * x + b1;
                     if(isInsideInterval(prevPoint, point, { x, y })) {
-                        const quarter = abs(mathUtils.trunc((360 + coordParam) / 90) % 4);
+                        const quarter = abs(trunc((360 + coordParam) / 90) % 4);
                         if(quarter === 0 && x >= centerPoint.x && y <= centerPoint.y ||
                             quarter === 1 && x <= centerPoint.x && y <= centerPoint.y ||
                             quarter === 2 && x <= centerPoint.x && y >= centerPoint.y ||
@@ -671,3 +669,8 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
         return neighborPoints;
     }
 });
+
+export {
+    chart,
+    polar
+};

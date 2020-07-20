@@ -251,7 +251,7 @@ const FilterPanelView = modules.View.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             filterPanel: {

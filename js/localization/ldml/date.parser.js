@@ -1,4 +1,4 @@
-const escapeRegExp = require('../../core/utils/common').escapeRegExp;
+import { escapeRegExp } from '../../core/utils/common';
 
 const FORMAT_TYPES = {
     '3': 'abbreviated',
@@ -166,7 +166,7 @@ const createPattern = function(char, count) {
     return result;
 };
 
-const getRegExpInfo = function(format, dateParts) {
+export const getRegExpInfo = function(format, dateParts) {
     let regexpText = '';
     let stubText = '';
     let isEscaping;
@@ -217,7 +217,7 @@ const getRegExpInfo = function(format, dateParts) {
     };
 };
 
-const getPatternSetters = function() {
+export const getPatternSetters = function() {
     return PATTERN_SETTERS;
 };
 
@@ -270,7 +270,7 @@ const getOrderedFormatPatterns = function(formatPatterns) {
     return ORDERED_PATTERNS.concat(otherPatterns);
 };
 
-const getParser = function(format, dateParts) {
+export const getParser = function(format, dateParts) {
     const regExpInfo = getRegExpInfo(format, dateParts);
 
     return function(text) {
@@ -305,7 +305,3 @@ const getParser = function(format, dateParts) {
         return null;
     };
 };
-
-exports.getParser = getParser;
-exports.getRegExpInfo = getRegExpInfo;
-exports.getPatternSetters = getPatternSetters;

@@ -1,0 +1,36 @@
+@use "../base/mixins" as *;
+
+// adduse
+
+
+.dx-slideout {
+  height: 100%;
+  width: 100%;
+}
+
+.dx-slideout-menu {
+  min-width: 280px;
+  max-width: 350px;
+
+  .dx-list-item {
+    .dx-icon {
+      float: left;
+      margin-right: 15px;
+      width: 24px;
+      height: 24px;
+      background-size: 100% 100%;
+    }
+  }
+}
+
+.dx-slideout-item,
+.dx-slideout-item-content {
+  height: 100%;
+  width: 100%;
+}
+
+.dx-rtl .dx-slideout-menu .dx-list-item .dx-icon {
+  float: right;
+  margin-right: 0;
+  margin-left: 15px;
+}

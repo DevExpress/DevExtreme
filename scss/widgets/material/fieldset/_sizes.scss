@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-fieldset-vertical-margin: null !default;
+$material-fieldset-horizontal-margin: null !default;
+$material-fieldset-header-vertical-margin: null !default;
+$material-field-vertical-margin: null !default;
+$material-field-labelvalue-spacing: null !default;
+
+@if $size == "default" {
+  $material-fieldset-vertical-margin: 30px;
+  $material-fieldset-horizontal-margin: 20px;
+  $material-fieldset-header-vertical-margin: 20px;
+  $material-field-vertical-margin: 30px;
+  $material-field-labelvalue-spacing: 15px;
+}
+
+@else if $size == "compact" {
+  $material-fieldset-vertical-margin: 20px;
+  $material-fieldset-horizontal-margin: 16px;
+  $material-fieldset-header-vertical-margin: 16px;
+  $material-field-vertical-margin: 20px;
+  $material-field-labelvalue-spacing: 12px;
+}

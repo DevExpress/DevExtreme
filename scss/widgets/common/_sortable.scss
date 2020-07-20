@@ -1,0 +1,43 @@
+@use "../base/mixins" as *;
+
+// adduse
+$max-integer: 2147483647;
+
+.dx-sortable {
+  overflow: hidden;
+}
+
+.dx-sortable-dragging.dx-sortable-clone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  opacity: 0.9;
+  z-index: $max-integer;
+}
+
+.dx-sortable-dragging.dx-sortable-clone * {
+  cursor: pointer;
+  cursor: grabbing;
+}
+
+.dx-sortable-source {
+  opacity: 0.5;
+}
+
+.dx-sortable-source-hidden {
+  opacity: 0;
+}
+
+.dx-sortable-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  z-index: $max-integer;
+}
+
+.dx-sortable-placeholder-inside {
+  border-width: 2px;
+}

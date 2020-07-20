@@ -1,0 +1,51 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../overlay/colors" as *;
+
+// adduse
+
+
+$popover-arrow-bg: null !default;
+
+
+@if $color == "carmine" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+
+@if $color == "contrast" {
+
+  $popover-arrow-bg: $base-bg !default;
+}
+
+@if $color == "dark" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+
+@if $color == "darkmoon" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+
+@if $color == "darkviolet" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+
+@if $color == "greenmist" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+
+@if $color == "light" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+
+@if $color == "softblue" {
+
+  $popover-arrow-bg: $overlay-content-bg !default;
+}
+

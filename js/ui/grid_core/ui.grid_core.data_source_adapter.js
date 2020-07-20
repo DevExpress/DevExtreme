@@ -1,14 +1,14 @@
 import Callbacks from '../../core/utils/callbacks';
 import gridCore from '../data_grid/ui.data_grid.core';
 import { executeAsync, getKeyHash } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isDefined, isPlainObject, isFunction } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import ArrayStore from '../../data/array_store';
 import arrayUtils from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
-module.exports = gridCore.Controller.inherit((function() {
+export default gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
         if(items) {
             items = items.slice(0);
@@ -43,7 +43,7 @@ module.exports = gridCore.Controller.inherit((function() {
     }
 
     function executeTask(action, timeout) {
-        if(typeUtils.isDefined(timeout)) {
+        if(isDefined(timeout)) {
             executeAsync(action, timeout);
         } else {
             action();
@@ -104,7 +104,7 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.store().on('push', that._pushHandler);
 
             each(dataSource, function(memberName, member) {
-                if(!that[memberName] && typeUtils.isFunction(member)) {
+                if(!that[memberName] && isFunction(member)) {
                     that[memberName] = function() {
                         return this._dataSource[memberName].apply(this._dataSource, arguments);
                     };
@@ -422,7 +422,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 }
 
                 if(loadOptions.requireTotalCount && localPaging) {
-                    options.extra = typeUtils.isPlainObject(options.extra) ? options.extra : {};
+                    options.extra = isPlainObject(options.extra) ? options.extra : {};
                     options.extra.totalCount = options.data.length;
                 }
 

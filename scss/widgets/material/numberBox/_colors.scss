@@ -1,0 +1,24 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+
+$numberbox-spin-icon-color: null !default;
+
+
+@if $mode == "light" {
+
+
+  $numberbox-spin-icon-color: $base-spin-icon-color !default;
+}
+
+@if $mode == "dark" {
+
+
+  $numberbox-spin-icon-color: $base-spin-icon-color !default;
+}
+

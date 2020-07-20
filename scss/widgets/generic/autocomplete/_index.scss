@@ -1,0 +1,41 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+
+// adduse
+@use "../dropDownList";
+
+.dx-autocomplete {
+  .dx-texteditor-input {
+    font-size: 1em;
+  }
+}
+
+@mixin autocomplete-badge-offset() {
+  right: $generic-invalid-badge-horizontal-padding;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    left: $generic-invalid-badge-horizontal-padding;
+  }
+}
+
+.dx-autocomplete.dx-invalid,
+.dx-autocomplete.dx-valid {
+  .dx-texteditor-container {
+    &:after {
+      @include autocomplete-badge-offset();
+    }
+  }
+}
+
+.dx-autocomplete.dx-validation-pending {
+  .dx-texteditor-container {
+    .dx-pending-indicator {
+      @include autocomplete-badge-offset();
+    }
+  }
+}

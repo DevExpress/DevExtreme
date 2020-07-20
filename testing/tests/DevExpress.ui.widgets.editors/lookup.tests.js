@@ -2024,6 +2024,27 @@ QUnit.module('popup options', {
         assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
     });
 
+    QUnit.test('toolbarItems should be passed to the popover (T896951)', function(assert) {
+        const buttonConfig = {
+            location: 'after',
+            toolbar: 'bottom',
+            widget: 'dxButton',
+            options: { text: 'test' }
+        };
+
+        const lookup = $('#lookup').dxLookup({
+            opened: true,
+            dropDownOptions: {
+                toolbarItems: [buttonConfig]
+            }
+        }).dxLookup('instance');
+
+        const $button = $(lookup.content()).parent().find('.dx-button-text');
+
+        assert.deepEqual(lookup._popup.option('toolbarItems'), [buttonConfig], 'toolbarItems are passed correctly');
+        assert.strictEqual($button.text(), 'test', 'button is added successfully');
+    });
+
     QUnit.test('shading should present', function(assert) {
         const $lookup = $('#lookupOptions');
 
@@ -3220,7 +3241,15 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 4 + 16, 'popup height contains 4 list items and 2 paddings (8px)');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 4 + 16, 'if 4 items popup height 4 items and 2 paddings (8px)');
+
+            lookup.close();
+
+            lookup.option('dataSource', ['blue', 'orange', 'lime', 'purple', 'red', 'green']);
+
+            $(lookup.field()).trigger('dxclick');
+
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 5 + 16, 'if items more 4 popup height is 5 items and 2 paddings (8px)');
 
             lookup.close();
 
@@ -3229,7 +3258,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 4 + $('.dx-toolbar').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 5 + $('.dx-toolbar').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
 
             lookup.close();
             lookup.option('dropDownOptions.width', 200);
@@ -3248,11 +3277,132 @@ QUnit.module('default options', {
         }
     });
 
+    QUnit.test('Check popup position if there are invisible items in dataSource for Material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const materialLookupPadding = 8;
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+            const lookup = $lookup.dxLookup({ dataSource: [{
+                'ID': 1,
+                'Color': 'black',
+                'visible': false
+            }, {
+                'ID': 2,
+                'Color': 'grey',
+                'visible': true
+            }, {
+                'ID': 3,
+                'Color': 'green',
+                'visible': true
+            }, {
+                'ID': 4,
+                'Color': 'white',
+                'visible': true
+            }, {
+                'ID': 5,
+                'Color': 'yellow',
+                'visible': true
+            }], valueExpr: 'ID', displayExpr: 'Color' }).dxLookup('instance');
+
+            $lookup.css('margin-top', 0);
+
+            $(lookup.field()).trigger('dxclick');
+
+            let $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 2, 'popup position if nothing is selected');
+            assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').not('.dx-state-invisible').height() * 4 + materialLookupPadding * 2, 'popup height equal 4 items and 2 paddings (8px)');
+
+            lookup.close();
+
+            $lookup.css('margin-top', 200);
+            lookup.option('value', 3);
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').not('.dx-state-invisible').height(), 3, 'popup position if second visible item is selected');
+            lookup.close();
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
+    QUnit.test('Check default popupHeight, position.of for Material theme if there are grouped items', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: new DataSource({
+                store: [{
+                    'ID': 1,
+                    'Group': 'dark',
+                    'Color': 'black'
+                }, {
+                    'ID': 2,
+                    'Group': 'dark',
+                    'Color': 'grey'
+                }, {
+                    'ID': 3,
+                    'Group': 'dark',
+                    'Color': 'green'
+                }, {
+                    'ID': 4,
+                    'Group': 'light',
+                    'Color': 'white'
+                }, {
+                    'ID': 5,
+                    'Group': 'light',
+                    'Color': 'yellow'
+                }, {
+                    'ID': 6,
+                    'Group': 'light',
+                    'Color': 'rose'
+                }, {
+                    'ID': 7,
+                    'Group': 'light',
+                    'Color': 'blue'
+                }], key: 'ID', group: 'Group' }), grouped: true, valueExpr: 'Color', displayExpr: 'Color', value: 'grey' }).dxLookup('instance');
+
+            $lookup.css('margin-top', 200);
+
+            $(lookup.field()).trigger('dxclick');
+
+            assert.roughEqual(lookup.option('dropDownOptions.height')(), $('.dx-list-item').outerHeight() * 3 + $('.dx-list-group-header').outerHeight() * 2 + 8, 2, 'if items more 5 popup height is 5 items and padding 8px');
+
+            lookup.close();
+
+            lookup.option('value', 'white');
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -($popup.find('.dx-overlay-content').height() - $('.dx-list-item').height()) / 2, 2, 'offset of the lookup if fourth item is selected');
+
+            lookup.close();
+
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
+
     QUnit.test('Check popup position offset for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
         const $lookup = $('<div>').prependTo('body');
+        const materialLookupPadding = 8;
 
         try {
 
@@ -3282,7 +3432,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'offset of the lookup after scrolling and cut-off item selecting');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - materialLookupPadding, 1, 'offset of the lookup after scrolling and cut-off item selecting');
             assert.roughEqual($('.dx-list-item').eq(1).position().top, getList().scrollTop(), 2, 'position of the selected item after scrolling and cut-off item selecting');
 
             lookup.close();
@@ -3291,7 +3441,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5, 1, 'offset of the lookup if last item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - materialLookupPadding, 1, 'offset of the lookup if last item is selected');
 
             lookup.close();
 
@@ -3306,33 +3456,139 @@ QUnit.module('default options', {
         }
     });
 
-    QUnit.test('Check itemCenteringEnabled option for Material theme', function(assert) {
+    QUnit.test('Check when itemCenteringEnabled option for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
         const $lookup = $('<div>').prependTo('body');
+        const materialLookupPadding = 8;
 
         try {
 
-            const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
-
-            lookup.option('usePopover', false);
-            lookup.option('itemCenteringEnabled', false);
+            const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green', 'red'], value: 'orange' }).dxLookup('instance');
 
             $(lookup.field()).trigger('dxclick');
 
             let $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), $(window).width() * 0.8, 3, 'default popup width like generic');
-            assert.roughEqual($popup.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'default popup height like generic');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - materialLookupPadding, 1, 'popup position if second item is selected and there is not top place');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'default popup position of window');
+            lookup.close();
 
-            lookup.option('dropDownOptions.position', 'top');
-
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'popup position of window after change position');
+            $lookup.css('margin-top', 100);
 
             $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').height(), 2, 'popup position if second item is selected and there is top place');
+
+            lookup.close();
+
+            $lookup.css('margin-top', 200);
+
+            lookup.option('value', 'lime');
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').height() * 2, 3, 'third item is centered');
+
+            lookup.close();
+
+            lookup.option('value', 'purple');
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').height() * 2 - materialLookupPadding * 2, 3, 'fourth item is centered');
+
+            lookup.close();
+
+            lookup.option('value', 'red');
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').height() * 4 - materialLookupPadding * 2, 2, 'popup position if last item is selected and there is place');
+
+            lookup.close();
+
+            $lookup.css('margin-top', 60);
+
+            lookup.option('value', 'lime');
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - $('.dx-list-item').height() - materialLookupPadding * 2, 3, 'popup position if there is not place for two items');
+
+            lookup.close();
+
+            lookup.option('value', 'red');
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -2.5 - materialLookupPadding, 1, 'popup position if last item is selected and there is not place');
+
+            lookup.close();
+
+            lookup.option('itemCenteringEnabled', false);
+
+            $(lookup.field()).trigger('dxclick');
+
+            $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if itemCenteringEnabled option is false');
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
+
+    QUnit.test('Check when itemCenteringEnabled option is false and change options for Material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const $lookup = $('<div>').prependTo('body');
+
+        const popupWidth = $(window).width() * 0.8;
+        const popupHeight = $(window).height() * 0.8;
+
+        try {
+
+            const lookup = $lookup.dxLookup({
+                dataSource: ['blue', 'orange', 'lime', 'purple', 'green'],
+                value: 'blue',
+                itemCenteringEnabled: false,
+                dropDownOptions: {
+                    position: {
+                        at: 'center',
+                        my: 'center',
+                        of: $(window)
+                    },
+                    width: popupWidth,
+                    height: popupHeight
+                }
+            }).dxLookup('instance');
+
+            $lookup.css('margin-top', 0);
+
+            $(lookup.field()).trigger('dxclick');
+
+            let $popup = $('.dx-popup-wrapper');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), popupWidth, 3, 'popup width like generic');
+            assert.roughEqual($popup.find('.dx-overlay-content').outerHeight(), popupHeight, 3, 'popup height like generic');
+
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'popup position of window');
 
             lookup.close();
 
@@ -3340,24 +3596,20 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            const $popover = $('.dx-popup-wrapper');
+            $popup = $('.dx-popup-wrapper');
+            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), popupWidth, 3, 'popup width does not change when usePopover true');
+            assert.roughEqual($popup.find('.dx-overlay-content').outerHeight(), popupHeight, 3, 'popup height does not change when usePopover true');
 
-            assert.equal($popover.find('.dx-overlay-content').outerWidth(), $(lookup.field()).outerWidth() + 2, 'popup width match with lookup field width');
-
-            // android6 test fail
-            // assert.roughEqual($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'popup height auto if usePopover true');
-
-            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8, 2, 'popover position of lookup field with body padding 8px');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'popup position does not change when usePopover true');
 
             lookup.close();
 
-            lookup.option('itemCenteringEnabled', true);
+            lookup.option('dropDownOptions.position', 'top');
 
             $(lookup.field()).trigger('dxclick');
 
             $popup = $('.dx-popup-wrapper');
-
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'popup position if option is false');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'popup position of window after change position more');
 
             lookup.close();
         } finally {

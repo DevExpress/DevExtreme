@@ -6,7 +6,7 @@ import ButtonGroup from './button_group';
 import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
-import windowUtils from '../core/utils/window';
+import { hasWindow } from '../core/utils/window';
 import { getPublicElement } from '../core/element';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
@@ -18,6 +18,8 @@ import { isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined } from '../core/utils/common';
 import Guid from '../core/guid';
 import { format as formatMessage } from '../localization/message';
+
+// STYLE dropDownButton
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
@@ -114,9 +116,9 @@ const DropDownButton = Widget.inherit({
         this._createItemClickAction();
         this._createActionClickAction();
         this._createSelectionChangedAction();
+        this._initDataSource();
         this._compileKeyGetter();
         this._compileDisplayGetter();
-        this._initDataSource();
         this._itemsToDataSource();
         this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
@@ -147,8 +149,15 @@ const DropDownButton = Widget.inherit({
         }
     },
 
+    _getKey: function() {
+        const keyExpr = this.option('keyExpr');
+        const storeKey = this._dataSource?.key();
+
+        return isDefined(storeKey) && (!isDefined(keyExpr) || keyExpr === 'this') ? storeKey : keyExpr;
+    },
+
     _compileKeyGetter() {
-        this._keyGetter = compileGetter(this.option('keyExpr'));
+        this._keyGetter = compileGetter(this._getKey());
     },
 
     _compileDisplayGetter() {
@@ -189,7 +198,7 @@ const DropDownButton = Widget.inherit({
         this._lastSelectedItemData = undefined;
 
         const selectedItemKey = this.option('selectedItemKey');
-        this._loadSingle(this.option('keyExpr'), selectedItemKey)
+        this._loadSingle(this._getKey(), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
                 d.resolve(null);
@@ -309,7 +318,7 @@ const DropDownButton = Widget.inherit({
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
             minWidth: () => {
-                if(!windowUtils.hasWindow()) {
+                if(!hasWindow()) {
                     return;
                 }
                 return this.$element().outerWidth();
@@ -331,10 +340,7 @@ const DropDownButton = Widget.inherit({
                 of: this.$element(),
                 collision: 'flipfit',
                 my: 'top ' + horizontalAlignment,
-                at: 'bottom ' + horizontalAlignment,
-                offset: {
-                    y: -1
-                }
+                at: 'bottom ' + horizontalAlignment
             }
         }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },
@@ -352,7 +358,7 @@ const DropDownButton = Widget.inherit({
             selectedItemKeys: selectedItemKey && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             groupTemplate: this.option('groupTemplate'),
-            keyExpr: this.option('keyExpr'),
+            keyExpr: this._getKey(),
             noDataText: this.option('noDataText'),
             displayExpr: this.option('displayExpr'),
             itemTemplate: this.option('itemTemplate'),
@@ -618,4 +624,4 @@ const DropDownButton = Widget.inherit({
 }).include(DataHelperMixin);
 
 registerComponent('dxDropDownButton', DropDownButton);
-module.exports = DropDownButton;
+export default DropDownButton;

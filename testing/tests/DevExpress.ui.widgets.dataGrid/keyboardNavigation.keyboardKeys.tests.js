@@ -323,7 +323,7 @@ QUnit.module('Keyboard keys', {
         let arrowKeysCounter = 0;
 
         // act
-        this.editingController._editRowIndex = 1;
+        this.editingController.editRow(1);
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -888,7 +888,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
 
-        this._controllers.editing._editRowIndex = 1;
+        this._controllers.editing.editRow(1);
         this.triggerKeyDown('space', false, false, $('#container').find('td').get(0));
 
         // assert
@@ -948,7 +948,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 1, 'row is editing');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'row is editing');
     });
 
     QUnit.testInActiveWindow('Editor has focus when edit form', function(assert) {
@@ -1845,7 +1845,7 @@ QUnit.module('Keyboard keys', {
             // assert
             assert.strictEqual(event.isDefaultPrevented(), false, 'default is not prevented');
             assert.ok(isStoreUpdated);
-            assert.equal(this.editingController._editRowIndex, -1, 'row is editing');
+            assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
             assert.ok(!this.keyboardNavigationController._isEditing);
             assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
             assert.equal($('td[tabIndex]').attr('tabIndex'), 0, 'tabIndex of cell');
@@ -2025,7 +2025,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, 2, 'edit column index');
     });
 
@@ -2080,7 +2080,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, 0, 'edit column index');
 
         // act
@@ -2091,7 +2091,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, 0, 'edit column index');
 
         // act
@@ -2099,7 +2099,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, -1, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, -1, 'edit column index');
     });
 
@@ -2117,7 +2117,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('rightArrow');
         this.triggerKeyDown('enter');
 
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, 2, 'edit column index');
     });
 
@@ -2139,7 +2139,7 @@ QUnit.module('Keyboard keys', {
         const isPreventDefaultCalled = that.triggerKeyDown('tab', false, false, $('#container').find('input')).preventDefault;
 
         // assert
-        assert.equal(that.editingController._editRowIndex, 1, 'edit row index');
+        assert.equal(that.editingController._getVisibleEditRowIndex(), 1, 'edit row index');
         assert.equal(that.editingController._editColumnIndex, 2, 'edit column index');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
@@ -2847,7 +2847,7 @@ QUnit.module('Keyboard keys', {
 
         const $editRow = $('#container').find('.dx-data-row').first();
 
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
 
         // act
         this.triggerKeyDown('tab', false, false, $('#container').find('input'));
@@ -2855,70 +2855,10 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.ok($editRow.find('input').eq(1).parents('.dx-editor-cell').hasClass('dx-focused'));
 
     });
-
-    if(device.deviceType === 'desktop') {
-        QUnit.testInActiveWindow('Focus on first cell when insert Row', function(assert) {
-            setupModules(this);
-            this.keyboardNavigationController._focusedView = this.rowsView;
-
-            this.options.editing = {
-                allowUpdating: true,
-                mode: 'row',
-                allowAdding: true
-            };
-
-            this.gridView.render($('#container'));
-
-            this.editingController.addRow();
-            this.clock.tick();
-            const $newRow = $('#container').find('.dx-data-row').first();
-
-            assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
-            assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass('dx-focused'));
-
-            // act
-            this.triggerKeyDown('tab', false, false, $('#container').find('input'));
-
-            this.clock.tick();
-
-            // assert
-            assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
-            assert.ok($newRow.find('input').eq(1).parents('.dx-editor-cell').hasClass('dx-focused'));
-        });
-
-        QUnit.testInActiveWindow('Focus on first cell when insert Row via API when not editing', function(assert) {
-            setupModules(this);
-            this.keyboardNavigationController._focusedView = this.rowsView;
-
-            this.options.editing = {
-                allowUpdating: false,
-                mode: 'row'
-            };
-
-            this.gridView.render($('#container'));
-
-            this.editingController.addRow();
-            this.clock.tick();
-
-            const $newRow = $('#container').find('.dx-data-row').first();
-
-            assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
-            assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass('dx-focused'));
-
-            // act
-            this.triggerKeyDown('tab', false, false, $('#container').find('input'));
-
-            this.clock.tick();
-
-            // assert
-            assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
-            assert.ok($newRow.find('input').eq(1).parents('.dx-editor-cell').hasClass('dx-focused'));
-        });
-    }
 
     QUnit.testInActiveWindow('Edit next cell after tab key when first cell focused at \'editCell\' function call', function(assert) {
         setupModules(this);
@@ -2931,7 +2871,7 @@ QUnit.module('Keyboard keys', {
         const isPreventDefaultCalled = this.triggerKeyDown('tab', false, false, $('#container').find('input'));
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, 1, 'edit column index');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
@@ -2950,7 +2890,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, -1, 'we are do not editing anything');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'we are do not editing anything');
         assert.equal(this.editingController._editColumnIndex, -1, 'we are do not editing anything');
         assert.equal(this.keyboardNavigationController._getFocusedCell().text(), 'test2', 'at now we are focused at second cell');
     });
@@ -2971,7 +2911,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'we are do not editing anything');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'we are do not editing anything');
         assert.equal(this.editingController._editColumnIndex, 1, 'we are do not editing anything');
         assert.equal(this.keyboardNavigationController._getFocusedCell().find('input').length, 1, 'focused cell contains editor');
     });
@@ -3144,7 +3084,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 1, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'edit row index');
         assert.equal(this.editingController._editColumnIndex, 2, 'edit column index');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
         assert.ok(isFocusedInput, 'is focused input');
@@ -3174,7 +3114,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 1, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'edit row index');
         assert.ok(isFocusedInput, 'is focused input');
 
         // act
@@ -3184,7 +3124,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 1, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'edit row index');
         assert.ok(isFocusedInput, 'is focused input');
     });
 
@@ -3807,7 +3747,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         // assert
-        assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
 
         // arrange
         this.editingController.cancelEditData();
@@ -3817,7 +3757,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         // assert
-        assert.equal(this.editingController._editRowIndex, -1, 'edit row index');
+        assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'edit row index');
     });
 
     // T680076

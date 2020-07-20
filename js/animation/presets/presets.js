@@ -1,8 +1,8 @@
-const Component = require('../../core/component');
-const each = require('../../core/utils/iterator').each;
-const extend = require('../../core/utils/extend').extend;
-const devices = require('../../core/devices');
-const fx = require('../fx');
+import Component from '../../core/component';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import devices from '../../core/devices';
+import fx from '../fx';
 
 const directionPostfixes = {
     forward: ' dx-forward',
@@ -387,7 +387,8 @@ const AnimationPresetCollection = Component.inherit({
     }
 });
 
-exports.PresetCollection = AnimationPresetCollection;
-
 const animationPresets = new AnimationPresetCollection();
-exports.presets = animationPresets;
+export {
+    animationPresets as presets,
+    AnimationPresetCollection as PresetCollection
+};

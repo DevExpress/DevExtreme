@@ -40,22 +40,29 @@ export default class MetadataCollector {
     });
   }
 
+  static getStringFromObject(
+    object: Array<MetaItem> | Array<string> | FlatStylesDependencies,
+  ): string {
+    return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
+  }
+
   async saveMetadata(
     filePath: string,
     version: string,
     browsersList: Array<string>,
+    dependencies: FlatStylesDependencies,
   ): Promise<void> {
     const absolutePath = resolve(filePath);
     const metadata = this.generator.getMetadata();
-    const metaString = JSON.stringify(metadata)
-      .replace(/"/g, '\'')
-      .replace(/'(ON|OFF)'/g, '"$1"');
-    const browsersListString = JSON.stringify(browsersList)
-      .replace(/"/g, '\'');
+    const metaString = MetadataCollector.getStringFromObject(metadata);
+    const browsersListString = MetadataCollector.getStringFromObject(browsersList);
+    const dependenciesString = MetadataCollector.getStringFromObject(dependencies);
 
-    let metaContent = `export const metadata: Array<MetaItem> = ${metaString};\n`;
-    metaContent += `export const version: string = '${version}';\n`;
-    metaContent += `export const browsersList: Array<string> = ${browsersListString};\n`;
+    const metaContent = `export const metadata: Array<MetaItem> = ${metaString};
+export const version: string = '${version}';
+export const browsersList: Array<string> = ${browsersListString};
+export const dependencies: FlatStylesDependencies = ${dependenciesString};
+`;
     await fs.mkdir(dirname(absolutePath), { recursive: true });
     await fs.writeFile(absolutePath, metaContent);
   }

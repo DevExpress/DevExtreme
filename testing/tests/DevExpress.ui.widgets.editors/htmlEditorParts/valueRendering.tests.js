@@ -34,6 +34,20 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         assert.equal($content.get(0).dataset.placeholder, 'test placeholder');
     });
 
+    test('the container must adjust to the placeholder', function(assert) {
+        const instance = $('#htmlEditor').dxHtmlEditor({
+            width: 50
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const initialHeight = $element.outerHeight();
+
+        instance.option('placeholder', '1234 567 89 0123 4567 89 012 345 67 890');
+
+        const actualHeight = $element.outerHeight();
+
+        assert.ok(actualHeight > initialHeight, 'editor height has been increased');
+    });
+
     test('render default value', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
             value: '<h1>Hi!</h1><p>Test</p>'
@@ -246,6 +260,41 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         instance.setSelection(0, 4);
         instance.format('color', 'red');
     });
+
+    test('clear the HTML value', function(assert) {
+        const done = assert.async();
+        const instance = $('#htmlEditor')
+            .dxHtmlEditor({
+                value: 'test',
+                onValueChanged: ({ value, previousValue }) => {
+                    assert.strictEqual(value, '');
+                    assert.strictEqual(previousValue, 'test');
+                    done();
+                }
+            })
+            .dxHtmlEditor('instance');
+
+        instance
+            .$element()
+            .find(getSelector(CONTENT_CLASS))
+            .html('');
+    });
+
+    test('render widget in detached container', function(assert) {
+        const $container = $('#htmlEditor');
+        const listMarkup = '<ul><li>t1</li><li>t2</li></ul>';
+
+        $container.detach();
+
+        $container.dxHtmlEditor({
+            value: listMarkup
+        });
+
+        $container.appendTo('#qunit-fixture');
+
+        const content = $container.find('.dx-htmleditor-content').html();
+        assert.strictEqual(content, listMarkup);
+    });
 });
 
 
@@ -319,6 +368,26 @@ QUnit.module('Value as Markdown markup', {
             .dxHtmlEditor('instance');
 
         instance.option('valueType', 'markdown');
+    });
+
+    test('clear the Markdown value', function(assert) {
+        const done = assert.async();
+        const instance = $('#htmlEditor')
+            .dxHtmlEditor({
+                value: 'test',
+                valueType: 'markdown',
+                onValueChanged: ({ value, previousValue }) => {
+                    assert.strictEqual(value, '');
+                    assert.strictEqual(previousValue, 'test');
+                    done();
+                }
+            })
+            .dxHtmlEditor('instance');
+
+        instance
+            .$element()
+            .find(getSelector(CONTENT_CLASS))
+            .html('');
     });
 });
 

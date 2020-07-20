@@ -1,0 +1,127 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common" as *;
+
+// adduse
+@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700";
+@import "https://fonts.googleapis.com/earlyaccess/notokufiarabic.css";
+
+@font-face {
+  font-family: 'RobotoFallback';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    local('Roboto Light'),
+    local('Roboto-Light'),
+    url("fonts/Roboto-300.woff2") format('woff2'),
+    url("fonts/Roboto-300.woff") format('woff'),
+    url("fonts/Roboto-300.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoFallback';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('Roboto'),
+    local('Roboto-Regular'),
+    url("fonts/Roboto-400.woff2") format('woff2'),
+    url("fonts/Roboto-400.woff") format('woff'),
+    url("fonts/Roboto-400.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoFallback';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    local('Roboto Medium'),
+    local('Roboto-Medium'),
+    url("fonts/Roboto-500.woff2") format('woff2'),
+    url("fonts/Roboto-500.woff") format('woff'),
+    url("fonts/Roboto-500.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoFallback';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('Roboto Bold'),
+    local('Roboto-Bold'),
+    url("fonts/Roboto-700.woff2") format('woff2'),
+    url("fonts/Roboto-700.woff") format('woff'),
+    url("fonts/Roboto-700.ttf") format('truetype');
+}
+
+@mixin dx-s-font-mixin() {
+  font-size: $material-s-font-size;
+}
+
+.dx-theme-material-typography {
+  background-color: $typography-bg;
+
+  @include dx-base-typography();
+
+  h1 {
+    font-weight: 300;
+    font-size: $material-h1-font-size;
+    letter-spacing: -1.5px;
+  }
+
+  h2 {
+    font-weight: 300;
+    font-size: $material-h2-font-size;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    font-weight: 400;
+    font-size: $material-h3-font-size;
+  }
+
+  h4 {
+    font-weight: 400;
+    font-size: $material-h4-font-size;
+    letter-spacing: 0.25px;
+  }
+
+  h5 {
+    font-weight: 400;
+    font-size: $material-h5-font-size;
+  }
+
+  h6 {
+    font-weight: 500;
+    font-size: $material-h6-font-size;
+    letter-spacing: 0.15px;
+  }
+
+  .dx-font-xl {
+    font-size: $material-xl-font-size;
+  }
+
+  .dx-font-l {
+    font-size: $material-l-font-size;
+  }
+
+  .dx-font-m {
+    font-size: $material-m-font-size;
+  }
+
+  .dx-font-s {
+    @include dx-s-font-mixin();
+  }
+
+  small,
+  .dx-font-xs {
+    font-size: $material-xs-font-size;
+  }
+
+  a {
+    color: $typography-link-color;
+  }
+}

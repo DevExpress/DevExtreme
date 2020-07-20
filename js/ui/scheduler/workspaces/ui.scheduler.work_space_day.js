@@ -31,31 +31,11 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         return resultDate;
     }
 
-    _getFormat() {
-        return this._formatWeekdayAndDay;
-    }
-
     _renderDateHeader() {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
-    }
-
-    _getRightCell(isMultiSelection) {
-        if(!isMultiSelection) {
-            return super._getRightCell(isMultiSelection);
-        }
-
-        return this._$focusedCell;
-    }
-
-    _getLeftCell(isMultiSelection) {
-        if(!isMultiSelection) {
-            return super._getLeftCell(isMultiSelection);
-        }
-
-        return this._$focusedCell;
     }
 }
 
 registerComponent('dxSchedulerWorkSpaceDay', SchedulerWorkSpaceDay);
 
-module.exports = SchedulerWorkSpaceDay;
+export default SchedulerWorkSpaceDay;

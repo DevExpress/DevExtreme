@@ -1,0 +1,117 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/colorView" as *;
+
+// adduse
+
+
+@include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
+
+
+$generic-colorview-alpha-width: $generic-colorview-palette-width + 4;
+$generic-colorview-hue-scale-height: $generic-colorview-palette-height;
+
+.dx-colorview-container {
+  width: $generic-colorview-container-width;
+
+  label {
+    line-height: $generic-colorview-container-line-height;
+
+    &.dx-colorview-label-hex {
+      margin: $generic-colorview-container-hex-margin;
+    }
+
+    &.dx-colorview-alpha-channel-label {
+      margin-left: $generic-colorview-container-alpha-label-margin;
+      width: $generic-colorview-container-alpha-label-width;
+    }
+
+    .dx-texteditor {
+      width: $generic-colorview-container-textbox-width;
+      margin: $generic-colorview-container-textbox-margin;
+    }
+  }
+}
+
+.dx-colorview-hue-scale-cell {
+  margin-left: $generic-colorview-hue-scale-margin;
+}
+
+.dx-colorview-palette {
+  width: $generic-colorview-palette-width;
+  height: $generic-colorview-palette-height;
+}
+
+.dx-colorview-alpha-channel-scale {
+  width: $generic-colorview-palette-width;
+}
+
+.dx-colorview-container-row.dx-colorview-alpha-channel-row {
+  margin-top: $generic-colorview-alpha-margin;
+}
+
+.dx-colorview-hue-scale {
+  width: $generic-colorview-hue-scale-width;
+  height: $generic-colorview-hue-scale-height;
+}
+
+.dx-colorview-alpha-channel-cell {
+  width: $generic-colorview-alpha-width;
+}
+
+.dx-colorview-hue-scale-wrapper {
+  height: $generic-colorview-hue-scale-height + 2;
+}
+
+.dx-colorview-color-preview {
+  width: 100%;
+  height: $generic-colorview-color-preview-height;
+}
+
+.dx-colorview-controls-container {
+  width: $generic-colorview-controls-container-width;
+  margin-left: $generic-colorview-controls-container-margin;
+}
+
+.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
+  color: $colorview-label-color;
+}
+
+.dx-colorview-palette-cell,
+.dx-colorview-alpha-channel-border,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-color-preview-container {
+  padding: 1px;
+  margin: 1px;
+  margin-top: 0;
+  background-color: $colorbox-palette-cell-bg;
+  box-shadow: 0 0 0 1px $colorview-border-color;
+}
+
+.dx-colorview-color-preview-container {
+  margin-bottom: $generic-colorview-preview-container-margin;
+}
+
+.dx-rtl {
+  .dx-colorview-controls-container {
+    margin-left: 0;
+    margin-right: $generic-colorview-controls-container-margin;
+  }
+
+  .dx-colorview-hue-scale-cell {
+    margin-left: 0;
+    margin-right: $generic-colorview-hue-scale-margin;
+  }
+
+  .dx-colorview-container {
+    label {
+      &.dx-colorview-alpha-channel-label {
+        margin-left: 0;
+        margin-right: $generic-colorview-container-alpha-label-margin;
+      }
+    }
+  }
+}

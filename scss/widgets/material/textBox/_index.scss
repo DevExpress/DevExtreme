@@ -1,0 +1,82 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/colors" as *;
+@use "../textEditor/sizes" as *;
+
+// adduse
+@use "../textEditor" as *;
+
+
+.dx-searchbox {
+  .dx-icon-search {
+    @include dx-icon(search);
+    @include dx-texteditor-icon();
+
+    &:before {
+      position: static;
+      text-indent: 0;
+      color: $textbox-search-icon-color;
+    }
+
+    color: $texteditor-placeholder-color;
+  }
+
+  &.dx-editor-underlined {
+    .dx-icon-search {
+      left: $material-standard-texteditor-input-horizontal-padding;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        left: initial;
+        right: $material-standard-texteditor-input-horizontal-padding;
+      }
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder:before {
+      padding-left: $material-texteditor-icon-container-size + $material-standard-texteditor-input-horizontal-padding;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        padding-left: $material-standard-texteditor-input-horizontal-padding;
+        padding-right: $material-texteditor-icon-container-size + $material-standard-texteditor-input-horizontal-padding;
+      }
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-icon-search {
+      left: $material-filled-texteditor-input-horizontal-padding;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        left: initial;
+        right: $material-filled-texteditor-input-horizontal-padding;
+      }
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder:before {
+      padding-left: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        padding-left: $material-filled-texteditor-input-horizontal-padding;
+        padding-right: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+      }
+    }
+  }
+}
+
+.dx-searchbar {
+  padding-bottom: 5px;
+
+  .dx-texteditor {
+    margin: 0;
+  }
+}

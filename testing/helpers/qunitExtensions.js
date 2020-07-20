@@ -124,7 +124,6 @@
 
         [
             'generic.light',
-            'ios7.default',
             'material.blue.light'
         ].forEach(function(theme) {
             const link = document.createElement('link');
@@ -425,7 +424,7 @@
             }
         }
 
-        if(callback.match(/function\(\)\{clearTimeout\(\w+\),cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
+        if(callback.match(/function\(\)\{clearTimeout\(\w+\),(\w+&&)*cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
         if(callback.match(/\.__H\.\w+\.forEach\(/)) return true; // NOTE: Preact hooks
     });
 

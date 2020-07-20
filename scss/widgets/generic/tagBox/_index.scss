@@ -1,0 +1,158 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor" as *;
+@use "../common" as *;
+
+// adduse
+
+
+.dx-tagbox:not(.dx-texteditor-empty) {
+  .dx-texteditor-input {
+    padding-left: 0;
+    margin-left: $generic-tagbox-input-margin-left;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      padding-right: 0;
+      padding-left: 0;
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+}
+
+.dx-tagbox-single-line {
+  .dx-tag-container {
+    padding-right: 0;
+  }
+}
+
+.dx-tagbox:not(.dx-tagbox-single-line) {
+  .dx-texteditor-input {
+    height: auto;
+  }
+}
+
+.dx-tag-container.dx-texteditor-input-container {
+  padding-bottom: $generic-tagbox-tag-container-padding-bottom;
+
+  .dx-texteditor-input {
+    padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $generic-tagbox-tag-container-padding-bottom;
+    min-height: $generic-texteditor-input-height - $generic-tagbox-tag-container-padding-bottom;
+  }
+}
+
+.dx-tag-content {
+  margin: $generic-tagbox-tag-content-margin;
+  padding: $generic-tagbox-tag-content-padding;
+  min-width: 40px;
+  background-color: $tagbox-tag-bg;
+  border-radius: $tagbox-tag-border-radius;
+  color: $tagbox-tag-color;
+}
+
+.dx-tag-remove-button {
+  width: $generic-tagbox-remove-button-width;
+  height: 100%;
+
+  &:before,
+  &:after {
+    right: 4px + $generic-tagbox-remove-button-right;
+    margin-top: -5px;
+    width: 3px;
+    height: 11px;
+    background: $tagbox-tag-button-remove-bg;
+  }
+
+  &:after {
+    right: $generic-tagbox-remove-button-right;
+    margin-top: -1px;
+    width: 11px;
+    height: 3px;
+  }
+
+  &:active {
+    &:before,
+    &:after {
+      background: $tagbox-tag-button-remove-active-bg;
+    }
+  }
+}
+
+.dx-tag.dx-state-focused {
+  .dx-tag-content {
+    background-color: $tagbox-tag-focused-bg;
+    color: $tagbox-tag-focused-color;
+  }
+
+  .dx-tag-remove-button {
+    &:before,
+    &:after {
+      background-color: $tagbox-tag-focused-button-remove-bg;
+    }
+
+    &:active {
+      &:before,
+      &:after {
+        background: $tagbox-tag-button-remove-active-bg;
+      }
+    }
+  }
+}
+
+@mixin tagbox-badge-offset() {
+  right: $generic-invalid-badge-horizontal-padding;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    left: $generic-invalid-badge-horizontal-padding;
+  }
+}
+
+.dx-tagbox.dx-invalid,
+.dx-tagbox.dx-valid {
+  .dx-texteditor-container {
+    &:after {
+      @include tagbox-badge-offset();
+    }
+  }
+}
+
+.dx-tagbox.dx-validation-pending {
+  .dx-texteditor-container {
+    .dx-pending-indicator {
+      @include tagbox-badge-offset();
+    }
+  }
+}
+
+.dx-tagbox-popup-wrapper {
+  .dx-list-select-all {
+    border-bottom: 1px solid $tagbox-select-all-border-color;
+    padding-bottom: $generic-tagbox-select-all-padding-bottom;
+    margin-bottom: $generic-tagbox-select-all-margin-bottom;
+  }
+}
+
+.dx-rtl {
+  .dx-tag-content {
+    padding-right: $generic-tagbox-tag-content-padding-left;
+    padding-left: $generic-tagbox-tag-content-padding-right;
+  }
+
+  .dx-tag-remove-button {
+    &:before {
+      right: auto;
+      left: 4px + $generic-tagbox-remove-button-right;
+    }
+
+    &:after {
+      right: auto;
+      left: $generic-tagbox-remove-button-right;
+    }
+  }
+}

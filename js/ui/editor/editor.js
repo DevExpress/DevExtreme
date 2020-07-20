@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
-import dataUtils from '../../core/element_data';
+import { data } from '../../core/element_data';
 import Callbacks from '../../core/utils/callbacks';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
@@ -49,7 +49,7 @@ const Editor = Widget.inherit({
         this.callBase(element);
         const $element = this.$element();
         if($element) {
-            dataUtils.data($element[0], VALIDATION_TARGET, this);
+            data($element[0], VALIDATION_TARGET, this);
         }
     },
 
@@ -189,7 +189,7 @@ const Editor = Widget.inherit({
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria(VALIDATION_STATUS_INVALID, !isValid || undefined);
 
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return;
         }
 
@@ -305,7 +305,7 @@ const Editor = Widget.inherit({
     _dispose: function() {
         const element = this.$element()[0];
 
-        dataUtils.data(element, VALIDATION_TARGET, null);
+        data(element, VALIDATION_TARGET, null);
         clearTimeout(this.showValidationMessageTimeout);
         this.callBase();
     },
@@ -383,4 +383,4 @@ const Editor = Widget.inherit({
     }
 });
 
-module.exports = Editor;
+export default Editor;

@@ -1,0 +1,30 @@
+@use "../base/mixins" as *;
+
+// adduse
+
+
+.dx-dropdownmenu-popup-wrapper .dx-dropdownmenu-list {
+  min-height: 40px;
+  min-width: 100px;
+
+  .dx-list-item {
+    display: block;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .dx-list-item-content {
+    display: block;
+  }
+}
+
+.dx-overlay-wrapper.dx-dropdownmenu-popup .dx-overlay-content .dx-popover-arrow {
+  width: 0;
+  height: 0;
+}
+
+.dx-dropdownmenu-popup-wrapper .dx-list-item {
+  display: block;
+}

@@ -1,0 +1,25 @@
+@use "sass:color";
+
+@function difference($minuend, $subtrahend) {
+  @return color.adjust(
+        $minuend,
+        $red: - (color.red($subtrahend)),
+        $green: - (color.green($subtrahend)),
+        $blue: - (color.blue($subtrahend)));
+}
+
+@function screen($color1, $color2) {
+  $r1: color.red($color1) / 255;
+  $g1: color.green($color1) / 255;
+  $b1: color.blue($color1) / 255;
+
+  $r2: color.red($color2) / 255;
+  $g2: color.green($color2) / 255;
+  $b2: color.blue($color2) / 255;
+
+  @return color.change(
+        $color1,
+        $red: ($r1 + $r2 - $r1 * $r2) * 255,
+        $green: ($g1 + $g2 - $g1 * $g2) * 255,
+        $blue: ($b1 + $b2 - $b1 * $b2) * 255);
+}

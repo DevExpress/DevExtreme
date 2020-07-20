@@ -1,0 +1,306 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+
+
+$material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
+$material-button-icononly-padding: $material-button-vertical-padding;
+$material-button-icon-size: $material-base-icon-size;
+$material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
+$material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
+$material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
+$material-normal-button-focused-state-shadow: $material-button-box-shadow-size $button-focused-shadow-color;
+
+.dx-button-content {
+  line-height: 0;
+}
+
+.dx-button-text {
+  line-height: $material-button-height - 2 * $material-button-vertical-padding - 1;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.dx-button a {
+  text-decoration: none;
+}
+
+@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
+  .dx-button-content {
+    padding: $padding;
+  }
+
+  .dx-icon {
+    @include dx-icon-sizing($icon-size);
+    @include dx-icon-margin($icon-margin);
+  }
+}
+
+@mixin dx-button-onlyicon-sizing() {
+  min-width: $material-button-height;
+
+  @include dx-button-sizing($material-button-icononly-padding, $material-button-icon-size, 0);
+}
+
+@mixin dx-button-withtext-sizing() {
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, $material-button-icon-size / 2);
+}
+
+@mixin dx-button-text-and-icon-sizing() {
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, 8px);
+}
+
+.dx-button {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-icon {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-text {
+  min-width: $material-button-min-width;
+
+  @include dx-button-withtext-sizing();
+}
+
+.dx-button-has-icon.dx-button-has-text {
+  @include dx-button-text-and-icon-sizing();
+}
+
+.dx-button { // stylelint-disable-line no-duplicate-selectors
+  &.dx-button-has-icon:not(.dx-button-has-text) {
+    &:not(.dx-shape-standard) {
+      border-radius: 50%;
+      box-shadow: none;
+    }
+  }
+}
+
+// NOTE: Button styles
+
+@mixin dx-button-styling-variant(
+  $background-color, $text-color, $shadow-color,
+  $hover-background-color, $hover-shadow-color, $focused-background-color,
+  $focused-shadow-color, $active-background-color, $active-shadow-color,
+  $disabled-background-color, $icon-color
+) {
+  background-color: $background-color;
+  color: $text-color;
+  box-shadow: $shadow-color;
+
+  .dx-icon {
+    color: $icon-color;
+  }
+
+  &.dx-state-hover {
+    background-color: $hover-background-color;
+    box-shadow: $hover-shadow-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-background-color;
+    box-shadow: $focused-shadow-color;
+  }
+
+  &.dx-state-active {
+    background-color: $active-background-color;
+    box-shadow: $active-shadow-color;
+  }
+
+  &.dx-state-disabled {
+    background: $disabled-background-color;
+    box-shadow: none;
+
+    .dx-icon {
+      opacity: $button-disabled-icon-opacity;
+    }
+
+    .dx-button-text {
+      color: $button-disabled-text-color;
+    }
+  }
+
+  .dx-inkripple-wave {
+    background-color: color.change($text-color, $alpha: 0.2);
+  }
+}
+
+@mixin dx-button-styling(
+  $button-bg, $button-color, $button-hover-bg,
+  $button-focused-bg, $button-active-bg, $button-icon-color
+) {
+  border-radius: $button-border-radius;
+
+  @include dx-button-styling-variant(
+    $button-bg,
+    $button-color,
+    $material-normal-button-shadow,
+    $button-hover-bg,
+    $material-normal-button-hovered-state-shadow,
+    $button-focused-bg,
+    $material-normal-button-focused-state-shadow,
+    $button-active-bg,
+    $material-normal-button-active-state-shadow,
+    $button-disabled-background,
+    $button-icon-color
+  );
+}
+
+@mixin dx-button-flat-color-styling($button-color, $hover-bg, $focused-bg, $active-bg) {
+  @include dx-button-styling-variant(
+    transparent,
+    $button-color,
+    none,
+    $hover-bg,
+    none,
+    $focused-bg,
+    none,
+    $active-bg,
+    none,
+    transparent,
+    $button-color
+  );
+}
+
+@mixin dx-button-outlined-color-styling($button-color, $border-color, $hover-bg, $focused-bg, $active-bg) {
+  @include dx-button-styling-variant(
+    transparent,
+    $button-color,
+    none,
+    $hover-bg,
+    none,
+    $focused-bg,
+    none,
+    $active-bg,
+    none,
+    transparent,
+    $button-color
+  );
+
+  border: 1px solid $border-color;
+}
+
+@mixin dx-button-styling-clear() {
+  box-shadow: none;
+  background: transparent;
+  border-color: transparent;
+}
+
+.dx-button { // stylelint-disable-line no-duplicate-selectors
+  height: $material-button-height;
+  position: relative;
+  overflow: hidden;
+
+  .dx-button-content {
+    position: relative;
+
+    .dx-inkripple {
+      overflow: hidden;
+      display: block;
+    }
+  }
+
+  @include dx-button-styling(
+    $button-normal-bg,
+    $button-normal-color,
+    $button-normal-hover-bg,
+    $button-normal-focused-bg,
+    $button-normal-active-bg,
+    $button-normal-icon-color
+  );
+
+  &.dx-button-default {
+    @include dx-button-styling(
+      $button-default-bg,
+      $button-default-color,
+      $button-default-hover-bg,
+      $button-default-focused-bg,
+      $button-default-active-bg,
+      $button-default-icon-color
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-styling(
+      $button-danger-bg,
+      $button-danger-color,
+      $button-danger-hover-bg,
+      $button-danger-focused-bg,
+      $button-danger-active-bg,
+      $button-danger-icon-color
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-styling(
+      $button-success-bg,
+      $button-success-color,
+      $button-success-hover-bg,
+      $button-success-focused-bg,
+      $button-success-active-bg,
+      $button-success-icon-color
+    );
+  }
+
+  &.dx-button-back {
+    @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
+
+    border-radius: 50%;
+
+    @include dx-button-onlyicon-sizing();
+
+    .dx-button-text {
+      display: none;
+    }
+  }
+}
+
+
+.dx-button-mode-text {
+  @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
+
+  &.dx-button-default {
+    @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
+  }
+
+  &.dx-button-danger {
+    @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
+  }
+
+  &.dx-button-success {
+    @include dx-button-flat-color-styling($button-success-bg, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
+  }
+}
+
+.dx-button-mode-outlined {
+  @include dx-button-outlined-color-styling($button-normal-color, color.change($button-normal-color, $alpha: 0.24), $button-normal-outlined-hover-bg, $button-normal-outlined-focused-bg, $button-normal-outlined-active-bg);
+
+  &.dx-button-default {
+    @include dx-button-outlined-color-styling($button-default-bg, $button-default-bg, $button-default-outlined-hover-bg, $button-default-outlined-focused-bg, $button-default-outlined-active-bg);
+  }
+
+  &.dx-button-danger {
+    @include dx-button-outlined-color-styling($button-danger-bg, $button-danger-bg, $button-danger-outlined-hover-bg, $button-danger-outlined-focused-bg, $button-danger-outlined-active-bg);
+  }
+
+  &.dx-button-success {
+    @include dx-button-outlined-color-styling($button-success-bg, $button-success-bg, $button-success-outlined-hover-bg, $button-success-outlined-focused-bg, $button-success-outlined-active-bg);
+  }
+}
+
+@keyframes focus {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
+}

@@ -1,0 +1,16 @@
+@use "../base/mixins" as *;
+
+// adduse
+.dx-box-item-content {
+  font-size: 14px;
+}
+
+.dx-box-fallback-item > .dx-box-item-content {
+  width: 100%;
+  height: 100%;
+}
+
+.dx-box-item-content { // stylelint-disable-line no-duplicate-selectors
+  flex-direction: column;
+  max-width: 100%;
+}

@@ -1,11 +1,13 @@
-const $ = require('../../core/renderer');
-const Guid = require('../../core/guid');
-const registerComponent = require('../../core/component_registrator');
-const extend = require('../../core/utils/extend').extend;
-const Popover = require('../popover');
+import $ from '../../core/renderer';
+import Guid from '../../core/guid';
+import registerComponent from '../../core/component_registrator';
+import { extend } from '../../core/utils/extend';
+import Popover from '../popover';
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
-const isWindow = require('../../core/utils/type').isWindow;
+import { isWindow } from '../../core/utils/type';
+
+// STYLE tooltip
 
 const Tooltip = Popover.inherit({
     _getDefaultOptions: function() {
@@ -82,4 +84,4 @@ const Tooltip = Popover.inherit({
 
 registerComponent('dxTooltip', Tooltip);
 
-module.exports = Tooltip;
+export default Tooltip;

@@ -16,12 +16,14 @@ class FileManagerItemListBase extends Widget {
 
     _init() {
         this._initActions();
+
+        this._lockFocusedItemProcessing = false;
+        this._focusedItemKey = this.option('focusedItemKey');
+
         super._init();
     }
 
     _initMarkup() {
-        this._initActions();
-
         this.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
 
         const dblClickEventName = addNamespace(dblClickName, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
@@ -68,7 +70,9 @@ class FileManagerItemListBase extends Widget {
                 this._setSelectedItemKeys(args.value);
                 break;
             case 'focusedItemKey':
-                this._setFocusedItemKey(args.value);
+                if(!this._lockFocusedItemProcessing) {
+                    this._setFocusedItemKey(args.value);
+                }
                 break;
             case 'onError':
             case 'onSelectedItemOpened':
@@ -130,6 +134,20 @@ class FileManagerItemListBase extends Widget {
             currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedItemKeys, true);
             this._raiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
         }
+    }
+
+    _onFocusedItemChanged(args) {
+        if(this._focusedItemKey === args.itemKey) {
+            return;
+        }
+
+        this._focusedItemKey = args.itemKey;
+
+        this._lockFocusedItemProcessing = true;
+        this.option('focusedItemKey', args.itemKey);
+        this._lockFocusedItemProcessing = false;
+
+        this._raiseFocusedItemChanged(args);
     }
 
     _getItemThumbnail(fileInfo) {
@@ -266,4 +284,4 @@ class FileManagerItemListBase extends Widget {
 
 }
 
-module.exports = FileManagerItemListBase;
+export default FileManagerItemListBase;

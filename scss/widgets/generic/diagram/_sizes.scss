@@ -1,0 +1,56 @@
+@use "../sizes" as *;
+
+// adduse
+
+$diagram-toolbox-width: null !default;
+$diagram-toolbox-h-padding: null !default;
+$diagram-toolbox-accordion-v-padding: null !default;
+$diagram-toolbox-input-margin: null !default;
+$diagram-toolbox-input-h-padding: null !default;
+$diagram-toolbox-input-v-padding: null !default;
+$diagram-toolbox-input-image-size: null !default;
+$diagram-toolbox-mobile-padding: null !default;
+$diagram-properties-panel-padding: null !default;
+$diagram-properties-panel-spacing: null !default;
+$diagram-properties-layout-icon-size: null !default;
+$diagram-small-editor-width: null !default;
+$diagram-medium-editor-width: null !default;
+$diagram-large-editor-width: null !default;
+
+@if $size == "default" {
+  $diagram-toolbox-width: 144px;
+  $diagram-toolbox-h-padding: 12px;
+  $diagram-toolbox-accordion-v-padding: 6px;
+  $diagram-toolbox-input-margin: 2px;
+  $diagram-toolbox-input-h-padding: 9px;
+  $diagram-toolbox-input-v-padding: 4px;
+  $diagram-toolbox-input-image-size: 12px;
+  $diagram-toolbox-mobile-padding: 66px;
+
+  $diagram-properties-panel-padding: 8px;
+  $diagram-properties-panel-spacing: 8px;
+  $diagram-properties-layout-icon-size: 64px;
+
+  $diagram-small-editor-width: 100px;
+  $diagram-medium-editor-width: 150px;
+  $diagram-large-editor-width: 240px;
+}
+
+@else if $size == "compact" {
+  $diagram-toolbox-width: 114px;
+  $diagram-toolbox-h-padding: 8px;
+  $diagram-toolbox-accordion-v-padding: 4px;
+  $diagram-toolbox-input-margin: 1px;
+  $diagram-toolbox-input-h-padding: 5px;
+  $diagram-toolbox-input-v-padding: 3px;
+  $diagram-toolbox-input-image-size: 10px;
+  $diagram-toolbox-mobile-padding: 56px;
+
+  $diagram-properties-panel-padding: 4px;
+  $diagram-properties-panel-spacing: 4px;
+  $diagram-properties-layout-icon-size: 48px;
+
+  $diagram-small-editor-width: 70px;
+  $diagram-medium-editor-width: 120px;
+  $diagram-large-editor-width: 180px;
+}

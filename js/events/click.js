@@ -1,14 +1,14 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const devices = require('../core/devices');
-const domAdapter = require('../core/dom_adapter');
-const domUtils = require('../core/utils/dom');
-const animationFrame = require('../animation/frame');
-const eventUtils = require('./utils');
-const pointerEvents = require('./pointer');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
-const compareVersions = require('../core/utils/version').compare;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
+import domUtils from '../core/utils/dom';
+import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
+import { addNamespace, fireEvent, eventDelta, eventData } from './utils';
+import pointerEvents from './pointer';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
+import { compare as compareVersions } from '../core/utils/version';
 
 const CLICK_EVENT_NAME = 'dxclick';
 const TOUCH_BOUNDARY = 10;
@@ -18,7 +18,7 @@ const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
 };
 
-const misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
+const misc = { requestAnimationFrame: requestAnimationFrame, cancelAnimationFrame: cancelAnimationFrame };
 
 let ClickEmitter = Emitter.inherit({
 
@@ -37,7 +37,7 @@ let ClickEmitter = Emitter.inherit({
     start: function(e) {
         this._blurPrevented = e.isDefaultPrevented();
         this._startTarget = e.target;
-        this._startEventData = eventUtils.eventData(e);
+        this._startEventData = eventData(e);
     },
 
     end: function(e) {
@@ -60,7 +60,7 @@ let ClickEmitter = Emitter.inherit({
         const target = e.target;
         const targetChanged = !domUtils.contains(element, target) && element !== target;
 
-        const gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData);
+        const gestureDelta = eventDelta(eventData(e), this._startEventData);
         const boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
 
         return targetChanged || boundsExceeded;
@@ -80,14 +80,14 @@ let ClickEmitter = Emitter.inherit({
 
 
 // NOTE: native strategy for desktop, iOS 9.3+, Android 5+
+const realDevice = devices.real();
+const useNativeClick =
+        realDevice.generic ||
+        realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
+        realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
+
 (function() {
     const NATIVE_CLICK_CLASS = 'dx-native-click';
-    const realDevice = devices.real();
-    const useNativeClick =
-            realDevice.generic ||
-            realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
-            realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
-
     const isNativeClickEvent = function(target) {
         return useNativeClick || $(target).closest('.' + NATIVE_CLICK_CLASS).length;
     };
@@ -107,7 +107,7 @@ let ClickEmitter = Emitter.inherit({
             }
 
             lastFiredEvent = originalEvent;
-            eventUtils.fireEvent({
+            fireEvent({
                 type: CLICK_EVENT_NAME,
                 originalEvent: e
             });
@@ -154,10 +154,6 @@ let ClickEmitter = Emitter.inherit({
             eventsEngine.off(this.getElement(), 'click', clickHandler);
         }
     });
-
-    ///#DEBUG
-    exports.useNativeClick = useNativeClick;
-    ///#ENDDEBUG
 })();
 
 
@@ -186,8 +182,8 @@ let ClickEmitter = Emitter.inherit({
 
         const NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER';
         const document = domAdapter.getDocument();
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.subscribeGlobal(document, addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 
@@ -206,8 +202,11 @@ registerEmitter({
     ]
 });
 
-exports.name = CLICK_EVENT_NAME;
+export { CLICK_EVENT_NAME as name };
 
 ///#DEBUG
-exports.misc = misc;
+export {
+    misc,
+    useNativeClick
+};
 ///#ENDDEBUG

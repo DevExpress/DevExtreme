@@ -1,15 +1,18 @@
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const noop = require('../core/utils/common').noop;
-const messageLocalization = require('../localization/message');
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const Button = require('./button');
-const CollectionWidget = require('./collection/ui.collection_widget.edit');
-const Popup = require('./popup');
-const Popover = require('./popover');
-const BindableTemplate = require('../core/templates/bindable_template').BindableTemplate;
-const Deferred = require('../core/utils/deferred').Deferred;
+import $ from '../core/renderer';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import { noop } from '../core/utils/common';
+import messageLocalization from '../localization/message';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import Button from './button';
+import CollectionWidget from './collection/ui.collection_widget.edit';
+import Popup from './popup';
+import Popover from './popover';
+import { BindableTemplate } from '../core/templates/bindable_template';
+import { Deferred } from '../core/utils/deferred';
+
+// STYLE actionSheet
 
 const ACTION_SHEET_CLASS = 'dx-actionsheet';
 const ACTION_SHEET_CONTAINER_CLASS = 'dx-actionsheet-container';
@@ -407,4 +410,4 @@ const ActionSheet = CollectionWidget.inherit({
 
 registerComponent('dxActionSheet', ActionSheet);
 
-module.exports = ActionSheet;
+export default ActionSheet;

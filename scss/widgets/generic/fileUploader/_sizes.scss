@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-fileuploader-vertical-padding: null !default;
+
+@if $size == "default" {
+  $generic-fileuploader-vertical-padding: 7px;
+}
+
+@else if $size == "compact" {
+  $generic-fileuploader-vertical-padding: 2px;
+}

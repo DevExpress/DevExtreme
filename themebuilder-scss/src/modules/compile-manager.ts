@@ -5,7 +5,7 @@ import resolveBundle from './bundle-resolver';
 import PostCompiler from './post-compiler';
 import BootstrapExtractor from './bootstrap-extractor';
 // eslint-disable-next-line import/extensions
-import { version } from '../data/metadata/dx-theme-builder-metadata';
+import { version, dependencies } from '../data/metadata/dx-theme-builder-metadata';
 
 export default class CompileManager {
   compiler = new Compiler();
@@ -16,7 +16,7 @@ export default class CompileManager {
       items, widgets, isBootstrap, bootstrapVersion, data,
     } = config;
 
-    const widgetsHandler = new WidgetsHandler(widgets, bundleOptions.file);
+    const widgetsHandler = new WidgetsHandler(widgets, bundleOptions.file, dependencies);
     const widgetsLists = await widgetsHandler.getIndexContent();
     this.compiler.indexFileContent = widgetsLists.indexContent;
 

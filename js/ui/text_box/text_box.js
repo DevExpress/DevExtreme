@@ -1,15 +1,17 @@
-const $ = require('../../core/renderer');
-const windowUtils = require('../../core/utils/window');
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
-const browser = require('../../core/utils/browser');
-const eventsEngine = require('../../events/core/events_engine');
-const devices = require('../../core/devices');
-const inArray = require('../../core/utils/array').inArray;
-const extend = require('../../core/utils/extend').extend;
-const registerComponent = require('../../core/component_registrator');
-const TextEditor = require('./ui.text_editor');
-const eventUtils = require('../../events/utils');
+import $ from '../../core/renderer';
+import { getNavigator, getWindow } from '../../core/utils/window';
+const window = getWindow();
+const navigator = getNavigator();
+import browser from '../../core/utils/browser';
+import eventsEngine from '../../events/core/events_engine';
+import devices from '../../core/devices';
+import { inArray } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import registerComponent from '../../core/component_registrator';
+import TextEditor from './ui.text_editor';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
+
+// STYLE textBox
 
 let ua = navigator.userAgent;
 const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];
@@ -58,8 +60,8 @@ const TextBox = TextEditor.inherit({
 
     _renderMaxLengthHandlers: function() {
         if(this._isAndroidOrIE()) {
-            eventsEngine.on(this._input(), eventUtils.addNamespace('keydown', this.NAME), this._onKeyDownCutOffHandler.bind(this));
-            eventsEngine.on(this._input(), eventUtils.addNamespace('change', this.NAME), this._onChangeCutOffHandler.bind(this));
+            eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), this._onKeyDownCutOffHandler.bind(this));
+            eventsEngine.on(this._input(), addNamespace('change', this.NAME), this._onChangeCutOffHandler.bind(this));
         }
     },
 
@@ -124,7 +126,7 @@ const TextBox = TextEditor.inherit({
         const actualMaxLength = this._getMaxLength();
         if(actualMaxLength) {
             const $input = $(e.target);
-            const key = eventUtils.normalizeKeyName(e);
+            const key = normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
@@ -179,4 +181,4 @@ TextBox.__internals = {
 ///#ENDDEBUG
 registerComponent('dxTextBox', TextBox);
 
-module.exports = TextBox;
+export default TextBox;

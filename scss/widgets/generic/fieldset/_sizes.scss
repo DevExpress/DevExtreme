@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-fieldset-vertical-margin: null !default;
+$generic-fieldset-horizontal-margin: null !default;
+$generic-fieldset-header-vertical-margin: null !default;
+$generic-field-vertical-margin: null !default;
+$generic-field-labelvalue-spacing: null !default;
+
+@if $size == "default" {
+  $generic-fieldset-vertical-margin: 30px;
+  $generic-fieldset-horizontal-margin: 20px;
+  $generic-fieldset-header-vertical-margin: 20px;
+  $generic-field-vertical-margin: 10px;
+  $generic-field-labelvalue-spacing: 15px;
+}
+
+@else if $size == "compact" {
+  $generic-fieldset-vertical-margin: 15px;
+  $generic-fieldset-horizontal-margin: 10px;
+  $generic-fieldset-header-vertical-margin: 10px;
+  $generic-field-vertical-margin: 5px;
+  $generic-field-labelvalue-spacing: 8px;
+}

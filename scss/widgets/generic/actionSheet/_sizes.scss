@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$generic-actionsheet-item-margin: null !default;
+
+@if $size == "default" {
+  $generic-actionsheet-item-margin: 0 0 10px 0;
+}
+
+@else if $size == "compact" {
+  $generic-actionsheet-item-margin: 0 0 5px 0;
+}

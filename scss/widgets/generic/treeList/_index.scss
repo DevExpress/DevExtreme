@@ -1,0 +1,173 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/icons" as *;
+@use "../gridBase" as *;
+@use "../gridBase/colors" as *;
+@use "../gridBase/sizes" as *;
+@use "../../base/treeList" as baseTreeList with (
+  $datagrid-border: $datagrid-border,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
+);
+
+// adduse
+
+
+@include grid-base(treelist);
+
+$treelist-empty-space-width: 14px;
+$treelist-select-all-checkbox-margin-top: floor((round($generic-base-line-height * $generic-base-font-size) - $generic-grid-base-checkbox-icon-size) / 2);
+$treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base-cell-padding;
+$treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
+$treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $generic-grid-base-cell-padding;
+$treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + $generic-grid-base-cell-padding;
+
+.dx-treelist-rowsview {
+  .dx-treelist-empty-space {
+    position: relative;
+    display: inline-block;
+    width: $treelist-empty-space-width;
+
+    @include dx-icon(spinright);
+
+    &:before {
+      visibility: hidden;
+    }
+  }
+
+  tr:not(.dx-row-focused) .dx-treelist-empty-space {
+    color: $treelist-spin-icon-color;
+  }
+
+  .dx-treelist-expanded span {
+    @include dx-icon(spindown);
+    @include dx-icon-font-centered-sizing($generic-base-icon-size);
+
+    cursor: pointer;
+
+    &:before {
+      left: 0;
+      margin-left: -$treelist-expanded-icon-margin-left;
+      margin-top: -$treelist-icon-margin-top;
+    }
+  }
+
+  .dx-treelist-collapsed span {
+    @include dx-icon(spinright);
+    @include dx-icon-font-centered-sizing($generic-base-icon-size);
+
+    cursor: pointer;
+
+    &:before {
+      left: 0;
+      margin-left: -$treelist-collapsed-icon-margin-left;
+      margin-top: -$treelist-icon-margin-top;
+    }
+  }
+
+  tr:not(.dx-row-focused).dx-selection {
+    .dx-treelist-empty-space {
+      color: $treelist-selection-spin-icon-color;
+    }
+  }
+
+  .dx-treelist-cell-expandable {
+    white-space: nowrap;
+
+    .dx-treelist-text-content {
+      white-space: normal;
+    }
+  }
+
+  &.dx-treelist-nowrap .dx-treelist-table {
+    .dx-treelist-cell-expandable {
+      .dx-treelist-text-content {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.dx-treelist-checkbox-size {
+  line-height: 0;
+}
+
+.dx-treelist-cell-expandable,
+.dx-treelist-select-all {
+  .dx-checkbox {
+    position: absolute;
+  }
+}
+
+.dx-treelist-icon-container.dx-editor-inline-block {
+  position: relative;
+  padding-right: $treelist-icon-container-padding-right;
+
+  .dx-checkbox {
+    top: 50%;
+    margin-top: -$generic-grid-base-checkbox-icon-size / 2;
+  }
+}
+
+.dx-treelist-select-all {
+  position: relative;
+
+  .dx-checkbox {
+    left: $treelist-checkbox-offset-left;
+    margin-top: $treelist-select-all-checkbox-margin-top;
+  }
+}
+
+.dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
+  padding-left: $treelist-editor-cell-padding-left;
+}
+
+.dx-rtl {
+  .dx-treelist-rowsview {
+    .dx-treelist-expanded,
+    .dx-treelist-collapsed {
+      @include flip-horizontally();
+    }
+
+    .dx-treelist-table-fixed {
+      .dx-treelist-icon-container {
+        float: right;
+      }
+    }
+  }
+
+  .dx-treelist-select-all .dx-checkbox {
+    left: calc(100% - #{$treelist-checkbox-offset-left-rtl});
+  }
+
+  .dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
+    padding-right: $treelist-editor-cell-padding-left;
+    padding-left: $generic-grid-base-cell-padding;
+  }
+
+  .dx-treelist-icon-container.dx-editor-inline-block {
+    padding-left: $treelist-icon-container-padding-right;
+    padding-right: 0;
+  }
+}
+
+.dx-treelist-filter-panel {
+  .dx-icon-filter,
+  .dx-treelist-filter-panel-text,
+  .dx-treelist-filter-panel-clear-filter {
+    color: $base-accent;
+  }
+}

@@ -1,2 +1,2 @@
-
-module.exports = require('./init_mobile_viewport/init_mobile_viewport').initMobileViewport;
+import { initMobileViewport } from './init_mobile_viewport/init_mobile_viewport';
+export default initMobileViewport;

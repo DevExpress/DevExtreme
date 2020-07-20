@@ -1,0 +1,36 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+@use "../scrollable";
+
+
+.dx-form-group-caption {
+  font-size: $generic-form-group-caption-font-size;
+}
+
+.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
+  & > .dx-form-group-content {
+    border-top: 1px solid $form-group-border-color;
+    padding-bottom: $generic-form-group-content-padding-bottom;
+  }
+}
+
+.dx-field-item-label-text {
+  color: $form-field-item-color;
+}
+
+.dx-field-item-help-text {
+  color: $form-field-item-color;
+}
+
+.dx-field-item-required-mark {
+  color: $form-field-required-color;
+}
+
+.dx-field-item-optional-mark {
+  color: $form-field-mark-color;
+}

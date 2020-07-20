@@ -1,37 +1,49 @@
-const $ = require('../../../core/renderer');
-const Class = require('../../../core/class');
-const getBoundingRect = require('../../../core/utils/position').getBoundingRect;
+
+import { getBoundingRect } from '../../../core/utils/position';
+import $ from '../../../core/renderer';
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
-const currentTimeShader = Class.inherit({
-    render: function(workspace) {
-        this._workspace = workspace;
-        this._$container = workspace._dateTableScrollable.$content();
+class CurrentTimeShader {
+    constructor(workSpace) {
+        this._workSpace = workSpace;
+        this._$container = this._workSpace._dateTableScrollable.$content();
+    }
 
-        this._$shader = this._createShader();
-        this._shader = [];
-        this._shader.push(this._$shader);
+    render() {
+        this.initShaderElements();
 
-        this._renderShader();
+        this.renderShader();
 
-        if(this._$shader && this._workspace.option('crossScrollingEnabled')) {
-            this._$shader.css('marginTop', -getBoundingRect(this._$container.get(0)).height);
-            this._$shader.css('height', getBoundingRect(this._$container.get(0)).height);
-        }
+        this.applyShaderMargin(this._$shader);
 
         this._shader.forEach((shader, index) => {
             this._$container.append(shader);
         });
-    },
+    }
 
-    _createShader: function() {
+    initShaderElements() {
+        this._$shader = this.createShader();
+        this._shader = [];
+        this._shader.push(this._$shader);
+    }
+
+    renderShader() {}
+
+    applyShaderMargin($shader) {
+        if($shader && this._workSpace.option('crossScrollingEnabled')) {
+            $shader.css('marginTop', -getBoundingRect(this._$container.get(0)).height);
+            $shader.css('height', getBoundingRect(this._$container.get(0)).height);
+        }
+    }
+
+    createShader() {
         return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
-    },
+    }
 
-    clean: function() {
+    clean() {
         this._$container && this._$container.find('.' + DATE_TIME_SHADER_CLASS).remove();
     }
-});
+}
 
-module.exports = currentTimeShader;
+export default CurrentTimeShader;

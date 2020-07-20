@@ -319,6 +319,7 @@
         "dxFileManager-commandThumbnails": "Thumbnails View",
         "dxFileManager-commandDetails": "Details View",
         "dxFileManager-commandClearSelection": "Clear selection",
+        "dxFileManager-commandShowNavPane": "Toggle navigation pane",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Move to",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Move",

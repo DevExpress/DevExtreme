@@ -1,0 +1,19 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+@use "../dropDownList";
+
+
+.dx-selectbox-popup-wrapper {
+  .dx-overlay-content {
+    box-shadow: 0 6px 12px $base-dropdown-shadow-color;
+  }
+
+  .dx-list {
+    background-color: $selectbox-list-bg;
+  }
+}
