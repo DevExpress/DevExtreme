@@ -34,8 +34,6 @@ describe('LayoutBase', () => {
       const tbody = layout.find('tbody');
       expect(tbody.exists())
         .toBe(true);
-      expect(tbody.hasClass(''))
-        .toBe(true);
     });
 
     it('should render content', () => {
