@@ -2249,7 +2249,7 @@ class Scheduler extends Widget {
                     }
                 }, !!recurrenceRule);
 
-                longParts = this._getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
+                longParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
 
@@ -2265,24 +2265,6 @@ class Scheduler extends Widget {
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
         return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
-    }
-
-    _getDatesOfInterval(startDate, endDate, step) {
-        const result = [];
-
-        let currentDate = new Date(startDate.getTime());
-
-        if(startDate.getTime() === endDate.getTime()) { // TODO: special for fix T845632
-            result.push(new Date(startDate.getTime()));
-        }
-
-        while(currentDate < endDate) {
-            result.push(new Date(currentDate.getTime()));
-
-            currentDate = dateUtils.addInterval(currentDate, step);
-        }
-
-        return result;
     }
 
     _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
