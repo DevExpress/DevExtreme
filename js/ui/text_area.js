@@ -12,6 +12,8 @@ import sizeUtils from '../core/utils/size';
 import { allowScroll } from './text_box/utils.scroll';
 import TextBox from './text_box';
 
+// STYLE textArea
+
 const TEXTAREA_CLASS = 'dx-textarea';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';

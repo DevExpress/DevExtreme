@@ -23,7 +23,7 @@ export class MonthHeaderPanelCellProps {
 
   @OneWay() endDate?: Date = new Date();
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 }
 
 @Component({

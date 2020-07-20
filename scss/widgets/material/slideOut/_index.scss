@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
@@ -11,8 +12,8 @@ $MATERIAL_SLIDEOUT_MENU_ICON_SIZE: $MATERIAL_BASE_ICON_SIZE + $MATERIAL_SLIDEOUT
 
 .dx-slideout-menu .dx-list-item .dx-icon {
   @include dx-icon-sizing($MATERIAL_SLIDEOUT_MENU_ICON_SIZE);
-  @include dx-icon-margin($MATERIAL_SLIDEOUT_MENU_ICON_SIZE/2);
+  @include dx-icon-margin($MATERIAL_SLIDEOUT_MENU_ICON_SIZE / 2);
 
-  margin-top: -$MATERIAL_SLIDEOUT_MENU_ICON_OVERSIZE/2;
-  margin-bottom: -$MATERIAL_SLIDEOUT_MENU_ICON_OVERSIZE/2;
+  margin-top: -$MATERIAL_SLIDEOUT_MENU_ICON_OVERSIZE / 2;
+  margin-bottom: -$MATERIAL_SLIDEOUT_MENU_ICON_OVERSIZE / 2;
 }

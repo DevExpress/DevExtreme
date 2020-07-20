@@ -5,7 +5,7 @@ import { LayoutBase } from '../base/layout';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../base/header_panel/layout';
 import { MonthHeaderPanelCell } from './header_panel/cell';
 import { MonthDateTableLayout } from './date_table/layout';
-import { ViewCellData } from '../types';
+import { GroupedViewData } from '../types';
 
 export const viewFunction = (viewModel: MonthLayout) => (
   <LayoutBase
@@ -24,7 +24,7 @@ export const viewFunction = (viewModel: MonthLayout) => (
 
 @ComponentBindings()
 export class MonthLayoutProps {
-  @OneWay() viewCellsData?: ViewCellData[][];
+  @OneWay() viewCellsData?: GroupedViewData;
 }
 
 @Component({

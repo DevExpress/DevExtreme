@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -16,7 +17,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 
 @function add-counter-reset($counter, $start: 1) {
   @if $counter > $start {
-    @return add-counter-reset($counter - 1, $start)+ " " + list-#{$counter};
+    @return add-counter-reset($counter - 1, $start) + " " + list-#{$counter};
   }
 
   @return list-#{$counter};
@@ -259,15 +260,24 @@ $TRANSPARENT_BORDER: 1px solid transparent;
     text-align: inherit;
   }
 
-  &.ql-blank::before {
-    color: rgba(0, 0, 0, 0.6);
-    content: attr(data-placeholder);
-    font-style: italic;
-    left: 15px;
-    pointer-events: none;
-    position: absolute;
-    right: 15px;
+  &.ql-blank {
+    &::before {
+      color: rgba(0, 0, 0, 0.6);
+      content: attr(data-placeholder);
+      font-style: italic;
+      left: 15px;
+      pointer-events: none;
+      position: absolute;
+      right: 15px;
+    }
+
+    &::after {
+      content: attr(data-placeholder);
+      z-index: -1;
+      visibility: hidden;
+    }
   }
+
   // stylelint-enable selector-class-pattern
 
   pre {

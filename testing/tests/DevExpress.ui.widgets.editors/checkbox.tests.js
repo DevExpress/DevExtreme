@@ -3,7 +3,7 @@ import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 import registerComponent from 'core/component_registrator.js';
-import dxrCheckBox from 'renovation/check-box.j.js';
+import dxrCheckBox from 'renovation/check_box.j.js';
 import dxCheckBox from 'ui/check_box';
 import { name as getName } from 'core/utils/public_component';
 import { act } from 'preact/test-utils';

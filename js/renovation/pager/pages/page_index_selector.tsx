@@ -151,7 +151,7 @@ export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
 
   pageIndexChange(pageIndex: number): void {
     if (this.canNavigateToPage(pageIndex)) {
-        this.props.pageIndexChange?.(pageIndex);
+      this.props.pageIndexChange?.(pageIndex);
     }
   }
 

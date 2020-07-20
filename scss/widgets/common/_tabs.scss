@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -128,7 +129,7 @@ $icon_size: 16px;
   max-width: 100%;
   -webkit-user-drag: none;
 
-  @include dx-overflow;
+  @include dx-overflow();
 }
 
 .dx-tabs-item-badge {

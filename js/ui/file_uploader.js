@@ -20,6 +20,8 @@ import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
 
+// STYLE fileUploader
+
 const window = getWindow();
 
 const FILEUPLOADER_CLASS = 'dx-fileuploader';

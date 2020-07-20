@@ -3,7 +3,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
+@use "../scrollable";
 
 
 .dx-form-group-caption {

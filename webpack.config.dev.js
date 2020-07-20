@@ -19,7 +19,7 @@ module.exports = Object.assign({
                             platform: 'preact',
                             defaultOptionsModule: 'js/core/options/utils',
                             jqueryComponentRegistratorModule: 'js/core/component_registrator',
-                            jqueryBaseComponentModule: 'js/renovation/preact-wrapper/component',
+                            jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
                             tsConfig: path.resolve('build/gulp/generator/ts-configs/preact.tsconfig.json')
                         },
                     },

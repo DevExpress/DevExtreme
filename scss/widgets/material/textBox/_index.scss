@@ -4,10 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../textEditor" as *;
 @use "../textEditor/colors" as *;
 @use "../textEditor/sizes" as *;
+
 // adduse
+@use "../textEditor" as *;
 
 
 .dx-searchbox {

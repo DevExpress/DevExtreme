@@ -96,7 +96,7 @@
             "quotes": ["error", "single"]
         }
     }, {
-        "files": ["*.ts", "*.tsx"],
+        "files": ["*.ts?(x)"],
         "parser": "@typescript-eslint/parser",
         "extends": ["devextreme/typescript"]
     }, {

@@ -7,6 +7,8 @@ import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
 
+// STYLE buttonGroup
+
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper';
 const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';

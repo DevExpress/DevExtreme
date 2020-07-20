@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
@@ -82,7 +83,7 @@ $GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
     content: "\f016";
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
     font-size: $GENERIC_BASE_ICON_SIZE;
-    margin-left: $GENERIC_BASE_ICON_SIZE/2;
+    margin-left: $GENERIC_BASE_ICON_SIZE / 2;
     margin-right: 0;
     line-height: $GENERIC_ACCORDION_ARROW_LINE_HEIGHT;
   }
@@ -124,7 +125,7 @@ $GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
   .dx-accordion-item-title {
     &:before {
       margin-left: 0;
-      margin-right: $GENERIC_BASE_ICON_SIZE/2;
+      margin-right: $GENERIC_BASE_ICON_SIZE / 2;
     }
   }
 }

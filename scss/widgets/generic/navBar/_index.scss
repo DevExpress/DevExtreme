@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
+@use "../badge";
 
 
 $GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px $navbar-tab-focused-border-color;

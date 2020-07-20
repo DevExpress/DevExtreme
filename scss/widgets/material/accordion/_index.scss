@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
@@ -96,7 +97,7 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
     font-size: $MATERIAL_ACCORDION_TITLE_FONT_SIZE;
     top: floor(($MATERIAL_ACCORDION_TITLE_HEIGHT - $MATERIAL_ACCORDION_TITLE_FONT_SIZE) / 2);
     left: $MATERIAL_ACCORDION_TITLE_PADDING;
-    right: $MATERIAL_ACCORDION_TITLE_PADDING*2 + $MATERIAL_BASE_ICON_SIZE;
+    right: $MATERIAL_ACCORDION_TITLE_PADDING * 2 + $MATERIAL_BASE_ICON_SIZE;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -141,7 +142,7 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
   .dx-accordion-item-title {
     .dx-accordion-item-title-caption {
       right: $MATERIAL_ACCORDION_TITLE_PADDING;
-      left: $MATERIAL_ACCORDION_TITLE_PADDING*2 + $MATERIAL_BASE_ICON_SIZE;
+      left: $MATERIAL_ACCORDION_TITLE_PADDING * 2 + $MATERIAL_BASE_ICON_SIZE;
     }
 
     &:before {

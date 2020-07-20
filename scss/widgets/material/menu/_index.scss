@@ -3,10 +3,11 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../menuBase" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
+@use "../menuBase" as *;
 
 
 $MATERIAL_MENU_FONT_SIZE: 13px;

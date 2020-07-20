@@ -3,11 +3,11 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../data/data_source';
-import { WidgetProps } from './widget';
+import { WidgetProps } from './common/widget';
 import DxList, { dxListItem, Options } from '../ui/list';
 import { dxElement } from '../core/element';
 import { event } from '../events/index';
-import renderTemplate from './utils/render-template';
+import renderTemplate from './utils/render_template';
 
 export const viewFunction = (viewModel: List) => (
   <div ref={viewModel.widgetRef as any} />
@@ -75,7 +75,7 @@ export class ListProps extends WidgetProps {
   // @Event() onItemContextMenu?: ((e: {
   //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
   //   itemElement?: dxElement, itemIndex?: number | any,
-  //   jQueryEvent?: JQueryEventObject, event?: event
+  //   event?: event
   // }) => any);
 
   // @Event()onItemDeleted?: ((e: {
@@ -92,7 +92,7 @@ export class ListProps extends WidgetProps {
   // @Event()onItemHold?: ((e: {
   //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
   //   itemElement?: dxElement, itemIndex?: number | any,
-  // jQueryEvent?: JQueryEventObject, event?: event
+  //   event?: event
   // }) => any);
 
   // @Event()onItemReordered?: ((e: {
@@ -102,7 +102,7 @@ export class ListProps extends WidgetProps {
 
   // @Event()onItemSwipe?: ((e: {
   //   component?: dxList, element?: dxElement, model?: any,
-  //   jQueryEvent?: JQueryEventObject, event?: event,
+  //   event?: event,
   //   itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string
   // }) => any);
 
@@ -111,7 +111,7 @@ export class ListProps extends WidgetProps {
   // @Event()onPullRefresh?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
 
   // @Event()onScroll?: ((e: {
-  // component?: dxList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject,
+  // component?: dxList, element?: dxElement, model?: any,
   // event?: event, scrollOffset?: any, reachedLeft?: boolean,
   // reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean
   // }) => any);

@@ -6,6 +6,7 @@
 @use "../common/sizes" as *;
 @use "../common" as *;
 @use "../typography" as *;
+
 // adduse
 
 
@@ -56,7 +57,7 @@ $MATERIAL_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($MATERIAL_FIELD_MIN_HEIGHT - $size)/2 0;
+    margin: ($MATERIAL_FIELD_MIN_HEIGHT - $size) / 2 0;
   }
 }
 
@@ -144,17 +145,17 @@ $MATERIAL_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
 @include dx-fieldset-styling();
 @include dx-fieldset-sizing-base();
 @include dx-fieldset-sizing(
-    $MATERIAL_FIELDSET_VERTICAL_MARGIN,
-    $MATERIAL_FIELDSET_HORIZONTAL_MARGIN,
-    $MATERIAL_FIELDSET_HEADER_VERTICAL_MARGIN,
-    $MATERIAL_FIELD_VERTICAL_MARGIN
+  $MATERIAL_FIELDSET_VERTICAL_MARGIN,
+  $MATERIAL_FIELDSET_HORIZONTAL_MARGIN,
+  $MATERIAL_FIELDSET_HEADER_VERTICAL_MARGIN,
+  $MATERIAL_FIELD_VERTICAL_MARGIN
 );
 
 .dx-device-mobile {
   @include dx-fieldset-sizing(
-        $MATERIAL_MOBILE_FIELDSET_VERTICAL_MARGIN,
-        $MATERIAL_MOBILE_FIELDSET_HORIZONTAL_MARGIN,
-        $MATERIAL_MOBILE_FIELDSET_HEADER_VERTICAL_MARGIN,
-        $MATERIAL_MOBILE_FIELD_VERTICAL_MARGIN
-    );
+    $MATERIAL_MOBILE_FIELDSET_VERTICAL_MARGIN,
+    $MATERIAL_MOBILE_FIELDSET_HORIZONTAL_MARGIN,
+    $MATERIAL_MOBILE_FIELDSET_HEADER_VERTICAL_MARGIN,
+    $MATERIAL_MOBILE_FIELD_VERTICAL_MARGIN
+  );
 }

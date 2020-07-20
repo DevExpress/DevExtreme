@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+
 // adduse
 
 
@@ -50,14 +51,15 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE;
-    //NOTE: height of the widget should be the same in default and drag over states
+    padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING * 2 $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE;
+
+    // NOTE: height of the widget should be the same in default and drag over states
     margin-bottom: 1px;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
+    padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING * 2 $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
   }
 }
 
@@ -71,7 +73,7 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-input-label {
-  padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + ($MATERIAL_BASE_FONT_SIZE/2 - $MATERIAL_FILEUPLOADER_VERTICAL_PADDING)/2 + 1px $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
+  padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + ($MATERIAL_BASE_FONT_SIZE / 2 - $MATERIAL_FILEUPLOADER_VERTICAL_PADDING) / 2 + 1px $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
   color: $fileuploader-filename-color;
 
   @include dx-overflow();
@@ -129,13 +131,13 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING/2;
+  padding-bottom: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING / 2;
   color: $fileuploader-filename-color;
   font-weight: 500;
 }
 
 .dx-fileuploader-file-size {
-  padding-bottom: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING/2;
+  padding-bottom: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING / 2;
 }
 
 .dx-fileuploader-invalid {

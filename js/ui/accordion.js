@@ -17,6 +17,8 @@ import { BindableTemplate } from '../core/templates/bindable_template';
 import { getImageContainer } from '../core/utils/icon';
 import themes from './themes';
 
+// STYLE accordion
+
 const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
 const ACCORDION_ITEM_CLASS = 'dx-accordion-item';

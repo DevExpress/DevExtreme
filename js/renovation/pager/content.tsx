@@ -1,14 +1,15 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Event, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
-import { PAGER_PAGES_CLASS, PAGER_CLASS_FULL, LIGHT_MODE_CLASS } from './common/consts';
+import { PAGER_PAGES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS } from './common/consts';
 import PagerProps from './common/pager_props';
+import { combineClasses } from '../utils/combine_classes';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -29,7 +30,7 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef as any} {...restAttributes} className={className}>
+  <div ref={parentRef as any} className={className} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef as any}
@@ -88,13 +89,13 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 
   @OneWay() isLargeDisplayMode = true;
 
-  @OneWay() pageSizesRef: any = null;
+  @ForwardRef() pageSizesRef: any = null;
 
-  @OneWay() parentRef: any = null;
+  @ForwardRef() parentRef: any = null;
 
-  @OneWay() pagesRef: any = null;
+  @ForwardRef() pagesRef: any = null;
 
-  @OneWay() infoTextRef: any = null;
+  @ForwardRef() infoTextRef: any = null;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
@@ -120,16 +121,14 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get className(): string {
-    const customClasses = this.restAttributes.className;
+    const userClasses = this.props.className!;
     const classesMap = {
       'dx-widget': true,
-      [customClasses]: true,
-      [PAGER_CLASS_FULL]: true,
+      [userClasses]: !!userClasses,
+      [PAGER_CLASS]: true,
       [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,
     };
-    return Object.keys(classesMap)
-      .filter((p) => classesMap[p])
-      .join(' ');
+    return combineClasses(classesMap);
   }
 }

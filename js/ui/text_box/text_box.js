@@ -11,6 +11,8 @@ import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
 import { addNamespace, normalizeKeyName } from '../../events/utils';
 
+// STYLE textBox
+
 let ua = navigator.userAgent;
 const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];
 

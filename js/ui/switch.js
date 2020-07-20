@@ -14,6 +14,8 @@ import { name as clickEventName } from '../events/click';
 import Swipeable from '../events/gesture/swipeable';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE switch
+
 const SWITCH_CLASS = 'dx-switch';
 const SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper';
 const SWITCH_CONTAINER_CLASS = SWITCH_CLASS + '-container';

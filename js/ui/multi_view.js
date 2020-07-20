@@ -13,6 +13,8 @@ import CollectionWidget from './collection/ui.collection_widget.live_update';
 import Swipeable from '../events/gesture/swipeable';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE multiView
+
 const MULTIVIEW_CLASS = 'dx-multiview';
 const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 const MULTIVIEW_ITEM_CONTAINER_CLASS = 'dx-multiview-item-container';

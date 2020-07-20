@@ -1,13 +1,14 @@
 import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay,
 } from 'devextreme-generator/component_declaration/common';
+import { addHeightToStyle } from '../utils';
 
 export const viewFunction = (viewModel: Row) => (
   <tr
-    className={viewModel.props.className}
-    style={viewModel.style}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    className={`${viewModel.props.className}`}
+    style={viewModel.style}
   >
     {viewModel.props.children}
   </tr>
@@ -17,7 +18,7 @@ export const viewFunction = (viewModel: Row) => (
 export class RowProps {
   @OneWay() height?: number;
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 
   @Slot() children?: any;
 }
@@ -27,9 +28,10 @@ export class RowProps {
   view: viewFunction,
 })
 export class Row extends JSXComponent(RowProps) {
-  get style() {
+  get style(): object {
     const { height } = this.props;
+    const { style } = this.restAttributes;
 
-    return { height: height ? `${height}px` : undefined };
+    return addHeightToStyle(height, style);
   }
 }

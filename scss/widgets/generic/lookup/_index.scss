@@ -8,8 +8,9 @@
 @use "../textEditor/colors" as *;
 @use "../dropDownEditor" as *;
 @use "../common" as *;
-// adduse
 
+// adduse
+@use "../dropDownList";
 
 $GENERIC_LOOKUP_FIELD_PADDING:
   $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING

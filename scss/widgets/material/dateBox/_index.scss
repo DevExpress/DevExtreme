@@ -7,8 +7,10 @@
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/colors" as *;
-// adduse
 
+// adduse
+@use "../timeView";
+@use "../dateView";
 
 .dx-datebox-wrapper {
   .dx-popup-title {
@@ -52,7 +54,7 @@
 
   &.dx-dropdowneditor-active {
     &.dx-editor-filled {
-      background: $texteditor-hover-bg; //TODO: Use active state const instead
+      background: $texteditor-hover-bg; // TODO: Use active state const instead
     }
   }
 
@@ -85,15 +87,15 @@
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
   .dx-calendar {
-    margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
-    margin-bottom: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
+    margin-bottom: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
   }
 
   .dx-timeview {
     padding: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
 
     @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin: 0 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN / 2 $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
     }
   }
 
@@ -123,12 +125,12 @@
 
   .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
     .dx-calendar {
-      margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
       margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
     }
 
     .dx-timeview {
-      margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin-right: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN / 2;
       margin-left: $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN;
     }
   }

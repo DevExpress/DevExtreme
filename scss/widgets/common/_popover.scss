@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -83,7 +84,9 @@
 
 .dx-device-ios {
   .dx-popover-arrow:after {
+
     // NOTE: fix arrow rendering on ios (T178931)
+
     // stylelint-disable-next-line property-no-vendor-prefix
     -webkit-transform: rotate(-45deg) translateZ(0);
   }

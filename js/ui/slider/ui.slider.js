@@ -17,6 +17,8 @@ import TrackBar from '../track_bar';
 import inkRipple from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
 
+// STYLE slider
+
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_WRAPPER_CLASS = 'dx-slider-wrapper';
 const SLIDER_HANDLE_SELECTOR = '.dx-slider-handle';

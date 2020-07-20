@@ -21,6 +21,8 @@ import './ui.tree_list.error_handling';
 import './ui.tree_list.grid_view';
 import './ui.tree_list.header_panel';
 
+// STYLE treeList
+
 treeListCore.registerModulesOrder([
     'stateStoring',
     'columns',

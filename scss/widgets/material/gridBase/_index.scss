@@ -13,8 +13,11 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
-@use "../pager" as *;
+
 // adduse
+@use "../scrollable";
+@use "../overlay";
+@use "../pager";
 
 
 $MATERIAL_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
@@ -31,7 +34,7 @@ $MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH:
   $MATERIAL_COMMAND_COLUMN_ADDITIONAL_RIGHT_MARGIN;
 
 $MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: $MATERIAL_BASE_ICON_SIZE;
-$MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: round(($MATERIAL_GRID_BASE_CELL_HEIGHT - $MATERIAL_GRID_BASE_CELL_LINE_HEIGHT)/2);
+$MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: round(($MATERIAL_GRID_BASE_CELL_HEIGHT - $MATERIAL_GRID_BASE_CELL_LINE_HEIGHT) / 2);
 $MATERIAL_GRID_BASE_CELL_PADDING: $MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING $MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
 
 @mixin grid-base($widgetName) {
@@ -185,6 +188,7 @@ $MATERIAL_GRID_BASE_CELL_PADDING: $MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING $MAT
     .dx-row-alt {
       & > td {
         background-color: $datagrid-row-alternation-bg;
+
         // T838734
         border-top: 1px solid $datagrid-row-alternation-bg;
         border-bottom: 1px solid $datagrid-row-alternation-bg;
@@ -611,6 +615,10 @@ $MATERIAL_GRID_BASE_CELL_PADDING: $MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING $MAT
             padding-bottom: 12px;
             vertical-align: bottom;
             border-right: 1px solid $MATERIAL_GRID_BASE_BORDER_COLOR;
+
+            &:last-child {
+              border-right: none;
+            }
           }
         }
       }

@@ -14,6 +14,8 @@ import LoadIndicator from '../load_indicator';
 import themes from './../themes';
 import LoadPanel from '../load_panel';
 
+// STYLE scrollView
+
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
 const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';

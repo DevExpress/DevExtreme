@@ -6,7 +6,10 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
+
 // adduse
+@use "../scrollable";
+@use "../badge";
 
 
 $MATERIAL_TABS_BACKGROUND: darken($base-bg, 4%);

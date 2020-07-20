@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -240,6 +241,7 @@
       flex-grow: 1;
     }
   }
+
   // stylelint-enable no-duplicate-selectors
 
   .dx-area-caption {

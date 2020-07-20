@@ -4,7 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+
 // adduse
+@use "../colorView";
+@use "../dropDownEditor";
 
 
 .dx-colorbox {

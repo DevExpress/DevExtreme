@@ -86,3 +86,24 @@ interface SwatchSass {
   sass: string;
   selector: string;
 }
+
+interface ScriptsDependencyTree {
+  widget: string;
+  dependencies: { [key: string]: ScriptsDependencyTree };
+}
+
+interface ScriptsDependencyCache {
+  [key: string]: ScriptsDependencyTree;
+}
+
+interface FlatStylesDependencies {
+  [key: string]: Array<string>;
+}
+
+interface AstComment {
+  value: string;
+}
+
+interface SyntaxTree {
+  comments?: Array<AstComment>;
+}

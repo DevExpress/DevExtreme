@@ -13,6 +13,7 @@
 @use "../fieldset/sizes" as *;
 @use "../menu/colors" as *;
 @use "../tabs" as *;
+
 // adduse
 
 
@@ -24,6 +25,7 @@ $DIAGRAM_TOOLBOX_TITLE_SIZE: 18px;
 
 .dx-diagram {
   border-color: $diagram-border-color;
+
   // stylelint-disable selector-class-pattern
   .dxdi-control .dxdi-canvas {
     background-color: darken($overlay-content-bg, 15%);
@@ -92,6 +94,7 @@ $DIAGRAM_TOOLBOX_TITLE_SIZE: 18px;
   .dxdi-text-input-container.connector-text .dxdi-text-input {
     border-color: $button-default-bg;
   }
+
   // stylelint-enable selector-class-pattern
 
   .dx-diagram-toolbar-wrapper {
@@ -198,7 +201,6 @@ $DIAGRAM_TOOLBOX_TITLE_SIZE: 18px;
   }
 
   .dx-diagram-toolbox-input {
-    width: calc(100% - 2 * $DIAGRAM_TOOLBOX_INPUT_MARGIN);
     margin: $DIAGRAM_TOOLBOX_INPUT_MARGIN;
 
     .dx-texteditor-input,

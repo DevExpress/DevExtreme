@@ -8,7 +8,9 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
+
 // adduse
+@use "../dropDownMenu";
 
 
 $GENERIC_TOOLBAR_HEIGHT: $GENERIC_BASE_INLINE_WIDGET_HEIGHT;
@@ -67,7 +69,7 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
     padding: 0 $item-spacing 0 0;
 
     &.dx-toolbar-first-in-group {
-      padding-left: $GENERIC_TOOLBAR_ITEM_SPACING*4;
+      padding-left: $GENERIC_TOOLBAR_ITEM_SPACING * 4;
     }
 
     &:last-child {
@@ -111,19 +113,19 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   color: $toolbar-color;
 
   @include dx-toolbar-sizing(
-        $GENERIC_TOOLBAR_HEIGHT,
-        $GENERIC_TOOLBAR_PADDING,
-        $GENERIC_TOOLBAR_LABEL_FONT_SIZE,
-        $GENERIC_TOOLBAR_ITEM_SPACING
-    );
+    $GENERIC_TOOLBAR_HEIGHT,
+    $GENERIC_TOOLBAR_PADDING,
+    $GENERIC_TOOLBAR_LABEL_FONT_SIZE,
+    $GENERIC_TOOLBAR_ITEM_SPACING
+  );
 
   .dx-device-mobile & {
     @include dx-toolbar-sizing(
-            $GENERIC_MOBILE_TOOLBAR_HEIGHT,
-            $GENERIC_MOBILE_TOOLBAR_PADDING,
-            $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE,
-            $GENERIC_MOBILE_TOOLBAR_ITEM_SPACING
-        );
+      $GENERIC_MOBILE_TOOLBAR_HEIGHT,
+      $GENERIC_MOBILE_TOOLBAR_PADDING,
+      $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE,
+      $GENERIC_MOBILE_TOOLBAR_ITEM_SPACING
+    );
   }
 
   &.dx-state-disabled {

@@ -4,8 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common" as *;
-// adduse
 
+// adduse
+@use "../dropDownList";
 
 @mixin autocomplete-editor-container-offset() {
   right: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
