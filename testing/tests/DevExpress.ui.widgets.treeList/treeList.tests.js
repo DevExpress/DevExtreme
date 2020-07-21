@@ -1570,7 +1570,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         setTimeout(function() {
         // assert
             assert.strictEqual(treeList.pageIndex(), 2, 'page index');
-            assert.strictEqual(contentReadySpy.callCount, 3, 'onContentReady');
             done();
         }, 1000);
     });
