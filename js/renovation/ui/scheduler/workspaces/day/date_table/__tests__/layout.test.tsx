@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { mount } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { DateTableRow as Row } from '../../../base/date_table/row';
@@ -10,6 +11,10 @@ import { VirtualTable } from '../../../base/virtual_table';
 jest.mock('../../../utils', () => ({
   ...require.requireActual('../../../utils'),
   getKeyByDateAndGroup: jest.fn(),
+}));
+jest.mock('devextreme-generator/component_declaration/common', () => ({
+  ...require.requireActual('devextreme-generator/component_declaration/common'),
+  Fragment: ({ children }) => <div>{children}</div>,
 }));
 
 describe('DayDateTableLayout', () => {
@@ -26,7 +31,7 @@ describe('DayDateTableLayout', () => {
     const render = (viewModel) => mount(LayoutView({
       ...viewModel,
       props: { ...viewModel.props, viewData },
-    } as any) as any);
+    } as any) as any).childAt(0).childAt(0);
 
     afterEach(() => jest.resetAllMocks());
 
@@ -40,7 +45,7 @@ describe('DayDateTableLayout', () => {
     it('should render table correctly', () => {
       const layout = render({});
 
-      expect(layout.is(Table))
+      expect(layout.find(Table).exists())
         .toBe(true);
 
       const rows = layout.find(Row);
@@ -52,7 +57,7 @@ describe('DayDateTableLayout', () => {
     it('should render virtual table correctly', () => {
       const layout = render({ props: { isVirtual: true } });
 
-      expect(layout.is(VirtualTable))
+      expect(layout.find(VirtualTable).exists())
         .toBe(true);
 
       const rows = layout.find(Row);
