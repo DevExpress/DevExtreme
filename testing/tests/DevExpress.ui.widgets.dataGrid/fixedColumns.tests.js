@@ -150,7 +150,7 @@ QUnit.module('Fixed columns', {
     QUnit.test('Draw fixed table for rowsView', function(assert) {
     // arrange
         const that = this;
-        const $testElement = $('#container');
+        const $testElement = this.gridContainer;
 
         // act
         that.setupDataGrid();
@@ -183,8 +183,14 @@ QUnit.module('Fixed columns', {
 
         assert.equal($fixTable.find('tbody > tr').first().find('td').length, 3, 'count fixed column');
         assert.strictEqual($fixedCells.first().text(), 'test4', 'fixed column');
+
+        const transparentColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
         assert.strictEqual($fixedCells.eq(1).html(), '&nbsp;', 'transparent column');
         assert.ok($fixedCells.eq(1).hasClass('dx-pointer-events-none'), 'has class dx-pointer-events-none');
+        assert.strictEqual($fixedCells.eq(1).css('background-color'), transparentColor, 'transparent column background color');
+        assert.strictEqual($fixedCells.eq(1).css('border-top-color'), transparentColor, 'transparent column border top color');
+        assert.strictEqual($fixedCells.eq(1).css('border-bottom-color'), transparentColor, 'transparent column border bottom color');
+
         assert.strictEqual($fixedCells.last().text(), 'test2', 'fixed column');
 
         // T243056
