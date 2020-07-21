@@ -10,7 +10,7 @@ export type dxEvent = Event;
 export class Event {
     /**
      * @docid dxEventFields.currentTarget
-     * @type Node
+     * @type Element
      * @prevFileNamespace DevExpress
      * @public
      */
@@ -24,14 +24,14 @@ export class Event {
     data: any;
     /**
      * @docid dxEventFields.delegateTarget
-     * @type Node
+     * @type Element
      * @prevFileNamespace DevExpress
      * @public
      */
     delegateTarget: Element;
     /**
      * @docid dxEventFields.target
-     * @type Node
+     * @type Element
      * @prevFileNamespace DevExpress
      * @public
      */
@@ -114,7 +114,7 @@ export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
  * @docid eventsMethods.off
  * @publicName off(element)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @module events
  * @export off
  * @prevFileNamespace DevExpress
@@ -126,7 +126,7 @@ export function off(element: Element | Array<Element>): void;
  * @docid eventsMethods.off
  * @publicName off(element, eventName)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @module events
  * @export off
@@ -139,7 +139,7 @@ export function off(element: Element | Array<Element>, eventName: string): void;
  * @docid eventsMethods.off
  * @publicName off(element, eventName, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 handler:function
  * @module events
@@ -153,7 +153,7 @@ export function off(element: Element | Array<Element>, eventName: string, handle
  * @docid eventsMethods.off
  * @publicName off(element, eventName, selector)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 selector:string
  * @module events
@@ -167,7 +167,7 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.off
  * @publicName off(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 selector:string
  * @param4 handler:function
@@ -182,7 +182,7 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.on
  * @publicName on(element, eventName, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 data:object
  * @param4 handler:function
@@ -197,7 +197,7 @@ export function on(element: Element | Array<Element>, eventName: string, data: a
  * @docid eventsMethods.on
  * @publicName on(element, eventName, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 handler:function
  * @module events
@@ -211,7 +211,7 @@ export function on(element: Element | Array<Element>, eventName: string, handler
  * @docid eventsMethods.on
  * @publicName on(element, eventName, selector, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 selector:string
  * @param4 data:object
@@ -227,7 +227,7 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @docid eventsMethods.on
  * @publicName on(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 selector:string
  * @param4 handler:function
@@ -242,7 +242,7 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @docid eventsMethods.one
  * @publicName one(element, eventName, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 data:object
  * @param4 handler:function
@@ -257,7 +257,7 @@ export function one(element: Element | Array<Element>, eventName: string, data: 
  * @docid eventsMethods.one
  * @publicName one(element, eventName, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 handler:function
  * @module events
@@ -271,7 +271,7 @@ export function one(element: Element | Array<Element>, eventName: string, handle
  * @docid eventsMethods.one
  * @publicName one(element, eventName, selector, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 selector:string
  * @param4 data:object
@@ -287,7 +287,7 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.one
  * @publicName one(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 eventName:string
  * @param3 selector:string
  * @param4 handler:function
@@ -302,7 +302,7 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.trigger
  * @publicName trigger(element, event)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @module events
  * @export trigger
@@ -315,7 +315,7 @@ export function trigger(element: Element | Array<Element>, event: string | event
  * @docid eventsMethods.trigger
  * @publicName trigger(element, event, extraParameters)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @param3 extraParameters:object
  * @module events
@@ -329,7 +329,7 @@ export function trigger(element: Element | Array<Element>, event: string | event
  * @docid eventsMethods.triggerHandler
  * @publicName triggerHandler(element, event)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @module events
  * @export triggerHandler
@@ -342,7 +342,7 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @docid eventsMethods.triggerHandler
  * @publicName triggerHandler(element, event, extraParameters)
  * @namespace DevExpress.events
- * @param1 element:Node|Array<Node>
+ * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @param3 extraParameters:object
  * @module events

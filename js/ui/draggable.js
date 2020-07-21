@@ -262,7 +262,7 @@ const Draggable = DOMComponentWithTemplate.inherit({
             /**
              * @name DraggableBaseOptions.contentTemplate
              * @type template|function
-             * @type_function_return string|Node|jQuery
+             * @type_function_return string|Element|jQuery
              * @hidden
              * @default "content"
              */

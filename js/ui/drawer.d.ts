@@ -102,7 +102,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     shading?: boolean;
     /**
      * @docid dxDrawerOptions.target
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

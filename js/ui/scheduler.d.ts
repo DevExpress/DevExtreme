@@ -167,7 +167,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 contentElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -691,7 +691,7 @@ export default class dxScheduler extends Widget {
      * @docid dxSchedulerMethods.showAppointmentTooltip
      * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
      * @param1 appointmentData:Object
-     * @param2 target:string|Node|jQuery
+     * @param2 target:string|Element|jQuery
      * @param3 currentAppointmentData:Object|undefined
      * @prevFileNamespace DevExpress.ui
      * @public

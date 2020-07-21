@@ -305,7 +305,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field4 percent:Number
      * @type_function_param1_field5 percentText:string
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

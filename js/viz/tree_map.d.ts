@@ -251,7 +251,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field2 valueText:string
      * @type_function_param1_field3 node:dxTreeMapNode
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
