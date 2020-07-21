@@ -603,7 +603,7 @@ describe('Cli arguments normalizer', () => {
     });
   });
 
-  test('variables are normalized by to kebab-case', () => {
+  test('variables are normalized to kebab-case', () => {
     const config: ConfigSettings = {
       command: 'build-theme',
       baseTheme: 'material.blue.light',
