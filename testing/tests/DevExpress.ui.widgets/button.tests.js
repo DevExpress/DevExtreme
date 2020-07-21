@@ -134,20 +134,6 @@ QUnit.module('options changed callbacks', {
         assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
     });
 
-    QUnit.test('parentIndependentState', function(assert) {
-        assert.notOk(this.element.hasClass('dx-state-independent'));
-
-        this.instance.option({
-            parentIndependentState: true
-        });
-        assert.ok(this.element.hasClass('dx-state-independent'));
-
-        this.instance.option({
-            parentIndependentState: false
-        });
-        assert.notOk(this.element.hasClass('dx-state-independent'));
-    });
-
     QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
         const clickHandler = sinon.spy();
 
