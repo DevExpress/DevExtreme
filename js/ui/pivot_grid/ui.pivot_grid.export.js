@@ -192,7 +192,7 @@ export const DataProvider = Class.inherit({
         const colsArea = this._options.columnsArea;
         const rowsArea = this._options.rowsArea;
         const columns = this._options.columns;
-        const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().get(0).clientWidth === 0;
+        const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().is(':hidden');
         return useDefaultWidth
             ? columns.map(_ => DEFAUL_COLUMN_WIDTH)
             : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());

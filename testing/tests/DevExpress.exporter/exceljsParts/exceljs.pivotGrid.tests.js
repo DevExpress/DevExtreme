@@ -3796,7 +3796,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                         { area: 'data', summaryType: 'count', dataType: 'number' }
                     ],
                     store: [
-                        { row1: 'A', row2: 'B', col1: 'a' },
+                        { row1: 'A', row2: 'B', col1: 'a' }
                     ]
                 };
                 const pivotGrid = gridCreatingFunc($('#pivotGrid'), {
