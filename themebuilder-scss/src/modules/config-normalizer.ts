@@ -124,21 +124,6 @@ const processItemKeys = (
   }
 };
 
-const convertTreeListConstants = (config: ConfigSettings): void => processItemKeys(
-  config,
-  (key) => key.replace(/@treelist/, '@datagrid'),
-);
-
-const convertItemKeysToSassFormat = (config: ConfigSettings): void => processItemKeys(
-  config,
-  (key) => key.replace(/@/, '$'),
-);
-
-const convertItemKeysToKebabCase = (config: ConfigSettings): void => processItemKeys(
-  config,
-  (key) => key.toLowerCase().replace(/_/g, '-'),
-);
-
 const normalizePath = (path: string): string => path + (path[path.length - 1] !== '/' ? '/' : '');
 
 const parseConfig = (config: ConfigSettings): void => {
@@ -167,9 +152,13 @@ const parseConfig = (config: ConfigSettings): void => {
     config.widgets = config.widgets.map((w) => w.toLowerCase());
   }
 
-  convertTreeListConstants(config);
-  convertItemKeysToSassFormat(config);
-  convertItemKeysToKebabCase(config);
+  [
+    (key: string): string => key.replace(/@treelist/, '@datagrid'),
+    (key: string): string => key.replace(/@/, '$'),
+    (key: string): string => key.toLowerCase().replace(/_/g, '-'),
+  ].forEach((processor) => {
+    processItemKeys(config, processor);
+  });
 
   Object.assign(config, {
     data: config.data !== undefined ? config.data : {},
