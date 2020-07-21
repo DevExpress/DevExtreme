@@ -11,8 +11,6 @@ $pivotgrid-common-top-bottom-padding: null !default;
 $pivotgrid-field-indicators-offset: null !default;
 $pivotgrid-indicators-line-height: null !default;
 $pivotgrid-totalcolor: null !default;
-$pivotgrid-expand-icon-offset: null !default;
-$pivotgrid-expand-icon-text-offset: null !default;
 $pivotgrid-field-area-text-color: null !default;
 $pivotgrid-data-area-color: null !default;
 $pivotgrid-grandtotalcolor: null !default;
@@ -36,6 +34,8 @@ $pivotgrid-border: $pivotgrid-border-width solid $pivotgrid-border-color;
 $pivotgrid-icon-size: 14px;
 $pivotgrid-common-field-padding: 2px;
 $pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding;
+$pivotgrid-expand-icon-offset: -5px;
+$pivotgrid-expand-icon-text-offset: 0;
 
 .dx-pivotgrid-fields-container {
   .dx-position-indicator {

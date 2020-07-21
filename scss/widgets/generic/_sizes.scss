@@ -21,8 +21,6 @@ $generic-base-more-adaptive-icon-size: null !default;
 $generic-base-inline-horizontal-padding: null !default;
 $generic-grid-base-nodata-font-size: null !default;
 $generic-datagrid-cell-padding: null !default;
-$pivotgrid-expand-icon-offset: null !default;
-$pivotgrid-expand-icon-text-offset: null !default;
 $accordion-title-icon-top-offset: null !default;
 $accordion-title-icon-margin: null !default;
 $pivotgrid-empty-column-width: null !default;
@@ -93,9 +91,6 @@ $generic-list-item-vertical-padding: null !default;
 
   $generic-grid-base-nodata-font-size: 17px;
   $generic-datagrid-cell-padding: 7px;
-
-  $pivotgrid-expand-icon-offset: -5px;
-  $pivotgrid-expand-icon-text-offset: 0;
 
   $accordion-title-icon-top-offset: 4px;
   $accordion-title-icon-margin: 6px;
@@ -180,9 +175,6 @@ $generic-list-item-vertical-padding: null !default;
   $accordion-title-icon-margin: 4px;
 
   $pivotgrid-empty-column-width: 16px;
-  $pivotgrid-expand-icon-offset: -5px;
-  $pivotgrid-expand-icon-text-offset: 0;
-
   $pivotgrid-common-left-right-padding: 6px;
   $pivotgrid-common-top-bottom-padding: 5px;
   $pivotgrid-field-indicators-offset: 4px;
