@@ -2254,9 +2254,10 @@ class Scheduler extends Widget {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
 
-                resultDates = resultDates
-                    .concat(longParts.filter(el => new Date(el) < maxDate))
-                    .map(date => createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointmentDuration)), gridAppointment));
+                const newArr = longParts.filter(el => new Date(el) < maxDate)
+                    .map(date => createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointmentDuration))), gridAppointment);
+
+                resultDates = resultDates.concat(newArr);
             });
 
             gridAppointmentList = resultDates;

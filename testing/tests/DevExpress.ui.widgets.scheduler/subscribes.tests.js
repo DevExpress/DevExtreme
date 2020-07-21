@@ -5,7 +5,6 @@ import 'ui/scheduler/ui.scheduler';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 
@@ -256,40 +255,6 @@ QUnit.test('\'createAppointmentSettings\' should not change dateRange', function
         startDate: new Date(2015, 2, 2, 0),
     });
     assert.deepEqual(dateRange, instance._workSpace.getDateRange(), 'Date range wasn\'t changed');
-});
-
-QUnit.test('\'createAppointmentSettings\' should calculate correct dates fo recurring appts (T408509)', function(assert) {
-    this.createInstance({
-        currentView: 'week',
-        startDayHour: 2,
-        endDayHour: 10,
-        currentDate: new Date(2015, 2, 2, 0),
-        firstDayOfWeek: 1
-    });
-    const getDatesByRecurrenceStub = sinon.stub(getRecurrenceProcessor(), 'generateDates').returns([]);
-
-    try {
-        const instance = this.instance;
-
-
-        instance.fire('createAppointmentSettings', {
-            appointmentData: {
-                'startDate': new Date(2015, 2, 2, 0),
-                'endDate': new Date(2015, 2, 3, 0),
-                'recurrenceRule': 'FREQ=DAILY',
-                allDay: true
-            },
-            startDate: new Date(2015, 2, 2, 0),
-            originalStartDate: new Date(2015, 2, 2, 1),
-        });
-
-        const startDate = getDatesByRecurrenceStub.getCall(0).args[0].start;
-
-        assert.equal(startDate.getTime(), new Date(2015, 2, 2, 1).getTime(), 'Original start date was used for dates calculation');
-
-    } finally {
-        getDatesByRecurrenceStub.restore();
-    }
 });
 
 QUnit.test('Long appointment in Timeline view should have right left coordinate', function(assert) {
@@ -1557,13 +1522,13 @@ QUnit.test('\'createAppointmentSettings\' should work correct for allDay appoint
             endDate: new Date(2018, 4, 23, 9, 0),
             priorityId: 2,
             allDay: true
-        },
-        startDate: new Date(2018, 4, 21, 9, 0),
+        }
     });
 
-    assert.equal(results.length, 2, 'Result length is OK');
+    assert.equal(results.length, 3, 'Result length is OK');
     this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 196, 1.1);
     this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 260, 1.1);
+    this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 324, 1.1);
 });
 
 QUnit.test('\'createAppointmentSettings\' should work correct when groupByDate = true, Week view', function(assert) {
@@ -1599,16 +1564,14 @@ QUnit.test('\'createAppointmentSettings\' should work correct when groupByDate =
         appointmentData: {
             startDate: new Date(2018, 4, 22, 10, 0),
             priorityId: 2
-        },
-        startDate: new Date(2018, 4, 22, 10, 0),
+        }
     })[0], 2, 2, 100, 420, 1.5);
 
     this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
         appointmentData: {
-            startDate: new Date(2018, 4, 25, 1, 0),
+            startDate: new Date(2018, 4, 25, 11, 0),
             priorityId: 1
-        },
-        startDate: new Date(2018, 4, 25, 11, 0),
+        }
     })[0], 5, 4, 200, 740, 1.5);
 });
 
