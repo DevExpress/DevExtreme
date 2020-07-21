@@ -113,8 +113,6 @@ class Button extends Widget {
             useInkRipple: false,
             _templateData: {},
 
-            parentIndependentState: false,
-
             stylingMode: 'contained'
         });
     }
@@ -223,7 +221,6 @@ class Button extends Widget {
                 this._updateSubmitInput();
                 break;
             case 'useInkRipple':
-            case 'parentIndependentState':
                 this._invalidate();
                 break;
             default:
@@ -345,7 +342,7 @@ class Button extends Widget {
         const $element = this.$element();
         let $content = this._$content();
         const data = this._getContentData();
-        const { template, iconPosition, parentIndependentState } = this.option();
+        const { template, iconPosition } = this.option();
         const { icon, text } = data;
 
         $content.length ? $content.empty() : $content = $('<div>')
@@ -355,8 +352,7 @@ class Button extends Widget {
         $element
             .toggleClass('dx-button-has-icon', !!icon)
             .toggleClass('dx-button-icon-right', !!icon && iconPosition !== 'left')
-            .toggleClass('dx-button-has-text', !!text)
-            .toggleClass('dx-state-independent', parentIndependentState);
+            .toggleClass('dx-button-has-text', !!text);
 
         const $template = $(this._getTemplateByOption('template').render({
             model: data,

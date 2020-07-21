@@ -420,6 +420,30 @@ QUnit.module('render', {}, () => {
         const instance = $('#widget').dxWidget().dxWidget('instance');
         assert.equal(instance.option('hint'), undefined);
     });
+
+    QUnit.test('init with parentIndependentState option', function(assert) {
+        const $element = $('#widget').dxWidget({
+            parentIndependentState: true
+        });
+
+        assert.ok($element.hasClass('dx-state-independent'), 'button with icon has icon class');
+    });
+
+    QUnit.test('parentIndependentState option change', function(assert) {
+        const instance = this.element.dxWidget({}).dxWidget('instance');
+
+        assert.notOk(this.element.hasClass('dx-state-independent'));
+
+        instance.option({
+            parentIndependentState: true
+        });
+        assert.ok(this.element.hasClass('dx-state-independent'));
+
+        instance.option({
+            parentIndependentState: false
+        });
+        assert.notOk(this.element.hasClass('dx-state-independent'));
+    });
 });
 
 QUnit.module('API', {
