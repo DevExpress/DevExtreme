@@ -1527,7 +1527,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     // T757537
     QUnit.test('TreeList should not hang when scrolling', function(assert) {
     // arrange
-        const contentReadySpy = sinon.spy();
         const treeList = createTreeList({
             dataSource: [
                 { id: 1, parentId: 0 },
@@ -1553,15 +1552,13 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             columnAutoWidth: true,
             scrolling: {
                 useNative: false
-            },
-            onContentReady: contentReadySpy
+            }
         });
         const done = assert.async();
 
         this.clock.tick(100);
         this.clock.restore();
         const scrollable = treeList.getScrollable();
-        contentReadySpy.reset();
 
         // act
         scrollable.scrollTo({ y: 200 });
@@ -1570,7 +1567,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         setTimeout(function() {
         // assert
             assert.strictEqual(treeList.pageIndex(), 2, 'page index');
-            assert.strictEqual(contentReadySpy.callCount, 3, 'onContentReady');
             done();
         }, 1000);
     });
