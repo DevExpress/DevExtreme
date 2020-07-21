@@ -2255,7 +2255,7 @@ class Scheduler extends Widget {
                 });
 
                 const newArr = longParts.filter(el => new Date(el) < maxDate)
-                    .map(date => createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointmentDuration))), gridAppointment);
+                    .map(date => createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointmentDuration)), gridAppointment.source));
 
                 resultDates = resultDates.concat(newArr);
             });
