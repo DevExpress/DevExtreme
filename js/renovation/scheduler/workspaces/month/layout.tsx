@@ -7,15 +7,17 @@ import { MonthHeaderPanelCell } from './header_panel/cell';
 import { MonthDateTableLayout } from './date_table/layout';
 import { GroupedViewData } from '../types';
 
+const HeaderTemplate = ({ viewCellsData }: HeaderPanelLayoutProps) => (
+  <HeaderPanelLayout
+    cellTemplate={MonthHeaderPanelCell}
+    viewCellsData={viewCellsData}
+  />
+);
+
 export const viewFunction = (viewModel: MonthLayout) => (
   <LayoutBase
     viewCellsData={viewModel.props.viewCellsData}
-    headerPanelTemplate={({ viewCellsData }: HeaderPanelLayoutProps) => (
-      <HeaderPanelLayout
-        cellTemplate={MonthHeaderPanelCell}
-        viewCellsData={viewCellsData}
-      />
-    )}
+    headerPanelTemplate={HeaderTemplate}
     dateTableTemplate={MonthDateTableLayout}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
