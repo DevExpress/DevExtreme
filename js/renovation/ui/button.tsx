@@ -115,7 +115,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Template() template?: (props: {data: {icon?: string; text?: string}}) => JSX.Element;
+  @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
 
   @Slot() children?: JSX.Element;
 
