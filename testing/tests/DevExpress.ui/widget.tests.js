@@ -430,19 +430,20 @@ QUnit.module('render', {}, () => {
     });
 
     QUnit.test('parentIndependentState option change', function(assert) {
-        const instance = this.element.dxWidget({}).dxWidget('instance');
+        const element = $('#widget');
+        const instance = element.dxWidget({}).dxWidget('instance');
 
-        assert.notOk(this.element.hasClass('dx-state-independent'));
+        assert.notOk(element.hasClass('dx-state-independent'));
 
         instance.option({
             parentIndependentState: true
         });
-        assert.ok(this.element.hasClass('dx-state-independent'));
+        assert.ok(element.hasClass('dx-state-independent'));
 
         instance.option({
             parentIndependentState: false
         });
-        assert.notOk(this.element.hasClass('dx-state-independent'));
+        assert.notOk(element.hasClass('dx-state-independent'));
     });
 });
 
