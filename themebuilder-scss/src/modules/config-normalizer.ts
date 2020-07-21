@@ -113,21 +113,31 @@ const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
   };
 };
 
-const replaceItemKeys = (
+const processItemKeys = (
   config: ConfigSettings,
-  searchValue: RegExp,
-  replaceValue: string,
+  processor: (item: string) => string,
 ): void => {
   if (config.items && config.items.length) {
     config.items.forEach((item) => {
-      item.key = item.key.replace(searchValue, replaceValue);
+      item.key = processor(item.key);
     });
   }
 };
 
-const convertTreeListConstants = (config: ConfigSettings): void => replaceItemKeys(config, /@treelist/, '@datagrid');
+const convertTreeListConstants = (config: ConfigSettings): void => processItemKeys(
+  config,
+  (key) => key.replace(/@treelist/, '@datagrid'),
+);
 
-const convertItemKeysToSassFormat = (config: ConfigSettings): void => replaceItemKeys(config, /@/, '$');
+const convertItemKeysToSassFormat = (config: ConfigSettings): void => processItemKeys(
+  config,
+  (key) => key.replace(/@/, '$'),
+);
+
+const convertItemKeysToKebabCase = (config: ConfigSettings): void => processItemKeys(
+  config,
+  (key) => key.toLowerCase().replace(/_/g, '-'),
+);
 
 const normalizePath = (path: string): string => path + (path[path.length - 1] !== '/' ? '/' : '');
 
@@ -159,6 +169,7 @@ const parseConfig = (config: ConfigSettings): void => {
 
   convertTreeListConstants(config);
   convertItemKeysToSassFormat(config);
+  convertItemKeysToKebabCase(config);
 
   Object.assign(config, {
     data: config.data !== undefined ? config.data : {},
