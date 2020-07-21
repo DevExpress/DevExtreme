@@ -1528,7 +1528,7 @@ QUnit.test('All day appointments should have correct left position, vertical str
     const appointmentPosition = translator.locate($appointment.eq(0));
 
     assert.equal($appointment.length, 1, 'Appointment was rendered');
-    assert.roughEqual(appointmentPosition.left, $allDayCell.outerWidth() * 2, 2, 'Appointment left coordinate has been adjusted ');
+    assert.roughEqual(appointmentPosition.left, $allDayCell.outerWidth() * 1, 2, 'Appointment left coordinate has been adjusted ');
 });
 
 QUnit.module('Appointments Keyboard Navigation', {

@@ -2685,7 +2685,7 @@ QUnit.test('AllDay appointment should have right width on timeline week view', f
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
     const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
-    const cellsInAppointment = 36;
+    const cellsInAppointment = 48;
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
 });
