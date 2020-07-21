@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSX, JSXComponent, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
 import { getImageSourceType } from '../../../core/utils/icon';
 

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSX, JSXComponent, OneWay, Method,
+  Component, ComponentBindings, JSXComponent, OneWay, Method,
 } from 'devextreme-generator/component_declaration/common';
 import { initConfig, showWave, hideWave } from '../../../ui/widget/utils.ink_ripple';
 

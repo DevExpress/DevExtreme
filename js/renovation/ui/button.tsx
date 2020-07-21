@@ -3,7 +3,6 @@ import {
   ComponentBindings,
   Effect,
   Event,
-  JSX,
   JSXComponent,
   Method,
   OneWay,

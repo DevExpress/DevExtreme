@@ -4,7 +4,6 @@ import {
   Effect,
   Event,
   InternalState,
-  JSX,
   JSXComponent,
   Method,
   OneWay,

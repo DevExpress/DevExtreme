@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay, JSX, JSXComponent, Component,
+  ComponentBindings, OneWay, JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
 
 export const viewFunction = (
