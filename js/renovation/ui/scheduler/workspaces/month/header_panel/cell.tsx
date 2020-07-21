@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import dateLocalization from '../../../../../localization/date';
+import dateLocalization from '../../../../../../localization/date';
 
 export const viewFunction = (viewModel: MonthHeaderPanelCell) => (
   <td

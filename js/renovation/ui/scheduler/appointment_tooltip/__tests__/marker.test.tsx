@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { Marker, viewFunction as MarkerView } from '../marker';
-import { Deferred } from '../../../../core/utils/deferred';
+import { Deferred } from '../../../../../core/utils/deferred';
 
 describe('Marker', () => {
   describe('Render', () => {
