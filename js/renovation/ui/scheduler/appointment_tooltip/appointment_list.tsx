@@ -3,8 +3,8 @@ import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
-import noop from '../../utils/noop';
-import { List } from '../../ui/list';
+import noop from '../../../utils/noop';
+import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';
 import {
   GetTextAndFormatDateFn, GetSingleAppointmentFn,
