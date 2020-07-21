@@ -8,9 +8,6 @@ import translator from 'animation/translator';
 
 import 'common.css!';
 
-fx.off = true;
-
-
 QUnit.testStart(function() {
     const markup =
         `<style>
@@ -96,6 +93,7 @@ QUnit.testStart(function() {
         `;
 
     $('#qunit-fixture').html(markup);
+    fx.off = true;
 });
 
 const SORTABLE_CLASS = 'dx-sortable';
@@ -659,6 +657,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
     QUnit.test('Move items during dragging', function(assert) {
         // arrange
+        fx.off = false;
 
         this.createSortable({
             filter: '.draggable',
@@ -683,7 +682,39 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
         assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
         assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+        assert.strictEqual(items[1].style.transitionDuration, '300ms', 'items 2 transition duration');
+        assert.strictEqual(items[1].style.transitionTimingFunction, 'ease', 'items 2 transition timing function');
         assert.strictEqual(items[2].style.transform, '', 'items 3 is not moved');
+    });
+
+    QUnit.test('Move items during dragging with custom animation', function(assert) {
+        // arrange
+        fx.off = false;
+
+        this.createSortable({
+            filter: '.draggable',
+            dropFeedbackMode: 'push',
+            animation: {
+                duration: 500,
+                easing: 'ease-in-out'
+            }
+        });
+
+        let items = this.$element.children();
+        const $dragItemElement = items.eq(0);
+
+        // assert
+        assert.strictEqual(items.length, 3, 'item count');
+
+        // act
+        pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+
+        // assert
+        items = this.$element.children();
+
+        assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+        assert.strictEqual(items[1].style.transitionDuration, '500ms', 'items 2 transition duration');
+        assert.strictEqual(items[1].style.transitionTimingFunction, 'ease-in-out', 'items 2 transition timing function');
     });
 
     QUnit.test('Move items during dragging if content tempalte is defined', function(assert) {
@@ -2092,6 +2123,8 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
     QUnit.test('Animation should be stopped for target sortable items after leave', function(assert) {
         // arrange
+        fx.off = false;
+
         const sortable1 = this.createSortable({
             group: 'shared',
             dropFeedbackMode: 'push'
@@ -2108,22 +2141,19 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
         // assert
         const items2 = $(sortable2.$element()).children();
+        assert.strictEqual(items2[0].style.transitionDuration, '300ms', 'items2 1 transition');
         assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
         assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
         assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 
         // act
-        sinon.spy(fx, 'stop');
         pointer.move(300, 0);
 
         // assert
-        assert.strictEqual(items2[0].style.transform, 'none', 'items2 1 is moved down');
-        assert.strictEqual(items2[1].style.transform, 'none', 'items2 2 is moved down');
-        assert.strictEqual(items2[2].style.transform, 'none', 'items2 3 is moved down');
-        assert.strictEqual(fx.stop.callCount, 3, 'fx.stop call count');
-        assert.strictEqual(fx.stop.getCall(0).args[0].get(0), items2[0], 'fx.stop called for items2 1');
-        assert.strictEqual(fx.stop.getCall(1).args[0].get(0), items2[1], 'fx.stop called for items2 1');
-        assert.strictEqual(fx.stop.getCall(2).args[0].get(0), items2[2], 'fx.stop called for items2 1');
+        assert.strictEqual(items2[0].style.transitionDuration, '', 'items2 1 transition is reseted');
+        assert.strictEqual(items2[0].style.transform, '', 'items2 1 transform is reseted');
+        assert.strictEqual(items2[1].style.transform, '', 'items2 2 transform is reseted');
+        assert.strictEqual(items2[2].style.transform, '', 'items2 3 transform is reseted');
     });
 
     QUnit.test('items should not be moved after leave and enter', function(assert) {
