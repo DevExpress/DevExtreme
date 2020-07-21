@@ -59,7 +59,10 @@ describe('Builder integration tests', () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
-      items: [{ key: '@base-bg', value: '#abcdef' }],
+      items: [
+        { key: '@base-bg', value: '#abcdef' },
+        { key: '@undefined-variable', value: '#abcdef' },
+      ],
     };
 
     return buildTheme(config).then((result) => {
