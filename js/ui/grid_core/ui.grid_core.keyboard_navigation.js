@@ -38,6 +38,7 @@ const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const DATEBOX_WIDGET_NAME = 'dxDateBox';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const WIDGET_CLASS = 'dx-widget';
+const REVERT_BUTTON_CLASS = 'dx-revert-button';
 
 const FAST_EDITING_DELETE_KEY = 'delete';
 
@@ -752,8 +753,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const $parent = $target.parent();
         const isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
         const isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
+        const isRevertButton = !!$(event.target).closest(`.${REVERT_BUTTON_CLASS}`).length;
 
-        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
+        if(!isRevertButton && this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
 
             this._focusView();
