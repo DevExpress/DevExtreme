@@ -1,23 +1,20 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { DateTableRow as Row } from '../../../base/date_table/row';
 import { DayDateTableCell as Cell } from '../cell';
 import { getKeyByDateAndGroup } from '../../../utils';
 
-jest.mock('../../../base/date_table/row', () => ({
-  ...require.requireActual('../../../base/date_table/row'),
-  Row: () => null,
-}));
-jest.mock('../cell', () => ({
-  DayDateTableCell: () => null,
-}));
+import { Table } from '../../../base/table';
+import { VirtualTable } from '../../../base/virtual_table';
+
 jest.mock('../../../utils', () => ({
+  ...require.requireActual('../../../utils'),
   getKeyByDateAndGroup: jest.fn(),
 }));
 
 describe('DayDateTableLayout', () => {
   describe('Render', () => {
-    const viewCellsData = {
+    const viewData = {
       groupedData: [{
         dateTable: [
           [{ startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30), groups: 1 }],
@@ -25,9 +22,10 @@ describe('DayDateTableLayout', () => {
         ],
       }],
     };
-    const render = (viewModel) => shallow(LayoutView({
+
+    const render = (viewModel) => mount(LayoutView({
       ...viewModel,
-      props: { ...viewModel.props, viewCellsData },
+      props: { ...viewModel.props, viewData },
     } as any) as any);
 
     afterEach(() => jest.resetAllMocks());
@@ -39,12 +37,22 @@ describe('DayDateTableLayout', () => {
         .toBe('customAttribute');
     });
 
-    it('should render components correctly', () => {
+    it('should render table correctly', () => {
       const layout = render({});
 
-      expect(layout.find('table').exists())
+      expect(layout.is(Table))
         .toBe(true);
-      expect(layout.find('tbody').exists())
+
+      const rows = layout.find(Row);
+
+      expect(rows)
+        .toHaveLength(2);
+    });
+
+    it('should render virtual table correctly', () => {
+      const layout = render({ props: { isVirtual: true } });
+
+      expect(layout.is(VirtualTable))
         .toBe(true);
 
       const rows = layout.find(Row);
@@ -62,16 +70,16 @@ describe('DayDateTableLayout', () => {
 
       expect(cells.at(0).props())
         .toMatchObject({
-          startDate: viewCellsData.groupedData[0].dateTable[0][0].startDate,
-          endDate: viewCellsData.groupedData[0].dateTable[0][0].endDate,
-          groups: viewCellsData.groupedData[0].dateTable[0][0].groups,
+          startDate: viewData.groupedData[0].dateTable[0][0].startDate,
+          endDate: viewData.groupedData[0].dateTable[0][0].endDate,
+          groups: viewData.groupedData[0].dateTable[0][0].groups,
         });
 
       expect(cells.at(1).props())
         .toMatchObject({
-          startDate: viewCellsData.groupedData[0].dateTable[1][0].startDate,
-          endDate: viewCellsData.groupedData[0].dateTable[1][0].endDate,
-          groups: viewCellsData.groupedData[0].dateTable[1][0].groups,
+          startDate: viewData.groupedData[0].dateTable[1][0].startDate,
+          endDate: viewData.groupedData[0].dateTable[1][0].endDate,
+          groups: viewData.groupedData[0].dateTable[1][0].groups,
         });
     });
 
@@ -83,23 +91,23 @@ describe('DayDateTableLayout', () => {
 
       expect(getKeyByDateAndGroup)
         .toHaveBeenNthCalledWith(
-          1, viewCellsData.groupedData[0].dateTable[0][0].startDate,
-          viewCellsData.groupedData[0].dateTable[0][0].groups,
+          1, viewData.groupedData[0].dateTable[0][0].startDate,
+          viewData.groupedData[0].dateTable[0][0].groups,
         );
       expect(getKeyByDateAndGroup)
         .toHaveBeenNthCalledWith(
-          2, viewCellsData.groupedData[0].dateTable[0][0].startDate,
-          viewCellsData.groupedData[0].dateTable[0][0].groups,
+          2, viewData.groupedData[0].dateTable[0][0].startDate,
+          viewData.groupedData[0].dateTable[0][0].groups,
         );
       expect(getKeyByDateAndGroup)
         .toHaveBeenNthCalledWith(
-          3, viewCellsData.groupedData[0].dateTable[1][0].startDate,
-          viewCellsData.groupedData[0].dateTable[1][0].groups,
+          3, viewData.groupedData[0].dateTable[1][0].startDate,
+          viewData.groupedData[0].dateTable[1][0].groups,
         );
       expect(getKeyByDateAndGroup)
         .toHaveBeenNthCalledWith(
-          4, viewCellsData.groupedData[0].dateTable[1][0].startDate,
-          viewCellsData.groupedData[0].dateTable[1][0].groups,
+          4, viewData.groupedData[0].dateTable[1][0].startDate,
+          viewData.groupedData[0].dateTable[1][0].groups,
         );
     });
   });
