@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -1393,3 +1393,34 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
     }],
   }],
 })));
+
+// T905677
+test('Rollback changes on a click on a revert button  when startEditAction is dblclick', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const dataRow = dataGrid.getDataRow(0);
+  const cell0 = dataRow.getDataCell(1);
+  const $revertButton = Selector('.dx-revert-button');
+
+  await t
+    .doubleClick(cell0.element)
+    .expect(cell0.isEditCell).ok()
+    .click(cell0.element.find('.dx-checkbox'))
+    .expect($revertButton.exists).ok()
+    .click($revertButton)
+    .expect($revertButton.exists).notOk()
+    .expect(cell0.isEditCell).notOk();
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: [{ name: 'test', test: undefined }],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    startEditAction: 'dblClick'
+  },
+  columns: ['name',
+    {
+      dataField: 'test',
+      dataType: 'boolean',
+      showEditorAlways: false
+    }
+  ]
+}));
