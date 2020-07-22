@@ -1181,11 +1181,11 @@ QUnit.module('Column chooser', {
             };
 
             if(useBeginEndUpdate) {
+                this.beginUpdate();
                 for(let i = 0; i < 2; i++) {
-                    this.beginUpdate();
                     this.columnsController.columnOption(i, 'caption', 'new caption');
-                    this.endUpdate();
                 }
+                this.endUpdate();
                 this.columnsController.columnsChanged.fire({
                     optionNames
                 });
