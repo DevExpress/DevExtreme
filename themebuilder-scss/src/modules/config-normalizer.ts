@@ -87,8 +87,6 @@ const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
     const passedThemeName = config.baseTheme.substr(0, dotIndex);
     const passedColorScheme = config.baseTheme.substr(dotIndex + 1).replace(/\./g, '-');
 
-    console.log(passedThemeName, passedColorScheme);
-
     foundTheme = themes.find((t) => t.name === passedThemeName
       && t.colorScheme === passedColorScheme);
 
