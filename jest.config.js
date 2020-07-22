@@ -25,14 +25,13 @@ module.exports = {
             branches: 0
         }
     },
-    roots: ['<rootDir>/testing/jest', '<rootDir>/js/renovation'],
+    roots: ['<rootDir>/js/renovation'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
         path.join(path.resolve('.'), './js/renovation/__tests__/setup_enzyme.ts'),
     ],
     testMatch: [
-        '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)',
         '<rootDir>/js/renovation/**/__tests__/**/*.test.[jt]s?(x)'
     ],
     transform: {
