@@ -417,6 +417,50 @@ QUnit.test('page index change', function(assert) {
 
 });
 
+QUnit.test('all fields with mapping', function(assert) {
+    const data = [
+        {
+            key: 1,
+            digit: 1,
+        },
+        {
+            key: 1,
+            digit: 3,
+            char: 'a'
+        },
+        {
+            array: [ 1, 2, 3 ]
+        }
+    ];
+
+    const store = new ArrayStore(data);
+    const source = new DataSource({
+        store: store,
+        map: item => {
+            return item;
+        }
+    });
+
+    source.load();
+    assert.deepEqual(source.items(),
+        [
+            {
+                key: 1,
+                digit: 1,
+            },
+            {
+                key: 1,
+                digit: 3,
+                char: 'a'
+            },
+            {
+                array: [ 1, 2, 3 ]
+            }
+        ]
+    );
+
+});
+
 QUnit.test('paginate option', function(assert) {
     const data = [];
 
