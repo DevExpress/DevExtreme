@@ -1,44 +1,21 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DateTableRow as Row } from '../../base/date_table/row';
-import { MonthDateTableCell as Cell } from './cell';
-import { ViewCellData, GroupedViewData } from '../../types';
-import { getKeyByDateAndGroup } from '../../utils';
+import { DateTableLayoutBase } from '../../base/date_table/layout';
+import { MonthDateTableCell } from './cell';
+import { LayoutProps } from '../../base/layout_props';
 
-export const viewFunction = (viewModel: MonthDateTableLayout) => (
-  <table
-    className={`dx-scheduler-date-table ${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-  >
-    <tbody>
-      {viewModel.props.viewCellsData!
-        .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
-          <Row
-            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-          >
-            {cellsRow.map(({
-              startDate, endDate, otherMonth, today, groups,
-            }: ViewCellData) => (
-              <Cell
-                startDate={startDate}
-                endDate={endDate}
-                otherMonth={otherMonth}
-                today={today}
-                groups={groups}
-                key={getKeyByDateAndGroup(startDate, groups)}
-              />
-            ))}
-          </Row>
-        )))}
-    </tbody>
-  </table>
+export const viewFunction = (viewModel: MonthDateTableLayout): object => (
+  <DateTableLayoutBase
+    viewData={viewModel.props.viewData}
+    isVirtual={viewModel.props.isVirtual}
+    cellTemplate={MonthDateTableCell}
+  />
 );
 
 @ComponentBindings()
-export class MonthDateTableLayoutProps {
-  @OneWay() viewCellsData?: GroupedViewData;
+export class MonthDateTableLayoutProps extends LayoutProps {
+  @OneWay() isVirtual?: boolean;
 
   @OneWay() className?: string = '';
 }

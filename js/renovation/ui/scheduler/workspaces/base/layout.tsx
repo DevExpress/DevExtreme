@@ -1,22 +1,20 @@
 import {
-  Component, ComponentBindings, JSXComponent, Template, OneWay,
+  Component, ComponentBindings, JSXComponent, Template,
 } from 'devextreme-generator/component_declaration/common';
-import { GroupedViewData } from '../types';
+import { LayoutProps } from './layout_props';
 
 export const viewFunction = (viewModel: LayoutBase) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div {...viewModel.restAttributes}>
     <viewModel.props.headerPanelTemplate
-      viewCellsData={viewModel.props.viewCellsData!.groupedData[0].dateTable}
+      viewCellsData={viewModel.props.viewData!.groupedData[0].dateTable}
     />
-    <viewModel.props.dateTableTemplate viewCellsData={viewModel.props.viewCellsData} />
+    <viewModel.props.dateTableTemplate viewCellsData={viewModel.props.viewData} />
   </div>
 );
 
 @ComponentBindings()
-export class LayoutBaseProps {
-  @OneWay() viewCellsData?: GroupedViewData;
-
+export class LayoutBaseProps extends LayoutProps {
   @Template() headerPanelTemplate?: any;
 
   @Template() dateTableTemplate?: any;
