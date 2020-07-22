@@ -2178,7 +2178,7 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointmentData);
 
         const recurrenceRule = adapter.recurrenceRule;
-        const recurrenceException = this._getRecurrenceException(appointmentData);
+        // const recurrenceException = this._getRecurrenceException2(appointmentData);
         const dateRange = this._workSpace.getDateRange();
         let allDay = this.appointmentTakesAllDay(appointmentData);
 
@@ -2189,7 +2189,8 @@ class Scheduler extends Widget {
 
         const recurrenceOptions = {
             rule: recurrenceRule,
-            exception: recurrenceException,
+            // exception: recurrenceException, // TODO
+            exception: adapter.recurrenceException,
             // start: originalStartDate || adapter.startDate, // TODO:
             start: adapter.startDate,
             end: adapter.endDate,
@@ -2577,6 +2578,34 @@ class Scheduler extends Widget {
         }
         return endDate;
     }
+
+    // _getRecurrenceException2(appointmentData) {
+    //     const adapter = this.createAppointmentAdapter(appointmentData);
+    //     const recurrenceException = adapter.recurrenceException;
+
+    //     if(recurrenceException) {
+    //         const recurrenceItems = recurrenceException.split(',');
+    //         recurrenceItems.forEach((exception, index) => {
+    //             recurrenceItems[index] = this._convertRecurrenceException2(exception, adapter.startDate);
+    //         });
+
+    //         return recurrenceItems.join();
+    //     }
+
+    //     return recurrenceException;
+    // }
+
+    // _convertRecurrenceException2(exceptionString, startDate) {
+    //     exceptionString = exceptionString.replace(/\s/g, '');
+
+    //     const exceptionDate = dateSerialization.deserializeDate(exceptionString);
+    //     const convertedStartDate = this.fire('convertDateByTimezone', startDate);
+    //     let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate);
+
+    //     convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
+    //     exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
+    //     return exceptionString;
+    // }
 
     _getRecurrenceException(appointmentData) {
         let recurrenceException = this.fire('getField', 'recurrenceException', appointmentData);
