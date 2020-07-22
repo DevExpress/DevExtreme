@@ -5,7 +5,13 @@
 @use "../sizes" as *;
 
 // adduse
+$textarea-vertical-padding:
+  $material-base-inline-widget-height -
+  $material-base-inline-block-height;
 
+$textarea-top-padding:
+  floor($textarea-vertical-padding / 2) -
+  $material-base-border-width;
 
 .dx-textarea {
   height: auto;
@@ -25,7 +31,7 @@
   }
 
   &.dx-invalid .dx-texteditor-container:after {
-    top: $material-base-inline-borderedwidget-top-padding;
+    top: $textarea-top-padding;
     margin-top: 0;
   }
 }

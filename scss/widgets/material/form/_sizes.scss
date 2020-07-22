@@ -5,15 +5,23 @@
 $material-form-group-caption-bottom-margin: null !default;
 $material-form-group-caption-bottom-padding: null !default;
 $material-form-top-label-padding: null !default;
+$material-form-group-caption-font-size: null !default;
+$material-form-group-content-padding-bottom: null !default;
+
+$material-form-label-font-size: 12px;
 
 @if $size == "default" {
   $material-form-group-caption-bottom-margin: 6px;
   $material-form-group-caption-bottom-padding: 19px;
   $material-form-top-label-padding: 16px 0 3px;
+  $material-form-group-caption-font-size: 20px;
+  $material-form-group-content-padding-bottom: 20px;
 }
 
 @else if $size == "compact" {
   $material-form-group-caption-bottom-margin: 4px;
   $material-form-group-caption-bottom-padding: 10px;
   $material-form-top-label-padding: 4px 0 2px;
+  $material-form-group-caption-font-size: 16px;
+  $material-form-group-content-padding-bottom: 10px;
 }
