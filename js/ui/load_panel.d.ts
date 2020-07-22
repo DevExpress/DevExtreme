@@ -22,7 +22,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     animation?: dxLoadPanelAnimation;
     /**
      * @docid dxLoadPanelOptions.container
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
