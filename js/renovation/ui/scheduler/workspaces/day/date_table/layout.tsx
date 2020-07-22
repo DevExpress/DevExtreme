@@ -84,6 +84,6 @@ export class DayDateTableLayoutProps {
 export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
   get isVirtual(): boolean {
     const { viewData } = this.props;
-    return viewData ? viewData.isVirtual : false;
+    return viewData ? !!viewData.isVirtual : false;
   }
 }

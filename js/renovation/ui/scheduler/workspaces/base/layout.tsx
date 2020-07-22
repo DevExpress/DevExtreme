@@ -25,8 +25,5 @@ export class LayoutBaseProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: {
-    register: true,
-  },
 })
 export class LayoutBase extends JSXComponent(LayoutBaseProps) {}
