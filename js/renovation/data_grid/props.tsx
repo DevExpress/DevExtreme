@@ -242,8 +242,8 @@ export class DataGridColumn {
   @OneWay()
   format?: format;
 
-  @Nested()
-  headerFilter?: DataGridColumnHeaderFilter;
+  // @Nested()
+  // headerFilter?: DataGridColumnHeaderFilter;
 
   @OneWay()
   hidingPriority?: number;
