@@ -1478,7 +1478,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 { area: 'data', summaryType: 'count', customizeText: () => 'custom data' }
             ],
             store: [
-                { row1: 'A', col1: 'a' },
+                { row1: 'A', col1: 'a' }
             ]
         };
 
