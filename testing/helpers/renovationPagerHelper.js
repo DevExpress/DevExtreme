@@ -24,28 +24,6 @@ export class RenovatedPagerForTest extends RenovatedPager {
     get selectedPage() {
         return this._pages.filter(p => p.selected)[0];
     }
-    option(name, value) {
-        if(!this._useDefaultOptionUpdate) {
-            if(name instanceof Object) {
-                const { pageSizeChanged, pageIndexChanged } = name;
-                if(pageSizeChanged) {
-                    super.on('optionChanged', ({ name, value }) => {
-                        if(name === 'pageSize') {
-                            pageSizeChanged(value);
-                        }
-                    });
-                }
-                if(pageIndexChanged) {
-                    super.on('optionChanged', ({ name, value }) => {
-                        if(name === 'pageIndex') {
-                            pageIndexChanged(value);
-                        }
-                    });
-                }
-            }
-        }
-        return super.option.apply(this, arguments);
-    }
     _dimensionChanged() {
         if(!this.firing) {
             this.firing = true;

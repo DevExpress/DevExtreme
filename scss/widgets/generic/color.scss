@@ -3,9 +3,9 @@
 @function difference($minuend, $subtrahend) {
   @return color.adjust(
         $minuend,
-        $red: -(color.red($subtrahend)),
-        $green: -(color.green($subtrahend)),
-        $blue: -(color.blue($subtrahend)));
+        $red: - (color.red($subtrahend)),
+        $green: - (color.green($subtrahend)),
+        $blue: - (color.blue($subtrahend)));
 }
 
 @function screen($color1, $color2) {

@@ -759,56 +759,6 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
         assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
     });
-
-    // T915695
-    [-1, null, 0].forEach(parentId => {
-        QUnit.test(`TreeList should not throw error when rootValue is defined (parentId = ${parentId})`, function(assert) {
-            // arrange, act
-            const treeList = createTreeList({
-                dataSource: [{
-                    id: 1, parent_id: parentId
-                }, {
-                    id: 2, parent_id: 1
-                }, {
-                    id: 3, parent_id: 2
-                }],
-                rootValue: 2,
-                keyExpr: 'id',
-                parentIdExpr: 'parent_id'
-            });
-
-            this.clock.tick();
-
-            // assert
-            const rows = treeList.getVisibleRows();
-            assert.equal(rows.length, 1, 'visible rows count');
-            assert.equal(rows[0].data.id, 3, 'visible row\'s id');
-        });
-    });
-
-    // T915695
-    QUnit.test('TreeList should throw error when rootValue is defined (parentId = undefined)', function(assert) {
-        // arrange, act
-        createTreeList({
-            dataSource: [{
-                id: 1
-            }, {
-                id: 2, parent_id: 1
-            }, {
-                id: 3, parent_id: 2
-            }],
-            rootValue: 2,
-            keyExpr: 'id',
-            parentIdExpr: 'parent_id'
-        });
-
-        try {
-            this.clock.tick();
-            assert.notOk(true, 'error was not thrown');
-        } catch(error) {
-            assert.ok(true, 'error was thrown');
-        }
-    });
 });
 
 QUnit.module('Option Changed', defaultModuleConfig, () => {
@@ -1577,7 +1527,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     // T757537
     QUnit.test('TreeList should not hang when scrolling', function(assert) {
     // arrange
-        const contentReadySpy = sinon.spy();
         const treeList = createTreeList({
             dataSource: [
                 { id: 1, parentId: 0 },
@@ -1603,15 +1552,13 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             columnAutoWidth: true,
             scrolling: {
                 useNative: false
-            },
-            onContentReady: contentReadySpy
+            }
         });
         const done = assert.async();
 
         this.clock.tick(100);
         this.clock.restore();
         const scrollable = treeList.getScrollable();
-        contentReadySpy.reset();
 
         // act
         scrollable.scrollTo({ y: 200 });
@@ -1620,7 +1567,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         setTimeout(function() {
         // assert
             assert.strictEqual(treeList.pageIndex(), 2, 'page index');
-            assert.strictEqual(contentReadySpy.callCount, 3, 'onContentReady');
             done();
         }, 1000);
     });

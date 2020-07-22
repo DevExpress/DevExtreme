@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
@@ -51,11 +52,11 @@
     @include dx-icon(chevronleft);
 
     &:after {
-      left: $MATERIAL_GALLERY_BUTTON_PADDING;
+      left: $material-gallery-button-padding;
     }
 
     &:before {
-      left: $MATERIAL_GALLERY_BUTTON_PADDING - 1;
+      left: $material-gallery-button-padding - 1;
       right: auto;
       margin-left: 0;
     }
@@ -65,11 +66,11 @@
     @include dx-icon(chevronright);
 
     &:after {
-      right: $MATERIAL_GALLERY_BUTTON_PADDING;
+      right: $material-gallery-button-padding;
     }
 
     &:before {
-      right: $MATERIAL_GALLERY_BUTTON_PADDING - 1;
+      right: $material-gallery-button-padding - 1;
       left: auto;
     }
   }
@@ -86,19 +87,19 @@
   box-sizing: border-box;
   border: 1px solid $gallery-indicator-item-border-color;
   pointer-events: auto;
-  margin: 5px - $MATERIAL_GALLERY_INDICATOR_SIZE/2 6px;
-  width: $MATERIAL_GALLERY_INDICATOR_SIZE;
-  height: $MATERIAL_GALLERY_INDICATOR_SIZE;
+  margin: 5px - $material-gallery-indicator-size / 2 6px;
+  width: $material-gallery-indicator-size;
+  height: $material-gallery-indicator-size;
   background: $gallery-indicator-bg;
 }
 
 .dx-gallery-indicator-item-active,
 .dx-gallery-indicator-item-selected {
-  width: $MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE;
-  height: $MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE;
+  width: $material-gallery-indicator-selected-size;
+  height: $material-gallery-indicator-selected-size;
   background: $gallery-indicator-item-selected-bg;
   border: 2px solid $gallery-indicator-selected-border-color;
-  margin: 5px - $MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE/2 6px;
+  margin: 5px - $material-gallery-indicator-selected-size / 2 6px;
 }
 
 

@@ -1,55 +1,56 @@
 @use "../sizes" as *;
+
 // adduse
 
-$DIAGRAM_TOOLBOX_WIDTH: null !default;
-$DIAGRAM_TOOLBOX_H_PADDING: null !default;
-$DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: null !default;
-$DIAGRAM_TOOLBOX_INPUT_MARGIN: null !default;
-$DIAGRAM_TOOLBOX_INPUT_H_PADDING: null !default;
-$DIAGRAM_TOOLBOX_INPUT_V_PADDING: null !default;
-$DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: null !default;
-$DIAGRAM_TOOLBOX_MOBILE_PADDING: null !default;
-$DIAGRAM_PROPERTIES_PANEL_PADDING: null !default;
-$DIAGRAM_PROPERTIES_PANEL_SPACING: null !default;
-$DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: null !default;
-$DIAGRAM_SMALL_EDITOR_WIDTH: null !default;
-$DIAGRAM_MEDIUM_EDITOR_WIDTH: null !default;
-$DIAGRAM_LARGE_EDITOR_WIDTH: null !default;
+$diagram-toolbox-width: null !default;
+$diagram-toolbox-h-padding: null !default;
+$diagram-toolbox-accordion-v-padding: null !default;
+$diagram-toolbox-input-margin: null !default;
+$diagram-toolbox-input-h-padding: null !default;
+$diagram-toolbox-input-v-padding: null !default;
+$diagram-toolbox-input-image-size: null !default;
+$diagram-toolbox-mobile-padding: null !default;
+$diagram-properties-panel-padding: null !default;
+$diagram-properties-panel-spacing: null !default;
+$diagram-properties-layout-icon-size: null !default;
+$diagram-small-editor-width: null !default;
+$diagram-medium-editor-width: null !default;
+$diagram-large-editor-width: null !default;
 
 @if $size == "default" {
-  $DIAGRAM_TOOLBOX_WIDTH: 144px;
-  $DIAGRAM_TOOLBOX_H_PADDING: 12px;
-  $DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 6px;
-  $DIAGRAM_TOOLBOX_INPUT_MARGIN: 2px;
-  $DIAGRAM_TOOLBOX_INPUT_H_PADDING: 9px;
-  $DIAGRAM_TOOLBOX_INPUT_V_PADDING: 4px;
-  $DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 12px;
-  $DIAGRAM_TOOLBOX_MOBILE_PADDING: 66px;
+  $diagram-toolbox-width: 144px;
+  $diagram-toolbox-h-padding: 12px;
+  $diagram-toolbox-accordion-v-padding: 6px;
+  $diagram-toolbox-input-margin: 2px;
+  $diagram-toolbox-input-h-padding: 9px;
+  $diagram-toolbox-input-v-padding: 4px;
+  $diagram-toolbox-input-image-size: 12px;
+  $diagram-toolbox-mobile-padding: 66px;
 
-  $DIAGRAM_PROPERTIES_PANEL_PADDING: 8px;
-  $DIAGRAM_PROPERTIES_PANEL_SPACING: 8px;
-  $DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: 64px;
+  $diagram-properties-panel-padding: 8px;
+  $diagram-properties-panel-spacing: 8px;
+  $diagram-properties-layout-icon-size: 64px;
 
-  $DIAGRAM_SMALL_EDITOR_WIDTH: 100px;
-  $DIAGRAM_MEDIUM_EDITOR_WIDTH: 150px;
-  $DIAGRAM_LARGE_EDITOR_WIDTH: 240px;
+  $diagram-small-editor-width: 100px;
+  $diagram-medium-editor-width: 150px;
+  $diagram-large-editor-width: 240px;
 }
 
 @else if $size == "compact" {
-  $DIAGRAM_TOOLBOX_WIDTH: 114px;
-  $DIAGRAM_TOOLBOX_H_PADDING: 8px;
-  $DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 4px;
-  $DIAGRAM_TOOLBOX_INPUT_MARGIN: 1px;
-  $DIAGRAM_TOOLBOX_INPUT_H_PADDING: 5px;
-  $DIAGRAM_TOOLBOX_INPUT_V_PADDING: 3px;
-  $DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 10px;
-  $DIAGRAM_TOOLBOX_MOBILE_PADDING: 56px;
+  $diagram-toolbox-width: 114px;
+  $diagram-toolbox-h-padding: 8px;
+  $diagram-toolbox-accordion-v-padding: 4px;
+  $diagram-toolbox-input-margin: 1px;
+  $diagram-toolbox-input-h-padding: 5px;
+  $diagram-toolbox-input-v-padding: 3px;
+  $diagram-toolbox-input-image-size: 10px;
+  $diagram-toolbox-mobile-padding: 56px;
 
-  $DIAGRAM_PROPERTIES_PANEL_PADDING: 4px;
-  $DIAGRAM_PROPERTIES_PANEL_SPACING: 4px;
-  $DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: 48px;
+  $diagram-properties-panel-padding: 4px;
+  $diagram-properties-panel-spacing: 4px;
+  $diagram-properties-layout-icon-size: 48px;
 
-  $DIAGRAM_SMALL_EDITOR_WIDTH: 70px;
-  $DIAGRAM_MEDIUM_EDITOR_WIDTH: 120px;
-  $DIAGRAM_LARGE_EDITOR_WIDTH: 180px;
+  $diagram-small-editor-width: 70px;
+  $diagram-medium-editor-width: 120px;
+  $diagram-large-editor-width: 180px;
 }

@@ -8,52 +8,53 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/dataGrid" as baseGrid with (
-    $datagrid-border: $datagrid-border,
-    $datagrid-border-color: $datagrid-border-color,
-    $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
-    $datagrid-row-error-bg: $datagrid-row-error-bg,
-    $datagrid-row-error-color: $datagrid-row-error-color,
-    $datagrid-base-color: $datagrid-base-color,
-    $datagrid-base-background-color: $datagrid-base-background-color,
-    $datagrid-focused-border-color: $datagrid-focused-border-color,
-    $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
-    $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
-    $base-focus-color: $base-focus-color,
-    $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-border: $datagrid-border,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
 );
+
 // adduse
 
 
 @include grid-base(datagrid);
 
 .dx-datagrid-group-panel {
-  font-size: $MATERIAL_BASE_FONT_SIZE;
+  font-size: $material-base-font-size;
   touch-action: pinch-zoom;
 
   .dx-group-panel-message {
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    padding: $MATERIAL_DATAGRID_CELL_PADDING 0;
-    border-top: $MATERIAL_GRID_BASE_BORDER_HIDDEN;
-    border-bottom: $MATERIAL_GRID_BASE_BORDER_HIDDEN;
+    padding: $material-datagrid-cell-padding 0;
+    border-top: $material-grid-base-border-hidden;
+    border-bottom: $material-grid-base-border-hidden;
   }
 
   .dx-group-panel-item {
-    margin-right: $MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+    margin-right: $material-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    font-size: $MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
-    line-height: $MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+    font-size: $material-grid-base-header-cell-font-size;
+    line-height: $material-grid-base-header-line-height;
     background: $datagrid-block-separator-bg;
     border-radius: 16px;
     padding: 8px 10px;
   }
 
   .dx-block-separator {
-    margin-right: $MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+    margin-right: $material-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    padding: $MATERIAL_DATAGRID_CELL_PADDING;
+    padding: $material-datagrid-cell-padding;
     background-color: $datagrid-block-separator-bg;
   }
 
@@ -74,26 +75,26 @@
       background-color: $datagrid-group-row-bg;
     }
 
-    font-size: $MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
+    font-size: $material-grid-base-header-cell-font-size;
     font-weight: bold;
 
     td {
-      border-top-color: $MATERIAL_GRID_BASE_BORDER_COLOR;
-      border-bottom-color: $MATERIAL_GRID_BASE_BORDER_COLOR;
+      border-top-color: $material-grid-base-border-color;
+      border-bottom-color: $material-grid-base-border-color;
     }
   }
 }
 
 .dx-datagrid-group-opened {
   @include dx-icon(chevrondown);
-  @include dx-icon-sizing($MATERIAL_BASE_ICON_SIZE);
+  @include dx-icon-sizing($material-base-icon-size);
 
   color: $datagrid-chevron-icon-color;
 }
 
 .dx-datagrid-group-closed {
   @include dx-icon(chevronright);
-  @include dx-icon-sizing($MATERIAL_BASE_ICON_SIZE);
+  @include dx-icon-sizing($material-base-icon-size);
 
   color: $datagrid-chevron-icon-color;
 }
@@ -115,7 +116,7 @@
   .dx-datagrid-group-panel {
     .dx-group-panel-item,
     .dx-block-separator {
-      margin-left: $MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+      margin-left: $material-grid-base-grouppanel-item-margin;
     }
   }
 }

@@ -4,15 +4,16 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+
 // adduse
 
 
-$GENERIC_SWITCH_BORDER_WEIGHT: 1px;
-$GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIGHT*2;
+$generic-switch-border-weight: 1px;
+$generic-switch-inner-size: $generic-switch-height - $generic-switch-border-weight * 2;
 
 .dx-switch {
-  width: $GENERIC_SWITCH_WIDTH;
-  height: $GENERIC_SWITCH_HEIGHT;
+  width: $generic-switch-width;
+  height: $generic-switch-height;
 
   &.dx-state-readonly {
     .dx-switch-container {
@@ -62,10 +63,10 @@ $GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIG
 
 .dx-switch-container {
   overflow: hidden;
-  margin: 0 (-$GENERIC_SWITCH_CONTAINER_ADJUSTMENT) 0 0;
-  padding: 0 $GENERIC_SWITCH_HANDLE_OFFSET;
-  height: $GENERIC_SWITCH_HEIGHT;
-  border: $GENERIC_SWITCH_BORDER_WEIGHT solid $switch-border-color;
+  margin: 0 (-$generic-switch-container-adjustment) 0 0;
+  padding: 0 $generic-switch-handle-offset;
+  height: $generic-switch-height;
+  border: $generic-switch-border-weight solid $switch-border-color;
   background: $switch-bg;
   border-radius: $switch-border-radius;
 }
@@ -80,10 +81,10 @@ $GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIG
   float: left;
   flex-shrink: 0;
   width: 50%;
-  padding-right: $GENERIC_SWITCH_HANDLE_WIDTH + $GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
-  line-height: $GENERIC_SWITCH_INNER_SIZE;
+  padding-right: $generic-switch-handle-width + $generic-switch-on-off-adding-padding;
+  line-height: $generic-switch-inner-size;
   text-align: center;
-  font-size: $GENERIC_SWITCH_FONT_SIZE;
+  font-size: $generic-switch-font-size;
   font-weight: 600;
 
   @include dx-overflow();
@@ -92,7 +93,7 @@ $GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIG
 }
 
 .dx-switch-off {
-  padding-left: $GENERIC_SWITCH_HANDLE_OFFSET;
+  padding-left: $generic-switch-handle-offset;
   color: $switch-off-color;
 }
 
@@ -103,11 +104,11 @@ $GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIG
 .dx-switch-handle {
   position: relative;
   float: left;
-  flex-basis: $GENERIC_SWITCH_HANDLE_WIDTH;
+  flex-basis: $generic-switch-handle-width;
   flex-shrink: 0;
-  width: $GENERIC_SWITCH_HANDLE_WIDTH;
-  height: $GENERIC_SWITCH_INNER_SIZE - $GENERIC_SWITCH_HANDLE_OFFSET*2;
-  margin-top: $GENERIC_SWITCH_HANDLE_OFFSET;
+  width: $generic-switch-handle-width;
+  height: $generic-switch-inner-size - $generic-switch-handle-offset * 2;
+  margin-top: $generic-switch-handle-offset;
   box-sizing: border-box;
 
   &:before {
@@ -134,8 +135,8 @@ $GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIG
   }
 
   .dx-switch-on {
-    padding-left: $GENERIC_SWITCH_HANDLE_WIDTH + $GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
-    padding-right: $GENERIC_SWITCH_HANDLE_OFFSET;
+    padding-left: $generic-switch-handle-width + $generic-switch-on-off-adding-padding;
+    padding-right: $generic-switch-handle-offset;
   }
 
   .dx-switch-off {
@@ -145,11 +146,11 @@ $GENERIC_SWITCH_INNER_SIZE: $GENERIC_SWITCH_HEIGHT - $GENERIC_SWITCH_BORDER_WEIG
   .dx-switch-handle {
     float: right;
     margin-left: 0;
-    margin-right: -$GENERIC_SWITCH_HANDLE_WIDTH;
+    margin-right: -$generic-switch-handle-width;
   }
 
   .dx-switch-container {
-    margin: 0 0 0 (-$GENERIC_SWITCH_CONTAINER_ADJUSTMENT);
+    margin: 0 0 0 (-$generic-switch-container-adjustment);
   }
 }
 

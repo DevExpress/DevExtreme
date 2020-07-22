@@ -1,18 +1,19 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_TOAST_CONTENT_PADDING: null !default;
-$MATERIAL_TOAST_HEIGHT: null !default;
-$MATERIAL_TOAST_SHADOW_COLOR: null !default;
+$material-toast-content-padding: null !default;
+$material-toast-height: null !default;
+$material-toast-shadow-color: null !default;
 
 @if $size == "default" {
-  $MATERIAL_TOAST_CONTENT_PADDING: 0 16px;
-  $MATERIAL_TOAST_HEIGHT: 48px;
-  $MATERIAL_TOAST_SHADOW_COLOR: 0.25;
+  $material-toast-content-padding: 0 16px;
+  $material-toast-height: 48px;
+  $material-toast-shadow-color: 0.25;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_TOAST_CONTENT_PADDING: 0 12px;
-  $MATERIAL_TOAST_HEIGHT: 36px;
-  $MATERIAL_TOAST_SHADOW_COLOR: 0.15;
+  $material-toast-content-padding: 0 12px;
+  $material-toast-height: 36px;
+  $material-toast-shadow-color: 0.15;
 }

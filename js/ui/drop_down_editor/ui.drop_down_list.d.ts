@@ -40,7 +40,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -101,13 +101,12 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field6 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     /**
      * @docid dxDropDownListOptions.searchEnabled
      * @type boolean

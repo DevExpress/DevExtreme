@@ -4,11 +4,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
 .dx-pager {
-  padding: $MATERIAL_PAGER_PADDINGS 14px  $MATERIAL_PAGER_PADDINGS 24px;
+  padding: $material-pager-paddings 14px  $material-pager-paddings 24px;
 
   &.dx-light-mode {
     .dx-page-sizes {
@@ -22,19 +23,19 @@
 
   .dx-pages {
     .dx-page {
-      padding: $MATERIAL_PAGER_PAGE_PADDING;
-      line-height: $MATERIAL_PAGER_PAGE_LINE_HEIGHT;
+      padding: $material-pager-page-padding;
+      line-height: $material-pager-page-line-height;
     }
 
     .dx-separator {
-      padding-left: $MATERIAL_PAGER_SEPARATOR_PADDINGS;
-      padding-right: $MATERIAL_PAGER_SEPARATOR_PADDINGS;
+      padding-left: $material-pager-separator-paddings;
+      padding-right: $material-pager-separator-paddings;
     }
 
     .dx-navigate-button {
       width: 9px;
-      height: $MATERIAL_PAGER_NAVBUTTON_HEIGHT;
-      padding: $MATERIAL_PAGER_NAVBUTTON_PADDINGS;
+      height: $material-pager-navbutton-height;
+      padding: $material-pager-navbutton-paddings;
     }
 
     .dx-prev-button {
@@ -53,7 +54,7 @@
 
   .dx-page,
   .dx-page-size {
-    font-size: $MATERIAL_PAGER_PAGE_FONT_SIZE;
+    font-size: $material-pager-page-font-size;
 
     &:hover {
       background-color: $pager-page-hovered-bg;
@@ -63,8 +64,8 @@
   }
 
   .dx-page-sizes .dx-page-size {
-    padding: $MATERIAL_PAGER_PAGE_PADDING;
-    line-height: $MATERIAL_PAGER_PAGE_LINE_HEIGHT;
+    padding: $material-pager-page-padding;
+    line-height: $material-pager-page-line-height;
   }
 
   .dx-pages,

@@ -5,26 +5,27 @@
 @use "../sizes" as *;
 @use "../scheduler/sizes" as *;
 @use "../../base/recurrenceEditor" as *;
+
 // adduse
 
 
-$MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN: 11px;
-$MATERIAL_RECURRENCE_BUTTON_GROUP_PADDING: 6px;
-$MATERIAL_RECURRENCE_RADIO_GROUP_MARGIN: 15px;
-$MATERIAL_RECURRENCE_DATE_BOX_MERGIN_LEFT: 23px;
+$material-recurrence-number-box-margin: 11px;
+$material-recurrence-button-group-padding: 6px;
+$material-recurrence-radio-group-margin: 15px;
+$material-recurrence-date-box-mergin-left: 23px;
 
 .dx-recurrence-numberbox-interval {
-  margin-right: $MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN;
+  margin-right: $material-recurrence-number-box-margin;
 }
 
 .dx-recurrence-numberbox-interval-label {
-  font-size: $MATERIAL_BASE_FONT_SIZE;
-  margin-top: $MATERIAL_RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP;
+  font-size: $material-base-font-size;
+  margin-top: $material-recurrence-interval-number-box-margin-top;
 }
 
 .dx-recurrence-button-group {
   .dx-button-content {
-    padding: $MATERIAL_RECURRENCE_BUTTON_GROUP_PADDING;
+    padding: $material-recurrence-button-group-padding;
   }
 
   .dx-buttongroup-wrapper > div {
@@ -33,14 +34,14 @@ $MATERIAL_RECURRENCE_DATE_BOX_MERGIN_LEFT: 23px;
 }
 
 .dx-recurrence-radiogroup-repeat-type {
-  margin: $MATERIAL_RECURRENCE_RADIO_GROUP_MARGIN 0;
+  margin: $material-recurrence-radio-group-margin 0;
 }
 
 .dx-recurrence-datebox-until-date {
-  margin-left: $MATERIAL_RECURRENCE_DATE_BOX_MERGIN_LEFT;
+  margin-left: $material-recurrence-date-box-mergin-left;
 }
 
 .dx-recurrence-numberbox-repeat-count {
-  margin: 0 $MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN 0 $MATERIAL_RECURRENCE_NUMBER_BOX_MARGIN;
+  margin: 0 $material-recurrence-number-box-margin 0 $material-recurrence-number-box-margin;
 }
 

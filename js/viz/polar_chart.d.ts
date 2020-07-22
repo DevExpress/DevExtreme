@@ -180,43 +180,40 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 argument:Date|Number|string
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, argument?: Date | number | string }) => any) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, argument?: Date | number | string }) => any) | string;
     /**
      * @docid dxPolarChartOptions.onLegendClick
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:polarChartSeriesObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, target?: polarChartSeriesObject }) => any) | string;
     /**
      * @docid dxPolarChartOptions.onSeriesClick
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:polarChartSeriesObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
+    onSeriesClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, target?: polarChartSeriesObject }) => any) | string;
     /**
      * @docid dxPolarChartOptions.onSeriesHoverChanged
      * @extends Action

@@ -1,15 +1,16 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_MENU_ITEM_LINE_HEIGHT: null !default;
-$MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING: null !default;
+$material-menu-item-line-height: null !default;
+$material-menu-item-with-icon-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $MATERIAL_MENU_ITEM_LINE_HEIGHT: 24px;
-  $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING: 64px;
+  $material-menu-item-line-height: 24px;
+  $material-menu-item-with-icon-horizontal-padding: 64px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_MENU_ITEM_LINE_HEIGHT: 18px;
-  $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING: 46px;
+  $material-menu-item-line-height: 18px;
+  $material-menu-item-with-icon-horizontal-padding: 46px;
 }

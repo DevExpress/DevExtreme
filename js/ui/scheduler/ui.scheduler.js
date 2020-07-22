@@ -145,7 +145,7 @@ class Scheduler extends Widget {
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -157,7 +157,7 @@ class Scheduler extends Widget {
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -167,7 +167,7 @@ class Scheduler extends Widget {
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -177,7 +177,7 @@ class Scheduler extends Widget {
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -187,7 +187,7 @@ class Scheduler extends Widget {
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -197,7 +197,7 @@ class Scheduler extends Widget {
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -208,7 +208,7 @@ class Scheduler extends Widget {
                 * @type_function_param1_field1 appointmentCount:number
                 * @type_function_param1_field2 isCompact:boolean
                 * @type_function_param2 collectorElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             views: ['day', 'week'],
@@ -286,7 +286,7 @@ class Scheduler extends Widget {
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
                 */
 
@@ -608,7 +608,7 @@ class Scheduler extends Widget {
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
             appointmentPopupTemplate: 'appointmentPopup',
 
@@ -644,13 +644,18 @@ class Scheduler extends Widget {
 
             allowMultipleCellSelection: true,
 
+            virtualScrolling: {
+                enabled: false,
+                outlineRowCount: 0
+            },
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
             _appointmentTooltipOpenButtonText: messageLocalization.format('dxScheduler-openAppointment'),
             _dropDownButtonIcon: 'overflow',
             _appointmentCountPerCell: 2,
             _collectorOffset: 0,
-            _appointmentOffset: 26
+            _appointmentOffset: 26,
 
             /**
                 * @name dxSchedulerOptions.activeStateEnabled
@@ -992,6 +997,10 @@ class Scheduler extends Widget {
                 break;
             case 'adaptivityEnabled':
                 this._toggleAdaptiveClass();
+                this.repaint();
+                break;
+            case 'virtualScrolling':
+                this._updateOption('workSpace', args.fullName, value);
                 this.repaint();
                 break;
             default:
@@ -1744,7 +1753,8 @@ class Scheduler extends Widget {
             onSelectionChanged: (args) => {
                 this.option('selectedCellData', args.selectedCellData);
             },
-            groupByDate: this._getCurrentViewOption('groupByDate')
+            groupByDate: this._getCurrentViewOption('groupByDate'),
+            virtualScrolling: this.option('virtualScrolling')
         }, currentViewOptions);
 
         result.observer = this;

@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
 
@@ -17,7 +18,7 @@ $progressbar-label-color: null !default;
     * $name 10. Bar background color
     * $type color
     */
-  $progressbar-bg:  color.change($base-accent, $alpha: 0.3) !default;
+  $progressbar-bg: color.change($base-accent, $alpha: 0.3) !default;
 
   /**
     * $name 20. Selected range background color
@@ -40,7 +41,7 @@ $progressbar-label-color: null !default;
     * $name 10. Bar background color
     * $type color
     */
-  $progressbar-bg:  color.change($base-accent, $alpha: 0.3) !default;
+  $progressbar-bg: color.change($base-accent, $alpha: 0.3) !default;
 
   /**
     * $name 20. Selected range background color

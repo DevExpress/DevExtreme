@@ -1,31 +1,32 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
-$LIST_STYLE: decimal lower-alpha lower-roman;
-$LIST_STYLE_WIDTH: 1.2em;
-$LIST_STYLE_MARGIN: 0.3em;
-$LIST_STYLE_OUTER_WIDTH: $LIST_STYLE_MARGIN + $LIST_STYLE_WIDTH;
-$MAX_INDENT: 9;
-$RESIZE_HANDLE_SIZE: 11px;
-$TOUCH_RESIZE_HANDLE_SIZE: 15px;
-$HALF_RESIZE_HANDLE_SIZE: $RESIZE_HANDLE_SIZE / 2;
-$HALF_TOUCH_RESIZE_HANDLE_SIZE: $TOUCH_RESIZE_HANDLE_SIZE / 2;
+$list-style: decimal lower-alpha lower-roman;
+$list-style-width: 1.2em;
+$list-style-margin: 0.3em;
+$list-style-outer-width: $list-style-margin + $list-style-width;
+$max-indent: 9;
+$resize-handle-size: 11px;
+$touch-resize-handle-size: 15px;
+$half-resize-handle-size: $resize-handle-size / 2;
+$half-touch-resize-handle-size: $touch-resize-handle-size / 2;
 
-$TRANSPARENT_BORDER: 1px solid transparent;
+$transparent-border: 1px solid transparent;
 
 @function add-counter-reset($counter, $start: 1) {
   @if $counter > $start {
-    @return add-counter-reset($counter - 1, $start)+ " " + list-#{$counter};
+    @return add-counter-reset($counter - 1, $start) + " " + list-#{$counter};
   }
 
   @return list-#{$counter};
 }
 
 @mixin if-less-then-max-indent($value) {
-  @if $value < $MAX_INDENT {
+  @if $value < $max-indent {
     li.ql-indent-#{$value} {
-      counter-reset: add-counter-reset($MAX_INDENT, $value + 1);
+      counter-reset: add-counter-reset($max-indent, $value + 1);
     }
   }
 }
@@ -44,11 +45,11 @@ $TRANSPARENT_BORDER: 1px solid transparent;
     }
 
     li.ql-indent-#{$counter} {
-      padding-left: 3 * $counter + $LIST_STYLE_OUTER_WIDTH;
+      padding-left: 3 * $counter + $list-style-outer-width;
 
       .dx-rtl & {
         padding-left: 0;
-        padding-right: 3 * $counter + $LIST_STYLE_OUTER_WIDTH;
+        padding-right: 3 * $counter + $list-style-outer-width;
       }
     }
   }
@@ -62,7 +63,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
       counter-increment: list-#{$counter};
 
       &::before {
-        content: counter(list-#{$counter}, nth($LIST_STYLE, ($counter % 3) + 1)) ". ";
+        content: counter(list-#{$counter}, nth($list-style, ($counter % 3) + 1)) ". ";
       }
     }
 
@@ -73,7 +74,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 .dx-htmleditor {
   display: flex;
   flex-direction: column;
-  border: $TRANSPARENT_BORDER;
+  border: $transparent-border;
 }
 
 .dx-quill-container {
@@ -145,7 +146,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
   h6,
   ol,
   ul {
-    counter-reset: add-counter-reset($MAX_INDENT);
+    counter-reset: add-counter-reset($max-indent);
   }
 
   table {
@@ -169,25 +170,25 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 
   li {
     list-style-type: none;
-    padding-left: $LIST_STYLE_OUTER_WIDTH;
+    padding-left: $list-style-outer-width;
     position: relative;
 
     &::before {
       display: inline-block;
-      margin-left: -1 * $LIST_STYLE_OUTER_WIDTH;
-      margin-right: $LIST_STYLE_MARGIN;
+      margin-left: -1 * $list-style-outer-width;
+      margin-right: $list-style-margin;
       text-align: right;
       white-space: nowrap;
-      width: $LIST_STYLE_WIDTH;
+      width: $list-style-width;
     }
 
     .dx-rtl & {
       padding-left: 0;
-      padding-right: $LIST_STYLE_OUTER_WIDTH;
+      padding-right: $list-style-outer-width;
 
       &::before {
-        margin-left: $LIST_STYLE_MARGIN;
-        margin-right: -1 * $LIST_STYLE_OUTER_WIDTH;
+        margin-left: $list-style-margin;
+        margin-right: -1 * $list-style-outer-width;
         text-align: left;
       }
     }
@@ -198,23 +199,23 @@ $TRANSPARENT_BORDER: 1px solid transparent;
   }
 
   li {  // stylelint-disable-line no-duplicate-selectors
-    counter-reset: add-counter-reset($MAX_INDENT);
+    counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
     &::before {  // stylelint-disable-line no-duplicate-selectors
-      content: counter(list-0, nth($LIST_STYLE, 1)) ". ";
+      content: counter(list-0, nth($list-style, 1)) ". ";
     }
   }
 
-  @include add-counter($MAX_INDENT);
-  @include add-indent-styles($MAX_INDENT);
+  @include add-counter($max-indent);
+  @include add-indent-styles($max-indent);
 
   .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
-    padding-right: $LIST_STYLE_OUTER_WIDTH;
+    padding-right: $list-style-outer-width;
 
     &::before { // stylelint-disable-line no-duplicate-selectors
-      margin-left: $LIST_STYLE_MARGIN;
-      margin-right: -1 * $LIST_STYLE_OUTER_WIDTH;
+      margin-left: $list-style-margin;
+      margin-right: -1 * $list-style-outer-width;
       text-align: left;
     }
   }
@@ -276,6 +277,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
       visibility: hidden;
     }
   }
+
   // stylelint-enable selector-class-pattern
 
   pre {
@@ -344,12 +346,12 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 }
 
 .dx-htmleditor-toolbar-separator {
-  border-left: $TRANSPARENT_BORDER;
+  border-left: $transparent-border;
 }
 
 .dx-htmleditor-toolbar-menu-separator {
   width: 100%;
-  border-top: $TRANSPARENT_BORDER;
+  border-top: $transparent-border;
 
   &::before {
     content: none;
@@ -366,49 +368,49 @@ $TRANSPARENT_BORDER: 1px solid transparent;
   .dx-resizable-handle-corner-bottom-right,
   .dx-resizable-handle-corner-bottom-left {
     border: 1px solid white;
-    width: $RESIZE_HANDLE_SIZE;
-    height: $RESIZE_HANDLE_SIZE;
+    width: $resize-handle-size;
+    height: $resize-handle-size;
     border-radius: 0;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      width: $TOUCH_RESIZE_HANDLE_SIZE;
-      height: $TOUCH_RESIZE_HANDLE_SIZE;
+      width: $touch-resize-handle-size;
+      height: $touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-corner-top-right,
   .dx-resizable-handle-corner-bottom-right {
-    right: -$HALF_RESIZE_HANDLE_SIZE;
+    right: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      right: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      right: -$half-touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-corner-top-left,
   .dx-resizable-handle-corner-bottom-left {
-    left: -$HALF_RESIZE_HANDLE_SIZE;
+    left: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      left: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      left: -$half-touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-corner-top-right,
   .dx-resizable-handle-corner-top-left {
-    top: -$HALF_RESIZE_HANDLE_SIZE;
+    top: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      top: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      top: -$half-touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-corner-bottom-right,
   .dx-resizable-handle-corner-bottom-left {
-    bottom: -$HALF_RESIZE_HANDLE_SIZE;
+    bottom: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      bottom: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      bottom: -$half-touch-resize-handle-size;
     }
   }
 
@@ -419,13 +421,13 @@ $TRANSPARENT_BORDER: 1px solid transparent;
     &::after {
       content: "";
       position: absolute;
-      width: $RESIZE_HANDLE_SIZE;
-      height: $RESIZE_HANDLE_SIZE;
+      width: $resize-handle-size;
+      height: $resize-handle-size;
       border: 1px solid white;
 
       @at-root #{selector-append(".dx-touch-device", &)} {
-        width: $TOUCH_RESIZE_HANDLE_SIZE;
-        height: $TOUCH_RESIZE_HANDLE_SIZE;
+        width: $touch-resize-handle-size;
+        height: $touch-resize-handle-size;
       }
     }
   }
@@ -433,10 +435,10 @@ $TRANSPARENT_BORDER: 1px solid transparent;
   .dx-resizable-handle-right,
   .dx-resizable-handle-left {
     &::after {
-      top: calc(50% - #{$HALF_RESIZE_HANDLE_SIZE});
+      top: calc(50% - #{$half-resize-handle-size});
 
       @at-root #{selector-append(".dx-touch-device", &)} {
-        top: calc(50% - #{$HALF_TOUCH_RESIZE_HANDLE_SIZE});
+        top: calc(50% - #{$half-touch-resize-handle-size});
       }
     }
   }
@@ -444,43 +446,43 @@ $TRANSPARENT_BORDER: 1px solid transparent;
   .dx-resizable-handle-top,
   .dx-resizable-handle-bottom {
     &::after {
-      left: calc(50% - #{$HALF_RESIZE_HANDLE_SIZE});
+      left: calc(50% - #{$half-resize-handle-size});
 
       @at-root #{selector-append(".dx-touch-device", &)} {
-        left: calc(50% - #{$HALF_TOUCH_RESIZE_HANDLE_SIZE});
+        left: calc(50% - #{$half-touch-resize-handle-size});
       }
     }
   }
 
   .dx-resizable-handle-right::after {
-    right: -$HALF_RESIZE_HANDLE_SIZE;
+    right: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      right: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      right: -$half-touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-left::after {
-    left: -$HALF_RESIZE_HANDLE_SIZE;
+    left: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      left: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      left: -$half-touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-top::after {
-    top: -$HALF_RESIZE_HANDLE_SIZE;
+    top: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      top: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      top: -$half-touch-resize-handle-size;
     }
   }
 
   .dx-resizable-handle-bottom::after {
-    bottom: -$HALF_RESIZE_HANDLE_SIZE;
+    bottom: -$half-resize-handle-size;
 
     @at-root #{selector-append(".dx-touch-device", &)} {
-      bottom: -$HALF_TOUCH_RESIZE_HANDLE_SIZE;
+      bottom: -$half-touch-resize-handle-size;
     }
   }
 }

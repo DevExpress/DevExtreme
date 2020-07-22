@@ -161,16 +161,15 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:String|Number
-     * @type_function_param1_field7 points:Array<piePointObject>
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:String|Number
+     * @type_function_param1_field6 points:Array<piePointObject>
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPieChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPieChart, element?: dxElement, model?: any, event?: event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
     /**
      * @docid dxPieChartOptions.palette
      * @extends CommonVizPalette

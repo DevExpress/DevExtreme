@@ -68,7 +68,7 @@ export interface dxDropDownMenuOptions extends WidgetOptions<dxDropDownMenu> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -85,13 +85,12 @@ export interface dxDropDownMenuOptions extends WidgetOptions<dxDropDownMenu> {
      * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: { component?: dxDropDownMenu, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
+    onButtonClick?: ((e: { component?: dxDropDownMenu, element?: dxElement, model?: any, event?: event }) => any) | string;
     /**
      * @docid dxDropDownMenuOptions.onItemClick
      * @type function(e)|string
