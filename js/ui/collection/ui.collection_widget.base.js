@@ -1066,7 +1066,7 @@ const CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods.itemElements
     * @publicName itemElements()
-    * @return Array<Node>
+    * @return Array<Element>
     * @hidden
     */
     itemElements: function() {
@@ -1076,7 +1076,7 @@ const CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods.itemsContainer
     * @publicName itemsContainer()
-    * @return Node
+    * @return Element
     * @hidden
     */
     itemsContainer: function() {

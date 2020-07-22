@@ -206,7 +206,7 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_param1_field2 field:dxFilterBuilderField
      * @type_function_param1_field3 setValue:function
      * @type_function_param2 container:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -299,7 +299,7 @@ export interface dxFilterBuilderField {
      * @type_function_param1_field3 field:dxFilterBuilderField
      * @type_function_param1_field4 setValue:function
      * @type_function_param2 container:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

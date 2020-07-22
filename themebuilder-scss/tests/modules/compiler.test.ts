@@ -10,6 +10,8 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   metadata,
 }));
 
+jest.mock('fibers', () => undefined);
+
 const dataPath: string = path.join(path.resolve(), 'tests', 'data');
 const indexFileName = path.join(dataPath, 'scss', 'widgets', 'generic', '_index.scss');
 const defaultIndexFileContent = fs.readFileSync(indexFileName, 'utf8');
