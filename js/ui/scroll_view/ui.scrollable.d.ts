@@ -205,7 +205,7 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid dxScrollablemethods.scrollToElement
      * @publicName scrollToElement(targetLocation)
-     * @param1 element:Node|jQuery
+     * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

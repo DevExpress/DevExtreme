@@ -93,7 +93,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
     /**
      * @docid dxMenuBaseMethods.selectItem
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -101,7 +101,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
     /**
      * @docid dxMenuBaseMethods.unselectItem
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -1184,7 +1184,7 @@ export interface GridBase {
     /**
      * @docid GridBaseMethods.focus
      * @publicName focus(element)
-     * @param1 element:Node|jQuery
+     * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -1240,7 +1240,7 @@ export interface GridBase {
      * @docid GridBaseMethods.getRowElement
      * @publicName getRowElement(rowIndex)
      * @param1 rowIndex:number
-     * @return Array<Node>|jQuery|undefined
+     * @return Array<Element>|jQuery|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -2897,7 +2897,7 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @type_function_param2_field6 rowIndex:number
      * @type_function_param2_field7 rowType:string
      * @type_function_param2_field8 row:dxDataGridRowObject
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
