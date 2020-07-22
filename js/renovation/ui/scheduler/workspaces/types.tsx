@@ -8,13 +8,14 @@ export interface ViewCellData {
   groups?: object;
 }
 
-interface ViewCellsData {
+interface ViewData {
   dateTable: ViewCellData[][];
   allDayPanel?: ViewCellData[];
 }
 
 export interface GroupedViewData {
-  groupedData: ViewCellsData[];
+  groupedData: ViewData[];
+  isVirtual?: boolean;
 }
 
 export interface GroupItem {

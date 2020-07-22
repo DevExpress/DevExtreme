@@ -3,10 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../ui/data_grid';
 
-import {
-  // eslint-disable-next-line max-len, @typescript-eslint/no-unused-vars
-  DataGridProps, DataGridColumn, DataGridColumnButton, DataGridColumnChooser, DataGridColumnFixing, DataGridColumnHeaderFilter, DataGridColumnLookup, DataGridEditing, DataGridEditingTexts, DataGridFilterPanel, DataGridFilterRow, DataGridGroupPanel, DataGridGrouping, DataGridHeaderFilter, DataGridKeyboardNavigation, DataGridLoadPanel, DataGridMasterDetail, DataGridPager, DataGridPaging, DataGridRowDragging, DataGridScrolling, DataGridSearchPanel, DataGridSelection, DataGridSortByGroupSummaryInfoItem, DataGridSorting, DataGridStateStoring, DataGridSummary, DataGridSummaryGroupItem, DataGridSummaryTotalItem,
-} from './props';
+import { DataGridProps } from './props';
 
 export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: DataGrid) => (
   <div
