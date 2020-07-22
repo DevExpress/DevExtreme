@@ -199,12 +199,12 @@ module.exports = {
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.boundary
-                 * @type string|Node|jQuery
+                 * @type string|Element|jQuery
                  * @default undefined
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.container
-                 * @type string|Node|jQuery
+                 * @type string|Element|jQuery
                  * @default undefined
                  */
                 /**
@@ -214,7 +214,7 @@ module.exports = {
                  * @type_function_param1_field1 itemData:any
                  * @type_function_param1_field2 itemElement:dxElement
                  * @type_function_param2 containerElement:dxElement
-                 * @type_function_return string|Node|jQuery
+                 * @type_function_return string|Element|jQuery
                  * @default undefined
                  */
                 /**
