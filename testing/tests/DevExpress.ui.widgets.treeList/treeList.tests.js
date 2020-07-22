@@ -759,56 +759,6 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
         assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
     });
-
-    // T915695
-    [-1, null, 0].forEach(parentId => {
-        QUnit.test(`TreeList should not throw error when rootValue is defined (parentId = ${parentId})`, function(assert) {
-            // arrange, act
-            const treeList = createTreeList({
-                dataSource: [{
-                    id: 1, parent_id: parentId
-                }, {
-                    id: 2, parent_id: 1
-                }, {
-                    id: 3, parent_id: 2
-                }],
-                rootValue: 2,
-                keyExpr: 'id',
-                parentIdExpr: 'parent_id'
-            });
-
-            this.clock.tick();
-
-            // assert
-            const rows = treeList.getVisibleRows();
-            assert.equal(rows.length, 1, 'visible rows count');
-            assert.equal(rows[0].data.id, 3, 'visible row\'s id');
-        });
-    });
-
-    // T915695
-    QUnit.test('TreeList should throw error when rootValue is defined (parentId = undefined)', function(assert) {
-        // arrange, act
-        createTreeList({
-            dataSource: [{
-                id: 1
-            }, {
-                id: 2, parent_id: 1
-            }, {
-                id: 3, parent_id: 2
-            }],
-            rootValue: 2,
-            keyExpr: 'id',
-            parentIdExpr: 'parent_id'
-        });
-
-        try {
-            this.clock.tick();
-            assert.notOk(true, 'error was not thrown');
-        } catch(error) {
-            assert.ok(true, 'error was thrown');
-        }
-    });
 });
 
 QUnit.module('Option Changed', defaultModuleConfig, () => {
