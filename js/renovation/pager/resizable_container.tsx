@@ -91,7 +91,9 @@ function updateElementsWidthIfNeed(
 }
 export function updateChildProps(
   parentRef: HTMLElement,
-  pageSizesHtmlRef: GetHtmlElement, infoTextRef: GetHtmlElement, pagesRef: HTMLElement | undefined,
+  pageSizesHtmlRef: GetHtmlElement| undefined,
+  infoTextRef: GetHtmlElement| undefined,
+  pagesRef: HTMLElement | undefined,
   elementsWidth: ChildElementsWidth,
 ):
   { elementsWidth: ChildElementsWidth } & ChildElementProps {
@@ -129,9 +131,9 @@ export class ResizableContainerProps extends PagerProps {
 export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
   @ForwardRef() parentRef!: HTMLElement;
 
-  @ForwardRef() pageSizesRef!: GetHtmlElement;
+  @ForwardRef() pageSizesRef?: GetHtmlElement;
 
-  @ForwardRef() infoTextRef!: GetHtmlElement;
+  @ForwardRef() infoTextRef?: GetHtmlElement;
 
   @ForwardRef() pagesRef!: HTMLElement | undefined;
 

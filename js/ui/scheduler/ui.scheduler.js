@@ -644,13 +644,18 @@ class Scheduler extends Widget {
 
             allowMultipleCellSelection: true,
 
+            virtualScrolling: {
+                enabled: false,
+                outlineRowCount: 0
+            },
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
             _appointmentTooltipOpenButtonText: messageLocalization.format('dxScheduler-openAppointment'),
             _dropDownButtonIcon: 'overflow',
             _appointmentCountPerCell: 2,
             _collectorOffset: 0,
-            _appointmentOffset: 26
+            _appointmentOffset: 26,
 
             /**
                 * @name dxSchedulerOptions.activeStateEnabled
@@ -992,6 +997,10 @@ class Scheduler extends Widget {
                 break;
             case 'adaptivityEnabled':
                 this._toggleAdaptiveClass();
+                this.repaint();
+                break;
+            case 'virtualScrolling':
+                this._updateOption('workSpace', args.fullName, value);
                 this.repaint();
                 break;
             default:
@@ -1744,7 +1753,8 @@ class Scheduler extends Widget {
             onSelectionChanged: (args) => {
                 this.option('selectedCellData', args.selectedCellData);
             },
-            groupByDate: this._getCurrentViewOption('groupByDate')
+            groupByDate: this._getCurrentViewOption('groupByDate'),
+            virtualScrolling: this.option('virtualScrolling')
         }, currentViewOptions);
 
         result.observer = this;

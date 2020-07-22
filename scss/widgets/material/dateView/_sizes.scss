@@ -1,15 +1,16 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_DATEVIEW_ROLLER_HEIGHT: null !default;
-$MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT: null !default;
+$material-dateview-roller-height: null !default;
+$material-dateview-roller-item-height: null !default;
 
 @if $size == "default" {
-  $MATERIAL_DATEVIEW_ROLLER_HEIGHT: 182px;
-  $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT: 40px;
+  $material-dateview-roller-height: 182px;
+  $material-dateview-roller-item-height: 40px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_DATEVIEW_ROLLER_HEIGHT: 182px;
-  $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT: 40px;
+  $material-dateview-roller-height: 182px;
+  $material-dateview-roller-item-height: 40px;
 }

@@ -81,5 +81,12 @@ describe('Pager size selector', () => {
       const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });
       expect(component.normalizedPageSizes).toEqual(defaultProps().normalizedPageSizes);
     });
+
+    it('getHtmlElement', () => {
+      const htmlRef = {} as HTMLDivElement;
+      const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });
+      component.htmlRef = htmlRef;
+      expect(component.getHtmlElement()).toBe(htmlRef);
+    });
   });
 });

@@ -1,15 +1,16 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_VALIDATION_MESSAGE_PADDING: null !default;
-$MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: null !default;
+$material-validation-message-padding: null !default;
+$material-validationsummary-item-margin: null !default;
 
 @if $size == "default" {
-  $MATERIAL_VALIDATION_MESSAGE_PADDING: 6px;
-  $MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: 10px;
+  $material-validation-message-padding: 6px;
+  $material-validationsummary-item-margin: 10px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_VALIDATION_MESSAGE_PADDING: 4px;
-  $MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: 6px;
+  $material-validation-message-padding: 4px;
+  $material-validationsummary-item-margin: 6px;
 }

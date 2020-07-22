@@ -1,18 +1,19 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_MENU_ITEM_PADDING_BASE: null !default;
-$GENERIC_MENU_PADDING_BIG: null !default;
-$GENERIC_MENU_PADDING_SMALL: null !default;
+$generic-menu-item-padding-base: null !default;
+$generic-menu-padding-big: null !default;
+$generic-menu-padding-small: null !default;
 
 @if $size == "default" {
-  $GENERIC_MENU_ITEM_PADDING_BASE: 5px;
-  $GENERIC_MENU_PADDING_BIG: 25px;
-  $GENERIC_MENU_PADDING_SMALL: 19px;
+  $generic-menu-item-padding-base: 5px;
+  $generic-menu-padding-big: 25px;
+  $generic-menu-padding-small: 19px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_MENU_ITEM_PADDING_BASE: 3px;
-  $GENERIC_MENU_PADDING_BIG: 23px;
-  $GENERIC_MENU_PADDING_SMALL: 17px;
+  $generic-menu-item-padding-base: 3px;
+  $generic-menu-padding-big: 23px;
+  $generic-menu-padding-small: 17px;
 }

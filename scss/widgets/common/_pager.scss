@@ -1,15 +1,16 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
-$PAGER_PADDINGS: 8px;
-$PAGER_INFO_PADDINGS: 9px;
+$pager-paddings: 8px;
+$pager-info-paddings: 9px;
 
 .dx-pager {
   overflow: hidden;
   width: 100%;
-  padding-top: $PAGER_PADDINGS;
-  padding-bottom: $PAGER_PADDINGS;
+  padding-top: $pager-paddings;
+  padding-bottom: $pager-paddings;
   line-height: normal;
 
   @include user-select(none);
@@ -38,7 +39,7 @@ $PAGER_INFO_PADDINGS: 9px;
 
     .dx-info {
       display: inline-block;
-      margin-right: $PAGER_INFO_PADDINGS;
+      margin-right: $pager-info-paddings;
       opacity: 0.6;
     }
 
@@ -48,7 +49,7 @@ $PAGER_INFO_PADDINGS: 9px;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-      padding: $PAGER_PADDINGS - 1px 13px;
+      padding: $pager-paddings - 1px 13px;
       box-sizing: content-box;
 
       &.dx-button-disable {
@@ -126,7 +127,7 @@ $PAGER_INFO_PADDINGS: 9px;
 
     .dx-info {
       direction: rtl;
-      margin-left: $PAGER_INFO_PADDINGS;
+      margin-left: $pager-info-paddings;
       margin-right: 0;
     }
   }

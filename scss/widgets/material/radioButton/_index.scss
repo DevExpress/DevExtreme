@@ -4,42 +4,43 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../radioGroup/colors" as *;
+
 // adduse
 
 
-$MATERIAL_RADIOBUTTON_BORDER_WIDTH: 2px;
-$MATERIAL_RADIOBUTTON_INNER_SIZE: $MATERIAL_RADIOBUTTON_SIZE - $MATERIAL_RADIOBUTTON_BORDER_WIDTH * 2;
-$MATERIAL_RADIOBUTTON_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$material-radiobutton-border-width: 2px;
+$material-radiobutton-inner-size: $material-radiobutton-size - $material-radiobutton-border-width * 2;
+$material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
 .dx-radiobutton-icon {
-  width: $MATERIAL_RADIOBUTTON_SIZE;
-  height: $MATERIAL_RADIOBUTTON_SIZE;
+  width: $material-radiobutton-size;
+  height: $material-radiobutton-size;
   position: relative;
 
   &:after {
     content: "";
-    width: $MATERIAL_RADIOBUTTON_RIPPLE_SIZE;
-    height: $MATERIAL_RADIOBUTTON_RIPPLE_SIZE;
+    width: $material-radiobutton-ripple-size;
+    height: $material-radiobutton-ripple-size;
     top: 50%;
     left: 50%;
-    margin-top: -$MATERIAL_RADIOBUTTON_RIPPLE_SIZE / 2;
-    margin-left: -$MATERIAL_RADIOBUTTON_RIPPLE_SIZE / 2;
+    margin-top: -$material-radiobutton-ripple-size / 2;
+    margin-left: -$material-radiobutton-ripple-size / 2;
     border-radius: 50%;
     display: block;
     position: absolute;
     z-index: 1;
     transform: scale(0.5);
-    transition: $MATERIAL_RADIOBUTTON_RIPPLE_TRANSITION;
+    transition: $material-radiobutton-ripple-transition;
   }
 
   &:before {
     display: block;
-    width: $MATERIAL_RADIOBUTTON_INNER_SIZE;
-    height: $MATERIAL_RADIOBUTTON_INNER_SIZE;
-    border: $MATERIAL_RADIOBUTTON_BORDER_WIDTH solid $radiogroup-border-color;
+    width: $material-radiobutton-inner-size;
+    height: $material-radiobutton-inner-size;
+    border: $material-radiobutton-border-width solid $radiogroup-border-color;
     background-color: $radiogroup-bg;
     content: "";
-    border-radius: $MATERIAL_RADIOBUTTON_SIZE / 2;
+    border-radius: $material-radiobutton-size / 2;
     box-sizing: content-box;
   }
 }
@@ -51,18 +52,18 @@ $MATERIAL_RADIOBUTTON_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 
   .dx-radiobutton-icon-dot {
     display: block;
-    margin-top: -$MATERIAL_RADIOBUTTON_SIZE / 2 - $MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
-    margin-left: $MATERIAL_RADIOBUTTON_SIZE / 2 - $MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
-    width: $MATERIAL_RADIOBUTTON_DOT_SIZE;
-    height: $MATERIAL_RADIOBUTTON_DOT_SIZE;
+    margin-top: -$material-radiobutton-size / 2 - $material-radiobutton-dot-size / 2;
+    margin-left: $material-radiobutton-size / 2 - $material-radiobutton-dot-size / 2;
+    width: $material-radiobutton-dot-size;
+    height: $material-radiobutton-dot-size;
     background: $radiogroup-checked-bg;
     content: "";
-    border-radius: $MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
+    border-radius: $material-radiobutton-dot-size / 2;
   }
 }
 
 .dx-radiobutton {
-  line-height: $MATERIAL_RADIOBUTTON_SIZE;
+  line-height: $material-radiobutton-size;
 
   &.dx-state-active,
   &.dx-state-focused {
@@ -137,7 +138,7 @@ $MATERIAL_RADIOBUTTON_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 .dx-rtl .dx-radiobutton,
 .dx-rtl.dx-radiobutton {
   &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-    margin-right: $MATERIAL_RADIOBUTTON_SIZE / 2 - $MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
+    margin-right: $material-radiobutton-size / 2 - $material-radiobutton-dot-size / 2;
     margin-left: 0;
   }
 }

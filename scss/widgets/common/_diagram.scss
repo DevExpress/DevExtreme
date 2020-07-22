@@ -1,12 +1,13 @@
 @use "../base/mixins" as *;
 @use "./overlay" as *;
+
 // adduse
 
 
-$TRANSPARENT_BORDER: 1px solid transparent;
+$transparent-border: 1px solid transparent;
 
 .dx-diagram {
-  border: $TRANSPARENT_BORDER;
+  border: $transparent-border;
   display: flex;
   flex-flow: column;
   height: 600px;
@@ -190,7 +191,7 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 
 .dx-diagram-floating-toolbar-container {
   position: absolute;
-  z-index: $OVERLAY_ZINDEX + 1;
+  z-index: $overlay-zindex + 1;
   width: 100%;
   transition: opacity 400ms ease;
 
@@ -218,12 +219,12 @@ $TRANSPARENT_BORDER: 1px solid transparent;
 .dx-diagram-toolbar {
   .dx-diagram-toolbar-separator {
     height: 100%;
-    border-left: $TRANSPARENT_BORDER;
+    border-left: $transparent-border;
   }
 
   .dx-diagram-toolbar-menu-separator {
     width: 100%;
-    border-top: $TRANSPARENT_BORDER;
+    border-top: $transparent-border;
 
     &::before {
       content: none;

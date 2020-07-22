@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
+
 // adduse
 
 
@@ -20,7 +21,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
 
@@ -45,7 +46,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
@@ -60,7 +61,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
@@ -75,7 +76,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
@@ -90,7 +91,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
 
@@ -106,7 +107,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
 
@@ -122,7 +123,7 @@ $loadpanel-content-border-radius: null !default;
     * $name 20. Loadpanel background color
     * $type color
     * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
+    * $is-last-sub-group-item true
     */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;

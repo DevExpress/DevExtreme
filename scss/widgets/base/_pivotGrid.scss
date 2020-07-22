@@ -1,41 +1,41 @@
-$PIVOTGRID_DRAG_HEADER_BORDER_COLOR: null !default;
-$PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: null !default;
-$PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: null !default;
-$PIVOTGRID_BORDER_COLOR: null !default;
-$PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: null !default;
-$PIVOTGRID_AREA_COLOR: null !default;
-$HEADER_FILTER_COLOR: null !default;
-$HEADER_FILTER_COLOR_EMPTY: null !default;
-$PIVOTGRID_AREA_BACKGROUND: null !default;
-$PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: null !default;
-$PIVOTGRID_FIELD_INDICATORS_OFFSET: null !default;
-$PIVOTGRID_INDICATORS_LINE_HEIGHT: null !default;
-$PIVOTGRID_TOTALCOLOR: null !default;
-$PIVOTGRID_EXPAND_ICON_OFFSET: null !default;
-$PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: null !default;
-$PIVOTGRID_FIELD_AREA_TEXT_COLOR: null !default;
-$PIVOTGRID_DATA_AREA_COLOR: null !default;
-$PIVOTGRID_GRANDTOTALCOLOR: null !default;
-$PIVOTGRID_ACCENT_COLOR: null !default;
-$PIVOTGRID_AREA_ALL_IMAGE: null !default;
-$PIVOTGRID_AREA_FILTER_IMAGE: null !default;
-$PIVOTGRID_AREA_ROW_IMAGE: null !default;
-$PIVOTGRID_AREA_COLUMN_IMAGE: null !default;
-$PIVOTGRID_AREA_DATA_IMAGE: null !default;
-$PIVOTGRID_DIMENSION_IMAGE: null !default;
-$PIVOTGRID_HIERARCHY_IMAGE: null !default;
+$pivotgrid-drag-header-border-color: null !default;
+$pivotgrid-drag-header-first-shadow-color: null !default;
+$pivotgrid-drag-header-second-shadow-color: null !default;
+$pivotgrid-border-color: null !default;
+$pivotgrid-common-left-right-padding: null !default;
+$pivotgrid-area-color: null !default;
+$header-filter-color: null !default;
+$header-filter-color-empty: null !default;
+$pivotgrid-area-background: null !default;
+$pivotgrid-common-top-bottom-padding: null !default;
+$pivotgrid-field-indicators-offset: null !default;
+$pivotgrid-indicators-line-height: null !default;
+$pivotgrid-totalcolor: null !default;
+$pivotgrid-field-area-text-color: null !default;
+$pivotgrid-data-area-color: null !default;
+$pivotgrid-grandtotalcolor: null !default;
+$pivotgrid-accent-color: null !default;
+$pivotgrid-area-all-image: null !default;
+$pivotgrid-area-filter-image: null !default;
+$pivotgrid-area-row-image: null !default;
+$pivotgrid-area-column-image: null !default;
+$pivotgrid-area-data-image: null !default;
+$pivotgrid-dimension-image: null !default;
+$pivotgrid-hierarchy-image: null !default;
 
 @use "./mixins" as *;
 @use "./icons" as *;
 
-$PIVOTGRID_DRAG_HEADER_BORDER: 1px solid $PIVOTGRID_DRAG_HEADER_BORDER_COLOR;
-$PIVOTGRID_DRAG_HEADER_FIRST_SHADOW: 0 0 1px $PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR;
-$PIVOTGRID_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px $PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR;
-$PIVOTGRID_BORDER_WIDTH: 1px;
-$PIVOTGRID_BORDER: $PIVOTGRID_BORDER_WIDTH solid $PIVOTGRID_BORDER_COLOR;
-$PIVOTGRID_ICON_SIZE: 14px;
-$PIVOTGRID_COMMON_FIELD_PADDING: 2px;
-$PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $PIVOTGRID_COMMON_FIELD_PADDING;
+$pivotgrid-drag-header-border: 1px solid $pivotgrid-drag-header-border-color;
+$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color;
+$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color;
+$pivotgrid-border-width: 1px;
+$pivotgrid-border: $pivotgrid-border-width solid $pivotgrid-border-color;
+$pivotgrid-icon-size: 14px;
+$pivotgrid-common-field-padding: 2px;
+$pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding;
+$pivotgrid-expand-icon-offset: -5px;
+$pivotgrid-expand-icon-text-offset: 0;
 
 .dx-pivotgrid-fields-container {
   .dx-position-indicator {
@@ -66,9 +66,9 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   }
 
   .dx-sort {
-    color: $PIVOTGRID_AREA_COLOR;
-    font-size: $PIVOTGRID_ICON_SIZE;
-    width: $PIVOTGRID_ICON_SIZE;
+    color: $pivotgrid-area-color;
+    font-size: $pivotgrid-icon-size;
+    width: $pivotgrid-icon-size;
   }
 
   .dx-sort-up {
@@ -80,16 +80,16 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   }
 
   .dx-header-filter {
-    color: $HEADER_FILTER_COLOR;
+    color: $header-filter-color;
 
     @include dx-icon(filter);
 
-    font-size: $PIVOTGRID_ICON_SIZE;
-    width: $PIVOTGRID_ICON_SIZE;
+    font-size: $pivotgrid-icon-size;
+    width: $pivotgrid-icon-size;
   }
 
   .dx-header-filter-empty {
-    color: $HEADER_FILTER_COLOR_EMPTY;
+    color: $header-filter-color-empty;
   }
 
   .dx-area-field {
@@ -100,16 +100,16 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     opacity: 0.8;
 
     .dx-area-field.dx-area-box {
-      box-shadow: $PIVOTGRID_DRAG_HEADER_FIRST_SHADOW, $PIVOTGRID_DRAG_HEADER_SECOND_SHADOW;
-      border: $PIVOTGRID_DRAG_HEADER_BORDER;
+      box-shadow: $pivotgrid-drag-header-first-shadow, $pivotgrid-drag-header-second-shadow;
+      border: $pivotgrid-drag-header-border;
     }
   }
 
   .dx-area-field.dx-area-box {
-    background-color: $PIVOTGRID_AREA_BACKGROUND;
+    background-color: $pivotgrid-area-background;
     margin-bottom: 4px;
-    border: $PIVOTGRID_BORDER;
-    padding: $PIVOTGRID_COMMON_TOP_BOTTOM_PADDING $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+    border: $pivotgrid-border;
+    padding: $pivotgrid-common-top-bottom-padding $pivotgrid-common-left-right-padding;
   }
 
   .dx-drag-source {
@@ -118,8 +118,8 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
   .dx-column-indicators {
     vertical-align: bottom;
-    margin-left: $PIVOTGRID_FIELD_INDICATORS_OFFSET;
-    line-height: $PIVOTGRID_INDICATORS_LINE_HEIGHT;
+    margin-left: $pivotgrid-field-indicators-offset;
+    line-height: $pivotgrid-indicators-line-height;
   }
 
   .dx-area-field-content {
@@ -148,7 +148,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   .dx-data-header,
   .dx-column-header,
   .dx-area-description-cell.dx-pivotgrid-background {
-    background-color: $PIVOTGRID_TOTALCOLOR;
+    background-color: $pivotgrid-totalcolor;
   }
 
   .dx-column-header {
@@ -166,17 +166,17 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
   .dx-filter-header {
     .dx-area-field-container {
-      border-spacing: $PIVOTGRID_FILTER_AREA_BORDER_SPACING;
+      border-spacing: $pivotgrid-filter-area-border-spacing;
       border-collapse: separate;
     }
 
     .dx-pivotgrid-fields-area-head {
       td {
-        padding: $PIVOTGRID_COMMON_FIELD_PADDING;
+        padding: $pivotgrid-common-field-padding;
       }
 
       tr > td:first-child {
-        padding-left: $PIVOTGRID_COMMON_FIELD_PADDING;
+        padding-left: $pivotgrid-common-field-padding;
       }
     }
   }
@@ -187,7 +187,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
   &.dx-row-lines {
     .dx-pivotgrid-area td {
-      border-top: $PIVOTGRID_BORDER;
+      border-top: $pivotgrid-border;
     }
 
     .dx-pivotgrid-area-data tr:first-child > td {
@@ -196,13 +196,13 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   }
 
   .dx-expand-icon-container {
-    margin-left: $PIVOTGRID_EXPAND_ICON_OFFSET;
-    margin-right: $PIVOTGRID_EXPAND_ICON_TEXT_OFFSET;
+    margin-left: $pivotgrid-expand-icon-offset;
+    margin-right: $pivotgrid-expand-icon-text-offset;
   }
 
   .dx-area-row-cell,
   .dx-area-description-cell {
-    border-right: $PIVOTGRID_BORDER;
+    border-right: $pivotgrid-border;
   }
 
   .dx-area-description-cell {
@@ -224,15 +224,15 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   .dx-bottom-border,
   .dx-area-description-cell,
   .dx-area-column-cell {
-    border-bottom: $PIVOTGRID_BORDER;
+    border-bottom: $pivotgrid-border;
   }
 
   .dx-pivotgrid-area {
     box-sizing: content-box;
 
     td {
-      color: $PIVOTGRID_AREA_COLOR;
-      padding: $PIVOTGRID_COMMON_TOP_BOTTOM_PADDING $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+      color: $pivotgrid-area-color;
+      padding: $pivotgrid-common-top-bottom-padding $pivotgrid-common-left-right-padding;
     }
   }
 
@@ -240,22 +240,22 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     td {
       position: relative;
       border: none;
-      padding: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING 2px;
+      padding: $pivotgrid-common-left-right-padding 2px;
     }
 
     tr > td:first-child {
-      padding-left: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+      padding-left: $pivotgrid-common-left-right-padding;
     }
 
     tr > td:last-child {
-      padding-right: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+      padding-right: $pivotgrid-common-left-right-padding;
     }
 
     .dx-empty-area-text {
       white-space: nowrap;
       padding: 6px 0;
-      border: $PIVOTGRID_BORDER_WIDTH solid transparent;
-      color: $PIVOTGRID_FIELD_AREA_TEXT_COLOR;
+      border: $pivotgrid-border-width solid transparent;
+      color: $pivotgrid-field-area-text-color;
     }
   }
 
@@ -265,7 +265,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     top: 50%;
     height: 2px;
     margin-top: -1px;
-    background-color: $PIVOTGRID_BORDER_COLOR;
+    background-color: $pivotgrid-border-color;
 
     &.dx-group-connector-prev {
       left: 0;
@@ -307,9 +307,9 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     tbody {
       td {
         text-align: right;
-        color: $PIVOTGRID_DATA_AREA_COLOR;
+        color: $pivotgrid-data-area-color;
         white-space: nowrap;
-        border-left: $PIVOTGRID_BORDER;
+        border-left: $pivotgrid-border;
       }
 
       td:first-child {
@@ -327,7 +327,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
   .dx-pivotgrid-vertical-headers {
     .dx-expand-border {
-      border-top: $PIVOTGRID_BORDER;
+      border-top: $pivotgrid-border;
     }
 
     .dx-last-cell {
@@ -335,9 +335,10 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     }
 
     td {
+
       // max-width: 150px;
       min-width: 50px;
-      border-right: $PIVOTGRID_BORDER;
+      border-right: $pivotgrid-border;
     }
 
     tr:first-child td {
@@ -354,8 +355,8 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   .dx-pivotgrid-vertical-headers,
   .dx-pivotgrid-area-data {
     .dx-row-total {
-      border-top: $PIVOTGRID_BORDER;
-      border-bottom: $PIVOTGRID_BORDER;
+      border-top: $pivotgrid-border;
+      border-bottom: $pivotgrid-border;
     }
   }
 
@@ -365,15 +366,15 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     }
 
     td.dx-white-space-column {
-      border-top: $PIVOTGRID_BORDER_WIDTH solid transparent;
-      background-color: $PIVOTGRID_TOTALCOLOR;
+      border-top: $pivotgrid-border-width solid transparent;
+      background-color: $pivotgrid-totalcolor;
       padding: 0;
     }
   }
 
   .dx-pivotgrid-horizontal-headers {
     &.dx-vertical-scroll {
-      border-right: $PIVOTGRID_BORDER;
+      border-right: $pivotgrid-border;
     }
 
     td {
@@ -383,8 +384,9 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
       &.dx-pivotgrid-collapsed {
         text-align: left;
       }
+
       // B234718
-      border: $PIVOTGRID_BORDER;
+      border: $pivotgrid-border;
     }
 
     td:first-child {
@@ -397,7 +399,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   }
 
   .dx-expand-icon-container { // stylelint-disable-line no-duplicate-selectors
-    width: $PIVOTGRID_ICON_SIZE;
+    width: $pivotgrid-icon-size;
   }
 
   .dx-pivotgrid-horizontal-headers:last-child {
@@ -408,11 +410,11 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
   .dx-data-header,
   .dx-column-header,
   .dx-area-description-cell {
-    background-color: $PIVOTGRID_TOTALCOLOR;
+    background-color: $pivotgrid-totalcolor;
   }
 
   .dx-grandtotal {
-    background-color: $PIVOTGRID_GRANDTOTALCOLOR;
+    background-color: $pivotgrid-grandtotalcolor;
   }
 
   .dx-pivotgrid-border {
@@ -420,18 +422,18 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     .dx-filter-header,
     .dx-area-description-cell,
     .dx-area-row-cell {
-      border-left: $PIVOTGRID_BORDER;
+      border-left: $pivotgrid-border;
     }
 
     .dx-filter-header,
     .dx-area-column-cell,
     .dx-column-header,
     .dx-area-data-cell {
-      border-right: $PIVOTGRID_BORDER;
+      border-right: $pivotgrid-border;
     }
 
     .dx-filter-header {
-      border-top: $PIVOTGRID_BORDER;
+      border-top: $pivotgrid-border;
 
       td {
         display: inline-block;
@@ -440,19 +442,19 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
     .dx-area-data-cell,
     .dx-area-row-cell {
-      border-bottom: $PIVOTGRID_BORDER;
+      border-bottom: $pivotgrid-border;
     }
   }
 
   .dx-icon-sorted {
     display: inline-block;
     margin-left: 5px;
-    width: $PIVOTGRID_ICON_SIZE;
+    width: $pivotgrid-icon-size;
   }
 
 
   .dx-popup-content {
-    padding: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+    padding: $pivotgrid-common-left-right-padding;
 
     .dx-pivotgrid-fields-area-head {
       td {
@@ -494,7 +496,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
     .dx-area-fields {
       margin-top: 3px;
-      border: $PIVOTGRID_BORDER;
+      border: $pivotgrid-border;
       display: flex;
       flex-direction: column;
       height: 0;
@@ -507,44 +509,44 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
   .dx-area-fields[group] {
     padding: 5px;
-    background-color: $PIVOTGRID_TOTALCOLOR;
+    background-color: $pivotgrid-totalcolor;
     display: flex;
   }
 
   .dx-area-fields.dx-drag-target {
-    border-color: $PIVOTGRID_ACCENT_COLOR;
+    border-color: $pivotgrid-accent-color;
   }
 
   .dx-area-icon-all {
-    background: $PIVOTGRID_AREA_ALL_IMAGE no-repeat center center;
+    background: $pivotgrid-area-all-image no-repeat center center;
   }
 
   .dx-area-icon-filter {
-    background: $PIVOTGRID_AREA_FILTER_IMAGE no-repeat center center;
+    background: $pivotgrid-area-filter-image no-repeat center center;
   }
 
   .dx-area-icon-row {
-    background: $PIVOTGRID_AREA_ROW_IMAGE no-repeat center center;
+    background: $pivotgrid-area-row-image no-repeat center center;
   }
 
   .dx-area-icon-column {
-    background: $PIVOTGRID_AREA_COLUMN_IMAGE no-repeat center center;
+    background: $pivotgrid-area-column-image no-repeat center center;
   }
 
   .dx-area-icon-data {
-    background: $PIVOTGRID_AREA_DATA_IMAGE no-repeat center center;
+    background: $pivotgrid-area-data-image no-repeat center center;
   }
 
   .dx-icon-measure {
-    background: $PIVOTGRID_AREA_DATA_IMAGE no-repeat center center;
+    background: $pivotgrid-area-data-image no-repeat center center;
   }
 
   .dx-icon-dimension {
-    background: $PIVOTGRID_DIMENSION_IMAGE no-repeat center center;
+    background: $pivotgrid-dimension-image no-repeat center center;
   }
 
   .dx-icon-hierarchy {
-    background: $PIVOTGRID_HIERARCHY_IMAGE no-repeat center center;
+    background: $pivotgrid-hierarchy-image no-repeat center center;
   }
 }
 
@@ -563,7 +565,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
     .dx-column-indicators {
       margin-left: 0;
-      margin-right: $PIVOTGRID_FIELD_INDICATORS_OFFSET;
+      margin-right: $pivotgrid-field-indicators-offset;
     }
   }
 
@@ -600,15 +602,15 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
     .dx-pivotgrid-fields-area-head {
       tr > td {
-        padding: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING 2px;
+        padding: $pivotgrid-common-left-right-padding 2px;
       }
 
       tr > td:first-child {
-        padding-right: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+        padding-right: $pivotgrid-common-left-right-padding;
       }
 
       tr > td:last-child {
-        padding-left: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+        padding-left: $pivotgrid-common-left-right-padding;
       }
     }
 
@@ -626,26 +628,26 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
 
     .dx-area-row-cell,
     .dx-area-description-cell {
-      border-left: $PIVOTGRID_BORDER;
+      border-left: $pivotgrid-border;
       border-right: 0;
     }
 
     .dx-pivotgrid-area-data {
       tbody td {
         border-left: 0;
-        border-right: $PIVOTGRID_BORDER;
+        border-right: $pivotgrid-border;
       }
     }
 
     .dx-pivotgrid-area-data tbody td:first-child {
-      border-left: $PIVOTGRID_BORDER;
+      border-left: $pivotgrid-border;
       border-right: 0;
     }
 
     .dx-pivotgrid-vertical-headers {
       td {
         border-right: 0;
-        border-left: $PIVOTGRID_BORDER;
+        border-left: $pivotgrid-border;
       }
 
       .dx-last-cell {
@@ -657,7 +659,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     .dx-pivotgrid-horizontal-headers {
       &.dx-vertical-scroll {
         border-right: 0;
-        border-left: $PIVOTGRID_BORDER;
+        border-left: $pivotgrid-border;
       }
 
       &.dx-pivotgrid-area {
@@ -665,7 +667,7 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
       }
 
       td:first-child {
-        border-left: $PIVOTGRID_BORDER;
+        border-left: $pivotgrid-border;
         border-right: 0;
       }
     }
@@ -678,8 +680,8 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
     }
 
     .dx-expand-icon-container {
-      margin-left: $PIVOTGRID_EXPAND_ICON_TEXT_OFFSET;
-      margin-right: $PIVOTGRID_EXPAND_ICON_OFFSET;
+      margin-left: $pivotgrid-expand-icon-text-offset;
+      margin-right: $pivotgrid-expand-icon-offset;
     }
 
     .dx-pivotgrid-collapsed .dx-expand-icon-container {
@@ -700,13 +702,13 @@ $PIVOTGRID_FILTER_AREA_BORDER_SPACING: $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - $P
       .dx-area-description-cell,
       .dx-data-header,
       .dx-area-row-cell {
-        border-right: $PIVOTGRID_BORDER;
+        border-right: $pivotgrid-border;
       }
 
       .dx-area-column-cell,
       .dx-column-header,
       .dx-area-data-cell {
-        border-left: $PIVOTGRID_BORDER;
+        border-left: $pivotgrid-border;
       }
 
       .dx-column-header {
