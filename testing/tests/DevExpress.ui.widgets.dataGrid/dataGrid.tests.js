@@ -19779,6 +19779,114 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.equal($dropDownBoxElement.length, 1, 'editor is found');
         });
     });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Unmodified cell in a new row should not be validated (T913725)`, function(assert) {
+            // arrange
+            const gridConfig = {
+                dataSource: [],
+                keyExpr: 'field2',
+                editing: {
+                    mode: editMode.toLowerCase()
+                },
+                columns: [
+                    {
+                        dataField: 'field1',
+                        validationRules: [
+                            {
+                                type: 'required'
+                            }
+                        ]
+                    },
+                    'field2'
+                ]
+            };
+
+            const grid = createDataGrid(gridConfig);
+            this.clock.tick();
+
+            grid.addRow();
+            this.clock.tick();
+
+            const $firstCell = $(grid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-focused'), 'cell should be focused');
+            assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell should not be invalid');
+        });
+    });
+
+    QUnit.testInActiveWindow('Row - Editing cell with undefined value should be validated (T913725)', function(assert) {
+        // arrange
+        const gridConfig = {
+            dataSource: [{ field1: undefined, field2: 1 }],
+            keyExpr: 'field2',
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'field1',
+                    validationRules: [
+                        {
+                            type: 'required'
+                        }
+                    ]
+                },
+                'field2'
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        grid.editRow(0);
+        this.clock.tick();
+
+        const $firstCell = $(grid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-focused'), 'cell should be focused');
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell should be invalid');
+    });
+
+    ['Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Editing cell with undefined value should be validated (T913725)`, function(assert) {
+            // arrange
+            const gridConfig = {
+                dataSource: [{ field1: undefined, field2: 1 }],
+                keyExpr: 'field2',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true
+                },
+                columns: [
+                    {
+                        dataField: 'field1',
+                        validationRules: [
+                            {
+                                type: 'required'
+                            }
+                        ]
+                    },
+                    'field2'
+                ]
+            };
+
+            const grid = createDataGrid(gridConfig);
+            this.clock.tick();
+
+            grid.editCell(0, 0);
+            this.clock.tick();
+
+            const $firstCell = $(grid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-focused'), 'cell should be focused');
+            assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell should be invalid');
+        });
+    });
 });
 
 QUnit.module('Row dragging', baseModuleConfig, () => {

@@ -335,7 +335,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     /**
      * @docid dxTreeViewMethods.collapseItem
      * @publicName collapseItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -369,7 +369,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     /**
      * @docid dxTreeViewMethods.expandItem
      * @publicName expandItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -427,7 +427,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     /**
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -461,7 +461,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     /**
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -496,7 +496,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     /**
      * @docid dxTreeViewMethods.scrollToItem
      * @publicName scrollToItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public

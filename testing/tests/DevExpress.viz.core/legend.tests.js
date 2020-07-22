@@ -695,6 +695,21 @@ QUnit.test('Horizontal orientation. two rows', function(assert) {
     ]);
 });
 
+QUnit.test('Horizontal orientation, update in two rows', function(assert) {
+    this.options.orientation = 'horizontal';
+    this.options.itemTextPosition = 'right';
+    const legend = this.createSimpleLegend();
+
+    legend.measure([200, 200]);
+    legend.measure([91, 200]);
+
+    this.checkItems(assert, [
+        { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
+        { id: 1, marker: { translateX: 0, translateY: 22 }, label: { translateX: 20, translateY: 21 } },
+        { id: 2, marker: { translateX: 0, translateY: 44 }, label: { translateX: 20, translateY: 43 } }
+    ]);
+});
+
 QUnit.test('Horizontal orientation. itemTextPosition = \'left\'', function(assert) {
     this.options.orientation = 'horizontal';
     this.options.itemTextPosition = 'left';

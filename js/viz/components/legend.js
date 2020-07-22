@@ -446,7 +446,6 @@ extend(legendPrototype, {
 
         that._isAsyncRendering = false;
 
-        that._size = { width: width, height: height };
         that.erase();
 
         if(!(that.isVisible() && items && items.length)) {
@@ -493,6 +492,7 @@ extend(legendPrototype, {
     _updateElementsPosition: function(width, height) {
         const that = this;
         const options = that._options;
+        this._size = { width: width, height: height };
         that._measureElements();
         that._locateElements(options);
         that._finalUpdate(options);
