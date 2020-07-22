@@ -8,6 +8,7 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
+@use "../typography/sizes" as *;
 
 // adduse
 @use "../dropDownMenu";
@@ -19,7 +20,6 @@ $generic-toolbar-item-spacing: 5px;
 $generic-toolbar-label-font-size: $generic-m-font-size;
 $generic-toolbar-section-padding: 15px;
 
-$generic-mobile-toolbar-height: $generic-mobile-base-inline-widget-size;
 $generic-mobile-toolbar-padding: 0;
 $generic-mobile-toolbar-item-spacing: 5px;
 $generic-mobile-toolbar-label-font-size: 20px;
