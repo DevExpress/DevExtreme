@@ -179,8 +179,12 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 0 });
   }
 
-  onWidgetClick(): void {
+  onWidgetClick(event: Event): void {
     const { readOnly, value } = this.props;
+
+    // TODO: remove it after actions support event pass
+    event.stopPropagation();
+
     if (!readOnly) {
       this.props.value = !value;
     }
