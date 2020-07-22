@@ -5,7 +5,7 @@ import {
 import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
-import messageLocalization from '../../../localization/message';
+import messageLocalization from '../../../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
