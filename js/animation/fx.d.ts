@@ -93,7 +93,7 @@ declare const fx: {
     /**
      * @docid fxmethods.animate
      * @publicName animate(element, config)
-     * @param1 element:Node
+     * @param1 element:Element
      * @param2 config:animationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
@@ -105,7 +105,7 @@ declare const fx: {
     /**
      * @docid fxmethods.isAnimating
      * @publicName isAnimating(element)
-     * @param1 element:Node
+     * @param1 element:Element
      * @return boolean
      * @namespace DevExpress.fx
      * @prevFileNamespace DevExpress.animation
@@ -116,7 +116,7 @@ declare const fx: {
     /**
      * @docid fxmethods.stop
      * @publicName stop(element, jumpToEnd)
-     * @param1 element:Node
+     * @param1 element:Element
      * @param2 jumpToEnd:boolean
      * @namespace DevExpress.fx
      * @prevFileNamespace DevExpress.animation

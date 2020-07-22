@@ -149,7 +149,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -161,7 +161,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -171,7 +171,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -181,7 +181,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -191,7 +191,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -201,7 +201,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             /**
@@ -212,7 +212,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1_field1 appointmentCount:number
                 * @type_function_param1_field2 isCompact:boolean
                 * @type_function_param2 collectorElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
 
             views: ['day', 'week'],
@@ -290,7 +290,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
                 */
 
@@ -612,7 +612,7 @@ const Scheduler = Widget.inherit({
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
+                * @type_function_return string|Element|jQuery
                 */
             appointmentPopupTemplate: 'appointmentPopup',
 

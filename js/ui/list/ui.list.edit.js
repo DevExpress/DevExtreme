@@ -328,7 +328,7 @@ const ListEdit = ListBase.inherit({
     /**
     * @name dxListMethods.getFlatIndexByItemElement
     * @publicName getFlatIndexByItemElement(itemElement)
-    * @param1 itemElement:Node
+    * @param1 itemElement:Element
     * @return object
     * @hidden
     */
@@ -340,7 +340,7 @@ const ListEdit = ListBase.inherit({
     * @name dxListMethods.getItemElementByFlatIndex
     * @publicName getItemElementByFlatIndex(flatIndex)
     * @param1 flatIndex:Number
-    * @return Node
+    * @return Element
     * @hidden
     */
     getItemElementByFlatIndex(flatIndex) {
