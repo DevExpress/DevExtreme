@@ -68,27 +68,17 @@
 // stylelint-enable declaration-no-important
 
 @mixin dx-base-typography() {
-  color: $typography-color;
-  font-weight: normal;
-  font-size: $generic-base-font-size;
-  font-family: $base-font-family;
-  line-height: $generic-base-line-height;
-
-  input,
-  textarea {
-    font-family: $base-font-family;
-    line-height: $generic-base-line-height;
-  }
+  @include dx-base-typography-mixin(
+    $typography-color,
+    $generic-base-font-size,
+    $base-font-family,
+    $generic-base-line-height
+  );
 }
 
-@mixin disabled-widget($opacity: $base-disabled-opacity) { // stylelint-disable-line selector-class-pattern
-  opacity: $opacity;
-
-  @include user-select(none);
-
-  cursor: default;
+@mixin disabled-widget($opacity: $base-disabled-opacity) {
+  @include disabled-widget-mixin($opacity);
 }
-
 
 $generic-invalid-badge-horizontal-padding: ($generic-base-inline-borderedwidget-inner-size - $generic-invalid-badge-size) / 2;
 $generic-invalid-badge-halfhorizontal-padding: $generic-invalid-badge-horizontal-padding / 2;
@@ -128,12 +118,7 @@ $badge-invalid-bg: $base-invalid-color;
 }
 
 @mixin dx-pending-indicator-generic() {
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  margin-top: -$generic-pending-indicator-size / 2;
-  width: $generic-pending-indicator-size;
-  height: $generic-pending-indicator-size;
+  @include dx-pending-indicator($generic-pending-indicator-size);
 }
 
 @mixin dx-dropdownlist-list-appearance() {

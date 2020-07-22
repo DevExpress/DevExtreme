@@ -31,6 +31,7 @@ import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
+import VirtualScrolling from './ui.scheduler.virtual_scrolling';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -448,7 +449,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             shadeUntilCurrentTime: true,
             groupOrientation: 'horizontal',
             selectedCellData: [],
-            groupByDate: false
+            groupByDate: false,
+            virtualScrolling: {
+                enabled: false,
+                outlineRowCount: 0
+            }
         });
     }
 
@@ -527,6 +532,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'allowMultipleCellSelection':
                 break;
             case 'selectedCellData':
+                break;
+            case 'virtualScrolling':
+                this.repaint();
                 break;
             default:
                 super._optionChanged(args);
@@ -943,6 +951,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._createWorkSpaceElements();
 
+        this._initVirtualScrolling();
+
         super._initMarkup();
 
         if(!this.option('crossScrollingEnabled')) {
@@ -956,6 +966,19 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._renderView();
         this._attachEvents();
         this._setFocusOnCellByOption(this.option('selectedCellData'));
+    }
+
+    _initVirtualScrolling() {
+        if(this._virtualScrolling) {
+            this._virtualScrolling.dispose();
+            delete this._virtualScrolling;
+            this._virtualScrolling = null;
+        }
+
+        if(this.option('virtualScrolling.enabled')) {
+            const viewportHeight = this.$element().height();
+            this._virtualScrolling = new VirtualScrolling(this, viewportHeight, this._dateTableScrollable);
+        }
     }
 
     _render() {

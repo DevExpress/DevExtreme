@@ -602,4 +602,30 @@ describe('Cli arguments normalizer', () => {
       themeName: 'material',
     });
   });
+
+  test('variables are normalized to kebab-case', () => {
+    const config: ConfigSettings = {
+      command: 'build-theme',
+      baseTheme: 'material.blue.light',
+      inputFile: 'file.json',
+      data: 'somedata',
+      items: [{ key: '@DATAGRID_BG_COLOR', value: '2' }],
+    };
+    normalizeConfig(config);
+
+    expect(config).toEqual({
+      base: false,
+      bootstrapVersion: 0,
+      colorScheme: 'blue-light',
+      command: 'build-theme',
+      data: 'somedata',
+      fileFormat: 'css',
+      isBootstrap: false,
+      items: [{ key: '$datagrid-bg-color', value: '2' }],
+      makeSwatch: false,
+      out: 'dx.material.custom-scheme.css',
+      outColorScheme: 'custom-scheme',
+      themeName: 'material',
+    });
+  });
 });
