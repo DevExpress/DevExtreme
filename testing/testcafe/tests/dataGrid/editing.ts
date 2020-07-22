@@ -1401,22 +1401,25 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
     .doubleClick(cell0.element)
     .expect(cell0.isEditCell).ok()
     .click(cell0.element.find('.dx-checkbox'))
-    .expect($revertButton.exists).ok()
+    .expect($revertButton.exists)
+    .ok()
     .click($revertButton)
-    .expect($revertButton.exists).notOk()
-    .expect(cell0.isEditCell).notOk();
+    .expect($revertButton.exists)
+    .notOk()
+    .expect(cell0.isEditCell)
+    .notOk();
 }).before(() => createWidget('dxDataGrid', {
   dataSource: [{ name: 'test', test: undefined }],
   editing: {
     mode: 'cell',
     allowUpdating: true,
-    startEditAction: 'dblClick'
+    startEditAction: 'dblClick',
   },
   columns: ['name',
     {
       dataField: 'test',
       dataType: 'boolean',
-      showEditorAlways: false
-    }
-  ]
+      showEditorAlways: false,
+    },
+  ],
 }));
