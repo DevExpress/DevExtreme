@@ -10,7 +10,7 @@ import { VirtualTable } from '../../base/virtual_table';
 
 export const viewFunction = (viewModel: DayDateTableLayout): object => (
   <Fragment>
-    {viewModel.props.isVirtual && (
+    {viewModel.isVirtual && (
       <VirtualTable
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel.restAttributes}
@@ -37,7 +37,7 @@ export const viewFunction = (viewModel: DayDateTableLayout): object => (
           )))}
       </VirtualTable>
     )}
-    {!viewModel.props.isVirtual && (
+    {!viewModel.isVirtual && (
       <Table
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel.restAttributes}
@@ -72,13 +72,18 @@ export class DayDateTableLayoutProps {
   @OneWay() viewData?: GroupedViewData;
 
   @OneWay() className?: string;
-
-  @OneWay() isVirtual?: boolean;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: {
+    register: true,
+  },
 })
 export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
+  get isVirtual(): boolean {
+    const { viewData } = this.props;
+    return viewData ? !!viewData.isVirtual : false;
+  }
 }

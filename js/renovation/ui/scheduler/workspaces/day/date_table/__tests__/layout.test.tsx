@@ -1,6 +1,9 @@
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import { viewFunction as LayoutView } from '../layout';
+import {
+  viewFunction as LayoutView,
+  DayDateTableLayout,
+} from '../layout';
 import { DateTableRow as Row } from '../../../base/date_table/row';
 import { DayDateTableCell as Cell } from '../cell';
 import { getKeyByDateAndGroup } from '../../../utils';
@@ -55,7 +58,7 @@ describe('DayDateTableLayout', () => {
     });
 
     it('should render virtual table correctly', () => {
-      const layout = render({ props: { isVirtual: true } });
+      const layout = render({ isVirtual: true });
 
       expect(layout.find(VirtualTable).exists())
         .toBe(true);
@@ -114,6 +117,21 @@ describe('DayDateTableLayout', () => {
           4, viewData.groupedData[0].dateTable[1][0].startDate,
           viewData.groupedData[0].dateTable[1][0].groups,
         );
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('style', () => {
+        [true, false].forEach((isVirtual) => {
+          it(`should get correct virtual flag if isVirtual=${isVirtual}`, () => {
+            const layout = new DayDateTableLayout({ viewData: { groupedData: [], isVirtual } });
+
+            expect(layout.isVirtual)
+              .toBe(isVirtual);
+          });
+        });
+      });
     });
   });
 });

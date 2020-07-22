@@ -1001,7 +1001,6 @@ class Scheduler extends Widget {
                 break;
             case 'virtualScrolling':
                 this._updateOption('workSpace', args.fullName, value);
-                this.repaint();
                 break;
             default:
                 super._optionChanged(args);
