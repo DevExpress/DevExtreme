@@ -506,7 +506,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
-                startDate: new Date(info.appointment.startDate),
+                startDate: new Date(info?.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(data, settings)
