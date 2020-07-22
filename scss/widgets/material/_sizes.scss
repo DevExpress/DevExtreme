@@ -26,8 +26,6 @@ $material-base-inline-horizontal-padding: null !default;
 $material-base-border-radius: null !default;
 $material-grid-base-nodata-font-size: null !default;
 $material-datagrid-cell-padding: null !default;
-$pivotgrid-expand-icon-offset: null !default;
-$pivotgrid-expand-icon-text-offset: null !default;
 $accordion-title-icon-top-offset: null !default;
 $accordion-title-icon-margin: null !default;
 $pivotgrid-empty-column-width: null !default;
@@ -95,9 +93,6 @@ $material-list-item-height: null !default;
 
   $material-grid-base-nodata-font-size: 17px;
   $material-datagrid-cell-padding: 7px;
-
-  $pivotgrid-expand-icon-offset: -5px;
-  $pivotgrid-expand-icon-text-offset: 0;
 
   $accordion-title-icon-top-offset: 4px;
   $accordion-title-icon-margin: 8px;
@@ -175,9 +170,6 @@ $material-list-item-height: null !default;
 
   $material-grid-base-nodata-font-size: 14px;
   $material-datagrid-cell-padding: 7px;
-
-  $pivotgrid-expand-icon-offset: -5px;
-  $pivotgrid-expand-icon-text-offset: 0;
 
   $accordion-title-icon-top-offset: 3px;
   $accordion-title-icon-margin: 6px;
