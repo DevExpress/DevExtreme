@@ -1186,7 +1186,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string x none] & hideEmptySummaryCells = false', function(assert) {
+    QUnit.test('Export [string x string x none] & data.hideEmptySummaryCells = false', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1235,7 +1235,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string x none] & hideEmptySummaryCells = true', function(assert) {
+    QUnit.test('Export [string x string x none] & data.hideEmptySummaryCells = true', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1278,7 +1278,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string x number] & field.calculateSummaryValue', function(assert) {
+    QUnit.test('Export [string x string x number] & data.calculateSummaryValue', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1330,7 +1330,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string x number] & field.calculateCustomSummary', function(assert) {
+    QUnit.test('Export [string x string x number] & data.calculateCustomSummary', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1395,7 +1395,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             fields: [
                 { area: 'row', dataField: 'row1' },
                 { area: 'column', dataField: 'col1' },
-                { area: 'data', summaryDisplayMode: 'percentOfGrandTotal' }
+                { area: 'data', dataType: 'number', summaryDisplayMode: 'percentOfGrandTotal' }
             ],
             store: [
                 { row1: 'r1', col1: 'c1' },

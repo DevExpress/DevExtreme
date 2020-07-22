@@ -135,9 +135,6 @@ function getCellDataType(field) {
         if(parse(format(1, field.format)) === 1) {
             return 'number';
         }
-        if(field.format === 'percent') {
-            return DEFAULT_DATA_TYPE;
-        }
         if(format(new Date(), field.format)) {
             return 'date';
         }
