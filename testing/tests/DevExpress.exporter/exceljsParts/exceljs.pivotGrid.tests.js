@@ -1473,8 +1473,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const done = assert.async();
         const ds = {
             fields: [
-                { area: 'filter', dataField: 'row1' },
-                { area: 'row', dataField: 'row1', customizeText: () => 'custom row' },
+                { area: 'row', dataField: 'row1', customizeText: () => 'custom row', width: 100 },
                 { area: 'column', dataField: 'col1', customizeText: () => 'custom column' },
                 { area: 'data', summaryType: 'count', customizeText: () => 'custom data' }
             ],
@@ -1484,27 +1483,24 @@ QUnit.module('Scenarios', moduleConfig, () => {
         };
 
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
-            width: 1000,
+            width: 600,
             showColumnGrandTotals: false,
             showRowGrandTotals: false,
-            dataSource: ds,
-            scrolling: {
-                mode: 'virtual'
-            }
+            dataSource: ds
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
             { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
             { excelCell: { value: 'custom column', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'custom column', type: 'D', width: 100 } }
         ], [
-            { excelCell: { value: 'custom row', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'custom row', type: 'D' } },
+            { excelCell: { value: 'custom row', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'custom row', type: 'D', width: 100 } },
             { excelCell: { value: 'custom data', alignment: alignRightTopWrap }, pivotCell: { area: 'data', value: 1, colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: 'custom data' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-            helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
+            helper.checkColumnWidths([toExcelWidth(120), toExcelWidth(480)], topLeft.column, epsilon);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
