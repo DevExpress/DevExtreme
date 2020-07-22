@@ -494,6 +494,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
         if(settings.virtual) {
             this._processVirtualAppointment(settings, $appointment, data, deferredColor);
         } else {
+            const { info } = settings;
+
             this._createComponent($appointment, Appointment, {
                 observer: this.option('observer'),
                 data: data,
@@ -504,7 +506,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
-                startDate: new Date(settings.startDate),
+                startDate: new Date(info.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(data, settings)
