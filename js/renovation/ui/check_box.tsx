@@ -107,7 +107,7 @@ export class CheckBoxProps extends BaseWidgetProps {
   @OneWay() isValid?: boolean = true;
 
   // TODO: remove null after generator bug fix
-  @TwoWay() value?: boolean | null = true;
+  @TwoWay() value?: boolean | null = false;
 
   @OneWay() useInkRipple?: boolean = false;
 
