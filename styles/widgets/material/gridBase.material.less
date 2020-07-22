@@ -466,6 +466,19 @@
                 padding-left: 0;
                 padding-top: 0;
                 padding-bottom: 0;
+                margin-top: 0;
+            }
+
+            .dx-tag-container {
+                min-height: $material-grid-base-cell-height;
+                padding: 0;
+            }
+
+            &:not(.dx-editor-filled):not(.dx-editor-outlined) {
+                .dx-texteditor-input,
+                .dx-tag-container {
+                    margin-top: 0;
+                }
             }
 
             .dx-texteditor-buttons-container {
