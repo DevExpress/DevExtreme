@@ -17,12 +17,11 @@ import Themes from '../../ui/themes';
 import { click } from '../../events/short';
 import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
-import { InkRipple } from './common/ink_ripple';
-import type { InkRippleConfig } from './common/ink_ripple';
+import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
 import BaseComponent from '../preact_wrapper/button';
-import type { EffectReturn } from '../utils/effect_return';
+import { EffectReturn } from '../utils/effect_return.d';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
