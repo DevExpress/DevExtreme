@@ -349,10 +349,11 @@ describe('CheckBox', () => {
           expect(new CheckBox({}).aria).toMatchObject({ role: 'checkbox' });
         });
 
-        [true, false, undefined].forEach((value) => {
+        // TODO: replace null with undefined after generator bug fix
+        [true, false, null].forEach((value) => {
           it(`should have "checked=${value}" if value=${value}`, () => {
             let expectedValue = `${value}`;
-            if (value === undefined) {
+            if (value === null) {
               expectedValue = 'mixed';
             }
             expect(new CheckBox({ value }).aria)
@@ -392,7 +393,8 @@ describe('CheckBox', () => {
         });
 
         it('should have "dx-checkbox-indeterminate" class if value option is undefined', () => {
-          expect(new CheckBox({ value: undefined }).cssClasses)
+          // TODO: replace null with undefined after generator bug fix
+          expect(new CheckBox({ value: null }).cssClasses)
             .toEqual(expect.stringMatching('dx-checkbox-indeterminate'));
         });
 

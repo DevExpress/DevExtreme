@@ -296,6 +296,23 @@ describe('Widget', () => {
           expect(onFocusOut).toHaveBeenCalledTimes(1);
         });
 
+        it('should not raise any error if onFocusIn or onFocusOut is undefined', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusIn: undefined, onFocusOut: undefined,
+          });
+          widget.widgetRef = {} as any;
+
+          widget.focusEffect();
+
+          emit(EVENT.focus, e);
+          expect(widget.focused).toBe(true);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+
+          emit(EVENT.blur, e);
+          expect(widget.focused).toBe(false);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
+        });
+
         it('should not raise onFocusIn/onFocusOut if event is prevented', () => {
           try {
             e.isDefaultPrevented = jest.fn(() => true);

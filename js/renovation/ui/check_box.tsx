@@ -24,7 +24,8 @@ const getCssClasses = (model: CheckBoxProps): string => {
   const classNames = ['dx-checkbox'];
 
   const checked = value;
-  const indeterminate = checked === undefined;
+  // TODO: replace null with undefined after generator bug fix
+  const indeterminate = checked === null;
 
   readOnly && classNames.push('dx-state-readonly');
   checked && classNames.push('dx-checkbox-checked');
@@ -105,7 +106,8 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() isValid?: boolean = true;
 
-  @TwoWay() value?: boolean = false;
+  // TODO: remove null after generator bug fix
+  @TwoWay() value?: boolean | null = true;
 
   @OneWay() useInkRipple?: boolean = false;
 
@@ -209,7 +211,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   get aria(): object {
     const { readOnly, isValid } = this.props;
     const checked = this.props.value;
-    const indeterminate = checked === undefined;
+    // TODO: replace null with undefined after generator bug fix
+    const indeterminate = checked === null;
 
     return {
       role: 'checkbox',

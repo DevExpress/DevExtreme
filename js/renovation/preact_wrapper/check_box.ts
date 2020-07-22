@@ -181,22 +181,29 @@ export default class CheckBox extends Component {
   }
 
   _optionChanged(option) {
-    const { name, value } = option || {};
+    const { name, value, previousValue } = option || {};
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
 
     switch (name) {
       case 'value':
-        this.validationRequest.fire({
+        if (value !== previousValue) {
+          this.validationRequest.fire({
+            value,
+            editor: this,
+          });
+        }
+        this._valueChangeAction?.({
+          element: this.$element(),
+          previousValue,
           value,
-          editor: this,
         });
-                this._valueChangeAction?.({
-                  element: this.$element(),
-                  previousValue: !value,
-                  value,
-                });
+        break;
+      case 'onValueChanged':
+        this._valueChangeAction = this._createActionByOption('onValueChanged', {
+          excludeValidators: ['disabled', 'readOnly'],
+        });
         break;
       case 'isValid':
       case 'validationError':
