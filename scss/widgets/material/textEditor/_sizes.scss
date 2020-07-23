@@ -14,7 +14,7 @@ $material-underlined-editor-button-height: null !default;
   $material-texteditor-clear-icon-size: 12px;
   $material-filled-texteditor-input-horizontal-padding: 12px;
   $material-filled-texteditor-input-padding: 19px $material-filled-texteditor-input-horizontal-padding 18px;
-  $material-standard-texteditor-input-padding: 7px $material-standard-texteditor-input-horizontal-padding 6px;
+  $material-standard-texteditor-input-padding: 7px $material-base-standard-texteditor-input-horizontal-padding 6px;
   $material-underlined-editor-button-height: 28px;
 }
 
@@ -23,6 +23,6 @@ $material-underlined-editor-button-height: null !default;
   $material-texteditor-clear-icon-size: 10px;
   $material-filled-texteditor-input-horizontal-padding: 8px;
   $material-filled-texteditor-input-padding: 13px $material-filled-texteditor-input-horizontal-padding 12px;
-  $material-standard-texteditor-input-padding: 6px $material-standard-texteditor-input-horizontal-padding 5px;
+  $material-standard-texteditor-input-padding: 6px $material-base-standard-texteditor-input-horizontal-padding 5px;
   $material-underlined-editor-button-height: 22px;
 }

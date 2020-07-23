@@ -4,6 +4,7 @@
 
 $generic-toolbar-menu-top-padding: null !default;
 $generic-toolbar-menu-bottom-padding: null !default;
+$generic-mobile-toolbar-height: 36px;
 
 @if $size == "default" {
   $generic-toolbar-menu-top-padding: 7px;

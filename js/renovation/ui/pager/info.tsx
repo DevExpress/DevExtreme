@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
-import { format } from '../../core/utils/string';
+import { format } from '../../../core/utils/string';
 import { GetHtmlElement } from './common/types.d';
 
 export const PAGER_INFO_CLASS = 'dx-info';

@@ -13,6 +13,7 @@ $generic-list-select-all-margin-right: null !default;
 $generic-list-select-all-label-margin-top: null !default;
 $generic-list-select-all-label-line-height: null !default;
 $generic-list-searchbox-margin-bottom: null !default;
+$generic-list-item-vertical-padding: null !default;
 
 @if $size == "default" {
   $generic-list-border-width: 1px;
@@ -29,6 +30,7 @@ $generic-list-searchbox-margin-bottom: null !default;
   $generic-list-select-all-label-line-height: 17px;
 
   $generic-list-searchbox-margin-bottom: 5px;
+  $generic-list-item-vertical-padding: 10px;
 }
 
 @else if $size == "compact" {
@@ -46,4 +48,5 @@ $generic-list-searchbox-margin-bottom: null !default;
   $generic-list-select-all-label-line-height: 16px;
 
   $generic-list-searchbox-margin-bottom: 3px;
+  $generic-list-item-vertical-padding: 5px;
 }

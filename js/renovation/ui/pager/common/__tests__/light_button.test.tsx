@@ -1,13 +1,13 @@
 import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
-import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
+import { registerKeyboardAction } from '../../../../../ui/shared/accessibility';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
-import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
+import { subscribeToClickEvent } from '../../../../utils/subscribe_to_event';
 import { closestClass } from '../../utils/closest_class';
 
-jest.mock('../../../../ui/shared/accessibility');
+jest.mock('../../../../../ui/shared/accessibility');
 jest.mock('../../utils/closest_class');
-jest.mock('../../../utils/subscribe_to_event');
+jest.mock('../../../../utils/subscribe_to_event');
 
 describe('LightButton', () => {
   describe('View', () => {

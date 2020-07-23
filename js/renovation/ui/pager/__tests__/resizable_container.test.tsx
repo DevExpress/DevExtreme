@@ -9,10 +9,10 @@ import {
   updateChildProps,
 } from '../resizable_container';
 import { GetHtmlElement } from '../common/types.d';
-import resizeCallbacks from '../../../core/utils/resize_callbacks';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../utils/get_computed_style');
-jest.mock('../../../core/utils/resize_callbacks');
+jest.mock('../../../../core/utils/resize_callbacks');
 
 
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
