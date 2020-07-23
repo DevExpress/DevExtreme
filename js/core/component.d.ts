@@ -49,6 +49,7 @@ export interface ComponentOptions<T = Component> {
  * @export default
  * @namespace DevExpress
  * @hidden
+ * @wrappable
  * @prevFileNamespace DevExpress.core
  */
 export default class Component {
