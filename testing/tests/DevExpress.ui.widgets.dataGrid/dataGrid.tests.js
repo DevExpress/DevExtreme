@@ -542,6 +542,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    [false, true].forEach((useIcons) => {
+        QUnit.test(`Command buttons should be rendered with RTL when useIcons=${useIcons} (T915926)`, function(assert) {
+            // arrange
+            const columnsWrapper = dataGridWrapper.columns;
+            createDataGrid({
+                rtlEnabled: true,
+                dataSource: [{ id: 0, c0: 'c0' }],
+                editing: {
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    useIcons
+                }
+            });
+
+            this.clock.tick();
+
+            // assert
+            const $buttons = columnsWrapper.getCommandButtons();
+
+            assert.equal($buttons.length, 2, 'command buttons are rendered');
+            $buttons.each((_, button) => {
+                assert.equal($(button).css('display'), 'inline-block', 'display style');
+                assert.equal($(button).css('direction'), 'rtl', 'direction style');
+            });
+        });
+    });
+
     QUnit.test('Undelete command buttons should contains aria-label accessibility attribute if rendered as icon and batch edit mode (T755185)', function(assert) {
     // arrange
         const columnsWrapper = dataGridWrapper.columns;
