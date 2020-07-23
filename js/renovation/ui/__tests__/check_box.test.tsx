@@ -32,6 +32,7 @@ jest.mock('../../../ui/themes', () => ({
 describe('CheckBox', () => {
   describe('render', () => {
     it('should render hidden input', () => {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const checkBox = shallow(viewFunction({ props: { value: false } } as any) as any);
       const input = checkBox.find('input');
       expect(input.props()).toMatchObject({
@@ -42,6 +43,7 @@ describe('CheckBox', () => {
 
     [true, false, undefined].forEach((value) => {
       it(`input should have value=${value} attr if value is ${value}`, () => {
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         const checkBox = shallow(viewFunction({ props: { value } } as any) as any);
         const input = checkBox.find('input');
         expect(input.props()).toMatchObject({
@@ -51,6 +53,7 @@ describe('CheckBox', () => {
     });
 
     it('input should have name attr if name is defined', () => {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const checkBox = shallow(viewFunction({ props: { name: 'name' } } as any) as any);
       const input = checkBox.find('input');
       expect(input.props()).toMatchObject({
@@ -59,6 +62,7 @@ describe('CheckBox', () => {
     });
 
     it('input shouldn\'t have name attr if name is not defined', () => {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const checkBox = shallow(viewFunction({ props: {} } as any) as any);
       const input = checkBox.find('input');
       expect(input.props()).not.toHaveProperty('name');
@@ -67,7 +71,7 @@ describe('CheckBox', () => {
     it('should render InkRipple if useInkRipple is true', () => {
       const checkBox = shallow(viewFunction({
         props: { useInkRipple: true },
-      } as any) as any);
+      } as any) as any); // eslint-disable-line  @typescript-eslint/no-explicit-any
       expect(checkBox.find(InkRipple).props()).toMatchObject({
         config: {
           waveSizeCoefficient: 2.5,
@@ -79,12 +83,14 @@ describe('CheckBox', () => {
     });
 
     it('should render text if text option is defined', () => {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const checkBox = shallow(viewFunction({ props: { text: 'checkbox-text' } } as any) as any);
       const checkBoxText = checkBox.find('.dx-checkbox-container .dx-checkbox-text');
       expect(checkBoxText.text()).toBe('checkbox-text');
     });
 
     it('should not render text if option is not defined', () => {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const checkBox = shallow(viewFunction({ props: {} } as any) as any);
       const checkBoxText = checkBox.find('.dx-checkbox-text');
       expect(checkBoxText.exists()).toBe(false);
@@ -93,17 +99,17 @@ describe('CheckBox', () => {
     it('should always render icon', () => {
       const button = shallow(viewFunction({
         props: {},
-      } as any) as any);
+      } as any) as any); // eslint-disable-line  @typescript-eslint/no-explicit-any
       expect(button.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
     });
 
     it('should pass all necessary properties to the Widget', () => {
       const renderOptions = {
         aria: 'area',
-        onActive: () => null,
-        onInactive: () => null,
-        onFocusIn: () => null,
-        onFocusOut: () => null,
+        onActive: (): null => null,
+        onInactive: (): null => null,
+        onFocusIn: (): null => null,
+        onFocusOut: (): null => null,
       };
       const renderProps = {
         accessKey: 'A',
@@ -113,7 +119,7 @@ describe('CheckBox', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: () => null,
+        onContentReady: (): null => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -121,8 +127,8 @@ describe('CheckBox', () => {
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
-      const onWidgetKeyDown = () => null;
-      const onWidgetClick = () => null;
+      const onWidgetKeyDown = (): null => null;
+      const onWidgetClick = (): null => null;
       const checkBox = mount(viewFunction({
         ...renderOptions,
         props: renderProps,
@@ -130,7 +136,7 @@ describe('CheckBox', () => {
         cssClasses,
         onWidgetKeyDown,
         onWidgetClick,
-      } as any) as any);
+      } as any) as any); // eslint-disable-line  @typescript-eslint/no-explicit-any
       expect(checkBox.find(Widget).props()).toMatchObject({
         ...renderOptions,
         ...renderProps,
@@ -151,6 +157,7 @@ describe('CheckBox', () => {
           const onContentReady = jest.fn();
           const checkBox = new CheckBox({ onContentReady });
           const node = {};
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           checkBox.widgetRef = node as any;
           checkBox.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
@@ -162,6 +169,7 @@ describe('CheckBox', () => {
         describe('focus', () => {
           it('should focus main element', () => {
             const checkBox = new CheckBox({});
+            // eslint-disable-next-line  @typescript-eslint/no-explicit-any
             checkBox.widgetRef = { focus: jest.fn() } as any;
             checkBox.focus();
 
@@ -220,7 +228,7 @@ describe('CheckBox', () => {
               const checkBox = new CheckBox({
                 value: false,
               });
-              checkBox.onWidgetClick();
+              checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(true);
             });
 
@@ -229,7 +237,7 @@ describe('CheckBox', () => {
                 value: false,
                 readOnly: true,
               });
-              checkBox.onWidgetClick();
+              checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(false);
             });
           });
@@ -243,7 +251,7 @@ describe('CheckBox', () => {
         checkBox.inkRippleRef = {
           showWave: jest.fn(),
           hideWave: jest.fn(),
-        } as any;
+        } as any; // eslint-disable-line  @typescript-eslint/no-explicit-any
 
         checkBox.onActive({} as Event);
         checkBox.onInactive({} as Event);
@@ -255,7 +263,9 @@ describe('CheckBox', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
         const iconRef = {};
         const event = {} as Event;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.inkRippleRef = { showWave: jest.fn() } as any;
         checkBox.onActive(event);
 
@@ -271,7 +281,9 @@ describe('CheckBox', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
         const iconRef = {};
         const event = {} as Event;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.inkRippleRef = { hideWave: jest.fn() } as any;
         checkBox.onInactive(event);
 
@@ -290,7 +302,7 @@ describe('CheckBox', () => {
         checkBox.inkRippleRef = {
           showWave: jest.fn(),
           hideWave: jest.fn(),
-        } as any;
+        } as any; // eslint-disable-line  @typescript-eslint/no-explicit-any
 
         checkBox.onFocusIn({} as Event);
         checkBox.onFocusOut({} as Event);
@@ -302,7 +314,9 @@ describe('CheckBox', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
         const iconRef = {};
         const event = {} as Event;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.inkRippleRef = { showWave: jest.fn() } as any;
         checkBox.onFocusIn(event);
 
@@ -318,7 +332,9 @@ describe('CheckBox', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
         const iconRef = {};
         const event = {} as Event;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.inkRippleRef = { hideWave: jest.fn() } as any;
         checkBox.onFocusOut(event);
 
@@ -418,6 +434,7 @@ describe('CheckBox', () => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (devices as any).isSimulator.mockImplementation(() => false);
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         ((themes as any).current as Mock).mockImplementation(() => 'generic');
       });
 
@@ -425,11 +442,13 @@ describe('CheckBox', () => {
 
       describe('useInkRiple', () => {
         it('should be true if material theme', () => {
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           ((themes as any).current as Mock).mockImplementation(() => 'material');
           expect(getDefaultOptions().useInkRipple).toBe(true);
         });
 
         it('should be false if theme is not material', () => {
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           ((themes as any).current as Mock).mockImplementation(() => 'generic');
           expect(getDefaultOptions().useInkRipple).toBe(false);
         });
@@ -446,6 +465,7 @@ describe('CheckBox', () => {
         });
 
         it('should be false on simulator', () => {
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           (devices as any).isSimulator.mockImplementation(() => true);
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });

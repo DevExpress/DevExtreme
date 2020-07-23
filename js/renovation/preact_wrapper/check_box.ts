@@ -15,7 +15,7 @@ const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 
-function getValidationErrorMessage(validationErrors) {
+function getValidationErrorMessage(validationErrors): string {
   let validationErrorMessage = '';
   if (validationErrors) {
     validationErrors.forEach((err) => {
@@ -28,9 +28,24 @@ function getValidationErrorMessage(validationErrors) {
 }
 
 export default class CheckBox extends Component {
-  getProps() {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  _$validationMessage: any = '';
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  _validationMessage: any = undefined;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  showValidationMessageTimeout: any = undefined;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  validationRequest: any = undefined;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  _valueChangeAction: any = undefined;
+
+  getProps(): object {
     const props = super.getProps();
-    props.onFocusIn = () => {
+    props.onFocusIn = (): void => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
 
       // NOTE: The click should be processed before the validation message is shown because
@@ -50,7 +65,7 @@ export default class CheckBox extends Component {
     return props;
   }
 
-  _init() {
+  _init(): void {
     super._init();
 
     data(this.$element()[0], VALIDATION_TARGET, this);
@@ -62,7 +77,7 @@ export default class CheckBox extends Component {
     });
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): object {
     return extend(
       super._getDefaultOptions(),
       {
@@ -72,7 +87,7 @@ export default class CheckBox extends Component {
     );
   }
 
-  _setValidationMessageMaxWidth() {
+  _setValidationMessageMaxWidth(): void {
     if (!this._validationMessage) {
       return;
     }
@@ -87,7 +102,7 @@ export default class CheckBox extends Component {
     this._validationMessage.option('maxWidth', validationMessageMaxWidth);
   }
 
-  _renderValidationState() {
+  _renderValidationState(): void {
     const isValid = this.option('isValid') && this.option('validationStatus') !== 'invalid';
     const validationMessageMode = this.option('validationMessageMode');
     const $element = this.$element();
@@ -130,7 +145,7 @@ export default class CheckBox extends Component {
         visible: true,
         propagateOutsideClick: true,
         _checkParentVisibility: false,
-      }, this._options.cache('validationTooltipOptions')));
+      }, this.option().cache('validationTooltipOptions')));
 
       this._$validationMessage
         .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === 'auto')
@@ -149,19 +164,19 @@ export default class CheckBox extends Component {
     }
   }
 
-  _bindInnerWidgetOptions(innerWidget, optionsContainer) {
-    const syncOptions = () => this._options.silent(optionsContainer, extend({},
+  _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
+    const syncOptions = () => this.option().silent(optionsContainer, extend({},
       innerWidget.option()));
 
     syncOptions();
     innerWidget.on('optionChanged', syncOptions);
   }
 
-  _getValidationMessageTarget() {
+  _getValidationMessageTarget(): Element {
     return this.$element();
   }
 
-  _getValidationMessagePosition(positionRequest) {
+  _getValidationMessagePosition(positionRequest): object {
     const rtlEnabled = this.option('rtlEnabled');
     const messagePositionSide = getDefaultAlignment(rtlEnabled);
     const messageOriginalOffset = this.option('validationMessageOffset');
@@ -180,7 +195,7 @@ export default class CheckBox extends Component {
     };
   }
 
-  _optionChanged(option) {
+  _optionChanged(option): void {
     const { name, value, previousValue } = option || {};
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
@@ -222,12 +237,12 @@ export default class CheckBox extends Component {
     this._invalidate();
   }
 
-  reset() {
+  reset(): void {
     const defaultOptions = this._getDefaultOptions();
     this.option('value', defaultOptions.value);
   }
 
-  _dispose() {
+  _dispose(): void {
     super._dispose();
 
     data(this.element(), VALIDATION_TARGET, null);

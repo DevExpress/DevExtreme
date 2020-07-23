@@ -47,7 +47,8 @@ export const viewFunction = (viewModel: CheckBox): any => {
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      ref={viewModel.widgetRef}
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+      ref={viewModel.widgetRef as any}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       classes={viewModel.cssClasses}
@@ -168,6 +169,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const { useInkRipple, onFocusIn } = this.props;
 
     useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 0 });
+    // NOTE: pass to jQ wrapper
     onFocusIn?.(event);
   }
 
@@ -200,7 +202,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
     if (keyName === 'space' || which === 'space') {
       originalEvent.preventDefault();
-      this.onWidgetClick();
+      this.onWidgetClick(originalEvent);
     }
 
     return undefined;
