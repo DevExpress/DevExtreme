@@ -111,6 +111,7 @@ const Form = Widget.inherit({
             showRequiredMark: true,
             showOptionalMark: false,
             requiredMark: '*',
+            repaintChangesOnly: true,
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage'),
             showValidationSummary: false,
@@ -984,6 +985,10 @@ const Form = Widget.inherit({
     },
 
     _tryChangeLayoutManagerItemOptions(itemPath, options) {
+        if(this.option('repaintChangesOnly') === false) {
+            return false;
+        }
+
         let result;
         this.beginUpdate();
         each(options, (optionName, optionValue) => {
