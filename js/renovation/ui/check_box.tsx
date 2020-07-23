@@ -157,29 +157,23 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onActive(event: Event): void {
-    const { useInkRipple } = this.props;
-
-    useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 1 });
+    this.wave(event, 'showWave', 1);
   }
 
   onInactive(event: Event): void {
-    const { useInkRipple } = this.props;
-
-    useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 1 });
+    this.wave(event, 'hideWave', 1);
   }
 
   onFocusIn(event: Event): void {
-    const { useInkRipple, onFocusIn } = this.props;
+    const { onFocusIn } = this.props;
+    this.wave(event, 'showWave', 0);
 
-    useInkRipple && this.inkRippleRef.showWave({ element: this.iconRef, event, wave: 0 });
     // NOTE: pass to jQ wrapper
     onFocusIn?.(event);
   }
 
   onFocusOut(event: Event): void {
-    const { useInkRipple } = this.props;
-
-    useInkRipple && this.inkRippleRef.hideWave({ element: this.iconRef, event, wave: 0 });
+    this.wave(event, 'hideWave', 0);
   }
 
   onWidgetClick(event: Event): void {
@@ -227,5 +221,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
     };
+  }
+
+  wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
+    const { useInkRipple } = this.props;
+    useInkRipple && this.inkRippleRef[type]({ element: this.iconRef, event, wave: waveId });
   }
 }
