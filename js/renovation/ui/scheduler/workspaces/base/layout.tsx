@@ -9,7 +9,7 @@ export const viewFunction = (viewModel: LayoutBase) => (
     <viewModel.props.headerPanelTemplate
       viewCellsData={viewModel.props.viewData!.groupedData[0].dateTable}
     />
-    <viewModel.props.dateTableTemplate viewCellsData={viewModel.props.viewData} />
+    <viewModel.props.dateTableTemplate viewData={viewModel.props.viewData} />
   </div>
 );
 
