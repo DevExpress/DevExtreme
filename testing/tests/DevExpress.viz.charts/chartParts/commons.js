@@ -137,7 +137,6 @@ exports.environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
         that.themeManager.getOptions.withArgs('margin').returns({
-            marginsThemeApplied: true,
             left: 0,
             right: 0,
             top: 0,

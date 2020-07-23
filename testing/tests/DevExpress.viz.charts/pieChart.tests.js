@@ -94,9 +94,6 @@ const environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('export').returns({});
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
-        that.themeManager.getOptions.withArgs('margin').returns({
-            marginsThemeApplied: true
-        });
         that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
             backgroundColor: 'none',
             border: {
