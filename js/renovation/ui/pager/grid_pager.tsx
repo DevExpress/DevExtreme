@@ -2,10 +2,10 @@ import {
   Component, JSXComponent, TwoWay, ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
 
-import { GridPagerWrapper } from '../preact_wrapper/grid_pager';
+import { GridPagerWrapper } from '../../preact_wrapper/grid_pager';
 import PagerProps from './common/pager_props';
 import { Pager } from './pager';
-import { combineClasses } from '../utils/combine_classes';
+import { combineClasses } from '../../utils/combine_classes';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
