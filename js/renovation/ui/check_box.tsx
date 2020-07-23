@@ -16,23 +16,26 @@ import { Widget } from './common/widget';
 import * as themes from '../../ui/themes';
 import BaseComponent from '../preact_wrapper/check_box';
 import BaseWidgetProps from '../utils/base_props';
+import { combineClasses } from '../utils/combine_classes';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
     text, readOnly, isValid, value,
   } = model;
-  const classNames = ['dx-checkbox'];
 
   const checked = value;
   // TODO: replace null with undefined after generator bug fix
   const indeterminate = checked === null;
 
-  readOnly && classNames.push('dx-state-readonly');
-  checked && classNames.push('dx-checkbox-checked');
-  indeterminate && classNames.push('dx-checkbox-indeterminate');
-  text && classNames.push('dx-checkbox-has-text');
-  !isValid && classNames.push('dx-invalid');
-  return classNames.join(' ');
+  const classesMap = {
+    'dx-checkbox': true,
+    'dx-state-readonly': !!readOnly,
+    'dx-checkbox-checked': !!checked,
+    'dx-checkbox-has-text': !!text,
+    'dx-invalid': !isValid,
+    'dx-checkbox-indeterminate': indeterminate,
+  };
+  return combineClasses(classesMap);
 };
 
 const inkRippleConfig = (): object => ({
