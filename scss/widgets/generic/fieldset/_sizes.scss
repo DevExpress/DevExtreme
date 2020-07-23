@@ -7,6 +7,7 @@ $generic-fieldset-horizontal-margin: null !default;
 $generic-fieldset-header-vertical-margin: null !default;
 $generic-field-vertical-margin: null !default;
 $generic-field-labelvalue-spacing: null !default;
+$generic-radiogroup-min-height: null !default;
 
 @if $size == "default" {
   $generic-fieldset-vertical-margin: 30px;
@@ -14,6 +15,7 @@ $generic-field-labelvalue-spacing: null !default;
   $generic-fieldset-header-vertical-margin: 20px;
   $generic-field-vertical-margin: 10px;
   $generic-field-labelvalue-spacing: 15px;
+  $generic-radiogroup-min-height: 26px;
 }
 
 @else if $size == "compact" {
@@ -22,4 +24,5 @@ $generic-field-labelvalue-spacing: null !default;
   $generic-fieldset-header-vertical-margin: 10px;
   $generic-field-vertical-margin: 5px;
   $generic-field-labelvalue-spacing: 8px;
+  $generic-radiogroup-min-height: 20px;
 }

@@ -5,63 +5,11 @@ $size: null !default;
 $generic-size-postfix: null !default;
 $generic-base-font-size: null !default;
 $generic-base-line-height: null !default;
-$generic-xl-font-size: null !default;
-$generic-l-font-size: null !default;
-$generic-m-font-size: null !default;
-$generic-s-font-size: null !default;
-$generic-xs-font-size: null !default;
-$generic-h3-font-size: null !default;
-$generic-h5-font-size: null !default;
-$generic-form-group-caption-font-size: null !default;
-$generic-form-group-content-padding-bottom: null !default;
 $generic-base-inline-widget-height: null !default;
 $generic-base-inline-block-height: null !default;
 $generic-base-icon-size: null !default;
 $generic-base-more-adaptive-icon-size: null !default;
 $generic-base-inline-horizontal-padding: null !default;
-$generic-grid-base-nodata-font-size: null !default;
-$generic-datagrid-cell-padding: null !default;
-$accordion-title-icon-top-offset: null !default;
-$accordion-title-icon-margin: null !default;
-$pivotgrid-empty-column-width: null !default;
-$pivotgrid-common-left-right-padding: null !default;
-$pivotgrid-common-top-bottom-padding: null !default;
-$pivotgrid-field-indicators-offset: null !default;
-$pivotgrid-indicators-line-height: null !default;
-$treelist-expanded-icon-margin-left: null !default;
-$treelist-collapsed-icon-margin-left: null !default;
-$treelist-icon-margin-top: null !default;
-$filterbuilder-item-margin-bottom: null !default;
-$filterbuilder-treeview-item-horizontal-padding: null !default;
-$filterbuilder-treeview-item-padding: null !default;
-$filemanager-toolbar-separator-height: null !default;
-$filemanager-toolbar-viewmode-width: null !default;
-$filemanager-toolbar-viewmode-padding: null !default;
-$filemanager-breadcrumbs-item-padding-top: null !default;
-$filemanager-breadcrumbs-item-padding-bottom: null !default;
-$filemanager-details-view-checkbox-column-width: null !default;
-$filemanager-file-actions-button-size: null !default;
-$filemanager-file-actions-button-top-bottom-padding: null !default;
-$filemanager-dirs-tree-icon-margin-bottom: null !default;
-$filemanager-large-icon-size: null !default;
-$filemanager-large-icon-button-content-padding: null !default;
-$filemanager-progress-panel-padding-top: null !default;
-$filemanager-progress-box-button-close-margin-top: null !default;
-$gantt-header-item-height: null !default;
-$gantt-task-wrapper-padding-top: null !default;
-$gantt-task-title-padding-left: null !default;
-$gantt-task-height: null !default;
-$gantt-parent-task-height: null !default;
-$gantt-dependency-successor-size: null !default;
-$gantt-milestone-size: null !default;
-$gantt-cv-dialog-padding-bottom: null !default;
-$gantt-cv-dialog-row-padding-top: null !default;
-$gantt-treelist-text-min-height: null !default;
-$generic-checkbox-size: null !default;
-$generic-switch-height: null !default;
-$generic-slider-height: null !default;
-$generic-radiogroup-min-height: null !default;
-$generic-list-item-vertical-padding: null !default;
 
 @if $size == "default" {
   $generic-size-postfix: "";
@@ -70,76 +18,12 @@ $generic-list-item-vertical-padding: null !default;
   $generic-base-font-size: 14px;
   $generic-base-line-height: 1.35715; // 19px/14px
 
-  $generic-xl-font-size: 34px;
-  $generic-l-font-size: 28px;
-  $generic-m-font-size: 20px;
-  $generic-s-font-size: 18px;
-  $generic-xs-font-size: 12px;
-
-  $generic-h3-font-size: 22px;
-  $generic-h5-font-size: 16px;
-
-  $generic-form-group-caption-font-size: 20px;
-  $generic-form-group-content-padding-bottom: 20px;
-
   // Base sizes
   $generic-base-inline-widget-height: 36px;
   $generic-base-inline-block-height: 19px;
   $generic-base-icon-size: 18px;
   $generic-base-more-adaptive-icon-size: 21px;
   $generic-base-inline-horizontal-padding: 10px;
-
-  $generic-grid-base-nodata-font-size: 17px;
-  $generic-datagrid-cell-padding: 7px;
-
-  $accordion-title-icon-top-offset: 4px;
-  $accordion-title-icon-margin: 6px;
-
-  $pivotgrid-empty-column-width: 19px;
-
-  $pivotgrid-common-left-right-padding: 10px;
-  $pivotgrid-common-top-bottom-padding: 7px;
-  $pivotgrid-field-indicators-offset: 6px;
-  $pivotgrid-indicators-line-height: 19px;
-
-  $treelist-expanded-icon-margin-left: 5px;
-  $treelist-collapsed-icon-margin-left: 6px;
-  $treelist-icon-margin-top: $generic-base-icon-size / 2 - 1;
-
-  $filterbuilder-item-margin-bottom: 9px;
-  $filterbuilder-treeview-item-horizontal-padding: 15px;
-  $filterbuilder-treeview-item-padding: 5px $filterbuilder-treeview-item-horizontal-padding;
-
-  $filemanager-toolbar-separator-height: 36px;
-  $filemanager-toolbar-viewmode-width: 150px;
-  $filemanager-toolbar-viewmode-padding: 8px;
-  $filemanager-breadcrumbs-item-padding-top: 5px;
-  $filemanager-breadcrumbs-item-padding-bottom: 8px;
-  $filemanager-details-view-checkbox-column-width: 43px;
-  $filemanager-file-actions-button-size: 21px;
-  $filemanager-file-actions-button-top-bottom-padding: 10px;
-  $filemanager-dirs-tree-icon-margin-bottom: 0;
-  $filemanager-large-icon-size: 22px;
-  $filemanager-large-icon-button-content-padding: 4px;
-  $filemanager-progress-panel-padding-top: 6px;
-  $filemanager-progress-box-button-close-margin-top: 9px;
-
-  $gantt-header-item-height: 45px;
-  $gantt-task-wrapper-padding-top: 0;
-  $gantt-task-title-padding-left: 7px;
-  $gantt-task-height: 21px;
-  $gantt-parent-task-height: 19px;
-  $gantt-dependency-successor-size: 10px;
-  $gantt-milestone-size: 14px;
-  $gantt-cv-dialog-padding-bottom: 8px;
-  $gantt-cv-dialog-row-padding-top: 12px;
-  $gantt-treelist-text-min-height: 19px;
-
-  $generic-checkbox-size: 22px;
-  $generic-switch-height: 24px;
-  $generic-slider-height: 28px;
-  $generic-radiogroup-min-height: 26px;
-  $generic-list-item-vertical-padding: 10px;
 }
 
 @if $size == "compact" {
@@ -149,74 +33,12 @@ $generic-list-item-vertical-padding: null !default;
   $generic-base-font-size: 12px;
   $generic-base-line-height: 1.33334; // 16px/12px
 
-  $generic-xl-font-size: 29px;
-  $generic-l-font-size: 24px;
-  $generic-m-font-size: 18px;
-  $generic-s-font-size: 16px;
-  $generic-xs-font-size: 10px;
-
-  $generic-h3-font-size: 20px;
-  $generic-h5-font-size: 14px;
-
-  $generic-form-group-caption-font-size: 16px;
-  $generic-form-group-content-padding-bottom: 10px;
-
   // Base sizes
   $generic-base-inline-widget-height: 26px;
   $generic-base-inline-block-height: 16px;
   $generic-base-icon-size: 14px;
   $generic-base-more-adaptive-icon-size: 17px;
   $generic-base-inline-horizontal-padding: 6px;
-
-  $generic-grid-base-nodata-font-size: 14px;
-  $generic-datagrid-cell-padding: 5px;
-
-  $accordion-title-icon-top-offset: 1px;
-  $accordion-title-icon-margin: 4px;
-
-  $pivotgrid-empty-column-width: 16px;
-  $pivotgrid-common-left-right-padding: 6px;
-  $pivotgrid-common-top-bottom-padding: 5px;
-  $pivotgrid-field-indicators-offset: 4px;
-  $pivotgrid-indicators-line-height: 16px;
-
-  $treelist-expanded-icon-margin-left: 3px;
-  $treelist-collapsed-icon-margin-left: 4px;
-  $treelist-icon-margin-top: $generic-base-icon-size / 2;
-
-  $filterbuilder-item-margin-bottom: 5px;
-  $filterbuilder-treeview-item-horizontal-padding: 15px;
-  $filterbuilder-treeview-item-padding: 3px $filterbuilder-treeview-item-horizontal-padding;
-
-  $filemanager-toolbar-separator-height: 26px;
-  $filemanager-toolbar-viewmode-width: 130px;
-  $filemanager-toolbar-viewmode-padding: 5px;
-  $filemanager-breadcrumbs-item-padding-top: 3px;
-  $filemanager-breadcrumbs-item-padding-bottom: 7px;
-  $filemanager-details-view-checkbox-column-width: 39px;
-  $filemanager-file-actions-button-size: 18px;
-  $filemanager-file-actions-button-top-bottom-padding: 9px;
-  $filemanager-dirs-tree-icon-margin-bottom: 1px;
-  $filemanager-large-icon-size: 18px;
-  $filemanager-large-icon-button-content-padding: 3px;
-  $filemanager-progress-panel-padding-top: 6px;
-  $filemanager-progress-box-button-close-margin-top: 6px;
-
-  $gantt-header-item-height: 45px;
-  $gantt-task-wrapper-padding-top: 0;
-  $gantt-task-title-padding-left: 5px;
-  $gantt-task-height: 18px;
-  $gantt-dependency-successor-size: 9px;
-  $gantt-milestone-size: 12px;
-  $gantt-cv-dialog-padding-bottom: 10px;
-  $gantt-cv-dialog-row-padding-top: 10px;
-  $gantt-treelist-text-min-height: 16px;
-
-  $generic-checkbox-size: 16px;
-  $generic-switch-height: 18px;
-  $generic-slider-height: 20px;
-  $generic-radiogroup-min-height: 20px;
-  $generic-list-item-vertical-padding: 5px;
 }
 
 // Base inline widgets paddings
@@ -233,21 +55,15 @@ $generic-base-border-width: 1px;
 $generic-base-inline-borderedwidget-inner-size:
   $generic-base-inline-widget-height -
   $generic-base-border-width * 2;
+
 $generic-base-inline-borderedwidget-top-padding:
   $generic-base-inline-widget-top-padding -
   $generic-base-border-width;
+
 $generic-base-inline-borderedwidget-horizontal-padding:
   $generic-base-inline-horizontal-padding -
   $generic-base-border-width;
+
 $generic-base-inline-borderedwidget-bottom-padding:
   $generic-base-inline-widget-bottom-padding -
   $generic-base-border-width;
-$generic-base-inline-borderedwidget-padding:
-  $generic-base-inline-borderedwidget-top-padding
-  $generic-base-inline-borderedwidget-horizontal-padding
-  $generic-base-inline-borderedwidget-bottom-padding;
-
-$scheduler-left-column-width: 100px;
-
-// Base mobile sizes
-$generic-mobile-base-inline-widget-size: 36px;

@@ -12,7 +12,7 @@
 // adduse
 
 
-$material-standard-texteditor-input-horizontal-padding: 0;
+$material-base-standard-texteditor-input-horizontal-padding: 0;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
 $material-editor-custom-button-margin: 5px;
@@ -28,12 +28,12 @@ $material-editor-custom-button-margin: 5px;
 
 @mixin texteditor-input-padding-underlined() {
   .dx-texteditor-input {
-    padding-right: $material-texteditor-invalid-badge-size + $material-standard-texteditor-input-horizontal-padding;
+    padding-right: $material-texteditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
   }
 
   &.dx-rtl .dx-texteditor-input {
     padding: $material-standard-texteditor-input-padding;
-    padding-left: $material-texteditor-invalid-badge-size + $material-standard-texteditor-input-horizontal-padding;
+    padding-left: $material-texteditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
   }
 }
 
@@ -222,7 +222,7 @@ $material-editor-custom-button-margin: 5px;
     background-color: transparent;
 
     .dx-texteditor-buttons-container {
-      right: $material-standard-texteditor-input-horizontal-padding;
+      right: $material-base-standard-texteditor-input-horizontal-padding;
     }
 
     &:after {
@@ -248,7 +248,7 @@ $material-editor-custom-button-margin: 5px;
     .dx-rtl &,
     &.dx-rtl {
       .dx-texteditor-buttons-container {
-        left: $material-standard-texteditor-input-horizontal-padding;
+        left: $material-base-standard-texteditor-input-horizontal-padding;
         right: auto;
       }
     }
