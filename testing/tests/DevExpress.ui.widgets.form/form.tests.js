@@ -429,14 +429,13 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
         const item1 = {
             editorType: 'dxDropDownBox',
             dataField: 'item1',
+            label: { text: 'item1' },
             editorOptions: { placeholder: 'test_placeHolder' }
         };
         const newItem1 = {
             editorType: 'dxTextBox',
-            itemType: 'simple',
-            label: { text: 'new item text' },
             dataField: 'newItem1',
-            name: 'newItem1',
+            label: { text: 'new item1' },
             editorOptions: { width: 300 }
         };
         const form = $('#form').dxForm({
@@ -444,9 +443,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
             items: [{
                 itemType: 'group',
                 caption: 'group1',
-                items: [
-                    item1
-                ]
+                items: [ item1 ]
             }]
         }).dxForm('instance');
 
