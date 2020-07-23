@@ -111,7 +111,7 @@ const Form = Widget.inherit({
             showRequiredMark: true,
             showOptionalMark: false,
             requiredMark: '*',
-            repaintChangesOnly: true,
+            allowPartialUpdate: true,
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage'),
             showValidationSummary: false,
@@ -985,7 +985,7 @@ const Form = Widget.inherit({
     },
 
     _tryChangeLayoutManagerItemOptions(itemPath, options) {
-        if(this.option('repaintChangesOnly') === false) {
+        if(this.option('allowPartialUpdate') === false) {
             return false;
         }
 
