@@ -81,7 +81,7 @@ describe('DateTableLayoutBase', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('style', () => {
+      describe('isVirtual', () => {
         [true, false].forEach((isVirtual) => {
           it(`should get correct virtual flag if isVirtual=${isVirtual}`, () => {
             const layout = new DateTableLayoutBase({ viewData: { groupedData: [], isVirtual } });
@@ -89,6 +89,13 @@ describe('DateTableLayoutBase', () => {
             expect(layout.isVirtual)
               .toBe(isVirtual);
           });
+        });
+
+        it('should return false if isVirtual is undefined', () => {
+          const layout = new DateTableLayoutBase({ viewData: { groupedData: [] } });
+
+          expect(layout.isVirtual)
+            .toBe(false);
         });
       });
     });
