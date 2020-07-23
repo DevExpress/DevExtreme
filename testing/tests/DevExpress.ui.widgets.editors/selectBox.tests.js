@@ -1516,6 +1516,25 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(element.option('value'), 1, 'value was not be changed');
         assert.equal($input.val(), '1', 'input text has been restored');
     });
+
+    QUnit.testInActiveWindow('"text" option should be updated after clear the search value', function(assert) {
+        const $element = $('#selectBox').dxSelectBox({
+            searchEnabled: true
+        });
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $input
+            .focusin()
+            .val('123')
+            .change()
+            .blur();
+
+        instance.option('dataSource', [1, 2, 3]);
+
+        assert.strictEqual(instance.option('text'), '', 'widget has no text');
+        assert.strictEqual($input.val(), '', 'input has no text');
+    });
 });
 
 QUnit.module('clearButton', moduleSetup, () => {
