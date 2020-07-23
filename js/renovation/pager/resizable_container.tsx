@@ -143,15 +143,16 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
 
   @InternalState() parentWidth = -1;
 
-  elementsWidth: ChildElementsWidth = {
+  @InternalState() elementsWidth: ChildElementsWidth = {
     pageSizes: 0,
     pages: 0,
     info: 0,
   };
 
-  @Effect() subscribeToResize(): EffectCallback {
-    resizeCallbacks.add(this.updateChildrenProps);
-    return (): void => { resizeCallbacks.remove(this.updateChildrenProps); };
+  @Effect({ run: 'once' }) subscribeToResize(): EffectCallback {
+    const callback = (): void => this.updateChildrenProps();
+    resizeCallbacks.add(callback);
+    return (): void => { resizeCallbacks.remove(callback); };
   }
 
   @Effect() effectUpdateChildProps(): void {
