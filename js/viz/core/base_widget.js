@@ -375,8 +375,9 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const elementWidth = !sizeIsValid(size.width) && hasWindow() ? that._$element.width() : 0;
-        const elementHeight = !sizeIsValid(size.height) && hasWindow() ? that._$element.height() : 0;
+
+        const elementWidth = !sizeIsValid(size.width) && hasWindow() ? _floor(that._$element.width()) : 0;
+        const elementHeight = !sizeIsValid(size.height) && hasWindow() ? _floor(that._$element.height()) : 0;
         let canvas = {
             width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
             height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),

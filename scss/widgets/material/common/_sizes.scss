@@ -2,12 +2,17 @@
 
 // adduse
 
-$MATERIAL_INVALID_BADGE_SIZE: null !default;
+$material-invalid-badge-size: null !default;
+$material-line-height: 1.2857;
+
+$material-inline-borderedwidget-inner-size:
+  $material-base-inline-widget-height -
+  $material-base-border-width * 2;
 
 @if $size == "default" {
-  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
+  $material-invalid-badge-size: $material-base-icon-size - 2px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
+  $material-invalid-badge-size: $material-base-icon-size - 2px;
 }

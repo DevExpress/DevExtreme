@@ -1,40 +1,40 @@
 @use "sass:map";
 
-@mixin dx-icon-sizing($icon_size, $container_size: $icon_size, $borders_size: 0) {
-  $icon_paddings_dirty: $container_size - $icon_size;
-  $icon_paddings: $icon_paddings_dirty - $borders_size;
-  $icon_padding: floor($icon_paddings / 2);
+@mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
+  $icon-paddings-dirty: $container-size - $icon-size;
+  $icon-paddings: $icon-paddings-dirty - $borders-size;
+  $icon-padding: floor($icon-paddings / 2);
 
   // Geometry
-  width: $container_size;
-  height: $container_size;
+  width: $container-size;
+  height: $container-size;
 
   // Icon as background sizing
-  background-position: $icon_padding $icon_padding;
-  background-size: $icon_size $icon_size;
+  background-position: $icon-padding $icon-padding;
+  background-size: $icon-size $icon-size;
 
   // Icon as img src sizing
-  padding: $icon_padding;
+  padding: $icon-padding;
 
   // Icon as font
-  font-size: $icon_size;
+  font-size: $icon-size;
   text-align: center;
-  line-height: $container_size - $icon_paddings_dirty;
+  line-height: $container-size - $icon-paddings-dirty;
 }
 
-@mixin dx-icon-font-centered-sizing($icon_size) {
-  font-size: $icon_size;
+@mixin dx-icon-font-centered-sizing($icon-size) {
+  font-size: $icon-size;
   text-align: center;
-  line-height: $icon_size;
+  line-height: $icon-size;
 
   &:before {
     position: absolute;
     display: block;
-    width: $icon_size;
+    width: $icon-size;
     top: 50%;
-    margin-top: -$icon_size / 2;
+    margin-top: -$icon-size / 2;
     left: 50%;
-    margin-left: -$icon_size / 2;
+    margin-left: -$icon-size / 2;
   }
 }
 

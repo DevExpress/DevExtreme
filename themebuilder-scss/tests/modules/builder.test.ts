@@ -12,6 +12,8 @@ const normalizeCss = (css: string): string => css
   .replace(/\s*\/\*[\s\S]*?\*\/\s*/g, '')
   .trim();
 
+jest.mock('fibers', () => undefined);
+
 describe('Builder integration tests', () => {
   test('Build theme without parameters', () => {
     const config: ConfigSettings = {
@@ -59,7 +61,10 @@ describe('Builder integration tests', () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
-      items: [{ key: '@base-bg', value: '#abcdef' }],
+      items: [
+        { key: '@base-bg', value: '#abcdef' },
+        { key: '@undefined-variable', value: '#abcdef' },
+      ],
     };
 
     return buildTheme(config).then((result) => {

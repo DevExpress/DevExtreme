@@ -17,8 +17,8 @@ $datagrid-drag-header-border-color: null !default;
 $datagrid-drag-header-shadow-color: null !default;
 $datagrid-drag-header-second-shadow-color: null !default;
 $datagrid-header-drag-bg: null !default;
-$HEADER_FILTER_COLOR: null !default;
-$HEADER_FILTER_COLOR_EMPTY: null !default;
+$header-filter-color: null !default;
+$header-filter-color-empty: null !default;
 $datagrid-selection-bg: null !default;
 $datagrid-row-selected-border-color: null !default;
 $datagrid-row-selected-color: null !default;
@@ -76,7 +76,7 @@ $datagrid-filter-panel-color: null !default;
   /**
     * $name 25. Header text weight
     * $type select
-    * $typeValues 300|500|700
+    * $type-values 300|500|700
     */
   $datagrid-columnchooser-font-weight: 500 !default;
 
@@ -89,8 +89,8 @@ $datagrid-filter-panel-color: null !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $datagrid-header-drag-bg: $datagrid-base-background-color !default;
 
-  $HEADER_FILTER_COLOR: $datagrid-columnchooser-item-color !default;
-  $HEADER_FILTER_COLOR_EMPTY: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
+  $header-filter-color: $datagrid-columnchooser-item-color !default;
+  $header-filter-color-empty: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
 
   /**
     * $name 55. Selected row background color
@@ -241,7 +241,7 @@ $datagrid-filter-panel-color: null !default;
   /**
     * $name 25. Header text weight
     * $type select
-    * $typeValues 300|500|700
+    * $type-values 300|500|700
     */
   $datagrid-columnchooser-font-weight: 500 !default;
 
@@ -254,8 +254,8 @@ $datagrid-filter-panel-color: null !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $datagrid-header-drag-bg: $datagrid-base-background-color !default;
 
-  $HEADER_FILTER_COLOR: $datagrid-columnchooser-item-color !default;
-  $HEADER_FILTER_COLOR_EMPTY: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
+  $header-filter-color: $datagrid-columnchooser-item-color !default;
+  $header-filter-color-empty: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
 
   /**
     * $name 55. Selected row background color

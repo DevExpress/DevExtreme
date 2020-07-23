@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import {
   ComponentBindings,
   OneWay,
@@ -37,8 +38,12 @@ import type dxDraggable from '../../ui/draggable';
 import type { dxFormSimpleItem, dxFormOptions } from '../../ui/form';
 import type Store from '../../data/abstract_store';
 
-export declare type DataGridColumnButton = {
+@ComponentBindings()
+export class DataGridColumnButton {
+  @OneWay()
   name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+
+  @Event()
   onClick?:
   | ((e: {
     component?: DxDataGrid;
@@ -49,6 +54,8 @@ export declare type DataGridColumnButton = {
     column?: dxDataGridColumn;
   }) => any)
   | string;
+
+  @OneWay()
   template?:
   | template
   | ((
@@ -64,6 +71,8 @@ export declare type DataGridColumnButton = {
       row?: dxDataGridRowObject;
     },
   ) => string | Element | JQuery);
+
+  @OneWay()
   visible?:
   | boolean
   | ((options: {
@@ -71,63 +80,129 @@ export declare type DataGridColumnButton = {
     row?: dxDataGridRowObject;
     column?: dxDataGridColumn;
   }) => boolean);
-};
+}
 
-export declare type DataGridColumnHeaderFilter = {
+@ComponentBindings()
+export class DataGridColumnHeaderFilter {
+  @OneWay()
   allowSearch?: boolean;
+
+  @OneWay()
   dataSource?:
   | Array<any>
   | ((options: { component?: any; dataSource?: DataSourceOptions }) => any)
   | DataSourceOptions;
-  groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number;
-  height?: number;
-  searchMode?: 'contains' | 'startswith' | 'equals';
-  width?: number;
-};
 
-export declare type DataGridColumnLookup = {
+  @OneWay()
+  groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number;
+
+  @OneWay()
+  height?: number;
+
+  @OneWay()
+  searchMode?: 'contains' | 'startswith' | 'equals';
+
+  @OneWay()
+  width?: number;
+}
+
+@ComponentBindings()
+export class DataGridColumnLookup {
+  @OneWay()
   allowClearing?: boolean;
+
+  @OneWay()
   dataSource?:
   | Array<any>
   | DataSourceOptions
   | Store
   | ((options: { data?: any; key?: any }) => Array<any> | DataSourceOptions | Store);
-  displayExpr?: string | ((data: any) => string);
-  valueExpr?: string;
-};
 
-export declare type DataGridColumn = {
+  @OneWay()
+  displayExpr?: string | ((data: any) => string);
+
+  @OneWay()
+  valueExpr?: string;
+}
+
+@ComponentBindings()
+export class DataGridColumn {
+  @OneWay()
   alignment?: 'center' | 'left' | 'right' | undefined;
+
+  @OneWay()
   allowEditing?: boolean;
+
+  @OneWay()
   allowFiltering?: boolean;
+
+  @OneWay()
   allowFixing?: boolean;
+
+  @OneWay()
   allowHeaderFiltering?: boolean;
+
+  @OneWay()
   allowHiding?: boolean;
+
+  @OneWay()
   allowReordering?: boolean;
+
+  @OneWay()
   allowResizing?: boolean;
+
+  @OneWay()
   allowSearch?: boolean;
+
+  @OneWay()
   allowSorting?: boolean;
+
+  @Event()
   calculateCellValue?: (rowData: any) => any;
+
+  @Event()
   calculateDisplayValue?: string | ((rowData: any) => any);
+
+  @Event()
   calculateFilterExpression?: (
     filterValue: any,
     selectedFilterOperation: string,
     target: string,
   ) => string | Array<any> | Function;
+
+  @Event()
   calculateSortValue?: string | ((rowData: any) => any);
+
+  @OneWay()
   caption?: string;
+
+  @OneWay()
   cssClass?: string;
+
+  @Event()
   customizeText?: (cellInfo: {
     value?: string | number | Date;
     valueText?: string;
     target?: string;
     groupInterval?: string | number;
   }) => string;
+
+  @OneWay()
   dataField?: string;
+
+  @OneWay()
   dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+
+  @OneWay()
   editorOptions?: any;
+
+  @OneWay()
   encodeHtml?: boolean;
+
+  @OneWay()
   falseText?: string;
+
+  @OneWay()
   filterOperations?: Array<
   | '='
   | '<>'
@@ -145,21 +220,53 @@ export declare type DataGridColumn = {
   | 'anyof'
   | 'noneof'
   >;
+
+  @OneWay()
   filterType?: 'exclude' | 'include';
+
+  @OneWay()
   filterValue?: any;
+
+  @OneWay()
   filterValues?: Array<any>;
+
+  @OneWay()
   fixed?: boolean;
+
+  @OneWay()
   fixedPosition?: 'left' | 'right';
+
+  @OneWay()
   formItem?: dxFormSimpleItem;
+
+  @OneWay()
   format?: format;
-  headerFilter?: DataGridColumnHeaderFilter;
+
+  // @Nested()
+  // headerFilter?: DataGridColumnHeaderFilter;
+
+  @OneWay()
   hidingPriority?: number;
+
+  @OneWay()
   isBand?: boolean;
+
+  @Nested()
   lookup?: DataGridColumnLookup;
+
+  @OneWay()
   minWidth?: number;
+
+  @OneWay()
   name?: string;
+
+  @OneWay()
   ownerBand?: number;
+
+  @OneWay()
   renderAsync?: boolean;
+
+  @OneWay()
   selectedFilterOperation?:
   | '<'
   | '<='
@@ -172,17 +279,33 @@ export declare type DataGridColumn = {
   | 'endswith'
   | 'notcontains'
   | 'startswith';
+
+  @Event()
   setCellValue?: (
     newData: any,
     value: any,
     currentRowData: any,
   ) => void | Promise<void> | JQueryPromise<void>;
+
+  @OneWay()
   showEditorAlways?: boolean;
+
+  @OneWay()
   showInColumnChooser?: boolean;
+
+  @OneWay()
   sortIndex?: number;
+
+  @OneWay()
   sortOrder?: 'asc' | 'desc' | undefined;
+
+  @Event()
   sortingMethod?: (value1: any, value2: any) => number;
+
+  @OneWay()
   trueText?: string;
+
+  @OneWay()
   validationRules?: Array<
   | RequiredRule
   | NumericRule
@@ -194,15 +317,32 @@ export declare type DataGridColumn = {
   | EmailRule
   | AsyncRule
   >;
+
+  @OneWay()
   visible?: boolean;
+
+  @OneWay()
   visibleIndex?: number;
+
+  @OneWay()
   width?: number | string;
 
+  @OneWay()
   allowExporting?: boolean;
+
+  @OneWay()
   allowGrouping?: boolean;
+
+  @OneWay()
   autoExpandGroup?: boolean;
+
+  @Nested()
   buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | DataGridColumnButton>;
+
+  @OneWay()
   calculateGroupValue?: string | ((rowData: any) => any);
+
+  @OneWay()
   cellTemplate?:
   | template
   | ((
@@ -222,7 +362,11 @@ export declare type DataGridColumn = {
       watch?: Function;
     },
   ) => any);
+
+  @OneWay()
   columns?: Array<dxDataGridColumn | string>;
+
+  @OneWay()
   editCellTemplate?:
   | template
   | ((
@@ -242,6 +386,8 @@ export declare type DataGridColumn = {
       watch?: Function;
     },
   ) => any);
+
+  @OneWay()
   groupCellTemplate?:
   | template
   | ((
@@ -261,7 +407,11 @@ export declare type DataGridColumn = {
       groupContinuedMessage?: string;
     },
   ) => any);
+
+  @OneWay()
   groupIndex?: number;
+
+  @OneWay()
   headerCellTemplate?:
   | template
   | ((
@@ -272,84 +422,186 @@ export declare type DataGridColumn = {
       column?: dxDataGridColumn;
     },
   ) => any);
+
+  @OneWay()
   showWhenGrouped?: boolean;
+
+  @OneWay()
   type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
-};
+}
 
-export declare type DataGridEditingTexts = {
+@ComponentBindings()
+export class DataGridEditingTexts {
+  @OneWay()
   addRow?: string;
-  cancelAllChanges?: string;
-  cancelRowChanges?: string;
-  confirmDeleteMessage?: string;
-  confirmDeleteTitle?: string;
-  deleteRow?: string;
-  editRow?: string;
-  saveAllChanges?: string;
-  undeleteRow?: string;
-  validationCancelChanges?: string;
-};
 
-export declare type DataGridEditing = {
+  @OneWay()
+  cancelAllChanges?: string;
+
+  @OneWay()
+  cancelRowChanges?: string;
+
+  @OneWay()
+  confirmDeleteMessage?: string;
+
+  @OneWay()
+  confirmDeleteTitle?: string;
+
+  @OneWay()
+  deleteRow?: string;
+
+  @OneWay()
+  editRow?: string;
+
+  @OneWay()
+  saveAllChanges?: string;
+
+  @OneWay()
+  undeleteRow?: string;
+
+  @OneWay()
+  validationCancelChanges?: string;
+}
+
+@ComponentBindings()
+export class DataGridEditing {
+  @OneWay()
   allowAdding?: boolean;
+
+  @OneWay()
   allowDeleting?:
   | boolean
   | ((options: { component?: DxDataGrid; row?: dxDataGridRowObject }) => boolean);
+
+  @OneWay()
   allowUpdating?:
   | boolean
   | ((options: { component?: DxDataGrid; row?: dxDataGridRowObject }) => boolean);
+
+  @OneWay()
   confirmDelete?: boolean;
+
+  @OneWay()
   form?: dxFormOptions;
+
+  @OneWay()
   mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+
+  @OneWay()
   popup?: dxPopupOptions;
+
+  @OneWay()
   refreshMode?: 'full' | 'reshape' | 'repaint';
+
+  @OneWay()
   selectTextOnEditStart?: boolean;
+
+  @OneWay()
   startEditAction?: 'click' | 'dblClick';
+
+  @Nested()
   texts?: DataGridEditingTexts;
+
+  @OneWay()
   useIcons?: boolean;
-};
+}
 
-export declare type DataGridScrolling = {
+@ComponentBindings()
+export class DataGridScrolling {
+  @OneWay()
   mode?: 'infinite' | 'standard' | 'virtual';
+
+  @OneWay()
   columnRenderingMode?: 'standard' | 'virtual';
+
+  @OneWay()
   preloadEnabled?: boolean;
+
+  @OneWay()
   rowRenderingMode?: 'standard' | 'virtual';
+
+  @OneWay()
   scrollByContent?: boolean;
+
+  @OneWay()
   scrollByThumb?: boolean;
+
+  @OneWay()
   showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+
+  @OneWay()
   useNative?: boolean | 'auto';
-};
+}
 
-export declare type DataGridSelection = {
+@ComponentBindings()
+export class DataGridSelection {
+  @OneWay()
   allowSelectAll?: boolean;
+
+  @OneWay()
   mode?: 'multiple' | 'none' | 'single';
+
+  @OneWay()
   deferred?: boolean;
+
+  @OneWay()
   selectAllMode?: 'allPages' | 'page';
+
+  @OneWay()
   showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-};
+}
 
-export declare type DataGridPaging = {
+@ComponentBindings()
+export class DataGridPaging {
+  @OneWay()
   enabled?: boolean;
+
+  @OneWay()
   pageIndex?: number;
+
+  @OneWay()
   pageSize?: number;
-};
+}
 
-export declare type DataGridSortByGroupSummaryInfoItem = {
+@ComponentBindings()
+export class DataGridSortByGroupSummaryInfoItem {
+  @OneWay()
   groupColumn?: string;
+
+  @OneWay()
   sortOrder?: 'asc' | 'desc';
+
+  @OneWay()
   summaryItem?: string | number;
-};
+}
 
-export declare type DataGridGroupPanel = {
+@ComponentBindings()
+export class DataGridGroupPanel {
+  @OneWay()
   allowColumnDragging?: boolean;
-  emptyPanelText?: string;
-  visible?: boolean | 'auto';
-};
 
-export declare type DataGridGrouping = {
+  @OneWay()
+  emptyPanelText?: string;
+
+  @OneWay()
+  visible?: boolean | 'auto';
+}
+
+@ComponentBindings()
+export class DataGridGrouping {
+  @OneWay()
   allowCollapsing?: boolean;
+
+  @OneWay()
   autoExpandAll?: boolean;
+
+  @OneWay()
   contextMenuEnabled?: boolean;
+
+  @OneWay()
   expandMode?: 'buttonClick' | 'rowClick';
+
+  @OneWay()
   texts?: {
     groupByThisColumn?: string;
     groupContinuedMessage?: string;
@@ -357,35 +609,77 @@ export declare type DataGridGrouping = {
     ungroup?: string;
     ungroupAll?: string;
   };
-};
+}
 
-export declare type DataGridSummaryGroupItem = {
+@ComponentBindings()
+export class DataGridSummaryGroupItem {
+  @OneWay()
   alignByColumn?: boolean;
+
+  @OneWay()
   column?: string;
+
+  @Event()
   customizeText?: (itemInfo: { value?: string | number | Date; valueText?: string }) => string;
+
+  @OneWay()
   displayFormat?: string;
+
+  @OneWay()
   name?: string;
+
+  @OneWay()
   showInColumn?: string;
+
+  @OneWay()
   showInGroupFooter?: boolean;
-  skipEmptyValues?: boolean;
-  summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
-  valueFormat?: format;
-};
 
-export declare type DataGridSummaryTotalItem = {
+  @OneWay()
+  skipEmptyValues?: boolean;
+
+  @OneWay()
+  summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+
+  @OneWay()
+  valueFormat?: format;
+}
+
+@ComponentBindings()
+export class DataGridSummaryTotalItem {
+  @OneWay()
   alignment?: 'center' | 'left' | 'right';
-  column?: string;
-  cssClass?: string;
-  customizeText?: (itemInfo: { value?: string | number | Date; valueText?: string }) => string;
-  displayFormat?: string;
-  name?: string;
-  showInColumn?: string;
-  skipEmptyValues?: boolean;
-  summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
-  valueFormat?: format;
-};
 
-export declare type DataGridSummary = {
+  @OneWay()
+  column?: string;
+
+  @OneWay()
+  cssClass?: string;
+
+  @Event()
+  customizeText?: (itemInfo: { value?: string | number | Date; valueText?: string }) => string;
+
+  @OneWay()
+  displayFormat?: string;
+
+  @OneWay()
+  name?: string;
+
+  @OneWay()
+  showInColumn?: string;
+
+  @OneWay()
+  skipEmptyValues?: boolean;
+
+  @OneWay()
+  summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+
+  @OneWay()
+  valueFormat?: format;
+}
+
+@ComponentBindings()
+export class DataGridSummary {
+  @Event()
   calculateCustomSummary?: (options: {
     component?: DxDataGrid;
     name?: string;
@@ -394,9 +688,17 @@ export declare type DataGridSummary = {
     totalValue?: any;
     groupIndex?: number;
   }) => any;
+
+  @Nested()
   groupItems?: Array<DataGridSummaryGroupItem>;
+
+  @OneWay()
   recalculateWhileEditing?: boolean;
+
+  @OneWay()
   skipEmptyValues?: boolean;
+
+  @OneWay()
   texts?: {
     avg?: string;
     avgOtherColumn?: string;
@@ -408,21 +710,41 @@ export declare type DataGridSummary = {
     sum?: string;
     sumOtherColumn?: string;
   };
+
+  @Nested()
   totalItems?: Array<DataGridSummaryTotalItem>;
-};
+}
 
-export declare type DataGridPager = {
+@ComponentBindings()
+export class DataGridPager {
+  @OneWay()
   allowedPageSizes?: Array<number> | 'auto';
-  infoText?: string;
-  showInfo?: boolean;
-  showNavigationButtons?: boolean;
-  showPageSizeSelector?: boolean;
-  visible?: boolean | 'auto';
-};
 
-export declare type DataGridMasterDetail = {
+  @OneWay()
+  infoText?: string;
+
+  @OneWay()
+  showInfo?: boolean;
+
+  @OneWay()
+  showNavigationButtons?: boolean;
+
+  @OneWay()
+  showPageSizeSelector?: boolean;
+
+  @OneWay()
+  visible?: boolean | 'auto';
+}
+
+@ComponentBindings()
+export class DataGridMasterDetail {
+  @OneWay()
   autoExpandAll?: boolean;
+
+  @OneWay()
   enabled?: boolean;
+
+  @OneWay()
   template?:
   | template
   | ((
@@ -433,17 +755,35 @@ export declare type DataGridMasterDetail = {
       watch?: Function;
     },
   ) => any);
-};
+}
 
-export declare type DataGridRowDragging = {
+@ComponentBindings()
+export class DataGridRowDragging {
+  @OneWay()
   allowDropInsideItem?: boolean;
+
+  @OneWay()
   allowReordering?: boolean;
+
+  @OneWay()
   autoScroll?: boolean;
+
+  @OneWay()
   boundary?: string | Element | JQuery;
+
+  @OneWay()
   container?: string | Element | JQuery;
+
+  @OneWay()
   cursorOffset?: string | { x?: number; y?: number };
+
+  @OneWay()
   data?: any;
+
+  @OneWay()
   dragDirection?: 'both' | 'horizontal' | 'vertical';
+
+  @OneWay()
   dragTemplate?:
   | template
   | ((
@@ -453,10 +793,20 @@ export declare type DataGridRowDragging = {
     },
     containerElement: dxElement,
   ) => string | Element | JQuery);
+
+  @OneWay()
   dropFeedbackMode?: 'push' | 'indicate';
+
+  @OneWay()
   filter?: string;
+
+  @OneWay()
   group?: string;
+
+  @OneWay()
   handle?: string;
+
+  @Event()
   onAdd?: (e: {
     event?: event;
     itemData?: any;
@@ -469,6 +819,8 @@ export declare type DataGridRowDragging = {
     toData?: any;
     dropInsideItem?: boolean;
   }) => any;
+
+  @Event()
   onDragChange?: (e: {
     event?: event;
     cancel?: boolean;
@@ -482,6 +834,8 @@ export declare type DataGridRowDragging = {
     toData?: any;
     dropInsideItem?: boolean;
   }) => any;
+
+  @Event()
   onDragEnd?: (e: {
     event?: event;
     cancel?: boolean;
@@ -495,6 +849,8 @@ export declare type DataGridRowDragging = {
     toData?: any;
     dropInsideItem?: boolean;
   }) => any;
+
+  @Event()
   onDragMove?: (e: {
     event?: event;
     cancel?: boolean;
@@ -508,6 +864,8 @@ export declare type DataGridRowDragging = {
     toData?: any;
     dropInsideItem?: boolean;
   }) => any;
+
+  @Event()
   onDragStart?: (e: {
     event?: event;
     cancel?: boolean;
@@ -516,6 +874,8 @@ export declare type DataGridRowDragging = {
     fromIndex?: number;
     fromData?: any;
   }) => any;
+
+  @Event()
   onRemove?: (e: {
     event?: event;
     itemData?: any;
@@ -527,6 +887,8 @@ export declare type DataGridRowDragging = {
     fromData?: any;
     toData?: any;
   }) => any;
+
+  @Event()
   onReorder?: (e: {
     event?: event;
     itemData?: any;
@@ -540,71 +902,151 @@ export declare type DataGridRowDragging = {
     dropInsideItem?: boolean;
     promise?: Promise<void> | JQueryPromise<void>;
   }) => any;
+
+  @OneWay()
   scrollSensitivity?: number;
+
+  @OneWay()
   scrollSpeed?: number;
+
+  @OneWay()
   showDragIcons?: boolean;
-};
+}
 
-export declare type DataGridColumnChooser = {
+@ComponentBindings()
+export class DataGridColumnChooser {
+  @OneWay()
   allowSearch?: boolean;
-  emptyPanelText?: string;
-  enabled?: boolean;
-  height?: number;
-  mode?: 'dragAndDrop' | 'select';
-  searchTimeout?: number;
-  title?: string;
-  width?: number;
-};
 
-export declare type DataGridColumnFixing = {
+  @OneWay()
+  emptyPanelText?: string;
+
+  @OneWay()
   enabled?: boolean;
+
+  @OneWay()
+  height?: number;
+
+  @OneWay()
+  mode?: 'dragAndDrop' | 'select';
+
+  @OneWay()
+  searchTimeout?: number;
+
+  @OneWay()
+  title?: string;
+
+  @OneWay()
+  width?: number;
+}
+
+@ComponentBindings()
+export class DataGridColumnFixing {
+  @OneWay()
+  enabled?: boolean;
+
+  @OneWay()
   texts?: {
     fix?: string;
     leftPosition?: string;
     rightPosition?: string;
     unfix?: string;
   };
-};
+}
 
-export declare type DataGridSearchPanel = {
+@ComponentBindings()
+export class DataGridSearchPanel {
+  @OneWay()
   highlightCaseSensitive?: boolean;
+
+  @OneWay()
   highlightSearchText?: boolean;
+
+  @OneWay()
   placeholder?: string;
+
+  @OneWay()
   searchVisibleColumnsOnly?: boolean;
+
+  @OneWay()
   text?: string;
+
+  @OneWay()
   visible?: boolean;
+
+  @OneWay()
   width?: number;
-};
+}
 
-export declare type DataGridSorting = {
+@ComponentBindings()
+export class DataGridSorting {
+  @OneWay()
   ascendingText?: string;
+
+  @OneWay()
   clearText?: string;
+
+  @OneWay()
   descendingText?: string;
+
+  @OneWay()
   mode?: 'multiple' | 'none' | 'single';
+
+  @OneWay()
   showSortIndexes?: boolean;
-};
+}
 
-export declare type DataGridStateStoring = {
+@ComponentBindings()
+export class DataGridStateStoring {
+  @Event()
   customLoad?: () => Promise<any> | JQueryPromise<any>;
+
+  @Event()
   customSave?: (gridState: any) => any;
+
+  @OneWay()
   enabled?: boolean;
+
+  @OneWay()
   savingTimeout?: number;
+
+  @OneWay()
   storageKey?: string;
+
+  @OneWay()
   type?: 'custom' | 'localStorage' | 'sessionStorage';
-};
+}
 
-export declare type DataGridFilterPanel = {
+@ComponentBindings()
+export class DataGridFilterPanel {
+  @Event()
   customizeText?: (e: { component?: DxDataGrid; filterValue?: any; text?: string }) => string;
-  filterEnabled?: boolean;
-  texts?: { clearFilter?: string; createFilter?: string; filterEnabledHint?: string };
-  visible?: boolean;
-};
 
-export declare type DataGridFilterRow = {
+  @OneWay()
+  filterEnabled?: boolean;
+
+  @OneWay()
+  texts?: { clearFilter?: string; createFilter?: string; filterEnabledHint?: string };
+
+  @OneWay()
+  visible?: boolean;
+}
+
+@ComponentBindings()
+export class DataGridFilterRow {
+  @OneWay()
   applyFilter?: 'auto' | 'onClick';
+
+  @OneWay()
   applyFilterText?: string;
+
+  @OneWay()
   betweenEndText?: string;
+
+  @OneWay()
   betweenStartText?: string;
+
+  @OneWay()
   operationDescriptions?: {
     between?: string;
     contains?: string;
@@ -618,39 +1060,85 @@ export declare type DataGridFilterRow = {
     notEqual?: string;
     startsWith?: string;
   };
+
+  @OneWay()
   resetOperationText?: string;
+
+  @OneWay()
   showAllText?: string;
+
+  @OneWay()
   showOperationChooser?: boolean;
-  visible?: boolean;
-};
 
-export declare type DataGridHeaderFilter = {
+  @OneWay()
+  visible?: boolean;
+}
+
+@ComponentBindings()
+export class DataGridHeaderFilter {
+  @OneWay()
   allowSearch?: boolean;
+
+  @OneWay()
   height?: number;
+
+  @OneWay()
   searchTimeout?: number;
+
+  @OneWay()
   texts?: { cancel?: string; emptyValue?: string; ok?: string };
+
+  @OneWay()
   visible?: boolean;
-  width?: number;
-};
 
-export declare type DataGridKeyboardNavigation = {
+  @OneWay()
+  width?: number;
+}
+
+@ComponentBindings()
+export class DataGridKeyboardNavigation {
+  @OneWay()
   editOnKeyPress?: boolean;
-  enabled?: boolean;
-  enterKeyAction?: 'startEdit' | 'moveFocus';
-  enterKeyDirection?: 'none' | 'column' | 'row';
-};
 
-export declare type DataGridLoadPanel = {
+  @OneWay()
+  enabled?: boolean;
+
+  @OneWay()
+  enterKeyAction?: 'startEdit' | 'moveFocus';
+
+  @OneWay()
+  enterKeyDirection?: 'none' | 'column' | 'row';
+}
+
+@ComponentBindings()
+export class DataGridLoadPanel {
+  @OneWay()
   enabled?: boolean | 'auto';
+
+  @OneWay()
   height?: number;
+
+  @OneWay()
   indicatorSrc?: string;
+
+  @OneWay()
   shading?: boolean;
+
+  @OneWay()
   shadingColor?: string;
+
+  @OneWay()
   showIndicator?: boolean;
+
+  @OneWay()
   showPane?: boolean;
+
+  @OneWay()
   text?: string;
+
+  @OneWay()
   width?: number;
-};
+}
 
 /*
 export declare type DataGridExport = {

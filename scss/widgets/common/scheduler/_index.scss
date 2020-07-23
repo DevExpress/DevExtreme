@@ -4,9 +4,9 @@
 
 @use "./tooltip";
 
-$SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN: 3px;
-$SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT: 20px;
-$SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
+$scheduler-appointment-collector-margin: 3px;
+$scheduler-appointment-collector-height: 20px;
+$scheduler-popup-scrollable-content-padding: 20px;
 
 .dx-scheduler-appointment-popup {
   .dx-popup-content {
@@ -15,7 +15,7 @@ $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
   }
 
   .dx-scrollable-content {
-    padding-top: $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING;
+    padding-top: $scheduler-popup-scrollable-content-padding;
   }
 
   .dx-form.dx-recurrence-editor-container {
@@ -44,15 +44,15 @@ $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
 .dx-scheduler-appointment-collector {
   position: absolute;
   display: block;
-  height: $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+  height: $scheduler-appointment-collector-height;
   text-align: center;
   cursor: pointer;
-  margin: $SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN 0 0 $SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN;
+  margin: $scheduler-appointment-collector-margin 0 0 $scheduler-appointment-collector-margin;
 
   .dx-scheduler-appointment-collector-content {
     @include dx-overflow();
 
-    margin: 0 2 * ($SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN - 1);
+    margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
 
     &.dx-button-content {
       padding: 0;
@@ -61,22 +61,22 @@ $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
     span:last-child {
       display: inline-block;
       vertical-align: middle;
-      line-height: $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT / 1.5;
-      height: $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+      line-height: $scheduler-appointment-collector-height / 1.5;
+      height: $scheduler-appointment-collector-height;
       padding-left: 2px;
     }
   }
 
   &.dx-state-hover {
     &:before {
-      border-radius: $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+      border-radius: $scheduler-appointment-collector-height;
     }
   }
 
   &.dx-button.dx-button-default {
     padding: 0;
     max-width: none;
-    border-radius: $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+    border-radius: $scheduler-appointment-collector-height;
   }
 }
 
@@ -89,7 +89,7 @@ $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
 
 .dx-rtl {
   .dx-scheduler-appointment-collector {
-    margin: $SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN $SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN 0 0;
+    margin: $scheduler-appointment-collector-margin $scheduler-appointment-collector-margin 0 0;
   }
 }
 
@@ -110,7 +110,7 @@ $SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
 
     .dx-scheduler-appointment-collector-content {
       span:last-child {
-        line-height: $SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+        line-height: $scheduler-appointment-collector-height;
       }
     }
   }

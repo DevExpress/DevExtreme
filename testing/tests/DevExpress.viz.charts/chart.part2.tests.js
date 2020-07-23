@@ -218,8 +218,6 @@ QUnit.test('Canvas creation from default', function(assert) {
     assert.equal(chart._canvas.width, 300);
     assert.equal(chart._canvas.height, 150, 'True height of container');
     // get it from default canvas" settings
-
-    // assert.ok(chart.canvas.marginsThemeApplied);
 });
 
 QUnit.test('Canvas creation, default container size', function(assert) {
@@ -230,6 +228,16 @@ QUnit.test('Canvas creation, default container size', function(assert) {
 
     assert.ok(chart._canvas);
     assert.equal(chart._canvas.width, css.width);
+    assert.equal(chart._canvas.height, 400);
+});
+
+QUnit.test('Canvas creation, default conteiner size, zoom of the browser is not 100% (T916363)', function(assert) {
+    this.$container.css({ height: '0.3px', width: '0.2px' });
+    const chart = this.createChart({
+    });
+
+    assert.ok(chart._canvas);
+    assert.equal(chart._canvas.width, 400);
     assert.equal(chart._canvas.height, 400);
 });
 
@@ -355,7 +363,6 @@ QUnit.test('Two panes canvas creation', function(assert) {
     assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
     assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'topPane', 'Top pane from user options');
     assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'bottomPane', 'Bottom pane from user options');
-    // assert.ok(chart.canvas.marginsThemeApplied);
 });
 
 QUnit.test('Two panes canvas creation. All Border visible', function(assert) {
