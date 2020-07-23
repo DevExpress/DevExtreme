@@ -1,4 +1,4 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -1395,11 +1395,12 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
   const dataGrid = new DataGrid('#container');
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(1);
-  const $revertButton = Selector('.dx-revert-button');
+  const $revertButton = cell0.getRevertButton();
 
   await t
     .doubleClick(cell0.element)
-    .expect(cell0.isEditCell).ok()
+    .expect(cell0.isEditCell)
+    .ok()
     .click(cell0.element.find('.dx-checkbox'))
     .expect($revertButton.exists)
     .ok()
@@ -1407,9 +1408,11 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
     .expect($revertButton.exists)
     .notOk()
     .expect(cell0.isEditCell)
+    .notOk()
+    .expect(dataGrid.apiGetCellValue(0, 1))
     .notOk();
 }).before(() => createWidget('dxDataGrid', {
-  dataSource: [{ name: 'test', test: undefined }],
+  dataSource: [{ name: 'test', test: false }],
   editing: {
     mode: 'cell',
     allowUpdating: true,
