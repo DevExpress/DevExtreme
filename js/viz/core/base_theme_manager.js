@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { isString as _isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import paletteModule from '../palette';
+import { createPalette as getPalette, getDiscretePalette, getGradientPalette, getAccentColor as accentColor } from '../palette';
 import { parseScalar as _parseScalar } from './utils';
 import themeModule from '../themes';
 const _getTheme = themeModule.getTheme;
@@ -87,19 +87,19 @@ export const BaseThemeManager = Class.inherit({ // TODO: test hack
     // TODO: May be we need some single method for all palettes?
 
     createPalette: function(palette, options) {
-        return paletteModule.createPalette(palette, options, this._defaultPalette);
+        return getPalette(palette, options, this._defaultPalette);
     },
 
     createDiscretePalette: function(palette, count) {
-        return paletteModule.getDiscretePalette(palette, count, this._defaultPalette);
+        return getDiscretePalette(palette, count, this._defaultPalette);
     },
 
     createGradientPalette: function(palette) {
-        return paletteModule.getGradientPalette(palette, this._defaultPalette);
+        return getGradientPalette(palette, this._defaultPalette);
     },
 
     getAccentColor: function(palette) {
-        return paletteModule.getAccentColor(palette, this._defaultPalette);
+        return accentColor(palette, this._defaultPalette);
     },
 
     _initializeTheme: function() {
