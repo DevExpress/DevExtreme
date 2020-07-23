@@ -4,13 +4,16 @@
 
 $generic-slider-width: null !default;
 $generic-slider-track-height: null !default;
+$generic-slider-height: null !default;
 
 @if $size == "default" {
   $generic-slider-width: 14px;
   $generic-slider-track-height: 4px;
+  $generic-slider-height: 28px;
 }
 
 @else if $size == "compact" {
   $generic-slider-width: 9px;
   $generic-slider-track-height: 2px;
+  $generic-slider-height: 20px;
 }

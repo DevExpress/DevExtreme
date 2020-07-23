@@ -127,7 +127,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     submenuDirection?: 'auto' | 'left' | 'right';
     /**
      * @docid dxContextMenuOptions.target
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

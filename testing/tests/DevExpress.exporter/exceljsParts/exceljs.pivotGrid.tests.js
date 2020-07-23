@@ -3779,6 +3779,49 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
     });
+
+    QUnit.module('invisible grid', moduleConfig, () => {
+        [
+            (element, options) => { return element.dxPivotGrid($.extend(options, { visible: false })); },
+            (element, options) => { element.css('display', 'none'); return element.dxPivotGrid(options); },
+            (element, options) => { element.wrap($('<div></div>').css('display', 'none')); return element.dxPivotGrid(options); },
+            (element, options) => { return $('<div></div>').dxPivotGrid(options); },
+        ].forEach(gridCreatingFunc => {
+            QUnit.test(`Export [string x string x number]. Grid created via: ${gridCreatingFunc.toString()}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string' },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A', row2: 'B', col1: 'a' }
+                    ]
+                };
+                const pivotGrid = gridCreatingFunc($('#pivotGrid'), {
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataSource: ds
+                }).dxPivotGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+                ], [
+                    { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D', width: 100 } },
+                    { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } }
+                ]];
+
+                helper.extendExpectedCells(expectedCells, topLeft);
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then(() => {
+                    helper.checkColumnWidths([toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH), toExcelWidth(PivotGridExport.DEFAUL_COLUMN_WIDTH)], topLeft.column, epsilon);
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+        });
+    });
 });
 
 QUnit.module('Text customization', moduleConfig, () => {

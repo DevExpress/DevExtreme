@@ -8,7 +8,7 @@ export interface positionConfig {
     at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
     /**
      * @docid positionConfig.boundary
-     * @type string|Node|jQuery|window
+     * @type string|Element|jQuery|window
      * @prevFileNamespace DevExpress.animation
      * @public
      */
@@ -36,7 +36,7 @@ export interface positionConfig {
     my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
     /**
      * @docid positionConfig.of
-     * @type string|Node|jQuery|window
+     * @type string|Element|jQuery|window
      * @prevFileNamespace DevExpress.animation
      * @public
      */
