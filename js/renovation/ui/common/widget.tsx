@@ -13,14 +13,16 @@ import {
 import '../../../events/click';
 import '../../../events/hover';
 
-import {
-  active, dxClick, focus, hover, keyboard, resize, visibility,
-} from '../../../events/short';
+import { focus } from '../../../events/short';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
+import {
+  subscribeHover, subscribeActive, subscribeFocus, subscribeDxClick,
+  subscribeResize, subscribeVisibility, subscribeKeyboard,
+} from '../../utils/subscribe_to_event';
 
 const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -113,20 +115,17 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   accessKeyEffect() {
-    const namespace = 'UIFeedback';
     const { accessKey, focusStateEnabled, disabled } = this.props;
     const isFocusable = focusStateEnabled && !disabled;
     const canBeFocusedByKey = isFocusable && accessKey;
 
     if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef, (e) => {
+      return subscribeDxClick(this.widgetRef, (e) => {
         if (isFakeClickEvent(e)) {
           e.stopImmediatePropagation();
           this.focused = true;
         }
-      }, { namespace });
-
-      return () => dxClick.off(this.widgetRef, { namespace });
+      });
     }
 
     return undefined;
@@ -139,44 +138,27 @@ export class Widget extends JSXComponent(WidgetProps) {
       _feedbackShowTimeout, _feedbackHideTimeout, onActive,
     } = this.props;
     const selector = activeStateUnit;
-    const namespace = 'UIFeedback';
-
-    if (activeStateEnabled && !disabled) {
-      active.on(this.widgetRef,
-        ({ event }) => {
-          this.active = true;
+    return subscribeActive(
+      !!(activeStateEnabled && !disabled),
+      this.widgetRef,
+      ({ event }) => {
+        this.active = true;
           onActive?.(event);
-        },
-        ({ event }) => {
-          this.active = false;
+      },
+      ({ event }) => {
+        this.active = false;
           onInactive?.(event);
-        }, {
-          hideTimeout: _feedbackHideTimeout,
-          namespace,
-          selector,
-          showTimeout: _feedbackShowTimeout,
-        });
-
-      return () => active.off(this.widgetRef, { selector, namespace });
-    }
-
-    return undefined;
+      }, {
+        hideTimeout: _feedbackHideTimeout,
+        selector,
+        showTimeout: _feedbackShowTimeout,
+      },
+    );
   }
 
   @Effect()
   clickEffect() {
-    const { name, onClick } = this.props;
-    const namespace = name;
-
-    if (onClick) {
-      dxClick.on(this.widgetRef,
-        (e) => onClick(e),
-        { namespace });
-
-      return () => dxClick.off(this.widgetRef, { namespace });
-    }
-
-    return undefined;
+    return subscribeDxClick(this.widgetRef, this.props.onClick);
   }
 
   @Method()
@@ -186,86 +168,56 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   focusEffect() {
-    const { disabled, focusStateEnabled, name } = this.props;
-    const namespace = `${name}Focus`;
+    const { disabled, focusStateEnabled } = this.props;
     const isFocusable = focusStateEnabled && !disabled;
 
-    if (isFocusable) {
-      focus.on(this.widgetRef,
-        (e) => { !e.isDefaultPrevented() && (this.focused = true); },
-        (e) => { !e.isDefaultPrevented() && (this.focused = false); },
-        {
-          isFocusable: focusable,
-          namespace,
-        });
-
-      return () => focus.off(this.widgetRef, { namespace });
-    }
-
-    return undefined;
+    return subscribeFocus(
+      !!isFocusable,
+      this.widgetRef,
+      (e) => { !e.isDefaultPrevented() && (this.focused = true); },
+      (e) => { !e.isDefaultPrevented() && (this.focused = false); },
+      {
+        isFocusable: focusable,
+      },
+    );
   }
 
   @Effect()
   hoverEffect() {
-    const namespace = 'UIFeedback';
     const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
     const selector = activeStateUnit;
     const isHoverable = hoverStateEnabled && !disabled;
-
-    if (isHoverable) {
-      hover.on(this.widgetRef,
-        () => { !this.active && (this.hovered = true); },
-        () => { this.hovered = false; },
-        { selector, namespace });
-
-      return () => hover.off(this.widgetRef, { selector, namespace });
-    }
-
-    return undefined;
+    return subscribeHover(
+      !!isHoverable,
+      this.widgetRef,
+      () => { !this.active && (this.hovered = true); },
+      () => { this.hovered = false; },
+      { selector },
+    );
   }
 
   @Effect()
   keyboardEffect() {
     const { focusStateEnabled, onKeyDown } = this.props;
 
-    if (focusStateEnabled || onKeyDown) {
-      const id = keyboard.on(this.widgetRef, this.widgetRef, (e) => onKeyDown!(e));
-
-      return () => keyboard.off(id);
-    }
-
-    return undefined;
+    return subscribeKeyboard(!!focusStateEnabled, this.widgetRef, onKeyDown);
   }
 
   @Effect()
   resizeEffect() {
-    const namespace = `${this.props.name}VisibilityChange`;
     const { onDimensionChanged } = this.props;
-
-    if (onDimensionChanged) {
-      resize.on(this.widgetRef, onDimensionChanged, { namespace });
-
-      return () => resize.off(this.widgetRef, { namespace });
-    }
-
-    return undefined;
+    return subscribeResize(this.widgetRef, onDimensionChanged);
   }
 
   @Effect()
   visibilityEffect() {
-    const { name, onVisibilityChange } = this.props;
-    const namespace = `${name}VisibilityChange`;
-
-    if (onVisibilityChange) {
-      visibility.on(this.widgetRef,
-        () => onVisibilityChange!(true),
-        () => onVisibilityChange!(false),
-        { namespace });
-
-      return () => visibility.off(this.widgetRef, { namespace });
-    }
-
-    return undefined;
+    const { onVisibilityChange } = this.props;
+    return subscribeVisibility(
+      !!onVisibilityChange,
+      this.widgetRef,
+      () => onVisibilityChange!(true),
+      () => onVisibilityChange!(false),
+    );
   }
 
   get attributes() {

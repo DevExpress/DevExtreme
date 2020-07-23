@@ -1,8 +1,7 @@
 import {
   EVENT, emit, getEventHandlers, clear,
 } from '../../__tests__/events_mock';
-
-import { subscribeToClickEvent } from '../subscribe_to_event';
+import { subscribeDxClick } from '../subscribe_to_event';
 
 describe('subscribeToClickEvent', () => {
   afterEach(() => { clear(); });
@@ -10,14 +9,14 @@ describe('subscribeToClickEvent', () => {
   const element = {} as HTMLElement;
 
   it('should not subscribe to click event without handler', () => {
-    subscribeToClickEvent(element, null);
+    subscribeDxClick(element);
 
     expect(getEventHandlers(EVENT.dxClick)).toBe(undefined);
   });
 
   it('should subscribe to click event', () => {
     const clickHandler = jest.fn();
-    subscribeToClickEvent(element, clickHandler);
+    subscribeDxClick(element, clickHandler);
     expect(clickHandler).toHaveBeenCalledTimes(0);
 
     emit(EVENT.dxClick);
@@ -26,7 +25,7 @@ describe('subscribeToClickEvent', () => {
 
   it('should return unsubscribe function', () => {
     const clickHandler = jest.fn();
-    const unsubscribeFn = subscribeToClickEvent(element, clickHandler);
+    const unsubscribeFn = subscribeDxClick(element, clickHandler);
 
     emit(EVENT.dxClick);
     expect(clickHandler).toHaveBeenCalledTimes(1);

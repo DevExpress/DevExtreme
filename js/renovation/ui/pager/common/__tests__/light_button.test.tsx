@@ -2,7 +2,7 @@ import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import { registerKeyboardAction } from '../../../../../ui/shared/accessibility';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
-import { subscribeToClickEvent } from '../../../../utils/subscribe_to_event';
+import { subscribeDxClick } from '../../../../utils/subscribe_to_event';
 import { closestClass } from '../../utils/closest_class';
 
 jest.mock('../../../../../ui/shared/accessibility');
@@ -43,10 +43,10 @@ describe('LightButton', () => {
         const component = new LightButton({ onClick: click });
         component.widgetRef = widgetRef;
         const unsubscribeFn = component.subscribeToClick();
-        expect(subscribeToClickEvent).toBeCalledTimes(1);
-        expect(subscribeToClickEvent).toBeCalledWith(widgetRef, click);
+        expect(subscribeDxClick).toBeCalledTimes(1);
+        expect(subscribeDxClick).toBeCalledWith(widgetRef, click);
         unsubscribeFn?.();
-        expect(subscribeToClickEvent).toBeCalledTimes(1);
+        expect(subscribeDxClick).toBeCalledTimes(1);
       });
     });
 

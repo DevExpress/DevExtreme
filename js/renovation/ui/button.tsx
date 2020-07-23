@@ -10,11 +10,10 @@ import {
   Template,
   Slot,
 } from 'devextreme-generator/component_declaration/common';
+import { subscribeClick } from '../utils/subscribe_to_event';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
-import noop from '../utils/noop';
 import * as themes from '../../ui/themes';
-import { click } from '../../events/short';
 import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
 import { InkRipple } from './common/ink_ripple';
@@ -106,9 +105,9 @@ export class ButtonProps extends BaseWidgetProps {
   @Event({
     actionConfig: { excludeValidators: ['readOnly'] },
   })
-  onClick?: (e: any) => any = noop;
+  onClick?: (e: any) => any;
 
-  @Event() onSubmit?: (e: any) => any = noop;
+  @Event() onSubmit?: (e: any) => any;
 
   @OneWay() pressed?: boolean;
 
@@ -207,18 +206,12 @@ export class Button extends JSXComponent(ButtonProps) {
 
   @Effect()
   submitEffect() {
-    const namespace = 'UIFeedback';
     const { useSubmitBehavior, onSubmit } = this.props;
-
-    if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef,
-        (event) => onSubmit({ event, submitInput: this.submitInputRef }),
-        { namespace });
-
-      return (): void => click.off(this.submitInputRef, { namespace });
-    }
-
-    return undefined;
+    return subscribeClick(
+      !!(useSubmitBehavior && onSubmit),
+      this.submitInputRef,
+      (event) => onSubmit!({ event, submitInput: this.submitInputRef }),
+    );
   }
 
   get aria() {

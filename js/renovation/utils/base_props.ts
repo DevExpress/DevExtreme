@@ -19,7 +19,7 @@ export default class BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = false;
 
-  @Event() onClick?: (e: any) => void;
+  @Event() onClick?: (e: Event) => void;
 
   @Event({
     actionConfig: { excludeValidators: ['disabled', 'readOnly'] },

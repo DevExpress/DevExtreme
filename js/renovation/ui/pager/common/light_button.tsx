@@ -4,7 +4,7 @@ import {
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 import { PAGER_CLASS } from './consts';
 import { closestClass } from '../utils/closest_class';
-import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
+import { subscribeDxClick } from '../../../utils/subscribe_to_event';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -54,6 +54,6 @@ export class LightButton extends JSXComponent(LightButtonProps) {
   }
 
   @Effect() subscribeToClick(): (() => void) | undefined {
-    return subscribeToClickEvent(this.widgetRef, this.props.onClick);
+    return subscribeDxClick(this.widgetRef, this.props.onClick);
   }
 }
