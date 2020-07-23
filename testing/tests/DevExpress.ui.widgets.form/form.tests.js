@@ -4,6 +4,7 @@ import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
+import { extend } from 'core/utils/extend';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -421,6 +422,44 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
 
     assert.ok($testContainer.find('.dx-field-item .dx-numberbox').hasClass('dx-editor-underlined'), 'right class rendered');
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
+});
+
+[true, false, undefined].forEach(repaintChangesOnly => {
+    QUnit.test(`Form.itemOption(item1, newItem2), repaintChangesOnly = ${repaintChangesOnly} (T903774)`, function(assert) {
+        const item1 = {
+            editorType: 'dxDropDownBox',
+            dataField: 'item1',
+            editorOptions: { placeholder: 'test_placeHolder' }
+        };
+        const newItem1 = {
+            editorType: 'dxTextBox',
+            itemType: 'simple',
+            label: { text: 'new item text' },
+            dataField: 'newItem1',
+            name: 'newItem1',
+            editorOptions: { width: 300 }
+        };
+        const form = $('#form').dxForm({
+            repaintChangesOnly,
+            items: [{
+                itemType: 'group',
+                caption: 'group1',
+                items: [
+                    item1
+                ]
+            }]
+        }).dxForm('instance');
+
+        form.itemOption('group1.item1', newItem1);
+
+        if(repaintChangesOnly === false) {
+            assert.equal(form.itemOption('group1.item1'), undefined);
+            assert.deepEqual(form.itemOption('group1.newItem1'), newItem1);
+        } else {
+            assert.equal(form.itemOption('group1.item1'), extend(item1, newItem1));
+            assert.deepEqual(form.itemOption('group1.newItem1'), newItem1);
+        }
+    });
 });
 
 
