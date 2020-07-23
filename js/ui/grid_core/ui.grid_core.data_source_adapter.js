@@ -22,8 +22,8 @@ module.exports = gridCore.Controller.inherit((function() {
         return items;
     }
 
-    function calculateOperationTypes(loadOptions, lastLoadOptions) {
-        let operationTypes = {};
+    function calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload) {
+        let operationTypes = { reload: true, fullReload: true };
 
         if(lastLoadOptions) {
             operationTypes = {
@@ -33,9 +33,11 @@ module.exports = gridCore.Controller.inherit((function() {
                 filtering: !gridCore.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter),
                 pageIndex: loadOptions.pageIndex !== lastLoadOptions.pageIndex,
                 skip: loadOptions.skip !== lastLoadOptions.skip,
-                take: loadOptions.take !== lastLoadOptions.take
+                take: loadOptions.take !== lastLoadOptions.take,
+                fullReload: isFullReload
             };
-            operationTypes.reload = operationTypes.sorting || operationTypes.grouping || operationTypes.filtering;
+
+            operationTypes.reload = isFullReload || operationTypes.sorting || operationTypes.grouping || operationTypes.filtering;
             operationTypes.paging = operationTypes.pageIndex || operationTypes.take;
         }
 
@@ -131,11 +133,11 @@ module.exports = gridCore.Controller.inherit((function() {
                 dataSource.dispose();
             }
         },
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const dataSource = that._dataSource;
 
-            if(isReload || operationTypes.reload) {
+            if(operationTypes.reload) {
                 that._currentTotalCount = 0;
                 that._skipCorrection = 0;
                 that._isLastPage = !dataSource.paginate();
@@ -234,7 +236,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
             return currentOperationTypes.some(operationType => remoteOperations[operationType]);
         },
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             const that = this;
             let cachedStoreData = that._cachedStoreData;
             let cachedPagingData = that._cachedPagingData;
@@ -246,7 +248,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 };
             }
 
-            if(isReload) {
+            if(operationTypes.fullReload) {
                 cachedStoreData = undefined;
                 cachedPagingData = undefined;
                 cachedPagesData = createEmptyPagesData();
@@ -291,7 +293,7 @@ module.exports = gridCore.Controller.inherit((function() {
             options.originalStoreLoadOptions = options.storeLoadOptions;
             options.remoteOperations = extend({}, this.remoteOperations());
 
-            const isReload = !that.isLoaded() && !that._isRefreshing;
+            const isFullReload = !that.isLoaded() && !that._isRefreshing;
 
             if(that.option('integrationOptions.renderedOnServer') && !that.isLoaded()) {
                 options.delay = undefined;
@@ -299,9 +301,9 @@ module.exports = gridCore.Controller.inherit((function() {
 
             const loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
 
-            const operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
+            const operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
 
-            that._customizeRemoteOperations(options, isReload, operationTypes);
+            that._customizeRemoteOperations(options, operationTypes);
 
             if(!options.isCustomLoading) {
                 const isRefreshing = that._isRefreshing;
@@ -312,7 +314,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._loadingOperationTypes = operationTypes;
                 that._isRefreshing = true;
 
-                when(isRefreshing || that._isRefreshed || that.refresh(options, isReload, operationTypes)).done(function() {
+                when(isRefreshing || that._isRefreshed || that.refresh(options, operationTypes)).done(function() {
                     if(that._lastOperationId === options.operationId) {
                         that._isRefreshed = true;
                         that.load().always(function() {
