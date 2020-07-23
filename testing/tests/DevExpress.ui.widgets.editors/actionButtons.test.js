@@ -114,6 +114,14 @@ module('button collection', () => {
 
                 assert.deepEqual(button.option('integrationOptions.skipTemplates'), ['content'], 'content is skipped');
             });
+
+            test('custom button should have ignoreParentReadOnly option as true', function(assert) {
+                const $textBox = $('<div>').dxTextBox({ buttons: [{ name: 'name1' }] });
+                const buttons = getTextEditorButtons($textBox);
+                const button = buttons.$after.eq(0).dxButton('instance');
+
+                assert.strictEqual(button.option('ignoreParentReadOnly'), true, 'button has ignoreParentReadOnly option');
+            });
         });
     });
 });
