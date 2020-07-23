@@ -940,14 +940,12 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     // T915695
-    QUnit.test('TreeList should throw error when rootValue is defined (parentId = undefined)', function(assert) {
+    QUnit.test('rootValue is parent if node\'s parentId is undefined', function(assert) {
         // arrange
         const array = [{
             id: 1
         }, {
-            id: 2, parent_id: 1
-        }, {
-            id: 3, parent_id: 2
+            id: 2, parent_id: 0
         }];
         const clock = sinon.useFakeTimers();
 
@@ -962,7 +960,9 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
             clock.tick();
 
-            assert.notOk(true, 'error should be thrown');
+            const rows = this.getVisibleRows();
+            assert.equal(rows.length, 1, 'visible rows count');
+            assert.equal(rows[0].data.id, 1, 'visible row\'s id');
         } catch(e) {
             assert.ok(true, 'error was thrown');
         } finally {
