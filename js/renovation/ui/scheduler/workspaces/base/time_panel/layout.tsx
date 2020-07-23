@@ -3,7 +3,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
-import { GroupedViewData, ViewCellData } from '../../types';
+// eslint-disable-next-line import/extensions
+import { ViewCellData } from '../../types';
 import { getKeyByDateAndGroup } from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';

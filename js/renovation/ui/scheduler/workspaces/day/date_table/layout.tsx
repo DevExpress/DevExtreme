@@ -7,6 +7,7 @@ export const viewFunction = (viewModel: DayDateTableLayout): object => (
   <DateTableLayoutBase
     viewData={viewModel.props.viewData}
     cellTemplate={DayDateTableCell}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   />
 );

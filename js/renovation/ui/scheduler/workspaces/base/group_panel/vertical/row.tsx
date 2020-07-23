@@ -2,6 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { GroupPanelVerticalCell } from './cell';
+// eslint-disable-next-line import/extensions
 import { GroupRenderItem } from '../../../types';
 
 export const viewFunction = (viewModel: Row) => (

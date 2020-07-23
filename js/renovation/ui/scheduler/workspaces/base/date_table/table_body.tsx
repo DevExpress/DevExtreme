@@ -2,6 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow } from './row';
+// eslint-disable-next-line import/extensions
 import { GroupedViewData, ViewCellData } from '../../types';
 import { getKeyByDateAndGroup } from '../../utils';
 
