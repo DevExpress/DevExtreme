@@ -421,27 +421,27 @@ QUnit.module('render', {}, () => {
         assert.equal(instance.option('hint'), undefined);
     });
 
-    QUnit.test('init with parentIndependentState option', function(assert) {
+    QUnit.test('init with ignoreParentReadOnly option', function(assert) {
         const $element = $('#widget').dxWidget({
-            parentIndependentState: true
+            ignoreParentReadOnly: true
         });
 
         assert.ok($element.hasClass('dx-state-independent'), 'button with icon has icon class');
     });
 
-    QUnit.test('parentIndependentState option change', function(assert) {
+    QUnit.test('ignoreParentReadOnly option change', function(assert) {
         const element = $('#widget');
         const instance = element.dxWidget({}).dxWidget('instance');
 
         assert.notOk(element.hasClass('dx-state-independent'));
 
         instance.option({
-            parentIndependentState: true
+            ignoreParentReadOnly: true
         });
         assert.ok(element.hasClass('dx-state-independent'));
 
         instance.option({
-            parentIndependentState: false
+            ignoreParentReadOnly: false
         });
         assert.notOk(element.hasClass('dx-state-independent'));
     });

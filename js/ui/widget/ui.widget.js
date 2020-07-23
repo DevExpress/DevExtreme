@@ -96,7 +96,7 @@ const Widget = DOMComponent.inherit({
             */
 
             onKeyboardHandled: null,
-            parentIndependentState: false
+            ignoreParentReadOnly: false
         });
     },
 
@@ -463,7 +463,7 @@ const Widget = DOMComponent.inherit({
     },
 
     _addStateClasses() {
-        this.$element().toggleClass('dx-state-independent', this.option('parentIndependentState'));
+        this.$element().toggleClass('dx-state-independent', this.option('ignoreParentReadOnly'));
     },
 
     _setWidgetOption(widgetName, args) {
@@ -501,7 +501,7 @@ const Widget = DOMComponent.inherit({
             case 'hint':
                 this._renderHint();
                 break;
-            case 'parentIndependentState':
+            case 'ignoreParentReadOnly':
                 this._addStateClasses();
                 break;
             case 'activeStateEnabled':
