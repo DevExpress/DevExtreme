@@ -625,7 +625,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 5);
+        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 45);
 
         // assert
         const $placeholder = $('.dx-sortable-placeholder');

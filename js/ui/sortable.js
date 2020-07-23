@@ -163,17 +163,13 @@ const Sortable = Draggable.inherit({
     },
 
     dragEnter: function() {
-        if(this === this._getTargetDraggable()) {
-            this.option('toIndex', this.option('fromIndex'));
-        } else {
+        if(this !== this._getTargetDraggable()) {
             this.option('toIndex', -1);
         }
     },
 
     dragLeave: function() {
-        if(this === this._getTargetDraggable()) {
-            this.option('toIndex', -1);
-        } else {
+        if(this !== this._getTargetDraggable()) {
             this.option('toIndex', this.option('fromIndex'));
         }
     },
