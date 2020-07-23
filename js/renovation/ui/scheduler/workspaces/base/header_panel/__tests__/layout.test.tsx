@@ -24,7 +24,7 @@ describe('HeaderPanelLayoutBase', () => {
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
       props: { cellTemplate, ...viewModel.props, viewCellsData },
-    } as any) as any);
+    }) as any);
 
     afterEach(() => jest.resetAllMocks());
 

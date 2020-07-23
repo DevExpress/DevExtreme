@@ -9,7 +9,7 @@ describe('DateTableCellBase', () => {
     const render = (viewModel) => shallow(CellView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should combine `className` with predefined classes', () => {
       const cell = render({ props: { className: 'test' } });

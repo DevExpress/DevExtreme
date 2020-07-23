@@ -28,7 +28,7 @@ describe('MonthLayout', () => {
         viewData,
         ...viewModel.props,
       },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

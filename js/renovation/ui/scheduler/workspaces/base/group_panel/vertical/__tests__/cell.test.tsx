@@ -16,7 +16,7 @@ describe('GroupPanel Vertical Cell', () => {
     const render = (viewModel) => shallow(CellView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should combine default and custom classNames', () => {
       const cell = render({ props: { className: 'custom-class' } });

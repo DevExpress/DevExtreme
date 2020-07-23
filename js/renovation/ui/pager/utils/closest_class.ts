@@ -4,7 +4,7 @@ export function closestClass(child: HTMLDivElement, className: string): HTMLElem
   let el: HTMLElement | null = child;
   const selector = `.${className}`;
   while (el !== null && el.nodeType === 1) {
-    if ((domAdapter as any).elementMatches(el, selector)) {
+    if ((domAdapter).elementMatches(el, selector)) {
       return el;
     }
     el = el.parentElement;

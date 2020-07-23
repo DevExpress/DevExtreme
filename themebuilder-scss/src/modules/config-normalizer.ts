@@ -122,7 +122,7 @@ const processItemKeys = (
   }
 };
 
-const normalizePath = (path: string): string => path + (path[path.length - 1] !== '/' ? '/' : '');
+const normalizePath = (path: string): string => path + (!path.endsWith('/') ? '/' : '');
 
 const parseConfig = (config: ConfigSettings): void => {
   const { command } = config;

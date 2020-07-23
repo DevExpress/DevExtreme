@@ -16,7 +16,7 @@ describe('TimePanelLayout', () => {
     const render = (viewModel) => mount(LayoutView({
       ...viewModel,
       props: { ...viewModel.props, viewData },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

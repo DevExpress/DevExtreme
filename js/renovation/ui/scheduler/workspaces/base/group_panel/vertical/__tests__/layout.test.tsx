@@ -46,7 +46,7 @@ describe('GroupPanel Vertical Layout', () => {
       props: {
         ...viewModel.props,
       },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes correctly', () => {
       const layout = render({

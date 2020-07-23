@@ -116,7 +116,7 @@ describe('Widget', () => {
           const detach = widget.accessKeyEffect();
 
           expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
         });
 
@@ -197,7 +197,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.active).length).toBe(0);
           expect(getEventHandlers(EVENT.inactive).length).toBe(0);
         });
@@ -257,7 +257,7 @@ describe('Widget', () => {
           const widget = new Widget({ onClick });
 
           const detach = widget.clickEffect();
-          detach!();
+          detach();
           emit(EVENT.dxClick);
 
           expect(onClick).toHaveBeenCalledTimes(0);
@@ -346,7 +346,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
           expect(getEventHandlers(EVENT.blur).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.focus).length).toBe(0);
           expect(getEventHandlers(EVENT.blur).length).toBe(0);
         });
@@ -400,7 +400,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(0);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(0);
         });
@@ -463,7 +463,7 @@ describe('Widget', () => {
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
 
-          detach!();
+          detach();
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -505,7 +505,7 @@ describe('Widget', () => {
           const detach = widget.resizeEffect();
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.resize).length).toBe(0);
         });
 
@@ -542,7 +542,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
           expect(getEventHandlers(EVENT.hiding).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.shown).length).toBe(0);
           expect(getEventHandlers(EVENT.hiding).length).toBe(0);
         });

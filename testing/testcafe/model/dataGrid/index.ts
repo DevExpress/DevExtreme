@@ -28,7 +28,7 @@ const CLASS = {
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
-  getGridInstance: ClientFunction<any>;
+  getGridInstance: ClientFunction;
 
   name: string;
 

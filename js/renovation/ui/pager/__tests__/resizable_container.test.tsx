@@ -78,7 +78,7 @@ describe('resizable-container', () => {
       const {
         parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
       } = getElementsRef(sizes);
-      component.parentRef = parentHtmlEl as HTMLElement;
+      component.parentRef = parentHtmlEl;
       component.pageSizesRef = pageSizesHtmlEl;
       component.pagesRef = pagesHtmlEl as HTMLElement;
       component.infoTextRef = infoHtmlEl;

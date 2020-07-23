@@ -41,14 +41,14 @@ export class PagesLargeProps {
 }
 
 const PAGES_LIMITER = 4;
-type PageType = {
+interface PageType {
   key: string;
   pageProps: Partial<PageProps> | null;
-};
-type SlidingWindowState = {
+}
+interface SlidingWindowState {
   indexesForReuse: number[];
   slidingWindowIndexes: number[];
-};
+}
 type PageIndex = number | 'low' | 'high';
 type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
@@ -125,8 +125,8 @@ export class PagesLarge extends JSXComponent(PagesLargeProps) {
 
   canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
     const { indexesForReuse } = this.slidingWindowState;
-    const currentPageNotExistInIndexes = indexesForReuse.indexOf(currentPageCount) === -1;
-    const pageIndexExistInIndexes = indexesForReuse.indexOf(pageIndex) !== -1;
+    const currentPageNotExistInIndexes = !indexesForReuse.includes(currentPageCount);
+    const pageIndexExistInIndexes = indexesForReuse.includes(pageIndex);
     return currentPageNotExistInIndexes && pageIndexExistInIndexes;
   }
 

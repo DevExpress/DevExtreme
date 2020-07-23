@@ -12,7 +12,7 @@ describe('TimePanelTableCell', () => {
         startDate,
         text,
       },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes', () => {
       const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
