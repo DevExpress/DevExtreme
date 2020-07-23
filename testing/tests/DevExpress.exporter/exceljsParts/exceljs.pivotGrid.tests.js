@@ -1395,7 +1395,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             fields: [
                 { area: 'row', dataField: 'row1' },
                 { area: 'column', dataField: 'col1' },
-                { area: 'data', dataType: 'number', summaryDisplayMode: 'percentOfGrandTotal' }
+                { area: 'data', dataType: 'string', summaryDisplayMode: 'percentOfGrandTotal' }
             ],
             store: [
                 { row1: 'r1', col1: 'c1' },
@@ -1413,12 +1413,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', width: 100, type: 'GT', isLast: true, area: 'column' } },
         ], [
             { excelCell: { value: 'r1', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1', path: ['r1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'row' } },
-            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, rowPath: ['r1'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
-            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, rowPath: ['r1'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
+            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'string', rowPath: ['r1'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
+            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'string', rowPath: ['r1'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
         ], [
             { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', type: 'GT', isLast: true, area: 'row' } },
-            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, rowPath: [], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'D' } },
-            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, rowPath: [], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'GT' } },
+            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'string', rowPath: [], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'D' } },
+            { excelCell: { value: '100%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'string', rowPath: [], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'GT' } },
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
