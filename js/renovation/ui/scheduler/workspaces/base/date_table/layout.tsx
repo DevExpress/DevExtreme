@@ -10,7 +10,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
   // This is a workaround because of bug in generator:
   // it's impossible use ternary operator to choose between tables
   <Fragment>
-    {viewModel.props.isVirtual && (
+    {viewModel.isVirtual && (
       <VirtualTable
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel.restAttributes}
@@ -22,7 +22,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
         />
       </VirtualTable>
     )}
-    {!viewModel.props.isVirtual && (
+    {!viewModel.isVirtual && (
       <Table
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel.restAttributes}
@@ -41,8 +41,6 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
 export class DateTableLayoutBaseProps extends LayoutProps {
   @OneWay() className?: string;
 
-  @OneWay() isVirtual?: boolean;
-
   @Template() cellTemplate?: any;
 }
 
@@ -51,4 +49,8 @@ export class DateTableLayoutBaseProps extends LayoutProps {
   view: viewFunction,
 })
 export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+  get isVirtual(): boolean {
+    const { viewData } = this.props;
+    return viewData ? !!viewData.isVirtual : false;
+  }
 }
