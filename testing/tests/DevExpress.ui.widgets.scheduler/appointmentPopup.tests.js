@@ -114,6 +114,35 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
+    QUnit.test('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', function(assert) {
+        const scheduler = createScheduler({
+            dataSource: [{
+                text: 'Watercolor Landscape',
+                startDate: new Date(2017, 4, 1, 9, 30),
+                endDate: new Date(2017, 4, 1, 11),
+                customRecurrenceRule: 'FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10'
+            }],
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2017, 4, 25),
+            recurrenceRuleExpr: 'customRecurrenceRule',
+            height: 600
+        });
+
+        scheduler.appointments.dblclick(0);
+        scheduler.appointmentPopup.dialog.clickEditSeries();
+
+        const form = scheduler.instance._appointmentPopup._appointmentForm;
+
+        assert.ok(form.getEditor('repeat').option('value'), 'repeat checkbox should be checked');
+        assert.ok(form.option('items')[1].visible, 'recurrence form should be visible');
+
+        scheduler.instance.showAppointmentPopup();
+
+        assert.notOk(form.getEditor('repeat').option('value'), 'repeat checkbox should be unchecked if empty form');
+        assert.notOk(form.option('items')[1].visible, 'recurrence form should be invisible if empty form');
+    });
+
     QUnit.test('showAppointmentPopup method should be work properly with no argument', function(assert) {
         const cases = [
             () => {
