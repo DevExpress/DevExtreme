@@ -1,4 +1,6 @@
+/* eslint-disable jest/no-standalone-expect */
 import { mount, shallow } from 'enzyme';
+import each from 'jest-each';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
 import themes from '../../../ui/themes';
@@ -41,8 +43,8 @@ describe('CheckBox', () => {
       });
     });
 
-    [true, false, undefined].forEach((value) => {
-      it(`input should have value=${value} attr if value is ${value}`, () => {
+    each([true, false, undefined])
+      .it('input should have value=%s attr if value is %s', (value) => {
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         const checkBox = shallow(viewFunction({ props: { value } } as any) as any);
         const input = checkBox.find('input');
@@ -50,7 +52,6 @@ describe('CheckBox', () => {
           value: `${value}`,
         });
       });
-    });
 
     it('input should have name attr if name is defined', () => {
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -369,8 +370,8 @@ describe('CheckBox', () => {
         });
 
         // TODO: replace null with undefined after generator bug fix
-        [true, false, null].forEach((value) => {
-          it(`should have "checked=${value}" if value=${value}`, () => {
+        each([true, false, null])
+          .it('should have "checked=%s" if value=%s', (value) => {
             let expectedValue = `${value}`;
             if (value === null) {
               expectedValue = 'mixed';
@@ -378,21 +379,18 @@ describe('CheckBox', () => {
             expect(new CheckBox({ value }).aria)
               .toMatchObject({ checked: expectedValue });
           });
-        });
 
-        [true, false].forEach((readOnly) => {
-          it(`should have "readonly=${readOnly}" if readOnly=${readOnly}`, () => {
+        each([true, false])
+          .it('should have "readonly=%s if readOnly=%s', (readOnly) => {
             expect(new CheckBox({ readOnly }).aria)
               .toMatchObject({ readonly: `${readOnly}` });
           });
-        });
 
-        [true, false].forEach((isValid) => {
-          it(`should have "invalid=${!isValid}" if isValid=${isValid}`, () => {
+        each([true, false])
+          .it('should have "invalid=%s" if isValid=%s', (isValid) => {
             expect(new CheckBox({ isValid }).aria)
               .toMatchObject({ invalid: `${!isValid}` });
           });
-        });
       });
 
       describe('cssClasses', () => {
