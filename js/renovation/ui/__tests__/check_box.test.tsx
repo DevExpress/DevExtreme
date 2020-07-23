@@ -228,7 +228,9 @@ describe('CheckBox', () => {
               const checkBox = new CheckBox({
                 value: false,
               });
-              checkBox.onWidgetClick({} as Event);
+
+              // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+              checkBox.onWidgetClick({ stopPropagation: jest.fn() } as any);
               expect(checkBox.props.value).toBe(true);
             });
 
@@ -237,7 +239,8 @@ describe('CheckBox', () => {
                 value: false,
                 readOnly: true,
               });
-              checkBox.onWidgetClick({} as Event);
+              // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+              checkBox.onWidgetClick({ stopPropagation: jest.fn() } as any);
               expect(checkBox.props.value).toBe(false);
             });
           });

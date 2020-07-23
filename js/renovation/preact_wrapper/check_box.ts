@@ -43,7 +43,8 @@ export default class CheckBox extends Component {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   _valueChangeAction: any = undefined;
 
-  getProps(): object {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  getProps(): any {
     const props = super.getProps();
     props.onFocusIn = (): void => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
@@ -145,7 +146,7 @@ export default class CheckBox extends Component {
         visible: true,
         propagateOutsideClick: true,
         _checkParentVisibility: false,
-      }, this.option().cache('validationTooltipOptions')));
+      }, this._options.cache('validationTooltipOptions')));
 
       this._$validationMessage
         .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === 'auto')
@@ -165,7 +166,7 @@ export default class CheckBox extends Component {
   }
 
   _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
-    const syncOptions = () => this.option().silent(optionsContainer, extend({},
+    const syncOptions = () => this._options.silent(optionsContainer, extend({},
       innerWidget.option()));
 
     syncOptions();
