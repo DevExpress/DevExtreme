@@ -149,7 +149,7 @@ const Widget = DOMComponent.inherit({
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
-        this._addStateClasses();
+        this._toggleIndependentState();
     },
 
     _renderHint() {
@@ -462,7 +462,7 @@ const Widget = DOMComponent.inherit({
         this.setAria('disabled', value || undefined);
     },
 
-    _addStateClasses() {
+    _toggleIndependentState() {
         this.$element().toggleClass('dx-state-independent', this.option('ignoreParentReadOnly'));
     },
 
@@ -502,7 +502,7 @@ const Widget = DOMComponent.inherit({
                 this._renderHint();
                 break;
             case 'ignoreParentReadOnly':
-                this._addStateClasses();
+                this._toggleIndependentState();
                 break;
             case 'activeStateEnabled':
                 this._attachFeedbackEvents();
