@@ -88,8 +88,6 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = true;
 
-  @OneWay() elementAttr?: object = {};
-
   @OneWay() validationError?: object | null = null;
 
   @OneWay() validationErrors?: object[] | null = null;
@@ -183,7 +181,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const { readOnly, value } = this.props;
 
     // TODO: remove it after actions support event pass
-    event.stopPropagation();
+    event?.stopPropagation();
 
     if (!readOnly) {
       this.props.value = !value;

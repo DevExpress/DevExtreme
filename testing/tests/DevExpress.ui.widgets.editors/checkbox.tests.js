@@ -386,6 +386,44 @@ QUnit.module_r('events', function() {
         assert.ok(handler.calledOnce);
     });
 
+    QUnit.test('valueChanged handler runtime change', function(assert) {
+        const handler = sinon.stub();
+        const newHandler = sinon.stub();
+        const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler });
+        const checkbox = $element.dxCheckBox('instance');
+
+        $element.trigger('dxclick');
+        assert.ok(handler.calledOnce);
+
+        checkbox.option('onValueChanged', newHandler);
+        $element.trigger('dxclick');
+        assert.ok(handler.calledOnce);
+    });
+
+    QUnit.skip('valueChanged should have correct previousValue when it is undefined', function(assert) {
+        const handler = sinon.stub();
+        const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler, value: undefined });
+
+        $element.trigger('dxclick');
+        assert.ok(handler.calledOnce);
+        assert.strictEqual(handler.getCalls()[0].args[0].previousValue, undefined, 'previousValue is correct');
+    });
+
+    QUnit.skip('value=undefined should be set correctly', function(assert) {
+        const $element = $('#checkbox').dxCheckBox({ value: undefined });
+        const checkbox = $element.dxCheckBox('instance');
+        assert.strictEqual(checkbox.option('value'), undefined, 'value on init is correct');
+        assert.ok($element.hasClass('dx-checkbox-indeterminate'), '"dx-checkbox-indeterminate"class has been added');
+
+        $element.trigger('dxclick');
+        assert.strictEqual(checkbox.option('value'), true, 'value on correct after click');
+        assert.ok($element.hasClass('dx-checkbox-checked'), 'class has been changed to "dx-checkbox-checked"');
+
+        checkbox.option('value', undefined);
+        assert.strictEqual(checkbox.option('value'), undefined, 'value on correct after runtime change to undefined');
+        assert.ok($element.hasClass('dx-checkbox-indeterminate'), 'class has been added');
+    });
+
     QUnit.test('valueChanged event fired after setting the value by keyboard', function(assert) {
         const handler = sinon.stub();
         const $element = $('#checkbox').dxCheckBox({ focusStateEnabled: true });

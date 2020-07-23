@@ -222,6 +222,11 @@ export default class CheckBox extends Component {
     this._invalidate();
   }
 
+  reset() {
+    const defaultOptions = this._getDefaultOptions();
+    this.option('value', defaultOptions.value);
+  }
+
   _dispose() {
     super._dispose();
 
