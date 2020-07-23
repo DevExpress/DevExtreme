@@ -3,7 +3,7 @@ import {
   Effect, Template, InternalState, Event, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
-import resizeCallbacks from '../../core/utils/resize_callbacks';
+import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
 import { GetHtmlElement } from './common/types.d';
 import { getElementWidth } from './utils/get_element_width';

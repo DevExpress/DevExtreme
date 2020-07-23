@@ -13,6 +13,7 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
+@use "../typography/sizes" as *;
 
 // adduse
 @use "../scrollable";
@@ -27,6 +28,7 @@ $material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shad
 $material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $material-grid-base-header-cell-vertical-padding: round(($material-grid-base-header-height - $material-grid-base-header-line-height) / 2);
 $material-grid-base-footer-font-size: $material-grid-base-header-cell-font-size;
+
 $material-grid-base-command-select-column-width:
   $material-grid-base-checkbox-size +
   ($material-grid-base-cell-first-column-padding - $material-grid-base-cell-horizontal-padding) +
@@ -399,6 +401,19 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         padding-left: 0;
         padding-top: 0;
         padding-bottom: 0;
+        margin-top: 0;
+      }
+
+      .dx-tag-container {
+        min-height: $material-grid-base-cell-height;
+        padding: 0;
+      }
+
+      &:not(.dx-editor-filled):not(.dx-editor-outlined) {
+        .dx-texteditor-input,
+        .dx-tag-container {
+          margin-top: 0;
+        }
       }
 
       .dx-texteditor-buttons-container {

@@ -59,18 +59,18 @@
 
     .dx-lookup-field {
       padding: $material-standard-texteditor-input-padding;
-      padding-right: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+      padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-right: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+        padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
       }
 
       &.dx-rtl {
         .dx-lookup-field {
-          padding-left: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
-          padding-right: $material-standard-texteditor-input-horizontal-padding;
+          padding-left: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+          padding-right: $material-base-standard-texteditor-input-horizontal-padding;
         }
       }
     }
@@ -78,8 +78,8 @@
     &.dx-rtl,
     .dx-rtl & {
       .dx-lookup-field {
-        padding-left: $material-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
-        padding-right: $material-standard-texteditor-input-horizontal-padding;
+        padding-left: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+        padding-right: $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
   }

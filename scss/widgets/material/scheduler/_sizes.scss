@@ -38,6 +38,8 @@ $material-tooltip-marker-dimension: null !default;
 $material-scheduler-appointment-tooltip-title-margin-top: null !default;
 $material-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
+$scheduler-left-column-width: 65px;
+
 @if $size == "default" {
   $material-scheduler-workspace-date-table-cell-height: 38px;
 

@@ -4,85 +4,19 @@ $size: null !default;
 
 $material-size-postfix: null !default;
 $material-base-font-size: null !default;
-$material-base-line-height: null !default;
-$material-xl-font-size: null !default;
-$material-l-font-size: null !default;
-$material-m-font-size: null !default;
-$material-s-font-size: null !default;
-$material-xs-font-size: null !default;
-$material-h1-font-size: null !default;
-$material-h2-font-size: null !default;
-$material-h3-font-size: null !default;
-$material-h4-font-size: null !default;
-$material-h5-font-size: null !default;
-$material-h6-font-size: null !default;
-$material-form-label-font-size: null !default;
-$material-form-group-caption-font-size: null !default;
-$material-form-group-content-padding-bottom: null !default;
 $material-base-inline-widget-height: null !default;
 $material-base-inline-block-height: null !default;
 $material-base-icon-size: null !default;
 $material-base-inline-horizontal-padding: null !default;
 $material-base-border-radius: null !default;
-$material-grid-base-nodata-font-size: null !default;
-$material-datagrid-cell-padding: null !default;
-$accordion-title-icon-top-offset: null !default;
-$accordion-title-icon-margin: null !default;
-$pivotgrid-empty-column-width: null !default;
-$pivotgrid-common-left-right-padding: null !default;
-$pivotgrid-common-top-bottom-padding: null !default;
-$pivotgrid-field-indicators-offset: null !default;
-$pivotgrid-indicators-line-height: null !default;
-$treelist-expanded-icon-margin-left: null !default;
-$treelist-collapsed-icon-margin-left: null !default;
-$treelist-icon-margin-top: null !default;
-$dropdown-widgets-shadow: null !default;
-$filemanager-toolbar-separator-height: null !default;
-$filemanager-toolbar-viewmode-width: null !default;
-$filemanager-toolbar-viewmode-padding: null !default;
-$filemanager-breadcrumbs-item-padding-top: null !default;
-$filemanager-breadcrumbs-item-padding-bottom: null !default;
-$filemanager-details-view-checkbox-column-width: null !default;
-$filemanager-file-actions-button-size: null !default;
-$filemanager-treeview-item-top-bottom-padding: null !default;
-$filemanager-file-actions-button-top-bottom-padding: null !default;
-$filemanager-contextmenu-text-item-left-margin: null !default;
-$filemanager-large-icon-size: null !default;
-$filemanager-progress-panel-title-padding: null !default;
-$filemanager-progress-box-button-close-margin-top: null !default;
-$gantt-header-item-height: null !default;
-$gantt-task-wrapper-padding-top: null !default;
-$gantt-task-title-padding-left: null !default;
-$gantt-task-height: null !default;
-$gantt-dependency-successor-size: null !default;
-$gantt-milestone-size: null !default;
-$material-checkbox-size: null !default;
-$material-switch-height: null !default;
-$material-list-item-height: null !default;
+$material-base-dropdown-widgets-shadow: null !default;
+
 
 @if $size == "default" {
   $material-size-postfix: "";
 
   // Font sizes
   $material-base-font-size: 14px;
-  $material-base-line-height: 1.2857;
-
-  $material-xl-font-size: 34px;
-  $material-l-font-size: 28px;
-  $material-m-font-size: 20px;
-  $material-s-font-size: 18px;
-  $material-xs-font-size: 12px;
-
-  $material-h1-font-size: 96px;
-  $material-h2-font-size: 60px;
-  $material-h3-font-size: 48px;
-  $material-h4-font-size: 34px;
-  $material-h5-font-size: 24px;
-  $material-h6-font-size: 20px;
-
-  $material-form-label-font-size: 12px;
-  $material-form-group-caption-font-size: 20px;
-  $material-form-group-content-padding-bottom: 20px;
 
   // Base sizes
   $material-base-inline-widget-height: 56px;
@@ -90,50 +24,7 @@ $material-list-item-height: null !default;
   $material-base-icon-size: 24px;
   $material-base-inline-horizontal-padding: 10px;
   $material-base-border-radius: 4px;
-
-  $material-grid-base-nodata-font-size: 17px;
-  $material-datagrid-cell-padding: 7px;
-
-  $accordion-title-icon-top-offset: 4px;
-  $accordion-title-icon-margin: 8px;
-
-  $pivotgrid-empty-column-width: 19px;
-
-  $pivotgrid-common-left-right-padding: 10px;
-  $pivotgrid-common-top-bottom-padding: 7px;
-  $pivotgrid-field-indicators-offset: 6px;
-  $pivotgrid-indicators-line-height: 12px;
-
-  $treelist-expanded-icon-margin-left: 5px;
-  $treelist-collapsed-icon-margin-left: 6px;
-  $treelist-icon-margin-top: $material-base-icon-size / 2;
-
-  $dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color;
-
-  $filemanager-toolbar-separator-height: 36px;
-  $filemanager-toolbar-viewmode-width: 190px;
-  $filemanager-toolbar-viewmode-padding: 6px;
-  $filemanager-breadcrumbs-item-padding-top: 7px;
-  $filemanager-breadcrumbs-item-padding-bottom: 8px;
-  $filemanager-details-view-checkbox-column-width: 49px;
-  $filemanager-file-actions-button-size: 28px;
-  $filemanager-treeview-item-top-bottom-padding: 11px;
-  $filemanager-file-actions-button-top-bottom-padding: 2px;
-  $filemanager-contextmenu-text-item-left-margin: 48px;
-  $filemanager-large-icon-size: 22px;
-  $filemanager-progress-panel-title-padding: 16px;
-  $filemanager-progress-box-button-close-margin-top: 6px;
-
-  $gantt-header-item-height: 57px;
-  $gantt-task-wrapper-padding-top: 0;
-  $gantt-task-title-padding-left: 11px;
-  $gantt-task-height: 27px;
-  $gantt-dependency-successor-size: 12px;
-  $gantt-milestone-size: 17px;
-
-  $material-checkbox-size: 18px;
-  $material-switch-height: 20px;
-  $material-list-item-height: 48px;
+  $material-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color;
 }
 
 @if $size == "compact" {
@@ -141,95 +32,19 @@ $material-list-item-height: null !default;
 
   // Font sizes
   $material-base-font-size: 13px;
-  $material-base-line-height: 1.2857;
-
-  $material-xl-font-size: 24px;
-  $material-l-font-size: 20px;
-  $material-m-font-size: 16px;
-  $material-s-font-size: 14px;
-  $material-xs-font-size: 12px;
-
-  $material-h1-font-size: 64px;
-  $material-h2-font-size: 42px;
-  $material-h3-font-size: 20px;
-  $material-h4-font-size: 18px;
-  $material-h5-font-size: 16px;
-  $material-h6-font-size: 14px;
-
-  $material-form-label-font-size: 12px;
-  $material-form-group-caption-font-size: 16px;
-  $material-form-group-content-padding-bottom: 10px;
 
   // Base sizes
   $material-base-inline-widget-height: 40px;
   $material-base-inline-block-height: 15px;
   $material-base-icon-size: 18px;
   $material-base-inline-horizontal-padding: 8px;
-
   $material-base-border-radius: 2px;
-
-  $material-grid-base-nodata-font-size: 14px;
-  $material-datagrid-cell-padding: 7px;
-
-  $accordion-title-icon-top-offset: 3px;
-  $accordion-title-icon-margin: 6px;
-
-  $pivotgrid-empty-column-width: 19px;
-
-  $pivotgrid-common-left-right-padding: 8px;
-  $pivotgrid-common-top-bottom-padding: 7px;
-  $pivotgrid-field-indicators-offset: 6px;
-  $pivotgrid-indicators-line-height: 12px;
-
-  $treelist-expanded-icon-margin-left: 5px;
-  $treelist-collapsed-icon-margin-left: 6px;
-  $treelist-icon-margin-top: $material-base-icon-size / 2;
-
-  $dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color;
-
-  $filemanager-toolbar-separator-height: 26px;
-  $filemanager-toolbar-viewmode-width: 150px;
-  $filemanager-toolbar-viewmode-padding: 5px;
-  $filemanager-breadcrumbs-item-padding-top: 8px;
-  $filemanager-breadcrumbs-item-padding-bottom: 9px;
-  $filemanager-details-view-checkbox-column-width: 43px;
-  $filemanager-file-actions-button-size: 22px;
-  $filemanager-treeview-item-top-bottom-padding: 8px;
-  $filemanager-file-actions-button-top-bottom-padding: 9px;
-  $filemanager-contextmenu-text-item-left-margin: 30px;
-  $filemanager-large-icon-size: 16px;
-  $filemanager-progress-panel-title-padding: 10px;
-  $filemanager-progress-box-button-close-margin-top: 5px;
-
-  $gantt-header-item-height: 51px;
-  $gantt-task-wrapper-padding-top: 0;
-  $gantt-task-title-padding-left: 9px;
-  $gantt-task-height: 20px;
-  $gantt-dependency-successor-size: 10px;
-  $gantt-milestone-size: 14px;
-
-  $material-checkbox-size: 16px;
-  $material-switch-height: 18px;
-  $material-list-item-height: 36px;
+  $material-base-dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color;
 }
-
-// Base inline widgets paddings
-$material-base-inline-widget-vertical-padding:
-  $material-base-inline-widget-height -
-  $material-base-inline-block-height;
-$material-base-inline-widget-top-padding: floor($material-base-inline-widget-vertical-padding / 2);
 
 // Base bordered inline widgets sizes
 $material-base-border-width: 1px;
-$material-base-inline-borderedwidget-inner-size:
-  $material-base-inline-widget-height -
-  $material-base-border-width * 2;
-$material-base-inline-borderedwidget-top-padding:
-  $material-base-inline-widget-top-padding -
-  $material-base-border-width;
 
-$material-slider-height: 28px;
-$material-radiogroup-min-height: 26px;
 
 /**
 * $name 120. Border radius
@@ -237,7 +52,4 @@ $material-radiogroup-min-height: 26px;
 */
 $base-border-radius: $material-base-border-radius;
 
-$material-standard-texteditor-input-horizontal-padding: 0;
-$scheduler-agenda-left-column-width: 70px;
-$scheduler-left-column-width: 65px;
-
+$material-base-standard-texteditor-input-horizontal-padding: 0;

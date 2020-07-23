@@ -23,6 +23,8 @@ $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
 $generic-scheduler-appointment-collector-height: null !default;
 
+$scheduler-left-column-width: 100px;
+
 @if $size == "default" {
   $generic-scheduler-workspace-date-table-cell-height: 50px;
   $generic-scheduler-timeline-date-table-cell-height: 75px;

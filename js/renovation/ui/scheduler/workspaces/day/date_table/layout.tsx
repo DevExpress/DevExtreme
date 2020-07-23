@@ -1,6 +1,4 @@
-import {
-  Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { DayDateTableCell } from './cell';
 import { LayoutProps } from '../../base/layout_props';
@@ -13,14 +11,16 @@ export const viewFunction = (viewModel: DayDateTableLayout): object => (
   />
 );
 
-@ComponentBindings()
-export class DayDateTableLayoutProps extends LayoutProps{
-  @OneWay() isVirtual?: boolean;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: {
+    register: true,
+  },
 })
-export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
+export class DayDateTableLayout extends JSXComponent(LayoutProps) {
+  get isVirtual(): boolean {
+    const { viewData } = this.props;
+    return viewData ? !!viewData.isVirtual : false;
+  }
 }

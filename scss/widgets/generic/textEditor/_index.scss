@@ -13,7 +13,11 @@
 
 
 $generic-texteditor-border-width: $generic-base-border-width;
-$generic-texteditor-input-padding: $generic-base-inline-borderedwidget-padding;
+$generic-texteditor-input-padding:
+  $generic-base-inline-borderedwidget-top-padding
+  $generic-base-inline-borderedwidget-horizontal-padding
+  $generic-base-inline-borderedwidget-bottom-padding;
+
 $generic-texteditor-input-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding;
 
 $generic-texteditor-icon-container-size: $generic-base-inline-borderedwidget-inner-size;

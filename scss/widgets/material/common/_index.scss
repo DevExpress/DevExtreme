@@ -72,7 +72,7 @@
     $typography-color,
     $material-base-font-size,
     $base-font-family,
-    $material-base-line-height
+    $material-line-height
   );
 }
 
@@ -80,7 +80,7 @@
   @include disabled-widget-mixin($opacity);
 }
 
-$material-invalid-badge-horizontal-padding: ($material-base-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2;
+$material-invalid-badge-horizontal-padding: ($material-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2;
 $material-invalid-badge-halfhorizontal-padding: $material-invalid-badge-horizontal-padding / 2;
 
 $material-valid-badge-font-size: $material-base-font-size + 6px;
@@ -159,7 +159,7 @@ $badge-invalid-bg: $base-invalid-color;
   height: 100%;
 
   &.dx-popup-wrapper .dx-overlay-content {
-    box-shadow: $dropdown-widgets-shadow;
+    box-shadow: $material-base-dropdown-widgets-shadow;
     border-top-width: 0;
     border-bottom-width: 1px;
 

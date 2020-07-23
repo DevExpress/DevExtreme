@@ -44,6 +44,9 @@ export class TimePanelTableLayoutProps extends LayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: {
+    register: true,
+  },
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
 }

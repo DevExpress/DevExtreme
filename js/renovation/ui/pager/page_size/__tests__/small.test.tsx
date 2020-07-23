@@ -5,7 +5,7 @@ import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../small'
 import getElementComputedStyle from '../../utils/get_computed_style';
 
 jest.mock('../../utils/get_computed_style');
-jest.mock('../../../ui/select_box', () => ({ SelectBox: () => { } }));
+jest.mock('../../../select_box', () => ({ SelectBox: () => { } }));
 
 describe('Pager size selector', () => {
   const pageSizes = [{ text: '5', value: 5 }, { text: '10', value: 10 }];

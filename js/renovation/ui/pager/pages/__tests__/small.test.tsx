@@ -2,9 +2,9 @@ import { h, createRef } from 'preact';
 import { mount } from 'enzyme';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../utils/get_computed_style';
-import { NumberBox } from '../../../ui/number_box';
+import { NumberBox } from '../../../number_box';
 
-jest.mock('../../../ui/number_box', () => ({ __esModule: true, NumberBox: jest.fn() }));
+jest.mock('../../../number_box', () => ({ __esModule: true, NumberBox: jest.fn() }));
 jest.mock('../page', () => ({ __esModule: true, Page: jest.fn() }));
 jest.mock('../../utils/get_computed_style');
 

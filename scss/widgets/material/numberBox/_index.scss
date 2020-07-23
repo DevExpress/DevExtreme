@@ -45,7 +45,7 @@
 .dx-numberbox-spin.dx-numberbox-box {
   &.dx-editor-underlined {
     .dx-texteditor-input {
-      padding-right: $material-standard-texteditor-input-horizontal-padding;
+      padding-right: $material-base-standard-texteditor-input-horizontal-padding;
     }
 
     @include validation-icon-position();
@@ -76,7 +76,7 @@
 
   &.dx-editor-underlined {
     &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $material-standard-texteditor-input-horizontal-padding;
+      padding-right: $material-base-standard-texteditor-input-horizontal-padding;
     }
   }
 
@@ -110,7 +110,7 @@
 
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-left: $material-standard-texteditor-input-horizontal-padding;
+        padding-left: $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
 

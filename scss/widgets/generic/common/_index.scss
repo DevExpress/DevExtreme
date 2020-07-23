@@ -8,6 +8,11 @@
 @use "../list/sizes" as *;
 
 // adduse
+
+$generic-dropdownlist-min-height:
+  $generic-base-font-size * $generic-base-line-height +
+  2 * $generic-list-item-vertical-padding;
+
 .dx-theme-marker {
   font-family: "dx.generic#{$generic-color-postfix}#{$generic-size-postfix}";
 }
