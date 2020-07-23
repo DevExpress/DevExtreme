@@ -90,13 +90,6 @@ describe('DateTableLayoutBase', () => {
               .toBe(isVirtual);
           });
         });
-
-        it('should return false if isVirtual is undefined', () => {
-          const layout = new DateTableLayoutBase({ viewData: { groupedData: [] } });
-
-          expect(layout.isVirtual)
-            .toBe(false);
-        });
       });
     });
   });

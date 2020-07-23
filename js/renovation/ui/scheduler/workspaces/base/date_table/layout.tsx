@@ -51,6 +51,6 @@ export class DateTableLayoutBaseProps extends LayoutProps {
 export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
   get isVirtual(): boolean {
     const { viewData } = this.props;
-    return viewData ? !!viewData.isVirtual : false;
+    return !!viewData!.isVirtual;
   }
 }

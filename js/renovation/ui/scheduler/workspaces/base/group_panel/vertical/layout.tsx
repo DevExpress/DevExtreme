@@ -1,8 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line import/extensions
-import { Group, GroupRenderItem, GroupItem } from '../../../types';
+import { Group, GroupRenderItem, GroupItem } from '../../../types.d';
 import { Row } from './row';
 import { addHeightToStyle } from '../../../utils';
 

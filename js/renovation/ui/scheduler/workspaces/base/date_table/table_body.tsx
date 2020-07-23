@@ -1,10 +1,10 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
+  Component, ComponentBindings, JSXComponent, Fragment, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow } from './row';
-// eslint-disable-next-line import/extensions
-import { GroupedViewData, ViewCellData } from '../../types';
+import { ViewCellData } from '../../types.d';
 import { getKeyByDateAndGroup } from '../../utils';
+import { LayoutProps } from '../layout_props';
 
 export const viewFunction = (viewModel: DateTableBody) => (
   <Fragment>
@@ -30,13 +30,7 @@ export const viewFunction = (viewModel: DateTableBody) => (
   </Fragment>
 );
 @ComponentBindings()
-export class DateTableBodyProps {
-  @OneWay() viewData?: GroupedViewData;
-
-  @OneWay() className?: string;
-
-  @OneWay() isVirtual?: boolean;
-
+export class DateTableBodyProps extends LayoutProps {
   @Template() cellTemplate?: any;
 }
 

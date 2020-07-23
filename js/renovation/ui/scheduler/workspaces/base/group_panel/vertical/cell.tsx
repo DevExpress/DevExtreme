@@ -1,8 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
-// eslint-disable-next-line import/extensions
-import { GroupItem } from '../../../types';
+import { GroupItem } from '../../../types.d';
 
 export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
   const useTemplate = !!viewModel.props.cellTemplate;
