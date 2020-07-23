@@ -400,7 +400,7 @@ QUnit.module_r('events', function() {
         assert.ok(handler.calledOnce);
     });
 
-    QUnit.skip('valueChanged should have correct previousValue when it is undefined', function(assert) {
+    QUnit.test('valueChanged should have correct previousValue when it is undefined', function(assert) {
         const handler = sinon.stub();
         const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler, value: undefined });
 
