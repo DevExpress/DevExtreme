@@ -9,7 +9,6 @@ import { name as getName } from 'core/utils/public_component';
 import { act } from 'preact/test-utils';
 
 import 'common.css!';
-import 'ui/check_box';
 import 'ui/validator';
 
 QUnit.testStart(function() {
