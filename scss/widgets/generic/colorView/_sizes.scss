@@ -6,7 +6,6 @@ $generic-colorview-container-width: null !default;
 $generic-colorview-palette-width: null !default;
 $generic-colorview-palette-height: null !default;
 $generic-colorview-alpha-margin: null !default;
-$generic-colorview-hue-scale-width: null !default;
 $generic-colorview-hue-scale-margin: null !default;
 $generic-colorview-color-preview-height: null !default;
 $generic-colorview-preview-container-margin: null !default;
@@ -19,12 +18,13 @@ $generic-colorview-container-textbox-margin: null !default;
 $generic-colorview-controls-container-width: null !default;
 $generic-colorview-controls-container-margin: null !default;
 
+$generic-colorview-hue-scale-width: 18px;
+
 @if $size == "default" {
   $generic-colorview-container-width: 450px;
   $generic-colorview-palette-width: 288px;
   $generic-colorview-palette-height: 299px;
   $generic-colorview-alpha-margin: 10px;
-  $generic-colorview-hue-scale-width: 18px;
   $generic-colorview-hue-scale-margin: 19px;
   $generic-colorview-color-preview-height: 40px;
   $generic-colorview-preview-container-margin: 34px;
@@ -45,7 +45,6 @@ $generic-colorview-controls-container-margin: null !default;
   $generic-colorview-palette-width: 190px;
   $generic-colorview-palette-height: 200px;
   $generic-colorview-alpha-margin: 5px;
-  $generic-colorview-hue-scale-width: 18px;
   $generic-colorview-hue-scale-margin: 15px;
   $generic-colorview-color-preview-height: 25px;
   $generic-colorview-preview-container-margin: 15px;
