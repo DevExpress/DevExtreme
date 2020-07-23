@@ -6,8 +6,8 @@ import { LayoutProps } from '../../base/layout_props';
 export const viewFunction = (viewModel: DayDateTableLayout): object => (
   <DateTableLayoutBase
     viewData={viewModel.props.viewData}
-    isVirtual={viewModel.props.isVirtual}
     cellTemplate={DayDateTableCell}
+    {...viewModel.restAttributes}
   />
 );
 
@@ -18,9 +18,4 @@ export const viewFunction = (viewModel: DayDateTableLayout): object => (
     register: true,
   },
 })
-export class DayDateTableLayout extends JSXComponent(LayoutProps) {
-  get isVirtual(): boolean {
-    const { viewData } = this.props;
-    return viewData ? !!viewData.isVirtual : false;
-  }
-}
+export class DayDateTableLayout extends JSXComponent(LayoutProps) {}
