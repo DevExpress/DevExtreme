@@ -17,7 +17,7 @@ jest.mock('../row', () => ({
   DateTableRow: ({ children }) => <div>{children}</div>,
 }));
 
-describe('DayDateTableLayout', () => {
+describe('DateTableBody', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{
