@@ -3740,10 +3740,34 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.getContentOffset('end'), 350);
         assert.deepEqual(this.changedArgs, [{
             changeType: 'refresh',
-            items: this.dataController.items()
+            items: this.dataController.items(),
+            operationTypes: {
+                filtering: false,
+                fullReload: false,
+                groupExpanding: undefined,
+                grouping: false,
+                pageIndex: true,
+                paging: true,
+                reload: false,
+                skip: true,
+                sorting: false,
+                take: false
+            }
         }, {
             changeType: 'append',
-            items: this.dataController.items().slice(10, 15)
+            items: this.dataController.items().slice(10, 15),
+            operationTypes: {
+                filtering: false,
+                fullReload: false,
+                groupExpanding: undefined,
+                grouping: false,
+                pageIndex: false,
+                paging: false,
+                reload: false,
+                skip: true,
+                sorting: false,
+                take: false
+            }
         }]);
     });
 
@@ -3804,7 +3828,20 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             changeType: 'refresh',
             isDataChanged: true,
             repaintChangesOnly: false,
-            items: this.dataController.items()
+            items: this.dataController.items(),
+            needUpdateDimensions: true,
+            operationTypes: {
+                filtering: false,
+                fullReload: true,
+                groupExpanding: undefined,
+                grouping: false,
+                pageIndex: false,
+                paging: false,
+                reload: true,
+                skip: true,
+                sorting: false,
+                take: false
+            }
         }]);
     });
 
@@ -3823,7 +3860,11 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.getContentOffset('end'), 50);
         assert.deepEqual(this.changedArgs, [{
             changeType: 'refresh',
-            items: this.dataController.items()
+            items: this.dataController.items(),
+            operationTypes: {
+                fullReload: true,
+                reload: true
+            }
         }, {
             changeType: 'append',
             items: this.dataController.items().slice(10, 15)
