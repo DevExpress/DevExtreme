@@ -425,37 +425,43 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
 });
 
 [true, false, undefined].forEach(repaintChangesOnly => {
-    QUnit.test(`Form.itemOption(item1, newItem2), repaintChangesOnly = ${repaintChangesOnly} (T903774)`, function(assert) {
-        const item1 = {
-            editorType: 'dxDropDownBox',
-            dataField: 'item1',
-            label: { text: 'item1' },
-            editorOptions: { placeholder: 'test_placeHolder' }
-        };
-        const newItem1 = {
-            editorType: 'dxTextBox',
-            dataField: 'newItem1',
-            label: { text: 'new item1' },
-            editorOptions: { width: 300 }
-        };
-        const form = $('#form').dxForm({
-            repaintChangesOnly,
-            items: [{
-                itemType: 'group',
-                caption: 'group1',
-                items: [ item1 ]
-            }]
-        }).dxForm('instance');
+    [true, false].forEach(useRepaint => {
+        QUnit.test(`Form.itemOption(item1, newItem2), repaintChangesOnly = ${repaintChangesOnly}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
+            const clone = (item) => JSON.parse(JSON.stringify(item));
 
-        form.itemOption('group1.item1', newItem1);
+            const item1 = {
+                editorType: 'dxDropDownBox',
+                dataField: 'item1',
+                label: { text: 'item1' },
+                editorOptions: { placeholder: 'test_placeHolder' }
+            };
+            const newItem1 = {
+                editorType: 'dxTextBox',
+                dataField: 'newItem1',
+                label: { text: 'new item1' },
+                editorOptions: { width: 300 }
+            };
+            const form = $('#form').dxForm({
+                repaintChangesOnly,
+                items: [{
+                    itemType: 'group',
+                    caption: 'group1',
+                    items: [ clone(item1) ]
+                }]
+            }).dxForm('instance');
 
-        if(repaintChangesOnly === false) {
-            assert.equal(form.itemOption('group1.item1'), undefined);
-            assert.deepEqual(form.itemOption('group1.newItem1'), newItem1);
-        } else {
-            assert.equal(form.itemOption('group1.item1'), extend(item1, newItem1));
-            assert.deepEqual(form.itemOption('group1.newItem1'), newItem1);
-        }
+            form.itemOption('group1.item1', clone(newItem1));
+            if(useRepaint) {
+                form.repaint();
+            }
+            if(repaintChangesOnly === false) {
+                assert.equal(form.itemOption('group1.item1'), undefined, 'item1');
+                assert.deepEqual(form.itemOption('group1.newItem1'), newItem1, 'newItem1');
+            } else {
+                assert.deepEqual(form.itemOption('group1.item1'), extend(true, {}, item1, newItem1, { editorType: item1.editorType, dataField: item1.dataField }), 'item1');
+                assert.deepEqual(form.itemOption('group1.newItem1'), undefined, 'newItem1');
+            }
+        });
     });
 });
 
