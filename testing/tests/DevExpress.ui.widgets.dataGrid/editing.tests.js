@@ -8160,7 +8160,7 @@ QUnit.module('Editing with real dataController', {
 
         const $links = $commandCellElement.children('.dx-link');
         assert.equal($links.length, 2, 'link count');
-        assert.equal($links.eq(0).css('display'), 'inline', 'text link display style');
+        assert.equal($links.eq(0).css('display'), 'inline-block', 'text link display style');
         // T848364
         assert.equal($links.eq(1).css('display'), 'inline-block', 'icon link display style');
     });
