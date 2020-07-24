@@ -108,7 +108,7 @@ export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
 
   private canNavigateToPage(pageIndex: number): boolean {
     if (!this.props.hasKnownLastPage) {
-      return true;
+      return pageIndex >= 0;
     }
     return (pageIndex >= 0 && pageIndex <= (this.props.pageCount as number) - 1);
   }
