@@ -2204,7 +2204,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T916093
     ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
-        QUnit.test(`LoadPanel should be showed during export (scrolling.mode = ${scrollingMode})`, function(assert) {
+        QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
             $('#dataGrid').dxDataGrid({
                 height: 400,
                 dataSource: {
