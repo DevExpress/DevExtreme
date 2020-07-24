@@ -2360,7 +2360,7 @@ QUnit.module('Initialization', {
         });
     });
 
-    QUnit.test('Data source should not be loaded on option change if it is already being loaded (T)', function(assert) {
+    QUnit.test('Data source should not be loaded on option change if it is already being loaded (T916558)', function(assert) {
         const dataSource = new DataSource({
             store: []
         });
