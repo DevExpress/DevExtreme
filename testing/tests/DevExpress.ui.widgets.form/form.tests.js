@@ -455,7 +455,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 form.repaint();
             }
             if(repaintChangesOnly === false) {
-                assert.equal(form.itemOption('group1.item1'), undefined, 'item1');
+                assert.deepEqual(form.itemOption('group1.item1'), undefined, 'item1');
                 assert.deepEqual(form.itemOption('group1.newItem1'), newItem1, 'newItem1');
             } else {
                 assert.deepEqual(form.itemOption('group1.item1'), extend(true, {}, item1, newItem1, { editorType: item1.editorType, dataField: item1.dataField }), 'item1');
