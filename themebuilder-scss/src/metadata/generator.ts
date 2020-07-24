@@ -1,5 +1,3 @@
-import path from 'path';
-
 export default class MetadataGenerator {
   metadata: ThemesMetadata = {
     generic: [],
