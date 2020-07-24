@@ -49,20 +49,19 @@ registerDecorator(
             const $itemElement = config.$itemElement;
             const $container = config.$container;
 
-            new this._controlWidget($('<div>').addClass(this._controlClass).appendTo($container), extend(this._commonOptions(), {
+            const $control = $('<div>').addClass(this._controlClass);
+            new this._controlWidget($control, extend(this._commonOptions(), {
                 value: this._isSelected($itemElement),
                 focusStateEnabled: false,
                 hoverStateEnabled: false,
                 onValueChanged: (function(e) {
                     this._processCheckedState($itemElement, e.value);
                     e.event && e.event.stopPropagation();
-                }).bind(this),
-                elementAttr: {
-                    class: this._controlClass
-                }
+                }).bind(this)
             }));
 
             $container.addClass(this._containerClass);
+            $container.append($control);
         },
 
         modifyElement: function(config) {
@@ -133,10 +132,7 @@ registerDecorator(
                     .appendTo($selectAll),
                 CheckBox, {
                     focusStateEnabled: false,
-                    hoverStateEnabled: false,
-                    elementAttr: {
-                        class: SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS
-                    }
+                    hoverStateEnabled: false
                 }
             );
 
