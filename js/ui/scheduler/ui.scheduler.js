@@ -2187,6 +2187,9 @@ class Scheduler extends Widget {
         const renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
         const firstDayOfWeek = this.getFirstDayOfWeek();
 
+        const minRecurrenceDate = this.option('timeZone') ? this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' }) : startViewDate;
+        const maxRecurrenceDate = this.option('timeZone') ? this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' }) : dateRange[1];
+
         const recurrenceOptions = {
             rule: recurrenceRule,
             // exception: recurrenceException, // TODO
@@ -2194,8 +2197,8 @@ class Scheduler extends Widget {
             // start: originalStartDate || adapter.startDate, // TODO:
             start: adapter.startDate,
             end: adapter.endDate,
-            min: startViewDate,
-            max: dateRange[1],
+            min: minRecurrenceDate,
+            max: maxRecurrenceDate,
             firstDayOfWeek: firstDayOfWeek
         };
 
@@ -2755,14 +2758,14 @@ class Scheduler extends Widget {
     }
 
 
-    addAppointment(appointment, skipConvert) {
+    addAppointment(appointment) {
         const text = this.fire('getField', 'text', appointment);
 
         if(!text) {
             this.fire('setField', 'text', appointment, '');
         }
 
-        !skipConvert && this._convertDatesByTimezoneBack(true, appointment);
+        // this._convertDatesByTimezoneBack(true, appointment);
 
         const addingOptions = {
             appointmentData: appointment,
@@ -2778,10 +2781,8 @@ class Scheduler extends Widget {
 
             this._expandAllDayPanel(appointment);
 
-            return this._appointmentModel.add(appointment, {
-                value: this._getTimezoneOffsetByOption(),
-                clientOffset: this.fire('getClientTimezoneOffset')
-            }).always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e));
+            return this._appointmentModel.add(appointment)
+                .always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e));
         });
     }
 
