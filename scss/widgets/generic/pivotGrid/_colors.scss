@@ -4,13 +4,32 @@
 
 // adduse
 
-
 $pivotgrid-area-background: null !default;
 $pivotgrid-border-color: null !default;
+
+/**
+* $name 10. Header text color
+* $type color
+*/
 $pivotgrid-area-color: null !default;
 $pivotgrid-data-area-color: null !default;
+
+/**
+* $name 20. Totals background color
+* $type color
+*/
 $pivotgrid-totalcolor: null !default;
+
+/**
+* $name 30. Grand totals background color
+* $type color
+*/
 $pivotgrid-grandtotalcolor: null !default;
+
+/**
+* $name 40. Field area text color
+* $type color
+*/
 $pivotgrid-field-area-text-color: null !default;
 $pivotgrid-accent-color: null !default;
 $pivotgrid-drag-header-border-color: null !default;
@@ -24,37 +43,25 @@ $pivotgrid-area-data-image: null !default;
 $pivotgrid-dimension-image: null !default;
 $pivotgrid-hierarchy-image: null !default;
 $pivotgrid-position-indicator-color: null !default;
-$pivotgrid-spin-icon-color: null !default;
 
+/**
+* $name 50. Spin icon color
+* $type color
+*/
+$pivotgrid-spin-icon-color: null !default;
 
 @if $color == "carmine" {
 
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: $base-header-color !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: darken($pivotgrid-area-background, 2.7%) !default;
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: darken($pivotgrid-area-background, 4%) !default;
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -73,15 +80,10 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: lighten($base-icon-color, 3%) !default;
 }
 
 @if $color == "contrast" {
-
 
   $pivotgrid-area-background: $base-bg !default;
 
@@ -108,10 +110,6 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-field-area-text-color: $pivotgrid-area-color !default;
   $pivotgrid-position-indicator-color: $base-accent !default;
 
-  /**
-    * $name 70. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 
@@ -121,29 +119,13 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: darken($base-text-color, 30%) !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: lighten($pivotgrid-area-background, 2.5%) !default;
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -162,10 +144,6 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: darken($base-icon-color, 38%) !default;
 }
 
@@ -174,29 +152,13 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: $screen-text-color !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 40. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: darken($base-bg, 2%) !default; // #465672 => #40506b
 
-  /**
-    * $name 50. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
 
-  /**
-    * $name 60. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -215,10 +177,6 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 
@@ -227,29 +185,13 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: darken($base-text-color, 30%) !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 30. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: #1f1f2b !default;
 
-  /**
-    * $name 40. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: color.change($base-accent-highlight-color, $alpha: 0.15) !default;
 
-  /**
-    * $name 50. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -268,10 +210,6 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: $base-header-color !default;
 }
 
@@ -280,29 +218,13 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: lighten($base-text-color, 38.5%) !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: darken($base-bg, 1%) !default; // #f5f5f5 => #f0f2f2
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: lighten($base-label-color, 40.6%) !default; // #728e94 => #e8eded
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: $base-text-color !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -321,10 +243,6 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 
@@ -333,29 +251,13 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: lighten($base-text-color, 38.5%) !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 13.3%), $alpha: 0.2) !default;
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: darken($base-bg, 4%) !default;
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -374,10 +276,6 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: lighten($base-icon-color, 38.5%) !default;
 }
 
@@ -386,29 +284,13 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: $base-icon-color !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 4%), $alpha: 0.7) !default; // #fff => #f5f5f5
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: darken($base-bg, 4%) !default; // #fff => #f5f5f5
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -427,10 +309,6 @@ $pivotgrid-spin-icon-color: null !default;
 
   $pivotgrid-position-indicator-color: gray !default;
 
-  /**
-    * $name 50. Spin icon color
-    * $type color
-    */
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 

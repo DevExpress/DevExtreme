@@ -4,8 +4,12 @@
 
 // adduse
 
-
 $treeview-color: null !default;
+
+/**
+* $name 80. Focused state background color
+* $type color
+*/
 $treeview-focused-bg: null !default;
 $treeview-focus-color: null !default;
 $treeview-hover-bg: null !default;
@@ -16,16 +20,10 @@ $treeview-item-selected-bg: null !default;
 $treeview-item-selected-hover-bg: null !default;
 $treeview-spin-icon-color: null !default;
 
-
 @if $mode == "light" {
-
 
   $treeview-color: $base-text-color !default;
 
-  /**
-    * $name 80. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-hover-bg !default;
   $treeview-focus-color: $base-text-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
@@ -39,13 +37,8 @@ $treeview-spin-icon-color: null !default;
 
 @if $mode == "dark" {
 
-
   $treeview-color: $base-text-color !default;
 
-  /**
-    * $name 80. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-hover-bg !default;
   $treeview-focus-color: $base-text-color !default;
   $treeview-hover-bg: $base-hover-bg !default;

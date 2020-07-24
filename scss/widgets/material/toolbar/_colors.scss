@@ -4,27 +4,21 @@
 
 // adduse
 
-
+/**
+* $name 10. Background color
+* $type color
+*/
 $toolbar-bg: null !default;
 $toolbar-color: null !default;
 
 
 @if $mode == "light" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
   $toolbar-bg: $base-bg !default;
   $toolbar-color: $base-text-color !default;
 }
 
 @if $mode == "dark" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
   $toolbar-bg: $base-bg !default;
-
   $toolbar-color: $base-text-color !default;
 }
 
