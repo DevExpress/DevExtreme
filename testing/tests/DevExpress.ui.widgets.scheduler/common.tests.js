@@ -2396,7 +2396,7 @@ QUnit.module('Initialization', {
 
         this.clock.tick(400);
 
-        assert.ok(initMarkupSpy.calledTwice, 'Init markup was on the second and thirt option change');
+        assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
         assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
     });
 })('Options');
