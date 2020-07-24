@@ -10,6 +10,7 @@ const plumber = require('gulp-plumber');
 const path = require('path');
 const notify = require('gulp-notify');
 const compressionPipes = require('./compression-pipes.js');
+const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 
 const context = require('./context.js');
 
@@ -22,20 +23,23 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-function isRenovated(file) {
-    const isRenovatedName = !!file.basename.match(/^button\b/g); // only renovated files
+const renovatedFileNames = renovatedComponents.map(component => component.name);
+
+function isOldComponentRenovated(file) {
+    const isRenovatedName = !!file.basename.match(new RegExp(renovatedFileNames.map(fileName => ('^' + fileName + '\\b')).join('|'), 'i')); // only renovated file names
     const isNotRenovationFolder = file.path.match(/renovation/g) === null; // without renovation folder
     const isJsFile = file.extname === '.js';
-    const isWidget = !!file.path.match(/ui\/button/g); // ui/text_box/../button.js
+    const isCorrectFilePath = !!file.path.match(new RegExp(renovatedFileNames.map(fileName => ('ui\\/' + fileName)).join('|'), 'i')); // without ui/text_box/../button.js
 
-    return isRenovatedName && isNotRenovationFolder && isJsFile && isWidget;
+    return isRenovatedName && isNotRenovationFolder && isJsFile && isCorrectFilePath;
 }
 
 gulp.task('transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
-        .pipe(gulpIf(isRenovated, gulpEach((content, file, callback) => {
-            const fileContext = 'import Widget from "../renovation/' + file.stem + '.j";export default Widget;';
+        .pipe(gulpIf(isOldComponentRenovated, gulpEach((content, file, callback) => {
+            const component = renovatedComponents.find(component => component.name.toLowerCase() === file.stem);
+            const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
             callback(null, fileContext);
         })))
         .pipe(replace('require("./widgets-base")', 'require("./widgets-base-renovated")'))

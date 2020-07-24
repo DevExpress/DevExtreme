@@ -9,6 +9,7 @@ const lazyPipe = require('lazypipe');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const fs = require('fs');
 
+const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
@@ -79,6 +80,8 @@ gulp.task('rename-renovation-folder', function(done) {
     });
 });
 
+const componentsExpr = renovatedComponents.map(component => ('dxr' + component.name)).join('|');
+
 gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
     return merge(
 
@@ -103,9 +106,8 @@ gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
             .pipe(gulp.dest(packagePath)),
 
         gulp.src(DIST_GLOBS)
-            .pipe(replace(new RegExp('dxrButton|dxrPager', 'g'), function(match) {
+            .pipe(replace(new RegExp(componentsExpr, 'g'), function(match) {
                 return match.replace('dxr', 'dx');
-                // return 'dxButton';
             }))
             .pipe(gulp.dest(packagePath + '/dist')),
 
