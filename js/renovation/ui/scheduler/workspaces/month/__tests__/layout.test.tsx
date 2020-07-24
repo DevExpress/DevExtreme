@@ -21,11 +21,11 @@ jest.mock('../../base/header_panel/layout', () => ({
 
 describe('MonthLayout', () => {
   describe('Render', () => {
-    const viewCellsData = 'Test data';
+    const viewData = 'Test data';
     const render = (viewModel) => mount(LayoutView({
       ...viewModel,
       props: {
-        viewCellsData,
+        viewData,
         ...viewModel.props,
       },
     } as any) as any);
@@ -44,7 +44,7 @@ describe('MonthLayout', () => {
         .toMatchObject({
           dateTableTemplate: MonthDateTableLayout,
           headerPanelTemplate: expect.any(Function),
-          viewCellsData,
+          viewData,
         });
       expect(layout.find(MonthDateTableLayout).exists())
         .toBe(true);

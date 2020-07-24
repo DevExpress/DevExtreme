@@ -5,7 +5,7 @@ describe('LayoutBase', () => {
   describe('Render', () => {
     const headerPanelTemplate = () => null;
     const dateTableTemplate = () => null;
-    const viewCellsData = {
+    const viewData = {
       groupedData: [{
         dateTable: [[
           {
@@ -41,7 +41,7 @@ describe('LayoutBase', () => {
       props: {
         headerPanelTemplate,
         dateTableTemplate,
-        viewCellsData,
+        viewData,
         ...viewModel.props,
       },
     } as any) as any);
@@ -61,14 +61,14 @@ describe('LayoutBase', () => {
         .toBe(true);
       expect(header.props())
         .toMatchObject({
-          viewCellsData: viewCellsData.groupedData[0].dateTable,
+          viewCellsData: viewData.groupedData[0].dateTable,
         });
 
       const dateTable = layout.find(dateTableTemplate);
       expect(dateTable.exists())
         .toBe(true);
       expect(dateTable.props())
-        .toMatchObject({ viewCellsData });
+        .toMatchObject({ viewData });
     });
   });
 });

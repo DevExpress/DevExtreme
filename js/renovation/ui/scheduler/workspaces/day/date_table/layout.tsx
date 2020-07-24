@@ -1,78 +1,16 @@
-import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
-} from 'devextreme-generator/component_declaration/common';
-import { DateTableRow } from '../../base/date_table/row';
-import { DayDateTableCell as Cell } from './cell';
-import { GroupedViewData, ViewCellData } from '../../types';
-import { getKeyByDateAndGroup } from '../../utils';
-import { Table } from '../../base/table';
-import { VirtualTable } from '../../base/virtual_table';
+import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { DateTableLayoutBase } from '../../base/date_table/layout';
+import { DayDateTableCell } from './cell';
+import { LayoutProps } from '../../base/layout_props';
 
 export const viewFunction = (viewModel: DayDateTableLayout): object => (
-  <Fragment>
-    {viewModel.isVirtual && (
-      <VirtualTable
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...viewModel.restAttributes}
-        className={`dx-scheduler-date-table ${viewModel.props.className}`}
-      >
-        {viewModel.props.viewData!
-          .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
-            <DateTableRow
-              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-            >
-              {cellsRow.map(({
-                startDate,
-                endDate,
-                groups,
-              }: ViewCellData) => (
-                <Cell
-                  startDate={startDate}
-                  endDate={endDate}
-                  groups={groups}
-                  key={getKeyByDateAndGroup(startDate, groups)}
-                />
-              ))}
-            </DateTableRow>
-          )))}
-      </VirtualTable>
-    )}
-    {!viewModel.isVirtual && (
-      <Table
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...viewModel.restAttributes}
-        className={`dx-scheduler-date-table ${viewModel.props.className}`}
-      >
-        {viewModel.props.viewData!
-          .groupedData.map(({ dateTable }) => dateTable.map((cellsRow) => (
-            <DateTableRow
-              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-            >
-              {cellsRow.map(({
-                startDate,
-                endDate,
-                groups,
-              }: ViewCellData) => (
-                <Cell
-                  startDate={startDate}
-                  endDate={endDate}
-                  groups={groups}
-                  key={getKeyByDateAndGroup(startDate, groups)}
-                />
-              ))}
-            </DateTableRow>
-          )))}
-      </Table>
-    )}
-  </Fragment>
+  <DateTableLayoutBase
+    viewData={viewModel.props.viewData}
+    cellTemplate={DayDateTableCell}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...viewModel.restAttributes}
+  />
 );
-
-@ComponentBindings()
-export class DayDateTableLayoutProps {
-  @OneWay() viewData?: GroupedViewData;
-
-  @OneWay() className?: string;
-}
 
 @Component({
   defaultOptionRules: null,
@@ -81,9 +19,4 @@ export class DayDateTableLayoutProps {
     register: true,
   },
 })
-export class DayDateTableLayout extends JSXComponent(DayDateTableLayoutProps) {
-  get isVirtual(): boolean {
-    const { viewData } = this.props;
-    return viewData ? !!viewData.isVirtual : false;
-  }
-}
+export class DayDateTableLayout extends JSXComponent(LayoutProps) {}
