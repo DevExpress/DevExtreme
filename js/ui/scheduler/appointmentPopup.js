@@ -1,6 +1,6 @@
 import devices from '../../core/devices';
 import $ from '../../core/renderer';
-import dateUtils from '../../core/utils/date';
+// import dateUtils from '../../core/utils/date';
 import { Deferred, when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -13,7 +13,7 @@ import Popup from '../popup';
 import { APPOINTMENT_FORM_GROUP_NAMES, AppointmentForm } from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
 
-const toMs = dateUtils.dateToMilliseconds;
+// const toMs = dateUtils.dateToMilliseconds;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
@@ -307,12 +307,12 @@ export default class AppointmentPopup {
         const validation = this._appointmentForm.validate();
         const state = this.state.appointment;
 
-        const convert = (obj, dateFieldName) => {
-            const date = new Date(this.scheduler.fire('getField', dateFieldName, obj));
-            const tzDiff = this.scheduler._getTimezoneOffsetByOption() * toMs('hour') + this.scheduler.fire('getClientTimezoneOffset', date);
+        // const convert = (obj, dateFieldName) => {
+        //     const date = new Date(this.scheduler.fire('getField', dateFieldName, obj));
+        //     const tzDiff = this.scheduler._getTimezoneOffsetByOption() * toMs('hour') + this.scheduler.fire('getClientTimezoneOffset', date);
 
-            return new Date(date.getTime() + tzDiff);
-        };
+        //     return new Date(date.getTime() + tzDiff);
+        // };
 
         showLoadPanel && this._showLoadPanel();
 
@@ -356,10 +356,10 @@ export default class AppointmentPopup {
                     this.scheduler.updateAppointment(oldData, recData);
                     delete this.scheduler._updatedRecAppointment;
 
-                    if(typeof this.scheduler._getTimezoneOffsetByOption() === 'number') {
-                        this.scheduler.fire('setField', 'startDate', appointment, convert.call(this, appointment, 'startDate'));
-                        this.scheduler.fire('setField', 'endDate', appointment, convert.call(this, appointment, 'endDate'));
-                    }
+                    // if(typeof this.scheduler._getTimezoneOffsetByOption() === 'number') {
+                    //     this.scheduler.fire('setField', 'startDate', appointment, convert.call(this, appointment, 'startDate'));
+                    //     this.scheduler.fire('setField', 'endDate', appointment, convert.call(this, appointment, 'endDate'));
+                    // }
                 }
 
                 this.scheduler.addAppointment(appointment)

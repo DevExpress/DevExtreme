@@ -1986,7 +1986,7 @@ class Scheduler extends Widget {
             this.addAppointment(singleAppointment);
         }
 
-        const recurrenceException = this._makeDateAsRecurrenceException(exceptionDate, targetAppointment);
+        const recurrenceException = this._createRecurrenceException(exceptionDate, targetAppointment);
         const updatedAppointment = extend({}, targetAppointment);
 
         this.fire('setField', 'recurrenceException', updatedAppointment, recurrenceException);
@@ -2004,28 +2004,25 @@ class Scheduler extends Widget {
         }
     }
 
-    _makeDateAsRecurrenceException(exceptionDate, targetAppointment) {
-        const startDate = this._getStartDate(targetAppointment, true);
-        const isAllDay = this.fire('getField', 'allDay', targetAppointment);
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', targetAppointment);
-        const exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate, startDateTimeZone, isAllDay);
-        const recurrenceException = this.fire('getField', 'recurrenceException', targetAppointment);
+    _createRecurrenceException(exceptionDate, targetAppointment) {
+        const result = [];
+        const adapter = this.createAppointmentAdapter(targetAppointment);
 
-        return recurrenceException ? recurrenceException + ',' + exceptionByDate : exceptionByDate;
+        if(adapter.recurrenceException) {
+            result.push(adapter.recurrenceException);
+        }
+        result.push(this._serializeRecurrenceException(exceptionDate, adapter.startDate, adapter.allDay));
+
+        return result.join();
     }
 
-    _getRecurrenceExceptionDate(exceptionStartDate, targetStartDate, startDateTimeZone, isAllDay) {
-        exceptionStartDate = this.fire('convertDateByTimezoneBack', exceptionStartDate, startDateTimeZone);
-        const appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
+    _serializeRecurrenceException(exceptionDate, targetStartDate, isAllDay) {
+        isAllDay && exceptionDate.setHours(targetStartDate.getHours(),
+            targetStartDate.getMinutes(),
+            targetStartDate.getSeconds(),
+            targetStartDate.getMilliseconds());
 
-        exceptionStartDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(exceptionStartDate, appointmentStartDate, this.option('timeZone'), startDateTimeZone, true);
-
-        isAllDay && exceptionStartDate.setHours(appointmentStartDate.getHours(),
-            appointmentStartDate.getMinutes(),
-            appointmentStartDate.getSeconds(),
-            appointmentStartDate.getMilliseconds());
-
-        return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
+        return dateSerialization.serializeDate(exceptionDate, UTC_FULL_DATE_FORMAT);
     }
 
     _showRecurrenceChangeConfirm(isDeleted) {
