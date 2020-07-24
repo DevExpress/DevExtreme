@@ -130,25 +130,4 @@ gulp.task('renovation-npm-sass', gulp.parallel(() => {
         .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
 }));
 
-
-// gulp.task('npm-check', gulp.series('ts-modules-check'));  // from old code
-
 gulp.task('renovation-npm', gulp.series('renovation-npm-sources', 'npm-check', 'renovation-npm-sass'));
-
-// const renovationWidgets = [];
-
-// gulp.task('renovation-npm', function() {
-//     return gulp.src([context.RESULT_NPM_PATH + '/devextreme/**/*'])
-//         .pipe(replace(/renovation\.dxr[A-Z, a-z]*/g, (match) => {
-//             const widgetName = match.match(/([A-Z])\w+/g)[0];
-//             renovationWidgets.push(widgetName);
-//             return match.replace('renovation.dxr', 'renovation.dx');
-//         }))
-//         .pipe(replace('renovation.dxr', (match, p1, offset, string) => {
-//             // console.log(match);
-//             // renovationWidgets.push(String(p1).match(/renovation\.dxr[A-Z, a-z]*/g));
-//             // console.log(renovationWidgets.join(' - '));
-//             return match;
-//         }))
-//         .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation'));
-// });
