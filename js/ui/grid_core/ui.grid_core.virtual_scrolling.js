@@ -133,17 +133,15 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             });
         },
         _handleLoadingChanged: function(isLoading) {
-            const that = this;
-
-            if(!isVirtualMode(that)) {
-                that._isLoading = isLoading;
-                that.callBase.apply(that, arguments);
+            if(!isVirtualMode(this) || this._isLoadingAll) {
+                this._isLoading = isLoading;
+                this.callBase.apply(this, arguments);
             }
 
             if(isLoading) {
-                that._startLoadTime = new Date();
+                this._startLoadTime = new Date();
             } else {
-                that._startLoadTime = undefined;
+                this._startLoadTime = undefined;
             }
         },
         _handleLoadError: function() {

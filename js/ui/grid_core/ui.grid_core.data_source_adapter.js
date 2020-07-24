@@ -81,6 +81,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that._lastOperationTypes = {};
             that._eventsStrategy = dataSource._eventsStrategy;
             that._skipCorrection = 0;
+            that._isLoadingAll = false;
 
 
             that.changed = Callbacks();
@@ -595,6 +596,8 @@ module.exports = gridCore.Controller.inherit((function() {
                     }
                 });
 
+                this._isLoadingAll = options.isLoadingAll;
+
                 that._scheduleCustomLoadCallbacks(d);
                 dataSource._scheduleLoadCallbacks(d);
 
@@ -622,6 +625,8 @@ module.exports = gridCore.Controller.inherit((function() {
 
                 return d.fail(function() {
                     that._eventsStrategy.fireEvent('loadError', arguments);
+                }).always(() => {
+                    this._isLoadingAll = false;
                 }).promise();
             } else {
                 return dataSource.load();
