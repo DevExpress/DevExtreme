@@ -248,6 +248,7 @@ const DropDownList = DropDownEditor.inherit({
         this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
+        this._cachedPopupMinWidth = null;
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
@@ -745,7 +746,11 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupMinWidth() {
-        windowUtils.hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
+        if(windowUtils.hasWindow() && this._popup && this._popup.option('minWidth') === this._cachedPopupMinWidth) {
+            const editorWidth = this.$element().outerWidth();
+            this._cachedPopupMinWidth = editorWidth;
+            this._setPopupOption('minWidth', editorWidth);
+        }
     },
 
     _popupShowingHandler: function() {
