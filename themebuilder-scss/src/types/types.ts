@@ -4,8 +4,12 @@ interface MetaItem {
   Value?: string;
   Type?: string;
   TypeValues?: string;
-  Path?: string;
   [key: string]: string;
+}
+
+interface ThemesMetadata {
+  generic: Array<MetaItem>;
+  material: Array<MetaItem>;
 }
 
 interface ConfigMetaItem {
@@ -62,7 +66,7 @@ interface PackageResult {
 }
 
 interface Metadata {
-  metadata: Array<MetaItem>;
+  metadata: ThemesMetadata;
   version: string;
 }
 
