@@ -8,7 +8,6 @@ $generic-scheduler-timeline-date-table-cell-height: null !default;
 $generic-scheduler-header-panel-top-gap: null !default;
 $generic-scheduler-header-height: null !default;
 $generic-scheduler-navigator-height: null !default;
-$generic-scheduler-navigator-border-radius: null !default;
 $generic-scheduler-navigation-buttons-padding: null !default;
 $generic-scheduler-appointment-month-text-size: null !default;
 $generic-scheduler-workspace-info-text-size: null !default;
@@ -17,13 +16,14 @@ $generic-scheduler-appointment-content-padding: null !default;
 $generic-scheduler-appointment-recurrence-content-padding: null !default;
 $generic-scheduler-appointment-recurrence-content-padding-rtl: null !default;
 $generic-scheduler-agenda-appointment-font-size: null !default;
-$generic-scheduler-group-header-agenda-font-size: null !default;
 $generic-scheduler-group-header-table-cell-width: null !default;
 $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
 $generic-scheduler-appointment-collector-height: null !default;
 
 $scheduler-left-column-width: 100px;
+$generic-scheduler-navigator-border-radius: $button-border-radius;
+$generic-scheduler-group-header-agenda-font-size: 14px;
 
 @if $size == "default" {
   $generic-scheduler-workspace-date-table-cell-height: 50px;
@@ -33,7 +33,6 @@ $scheduler-left-column-width: 100px;
 
   $generic-scheduler-header-height: 56px;
   $generic-scheduler-navigator-height: 36px;
-  $generic-scheduler-navigator-border-radius: $button-border-radius;
   $generic-scheduler-navigation-buttons-padding: 6px;
 
   $generic-scheduler-appointment-month-text-size: 13px;
@@ -45,11 +44,9 @@ $scheduler-left-column-width: 100px;
   $generic-scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px;
 
   $generic-scheduler-agenda-appointment-font-size: 16px;
-  $generic-scheduler-group-header-agenda-font-size: 14px;
   $generic-scheduler-group-header-table-cell-width: 80px;
   $generic-scheduler-appointment-transparent-left-border: 3px solid transparent;
   $generic-scheduler-appointment-transparent-right-border: 2px solid transparent;
-
 
   $generic-scheduler-appointment-collector-height: 20px;
 }
@@ -62,7 +59,6 @@ $scheduler-left-column-width: 100px;
 
   $generic-scheduler-header-height: 39px;
   $generic-scheduler-navigator-height: 25px;
-  $generic-scheduler-navigator-border-radius: $button-border-radius;
   $generic-scheduler-navigation-buttons-padding: 4px;
 
   $generic-scheduler-appointment-month-text-size: 11px;
@@ -74,7 +70,6 @@ $scheduler-left-column-width: 100px;
   $generic-scheduler-appointment-recurrence-content-padding-rtl: 2px 5px 2px 25px;
 
   $generic-scheduler-agenda-appointment-font-size: 14px;
-  $generic-scheduler-group-header-agenda-font-size: 14px;
   $generic-scheduler-group-header-table-cell-width: 60px;
   $generic-scheduler-appointment-transparent-left-border: 2px solid transparent;
   $generic-scheduler-appointment-transparent-right-border: 1px solid transparent;

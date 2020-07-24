@@ -3,12 +3,6 @@
 // adduse
 
 $generic-treeview-container-with-border-offset: null !default;
-$generic-treeview-border-padding: null !default;
-$generic-treeview-container-padding:
-  $generic-treeview-border-padding
-  $generic-treeview-border-padding
-  $generic-treeview-border-padding
-  $generic-treeview-container-with-border-offset;
 $generic-treeview-node-offset: null !default;
 $generic-treeview-toggle-item-width: null !default;
 $generic-treeview-item-with-checkbox-offset: null !default;
@@ -19,22 +13,17 @@ $generic-treeview-item-padding: null !default;
 $generic-treeview-min-item-height: null !default;
 $generic-treeview-checkbox-offset: null !default;
 $generic-treeview-item-visibility-icon-size: null !default;
-$generic-treeview-loadincicator-offset-top: null !default;
-$generic-treeview-loadincicator-offset-left: null !default;
 $generic-treeview-loadincicator-size: null !default;
 $generic-select-all-text-offset: null !default;
 $generic-treeview-arrow-icon-size: null !default;
 $generic-treeview-searchbox-margin-bottom: null !default;
 
+$generic-treeview-border-padding: 1px;
+$generic-treeview-loadincicator-offset-top: 8px;
+$generic-treeview-loadincicator-offset-left: -1px;
+
 @if $size == "default" {
   $generic-treeview-container-with-border-offset: 7px;
-
-  $generic-treeview-border-padding: 1px;
-  $generic-treeview-container-padding:
-    $generic-treeview-border-padding
-    $generic-treeview-border-padding
-    $generic-treeview-border-padding
-    $generic-treeview-container-with-border-offset;
 
   $generic-treeview-node-offset: 15px;
 
@@ -53,8 +42,6 @@ $generic-treeview-searchbox-margin-bottom: null !default;
 
   $generic-treeview-item-visibility-icon-size: 10px;
 
-  $generic-treeview-loadincicator-offset-top: 8px;
-  $generic-treeview-loadincicator-offset-left: -1px;
   $generic-treeview-loadincicator-size: 14px;
   $generic-select-all-text-offset: 31px;
 
@@ -65,13 +52,6 @@ $generic-treeview-searchbox-margin-bottom: null !default;
 
 @else if $size == "compact" {
   $generic-treeview-container-with-border-offset: 6px;
-
-  $generic-treeview-border-padding: 1px;
-  $generic-treeview-container-padding:
-    $generic-treeview-border-padding
-    $generic-treeview-border-padding
-    $generic-treeview-border-padding
-    $generic-treeview-container-with-border-offset;
 
   $generic-treeview-node-offset: 10px;
 
@@ -90,8 +70,6 @@ $generic-treeview-searchbox-margin-bottom: null !default;
 
   $generic-treeview-item-visibility-icon-size: 8px;
 
-  $generic-treeview-loadincicator-offset-top: 8px;
-  $generic-treeview-loadincicator-offset-left: -1px;
   $generic-treeview-loadincicator-size: 11px;
   $generic-select-all-text-offset: 26px;
 
@@ -99,3 +77,9 @@ $generic-treeview-searchbox-margin-bottom: null !default;
 
   $generic-treeview-searchbox-margin-bottom: 3px;
 }
+
+$generic-treeview-container-padding:
+  $generic-treeview-border-padding
+  $generic-treeview-border-padding
+  $generic-treeview-border-padding
+  $generic-treeview-container-with-border-offset;

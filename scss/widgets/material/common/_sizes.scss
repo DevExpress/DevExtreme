@@ -2,17 +2,10 @@
 
 // adduse
 
-$material-invalid-badge-size: null !default;
 $material-line-height: 1.2857;
 
 $material-inline-borderedwidget-inner-size:
   $material-base-inline-widget-height -
   $material-base-border-width * 2;
 
-@if $size == "default" {
-  $material-invalid-badge-size: $material-base-icon-size - 2px;
-}
-
-@else if $size == "compact" {
-  $material-invalid-badge-size: $material-base-icon-size - 2px;
-}
+$material-invalid-badge-size: $material-base-icon-size - 2px;
