@@ -9,7 +9,7 @@ import eventUtils from '../events/utils';
 import pointerEvents from '../events/pointer';
 import scrollEvents from '../ui/scroll_view/ui.events.emitter.gesture.scroll';
 import sizeUtils from '../core/utils/size';
-import { allowScroll } from './text_box/utils.scroll';
+import { allowScroll, prepareScrollData } from './text_box/utils.scroll';
 import TextBox from './text_box';
 
 const TEXTAREA_CLASS = 'dx-textarea';
@@ -107,18 +107,7 @@ const TextArea = TextBox.inherit({
         this._eventY = 0;
         const $input = this._input();
 
-        const initScrollData = {
-            validate: (e) => {
-                if(eventUtils.isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
-                    if(allowScroll($input, -e.delta, e.shiftKey)) {
-                        e._needSkipEvent = true;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-        };
+        const initScrollData = prepareScrollData($input, true);
 
         eventsEngine.on($input, eventUtils.addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
         eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
