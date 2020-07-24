@@ -48,7 +48,7 @@ function createMiscBatch() {
 function createMainBatch() {
     const tasks = ['js-bundles-debug'];
     if(!TEST_CI) {
-        tasks.push('js-bundles-prod');
+        tasks.push('js-bundles-prod', 'js-bundles-prod-renovation');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
     return DOCKER_CI

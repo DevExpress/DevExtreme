@@ -35,9 +35,10 @@ gulp.task('transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(gulpIf(isRenovated, gulpEach((content, file, callback) => {
-            const pathToRenovatedFile = 'import Widget from "../renovation/' + file.stem + '.j";export default Widget;';
-            callback(null, pathToRenovatedFile);
+            const fileContext = 'import Widget from "../renovation/' + file.stem + '.j";export default Widget;';
+            callback(null, fileContext);
         })))
+        .pipe(replace('require("./widgets-base")', 'require("./widgets-base-renovated")'))
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
 });

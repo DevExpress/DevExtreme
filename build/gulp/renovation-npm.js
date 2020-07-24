@@ -7,6 +7,7 @@ const merge = require('merge-stream');
 const through = require('through2');
 const lazyPipe = require('lazypipe');
 const dataUri = require('./gulp-data-uri').gulpPipe;
+const fs = require('fs');
 
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
@@ -17,6 +18,7 @@ const scssPackagePath = packagePath + '/scss';
 
 const TRANSPILED_GLOBS = [
     context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.js',
+    '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/bundles/*.js',
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/bundles/modules/parts/*.js',
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/viz/vector_map.utils/*.js',
@@ -31,19 +33,21 @@ const JSON_GLOBS = [
 const DIST_GLOBS = [
     'artifacts/**/*.*',
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
+    '!' + context.RESULT_JS_PATH + '/**/*.*',
+    '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
-    '!artifacts/js/angular**/*.*',
-    '!artifacts/js/angular*',
-    '!artifacts/js/knockout*',
-    '!artifacts/js/cldr/*.*',
-    '!artifacts/js/cldr*',
-    '!artifacts/js/globalize/*.*',
-    '!artifacts/js/globalize*',
-    '!artifacts/js/jquery*',
-    '!artifacts/js/jszip*',
-    '!artifacts/js/dx.custom*',
-    '!artifacts/js/dx-diagram*',
-    '!artifacts/js/dx-gantt*',
+    '!artifacts/js-renovation/angular**/*.*',
+    '!artifacts/js-renovation/angular*',
+    '!artifacts/js-renovation/knockout*',
+    '!artifacts/js-renovation/cldr/*.*',
+    '!artifacts/js-renovation/cldr*',
+    '!artifacts/js-renovation/globalize/*.*',
+    '!artifacts/js-renovation/globalize*',
+    '!artifacts/js-renovation/jquery*',
+    '!artifacts/js-renovation/jszip*',
+    '!artifacts/js-renovation/dx.custom*',
+    '!artifacts/js-renovation/dx-diagram*',
+    '!artifacts/js-renovation/dx-gantt*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',
@@ -63,6 +67,15 @@ const addDefaultExport = lazyPipe().pipe(function() {
             chunk.contents = Buffer.from(String(chunk.contents) + 'module.exports.default = module.exports;');
         }
         callback(null, chunk);
+    });
+});
+
+gulp.task('rename-renovation-folder', function(done) {
+    fs.rename(packagePath + '/dist/js-renovation', packagePath + '/dist/js', function(err) {
+        if(err) {
+            throw err;
+        }
+        done();
     });
 });
 
@@ -90,12 +103,16 @@ gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
             .pipe(gulp.dest(packagePath)),
 
         gulp.src(DIST_GLOBS)
+            .pipe(replace(new RegExp('dxrButton|dxrPager', 'g'), function(match) {
+                return match.replace('dxr', 'dx');
+                // return 'dxButton';
+            }))
             .pipe(gulp.dest(packagePath + '/dist')),
 
         gulp.src('README.md')
             .pipe(gulp.dest(packagePath))
     );
-}));
+}, 'rename-renovation-folder'));
 
 gulp.task('renovation-npm-sass', gulp.parallel(() => {
     return gulp

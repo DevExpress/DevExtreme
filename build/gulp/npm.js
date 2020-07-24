@@ -17,6 +17,7 @@ const scssPackagePath = packagePath + '/scss';
 
 const TRANSPILED_GLOBS = [
     context.TRANSPILED_PROD_PATH + '/**/*.js',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
     '!' + context.TRANSPILED_PROD_PATH + '/renovation/**/*',
     '!' + context.TRANSPILED_PROD_PATH + '/bundles/*.js',
     '!' + context.TRANSPILED_PROD_PATH + '/bundles/modules/parts/*.js',
@@ -32,6 +33,8 @@ const JSON_GLOBS = [
 const DIST_GLOBS = [
     'artifacts/**/*.*',
     '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
+    '!' + context.RESULT_JS_RENOVATION_PATH + '/**/*.*',
+    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',

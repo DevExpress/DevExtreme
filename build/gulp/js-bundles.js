@@ -38,14 +38,24 @@ function processBundles(bundles) {
     });
 }
 
-function processDevBundles(bundles) {
+function processRenovationBundles(bundles) {
     return bundles.map(function(bundle) {
-        return 'js' + bundle;
+        return context.TRANSPILED_PROD_RENOVATION_PATH + bundle;
     });
 }
 
 function muteWebPack() {
 }
+
+gulp.task('js-bundles-prod-renovation', gulp.series('version-replace', function() {
+    return gulp.src(processRenovationBundles(BUNDLES))
+        .pipe(named())
+        .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
+        .pipe(headerPipes.useStrict())
+        .pipe(headerPipes.bangLicense())
+        .pipe(compressionPipes.minify())
+        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
+}));
 
 gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
     return gulp.src(processBundles(BUNDLES))
@@ -63,10 +73,10 @@ const createDebugBundlesStream = function(watch) {
     let bundles;
     if(watch) {
         debugConfig = Object.assign({}, webpackConfigDev);
-        bundles = processDevBundles(DEBUG_BUNDLES);
+        bundles = processRenovationBundles(DEBUG_BUNDLES);
     } else {
         debugConfig = Object.assign({}, webpackConfig);
-        bundles = processBundles(DEBUG_BUNDLES);
+        bundles = processRenovationBundles(DEBUG_BUNDLES);
     }
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
@@ -84,7 +94,8 @@ const createDebugBundlesStream = function(watch) {
         .pipe(headerPipes.useStrict())
         .pipe(headerPipes.bangLicense())
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
-        .pipe(gulp.dest(context.RESULT_JS_PATH));
+        .pipe(gulp.dest(context.RESULT_JS_PATH))
+        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
 };
 
 
