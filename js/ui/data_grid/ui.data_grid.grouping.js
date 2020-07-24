@@ -128,7 +128,7 @@ const GroupingDataSourceAdapterExtender = (function() {
                 }
             }
         },
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             const remoteOperations = options.remoteOperations;
 
             if(options.storeLoadOptions.group) {
