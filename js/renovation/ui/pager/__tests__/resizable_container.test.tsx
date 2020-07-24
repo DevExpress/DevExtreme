@@ -14,7 +14,6 @@ import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 jest.mock('../utils/get_computed_style');
 jest.mock('../../../../core/utils/resize_callbacks');
 
-
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
 describe('resizable-container', () => {
@@ -130,14 +129,65 @@ describe('resizable-container', () => {
       expect(elementsWidth).not.toBe(component.elementsWidth);
     });
 
-    it('subscribeToResize', () => {
-      const component = createComponent({
-        width: 0, pageSizes: 0, info: 0, pages: 0,
+    describe('subscribeToResize', () => {
+      afterEach(() => {
+        jest.clearAllMocks();
       });
-      const dispose = component.subscribeToResize();
-      expect(resizeCallbacks.add).toBeCalledWith(component.updateChildrenProps);
-      dispose();
-      expect(resizeCallbacks.remove).toBeCalledTimes(1);
+
+      it('subscribe', () => {
+        const component = createComponent({
+          width: 0, pageSizes: 0, info: 0, pages: 0,
+        });
+
+        const dispose = component.subscribeToResize();
+
+        expect(resizeCallbacks.add).toBeCalledTimes(1);
+        expect(resizeCallbacks.remove).toBeCalledTimes(0);
+
+        dispose();
+      });
+
+      it('remove', () => {
+        const component = createComponent({
+          width: 0, pageSizes: 0, info: 0, pages: 0,
+        });
+        const dispose = component.subscribeToResize();
+
+        dispose();
+
+        expect(resizeCallbacks.remove).toBeCalledTimes(1);
+        const callbackPassedToAdd = (resizeCallbacks as any).add.mock.calls[0][0];
+        const callbackPassedToRemove = (resizeCallbacks as any).add.mock.calls[0][0];
+        expect(callbackPassedToAdd).toEqual(callbackPassedToRemove);
+      });
+
+      it('updateChildProps on resizeCallback', () => {
+        const component = createComponent({
+          width: 10, pageSizes: 50, info: 50, pages: 50,
+        });
+        component.effectUpdateChildProps();
+
+        const {
+          parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
+        } = getElementsRef({
+          width: 400, pageSizes: 100, info: 50, pages: 100,
+        });
+        component.parentRef = parentHtmlEl;
+        component.pageSizesRef = pageSizesHtmlEl;
+        component.pagesRef = pagesHtmlEl;
+        component.infoTextRef = infoHtmlEl;
+
+        const addMock = (resizeCallbacks as any).add.mock;
+        const dispose = component.subscribeToResize();
+        expect(addMock.calls.length).toBe(1);
+
+        addMock.calls[0][0](); // resizeCallbacks.fire() - jest mock bug
+
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+
+        dispose();
+      });
     });
 
     it('pagerProps', () => {
