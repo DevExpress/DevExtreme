@@ -608,7 +608,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             return items;
         },
 
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const dataSource = that._dataSource;
             const storeLoadOptions = options.storeLoadOptions;
@@ -632,7 +632,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
 
             that.callBase.apply(this, arguments);
 
-            if(group && options.remoteOperations.paging && (isReload || operationTypes.reload)) {
+            if(group && options.remoteOperations.paging && operationTypes.reload) {
                 return foreachExpandedGroups(that, function(groupInfo) {
                     const groupCountQuery = loadGroupTotalCount(dataSource, {
                         filter: createGroupFilter(groupInfo.path, {

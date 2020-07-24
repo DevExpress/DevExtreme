@@ -358,14 +358,14 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
         allowCollapseAll: function() {
             return false;
         },
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
             const dataSource = that._dataSource;
 
             this.callBase.apply(this, arguments);
 
-            if(isReload || operationTypes.reload) {
+            if(operationTypes.reload) {
                 return foreachCollapsedGroups(that, function(groupInfo) {
                     const groupCountQuery = loadTotalCount(dataSource, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
                     const groupOffsetQuery = loadTotalCount(dataSource, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
