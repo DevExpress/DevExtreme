@@ -251,11 +251,6 @@ $datagrid-filter-panel-color: null !default;
   $datagrid-columnchooser-hover-icon-color: color.change($datagrid-base-color, $alpha: 0.38) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values 300|500|700
-    */
   $datagrid-columnchooser-font-weight: 500 !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
