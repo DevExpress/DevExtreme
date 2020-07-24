@@ -183,9 +183,9 @@ Action.registerExecutor({
     },
 
     'readOnly': {
-        validate: createValidatorByTargetElement(($target) =>
-            $target.is('.dx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')
-        )
+        validate: createValidatorByTargetElement(function($target) {
+            return $target.is('.dx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)');
+        })
     }
 });
 
