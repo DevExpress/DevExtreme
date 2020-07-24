@@ -57,10 +57,6 @@ $treeview-spin-icon-color: null !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 80. Focused state background color ('showCheckBoxes' mode is false)
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-color !default;
   $treeview-focus-color: $base-inverted-text-color !default;
 
@@ -95,10 +91,6 @@ $treeview-spin-icon-color: null !default;
 
   $treeview-color: $base-text-color !default;
 
-  /**
-    * $name 80. Focused state background color ('showCheckBoxes' mode is false)
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
 

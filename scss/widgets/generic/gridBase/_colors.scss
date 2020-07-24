@@ -379,11 +379,6 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-item-color: darken($datagrid-base-color, 38.5%) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 6.5%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values normal|bold|light
-    */
   $datagrid-columnchooser-font-weight: normal !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
@@ -467,11 +462,6 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-item-color: $screen-text-color !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 6.5%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values normal|bold|light
-    */
   $datagrid-columnchooser-font-weight: normal !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
@@ -554,11 +544,6 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-item-color: darken($datagrid-base-color, 38.5%) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 6.5%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values normal|bold|light
-    */
   $datagrid-columnchooser-font-weight: normal !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent-highlight-color, $alpha: 0.8) !default;
@@ -640,11 +625,6 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-item-color: lighten($datagrid-base-color, 38.5%) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values normal|bold|light
-    */
   $datagrid-columnchooser-font-weight: normal !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
@@ -729,11 +709,6 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-item-color: lighten($datagrid-base-color, 38.5%) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values normal|bold|light
-    */
   $datagrid-columnchooser-font-weight: normal !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
@@ -815,11 +790,6 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-item-color: $base-icon-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
 
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $type-values normal|bold|light
-    */
   $datagrid-columnchooser-font-weight: normal !default;
 
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;

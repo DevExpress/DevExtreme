@@ -120,10 +120,6 @@ $button-group-success-selected-bg-focused: null !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Selected item text color
-    * $type color
-    */
   $button-group-normal-selected-color: $base-text-color !default;
 
   $button-group-normal-contained-selected-bg: lighten($button-normal-bg, 17%) !default;
