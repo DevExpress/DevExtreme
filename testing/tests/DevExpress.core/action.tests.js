@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
+import errors from 'core/errors';
 import Action from 'core/action';
+
+const noJquery = QUnit.urlParams['nojquery'];
 
 QUnit.testStart(function() {
     const markup =
@@ -285,6 +288,60 @@ QUnit.test('ui interaction validator should not prevent all ui action handlers i
     });
 
     assert.strictEqual(handlerSpy.callCount, 1);
+});
+
+QUnit.test('Action argument should contain both Event and jQueryEvent field or none of them', function(assert) {
+    const eventMock = {};
+
+    new Action(function(e) {
+        assert.notOk(e.event);
+        assert.notOk(e.jQueryEvent);
+    }).execute({});
+
+    new Action(function(e) {
+        assert.ok(e.event);
+        assert.ok(noJquery || e.jQueryEvent);
+    }).execute({ event: eventMock });
+
+    assert.throws(function() {
+        new Action(noop).execute({ jQueryEvent: eventMock });
+    }, /The jQueryEvent field is deprecated\. Please, use the `event` field instead/);
+});
+
+QUnit.test('Working with jQueryEvent field should throw warning', function(assert) {
+    const eventMock = {};
+    const expectedWarning = ['W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead'];
+    const originalLog = errors.log;
+    const log = [];
+
+    errors.log = function() {
+        log.push($.makeArray(arguments));
+    };
+
+    new Action(function(e) {
+        e.jQueryEvent;
+    }).execute({ event: eventMock });
+
+    if(noJquery) {
+        assert.equal(log.length, 0);
+    } else {
+        assert.equal(log.length, 1);
+        assert.deepEqual(log[0], expectedWarning);
+    }
+
+    new Action(function(e) {
+        e.jQueryEvent = {};
+    }).execute({ event: eventMock });
+
+
+    if(noJquery) {
+        assert.equal(log.length, 0);
+    } else {
+        assert.equal(log.length, 2);
+        assert.deepEqual(log[1], expectedWarning);
+    }
+
+    errors.log = originalLog;
 });
 
 QUnit.module('excludeValidators', {
