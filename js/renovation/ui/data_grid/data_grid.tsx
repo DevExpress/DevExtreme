@@ -1,7 +1,7 @@
 import {
   Ref, Effect, Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-import DxDataGrid from '../../ui/data_grid';
+import DxDataGrid from '../../../ui/data_grid';
 
 import { DataGridProps } from './props';
 

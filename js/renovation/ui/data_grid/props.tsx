@@ -7,18 +7,18 @@ import {
   Nested,
   Template,
 } from 'devextreme-generator/component_declaration/common';
-import DxDataGrid from '../../ui/data_grid';
-import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../ui/data_grid';
-import { WidgetProps } from '../ui/common/widget';
+import DxDataGrid from '../../../ui/data_grid';
+import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../ui/data_grid';
+import { WidgetProps } from '../common/widget';
 
-import type { dxFilterBuilderOptions } from '../../ui/filter_builder';
-import type { dxElement } from '../../core/element';
-import type { template } from '../../core/templates/template';
-import type { event } from '../../events/index';
-import DataSource from '../../data/data_source';
-import type { DataSourceOptions } from '../../data/data_source';
-import type { dxPopupOptions } from '../../ui/popup';
-import type { dxToolbarOptions } from '../../ui/toolbar';
+import type { dxFilterBuilderOptions } from '../../../ui/filter_builder';
+import type { dxElement } from '../../../core/element';
+import type { template } from '../../../core/templates/template';
+import type { event } from '../../../events/index';
+import DataSource from '../../../data/data_source';
+import type { DataSourceOptions } from '../../../data/data_source';
+import type { dxPopupOptions } from '../../../ui/popup';
+import type { dxToolbarOptions } from '../../../ui/toolbar';
 import type {
   RequiredRule,
   NumericRule,
@@ -29,14 +29,14 @@ import type {
   CompareRule,
   EmailRule,
   AsyncRule,
-} from '../../ui/validation_engine';
+} from '../../../ui/validation_engine';
 // import { ExcelFont } from '../../exporter/excel/excel.doc_comments';
 // import { ExcelDataGridCell } from '../../excel_exporter';
-import type { format } from '../../ui/widget/ui.widget';
-import type dxSortable from '../../ui/sortable';
-import type dxDraggable from '../../ui/draggable';
-import type { dxFormSimpleItem, dxFormOptions } from '../../ui/form';
-import type Store from '../../data/abstract_store';
+import type { format } from '../../../ui/widget/ui.widget';
+import type dxSortable from '../../../ui/sortable';
+import type dxDraggable from '../../../ui/draggable';
+import type { dxFormSimpleItem, dxFormOptions } from '../../../ui/form';
+import type Store from '../../../data/abstract_store';
 
 @ComponentBindings()
 export class DataGridColumnButton {
