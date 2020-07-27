@@ -965,6 +965,11 @@ const Form = Widget.inherit({
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
+                if(optionName === 'editorType') { // T903774
+                    if(layoutManager.option(fullOptionName) !== value) {
+                        return false;
+                    }
+                }
                 if(optionName === 'visible') { // T874843
                     const formItems = this.option(getFullOptionName(itemPath, 'items'));
                     if(formItems && formItems.length) {
@@ -988,8 +993,6 @@ const Form = Widget.inherit({
         this.beginUpdate();
         each(options, (optionName, optionValue) => {
             result = this._tryChangeLayoutManagerItemOption(getFullOptionName(itemPath, optionName), optionValue);
-            const item = this.option(itemPath);
-            this._changeItemOption(item, optionName, optionValue);
             if(!result) {
                 return false;
             }
