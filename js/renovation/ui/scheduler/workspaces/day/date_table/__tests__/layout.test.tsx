@@ -1,23 +1,11 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
-import {
-  viewFunction as LayoutView,
-  DayDateTableLayout,
-} from '../layout';
-import { DateTableRow as Row } from '../../../base/date_table/row';
-import { DayDateTableCell as Cell } from '../cell';
-import { getKeyByDateAndGroup } from '../../../utils';
+import { shallow } from 'enzyme';
+import { viewFunction as LayoutView } from '../layout';
+import { DayDateTableCell } from '../cell';
 
-import { Table } from '../../../base/table';
-import { VirtualTable } from '../../../base/virtual_table';
-
-jest.mock('../../../utils', () => ({
-  ...require.requireActual('../../../utils'),
-  getKeyByDateAndGroup: jest.fn(),
-}));
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
+jest.mock('../../../base/date_table/layout', () => ({
+  ...require.requireActual('../../../base/date_table/layout'),
+  DateTableLayoutBase: (props) => <div {...props} />,
 }));
 
 describe('DayDateTableLayout', () => {
@@ -31,12 +19,10 @@ describe('DayDateTableLayout', () => {
       }],
     };
 
-    const render = (viewModel) => mount(LayoutView({
+    const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
-      props: { ...viewModel.props, viewData },
-    } as any) as any).childAt(0).childAt(0);
-
-    afterEach(() => jest.resetAllMocks());
+      props: { viewData, ...viewModel.props },
+    } as any) as any);
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
@@ -45,93 +31,14 @@ describe('DayDateTableLayout', () => {
         .toBe('customAttribute');
     });
 
-    it('should render table correctly', () => {
+    it('should pass correct props to base layout', () => {
       const layout = render({});
 
-      expect(layout.find(Table).exists())
-        .toBe(true);
-
-      const rows = layout.find(Row);
-
-      expect(rows)
-        .toHaveLength(2);
-    });
-
-    it('should render virtual table correctly', () => {
-      const layout = render({ isVirtual: true });
-
-      expect(layout.find(VirtualTable).exists())
-        .toBe(true);
-
-      const rows = layout.find(Row);
-
-      expect(rows)
-        .toHaveLength(2);
-    });
-
-    it('should render cells and pass correct props to them', () => {
-      const layout = render({});
-
-      const cells = layout.find(Cell);
-      expect(cells)
-        .toHaveLength(2);
-
-      expect(cells.at(0).props())
+      expect(layout.props())
         .toMatchObject({
-          startDate: viewData.groupedData[0].dateTable[0][0].startDate,
-          endDate: viewData.groupedData[0].dateTable[0][0].endDate,
-          groups: viewData.groupedData[0].dateTable[0][0].groups,
+          viewData,
+          cellTemplate: DayDateTableCell,
         });
-
-      expect(cells.at(1).props())
-        .toMatchObject({
-          startDate: viewData.groupedData[0].dateTable[1][0].startDate,
-          endDate: viewData.groupedData[0].dateTable[1][0].endDate,
-          groups: viewData.groupedData[0].dateTable[1][0].groups,
-        });
-    });
-
-    it('should call getKeyByDateAndGroup with correct parameters', () => {
-      render({});
-
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenCalledTimes(4);
-
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenNthCalledWith(
-          1, viewData.groupedData[0].dateTable[0][0].startDate,
-          viewData.groupedData[0].dateTable[0][0].groups,
-        );
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenNthCalledWith(
-          2, viewData.groupedData[0].dateTable[0][0].startDate,
-          viewData.groupedData[0].dateTable[0][0].groups,
-        );
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenNthCalledWith(
-          3, viewData.groupedData[0].dateTable[1][0].startDate,
-          viewData.groupedData[0].dateTable[1][0].groups,
-        );
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenNthCalledWith(
-          4, viewData.groupedData[0].dateTable[1][0].startDate,
-          viewData.groupedData[0].dateTable[1][0].groups,
-        );
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Getters', () => {
-      describe('style', () => {
-        [true, false].forEach((isVirtual) => {
-          it(`should get correct virtual flag if isVirtual=${isVirtual}`, () => {
-            const layout = new DayDateTableLayout({ viewData: { groupedData: [], isVirtual } });
-
-            expect(layout.isVirtual)
-              .toBe(isVirtual);
-          });
-        });
-      });
     });
   });
 });

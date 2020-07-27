@@ -1,11 +1,9 @@
-import {
-  Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import { LayoutBase } from '../base/layout';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../base/header_panel/layout';
 import { MonthHeaderPanelCell } from './header_panel/cell';
 import { MonthDateTableLayout } from './date_table/layout';
-import { GroupedViewData } from '../types';
+import { LayoutProps } from '../base/layout_props';
 
 const HeaderTemplate = ({ viewCellsData }: HeaderPanelLayoutProps) => (
   <HeaderPanelLayout
@@ -16,7 +14,7 @@ const HeaderTemplate = ({ viewCellsData }: HeaderPanelLayoutProps) => (
 
 export const viewFunction = (viewModel: MonthLayout) => (
   <LayoutBase
-    viewCellsData={viewModel.props.viewCellsData}
+    viewData={viewModel.props.viewData}
     headerPanelTemplate={HeaderTemplate}
     dateTableTemplate={MonthDateTableLayout}
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -24,13 +22,8 @@ export const viewFunction = (viewModel: MonthLayout) => (
   />
 );
 
-@ComponentBindings()
-export class MonthLayoutProps {
-  @OneWay() viewCellsData?: GroupedViewData;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class MonthLayout extends JSXComponent(MonthLayoutProps) {}
+export class MonthLayout extends JSXComponent(LayoutProps) {}

@@ -4,7 +4,6 @@
 
 $gantt-task-title-padding-left: null !default;
 $gantt-task-height: null !default;
-$gantt-parent-task-height: null !default;
 $gantt-dependency-successor-size: null !default;
 $gantt-milestone-size: null !default;
 $gantt-cv-dialog-padding-bottom: null !default;
@@ -17,7 +16,6 @@ $gantt-task-wrapper-padding-top: 0;
 @if $size == "default" {
   $gantt-task-title-padding-left: 7px;
   $gantt-task-height: 21px;
-  $gantt-parent-task-height: 19px;
   $gantt-dependency-successor-size: 10px;
   $gantt-milestone-size: 14px;
   $gantt-cv-dialog-padding-bottom: 8px;

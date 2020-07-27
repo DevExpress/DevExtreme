@@ -2,18 +2,6 @@
 
 // adduse
 
-$material-gallery-indicator-size: null !default;
-$material-gallery-indicator-selected-size: null !default;
-$material-gallery-button-padding: null !default;
-
-@if $size == "default" {
-  $material-gallery-indicator-size: 8px;
-  $material-gallery-indicator-selected-size: 12px;
-  $material-gallery-button-padding: 8px;
-}
-
-@else if $size == "compact" {
-  $material-gallery-indicator-size: 8px;
-  $material-gallery-indicator-selected-size: 12px;
-  $material-gallery-button-padding: 8px;
-}
+$material-gallery-indicator-size: 8px;
+$material-gallery-indicator-selected-size: 12px;
+$material-gallery-button-padding: 8px;

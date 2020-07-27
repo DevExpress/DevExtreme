@@ -30,6 +30,7 @@
         "scss/dollar-variable-colon-space-after": "always-single-line",
         "scss/dollar-variable-colon-space-before": "never",
         "scss/dollar-variable-no-missing-interpolation": true,
+        "scss/no-duplicate-dollar-variables": [true, { "ignoreInsideAtRules": ["if", "else"] }],
         "scss/dollar-variable-pattern": "^[a-z][0-9a-z-]*$",
         "scss/double-slash-comment-empty-line-before": "always",
         "scss/double-slash-comment-whitespace-inside": "always",

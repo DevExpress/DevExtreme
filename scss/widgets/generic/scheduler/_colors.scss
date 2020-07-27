@@ -5,23 +5,66 @@
 
 // adduse
 
-
+/**
+* $name 10 Border color
+* $type color
+*/
 $scheduler-base-border-color: null !default;
 $scheduler-cell-active-bg: null !default;
 $scheduler-cell-hover-bg: null !default;
 $scheduler-group-separator-border-color: null !default;
+
+/**
+* $name 20. Hour separator color
+* $type color
+*/
 $scheduler-accent-border-color: null !default;
+
+/**
+* $name 30. Appointment text color
+* $type color
+*/
 $scheduler-appointment-text-color: null !default;
 $scheduler-appointment-focus-color: null !default;
+
+/**
+* $name 40. Appointment background color
+* $type color
+*/
 $scheduler-appointment-base-color: null !default;
+
+/**
+* $name 50. Start appointment color
+* $type color
+*/
 $scheduler-appointment-start-color: null !default;
+
+/**
+* $name 60. First day of month separator color
+* $type color
+*/
 $scheduler-first-month-border-color: null !default;
 $scheduler-droppable-cell-background-color: null !default;
+
+/**
+* $name 70. Focused cell color
+* $type color
+*/
 $scheduler-workspace-focused-cell-color: null !default;
 $scheduler-panel-text-color: null !default;
 $scheduler-workspace-background-color: null !default;
 $scheduler-workspace-accent-color: null !default;
+
+/**
+* $name 80. Date-time indicator color
+* $type color
+*/
 $scheduler-current-time-cell-color: null !default;
+
+/**
+* $name 80. Date-time indicator color
+* $type color
+*/
 $scheduler-time-indicator-color: null !default;
 $scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-popup-title-bg: null !default;
@@ -42,64 +85,32 @@ $scheduler-time-indicator-background-color: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 $scheduler-time-panel-background-color: null !default;
 
-
 @if $color == "carmine" {
-  /**
-    * $name 10 Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
 
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: darken($base-border-color, 10%) !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: $base-accent !default;
 
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 
-  /**
-    * $name 60. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
 
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
 
-  /**
-    * $name 70. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
   $scheduler-panel-text-color: $base-header-color !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-current-time-cell-color: $base-accent !default;
 
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
@@ -134,7 +145,6 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "contrast" {
-
 
   $scheduler-base-border-color: $base-border-color !default;
 
@@ -189,61 +199,30 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
 
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
   $scheduler-group-separator-border-color: lighten($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: lighten($base-border-color, 9.8%) !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: $base-accent !default;
 
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 
-  /**
-    * $name 60. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: lighten($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
 
-  /**
-    * $name 70. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
   $scheduler-panel-text-color: $base-text-color !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-current-time-cell-color: $base-accent !default;
 
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
@@ -277,63 +256,31 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: lighten($base-bg, 4%) !default;
   $scheduler-group-separator-border-color: lighten($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: lighten($base-border-color, 9.8%) !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: #fff !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: #2cc9b4 !default;
 
-
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.3) !default;
 
-  /**
-    * $name 60. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: lighten($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
   $scheduler-appointment-base-color: #2cc9b4 !default;
   $scheduler-appointment-text-color: #fff !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 70. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: color.change($base-accent, $alpha: 0.2) !default;
   $scheduler-panel-text-color: $base-text-color !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-current-time-cell-color: $base-accent !default;
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
   $scheduler-dd-appointment-hover-text-color: #fff !default;
@@ -357,61 +304,30 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
 
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
   $scheduler-group-separator-border-color: lighten($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: #414152 !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: $base-icon-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: $base-select-bg !default;
 
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 
-  /**
-    * $name 60. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: lighten($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
 
-  /**
-    * $name 70. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: darken($base-select-bg, 12%) !default;
   $scheduler-panel-text-color: $base-header-color !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-current-time-cell-color: $base-accent !default;
 
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
@@ -446,10 +362,7 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
 
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
@@ -457,52 +370,24 @@ $scheduler-time-panel-background-color: null !default;
 
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: #b5c9c8 !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: $base-accent !default;
 
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
-  /**
-    * $name 60. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
 
-  /**
-    * $name 70. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
   $scheduler-panel-text-color: lighten($base-text-color, 38.5%) !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
   $scheduler-current-time-cell-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
 
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
@@ -536,62 +421,31 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10 Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
 
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: darken($base-border-color, 10%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
   $scheduler-header-bg: darken($base-bg, 4%) !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: $base-accent !default;
 
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 
-  /**
-    * $name 60. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
 
-  /**
-    * $name 70. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 45%) !default;
   $scheduler-panel-text-color: $base-text-color !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-current-time-cell-color: $base-accent !default;
 
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
@@ -624,60 +478,29 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-webwidget-hover-background !default;
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
 
-  /**
-    * $name 20. Hour separator color
-    * $type color
-    */
   $scheduler-accent-border-color: darken($base-border-color, 10%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
 
-  /**
-    * $name 30. Appointment text color
-    * $type color
-    */
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
 
-  /**
-    * $name 40. Appointment background color
-    * $type color
-    */
   $scheduler-appointment-base-color: $base-accent !default;
 
-  /**
-    * $name 50. Start appointment color
-    * $type color
-    */
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 
-  /**
-    * $name 60. Focused cell color
-    * $type color
-    */
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
 
-  /**
-    * $name 70. First day of month separator color
-    * $type color
-    */
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
   $scheduler-panel-text-color: $base-text-color !default;
   $scheduler-workspace-background-color: $base-bg !default;
   $scheduler-workspace-accent-color: $base-accent !default;
 
-  /**
-    * $name 80. Date-time indicator color
-    * $type color
-    */
   $scheduler-current-time-cell-color: $base-accent !default;
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;

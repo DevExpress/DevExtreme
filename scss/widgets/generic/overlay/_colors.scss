@@ -4,35 +4,36 @@
 
 // adduse
 
-
 $overlay-content-shadow-color: null !default;
 $overlay-border-color: null !default;
-$overlay-content-bg: null !default;
-$overlay-shader-bg: null !default;
-$overlay-focus-border-color: null !default;
 
+/**
+* $name 10. Content background color
+* $type color
+*/
+$overlay-content-bg: null !default;
+
+/**
+* $name 20. Shader background color
+* $type color
+*/
+$overlay-shader-bg: null !default;
+
+/**
+* $name 30. Focus border color
+* $type color
+*/
+$overlay-focus-border-color: null !default;
 
 @if $color == "carmine" {
 
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 30. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 
@@ -41,22 +42,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: $base-shadow-color !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 40. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: $base-shadow-color !default;
 
-  /**
-    * $name 50. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color;
 }
 
@@ -65,22 +54,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 20. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 
@@ -89,22 +66,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.3) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 20. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 
@@ -113,22 +78,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 30. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 
@@ -137,22 +90,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 20. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 
@@ -161,22 +102,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 20. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 
@@ -185,22 +114,10 @@ $overlay-focus-border-color: null !default;
   $overlay-content-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 
-  /**
-    * $name 20. Focus border color
-    * $type color
-    */
   $overlay-focus-border-color: $base-border-color !default;
 }
 

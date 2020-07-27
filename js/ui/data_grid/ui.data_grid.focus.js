@@ -13,9 +13,10 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
     extenders: {
         controllers: {
             data: {
-                changeRowExpand: function(path) {
+                changeRowExpand: function(path, isRowClick) {
                     if(this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
-                        if(this._isFocusedRowInsideGroup(path)) {
+                        const keyboardNavigation = this.getController('keyboardNavigation');
+                        if((!isRowClick || !keyboardNavigation.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
                             this.option('focusedRowKey', path);
                         }
                     }

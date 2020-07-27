@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { GroupPanelVerticalCell } from './cell';
-import { GroupRenderItem } from '../../../types';
+import { GroupRenderItem } from '../../../types.d';
 
 export const viewFunction = (viewModel: Row) => (
   <div

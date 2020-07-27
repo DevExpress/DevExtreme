@@ -139,7 +139,8 @@ export default class AppointmentPopup {
     }
 
     _createAppointmentFormData(appointmentData) {
-        const result = extend(true, { repeat: !!appointmentData.recurrenceRule }, appointmentData);
+        const recurrenceRule = this.scheduler.fire('getField', 'recurrenceRule', appointmentData);
+        const result = extend(true, { repeat: !!recurrenceRule }, appointmentData);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;

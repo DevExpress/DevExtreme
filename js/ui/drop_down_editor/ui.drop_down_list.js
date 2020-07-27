@@ -771,7 +771,9 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupDimensions: function() {
-        this._popup.repaint();
+        if(this._needPopupRepaint()) {
+            this._popup.repaint();
+        }
 
         this._list && this._list.updateDimensions();
     },

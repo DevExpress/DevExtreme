@@ -3,7 +3,7 @@ import { viewFunction as LayoutView } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
 
-describe('DayDateTableLayout', () => {
+describe('TimePanelLayout', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{
