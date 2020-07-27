@@ -29,14 +29,14 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './js/renovation/__tests__/setup_enzyme.ts'),
+        path.join(path.resolve('.'), './js/renovation/test_utils/setup_enzyme.ts'),
     ],
     testMatch: [
         '<rootDir>/js/renovation/**/__tests__/**/*.test.[jt]s?(x)'
     ],
     transform: {
-        'test_components.+\\.tsx$': path.resolve('./js/renovation/__tests__/transformers/declaration.js'),
+        'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),
         '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
-        '\\.(tsx)$': path.resolve('./js/renovation/__tests__/transformers/tsx.js')
+        '\\.(tsx)$': path.resolve('./js/renovation/test_utils/transformers/tsx.js')
     }
 };
