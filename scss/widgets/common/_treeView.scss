@@ -1,9 +1,10 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
-$TREEVIEW_SEARCHBOX_MARGIN_BOTTOM: 5px;
-$TREE_VIEW_ICON_SIZE: 24px;
+$treeview-searchbox-margin-bottom: 5px;
+$tree-view-icon-size: 24px;
 
 .dx-treeview-loadindicator-wrapper {
   text-align: center;
@@ -14,7 +15,7 @@ $TREE_VIEW_ICON_SIZE: 24px;
 }
 
 .dx-treeview-search {
-  margin-bottom: $TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
+  margin-bottom: $treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview {
@@ -79,11 +80,11 @@ $TREE_VIEW_ICON_SIZE: 24px;
 
   .dx-icon {
     display: inline-block;
-    width: $TREE_VIEW_ICON_SIZE;
-    height: $TREE_VIEW_ICON_SIZE;
+    width: $tree-view-icon-size;
+    height: $tree-view-icon-size;
     vertical-align: middle;
     margin-right: 5px;
-    background-size: $TREE_VIEW_ICON_SIZE $TREE_VIEW_ICON_SIZE;
+    background-size: $tree-view-icon-size $tree-view-icon-size;
   }
 
   .dx-treeview-item-content {

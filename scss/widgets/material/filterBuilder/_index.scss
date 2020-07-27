@@ -28,6 +28,7 @@
     $filterbuilder-menu-icon-color: $filterbuilder-menu-icon-color,
 );
 @use "../textEditor/colors" as *;
+
 // adduse
 
 
@@ -39,7 +40,7 @@
   .dx-filterbuilder-group {
     .dx-filterbuilder-group-item {
       .dx-filterbuilder-action.dx-filterbuilder-action-icon {
-        padding: $MATERIAL_FILTERBUILDER_ICON_PADDING;
+        padding: $material-filterbuilder-icon-padding;
         vertical-align: middle;
       }
     }
@@ -49,7 +50,7 @@
     .dx-editor-filled,
     .dx-editor-outlined {
       .dx-texteditor-input {
-        padding: $MATERIAL_FILTERBUILDER_FILLED_EDITOR_PADDING;
+        padding: $material-filterbuilder-filled-editor-padding;
       }
     }
   }
@@ -66,38 +67,38 @@
 
 .dx-filterbuilder-overlay {
   &.dx-popup-wrapper > .dx-overlay-content {
-    box-shadow: $dropdown-widgets-shadow;
+    box-shadow: $material-base-dropdown-widgets-shadow;
   }
 
   &.dx-filterbuilder-operations {
     .dx-treeview-item {
-      padding-left: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING;
+      padding-left: $material-filterbuilder-treeview-item-left-padding;
     }
 
     .dx-rtl {
       .dx-treeview-item {
-        padding-right: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING;
+        padding-right: $material-filterbuilder-treeview-item-left-padding;
       }
     }
   }
 
   .dx-treeview-node {
     > .dx-treeview-item {
-      padding-left: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING * 2;
+      padding-left: $material-filterbuilder-treeview-item-left-padding * 2;
     }
 
     &.dx-treeview-node-is-leaf > .dx-treeview-item {
-      padding-left: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING;
+      padding-left: $material-filterbuilder-treeview-item-left-padding;
     }
 
     .dx-treeview-node-container-opened {
-      margin-left: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING;
+      margin-left: $material-filterbuilder-treeview-item-left-padding;
     }
   }
 
   .dx-treeview-item {
-    padding: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
-    min-height: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH;
+    padding: $material-filterbuilder-treeview-item-padding;
+    min-height: $material-filterbuilder-treeview-item-min-heigth;
 
     .dx-icon {
       margin-right: 10px;
@@ -105,22 +106,22 @@
   }
 
   .dx-treeview-toggle-item-visibility {
-    height: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH;
-    left: $MATERIAL_FILTERBUILDER_TREEVIEW_TOGGLE_LEFT;
+    height: $material-filterbuilder-treeview-item-min-heigth;
+    left: $material-filterbuilder-treeview-toggle-left;
   }
 
   .dx-rtl {
     .dx-treeview-node {
       > .dx-treeview-item {
-        padding-right: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING * 2;
+        padding-right: $material-filterbuilder-treeview-item-left-padding * 2;
       }
 
       &.dx-treeview-node-is-leaf > .dx-treeview-item {
-        padding-right: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING;
+        padding-right: $material-filterbuilder-treeview-item-left-padding;
       }
 
       .dx-treeview-node-container-opened {
-        margin-right: $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING;
+        margin-right: $material-filterbuilder-treeview-item-left-padding;
         margin-left: 0;
       }
     }

@@ -84,7 +84,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     showTitle?: boolean;
     /**
      * @docid dxPopoverOptions.target
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -133,7 +133,7 @@ export default class dxPopover extends dxPopup {
     /**
      * @docid dxPopoverMethods.show
      * @publicName show(target)
-     * @param1 target:string|Node|jQuery
+     * @param1 target:string|Element|jQuery
      * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
      * @public

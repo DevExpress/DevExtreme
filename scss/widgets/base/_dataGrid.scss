@@ -6,8 +6,8 @@ $datagrid-row-error-color: null !default;
 $datagrid-base-color: null !default;
 $datagrid-base-background-color: null !default;
 $datagrid-focused-border-color: null !default;
-$HEADER_FILTER_COLOR: null !default;
-$HEADER_FILTER_COLOR_EMPTY: null !default;
+$header-filter-color: null !default;
+$header-filter-color-empty: null !default;
 $base-focus-color: null !default;
 $datagrid-text-stub-background-image-path: null !default;
 
@@ -113,13 +113,13 @@ $datagrid-text-stub-background-image-path: null !default;
 
   .dx-header-filter {
     position: relative;
-    color: $HEADER_FILTER_COLOR;
+    color: $header-filter-color;
 
     @include dx-icon(filter);
   }
 
   .dx-header-filter-empty {
-    color: $HEADER_FILTER_COLOR_EMPTY;
+    color: $header-filter-color-empty;
   }
 
   &.dx-filter-menu {

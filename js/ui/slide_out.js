@@ -12,6 +12,8 @@ import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import DataConverterMixin from './shared/grouped_data_converter_mixin';
 
+// STYLE slideOut
+
 const SLIDEOUT_CLASS = 'dx-slideout';
 const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
 const SLIDEOUT_MENU = 'dx-slideout-menu';

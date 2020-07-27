@@ -9,29 +9,30 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
-    $datagrid-border: $datagrid-border,
-    $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
-    $datagrid-row-error-bg: $datagrid-row-error-bg,
-    $datagrid-base-color: $datagrid-base-color,
-    $datagrid-base-background-color: $datagrid-base-background-color,
-    $datagrid-border-color: $datagrid-border-color,
-    $datagrid-focused-border-color: $datagrid-focused-border-color,
-    $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
-    $datagrid-row-error-color: $datagrid-row-error-color,
-    $HEADER_FILTER_COLOR: $HEADER_FILTER_COLOR,
-    $HEADER_FILTER_COLOR_EMPTY: $HEADER_FILTER_COLOR_EMPTY,
-    $base-focus-color: $base-focus-color,
+  $datagrid-border: $datagrid-border,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
 );
+
 // adduse
 
 
 @include grid-base(treelist);
 
-$TREELIST_EMPTY_SPACE_WIDTH: 24px;
-$TREELIST_CHECKBOX_OFFSET_LEFT: $TREELIST_EMPTY_SPACE_WIDTH + $MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
-$TREELIST_CHECKBOX_OFFSET_LEFT_RTL: $TREELIST_CHECKBOX_OFFSET_LEFT + $MATERIAL_GRID_BASE_CHECKBOX_SIZE;
-$TREELIST_EDITOR_CELL_PADDING_LEFT: $TREELIST_CHECKBOX_OFFSET_LEFT_RTL + $MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-$TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+$treelist-empty-space-width: 24px;
+$treelist-checkbox-offset-left: $treelist-empty-space-width + $material-grid-base-cell-first-column-padding;
+$treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $material-grid-base-checkbox-size;
+$treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $material-grid-base-cell-horizontal-padding;
+$treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $material-grid-base-cell-horizontal-padding;
 
 .dx-treelist-rowsview {
   .dx-treelist-empty-space {
@@ -41,7 +42,7 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
 
     @include dx-icon(chevronup);
 
-    width: $TREELIST_EMPTY_SPACE_WIDTH;
+    width: $treelist-empty-space-width;
 
     &:before {
       visibility: hidden;
@@ -54,27 +55,27 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
 
   .dx-treelist-expanded span {
     @include dx-icon(chevrondown);
-    @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($material-base-icon-size);
 
     cursor: pointer;
 
     &:before {
       left: 0;
-      margin-left: -$TREELIST_EXPANDED_ICON_MARGIN_LEFT;
-      margin-top: -$TREELIST_ICON_MARGIN_TOP;
+      margin-left: -$treelist-expanded-icon-margin-left;
+      margin-top: -$treelist-icon-margin-top;
     }
   }
 
   .dx-treelist-collapsed span {
     @include dx-icon(chevronright);
-    @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($material-base-icon-size);
 
     cursor: pointer;
 
     &:before {
       left: 0;
-      margin-left: -$TREELIST_COLLAPSED_ICON_MARGIN_LEFT;
-      margin-top: -$TREELIST_ICON_MARGIN_TOP;
+      margin-left: -$treelist-collapsed-icon-margin-left;
+      margin-top: -$treelist-icon-margin-top;
     }
   }
 
@@ -119,15 +120,15 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
 }
 
 .dx-treelist-icon-container {
-  max-height: $MATERIAL_GRID_BASE_CELL_LINE_HEIGHT;
+  max-height: $material-grid-base-cell-line-height;
 
   &.dx-editor-inline-block {
     position: relative;
-    padding-right: $TREELIST_ICON_CONTAINER_PADDING_RIGHT;
+    padding-right: $treelist-icon-container-padding-right;
 
     .dx-checkbox {
       top: 50%;
-      margin-top: -$MATERIAL_GRID_BASE_CHECKBOX_SIZE/2;
+      margin-top: -$material-grid-base-checkbox-size / 2;
     }
   }
 }
@@ -136,13 +137,13 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
   position: relative;
 
   .dx-checkbox {
-    left: $TREELIST_CHECKBOX_OFFSET_LEFT;
-    top: ($MATERIAL_GRID_BASE_HEADER_HEIGHT - $MATERIAL_GRID_BASE_CHECKBOX_SIZE)/2;
+    left: $treelist-checkbox-offset-left;
+    top: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
   }
 }
 
 .dx-treelist .dx-treelist-headers .dx-treelist-content .dx-treelist-table .dx-header-row > .dx-treelist-select-all {
-  padding-left: $TREELIST_EDITOR_CELL_PADDING_LEFT;
+  padding-left: $treelist-editor-cell-padding-left;
 }
 
 .dx-rtl {
@@ -160,16 +161,16 @@ $TREELIST_ICON_CONTAINER_PADDING_RIGHT: $MATERIAL_GRID_BASE_CHECKBOX_SIZE + $MAT
   }
 
   .dx-treelist-select-all .dx-checkbox {
-    left: calc(100% - #{$TREELIST_CHECKBOX_OFFSET_LEFT_RTL});
+    left: calc(100% - #{$treelist-checkbox-offset-left-rtl});
   }
 
   &.dx-treelist .dx-treelist-headers .dx-treelist-content .dx-treelist-table .dx-header-row > .dx-treelist-select-all {
-    padding-right: $TREELIST_EDITOR_CELL_PADDING_LEFT;
-    padding-left: $MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+    padding-right: $treelist-editor-cell-padding-left;
+    padding-left: $material-grid-base-cell-horizontal-padding;
   }
 
   .dx-treelist-icon-container.dx-editor-inline-block {
-    padding-left: $TREELIST_ICON_CONTAINER_PADDING_RIGHT;
+    padding-left: $treelist-icon-container-padding-right;
     padding-right: 0;
   }
 }

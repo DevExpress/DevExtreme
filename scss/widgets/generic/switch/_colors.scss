@@ -1,10 +1,19 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
+/**
+* $name 10. Border color
+* $type color
+*/
 $switch-border-color: null !default;
+
+/**
+* $name 10. 'ON' label color
+* $type color
+*/
 $switch-on-color: null !default;
 $switch-bg: null !default;
 $switch-handle-bg: null !default;
@@ -12,25 +21,29 @@ $switch-handle-border-radius: null !default;
 $switch-handle-active-bg: null !default;
 $switch-hover-border-color: null !default;
 $switch-focused-border-color: null !default;
+
+/**
+* $name 30. Active state background color
+* $type color
+*/
 $switch-container-active-bg: null !default;
 $switch-hover-bg: null !default;
 $switch-active-border-color: null !default;
+
+/**
+* $name 20. 'OFF' label color
+* $type color
+*/
 $switch-off-color: null !default;
 $switch-handle-off-bg: null !default;
 $switch-readonly-border-color: null !default;
 $switch-container-readonly-bg: null !default;
 $switch-border-radius: null !default;
 
-
 @if $color == "carmine" {
-
 
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-element-bg !default;
@@ -43,10 +56,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 20. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: lighten($base-text-color, 40%) !default;
   $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
   $switch-readonly-border-color: lighten($switch-border-color, 9%) !default;
@@ -55,16 +64,9 @@ $switch-border-radius: null !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-bg !default;
@@ -76,10 +78,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: $base-hover-color !default;
   $switch-focused-border-color: $base-focus-color !default;
 
-  /**
-    * $name 30. Active state background color
-    * $type color
-    */
   $switch-container-active-bg: $base-bg !default;
   $switch-active-border-color: $base-border-color !default;
 
@@ -94,13 +92,8 @@ $switch-border-radius: null !default;
 
 @if $color == "dark" {
 
-
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-element-bg !default;
@@ -114,10 +107,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 30. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: darken($base-text-color, 40%) !default;
   $switch-handle-off-bg: darken($switch-handle-bg, 15%) !default;
   $switch-readonly-border-color: darken($switch-border-color, 9%) !default;
@@ -127,13 +116,8 @@ $switch-border-radius: null !default;
 
 @if $color == "darkmoon" {
 
-
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
@@ -145,10 +129,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 30. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: darken($base-text-color, 40%) !default;
   $switch-handle-off-bg: darken($switch-handle-bg, 15%) !default;
   $switch-readonly-border-color: darken($switch-border-color, 9%) !default;
@@ -158,13 +138,8 @@ $switch-border-radius: null !default;
 
 @if $color == "darkviolet" {
 
-
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-element-bg !default;
@@ -177,10 +152,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 30. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: darken($base-text-color, 40%) !default;
 
   $switch-handle-off-bg: darken($switch-handle-bg, 15%) !default;
@@ -193,13 +164,8 @@ $switch-border-radius: null !default;
 
 @if $color == "greenmist" {
 
-
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-element-bg !default;
@@ -212,10 +178,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 30. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: lighten($base-text-color, 40%) !default;
 
   $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
@@ -228,13 +190,8 @@ $switch-border-radius: null !default;
 
 @if $color == "light" {
 
-
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-element-bg !default;
@@ -247,10 +204,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 20. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: lighten($base-text-color, 40%) !default;
   $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
   $switch-readonly-border-color: lighten($switch-border-color, 9%) !default;
@@ -260,13 +213,8 @@ $switch-border-radius: null !default;
 
 @if $color == "softblue" {
 
-
   $switch-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. 'ON' label color
-    * $type color
-    */
   $switch-on-color: $base-text-color !default;
 
   $switch-bg: $base-element-bg !default;
@@ -279,10 +227,6 @@ $switch-border-radius: null !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  /**
-    * $name 30. 'OFF' label color
-    * $type color
-    */
   $switch-off-color: lighten($base-text-color, 40%) !default;
 
   $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;

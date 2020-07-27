@@ -2,10 +2,19 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
-
+/**
+* $name 10. Slider bar background color
+* $type color
+*/
 $slider-bar-bg: null !default;
+
+/**
+* $name 30. Selected range background color
+* $type color
+*/
 $slider-range-bg: null !default;
 $slider-range-border-color: null !default;
 $slider-handle-bg: null !default;
@@ -16,18 +25,10 @@ $slider-handle-focused-bg: null !default;
 $slider-invalid-handle-accent-bg: null !default;
 $slider-handle-border-radius: null !default;
 
-
 @if $color == "carmine" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 
@@ -42,16 +43,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
   $slider-handle-bg: $base-inverted-bg !default;
@@ -65,16 +59,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 
@@ -89,16 +76,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 
@@ -113,16 +93,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 
@@ -137,16 +110,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 
@@ -161,16 +127,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 
@@ -185,16 +144,9 @@ $slider-handle-border-radius: null !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
+
   $slider-bar-bg: $base-border-color !default;
 
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
   $slider-range-bg: $base-accent !default;
   $slider-range-border-color: $slider-range-bg !default;
 

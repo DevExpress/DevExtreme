@@ -13,6 +13,8 @@ import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { hasWindow } from '../core/utils/window';
 
+// STYLE tabPanel
+
 const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';

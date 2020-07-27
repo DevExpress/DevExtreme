@@ -15,6 +15,8 @@ import { addNamespace } from '../events/utils';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 
+// STYLE popover
+
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';

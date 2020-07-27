@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 .dx-splitter-wrapper {
   height: 100%;
@@ -18,7 +19,7 @@
       width: 1px;
       display: block;
       cursor: col-resize;
-      z-index: 999; // Below $OVERLAY_ZINDEX: 1000
+      z-index: 999; // Below $overlay-zindex: 1000
       margin: auto;
 
       &.dx-splitter-inactive {

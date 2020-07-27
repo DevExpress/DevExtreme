@@ -8,6 +8,8 @@ import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils';
 import { name as clickEventName } from '../events/click';
 
+// STYLE checkbox
+
 const CHECKBOX_CLASS = 'dx-checkbox';
 const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
 const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';

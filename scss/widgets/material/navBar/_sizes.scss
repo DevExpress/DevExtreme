@@ -1,15 +1,15 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_NAVBAR_ICON_SIZE: null !default;
-$MATERIAL_NAVBAR_BADGE_TOP: null !default;
+$material-navbar-icon-size: null !default;
+
+$material-navbar-badge-top: 11%;
 
 @if $size == "default" {
-  $MATERIAL_NAVBAR_ICON_SIZE: 31px;
-  $MATERIAL_NAVBAR_BADGE_TOP: 11%;
+  $material-navbar-icon-size: 31px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_NAVBAR_ICON_SIZE: 28px;
-  $MATERIAL_NAVBAR_BADGE_TOP: 11%;
+  $material-navbar-icon-size: 28px;
 }

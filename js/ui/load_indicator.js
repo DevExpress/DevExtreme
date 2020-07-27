@@ -8,6 +8,8 @@ import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import Widget from './widget/ui.widget';
 
+// STYLE loadIndicator
+
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
 const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';

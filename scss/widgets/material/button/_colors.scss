@@ -1,8 +1,8 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-// adduse
 
+// adduse
 
 $button-icon-color: null !default;
 $button-inverted-icon-color: null !default;
@@ -14,10 +14,35 @@ $button-shadow-color: null !default;
 $button-hover-shadow-color: null !default;
 $button-focused-shadow-color: null !default;
 $button-active-shadow-color: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
 $button-normal-color: null !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $button-normal-bg: null !default;
+
+/**
+* $name 30. Hovered state background color
+* $type color
+*/
 $button-normal-hover-bg: null !default;
+
+/**
+* $name 40. Focused state background color
+* $type color
+*/
 $button-normal-focused-bg: null !default;
+
+/**
+* $name 50. Active state background color
+* $type color
+*/
 $button-normal-active-bg: null !default;
 $button-normal-icon-color: null !default;
 $button-normal-bg-inverted: null !default;
@@ -27,10 +52,35 @@ $button-normal-outlined-active-bg: null !default;
 $button-normal-text-hover-bg: null !default;
 $button-normal-text-focused-bg: null !default;
 $button-normal-text-active-bg: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
 $button-default-color: null !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $button-default-bg: null !default;
+
+/**
+* $name 30. Hovered state background color
+* $type color
+*/
 $button-default-hover-bg: null !default;
+
+/**
+* $name 40. Focused state background color
+* $type color
+*/
 $button-default-focused-bg: null !default;
+
+/**
+* $name 50. Active state background color
+* $type color
+*/
 $button-default-active-bg: null !default;
 $button-default-icon-color: null !default;
 $button-default-outlined-hover-bg: null !default;
@@ -39,10 +89,35 @@ $button-default-outlined-active-bg: null !default;
 $button-default-text-hover-bg: null !default;
 $button-default-text-focused-bg: null !default;
 $button-default-text-active-bg: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
 $button-danger-color: null !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $button-danger-bg: null !default;
+
+/**
+* $name 30. Hovered state background color
+* $type color
+*/
 $button-danger-hover-bg: null !default;
+
+/**
+* $name 40. Focused state background color
+* $type color
+*/
 $button-danger-focused-bg: null !default;
+
+/**
+* $name 50. Active state background color
+* $type color
+*/
 $button-danger-active-bg: null !default;
 $button-danger-icon-color: null !default;
 $button-danger-outlined-hover-bg: null !default;
@@ -51,10 +126,35 @@ $button-danger-outlined-active-bg: null !default;
 $button-danger-text-hover-bg: null !default;
 $button-danger-text-focused-bg: null !default;
 $button-danger-text-active-bg: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
 $button-success-color: null !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $button-success-bg: null !default;
+
+/**
+* $name 30. Hovered state background color
+* $type color
+*/
 $button-success-hover-bg: null !default;
+
+/**
+* $name 40. Focused state background color
+* $type color
+*/
 $button-success-focused-bg: null !default;
+
+/**
+* $name 50. Active state background color
+* $type color
+*/
 $button-success-active-bg: null !default;
 $button-success-icon-color: null !default;
 $button-success-outlined-hover-bg: null !default;
@@ -64,9 +164,7 @@ $button-success-text-hover-bg: null !default;
 $button-success-text-focused-bg: null !default;
 $button-success-text-active-bg: null !default;
 
-
 @if $mode == "light" {
-
 
   $button-icon-color: $base-icon-color !default;
   $button-inverted-icon-color: $base-inverted-icon-color !default;
@@ -79,35 +177,14 @@ $button-success-text-active-bg: null !default;
   $button-focused-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
   $button-active-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
 
-  /**
-    * $name 30. Hovered state background color
-    * $type color
-    */
   $button-normal-hover-bg: darken($button-normal-bg, 8%) !default;
 
-  /**
-    * $name 40. Focused state background color
-    * $type color
-    */
   $button-normal-focused-bg: darken($button-normal-bg, 8%) !default;
 
-  /**
-    * $name 50. Active state background color
-    * $type color
-    */
   $button-normal-active-bg: darken($button-normal-bg, 30%) !default;
   $button-normal-icon-color: $button-normal-color !default;
 
@@ -121,35 +198,14 @@ $button-success-text-active-bg: null !default;
   $button-normal-text-focused-bg: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-active-bg: color.change($button-normal-bg-inverted, $alpha: 0.3) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-default-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
 
-  /**
-    * $name 30. Hovered state background color
-    * $type color
-    */
   $button-default-hover-bg: darken($button-default-bg, 8.5%) !default;
 
-  /**
-    * $name 40. Focused state background color
-    * $type color
-    */
   $button-default-focused-bg: darken($button-default-bg, 8.5%) !default;
 
-  /**
-    * $name 50. Active state background color
-    * $type color
-    */
   $button-default-active-bg: darken($button-default-bg, 19.5%) !default;
   $button-default-icon-color: $button-default-color !default;
 
@@ -161,35 +217,14 @@ $button-success-text-active-bg: null !default;
   $button-default-text-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
   $button-default-text-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-danger-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-danger-bg: $base-danger !default;
 
-  /**
-    * $name 30. Hovered state background color
-    * $type color
-    */
   $button-danger-hover-bg: darken($button-danger-bg, 8.5%) !default;
 
-  /**
-    * $name 40. Focused state background color
-    * $type color
-    */
   $button-danger-focused-bg: darken($button-danger-bg, 8.5%) !default;
 
-  /**
-    * $name 50. Active state background color
-    * $type color
-    */
   $button-danger-active-bg: darken($button-danger-bg, 19.5%) !default;
   $button-danger-icon-color: $button-danger-color !default;
 
@@ -201,35 +236,15 @@ $button-success-text-active-bg: null !default;
   $button-danger-text-focused-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
   $button-danger-text-active-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-success-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-success-bg: $base-success !default;
 
-  /**
-    * $name 30. Hovered state background color
-    * $type color
-    */
   $button-success-hover-bg: darken($button-success-bg, 8.5%) !default;
 
-  /**
-    * $name 40. Focused state background color
-    * $type color
-    */
   $button-success-focused-bg: darken($button-success-bg, 8.5%) !default;
 
-  /**
-    * $name 50. Active state background color
-    * $type color
-    */
+
   $button-success-active-bg: darken($button-success-bg, 19.5%) !default;
   $button-success-icon-color: $button-success-color !default;
 
@@ -243,7 +258,6 @@ $button-success-text-active-bg: null !default;
 }
 
 @if $mode == "dark" {
-
 
   $button-icon-color: $base-icon-color !default;
   $button-inverted-icon-color: $base-inverted-icon-color !default;
@@ -260,35 +274,14 @@ $button-success-text-active-bg: null !default;
   $button-focused-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
   $button-active-shadow-color: color.adjust($button-shadow-color, $alpha: 0.08) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
 
-  /**
-    * $name 30. Hovered state background color
-    * $type color
-    */
   $button-normal-hover-bg: lighten($button-normal-bg, 8%) !default;
 
-  /**
-    * $name 40. Focused state background color
-    * $type color
-    */
   $button-normal-focused-bg: lighten($button-normal-bg, 8%) !default;
 
-  /**
-    * $name 60. Active state background color
-    * $type color
-    */
   $button-normal-active-bg: lighten($button-normal-bg, 30%) !default;
 
   $button-normal-icon-color: $button-normal-color !default;
@@ -303,35 +296,14 @@ $button-success-text-active-bg: null !default;
   $button-normal-text-focused-bg: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-active-bg: color.change($button-normal-bg-inverted, $alpha: 0.3) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-default-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
 
-  /**
-    * $name 30. Hovered state background color
-    * $type color
-    */
   $button-default-hover-bg: lighten($button-default-bg, 8.5%) !default;
 
-  /**
-    * $name 40. Focused state background color
-    * $type color
-    */
   $button-default-focused-bg: lighten($button-default-bg, 8.5%) !default;
 
-  /**
-    * $name 60. Active state background color
-    * $type color
-    */
   $button-default-active-bg: lighten($button-default-focused-bg, 19.5%) !default;
   $button-default-icon-color: $button-default-color !default;
 
@@ -343,35 +315,14 @@ $button-success-text-active-bg: null !default;
   $button-default-text-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
   $button-default-text-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-danger-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-danger-bg: $base-danger !default;
 
-  /**
-    * $name 40. Hovered state background color
-    * $type color
-    */
   $button-danger-hover-bg: lighten($button-danger-bg, 8.5%) !default;
 
-  /**
-    * $name 60. Focused state background color
-    * $type color
-    */
   $button-danger-focused-bg: lighten($button-danger-bg, 8.5%) !default;
 
-  /**
-    * $name 80. Active state background color
-    * $type color
-    */
   $button-danger-active-bg: lighten($button-danger-bg, 19.5%) !default;
   $button-danger-icon-color: $button-danger-color !default;
 
@@ -383,35 +334,14 @@ $button-success-text-active-bg: null !default;
   $button-danger-text-focused-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
   $button-danger-text-active-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
 
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $button-success-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-success-bg: $base-success !default;
 
-  /**
-    * $name 40. Hovered state background color
-    * $type color
-    */
   $button-success-hover-bg: lighten($button-success-bg, 8.5%) !default;
 
-  /**
-    * $name 60. Focused state background color
-    * $type color
-    */
   $button-success-focused-bg: lighten($button-success-bg, 8.5%) !default;
 
-  /**
-    * $name 80. Active state background color
-    * $type color
-    */
   $button-success-active-bg: lighten($button-success-bg, 19.5%) !default;
   $button-success-icon-color: $button-success-color !default;
 

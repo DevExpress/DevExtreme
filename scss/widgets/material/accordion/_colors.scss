@@ -1,12 +1,27 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
 $accordion-color: null !default;
+
+/**
+* $name 10. Item title text color
+* $type color
+*/
 $accordion-title-color: null !default;
+
+/**
+* $name 20. Item border color
+* $type color
+*/
 $accordion-item-border-color: null !default;
+
+/**
+* $name 30. Item active state icon color
+* $type color
+*/
 $accordion-icon-active-color: null !default;
 $accordion-background-color: null !default;
 $accordion-title-active-color: null !default;
@@ -16,28 +31,14 @@ $accordion-item-bg: null !default;
 $accordion-icon-color: null !default;
 $accordion-title-hover-border-color: null !default;
 
-
 @if $mode == "light" {
-
 
   $accordion-color: $base-text-color !default;
 
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
 
-  /**
-    * $name 20. Item border color
-    * $type color
-    */
   $accordion-item-border-color: $base-border-color !default;
 
-  /**
-    * $name 30. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
 
   $accordion-background-color: $base-bg !default;
@@ -51,25 +52,12 @@ $accordion-title-hover-border-color: null !default;
 
 @if $mode == "dark" {
 
-
   $accordion-color: $base-text-color !default;
 
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
 
-  /**
-    * $name 20. Item border color
-    * $type color
-    */
   $accordion-item-border-color: $base-border-color !default;
 
-  /**
-    * $name 30. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
 
   $accordion-background-color: $base-bg !default;

@@ -1,4 +1,5 @@
 import * as sass from 'sass';
+import fiber from 'fibers';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 
@@ -31,6 +32,7 @@ export default class Compiler {
       functions: {
         'collector($map)': this.collector.bind(this),
       },
+      fiber,
     };
 
     compilerOptions = { ...compilerOptions, ...options };

@@ -132,15 +132,14 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @extends Action
      * @type function|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 node:dxTreeMapNode
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeMapNode }) => any) | string;
+    onClick?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, event?: event, node?: dxTreeMapNode }) => any) | string;
     /**
      * @docid dxTreeMapOptions.onDrill
      * @extends Action
@@ -249,7 +248,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field2 valueText:string
      * @type_function_param1_field3 node:dxTreeMapNode
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

@@ -1,12 +1,13 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_BADGE_HORIZONTAL_PADDING: null !default;
+$generic-badge-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $GENERIC_BADGE_HORIZONTAL_PADDING: 6px;
+  $generic-badge-horizontal-padding: 6px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_BADGE_HORIZONTAL_PADDING: 5px;
+  $generic-badge-horizontal-padding: 5px;
 }

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import RenovatedPager from 'renovation/pager/pager.j.js';
+import RenovatedPager from 'renovation/ui/pager/grid_pager.j.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { act } from 'preact/test-utils';
 
@@ -23,43 +23,6 @@ export class RenovatedPagerForTest extends RenovatedPager {
     }
     get selectedPage() {
         return this._pages.filter(p => p.selected)[0];
-    }
-    option(name, value) {
-        if(!this._useDefaultOptionUpdate) {
-            if(name instanceof Object) {
-                const { pageIndex, pageSizeChanged, pageIndexChanged, ...restOption } = name;
-                if(pageIndex && !this._useDefaultOptionUpdate) {
-                    super.option({ pageIndex: pageIndex - 1, ...restOption });
-                } else {
-                    super.option({ pageIndex, ...restOption });
-                }
-                if(pageSizeChanged) {
-                    super.on('optionChanged', ({ name, value }) => {
-                        if(name === 'pageSize') {
-                            pageSizeChanged(value);
-                        }
-                    });
-                }
-                if(pageIndexChanged) {
-                    super.on('optionChanged', ({ name, value }) => {
-                        if(name === 'pageIndex') {
-                            pageIndexChanged(value + 1);
-                        }
-                    });
-                }
-                return;
-            }
-            if(name === 'pageIndex' && !this._useDefaultOptionUpdate) {
-                if(value !== undefined) {
-                    super.option(name, value - 1);
-                    return;
-                } else {
-                    const val = super.option(name);
-                    return (val || 0) + 1;
-                }
-            }
-        }
-        return super.option.apply(this, arguments);
     }
     _dimensionChanged() {
         if(!this.firing) {

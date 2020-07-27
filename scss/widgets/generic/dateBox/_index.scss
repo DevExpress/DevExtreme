@@ -7,8 +7,10 @@
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/colors" as *;
-// adduse
 
+// adduse
+@use "../timeView";
+@use "../dateView";
 
 .dx-datebox-wrapper {
   .dx-popup-title {
@@ -23,14 +25,14 @@
 
   .dx-popup-bottom {
     .dx-button {
-      min-width: $GENERIC_DATEBOX_OVERLAY_BUTTON_WIDTH;
+      min-width: $generic-datebox-overlay-button-width;
       width: auto;
     }
   }
 }
 
 .dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
-  margin: $GENERIC_DATEBOX_POPUP_CONTENT_MARGIN;
+  margin: $generic-datebox-popup-content-margin;
 }
 
 .dx-datebox-wrapper-list {
@@ -69,42 +71,42 @@
 .dx-datebox-wrapper-calendar {
   .dx-popup-content {
     padding: 0;
-    margin: 0 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin: 0 $generic-datebox-overlay-item-margin / 2;
   }
 
   .dx-calendar {
     border: none;
-    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin: $generic-datebox-overlay-item-margin $generic-datebox-overlay-item-margin / 2;
   }
 
   .dx-datebox-container-cell {
-    margin-right: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN;
-    margin-bottom: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN;
+    margin-right: $generic-datebox-overlay-item-margin;
+    margin-bottom: $generic-datebox-overlay-item-margin;
   }
 }
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
   .dx-calendar {
-    margin-bottom: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin-bottom: $generic-datebox-overlay-item-margin / 2;
   }
 
   .dx-timeview {
-    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+    margin: $generic-datebox-overlay-item-margin $generic-datebox-overlay-item-margin / 2 $generic-datebox-overlay-item-margin / 2;
 
     @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2 $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN/2;
+      margin: 0 $generic-datebox-overlay-item-margin / 2 $generic-datebox-overlay-item-margin / 2;
     }
   }
 
   .dx-datebox-container-cell {
     margin-top: -1px;
-    margin-right: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN;
+    margin-right: $generic-datebox-overlay-item-margin;
   }
 }
 
 @media (max-width: 320px) {
   .dx-datebox-wrapper-calendar .dx-calendar {
-    margin: $GENERIC_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE;
+    margin: $generic-datebox-overlay-item-margin-adaptive;
   }
 }
 
@@ -146,5 +148,5 @@
 }
 
 .dx-device-ios .dx-datebox.dx-texteditor-empty .dx-texteditor-input {
-  min-height: $GENERIC_DATEBOX_INPUT_MIN_HEIGHT;
+  min-height: $generic-datebox-input-min-height;
 }

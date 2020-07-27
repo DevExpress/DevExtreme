@@ -1,15 +1,39 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
+/**
+* $name 10. Border color
+* $type color
+*/
 $checkbox-border-color: null !default;
 $checkbox-checked-color: null !default;
 $checkbox-indeterminate-bg: null !default;
+
+/**
+* $name 70. Focused state border color
+* $type color
+*/
 $checkbox-focused-borderd-color: null !default;
+
+/**
+* $name 40. Background color
+* $type color
+*/
 $checkbox-bg: null !default;
+
+/**
+* $name 20. Hovered state border color
+* $type color
+*/
 $checkbox-hover-border-color: null !default;
+
+/**
+* $name 80. Active state background color
+* $type color
+*/
 $checkbox-active-icon-bg: null !default;
 $checkbox-invalid-focused-border-color: null !default;
 $checkbox-invalid-faded-border-color: null !default;
@@ -17,9 +41,7 @@ $checkbox-readonly-border-color: null !default;
 $checkbox-readonly-bg: null !default;
 $checkbox-icon-border-radius: null !default;
 
-
 @if $color == "carmine" {
-
 
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
@@ -36,36 +58,13 @@ $checkbox-icon-border-radius: null !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Border color
-    * $type color
-    */
+
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-text-color !default;
   $checkbox-indeterminate-bg: $base-inverted-bg !default;
-
-  /**
-    * $name 70. Focused state border color
-    * $type color
-    */
   $checkbox-focused-borderd-color: $base-focus-color !default;
-
-  /**
-    * $name 40. Background color
-    * $type color
-    */
   $checkbox-bg: $base-bg !default;
-
-  /**
-    * $name 20. Hovered state border color
-    * $type color
-    */
   $checkbox-hover-border-color: $base-border-color !default;
-
-  /**
-    * $name 80. Active state background color
-    * $type color
-    */
   $checkbox-active-icon-bg: $base-inverted-bg !default;
 
   $checkbox-invalid-focused-border-color: $base-invalid-color !default;
@@ -78,7 +77,6 @@ $checkbox-icon-border-radius: null !default;
 }
 
 @if $color == "dark" {
-
 
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
@@ -112,7 +110,6 @@ $checkbox-icon-border-radius: null !default;
 
 @if $color == "darkviolet" {
 
-
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
@@ -128,7 +125,6 @@ $checkbox-icon-border-radius: null !default;
 }
 
 @if $color == "greenmist" {
-
 
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
@@ -146,7 +142,6 @@ $checkbox-icon-border-radius: null !default;
 
 @if $color == "light" {
 
-
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
@@ -162,7 +157,6 @@ $checkbox-icon-border-radius: null !default;
 }
 
 @if $color == "softblue" {
-
 
   $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;

@@ -35,6 +35,8 @@ import DiagramCommandsManager from './diagram.commands_manager';
 import NodesOption from './diagram.nodes_option';
 import EdgesOption from './diagram.edges_option';
 
+// STYLE diagram
+
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
@@ -825,6 +827,9 @@ class Diagram extends Widget {
                 getKey: this._createOptionGetter('nodes.keyExpr'),
                 setKey: this._createOptionSetter('nodes.keyExpr'),
 
+                getCustomData: this._createOptionGetter('nodes.customDataExpr'),
+                setCustomData: this._createOptionSetter('nodes.customDataExpr'),
+
                 getLocked: this._createOptionGetter('nodes.lockedExpr'),
                 setLocked: this._createOptionSetter('nodes.lockedExpr'),
 
@@ -864,6 +869,9 @@ class Diagram extends Widget {
             edgeDataImporter: {
                 getKey: this._createOptionGetter('edges.keyExpr'),
                 setKey: this._createOptionSetter('edges.keyExpr'),
+
+                getCustomData: this._createOptionGetter('edges.customDataExpr'),
+                setCustomData: this._createOptionSetter('edges.customDataExpr'),
 
                 getLocked: this._createOptionGetter('edges.lockedExpr'),
                 setLocked: this._createOptionSetter('edges.lockedExpr'),
@@ -1198,7 +1206,7 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._onToggleFullScreen(false);
+            this.option('fullScreen', false);
         }
     }
     _onShowContextMenu(x, y, selection) {
@@ -1530,6 +1538,13 @@ class Diagram extends Widget {
                 */
                 keyExpr: 'id',
                 /**
+                * @name dxDiagramOptions.nodes.customDataExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                customDataExpr: undefined,
+                /**
                 * @name dxDiagramOptions.nodes.lockedExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
@@ -1663,6 +1678,13 @@ class Diagram extends Widget {
                 * @default "id"
                 */
                 keyExpr: 'id',
+                /**
+                * @name dxDiagramOptions.edges.customDataExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                customDataExpr: undefined,
                 /**
                 * @name dxDiagramOptions.edges.lockedExpr
                 * @type string|function(data)
@@ -2295,7 +2317,8 @@ class Diagram extends Widget {
             this._nativeShapeToDiagramShape.bind(this) :
             this._nativeConnectorToDiagramConnector.bind(this);
         return extend({
-            id: nativeItem.id
+            id: nativeItem.id,
+            dataItem: undefined
         }, createMethod(nativeItem));
     }
     _nativeShapeToDiagramShape(nativeShape) {

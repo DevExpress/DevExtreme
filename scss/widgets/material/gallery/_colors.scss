@@ -2,37 +2,49 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
-
+/**
+* $name 10. Indicator background color
+* $type color
+*/
 $gallery-indicator-bg: null !default;
+
+/**
+* $name 20. Selected indicator background color
+* $type color
+*/
 $gallery-indicator-item-selected-bg: null !default;
+
+/**
+* $name 30. Focused indicator background color
+* $type color
+*/
 $gallery-indicator-focused-bg: null !default;
 $gallery-indicator-item-border-color: null !default;
 $gallery-indicator-selected-border-color: null !default;
 $gallery-navbutton-color: null !default;
 $gallery-nav-arrow-color: null !default;
+
+/**
+* $name 40. Hovered navigation button color
+* $type color
+*/
 $gallery-navbutton-hover-color: null !default;
+
+/**
+* $name 50. Active navigation button color
+* $type color
+*/
 $gallery-navbutton-active-color: null !default;
 
-
 @if $mode == "light" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
+
   $gallery-indicator-bg: $base-bg !default;
 
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
 
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: $base-accent !default;
 
   $gallery-indicator-item-border-color: color.change(#000, $alpha: 0.2) !default;
@@ -41,36 +53,17 @@ $gallery-navbutton-active-color: null !default;
   $gallery-navbutton-color: color.change($base-text-color, $alpha: 0.54) !default;
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
 
-  /**
-    * $name 40. Hovered navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: $base-accent !default;
 
-  /**
-    * $name 50. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: $base-accent !default;
 }
 
 @if $mode == "dark" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
+
   $gallery-indicator-bg: $base-bg !default;
 
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
 
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: $base-accent !default;
 
   $gallery-indicator-item-border-color: color.change(#000, $alpha: 0.2) !default;
@@ -79,16 +72,8 @@ $gallery-navbutton-active-color: null !default;
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
   $gallery-navbutton-color: color.change($base-text-color, $alpha: 0.54) !default;
 
-  /**
-    * $name 30. Hovered navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: $base-accent !default;
 
-  /**
-    * $name 30. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: $base-accent !default;
 }
 

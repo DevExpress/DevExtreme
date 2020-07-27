@@ -1,42 +1,15 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_PAGER_PADDINGS: null !default;
-$MATERIAL_PAGER_SEPARATOR_PADDINGS: null !default;
-$MATERIAL_PAGER_PAGE_PADDING: null !default;
-$MATERIAL_PAGER_PAGE_LINE_HEIGHT: null !default;
-$MATERIAL_PAGER_PAGE_FONT_SIZE: null !default;
-$MATERIAL_PAGER_NAVBUTTON_PADDINGS: null !default;
-$MATERIAL_PAGER_NAVBUTTON_HEIGHT: null !default;
-$MATERIAL_PAGER_PAGESIZE_PADDING_TOP: null !default;
-$MATERIAL_PAGER_PAGESIZE_PADDING_BOTTOM: null !default;
-$MATERIAL_PAGER_PAGESIZE_PADDING_LEFT: null !default;
-$MATERIAL_PAGER_PAGESIZE_PADDING_RIGHT: null !default;
-
-@if $size == "default" {
-  $MATERIAL_PAGER_PADDINGS: 13px;
-  $MATERIAL_PAGER_SEPARATOR_PADDINGS: 8px;
-  $MATERIAL_PAGER_PAGE_PADDING: 9px 12px;
-  $MATERIAL_PAGER_PAGE_LINE_HEIGHT: 12px;
-  $MATERIAL_PAGER_PAGE_FONT_SIZE: 12px;
-  $MATERIAL_PAGER_NAVBUTTON_PADDINGS: $MATERIAL_PAGER_PAGE_PADDING;
-  $MATERIAL_PAGER_NAVBUTTON_HEIGHT: 12px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_TOP: 7px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_BOTTOM: 8px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_LEFT: 10px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_RIGHT: 9px;
-}
-
-@else if $size == "compact" {
-  $MATERIAL_PAGER_PADDINGS: 13px;
-  $MATERIAL_PAGER_SEPARATOR_PADDINGS: 8px;
-  $MATERIAL_PAGER_PAGE_PADDING: 9px 12px;
-  $MATERIAL_PAGER_PAGE_LINE_HEIGHT: 12px;
-  $MATERIAL_PAGER_PAGE_FONT_SIZE: 12px;
-  $MATERIAL_PAGER_NAVBUTTON_PADDINGS: $MATERIAL_PAGER_PAGE_PADDING;
-  $MATERIAL_PAGER_NAVBUTTON_HEIGHT: 12px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_TOP: 7px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_BOTTOM: 8px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_LEFT: 10px;
-  $MATERIAL_PAGER_PAGESIZE_PADDING_RIGHT: 9px;
-}
+$material-pager-paddings: 13px;
+$material-pager-separator-paddings: 8px;
+$material-pager-page-padding: 9px 12px;
+$material-pager-page-line-height: 12px;
+$material-pager-page-font-size: 12px;
+$material-pager-navbutton-paddings: $material-pager-page-padding;
+$material-pager-navbutton-height: 12px;
+$material-pager-pagesize-padding-top: 7px;
+$material-pager-pagesize-padding-bottom: 8px;
+$material-pager-pagesize-padding-left: 10px;
+$material-pager-pagesize-padding-right: 9px;

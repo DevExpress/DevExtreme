@@ -4,41 +4,42 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../radioGroup/colors" as *;
+
 // adduse
 
 
-$GENERIC_RADIOBUTTON_BORDER_WIDTH: 1px;
-$GENERIC_RADIOBUTTON_INNER_SIZE: $GENERIC_RADIOBUTTON_SIZE - $GENERIC_RADIOBUTTON_BORDER_WIDTH * 2;
+$generic-radiobutton-border-width: 1px;
+$generic-radiobutton-inner-size: $generic-radiobutton-size - $generic-radiobutton-border-width * 2;
 
 .dx-radiobutton-icon {
-  width: $GENERIC_RADIOBUTTON_SIZE;
-  height: $GENERIC_RADIOBUTTON_SIZE;
+  width: $generic-radiobutton-size;
+  height: $generic-radiobutton-size;
 }
 
 .dx-radiobutton-icon:before {
   display: block;
-  width: $GENERIC_RADIOBUTTON_INNER_SIZE;
-  height: $GENERIC_RADIOBUTTON_INNER_SIZE;
-  border: $GENERIC_RADIOBUTTON_BORDER_WIDTH solid $radiogroup-border-color;
+  width: $generic-radiobutton-inner-size;
+  height: $generic-radiobutton-inner-size;
+  border: $generic-radiobutton-border-width solid $radiogroup-border-color;
   background-color: $radiogroup-bg;
   content: "";
-  border-radius: $GENERIC_RADIOBUTTON_SIZE / 2;
+  border-radius: $generic-radiobutton-size / 2;
   box-sizing: content-box;
 }
 
 .dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
   display: block;
-  margin-top: -$GENERIC_RADIOBUTTON_SIZE / 2 - $GENERIC_RADIOBUTTON_DOT_SIZE / 2;
-  margin-left: $GENERIC_RADIOBUTTON_SIZE / 2 - $GENERIC_RADIOBUTTON_DOT_SIZE / 2;
-  width: $GENERIC_RADIOBUTTON_DOT_SIZE;
-  height: $GENERIC_RADIOBUTTON_DOT_SIZE;
+  margin-top: -$generic-radiobutton-size / 2 - $generic-radiobutton-dot-size / 2;
+  margin-left: $generic-radiobutton-size / 2 - $generic-radiobutton-dot-size / 2;
+  width: $generic-radiobutton-dot-size;
+  height: $generic-radiobutton-dot-size;
   background: $radiogroup-checked-bg;
   content: "";
-  border-radius: $GENERIC_RADIOBUTTON_DOT_SIZE / 2;
+  border-radius: $generic-radiobutton-dot-size / 2;
 }
 
 .dx-radiobutton {
-  line-height: $GENERIC_RADIOBUTTON_SIZE;
+  line-height: $generic-radiobutton-size;
 
   &.dx-state-readonly {
     .dx-radiobutton-icon:before {
@@ -62,7 +63,7 @@ $GENERIC_RADIOBUTTON_INNER_SIZE: $GENERIC_RADIOBUTTON_SIZE - $GENERIC_RADIOBUTTO
   &.dx-state-focused {
     &:not(.dx-state-active) {
       .dx-radiobutton-icon:before {
-        border: $GENERIC_RADIOBUTTON_BORDER_WIDTH solid $radiobutton-focused-border-color;
+        border: $generic-radiobutton-border-width solid $radiobutton-focused-border-color;
       }
     }
   }
@@ -103,7 +104,7 @@ $GENERIC_RADIOBUTTON_INNER_SIZE: $GENERIC_RADIOBUTTON_SIZE - $GENERIC_RADIOBUTTO
 .dx-rtl .dx-radiobutton,
 .dx-rtl.dx-radiobutton {
   &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-    margin-right: $GENERIC_RADIOBUTTON_INNER_SIZE / 4 + $GENERIC_RADIOBUTTON_BORDER_WIDTH;
+    margin-right: $generic-radiobutton-inner-size / 4 + $generic-radiobutton-border-width;
     margin-left: 0;
   }
 }

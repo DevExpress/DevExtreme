@@ -1,5 +1,8 @@
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
+import dateLocalization from '../../../localization/date';
+
+import dxrDayDateTableLayout from '../../../renovation/ui/scheduler/workspaces/day/date_table/layout.j';
 
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
@@ -33,6 +36,34 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
 
     _renderDateHeader() {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
+    }
+
+    generateRenderOptions() {
+        const startViewDate = this._getDateWithSkippedDST();
+        const _getTimeText = (i) => {
+            // T410490: incorrectly displaying time slots on Linux
+            const index = i % this._getRowCount();
+            if(index % 2 === 0) {
+                return dateLocalization.format(this._getTimeCellDateCore(startViewDate, i), 'shorttime');
+            }
+            return '';
+        };
+
+        const options = super.generateRenderOptions();
+        options.cellDataGetters.push((_, rowIndex, cellIndex) => {
+            return {
+                value: {
+                    startDate: this._getTimeCellDate(rowIndex, cellIndex),
+                    text: _getTimeText(rowIndex, cellIndex)
+                }
+            };
+        });
+
+        return options;
+    }
+
+    renderRDateTable(viewData) {
+        this._renderRComponent(this._$dateTable, dxrDayDateTableLayout, 'dateTable', viewData);
     }
 }
 

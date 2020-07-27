@@ -3,14 +3,15 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
 .dx-badge {
   background-color: $badge-bg;
   color: $badge-color;
-  font-size: $MATERIAL_BADGE_FONT_SIZE;
-  padding: $MATERIAL_BADGE_PADDING;
+  font-size: $material-badge-font-size;
+  padding: $material-badge-padding;
   margin-left: 4px;
   line-height: normal;
   margin-top: 1px;

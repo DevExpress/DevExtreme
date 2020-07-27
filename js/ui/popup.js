@@ -24,6 +24,8 @@ const window = getWindow();
 
 import './toolbar/ui.toolbar.base';
 
+// STYLE popup
+
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';

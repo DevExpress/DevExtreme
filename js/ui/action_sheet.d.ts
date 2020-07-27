@@ -71,7 +71,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     showTitle?: boolean;
     /**
      * @docid dxActionSheetOptions.target
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -157,12 +157,11 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @type_function_param1_field1 component:dxActionSheet
      * @type_function_param1_field2 element:dxElement
      * @type_function_param1_field3 model:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, event?: event }) => any) | string;
     /**
      * @docid dxActionSheetItem.type
      * @type Enums.ButtonType

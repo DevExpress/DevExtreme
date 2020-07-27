@@ -14,6 +14,8 @@ import { Deferred } from '../core/utils/deferred';
 import { hasWindow } from '../core/utils/window';
 import { animation } from './slide_out_view/ui.slide_out_view.animation';
 
+// STYLE slideOutView
+
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
 const SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper';
 const SLIDEOUTVIEW_MENU_CONTENT_CLASS = 'dx-slideoutview-menu-content';

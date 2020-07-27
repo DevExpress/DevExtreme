@@ -1,53 +1,41 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_CALENDAR_CELL_FONT_SIZE: null !default;
-$MATERIAL_CALENDAR_BODY_WIDTH: null !default;
-$MATERIAL_CALENDAR_BODY_HEIGHT: null !default;
-$MATERIAL_CALENDAR_BODY_TOP: null !default;
-$MATERIAL_CALENDAR_FOOTER_HEIGHT: null !default;
-$MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: null !default;
-$MATERIAL_CALENDAR_NAVIGATOR_HEIGHT: null !default;
-$MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: null !default;
-$MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: null !default;
-$MATERIAL_NAV_BUTTON_WIDTH: null !default;
-$MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: null !default;
-$MATERIAL_CALENDAR_CELL_WIDTH: null !default;
-$MATERIAL_CALENDAR_CELL_DIAMETER: null !default;
-$MATERIAL_CALENDAR_CELL_VERTICAL_PADDING: null !default;
+$material-calendar-body-width: null !default;
+$material-calendar-body-height: null !default;
+$material-calendar-body-top: null !default;
+$material-calendar-navigator-height: null !default;
+$material-nav-button-width: null !default;
+$material-calendar-cell-width: null !default;
+$material-calendar-cell-diameter: null !default;
+$material-calendar-cell-vertical-padding: null !default;
+
+$material-calendar-cell-font-size: 12px;
+$material-calendar-footer-height: 45px;
+$material-calendar-navigator-vertical-padding: 9px;
+$material-calendar-header-bottom-padding: 10px;
+$material-calendar-cell-horizontal-padding: 8px;
+$material-calendar-caption-button-padding: 2px 15px 4px;
 
 @if $size == "default" {
-  $MATERIAL_CALENDAR_CELL_FONT_SIZE: 12px;
-  $MATERIAL_CALENDAR_BODY_WIDTH: 320px;
-  $MATERIAL_CALENDAR_BODY_HEIGHT: 267px;
-  $MATERIAL_CALENDAR_BODY_TOP: 49px;
-  $MATERIAL_CALENDAR_FOOTER_HEIGHT: 45px;
-  $MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 9px;
-  $MATERIAL_CALENDAR_NAVIGATOR_HEIGHT: 36px;
-
-  $MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: 10px;
-  $MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: 8px;
-  $MATERIAL_NAV_BUTTON_WIDTH: 32px;
-  $MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 2px 15px 4px;
-  $MATERIAL_CALENDAR_CELL_WIDTH: 39px;
-  $MATERIAL_CALENDAR_CELL_DIAMETER: 32px;
-  $MATERIAL_CALENDAR_CELL_VERTICAL_PADDING: 4px;
+  $material-calendar-body-width: 320px;
+  $material-calendar-body-height: 267px;
+  $material-calendar-body-top: 49px;
+  $material-calendar-navigator-height: 36px;
+  $material-nav-button-width: 32px;
+  $material-calendar-cell-width: 39px;
+  $material-calendar-cell-diameter: 32px;
+  $material-calendar-cell-vertical-padding: 4px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_CALENDAR_CELL_FONT_SIZE: 12px;
-  $MATERIAL_CALENDAR_BODY_WIDTH: 250px;
-  $MATERIAL_CALENDAR_BODY_HEIGHT: 200px;
-  $MATERIAL_CALENDAR_BODY_TOP: 35px;
-  $MATERIAL_CALENDAR_FOOTER_HEIGHT: 45px;
-  $MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 9px;
-  $MATERIAL_CALENDAR_NAVIGATOR_HEIGHT: 28px;
-
-  $MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: 10px;
-  $MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: 8px;
-  $MATERIAL_NAV_BUTTON_WIDTH: 28px;
-  $MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 2px 15px 4px;
-  $MATERIAL_CALENDAR_CELL_WIDTH: 32px;
-  $MATERIAL_CALENDAR_CELL_DIAMETER: 28px;
-  $MATERIAL_CALENDAR_CELL_VERTICAL_PADDING: 0;
+  $material-calendar-body-width: 250px;
+  $material-calendar-body-height: 200px;
+  $material-calendar-body-top: 35px;
+  $material-calendar-navigator-height: 28px;
+  $material-nav-button-width: 28px;
+  $material-calendar-cell-width: 32px;
+  $material-calendar-cell-diameter: 28px;
+  $material-calendar-cell-vertical-padding: 0;
 }

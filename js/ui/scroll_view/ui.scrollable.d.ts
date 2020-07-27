@@ -43,35 +43,33 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 scrollOffset:object
-     * @type_function_param1_field7 reachedLeft:boolean
-     * @type_function_param1_field8 reachedRight:boolean
-     * @type_function_param1_field9 reachedTop:boolean
-     * @type_function_param1_field10 reachedBottom:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 scrollOffset:object
+     * @type_function_param1_field6 reachedLeft:boolean
+     * @type_function_param1_field7 reachedRight:boolean
+     * @type_function_param1_field8 reachedTop:boolean
+     * @type_function_param1_field9 reachedBottom:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid dxScrollableOptions.onUpdated
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 scrollOffset:object
-     * @type_function_param1_field7 reachedLeft:boolean
-     * @type_function_param1_field8 reachedRight:boolean
-     * @type_function_param1_field9 reachedTop:boolean
-     * @type_function_param1_field10 reachedBottom:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 scrollOffset:object
+     * @type_function_param1_field6 reachedLeft:boolean
+     * @type_function_param1_field7 reachedRight:boolean
+     * @type_function_param1_field8 reachedTop:boolean
+     * @type_function_param1_field9 reachedBottom:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onUpdated?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid dxScrollableOptions.scrollByContent
      * @default false [for](non-touch_devices)
@@ -205,7 +203,7 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid dxScrollablemethods.scrollToElement
      * @publicName scrollToElement(targetLocation)
-     * @param1 element:Node|jQuery
+     * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

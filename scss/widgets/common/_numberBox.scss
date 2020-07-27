@@ -1,9 +1,10 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
-$SPIN_CONTAINER_WIDTH: 22px;
-$TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 64px;
+$spin-container-width: 22px;
+$touch-friendly-spin-container-width: 64px;
 
 .dx-numberbox {
   position: relative;
@@ -22,7 +23,7 @@ $TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 64px;
 }
 
 .dx-numberbox-spin-container {
-  width: $SPIN_CONTAINER_WIDTH;
+  width: $spin-container-width;
   height: 100%;
 }
 
@@ -36,7 +37,7 @@ $TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 64px;
 
 .dx-numberbox-spin-touch-friendly {
   .dx-numberbox-spin-container {
-    width: $TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    width: $touch-friendly-spin-container-width;
   }
 
   .dx-numberbox-spin-down,

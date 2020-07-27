@@ -39,7 +39,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -96,7 +96,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid dxToolbarItem.menuItemTemplate
      * @type template|function
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

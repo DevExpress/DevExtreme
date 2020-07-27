@@ -1,13 +1,23 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-// adduse
 
+// adduse
 
 $menu-popup-bg: null !default;
 $menu-item-hover-bg: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
 $menu-color: null !default;
 $menu-item-expanded-color: null !default;
+
+/**
+* $name 20. Selected item background color
+* $type color
+*/
 $menu-item-selected-bg: null !default;
 $menu-popup-border-color: null !default;
 $menu-separator-bg: null !default;
@@ -15,24 +25,14 @@ $menu-item-selected-color: null !default;
 $menu-item-focused-selected-bg: null !default;
 $menu-container-shadow-color: null !default;
 
-
 @if $mode == "light" {
-
 
   $menu-popup-bg: $base-bg !default;
   $menu-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $menu-color: lighten($base-text-color, 46%) !default;
   $menu-item-expanded-color: $menu-color !default;
 
-  /**
-    * $name 20. Selected item background color
-    * $type color
-    */
   $menu-item-selected-bg: lighten($base-text-color, 88%) !default;
   $menu-popup-border-color: $base-border-color !default;
   $menu-separator-bg: $base-border-color !default;
@@ -43,21 +43,12 @@ $menu-container-shadow-color: null !default;
 
 @if $mode == "dark" {
 
-
   $menu-popup-bg: $base-bg !default;
   $menu-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $menu-color: lighten($base-text-color, 46%) !default;
   $menu-item-expanded-color: $menu-color !default;
 
-  /**
-    * $name 60. Selected item background color
-    * $type color
-    */
   $menu-item-selected-bg: lighten($base-bg, 8%) !default;
   $menu-popup-border-color: $base-border-color !default;
   $menu-separator-bg: $base-border-color !default;

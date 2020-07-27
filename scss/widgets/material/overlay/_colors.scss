@@ -1,28 +1,29 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
 $overlay-border-color: null !default;
-$overlay-content-bg: null !default;
-$overlay-shader-bg: null !default;
 
+/**
+* $name 10. Content background color
+* $type color
+*/
+$overlay-content-bg: null !default;
+
+/**
+* $name 20. Shader background color
+* $type color
+*/
+$overlay-shader-bg: null !default;
 
 @if $mode == "light" {
 
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 20. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-shadow-color, $alpha: 0.32) !default;
 }
 
@@ -30,16 +31,8 @@ $overlay-shader-bg: null !default;
 
   $overlay-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Content background color
-    * $type color
-    */
   $overlay-content-bg: $base-bg !default;
 
-  /**
-    * $name 40. Shader background color
-    * $type color
-    */
   $overlay-shader-bg: color.change($base-shadow-color, $alpha: 0.61) !default;
 }
 

@@ -1,60 +1,63 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_GRID_BASE_CELL_PADDING: null !default;
-$GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING: null !default;
-$GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: null !default;
-$GENERIC_GRID_BASE_MENU_ITEM_PADDING: null !default;
-$GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: null !default;
-$GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: null !default;
-$GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: null !default;
-$GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: null !default;
-$GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: null !default;
-$GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH: null !default;
-$GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: null !default;
-$GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: null !default;
-$GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: null !default;
-$GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: null !default;
-$GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: null !default;
-$GENERIC_COMMAND_EDIT_ICON_SIZE: null !default;
-$GENERIC_COMMAND_EDIT_ICON_MARGIN: null !default;
+$generic-grid-base-cell-padding: null !default;
+$generic-grid-base-texteditor-input-padding: null !default;
+$generic-grid-base-header-panel-margin-bottom: null !default;
+$generic-grid-base-menu-item-padding: null !default;
+$generic-grid-base-column-chooser-padding: null !default;
+$generic-grid-base-column-chooser-item-margin: null !default;
+$generic-grid-base-grouppanel-item-margin: null !default;
+$generic-grid-base-command-select-column-width: null !default;
+$generic-grid-base-command-handle-column-width: null !default;
+$generic-grid-base-command-edit-column-width: null !default;
+$generic-grid-base-command-expand-column-width: null !default;
+$generic-grid-base-checkbox-fontsize: null !default;
+$generic-grid-base-adaptive-text-padding: null !default;
+$generic-grid-base-treeview-search-margin: null !default;
+$generic-command-edit-icon-size: null !default;
+$generic-command-edit-icon-margin: null !default;
+$generic-grid-base-nodata-font-size: null !default;
 
 @if $size == "default" {
-  $GENERIC_GRID_BASE_CELL_PADDING: 7px;
-  $GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
-  $GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 10px;
-  $GENERIC_GRID_BASE_MENU_ITEM_PADDING: 6px 5px 7px;
-  $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: 20px;
-  $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0 $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
-  $GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
-  $GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 10px;
-  $GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 70px;
-  $GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH: 36px;
-  $GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 85px;
-  $GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 30px;
-  $GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 12px;
-  $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
-  $GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
-  $GENERIC_COMMAND_EDIT_ICON_SIZE: 18px;
-  $GENERIC_COMMAND_EDIT_ICON_MARGIN: 3px;
+  $generic-grid-base-cell-padding: 7px;
+  $generic-grid-base-texteditor-input-padding: 32px;
+  $generic-grid-base-header-panel-margin-bottom: 10px;
+  $generic-grid-base-menu-item-padding: 6px 5px 7px;
+  $generic-grid-base-column-chooser-padding: 20px;
+  $generic-grid-base-column-chooser-item-margin: 10px;
+  $generic-grid-base-grouppanel-item-margin: 10px;
+  $generic-grid-base-command-select-column-width: 70px;
+  $generic-grid-base-command-handle-column-width: 36px;
+  $generic-grid-base-command-edit-column-width: 85px;
+  $generic-grid-base-command-expand-column-width: 30px;
+  $generic-grid-base-checkbox-fontsize: 12px;
+  $generic-grid-base-adaptive-text-padding: 8px;
+  $generic-grid-base-treeview-search-margin: 10px;
+  $generic-command-edit-icon-size: 18px;
+  $generic-command-edit-icon-margin: 3px;
+  $generic-grid-base-nodata-font-size: 17px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_GRID_BASE_CELL_PADDING: 5px;
-  $GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 24px;
-  $GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 5px;
-  $GENERIC_GRID_BASE_MENU_ITEM_PADDING: 5px 3px 3px;
-  $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: 10px;
-  $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0 $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
-  $GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 5px;
-  $GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
-  $GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
-  $GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH: 32px;
-  $GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 70px;
-  $GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 15px;
-  $GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 10px;
-  $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: 6px;
-  $GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
-  $GENERIC_COMMAND_EDIT_ICON_SIZE: 14px;
-  $GENERIC_COMMAND_EDIT_ICON_MARGIN: 1px;
+  $generic-grid-base-cell-padding: 5px;
+  $generic-grid-base-texteditor-input-padding: 24px;
+  $generic-grid-base-header-panel-margin-bottom: 5px;
+  $generic-grid-base-menu-item-padding: 5px 3px 3px;
+  $generic-grid-base-column-chooser-padding: 10px;
+  $generic-grid-base-column-chooser-item-margin: 5px;
+  $generic-grid-base-grouppanel-item-margin: 5px;
+  $generic-grid-base-command-select-column-width: 55px;
+  $generic-grid-base-command-handle-column-width: 32px;
+  $generic-grid-base-command-edit-column-width: 70px;
+  $generic-grid-base-command-expand-column-width: 15px;
+  $generic-grid-base-checkbox-fontsize: 10px;
+  $generic-grid-base-adaptive-text-padding: 6px;
+  $generic-grid-base-treeview-search-margin: 5px;
+  $generic-command-edit-icon-size: 14px;
+  $generic-command-edit-icon-margin: 1px;
+  $generic-grid-base-nodata-font-size: 14px;
 }
+
+$generic-grid-base-column-chooser-paddings: 0 $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding;

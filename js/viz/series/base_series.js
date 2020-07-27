@@ -544,7 +544,7 @@ Series.prototype = {
         that._applyVisibleArea();
         that._setGroupsSettings(animationEnabled, firstDrawing);
 
-        !firstDrawing && that._drawElements(false, firstDrawing, false);
+        !firstDrawing && !that._resetApplyingAnimation && that._drawElements(false, firstDrawing, false);
         that._drawElements(animationEnabled, firstDrawing, true);
 
         hideLayoutLabels && that.hideLabels();
@@ -556,6 +556,7 @@ Series.prototype = {
         } else {
             that._applyStyle(that._styles.normal);
         }
+        that._resetApplyingAnimation = false;
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
@@ -650,6 +651,13 @@ Series.prototype = {
 
     isStackedSeries: function() {
         return this.type.indexOf('stacked') === 0;
+    },
+
+    resetApplyingAnimation: function(isFirstDrawing) {
+        this._resetApplyingAnimation = true;
+        if(isFirstDrawing) {
+            this._firstDrawing = true;
+        }
     },
 
     isFinancialSeries: function() {

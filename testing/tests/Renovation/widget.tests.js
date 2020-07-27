@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'renovation/widget.j';
+import 'renovation/ui/common/widget.j';
 
 import { act } from 'preact/test-utils';
 

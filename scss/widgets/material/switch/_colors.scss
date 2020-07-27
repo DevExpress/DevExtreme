@@ -1,12 +1,31 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
+/**
+* $name 20. Track 'OFF' background color
+* $type color
+*/
 $switch-bg: null !default;
+
+/**
+* $name 30. Handle 'OFF' background color
+* $type color
+*/
 $switch-handle-off-bg: null !default;
+
+/**
+* $name 40. Track 'ON' background color
+* $type color
+*/
 $switch-on-bg: null !default;
+
+/**
+* $name 50. Handle 'ON' background color
+* $type color
+*/
 $switch-handle-on-bg: null !default;
 $switch-handle-border-radius: null !default;
 $switch-hover-bg: null !default;
@@ -14,34 +33,13 @@ $switch-handle-disabled-bg: null !default;
 $switch-invalid-handle-bg: null !default;
 $switch-invalid-container-bg: null !default;
 
-
 @if $mode == "light" {
-  /**
-    * $name 20. Track 'OFF' background color
-    * $type color
-    */
+
   $switch-bg: darken($base-element-bg, 38%) !default;
-
-
-  /**
-    * $name 30. Handle 'OFF' background color
-    * $type color
-    */
 
   $switch-handle-off-bg: darken($base-element-bg, 2%) !default;
 
-
-  /**
-    * $name 40. Track 'ON' background color
-    * $type color
-    */
-
   $switch-on-bg: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 50. Handle 'ON' background color
-    * $type color
-    */
 
   $switch-handle-on-bg: $base-accent !default;
 
@@ -53,32 +51,11 @@ $switch-invalid-container-bg: null !default;
 }
 
 @if $mode == "dark" {
-  /**
-    * $name 20. Track 'OFF' background color
-    * $type color
-    */
   $switch-bg: lighten($base-element-bg, 38%) !default;
-
-
-  /**
-    * $name 30. Handle 'OFF' background color
-    * $type color
-    */
 
   $switch-handle-off-bg: lighten($base-element-bg, 2%) !default;
 
-
-  /**
-    * $name 40. Track 'ON' background color
-    * $type color
-    */
-
   $switch-on-bg: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 50. Handle 'ON' background color
-    * $type color
-    */
 
   $switch-handle-on-bg: $base-accent !default;
 

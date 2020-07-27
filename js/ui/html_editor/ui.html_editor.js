@@ -10,16 +10,19 @@ import Errors from '../widget/ui.errors';
 import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
-import { isDxMouseWheelEvent, addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
-import { allowScroll } from '../text_box/utils.scroll';
+import { prepareScrollData } from '../text_box/utils.scroll';
 
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import getTextDecorationMatcher from './matchers/textDecoration';
+import getNewLineMatcher from './matchers/newLine';
 import FormDialog from './ui/formDialog';
+
+// STYLE htmlEditor
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
@@ -32,6 +35,7 @@ const MARKDOWN_VALUE_TYPE = 'markdown';
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
 const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
 
 const HtmlEditor = Editor.inherit({
 
@@ -273,18 +277,7 @@ const HtmlEditor = Editor.inherit({
     _renderScrollHandler: function() {
         const $scrollContainer = this._getContent();
 
-        const initScrollData = {
-            validate: (e) => {
-                if(isDxMouseWheelEvent(e)) {
-                    if(allowScroll($scrollContainer, -e.delta, e.shiftKey)) {
-                        e._needSkipEvent = true;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-        };
+        const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     },
@@ -307,6 +300,7 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
+        const newLineMatcher = getNewLineMatcher();
         const modulesConfig = extend({
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
@@ -319,7 +313,9 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
+                    [ELEMENT_NODE, getTextDecorationMatcher(quill)],
+                    [ELEMENT_NODE, newLineMatcher],
+                    [TEXT_NODE, newLineMatcher]
                 ]
             }
         }, this._getCustomModules());

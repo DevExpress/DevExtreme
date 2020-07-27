@@ -31,6 +31,8 @@ import Popup from '../popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
+// STYLE pivotGrid
+
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 const ROW_AREA_CELL_CLASS = 'dx-area-row-cell';
 const COLUMN_AREA_CELL_CLASS = 'dx-area-column-cell';
@@ -368,6 +370,7 @@ const PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.fileName
                  * @type string
                  * @default "PivotGrid"
+                 * @deprecated
                  */
                 fileName: 'PivotGrid',
                 /**
@@ -381,6 +384,7 @@ const PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.ignoreExcelErrors
                  * @type boolean
                  * @default true
+                 * @deprecated
                  */
                 ignoreExcelErrors: true
             },
