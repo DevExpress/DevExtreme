@@ -3,8 +3,16 @@ import { extend } from 'core/utils/extend';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { clearStack } from 'ui/overlay/z_index';
+import 'ui/file_manager';
+import 'ui/color_box';
+import 'ui/menu';
+import 'ui/select_box';
+import 'ui/tab_panel';
+import 'ui/text_box';
+import 'ui/tree_view';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import dxDrawer from 'ui/drawer';
 
@@ -24,6 +32,137 @@ const configs = [];
                     configs.push({ openedStateMode, position, revealMode, shading, minSize });
                 });
             });
+        });
+    });
+});
+
+QUnit.module('zIndex conflicts', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+        clearStack();
+    },
+    afterEach() {
+        this.clock.restore();
+        this.clock = undefined;
+        clearStack();
+    }
+}, () => {
+    ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
+        function checkShaderZIndex(assert) {
+            const $drawer = $('#' + drawerTesters.drawerElementId).dxDrawer({
+                shading: true, opened: true, width: 600, height: 600, position: 'left',
+                openedStateMode: openedStateMode,
+                template: function() {
+                    return $('<div>').width(100).css('background-color', 'aqua').css('height', '100%');
+                }
+            });
+
+            const $shader = $drawer.find('.dx-drawer-shader');
+            const shaderZIndex = $shader.css('z-index');
+
+            let recursionLevel = 0;
+            const recursiveCheckZIndex = ($element) => {
+                if(recursionLevel > 100 || $element.hasClass('dx-hidden') || $element.hasClass('dx-state-invisible')) {
+                    return;
+                }
+                const currentZIndex = $element.css('z-index');
+                if(currentZIndex !== 'auto' && Number(currentZIndex) > shaderZIndex) {
+                    assert.ok(false, `shader z-index: ${shaderZIndex}, ${$element.prop('tagName')}(${$element.attr('id')}, z-Index: ${currentZIndex})`);
+                }
+                recursionLevel++;
+                $element.children().each((_, child) => recursiveCheckZIndex($(child)));
+                recursionLevel--;
+            };
+            recursiveCheckZIndex($($drawer.find('#view')));
+            assert.ok(true, 'at least one assertion');
+        }
+
+        QUnit.test(`(${openedStateMode}) ColorBox_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxColorBox({
+                value: '#f05b41'
+            });
+
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) DataGrid_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxDataGrid({
+                editing: { mode: 'row', allowUpdating: true }, dataSource: [{ date: new Date(2010, 10, 10), str: 'qwe' }]
+            });
+
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) FileManager_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxFileManager({
+                currentPath: 'Documents/Projects',
+                fileSystemProvider: [
+                    {
+                        name: 'Documents', isDirectory: true,
+                        items: [
+                            {
+                                name: 'Projects', isDirectory: true,
+                                items: [ { name: 'About.rtf' }, { name: 'Passwords.rtf' } ]
+                            }
+                        ]
+                    }
+                ],
+                height: 300,
+                permissions: { create: true, copy: true, move: true, delete: true, rename: true, upload: true, download: true }
+            });
+
+            this.clock.tick(400);
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) Menu_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxMenu({
+                dataSource: [{ text: 'item1', items: [{ text: 'item1/item1' }, { text: 'item1/item2' }] }]
+            });
+
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) SelectBox_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxSelectBox({
+                dataSource: ['item1', 'item2']
+            });
+
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) TabPanel_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxTabPanel({
+                selectedIndex: 1,
+                items: [{ title: 'Tab1', text: 'This is Tab1' }, { title: 'Tab2', text: 'This is Tab2' }, { title: 'Tab3', text: 'This is Tab3' }]
+            });
+
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) TextBox_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxTextBox({
+                value: 'value'
+            });
+
+            checkShaderZIndex(assert);
+        });
+
+        QUnit.test(`(${openedStateMode}) TreeView_inner`, function(assert) {
+            $('<div>').appendTo('#view').dxTreeView({
+                showCheckBoxesMode: 'normal',
+                items: [{
+                    id: '1', text: 'item1', expanded: true,
+                    items: [{
+                        id: '11', text: 'item1_1', expanded: true,
+                        items: [{
+                            id: '111', text: 'item1_1_1', expanded: true
+                        }]
+                    }]
+                }]
+            });
+
+            checkShaderZIndex(assert);
         });
     });
 });

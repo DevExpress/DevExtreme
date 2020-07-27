@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+@use "./overlay" as *;
 // adduse
 .dx-drawer {
   height: 100%;
@@ -33,6 +34,7 @@
 }
 
 .dx-drawer-shader {
+  z-index: $OVERLAY_ZINDEX;
   position: absolute;
   top: 0;
   height: 100%;
