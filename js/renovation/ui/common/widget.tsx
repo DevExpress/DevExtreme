@@ -53,7 +53,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
 
 export const viewFunction = (viewModel: Widget): JSX.Element => (
   <div
-    ref={viewModel.widgetRef as any}
+    ref={viewModel.widgetRef}
     {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
     tabIndex={viewModel.tabIndex}
     title={viewModel.props.hint}
@@ -92,6 +92,10 @@ export class WidgetProps extends BaseWidgetProps {
   @Event() onKeyboardHandled?: (args: object) => void;
 
   @Event() onVisibilityChange?: (args: boolean) => void;
+
+  @Event() onFocusIn?: (e: Event) => void;
+
+  @Event() onFocusOut?: (e: Event) => void;
 }
 
 @Component({
@@ -166,14 +170,13 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   clickEffect(): EffectReturn {
-    const { name, onClick } = this.props;
+    const { name, onClick, disabled } = this.props;
     const namespace = name;
 
-    if (onClick) {
+    if (onClick && !disabled) {
       dxClick.on(this.widgetRef,
         (e) => onClick(e),
         { namespace });
-
       return (): void => dxClick.off(this.widgetRef, { namespace });
     }
 
@@ -187,19 +190,30 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   focusEffect(): EffectReturn {
-    const { disabled, focusStateEnabled, name } = this.props;
+    const {
+      disabled, focusStateEnabled, name, onFocusIn, onFocusOut,
+    } = this.props;
     const namespace = `${name}Focus`;
     const isFocusable = focusStateEnabled && !disabled;
 
     if (isFocusable) {
       focus.on(this.widgetRef,
-        (e) => { !e.isDefaultPrevented() && (this.focused = true); },
-        (e) => { !e.isDefaultPrevented() && (this.focused = false); },
+        (e) => {
+          if (!e.isDefaultPrevented()) {
+            this.focused = true;
+            onFocusIn?.(e);
+          }
+        },
+        (e) => {
+          if (!e.isDefaultPrevented()) {
+            this.focused = false;
+            onFocusOut?.(e);
+          }
+        },
         {
           isFocusable: focusable,
           namespace,
         });
-
       return (): void => focus.off(this.widgetRef, { namespace });
     }
 
@@ -218,7 +232,6 @@ export class Widget extends JSXComponent(WidgetProps) {
         () => { !this.active && (this.hovered = true); },
         () => { this.hovered = false; },
         { selector, namespace });
-
       return (): void => hover.off(this.widgetRef, { selector, namespace });
     }
 
@@ -245,7 +258,6 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (onDimensionChanged) {
       resize.on(this.widgetRef, onDimensionChanged, { namespace });
-
       return (): void => resize.off(this.widgetRef, { namespace });
     }
 

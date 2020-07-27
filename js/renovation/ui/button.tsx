@@ -80,7 +80,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
         {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
         {viewModel.props.useSubmitBehavior
-                && <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
+                && <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
         {viewModel.props.useInkRipple
                 && (
                 <InkRipple
