@@ -4755,6 +4755,36 @@ QUnit.module('single line mode', {
         assert.ok(event.isPropagationStopped(), 'propagation is stopped');
     });
 
+    QUnit.test('stopPropagation and preventDefault should not be called for the mouse wheel event at scroll end/start position', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        const spy = sinon.spy();
+
+        $(this.$element).on('dxmousewheel', spy);
+
+        $(this.$element).trigger($.Event('dxmousewheel', {
+            delta: 120
+        }));
+
+        this.$element
+            .find('.dx-tag-container')
+            .scrollLeft(1000);
+
+        $(this.$element).trigger($.Event('dxmousewheel', {
+            delta: -120
+        }));
+
+        const startingPositionEvent = spy.args[0][0];
+        const endingPositionEvent = spy.args[1][0];
+        assert.notOk(startingPositionEvent.isDefaultPrevented(), 'event is not prevented for the starting position');
+        assert.notOk(startingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the starting position');
+        assert.notOk(endingPositionEvent.isDefaultPrevented(), 'event is not prevented for the ending position');
+        assert.notOk(endingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the ending position');
+    });
+
     QUnit.test('it is should be possible to scroll tag container natively on mobile device', function(assert) {
         const currentDevice = devices.real();
         let $tagBox;

@@ -71,6 +71,7 @@ const Widget = DOMComponentWithTemplate.inherit({
             onFocusOut: null,
 
             _keyboardProcessor: undefined,
+            ignoreParentReadOnly: false
 
 
             /**
@@ -184,6 +185,7 @@ const Widget = DOMComponentWithTemplate.inherit({
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
+        this._toggleIndependentState();
     },
 
     _renderHint: function() {
@@ -550,6 +552,10 @@ const Widget = DOMComponentWithTemplate.inherit({
         this.setAria('disabled', value || undefined);
     },
 
+    _toggleIndependentState() {
+        this.$element().toggleClass('dx-state-independent', this.option('ignoreParentReadOnly'));
+    },
+
     _setWidgetOption: function(widgetName, args) {
         if(!this[widgetName]) {
             return;
@@ -581,6 +587,9 @@ const Widget = DOMComponentWithTemplate.inherit({
                 break;
             case 'hint':
                 this._renderHint();
+                break;
+            case 'ignoreParentReadOnly':
+                this._toggleIndependentState();
                 break;
             case 'activeStateEnabled':
                 this._attachFeedbackEvents();

@@ -135,7 +135,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const key = this._keyGetter(item);
             let parentId = this._parentIdGetter(item);
 
-            parentId = typeUtils.isDefined(parentId) ? parentId : rootValue;
+            parentId = parentId !== undefined ? parentId : rootValue;
             const parentNode = nodeByKey[parentId] = nodeByKey[parentId] || { key: parentId, children: [] };
 
             const node = nodeByKey[key] = nodeByKey[key] || { key: key, children: [] };
@@ -225,7 +225,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return gridCoreUtils.combineFilters(parentIdFilters, 'or');
         },
 
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             this.callBase.apply(this, arguments);
 
             options.remoteOperations.paging = false;
@@ -241,7 +241,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
 
             if(!options.isCustomLoading) {
-                this._isReload = this._isReload || isReload || operationTypes.reload;
+                this._isReload = this._isReload || operationTypes.reload;
 
                 if(!options.cachedStoreData) {
                     this._isChildrenLoaded = {};

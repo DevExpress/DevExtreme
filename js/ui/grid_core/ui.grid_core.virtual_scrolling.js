@@ -159,10 +159,10 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
             this._virtualScrollController.handleDataChanged(callBase, e);
         },
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             const that = this;
 
-            if(!that.option('legacyRendering') && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._renderTime < that.option('scrolling.renderingThreshold')) {
+            if(!that.option('legacyRendering') && isVirtualMode(that) && !operationTypes.reload && operationTypes.skip && that._renderTime < that.option('scrolling.renderingThreshold')) {
                 options.delay = undefined;
             }
 
@@ -223,12 +223,12 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                 return this.callBase.apply(this, arguments);
             }
         },
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
             const dataSource = that._dataSource;
 
-            if(isReload || operationTypes.reload) {
+            if(operationTypes.reload) {
                 that._virtualScrollController.reset();
                 dataSource.items().length = 0;
                 that._isLoaded = false;

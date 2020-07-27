@@ -125,14 +125,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _initViewHandlers: function() {
-        const that = this;
-        const pointerEventAction = that.createAction(that._pointerEventHandler);
-        const rowsView = that.getView('rowsView');
+        const pointerEventAction = this.createAction(this._pointerEventHandler);
+        const rowsView = this.getView('rowsView');
 
-        rowsView.renderCompleted.add(function(e) {
+        rowsView.renderCompleted.add((e) => {
             const $rowsView = rowsView.element();
             const isFullUpdate = !e || e.changeType === 'refresh';
-            const isFocusedViewCorrect = that._focusedView && that._focusedView.name === rowsView.name;
+            const isFocusedViewCorrect = this._focusedView && this._focusedView.name === rowsView.name;
             let needUpdateFocus = false;
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
             const clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
@@ -143,13 +142,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
             eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), pointerEventAction);
             eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, pointerEventAction);
 
-            that._initKeyDownProcessor(that, $rowsView, that._keyDownHandler);
+            this._initKeyDownProcessor(this, $rowsView, this._keyDownHandler);
 
-            that._setRowsViewAttributes($rowsView);
+            this._setRowsViewAttributes($rowsView);
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
-                needUpdateFocus && that._updateFocus(true);
+                needUpdateFocus = this._isNeedFocus ? !isAppend : this._isHiddenFocus && isFullUpdate;
+                needUpdateFocus && this._updateFocus(true);
             }
         });
     },
@@ -754,8 +753,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
         const isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
         const isRevertButton = !!$(event.target).closest(`.${REVERT_BUTTON_CLASS}`).length;
+        const isExpandCommandCell = $target.hasClass(COMMAND_EXPAND_CLASS);
 
-        if(!isRevertButton && this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
+        if(!isRevertButton && this._isEventInCurrentGrid(event) && (this._isCellValid($target, !isInteractiveElement) || isExpandCommandCell)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
 
             this._focusView();
@@ -806,7 +806,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 const $target = event && $(event.target).closest(INTERACTIVE_ELEMENTS_SELECTOR + ', td');
                 const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                const isEditor = !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
+                const isEditor = !!column && !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
                 const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
@@ -878,8 +878,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
             }
         }
 
-        this._focus($element, !args.isHighlighted);
-        this._focusInteractiveElement($element);
+        if(!args.cancel) {
+            this._focus($element, !args.isHighlighted);
+            this._focusInteractiveElement($element);
+        }
     },
 
     _getFocusedViewByElement: function($element) {
