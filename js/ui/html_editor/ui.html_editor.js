@@ -10,9 +10,9 @@ import Errors from '../widget/ui.errors';
 import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
-import { isDxMouseWheelEvent, addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
-import { allowScroll } from '../text_box/utils.scroll';
+import { prepareScrollData } from '../text_box/utils.scroll';
 
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
@@ -275,18 +275,7 @@ const HtmlEditor = Editor.inherit({
     _renderScrollHandler: function() {
         const $scrollContainer = this._getContent();
 
-        const initScrollData = {
-            validate: (e) => {
-                if(isDxMouseWheelEvent(e)) {
-                    if(allowScroll($scrollContainer, -e.delta, e.shiftKey)) {
-                        e._needSkipEvent = true;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-        };
+        const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     },

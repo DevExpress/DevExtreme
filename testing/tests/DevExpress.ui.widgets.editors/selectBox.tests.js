@@ -3702,10 +3702,8 @@ QUnit.module('Scrolling', {
     }
 }, () => {
     QUnit.test('After load new page list should not be scrolled to selected item', function(assert) {
-        this.clock.restore();
-
         const data = [];
-        const done = assert.async();
+        assert.expect(1);
 
         for(let i = 1; i < 100; i++) {
             data.push(i);
@@ -3737,8 +3735,8 @@ QUnit.module('Scrolling', {
 
         setTimeout(() => {
             assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
-            done();
-        });
+        }, 0);
+        this.clock.tick(0);
     });
 });
 
