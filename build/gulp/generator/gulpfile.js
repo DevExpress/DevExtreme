@@ -26,7 +26,8 @@ const SRC = [
     'js/renovation/**/*.{tsx,ts}',
     `!${jQueryComponentsGlob}`,
     '!js/renovation/**/*.d.ts',
-    '!js/renovation/**/__tests__/**/*'
+    '!js/renovation/**/__tests__/**/*',
+    '!js/renovation/test_utils/**/*'
 ];
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
