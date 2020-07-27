@@ -2,9 +2,13 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
+import registerComponent from 'core/component_registrator.js';
+import dxrCheckBox from 'renovation/ui/check_box.j.js';
+import dxCheckBox from 'ui/check_box';
+import { name as getName } from 'core/utils/public_component';
+import { act } from 'preact/test-utils';
 
 import 'common.css!';
-import 'ui/check_box';
 import 'ui/validator';
 
 QUnit.testStart(function() {
@@ -26,8 +30,55 @@ const CHECKED_CLASS = 'dx-checkbox-checked';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
+const createModuleConfig = (oldWidget, renovatedWidget, config) => {
+    const widgetName = getName(oldWidget);
+    return {
+        beforeEach: function() {
+            const renovatedWidgetWrapper = renovatedWidget.inherit({
+                ctor: function() {
+                    let res;
+                    act(() => {
+                        res = this.callBase.apply(this, arguments);
+                    });
+                    return res;
+                },
+                option: function() {
+                    let res;
+                    act(() => {
+                        res = this.callBase.apply(this, arguments);
+                    });
+                    return res;
+                },
+                focus: function() {
+                    let res;
+                    act(() => {
+                        res = this.callBase.apply(this, arguments);
+                    });
+                    return res;
+                }
+            });
+            renovatedWidgetWrapper.getInstance = renovatedWidget.getInstance;
+            registerComponent(widgetName, renovatedWidgetWrapper);
+            config.beforeEach && config.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            config.afterEach && config.afterEach.apply(this);
+            registerComponent(widgetName, oldWidget);
+        }
+    };
+};
 
-QUnit.module('render', function() {
+export const getQUnitModuleForTestingRenovationWidget = (oldWidget, newWidget) => (name, config, tests) => {
+    const realConfig = tests ? config : {};
+    const realTests = tests || config;
+    QUnit.module(name, config, () => realTests(false));
+    const newConfig = createModuleConfig(oldWidget, newWidget, realConfig);
+    QUnit.module(`Renovated ${name}`, newConfig, () => realTests(true));
+};
+
+QUnit.module_r = getQUnitModuleForTestingRenovationWidget(dxCheckBox, dxrCheckBox);
+
+QUnit.module_r('render', function() {
 
     QUnit.test('markup init', function(assert) {
         const element = $('#checkbox').dxCheckBox();
@@ -64,6 +115,8 @@ QUnit.module('render', function() {
     });
 
     QUnit.test('click triggers user handler and changes state', function(assert) {
+        assert.expect(5);
+
         let checked = false;
 
         const element = $('#checkbox').dxCheckBox({
@@ -90,6 +143,7 @@ QUnit.module('render', function() {
                 assert.ok(true);
             }
         }).dxCheckBox('instance');
+
         checkbox.option('value', true);
     });
 
@@ -106,7 +160,7 @@ QUnit.module('render', function() {
     });
 });
 
-QUnit.module('validation', function() {
+QUnit.module_r('validation', function() {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('the click should be processed before the validation message is shown (T570458)', function(assert) {
@@ -146,8 +200,10 @@ QUnit.module('validation', function() {
                     validationRules: [{ type: 'required', message: 'message' }]
                 });
 
+            const instance = $checkbox.dxCheckBox('instance');
+
             validateGroup();
-            $checkbox.focus();
+            instance.focus();
             clock.tick(200);
 
             const message = $checkbox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
@@ -158,7 +214,7 @@ QUnit.module('validation', function() {
     }
 });
 
-QUnit.module('options', function() {
+QUnit.module_r('options', function() {
 
     QUnit.test('visible', function(assert) {
         const $element = $('#checkbox').dxCheckBox();
@@ -226,7 +282,7 @@ QUnit.module('options', function() {
     });
 });
 
-QUnit.module('hidden input', function() {
+QUnit.module_r('hidden input', function() {
 
     QUnit.test('the hidden input has \'true\' value', function(assert) {
         const $element = $('#checkbox').dxCheckBox({ value: true });
@@ -258,7 +314,7 @@ QUnit.module('hidden input', function() {
 });
 
 
-QUnit.module('the \'name\' option', function() {
+QUnit.module_r('the \'name\' option', function() {
 
     QUnit.test('widget input should get the \'name\' attribute with a correct value', function(assert) {
         const expectedName = 'some_name';
@@ -272,7 +328,7 @@ QUnit.module('the \'name\' option', function() {
 });
 
 
-QUnit.module('widget sizing render', function() {
+QUnit.module_r('widget sizing render', function() {
 
     QUnit.test('constructor', function(assert) {
         const $element = $('#widget').dxCheckBox({ width: 400 });
@@ -294,7 +350,7 @@ QUnit.module('widget sizing render', function() {
 });
 
 
-QUnit.module('keyboard navigation', function() {
+QUnit.module_r('keyboard navigation', function() {
 
     QUnit.test('check state changes on space press', function(assert) {
         assert.expect(2);
@@ -316,7 +372,7 @@ QUnit.module('keyboard navigation', function() {
     });
 });
 
-QUnit.module('events', function() {
+QUnit.module_r('events', function() {
 
     QUnit.test('valueChanged event fired after setting the value by click', function(assert) {
         const handler = sinon.stub();
@@ -327,6 +383,44 @@ QUnit.module('events', function() {
 
         $element.trigger('dxclick');
         assert.ok(handler.calledOnce);
+    });
+
+    QUnit.test('valueChanged handler runtime change', function(assert) {
+        const handler = sinon.stub();
+        const newHandler = sinon.stub();
+        const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler });
+        const checkbox = $element.dxCheckBox('instance');
+
+        $element.trigger('dxclick');
+        assert.ok(handler.calledOnce);
+
+        checkbox.option('onValueChanged', newHandler);
+        $element.trigger('dxclick');
+        assert.ok(handler.calledOnce);
+    });
+
+    QUnit.test('valueChanged should have correct previousValue when it is undefined', function(assert) {
+        const handler = sinon.stub();
+        const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler, value: undefined });
+
+        $element.trigger('dxclick');
+        assert.ok(handler.calledOnce);
+        assert.strictEqual(handler.getCalls()[0].args[0].previousValue, undefined, 'previousValue is correct');
+    });
+
+    QUnit.skip('value=undefined should be set correctly', function(assert) {
+        const $element = $('#checkbox').dxCheckBox({ value: undefined });
+        const checkbox = $element.dxCheckBox('instance');
+        assert.strictEqual(checkbox.option('value'), undefined, 'value on init is correct');
+        assert.ok($element.hasClass('dx-checkbox-indeterminate'), '"dx-checkbox-indeterminate"class has been added');
+
+        $element.trigger('dxclick');
+        assert.strictEqual(checkbox.option('value'), true, 'value on correct after click');
+        assert.ok($element.hasClass('dx-checkbox-checked'), 'class has been changed to "dx-checkbox-checked"');
+
+        checkbox.option('value', undefined);
+        assert.strictEqual(checkbox.option('value'), undefined, 'value on correct after runtime change to undefined');
+        assert.ok($element.hasClass('dx-checkbox-indeterminate'), 'class has been added');
     });
 
     QUnit.test('valueChanged event fired after setting the value by keyboard', function(assert) {
