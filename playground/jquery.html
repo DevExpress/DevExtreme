@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
 
@@ -28,63 +27,15 @@
     <!-- RENOVATION -->
     <!-- <script type="text/javascript" src="../artifacts/js-renovation/dx.all.debug.js" charset="utf-8"></script> -->
 </head>
-
 <body>
-    <div id="scheduler"></div>
+    <div id="button"></div>
     <script>
-        $(function () {
-            var data = [{
-                textText: "Stand-up meeting",
-                startDate: new Date(2017, 4, 22, 12, 0), // + 3
-                endDate: new Date(2017, 4, 22, 12, 30), // + 3
-                startDateTimeZone: "America/Los_Angeles", // -7
-                endDateTimeZone: "America/Los_Angeles", // -7
-                recurrenceRule: "FREQ=DAILY"
-            }, {
-                textText: "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-                startDate: new Date(2017, 4, 22, 12, 10), // + 3
-                endDate: new Date(2017, 4, 22, 12, 35), // + 3
-                startDateTimeZone: "America/Los_Angeles", // -8
-                endDateTimeZone: "America/Los_Angeles", // -8
-                recurrenceRule: "FREQ=DAILY"
-            }];
-
-            const views = [{
-                type: 'week',
-                name: 'week',
-                maxAppointmentsPerCell: 0
-            }, {
-                type: 'month',
-                name: 'Unlimited Mode',
-                maxAppointmentsPerCell: 'unlimited'
-            }, {
-                type: 'month',
-                name: 'Numeric Mode',
-                maxAppointmentsPerCell: 2
-            }];
-
-            var scheduler = $("#scheduler").dxScheduler({
-                dataSource: data,
-                views: [{
-                    type: 'week',
-                    name: 'week',
-                    maxAppointmentsPerCell: 0
-                }, {
-                    type: 'day',
-                    name: 'day'
-                }],
-                currentView: "week",
-                currentDate: new Date(2017, 4, 22),
-                height: 600,
-                textExpr: 'textText',
-                editing: {
-                    allowEditingTimeZones: true
-                },
-                timeZone: "America/New_York" // -4
-            }).dxScheduler("instance");
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
-
     </script>
 </body>
-
 </html>

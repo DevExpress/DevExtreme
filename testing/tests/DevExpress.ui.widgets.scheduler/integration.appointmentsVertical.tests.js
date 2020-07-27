@@ -302,35 +302,35 @@ QUnit.test('The part of recurrence appointment after midnight should have right 
 });
 
 QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', function(assert) {
-    // const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
-    // try {
-    this.createInstance({
-        dataSource: [],
-        currentDate: new Date(2016, 4, 7),
-        timeZone: 'Asia/Ashkhabad',
-        height: 500,
-        currentView: 'week',
-        firstDayOfWeek: 1
-    });
+    try {
+        this.createInstance({
+            dataSource: [],
+            currentDate: new Date(2016, 4, 7),
+            timeZone: 'Asia/Ashkhabad',
+            height: 500,
+            currentView: 'week',
+            firstDayOfWeek: 1
+        });
 
-    this.instance.addAppointment({
-        startDate: new Date(2016, 4, 2),
-        endDate: new Date(2016, 4, 2, 0, 30),
-        recurrenceRule: 'FREQ=DAILY'
-    });
+        this.instance.addAppointment({
+            startDate: new Date(2016, 4, 2),
+            endDate: new Date(2016, 4, 2, 0, 30),
+            recurrenceRule: 'FREQ=DAILY'
+        });
 
-    const $element = this.instance.$element();
-    const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
-    const expectedLeftPosition = $element.find('.dx-scheduler-time-panel').outerWidth();
-    const apptPosition = $appt.position();
+        const $element = this.instance.$element();
+        const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+        const expectedLeftPosition = $element.find('.dx-scheduler-time-panel').outerWidth();
+        const apptPosition = $appt.position();
 
-    assert.roughEqual(apptPosition.top, 200, 2.001, 'Appts top is OK');
-    assert.roughEqual(apptPosition.left, expectedLeftPosition, 2.001, 'Appts left is OK');
+        assert.roughEqual(apptPosition.top, 200, 2.001, 'Appts top is OK');
+        assert.roughEqual(apptPosition.left, expectedLeftPosition, 2.001, 'Appts left is OK');
 
-    // } finally {
-    // tzOffsetStub.restore();
-    // }
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test('Appointments should have correctly height with a custom timezone(T387561)', function(assert) {
