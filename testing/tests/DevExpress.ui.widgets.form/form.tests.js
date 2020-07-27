@@ -426,8 +426,8 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
 
 [
     { editorType: 'dxTextBox' },
-    /* { itemType: 'simple' }, not working yet */
-    /* { visible: false }, not working yet */
+    { itemType: 'simple' },
+    { visible: false },
     { label: { text: 'label text' } },
     { editorOptions: { width: 400 } },
 ].forEach(testConfig => {
@@ -445,7 +445,10 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 label: { text: 'new item1' },
                 editorOptions: { width: 300 }
             }, testConfig);
+
+            let itemsRenderCount = 0;
             const form = $('#form').dxForm({
+                onOptionChanged: (e) => { if(e.fullName === 'items') { itemsRenderCount++; } },
                 items: [{
                     itemType: 'group',
                     caption: 'group1',
@@ -453,17 +456,14 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 }]
             }).dxForm('instance');
 
-            form.itemOption('group1.item1', newItem1);
+            form.itemOption('group1.item1', clone(newItem1));
             if(useRepaint) {
                 form.repaint();
             }
-            if('editorType' in testConfig) {
-                assert.deepEqual(form.itemOption('group1.item1'), undefined, 'item1');
-                assert.deepEqual(form.itemOption('group1.newItem1'), newItem1, 'newItem1');
-            } else {
-                assert.deepEqual(form.itemOption('group1.item1'), extend(true, {}, item1, newItem1, { editorType: item1.editorType, dataField: item1.dataField }), 'item1');
-                assert.deepEqual(form.itemOption('group1.newItem1'), undefined, 'newItem1');
-            }
+
+            assert.equal(itemsRenderCount, 'editorType' in testConfig ? 1 : 0, 'rerender count');
+            assert.deepEqual(form.itemOption('group1.item1'), undefined, 'item1');
+            assert.deepEqual(form.itemOption('group1.newItem1'), extend(true, {}, newItem1, { editorType: testConfig.editorType || item1.editorType }), 'newItem1');
         });
 
         QUnit.test(`Form.itemOption('item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
@@ -475,13 +475,15 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 label: { text: 'item1' },
                 editorOptions: { placeholder: 'test_placeHolder' }
             };
-            const newItem1 = {
-                editorType: 'dxTextBox',
+            const newItem1 = extend({
                 dataField: 'newItem1',
                 label: { text: 'new item1' },
                 editorOptions: { width: 300 }
-            };
+            }, testConfig);
+
+            let itemsRenderCount = 0;
             const form = $('#form').dxForm({
+                onOptionChanged: (e) => { if(e.fullName === 'items') { itemsRenderCount++; } },
                 items: [ clone(item1) ]
             }).dxForm('instance');
 
@@ -490,8 +492,9 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 form.repaint();
             }
 
+            assert.equal(itemsRenderCount, 1, 'rerender count');
             assert.deepEqual(form.itemOption('item1'), undefined, 'item1');
-            assert.deepEqual(form.itemOption('newItem1'), newItem1, 'newItem1');
+            assert.deepEqual(form.itemOption('newItem1'), extend(true, {}, newItem1, { editorType: testConfig.editorType || item1.editorType }), 'newItem1');
         });
     });
 });

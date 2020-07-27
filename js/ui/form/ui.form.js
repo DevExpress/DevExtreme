@@ -993,6 +993,8 @@ const Form = Widget.inherit({
         this.beginUpdate();
         each(options, (optionName, optionValue) => {
             result = this._tryChangeLayoutManagerItemOption(getFullOptionName(itemPath, optionName), optionValue);
+            const item = this.option(itemPath);
+            this._changeItemOption(item, optionName, optionValue);
             if(!result) {
                 return false;
             }
