@@ -579,11 +579,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+
     [false, true].forEach((useIcons) => {
         QUnit.test(`Command buttons should be rendered with RTL when useIcons=${useIcons} (T915926)`, function(assert) {
             // arrange
             const columnsWrapper = dataGridWrapper.columns;
-            createDataGrid({
+            const dataGrid = createDataGrid({
                 rtlEnabled: true,
                 dataSource: [{ id: 0, c0: 'c0' }],
                 editing: {
@@ -595,14 +596,42 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             this.clock.tick();
 
-            // assert
             const $buttons = columnsWrapper.getCommandButtons();
+            const $commandCell = $(dataGrid.getCellElement(0, 0));
 
+            // assert
+            assert.ok($commandCell.length, 'command cell is rendered');
+            assert.equal($commandCell.css('white-space'), 'nowrap', 'white-space style');
             assert.equal($buttons.length, 2, 'command buttons are rendered');
             $buttons.each((_, button) => {
                 assert.equal($(button).css('display'), 'inline-block', 'display style');
                 assert.equal($(button).css('direction'), 'rtl', 'direction style');
             });
+        });
+
+        QUnit.test(`Edit command column should not wrap command buttons when useIcons=${useIcons}`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{}],
+                editing: {
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    useIcons
+                },
+                columns: [
+                    {
+                        type: 'buttons'
+                    }
+                ]
+            });
+
+            this.clock.tick();
+
+            // assert
+            const $commandCell = $(dataGrid.getCellElement(0, 0));
+
+            assert.ok($commandCell.length, 'command cell is rendered');
+            assert.equal($commandCell.css('white-space'), 'nowrap', 'white-space style');
         });
     });
 
@@ -2201,6 +2230,51 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         checkDxFontIcon(assert, '.dx-datagrid-export-button .dx-icon', DX_ICON_XLSX_FILE_CONTENT_CODE);
+    });
+
+    // T916093
+    ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
+        QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
+            $('#dataGrid').dxDataGrid({
+                height: 400,
+                dataSource: {
+                    load: function(loadOptions) {
+                        const d = $.Deferred();
+
+                        const data = [];
+                        const start = loadOptions.skip || 0;
+                        const end = loadOptions.skip + loadOptions.take || 1000;
+                        for(let i = start; i < end; i++) {
+                            data.push({
+                                id: i + 1
+                            });
+                        }
+
+                        setTimeout(function() {
+                            d.resolve({ data: data, totalCount: 1000 });
+                        }, 2000);
+
+                        return d;
+                    }
+                },
+                remoteOperations: true,
+                scrolling: {
+                    mode: scrollingMode
+                },
+                export: {
+                    enabled: true
+                }
+            });
+
+            this.clock.tick(4500);
+
+            $('.dx-datagrid-export-button').trigger('dxclick');
+
+            this.clock.tick(1000);
+            const $loadPanel = $('.dx-loadpanel');
+
+            assert.notOk($loadPanel.hasClass('dx-state-invisible'), 'load panel is visible');
+        });
     });
 
     QUnit.test('Add row to empty dataGrid - freeSpaceRow element is hidden', function(assert) {

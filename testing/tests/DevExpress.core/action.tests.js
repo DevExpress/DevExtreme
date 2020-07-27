@@ -260,6 +260,36 @@ QUnit.test('ui interaction validator should prevent all ui action handlers by \'
     assert.ok(!handlerSpy.called);
 });
 
+QUnit.test('ui interaction validator should prevent all ui action handlers if \'dx-state-readonly\' class and target element has \'dx-state-independent\' class', function(assert) {
+    const handlerSpy = sinon.spy(noop);
+    const $targetElement = $('.dx-state-readonly .dx-click-target');
+    $targetElement.addClass('dx-state-independent dx-state-readonly');
+
+    const action = new Action(handlerSpy);
+
+    action.execute({
+        event: $.Event('click', { target: $targetElement.get(0) }),
+        element: $targetElement
+    });
+
+    assert.strictEqual(handlerSpy.callCount, 0);
+});
+
+QUnit.test('ui interaction validator should not prevent all ui action handlers if \'dx-state-readonly\' class is on the parents and target element has \'dx-state-independent\' class', function(assert) {
+    const handlerSpy = sinon.spy(noop);
+    const $targetElement = $('.dx-state-readonly .dx-click-target');
+    $targetElement.addClass('dx-state-independent');
+
+    const action = new Action(handlerSpy);
+
+    action.execute({
+        event: $.Event('click', { target: $targetElement.get(0) }),
+        element: $targetElement
+    });
+
+    assert.strictEqual(handlerSpy.callCount, 1);
+});
+
 QUnit.test('Action argument should contain both Event and jQueryEvent field or none of them', function(assert) {
     const eventMock = {};
 
