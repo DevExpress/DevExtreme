@@ -424,25 +424,28 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
-[true, false, undefined].forEach(repaintChangesOnly => {
+[
+    { editorType: 'dxTextBox' },
+    /* { itemType: 'simple' }, not working yet */
+    /* { visible: false }, not working yet */
+    { label: { text: 'label text' } },
+    { editorOptions: { width: 400 } },
+].forEach(testConfig => {
     [true, false].forEach(useRepaint => {
-        QUnit.test(`Form.itemOption('group.item1', newItem2), repaintChangesOnly = ${repaintChangesOnly}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
-            const clone = (item) => JSON.parse(JSON.stringify(item));
-
+        const clone = (item) => JSON.parse(JSON.stringify(item));
+        QUnit.test(`Form.itemOption('group.item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
             const item1 = {
                 editorType: 'dxDropDownBox',
                 dataField: 'item1',
                 label: { text: 'item1' },
                 editorOptions: { placeholder: 'test_placeHolder' }
             };
-            const newItem1 = {
-                editorType: 'dxTextBox',
+            const newItem1 = extend({
                 dataField: 'newItem1',
                 label: { text: 'new item1' },
                 editorOptions: { width: 300 }
-            };
+            }, testConfig);
             const form = $('#form').dxForm({
-                repaintChangesOnly,
                 items: [{
                     itemType: 'group',
                     caption: 'group1',
@@ -450,11 +453,11 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 }]
             }).dxForm('instance');
 
-            form.itemOption('group1.item1', clone(newItem1));
+            form.itemOption('group1.item1', newItem1);
             if(useRepaint) {
                 form.repaint();
             }
-            if(repaintChangesOnly === false) {
+            if('editorType' in testConfig) {
                 assert.deepEqual(form.itemOption('group1.item1'), undefined, 'item1');
                 assert.deepEqual(form.itemOption('group1.newItem1'), newItem1, 'newItem1');
             } else {
@@ -463,7 +466,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
             }
         });
 
-        QUnit.test(`Form.itemOption('item1', newItem2), repaintChangesOnly = ${repaintChangesOnly}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
+        QUnit.test(`Form.itemOption('item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
             const clone = (item) => JSON.parse(JSON.stringify(item));
 
             const item1 = {
@@ -479,7 +482,6 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
                 editorOptions: { width: 300 }
             };
             const form = $('#form').dxForm({
-                repaintChangesOnly,
                 items: [ clone(item1) ]
             }).dxForm('instance');
 

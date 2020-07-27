@@ -111,7 +111,6 @@ const Form = Widget.inherit({
             showRequiredMark: true,
             showOptionalMark: false,
             requiredMark: '*',
-            repaintChangesOnly: true,
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage'),
             showValidationSummary: false,
@@ -850,8 +849,6 @@ const Form = Widget.inherit({
                 break;
             case 'readOnly':
                 break;
-            case 'repaintChangesOnly':
-                break;
             case 'width':
                 this.callBase(args);
                 this._rootLayoutManager.option(args.name, args.value);
@@ -968,6 +965,11 @@ const Form = Widget.inherit({
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
+                if(optionName === 'editorType') { // T903774
+                    if(layoutManager.option(fullOptionName) !== value) {
+                        return false;
+                    }
+                }
                 if(optionName === 'visible') { // T874843
                     const formItems = this.option(getFullOptionName(itemPath, 'items'));
                     if(formItems && formItems.length) {
@@ -987,10 +989,6 @@ const Form = Widget.inherit({
     },
 
     _tryChangeLayoutManagerItemOptions(itemPath, options) {
-        if(this.option('repaintChangesOnly') === false) {
-            return false;
-        }
-
         let result;
         this.beginUpdate();
         each(options, (optionName, optionValue) => {
