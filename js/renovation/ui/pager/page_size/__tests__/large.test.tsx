@@ -23,9 +23,8 @@ describe('Pager size selector', () => {
   });
 
   it('change pagesize in large selector', () => {
-    const pageSizeHandler = jest.fn();
-    const component = new PageSizeLarge({ pageSizes, pageSizeChange: pageSizeHandler });
+    const component = new PageSizeLarge({ pageSizes });
     component.pageSizesText[1].click();
-    expect(pageSizeHandler).toBeCalledWith(10);
+    expect(component.props.pageSize).toBe(10);
   });
 });

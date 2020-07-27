@@ -82,16 +82,13 @@ describe('Small pager pages', () => {
     });
 
     it('valueChange', () => {
-      const pageIndexChangeHandler = jest.fn();
       const component = new PagesSmall({
         pageCount: 3,
         pageIndex: 2,
 
       });
-      expect(() => component.valueChange(4)).not.toThrow();
-      component.props.pageIndexChange = pageIndexChangeHandler;
       component.valueChange(1);
-      expect(pageIndexChangeHandler).toBeCalledWith(0);
+      expect(component.props.pageIndex).toBe(0);
     });
 
     it('get value', () => {

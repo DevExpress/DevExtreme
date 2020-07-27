@@ -1,4 +1,4 @@
-import * as domAdapter from '../../../../core/dom_adapter';
+import domAdapter from '../../../../core/dom_adapter';
 
 export function closestClass(child: HTMLDivElement, className: string): HTMLElement | null {
   let el: HTMLElement | null = child;
