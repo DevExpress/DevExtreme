@@ -760,6 +760,8 @@ const DropDownList = DropDownEditor.inherit({
 
         if(popupWidth === null) {
             popupWidth = undefined;
+        } else if(typeof popupWidth === 'function') {
+            popupWidth = popupWidth();
         }
 
         if(popupWidth === undefined) {
