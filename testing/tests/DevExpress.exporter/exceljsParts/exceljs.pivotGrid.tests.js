@@ -1409,21 +1409,21 @@ QUnit.module('Scenarios', moduleConfig, () => {
         }).dxPivotGrid('instance');
 
         const expectedCells = [[
-            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-            { excelCell: { value: 'c1', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'c1', width: 100, path: ['c1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } },
-            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', width: 100, type: 'GT', isLast: true, area: 'column' } },
+            { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'c1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'c1', width: 100, path: ['c1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } },
+            { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', width: 100, type: 'GT', isLast: true, area: 'column' } },
         ], [
-            { excelCell: { value: 'r1_1', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1_1', path: ['r1_1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'row' } },
-            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
-            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
+            { excelCell: { value: 'r1_1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1_1', path: ['r1_1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'row' } },
+            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
+            { excelCell: { value: 0.2, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '20%', value: 0.2, dataType: 'number', rowPath: ['r1_1'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
         ], [
-            { excelCell: { value: 'r1_2', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1_2', path: ['r1_2'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
-            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
-            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
+            { excelCell: { value: 'r1_2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1_2', path: ['r1_2'], type: 'D', isLast: true, dataSourceIndex: 2, area: 'row' } },
+            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'D' } },
+            { excelCell: { value: 0.8, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '80%', value: 0.8, dataType: 'number', rowPath: ['r1_2'], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'D', columnType: 'GT' } },
         ], [
-            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', type: 'GT', isLast: true, area: 'row' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'D' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'GT' } },
+            { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Grand Total', type: 'GT', isLast: true, area: 'row' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: ['c1'], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'D' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '100%', value: 1, dataType: 'number', rowPath: [], columnPath: [], dataIndex: 0, area: 'data', format: 'percent', rowType: 'GT', columnType: 'GT' } },
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
@@ -1431,6 +1431,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
             helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(345), toExcelWidth(585)], topLeft.column, epsilon);
+            helper.checkCellFormat(expectedCells);
             helper.checkFont(expectedCells);
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
@@ -4303,4 +4304,5 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, function() { return $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'); });
+
 
