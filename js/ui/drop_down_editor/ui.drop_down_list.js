@@ -762,6 +762,9 @@ const DropDownList = DropDownEditor.inherit({
             popupWidth = undefined;
         }
 
+        if(popupWidth === undefined) {
+            this._setPopupOption('width', (this._getInputWidth.bind(this)));
+        }
         if(!typeUtils.isDefined(popupMinWidth)) {
             this._updatePopupMinWidth(popupWidth);
         }

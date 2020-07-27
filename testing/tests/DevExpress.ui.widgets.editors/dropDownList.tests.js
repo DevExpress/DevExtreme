@@ -1209,6 +1209,38 @@ QUnit.module('popup', moduleConfig, () => {
         assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
     });
 
+    QUnit.test('popup should have width 100% if dropDownOptions.width is reset and minWidth is defined', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({
+            width: 500,
+            dropDownOptions: {
+                minWidth: 200,
+                width: 200
+            },
+            opened: true
+        }).dxDropDownList('instance');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        instance.option('dropDownOptions.width', null);
+
+        assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have width 100% if dropDownOptions.width is undefined and minWidth is defined', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({
+            width: 500,
+            dropDownOptions: {
+                minWidth: 200,
+                width: null
+            },
+            opened: true
+        }).dxDropDownList('instance');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
+    });
+
     QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
             width: 600,
