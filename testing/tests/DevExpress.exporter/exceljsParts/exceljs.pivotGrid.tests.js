@@ -165,6 +165,58 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Export [string x string/string(c1,c2) x number] & data_1.dataField_exist & data_2.dataField_not_exist with caption', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1' },
+                { area: 'column', dataField: 'col1' },
+                { area: 'data', dataType: 'number', dataField: 'data', summaryType: 'sum', caption: 'Sum' },
+                { area: 'data', dataType: 'number', dataField: 'data', summaryType: 'avg', caption: 'Avg' }
+            ],
+            store: [
+                { row1: 'r1', col1: 'c1', data: 2 },
+                { row1: 'r1', col1: 'c1', data: 3 }
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '', width: 100 } },
+            { excelCell: { value: 'c1', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, isLast: true, path: ['c1'], rowspan: 1, text: 'c1', type: 'D', width: 100 } },
+            { excelCell: { value: 'c1', master: [1, 2], alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['c1'], rowspan: 1, text: '', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: '', master: [1, 1], alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Sum', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['c1'], rowspan: 1, text: 'Sum', type: 'D', width: 100 } },
+            { excelCell: { value: 'Avg', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['c1'], rowspan: 1, text: 'Avg', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: 'r1', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['r1'], rowspan: 1, text: 'r1', type: 'D', width: 100 } },
+            { excelCell: { value: 5, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['c1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['r1'], rowType: 'D', rowspan: 1, text: '5' } },
+            { excelCell: { value: 2.5, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['c1'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['r1'], rowType: 'D', rowspan: 1, text: '2.5' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+            helper.checkColumnWidths([toExcelWidth(70), toExcelWidth(479), toExcelWidth(450)], topLeft.column, epsilon);
+            helper.checkFont(expectedCells);
+            helper.checkAlignment(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+            done();
+        });
+    });
+
     QUnit.test('Export [string x string x number,number] with \'dataFieldArea:column\'', function(assert) {
         const done = assert.async();
         const ds = {
