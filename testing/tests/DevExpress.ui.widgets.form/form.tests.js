@@ -467,8 +467,6 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
         });
 
         QUnit.test(`Form.itemOption('item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
-            const clone = (item) => JSON.parse(JSON.stringify(item));
-
             const item1 = {
                 editorType: 'dxDropDownBox',
                 dataField: 'item1',
