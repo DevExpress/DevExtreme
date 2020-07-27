@@ -119,8 +119,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  accessKeyEffect(): any {
+  accessKeyEffect(): (() => void) | undefined {
     const namespace = 'UIFeedback';
     const { accessKey, focusStateEnabled, disabled } = this.props;
     const isFocusable = focusStateEnabled && !disabled;
@@ -134,16 +133,14 @@ export class Widget extends JSXComponent(WidgetProps) {
         }
       }, { namespace });
 
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => dxClick.off(this.widgetRef, { namespace });
+      return (): void => dxClick.off(this.widgetRef, { namespace });
     }
 
     return undefined;
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  activeEffect(): any {
+  activeEffect(): (() => void) | undefined {
     const {
       activeStateEnabled, activeStateUnit, disabled, onInactive,
       _feedbackShowTimeout, _feedbackHideTimeout, onActive,
@@ -167,16 +164,14 @@ export class Widget extends JSXComponent(WidgetProps) {
           showTimeout: _feedbackShowTimeout,
         });
 
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => active.off(this.widgetRef, { selector, namespace });
+      return (): void => active.off(this.widgetRef, { selector, namespace });
     }
 
     return undefined;
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  clickEffect(): any {
+  clickEffect(): (() => void) | undefined {
     const { name, onClick, disabled } = this.props;
     const namespace = name;
 
@@ -184,8 +179,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       dxClick.on(this.widgetRef,
         (e) => onClick(e),
         { namespace });
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      return (): any => dxClick.off(this.widgetRef, { namespace });
+      return (): void => dxClick.off(this.widgetRef, { namespace });
     }
 
     return undefined;
@@ -197,8 +191,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  focusEffect(): any {
+  focusEffect(): (() => void) | undefined {
     const {
       disabled, focusStateEnabled, name, onFocusIn, onFocusOut,
     } = this.props;
@@ -223,7 +216,6 @@ export class Widget extends JSXComponent(WidgetProps) {
           isFocusable: focusable,
           namespace,
         });
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       return (): void => focus.off(this.widgetRef, { namespace });
     }
 
@@ -231,8 +223,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  hoverEffect(): any {
+  hoverEffect(): (() => void) | undefined {
     const namespace = 'UIFeedback';
     const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
     const selector = activeStateUnit;
@@ -243,7 +234,6 @@ export class Widget extends JSXComponent(WidgetProps) {
         () => { !this.active && (this.hovered = true); },
         () => { this.hovered = false; },
         { selector, namespace });
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       return (): void => hover.off(this.widgetRef, { selector, namespace });
     }
 
@@ -251,14 +241,12 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  keyboardEffect(): any {
+  keyboardEffect(): (() => void) | undefined {
     const { focusStateEnabled, onKeyDown } = this.props;
 
     if (focusStateEnabled || onKeyDown) {
       // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
       const id = keyboard.on(this.widgetRef, this.widgetRef, (e) => onKeyDown!(e));
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       return (): void => keyboard.off(id);
     }
 
@@ -266,14 +254,12 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  resizeEffect(): any {
+  resizeEffect(): (() => void) | undefined {
     const namespace = `${this.props.name}VisibilityChange`;
     const { onDimensionChanged } = this.props;
 
     if (onDimensionChanged) {
       resize.on(this.widgetRef, onDimensionChanged, { namespace });
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       return (): void => resize.off(this.widgetRef, { namespace });
     }
 
@@ -281,8 +267,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  visibilityEffect(): any {
+  visibilityEffect(): (() => void) | undefined {
     const { name, onVisibilityChange } = this.props;
     const namespace = `${name}VisibilityChange`;
 
@@ -293,7 +278,6 @@ export class Widget extends JSXComponent(WidgetProps) {
         // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
         () => onVisibilityChange!(false),
         { namespace });
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       return (): void => visibility.off(this.widgetRef, { namespace });
     }
 
