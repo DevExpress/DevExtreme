@@ -11,12 +11,13 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
-import { InkRipple } from './common/ink_ripple';
+import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import * as themes from '../../ui/themes';
+import Themes from '../../ui/themes';
 import BaseComponent from '../preact_wrapper/check_box';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
+import { EffectReturn } from '../utils/effect_return.d';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -38,14 +39,14 @@ const getCssClasses = (model: CheckBoxProps): string => {
   return combineClasses(classesMap);
 };
 
-const inkRippleConfig = (): object => ({
+const inkRippleConfig = (): InkRippleConfig => ({
   waveSizeCoefficient: 2.5,
   useHoldAnimation: false,
   wavesNumber: 2,
   isCentered: true,
 });
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-export const viewFunction = (viewModel: CheckBox): any => {
+
+export const viewFunction = (viewModel: CheckBox): JSX.Element => {
   const { text, name } = viewModel.props;
 
   return (
@@ -117,12 +118,11 @@ export class CheckBoxProps extends BaseWidgetProps {
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  device: (): boolean => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
+  device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  device: (): boolean => (themes as any).isMaterial((themes as any).current()),
+  // eslint-disable-next-line import/no-named-as-default-member
+  device: (): boolean => Themes.isMaterial(Themes.current()),
   options: { useInkRipple: true },
 }]);
 
@@ -150,10 +150,9 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   @Effect()
-  contentReadyEffect(): void {
+  contentReadyEffect(): EffectReturn {
     const { onContentReady } = this.props;
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-    onContentReady!({ element: this.widgetRef });
+    onContentReady?.({ element: this.widgetRef });
   }
 
   onActive(event: Event): void {
@@ -184,8 +183,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onWidgetKeyDown(options): any | undefined {
+  onWidgetKeyDown(options): Event | undefined {
     const { onKeyDown } = this.props;
     const { originalEvent, keyName, which } = options;
 
@@ -196,7 +194,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
     if (keyName === 'space' || which === 'space') {
       originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      this.onWidgetClick();
     }
 
     return undefined;

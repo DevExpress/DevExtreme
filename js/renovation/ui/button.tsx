@@ -13,14 +13,15 @@ import {
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
 import noop from '../utils/noop';
-import * as themes from '../../ui/themes';
+import Themes from '../../ui/themes';
 import { click } from '../../events/short';
 import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
-import { InkRipple } from './common/ink_ripple';
+import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
 import BaseComponent from '../preact_wrapper/button';
+import { EffectReturn } from '../utils/effect_return.d';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -40,20 +41,18 @@ const getCssClasses = (model: ButtonProps): string => {
 
   return classNames.join(' ');
 };
-
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-export const viewFunction = (viewModel: Button): any => {
+export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, icon, iconPosition, template, text,
+    children, icon, iconPosition, template: ButtonTemplate, text,
   } = viewModel.props;
-  const renderText = !template && !children && text;
+  const renderText = !ButtonTemplate && !children && text;
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !template && !children && viewModel.iconSource
+  const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      ref={viewModel.widgetRef}
+      ref={viewModel.widgetRef as any}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       aria={viewModel.aria}
@@ -74,21 +73,21 @@ export const viewFunction = (viewModel: Button): any => {
       width={viewModel.props.width}
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      <div className="dx-button-content" ref={viewModel.contentRef}>
-        {template
-                && (
-                <viewModel.props.template
-                  data={{ icon, text }}
-                />
-                )}
-        {!template && children}
+      <div className="dx-button-content" ref={viewModel.contentRef as any}>
+        {ButtonTemplate && (<ButtonTemplate data={{ icon, text }} />)}
+        {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
         {viewModel.props.useSubmitBehavior
                 && <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
         {viewModel.props.useInkRipple
-                && <InkRipple config={viewModel.inkRippleConfig} ref={viewModel.inkRippleRef} />}
+                && (
+                <InkRipple
+                  config={viewModel.inkRippleConfig}
+                  ref={viewModel.inkRippleRef as any}
+                />
+                )}
       </div>
     </Widget>
   );
@@ -107,20 +106,17 @@ export class ButtonProps extends BaseWidgetProps {
   @Event({
     actionConfig: { excludeValidators: ['readOnly'] },
   })
+  onClick?: (e: { event: Event; validationGroup?: string }) => void = noop;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onClick?: (e: any) => void = noop;
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  @Event() onSubmit?: (e: any) => void = noop;
+  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement }) => void = noop;
 
   @OneWay() pressed?: boolean;
 
   @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
 
-  @Slot() children?: any;
+  @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
 
-  @Template() template?: any = '';
+  @Slot() children?: JSX.Element;
 
   @OneWay() text?: string = '';
 
@@ -134,12 +130,11 @@ export class ButtonProps extends BaseWidgetProps {
 }
 
 export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  device: (): boolean => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
+  device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  device: (): boolean => (themes as any).isMaterial((themes as any).current()),
+  // eslint-disable-next-line import/no-named-as-default-member
+  device: (): boolean => Themes.isMaterial(Themes.current()),
   options: { useInkRipple: true },
 }]);
 @Component({
@@ -161,13 +156,13 @@ export class Button extends JSXComponent(ButtonProps) {
   @Ref() widgetRef!: Widget;
 
   @Effect()
-  contentReadyEffect(): void {
+  contentReadyEffect(): EffectReturn {
     // NOTE: we should trigger this effect on change each
     //       property upon which onContentReady depends
     //       (for example, text, icon, etc)
     const { onContentReady } = this.props;
 
-    onContentReady!({ element: this.contentRef.parentNode });
+    onContentReady?.({ element: this.contentRef.parentNode });
   }
 
   @Method()
@@ -194,8 +189,7 @@ export class Button extends JSXComponent(ButtonProps) {
     useSubmitBehavior && this.submitInputRef.click();
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onWidgetKeyDown(options): any | void {
+  onWidgetKeyDown(options): Event | undefined {
     const { onKeyDown } = this.props;
     const { originalEvent, keyName, which } = options;
 
@@ -213,8 +207,7 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   @Effect()
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  submitEffect(): any | undefined {
+  submitEffect(): EffectReturn {
     const namespace = 'UIFeedback';
     const { useSubmitBehavior, onSubmit } = this.props;
 
@@ -254,7 +247,7 @@ export class Button extends JSXComponent(ButtonProps) {
     return (icon || type === 'back') ? (icon || 'back') : '';
   }
 
-  get inkRippleConfig(): object {
+  get inkRippleConfig(): InkRippleConfig {
     const { text, icon, type } = this.props;
     return ((!text && icon) || (type === 'back')) ? {
       isCentered: true,

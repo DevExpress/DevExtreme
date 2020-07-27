@@ -4114,5 +4114,42 @@ QUnit.module('Deferred selection', {
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
     });
+
+    // T917204
+    QUnit.test('The getSelectedRowsData method should return correct selected rows data after filtering and selectAll/deselectAll', function(assert) {
+        // arrange
+        let selectedRowsData = [];
+
+        this.setupDataGrid({
+            loadingTimeout: undefined,
+            dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
+            remoteOperations: { filtering: true, sorting: true, paging: true },
+            columns: [
+                { dataField: 'id', dataType: 'number' },
+                { dataField: 'name', dataType: 'string' },
+                { dataField: 'age', dataType: 'number', filterValue: '18', selectedFilterOperation: '<>' }
+            ],
+            selection: { mode: 'multiple', deferred: true }
+        });
+
+        this.selectAll();
+        this.getSelectedRowsData().done((selectedData) => {
+            selectedRowsData = selectedData;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.equal(selectedRowsData.length, 5, 'selected rows data count');
+
+        // arrange
+        this.deselectAll();
+        this.getSelectedRowsData().done((selectedData) => {
+            selectedRowsData = selectedData;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.equal(selectedRowsData.length, 0, 'selected rows data count');
+    });
 });
 

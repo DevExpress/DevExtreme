@@ -21,6 +21,7 @@ import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
+import { EffectReturn } from '../../utils/effect_return.d';
 
 const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -50,8 +51,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
   return className.join(' ');
 };
 
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any
-export const viewFunction = (viewModel: Widget): any => (
+export const viewFunction = (viewModel: Widget): JSX.Element => (
   <div
     ref={viewModel.widgetRef}
     {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
@@ -75,8 +75,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() aria?: object = {};
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element;
 
   @OneWay() classes?: string | undefined = '';
 
@@ -90,14 +89,13 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
+  @Event() onKeyboardHandled?: (args: object) => void;
+
+  @Event() onVisibilityChange?: (args: boolean) => void;
+
   @Event() onFocusIn?: (e: Event) => void;
 
   @Event() onFocusOut?: (e: Event) => void;
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  @Event() onKeyboardHandled?: (args: any) => any | undefined;
-
-  @Event() onVisibilityChange?: (args: boolean) => undefined;
 }
 
 @Component({
@@ -119,7 +117,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   widgetRef!: HTMLDivElement;
 
   @Effect()
-  accessKeyEffect(): (() => void) | undefined {
+  accessKeyEffect(): EffectReturn {
     const namespace = 'UIFeedback';
     const { accessKey, focusStateEnabled, disabled } = this.props;
     const isFocusable = focusStateEnabled && !disabled;
@@ -140,7 +138,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  activeEffect(): (() => void) | undefined {
+  activeEffect(): EffectReturn {
     const {
       activeStateEnabled, activeStateUnit, disabled, onInactive,
       _feedbackShowTimeout, _feedbackHideTimeout, onActive,
@@ -171,7 +169,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  clickEffect(): (() => void) | undefined {
+  clickEffect(): EffectReturn {
     const { name, onClick, disabled } = this.props;
     const namespace = name;
 
@@ -191,7 +189,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  focusEffect(): (() => void) | undefined {
+  focusEffect(): EffectReturn {
     const {
       disabled, focusStateEnabled, name, onFocusIn, onFocusOut,
     } = this.props;
@@ -223,7 +221,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  hoverEffect(): (() => void) | undefined {
+  hoverEffect(): EffectReturn {
     const namespace = 'UIFeedback';
     const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
     const selector = activeStateUnit;
@@ -241,12 +239,12 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  keyboardEffect(): (() => void) | undefined {
+  keyboardEffect(): EffectReturn {
     const { focusStateEnabled, onKeyDown } = this.props;
 
     if (focusStateEnabled || onKeyDown) {
-      // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-      const id = keyboard.on(this.widgetRef, this.widgetRef, (e) => onKeyDown!(e));
+      const id = keyboard.on(this.widgetRef, this.widgetRef, (e): void => onKeyDown?.(e));
+
       return (): void => keyboard.off(id);
     }
 
@@ -254,7 +252,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  resizeEffect(): (() => void) | undefined {
+  resizeEffect(): EffectReturn {
     const namespace = `${this.props.name}VisibilityChange`;
     const { onDimensionChanged } = this.props;
 
@@ -267,17 +265,16 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   @Effect()
-  visibilityEffect(): (() => void) | undefined {
+  visibilityEffect(): EffectReturn {
     const { name, onVisibilityChange } = this.props;
     const namespace = `${name}VisibilityChange`;
 
     if (onVisibilityChange) {
       visibility.on(this.widgetRef,
-        // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-        () => onVisibilityChange!(true),
-        // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-        () => onVisibilityChange!(false),
+        (): void => onVisibilityChange(true),
+        (): void => onVisibilityChange(false),
         { namespace });
+
       return (): void => visibility.off(this.widgetRef, { namespace });
     }
 
@@ -340,7 +337,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     });
   }
 
-  get tabIndex(): number | undefined {
+  get tabIndex(): undefined | number {
     const { focusStateEnabled, disabled, tabIndex } = this.props;
     const isFocusable = focusStateEnabled && !disabled;
 
