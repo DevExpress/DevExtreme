@@ -39,12 +39,12 @@ const getCssClasses = (model: CheckBoxProps): string => {
   return combineClasses(classesMap);
 };
 
-const inkRippleConfig = (): InkRippleConfig => ({
+const inkRippleConfig: InkRippleConfig = {
   waveSizeCoefficient: 2.5,
   useHoldAnimation: false,
   wavesNumber: 2,
   isCentered: true,
-});
+};
 
 export const viewFunction = (viewModel: CheckBox): JSX.Element => {
   const { text, name } = viewModel.props;
@@ -82,7 +82,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.props.useInkRipple
-                && <InkRipple config={inkRippleConfig()} ref={viewModel.inkRippleRef} />}
+                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
     </Widget>
   );
 };
