@@ -8,6 +8,9 @@ const through = require('through2');
 const lazyPipe = require('lazypipe');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const fs = require('fs');
+const header = require('gulp-header');
+const rename = require('gulp-rename');
+const gulpEach = require('gulp-each');
 
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const context = require('./context.js');
@@ -131,5 +134,44 @@ gulp.task('renovation-npm-sass', gulp.parallel(() => {
         .src('icons/**/*', { base: '.' })
         .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
 }));
+
+gulp.task('generate-renovation-config', function() {
+    const pathToTemplate = 'js/bundles/modules/parts/widgets-base.js';
+    const resultPath = 'js/bundles/modules/parts/';
+    const resultFileName = 'widgets-base-renovation';
+
+    return gulp.src(pathToTemplate)
+        .pipe(rename(function(path) {
+            path.basename = resultFileName;
+        }))
+        .pipe(header('// !!! AUTO-GENERATED FILE, DO NOT EDIT.\n\n'))
+        .pipe(gulpEach(function(content, file, callback) {
+            let fileLines = content.split('\n');
+
+            renovatedComponents.forEach((component) => {
+                let isComponentExists = false;
+                const componentImport = `ui.dx${component.name} = require('../../../renovation/${component.pathInRenovationFolder}').default;`;
+
+                fileLines = fileLines.reduce((accumulator, line) => {
+                    if(line.indexOf(`dx${component.name} =`) !== -1) {
+                        isComponentExists = true;
+                        accumulator.push(componentImport);
+                    } else {
+                        accumulator.push(line);
+                    }
+                    return accumulator;
+                }, []);
+
+                if(!isComponentExists) {
+                    fileLines.push(componentImport);
+                }
+            });
+
+            const fileContext = fileLines.join('\n');
+            callback(null, fileContext);
+        }))
+        .pipe(eol('\n'))
+        .pipe(gulp.dest(resultPath));
+});
 
 gulp.task('renovation-npm', gulp.series('renovation-npm-sources', 'npm-check', 'renovation-npm-sass'));
