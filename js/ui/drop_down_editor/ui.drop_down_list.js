@@ -248,7 +248,6 @@ const DropDownList = DropDownEditor.inherit({
         this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
-        this._cachedPopupMinWidth = null;
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
@@ -745,11 +744,9 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
-    _updatePopupMinWidth() {
-        if(windowUtils.hasWindow() && this._popup && this._popup.option('minWidth') === this._cachedPopupMinWidth) {
-            const editorWidth = this.$element().outerWidth();
-            this._cachedPopupMinWidth = editorWidth;
-            this._setPopupOption('minWidth', editorWidth);
+    _updatePopupMinWidth(popupWidth = this.$element().outerWidth()) {
+        if(windowUtils.hasWindow() && this._popup) {
+            this._popup.overlayContent().css('minWidth', popupWidth);
         }
     },
 
@@ -758,7 +755,16 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _dimensionChanged: function() {
-        this._updatePopupMinWidth();
+        let popupWidth = this.option('dropDownOptions.width');
+        const popupMinWidth = this.option('dropDownOptions.minWidth');
+
+        if(popupWidth === null) {
+            popupWidth = undefined;
+        }
+
+        if(!typeUtils.isDefined(popupMinWidth)) {
+            this._updatePopupMinWidth(popupWidth);
+        }
         this._popup && this._updatePopupDimensions();
     },
 
@@ -828,6 +834,12 @@ const DropDownList = DropDownEditor.inherit({
             case 'hoverStateEnabled':
             case 'focusStateEnabled':
                 this._isDesktopDevice() && this._setListOption(args.name, args.value);
+                this.callBase(args);
+                break;
+            case 'dropDownOptions':
+                if(args.fullName === 'dropDownOptions.width') {
+                    this._dimensionChanged();
+                }
                 this.callBase(args);
                 break;
             case 'items':
