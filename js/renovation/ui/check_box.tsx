@@ -176,11 +176,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     this.wave(event, 'hideWave', 0);
   }
 
-  onWidgetClick(event: Event): void {
+  onWidgetClick(): void {
     const { readOnly, value } = this.props;
-
-    // TODO: remove it after actions support event pass
-    event?.stopPropagation();
 
     if (!readOnly) {
       this.props.value = !value;
