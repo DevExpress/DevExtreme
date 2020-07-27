@@ -1183,7 +1183,7 @@ QUnit.module('popup', moduleConfig, () => {
         });
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 0.1, 'overlay content width is correct');
+        assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 1.5, 'overlay content width is correct');
     });
 
     QUnit.test('popup width can be smaller than editor width if dropDownOptions.minWidth is defined by user (T916722)', function(assert) {
