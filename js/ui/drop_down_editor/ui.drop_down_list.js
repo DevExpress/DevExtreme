@@ -744,8 +744,11 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
-    _updatePopupMinWidth(popupWidth = this.$element().outerWidth()) {
+    _updatePopupMinWidth(popupWidth) {
         if(windowUtils.hasWindow() && this._popup) {
+            if(popupWidth === undefined) {
+                popupWidth = this.$element().outerWidth();
+            }
             this._popup.overlayContent().css('minWidth', popupWidth);
         }
     },
