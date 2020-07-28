@@ -43,10 +43,6 @@ gulp.task('transpile-prod-renovation', function() {
             const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
             callback(null, fileContext);
         })))
-        // .pipe(replace('require("./widgets-base")', `require("./${context.RENOVATION_WIDGETS_BASE}")`))
-        // .pipe(replace('require("./widgets-mobile")', `require("./${context.RENOVATION_WIDGETS_MOBILE}")`))
-        // .pipe(replace('import "./viz-old"', `import "./${context.RENOVATION_WIDGETS_VIZ}"`))
-        // .pipe(replace('require("./widgets-web")', `require("./${context.RENOVATION_WIDGETS_WEB}")`))
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
 });

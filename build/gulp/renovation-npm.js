@@ -8,9 +8,6 @@ const through = require('through2');
 const lazyPipe = require('lazypipe');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const fs = require('fs');
-const header = require('gulp-header');
-const rename = require('gulp-rename');
-const gulpEach = require('gulp-each');
 
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const context = require('./context.js');
@@ -135,71 +132,5 @@ gulp.task('renovation-npm-sass', gulp.parallel(() => {
         .src('icons/**/*', { base: '.' })
         .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
 }));
-
-function replaceToRenovation (components, content) {
-    let fileLines = content.split('\n');
-
-    components.forEach((component) => {
-        let isComponentExists = false;
-        const componentImport = `ui.dx${component.name} = require('../../../renovation/${component.pathInRenovationFolder}').default;`;
-
-        fileLines = fileLines.reduce((accumulator, line) => {
-            if(line.indexOf(`dx${component.name} =`) !== -1) {
-                isComponentExists = true;
-                accumulator.push(componentImport);
-            } else {
-                accumulator.push(line);
-            }
-            return accumulator;
-        }, []);
-
-        if(!isComponentExists) {
-            fileLines.push(componentImport);
-        }
-    });
-
-    return fileLines.join('\n');
-};
-
-function replaceFile (pathToTemplate, baseName, components, resultPath) {
-    return gulp.src(pathToTemplate)
-        .pipe(rename(function(path) { path.basename = baseName; }))
-        .pipe(header('// !!! AUTO-GENERATED FILE, DO NOT EDIT.\n\n'))
-        .pipe(gulpEach(function(content, file, callback) {
-            callback(null, replaceToRenovation(components, content));
-        }))
-        .pipe(eol('\n'))
-        .pipe(gulp.dest(resultPath));
-}
-
-gulp.task('generate-renovation-config', function() {
-    const resultPath = 'js/bundles/modules/parts/';
-    return merge(
-        replaceFile(
-            'js/bundles/modules/parts/widgets-base.js',
-            context.RENOVATION_WIDGETS_BASE,
-            renovatedComponents.base,
-            resultPath,
-        ),
-        replaceFile(
-            'js/bundles/modules/parts/viz-old.js',
-            context.RENOVATION_WIDGETS_VIZ,
-            renovatedComponents.viz,
-            resultPath,
-        ),
-        replaceFile(
-            'js/bundles/modules/parts/widgets-mobile.js',
-            context.RENOVATION_WIDGETS_MOBILE,
-            renovatedComponents.mobile,
-            resultPath,
-        ),
-        replaceFile(
-            'js/bundles/modules/parts/widgets-web.js',
-            context.RENOVATION_WIDGETS_WEB,
-            renovatedComponents.web,
-            resultPath,
-        )
-    );
-});
 
 gulp.task('renovation-npm', gulp.series('renovation-npm-sources', 'npm-check', 'renovation-npm-sass'));

@@ -57,7 +57,7 @@ function createMainBatch() {
 }
 
 function createDefaultBatch() {
-    const tasks = [ 'clean', 'localization', 'generate-renovation-config', createMainBatch() ];
+    const tasks = [ 'clean', 'localization', createMainBatch() ];
     if(!TEST_CI) {
         tasks.push('npm', 'renovation-npm', 'themebuilder-npm');
     }
