@@ -24,7 +24,7 @@ ui.repaintFloatingActionButton = require('../../../ui/speed_dial_action/repaint_
 ui.dxActionSheet = require('../../../ui/action_sheet');
 ui.dxAutocomplete = require('../../../ui/autocomplete');
 ui.dxBox = require('../../../ui/box');
-ui.dxButton = require('../../../renovation/button.j').default;
+ui.dxButton = require('../../../renovation/ui/button.j').default;
 ui.dxDropDownButton = require('../../../ui/drop_down_button');
 ui.dxButtonGroup = require('../../../ui/button_group');
 ui.dxCalendar = require('../../../ui/calendar');
@@ -93,6 +93,7 @@ ui.dxDropDownEditor = require('../../../ui/drop_down_editor/ui.drop_down_editor'
 // Reports
 module.exports = ui;
 
-ui.dxWidget = require('../../../renovation/widget.j').default;
-ui.dxPager = require('../../../renovation/pager/pager.j').default;
-ui.dxItemLayout = require('../../../renovation/scheduler/appointment-tooltip/item-layout.j').default;
+ui.dxWidget = require('../../../renovation/ui/widget.j').default;
+ui.dxGridPager = require('../../../renovation/ui/pager/grid_pager.j').default;
+ui.dxDataGrid = require('../../../renovation/ui/data_grid/data_grid.j').default;
+ui.dxItemLayout = require('../../../renovation/ui/scheduler/appointment-tooltip/item-layout.j').default;
