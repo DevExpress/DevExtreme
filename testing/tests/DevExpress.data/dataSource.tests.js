@@ -418,47 +418,81 @@ QUnit.test('page index change', function(assert) {
 });
 
 QUnit.test('all fields with mapping', function(assert) {
-    const data = [
-        {
-            key: 1,
-            digit: 1,
-        },
-        {
-            key: 1,
-            digit: 3,
-            char: 'a'
-        },
-        {
-            array: [ 1, 2, 3 ]
-        }
-    ];
-
-    const store = new ArrayStore(data);
     const source = new DataSource({
-        store: store,
+        load: function() {
+            return [
+                {
+                    key: 1,
+                    items: [
+                        {
+                            id: 1,
+                            name: 'Test'
+                        }
+                    ],
+                    number: 1,
+                },
+                {
+                    key: 2,
+                    items: [
+                        { id: 2, b: 'b' }
+                    ],
+                    digit: 3,
+                    char: 'a'
+                },
+                {
+                    items: [
+                        { id: 3, a: 'a' }
+                    ],
+                    key: 3,
+                    array: [ 1, 2, 3 ]
+                }
+            ];
+        },
         map: item => {
             return item;
-        }
+        },
+        key: 'key',
+        group: 'id'
     });
 
     source.load();
-    assert.deepEqual(source.items(),
-        [
-            {
-                key: 1,
-                digit: 1,
-            },
-            {
-                key: 1,
-                digit: 3,
-                char: 'a'
-            },
-            {
-                array: [ 1, 2, 3 ]
-            }
-        ]
-    );
-
+    assert.deepEqual(source.items(), [
+        {
+            'items': [
+                {
+                    'id': 1,
+                    'name': 'Test'
+                }
+            ],
+            'key': 1,
+            'number': 1
+        },
+        {
+            'char': 'a',
+            'digit': 3,
+            'items': [
+                {
+                    'b': 'b',
+                    'id': 2
+                }
+            ],
+            'key': 2
+        },
+        {
+            'array': [
+                1,
+                2,
+                3
+            ],
+            'items': [
+                {
+                    'a': 'a',
+                    'id': 3
+                }
+            ],
+            'key': 3
+        }
+    ]);
 });
 
 QUnit.test('paginate option', function(assert) {

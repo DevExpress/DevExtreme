@@ -22,7 +22,10 @@ export const normalizeStoreLoadOptionAccessorArguments = (originalArguments) => 
 };
 
 const mapGroup = (group, level, mapper) => map(group, item => {
-    return { ...item, items: mapRecursive(item.items, level - 1, mapper) };
+    return {
+        ...item,
+        items: mapRecursive(item.items, level - 1, mapper)
+    };
 });
 
 const mapRecursive = (items, level, mapper) => {
