@@ -8,17 +8,5 @@
 * $name 10. Background color
 * $type color
 */
-$toolbar-bg: null !default;
-$toolbar-color: null !default;
-
-
-@if $mode == "light" {
-  $toolbar-bg: $base-bg !default;
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $mode == "dark" {
-  $toolbar-bg: $base-bg !default;
-  $toolbar-color: $base-text-color !default;
-}
-
+$toolbar-bg: $base-bg !default;
+$toolbar-color: $base-text-color !default;

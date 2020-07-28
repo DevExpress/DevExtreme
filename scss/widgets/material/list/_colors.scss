@@ -15,31 +15,31 @@ $list-group-color: null !default;
 * $name 20. Group border color
 * $type color
 */
-$list-border-color: null !default;
+$list-border-color: $base-border-color !default;
 
 /**
 * $name 20. Group header background color
 * $type color
 */
-$list-group-header-bg: null !default;
+$list-group-header-bg: color.change($base-bg, $alpha: 0) !default;
 
 /**
 * $name 10. Item text color
 * $type color
 */
-$list-normal-color: null !default;
+$list-normal-color: $base-text-color !default;
 
 /**
 * $name 25. Expanded group header text color
 * $type color
 */
-$list-expanded-group-color: null !default;
+$list-expanded-group-color: $base-accent !default;
 
 /**
 * $name 30. Hovered item background color
 * $type color
 */
-$list-item-hover-bg: null !default;
+$list-item-hover-bg: $base-hover-bg !default;
 
 /**
 * $name 30. Selected item state background color
@@ -48,109 +48,45 @@ $list-item-hover-bg: null !default;
 $list-item-selected-bg: null !default;
 $list-item-selected-hover-bg: null !default;
 $list-item-focused-selected-bg: null !default;
-$list-item-hover-color: null !default;
-$list-item-selected-color: null !default;
-$list-header-indicator-color: null !default;
+$list-item-hover-color: $base-hover-color !default;
+$list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
+$list-header-indicator-color: $base-icon-color !default;
 
 /**
 * $name 40. Active state item background color
 * $type color
 */
 $list-item-active-bg: null !default;
-$list-holdmenu-bg: null !default;
-$list-holdmenu-border-color: null !default;
-$list-holdmenu-shadow-color: null !default;
-$list-menu-button-default-color: null !default;
-$list-menu-button-default-bg: null !default;
-$list-menu-button-delete-bg: null !default;
-$list-button-delete-shadow-color: null !default;
-$list-item-ghost-bg: null !default;
-$list-item-ghost-color: null !default;
-$list-item-ghost-border-color: null !default;
-$list-item-ghost-shadow-color: null !default;
-$list-icon-color: null !default;
-$list-item-chevron-icon-color: null !default;
+$list-holdmenu-bg: $base-bg !default;
+$list-holdmenu-border-color: $list-border-color !default;
+$list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
+$list-menu-button-default-color: $button-default-color !default;
+$list-menu-button-default-bg: $button-default-bg !default;
+$list-menu-button-delete-bg: $base-danger !default;
+$list-button-delete-shadow-color: color.change($base-shadow-color, $alpha: 0.24) !default;
+$list-item-ghost-bg: $base-bg !default;
+$list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+$list-item-ghost-border-color: $base-accent !default;
+$list-item-ghost-shadow-color: $base-shadow-color !default;
+$list-icon-color: $base-icon-color !default;
+$list-item-chevron-icon-color: $base-spin-icon-color !default;
 $list-item-icon-toggle-delete-bg: null !default;
 
 @if $mode == "light" {
-
   $list-group-color: $base-text-color !default;
-  $list-border-color: $base-border-color !default;
-
-  $list-group-header-bg: color.change($base-bg, $alpha: 0) !default;
-  $list-normal-color: $base-text-color !default;
-  $list-expanded-group-color: $base-accent !default;
-  $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: color.change(#000, $alpha: 0.12) !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
   $list-item-focused-selected-bg: color.change(#000, $alpha: 0.18) !default;
-
-  $list-item-hover-color: $base-hover-color !default;
-  $list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
-  $list-header-indicator-color: $base-icon-color !default;
-
   $list-item-active-bg: darken($base-bg, 20%) !default;
-  $list-holdmenu-bg: $base-bg !default;
-  $list-holdmenu-border-color: $list-border-color !default;
-  $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-bg: $base-danger !default;
-  $list-button-delete-shadow-color: color.change($base-shadow-color, $alpha: 0.24) !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
-  $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-  $list-item-chevron-icon-color: $base-spin-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/light/list/delete.png') !default;
 }
 
 @if $mode == "dark" {
-
-  $list-border-color: $base-border-color !default;
-
-  $list-group-header-bg: color.change($base-bg, $alpha: 0) !default;
-
-  $list-normal-color: $base-text-color !default;
-
   $list-group-color: color.change($base-text-color, $alpha: 0.6) !default;
-
-  $list-expanded-group-color: $base-accent !default;
-
-  $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: color.change(#6e6e80, $alpha: 0.5) !default;
   $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
   $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;
-
-  $list-item-hover-color: $base-hover-color !default;
-  $list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
-  $list-header-indicator-color: $base-icon-color !default;
-
   $list-item-active-bg: lighten($base-bg, 20%) !default;
-  $list-holdmenu-bg: $base-bg !default;
-  $list-holdmenu-border-color: $list-border-color !default;
-  $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-bg: $base-danger !default;
-  $list-button-delete-shadow-color: color.change($base-shadow-color, $alpha: 0.24) !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
-  $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-  $list-item-chevron-icon-color: $base-spin-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/dark/list/delete.png') !default;
 }
 

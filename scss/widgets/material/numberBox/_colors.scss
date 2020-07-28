@@ -6,19 +6,4 @@
 
 // adduse
 
-
-$numberbox-spin-icon-color: null !default;
-
-
-@if $mode == "light" {
-
-
-  $numberbox-spin-icon-color: $base-spin-icon-color !default;
-}
-
-@if $mode == "dark" {
-
-
-  $numberbox-spin-icon-color: $base-spin-icon-color !default;
-}
-
+$numberbox-spin-icon-color: $base-spin-icon-color !default;
