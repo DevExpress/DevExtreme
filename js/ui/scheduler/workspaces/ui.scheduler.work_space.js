@@ -146,10 +146,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             if(this._focusedCells && this._focusedCells.length) {
                 const $itemElement = $(this.option('focusedElement'));
-                const $cellElement = $itemElement.length ? $itemElement : this._focusedCells;
+                // const $cellElement = $itemElement.length ? $itemElement : this._focusedCells;
+                const $cellElement = $itemElement.length ? $($itemElement) : $(this._focusedCells);
 
                 e.target = this._focusedCells;
                 this._showPopup = true;
+                // debugger;
                 this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($cellElement) });
             }
         };
@@ -1008,6 +1010,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.option('renovateRender')) {
             this._renderRWorkspace();
+            console.log('hi');
         } else {
             this._renderTimePanel();
             this._renderGroupAllDayPanel();
@@ -1275,8 +1278,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _showAddAppointmentPopup($cell) {
-        const firstCellData = this.getCellData($cell.first());
-        const lastCellData = this.getCellData($cell.last());
+        console.log('_showAddAppointmentPopup');
+        const firstCellData = this.getCellData($($cell.first()));
+        const lastCellData = this.getCellData($($cell.last()));
+        // const firstCellData = this.getCellData($cell.first());
+        // const lastCellData = this.getCellData($cell.last());
 
         const args = {
             startDate: this.invoke('convertDateByTimezoneBack', firstCellData.startDate) || firstCellData.startDate,
@@ -2222,10 +2228,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $focusedCells = this._getAllFocusedCells();
         let result = [];
 
+        // console.log($focusedCells);
         if($focusedCells.length > 1) {
             result = this._getMultipleCellsData($focusedCells);
         } else {
-            const data = this.getCellData($focusedCells);
+            // console.log('somehow we are here');
+            const data = this.getCellData($($focusedCells[0]));
             data && result.push(data);
         }
 
@@ -2236,15 +2244,33 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = [];
 
         for(let i = 0; i < $cells.length; i++) {
-            data.push(elementData($cells[i], CELL_DATA));
+            // data.push(this.getCellData($($cells[i])));
+            data.push(this.getCellData($cells[i]));
         }
 
         return data;
     }
 
     getCellData($cell) {
-        const data = $cell[0] ? elementData($cell[0], CELL_DATA) : undefined;
+        let data;
+        if($cell[0]) {
+            if(this.option('renovateRender')) {
+                const rowIndex = $cell.parent().index();
+                const columnIndex = $cell.index();
+
+                data = this._getCellData(undefined, rowIndex, columnIndex).value;
+            }
+            if(!this.option('renovateRender')) {
+                data = elementData($cell[0], CELL_DATA);
+            }
+            console.log(data);
+        }
+
         return extend(true, {}, data);
+
+
+        // const data = $cell[0] ? elementData($cell[0], CELL_DATA) : undefined;
+        // return extend(true, {}, data);
     }
 
     _getHorizontalMax(groupIndex) {
@@ -2369,7 +2395,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getDataByDroppableCell() {
-        const cellData = this.getCellData(this._getDroppableCell());
+        // console.log(this._getDroppableCell());
+        const cellData = this.getCellData($(this._getDroppableCell()));
+        // const cellData = this.getCellData(this._getDroppableCell());
+        // console.log(cellData);
         const allDay = cellData.allDay;
         const startDate = cellData.startDate;
         const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
