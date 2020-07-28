@@ -1,4 +1,5 @@
 import { extend } from '../../core/utils/extend';
+import errors from '../widget/ui.errors';
 
 const PROPERTY_NAMES = {
     startDate: 'startDate',
@@ -76,6 +77,10 @@ class AppointmentAdapter {
     }
 
     calculateStartDate(pathTimeZoneConversion) {
+        if(!this.startDate || isNaN(this.startDate.getTime())) {
+            throw errors.Error('E1032', this.text);
+        }
+
         return this.calculateDate(this.startDate, this.startDateTimeZone, pathTimeZoneConversion);
     }
 
@@ -84,7 +89,7 @@ class AppointmentAdapter {
     }
 
     calculateDate(date, appointmentTimeZone, pathTimeZoneConversion) {
-        if(!date) { // TODO:
+        if(!date) { // TODO: E1032 should be trown only for startDate above
             return undefined;
         }
 

@@ -56,8 +56,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const allDay = this.isAllDay(appointment);
         const isRecurring = !!adapter.recurrenceRule;
 
-        const appointmentStartDate = this.startDate(appointment, true); // TODO
-        const appointmentEndDate = this.endDate(appointment); // TODO
+        // const appointmentStartDate = this.startDate(appointment, true);
+        // const appointmentEndDate = this.endDate(appointment);
+        // NOTE: startDate(...) method contains comparison with rangeStartDate
+
+        const appointmentStartDate = adapter.calculateStartDate('toGrid');
+        const appointmentEndDate = adapter.calculateEndDate('toGrid');
 
         const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
@@ -101,8 +105,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 height: resultHeight,
                 width: width,
                 allDay: allDay,
-                originalAppointmentStartDate: adapter.startDate, // TODO: remove
-                originalAppointmentEndDate: adapter.endDate, // TODO: remove
+                // originalAppointmentStartDate: adapter.startDate, // TODO: remove
+                // originalAppointmentEndDate: adapter.endDate, // TODO: remove
                 endDate: this.endDate(appointment, currentSetting, isRecurring),
                 appointmentReduced: appointmentReduced
             });
