@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  ComponentBindings, JSXComponent, Event, OneWay, Component, Method, Ref,
+  ComponentBindings, JSXComponent, Event, TwoWay, OneWay, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import { GetHtmlElement, FullPageSize } from '../common/types.d';
@@ -41,7 +41,7 @@ type PageSize = number;// | FullPageSize;
 export class PageSizeSelectorProps {
   @OneWay() isLargeDisplayMode?: boolean = true;
 
-  @OneWay() pageSize?: number = 5;
+  @TwoWay() pageSize?: number = 5;
 
   @OneWay() pageSizes?: PageSize[] = [5, 10];
 

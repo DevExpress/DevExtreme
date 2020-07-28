@@ -5,11 +5,11 @@ import { getWindow } from '../core/utils/window';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
-import { addNamespace, isDxMouseWheelEvent, eventData } from '../events/utils';
+import { addNamespace, eventData } from '../events/utils';
 import pointerEvents from '../events/pointer';
 import scrollEvents from '../ui/scroll_view/ui.events.emitter.gesture.scroll';
 import sizeUtils from '../core/utils/size';
-import { allowScroll } from './text_box/utils.scroll';
+import { allowScroll, prepareScrollData } from './text_box/utils.scroll';
 import TextBox from './text_box';
 
 // STYLE textArea
@@ -108,19 +108,7 @@ const TextArea = TextBox.inherit({
     _renderScrollHandler: function() {
         this._eventY = 0;
         const $input = this._input();
-
-        const initScrollData = {
-            validate: (e) => {
-                if(isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
-                    if(allowScroll($input, -e.delta, e.shiftKey)) {
-                        e._needSkipEvent = true;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-        };
+        const initScrollData = prepareScrollData($input, true);
 
         eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
         eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));

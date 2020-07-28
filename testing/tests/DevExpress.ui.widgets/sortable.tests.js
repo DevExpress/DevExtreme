@@ -2170,7 +2170,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
         // act
         const pointer = pointerMock(sortable1.$element().children().eq(0));
-        pointer.start().down().move(350, 0).move(50, 0).move(-50).move(-350);
+        pointer.start().down().move(350, 0).move(50, 0).move(-350).move(-50);
 
         // assert
         const items1 = $(sortable1.$element()).children();
@@ -2179,7 +2179,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         assert.strictEqual(items1[2].style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'items1 3 is not moved');
     });
 
-    QUnit.test('Items should be moved after leave sortable if group is defined', function(assert) {
+    QUnit.test('Items should not be moved after leave sortable if group is defined', function(assert) {
         // arrange
         const sortable = this.createSortable({
             group: 'shared',
@@ -2193,8 +2193,8 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         // assert
         const items = $(sortable.$element()).children();
         assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
-        assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
-        assert.strictEqual(items[2].style.transform, 'translate(0px, -30px)', 'items 3 is moved up');
+        assert.strictEqual(items[1].style.transform, '', 'items 2 is not moved');
+        assert.strictEqual(items[2].style.transform, '', 'items 3 is not moved');
     });
 
     QUnit.test('Items should not be moved after leave sortable if group is not defined', function(assert) {

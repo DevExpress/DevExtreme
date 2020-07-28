@@ -56,7 +56,15 @@ describe('PagerContent', () => {
       expect((pagesContainer.instance() as unknown as Element).className).toEqual('dx-pages');
       expect(pagesContainer.children()).toHaveLength(2);
       expect(tree.find(PageIndexSelector)).toHaveLength(1);
+      expect(tree.find(InfoText)).toHaveLength(1);
       expect(pagesContainer.childAt(0).props()).toEqual({
+        children: [],
+        infoText: 'infoText',
+        pageCount: 50,
+        pageIndex: 2,
+        totalCount: 100,
+      });
+      expect(pagesContainer.childAt(1).props()).toEqual({
         children: [],
         isLargeDisplayMode: true,
         hasKnownLastPage: true,
@@ -67,14 +75,6 @@ describe('PagerContent', () => {
         pagesCountText: 'pagesCountText',
         rtlEnabled: true,
         showNavigationButtons: true,
-        totalCount: 100,
-      });
-      expect(tree.find(InfoText)).toHaveLength(1);
-      expect(pagesContainer.childAt(1).props()).toEqual({
-        children: [],
-        infoText: 'infoText',
-        pageCount: 50,
-        pageIndex: 2,
         totalCount: 100,
       });
     });
@@ -158,7 +158,7 @@ describe('PagerContent', () => {
       expect(tree.instance()).toBe(parentRef.current);
       expect(tree.childAt(0).instance()).toBe(pageSizesRef.current);
       expect(tree.childAt(1).instance()).toBe(pagesRef.current);
-      expect(tree.childAt(1).childAt(1).instance()).toBe(infoTextRef.current);
+      expect(tree.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);
     });
   });
 

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Event, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay, Fragment,
 } from 'devextreme-generator/component_declaration/common';
 
 import { LightButton } from '../common/light_button';
@@ -77,7 +77,7 @@ export class PageIndexSelectorProps {
 
   @OneWay() pageCount?: number = 10;
 
-  @OneWay() pageIndex?: number = 0;
+  @TwoWay() pageIndex?: number = 0;
 
   @Event() pageIndexChange?: (value: number) => void; // commonUtils.noop
 
@@ -108,7 +108,7 @@ export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
 
   private canNavigateToPage(pageIndex: number): boolean {
     if (!this.props.hasKnownLastPage) {
-      return true;
+      return pageIndex >= 0;
     }
     return (pageIndex >= 0 && pageIndex <= (this.props.pageCount as number) - 1);
   }
@@ -151,7 +151,7 @@ export class PageIndexSelector extends JSXComponent(PageIndexSelectorProps) {
 
   pageIndexChange(pageIndex: number): void {
     if (this.canNavigateToPage(pageIndex)) {
-      this.props.pageIndexChange?.(pageIndex);
+      this.props.pageIndex = pageIndex;
     }
   }
 

@@ -172,6 +172,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated
      */
     onExported?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any }) => any);
     /**
@@ -198,6 +199,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated
      */
     onFileSaving?: ((e: { component?: dxPivotGrid, element?: dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
     /**
@@ -317,6 +319,7 @@ export default class dxPivotGrid extends Widget {
     /**
      * @docid dxPivotGridMethods.exportToExcel
      * @publicName exportToExcel()
+     * @deprecated excelExporter.exportPivotGrid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

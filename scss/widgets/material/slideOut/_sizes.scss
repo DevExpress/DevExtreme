@@ -2,12 +2,4 @@
 
 // adduse
 
-$material-slideout-menu-icon-oversize: null !default;
-
-@if $size == "default" {
-  $material-slideout-menu-icon-oversize: 8px;
-}
-
-@else if $size == "compact" {
-  $material-slideout-menu-icon-oversize: 8px;
-}
+$material-slideout-menu-icon-oversize: 8px;

@@ -47,6 +47,15 @@ export const viewFunction = ({
         className={PAGER_PAGES_CLASS}
         style={{ visibility: pagesContainerVisibility }}
       >
+        {infoVisible && (
+        <InfoText
+          ref={infoTextRef as any}
+          infoText={infoText}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          totalCount={totalCount}
+        />
+        )}
         <PageIndexSelector
           hasKnownLastPage={hasKnownLastPage}
           isLargeDisplayMode={isLargeDisplayMode}
@@ -59,15 +68,6 @@ export const viewFunction = ({
           showNavigationButtons={showNavigationButtons}
           totalCount={totalCount}
         />
-        {infoVisible && (
-        <InfoText
-          ref={infoTextRef as any}
-          infoText={infoText}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-        />
-        )}
       </div>
     )}
   </div>

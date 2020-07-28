@@ -13,8 +13,9 @@ $filemanager-file-actions-button-top-bottom-padding: null !default;
 $filemanager-dirs-tree-icon-margin-bottom: null !default;
 $filemanager-large-icon-size: null !default;
 $filemanager-large-icon-button-content-padding: null !default;
-$filemanager-progress-panel-padding-top: null !default;
 $filemanager-progress-box-button-close-margin-top: null !default;
+
+$filemanager-progress-panel-padding-top: 6px;
 
 @if $size == "default" {
   $filemanager-toolbar-separator-height: 36px;
@@ -28,7 +29,6 @@ $filemanager-progress-box-button-close-margin-top: null !default;
   $filemanager-dirs-tree-icon-margin-bottom: 0;
   $filemanager-large-icon-size: 22px;
   $filemanager-large-icon-button-content-padding: 4px;
-  $filemanager-progress-panel-padding-top: 6px;
   $filemanager-progress-box-button-close-margin-top: 9px;
 }
 
@@ -44,7 +44,6 @@ $filemanager-progress-box-button-close-margin-top: null !default;
   $filemanager-dirs-tree-icon-margin-bottom: 1px;
   $filemanager-large-icon-size: 18px;
   $filemanager-large-icon-button-content-padding: 3px;
-  $filemanager-progress-panel-padding-top: 6px;
   $filemanager-progress-box-button-close-margin-top: 6px;
 }
 

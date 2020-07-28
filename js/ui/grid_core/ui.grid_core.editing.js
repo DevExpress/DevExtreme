@@ -452,7 +452,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 const $container = $(container);
 
                 if(options.rowType === 'data') {
-                    options.rtlEnabled = this.option('rtlEnabled');
                     const buttons = this._getEditingButtons(options);
 
                     this._renderEditingButtons($container, buttons, options);
@@ -2240,7 +2239,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     e.event.preventDefault();
                     e.event.stopPropagation();
                 }));
-                options.rtlEnabled ? $container.prepend($button, '&nbsp;') : $container.append($button, '&nbsp;');
+                $container.append($button, '&nbsp;');
             }
         },
 

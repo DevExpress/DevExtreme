@@ -18,9 +18,9 @@ DevExpress.VERSION = require('../../core/version');
 
 DevExpress.Class = require('../../core/class');
 DevExpress.DOMComponent = require('../../core/dom_component');
-///#DEBUG
+
 DevExpress.Component = require('../../core/component');
-///#ENDDEBUG
+
 DevExpress.registerComponent = require('../../core/component_registrator');
 DevExpress.devices = require('../../core/devices');
 

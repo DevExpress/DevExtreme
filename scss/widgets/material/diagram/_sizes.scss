@@ -5,7 +5,6 @@
 $diagram-toolbox-width: null !default;
 $diagram-toolbox-h-padding: null !default;
 $diagram-toolbox-accordion-v-padding: null !default;
-$diagram-toolbox-input-margin: null !default;
 $diagram-toolbox-input-h-padding: null !default;
 $diagram-toolbox-input-v-padding: null !default;
 $diagram-toolbox-input-image-size: null !default;
@@ -22,11 +21,12 @@ $diagram-small-editor-width: null !default;
 $diagram-medium-editor-width: null !default;
 $diagram-large-editor-width: null !default;
 
+$diagram-toolbox-input-margin: 2px;
+
 @if $size == "default" {
   $diagram-toolbox-width: 156px;
   $diagram-toolbox-h-padding: 12px;
   $diagram-toolbox-accordion-v-padding: 8px;
-  $diagram-toolbox-input-margin: 2px;
   $diagram-toolbox-input-h-padding: 9px;
   $diagram-toolbox-input-v-padding: 12px;
   $diagram-toolbox-input-image-size: 18px;
@@ -52,7 +52,6 @@ $diagram-large-editor-width: null !default;
   $diagram-toolbox-width: 130px;
   $diagram-toolbox-h-padding: 10px;
   $diagram-toolbox-accordion-v-padding: 6px;
-  $diagram-toolbox-input-margin: 2px;
   $diagram-toolbox-input-h-padding: 8px;
   $diagram-toolbox-input-v-padding: 8px;
   $diagram-toolbox-input-image-size: 14px;
