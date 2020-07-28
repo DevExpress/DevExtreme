@@ -29,6 +29,21 @@ function getValidationErrorMessage(validationErrors): string {
 
 export default class CheckBox extends Component {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  _$validationMessage: any;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  _validationMessage: any;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  showValidationMessageTimeout: any;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  validationRequest: any;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  _valueChangeAction: any;
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   getProps(): any {
     const props = super.getProps();
     props.onFocusIn = (): void => {
