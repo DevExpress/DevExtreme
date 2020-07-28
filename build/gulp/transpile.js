@@ -23,7 +23,8 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-const renovatedFileNames = renovatedComponents.map(component => component.name);
+const renovationComponentsAll = renovatedComponents.base.concat(renovatedComponents.web, renovatedComponents.viz, renovatedComponents.mobile);
+const renovatedFileNames = renovationComponentsAll.map(component => component.name);
 
 function isOldComponentRenovated(file) {
     const isRenovatedName = !!file.basename.match(new RegExp(renovatedFileNames.map(fileName => ('^' + fileName + '\\b')).join('|'), 'i')); // only renovated file names
@@ -38,11 +39,14 @@ gulp.task('transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(gulpIf(isOldComponentRenovated, gulpEach((content, file, callback) => {
-            const component = renovatedComponents.find(component => component.name.toLowerCase() === file.stem);
+            const component = renovationComponentsAll.find(component => component.name.toLowerCase() === file.stem);
             const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
             callback(null, fileContext);
         })))
-        .pipe(replace('require("./widgets-base")', `require("./${context.RENOVATION_WIDGETS_BASE}")`))
+        // .pipe(replace('require("./widgets-base")', `require("./${context.RENOVATION_WIDGETS_BASE}")`))
+        // .pipe(replace('require("./widgets-mobile")', `require("./${context.RENOVATION_WIDGETS_MOBILE}")`))
+        // .pipe(replace('import "./viz-old"', `import "./${context.RENOVATION_WIDGETS_VIZ}"`))
+        // .pipe(replace('require("./widgets-web")', `require("./${context.RENOVATION_WIDGETS_WEB}")`))
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
 });

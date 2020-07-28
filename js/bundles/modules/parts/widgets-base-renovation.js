@@ -95,5 +95,4 @@ module.exports = ui;
 
 ui.dxWidget = require('../../../renovation/ui/widget.j').default;
 ui.dxGridPager = require('../../../renovation/ui/pager/grid_pager.j').default;
-ui.dxDataGrid = require('../../../renovation/ui/data_grid/data_grid.j').default;
 ui.dxItemLayout = require('../../../renovation/ui/scheduler/appointment-tooltip/item-layout.j').default;

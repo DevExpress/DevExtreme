@@ -83,7 +83,8 @@ gulp.task('rename-renovation-folder', function(done) {
     });
 });
 
-const componentsExpr = renovatedComponents.map(component => ('dxr' + component.name)).join('|');
+const componentsExpr = renovatedComponents.web.concat(renovatedComponents.base, renovatedComponents.viz, renovatedComponents.mobile)
+    .map(component => ('dxr' + component.name)).join('|');
 
 gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
     return merge(
@@ -135,42 +136,70 @@ gulp.task('renovation-npm-sass', gulp.parallel(() => {
         .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
 }));
 
-gulp.task('generate-renovation-config', function() {
-    const pathToTemplate = 'js/bundles/modules/parts/widgets-base.js';
-    const resultPath = 'js/bundles/modules/parts/';
+function replaceToRenovation (components, content) {
+    let fileLines = content.split('\n');
 
+    components.forEach((component) => {
+        let isComponentExists = false;
+        const componentImport = `ui.dx${component.name} = require('../../../renovation/${component.pathInRenovationFolder}').default;`;
+
+        fileLines = fileLines.reduce((accumulator, line) => {
+            if(line.indexOf(`dx${component.name} =`) !== -1) {
+                isComponentExists = true;
+                accumulator.push(componentImport);
+            } else {
+                accumulator.push(line);
+            }
+            return accumulator;
+        }, []);
+
+        if(!isComponentExists) {
+            fileLines.push(componentImport);
+        }
+    });
+
+    return fileLines.join('\n');
+};
+
+function replaceFile (pathToTemplate, baseName, components, resultPath) {
     return gulp.src(pathToTemplate)
-        .pipe(rename(function(path) {
-            path.basename = context.RENOVATION_WIDGETS_BASE;
-        }))
+        .pipe(rename(function(path) { path.basename = baseName; }))
         .pipe(header('// !!! AUTO-GENERATED FILE, DO NOT EDIT.\n\n'))
         .pipe(gulpEach(function(content, file, callback) {
-            let fileLines = content.split('\n');
-
-            renovatedComponents.forEach((component) => {
-                let isComponentExists = false;
-                const componentImport = `ui.dx${component.name} = require('../../../renovation/${component.pathInRenovationFolder}').default;`;
-
-                fileLines = fileLines.reduce((accumulator, line) => {
-                    if(line.indexOf(`dx${component.name} =`) !== -1) {
-                        isComponentExists = true;
-                        accumulator.push(componentImport);
-                    } else {
-                        accumulator.push(line);
-                    }
-                    return accumulator;
-                }, []);
-
-                if(!isComponentExists) {
-                    fileLines.push(componentImport);
-                }
-            });
-
-            const fileContext = fileLines.join('\n');
-            callback(null, fileContext);
+            callback(null, replaceToRenovation(components, content));
         }))
         .pipe(eol('\n'))
         .pipe(gulp.dest(resultPath));
+}
+
+gulp.task('generate-renovation-config', function() {
+    const resultPath = 'js/bundles/modules/parts/';
+    return merge(
+        replaceFile(
+            'js/bundles/modules/parts/widgets-base.js',
+            context.RENOVATION_WIDGETS_BASE,
+            renovatedComponents.base,
+            resultPath,
+        ),
+        replaceFile(
+            'js/bundles/modules/parts/viz-old.js',
+            context.RENOVATION_WIDGETS_VIZ,
+            renovatedComponents.viz,
+            resultPath,
+        ),
+        replaceFile(
+            'js/bundles/modules/parts/widgets-mobile.js',
+            context.RENOVATION_WIDGETS_MOBILE,
+            renovatedComponents.mobile,
+            resultPath,
+        ),
+        replaceFile(
+            'js/bundles/modules/parts/widgets-web.js',
+            context.RENOVATION_WIDGETS_WEB,
+            renovatedComponents.web,
+            resultPath,
+        )
+    );
 });
 
 gulp.task('renovation-npm', gulp.series('renovation-npm-sources', 'npm-check', 'renovation-npm-sass'));
