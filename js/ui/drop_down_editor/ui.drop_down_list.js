@@ -745,7 +745,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupMinWidth(popupWidth) {
-        if(windowUtils.hasWindow() && this._popup) {
+        if(window && this._popup) {
             if(popupWidth === undefined) {
                 popupWidth = this.$element().outerWidth();
             }
@@ -757,15 +757,22 @@ const DropDownList = DropDownEditor.inherit({
         this._dimensionChanged();
     },
 
-    _dimensionChanged: function() {
-        let popupWidth = this.option('dropDownOptions.width');
-        const popupMinWidth = this.option('dropDownOptions.minWidth');
+    _getPopupWidth() {
+        const popupWidth = this.option('dropDownOptions.width');
 
         if(popupWidth === null) {
-            popupWidth = undefined;
-        } else if(typeof popupWidth === 'function') {
-            popupWidth = popupWidth();
+            return undefined;
         }
+        if(typeof popupWidth === 'function') {
+            return popupWidth();
+        }
+
+        return popupWidth;
+    },
+
+    _dimensionChanged: function() {
+        const popupWidth = this._getPopupWidth();
+        const popupMinWidth = this.option('dropDownOptions.minWidth');
 
         if(popupWidth === undefined) {
             this._setPopupOption('width', (this._getInputWidth.bind(this)));
