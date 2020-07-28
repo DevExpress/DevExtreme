@@ -249,7 +249,6 @@ const DropDownList = DropDownEditor.inherit({
         this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
-        this._cachedPopupMinWidth = null;
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
