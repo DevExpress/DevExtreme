@@ -1,3 +1,7 @@
+
+@forward "./variables";
+
+@use "./variables" as *;
 @use "sass:color";
 @use "./color" as extcolor;
 $color: null !default;

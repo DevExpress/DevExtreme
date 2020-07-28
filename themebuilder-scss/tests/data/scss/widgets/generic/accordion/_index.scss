@@ -3,17 +3,18 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 $font-file: "icons";
 
 .dx-accordion {
-    background-color: $base-font-family;
-    color: $accordion-title-color;
-    background-image: url(icons/#{$font-file}.woff2);
+  background-color: $base-font-family;
+  color: $accordion-title-color;
+  background-image: url(icons/#{$font-file}.woff2);
 
-    .from-base {
-        background-color: $accordion-item-title-opened-bg;
-        color: $base-accent;
-    }
+  .from-base {
+    background-color: $accordion-item-title-opened-bg;
+    color: $base-accent;
+  }
 }
