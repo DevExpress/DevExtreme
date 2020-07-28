@@ -821,8 +821,8 @@ class Diagram extends Widget {
         let containerKeySetter;
 
         const data = {
-            nodeDataSource: this._nodesOption && this._nodesOption.getItems(),
-            edgeDataSource: this._edgesOption && this._edgesOption.getItems(),
+            nodeDataSource: this._nodesOption && this._nodesOption.getMappedItems(),
+            edgeDataSource: this._edgesOption && this._edgesOption.getMappedItems(),
             nodeDataImporter: {
                 getKey: this._createOptionGetter('nodes.keyExpr'),
                 setKey: this._createOptionSetter('nodes.keyExpr'),
@@ -965,11 +965,11 @@ class Diagram extends Widget {
             this._beginUpdateDiagram();
             if(this._nodesOption) {
                 this._nodesOption.getDataSource().reload();
-                nodeDataSource = this._nodesOption.getItems();
+                nodeDataSource = this._nodesOption.getMappedItems();
             }
             if(this._edgesOption) {
                 this._edgesOption.getDataSource().reload();
-                edgeDataSource = this._edgesOption.getItems();
+                edgeDataSource = this._edgesOption.getMappedItems();
             }
             this._endUpdateDiagram(true);
             return { nodeDataSource, edgeDataSource };
