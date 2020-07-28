@@ -1186,12 +1186,11 @@ QUnit.module('popup', moduleConfig, () => {
         assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 1.5, 'overlay content width is correct');
     });
 
-    QUnit.test('popup width can be smaller than editor width if dropDownOptions.minWidth is defined by user (T916722)', function(assert) {
+    QUnit.test('popup width can be smaller than editor width (T916722)', function(assert) {
         $('#dropDownList').dxDropDownList({
             width: 500,
             dropDownOptions: {
-                width: 100,
-                minWidth: 100
+                width: 100
             },
             opened: true
         }).dxDropDownList('instance');
@@ -1200,7 +1199,7 @@ QUnit.module('popup', moduleConfig, () => {
         assert.strictEqual($overlayContent.outerWidth(), 100, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width 100% if dropDownOptions.width is not defined (T897820)', function(assert) {
+    QUnit.test('popup should have editor width if dropDownOptions.width is not defined (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
             opened: true
         }).dxDropDownList('instance');
@@ -1209,7 +1208,7 @@ QUnit.module('popup', moduleConfig, () => {
         assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width 100% if dropDownOptions.width is reset and minWidth is defined', function(assert) {
+    QUnit.test('popup should have editor width if dropDownOptions.width is reset and minWidth is defined', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
             width: 500,
             dropDownOptions: {
@@ -1226,7 +1225,7 @@ QUnit.module('popup', moduleConfig, () => {
         assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width 100% if dropDownOptions.width is undefined and minWidth is defined', function(assert) {
+    QUnit.test('popup should have editor width if dropDownOptions.width is undefined and minWidth is defined', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
             width: 500,
             dropDownOptions: {
