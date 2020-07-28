@@ -33,7 +33,7 @@ const mapRecursive = (items, level, mapper) => {
     return level ? mapGroup(items, level, mapper) : map(items, mapper);
 };
 
-export const mapDataForGrouping = (items, mapper, groupInfo) => {
+export const mapDataRespectingGrouping = (items, mapper, groupInfo) => {
     const level = groupInfo ? normalizeSortingInfo(groupInfo).length : 0;
 
     return mapRecursive(items, level, mapper);
