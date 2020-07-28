@@ -138,11 +138,10 @@ gulp.task('renovation-npm-sass', gulp.parallel(() => {
 gulp.task('generate-renovation-config', function() {
     const pathToTemplate = 'js/bundles/modules/parts/widgets-base.js';
     const resultPath = 'js/bundles/modules/parts/';
-    const resultFileName = 'widgets-base-renovation';
 
     return gulp.src(pathToTemplate)
         .pipe(rename(function(path) {
-            path.basename = resultFileName;
+            path.basename = context.RENOVATION_WIDGETS_BASE;
         }))
         .pipe(header('// !!! AUTO-GENERATED FILE, DO NOT EDIT.\n\n'))
         .pipe(gulpEach(function(content, file, callback) {

@@ -42,7 +42,7 @@ gulp.task('transpile-prod-renovation', function() {
             const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
             callback(null, fileContext);
         })))
-        .pipe(replace('require("./widgets-base")', 'require("./widgets-base-renovated")'))
+        .pipe(replace('require("./widgets-base")', `require("./${context.RENOVATION_WIDGETS_BASE}")`))
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
 });

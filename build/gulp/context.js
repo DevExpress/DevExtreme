@@ -22,5 +22,6 @@ module.exports = {
     TRANSPILED_PATH: 'artifacts/transpiled',
     TRANSPILED_PROD_PATH: 'artifacts/transpiled-npm',
     TRANSPILED_PROD_RENOVATION_PATH: 'artifacts/transpiled-renovation-npm',
+    RENOVATION_WIDGETS_BASE: 'widgets-base-renovation',
     EULA_URL: 'https://js.devexpress.com/Licensing/'
 };
