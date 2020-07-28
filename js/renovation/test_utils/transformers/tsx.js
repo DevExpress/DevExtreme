@@ -8,7 +8,7 @@ const addCreateElementImport = (src) => `import { h } from 'preact'; ${src}`;
 
 module.exports = {
     process(src, filename, config) {
-        return jestTransformer.process(filename.indexOf('testing/jest') > -1 ? src : addCreateElementImport(src), filename, config);
+        return jestTransformer.process(filename.indexOf('__tests__') > -1 ? src : addCreateElementImport(src), filename, config);
     },
     getCacheKey(fileData, filePath, configStr) {
         return getCacheKey(fileData, filePath, configStr, THIS_FILE);

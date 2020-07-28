@@ -6,7 +6,7 @@ import { convertRulesToOptions } from '../../../core/options/utils';
 import themes from '../../../ui/themes';
 import {
   clear as clearEventHandlers,
-} from '../../__tests__/events_mock';
+} from '../../test_utils/events_mock';
 import {
   CheckBox, CheckBoxProps, defaultOptionRules, viewFunction,
 } from '../check_box';
