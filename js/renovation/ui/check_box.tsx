@@ -206,9 +206,9 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   get aria(): object {
     const { readOnly, isValid } = this.props;
-    const checked = this.props.value;
+    const checked = !!this.props.value;
     // TODO: replace null with undefined after generator bug fix
-    const indeterminate = checked === null;
+    const indeterminate = this.props.value === null;
 
     return {
       role: 'checkbox',
