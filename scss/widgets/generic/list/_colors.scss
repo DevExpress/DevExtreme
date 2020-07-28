@@ -9,7 +9,7 @@
 * $name 20. Item border color
 * $type color
 */
-$list-border-color: null !default;
+$list-border-color: $base-border-color !default;
 
 /**
 * $name 20. Group header text color
@@ -27,7 +27,7 @@ $list-group-header-bg: null !default;
 * $name 10. Item text color
 * $type color
 */
-$list-normal-color: null !default;
+$list-normal-color: $base-text-color !default;
 
 /**
 * $name 30. Hovered item background color
@@ -53,7 +53,7 @@ $list-item-focused-selected-bg: null !default;
 * $type color
 */
 $list-focused-bg: null !default;
-$list-item-color: null !default;
+$list-item-color: $base-text-color !default;
 $list-item-hover-color: null !default;
 $list-item-selected-color: null !default;
 $list-item-focus-color: null !default;
@@ -64,401 +64,206 @@ $list-item-active-color: null !default;
 * $type color
 */
 $list-item-active-bg: null !default;
-$list-holdmenu-bg: null !default;
+$list-holdmenu-bg: $base-bg !default;
 $list-holdmenu-border-color: null !default;
 $list-holdmenu-shadow-color: null !default;
-$list-menu-button-default-color: null !default;
-$list-menu-button-default-bg: null !default;
-$list-menu-button-delete-color: null !default;
-$list-menu-button-delete-bg: null !default;
-$list-item-ghost-bg: null !default;
-$list-chevron-focus-color: null !default;
+$list-menu-button-default-color: $button-default-color !default;
+$list-menu-button-default-bg: $button-default-bg !default;
+$list-menu-button-delete-color: $button-danger-color !default;
+$list-menu-button-delete-bg: $button-danger-bg !default;
+$list-item-ghost-bg: $base-bg !default;
+$list-chevron-focus-color: $base-inverted-text-color !default;
 $list-item-ghost-color: null !default;
 $list-item-ghost-border-color: null !default;
-$list-item-ghost-shadow-color: null !default;
-$list-icon-color: null !default;
+$list-item-ghost-shadow-color: $base-shadow-color !default;
+$list-icon-color: $base-icon-color !default;
 $list-group-header-border-bottom: null !default;
 $list-group-header-default-padding-top: null !default;
 $list-group-header-compact-padding-top: null !default;
-$list-item-chevron-icon-color: null !default;
+$list-item-chevron-icon-color: $base-icon-color !default;
 $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "carmine" {
-
-  $list-border-color: $base-border-color !default;
-
   $list-group-color: $base-header-color !default;
-
   $list-group-header-bg: darken($base-bg, 2%) !default;
-  $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default; // #f05b41 => #ffb5a8
-
   $list-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
   $list-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
-
   $list-item-active-bg: $base-accent !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
 @if $color == "contrast" {
-
-  $list-border-color: $base-border-color !default;
-
   $list-group-header-bg: $base-inverted-bg !default;
-
-  $list-normal-color: $base-text-color !default;
-
   $list-group-color: $base-inverted-text-color !default;
-
   $list-item-hover-bg: $base-hover-color !default;
-
   $list-item-selected-bg: $base-inverted-bg !default;
   $list-item-selected-hover-bg: #3806ff !default;
-
   $list-item-focused-selected-bg: $base-inverted-bg !default;
-
   $list-focused-bg: $base-focus-color !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-text-color !default;
   $list-item-selected-color: $base-inverted-text-color !default;
   $list-item-focus-color: $base-text-color !default;
   $list-item-active-color: $base-inverted-text-color !default;
-
   $list-item-active-bg: $base-inverted-bg !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $base-border-color !default;
   $list-holdmenu-shadow-color: $base-shadow-color !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: $base-text-color !default;
   $list-item-ghost-border-color: $base-border-color !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 1px solid $list-border-color !default;
   $list-group-header-default-padding-top: 10px !default;
   $list-group-header-compact-padding-top: 5px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/contrast/list/delete.png') !default;
 }
 
 @if $color == "dark" {
-
-  $list-border-color: $base-border-color !default;
-  $list-normal-color: $base-text-color !default;
-
   $list-group-color: $list-normal-color !default;
-
   $list-group-header-bg: color.change(lighten($base-bg, 6.5%), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: $base-select-bg !default;
-
   $list-item-selected-hover-bg: color.change(#fff, $alpha: 0.09) !default;
   $list-item-focused-selected-bg: color.change($base-accent, $alpha: 0.7) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
-
   $list-item-active-bg: $base-accent !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: darken($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png') !default;
 }
 
 @if $color == "darkmoon" {
-
-  $list-border-color: $base-border-color !default;
-  $list-normal-color: $base-text-color !default;
-
   $list-group-color: $list-normal-color !default;
-
   $list-group-header-bg: color.change(darken($base-bg, 37%), $alpha: 0) !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: $base-select-bg !default;
-
   $list-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
   $list-item-focused-selected-bg: color.change($base-accent, $alpha: 0.76) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
-
   $list-item-active-bg: $base-accent !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: darken($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png') !default;
 }
 
 @if $color == "darkviolet" {
-
-  $list-border-color: $base-border-color !default;
-
   $list-group-color: $base-header-color !default;
-
   $list-group-header-bg: color.change(lighten($base-bg, 6.5%), $alpha: 0.05) !default;
-  $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
-
   $list-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
   $list-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
-
   $list-item-active-bg: #b88fff !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: darken($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png') !default;
 }
 
 @if $color == "greenmist" {
-
-  $list-border-color: $base-border-color !default;
-
   $list-group-color: $base-accent !default;
-
   $list-group-header-bg: color.change(darken($base-bg, 6.5%), $alpha: 0.05) !default;
-  $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: $base-select-bg !default;
-
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.2) !default;
   $list-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-inverted-text-color !default;
-
   $list-item-active-bg: $base-accent !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
 @if $color == "light" {
-
-  $list-border-color: $base-border-color !default;
-  $list-normal-color: $base-text-color !default;
-
   $list-group-color: $list-normal-color !default;
-
   $list-group-header-bg: color.change(darken($base-bg, 6.5%), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: $base-select-bg !default;
-
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
   $list-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
-
   $list-item-active-bg: $base-accent !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
 @if $color == "softblue" {
-
-  $list-border-color: $base-border-color !default;
-
   $list-group-color: $base-icon-color !default;
-
   $list-group-header-bg: darken($base-bg, 2%) !default; // #fff => #fafbfc
-  $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
-
   $list-item-selected-bg: $base-select-bg !default;
-
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.15) !default;
   $list-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $list-focused-bg: $base-focus-bg !default;
-  $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-hover-color !default;
   $list-item-selected-color: $base-select-color !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
-
   $list-item-active-bg: $base-accent !default;
-  $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-
-  $list-menu-button-default-color: $button-default-color !default;
-  $list-menu-button-default-bg: $button-default-bg !default;
-
-  $list-menu-button-delete-color: $button-danger-color !default;
-  $list-menu-button-delete-bg: $button-danger-bg !default;
-
-  $list-item-ghost-bg: $base-bg !default;
-  $list-chevron-focus-color: $base-inverted-text-color !default;
   $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-item-ghost-shadow-color: $base-shadow-color !default;
-
-  $list-icon-color: $base-icon-color !default;
-
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 

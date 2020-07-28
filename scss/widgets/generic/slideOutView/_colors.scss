@@ -5,56 +5,39 @@
 // adduse
 
 
-$slideoutview-content-border-color: null !default;
+$slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
 $slideoutview-bg: null !default;
 
 
 @if $color == "carmine" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 
 @if $color == "contrast" {
-
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-bg !default;
 }
 
 @if $color == "dark" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 
 @if $color == "darkmoon" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 
 @if $color == "darkviolet" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 
 @if $color == "greenmist" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 
 @if $color == "light" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 
 @if $color == "softblue" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
   $slideoutview-bg: $base-element-bg !default;
 }
 

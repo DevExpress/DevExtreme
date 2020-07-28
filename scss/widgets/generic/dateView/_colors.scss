@@ -4,74 +4,7 @@
 
 // adduse
 
-
-$dateview-border-color: null !default;
-$dateview-shadow-up: null !default;
-$dateview-shadow-down: null !default;
-$dateview-color: null !default;
-
-
-@if $color == "carmine" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "contrast" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "dark" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "darkmoon" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "darkviolet" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "greenmist" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "light" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $color == "softblue" {
-
-  $dateview-border-color: $base-border-color !default;
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
+$dateview-border-color: $base-border-color !default;
+$dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
+$dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
+$dateview-color: $base-text-color !default;
