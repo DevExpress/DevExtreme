@@ -70,23 +70,39 @@ describe('AppDayPanelLayout', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('should have correct height', () => {
-        const layout = new AllDayPanelLayout({ viewData: { groupedData: [] }, height: 100 });
+      it('height', () => {
+        const layout = new AllDayPanelLayout({
+          viewData: { groupedData: [] },
+          height: 100,
+        });
 
         expect(layout.style.height)
           .toBe('100px');
       });
 
-      it('should have correct allDayPanelData', () => {
+      it('allDayPanelData', () => {
         const viewData = {
           groupedData: [
-            { allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }] },
+            {
+              allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
+            },
           ],
         };
         const layout = new AllDayPanelLayout({ viewData });
 
         expect(layout.allDayPanelData)
           .toStrictEqual([{ startDate: new Date(2020, 6, 9, 0) }]);
+      });
+
+      it('style', () => {
+        const viewData = {
+          groupedData: [{ allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }] }],
+        };
+
+        const layout = new AllDayPanelLayout({ viewData, height: 100 });
+
+        expect(layout.style)
+          .toStrictEqual({ height: '100px' });
       });
     });
   });

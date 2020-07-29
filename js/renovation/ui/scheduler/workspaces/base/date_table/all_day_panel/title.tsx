@@ -4,7 +4,11 @@ import {
 import messageLocalization from '../../../../../../../localization/message';
 
 export const viewFunction = (viewModel: AllDayPanelTitle) => (
-  <div className={`dx-scheduler-all-day-title ${viewModel.props.className}`}>
+  <div
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...viewModel.restAttributes}
+    className={`dx-scheduler-all-day-title ${viewModel.props.className}`}
+  >
     {viewModel.text}
   </div>
 );
