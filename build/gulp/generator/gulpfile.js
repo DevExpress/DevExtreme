@@ -104,7 +104,7 @@ function processRenovationMeta() {
             fs.existsSync(meta.path));
 
     const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
-        widgetName: `dxr${meta.name}`,
+        widgetName: `dx${meta.name}`,
         ...meta,
         path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
     })), null, 2);

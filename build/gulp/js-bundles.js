@@ -32,15 +32,9 @@ const DEBUG_BUNDLES = BUNDLES.concat([
     '/bundles/dx.custom.js'
 ]);
 
-function processBundles(bundles) {
+function processBundles(bundles, pathPrefix) {
     return bundles.map(function(bundle) {
-        return context.TRANSPILED_PROD_PATH + bundle;
-    });
-}
-
-function processRenovationBundles(bundles) {
-    return bundles.map(function(bundle) {
-        return context.TRANSPILED_PROD_RENOVATION_PATH + bundle;
+        return pathPrefix + bundle;
     });
 }
 
@@ -48,7 +42,7 @@ function muteWebPack() {
 }
 
 gulp.task('js-bundles-prod-renovation', gulp.series('version-replace', function() {
-    return gulp.src(processRenovationBundles(BUNDLES))
+    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_RENOVATION_PATH))
         .pipe(named())
         .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
@@ -58,7 +52,7 @@ gulp.task('js-bundles-prod-renovation', gulp.series('version-replace', function(
 }));
 
 gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
-    return gulp.src(processBundles(BUNDLES))
+    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_PATH))
         .pipe(named())
         .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
@@ -73,10 +67,10 @@ const createDebugBundlesStream = function(watch) {
     let bundles;
     if(watch) {
         debugConfig = Object.assign({}, webpackConfigDev);
-        bundles = processRenovationBundles(DEBUG_BUNDLES);
+        bundles = processBundles(DEBUG_BUNDLES, 'js');
     } else {
         debugConfig = Object.assign({}, webpackConfig);
-        bundles = processRenovationBundles(DEBUG_BUNDLES);
+        bundles = processBundles(DEBUG_BUNDLES, context.TRANSPILED_PROD_PATH);
     }
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
