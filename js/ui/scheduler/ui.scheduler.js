@@ -2220,11 +2220,11 @@ class Scheduler extends Widget {
 
         let gridAppointmentList = appointmentList.map(source => {
             const startDate = this.timeZoneCalculator.createDate(source.startDate, {
-                appointmentTimeZone: adapter.timeZone,
+                appointmentTimeZone: adapter.startDateTimeZone,
                 path: 'toGrid'
             });
             const endDate = this.timeZoneCalculator.createDate(source.endDate, {
-                appointmentTimeZone: adapter.timeZone,
+                appointmentTimeZone: adapter.endDateTimeZone,
                 path: 'toGrid'
             });
 
