@@ -1896,10 +1896,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _cleanView() {
-        this.renovatedDateTable.dispose();
+        this.renovatedDateTable?.dispose();
         this.renovatedDateTable = undefined;
 
-        this.renovatedTimePanel.dispose();
+        this.renovatedTimePanel?.dispose();
         this.renovatedTimePanel = undefined;
 
         this._cleanCellDataCache();
