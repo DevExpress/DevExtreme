@@ -10,8 +10,7 @@ class ItemsOption extends Component {
 
     _dataSourceChangedHandler(newItems, e) {
         this._resetCache();
-        this._items = newItems;
-        this._mappedItems = this._items.map(item => Object.assign({}, item));
+        this._items = newItems.map(item => Object.assign({}, item));
         this._diagramWidget._onDataSourceChanged();
     }
     _dataSourceLoadingChangedHandler(isLoading) {
@@ -85,9 +84,6 @@ class ItemsOption extends Component {
     }
     hasItems() {
         return !!this._items;
-    }
-    getMappedItems() {
-        return this._mappedItems;
     }
 
     _getItemByKey(key) {
