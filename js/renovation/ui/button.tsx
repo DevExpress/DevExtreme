@@ -30,10 +30,10 @@ const getCssClasses = (model: ButtonProps): string => {
     text, icon, stylingMode, type, iconPosition,
   } = model;
   const classNames = ['dx-button'];
-  const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
+  const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
   classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
-  classNames.push(`dx-button-${type ?? 'normal'}`);
+  classNames.push(`dx-button-${type || 'normal'}`);
 
   text && classNames.push('dx-button-has-text');
   icon && classNames.push('dx-button-has-icon');
@@ -225,10 +225,10 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): object {
     const { text, icon } = this.props;
 
-    let label = text ?? icon;
+    let label = text || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
-      label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+      label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
 
     return {
@@ -244,7 +244,7 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return (icon || type === 'back') ? (icon ?? 'back') : '';
+    return (icon || type === 'back') ? (icon || 'back') : '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
