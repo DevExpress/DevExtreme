@@ -2320,7 +2320,7 @@ class Scheduler extends Widget {
             targetedAdapter.startDate = newStartDate;
             targetedAdapter.endDate = new Date(newStartDate.getTime() + adapter.duration);
 
-        } else {
+        } else if(settings) {
             targetedAdapter.startDate = settings.info.sourceAppointment.startDate;
             targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
         }
