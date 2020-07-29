@@ -30,10 +30,10 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef as any} className={className} {...restAttributes}>
+  <div ref={parentRef} className={className} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
-      ref={pageSizesRef as any}
+      ref={pageSizesRef}
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
@@ -43,13 +43,13 @@ export const viewFunction = ({
     )}
     {pagesContainerVisible && (
       <div
-        ref={pagesRef as any}
+        ref={pagesRef}
         className={PAGER_PAGES_CLASS}
         style={{ visibility: pagesContainerVisibility }}
       >
         {infoVisible && (
         <InfoText
-          ref={infoTextRef as any}
+          ref={infoTextRef}
           infoText={infoText}
           pageCount={pageCount}
           pageIndex={pageIndex}

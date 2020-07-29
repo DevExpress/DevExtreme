@@ -16,12 +16,12 @@ export default class Compiler {
 
   meta: ThemesMetadata = metadata;
 
-  userItems: Array<ConfigMetaItem> = [];
+  userItems: ConfigMetaItem[] = [];
 
   indexFileContent: string;
 
   compile(
-    items: Array<ConfigMetaItem>,
+    items: ConfigMetaItem[],
     options: sass.Options,
   ): Promise<CompilerResult> {
     this.changedVariables = {};
@@ -59,10 +59,10 @@ export default class Compiler {
 
   getMatchingUserItemsAsString(theme: string): string {
     const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
-    const themeKeys: Array<string> = meta.map((item) => item.Key);
+    const themeKeys: string[] = meta.map((item) => item.Key);
 
     return this.userItems
-      .filter((item) => themeKeys.indexOf(item.key) >= 0)
+      .filter((item) => themeKeys.includes(item.key))
       .map((item) => `${item.key}: ${item.value};`)
       .join('');
   }

@@ -12,7 +12,7 @@ describe('RowBase', () => {
     const render = (viewModel) => shallow(RowView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should pass className and style', () => {
       const row = render({ props: { className: 'custom-class' }, style: 'style' });

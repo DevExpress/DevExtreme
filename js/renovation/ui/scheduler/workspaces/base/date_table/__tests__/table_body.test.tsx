@@ -36,7 +36,7 @@ describe('DateTableBody', () => {
         cellTemplate,
         ...viewModel.props,
       },
-    } as any) as any);
+    }) as any);
 
     afterEach(() => jest.resetAllMocks());
 

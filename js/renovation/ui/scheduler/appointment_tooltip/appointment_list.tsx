@@ -15,14 +15,14 @@ import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
 } from './utils/default_functions';
 
-type ItemTemplateProps = {
+interface ItemTemplateProps {
   item: AppointmentItem;
   index: number;
   container: HTMLDivElement;
-};
-type ListItemProps = {
+}
+interface ListItemProps {
   itemData?: AppointmentItem;
-};
+}
 
 export const viewFunction = (viewModel: AppointmentList) => (
   <List

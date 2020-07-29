@@ -64,7 +64,7 @@ describe('Small pager pages', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue(null);
       const component = new PagesSmall({ pageCount: 100 });
       const numberBoxElement = {};
-      component.pageIndexRef = { getHtmlElement: () => numberBoxElement }as any;
+      component.pageIndexRef = { getHtmlElement: () => numberBoxElement } as any;
       component.updateWidth();
       expect(component.width).toBe(10 + 10 * 3);
     });
