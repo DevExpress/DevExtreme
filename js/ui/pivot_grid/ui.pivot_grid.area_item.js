@@ -4,6 +4,7 @@ import { getPublicElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
+import browser from '../../core/utils/browser';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -24,7 +25,10 @@ const getRealElementWidth = function(element) {
         }
     }
 
-    return width > 0 ? width : offsetWidth;
+    const elementWidth = width > 0 ? width : offsetWidth;
+    return browser.chrome
+        ? Math.floor(elementWidth)
+        : elementWidth;
 };
 
 function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
