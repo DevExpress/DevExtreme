@@ -66,20 +66,17 @@ describe('AppDayPanelLayout', () => {
       expect(layout)
         .toHaveLength(0);
     });
+
+    it('should render correct height', () => {
+      const layout = render({ style: { height: 100 } });
+
+      expect(layout.prop('style'))
+        .toStrictEqual({ height: 100 });
+    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('height', () => {
-        const layout = new AllDayPanelLayout({
-          viewData: { groupedData: [] },
-          height: 100,
-        });
-
-        expect(layout.style.height)
-          .toBe('100px');
-      });
-
       it('allDayPanelData', () => {
         const viewData = {
           groupedData: [
@@ -95,11 +92,7 @@ describe('AppDayPanelLayout', () => {
       });
 
       it('style', () => {
-        const viewData = {
-          groupedData: [{ allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }] }],
-        };
-
-        const layout = new AllDayPanelLayout({ viewData, height: 100 });
+        const layout = new AllDayPanelLayout({ height: 100 });
 
         expect(layout.style)
           .toStrictEqual({ height: '100px' });

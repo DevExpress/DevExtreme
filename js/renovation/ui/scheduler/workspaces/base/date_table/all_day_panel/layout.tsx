@@ -4,8 +4,9 @@ import {
 import { Table } from '../../table';
 import { AllDayPanelTableBody as TableBody } from './table_body';
 import { addHeightToStyle } from '../../../utils';
-import { GroupedViewData, ViewCellData } from '../../../types.d';
+import { ViewCellData } from '../../../types.d';
 import { AllDayPanelTitle as Title } from './title';
+import { LayoutProps } from '../../layout_props';
 
 export const viewFunction = (viewModel: AllDayPanelLayout) => (
   <Fragment>
@@ -28,10 +29,8 @@ export const viewFunction = (viewModel: AllDayPanelLayout) => (
 );
 
 @ComponentBindings()
-export class AllDayPanelLayoutProps {
+export class AllDayPanelLayoutProps extends LayoutProps {
   @OneWay() className?: string = '';
-
-  @OneWay() viewData?: GroupedViewData;
 
   @OneWay() height?: number = 25;
 
@@ -47,7 +46,7 @@ export class AllDayPanelLayoutProps {
 })
 export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
   get allDayPanelData(): ViewCellData[] | undefined {
-    return this.props.viewData?.groupedData[0].allDayPanel;
+    return this.props.viewData!.groupedData[0].allDayPanel;
   }
 
   get style(): object {
