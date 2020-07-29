@@ -1175,6 +1175,8 @@ QUnit.module('popup', moduleConfig, () => {
     });
 
     QUnit.test('popup should have "auto" width if dropDownOptions.width is set to auto (T897820)', function(assert) {
+        const paddingsSize = 4;
+
         $('#dropDownList').dxDropDownList({
             dropDownOptions: {
                 width: 'auto'
@@ -1183,8 +1185,9 @@ QUnit.module('popup', moduleConfig, () => {
         });
 
         const $emptyMessage = $(`.${EMPTY_MESSAGE_CLASS}`);
+        const emptyPopupWidth = $emptyMessage.outerWidth() + paddingsSize;
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.roughEqual($overlayContent.outerWidth(), $emptyMessage.outerWidth() + 4, 0.1, 'overlay content width is correct');
+        assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 0.1, 'overlay content width is correct');
     });
 
     QUnit.test('popup width can be smaller than editor width (T916722)', function(assert) {
