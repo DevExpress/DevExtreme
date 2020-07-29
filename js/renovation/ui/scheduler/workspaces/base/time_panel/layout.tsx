@@ -3,7 +3,6 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
-import { GroupedViewData } from '../../types.d';
 import { getKeyByDateAndGroup } from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
@@ -32,8 +31,6 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
 @ComponentBindings()
 export class TimePanelTableLayoutProps extends LayoutProps {
   @OneWay() className?: string;
-
-  @OneWay() viewData?: GroupedViewData;
 }
 
 @Component({
