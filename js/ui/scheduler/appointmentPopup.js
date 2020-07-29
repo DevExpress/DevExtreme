@@ -1,6 +1,6 @@
 import devices from '../../core/devices';
 import $ from '../../core/renderer';
-// import dateUtils from '../../core/utils/date';
+import dateUtils from '../../core/utils/date';
 import { Deferred, when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -13,7 +13,7 @@ import Popup from '../popup';
 import { APPOINTMENT_FORM_GROUP_NAMES, AppointmentForm } from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
 
-// const toMs = dateUtils.dateToMilliseconds;
+const toMs = dateUtils.dateToMilliseconds;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
