@@ -60,23 +60,25 @@ QUnit.module('zIndex conflicts', {
 
             const $shader = $drawer.find('.dx-drawer-shader');
             const shaderZIndex = window.getComputedStyle($shader[0]).zIndex;
-            assert.ok(isNumeric(shaderZIndex), `test is designed for shader ZIndex numeric value but '${shaderZIndex}' was found. Redesign this test for another approach.`);
+            if(!isNumeric(shaderZIndex)) {
+                assert.ok(false, `test is designed for shader ZIndex numeric value but '${shaderZIndex}' was found. Redesign this test for another approach.`);
+            }
 
             let recursionLevel = 0;
             const recursiveCheckZIndex = ($element) => {
-                if(recursionLevel > 100 || $element.hasClass('dx-hidden') || $element.hasClass('dx-state-invisible')) {
+                const currentElementStyle = getComputedStyle($element[0]);
+                if(recursionLevel > 100 || currentElementStyle.display === 'none') {
                     return;
                 }
-                const currentZIndex = window.getComputedStyle($element[0]).zIndex;
-                if(isNumeric(currentZIndex) && Number(currentZIndex) > Number(shaderZIndex)) {
-                    assert.ok(false, `'${shaderZIndex}' is shader z-index and it is overwritten by other z-Index: '${currentZIndex}', ${$element.prop('tagName')}(id:${$element.attr('id')})`);
+                if(isNumeric(currentElementStyle.zIndex) && Number(currentElementStyle.zIndex) > Number(shaderZIndex)) {
+                    assert.ok(false, `shader has '${shaderZIndex}' z-index but there z-index is greater: ${$element.prop('tagName')}(z-Index: ${currentElementStyle.zIndex}, id:${$element.attr('id')})`);
                 }
                 recursionLevel++;
                 $element.children().each((_, child) => recursiveCheckZIndex($(child)));
                 recursionLevel--;
             };
             recursiveCheckZIndex($($drawer.find('#view')));
-            assert.ok(true, 'at least one assertion');
+            assert.ok(true, 'one assert to fit the "at least one assertion" rule');
         }
 
         QUnit.test(`(${openedStateMode}) ColorBox_inner`, function(assert) {
