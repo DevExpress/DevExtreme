@@ -1609,6 +1609,9 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
+            if(dataArea.needWidthCorrection() && Math.abs(totalWidth - groupWidth) <= 2) {
+                groupWidth = totalWidth;
+            }
 
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);

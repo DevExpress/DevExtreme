@@ -25,10 +25,7 @@ const getRealElementWidth = function(element) {
         }
     }
 
-    const elementWidth = width > 0 ? width : offsetWidth;
-    return browser.chrome
-        ? Math.floor(elementWidth)
-        : elementWidth;
+    return width > 0 ? width : offsetWidth;
 };
 
 function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
@@ -391,7 +388,10 @@ exports.AreaItem = Class.inherit({
             colgroupElementHTML += '<col style="width: ' + columnWidth[i] + 'px">';
         }
         this._colgroupElement.html(colgroupElementHTML);
-        this._tableWidth = totalWidth - this._groupWidth > 0.01 ? Math.ceil(totalWidth) : totalWidth;
+        this._tableWidth = this.needWidthCorrection()
+            ? totalWidth
+            : totalWidth - this._groupWidth > 0.01 ? Math.ceil(totalWidth) : totalWidth;
+
         tableElement.style.width = this._tableWidth + 'px';
         tableElement.style.tableLayout = 'fixed';
     },
@@ -453,6 +453,10 @@ exports.AreaItem = Class.inherit({
         }
 
         this.tableElement().css(styles);
+    },
+
+    needWidthCorrection() { // T914454
+        return browser.chrome;
     },
 
     setVirtualContentParams: function(params) {
