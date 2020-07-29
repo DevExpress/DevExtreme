@@ -23,7 +23,6 @@
           {
             "Title": "Simple Array",
             "Name": "SimpleArray",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Local_Array/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Scripts/data/customers.js"
@@ -31,19 +30,18 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Ajax Request",
+            "Title": "JSON Data",
             "Name": "AjaxRequest",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Read-Only_Data_in_JSON_Format/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Content/SampleData/Customers.json"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Equivalents": "ajax request"
           },
           {
             "Title": "OData Service",
             "Name": "ODataService",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/OData/",
             "Widget": "DataGrid",
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding#odata",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/401022/devextreme-based-controls/concepts/bind-controls-to-data/odata",
@@ -52,13 +50,11 @@
           {
             "Title": "Custom Data Source",
             "Name": "CustomDataSource",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
             "Widget": "DataGrid",
             "DemoType": "Web",
             "Modules": "whatwg-fetch"
           },
           {
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
             "Title": "Web API Service",
             "Name": "WebAPIService",
             "Equivalents": "webapi",
@@ -73,7 +69,6 @@
             "DemoType": "Web"
           },
           {
-            "DocUrl": "Guide/Data_Layer/Data_Layer/#Data_Modification/Integration_with_Push_Services",
             "Title": "SignalR Service",
             "Name": "SignalRService",
             "Widget": "DataGrid",
@@ -165,7 +160,6 @@
           {
             "Title": "Row Editing and Editing Events",
             "Name": "RowEditingAndEditingEvents",
-            "DocUrl": "Guide/Widgets/DataGrid/Editing/#User_Interaction/Row_Mode",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
@@ -2049,6 +2043,15 @@
                     "Widget": "Diagram",
                     "DemoType": "Web",
                     "WideDemo": true
+                },
+                {
+                    "Title": "Templates with Editing",
+                    "Name": "CustomShapesWithTemplatesWithEditing",
+                    "DocUrl": "",
+                    "Widget": "Diagram",
+                    "DemoType": "Web",
+                    "WideDemo": true,
+                    "Badge": "New"
                 }
             ]
         },
@@ -2142,11 +2145,12 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Ajax Request",
+            "Title": "JSON Data",
             "Name": "AjaxRequest",
             "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Read-Only_Data_in_JSON_Format/",
             "Widget": "Charts",
-            "DemoType": "Viz"
+            "DemoType": "Viz",
+            "Equivalents": "ajax request"
           },
           {
             "Title": "Client-Side Data Processing",
@@ -3640,7 +3644,6 @@
           {
             "Title": "Tab Drag & Drop",
             "Name": "SortableClosableTabs",
-            "DocUrl": "Guide/Widgets/TabPanel/Overview/",
             "Widget": "TabPanel",
             "Equivalents": "Tab Drag and Drop",
             "Badge": "New",

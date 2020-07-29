@@ -83,6 +83,8 @@ System.config({
     'quill': 'npm:quill/dist/quill.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',
+    'preact': 'npm:preact/dist/preact.js',
+    'preact/hooks': 'npm:preact/hooks/dist/hooks.js',
 
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
     'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js'

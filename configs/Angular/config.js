@@ -22,7 +22,12 @@ System.config({
         'devextreme/dist/js/vectormap-data/*': {
             'esModule': true
         },
+		
         /**/
+		
+        'devextreme/localization.js': {
+            "esModule": true
+        }
     },
     paths: {
         'npm:': '../../../../node_modules/'
@@ -82,7 +87,9 @@ System.config({
         'quill': 'npm:quill/dist/quill.js',
         'devexpress-diagram': 'npm:devexpress-diagram',
         'devexpress-gantt': 'npm:devexpress-gantt',
-        'devextreme-angular': 'npm:devextreme-angular'
+        'devextreme-angular': 'npm:devextreme-angular',
+        'preact': 'npm:preact/dist/preact.js',
+        'preact/hooks': 'npm:preact/hooks/dist/hooks.js'
     },
     packages: {
         'app': {

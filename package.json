@@ -50,7 +50,8 @@
         "underscore": "1.5.1",
         "vue": "2.6.3",
         "whatwg-fetch": "2.0.4",
-        "zone.js": "0.10.2"
+        "zone.js": "0.10.2",
+        "preact": "^10.4.5"
     },
     "devDependencies": {
         "http-server": "latest"

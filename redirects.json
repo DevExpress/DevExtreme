@@ -2,6 +2,7 @@
     { "Widget": "Data_Grid", "NewWidget": "DataGrid" },
     { "Widget": "DataGrid", "Name": "FilterBuilder", "NewWidget": "DataGrid", "NewName": "FilterPanel" },
     { "Widget": "DataGrid", "Name": "CustomizeCommandColumns", "NewWidget": "DataGrid", "NewName": "CommandColumnCustomization" },
+    { "Widget": "DataGrid", "Name": "ExcelJS", "NewWidget": "DataGrid", "NewName": "ExcelJSCellCustomization" },
     { "Widget": "Tree_List", "NewWidget": "TreeList" },
     { "Widget": "Responsive_Box", "NewWidget": "ResponsiveBox" },
     { "Widget": "Action_Sheet", "NewWidget": "ActionSheet" },
