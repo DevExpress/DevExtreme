@@ -2315,7 +2315,7 @@ class Scheduler extends Widget {
 
         if(this._isAgenda()) {
             const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
-            const newStartDate = getStartDate(element, adapter.startDate).startDate;
+            const newStartDate = getStartDate($(element), adapter.startDate).startDate;
 
             targetedAdapter.startDate = newStartDate;
             targetedAdapter.endDate = new Date(newStartDate.getTime() + adapter.duration);
