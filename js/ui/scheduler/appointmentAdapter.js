@@ -44,12 +44,24 @@ class AppointmentAdapter {
         return this.scheduler.fire('getField', PROPERTY_NAMES.allDay, this.appointment);
     }
 
+    set allDay(value) {
+        this.scheduler.fire('setField', PROPERTY_NAMES.allDay, this.appointment, value);
+    }
+
     get text() {
         return this.scheduler.fire('getField', PROPERTY_NAMES.text, this.appointment);
     }
 
+    set text(value) {
+        this.scheduler.fire('setField', PROPERTY_NAMES.text, this.appointment, value);
+    }
+
     get description() {
         return this.scheduler.fire('getField', PROPERTY_NAMES.description, this.appointment);
+    }
+
+    set description(value) {
+        this.scheduler.fire('setField', PROPERTY_NAMES.description, this.appointment, value);
     }
 
     get startDateTimeZone() {

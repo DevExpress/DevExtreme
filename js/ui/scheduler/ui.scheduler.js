@@ -2757,27 +2757,29 @@ class Scheduler extends Widget {
 
     addAppointment(appointment) {
         const adapter = this.createAppointmentAdapter(appointment);
+        adapter.text = adapter.text || '';
 
-        if(!adapter.text) {
-            adapter.text = '';
-        }
+        const serializedAppointment = adapter.source(true);
 
         const addingOptions = {
-            appointmentData: adapter.source(true),
+            appointmentData: serializedAppointment,
             cancel: false
         };
 
-        this._actions['onAppointmentAdding'](addingOptions);
+        this._actions['onAppointmentAdding']({
+            appointmentData: serializedAppointment,
+            cancel: false
+        });
 
         return this._processActionResult(addingOptions, canceled => {
             if(canceled) {
                 return new Deferred().resolve();
             }
 
-            this._expandAllDayPanel(appointment);
+            this._expandAllDayPanel(serializedAppointment);
 
-            return this._appointmentModel.add(appointment)
-                .always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e));
+            return this._appointmentModel.add(serializedAppointment)
+                .always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], serializedAppointment, e));
         });
     }
 
