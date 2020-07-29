@@ -398,8 +398,8 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) { // TODO
-        // const targetedData = this.getTargetedAppointmentNew(config.itemData, config.itemElement);
-        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
+        const targetedData = this.getTargetedAppointmentNew(config.itemData, config.itemElement);
+        // const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
 
         return {
             appointmentData: config.itemData,
