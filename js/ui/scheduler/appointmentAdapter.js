@@ -1,5 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
+import objectUtils from '../../core/utils/object';
 
 const PROPERTY_NAMES = {
     startDate: 'startDate',
@@ -108,7 +109,8 @@ class AppointmentAdapter {
     }
 
     clone(options = undefined) {
-        const result = new AppointmentAdapter(this.scheduler, extend({}, this.appointment));
+        const result = new AppointmentAdapter(this.scheduler, objectUtils.deepExtendArraySafe({}, this.appointment)); // NOTE: deepExtendArraySafe works safer for embedded data
+        // const result = new AppointmentAdapter(this.scheduler, extend({}, this.appointment));
 
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);

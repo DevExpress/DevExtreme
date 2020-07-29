@@ -2325,9 +2325,8 @@ class Scheduler extends Widget {
             targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
         }
 
-        if(element) {
-            this.setTargetedAppointmentResources(targetedAdapter.source(), element, appointmentIndex);
-        }
+        element && this.setTargetedAppointmentResources(targetedAdapter.source(), element, appointmentIndex);
+
         return targetedAdapter.source();
     }
 
