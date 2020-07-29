@@ -9,7 +9,7 @@ import themes from 'ui/themes';
 import device from 'core/devices';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from 'core/dom_adapter';
-
+import { extend } from 'core/utils/extend';
 import 'ui/text_area';
 import 'ui/autocomplete';
 import 'ui/calendar';
@@ -451,6 +451,76 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     // assert
     assert.ok($testContainer.find('.dx-field-item .dx-numberbox').hasClass('dx-editor-underlined'), 'right class rendered');
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
+});
+
+[
+    { editorType: 'dxTextBox' },
+    { label: { text: 'label text' } },
+    { editorOptions: { width: 400 } },
+].forEach(testConfig => {
+    [true, false].forEach(useRepaint => {
+        const clone = (item) => JSON.parse(JSON.stringify(item));
+        QUnit.test(`Form.itemOption('group.item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
+            const item1 = {
+                editorType: 'dxDropDownBox',
+                dataField: 'item1',
+                label: { text: 'item1' },
+                editorOptions: { placeholder: 'test_placeHolder' }
+            };
+            const newItem1 = extend({
+                dataField: 'newItem1',
+                label: { text: 'new item1' },
+                editorOptions: { width: 300 }
+            }, testConfig);
+
+            const form = $('#form').dxForm({
+                items: [{
+                    itemType: 'group',
+                    caption: 'group1',
+                    items: [ clone(item1) ]
+                }]
+            }).dxForm('instance');
+
+            form.itemOption('group1.item1', clone(newItem1));
+            if(useRepaint) {
+                form.repaint();
+            }
+
+            if('editorType' in testConfig) {
+                assert.deepEqual(form.itemOption('group1.item1'), undefined, 'item1');
+                assert.deepEqual(form.itemOption('group1.newItem1'), extend(true, {}, newItem1, { editorType: testConfig.editorType || item1.editorType }), 'newItem1');
+            } else {
+                assert.deepEqual(form.itemOption('group1.item1'), extend(true, {}, item1, newItem1, { editorType: item1.editorType, dataField: item1.dataField }), 'item1');
+                assert.deepEqual(form.itemOption('group1.newItem1'), undefined, 'newItem1');
+            }
+        });
+
+        QUnit.test(`Form.itemOption('item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
+            const item1 = {
+                editorType: 'dxDropDownBox',
+                dataField: 'item1',
+                label: { text: 'item1' },
+                editorOptions: { placeholder: 'test_placeHolder' }
+            };
+            const newItem1 = extend({
+                dataField: 'newItem1',
+                label: { text: 'new item1' },
+                editorOptions: { width: 300 }
+            }, testConfig);
+
+            const form = $('#form').dxForm({
+                items: [ clone(item1) ]
+            }).dxForm('instance');
+
+            form.itemOption('item1', clone(newItem1));
+            if(useRepaint) {
+                form.repaint();
+            }
+
+            assert.deepEqual(form.itemOption('item1'), undefined, 'item1');
+            assert.deepEqual(form.itemOption('newItem1'), extend(true, {}, newItem1, { editorType: testConfig.editorType || item1.editorType }), 'newItem1');
+        });
+    });
 });
 
 
