@@ -72,10 +72,6 @@ class AppointmentAdapter {
         return !!this.appointment.disabled;
     }
 
-    get source() {
-        return this.appointment;
-    }
-
     calculateStartDate(pathTimeZoneConversion) {
         if(!this.startDate || isNaN(this.startDate.getTime())) {
             throw errors.Error('E1032', this.text);
@@ -105,10 +101,21 @@ class AppointmentAdapter {
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);
             result.endDate = result.calculateEndDate(options.pathTimeZone);
-
-            return result;
         }
         return result;
+    }
+
+    source(serializeDate = false) {
+        if(serializeDate) {
+            // TODO: hack for use dateSerializationFormat
+            const clonedAdapter = this.clone();
+            clonedAdapter.startDate = this.startDate;
+            clonedAdapter.endDate = this.endDate;
+
+            return clonedAdapter.source();
+        }
+
+        return extend({}, this.appointment);
     }
 }
 

@@ -326,7 +326,7 @@ export default class AppointmentPopup {
             // const formData = objectUtils.deepExtendArraySafe({}, this._appointmentForm.option('formData'), true);
             const formData = this._appointmentForm.option('formData');
             const adapter = this.scheduler.createAppointmentAdapter(formData);
-            const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source; // TODO:
+            const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
             const oldData = this.scheduler._editAppointmentData;
             const recData = this.scheduler._updatedRecAppointment;

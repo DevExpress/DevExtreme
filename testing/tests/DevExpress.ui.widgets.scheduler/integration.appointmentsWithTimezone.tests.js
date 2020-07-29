@@ -470,33 +470,27 @@ QUnit.test('Appointment should have a correct template with custom timezone', fu
 });
 
 QUnit.test('onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)', function(assert) {
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    this.createInstance({
+        currentDate: new Date(2016, 4, 7),
+        dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
+        timeZone: 'Etc/UTC',
+        views: ['day'],
+        currentView: 'day',
+        dataSource: [],
+        height: 800,
+        onAppointmentAdding: function(e) {
+            assert.equal(e.appointmentData.startDate, '2016-05-07T05:00:00Z', 'Start date is ok');
+            assert.equal(e.appointmentData.endDate, '2016-05-07T05:30:00Z', 'End date is ok');
+        }
+    });
 
-    try {
-        this.createInstance({
-            currentDate: new Date(2016, 4, 7),
-            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
-            timeZone: 'Etc/UTC',
-            views: ['day'],
-            currentView: 'day',
-            dataSource: [],
-            height: 800,
-            onAppointmentAdding: function(e) {
-                assert.equal(e.appointmentData.startDate, '2016-05-07T08:00:00Z', 'Start date is ok');
-                assert.equal(e.appointmentData.endDate, '2016-05-07T08:30:00Z', 'End date is ok');
-            }
-        });
-
-        this.instance.addAppointment({
-            startDate: new Date(Date.UTC(2016, 4, 7, 5)),
-            endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
-            startDateTimeZone: 'Asia/Qyzylorda', // +6:00
-            endDateTimeZone: 'Asia/Qyzylorda',
-            text: 'new Date sample'
-        });
-    } finally {
-        tzOffsetStub.restore();
-    }
+    this.instance.addAppointment({
+        startDate: new Date(Date.UTC(2016, 4, 7, 5)),
+        endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
+        startDateTimeZone: 'Asia/Qyzylorda', // +6:00
+        endDateTimeZone: 'Asia/Qyzylorda',
+        text: 'new Date sample'
+    });
 });
 
 QUnit.test('Appointment should have a correct template with custom timezone(T387040)', function(assert) {

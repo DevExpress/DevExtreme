@@ -2326,9 +2326,9 @@ class Scheduler extends Widget {
         }
 
         if(element) {
-            this.setTargetedAppointmentResources(targetedAdapter.source, element, appointmentIndex);
+            this.setTargetedAppointmentResources(targetedAdapter.source(), element, appointmentIndex);
         }
-        return targetedAdapter.source;
+        return targetedAdapter.source();
     }
 
     _getAppointmentData(appointmentData, options) {
@@ -2756,16 +2756,14 @@ class Scheduler extends Widget {
 
 
     addAppointment(appointment) {
-        const text = this.fire('getField', 'text', appointment);
+        const adapter = this.createAppointmentAdapter(appointment);
 
-        if(!text) {
-            this.fire('setField', 'text', appointment, '');
+        if(!adapter.text) {
+            adapter.text = '';
         }
 
-        // this._convertDatesByTimezoneBack(true, appointment);
-
         const addingOptions = {
-            appointmentData: appointment,
+            appointmentData: adapter.source(true),
             cancel: false
         };
 

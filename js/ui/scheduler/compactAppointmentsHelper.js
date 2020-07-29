@@ -58,7 +58,7 @@ export class CompactAppointmentsHelper {
                 targetedAdapter.endDate = info.sourceAppointment.endDate;
             }
 
-            return new AppointmentTooltipInfo(adapter.source, targetedAdapter.source, items.colors[index], items.settings[index]); // TODO
+            return new AppointmentTooltipInfo(adapter.source(), targetedAdapter.source(), items.colors[index], items.settings[index]); // TODO
         });
     }
 
