@@ -10,7 +10,7 @@ class ItemsOption extends Component {
 
     _dataSourceChangedHandler(newItems, e) {
         this._resetCache();
-        this._items = newItems;
+        this._items = newItems.map(item => Object.assign({}, item));
         this._diagramWidget._onDataSourceChanged();
     }
     _dataSourceLoadingChangedHandler(isLoading) {
