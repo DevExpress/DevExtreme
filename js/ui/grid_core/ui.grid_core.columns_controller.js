@@ -204,6 +204,12 @@ export default {
                         };
                     }
 
+                    const dataField = columnOptions.dataField;
+
+                    if(!isDefined(columnOptions.name) && isDefined(dataField)) {
+                        columnOptions.name = dataField;
+                    }
+
                     let result = { };
                     if(columnOptions.command) {
                         result = deepExtendArraySafe(commonColumnOptions, columnOptions);
@@ -582,7 +588,7 @@ export default {
             };
 
             function checkUserStateColumn(column, userStateColumn) {
-                return column && userStateColumn && userStateColumn.name === column.name && (userStateColumn.dataField === column.dataField || column.name);
+                return column && userStateColumn && (userStateColumn.name === column.name || !column.name) && (userStateColumn.dataField === column.dataField || column.name);
             }
 
             const applyUserState = function(that) {
@@ -1099,6 +1105,8 @@ export default {
                     } else {
                         updateIndexes(that);
                     }
+
+                    that._checkColumns();
                 },
                 callbackNames: function() {
                     return ['columnsChanged'];
@@ -2193,6 +2201,7 @@ export default {
                     column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
+                    that._checkColumns();
                 },
                 deleteColumn: function(id) {
                     const that = this;
@@ -2267,6 +2276,30 @@ export default {
                     if(dataSource) {
                         dataSource.sort(that.getSortDataSourceParameters());
                         dataSource.group(that.getGroupDataSourceParameters());
+                    }
+                },
+                _checkColumns: function() {
+                    const usedNames = {};
+                    let hasEditableColumnWithoutName = false;
+                    let hasDuplicatedNames = false;
+                    this._columns.forEach(column => {
+                        const name = column.name;
+                        if(name) {
+                            if(usedNames[name]) {
+                                hasDuplicatedNames = true;
+                            }
+                            usedNames[name] = true;
+                        } else if(column.allowEditing) {
+                            hasEditableColumnWithoutName = true;
+                        }
+                    });
+
+                    if(hasDuplicatedNames) {
+                        errors.log('E1059');
+                    }
+
+                    if(hasEditableColumnWithoutName) {
+                        errors.log('E1060');
                     }
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {
