@@ -2766,10 +2766,7 @@ class Scheduler extends Widget {
             cancel: false
         };
 
-        this._actions['onAppointmentAdding']({
-            appointmentData: serializedAppointment,
-            cancel: false
-        });
+        this._actions['onAppointmentAdding'](addingOptions);
 
         return this._processActionResult(addingOptions, canceled => {
             if(canceled) {
