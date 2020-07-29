@@ -31,6 +31,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const getPopup = (instance) => {
     return instance._popup;
@@ -1174,7 +1175,8 @@ QUnit.module('popup', moduleConfig, () => {
     });
 
     QUnit.test('popup should have "auto" width if dropDownOptions.width is set to auto (T897820)', function(assert) {
-        const emptyPopupWidth = 137.5;
+        const paddingsSize = 4;
+
         $('#dropDownList').dxDropDownList({
             dropDownOptions: {
                 width: 'auto'
@@ -1182,8 +1184,10 @@ QUnit.module('popup', moduleConfig, () => {
             opened: true
         });
 
+        const $emptyMessage = $(`.${EMPTY_MESSAGE_CLASS}`);
+        const emptyPopupWidth = $emptyMessage.outerWidth() + paddingsSize;
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 1.5, 'overlay content width is correct');
+        assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 0.1, 'overlay content width is correct');
     });
 
     QUnit.test('popup width can be smaller than editor width (T916722)', function(assert) {
