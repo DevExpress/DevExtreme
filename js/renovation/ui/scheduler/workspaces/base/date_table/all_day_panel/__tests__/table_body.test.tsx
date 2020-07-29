@@ -1,4 +1,4 @@
-import { h } from 'react';
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as TableBodyView } from '../table_body';
 import { AllDayPanelRow as Row } from '../row';

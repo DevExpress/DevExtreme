@@ -1,4 +1,4 @@
-import { h } from 'react';
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTitle } from '../title';
