@@ -146,12 +146,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             if(this._focusedCells && this._focusedCells.length) {
                 const $itemElement = $(this.option('focusedElement'));
-                // const $cellElement = $itemElement.length ? $itemElement : this._focusedCells;
-                const $cellElement = $itemElement.length ? $($itemElement) : $(this._focusedCells);
+                const $cellElement = $($itemElement.length ? $itemElement : this._focusedCells);
 
                 e.target = this._focusedCells;
                 this._showPopup = true;
-                // debugger;
                 this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($cellElement) });
             }
         };
@@ -2246,7 +2244,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = [];
 
         for(let i = 0; i < $cells.length; i++) {
-            // data.push(this.getCellData($($cells[i])));
             data.push(this.getCellData($cells[i]));
         }
 
