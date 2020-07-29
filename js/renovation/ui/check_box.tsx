@@ -18,6 +18,7 @@ import BaseComponent from '../preact_wrapper/check_box';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
+import noop from '../utils/noop';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -64,6 +65,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       onActive={viewModel.onActive}
       onFocusIn={viewModel.onFocusIn}
       onFocusOut={viewModel.onFocusOut}
+      saveValueChangedEvent={viewModel.props.saveValueChangedEvent}
       aria={viewModel.aria}
       onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
@@ -115,6 +117,8 @@ export class CheckBoxProps extends BaseWidgetProps {
   @OneWay() useInkRipple?: boolean = false;
 
   @Event() onFocusIn?: (e: Event) => void;
+
+  @OneWay() saveValueChangedEvent?: (event: Event) => void = noop;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
@@ -152,7 +156,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Effect()
   contentReadyEffect(): EffectReturn {
     const { onContentReady } = this.props;
-    onContentReady?.({ element: this.widgetRef });
+    onContentReady?.({});
   }
 
   onActive(event: Event): void {
@@ -175,10 +179,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     this.wave(event, 'hideWave', 0);
   }
 
-  onWidgetClick(): void {
-    const { readOnly, value } = this.props;
+  onWidgetClick(event: Event): void {
+    const { readOnly, value, saveValueChangedEvent } = this.props;
 
     if (!readOnly) {
+      saveValueChangedEvent?.(event);
       this.props.value = !value;
     }
   }
@@ -194,7 +199,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
     if (keyName === 'space' || which === 'space') {
       originalEvent.preventDefault();
-      this.onWidgetClick();
+      this.onWidgetClick(originalEvent);
     }
 
     return undefined;
