@@ -8,8 +8,8 @@ describe('TimePanelLayout', () => {
     const viewData = {
       groupedData: [{
         dateTable: [
-          [{ startDate: new Date(2020, 6, 9, 0), text: '0:00 AM' }],
-          [{ startDate: new Date(2020, 6, 9, 1), text: '1:00 AM' }],
+          [{ startDate: new Date(2020, 6, 9, 0), text: '0:00 AM' }, { startDate: new Date(2020, 6, 9, 1), text: '0:00 AM' }],
+          [{ startDate: new Date(2020, 6, 9, 1), text: '1:00 AM' }, { startDate: new Date(2020, 6, 9, 2), text: '1:00 AM' }],
         ],
       }],
     };
@@ -51,7 +51,7 @@ describe('TimePanelLayout', () => {
     });
 
     it('should render cells and pass correct props to them', () => {
-      const layout = render({});
+      const layout = render({ });
 
       const cells = layout.find(Cell);
       expect(cells)
