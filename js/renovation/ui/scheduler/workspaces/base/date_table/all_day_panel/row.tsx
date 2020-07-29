@@ -4,7 +4,11 @@ import {
 import { Row } from '../../row';
 
 export const viewFunction = (viewModel: AllDayPanelRow) => (
-  <Row className={`dx-scheduler-all-day-table-row ${viewModel.props.className}`}>
+  <Row
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...viewModel.restAttributes}
+    className={`dx-scheduler-all-day-table-row ${viewModel.props.className}`}
+  >
     {viewModel.props.children}
   </Row>
 );

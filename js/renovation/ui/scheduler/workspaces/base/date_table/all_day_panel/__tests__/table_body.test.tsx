@@ -1,22 +1,26 @@
-import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { viewFunction as TableBodyView } from '../table_body';
 import { AllDayPanelRow as Row } from '../row';
 import { AllDayPanelCell as Cell } from '../cell';
 
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
-}));
-
 describe('AllDayPanelTableBody', () => {
   describe('Render', () => {
-    const render = (viewModel) => shallow(TableBodyView({
+    const render = (viewModel) => mount(TableBodyView({
       ...viewModel,
       props: {
         ...viewModel.props,
       },
-    } as any) as any).childAt(0);
+    } as any) as any);
+
+    it('should spread restAttributes', () => {
+      const tableBody = render({
+        restAttributes: { customAttribute: 'customAttribute' },
+        props: { viewData: [{ startDate: new Date(2020, 7, 28) }] },
+      });
+
+      expect(tableBody.prop('customAttribute'))
+        .toBe('customAttribute');
+    });
 
     it('should render component correctly', () => {
       const tableBody = render({
