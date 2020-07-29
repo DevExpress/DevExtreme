@@ -11,8 +11,8 @@ export const viewFunction = (viewModel: AllDayPanelTableBody) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
-    {viewModel.props.viewData!.map((_, cellIndex) => (
-      <Cell key={getKeyByDateAndGroup(viewModel.props.viewData![cellIndex].startDate)} />
+    {viewModel.props.viewData!.map((cell) => (
+      <Cell key={getKeyByDateAndGroup(cell.startDate, cell.groups)} />
     ))}
   </Row>
 );
