@@ -65,7 +65,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       onActive={viewModel.onActive}
       onFocusIn={viewModel.onFocusIn}
       onFocusOut={viewModel.onFocusOut}
-      saveValueChangedEvent={viewModel.props.saveValueChangedEvent}
+      saveValueChangeEvent={viewModel.props.saveValueChangeEvent}
       aria={viewModel.aria}
       onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
@@ -118,7 +118,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @Event() onFocusIn?: (e: Event) => void;
 
-  @OneWay() saveValueChangedEvent?: (event: Event) => void = noop;
+  @OneWay() saveValueChangeEvent?: (event: Event) => void = noop;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
@@ -180,10 +180,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onWidgetClick(event: Event): void {
-    const { readOnly, value, saveValueChangedEvent } = this.props;
+    const { readOnly, value, saveValueChangeEvent } = this.props;
 
     if (!readOnly) {
-      saveValueChangedEvent?.(event);
+      saveValueChangeEvent?.(event);
       this.props.value = !value;
     }
   }

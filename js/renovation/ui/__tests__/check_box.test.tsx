@@ -236,15 +236,15 @@ describe('CheckBox', () => {
             });
 
             it('should call saveValueChangeEvent by Widget click', () => {
-              const saveValueChangedEvent = jest.fn();
+              const saveValueChangeEvent = jest.fn();
               const checkBox = new CheckBox({
-                saveValueChangedEvent,
+                saveValueChangeEvent,
                 value: false,
               });
               const event = {} as Event;
               checkBox.onWidgetClick(event);
-              expect(saveValueChangedEvent).toBeCalled();
-              expect(saveValueChangedEvent).toBeCalledWith(event);
+              expect(saveValueChangeEvent).toBeCalled();
+              expect(saveValueChangeEvent).toBeCalledWith(event);
             });
 
             it('should not change value by Widget click of readOnly is true', () => {

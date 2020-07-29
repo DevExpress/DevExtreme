@@ -44,7 +44,7 @@ export default class CheckBox extends Component {
   _valueChangeAction: any;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  savedValueChangedEvent: any;
+  _valueChangeEventInstance: any;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   getProps(): any {
@@ -67,7 +67,7 @@ export default class CheckBox extends Component {
       }
     };
     props.saveValueChangedEvent = (e: Event): void => {
-      this.savedValueChangedEvent = e;
+      this._valueChangeEventInstance = e;
     };
     return props;
   }
@@ -220,9 +220,9 @@ export default class CheckBox extends Component {
           element: this.$element(),
           previousValue,
           value,
-          event: this.savedValueChangedEvent,
+          event: this._valueChangeEventInstance,
         });
-        this.savedValueChangedEvent = null;
+        this._valueChangeEventInstance = null;
         break;
       case 'onValueChanged':
         this._valueChangeAction = this._createActionByOption('onValueChanged', {
