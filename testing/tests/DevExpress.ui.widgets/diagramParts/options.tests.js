@@ -3,8 +3,10 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-import { DiagramCommand, DataLayoutType } from 'devexpress-diagram';
+import { getDiagram } from 'ui/diagram/diagram.importer';
 import { Consts } from '../../../helpers/diagramHelpers.js';
+
+const { DiagramCommand, DataLayoutType } = getDiagram();
 
 const moduleConfig = {
     beforeEach: function() {

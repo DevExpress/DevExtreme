@@ -3,8 +3,10 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-import { DiagramCommand } from 'devexpress-diagram';
+import { getDiagram } from 'ui/diagram/diagram.importer';
 import { Consts, getPropertiesToolbarElement, getPropertiesToolbarInstance, findPropertiesToolbarItem, findPropertiesPanelToolbarItem } from '../../../helpers/diagramHelpers.js';
+
+const { DiagramCommand } = getDiagram();
 
 const moduleConfig = {
     beforeEach: function() {
