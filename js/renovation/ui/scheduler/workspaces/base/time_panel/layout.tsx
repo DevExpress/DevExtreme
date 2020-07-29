@@ -23,7 +23,6 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
           <Cell
             startDate={cellsRow[0].startDate}
             text={cellsRow[0].text}
-            key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
           />
         </Row>
       )))}
