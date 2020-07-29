@@ -3708,3 +3708,153 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
 })('Work Space Work Week with intervalCount');
 
+QUnit.module('Renovated Render', {
+    beforeEach() {
+        this.createInstance = (options = {}) => {
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+                renovateRender: true,
+                currentDate: new Date(2020, 6, 29),
+                startDayHour: 0,
+                endDayHour: 1,
+                ...options,
+            }).dxSchedulerWorkSpaceDay('instance');
+            stubInvokeMethod(this.instance);
+        };
+    },
+}, () => {
+    QUnit.module('Generate View Data', () => {
+        QUnit.test('should work in basic case', function(assert) {
+            this.createInstance();
+            const result = this.instance._generateViewData();
+            const expected = {
+                groupedData: [{
+                    dateTable: [[{
+                        startDate: new Date(2020, 6, 29, 0, 0),
+                        endDate: new Date(2020, 6, 29, 0, 30),
+                        allDay: false,
+                        text: '12:00 AM',
+                    }], [{
+                        startDate: new Date(2020, 6, 29, 0, 30),
+                        endDate: new Date(2020, 6, 29, 1, 0),
+                        allDay: false,
+                        text: '',
+                    }]]
+                }],
+            };
+
+            assert.deepEqual(result.groupedData, expected.groupedData, 'correct view data');
+            assert.notOk(result.isVirtual, 'View Data is not virtual');
+        });
+
+        QUnit.test('should work with horizontal grouping', function(assert) {
+            this.createInstance({
+                groupOrientation: 'horizontal',
+            });
+            this.instance.option('groups', [
+                {
+                    name: 'res',
+                    items: [
+                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                    ]
+                }
+            ]);
+
+            const result = this.instance._generateViewData();
+            const expected = {
+                groupedData: [{
+                    dateTable: [[{
+                        startDate: new Date(2020, 6, 29, 0, 0),
+                        endDate: new Date(2020, 6, 29, 0, 30),
+                        allDay: false,
+                        text: '12:00 AM',
+                        groups: { res: 1 },
+                    }, {
+                        startDate: new Date(2020, 6, 29, 0, 0),
+                        endDate: new Date(2020, 6, 29, 0, 30),
+                        allDay: false,
+                        text: '12:00 AM',
+                        groups: { res: 2 },
+                    }], [{
+                        startDate: new Date(2020, 6, 29, 0, 30),
+                        endDate: new Date(2020, 6, 29, 1, 0),
+                        allDay: false,
+                        text: '',
+                        groups: { res: 1 },
+                    }, {
+                        startDate: new Date(2020, 6, 29, 0, 30),
+                        endDate: new Date(2020, 6, 29, 1, 0),
+                        allDay: false,
+                        text: '',
+                        groups: { res: 2 },
+                    }]]
+                }],
+            };
+
+            assert.equal(result.groupedData.length, 1, 'correct number of tables');
+            assert.equal(result.groupedData[0].dateTable.length, 2, 'correct number of rows');
+            assert.equal(result.groupedData[0].dateTable[0].length, 2, 'correct number of columns');
+            assert.deepEqual(result.groupedData[0].dateTable[0][0], expected.groupedData[0].dateTable[0][0], 'correct first cell');
+            assert.deepEqual(result.groupedData[0].dateTable[0][1], expected.groupedData[0].dateTable[0][1], 'correct second cell');
+            assert.deepEqual(result.groupedData[0].dateTable[1][0], expected.groupedData[0].dateTable[1][0], 'correct third cell');
+            assert.deepEqual(result.groupedData[0].dateTable[1][1], expected.groupedData[0].dateTable[1][1], 'correct fourth cell');
+            assert.notOk(result.isVirtual, 'View Data is not virtual');
+        });
+
+        QUnit.test('should work with vertical grouping', function(assert) {
+            this.createInstance();
+            this.instance.option('groups', [
+                {
+                    name: 'res',
+                    items: [
+                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                    ]
+                }
+            ]);
+            this.instance.option('groupOrientation', 'vertical');
+
+            const result = this.instance._generateViewData();
+            const expected = {
+                groupedData: [{
+                    dateTable: [[{
+                        startDate: new Date(2020, 6, 29, 0, 0),
+                        endDate: new Date(2020, 6, 29, 0, 30),
+                        allDay: false,
+                        text: '12:00 AM',
+                        groups: { res: 1 },
+                    }], [{
+                        startDate: new Date(2020, 6, 29, 0, 30),
+                        endDate: new Date(2020, 6, 29, 1, 0),
+                        allDay: false,
+                        text: '',
+                        groups: { res: 1 },
+                    }]]
+                }, {
+                    dateTable: [[{
+                        startDate: new Date(2020, 6, 29, 0, 0),
+                        endDate: new Date(2020, 6, 29, 0, 30),
+                        allDay: false,
+                        text: '12:00 AM',
+                        groups: { res: 2 },
+                    }], [{
+                        startDate: new Date(2020, 6, 29, 0, 30),
+                        endDate: new Date(2020, 6, 29, 1, 0),
+                        allDay: false,
+                        text: '',
+                        groups: { res: 2 },
+                    }]]
+                }],
+            };
+
+            assert.equal(result.groupedData.length, 2, 'correct number of tables');
+            assert.equal(result.groupedData[0].dateTable.length, 2, 'correct number of rows in the first table');
+            assert.equal(result.groupedData[0].dateTable[0].length, 1, 'correct number of columns in the first table');
+            assert.equal(result.groupedData[1].dateTable.length, 2, 'correct number of rows in the first table');
+            assert.equal(result.groupedData[1].dateTable[0].length, 1, 'correct number of columns in the first table');
+            assert.deepEqual(result.groupedData[0].dateTable[0][0], expected.groupedData[0].dateTable[0][0], 'correct first cell');
+            assert.deepEqual(result.groupedData[0].dateTable[1][0], expected.groupedData[0].dateTable[1][0], 'correct second cell');
+            assert.deepEqual(result.groupedData[1].dateTable[0][0], expected.groupedData[1].dateTable[0][0], 'correct third cell');
+            assert.deepEqual(result.groupedData[1].dateTable[1][0], expected.groupedData[1].dateTable[1][0], 'correct fourth cell');
+            assert.notOk(result.isVirtual, 'View Data is not virtual');
+        });
+    });
+});

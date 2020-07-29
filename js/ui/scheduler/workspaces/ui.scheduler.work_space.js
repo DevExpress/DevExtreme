@@ -1022,12 +1022,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions() {
-        const groupCount = this._getGroupCount() || 1;
+        const renderGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
+        const groupCount = this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
 
         return {
-            groupCount: groupCount,
-            rowCount: this._getTotalRowCount(groupCount),
+            groupCount: renderGroupCount,
+            rowCount: this._getRowCount(),
             cellCount: this._getTotalCellCount(groupCount),
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements: allDayElements,
@@ -1044,17 +1045,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVirtual
         } = this.generateRenderOptions();
 
-        const validGroupCount = this.option('groupOrientation') === 'horizontal' ? 1 : groupCount;
-        const viewCellsData = [];
         const groupedData = [];
 
-        for(let groupIndex = 0; groupIndex < validGroupCount; ++groupIndex) {
+        for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
+            const viewCellsData = [];
             for(let i = 0; i < rowCount; ++i) {
                 viewCellsData.push([]);
                 for(let j = 0; j < cellCount; ++j) {
                     const cellDataValue = { };
                     cellDataGetters.forEach(getter => {
-                        Object.assign(cellDataValue, getter(undefined, i, j).value);
+                        Object.assign(cellDataValue, getter(undefined, i + groupIndex * rowCount, j).value);
                     });
                     viewCellsData[i].push(cellDataValue);
                 }
@@ -1062,7 +1062,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             groupedData.push({
                 dateTable: viewCellsData,
-                allDayPanel: false
             });
         }
 
