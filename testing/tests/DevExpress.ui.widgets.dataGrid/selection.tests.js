@@ -3772,6 +3772,24 @@ QUnit.module('Selection with views', {
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: 'Alex' }], 'one item is selected');
         assert.strictEqual($checkbox.dxCheckBox('instance').option('value'), true, 'checkbox is checked');
     });
+
+    // T550013
+    QUnit.test('Click on cell with checkbox should select row', function(assert) {
+        const testElement = $('#container');
+
+        this.options.selection.showCheckBoxesMode = 'always';
+        this.setup();
+        this.columnHeadersView.render(testElement);
+        this.rowsView.render(testElement);
+
+        // act
+        const $selectionCell = testElement.find('.dx-data-row .dx-command-select').eq(0);
+        $selectionCell.trigger(clickEvent.name);
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: 'Alex' }], 'one item is selected');
+        assert.strictEqual($selectionCell.find('.dx-checkbox').dxCheckBox('instance').option('value'), true, 'checkbox is checked');
+    });
 });
 
 QUnit.module('Deferred selection', {
