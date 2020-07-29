@@ -244,7 +244,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1059
     */
-    E1059: 'One or several columns have invalid or non-unique "name" values',
+    E1059: 'All column names must be different',
 
     /**
     * @name ErrorsUIWidgets.E1060
