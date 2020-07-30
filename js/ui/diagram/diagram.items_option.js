@@ -1,5 +1,6 @@
 import Component from '../../core/component';
 import DataHelperMixin from '../../data_helper';
+import { extend } from '../../core/utils/extend';
 
 class ItemsOption extends Component {
     constructor(diagramWidget) {
@@ -10,7 +11,7 @@ class ItemsOption extends Component {
 
     _dataSourceChangedHandler(newItems, e) {
         this._resetCache();
-        this._items = newItems.map(item => Object.assign({}, item));
+        this._items = newItems.map(item => extend({}, item));
         this._diagramWidget._onDataSourceChanged();
     }
     _dataSourceLoadingChangedHandler(isLoading) {
