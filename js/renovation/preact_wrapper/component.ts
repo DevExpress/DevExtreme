@@ -19,7 +19,7 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _getDefaultOptions() {
-    return extend(
+    return extend(true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
       this._getDefaultTwoWayProps(),

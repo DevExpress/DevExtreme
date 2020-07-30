@@ -39,6 +39,8 @@ export class PreactTestWidgetProps {
 
   @OneWay() unsubscribeEffect?: any;
 
+  @OneWay() objectProp? = { someVal: true };
+
   @Event() onKeyDown?: (e: any) => any;
 
   @Event({
