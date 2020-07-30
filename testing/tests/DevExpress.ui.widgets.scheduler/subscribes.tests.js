@@ -303,10 +303,10 @@ QUnit.test('\'updateAppointmentStartDate\' should work correct with custom data 
     }));
 });
 
-QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointmentData', function(assert) {
+QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointment', function(assert) {
     this.createInstance();
 
-    const stub = sinon.stub(this.instance._subscribes, 'getTargetedAppointmentData');
+    const stub = sinon.stub(this.instance._subscribes, 'getTargetedAppointment');
 
     this.instance.fire('mapAppointmentFields', {
         itemData: {

@@ -42,7 +42,7 @@ const subscribes = {
     },
 
     showAppointmentTooltip: function(options) { // TODO:
-        const targetedAppointment = this.getTargetedAppointmentNew(options.data, options.target);
+        const targetedAppointment = this.getTargetedAppointment(options.data, options.target);
         this.showAppointmentTooltip(options.data, options.target, targetedAppointment);
     },
 
@@ -411,7 +411,7 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) { // TODO
-        const targetedData = this.getTargetedAppointmentNew(config.itemData, config.itemElement);
+        const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
         // const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
 
         return {
@@ -700,7 +700,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointment, appointmentElement, needConvertByTimezones) { // TODO: replace on getTargetedAppointmentNew
+    getTargetedAppointmentData: function(appointment, appointmentElement, needConvertByTimezones) { // TODO: replace on getTargetedAppointment
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 

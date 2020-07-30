@@ -2309,7 +2309,7 @@ class Scheduler extends Widget {
         });
     }
 
-    getTargetedAppointmentNew(appointment, element) { // TODO: rename
+    getTargetedAppointment(appointment, element) {
         const settings = $(element).data('dxAppointmentSettings');
         const appointmentIndex = $(element).data(this._appointments._itemIndexKey());
 
@@ -2324,7 +2324,7 @@ class Scheduler extends Widget {
             targetedAdapter.endDate = new Date(newStartDate.getTime() + adapter.duration);
 
         } else if(settings) {
-            targetedAdapter.startDate = settings.info ? settings.info.sourceAppointment.startDate : adapter.startDate;
+            targetedAdapter.startDate = settings.info ? settings.info.sourceAppointment.startDate : adapter.startDate; // TODO: in agenda we havn't info field
             targetedAdapter.endDate = settings.info ? settings.info.sourceAppointment.endDate : adapter.endDate;
         }
 
