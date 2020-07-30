@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { viewFunction as TitleView } from '../title';
+import { viewFunction as TitleView, AllDayPanelTitle } from '../title';
 
 describe('AllDayPanelTitle', () => {
   describe('Render', () => {
@@ -27,6 +27,17 @@ describe('AllDayPanelTitle', () => {
         .toBe(true);
       expect(title.text())
         .toEqual('some text');
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      it('text', () => {
+        const title = new AllDayPanelTitle({});
+
+        expect(title.text)
+          .toEqual('All day');
+      });
     });
   });
 });
