@@ -299,7 +299,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.equal($gridCell.find('.dx-select-checkbox').length, 0, 'Select checkbox was not rendered');
     });
 
-    QUnit.test('Click on select checkbox should works correctly', function(assert) {
+    QUnit.test('Click on select checkbox should work correctly', function(assert) {
     // arrange
         const $testElement = $('#treeList');
 
@@ -318,7 +318,27 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.ok(this.dataController.items()[0].isSelected, 'Right row is selected');
     });
 
-    QUnit.test('Click on selectAll checkbox should works correctly', function(assert) {
+    // T917248
+    QUnit.test('Click on select checkbox container should not select row', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always' };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        const $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
+        $selectCheckbox.parent().trigger('dxclick');
+
+        // assert
+        assert.equal($selectCheckbox.dxCheckBox('instance').option('value'), false, 'Select checkbox value');
+        assert.notOk(this.option('selectedRowKeys'), 'row is not selected');
+        assert.notOk(this.dataController.items()[0].isSelected, 'row is not selected');
+    });
+
+    QUnit.test('Click on selectAll checkbox should work correctly', function(assert) {
     // arrange
         const $testElement = $('#treeList');
 
@@ -337,7 +357,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.deepEqual(this.option('selectedRowKeys'), [1], 'Right rows are selected');
     });
 
-    QUnit.test('Click on selectAll checkbox should works correctly when sorting is enabled', function(assert) {
+    QUnit.test('Click on selectAll checkbox should work correctly when sorting is enabled', function(assert) {
     // arrange
         const $testElement = $('#treeList');
         const clock = sinon.useFakeTimers();
@@ -548,7 +568,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
     });
 
     // T742205, T751539
-    QUnit.test('selection for nested node should works', function(assert) {
+    QUnit.test('selection for nested node should work', function(assert) {
     // arrange
         const $testElement = $('#treeList');
 

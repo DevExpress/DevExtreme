@@ -34,4 +34,5 @@ export default class themes {
      * @public
      */
     static ready(callback: Function): void;
+    static isMaterial(theme: string): boolean;
 }

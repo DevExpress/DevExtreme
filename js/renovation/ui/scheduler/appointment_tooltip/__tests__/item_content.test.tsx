@@ -10,7 +10,7 @@ describe('TooltipItemContent', () => {
     const render = (viewModel) => shallow(TooltipItemContentView({
       ...viewModel,
       props: { ...defaultProps, ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should combine `className` with predefined classes', () => {
       const tree = render({ props: { className: 'custom-class' } });

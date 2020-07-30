@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
-} from '../../../__tests__/events_mock';
+} from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils';
 import config from '../../../../core/config';
@@ -116,7 +116,7 @@ describe('Widget', () => {
           const detach = widget.accessKeyEffect();
 
           expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
         });
 
@@ -197,7 +197,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.active).length).toBe(0);
           expect(getEventHandlers(EVENT.inactive).length).toBe(0);
         });
@@ -257,7 +257,7 @@ describe('Widget', () => {
           const widget = new Widget({ onClick });
 
           const detach = widget.clickEffect();
-          detach!();
+          detach();
           emit(EVENT.dxClick);
 
           expect(onClick).toHaveBeenCalledTimes(0);
@@ -276,7 +276,30 @@ describe('Widget', () => {
         const e = { ...defaultEvent, isDefaultPrevented: jest.fn() };
 
         it('should subscribe to focus event', () => {
-          const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          const onFocusIn = jest.fn();
+          const onFocusOut = jest.fn();
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
+          });
+          widget.widgetRef = {} as any;
+
+          widget.focusEffect();
+
+          emit(EVENT.focus, e);
+          expect(widget.focused).toBe(true);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+          expect(onFocusIn).toHaveBeenCalledTimes(1);
+
+          emit(EVENT.blur, e);
+          expect(widget.focused).toBe(false);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
+          expect(onFocusOut).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not raise any error if onFocusIn or onFocusOut is undefined', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusIn: undefined, onFocusOut: undefined,
+          });
           widget.widgetRef = {} as any;
 
           widget.focusEffect();
@@ -290,6 +313,32 @@ describe('Widget', () => {
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
         });
 
+        it('should not raise onFocusIn/onFocusOut if event is prevented', () => {
+          try {
+            e.isDefaultPrevented = jest.fn(() => true);
+            const onFocusIn = jest.fn();
+            const onFocusOut = jest.fn();
+            const widget = new Widget({
+              focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
+            });
+            widget.widgetRef = {} as any;
+
+            widget.focusEffect();
+
+            emit(EVENT.focus, e);
+            expect(widget.focused).toBe(false);
+            expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+            expect(onFocusIn).not.toHaveBeenCalled();
+
+            emit(EVENT.blur, e);
+            expect(widget.focused).toBe(false);
+            expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
+            expect(onFocusOut).not.toHaveBeenCalled();
+          } finally {
+            e.isDefaultPrevented = jest.fn();
+          }
+        });
+
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
 
@@ -297,12 +346,12 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
           expect(getEventHandlers(EVENT.blur).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.focus).length).toBe(0);
           expect(getEventHandlers(EVENT.blur).length).toBe(0);
         });
 
-        it('should subscribe is widget is disabled', () => {
+        it('should subscribe if widget is disabled', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: true });
           widget.widgetRef = {} as any;
           widget.focused = false;
@@ -315,7 +364,9 @@ describe('Widget', () => {
         });
 
         it('should subscribe is widget is not focusable', () => {
-          const widget = new Widget({ focusStateEnabled: false, disabled: false });
+          const onFocusIn = jest.fn();
+
+          const widget = new Widget({ focusStateEnabled: false, disabled: false, onFocusIn });
           widget.widgetRef = {} as any;
           widget.focused = false;
 
@@ -324,6 +375,7 @@ describe('Widget', () => {
           emit(EVENT.focus, e);
           expect(widget.focused).toBe(false);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
+          expect(onFocusIn).toHaveBeenCalledTimes(0);
         });
       });
 
@@ -348,7 +400,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(0);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(0);
         });
@@ -411,7 +463,7 @@ describe('Widget', () => {
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
 
-          detach!();
+          detach();
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -453,7 +505,7 @@ describe('Widget', () => {
           const detach = widget.resizeEffect();
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.resize).length).toBe(0);
         });
 
@@ -490,7 +542,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
           expect(getEventHandlers(EVENT.hiding).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.shown).length).toBe(0);
           expect(getEventHandlers(EVENT.hiding).length).toBe(0);
         });

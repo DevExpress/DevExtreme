@@ -7,7 +7,7 @@ describe('Marker', () => {
     const render = (viewModel) => shallow(MarkerView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should render components correctly', () => {
       const marker = render({});

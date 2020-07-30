@@ -34,7 +34,7 @@ export const viewFunction = ({
     infoTextVisible={infoTextVisible}
     isLargeDisplayMode={isLargeDisplayMode}
       // eslint-disable-next-line react/jsx-props-no-spreading
-    {...{ ...pagerProps as PagerProps, ...restAttributes }}
+    {...{ ...pagerProps, ...restAttributes }}
   />
 );
 type ChildElementsName = 'pageSizes' | 'pages' | 'info';
@@ -42,10 +42,10 @@ type AllElementsName = 'parent' | ChildElementsName;
 type AllElementsWidth = Record<AllElementsName, number>;
 type ChildElementsWidth = Record<ChildElementsName, number>;
 type HTMLRefType = Record<AllElementsName, HTMLElement | undefined>;
-type ChildElementProps = {
+interface ChildElementProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
-};
+}
 
 export function getContentProps({
   parent: parentWidth, pageSizes: pageSizesWidth,

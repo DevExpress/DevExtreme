@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Method, Ref,
+  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import { format } from '../../../core/utils/string';
@@ -19,7 +19,7 @@ export class InfoTextProps {
 
   @OneWay() pageCount?: number = 10;
 
-  @OneWay() pageIndex?: number = 0;
+  @TwoWay() pageIndex?: number = 0;
 
   @OneWay() totalCount?: number = 0;
 }

@@ -35,7 +35,7 @@ describe('DateTableLayoutBase', () => {
         viewData,
         ...viewModel.props,
       },
-    } as any) as any).childAt(0).childAt(0);
+    }) as any).childAt(0).childAt(0);
 
     afterEach(() => jest.resetAllMocks());
 

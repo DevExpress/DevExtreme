@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  ComponentBindings, JSXComponent, OneWay, Component, Fragment, Event,
+  ComponentBindings, JSXComponent, TwoWay, OneWay, Component, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
 
 import { LightButton } from '../common/light_button';
@@ -25,11 +25,11 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge) => (
 );
 @ComponentBindings()
 export class PageSizeLargeProps {
-  @OneWay() pageSize?: number = 5;
+  @TwoWay() pageSize?: number = 5;
 
   @OneWay() pageSizes!: FullPageSize[];
 
-  @Event() pageSizeChange!: (pageSize: number) => void; // commonUtils.noop
+  @Event() pageSizeChange?: (pageSize: number) => void; // commonUtils.noop
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
@@ -49,6 +49,6 @@ export class PageSizeLarge extends JSXComponent(PageSizeLargeProps) {
   }
 
   private onPageSizeChange(processedPageSize: number) {
-    return () => this.props.pageSizeChange(processedPageSize);
+    return () => { this.props.pageSize = processedPageSize; };
   }
 }

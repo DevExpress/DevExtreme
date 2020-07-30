@@ -1,8 +1,0 @@
-{
-    "extends": [
-        "devextreme/jest"
-    ],
-    "settings": {
-        "react": { "pragma": "h" }
-    }
-}

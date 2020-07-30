@@ -7,7 +7,7 @@ const rootDir = join(__dirname, '..', '..');
 const scssDir = join(rootDir, 'tests', 'data', 'scss');
 
 describe('MetadataCollector', () => {
-  const expectedFileList: Array<string> = [
+  const expectedFileList: string[] = [
     join('bundles', 'dx.light.scss'),
     join('widgets', 'generic', 'accordion', '_colors.scss'),
     join('widgets', 'generic', 'accordion', '_index.scss'),
@@ -16,6 +16,7 @@ describe('MetadataCollector', () => {
     join('widgets', 'generic', '_colors.scss'),
     join('widgets', 'generic', '_index.scss'),
     join('widgets', 'generic', '_sizes.scss'),
+    join('widgets', 'generic', '_variables.scss'),
   ];
 
   promises.mkdir = jest.fn();
@@ -64,7 +65,7 @@ describe('MetadataCollector', () => {
     const expectedDestinationPath = resolve(join(destinationPath, relativePath));
     const expectedDestinationDir = dirname(expectedDestinationPath);
 
-    async function getTestFiles(): Promise<Array<FileInfo>> {
+    async function getTestFiles(): Promise<FileInfo[]> {
       return [{ path: relativePath, content: fileContent }];
     }
 
@@ -83,9 +84,9 @@ describe('MetadataCollector', () => {
     const expectedFileName = resolve(fileName);
     const expectedDirName = dirname(expectedFileName);
 
-    collector.generator.metadata = [{ Key: '$var', Value: '\'ON\'' }];
+    collector.generator.metadata = { generic: [{ Key: '$var', Value: '\'ON\'' }], material: [] };
 
-    let metaContent = 'export const metadata: Array<MetaItem> = [{\'Key\':\'$var\',\'Value\':\'"ON"\'}];\n';
+    let metaContent = 'export const metadata: ThemesMetadata = {\'generic\':[{\'Key\':\'$var\',\'Value\':\'"ON"\'}],\'material\':[]};\n';
     metaContent += `export const version: string = '${version}';\n`;
     metaContent += 'export const browsersList: Array<string> = [];\n';
     metaContent += 'export const dependencies: FlatStylesDependencies = {};\n';

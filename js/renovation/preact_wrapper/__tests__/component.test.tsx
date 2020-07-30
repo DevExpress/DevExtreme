@@ -4,14 +4,14 @@
 
 import { act } from 'preact/test-utils';
 import $ from '../../../core/renderer';
-import './test_components/empty_test_widget';
-import './test_components/preact_test_widget';
-import './test_components/templated_test_widget';
+import './utils/test_components/empty_test_widget';
+import './utils/test_components/preact_test_widget';
+import './utils/test_components/templated_test_widget';
 import {
   defaultEvent,
   emitKeyboard,
   KEY,
-} from '../../__tests__/events_mock';
+} from '../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../core/element';
 
 beforeEach(() => {
