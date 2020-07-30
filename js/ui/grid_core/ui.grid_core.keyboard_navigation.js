@@ -1339,13 +1339,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const focusedCellPosition = cellPosition || this._focusedCellPosition;
         const isRowFocusType = this.isRowFocusType();
         const includeCommandCells = isRowFocusType || inArray(keyCode, ['next', 'previous']) > -1;
-        const isLastCellOnDirection = keyCode === 'previous' ? this._isFirstValidCell(focusedCellPosition) : this._isLastValidCell(focusedCellPosition);
         let $cell;
         let $row;
 
         if(this._focusedView && focusedCellPosition) {
             const newFocusedCellPosition = this._getNewPositionByCode(focusedCellPosition, elementType, keyCode);
             $cell = $(this._getCell(newFocusedCellPosition));
+            const isLastCellOnDirection = keyCode === 'previous' ? this._isFirstValidCell(newFocusedCellPosition) : this._isLastValidCell(newFocusedCellPosition);
 
             if(isElementDefined($cell) && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
                 if(isRowFocusType) {
