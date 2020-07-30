@@ -1276,8 +1276,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _showAddAppointmentPopup($cell) {
-        const firstCellData = this.getCellData($($cell.first()));
-        const lastCellData = this.getCellData($($cell.last()));
+        const firstCellData = this.getCellData($cell.first());
+        const lastCellData = this.getCellData($cell.last());
 
         const args = {
             startDate: this.invoke('convertDateByTimezoneBack', firstCellData.startDate) || firstCellData.startDate,
