@@ -227,6 +227,25 @@ describe('option', () => {
     expect($('#component').dxrPreactTestWidget('option').text).toBe('default text');
   });
 
+  it('should copy default props of preact component (not by reference)', () => {
+    document.body.innerHTML = `
+      <div id="components">
+          <div id="component1"></div>
+          <div id="component2"></div>
+      </div>
+      `;
+
+    act(() => {
+      $('#component1').dxrPreactTestWidget({});
+      $('#component2').dxrPreactTestWidget({});
+    });
+
+    const objectProp1 = $('#component1').dxrPreactTestWidget('option').objectProp;
+    const objectProp2 = $('#component2').dxrPreactTestWidget('option').objectProp;
+
+    expect(objectProp1).not.toBe(objectProp2);
+  });
+
   it('should return default value of TwoWay prop', () => {
     act(() => $('#component').dxrPreactTestWidget({}));
 
