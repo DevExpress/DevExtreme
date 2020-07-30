@@ -438,6 +438,17 @@ const PivotGrid = Widget.inherit({
                 */
                 showPane: true
 
+                /**
+                * @name dxPivotGridOptions.loadPanel.shading
+                * @type boolean
+                * @default false
+                */
+
+                /**
+                * @name dxPivotGridOptions.loadPanel.shadingColor
+                * @type string
+                * @default ''
+                */
             },
             texts: {
                 /**

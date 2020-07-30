@@ -9,6 +9,7 @@ import './diagramParts/contextMenu.tests.js';
 import './diagramParts/propertiesPanel.tests.js';
 import './diagramParts/toolbox.tests.js';
 import './diagramParts/options.tests.js';
+import './diagramParts/dataBinding.tests.js';
 import './diagramParts/commandManager.tests.js';
 import './diagramParts/clientSideEvents.tests.js';
 
