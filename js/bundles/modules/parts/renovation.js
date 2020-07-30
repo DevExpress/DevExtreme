@@ -1,6 +1,7 @@
 /* eslint-disable import/no-commonjs */
 module.exports = [
     { name: 'Button', pathInRenovationFolder: 'ui/button.j' },
+    { name: 'CheckBox', pathInRenovationFolder: 'ui/check_box.j' },
     { name: 'Widget', pathInRenovationFolder: 'ui/widget.j' },
     { name: 'GridPager', pathInRenovationFolder: 'ui/pager/grid_pager.j' },
     { name: 'TooltipItemLayout', pathInRenovationFolder: 'ui/scheduler/appointment-tooltip/item-layout.j' },
