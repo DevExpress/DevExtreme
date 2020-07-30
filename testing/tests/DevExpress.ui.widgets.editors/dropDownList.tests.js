@@ -1574,10 +1574,47 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const $item = $list.find('.dx-list-item:eq(1)');
 
-        list.option('focusedElement', $item);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant exists');
 
+        list.option('focusedElement', $item);
         assert.notEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant exists');
         assert.equal($input.attr('aria-activedescendant'), $item.attr('id'), 'aria-activedescendant and id of the focused item are equals');
+    });
+
+    QUnit.test('input\'s aria-activedescendant attribute should not be defined after popup reopen', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: [1, 2, 3],
+            opened: true,
+            focusStateEnabled: true
+        });
+
+        const instance = $dropDownList.dxDropDownList('instance');
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const $item = $list.find('.dx-list-item:eq(1)');
+
+        list.option('focusedElement', $item);
+        instance.option('opened', false);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
+
+        instance.option('opened', true);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
+    });
+
+    QUnit.test('input\'s aria-activedescendant attribute should be reset after list focused element change to null', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: [1, 2, 3],
+            opened: true,
+            focusStateEnabled: true
+        });
+
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+
+        list.option('focusedElement', null);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
     });
 
     QUnit.test('list\'s aria-target should point to the widget\'s input (T247414)', function(assert) {
