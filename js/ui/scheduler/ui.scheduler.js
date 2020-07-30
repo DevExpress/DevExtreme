@@ -2316,7 +2316,7 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointment);
         const targetedAdapter = adapter.clone();
 
-        if(this._isAgenda()) {
+        if(this._isAgenda() && this._isAppointmentRecurrence(appointment)) {
             const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
             const newStartDate = getStartDate($(element), adapter.startDate).startDate;
 
@@ -2324,8 +2324,8 @@ class Scheduler extends Widget {
             targetedAdapter.endDate = new Date(newStartDate.getTime() + adapter.duration);
 
         } else if(settings) {
-            targetedAdapter.startDate = settings.info.sourceAppointment.startDate;
-            targetedAdapter.endDate = settings.info.sourceAppointment.endDate;
+            targetedAdapter.startDate = settings.info ? settings.info.sourceAppointment.startDate : adapter.startDate;
+            targetedAdapter.endDate = settings.info ? settings.info.sourceAppointment.endDate : adapter.endDate;
         }
 
         element && this.setTargetedAppointmentResources(targetedAdapter.source(), element, appointmentIndex);
