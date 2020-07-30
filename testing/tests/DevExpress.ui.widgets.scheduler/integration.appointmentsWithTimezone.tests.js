@@ -1182,7 +1182,7 @@ QUnit.test('Appointment should have right width in workspace with timezone', fun
         const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
         const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(9);
 
-        assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, 'Task has a right width');
+        assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 2, 2.001, 'Task has a right width');
     } finally {
         tzOffsetStub.restore();
     }
