@@ -1609,7 +1609,7 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
-            if(Math.abs(totalWidth - groupWidth) <= 2) { // T914454
+            if(hasWindow() && getWindow().devicePixelRatio > 1 && Math.abs(totalWidth - groupWidth) <= 2) { // T914454
                 groupWidth = totalWidth;
             }
 
