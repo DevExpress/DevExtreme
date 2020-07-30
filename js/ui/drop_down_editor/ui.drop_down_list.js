@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 const window = getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
@@ -20,6 +20,7 @@ import messageLocalization from '../../localization/message';
 import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
 import { Deferred } from '../../core/utils/deferred';
 import DataConverterMixin from '../shared/grouped_data_converter_mixin';
+import typeUtils from '../../core/utils/type';
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
@@ -744,16 +745,42 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
-    _updatePopupMinWidth() {
-        hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
+    _updatePopupMinWidth(popupWidth) {
+        if(window && this._popup) {
+            if(popupWidth === undefined) {
+                popupWidth = this.$element().outerWidth();
+            }
+            this._popup.overlayContent().css('minWidth', popupWidth);
+        }
     },
 
     _popupShowingHandler: function() {
         this._dimensionChanged();
     },
 
+    _getPopupWidth() {
+        const popupWidth = this.option('dropDownOptions.width');
+
+        if(popupWidth === null) {
+            return undefined;
+        }
+        if(typeof popupWidth === 'function') {
+            return popupWidth();
+        }
+
+        return popupWidth;
+    },
+
     _dimensionChanged: function() {
-        this._updatePopupMinWidth();
+        const popupWidth = this._getPopupWidth();
+        const popupMinWidth = this.option('dropDownOptions.minWidth');
+
+        if(popupWidth === undefined) {
+            this._setPopupOption('width', (this._getInputWidth.bind(this)));
+        }
+        if(!typeUtils.isDefined(popupMinWidth)) {
+            this._updatePopupMinWidth(popupWidth);
+        }
         this._popup && this._updatePopupDimensions();
     },
 
@@ -823,6 +850,12 @@ const DropDownList = DropDownEditor.inherit({
             case 'hoverStateEnabled':
             case 'focusStateEnabled':
                 this._isDesktopDevice() && this._setListOption(args.name, args.value);
+                this.callBase(args);
+                break;
+            case 'dropDownOptions':
+                if(args.fullName === 'dropDownOptions.width') {
+                    this._dimensionChanged();
+                }
                 this.callBase(args);
                 break;
             case 'items':

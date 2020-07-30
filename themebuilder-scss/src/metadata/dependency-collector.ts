@@ -28,14 +28,14 @@ export default class DependencyCollector {
     return '';
   }
 
-  static getUniqueWidgets(widgetsArray: Array<string>, currentWidget?: string): Array<string> {
+  static getUniqueWidgets(widgetsArray: string[], currentWidget?: string): string[] {
     const fullArray = currentWidget ? [...widgetsArray, currentWidget] : widgetsArray;
 
     return [...new Set(fullArray)];
   }
 
-  treeProcessor(node: ScriptsDependencyTree): Array<string> {
-    let result: Array<string> = [];
+  treeProcessor(node: ScriptsDependencyTree): string[] {
+    let result: string[] = [];
     const { widget, dependencies } = node;
 
     if (this.flatStylesDependencyTree[widget] !== undefined) {
@@ -74,8 +74,8 @@ export default class DependencyCollector {
         }))
         .filter((path: string): boolean => path !== null
           && existsSync(path)
-          && path.indexOf('node_modules') < 0
-          && path.indexOf('viz') < 0);
+          && !path.includes('node_modules')
+          && !path.includes('viz'));
 
       cacheItem = {
         widget: DependencyCollector.getWidgetFromAst(precinct.ast),
@@ -92,7 +92,7 @@ export default class DependencyCollector {
     return cacheItem;
   }
 
-  static isArraysEqual(array1: Array<string>, array2: Array<string>): boolean {
+  static isArraysEqual(array1: string[], array2: string[]): boolean {
     return array1.length === array2.length
     && array1.every((value, index) => value === array2[index]);
   }

@@ -3,7 +3,6 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
-import { ViewCellData } from '../../types.d';
 import { getKeyByDateAndGroup } from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
@@ -20,17 +19,10 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
           className="dx-scheduler-time-panel-row"
           key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
         >
-          {cellsRow.map(({
-            startDate,
-            text,
-            groups,
-          }: ViewCellData) => (
-            <Cell
-              startDate={startDate}
-              text={text}
-              key={getKeyByDateAndGroup(startDate, groups)}
-            />
-          ))}
+          <Cell
+            startDate={cellsRow[0].startDate}
+            text={cellsRow[0].text}
+          />
         </Row>
       )))}
   </Table>

@@ -438,5 +438,18 @@ QUnit.module('Checkbox editor field', () => {
                 });
             });
         });
+
+        ['checkbox', 'object.checkbox', 'object.innerObject.checkbox'].forEach(dataField => {
+            QUnit.test(`form.formData = empty, checkbox.dataField=${dataField}, allowIndeterminateState = ${allowIndeterminateState})`, function(assert) {
+                const form = $('#form').dxForm({
+                    formData: { },
+                    items: [
+                        { dataField: dataField, editorType: 'dxCheckBox', allowIndeterminateState: allowIndeterminateState }
+                    ]
+                }).dxForm('instance');
+
+                assert.equal(form.getEditor(dataField).option('value'), false);
+            });
+        });
     });
 });

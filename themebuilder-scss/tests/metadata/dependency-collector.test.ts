@@ -78,7 +78,6 @@ jest.mock('filing-cabinet', () => ({
   default: (options: cabinet.Options): string => `${options.partial.replace('./', '')}.js`,
 }));
 
-
 describe('DependencyCollector', () => {
   beforeEach(() => {
     (fs.readFileSync as jest.Mock).mockClear();

@@ -20,7 +20,7 @@ describe('MonthHeaderPanelCell', () => {
         startDate,
         endDate,
       },
-    } as any) as any);
+    }) as any);
 
     it('should pass correct class', () => {
       const cell = render({ props: { className: 'test' } });

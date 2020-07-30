@@ -26,7 +26,8 @@ const SRC = [
     'js/renovation/**/*.{tsx,ts}',
     `!${jQueryComponentsGlob}`,
     '!js/renovation/**/*.d.ts',
-    '!js/renovation/**/__tests__/**/*'
+    '!js/renovation/**/__tests__/**/*',
+    '!js/renovation/test_utils/**/*'
 ];
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
@@ -147,7 +148,7 @@ function addGenerationTask(
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
     }
 
-    generator.defaultOptionsModule = 'js/core/options/utils';
+    generator.options = BASE_GENERATOR_OPTIONS;
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
         return gulp.src(SRC, { base: 'js' })

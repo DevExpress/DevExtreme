@@ -46,7 +46,7 @@ export const fakeClickEvent = {
   pageY: 0,
 };
 
-export const getEventHandlers = (event): Array<object> => eventHandlers[event];
+export const getEventHandlers = (event): object[] => eventHandlers[event];
 
 export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
   Object.keys(keyboardHandlers).forEach((id) => {
