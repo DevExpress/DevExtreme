@@ -1022,12 +1022,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions() {
-        const renderGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
+        const groupCountForRender = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const groupCount = this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
 
         return {
-            groupCount: renderGroupCount,
+            groupCount: groupCountForRender,
             rowCount: this._getRowCount(),
             cellCount: this._getTotalCellCount(groupCount),
             cellDataGetters: [this._getCellData.bind(this)],
