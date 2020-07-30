@@ -80,8 +80,7 @@ gulp.task('rename-renovation-folder', function(done) {
     });
 });
 
-const componentsExpr = renovatedComponents.web.concat(renovatedComponents.base, renovatedComponents.viz, renovatedComponents.mobile)
-    .map(component => ('dxr' + component.name)).join('|');
+const componentsExpr = renovatedComponents.map(component => ('dxr' + component.name)).join('|');
 
 gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
     return merge(

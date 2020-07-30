@@ -1,18 +1,8 @@
 /* eslint-disable import/no-commonjs */
-module.exports = {
-    /* Base widgets */
-    base: [
-        { name: 'Button', pathInRenovationFolder: 'ui/button.j' },
-        { name: 'Widget', pathInRenovationFolder: 'ui/widget.j' },
-        { name: 'GridPager', pathInRenovationFolder: 'ui/pager/grid_pager.j' },
-        { name: 'ItemLayout', pathInRenovationFolder: 'ui/scheduler/appointment-tooltip/item-layout.j' },
-    ],
-    /* Web widgets */
-    web: [
-        { name: 'DataGrid', pathInRenovationFolder: 'ui/data_grid/data_grid.j' },
-    ],
-    /* Viz */
-    viz: [],
-    /* Mobile widgets */
-    mobile: [],
-};
+module.exports = [
+    { name: 'Button', pathInRenovationFolder: 'ui/button.j' },
+    { name: 'Widget', pathInRenovationFolder: 'ui/widget.j' },
+    { name: 'GridPager', pathInRenovationFolder: 'ui/pager/grid_pager.j' },
+    { name: 'TooltipItemLayout', pathInRenovationFolder: 'ui/scheduler/appointment-tooltip/item-layout.j' },
+    { name: 'DataGrid', pathInRenovationFolder: 'ui/data_grid/data_grid.j' },
+];
