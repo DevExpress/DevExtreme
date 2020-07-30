@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as RowView } from '../row';
 
 jest.mock('../../../row', () => ({
+  ...require.requireActual('../../../row'),
   Row: (props) => <div {...props} />,
 }));
 

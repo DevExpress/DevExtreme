@@ -13,8 +13,8 @@ export const viewFunction = (viewModel: AllDayPanelTableBody) => (
   >
     {viewModel.props.viewData!.map((cell, index) => (
       <Cell
-        isFirstGroupCell={index === 0}
-        isLastGroupCell={index === (viewModel.props.viewData!.length - 1)}
+        isFirstCell={index === 0}
+        isLastCell={index === (viewModel.props.viewData!.length - 1)}
         key={getKeyByDateAndGroup(cell.startDate, cell.groups)}
       />
     ))}

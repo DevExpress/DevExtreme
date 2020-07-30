@@ -42,19 +42,19 @@ describe('AllDayPanelCell', () => {
         it('Should have default classes', () => {
           const layout = new AllDayPanelCell({ });
 
-          expect(layout.classes)
+          expect(layout.classes.trim())
             .toEqual('dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal');
         });
 
         it('Should have first group class', () => {
-          const layout = new AllDayPanelCell({ isFirstGroupCell: true });
+          const layout = new AllDayPanelCell({ isFirstCell: true });
 
           expect(layout.classes)
             .toContain('dx-scheduler-first-group-cell');
         });
 
         it('Should have last group class', () => {
-          const layout = new AllDayPanelCell({ isLastGroupCell: true });
+          const layout = new AllDayPanelCell({ isLastCell: true });
 
           expect(layout.classes)
             .toContain('dx-scheduler-last-group-cell');

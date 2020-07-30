@@ -20,3 +20,12 @@ export const addHeightToStyle = (
     height: height ? `${height}px` : nextStyle.height,
   };
 };
+
+export const getGroupCellClasses = (isFirstCell, isLastCell): string => {
+  const classes = new Array<string>();
+
+  isFirstCell && classes.push('dx-scheduler-first-group-cell');
+  isLastCell && classes.push('dx-scheduler-last-group-cell');
+
+  return classes.join(' ');
+};

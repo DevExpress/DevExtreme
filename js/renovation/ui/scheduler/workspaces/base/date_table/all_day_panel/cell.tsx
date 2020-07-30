@@ -1,6 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
+import { getGroupCellClasses } from '../../../utils';
 
 export const viewFunction = (viewModel: AllDayPanelCell) => (
   <td
@@ -14,9 +15,9 @@ export const viewFunction = (viewModel: AllDayPanelCell) => (
 export class AllDayPanelCellProps {
   @OneWay() className?: string = '';
 
-  @OneWay() isFirstGroupCell?: boolean;
+  @OneWay() isFirstCell?: boolean;
 
-  @OneWay() isLastGroupCell?: boolean;
+  @OneWay() isLastCell?: boolean;
 }
 
 @Component({
@@ -25,16 +26,7 @@ export class AllDayPanelCellProps {
 })
 export class AllDayPanelCell extends JSXComponent(AllDayPanelCellProps) {
   get classes() {
-    let classes = 'dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal';
-
-    if (this.props.isFirstGroupCell) {
-      classes += ' dx-scheduler-first-group-cell';
-    }
-
-    if (this.props.isLastGroupCell) {
-      classes += ' dx-scheduler-last-group-cell';
-    }
-
-    return classes;
+    const groupClasses = getGroupCellClasses(this.props.isFirstCell, this.props.isLastCell);
+    return `dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal ${groupClasses}`;
   }
 }

@@ -1,7 +1,7 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
+  Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from '../../row';
+import { Row, RowProps } from '../../row';
 
 export const viewFunction = (viewModel: AllDayPanelRow) => (
   <Row
@@ -13,16 +13,9 @@ export const viewFunction = (viewModel: AllDayPanelRow) => (
   </Row>
 );
 
-@ComponentBindings()
-export class AllDayPanelRowProps {
-  @OneWay() className?: string = '';
-
-  @Slot() children?: any;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class AllDayPanelRow extends JSXComponent(AllDayPanelRowProps) {
+export class AllDayPanelRow extends JSXComponent(RowProps) {
 }
