@@ -1548,6 +1548,15 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.equal($dropDownList.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
     });
 
+    QUnit.test('input aria-owns should point to list', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({ items: [1, 2, 3], opened: true });
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+    });
+
     QUnit.test('aria-controls should be removed when popup is not visible', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
