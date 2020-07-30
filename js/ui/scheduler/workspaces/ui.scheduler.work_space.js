@@ -1895,12 +1895,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _cleanView() {
-        this.renovatedDateTable?.dispose();
-        this.renovatedDateTable = undefined;
-
-        this.renovatedTimePanel?.dispose();
-        this.renovatedTimePanel = undefined;
-
+        this._cleanRenovatedComponents();
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
         this._$thead.empty();
@@ -1917,6 +1912,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
 
         super._clean();
+    }
+
+    _cleanRenovatedComponents() {
+        this.renovatedDateTable?.dispose();
+        this.renovatedDateTable = undefined;
+
+        this.renovatedTimePanel?.dispose();
+        this.renovatedTimePanel = undefined;
     }
 
     getWorkArea() {
@@ -2251,11 +2254,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCellData($cell) {
         let data;
-        if($cell[0]) {
+        const currentCell = $cell[0];
+
+        if(currentCell) {
             if(this.option('renovateRender')) {
                 data = this._getCellDataInRenovatedView($cell);
             } else {
-                data = elementData($cell[0], CELL_DATA);
+                data = elementData(currentCell, CELL_DATA);
             }
         }
 
@@ -2264,18 +2269,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellDataInRenovatedView($cell) {
         const isAllDayCell = this._hasAllDayClass($cell);
-        const isRTL = this.option('rtlEnabled');
-        const viewData = this.viewData;
         const rowIndex = $cell.parent().index();
         const columnIndex = $cell.index();
-        const cellIndex = isRTL ? cellCount - columnIndex : columnIndex;
+        const cellIndex = this.option('rtlEnabled') ? cellCount - columnIndex : columnIndex;
         const cellCount = this._getTotalCellCount();
         const rowCount = this._getRowCountWithAllDayRows();
         const indexDiff = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace()
             ? 1 : 0;
 
         const groupIndex = Math.floor(rowIndex / rowCount);
-        const currentGroup = viewData.groupedData[groupIndex];
+        const currentGroup = this.viewData.groupedData[groupIndex];
 
         if(isAllDayCell) {
             return currentGroup.allDayPanel[cellIndex];
