@@ -4571,65 +4571,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(changedArgs.changeType, 'append');
         assert.deepEqual(changedArgs.removeCount, 40, 'removeCount is correct');
     });
-
-    // T907168
-    QUnit.test('Check dataIndex for grouped items in the next page if group row is in the prev page', function(assert) {
-        const array = [];
-        const pageSize = 5;
-        const groupRowCountInFirstPage = 2;
-        const firstGroupItemsCount = pageSize - groupRowCountInFirstPage;
-        for(let group = 1; group <= 10; group++) {
-            const rowCount = group === 1 ? firstGroupItemsCount : 4;
-            for(let row = 1; row <= rowCount; row++) {
-                array.push({ id: group * row, group: group, name: `text ${group},${row}` });
-            }
-        }
-        this.applyOptions({
-            remoteOperations: {},
-            columns: [
-                'id', { dataField: 'group', groupIndex: 0 }, 'name'
-            ] });
-        this.setupDataSource({
-            data: array,
-            pageSize
-        });
-        this.dataController.viewportSize(pageSize);
-        const items = this.dataController.items();
-        assert.equal(items[pageSize - 1].rowType, 'group');
-        assert.equal(items[pageSize].data.name, 'text 2,1');
-        assert.equal(items[pageSize].dataIndex, 0);
-    });
-
-    // T907168
-    QUnit.test('Check dataIndex for the first and the second row in group', function(assert) {
-        const array = [];
-        const pageSize = 5;
-        const groupRowCountInFirstPage = 2;
-        const firstGroupItemsCount = pageSize - groupRowCountInFirstPage - 1;
-        for(let group = 1; group <= 10; group++) {
-            const rowCount = group === 1 ? firstGroupItemsCount : 4;
-            for(let row = 1; row <= rowCount; row++) {
-                array.push({ id: group * row, group: group, name: `text ${group},${row}` });
-            }
-        }
-        this.applyOptions({
-            remoteOperations: {},
-            columns: [
-                'id', { dataField: 'group', groupIndex: 0 }, 'name'
-            ] });
-        this.setupDataSource({
-            data: array,
-            pageSize
-        });
-        this.dataController.viewportSize(pageSize);
-        const items = this.dataController.items();
-        assert.equal(items[pageSize - 2].rowType, 'group');
-        assert.equal(items[pageSize - 1].data.name, 'text 2,1');
-        assert.equal(items[pageSize - 1].dataIndex, 0);
-        assert.equal(items[pageSize].data.name, 'text 2,2');
-        assert.equal(items[pageSize].dataIndex, 1);
-    });
-
 });
 
 QUnit.module('Infinite scrolling', {
