@@ -22,7 +22,6 @@ import { compileGetter } from '../../core/utils/data';
 import clickEvent from '../../events/click';
 import contextMenuEvent from '../../events/contextmenu';
 import { BindableTemplate } from '../../core/templates/bindable_template';
-import { noop } from 'jquery';
 
 const COLLECTION_CLASS = 'dx-collection';
 const ITEM_CLASS = 'dx-item';
@@ -459,7 +458,7 @@ const CollectionWidget = Widget.inherit({
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
 
-    _updateParentActiveDescendant: noop,
+    _updateParentActiveDescendant: commonUtils.noop,
 
     _optionChanged: function(args) {
         if(args.name === 'items') {
