@@ -17,6 +17,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import { extend } from 'core/utils/extend';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -3711,13 +3712,12 @@ QUnit.module('Workspace Mouse Interaction', () => {
 QUnit.module('Renovated Render', {
     beforeEach() {
         this.createInstance = (options = {}) => {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(extend({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,
-                ...options,
-            }).dxSchedulerWorkSpaceDay('instance');
+            }, options)).dxSchedulerWorkSpaceDay('instance');
             stubInvokeMethod(this.instance);
         };
     },
