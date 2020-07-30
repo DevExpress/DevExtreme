@@ -6,15 +6,17 @@ export const viewFunction = (viewModel: AllDayPanelCell) => (
   <td
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={`dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal
-      dx-scheduler-first-group-cell dx-scheduler-last-group-cell
-      ${viewModel.props.className}`}
+    className={`${viewModel.classes} ${viewModel.props.className}`}
   />
 );
 
 @ComponentBindings()
 export class AllDayPanelCellProps {
   @OneWay() className?: string = '';
+
+  @OneWay() isFirstGroupCell?: boolean;
+
+  @OneWay() isLastGroupCell?: boolean;
 }
 
 @Component({
@@ -22,4 +24,17 @@ export class AllDayPanelCellProps {
   view: viewFunction,
 })
 export class AllDayPanelCell extends JSXComponent(AllDayPanelCellProps) {
+  get classes() {
+    let classes = 'dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal';
+
+    if (this.props.isFirstGroupCell) {
+      classes += ' dx-scheduler-first-group-cell';
+    }
+
+    if (this.props.isLastGroupCell) {
+      classes += ' dx-scheduler-last-group-cell';
+    }
+
+    return classes;
+  }
 }
