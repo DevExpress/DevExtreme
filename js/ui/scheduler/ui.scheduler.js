@@ -54,7 +54,7 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 
 // STYLE scheduler
-const toMs = dateUtils.dateToMilliseconds;
+// const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 
 const WIDGET_CLASS = 'dx-scheduler';
@@ -1945,45 +1945,49 @@ class Scheduler extends Widget {
     }
 
     _singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        exceptionDate = new Date(exceptionDate);
+        exceptionDate = this.timeZoneCalculator.createDate(exceptionDate, {
+            path: 'fromGrid'
+        });
+        // exceptionDate = new Date(exceptionDate);
 
-        function processAppointmentDates(appointment, commonTimezoneOffset) {
-            const startDate = this.fire('getField', 'startDate', appointment);
-            let processedStartDate = this.fire(
-                'convertDateByTimezoneBack',
-                startDate,
-                this.fire('getField', 'startDateTimeZone', appointment)
-            );
+        // function processAppointmentDates(appointment, commonTimezoneOffset) {
+        //     const startDate = this.fire('getField', 'startDate', appointment);
+        //     let processedStartDate = this.fire(
+        //         'convertDateByTimezoneBack',
+        //         startDate,
+        //         this.fire('getField', 'startDateTimeZone', appointment)
+        //     );
 
-            const endDate = this.fire('getField', 'endDate', appointment);
-            let processedEndDate = this.fire(
-                'convertDateByTimezoneBack',
-                endDate,
-                this.fire('getField', 'endDateTimeZone', appointment)
-            );
+        //     const endDate = this.fire('getField', 'endDate', appointment);
+        //     let processedEndDate = this.fire(
+        //         'convertDateByTimezoneBack',
+        //         endDate,
+        //         this.fire('getField', 'endDateTimeZone', appointment)
+        //     );
 
-            if(typeof commonTimezoneOffset === 'number' && !isNaN(commonTimezoneOffset)) {
-                const startDateClientTzOffset = -(this._subscribes['getClientTimezoneOffset'](startDate) / toMs('hour'));
-                const endDateClientTzOffset = -(this._subscribes['getClientTimezoneOffset'](endDate) / toMs('hour'));
-                const processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * toMs('hour');
-                const processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * toMs('hour');
+        //     if(typeof commonTimezoneOffset === 'number' && !isNaN(commonTimezoneOffset)) {
+        //         const startDateClientTzOffset = -(this._subscribes['getClientTimezoneOffset'](startDate) / toMs('hour'));
+        //         const endDateClientTzOffset = -(this._subscribes['getClientTimezoneOffset'](endDate) / toMs('hour'));
+        //         const processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * toMs('hour');
+        //         const processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * toMs('hour');
 
-                processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * toMs('hour'));
-                processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * toMs('hour'));
-            }
+        //         processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * toMs('hour'));
+        //         processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * toMs('hour'));
+        //     }
 
-            this.fire('setField', 'startDate', appointment, processedStartDate);
-            this.fire('setField', 'endDate', appointment, processedEndDate);
-        }
+        //     this.fire('setField', 'startDate', appointment, processedStartDate);
+        //     this.fire('setField', 'endDate', appointment, processedEndDate);
+        // }
 
         this.fire('setField', 'recurrenceRule', singleAppointment, '');
         this.fire('setField', 'recurrenceException', singleAppointment, '');
 
         if(!isDeleted && !isPopupEditing) {
-
-            processAppointmentDates.call(this, singleAppointment, this._getTimezoneOffsetByOption());
-
-            this.addAppointment(singleAppointment);
+            const newApp = this.createAppointmentAdapter(singleAppointment).clone({
+                pathTimeZone: 'fromGrid'
+            }).source();
+            // processAppointmentDates.call(this, singleAppointment, this._getTimezoneOffsetByOption());
+            this.addAppointment(newApp);
         }
 
         const recurrenceException = this._createRecurrenceException(exceptionDate, targetAppointment);

@@ -4,15 +4,16 @@ export class TimeZoneCalculator {
     }
 
     createDate(sourceDate, info) {
+        const date = new Date(sourceDate);
         switch(info.path) {
             case PathTimeZoneConversion.fromSourceToAppointment:
-                return this.scheduler.fire('convertDateByTimezone', sourceDate, info.appointmentTimeZone, true);
+                return this.scheduler.fire('convertDateByTimezone', date, info.appointmentTimeZone, true);
             case PathTimeZoneConversion.fromAppointmentToSource:
-                return this.scheduler.fire('convertDateByTimezoneBack', sourceDate, info.appointmentTimeZone, true);
+                return this.scheduler.fire('convertDateByTimezoneBack', date, info.appointmentTimeZone, true);
             case PathTimeZoneConversion.fromSourceToGrid:
-                return this.scheduler.fire('convertDateByTimezone', sourceDate, info.appointmentTimeZone);
+                return this.scheduler.fire('convertDateByTimezone', date, info.appointmentTimeZone);
             case PathTimeZoneConversion.fromGridToSource:
-                return this.scheduler.fire('convertDateByTimezoneBack', sourceDate, info.appointmentTimeZone);
+                return this.scheduler.fire('convertDateByTimezoneBack', date, info.appointmentTimeZone);
         }
         throw new Error('not specified pathTimeZoneConversion');
     }
