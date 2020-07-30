@@ -811,7 +811,7 @@ QUnit.module('View\'s focus', {
                     this.clock.tick();
                     let keyboard = keyboardMock($cell);
                     keyboard.keyDown('a');
-                    this.clock.tick();
+                    this.clock.tick(25);
                     $cell = $(dataGrid.getCellElement(rowIndex, 1));
 
                     // assert
