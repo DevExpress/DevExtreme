@@ -5,10 +5,8 @@ import 'ui/diagram';
 
 import DataSource from 'data/data_source';
 import ArrayStore from 'data/array_store';
-import { getDiagram } from 'ui/diagram/diagram.importer';
+import { DiagramCommand } from 'devexpress-diagram';
 import { Consts } from '../../../helpers/diagramHelpers.js';
-
-const { DiagramCommand } = getDiagram();
 
 const moduleConfig = {
     beforeEach: function() {
