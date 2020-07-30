@@ -17,7 +17,7 @@ jest.mock('../../../table', () => ({
   Table: () => null,
 }));
 
-describe('AppDayPanelLayout', () => {
+describe('AllDayPanelLayout', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [
