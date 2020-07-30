@@ -8,6 +8,9 @@ import {
 
 export const viewFunction = (viewModel: DayDateTableCell): JSX.Element => (
   <DateTableCellBase
+    startDate={viewModel.props.startDate}
+    endDate={viewModel.props.endDate}
+    groups={viewModel.props.groups}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     className="dx-scheduler-first-group-cell dx-scheduler-last-group-cell"

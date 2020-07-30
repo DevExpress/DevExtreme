@@ -257,6 +257,7 @@ describe('TooltipItemLayout', () => {
           const onHide = jest.fn();
           const onDelete = jest.fn();
           const stopPropagation = jest.fn();
+          const getTextAndFormatDate = jest.fn();
           const appointmentItem = {
             data: { text: 'data' },
             currentData: { text: 'currentData' },
@@ -264,14 +265,18 @@ describe('TooltipItemLayout', () => {
           const singleAppointment = { text: 'singleAppointmentData' };
 
           const tooltipItemLayout = new TooltipItemLayout({
-            item: appointmentItem, onHide, onDelete, singleAppointment,
+            item: appointmentItem,
+            onHide,
+            onDelete,
+            singleAppointment,
+            getTextAndFormatDate,
           });
           const { onDeleteButtonClick } = tooltipItemLayout;
 
           expect(onDeleteButtonClick)
             .toEqual(expect.any(Function));
 
-          const event = { event: { stopPropagation } };
+          const event: { event: Event } = { event: { stopPropagation } };
           onDeleteButtonClick(event);
 
           expect(onHide)

@@ -6,6 +6,10 @@ import { ViewCellData } from '../../types.d';
 import { getKeyByDateAndGroup } from '../../utils';
 import { LayoutProps } from '../layout_props';
 
+interface CellTemplateProps extends ViewCellData {
+  key: string;
+}
+
 export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
   <Fragment>
     {viewModel.props.viewData
@@ -17,11 +21,13 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
             startDate,
             endDate,
             groups,
+            text,
           }: ViewCellData) => (
             <viewModel.props.cellTemplate
               startDate={startDate}
               endDate={endDate}
               groups={groups}
+              text={text}
               key={getKeyByDateAndGroup(startDate, groups)}
             />
           ))}
@@ -31,7 +37,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
 );
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
-  @Template() cellTemplate?: (props: ViewCellData) => JSX.Element;
+  @Template() cellTemplate?: (props: CellTemplateProps) => JSX.Element;
 }
 
 @Component({

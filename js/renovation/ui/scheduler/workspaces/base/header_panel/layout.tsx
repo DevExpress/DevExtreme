@@ -38,6 +38,7 @@ export class HeaderPanelLayoutProps {
     startDate: Date;
     endDate: Date;
     today?: boolean;
+    key: string;
   }) => JSX.Element;
 }
 

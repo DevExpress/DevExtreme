@@ -3,6 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import {
   AppointmentList,
   viewFunction as AppointmentListView,
+  AppointmentListProps,
 } from '../appointment_list';
 import { List } from '../../../list';
 import { TooltipItemLayout } from '../item_layout';
@@ -180,11 +181,20 @@ describe('AppointmentList', () => {
   });
 
   describe('Logic', () => {
+    const baseProps: AppointmentListProps = {
+      target: (('target' as unknown) as HTMLElement),
+      showAppointmentPopup: () => {},
+      getSingleAppointmentData: () => {},
+    };
+
     describe('Getters', () => {
       describe('onItemClick', () => {
         it('should create onItemClick correctly', () => {
           const showAppointmentPopup = jest.fn();
-          const appointmentList = new AppointmentList({ showAppointmentPopup });
+          const appointmentList = new AppointmentList({
+            ...baseProps,
+            showAppointmentPopup,
+          });
 
           const { onItemClick } = appointmentList;
           expect(onItemClick)
