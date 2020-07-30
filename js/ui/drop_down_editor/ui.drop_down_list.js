@@ -352,7 +352,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _updateActiveDescendant() {
         const opened = this.option('opened');
-        const listFocusedItemId = this._list.getFocusedItemId();
+        const listFocusedItemId = this._list?.getFocusedItemId();
         const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
         const activedescendant = opened && isElementOnDom && listFocusedItemId;
 
