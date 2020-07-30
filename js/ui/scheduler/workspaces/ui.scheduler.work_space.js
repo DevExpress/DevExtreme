@@ -2271,6 +2271,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellIndex = isRTL ? cellCount - columnIndex : columnIndex;
         const cellCount = this._getTotalCellCount();
         const rowCount = this._getRowCountWithAllDayRows();
+        const indexDiff = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace()
+            ? 1 : 0;
 
         const groupIndex = Math.floor(rowIndex / rowCount);
         const currentGroup = viewData.groupedData[groupIndex];
@@ -2279,7 +2281,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             return currentGroup.allDayPanel[cellIndex];
         }
 
-        return currentGroup.dateTable[rowIndex % rowCount][cellIndex];
+        return currentGroup.dateTable[rowIndex % rowCount - indexDiff][cellIndex];
     }
 
     _getHorizontalMax(groupIndex) {
