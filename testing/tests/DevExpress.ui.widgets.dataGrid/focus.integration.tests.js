@@ -766,4 +766,73 @@ QUnit.module('View\'s focus', {
         // assert
         assert.ok($cell0.hasClass('dx-focused'), 'cell is focused');
     });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        ['left', 'right'].forEach(arrowKey => {
+            [0, 1, 2].forEach(rowIndex => {
+                let rowPosition;
+                switch(rowIndex) {
+                    case 0: rowPosition = 'first';
+                        break;
+                    case 1: rowPosition = 'middle';
+                        break;
+                    case 2: rowPosition = 'last';
+                        break;
+                }
+                QUnit.test(`${editMode} - Modified cell value should not be reset when the ${arrowKey} arrow key is pressed in the ${rowPosition} row and fast editing is enabled (T916159)`, function(assert) {
+                    // arrange
+                    this.dataGrid.dispose();
+                    const dataGrid = createDataGrid({
+                        keyExpr: 'id',
+                        dataSource: [
+                            { id: 1, name: 'name1', description: 'description1' },
+                            { id: 2, name: 'name2', description: 'description2' },
+                            { id: 3, name: 'name3', description: 'description3' },
+                        ],
+                        keyboardNavigation: {
+                            editOnKeyPress: true
+                        },
+                        editing: {
+                            mode: editMode.toLowerCase(),
+                            allowUpdating: true,
+                            startEditAction: 'dblClick'
+                        },
+                        columns: [
+                            { dataField: 'id', allowEditing: false },
+                            'name',
+                            { dataField: 'description', allowEditing: false }
+                        ]
+                    });
+                    this.clock.tick();
+
+                    // act
+                    let $cell = $(dataGrid.getCellElement(rowIndex, 1));
+                    $cell.trigger(CLICK_EVENT).trigger('dxclick');
+                    this.clock.tick();
+                    let keyboard = keyboardMock($cell);
+                    keyboard.keyDown('a');
+                    this.clock.tick();
+                    $cell = $(dataGrid.getCellElement(rowIndex, 1));
+
+                    // assert
+                    assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
+
+                    // act
+                    keyboard = keyboardMock($cell);
+                    keyboard.keyDown(arrowKey);
+                    this.clock.tick();
+                    $cell = $(dataGrid.getCellElement(rowIndex, 1));
+                    const cellValue = dataGrid.cellValue(rowIndex, 1);
+
+                    // assert
+                    if(editMode === 'Batch') {
+                        assert.ok($cell.hasClass('dx-cell-modified'), 'cell is modified');
+                    }
+                    assert.ok($cell.hasClass('dx-focused'), 'cell is focused');
+                    assert.notOk($cell.hasClass('dx-editor-cell'), 'cell does not have an editor');
+                    assert.equal(cellValue, 'a', 'cell value is correct');
+                });
+            });
+        });
+    });
 });
