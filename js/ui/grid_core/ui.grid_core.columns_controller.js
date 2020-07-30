@@ -815,6 +815,10 @@ export default {
                         value = optionGetter(column);
                     }
 
+                    if(optionName === 'name' || optionName === 'allowEditing') {
+                        that._checkColumns();
+                    }
+
                     fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,

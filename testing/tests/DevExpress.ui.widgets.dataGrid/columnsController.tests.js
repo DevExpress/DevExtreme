@@ -1624,6 +1624,37 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             assert.equal(errorLogCalls[1].args[0], 'E1060', 'error code');
             errors.log.restore();
         });
+
+        QUnit.test('Change name to non-unique', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['Test', 'Test1'];
+            this.applyOptions({ columns });
+
+            // act
+            this.columnOption(0, 'name', 'Test1');
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Change allowEditing to true for column without name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: '',
+                allowEditing: false
+            }];
+            this.applyOptions({ columns });
+
+            // act
+            this.columnOption(0, 'allowEditing', true);
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
     });
 });
 
