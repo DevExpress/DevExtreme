@@ -4,7 +4,6 @@ import { getPublicElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
-import browser from '../../core/utils/browser';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -388,9 +387,7 @@ exports.AreaItem = Class.inherit({
             colgroupElementHTML += '<col style="width: ' + columnWidth[i] + 'px">';
         }
         this._colgroupElement.html(colgroupElementHTML);
-        this._tableWidth = this.needWidthCorrection()
-            ? totalWidth
-            : totalWidth - this._groupWidth > 0.01 ? Math.ceil(totalWidth) : totalWidth;
+        this._tableWidth = totalWidth;
 
         tableElement.style.width = this._tableWidth + 'px';
         tableElement.style.tableLayout = 'fixed';
@@ -453,10 +450,6 @@ exports.AreaItem = Class.inherit({
         }
 
         this.tableElement().css(styles);
-    },
-
-    needWidthCorrection() { // T914454
-        return browser.chrome;
     },
 
     setVirtualContentParams: function(params) {
