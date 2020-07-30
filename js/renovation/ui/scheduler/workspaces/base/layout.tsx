@@ -2,12 +2,13 @@ import {
   Component, ComponentBindings, JSXComponent, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { LayoutProps } from './layout_props';
+import { ViewCellData, GroupedViewData } from '../types.d';
 
-export const viewFunction = (viewModel: LayoutBase) => (
+export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div {...viewModel.restAttributes}>
     <viewModel.props.headerPanelTemplate
-      viewCellsData={viewModel.props.viewData!.groupedData[0].dateTable}
+      viewCellsData={viewModel.props.viewData.groupedData[0].dateTable}
     />
     <viewModel.props.dateTableTemplate viewData={viewModel.props.viewData} />
   </div>
@@ -15,9 +16,13 @@ export const viewFunction = (viewModel: LayoutBase) => (
 
 @ComponentBindings()
 export class LayoutBaseProps extends LayoutProps {
-  @Template() headerPanelTemplate?: any;
+  @Template() headerPanelTemplate?: (props: {
+    viewCellsData: ViewCellData[][];
+  }) => JSX.Element;
 
-  @Template() dateTableTemplate?: any;
+  @Template() dateTableTemplate?: (props: {
+    viewData: GroupedViewData;
+  }) => JSX.Element;
 }
 
 @Component({

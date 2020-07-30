@@ -2,15 +2,15 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { GroupPanelVerticalCell } from './cell';
-import { GroupRenderItem } from '../../../types.d';
+import { GroupRenderItem, GroupItem } from '../../../types.d';
 
-export const viewFunction = (viewModel: Row) => (
+export const viewFunction = (viewModel: Row): JSX.Element => (
   <div
     className={`dx-scheduler-group-row ${viewModel.props.className}`}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
-    {viewModel.props.groupItems!.map(({
+    {viewModel.props.groupItems.map(({
       text, id, data, key, color,
     }, index) => (
       <GroupPanelVerticalCell
@@ -28,9 +28,17 @@ export const viewFunction = (viewModel: Row) => (
 
 @ComponentBindings()
 export class RowProps {
-  @OneWay() groupItems?: GroupRenderItem[];
+  @OneWay() groupItems!: GroupRenderItem[];
 
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate?: (props: {
+    data: {
+      data: GroupItem;
+      id: string | number;
+      color?: string;
+      text?: string;
+    };
+    index: number;
+  }) => JSX.Element;
 
   @OneWay() className?: string = '';
 }

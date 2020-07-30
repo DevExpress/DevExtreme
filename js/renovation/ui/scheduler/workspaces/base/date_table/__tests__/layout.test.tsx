@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import {
   viewFunction as LayoutView,
   DateTableLayoutBase,
@@ -10,10 +10,10 @@ import { DateTableBody } from '../table_body';
 
 jest.mock('devextreme-generator/component_declaration/common', () => ({
   ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
+  Fragment: ({ children }): JSX.Element => <div>{children}</div>,
 }));
 jest.mock('../table_body', () => ({
-  DateTableBody: () => null,
+  DateTableBody: (): null => null,
 }));
 
 describe('DateTableLayoutBase', () => {
@@ -26,16 +26,16 @@ describe('DateTableLayoutBase', () => {
         ],
       }],
     };
-    const cellTemplate = () => null;
+    const cellTemplate = (): null => null;
 
-    const render = (viewModel) => mount(LayoutView({
+    const render = (viewModel): ReactWrapper => mount(LayoutView({
       ...viewModel,
       props: {
         cellTemplate,
         viewData,
         ...viewModel.props,
       },
-    }) as any).childAt(0).childAt(0);
+    })).childAt(0).childAt(0);
 
     afterEach(() => jest.resetAllMocks());
 

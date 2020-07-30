@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = (viewModel: TooltipItemContent) => (
+export const viewFunction = (viewModel: TooltipItemContent): JSX.Element => (
   <div
     className={`dx-tooltip-appointment-item-content ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading

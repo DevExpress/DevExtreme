@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { Fragment } from 'devextreme-generator/component_declaration/common';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
@@ -18,9 +18,9 @@ jest.mock('../utils/get_current_appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));
 
-jest.mock('../../../button', () => ({ __esModule: true, Button: () => null }));
-jest.mock('../marker', () => ({ __esModule: true, Marker: () => null }));
-jest.mock('../item_content', () => ({ __esModule: true, TooltipItemContent: () => null }));
+jest.mock('../../../button', () => ({ __esModule: true, Button: (): null => null }));
+jest.mock('../marker', () => ({ __esModule: true, Marker: (): null => null }));
+jest.mock('../item_content', () => ({ __esModule: true, TooltipItemContent: (): null => null }));
 
 describe('TooltipItemLayout', () => {
   describe('Render', () => {
@@ -46,12 +46,12 @@ describe('TooltipItemLayout', () => {
     };
 
     // Have to use JSX because Fragment causes errors
-    const render = (viewModel) => shallow(
+    const render = (viewModel): ShallowWrapper => shallow(
       <TooltipItemLayoutView
         {...defaultViewModel}
         {...viewModel}
         props={{ ...defaultProps, ...viewModel.props }}
-      /> as any,
+      />,
     );
 
     it('should combine `className` with predefined classes', () => {
@@ -99,7 +99,7 @@ describe('TooltipItemLayout', () => {
 
       expect(marker.props())
         .toMatchObject({
-          color: defaultProps.item!.color,
+          color: defaultProps.item.color,
         });
     });
 
@@ -136,8 +136,9 @@ describe('TooltipItemLayout', () => {
 
     describe('Template', () => {
       const currentAppointment: dxSchedulerAppointment = { text: 'currentAppointment' };
-      const template = () => null;
-      const renderWithTemplate = () => shallow(
+      const template = (): null => null;
+
+      const renderWithTemplate = (): ShallowWrapper => shallow(
         <TooltipItemLayoutView
           props={{ ...defaultProps, itemContentTemplate: template }}
           {...defaultViewModel}

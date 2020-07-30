@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import {
   MonthHeaderPanelCell as Cell,
   viewFunction as CellView,
@@ -13,14 +13,14 @@ describe('MonthHeaderPanelCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9);
     const endDate = new Date(2020, 6, 10);
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel): ShallowWrapper => shallow(CellView({
       ...viewModel,
       props: {
         ...viewModel.props,
         startDate,
         endDate,
       },
-    }) as any);
+    }));
 
     it('should pass correct class', () => {
       const cell = render({ props: { className: 'test' } });

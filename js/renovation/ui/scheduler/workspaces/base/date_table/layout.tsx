@@ -5,8 +5,9 @@ import { Table } from '../table';
 import { VirtualTable } from '../virtual_table';
 import { DateTableBody } from './table_body';
 import { LayoutProps } from '../layout_props';
+import { ViewCellData } from '../../types.d';
 
-export const viewFunction = (viewModel: DateTableLayoutBase) => (
+export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
   // This is a workaround because of bug in generator:
   // it's impossible use ternary operator to choose between tables
   <Fragment>
@@ -41,7 +42,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
 export class DateTableLayoutBaseProps extends LayoutProps {
   @OneWay() className?: string;
 
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate?: (props: ViewCellData) => JSX.Element;
 }
 
 @Component({
@@ -51,6 +52,6 @@ export class DateTableLayoutBaseProps extends LayoutProps {
 export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
   get isVirtual(): boolean {
     const { viewData } = this.props;
-    return !!viewData!.isVirtual;
+    return !!viewData.isVirtual;
   }
 }

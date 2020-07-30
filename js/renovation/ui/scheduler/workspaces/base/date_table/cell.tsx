@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = (viewModel: DateTableCellBase) => (
+export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
   <td
     className={
       `dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal
@@ -17,7 +17,7 @@ export const viewFunction = (viewModel: DateTableCellBase) => (
 
 @ComponentBindings()
 export class DateTableCellBaseProps {
-  @OneWay() startDate?: Date = new Date();
+  @OneWay() startDate: Date = new Date();
 
   @OneWay() endDate?: Date = new Date();
 
@@ -25,7 +25,7 @@ export class DateTableCellBaseProps {
 
   @OneWay() className?: string = '';
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({

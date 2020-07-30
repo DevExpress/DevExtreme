@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import {
   AppointmentList,
   viewFunction as AppointmentListView,
@@ -10,12 +10,12 @@ import getCurrentAppointment from '../utils/get_current_appointment';
 
 jest.mock('../item_layout', () => ({
   __esModule: true,
-  TooltipItemLayout: () => null,
+  TooltipItemLayout: (): null => null,
 }));
 
 jest.mock('../../../list', () => ({
   __esModule: true,
-  List: (props) => {
+  List: (props): JSX.Element => {
     // eslint-disable-next-line react/prop-types
     const { dataSource } = props;
     return (
@@ -43,7 +43,7 @@ describe('AppointmentList', () => {
     }];
     const getSingleAppointmentData = jest.fn();
 
-    const render = ({ props, ...restProps }) => mount(AppointmentListView({
+    const render = ({ props, ...restProps }): ReactWrapper => mount(AppointmentListView({
       props: {
         getSingleAppointmentData,
         appointments,
@@ -51,7 +51,7 @@ describe('AppointmentList', () => {
         ...props,
       },
       ...restProps,
-    } as any) as any);
+    } as AppointmentList));
 
     beforeAll(() => {
       getSingleAppointmentData.mockImplementation(() => ({

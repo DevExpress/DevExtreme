@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as TooltipItemContentView } from '../item_content';
 
 describe('TooltipItemContent', () => {
@@ -7,10 +7,10 @@ describe('TooltipItemContent', () => {
       text: 'text',
       formattedDate: 'formattedDate',
     };
-    const render = (viewModel) => shallow(TooltipItemContentView({
+    const render = (viewModel): ShallowWrapper => shallow(TooltipItemContentView({
       ...viewModel,
       props: { ...defaultProps, ...viewModel.props },
-    }) as any);
+    }));
 
     it('should combine `className` with predefined classes', () => {
       const tree = render({ props: { className: 'custom-class' } });

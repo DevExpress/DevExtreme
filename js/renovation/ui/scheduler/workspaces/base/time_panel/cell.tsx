@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = (viewModel: TimePanelCell) => (
+export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
   <td
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}

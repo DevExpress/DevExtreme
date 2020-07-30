@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import {
   GroupPanelVerticalLayout as Layout,
   viewFunction as LayoutView,
@@ -7,7 +7,7 @@ import { Row } from '../row';
 import { addHeightToStyle } from '../../../../utils';
 
 jest.mock('../row', () => ({
-  Row: () => null,
+  Row: (): null => null,
 }));
 jest.mock('../../../../utils', () => ({
   addHeightToStyle: jest.fn(() => 'style'),
@@ -39,14 +39,14 @@ describe('GroupPanel Vertical Layout', () => {
     }]];
     const defaultStyle = 'default style';
 
-    const render = (viewModel) => mount(LayoutView({
+    const render = (viewModel): ReactWrapper => mount(LayoutView({
       groupsRenderData,
       style: defaultStyle,
       ...viewModel,
       props: {
         ...viewModel.props,
       },
-    }) as any);
+    }));
 
     it('should spread restAttributes correctly', () => {
       const layout = render({

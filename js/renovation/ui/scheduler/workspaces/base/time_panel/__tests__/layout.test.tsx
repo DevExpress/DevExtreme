@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
@@ -13,10 +13,10 @@ describe('TimePanelLayout', () => {
         ],
       }],
     };
-    const render = (viewModel) => mount(LayoutView({
+    const render = (viewModel): ReactWrapper => mount(LayoutView({
       ...viewModel,
       props: { ...viewModel.props, viewData },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

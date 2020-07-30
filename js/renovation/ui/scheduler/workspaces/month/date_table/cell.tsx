@@ -3,14 +3,14 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableCellBase, DateTableCellBaseProps } from '../../base/date_table/cell';
 
-export const viewFunction = (viewModel: MonthDateTableCell) => (
+export const viewFunction = (viewModel: MonthDateTableCell): JSX.Element => (
   <DateTableCellBase
     className={viewModel.classes}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
     <div>
-      {viewModel.props.startDate!.getDate()}
+      {viewModel.props.startDate.getDate()}
     </div>
   </DateTableCellBase>
 );

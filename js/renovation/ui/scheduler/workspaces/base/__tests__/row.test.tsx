@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { Row, viewFunction as RowView } from '../row';
 import { addHeightToStyle } from '../../utils';
 
@@ -9,10 +9,10 @@ jest.mock('../../utils', () => ({
 
 describe('RowBase', () => {
   describe('Render', () => {
-    const render = (viewModel) => shallow(RowView({
+    const render = (viewModel): ShallowWrapper => shallow(RowView({
       ...viewModel,
       props: { ...viewModel.props },
-    }) as any);
+    }));
 
     it('should pass className and style', () => {
       const row = render({ props: { className: 'custom-class' }, style: 'style' });

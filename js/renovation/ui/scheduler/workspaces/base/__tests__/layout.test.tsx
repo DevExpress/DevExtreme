@@ -1,10 +1,10 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
-    const headerPanelTemplate = () => null;
-    const dateTableTemplate = () => null;
+    const headerPanelTemplate = (): null => null;
+    const dateTableTemplate = (): null => null;
     const viewData = {
       groupedData: [{
         dateTable: [[
@@ -36,7 +36,7 @@ describe('LayoutBase', () => {
         ]],
       }],
     };
-    const render = (viewModel) => shallow(LayoutView({
+    const render = (viewModel): ShallowWrapper => shallow(LayoutView({
       ...viewModel,
       props: {
         headerPanelTemplate,
@@ -44,7 +44,7 @@ describe('LayoutBase', () => {
         viewData,
         ...viewModel.props,
       },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

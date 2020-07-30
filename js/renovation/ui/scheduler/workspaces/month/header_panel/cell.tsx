@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import dateLocalization from '../../../../../../localization/date';
 
-export const viewFunction = (viewModel: MonthHeaderPanelCell) => (
+export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => (
   <td
     className={
       `dx-scheduler-header-panel-cell dx-scheduler-cell-sizes-horizontal ${viewModel.props.className}`
@@ -19,7 +19,7 @@ export const viewFunction = (viewModel: MonthHeaderPanelCell) => (
 
 @ComponentBindings()
 export class MonthHeaderPanelCellProps {
-  @OneWay() startDate?: Date = new Date();
+  @OneWay() startDate: Date = new Date();
 
   @OneWay() endDate?: Date = new Date();
 
@@ -34,6 +34,6 @@ export class MonthHeaderPanelCell extends JSXComponent(MonthHeaderPanelCellProps
   get weekDay(): string {
     const { startDate } = this.props;
 
-    return dateLocalization.getDayNames('abbreviated')[startDate!.getDay()];
+    return dateLocalization.getDayNames('abbreviated')[startDate.getDay()];
   }
 }

@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as TableBodyView } from '../table_body';
 import { DateTableRow as Row } from '../row';
 import { getKeyByDateAndGroup } from '../../../utils';
@@ -10,11 +10,11 @@ jest.mock('../../../utils', () => ({
 }));
 jest.mock('devextreme-generator/component_declaration/common', () => ({
   ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
+  Fragment: ({ children }): JSX.Element => <div>{children}</div>,
 }));
 jest.mock('../row', () => ({
   ...require.requireActual('../row'),
-  DateTableRow: ({ children }) => <div>{children}</div>,
+  DateTableRow: ({ children }): JSX.Element => <div>{children}</div>,
 }));
 
 describe('DateTableBody', () => {
@@ -27,16 +27,16 @@ describe('DateTableBody', () => {
         ],
       }],
     };
-    const cellTemplate = () => null;
+    const cellTemplate = (): null => null;
 
-    const render = (viewModel) => shallow(TableBodyView({
+    const render = (viewModel): ShallowWrapper => shallow(TableBodyView({
       ...viewModel,
       props: {
         viewData,
         cellTemplate,
         ...viewModel.props,
       },
-    }) as any);
+    }));
 
     afterEach(() => jest.resetAllMocks());
 

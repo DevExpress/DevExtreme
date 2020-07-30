@@ -1,15 +1,15 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as TableView } from '../table';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
-    const render = (viewModel) => shallow(TableView({
+    const render = (viewModel): ShallowWrapper => shallow(TableView({
       ...viewModel,
       props: {
         ...viewModel.props,
       },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

@@ -6,9 +6,9 @@ import { ViewCellData } from '../../types.d';
 import { getKeyByDateAndGroup } from '../../utils';
 import { LayoutProps } from '../layout_props';
 
-export const viewFunction = (viewModel: DateTableBody) => (
+export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
   <Fragment>
-    {viewModel.props.viewData!
+    {viewModel.props.viewData
       .groupedData.map((table) => table.dateTable.map((cellsRow) => (
         <DateTableRow
           key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
@@ -31,7 +31,7 @@ export const viewFunction = (viewModel: DateTableBody) => (
 );
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate?: (props: ViewCellData) => JSX.Element;
 }
 
 @Component({

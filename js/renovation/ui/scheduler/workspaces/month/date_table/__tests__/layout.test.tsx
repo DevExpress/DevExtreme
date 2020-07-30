@@ -1,11 +1,11 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { MonthDateTableCell } from '../cell';
 
 jest.mock('../../../base/date_table/layout', () => ({
   ...require.requireActual('../../../base/date_table/layout'),
-  DateTableLayoutBase: (props) => <div {...props} />,
+  DateTableLayoutBase: (props): JSX.Element => <div {...props} />,
 }));
 
 describe('MonthDateTableLayout', () => {
@@ -19,10 +19,10 @@ describe('MonthDateTableLayout', () => {
       }],
     };
 
-    const render = (viewModel) => shallow(LayoutView({
+    const render = (viewModel): ShallowWrapper => shallow(LayoutView({
       ...viewModel,
       props: { viewData, ...viewModel.props },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

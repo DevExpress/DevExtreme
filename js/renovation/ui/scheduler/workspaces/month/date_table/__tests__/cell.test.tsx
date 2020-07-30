@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import {
   MonthDateTableCell as Cell,
   viewFunction as CellView,
@@ -7,21 +7,21 @@ import {
 
 jest.mock('../../../base/date_table/cell', () => ({
   ...require.requireActual('../../../base/date_table/cell'),
-  DateTableCellBase: (props) => <div {...props} />,
+  DateTableCellBase: (props): JSX.Element => <div {...props} />,
 }));
 
 describe('MonthDateTableCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9);
     const endDate = new Date(2020, 6, 10);
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel): ShallowWrapper => shallow(CellView({
       ...viewModel,
       props: {
         ...viewModel.props,
         startDate,
         endDate,
       },
-    }) as any);
+    }));
 
     it('should pass correct class', () => {
       const cell = render({ classes: 'test' });

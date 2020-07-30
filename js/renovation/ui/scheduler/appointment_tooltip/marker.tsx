@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { DeferredColor, Color } from './types';
 
-export const viewFunction = (viewModel: Marker) => (
+export const viewFunction = (viewModel: Marker): JSX.Element => (
   <div
     className={`dx-tooltip-appointment-item-marker ${viewModel.props.className}`}
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -39,6 +39,6 @@ export class Marker extends JSXComponent(MarkerProps) {
   }
 
   get style() {
-    return { background: this.appointmentColor! };
+    return { background: this.appointmentColor };
   }
 }

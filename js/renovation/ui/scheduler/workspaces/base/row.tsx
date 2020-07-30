@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { addHeightToStyle } from '../utils';
 
-export const viewFunction = (viewModel: Row) => (
+export const viewFunction = (viewModel: Row): JSX.Element => (
   <tr
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -20,7 +20,7 @@ export class RowProps {
 
   @OneWay() className?: string = '';
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({

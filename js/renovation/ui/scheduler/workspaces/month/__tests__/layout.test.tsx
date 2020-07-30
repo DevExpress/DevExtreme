@@ -1,11 +1,11 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { MonthDateTableLayout } from '../date_table/layout';
 import { HeaderPanelLayout } from '../../base/header_panel/layout';
 
 jest.mock('../../base/layout', () => ({
-  LayoutBase: (props) => (
+  LayoutBase: (props): JSX.Element => (
     <div {...props}>
       <props.headerPanelTemplate />
       <props.dateTableTemplate />
@@ -13,22 +13,22 @@ jest.mock('../../base/layout', () => ({
   ),
 }));
 jest.mock('../date_table/layout', () => ({
-  MonthDateTableLayout: () => null,
+  MonthDateTableLayout: (): null => null,
 }));
 jest.mock('../../base/header_panel/layout', () => ({
-  HeaderPanelLayout: () => null,
+  HeaderPanelLayout: (): null => null,
 }));
 
 describe('MonthLayout', () => {
   describe('Render', () => {
     const viewData = 'Test data';
-    const render = (viewModel) => mount(LayoutView({
+    const render = (viewModel): ReactWrapper => mount(LayoutView({
       ...viewModel,
       props: {
         viewData,
         ...viewModel.props,
       },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

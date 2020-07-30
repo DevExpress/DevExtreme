@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = (viewModel: Table) => (
+export const viewFunction = (viewModel: Table): JSX.Element => (
   <table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -18,7 +18,7 @@ export const viewFunction = (viewModel: Table) => (
 export class TableProps {
   @OneWay() className?: string;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[] | JSX.Element[][];
 }
 
 @Component({

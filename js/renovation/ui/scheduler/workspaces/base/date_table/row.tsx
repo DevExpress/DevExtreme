@@ -5,7 +5,7 @@ import {
   Row, RowProps,
 } from '../row';
 
-export const viewFunction = (viewModel: DateTableRow) => (
+export const viewFunction = (viewModel: DateTableRow): JSX.Element => (
   <Row
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}

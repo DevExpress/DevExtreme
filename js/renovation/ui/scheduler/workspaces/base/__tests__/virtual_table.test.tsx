@@ -1,16 +1,16 @@
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { viewFunction as VirtualTableView } from '../virtual_table';
 import { Table } from '../table';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
-    const render = (viewModel) => mount(VirtualTableView({
+    const render = (viewModel): ReactWrapper => mount(VirtualTableView({
       ...viewModel,
       props: {
         ...viewModel.props,
       },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });

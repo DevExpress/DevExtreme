@@ -4,6 +4,8 @@ import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 /* eslint-disable-next-line import/named */
 import { dxPromise } from '../../../../core/utils/deferred';
 
+export type Appointment = dxSchedulerAppointment;
+
 export type Color = string | undefined;
 export type DeferredColor = dxPromise<Color>;
 

@@ -1,15 +1,15 @@
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import {
   viewFunction as CellView,
 } from '../cell';
 
 describe('DateTableCellBase', () => {
   describe('Render', () => {
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel): ShallowWrapper => shallow(CellView({
       ...viewModel,
       props: { ...viewModel.props },
-    }) as any);
+    }));
 
     it('should combine `className` with predefined classes', () => {
       const cell = render({ props: { className: 'test' } });

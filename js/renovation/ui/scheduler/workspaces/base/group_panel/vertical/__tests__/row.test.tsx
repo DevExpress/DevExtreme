@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import {
   viewFunction as RowView,
 } from '../row';
@@ -17,10 +17,10 @@ describe('GroupPanel Vertical Row', () => {
     }, {
       text: 'item 2', id: 2, color: 'color 2', resourceName: 'group 1', key: '2',
     }];
-    const render = (viewModel) => shallow(RowView({
+    const render = (viewModel): ShallowWrapper => shallow(RowView({
       ...viewModel,
       props: { groupItems, ...viewModel.props },
-    }) as any);
+    }));
 
     it('should combine default and custom classNames', () => {
       const row = render({ props: { className: 'custom-class' } });

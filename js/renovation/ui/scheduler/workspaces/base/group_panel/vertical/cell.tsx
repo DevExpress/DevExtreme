@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { GroupItem } from '../../../types.d';
 
-export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
+export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => {
   const useTemplate = !!viewModel.props.cellTemplate;
 
   return (
@@ -44,7 +44,15 @@ export class GroupPanelVerticalCellProps {
 
   @OneWay() index?: number;
 
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate?: (props: {
+    data: {
+      data: GroupItem;
+      id: string | number;
+      color?: string;
+      text?: string;
+    };
+    index: number;
+  }) => JSX.Element;
 
   @OneWay() className?: string ='';
 }

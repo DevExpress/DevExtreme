@@ -1,11 +1,11 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import {
   viewFunction as CellView,
 } from '../cell';
 
 describe('GroupPanel Vertical Cell', () => {
   describe('Render', () => {
-    const cellTemplate = () => null;
+    const cellTemplate = (): null => null;
     const cellData = {
       data: { text: 'text' },
       id: 1,
@@ -13,10 +13,10 @@ describe('GroupPanel Vertical Cell', () => {
       color: 'Test color',
     };
 
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel): ShallowWrapper => shallow(CellView({
       ...viewModel,
       props: { ...viewModel.props },
-    }) as any);
+    }));
 
     it('should combine default and custom classNames', () => {
       const cell = render({ props: { className: 'custom-class' } });

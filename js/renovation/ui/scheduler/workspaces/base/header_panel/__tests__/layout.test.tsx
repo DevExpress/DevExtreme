@@ -1,10 +1,10 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { Row } from '../../row';
 import { getKeyByDateAndGroup } from '../../../utils';
 
 jest.mock('../../row', () => ({
-  Row: () => null,
+  Row: (): null => null,
 }));
 jest.mock('../../../utils', () => ({
   getKeyByDateAndGroup: jest.fn(),
@@ -12,7 +12,7 @@ jest.mock('../../../utils', () => ({
 
 describe('HeaderPanelLayoutBase', () => {
   describe('Render', () => {
-    const cellTemplate = () => null;
+    const cellTemplate = (): null => null;
     const viewCellsData = [[
       {
         startDate: new Date(2020, 6, 9), endDate: new Date(2020, 6, 10), today: true, groups: 1,
@@ -21,10 +21,10 @@ describe('HeaderPanelLayoutBase', () => {
         startDate: new Date(2020, 6, 10), endDate: new Date(2020, 6, 11), today: false, groups: 1,
       },
     ]];
-    const render = (viewModel) => shallow(LayoutView({
+    const render = (viewModel): ShallowWrapper => shallow(LayoutView({
       ...viewModel,
       props: { cellTemplate, ...viewModel.props, viewCellsData },
-    }) as any);
+    }));
 
     afterEach(() => jest.resetAllMocks());
 

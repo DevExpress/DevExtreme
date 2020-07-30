@@ -1,18 +1,18 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as CellView } from '../cell';
 
 describe('TimePanelTableCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9, 9);
     const text = 'Some Text';
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel): ShallowWrapper => shallow(CellView({
       ...viewModel,
       props: {
         ...viewModel.props,
         startDate,
         text,
       },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });

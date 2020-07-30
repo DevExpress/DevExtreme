@@ -4,7 +4,7 @@ import {
 import { Table } from './table';
 import { Row } from './row';
 
-export const viewFunction = (viewModel: VirtualTable) => (
+export const viewFunction = (viewModel: VirtualTable): JSX.Element => (
   <Table
     className={`dx-scheduler-table-virtual ${viewModel.props.className}`}
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -20,7 +20,7 @@ export const viewFunction = (viewModel: VirtualTable) => (
 export class VirtualTableProps {
   @OneWay() className?: string;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({

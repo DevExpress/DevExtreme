@@ -1,13 +1,13 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { Marker, viewFunction as MarkerView } from '../marker';
 import { Deferred } from '../../../../../core/utils/deferred';
 
 describe('Marker', () => {
   describe('Render', () => {
-    const render = (viewModel) => shallow(MarkerView({
+    const render = (viewModel): ShallowWrapper => shallow(MarkerView({
       ...viewModel,
       props: { ...viewModel.props },
-    }) as any);
+    }));
 
     it('should render components correctly', () => {
       const marker = render({});

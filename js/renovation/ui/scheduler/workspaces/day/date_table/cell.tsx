@@ -6,7 +6,7 @@ import {
   DateTableCellBaseProps,
 } from '../../base/date_table/cell';
 
-export const viewFunction = (viewModel: DayDateTableCell) => (
+export const viewFunction = (viewModel: DayDateTableCell): JSX.Element => (
   <DateTableCellBase
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
