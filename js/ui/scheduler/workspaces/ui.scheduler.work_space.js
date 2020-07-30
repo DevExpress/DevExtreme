@@ -2243,7 +2243,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = [];
 
         for(let i = 0; i < $cells.length; i++) {
-            data.push(this.getCellData($cells[i]));
+            data.push(this.getCellData($($cells[i])));
         }
 
         return data;
