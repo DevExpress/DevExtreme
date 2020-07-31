@@ -1736,7 +1736,7 @@ const PivotGrid = Widget.inherit({
 
                 when.apply($, updateScrollableResults).done(function() {
                     that._updateScrollPosition(columnsArea, rowsArea, dataArea);
-                    that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
+                    that._subscribeToEvents(columnsArea, rowsArea, dataArea);
                     d.resolve();
                 });
             });
