@@ -49,8 +49,7 @@ export class CompactAppointmentsHelper {
 
     _createAppointmentsData(items) {
         return items.data.map((appointment, index) => {
-            const adapter = this.instance.createAppointmentAdapter(appointment);
-            const targetedAdapter = adapter.clone();
+            const targetedAdapter = this.instance.createAppointmentAdapter(appointment).clone();
 
             if(items.settings?.length > 0) {
                 const { info } = items.settings[index];
@@ -58,7 +57,7 @@ export class CompactAppointmentsHelper {
                 targetedAdapter.endDate = info.sourceAppointment.endDate;
             }
 
-            return new AppointmentTooltipInfo(adapter.source(), targetedAdapter.source(), items.colors[index], items.settings[index]); // TODO
+            return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]); // TODO
         });
     }
 
