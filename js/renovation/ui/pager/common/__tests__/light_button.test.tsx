@@ -17,7 +17,7 @@ describe('LightButton', () => {
         widgetRef,
         props: { children: 'text', className: 'class', label: 'label' },
       } as Partial<LightButton>;
-      const tree = mount(<LightButtonComponent {...props as any} />as any);
+      const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
       expect(tree.find('div').instance()).toBe(widgetRef.current);
 
@@ -29,7 +29,7 @@ describe('LightButton', () => {
       const props = {
         props: { children: <div className="child" />, className: 'class', label: 'label' },
       } as Partial<LightButton>;
-      const tree = mount(<LightButtonComponent {...props as any} />as any);
+      const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
       expect(tree.find('.child').exists()).toBe(true);
     });

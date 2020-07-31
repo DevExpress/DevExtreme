@@ -20,7 +20,7 @@ describe('GroupPanel Vertical Row', () => {
     const render = (viewModel) => shallow(RowView({
       ...viewModel,
       props: { groupItems, ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should combine default and custom classNames', () => {
       const row = render({ props: { className: 'custom-class' } });

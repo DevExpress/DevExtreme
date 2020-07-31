@@ -7,7 +7,7 @@ const rootDir = join(__dirname, '..', '..');
 const scssDir = join(rootDir, 'tests', 'data', 'scss');
 
 describe('MetadataCollector', () => {
-  const expectedFileList: Array<string> = [
+  const expectedFileList: string[] = [
     join('bundles', 'dx.light.scss'),
     join('widgets', 'generic', 'accordion', '_colors.scss'),
     join('widgets', 'generic', 'accordion', '_index.scss'),
@@ -65,7 +65,7 @@ describe('MetadataCollector', () => {
     const expectedDestinationPath = resolve(join(destinationPath, relativePath));
     const expectedDestinationDir = dirname(expectedDestinationPath);
 
-    async function getTestFiles(): Promise<Array<FileInfo>> {
+    async function getTestFiles(): Promise<FileInfo[]> {
       return [{ path: relativePath, content: fileContent }];
     }
 

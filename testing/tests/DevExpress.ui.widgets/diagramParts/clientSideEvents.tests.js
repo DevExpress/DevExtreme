@@ -77,7 +77,7 @@ QUnit.module('ClientSideEvents', {
         assert.equal(clickedItem.dataItem.key, '123');
         assert.equal(clickedItem.dataItem.foo, 'bar');
         assert.equal(clickedItem.text, 'mytext');
-        assert.equal(clickedItem.dataItem, nodes[0]);
+        assert.equal(clickedItem.dataItem.key, nodes[0].key);
         let count = 0;
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
@@ -89,12 +89,12 @@ QUnit.module('ClientSideEvents', {
         assert.equal(dblClickedItem.dataItem.key, '123');
         assert.equal(dblClickedItem.dataItem.foo, 'bar');
         assert.equal(dblClickedItem.text, 'mytext');
-        assert.equal(dblClickedItem.dataItem, nodes[0]);
+        assert.equal(dblClickedItem.dataItem.key, nodes[0].key);
 
         this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findConnectorByDataKey('1').toNative());
         assert.equal(clickedItem.dataItem.key, '1');
         assert.equal(clickedItem.fromKey, '123');
         assert.equal(clickedItem.toKey, '345');
-        assert.equal(clickedItem.dataItem, edges[0]);
+        assert.equal(clickedItem.dataItem.key, edges[0].key);
     });
 });

@@ -38,8 +38,8 @@ export default class MetadataGenerator {
     return metaItem;
   }
 
-  static getMetaItems(scss: string): Array<MetaItem> {
-    const metaItems: Array<MetaItem> = [];
+  static getMetaItems(scss: string): MetaItem[] {
+    const metaItems: MetaItem[] = [];
 
     MetadataGenerator.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches: RegExpMatchArray) => {
       const key = matches[2];
@@ -58,13 +58,13 @@ export default class MetadataGenerator {
     return metaItems;
   }
 
-  static getMapFromMeta(metaItems: Array<MetaItem>): string {
+  static getMapFromMeta(metaItems: MetaItem[]): string {
     const result = metaItems.map((item) => `"${item.Key}": ${item.Key},\n`).join('');
     return `(\n${result})`;
   }
 
   static isBundleFile(fileName: string): boolean {
-    return /bundles/.test(fileName);
+    return fileName.includes('bundles');
   }
 
   static getMainColorsFileTheme(fileName: string): string {
@@ -84,7 +84,7 @@ export default class MetadataGenerator {
   }
 
   fillMetaData(item: MetaItem, filePath: string): void {
-    const target = filePath.indexOf('generic') >= 0
+    const target = filePath.includes('generic')
       ? this.metadata.generic
       : this.metadata.material;
 

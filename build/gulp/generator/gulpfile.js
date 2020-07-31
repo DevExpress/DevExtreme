@@ -147,7 +147,7 @@ function addGenerationTask(
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
     }
 
-    generator.defaultOptionsModule = 'js/core/options/utils';
+    generator.options = BASE_GENERATOR_OPTIONS;
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
         return gulp.src(SRC, { base: 'js' })

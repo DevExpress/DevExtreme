@@ -5490,8 +5490,8 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                 };
 
-                inputAttributes['aria-activedescendant'] = helper.widget._list.getFocusedItemId();
                 inputAttributes['aria-controls'] = helper.widget._listId;
+                inputAttributes['aria-owns'] = helper.widget._popupContentId;
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
@@ -5503,8 +5503,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
 
-                inputAttributes['aria-activedescendant'] = helper.widget._list.getFocusedItemId();
                 inputAttributes['aria-controls'] = helper.widget._listId;
+                inputAttributes['aria-owns'] = helper.widget._popupContentId;
 
                 delete inputAttributes.readonly;
 

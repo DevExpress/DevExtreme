@@ -21,7 +21,7 @@ describe('Pager size selector', () => {
         pageSizes,
       },
     } as Partial<PageSizeSmall>;
-    const tree = shallow(<PageSizeSmallComponent {...props as any} />as any);
+    const tree = shallow(<PageSizeSmallComponent {...props as any} /> as any);
     expect(tree.props()).toEqual({
       children: [],
       displayExpr: 'text',

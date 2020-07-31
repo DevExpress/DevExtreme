@@ -728,4 +728,42 @@ QUnit.module('View\'s focus', {
         assert.notOk(onFocusedCellChanged.called, 'onFocusedCellChanged is not called');
         assert.notOk(onFocusedRowChanged.called, 'onFocusedRowChanged is not called');
     });
+
+    QUnit.test('Data cell should be focused correctly when a left arrow key is pressed on an adaptive cell in the last data row (T916621)', function(assert) {
+        // arrange
+        this.dataGrid.dispose();
+        const dataGrid = createDataGrid({
+            columnHidingEnabled: true,
+            dataSource: [
+                { id: 1, name: 'name1' }
+            ],
+            keyExpr: 'id',
+            columns: ['id', { dataField: 'name', width: 120 }],
+            width: 120
+        });
+
+        this.clock.tick();
+
+        const $cell0 = $(dataGrid.getCellElement(0, 0));
+        $cell0.trigger(CLICK_EVENT).trigger('dxclick');
+
+        let keyboard = keyboardMock($cell0);
+        keyboard.keyDown('right');
+        this.clock.tick();
+
+        const $cell1 = $(dataGrid.getCellElement(0, 2));
+
+        // assert
+        assert.notOk($cell0.hasClass('dx-focused'), 'cell is not focused');
+        assert.ok($cell1.hasClass('dx-command-adaptive'), 'adaptive cell');
+        assert.ok($cell1.hasClass('dx-focused'), 'cell is focused');
+
+
+        keyboard = keyboardMock($cell1);
+        keyboard.keyDown('left');
+        this.clock.tick();
+
+        // assert
+        assert.ok($cell0.hasClass('dx-focused'), 'cell is focused');
+    });
 });

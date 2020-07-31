@@ -3,7 +3,7 @@ import MetadataGenerator from '../../src/metadata/generator';
 const generator = new MetadataGenerator();
 
 describe('Metadata generator - parseComments', () => {
-  const commentSamples: Array<string> = [
+  const commentSamples: string[] = [
     '* $name 10. Constant name',
     '* $wrong some wrong comment',
     '* $name 10. Name\n* $type select\n* $typeValues 1|2',
@@ -31,7 +31,7 @@ describe('Metadata generator - getMetaItems (one item)', () => {
     [key: string]: string;
   }
 
-  const scssSamples: Array<Samples> = [
+  const scssSamples: Samples[] = [
     {
       'no new line after comment':
 `/**
@@ -146,7 +146,7 @@ $base-color: rgb(0,170,0);
 });
 
 describe('Metadata generator - getMapFromMeta', () => {
-  const testMetadata: Array<MetaItem> = [
+  const testMetadata: MetaItem[] = [
     { Key: '$menu-color' },
     { Key: '$menu-item-selected-bg' },
   ];
