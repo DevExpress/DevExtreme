@@ -25,7 +25,8 @@ describe('DateTableBody', () => {
         cellTemplate,
         ...viewModel.props,
       },
-    }}/>);
+    }}
+    />);
 
     beforeEach(() => getKeyByDateAndGroup.mockClear());
 
