@@ -1,1 +1,3 @@
-The **DataGrid** widget offers two row selection modes. In&nbsp;this example, single row selection mode is&nbsp;used. The **onSelectionChanged** callback function is&nbsp;also used to&nbsp;display additional information below the **DataGrid** once a&nbsp;record has been selected.
+In this demo, the **DataGrid** allows users to select only one row at a time. To enable this mode, set the **selection**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#mode) option to *"single"*.
+
+You can access the selected row data from the [onSelectionChanged](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onSelectionChanged) function. In this demo, this function fetches the selected row's information and displays it under the grid.

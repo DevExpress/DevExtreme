@@ -1,1 +1,7 @@
-The **DataGrid** widget offers two row selection modes. In&nbsp;this example, multiple row selection mode is&nbsp;used. You can specify whether records from all pages or&nbsp;a&nbsp;single one should be&nbsp;selected on&nbsp;clicking the check box within the grid&rsquo;s column header. For this purpose, use the _Select All Mode_ drop-down menu. To&nbsp;specify in&nbsp;which case check boxes should be&nbsp;visible, use the _Show Checkboxes Mode_ one.
+This demo sets **selection**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#mode) to *"multiple"*. This allows users to select multiple rows using checkboxes or keyboard shortcuts.
+
+To configure when the checkboxes appear, set the [showCheckBoxesMode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#showCheckBoxesMode) option.
+
+The checkbox in the header selects all rows or current page rows, depending on the [selectAllMode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#selectAllMode) value. If you want to disable this checkbox, set [allowSelectAll](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#allowSelectAll) to **false**.
+
+In this demo, you can use the drop-down menus under the grid to change the **showCheckBoxesMode** and **selectAllMode** values.

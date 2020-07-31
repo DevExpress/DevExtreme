@@ -1,1 +1,18 @@
-The **DataGrid** widget provides a&nbsp;flexible selection API. In&nbsp;this demo, when you choose a&nbsp;title from the drop-down menu above the **DataGrid**, the **selectRows(keys)** method selects those rows that contain the chosen title. A&nbsp;click on&nbsp;the _Clear Selection_ button clears the selection by&nbsp;calling the **clearSelection()** method.
+**DataGrid** has the following API for multiple record selection:
+
+* [selectAll](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#selectAll) / [deselectAll()](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#deselectAll)       
+Selects / deselects all rows or current page rows, depending on the value of [selectAllMode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#selectAllMode).
+
+* [selectRows(keys, preserve)](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#selectRowskeys_preserve) / [deselectRows(keys)](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#deselectRowskeys)       
+Selects / deselects rows with the specified keys.
+
+* [selectRowsByIndexes(indexes)](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#selectRowsByIndexesindexes)       
+Selects rows with specific indexes.
+
+* [clearSelection()](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#clearSelection)       
+Clears the selection of all rows on all pages.
+
+* [getSelectedRowKeys()](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#getSelectedRowKeys) / [getSelectedRowsData()](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#getSelectedRowsData)       
+Gets the selected rows' keys or data objects.
+
+In this demo, **selectAll()** or **selectRows(keys, preserve)** is called when you change the **SelectBox** value and **clearSelection()** is called when you click the Clear Selection button.

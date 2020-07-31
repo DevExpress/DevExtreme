@@ -463,7 +463,6 @@
           {
             "Title": "Row Selection",
             "Name": "RowSelection",
-            "DocUrl": "Guide/Widgets/DataGrid/Selection/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/SampleData/DataGridEmployees.cs"
@@ -471,9 +470,8 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Multiple Record Selection Modes",
+            "Title": "Multiple Record Selection",
             "Name": "MultipleRecordSelectionModes",
-            "DocUrl": "Guide/Widgets/DataGrid/Selection/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridSalesController.cs",
@@ -485,7 +483,6 @@
           {
             "Title": "Multiple Record Selection API",
             "Name": "MultipleRecordSelectionAPI",
-            "DocUrl": "Guide/Widgets/DataGrid/Selection/#API",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/SampleData/DataGridEmployees.cs"
@@ -495,7 +492,6 @@
           {
             "Title": "Deferred Selection",
             "Name": "DeferredSelection",
-            "DocUrl": "Guide/Widgets/DataGrid/Enhance_Performance_on_Large_Datasets/#Deferred_Selection",
             "Widget": "DataGrid",
             "DemoType": "Web"
           }
