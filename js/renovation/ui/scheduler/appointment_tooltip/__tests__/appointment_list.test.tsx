@@ -23,7 +23,6 @@ jest.mock('../../../list', () => ({
       <props.itemTemplate
         item={dataSource[0]}
         index={0}
-        container="container"
       />
     );
   },
@@ -113,7 +112,6 @@ describe('AppointmentList', () => {
           itemContentTemplate: renderProps.itemContentTemplate,
           getTextAndFormatDate: renderProps.getTextAndFormatDate,
           singleAppointment: { text: 'singleAppointment' },
-          container: 'container',
           showDeleteButton: true,
         });
       expect(getSingleAppointmentData)

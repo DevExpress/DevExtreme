@@ -159,7 +159,7 @@ describe('TooltipItemLayout', () => {
 
         expect(tooltipItemLayout.find(template).props())
           .toEqual({
-            model: {
+            data: {
               appointmentData: defaultProps.item?.data,
               targetedAppointmentData: currentAppointment,
             },
@@ -203,7 +203,7 @@ describe('TooltipItemLayout', () => {
 
         expect(tooltipItemLayout.find(template).props())
           .toEqual({
-            model: {
+            data: {
               appointmentData: defaultProps.item?.data,
               targetedAppointmentData: currentAppointment,
             },
@@ -228,7 +228,7 @@ describe('TooltipItemLayout', () => {
 
         expect(tooltipItemLayout.find(template).props())
           .toEqual({
-            model: {
+            data: {
               appointmentData: nextItem.data,
               targetedAppointmentData: nextItem.currentData,
             },
