@@ -306,7 +306,7 @@ QUnit.test('\'updateAppointmentStartDate\' should work correct with custom data 
 QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointment', function(assert) {
     this.createInstance();
 
-    const stub = sinon.stub(this.instance._subscribes, 'getTargetedAppointment');
+    const stub = sinon.stub(this.instance, 'getTargetedAppointment');
 
     this.instance.fire('mapAppointmentFields', {
         itemData: {
