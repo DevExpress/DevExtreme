@@ -646,8 +646,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                 that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, columnsSeparatorWidth);
                 that._previousParentOffset = parentOffset;
                 that._isReadyResizing = false;
-
-                if(that._targetPoint) {
+                if(that._targetPoint && that._canResize()) {
                     that._columnsSeparatorView.changeCursor('col-resize');
                     that._columnsSeparatorView.moveByX(that._targetPoint.x - deltaX);
                     that._tablePositionController.update(that._targetPoint.y);
@@ -663,7 +662,12 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             }
         }
     },
-
+    _canResize: function() {
+        const editingController = this.getController('editing');
+        const editingMode = this.option('editing.mode');
+        const isCellEditing = editingController.isEditing() && (editingMode === 'batch' || editingMode === 'cell');
+        return !isCellEditing;
+    },
     _endResizing: function(args) {
         const e = args.event;
         const that = e.data;
@@ -706,9 +710,6 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const e = args.event;
         const that = e.data;
         const eventData = getEventData(e);
-        const editingController = that.getController('editing');
-        const editingMode = that.option('editing.mode');
-        const isCellEditing = editingController.isEditing() && (editingMode === 'batch' || editingMode === 'cell');
 
         if(isTouchEvent(e)) {
             if(that._isHeadersRowArea(eventData.y)) {
@@ -722,7 +723,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             }
         }
 
-        if(that._isReadyResizing && !isCellEditing) {
+        if(that._isReadyResizing && that._canResize()) {
             ///#DEBUG
             if(that._targetPoint) {
                 that._testColumnIndex = that._targetPoint.columnIndex;
