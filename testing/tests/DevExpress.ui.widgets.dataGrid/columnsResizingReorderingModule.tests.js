@@ -1735,6 +1735,38 @@ QUnit.module('Columns resizing', {
         assert.ok(resizeController._isResizing, 'columnsResizer is resizing');
     });
 
+    ['cell', 'batch'].forEach((mode) => {
+        QUnit.test(`Dont show resize cursor during editing in ${mode} mode. T915568`, function(assert) {
+            // arrange
+            const resizeController = this.createColumnsResizerViewController();
+            this.options['editing.mode'] = mode;
+            this.component._controllers.editing._isEditing = true;
+
+            this.renderViews($('#container'));
+            resizeController._pointsByColumns = [
+                { x: -9875, columnIndex: 0, index: 1, y: -9995 },
+                { x: -9750, columnIndex: 1, index: 2, y: -9995 },
+            ];
+
+            // assert
+            resizeController._columnsSeparatorView.changeCursor = function(cursorName) {
+                assert.notEqual(cursorName, 'col-resize', 'we cannot resize column while editing is active');
+            };
+            // act
+            resizeController._columnsSeparatorView.height(100);
+            const options = {
+                data: resizeController,
+                type: 'mousedown',
+                pageX: -9750,
+                pageY: -9995
+            };
+            resizeController._moveSeparator(getEvent(options));
+
+            // assert
+            assert.expect(1);
+        });
+    });
+
     QUnit.test('No start resizing while cell is opened for editing in "cell" mode. T450598', function(assert) {
         // arrange
         const callPositionChanged = sinon.stub();
