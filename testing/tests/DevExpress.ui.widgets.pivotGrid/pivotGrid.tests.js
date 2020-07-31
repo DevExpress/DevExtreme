@@ -3356,7 +3356,7 @@ QUnit.module('dxPivotGrid', {
                     }).dxPivotGrid('instance');
                     this.clock.tick();
 
-                    $(grid.element().closest('#wrapper')).css('display', 'block');
+                    $('#wrapper').css('display', 'block');
                     grid.updateDimensions();
 
                     const eventArgs = { scrollOffset: { top: scrollDistance, left: 0 } };
