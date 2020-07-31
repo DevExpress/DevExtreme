@@ -574,26 +574,46 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _resizeEndHandler: function(e) {
+        const scheduler = this.option('observer');
         const $element = $(e.element);
-        const itemData = this._getItemData($element);
-        const startDate = this.invoke('getStartDate', itemData, true);
-        const endDate = this.invoke('getEndDate', itemData, true);
 
-        const dateRange = this._getDateRange(e, startDate, endDate);
+        const { info } = $element.data('dxAppointmentSettings');
+        const sourceAppointment = this._getItemData($element);
+        const dateRange = this._getDateRange(e, info.appointment.startDate, info.appointment.endDate);
 
-        const updatedDates = {};
+        const modifiedAppointmentAdapter = scheduler.createAppointmentAdapter(sourceAppointment).clone();
+        modifiedAppointmentAdapter.startDate = new Date(dateRange[0]);
+        modifiedAppointmentAdapter.endDate = new Date(dateRange[1]);
 
-        this.invoke('setField', 'startDate', updatedDates, new Date(dateRange[0]));
-        this.invoke('setField', 'endDate', updatedDates, new Date(dateRange[1]));
-
-        const data = extend({}, itemData, updatedDates);
-
-        this.notifyObserver('updateAppointmentAfterResize', {
-            target: itemData,
-            data: data,
+        this.notifyObserver('updateAppointmentAfterResize', { // TODO: rename arguments
+            target: sourceAppointment,
+            data: modifiedAppointmentAdapter.clone({ pathTimeZone: 'fromGrid' }).source(),
             $appointment: $element
         });
     },
+
+    // _resizeEndHandler1: function(e) {
+    //     debugger;
+    //     const $element = $(e.element);
+    //     const itemData = this._getItemData($element);
+    //     const startDate = this.invoke('getStartDate', itemData, true);
+    //     const endDate = this.invoke('getEndDate', itemData, true);
+
+    //     const dateRange = this._getDateRange(e, startDate, endDate);
+
+    //     const updatedDates = {};
+
+    //     this.invoke('setField', 'startDate', updatedDates, new Date(dateRange[0]));
+    //     this.invoke('setField', 'endDate', updatedDates, new Date(dateRange[1]));
+
+    //     const data = extend({}, itemData, updatedDates);
+
+    //     this.notifyObserver('updateAppointmentAfterResize', {
+    //         target: itemData,
+    //         data: data,
+    //         $appointment: $element
+    //     });
+    // },
 
     _getDateRange: function(e, startDate, endDate) {
         const itemData = this._getItemData(e.element);

@@ -1,4 +1,4 @@
-import translator from '../../animation/translator';
+// import translator from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import config from '../../core/config';
 import devices from '../../core/devices';
@@ -1945,9 +1945,10 @@ class Scheduler extends Widget {
     }
 
     _singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        exceptionDate = this.timeZoneCalculator.createDate(exceptionDate, {
-            path: 'fromGrid'
-        });
+        // exceptionDate = this.timeZoneCalculator.createDate(exceptionDate, {
+        //     path: 'fromGrid'
+        // });
+
         // exceptionDate = new Date(exceptionDate);
 
         // function processAppointmentDates(appointment, commonTimezoneOffset) {
@@ -1983,11 +1984,9 @@ class Scheduler extends Widget {
         this.fire('setField', 'recurrenceException', singleAppointment, '');
 
         if(!isDeleted && !isPopupEditing) {
-            const newApp = this.createAppointmentAdapter(singleAppointment).clone({
-                pathTimeZone: 'fromGrid'
-            }).source();
             // processAppointmentDates.call(this, singleAppointment, this._getTimezoneOffsetByOption());
-            this.addAppointment(newApp);
+            // this.addAppointment(newApp);
+            this.addAppointment(singleAppointment);
         }
 
         const recurrenceException = this._createRecurrenceException(exceptionDate, targetAppointment);
@@ -2340,8 +2339,8 @@ class Scheduler extends Widget {
         const $appointment = options.$appointment;
         const updatedData = options.skipDateCalculation ? {} : this._getUpdatedData(options);
         const resultAppointmentData = extend({}, appointmentData, updatedData);
-        const allDay = this.fire('getField', 'allDay', appointmentData);
-        const isAllDay = this._workSpace.supportAllDayRow() && allDay;
+        // const allDay = this.fire('getField', 'allDay', appointmentData);
+        // const isAllDay = this._workSpace.supportAllDayRow() && allDay;
         const startDate = new Date(this.fire('getField', 'startDate', resultAppointmentData));
         const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
         const appointmentDuration = endDate.getTime() - startDate.getTime();
@@ -2355,29 +2354,24 @@ class Scheduler extends Widget {
             if(isFunction(apptDataCalculator) && this._isAppointmentRecurrence(appointmentData)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                if(options.isAppointmentResized) {
-                    const coordinates = translator.locate($appointment);
-                    updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
-                } else {
-                    const settings = $appointment.data('dxAppointmentSettings');
+                const settings = $appointment.data('dxAppointmentSettings');
 
-                    // appointmentStartDate = settings && settings.originalAppointmentStartDate;
-                    // appointmentEndDate = settings && settings.originalAppointmentEndDate;
+                // appointmentStartDate = settings && settings.originalAppointmentStartDate;
+                // appointmentEndDate = settings && settings.originalAppointmentEndDate;
 
-                    // TODO
-                    if(settings) {
-                        appointmentStartDate = settings.info?.sourceAppointment.startDate;
-                        appointmentEndDate = settings.info?.sourceAppointment.endDate;
-                    }
+                // TODO
+                if(settings) {
+                    appointmentStartDate = settings.info?.sourceAppointment.startDate;
+                    appointmentEndDate = settings.info?.sourceAppointment.endDate;
+                }
 
-                    // if(this._isAppointmentRecurrence(appointmentData)) {
-                    //     appointmentStartDate = settings && settings.startDate;
-                    //     appointmentEndDate = settings && settings.endDate;
-                    // }
+                // if(this._isAppointmentRecurrence(appointmentData)) {
+                //     appointmentStartDate = settings && settings.startDate;
+                //     appointmentEndDate = settings && settings.endDate;
+                // }
 
-                    if(appointmentStartDate) {
-                        updatedStartDate = appointmentStartDate;
-                    }
+                if(appointmentStartDate) {
+                    updatedStartDate = appointmentStartDate;
                 }
             }
         }
@@ -2385,7 +2379,7 @@ class Scheduler extends Widget {
         this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
         this.fire('setField', 'endDate', resultAppointmentData, appointmentEndDate || new Date(updatedStartDate.getTime() + appointmentDuration));
 
-        if(!options.skipHoursProcessing && !options.isAppointmentResized) {
+        if(!options.skipHoursProcessing && !options.isAppointmentResized) { // TODO: isAppointmentResized no exists
             this._convertDatesByTimezoneBack(false, resultAppointmentData);
         }
 
@@ -2712,9 +2706,9 @@ class Scheduler extends Widget {
 
     showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) {
         const singleAppointment = currentAppointmentData || this._getAppointmentData(appointmentData, { skipDateCalculation: true });
-        const startDate = this.fire('getField', 'startDate', currentAppointmentData || appointmentData);
+        const adapter = this.createAppointmentAdapter(currentAppointmentData || appointmentData);
 
-        this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
+        this._checkRecurringAppointment(appointmentData, singleAppointment, adapter.startDate, function() {
             if(createNewAppointment || isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
                 this._editing.allowAdding && this._appointmentPopup.show(appointmentData, true);

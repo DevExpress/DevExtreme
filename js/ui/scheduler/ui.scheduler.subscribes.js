@@ -74,48 +74,61 @@ const subscribes = {
     },
 
     updateAppointmentAfterResize: function(options) {
-        const targetAppointment = options.target;
+        const { info } = $(options.$appointment).data('dxAppointmentSettings');
+        const exceptionDate = info.sourceAppointment.startDate;
 
-        options.isAppointmentResized = true;
-
-        const targetedData = this._getAppointmentData(targetAppointment, options);
-        const startDate = this.fire('getField', 'startDate', targetedData);
-        const updatedData = extend(true, {}, options.data);
-
-        this._convertDatesByTimezoneBack(true, updatedData);
-
-        this._checkRecurringAppointment(targetAppointment, targetedData, startDate, (function() {
-            this._updateAppointment(targetAppointment, updatedData, function() {
+        this._checkRecurringAppointment(options.target, options.data, exceptionDate, (function() {
+            this._updateAppointment(options.target, options.data, function() {
                 this._appointments.moveAppointmentBack();
             });
         }).bind(this));
     },
+
+    // updateAppointmentAfterResize: function(options) {
+    //     const targetAppointment = options.target;
+
+    //     options.isAppointmentResized = true;
+
+    //     const targetedData = this._getAppointmentData(targetAppointment, options);
+    //     const startDate = this.fire('getField', 'startDate', targetedData);
+    //     const updatedData = extend(true, {}, options.data);
+
+    //     this._convertDatesByTimezoneBack(true, updatedData);
+
+    //     this._checkRecurringAppointment(targetAppointment, targetedData, startDate, (function() {
+    //         this._updateAppointment(targetAppointment, updatedData, function() {
+    //             this._appointments.moveAppointmentBack();
+    //         });
+    //     }).bind(this));
+    // },
 
     getUpdatedData: function(options) {
         return this._getUpdatedData({ data: options.data });
     },
 
     updateAppointmentAfterDrag: function(options) {
-        const target = options.data;
-        const updatedData = this._getUpdatedData(options);
+        const { info } = $(options.$appointment).data('dxAppointmentSettings');
+        const sourceAppointment = options.data;
+        const sourceAppointmentAdapter = this.createAppointmentAdapter(sourceAppointment);
+
+        const currentAppointmentAdapter = this.createAppointmentAdapter(extend({}, sourceAppointment, this._getUpdatedData(options)))
+            .clone({ pathTimeZone: 'fromGrid' });
+        const currentAppointmentWithoutConverting = currentAppointmentAdapter.source();
+
         const newCellIndex = this._workSpace.getDroppableCellIndex();
         const oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates);
-        const becomeAllDay = this.fire('getField', 'allDay', updatedData);
-        const wasAllDay = this.fire('getField', 'allDay', target);
+
+        const becomeAllDay = currentAppointmentAdapter.allDay;
+        const wasAllDay = sourceAppointmentAdapter.allDay;
+
         const dragEvent = options.event;
 
-        const appointment = extend({}, target, updatedData);
-
-        const movedToAllDay = this._workSpace.supportAllDayRow() && becomeAllDay;
-        const cellData = this._workSpace.getCellDataByCoordinates(options.coordinates, movedToAllDay);
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(target, appointment, cellData.startDate, (function() {
+            this._checkRecurringAppointment(sourceAppointment, currentAppointmentWithoutConverting, info.sourceAppointment.startDate, (function() {
 
-                this._convertDatesByTimezoneBack(true, updatedData, appointment);
-
-                this._updateAppointment(target, appointment, function() {
+                this._updateAppointment(sourceAppointment, currentAppointmentWithoutConverting, function() {
                     this._appointments.moveAppointmentBack(dragEvent);
                 }, dragEvent);
             }).bind(this), undefined, undefined, dragEvent);
