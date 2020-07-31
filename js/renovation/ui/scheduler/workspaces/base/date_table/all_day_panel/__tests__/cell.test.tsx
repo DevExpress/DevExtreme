@@ -16,7 +16,7 @@ describe('AllDayPanelCell', () => {
     });
 
     it('should render correctly', () => {
-      const cell = render({ props: { className: 'test-class' } });
+      const cell = render({ classes: 'test-class' });
 
       expect(cell.children())
         .toHaveLength(0);
@@ -40,10 +40,18 @@ describe('AllDayPanelCell', () => {
     describe('Getters', () => {
       describe('classes', () => {
         it('Should have default classes', () => {
-          const layout = new AllDayPanelCell({ });
+          const layout = new AllDayPanelCell({ className: 'some-class' });
+          const classNames = layout.classes.split(' ').filter((className) => !!className);
 
-          expect(layout.classes.trim())
-            .toEqual('dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal');
+          expect(classNames.length)
+            .toBe(3);
+
+          expect(classNames[0])
+            .toEqual('dx-scheduler-all-day-table-cell');
+          expect(classNames[1])
+            .toEqual('dx-scheduler-cell-sizes-horizontal');
+          expect(classNames[2])
+            .toEqual('some-class');
         });
 
         it('Should have first group class', () => {
