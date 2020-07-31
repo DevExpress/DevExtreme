@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
+// eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import { isDefined } from '../../core/utils/type';
 import { TemplateBase } from '../../core/templates/template_base';

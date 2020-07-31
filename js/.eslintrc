@@ -14,10 +14,12 @@
             }
         ],
         "no-restricted-imports": [ "error", {
-            "paths": [{
-                "name": "jquery"
-            }],
-            "patterns": ["jquery/*"]
+            "paths": [
+                { "name": "jquery"},
+                { "name": "angular"},
+                { "name": "knockout"}
+            ],
+            "patterns": ["jquery/*", "angular/*", "knockout/*"]
         }]
     }
 }
