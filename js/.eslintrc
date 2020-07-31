@@ -6,12 +6,19 @@
     "parserOptions": {
         "sourceType": "module"
     },
+    "ignorePatterns": [ "integration/jquery/*.js" ],
     "rules": {
         "no-restricted-modules": [
             "error",
             {
                 "patterns": ["*.js"]
             }
-        ]
+        ],
+        "no-restricted-imports": [ "error", {
+            "paths": [{
+                "name": "jquery"
+            }],
+            "patterns": ["jquery/*"]
+        }]
     }
 }
