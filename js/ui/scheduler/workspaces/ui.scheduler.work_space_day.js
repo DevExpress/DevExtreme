@@ -63,7 +63,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
     }
 
     renderRDateTable(viewData) {
-        this._renderRComponent(this._$dateTable, dxrDayDateTableLayout, 'dateTable', viewData);
+        this._renderRComponent(this._$dateTable, dxrDayDateTableLayout, 'renovatedDateTable', viewData);
     }
 }
 
