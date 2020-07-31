@@ -66,6 +66,8 @@
             visibility: hidden;
             background-color: transparent;
             pointer-events: none;
+            border-top-color: transparent; // T913696
+            border-bottom-color: transparent; // T913696
           }
         }
 
@@ -479,6 +481,7 @@
         text-overflow: clip;
         width: $grid-command-edit-column-width;
         min-width: $grid-command-edit-column-width;
+        white-space: nowrap;
 
         &.dx-command-edit-with-icons {
           width: $grid-command-edit-column-with-icons-width;
@@ -489,7 +492,7 @@
           }
         }
 
-        .dx-link-icon {
+        .dx-link {
           display: inline-block;
         }
       }

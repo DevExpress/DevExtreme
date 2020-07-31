@@ -7,7 +7,7 @@ import MetadataGenerator from './generator';
 export default class MetadataCollector {
   generator = new MetadataGenerator();
 
-  async getFileList(dirName: string): Promise<Array<string>> {
+  async getFileList(dirName: string): Promise<string[]> {
     const directories = await fs.readdir(dirName, { withFileTypes: true });
     const files = await Promise.all(directories.map((directory) => {
       const res = resolve(dirName, directory.name);
@@ -19,19 +19,19 @@ export default class MetadataCollector {
   async readFiles(
     dirName: string,
     handler: (content: string) => string,
-  ): Promise<Array<FileInfo>> {
+  ): Promise<FileInfo[]> {
     const fileList = await this.getFileList(dirName);
 
     return Promise.all(fileList.map(async (filePath) => {
       const relativePath = relative(dirName, filePath);
       const fileContent = await fs.readFile(filePath, 'utf-8');
-      let modifiedContent = this.generator.collectMetadata(dirName, filePath, fileContent);
+      let modifiedContent = this.generator.collectMetadata(filePath, fileContent);
       modifiedContent = handler(modifiedContent);
       return { path: relativePath, content: modifiedContent };
     }));
   }
 
-  static async saveScssFiles(files: Promise<Array<FileInfo>>, destination: string): Promise<void> {
+  static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
     (await files).forEach(async (file) => {
       const absolutePath = resolve(join(destination, file.path));
       const directory = dirname(absolutePath);
@@ -41,7 +41,7 @@ export default class MetadataCollector {
   }
 
   static getStringFromObject(
-    object: Array<MetaItem> | Array<string> | FlatStylesDependencies,
+    object: ThemesMetadata | string[] | FlatStylesDependencies,
   ): string {
     return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
   }
@@ -49,7 +49,7 @@ export default class MetadataCollector {
   async saveMetadata(
     filePath: string,
     version: string,
-    browsersList: Array<string>,
+    browsersList: string[],
     dependencies: FlatStylesDependencies,
   ): Promise<void> {
     const absolutePath = resolve(filePath);
@@ -58,7 +58,7 @@ export default class MetadataCollector {
     const browsersListString = MetadataCollector.getStringFromObject(browsersList);
     const dependenciesString = MetadataCollector.getStringFromObject(dependencies);
 
-    const metaContent = `export const metadata: Array<MetaItem> = ${metaString};
+    const metaContent = `export const metadata: ThemesMetadata = ${metaString};
 export const version: string = '${version}';
 export const browsersList: Array<string> = ${browsersListString};
 export const dependencies: FlatStylesDependencies = ${dependenciesString};

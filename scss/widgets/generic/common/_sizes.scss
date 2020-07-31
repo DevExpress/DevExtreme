@@ -3,17 +3,14 @@
 // adduse
 
 $generic-invalid-badge-size: null !default;
-$generic-pending-indicator-size: null !default;
 $generic-dropdownlist-min-height: null !default;
 
 @if $size == "default" {
   $generic-invalid-badge-size: $generic-base-icon-size;
-  $generic-pending-indicator-size: $generic-invalid-badge-size + 4px;
-  $generic-dropdownlist-min-height: $generic-base-font-size * $generic-base-line-height + 2 * $generic-list-item-vertical-padding;
 }
 
 @else if $size == "compact" {
   $generic-invalid-badge-size: $generic-base-icon-size + 2px;
-  $generic-pending-indicator-size: $generic-invalid-badge-size + 4px;
-  $generic-dropdownlist-min-height: $generic-base-font-size * $generic-base-line-height + 2 * $generic-list-item-vertical-padding;
 }
+
+$generic-pending-indicator-size: $generic-invalid-badge-size + 4px;

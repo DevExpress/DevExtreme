@@ -370,6 +370,7 @@ const PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.fileName
                  * @type string
                  * @default "PivotGrid"
+                 * @deprecated
                  */
                 fileName: 'PivotGrid',
                 /**
@@ -383,6 +384,7 @@ const PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.ignoreExcelErrors
                  * @type boolean
                  * @default true
+                 * @deprecated
                  */
                 ignoreExcelErrors: true
             },
@@ -440,6 +442,17 @@ const PivotGrid = Widget.inherit({
                 */
                 showPane: true
 
+                /**
+                * @name dxPivotGridOptions.loadPanel.shading
+                * @type boolean
+                * @default false
+                */
+
+                /**
+                * @name dxPivotGridOptions.loadPanel.shadingColor
+                * @type string
+                * @default ''
+                */
             },
             texts: {
                 /**

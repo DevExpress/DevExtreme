@@ -30,8 +30,9 @@ export default SelectionStrategy.inherit({
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
         if(isSelectAll) {
             const filter = this.options.filter();
+            const needResetSelectionFilter = !filter || JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect;
 
-            if(!filter) {
+            if(needResetSelectionFilter) {
                 this._setOption('selectionFilter', isDeselect ? [] : null);
             } else {
                 this._addSelectionFilter(isDeselect, filter, isSelectAll);

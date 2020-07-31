@@ -472,12 +472,13 @@ export default {
         const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
         const keyboardController = component.getController('keyboardNavigation');
         const isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
+        const element = $element.get(0);
 
-        if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input')) {
+        if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
             const editor = getWidgetInstance($element.closest('.dx-texteditor'));
 
             when(editor && editor._loadItemDeferred).done(function() {
-                $element.get(0).select();
+                element.select();
             });
         }
     },

@@ -3,20 +3,19 @@
 // adduse
 
 $generic-numberbox-spin-container-width: null !default;
-$generic-numberbox-spin-padding: null !default;
 $generic-numberbox-touch-friendly-spin-container-width: null !default;
 $generic-numberbox-clear-button-area-width: null !default;
 
+$generic-numberbox-spin-padding: 1px;
+
 @if $size == "default" {
   $generic-numberbox-spin-container-width: 34px;
-  $generic-numberbox-spin-padding: 1px;
   $generic-numberbox-touch-friendly-spin-container-width: 74px;
   $generic-numberbox-clear-button-area-width: 32px;
 }
 
 @else if $size == "compact" {
   $generic-numberbox-spin-container-width: 20px;
-  $generic-numberbox-spin-padding: 1px;
   $generic-numberbox-touch-friendly-spin-container-width: 60px;
   $generic-numberbox-clear-button-area-width: 20px;
 }

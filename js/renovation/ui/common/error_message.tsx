@@ -1,9 +1,10 @@
-/* eslint-disable max-classes-per-file */
 import {
   ComponentBindings, OneWay, JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
 
-export const viewFunction = ({ props: { message, className }, restAttributes }: ErrorMessage) => (
+export const viewFunction = (
+  { props: { message, className }, restAttributes }: ErrorMessage,
+): JSX.Element => (
   <div
     className={`dx-validationsummary dx-validationsummary-item ${className}`}
       /* eslint-disable react/jsx-props-no-spreading */

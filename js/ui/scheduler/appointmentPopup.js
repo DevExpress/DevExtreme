@@ -9,6 +9,7 @@ import { isDefined } from '../../core/utils/type';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
+import { isEmptyObject } from '../../core/utils/type';
 import Popup from '../popup';
 import { APPOINTMENT_FORM_GROUP_NAMES, AppointmentForm } from './ui.scheduler.appointment_form';
 import loading from './ui.loading';
@@ -48,6 +49,12 @@ export default class AppointmentPopup {
     }
 
     show(data = {}, isDoneButtonVisible, processTimeZone) {
+        if(isEmptyObject(data)) {
+            const startDate = this.scheduler.option('currentDate');
+            const endDate = new Date(startDate.getTime() + this.scheduler.option('cellDuration') * toMs('minute'));
+            this.scheduler.fire('setField', 'startDate', data, startDate);
+            this.scheduler.fire('setField', 'endDate', data, endDate);
+        }
         this.state.appointment.data = data;
         this.state.appointment.processTimeZone = processTimeZone;
 
@@ -139,7 +146,8 @@ export default class AppointmentPopup {
     }
 
     _createAppointmentFormData(appointmentData) {
-        const result = extend(true, { repeat: !!appointmentData.recurrenceRule }, appointmentData);
+        const recurrenceRule = this.scheduler.fire('getField', 'recurrenceRule', appointmentData);
+        const result = extend(true, { repeat: !!recurrenceRule }, appointmentData);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;

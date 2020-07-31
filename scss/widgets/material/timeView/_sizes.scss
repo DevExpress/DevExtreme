@@ -4,31 +4,22 @@
 
 $material-timeview-clock-min-size: null !default;
 $material-timeview-clock-image-min-size: null !default;
-$material-timeview-field-min-height: null !default;
-$material-timeview-arrow-height-reduce: null !default;
-$material-timeview-field-numberbox-reduce: null !default;
-$material-timeview-clock-additional-size: null !default;
-$material-timeview-time-separator-margin: null !default;
 $material-timeview-format12-width: null !default;
+
+$material-timeview-field-min-height: 35px;
+$material-timeview-arrow-height-reduce: 0;
+$material-timeview-field-numberbox-reduce: 0;
+$material-timeview-clock-additional-size: 8px;
+$material-timeview-time-separator-margin: 5px;
 
 @if $size == "default" {
   $material-timeview-clock-min-size: 252px;
   $material-timeview-clock-image-min-size: 215px;
-  $material-timeview-field-min-height: 35px;
-  $material-timeview-arrow-height-reduce: 0;
-  $material-timeview-field-numberbox-reduce: 0;
-  $material-timeview-clock-additional-size: 8px;
-  $material-timeview-time-separator-margin: 5px;
   $material-timeview-format12-width: 70px;
 }
 
 @else if $size == "compact" {
   $material-timeview-clock-min-size: 200px;
   $material-timeview-clock-image-min-size: 190px;
-  $material-timeview-field-min-height: 35px;
-  $material-timeview-arrow-height-reduce: 0;
-  $material-timeview-field-numberbox-reduce: 0;
-  $material-timeview-clock-additional-size: 8px;
-  $material-timeview-time-separator-margin: 5px;
   $material-timeview-format12-width: 56px;
 }

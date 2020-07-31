@@ -1608,24 +1608,36 @@ declare module DevExpress.excelExporter {
         /** @name ExcelDataGridCell.value */
         value?: any;
     }
+    /** @name ExcelPivotGridCell */
+    export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
+        /** @name ExcelPivotGridCell.area */
+        area?: string;
+        /** @name ExcelPivotGridCell.columnIndex */
+        columnIndex?: number;
+        /** @name ExcelPivotGridCell.rowIndex */
+        rowIndex?: number;
+    }
+    /** @name ExportBaseProps */
+    export interface ExportBaseProps {
+        /** @name ExportBaseProps.keepColumnWidths */
+        keepColumnWidths?: boolean;
+        /** @name ExportBaseProps.loadPanel */
+        loadPanel?: ExportLoadPanel;
+        /** @name ExportBaseProps.topLeftCell */
+        topLeftCell?: CellAddress | string;
+        /** @name ExportBaseProps.worksheet */
+        worksheet?: any;
+    }
     /** @name ExportDataGridProps */
-    export interface ExportDataGridProps {
+    export interface ExportDataGridProps extends ExportBaseProps {
         /** @name ExportDataGridProps.autoFilterEnabled */
         autoFilterEnabled?: boolean;
         /** @name ExportDataGridProps.component */
         component?: DevExpress.ui.dxDataGrid;
         /** @name ExportDataGridProps.customizeCell */
         customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
-        /** @name ExportDataGridProps.keepColumnWidths */
-        keepColumnWidths?: boolean;
-        /** @name ExportDataGridProps.loadPanel */
-        loadPanel?: ExportLoadPanel;
         /** @name ExportDataGridProps.selectedRowsOnly */
         selectedRowsOnly?: boolean;
-        /** @name ExportDataGridProps.topLeftCell */
-        topLeftCell?: CellAddress | string;
-        /** @name ExportDataGridProps.worksheet */
-        worksheet?: any;
     }
     /** @name ExportLoadPanel */
     export interface ExportLoadPanel {
@@ -1648,8 +1660,17 @@ declare module DevExpress.excelExporter {
         /** @name ExportLoadPanel.width */
         width?: number;
     }
+    /** @name ExportPivotGridProps */
+    export interface ExportPivotGridProps extends ExportBaseProps {
+        /** @name ExportPivotGridProps.component */
+        component?: DevExpress.ui.dxPivotGrid;
+        /** @name ExportPivotGridProps.customizeCell */
+        customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+    }
     /** @name excelExporter.exportDataGrid(options) */
     export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+    /** @name excelExporter.exportPivotGrid(options) */
+    export function exportPivotGrid(options: ExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 }
 declare module DevExpress.exporter {
     /** @name ExcelFont */
@@ -4922,17 +4943,19 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.hideEmptySummaryCells */
         hideEmptySummaryCells?: boolean;
         /** @name dxPivotGrid.Options.loadPanel */
-        loadPanel?: { enabled?: boolean, height?: number, indicatorSrc?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
+        loadPanel?: { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
         /** @name dxPivotGrid.Options.onCellClick */
         onCellClick?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, event?: DevExpress.events.event, cancel?: boolean }) => any);
         /** @name dxPivotGrid.Options.onCellPrepared */
         onCellPrepared?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
         /** @name dxPivotGrid.Options.onContextMenuPreparing */
         onContextMenuPreparing?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, field?: DevExpress.data.PivotGridDataSourceField }) => any);
+        /** @deprecated */
         /** @name dxPivotGrid.Options.onExported */
         onExported?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxPivotGrid.Options.onExporting */
         onExporting?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
+        /** @deprecated */
         /** @name dxPivotGrid.Options.onFileSaving */
         onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name dxPivotGrid.Options.rowHeaderLayout */
@@ -4964,6 +4987,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxPivotGridOptions)
         /** @name dxPivotGrid.bindChart(chart, integrationOptions) */
         bindChart(chart: string | JQuery | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
+        /** @deprecated */
         /** @name dxPivotGrid.exportToExcel() */
         exportToExcel(): void;
         /** @name dxPivotGrid.getDataSource() */

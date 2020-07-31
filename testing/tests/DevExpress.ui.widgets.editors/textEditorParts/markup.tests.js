@@ -112,7 +112,7 @@ module('Basic markup', () => {
     test('"placeholder" attribute should be defined for iOS device (T898735)', function(assert) {
         const $editor = $('#texteditor').dxTextEditor();
         const { ios: isIos } = devices.real();
-        const expectedPlaceholder = isIos ? '&nbsp;' : '';
+        const expectedPlaceholder = isIos ? ' ' : '';
         const placeholder = $editor.find(`.${INPUT_CLASS}`).attr('placeholder') || '';
 
         assert.strictEqual(placeholder, expectedPlaceholder, 'input has placeholder with space at iOS device');

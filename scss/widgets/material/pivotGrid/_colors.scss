@@ -4,15 +4,34 @@
 
 // adduse
 
-
 $pivotgrid-area-background: null !default;
 $pivotgrid-border-color: null !default;
+
+/**
+* $name 10. Header text color
+* $type color
+*/
 $pivotgrid-area-color: null !default;
 $pivotgrid-field-area-box-text-color: null !default;
 $pivotgrid-field-area-box-background-color: null !default;
 $pivotgrid-data-area-color: null !default;
+
+/**
+* $name 20. Totals background color
+* $type color
+*/
 $pivotgrid-totalcolor: null !default;
+
+/**
+* $name 30. Grand totals background color
+* $type color
+*/
 $pivotgrid-grandtotalcolor: null !default;
+
+/**
+* $name 40. Field area text color
+* $type color
+*/
 $pivotgrid-field-area-text-color: null !default;
 $pivotgrid-accent-color: null !default;
 $pivotgrid-drag-header-border-color: null !default;
@@ -28,38 +47,21 @@ $pivotgrid-hierarchy-image: null !default;
 $pivotgrid-position-indicator-color: null !default;
 $pivotgrid-chevron-icon-color: null !default;
 
-
 @if $mode == "light" {
 
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: color.change($base-text-color, $alpha: 0.54) !default;
 
   $pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
   $pivotgrid-field-area-box-background-color: darken($base-bg, 12%) !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 13.3%), $alpha: 0.2) !default;
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: color.change(darken($pivotgrid-area-color, 26.2%), $alpha: 0.3) !default;
 
   $pivotgrid-accent-color: $base-accent !default;
@@ -85,32 +87,16 @@ $pivotgrid-chevron-icon-color: null !default;
   $pivotgrid-area-background: $base-bg !default;
   $pivotgrid-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Header text color
-    * $type color
-    */
   $pivotgrid-area-color: color.change($base-text-color, $alpha: 0.54) !default;
 
   $pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
   $pivotgrid-field-area-box-background-color: lighten($base-bg, 12%) !default;
   $pivotgrid-data-area-color: $base-text-color !default;
 
-  /**
-    * $name 20. Totals background color
-    * $type color
-    */
   $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 13.3%), $alpha: 0.2) !default;
 
-  /**
-    * $name 30. Grand totals background color
-    * $type color
-    */
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
 
-  /**
-    * $name 40. Field area text color
-    * $type color
-    */
   $pivotgrid-field-area-text-color: color.change(darken($pivotgrid-area-color, 26.2%), $alpha: 0.3) !default;
 
   $pivotgrid-accent-color: $base-accent !default;

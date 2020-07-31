@@ -5,19 +5,57 @@
 
 // adduse
 
-
+/**
+* $name 10. Group header text color
+* $type color
+*/
 $list-group-color: null !default;
+
+/**
+* $name 20. Group border color
+* $type color
+*/
 $list-border-color: null !default;
+
+/**
+* $name 20. Group header background color
+* $type color
+*/
 $list-group-header-bg: null !default;
+
+/**
+* $name 10. Item text color
+* $type color
+*/
 $list-normal-color: null !default;
+
+/**
+* $name 25. Expanded group header text color
+* $type color
+*/
 $list-expanded-group-color: null !default;
+
+/**
+* $name 30. Hovered item background color
+* $type color
+*/
 $list-item-hover-bg: null !default;
+
+/**
+* $name 30. Selected item state background color
+* $type color
+*/
 $list-item-selected-bg: null !default;
 $list-item-selected-hover-bg: null !default;
 $list-item-focused-selected-bg: null !default;
 $list-item-hover-color: null !default;
 $list-item-selected-color: null !default;
 $list-header-indicator-color: null !default;
+
+/**
+* $name 40. Active state item background color
+* $type color
+*/
 $list-item-active-bg: null !default;
 $list-holdmenu-bg: null !default;
 $list-holdmenu-border-color: null !default;
@@ -34,28 +72,16 @@ $list-icon-color: null !default;
 $list-item-chevron-icon-color: null !default;
 $list-item-icon-toggle-delete-bg: null !default;
 
-
 @if $mode == "light" {
-  /**
-    * $name 10. Group header text color
-    * $type color
-    */
+
   $list-group-color: $base-text-color !default;
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change($base-bg, $alpha: 0) !default;
   $list-normal-color: $base-text-color !default;
   $list-expanded-group-color: $base-accent !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 30. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: color.change(#000, $alpha: 0.12) !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
   $list-item-focused-selected-bg: color.change(#000, $alpha: 0.18) !default;
@@ -64,10 +90,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
   $list-header-indicator-color: $base-icon-color !default;
 
-  /**
-    * $name 40. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: darken($base-bg, 20%) !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -90,46 +112,19 @@ $list-item-icon-toggle-delete-bg: null !default;
 }
 
 @if $mode == "dark" {
-  /**
-    * $name 20. Group border color
-    * $type color
-    */
+
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change($base-bg, $alpha: 0) !default;
 
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
   $list-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: color.change($base-text-color, $alpha: 0.6) !default;
 
-  /**
-    * $name 25. Expanded group header text color
-    * $type color
-    */
   $list-expanded-group-color: $base-accent !default;
 
-  /**
-    * $name 30. Hovered item background color
-    * $type color
-    */
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 50. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: color.change(#6e6e80, $alpha: 0.5) !default;
   $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
   $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;
@@ -138,10 +133,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-selected-color: color.change($base-text-color, $alpha: 1) !default;
   $list-header-indicator-color: $base-icon-color !default;
 
-  /**
-    * $name 40. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: lighten($base-bg, 20%) !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;

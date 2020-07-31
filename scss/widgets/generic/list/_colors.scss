@@ -5,21 +5,64 @@
 
 // adduse
 
-
+/**
+* $name 20. Item border color
+* $type color
+*/
 $list-border-color: null !default;
+
+/**
+* $name 20. Group header text color
+* $type color
+*/
 $list-group-color: null !default;
+
+/**
+* $name 30. Group header background color
+* $type color
+*/
 $list-group-header-bg: null !default;
+
+/**
+* $name 10. Item text color
+* $type color
+*/
 $list-normal-color: null !default;
+
+/**
+* $name 30. Hovered item background color
+* $type color
+*/
 $list-item-hover-bg: null !default;
+
+/**
+* $name 40. Selected item state background color
+* $type color
+*/
 $list-item-selected-bg: null !default;
 $list-item-selected-hover-bg: null !default;
+
+/**
+* $name 50. Focused selected item state background color
+* $type color
+*/
 $list-item-focused-selected-bg: null !default;
+
+/**
+* $name 60. Focused item state background color
+* $type color
+*/
 $list-focused-bg: null !default;
 $list-item-color: null !default;
 $list-item-hover-color: null !default;
 $list-item-selected-color: null !default;
 $list-item-focus-color: null !default;
 $list-item-active-color: null !default;
+
+/**
+* $name 50. Active state item background color
+* $type color
+*/
 $list-item-active-bg: null !default;
 $list-holdmenu-bg: null !default;
 $list-holdmenu-border-color: null !default;
@@ -40,30 +83,16 @@ $list-group-header-compact-padding-top: null !default;
 $list-item-chevron-icon-color: null !default;
 $list-item-icon-toggle-delete-bg: null !default;
 
-
 @if $color == "carmine" {
-
 
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $base-header-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: darken($base-bg, 2%) !default;
   $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 40. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default; // #f05b41 => #ffb5a8
 
   $list-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
@@ -75,10 +104,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
 
-  /**
-    * $name 50. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -106,53 +131,22 @@ $list-item-icon-toggle-delete-bg: null !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 20. Item border color
-    * $type color
-    */
+
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: $base-inverted-bg !default;
 
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
   $list-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 30. Hovered item background color
-    * $type color
-    */
   $list-item-hover-bg: $base-hover-color !default;
 
-  /**
-    * $name 40. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: $base-inverted-bg !default;
   $list-item-selected-hover-bg: #3806ff !default;
 
-  /**
-    * $name 50. Focused selected item state background color
-    * $type color
-    */
   $list-item-focused-selected-bg: $base-inverted-bg !default;
 
-  /**
-    * $name 60. Focused item state background color
-    * $type color
-    */
   $list-focused-bg: $base-focus-color !default;
   $list-item-color: $base-text-color !default;
   $list-item-hover-color: $base-text-color !default;
@@ -188,27 +182,14 @@ $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "dark" {
 
-
   $list-border-color: $base-border-color !default;
   $list-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $list-normal-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change(lighten($base-bg, 6.5%), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 50. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: $base-select-bg !default;
 
   $list-item-selected-hover-bg: color.change(#fff, $alpha: 0.09) !default;
@@ -220,10 +201,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
 
-  /**
-    * $name 50. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -252,27 +229,14 @@ $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "darkmoon" {
 
-
   $list-border-color: $base-border-color !default;
   $list-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $list-normal-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change(darken($base-bg, 37%), $alpha: 0) !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 50. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: $base-select-bg !default;
 
   $list-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
@@ -284,10 +248,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
 
-  /**
-    * $name 40. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -316,27 +276,14 @@ $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "darkviolet" {
 
-
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 10. Group header text color
-    * $type color
-    */
   $list-group-color: $base-header-color !default;
 
-  /**
-    * $name 20. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change(lighten($base-bg, 6.5%), $alpha: 0.05) !default;
   $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 40. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
 
   $list-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
@@ -348,10 +295,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
 
-  /**
-    * $name 50. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: #b88fff !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -380,27 +323,14 @@ $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "greenmist" {
 
-
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $base-accent !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change(darken($base-bg, 6.5%), $alpha: 0.05) !default;
   $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 40. Selected item state background color
-    * $type color
-    */
   $list-item-selected-bg: $base-select-bg !default;
 
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.2) !default;
@@ -412,10 +342,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-inverted-text-color !default;
 
-  /**
-    * $name 50. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -444,27 +370,14 @@ $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "light" {
 
-
   $list-border-color: $base-border-color !default;
   $list-normal-color: $base-text-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $list-normal-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: color.change(darken($base-bg, 6.5%), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 40. Select state item background color
-    * $type color
-    */
   $list-item-selected-bg: $base-select-bg !default;
 
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
@@ -476,10 +389,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
 
-  /**
-    * $name 50. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;
@@ -508,27 +417,14 @@ $list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "softblue" {
 
-
   $list-border-color: $base-border-color !default;
 
-  /**
-    * $name 20. Group header text color
-    * $type color
-    */
   $list-group-color: $base-icon-color !default;
 
-  /**
-    * $name 30. Group header background color
-    * $type color
-    */
   $list-group-header-bg: darken($base-bg, 2%) !default; // #fff => #fafbfc
   $list-normal-color: $base-text-color !default;
   $list-item-hover-bg: $base-hover-bg !default;
 
-  /**
-    * $name 40. Select state item background color
-    * $type color
-    */
   $list-item-selected-bg: $base-select-bg !default;
 
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.15) !default;
@@ -540,10 +436,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-focus-color: $base-focus-color !default;
   $list-item-active-color: $base-focus-color !default;
 
-  /**
-    * $name 50. Active state item background color
-    * $type color
-    */
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-bg: $base-bg !default;
   $list-holdmenu-border-color: $list-border-color !default;

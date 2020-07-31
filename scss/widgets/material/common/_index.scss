@@ -68,29 +68,19 @@
 // stylelint-enable declaration-no-important
 
 @mixin dx-base-typography() {
-  color: $typography-color;
-  font-weight: normal;
-  font-size: $material-base-font-size;
-  font-family: $base-font-family;
-  line-height: $material-base-line-height;
-
-  input,
-  textarea {
-    font-family: $base-font-family;
-    line-height: $material-base-line-height;
-  }
+  @include dx-base-typography-mixin(
+    $typography-color,
+    $material-base-font-size,
+    $base-font-family,
+    $material-line-height
+  );
 }
 
-@mixin disabled-widget($opacity: $base-disabled-opacity) { // stylelint-disable-line selector-class-pattern
-  opacity: $opacity;
-
-  @include user-select(none);
-
-  cursor: default;
+@mixin disabled-widget($opacity: $base-disabled-opacity) {
+  @include disabled-widget-mixin($opacity);
 }
 
-
-$material-invalid-badge-horizontal-padding: ($material-base-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2;
+$material-invalid-badge-horizontal-padding: ($material-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2;
 $material-invalid-badge-halfhorizontal-padding: $material-invalid-badge-horizontal-padding / 2;
 
 $material-valid-badge-font-size: $material-base-font-size + 6px;
@@ -132,12 +122,7 @@ $badge-invalid-bg: $base-invalid-color;
 }
 
 @mixin dx-pending-indicator-material() {
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  margin-top: -$material-invalid-badge-size / 2;
-  width: $material-invalid-badge-size;
-  height: $material-invalid-badge-size;
+  @include dx-pending-indicator($material-invalid-badge-size);
 }
 
 .dx-inkripple {
@@ -174,7 +159,7 @@ $badge-invalid-bg: $base-invalid-color;
   height: 100%;
 
   &.dx-popup-wrapper .dx-overlay-content {
-    box-shadow: $dropdown-widgets-shadow;
+    box-shadow: $material-base-dropdown-widgets-shadow;
     border-top-width: 0;
     border-bottom-width: 1px;
 

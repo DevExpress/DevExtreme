@@ -81,12 +81,12 @@ export default class BootstrapExtractor {
     return `dx-varibles-collector {${variables}}`;
   }
 
-  async extract(): Promise<Array<ConfigMetaItem>> {
+  async extract(): Promise<ConfigMetaItem[]> {
     const css = await this.compiler(await this.sourceProcessor());
     const serviceCodeRegex = /dx-varibles-collector\s{([\s\S]*)}/;
     const ruleRegex = /([\w-]*):\s(.*);/g;
     const serviceCode = serviceCodeRegex.exec(css)[1];
-    const result: Array<ConfigMetaItem> = [];
+    const result: ConfigMetaItem[] = [];
 
     let match = ruleRegex.exec(serviceCode);
     while (match !== null) {

@@ -2,6 +2,7 @@
 
 const gulp = require('gulp');
 const file = require('gulp-file');
+const del = require('del');
 const path = require('path');
 const fs = require('fs');
 const { generateComponents } = require('devextreme-generator/component-compiler');
@@ -19,11 +20,14 @@ const {
 
 const generator = new PreactGenerator();
 
+const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
+
 const SRC = [
     'js/renovation/**/*.{tsx,ts}',
-    '!js/renovation/**/*.j.tsx',
+    `!${jQueryComponentsGlob}`,
     '!js/renovation/**/*.d.ts',
-    '!js/renovation/**/__tests__/**/*'
+    '!js/renovation/**/__tests__/**/*',
+    '!js/renovation/test_utils/**/*'
 ];
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
@@ -37,6 +41,11 @@ const knownErrors = [
     'js/renovation/preact_wrapper/',
     'js\\renovation\\preact_wrapper\\'
 ];
+
+function deleteJQueryComponents(cb) {
+    del.sync(jQueryComponentsGlob);
+    cb();
+}
 
 function generateJQueryComponents(isWatch) {
     const generator = new PreactGenerator();
@@ -104,9 +113,9 @@ function processRenovationMeta() {
         .pipe(gulp.dest(COMPAT_TESTS_PARTS));
 }
 
-gulp.task('generate-jquery-components', function generateJQuery() {
+gulp.task('generate-jquery-components', gulp.series(deleteJQueryComponents, function generateJQuery() {
     return generateJQueryComponents(false);
-});
+}));
 
 gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
     return generateJQueryComponents(true);
@@ -138,7 +147,7 @@ function addGenerationTask(
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
     }
 
-    generator.defaultOptionsModule = 'js/core/options/utils';
+    generator.options = BASE_GENERATOR_OPTIONS;
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
         return gulp.src(SRC, { base: 'js' })
@@ -152,9 +161,14 @@ function addGenerationTask(
             .pipe(gulp.dest(frameworkDest));
     });
 
-    const artifactsSrc = ['./artifacts/css/**/*', `./artifacts/${frameworkName}/**/*`];
+    const frameworkSrc = `./artifacts/${frameworkName}`;
+    const artifactsSrc = ['./artifacts/css/**/*', `${frameworkSrc}/**/*`];
 
     const generateSeries = [
+        function cleanFrameworkArtifacts(cb) {
+            del.sync(frameworkSrc);
+            cb();
+        },
         `generate-${frameworkName}-declaration-only`,
         function() {
             return gulp.src(COMMON_SRC)
@@ -168,9 +182,14 @@ function addGenerationTask(
         }];
 
     if(copyArtifacts) {
+        const dest = `./playground/${frameworkName}/src/artifacts`;
+        generateSeries.push(function cleanFrameworkPlayground(cb) {
+            del.sync(dest);
+            cb();
+        });
         generateSeries.push(function copyArtifacts() {
             return gulp.src(artifactsSrc, { base: './artifacts/' })
-                .pipe(gulp.dest(`./playground/${frameworkName}/src/artifacts`));
+                .pipe(gulp.dest(dest));
         });
     }
 

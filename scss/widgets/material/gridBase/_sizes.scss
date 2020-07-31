@@ -4,52 +4,50 @@
 
 $material-grid-base-cell-height: null !default;
 $material-grid-base-header-height: null !default;
-$material-grid-base-header-line-height: null !default;
 $material-grid-base-cell-line-height: null !default;
 $material-grid-base-cell-font-size: null !default;
-$material-grid-base-header-cell-font-size: null !default;
 $material-grid-base-checkbox-size: null !default;
 $material-grid-base-cell-horizontal-padding: null !default;
 $material-grid-base-cell-first-column-padding: null !default;
 $material-grid-base-cell-last-column-padding: null !default;
-$material-grid-base-header-icon-size: null !default;
 $material-grid-base-filter-icon-size: null !default;
 $material-grid-base-texteditor-input-padding: null !default;
 $material-grid-base-menu-item-padding: null !default;
 $material-grid-base-column-chooser-horizontal-padding: null !default;
 $material-grid-base-column-chooser-paddings: null !default;
-$material-grid-base-column-chooser-item-margin: null !default;
 $material-grid-base-grouppanel-item-margin: null !default;
 $material-grid-base-header-panel-padding: null !default;
 $material-grid-base-command-edit-column-width: null !default;
 $material-grid-base-command-edit-column-with-icons-width: null !default;
 $material-grid-base-adaptive-column-height: null !default;
 $material-grid-base-treeview-search-margin: null !default;
+$material-grid-base-nodata-font-size: null !default;
 $material-command-edit-icon-size: null !default;
-$material-command-edit-icon-margin: null !default;
 $material-filter-row-between-editor-padding: null !default;
 $material-command-column-additional-right-margin: null !default;
+
+$material-grid-base-header-line-height: 16px;
+$material-grid-base-header-cell-font-size: 12px;
+$material-grid-base-header-icon-size: 15px;
+$material-grid-base-column-chooser-item-margin: 8px;
+$material-command-edit-icon-margin: 2px;
 
 @if $size == "default" {
   $material-grid-base-cell-height: 48px;
   $material-grid-base-header-height: 56px;
-  $material-grid-base-header-line-height: 16px;
   $material-grid-base-cell-line-height: 20px;
   $material-grid-base-cell-font-size: 14px;
-  $material-grid-base-header-cell-font-size: 12px;
 
   $material-grid-base-checkbox-size: 18px;
   $material-grid-base-cell-horizontal-padding: 14px;
   $material-grid-base-cell-first-column-padding: 18px;
   $material-grid-base-cell-last-column-padding: 18px;
-  $material-grid-base-header-icon-size: 15px;
   $material-grid-base-filter-icon-size: 22px;
 
   $material-grid-base-texteditor-input-padding: 32px;
   $material-grid-base-menu-item-padding: 11px 4px;
   $material-grid-base-column-chooser-horizontal-padding: 24px;
   $material-grid-base-column-chooser-paddings: 16px $material-grid-base-column-chooser-horizontal-padding 9px;
-  $material-grid-base-column-chooser-item-margin: 8px;
   $material-grid-base-grouppanel-item-margin: 10px;
   $material-grid-base-header-panel-padding: 0 14px 0 24px;
 
@@ -57,8 +55,8 @@ $material-command-column-additional-right-margin: null !default;
   $material-grid-base-command-edit-column-with-icons-width: 93px;
   $material-grid-base-adaptive-column-height: 40px;
   $material-grid-base-treeview-search-margin: 10px;
+  $material-grid-base-nodata-font-size: 17px;
   $material-command-edit-icon-size: 18px;
-  $material-command-edit-icon-margin: 2px;
 
   $material-filter-row-between-editor-padding: 12px;
   $material-command-column-additional-right-margin: 0;
@@ -67,23 +65,19 @@ $material-command-column-additional-right-margin: null !default;
 @else if $size == "compact" {
   $material-grid-base-cell-height: 36px;
   $material-grid-base-header-height: 40px;
-  $material-grid-base-header-line-height: 16px;
   $material-grid-base-cell-line-height: 16px;
   $material-grid-base-cell-font-size: 13px;
-  $material-grid-base-header-cell-font-size: 12px;
 
   $material-grid-base-checkbox-size: 16px;
   $material-grid-base-cell-horizontal-padding: 10px;
   $material-grid-base-cell-first-column-padding: 10px;
   $material-grid-base-cell-last-column-padding: 10px;
-  $material-grid-base-header-icon-size: 15px;
   $material-grid-base-filter-icon-size: 18px;
 
   $material-grid-base-texteditor-input-padding: 22px;
   $material-grid-base-menu-item-padding: 8px 4px;
   $material-grid-base-column-chooser-horizontal-padding: 8px;
   $material-grid-base-column-chooser-paddings: 8px $material-grid-base-column-chooser-horizontal-padding 8px;
-  $material-grid-base-column-chooser-item-margin: 8px;
   $material-grid-base-grouppanel-item-margin: 8px;
   $material-grid-base-header-panel-padding: 0 10px 0 10px;
 
@@ -91,8 +85,8 @@ $material-command-column-additional-right-margin: null !default;
   $material-grid-base-command-edit-column-with-icons-width: 80px;
   $material-grid-base-adaptive-column-height: 26px;
   $material-grid-base-treeview-search-margin: 10px;
+  $material-grid-base-nodata-font-size: 14px;
   $material-command-edit-icon-size: 16px;
-  $material-command-edit-icon-margin: 2px;
 
   $material-filter-row-between-editor-padding: 8px;
   $material-command-column-additional-right-margin: 2px;
