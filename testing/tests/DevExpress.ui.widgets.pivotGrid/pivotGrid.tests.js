@@ -5828,7 +5828,38 @@ QUnit.module('Vertical headers', {
         headersArea.groupWidth(100);
         headersArea.setColumnsWidth([40, 50, 30, 60.29]);
 
-        assert.equal(headersArea.tableElement().width(), 40 + 50 + 30 + 61, 'table width is correct');
+        assert.equal(headersArea.tableElement().get(0).getBoundingClientRect().width, 40 + 50 + 30 + 60.29, 'table width is correct');
+    });
+
+    // T914454
+    QUnit.test('No extra scrollbar on zoom', function(assert) {
+        const grid = $('#pivotGrid').dxPivotGrid({
+            showBorders: true,
+            width: 500,
+            scrolling: {
+                useNative: true
+            },
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', width: 56.296, summaryType: 'count', dataType: 'number' },
+                    { area: 'data', width: 56.296, summaryType: 'count', dataType: 'number' },
+                ],
+                store: [
+                    { row1: 'r1', col1: 'c1' }
+                ]
+            }
+        }).dxPivotGrid('instance');
+        this.clock.tick();
+
+        grid._useFloatingWidthCorrection = () => true;
+        grid.$element().css('zoom', 1.35);
+        grid.repaint();
+
+        const containerWidth = grid._dataArea.element().find('.dx-pivotgrid-area-data').get(0).getBoundingClientRect().width;
+        const tableWidth = grid._dataArea.element().find('table').get(0).getBoundingClientRect().width;
+        assert.roughEqual(containerWidth, tableWidth, 0.1, `containerWidth = ${containerWidth}, tableWidth=${tableWidth}`);
     });
 
     QUnit.test('Update colspans. when new columns count greater than headers area have', function(assert) {
