@@ -4,7 +4,7 @@ import {
 
 export const viewFunction = (viewModel: Table) => (
   <table
-    // eslint-disable-next-line react/jsx-props-no-spreading
+        // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     className={viewModel.props.className}
   >
@@ -16,7 +16,7 @@ export const viewFunction = (viewModel: Table) => (
 
 @ComponentBindings()
 export class TableProps {
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 
   @Slot() children?: any;
 }
