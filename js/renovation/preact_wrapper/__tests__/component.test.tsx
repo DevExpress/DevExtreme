@@ -121,13 +121,14 @@ describe('Widget\'s container manipulations', () => {
   it('pass custom class and attributes (with id) as props on first render', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
+    $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
 
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
     expect($('#my-id').dxrPreactTestWidget('getLastProps')).toMatchObject({
       id: 'my-id',
-      className: 'custom-css-class',
+      className: 'custom-css-class dx-custom-css-class',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -135,6 +136,7 @@ describe('Widget\'s container manipulations', () => {
   it('keep passing custom class and attributes (with id) props on repaint', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
+    $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
@@ -142,7 +144,7 @@ describe('Widget\'s container manipulations', () => {
 
     expect($('#my-id').dxrPreactTestWidget('getLastProps')).toMatchObject({
       id: 'my-id',
-      className: 'custom-css-class',
+      className: 'custom-css-class dx-custom-css-class',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -150,13 +152,26 @@ describe('Widget\'s container manipulations', () => {
   it('pass updated custom class on repaint', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
+    $('#my-id').addClass('dx-custom-css-class');
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
     $('#my-id').addClass('custom-css-class2');
 
     act(() => $('#my-id').dxrPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class custom-css-class2');
+    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class custom-css-class2 dx-custom-css-class');
+  });
+
+  it('should save only initial "dx-" custom classes', () => {
+    $('#component').attr('id', 'my-id');
+    $('#my-id').addClass('custom-css-class');
+    act(() => $('#my-id').dxrPreactTestWidget({}));
+
+    $('#my-id').addClass('dx-custom-css-class');
+
+    act(() => $('#my-id').dxrPreactTestWidget('repaint'));
+
+    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class');
   });
 
   it('widget does not show className option', () => {
