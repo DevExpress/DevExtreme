@@ -382,6 +382,8 @@ const CollectionWidget = Widget.inherit({
             this._refreshItemId($target, needCleanItemId);
             this._toggleFocusClass(isFocused, $target);
         }
+
+        this._updateParentActiveDescendant();
     },
 
     _refreshActiveDescendant: function($target) {
@@ -455,6 +457,8 @@ const CollectionWidget = Widget.inherit({
         const index = $item.data(this._itemIndexKey());
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
+
+    _updateParentActiveDescendant: noop,
 
     _optionChanged: function(args) {
         if(args.name === 'items') {
