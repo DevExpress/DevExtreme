@@ -98,11 +98,18 @@ describe('GroupPanel Vertical Layout', () => {
   });
 
   describe('Logic', () => {
+    const defaultProps = {
+      groups: [],
+    };
+
     describe('Getters', () => {
       describe('style', () => {
         it('should call addHeightToStyle with proper parameters', () => {
           const style = { width: '555px', height: '666px' };
-          const layout = new Layout({ height: 500 });
+          const layout = new Layout({
+            ...defaultProps,
+            height: 500,
+          });
           layout.restAttributes = { style };
 
           expect(layout.style)

@@ -16,11 +16,11 @@ export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
 
 @ComponentBindings()
 export class LayoutBaseProps extends LayoutProps {
-  @Template() headerPanelTemplate?: (props: {
+  @Template() headerPanelTemplate!: (props: {
     viewCellsData: ViewCellData[][];
   }) => JSX.Element;
 
-  @Template() dateTableTemplate?: (props: {
+  @Template() dateTableTemplate!: (props: {
     viewData: GroupedViewData;
   }) => JSX.Element;
 }

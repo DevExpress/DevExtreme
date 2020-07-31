@@ -44,14 +44,14 @@ export class GroupPanelVerticalCellProps {
 
   @OneWay() index?: number;
 
-  @Template() cellTemplate?: (props: {
+  @Template() cellTemplate!: (props: {
     data: {
-      data: GroupItem;
-      id: string | number;
+      data?: GroupItem;
+      id?: string | number;
       color?: string;
       text?: string;
     };
-    index: number;
+    index?: number;
   }) => JSX.Element;
 
   @OneWay() className?: string ='';

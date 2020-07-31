@@ -23,24 +23,25 @@ jest.mock('../marker', () => ({ __esModule: true, Marker: (): null => null }));
 jest.mock('../item_content', () => ({ __esModule: true, TooltipItemContent: (): null => null }));
 
 describe('TooltipItemLayout', () => {
+  const defaultProps: TooltipItemLayoutProps = {
+    onDelete: jest.fn(),
+    onHide: jest.fn(),
+    getTextAndFormatDate: jest.fn(() => ({
+      text: 'Appointment text',
+      formatDate: 'Formatted date',
+    })),
+    showDeleteButton: true,
+    item: {
+      data: { text: 'data' },
+      currentData: { text: 'currentData' },
+    },
+    index: 0,
+    singleAppointment: {
+      text: 'singleAppointmentData',
+    },
+  };
+
   describe('Render', () => {
-    const defaultProps: TooltipItemLayoutProps = {
-      onDelete: jest.fn(),
-      onHide: jest.fn(),
-      getTextAndFormatDate: jest.fn(() => ({
-        text: 'Appointment text',
-        formatDate: 'Formatted date',
-      })),
-      showDeleteButton: true,
-      item: {
-        data: { text: 'data' },
-        currentData: { text: 'currentData' },
-      },
-      index: 0,
-      singleAppointment: {
-        text: 'singleAppointmentData',
-      },
-    };
     const defaultViewModel: Partial<TooltipItemLayout> = {
       formattedContent: { text: 'text', formatDate: 'formattedDate' },
     };
@@ -243,7 +244,10 @@ describe('TooltipItemLayout', () => {
       describe('currentAppointment', () => {
         it('should call getCurrentData with correct parameters', () => {
           const appointmentItem = { data: { text: 'data' } };
-          const tooltipItemLayout = new TooltipItemLayout({ item: appointmentItem });
+          const tooltipItemLayout = new TooltipItemLayout({
+            ...defaultProps,
+            item: appointmentItem,
+          });
 
           expect(tooltipItemLayout.currentAppointment)
             .toEqual({ text: 'currentAppointment' });
@@ -301,7 +305,9 @@ describe('TooltipItemLayout', () => {
           };
 
           const tooltipItemLayout = new TooltipItemLayout({
-            item: appointmentItem, getTextAndFormatDate,
+            ...defaultProps,
+            item: appointmentItem,
+            getTextAndFormatDate,
           });
           const { formattedContent } = tooltipItemLayout;
 

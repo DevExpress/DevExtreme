@@ -20,7 +20,7 @@ export const viewFunction = (viewModel: VirtualTable): JSX.Element => (
 export class VirtualTableProps {
   @OneWay() className?: string;
 
-  @Slot() children?: JSX.Element | JSX.Element[];
+  @Slot() children!: JSX.Element | JSX.Element[];
 }
 
 @Component({

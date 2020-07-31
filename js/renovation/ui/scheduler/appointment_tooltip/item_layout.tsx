@@ -17,12 +17,12 @@ import getCurrentAppointment from './utils/get_current_appointment';
 import { defaultGetTextAndFormatDate } from './utils/default_functions';
 
 export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
-  const useTemplate = !!viewModel.props.itemContentTemplate;
+  const ContentTemplate = viewModel.props.itemContentTemplate;
 
   return (
     <Fragment>
-      {useTemplate && (
-        <viewModel.props.itemContentTemplate
+      {ContentTemplate && (
+        <ContentTemplate
           data={{
             appointmentData: viewModel.props.item.data,
             targetedAppointmentData: viewModel.currentAppointment,
@@ -30,7 +30,7 @@ export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
           index={viewModel.props.index}
         />
       )}
-      {!useTemplate && (
+      {!ContentTemplate && (
         <div
           className={`dx-tooltip-appointment-item ${viewModel.props.className}`}
           // eslint-disable-next-line react/jsx-props-no-spreading
@@ -70,7 +70,7 @@ export class TooltipItemLayoutProps {
   @Template() itemContentTemplate?: (
     props: {
       data: { appointmentData: Appointment; targetedAppointmentData?: Appointment };
-      index: number;
+      index?: number;
     },
   ) => JSX.Element;
 

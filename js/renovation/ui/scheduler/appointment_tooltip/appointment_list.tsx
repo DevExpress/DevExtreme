@@ -21,7 +21,7 @@ interface ItemTemplateProps {
   container: HTMLDivElement;
 }
 interface ListItemProps {
-  itemData: AppointmentItem;
+  itemData?: AppointmentItem;
 }
 
 export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
@@ -35,7 +35,7 @@ export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
         itemContentTemplate={viewModel.props.itemContentTemplate}
         getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
         singleAppointment={viewModel.props.getSingleAppointmentData(
-          item.data, viewModel.props.target,
+          item.data, viewModel.props.target!,
         )}
         showDeleteButton={viewModel.props.isEditingAllowed && !item.data.disabled}
       />
@@ -56,7 +56,7 @@ export class AppointmentListProps {
 
   @OneWay() focusStateEnabled?: boolean = false;
 
-  @OneWay() target!: HTMLElement;
+  @OneWay() target?: HTMLElement;
 
   @Event() showAppointmentPopup: ShowAppointmentPopupFn = noop;
 
@@ -84,7 +84,7 @@ export class AppointmentList extends JSXComponent(AppointmentListProps) {
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;
-      showAppointmentPopup(itemData.data, false, getCurrentAppointment(itemData));
+      showAppointmentPopup(itemData!.data, false, getCurrentAppointment(itemData!));
     };
   }
 }

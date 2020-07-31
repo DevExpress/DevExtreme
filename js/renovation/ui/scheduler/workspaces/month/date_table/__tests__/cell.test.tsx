@@ -48,38 +48,44 @@ describe('MonthDateTableCell', () => {
   });
 
   describe('Logic', () => {
+    const defaultProps = {
+      startDate: new Date(),
+    };
+
     describe('Getters', () => {
       describe('classes', () => {
         it('should return undefined in basic case', () => {
-          const cell = new Cell({});
+          const cell = new Cell({ ...defaultProps });
 
           expect(cell.classes)
             .toBeUndefined();
         });
 
         it('should return "other-month" class if otherMotnh is "true"', () => {
-          const cell = new Cell({ otherMonth: true });
+          const cell = new Cell({ ...defaultProps, otherMonth: true });
 
           expect(cell.classes)
             .toBe('dx-scheduler-date-table-other-month');
         });
 
         it('should return "today" class if today is "true"', () => {
-          const cell = new Cell({ today: true });
+          const cell = new Cell({ ...defaultProps, today: true });
 
           expect(cell.classes)
             .toBe('dx-scheduler-date-table-current-date');
         });
 
         it('should combine "today" and "othermonth" classes', () => {
-          const cell = new Cell({ otherMonth: true, today: true });
+          const cell = new Cell({ ...defaultProps, otherMonth: true, today: true });
 
           expect(cell.classes)
             .toBe('dx-scheduler-date-table-other-month dx-scheduler-date-table-current-date');
         });
 
         it('should combine basic classes with custom className', () => {
-          const cell = new Cell({ otherMonth: true, today: true, className: 'custom-class' });
+          const cell = new Cell({
+            ...defaultProps, otherMonth: true, today: true, className: 'custom-class',
+          });
 
           expect(cell.classes)
             .toBe('dx-scheduler-date-table-other-month dx-scheduler-date-table-current-date custom-class');

@@ -37,7 +37,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
 );
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
-  @Template() cellTemplate?: (props: CellTemplateProps) => JSX.Element;
+  @Template() cellTemplate!: (props: CellTemplateProps) => JSX.Element;
 }
 
 @Component({
