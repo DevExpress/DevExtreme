@@ -17,9 +17,10 @@
             "paths": [
                 { "name": "jquery"},
                 { "name": "angular"},
-                { "name": "knockout"}
+                { "name": "knockout"},
+                { "name": "globalize"}
             ],
-            "patterns": ["jquery/*", "angular/*", "knockout/*"]
+            "patterns": ["jquery/*", "angular/*", "knockout/*", "globalize/*"]
         }]
     }
 }
