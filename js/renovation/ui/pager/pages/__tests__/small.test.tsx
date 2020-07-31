@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../utils/get_computed_style';
+import { NumberBox } from '../../../number_box';
 
 jest.mock('../../utils/get_computed_style');
 
@@ -27,7 +28,7 @@ describe('Small pager pages', () => {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
-      pageIndexRef: pageIndexRef as any,
+      pageIndexRef: pageIndexRef as unknown as NumberBox,
       selectLastPageIndex: jest.fn(),
       props: { pageCount: 100, pagesCountText: 'of', rtlEnabled: true },
     } as Partial<PagesSmall>;

@@ -7,7 +7,7 @@ describe('Pager size selector', () => {
   function defaultProps(): PageSizeSelector {
     const htmlRef = createRef();
     return {
-      htmlRef: htmlRef as any,
+      htmlRef: htmlRef as unknown as HTMLDivElement,
       visible: true,
       normalizedPageSizes: [{
         text: '5',
