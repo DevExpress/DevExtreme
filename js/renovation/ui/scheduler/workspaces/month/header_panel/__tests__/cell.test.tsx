@@ -34,9 +34,9 @@ describe('MonthHeaderPanelCell', () => {
     });
 
     it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(cell.prop('customAttribute'))
+      expect(cell.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

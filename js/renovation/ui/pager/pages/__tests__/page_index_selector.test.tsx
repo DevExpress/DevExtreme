@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '../page_index_selector';
 
@@ -33,7 +33,6 @@ describe('Page index selector', () => {
 
       expect(tree.children()).toHaveLength(3);
       expect(pages.props()).toEqual({
-        children: [],
         maxPagesCount: 10,
         pageCount: 10,
         pageIndex: 1,
@@ -41,10 +40,10 @@ describe('Page index selector', () => {
         rtlEnabled: true,
       });
       expect(prevButton.props()).toEqual({
-        children: [], className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
+        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
       });
       expect(nextButton.props()).toEqual({
-        children: [], className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
+        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
       });
     });
 
@@ -61,7 +60,6 @@ describe('Page index selector', () => {
 
       expect(tree.children()).toHaveLength(2);
       expect(pages.props()).toEqual({
-        children: [],
         maxPagesCount: 10,
         pageCount: 10,
         pageIndex: 1,
@@ -69,7 +67,7 @@ describe('Page index selector', () => {
         rtlEnabled: true,
       });
       expect(nextButton.props()).toEqual({
-        children: [], className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
+        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
       });
     });
 
@@ -86,10 +84,9 @@ describe('Page index selector', () => {
 
       expect(tree.children()).toHaveLength(2);
       expect(prevButton.props()).toEqual({
-        children: [], className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
+        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
       });
       expect(pages.props()).toEqual({
-        children: [],
         maxPagesCount: 10,
         pageCount: 10,
         pageIndex: 1,
@@ -112,7 +109,6 @@ describe('Page index selector', () => {
 
       expect(tree.children()).toHaveLength(1);
       expect(pages.props()).toEqual({
-        children: [],
         pageCount: 10,
         pageIndex: 1,
         pageIndexChange: props.pageIndexChange,

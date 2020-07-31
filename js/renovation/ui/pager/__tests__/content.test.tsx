@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PagerContentComponent as PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../content';
 import { PageSizeSelector } from '../page_size/selector';
 import { InfoText } from '../info';
-
-jest.mock('../page_size/selector', () => ({ PageSizeSelector: jest.fn() }));
-jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: jest.fn() }));
-jest.mock('../info', () => ({ InfoText: jest.fn() }));
 
 describe('PagerContent', () => {
   describe('View', () => {
@@ -34,18 +30,17 @@ describe('PagerContent', () => {
           showNavigationButtons: true,
           totalCount: 100,
         },
-        restAttributes: { restAttribute: {} },
+        restAttributes: { 'rest-attribute': {} },
       } as any as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
       expect((tree.instance() as unknown as Element).className).toEqual('className');
-      expect(tree.props()).toEqual({
+      expect(tree.props()).toMatchObject({
         className: 'className',
-        restAttribute: props.restAttributes.restAttribute,
+        'rest-attribute': props.restAttributes['rest-attribute'],
       });
       expect(tree.children()).toHaveLength(2);
       expect(tree.find(PageSizeSelector)).toHaveLength(1);
-      expect(tree.childAt(0).props()).toEqual({
-        children: [],
+      expect(tree.childAt(0).props()).toMatchObject({
         isLargeDisplayMode: true,
         pageSize: 5,
         pageSizeChange: props.props.pageSizeChange,
@@ -57,15 +52,13 @@ describe('PagerContent', () => {
       expect(pagesContainer.children()).toHaveLength(2);
       expect(tree.find(PageIndexSelector)).toHaveLength(1);
       expect(tree.find(InfoText)).toHaveLength(1);
-      expect(pagesContainer.childAt(0).props()).toEqual({
-        children: [],
+      expect(pagesContainer.childAt(0).props()).toMatchObject({
         infoText: 'infoText',
         pageCount: 50,
         pageIndex: 2,
         totalCount: 100,
       });
-      expect(pagesContainer.childAt(1).props()).toEqual({
-        children: [],
+      expect(pagesContainer.childAt(1).props()).toMatchObject({
         isLargeDisplayMode: true,
         hasKnownLastPage: true,
         maxPagesCount: 10,

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { mount, shallow } from 'enzyme';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
@@ -143,7 +143,7 @@ describe('Button', () => {
 
     it('should pass all necessary properties to the Widget', () => {
       const renderOptions = {
-        aria: 'area',
+        aria: { role: 'aria' },
         onActive: () => null,
         onInactive: () => null,
       };

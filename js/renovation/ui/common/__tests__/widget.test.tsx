@@ -1,6 +1,6 @@
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 // Should be before component import
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
@@ -40,18 +40,18 @@ describe('Widget', () => {
     });
 
     it('should pass REF into the main div element', () => {
-      const mockRef = createRef();
+      const mockRef = createRef<HTMLDivElement>();
       const props = {
         hint: 'hint',
         visible: true,
       };
-      shallow(viewFunction({
+      mount(viewFunction({
         widgetRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
 
-      expect(mockRef.current.className).toBe('cssClasses');
+      expect(mockRef.current?.className).toBe('cssClasses');
     });
 
     it('should render children', () => {
@@ -581,25 +581,25 @@ describe('Widget', () => {
           const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
 
           expect(widget.attributes).toEqual({
-            'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', restAttributes: 'restAttributes',
+            'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', 'rest-attributes': 'restAttributes',
           });
         });
 
         it('should not return accessKey if widget is not focusable', () => {
           const widget1 = new Widget({ accessKey: 'c', visible: true });
-          expect(widget1.attributes).toEqual({ restAttributes: 'restAttributes' });
+          expect(widget1.attributes).toEqual({ 'rest-attributes': 'restAttributes' });
         });
 
         it('should return accessKey if widget is focusable', () => {
           const widget2 = new Widget({ accessKey: 'c', focusStateEnabled: true, visible: true });
-          expect(widget2.attributes).toEqual({ accessKey: 'c', restAttributes: 'restAttributes' });
+          expect(widget2.attributes).toEqual({ accessKey: 'c', 'rest-attributes': 'restAttributes' });
         });
 
         it('should not return accessKay if widget is disabled', () => {
           const widget3 = new Widget({
             accessKey: 'c', focusStateEnabled: true, disabled: true, visible: true,
           });
-          expect(widget3.attributes).toEqual({ 'aria-disabled': 'true', restAttributes: 'restAttributes' });
+          expect(widget3.attributes).toEqual({ 'aria-disabled': 'true', 'rest-attributes': 'restAttributes' });
         });
       });
 
