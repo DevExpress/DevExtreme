@@ -3734,6 +3734,11 @@ QUnit.module('Renovated Render', {
             const result = this.instance._generateViewData();
             const expected = {
                 groupedData: [{
+                    allDayPanel: [{
+                        startDate: new Date(2020, 6, 29),
+                        endDate: new Date(2020, 6, 30),
+                        allDay: true,
+                    }],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),

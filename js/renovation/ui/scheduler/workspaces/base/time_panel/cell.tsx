@@ -24,7 +24,7 @@ export class TimePanelCellProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = '';
 }
 
 @Component({

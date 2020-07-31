@@ -1,3 +1,5 @@
+import { combineClasses } from '../../../utils/combine_classes';
+
 export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
   let key = date.toString();
   if (group) {
@@ -20,3 +22,11 @@ export const addHeightToStyle = (
     height: height ? `${height}px` : nextStyle.height,
   };
 };
+
+export const getGroupCellClasses = (
+  isFirstCell: boolean,
+  isLastCell: boolean,
+): string => combineClasses({
+  'dx-scheduler-first-group-cell': isFirstCell,
+  'dx-scheduler-last-group-cell': isLastCell,
+});
