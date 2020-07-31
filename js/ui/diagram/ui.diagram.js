@@ -1089,8 +1089,7 @@ class Diagram extends Widget {
                         svgHeight: s.backgroundImageHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
-                        toolboxWidth: s.toolboxWidth,
-                        toolboxHeight: s.toolboxHeight,
+                        toolboxWidthToHeightRatio: s.toolboxWidthToHeightRatio,
                         minWidth: s.minWidth,
                         minHeight: s.minHeight,
                         maxWidth: s.maxWidth,
@@ -1828,11 +1827,7 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.toolboxWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.toolboxHeight
+                * @name dxDiagramOptions.customShapes.toolboxWidthToHeightRatio
                 * @type Number
                 */
                 /**
