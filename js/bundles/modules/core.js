@@ -13,6 +13,7 @@ DevExpress._DEVEXTREME_BUNDLE_INITIALIZED = true;
 
 DevExpress.clientExporter = require('../../exporter');
 DevExpress.excelExporter = require('../../excel_exporter');
+DevExpress.pdfExporter = require('../../pdf_exporter');
 
 DevExpress.VERSION = require('../../core/version');
 
