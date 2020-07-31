@@ -3330,7 +3330,7 @@ QUnit.module('dxPivotGrid', {
         [true, false].forEach(useNative => {
             [40, 80].forEach(scrollDistance => {
                 QUnit.test(`Container.visibility= false -> Container.visibility= true -> dataArea.trigger(scrollTop), useNative=${useNative}, scrollMode=${scrollMode}, scrollDistance = ${scrollDistance} (T907207)`, function(assert) {
-                    $('#pivotGrid').wrap($('<div></div>').css('display', 'none'));
+                    $('#pivotGrid').wrap($('<div id="wrapper"></div>').css('display', 'none'));
 
                     const grid = $('#pivotGrid').dxPivotGrid({
                         width: 500,
@@ -3356,7 +3356,7 @@ QUnit.module('dxPivotGrid', {
                     }).dxPivotGrid('instance');
                     this.clock.tick();
 
-                    grid.element().parent().css('display', 'block');
+                    $(grid.element().closest('#wrapper')).css('display', 'block');
                     grid.updateDimensions();
 
                     const eventArgs = { scrollOffset: { top: scrollDistance, left: 0 } };
