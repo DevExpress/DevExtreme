@@ -458,7 +458,7 @@ const CollectionWidget = Widget.inherit({
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
 
-    _updateParentActiveDescendant: commonUtils.noop,
+    _updateParentActiveDescendant: noop,
 
     _optionChanged: function(args) {
         if(args.name === 'items') {
