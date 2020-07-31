@@ -21,6 +21,7 @@ module.exports = {
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown',
         'exceljs': 'window.ExcelJS',
+        'jspdf': 'window.jsPDF',
         'devexpress-diagram': 'window.DevExpress.diagram',
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'RRule': 'window.RRule',
