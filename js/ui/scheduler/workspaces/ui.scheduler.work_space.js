@@ -1058,7 +1058,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const groupedData = [];
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
-            let allDayPanelData;
             const viewCellsData = [];
             for(let i = 0; i < rowCount; ++i) {
                 viewCellsData.push([]);
@@ -1069,8 +1068,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                     });
                     viewCellsData[i].push(cellDataValue);
                 }
-                allDayPanelData = viewCellsData[i];
             }
+
+            const allDayPanelData = this._generateAllDayPanelData(groupIndex, rowCount, cellCount);
 
             groupedData.push({
                 dateTable: viewCellsData,
@@ -1084,31 +1084,47 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _renderRWorkspace() {
-        const viewData = this._generateViewData();
+    _generateAllDayPanelData(groupIndex, rowCount, cellCount) {
+        if(!this.option('showAllDayPanel')) {
+            return null;
+        }
 
-        this.renderRAllDayPanel(viewData);
+        const allDayPanelData = [];
 
-        this.renderRTimeTable(viewData);
+        for(let i = 0; i < cellCount; ++i) {
+            const rowIndex = Math.max(groupIndex * rowCount - 1, 0);
+            const cellDataValue = this._getAllDayCellData(undefined, rowIndex, i).value;
+            allDayPanelData.push(cellDataValue);
+        }
 
-        this.renderRDateTable(viewData);
+        return allDayPanelData;
     }
 
-    renderRAllDayPanel(viewData) {
-        const isVisible = this.option('showAllDayPanel') && viewData.groupedData?.length >= 1;
+    _renderRWorkspace() {
+        this.viewData = this._generateViewData();
+
+        this.renderRAllDayPanel();
+
+        this.renderRTimeTable();
+
+        this.renderRDateTable();
+    }
+
+    renderRAllDayPanel() {
+        const isVisible = this.option('showAllDayPanel') && this.viewData.groupedData?.length >= 1;
         const options = {
-            viewData,
+            viewData: this.viewData,
             visible: isVisible
         };
 
-        this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'allDayPanel', options);
+        this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
     }
 
-    renderRTimeTable(viewData) {
-        this.renderRComponent(this._$timePanel, dxrTimePanelTableLayout, 'timePanel', viewData);
+    renderRTimeTable() {
+        this.renderRComponent(this._$timePanel, dxrTimePanelTableLayout, 'renovatedTimePanel', { viewData: this.viewData });
     }
 
-    renderRDateTable(viewData) { }
+    renderRDateTable() { }
 
     renderRComponent(parentElement, componentClass, componentName, viewModel) {
         let component = this[componentName];
@@ -1940,6 +1956,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _cleanRenovatedComponents() {
+        this.renovatedAllDayPanel?.dispose();
+        this.renovatedAllDayPanel = undefined;
+
         this.renovatedDateTable?.dispose();
         this.renovatedDateTable = undefined;
 
