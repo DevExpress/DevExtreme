@@ -14,6 +14,7 @@ const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
+const renovationPipes = require('./renovation-pipes');
 const context = require('./context.js');
 
 const namedDebug = lazyPipe()
@@ -61,8 +62,7 @@ gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
         .pipe(gulp.dest(context.RESULT_JS_PATH));
 }));
 
-
-const createDebugBundlesStream = function(watch) {
+function prepareDebugMeta(watch) {
     let debugConfig;
     let bundles;
     if(watch) {
@@ -78,6 +78,12 @@ const createDebugBundlesStream = function(watch) {
         debugConfig.devtool = 'eval-source-map';
     }
 
+    return { debugConfig, bundles };
+}
+
+function createDebugBundlesStream(watch) {
+    const { debugConfig, bundles } = prepareDebugMeta(watch);
+
     return gulp.src(bundles)
         .pipe(namedDebug())
         .pipe(gulpIf(watch, plumber({
@@ -88,15 +94,37 @@ const createDebugBundlesStream = function(watch) {
         .pipe(headerPipes.useStrict())
         .pipe(headerPipes.bangLicense())
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
-        .pipe(gulp.dest(context.RESULT_JS_PATH))
-        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
-};
+        .pipe(gulp.dest(context.RESULT_JS_PATH));
+}
 
+function createDebugBundlesStreamRenovation(watch) {
+    const { debugConfig } = prepareDebugMeta(watch);
+
+    return gulp.src(processBundles(DEBUG_BUNDLES, renovationPipes.tempFolder))
+        .pipe(namedDebug())
+        .pipe(gulpIf(watch, plumber({
+            errorHandler: notify.onError('Error: <%= error.message %>')
+                .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
+        })))
+        .pipe(webpackStream(debugConfig, webpack, muteWebPack))
+        .pipe(headerPipes.useStrict())
+        .pipe(headerPipes.bangLicense())
+        .pipe(gulpIf(!watch, compressionPipes.beautify()))
+        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
+}
 
 gulp.task('js-bundles-debug', gulp.series('version-replace', function() {
     return createDebugBundlesStream(false);
 }));
 
-gulp.task('js-bundles-dev', function() {
+const SRC = ['js/**/*.*'];
+
+gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true);
-});
+}, gulp.series(function() {
+    return gulp.src(SRC)
+        .pipe(renovationPipes.replaceWidgets())
+        .pipe(gulp.dest(renovationPipes.tempFolder));
+}, function() {
+    return createDebugBundlesStreamRenovation(true);
+})));

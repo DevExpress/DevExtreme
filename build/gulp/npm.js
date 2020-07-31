@@ -11,6 +11,7 @@ const dataUri = require('./gulp-data-uri').gulpPipe;
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
+const renovationPipes = require('./renovation-pipes');
 const version = require('../../package.json').version;
 const packagePath = context.RESULT_NPM_PATH + '/devextreme';
 const scssPackagePath = packagePath + '/scss';
@@ -35,6 +36,7 @@ const DIST_GLOBS = [
     '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
     '!' + context.RESULT_JS_RENOVATION_PATH + '/**/*.*',
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
+    '!' + renovationPipes.tempFolder + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',

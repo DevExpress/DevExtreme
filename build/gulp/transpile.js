@@ -1,16 +1,14 @@
 'use strict';
 
 const gulp = require('gulp');
-const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
-const gulpEach = require('gulp-each');
 const watch = require('gulp-watch');
 const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const path = require('path');
 const notify = require('gulp-notify');
 const compressionPipes = require('./compression-pipes.js');
-const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
+const renovationPipes = require('./renovation-pipes');
 
 const context = require('./context.js');
 
@@ -23,25 +21,10 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-const renovatedFileNames = renovatedComponents.map(component => component.name);
-
-function isOldComponentRenovated(file) {
-    const isRenovatedName = !!file.basename.match(new RegExp(renovatedFileNames.map(fileName => ('^' + fileName + '\\b')).join('|'), 'i')); // only renovated file names
-    const isNotRenovationFolder = file.path.match(/renovation/g) === null; // without renovation folder
-    const isJsFile = file.extname === '.js';
-    const isCorrectFilePath = !!file.path.match(new RegExp(renovatedFileNames.map(fileName => ('ui\\/' + fileName)).join('|'), 'i')); // without ui/text_box/../button.js
-
-    return isRenovatedName && isNotRenovationFolder && isJsFile && isCorrectFilePath;
-}
-
 gulp.task('transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
-        .pipe(gulpIf(isOldComponentRenovated, gulpEach((content, file, callback) => {
-            const component = renovatedComponents.find(component => component.name.toLowerCase() === file.stem);
-            const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
-            callback(null, fileContext);
-        })))
+        .pipe(renovationPipes.replaceWidgets())
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
 });
@@ -53,7 +36,7 @@ gulp.task('transpile-prod-old', function() {
         .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 });
 
-gulp.task('transpile-prod', gulp.series('transpile-prod-old', 'transpile-prod-renovation'));
+gulp.task('transpile-prod', gulp.parallel('transpile-prod-old', 'transpile-prod-renovation'));
 
 gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'transpile-prod', function() {
     return gulp.src(SRC)

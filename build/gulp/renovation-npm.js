@@ -13,6 +13,7 @@ const renovatedComponents = require('../../js/bundles/modules/parts/renovation')
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
+const renovationPipes = require('./renovation-pipes');
 const version = require('../../package.json').version;
 const packagePath = context.RESULT_NPM_PATH + '/devextreme-renovation';
 const scssPackagePath = packagePath + '/scss';
@@ -36,6 +37,7 @@ const DIST_GLOBS = [
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
     '!' + context.RESULT_JS_PATH + '/**/*.*',
     '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
+    '!' + renovationPipes.tempFolder + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js-renovation/angular**/*.*',
     '!artifacts/js-renovation/angular*',
