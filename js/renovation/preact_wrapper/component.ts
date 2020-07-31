@@ -93,11 +93,11 @@ export default class PreactWrapper extends DOMComponent {
     const cssClass = this.$element()[0].getAttribute('class') || '';
     this.storedClasses = this.storedClasses ?? cssClass
       .split(' ')
-      .filter((name) => name.startsWith('dx-'))
+      .filter((name) => name.indexOf('dx-') === 0)
       .join(' ');
     this._elementAttr.class = cssClass
       .split(' ')
-      .filter((name) => !name.startsWith('dx-'))
+      .filter((name) => name.indexOf('dx-') !== 0)
       .concat(this.storedClasses)
       .join(' ');
 
