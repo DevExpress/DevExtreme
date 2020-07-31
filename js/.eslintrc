@@ -6,7 +6,6 @@
     "parserOptions": {
         "sourceType": "module"
     },
-    "ignorePatterns": [ "integration/jquery/*.js" ],
     "rules": {
         "no-restricted-modules": [
             "error",
