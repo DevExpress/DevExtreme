@@ -349,7 +349,7 @@ const DropDownEditor = TextBox.inherit({
             }
         });
 
-        eventsEngine.off(this._input(), 'input blur');
+        eventsEngine.off(this._input(), 'input blur', this._toggleEmptinessEventHandler);
         eventsEngine.on(this._input(), 'input blur', this._toggleEmptinessEventHandler.bind(this));
 
         $container.prepend(this._$beforeButtonsContainer);
