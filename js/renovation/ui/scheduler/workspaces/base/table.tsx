@@ -18,7 +18,7 @@ export const viewFunction = (viewModel: Table): JSX.Element => (
 export class TableProps {
   @OneWay() className?: string;
 
-  @Slot() children?: JSX.Element | JSX.Element[] | JSX.Element[][];
+  @Slot() children?: any;
 }
 
 @Component({

@@ -63,14 +63,14 @@ export class TooltipItemLayoutProps {
 
   @OneWay() item: AppointmentItem = { data: {} };
 
-  @OneWay() index?: number;
+  @OneWay() index = 0;
 
   @OneWay() showDeleteButton?: boolean = true;
 
   @Template() itemContentTemplate?: (
     props: {
       data: { appointmentData: Appointment; targetedAppointmentData?: Appointment };
-      index?: number;
+      index: number;
     },
   ) => JSX.Element;
 

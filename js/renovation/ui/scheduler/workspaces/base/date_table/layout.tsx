@@ -5,7 +5,6 @@ import { Table } from '../table';
 import { VirtualTable } from '../virtual_table';
 import { DateTableBody } from './table_body';
 import { LayoutProps } from '../layout_props';
-import { ViewCellData } from '../../types.d';
 
 export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
   // This is a workaround because of bug in generator:
@@ -42,7 +41,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
 export class DateTableLayoutBaseProps extends LayoutProps {
   @OneWay() className?: string;
 
-  @Template() cellTemplate?: (props: ViewCellData) => JSX.Element;
+  @Template() cellTemplate?: any;
 }
 
 @Component({

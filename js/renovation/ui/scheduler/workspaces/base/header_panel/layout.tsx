@@ -34,12 +34,7 @@ export class HeaderPanelLayoutProps {
 
   @OneWay() viewCellsData: ViewCellData[][] = [[]];
 
-  @Template() cellTemplate!: (props: {
-    startDate: Date;
-    endDate: Date;
-    today?: boolean;
-    key: string;
-  }) => JSX.Element;
+  @Template() cellTemplate!: any;
 }
 
 @Component({

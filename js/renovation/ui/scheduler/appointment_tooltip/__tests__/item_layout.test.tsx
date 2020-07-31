@@ -274,6 +274,7 @@ describe('TooltipItemLayout', () => {
             onDelete,
             singleAppointment,
             getTextAndFormatDate,
+            index: 0,
           });
           const { onDeleteButtonClick } = tooltipItemLayout;
 
