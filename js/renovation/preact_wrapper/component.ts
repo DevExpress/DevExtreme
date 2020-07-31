@@ -90,13 +90,17 @@ export default class PreactWrapper extends DOMComponent {
     }
     this._elementAttr.style = style;
 
-    const cssClass = this.$element()[0].getAttribute('class');
-    if (cssClass) {
-      this._elementAttr.class = cssClass
-        .split(' ')
-        .filter((name) => name.indexOf('dx-') < 0)
-        .join(' ');
-    }
+    const cssClass = this.$element()[0].getAttribute('class') || '';
+
+    this.storedClasses = this.storedClasses ?? cssClass
+      .split(' ')
+      .filter((name) => name.startsWith('dx-'))
+      .join(' ');
+    this._elementAttr.class = cssClass
+      .split(' ')
+      .filter((name) => !name.startsWith('dx-'))
+      .concat(this.storedClasses)
+      .join(' ');
 
     return this._elementAttr;
   }
