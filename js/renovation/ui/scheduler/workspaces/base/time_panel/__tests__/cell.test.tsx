@@ -1,7 +1,13 @@
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { viewFunction as CellView } from '../cell';
 
-describe('TimePanelTableCell', () => {
+jest.mock('../../cell', () => ({
+  ...require.requireActual('../../cell'),
+  CellBase: (props) => <div {...props} />,
+}));
+
+describe('TimePanelCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9, 9);
     const text = 'Some Text';
@@ -33,10 +39,24 @@ describe('TimePanelTableCell', () => {
       expect(cell.hasClass('dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical'))
         .toBe(true);
 
-      expect(cell.hasClass('dx-scheduler-first-group-cell dx-scheduler-last-group-cell'))
-        .toBe(true);
-
       expect(cell.hasClass('test-class'))
+        .toBe(true);
+    });
+
+    it('should render props correctly', () => {
+      const cell = render({
+        props: {
+          className: 'some-class',
+          isFirstCell: true,
+          isLastCell: true,
+        },
+      });
+
+      expect(cell.prop('className'))
+        .toContain('some-class');
+      expect(cell.prop('isFirstCell'))
+        .toBe(true);
+      expect(cell.prop('isLastCell'))
         .toBe(true);
     });
   });
