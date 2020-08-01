@@ -52,14 +52,14 @@ $scheduler-droppable-cell-background-color: null !default;
 */
 $scheduler-workspace-focused-cell-color: null !default;
 $scheduler-panel-text-color: null !default;
-$scheduler-workspace-background-color: null !default;
-$scheduler-workspace-accent-color: null !default;
+$scheduler-workspace-background-color: $base-bg !default;
+$scheduler-workspace-accent-color: $base-accent !default;
 
 /**
 * $name 80. Date-time indicator color
 * $type color
 */
-$scheduler-current-time-cell-color: null !default;
+$scheduler-current-time-cell-color: $base-accent !default;
 
 /**
 * $name 80. Date-time indicator color
@@ -67,7 +67,7 @@ $scheduler-current-time-cell-color: null !default;
 */
 $scheduler-time-indicator-color: null !default;
 $scheduler-dd-appointment-hover-text-color: null !default;
-$scheduler-popup-title-bg: null !default;
+$scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
 $scheduler-workspace-month-text-color: null !default;
 $scheduler-dropdown-appointment-date-color: null !default;
 $scheduler-workspace-active-cell-color: null !default;
@@ -75,7 +75,7 @@ $scheduler-workspace-hovered-cell-color: null !default;
 $scheduler-group-header-color: null !default;
 $scheduler-header-bg: null !default;
 $scheduler-alldaypanel-bg: null !default;
-$scheduler-appointment-form-separator-color: null !default;
+$scheduler-appointment-form-separator-color: $base-border-color !default;
 $scheduler-tab-selected-bg: null !default;
 $scheduler-tab-selected-before-bg: null !default;
 $scheduler-tab-focused-border-color: null !default;
@@ -85,59 +85,33 @@ $scheduler-time-indicator-background-color: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 $scheduler-time-panel-background-color: null !default;
 
-@if $color == "carmine" {
 
+@if $color == "carmine" {
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
-
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: darken($base-border-color, 10%) !default;
-
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-appointment-base-color: $base-accent !default;
-
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
-
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
-
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
   $scheduler-panel-text-color: $base-header-color !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-current-time-cell-color: $base-accent !default;
-
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
-
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
-
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
-
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
-
   $scheduler-header-bg: darken($base-bg, 4%) !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
-
   $scheduler-tab-selected-bg: $base-bg !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
-
   $scheduler-tab-focused-border-color: $base-accent !default;
-
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(51, 51, 51, 0.04) !default;
@@ -145,109 +119,62 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "contrast" {
-
   $scheduler-base-border-color: $base-border-color !default;
-
   $scheduler-cell-active-bg: $base-border-color !default;
   $scheduler-cell-hover-bg: $base-border-color !default;
-
   $scheduler-group-separator-border-color: $base-border-color !default;
   $scheduler-first-month-border-color: $base-border-color !default;
   $scheduler-accent-border-color: $base-border-color !default;
-
   $scheduler-droppable-cell-background-color: $base-bg !default;
-
   $scheduler-appointment-base-color: $base-accent !default;
   $scheduler-appointment-text-color: $base-text-color !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: extcolor.difference(#fff, $base-text-color) !default;
   $scheduler-appointment-start-color: $base-inverted-bg !default;
-
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 5%) !default;
-
   $scheduler-panel-text-color: $base-text-color !default;
   $scheduler-workspace-month-text-color: $base-text-color !default;
-
   $scheduler-dropdown-appointment-date-color: $base-text-color !default;
-
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: extcolor.difference(#fff, $base-text-color) !default;
-
   $scheduler-group-header-color: $base-text-color !default;
-
   $scheduler-header-bg: $base-bg !default;
   $scheduler-alldaypanel-bg: $base-bg !default;
-
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
-
   $scheduler-tab-selected-bg: $base-inverted-bg !default;
   $scheduler-tab-selected-before-bg: transparent !default;
-
   $scheduler-tab-focused-border-color: $base-border-color !default;
-
   $scheduler-other-month-cell-opacity: 1 !default;
   $scheduler-fill-focused-appointment: true !default;
   $scheduler-time-indicator-background-color: color.change(#3806ff, $alpha: 0.6) !default;
-  $scheduler-current-time-cell-color: $base-accent !default;
   $scheduler-time-indicator-color: $scheduler-current-time-cell-color !default;
   $scheduler-first-month-cell-background-color: $base-bg !default;
 }
 
 @if $color == "dark" {
-
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
-
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
   $scheduler-group-separator-border-color: lighten($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: lighten($base-border-color, 9.8%) !default;
-
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-appointment-base-color: $base-accent !default;
-
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-
   $scheduler-first-month-border-color: lighten($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
-
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
   $scheduler-panel-text-color: $base-text-color !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-current-time-cell-color: $base-accent !default;
-
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
-
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
-
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
-
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
-
   $scheduler-header-bg: $base-hover-bg !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
-
   $scheduler-tab-selected-bg: $scheduler-workspace-background-color !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
-
   $scheduler-tab-focused-border-color: $base-focus-bg !default;
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
@@ -256,35 +183,23 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "darkmoon" {
-
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: lighten($base-bg, 4%) !default;
   $scheduler-group-separator-border-color: lighten($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: lighten($base-border-color, 9.8%) !default;
-
   $scheduler-appointment-text-color: #fff !default;
-
   $scheduler-appointment-base-color: #2cc9b4 !default;
-
   $scheduler-appointment-start-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.3) !default;
-
   $scheduler-first-month-border-color: lighten($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
   $scheduler-appointment-base-color: #2cc9b4 !default;
   $scheduler-appointment-text-color: #fff !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-workspace-focused-cell-color: color.change($base-accent, $alpha: 0.2) !default;
   $scheduler-panel-text-color: $base-text-color !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-current-time-cell-color: $base-accent !default;
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
   $scheduler-dd-appointment-hover-text-color: #fff !default;
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
@@ -292,11 +207,9 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
   $scheduler-tab-selected-bg: $scheduler-workspace-background-color !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
   $scheduler-tab-focused-border-color: $base-accent !default;
-
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(222, 222, 222, 0.07) !default;
@@ -304,57 +217,31 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "darkviolet" {
-
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
-
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
   $scheduler-group-separator-border-color: lighten($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: #414152 !default;
-
   $scheduler-appointment-text-color: $base-icon-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-appointment-base-color: $base-select-bg !default;
-
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-
   $scheduler-first-month-border-color: lighten($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
-
   $scheduler-workspace-focused-cell-color: darken($base-select-bg, 12%) !default;
   $scheduler-panel-text-color: $base-header-color !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-current-time-cell-color: $base-accent !default;
-
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
-
   $scheduler-dd-appointment-hover-text-color: $base-text-color !default;
-
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
-
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
-
   $scheduler-header-bg: $base-hover-bg !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
-
   $scheduler-tab-selected-bg: $scheduler-workspace-background-color !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
-
   $scheduler-tab-focused-border-color: $base-accent !default;
-
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(222, 222, 222, 0.07) !default;
@@ -362,57 +249,31 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "greenmist" {
-
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
-
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
-
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: #b5c9c8 !default;
-
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-appointment-base-color: $base-accent !default;
-
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
-
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
   $scheduler-panel-text-color: lighten($base-text-color, 38.5%) !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-  $scheduler-current-time-cell-color: $base-accent !default;
-
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
-
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
-
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-time-panel-background-color: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
-
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
-
   $scheduler-header-bg: $base-hover-bg !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
-
   $scheduler-tab-selected-bg: $scheduler-time-panel-background-color !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
-
   $scheduler-tab-focused-border-color: $base-focus-bg !default;
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
@@ -421,55 +282,30 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "light" {
-
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
-
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: darken($base-border-color, 10%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
   $scheduler-header-bg: darken($base-bg, 4%) !default;
-
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-appointment-base-color: $base-accent !default;
-
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
-
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 45%) !default;
   $scheduler-panel-text-color: $base-text-color !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-current-time-cell-color: $base-accent !default;
-
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
-
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
-
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
-
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
-
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
-
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
-
   $scheduler-tab-selected-bg: $scheduler-workspace-background-color !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
-
   $scheduler-tab-focused-border-color: $base-focus-bg !default;
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
@@ -478,33 +314,21 @@ $scheduler-time-panel-background-color: null !default;
 }
 
 @if $color == "softblue" {
-
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
   $scheduler-cell-hover-bg: $base-webwidget-hover-background !default;
   $scheduler-group-separator-border-color: darken($base-border-color, 20%) !default;
-
   $scheduler-accent-border-color: darken($base-border-color, 10%) !default;
   $scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
-
   $scheduler-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-focus-color: $scheduler-appointment-text-color !default;
-
   $scheduler-appointment-base-color: $base-accent !default;
-
   $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-
   $scheduler-workspace-focused-cell-color: lighten($base-accent, 25%) !default;
-
   $scheduler-first-month-border-color: darken($base-border-color, 20%) !default;
   $scheduler-panel-text-color: $base-text-color !default;
-  $scheduler-workspace-background-color: $base-bg !default;
-  $scheduler-workspace-accent-color: $base-accent !default;
-
-  $scheduler-current-time-cell-color: $base-accent !default;
   $scheduler-time-indicator-color: lighten($scheduler-current-time-cell-color, 15%) !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
-  $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
   $scheduler-workspace-month-text-color: lighten($base-text-color, 38.5%) !default;
   $scheduler-dropdown-appointment-date-color: lighten($base-text-color, 38.5%) !default;
   $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
@@ -512,11 +336,9 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
-  $scheduler-appointment-form-separator-color: $base-border-color !default;
   $scheduler-tab-selected-bg: $scheduler-workspace-background-color !default;
   $scheduler-tab-selected-before-bg: $scheduler-tab-selected-bg !default;
   $scheduler-tab-focused-border-color: $base-accent !default;
-
   $scheduler-other-month-cell-opacity: 0.5 !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(51, 51, 51, 0.04) !default;

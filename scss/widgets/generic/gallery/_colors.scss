@@ -9,7 +9,7 @@
 * $name 10. Indicator background color
 * $type color
 */
-$gallery-indicator-bg: null !default;
+$gallery-indicator-bg: $base-bg !default;
 
 /**
 * $name 20. Selected indicator background color
@@ -43,170 +43,93 @@ $gallery-nav-arrow-color: null !default;
 * $type color
 */
 $gallery-navbutton-active-color: null !default;
-$gallery-navbutton-border-radius: null !default;
+$gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "carmine" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.3) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "contrast" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-inverted-bg !default;
-
   $gallery-indicator-focused-bg: $base-inverted-bg !default;
-
   $gallery-indicator-item-border-color: $base-border-color !default;
   $gallery-indicator-selected-border-color: extcolor.difference(#fff, $base-border-color) !default;
-
   $gallery-navbutton-degradation-bg: $base-inverted-bg !default;
-
   $gallery-nav-arrow-color: $base-inverted-text-color !default;
-
   $gallery-navbutton-hover-color: $base-hover-color !default;
-
   $gallery-navbutton-active-color: $base-text-color !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "dark" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "darkmoon" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "darkviolet" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "greenmist" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "light" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "softblue" {
-
-  $gallery-indicator-bg: $base-bg !default;
-
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 

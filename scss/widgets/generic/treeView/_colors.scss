@@ -24,7 +24,7 @@ $treeview-item-hover-color: null !default;
 * $name 100. Border color
 * $type color
 */
-$treeview-border-color: null !default;
+$treeview-border-color: $base-border-color !default;
 
 /**
 * $name 110. Selected item text color
@@ -41,132 +41,97 @@ $treeview-item-selected-hover-bg: null !default;
 $treeview-spin-icon-color: null !default;
 
 @if $color == "carmine" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
-
   $treeview-spin-icon-color: $base-header-color !default;
 }
 
 @if $color == "contrast" {
   $treeview-focused-bg: $base-focus-color !default;
   $treeview-focus-color: $base-inverted-text-color !default;
-
   $treeview-hover-bg: $base-hover-color !default;
   $treeview-item-hover-color: $base-text-color !default;
-
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $base-inverted-text-color !default;
   $treeview-item-selected-bg: $base-inverted-bg !default;
   $treeview-item-selected-hover-bg: $base-inverted-bg !default;
-
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#fff, $alpha: 0.12) !default;
   $treeview-item-selected-hover-bg: color.change(#fff, $alpha: 0.09) !default;
-
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkmoon" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
-
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $treeview-color !default;
-
-  $treeview-border-color: $base-border-color !default;
-
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#748fbc, $alpha: 0.42) !default;
   $treeview-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
-
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
-
   $treeview-spin-icon-color: $base-header-color !default;
 }
 
 @if $color == "greenmist" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: color.change(darken($base-bg, 9%), $alpha: 0.2) !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.2) !default;
-
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $treeview-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
-
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "softblue" {
-
   $treeview-color: $base-text-color !default;
-
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $treeview-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.15) !default;
-
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
