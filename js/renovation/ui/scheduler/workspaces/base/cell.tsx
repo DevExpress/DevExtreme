@@ -15,11 +15,11 @@ export const viewFunction = (viewModel: CellBase) => (
 
 @ComponentBindings()
 export class CellBaseProps {
-  @OneWay() className?: string = '';
+  @OneWay() className? = '';
 
-  @OneWay() isFirstCell = false;
+  @OneWay() isFirstCell? = false;
 
-  @OneWay() isLastCell = false;
+  @OneWay() isLastCell? = false;
 
   @Slot() children?: any;
 }
