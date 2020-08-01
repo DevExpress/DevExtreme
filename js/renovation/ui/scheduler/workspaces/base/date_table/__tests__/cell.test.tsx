@@ -18,6 +18,19 @@ describe('DateTableCellBase', () => {
         .toBe('customAttribute');
     });
 
+    it('default render', () => {
+      const cell = render({ });
+
+      expect(cell.is('#cellBase'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-date-table-cell'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-cell-sizes-horizontal'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-cell-sizes-vertical'))
+        .toBe(true);
+    });
+
     it('should combine `className` with predefined classes', () => {
       const cell = render({ props: { className: 'test' } });
 
