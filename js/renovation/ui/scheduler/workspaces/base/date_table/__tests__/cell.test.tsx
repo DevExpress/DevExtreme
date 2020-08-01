@@ -11,6 +11,13 @@ describe('DateTableCellBase', () => {
       props: { ...viewModel.props },
     }) as any);
 
+    it('should spread restAttributes', () => {
+      const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
+
+      expect(cell.prop('customAttribute'))
+        .toBe('customAttribute');
+    });
+
     it('should combine `className` with predefined classes', () => {
       const cell = render({ props: { className: 'test' } });
 
@@ -22,13 +29,6 @@ describe('DateTableCellBase', () => {
         .toBe(true);
       expect(cell.hasClass('dx-scheduler-cell-sizes-vertical'))
         .toBe(true);
-    });
-
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
     });
 
     it('should render children', () => {
