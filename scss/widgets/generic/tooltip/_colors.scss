@@ -24,93 +24,60 @@ $tooltip-bg: null !default;
 */
 $tooltip-border-color: null !default;
 $tooltip-shadow-color: null !default;
-$tooltip-border-radius: null !default;
+$tooltip-border-radius: $base-border-radius !default;
 
 @if $color == "carmine" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: $base-bg !default;
-
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "contrast" {
-
   $tooltip-color: $base-inverted-text-color !default;
-
   $tooltip-bg: $base-inverted-bg !default;
-
   $tooltip-border-color: $base-border-color !default;
   $tooltip-shadow-color: $base-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "dark" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: $base-bg !default;
-
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkmoon" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: lighten($base-bg, 14%) !default; // #465672 => #62789e
-
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkviolet" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: $base-bg !default;
-
   $tooltip-border-color: $base-hover-bg !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "greenmist" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: lighten($base-bg, 100%) !default;
-
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "light" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: $base-bg !default;
-
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "softblue" {
-
   $tooltip-color: $base-text-color !default;
-
   $tooltip-bg: $base-bg !default;
-
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
-

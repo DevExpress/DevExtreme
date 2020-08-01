@@ -4,15 +4,15 @@
 
 // adduse
 
-$pivotgrid-area-background: null !default;
-$pivotgrid-border-color: null !default;
+$pivotgrid-area-background: $base-bg !default;
+$pivotgrid-border-color: $base-border-color !default;
 
 /**
 * $name 10. Header text color
 * $type color
 */
 $pivotgrid-area-color: null !default;
-$pivotgrid-data-area-color: null !default;
+$pivotgrid-data-area-color: $base-text-color !default;
 
 /**
 * $name 20. Totals background color
@@ -51,264 +51,162 @@ $pivotgrid-position-indicator-color: null !default;
 $pivotgrid-spin-icon-color: null !default;
 
 @if $color == "carmine" {
-
-  $pivotgrid-area-background: $base-bg !default;
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: $base-header-color !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: darken($pivotgrid-area-background, 2.7%) !default;
-
   $pivotgrid-grandtotalcolor: darken($pivotgrid-area-background, 4%) !default;
-
   $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/light/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/light/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: lighten($base-icon-color, 3%) !default;
 }
 
 @if $color == "contrast" {
-
-  $pivotgrid-area-background: $base-bg !default;
-
-  $pivotgrid-border-color: $base-border-color !default;
   $pivotgrid-area-color: $base-text-color !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
   $pivotgrid-totalcolor: $base-bg !default;
   $pivotgrid-grandtotalcolor: $base-bg !default;
-
   $pivotgrid-accent-color: $base-border-color !default;
   $pivotgrid-drag-header-border-color: $base-border-color !default;
   $pivotgrid-drag-header-first-shadow-color: $base-shadow-color !default;
   $pivotgrid-drag-header-second-shadow-color: $base-shadow-color !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/contrast/grid/hierarchy.png') !default;
-
   $pivotgrid-field-area-text-color: $pivotgrid-area-color !default;
   $pivotgrid-position-indicator-color: $base-accent !default;
-
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-
-  $pivotgrid-area-background: $base-bg !default;
-
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: darken($base-text-color, 30%) !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: lighten($pivotgrid-area-background, 2.5%) !default;
-
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
-
   $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/dark/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/dark/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: darken($base-icon-color, 38%) !default;
 }
 
 @if $color == "darkmoon" {
-
-  $pivotgrid-area-background: $base-bg !default;
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: $screen-text-color !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: darken($base-bg, 2%) !default; // #465672 => #40506b
-
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
-
   $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/dark/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/dark/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-
-  $pivotgrid-area-background: $base-bg !default;
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: darken($base-text-color, 30%) !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: #1f1f2b !default;
-
   $pivotgrid-grandtotalcolor: color.change($base-accent-highlight-color, $alpha: 0.15) !default;
-
   $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/dark/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/dark/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/dark/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: $base-header-color !default;
 }
 
 @if $color == "greenmist" {
-
-  $pivotgrid-area-background: $base-bg !default;
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: lighten($base-text-color, 38.5%) !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: darken($base-bg, 1%) !default; // #f5f5f5 => #f0f2f2
-
   $pivotgrid-grandtotalcolor: lighten($base-label-color, 40.6%) !default; // #728e94 => #e8eded
-
   $pivotgrid-field-area-text-color: $base-text-color !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/light/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/light/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-
-  $pivotgrid-area-background: $base-bg !default;
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: lighten($base-text-color, 38.5%) !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 13.3%), $alpha: 0.2) !default;
-
   $pivotgrid-grandtotalcolor: darken($base-bg, 4%) !default;
-
   $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/light/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/light/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: lighten($base-icon-color, 38.5%) !default;
 }
 
 @if $color == "softblue" {
-
-  $pivotgrid-area-background: $base-bg !default;
-  $pivotgrid-border-color: $base-border-color !default;
-
   $pivotgrid-area-color: $base-icon-color !default;
-  $pivotgrid-data-area-color: $base-text-color !default;
-
   $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 4%), $alpha: 0.7) !default; // #fff => #f5f5f5
-
   $pivotgrid-grandtotalcolor: darken($base-bg, 4%) !default; // #fff => #f5f5f5
-
   $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
-
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
   $pivotgrid-area-all-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-all.png') !default;
   $pivotgrid-area-filter-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-filter.png') !default;
   $pivotgrid-area-column-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-column.png') !default;
   $pivotgrid-area-row-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-row.png') !default;
   $pivotgrid-area-data-image: data-uri('images/widgets/generic/color-schemes/light/grid/area-data.png') !default;
-
   $pivotgrid-dimension-image: data-uri('images/widgets/generic/color-schemes/light/grid/dimension.png') !default;
   $pivotgrid-hierarchy-image: data-uri('images/widgets/generic/color-schemes/light/grid/hierarchy.png') !default;
-
   $pivotgrid-position-indicator-color: gray !default;
-
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
 

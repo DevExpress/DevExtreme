@@ -8,61 +8,45 @@
 
 $treelist-spin-icon-color: null !default;
 $treelist-selection-spin-icon-color: null !default;
-$treelist-row-alternation-bg: null !default;
+$treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 
 
 @if $color == "carmine" {
-
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: lighten($base-icon-color, 100%) !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "contrast" {
-
   $treelist-spin-icon-color: $base-icon-color !default;
   $treelist-selection-spin-icon-color: $base-inverted-text-color !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "dark" {
-
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $treelist-spin-icon-color !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "darkmoon" {
-
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-bg !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "darkviolet" {
-
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-icon-color !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "greenmist" {
-
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: lighten($treelist-spin-icon-color, 100%) !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "light" {
-
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $treelist-spin-icon-color !default;
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
 }
 
 @if $color == "softblue" {
-
-  $treelist-row-alternation-bg: $datagrid-row-alternation-bg !default;
   $treelist-spin-icon-color: $base-icon-color !default;
   $treelist-selection-spin-icon-color: $base-icon-color !default;
 }

@@ -19,129 +19,76 @@ $numberbox-spin-active-color: null !default;
 */
 $numberbox-spin-hover-border-color: null !default;
 $numberbox-spin-hover-bg: null !default;
-$numberbox-spin-container-border-radius: null !default;
+$numberbox-spin-container-border-radius: $base-border-radius !default;
 $numberbox-spin-icon-border-radius: null !default;
 
 /**
 * $name 10. Spin icon color
 * $type color
 */
-$numberbox-spin-icon-color: null !default;
+$numberbox-spin-icon-color: $base-icon-color !default;
 
 
 @if $color == "carmine" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "contrast" {
-
   $numberbox-spin-active-bg: $base-inverted-bg !default;
   $numberbox-spin-active-color: extcolor.difference(#fff, $base-border-color) !default;
-
-
   $numberbox-spin-hover-border-color: $base-border-color !default;
   $numberbox-spin-hover-bg: $base-hover-color !default;
-
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius - 1px !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkmoon" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "greenmist" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "softblue" {
-
-
   $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
   $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
-  $numberbox-spin-container-border-radius: $base-border-radius !default;
   $numberbox-spin-icon-border-radius: $base-border-radius-small !default;
-
-
-  $numberbox-spin-icon-color: $base-icon-color !default;
 }
-
