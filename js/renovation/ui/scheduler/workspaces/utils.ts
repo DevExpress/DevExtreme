@@ -1,4 +1,5 @@
 import { combineClasses } from '../../../utils/combine_classes';
+import { GroupedViewData } from './types.d';
 
 export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
   let key = date.toString();
@@ -26,7 +27,16 @@ export const addHeightToStyle = (
 export const getGroupCellClasses = (
   isFirstCell: boolean,
   isLastCell: boolean,
+  className = '',
 ): string => combineClasses({
   'dx-scheduler-first-group-cell': isFirstCell,
   'dx-scheduler-last-group-cell': isLastCell,
+  [className]: true,
 });
+
+export const getIsGroupedAllDayPanel = (viewData: GroupedViewData): boolean => {
+  const { groupedData } = viewData;
+  const isAllDayPanel = !!groupedData[0]?.allDayPanel;
+
+  return isAllDayPanel && groupedData.length > 1;
+};
