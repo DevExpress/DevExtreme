@@ -9,33 +9,19 @@
 * $name 10. Overlay background
 * $type color
 */
-$colorbox-overlay-bg: null !default;
-$colorbox-palette-cell-bg: null !default;
-$colorview-border-color: null !default;
-$colorview-label-color: null !default;
+$colorbox-overlay-bg: $overlay-content-bg !default;
+$colorbox-palette-cell-bg: $colorbox-overlay-bg !default;
+$colorview-border-color: $base-border-color !default;
+$colorview-label-color: $base-label-color !default;
+$colorview-handle-color: $base-bg !default;
+$colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
 $colorbox-preview-empty-bg: null !default;
-$colorview-handle-color: null !default;
-$colorview-handle-border-color: null !default;
+
 
 @if $mode == "light" {
-  $colorbox-overlay-bg: $overlay-content-bg !default;
-  $colorbox-palette-cell-bg: $colorbox-overlay-bg !default;
-  $colorview-border-color: $base-border-color !default;
-  $colorview-label-color: $base-label-color !default;
   $colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/light/colorbox/nocolor.png') !default;
-
-  $colorview-handle-color: $base-bg !default;
-  $colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
 }
 
 @if $mode == "dark" {
-  $colorbox-overlay-bg: $overlay-content-bg !default;
-  $colorbox-palette-cell-bg: $colorbox-overlay-bg !default;
-  $colorview-border-color: $base-border-color !default;
-  $colorview-label-color: $base-label-color !default;
   $colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/dark/colorbox/nocolor.png') !default;
-
-  $colorview-handle-color: $base-bg !default;
-  $colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
 }
-
