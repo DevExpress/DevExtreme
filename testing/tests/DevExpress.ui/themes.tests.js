@@ -35,7 +35,7 @@ function loadCss(frame, cssFileName) {
     };
 }
 
-themes.setDefaultTimeout(1000); // TODO remove me (dear reviewer, remind me!)
+themes.setDefaultTimeout(2000);
 
 QUnit.module('Selector check', () => {
     if(document.documentMode < 9) {
