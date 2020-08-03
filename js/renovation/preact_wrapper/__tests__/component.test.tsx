@@ -293,6 +293,19 @@ describe('option', () => {
       component: $('#component').dxrPreactTestWidget('instance'),
     });
   });
+
+  it('convert `undefined` to `null` for TwoWay props', () => {
+    act(() => $('#component').dxrPreactTestWidget({
+      twoWayProp: 15,
+    }));
+
+    act(() => $('#component').dxrPreactTestWidget({
+      twoWayProp: undefined,
+    }));
+
+    expect($('#component').dxrPreactTestWidget('getLastProps').twoWayProp).toBe(null);
+    expect($('#component').dxrPreactTestWidget('option').twoWayProp).toBe(undefined);
+  });
 });
 
 describe('templates and slots', () => {
