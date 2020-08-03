@@ -1,86 +1,12 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$toolbar-bg: null !default;
-$toolbar-color: null !default;
-
-
-@if $color == "carmine" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "contrast" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "dark" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "darkmoon" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "darkviolet" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "greenmist" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "light" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-  $toolbar-color: $base-text-color !default;
-}
-
-@if $color == "softblue" {
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $toolbar-bg: $base-bg !default;
-  $toolbar-color: $base-text-color !default;
-}
-
+/**
+* $name 10. Background color
+* $type color
+*/
+$toolbar-bg: $base-bg !default;
+$toolbar-color: $base-text-color !default;

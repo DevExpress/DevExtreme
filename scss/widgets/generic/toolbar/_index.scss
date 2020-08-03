@@ -8,19 +8,21 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
+@use "../typography/sizes" as *;
+
 // adduse
+@use "../dropDownMenu";
 
 
-$GENERIC_TOOLBAR_HEIGHT: $GENERIC_BASE_INLINE_WIDGET_HEIGHT;
-$GENERIC_TOOLBAR_PADDING: 0;
-$GENERIC_TOOLBAR_ITEM_SPACING: 5px;
-$GENERIC_TOOLBAR_LABEL_FONT_SIZE: $GENERIC_M_FONT_SIZE;
-$GENERIC_TOOLBAR_SECTION_PADDING: 15px;
+$generic-toolbar-height: $generic-base-inline-widget-height;
+$generic-toolbar-padding: 0;
+$generic-toolbar-item-spacing: 5px;
+$generic-toolbar-label-font-size: $generic-m-font-size;
+$generic-toolbar-section-padding: 15px;
 
-$GENERIC_MOBILE_TOOLBAR_HEIGHT: $GENERIC_MOBILE_BASE_INLINE_WIDGET_SIZE;
-$GENERIC_MOBILE_TOOLBAR_PADDING: 0;
-$GENERIC_MOBILE_TOOLBAR_ITEM_SPACING: 5px;
-$GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
+$generic-mobile-toolbar-padding: 0;
+$generic-mobile-toolbar-item-spacing: 5px;
+$generic-mobile-toolbar-label-font-size: 20px;
 
 
 @mixin dx-toolbar-sizing($height, $padding, $label-font-size, $item-spacing) {
@@ -28,20 +30,20 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   overflow: visible;
 
   .dx-toolbar-before {
-    padding-right: $GENERIC_TOOLBAR_SECTION_PADDING;
+    padding-right: $generic-toolbar-section-padding;
 
     @at-root #{selector-append(".dx-rtl", &)} {
       padding-right: 0;
-      padding-left: $GENERIC_TOOLBAR_SECTION_PADDING;
+      padding-left: $generic-toolbar-section-padding;
     }
   }
 
   .dx-toolbar-after {
-    padding-left: $GENERIC_TOOLBAR_SECTION_PADDING;
+    padding-left: $generic-toolbar-section-padding;
 
     @at-root #{selector-append(".dx-rtl", &)} {
       padding-left: 0;
-      padding-right: $GENERIC_TOOLBAR_SECTION_PADDING;
+      padding-right: $generic-toolbar-section-padding;
     }
   }
 
@@ -67,7 +69,7 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
     padding: 0 $item-spacing 0 0;
 
     &.dx-toolbar-first-in-group {
-      padding-left: $GENERIC_TOOLBAR_ITEM_SPACING*4;
+      padding-left: $generic-toolbar-item-spacing * 4;
     }
 
     &:last-child {
@@ -111,19 +113,19 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   color: $toolbar-color;
 
   @include dx-toolbar-sizing(
-        $GENERIC_TOOLBAR_HEIGHT,
-        $GENERIC_TOOLBAR_PADDING,
-        $GENERIC_TOOLBAR_LABEL_FONT_SIZE,
-        $GENERIC_TOOLBAR_ITEM_SPACING
-    );
+    $generic-toolbar-height,
+    $generic-toolbar-padding,
+    $generic-toolbar-label-font-size,
+    $generic-toolbar-item-spacing
+  );
 
   .dx-device-mobile & {
     @include dx-toolbar-sizing(
-            $GENERIC_MOBILE_TOOLBAR_HEIGHT,
-            $GENERIC_MOBILE_TOOLBAR_PADDING,
-            $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE,
-            $GENERIC_MOBILE_TOOLBAR_ITEM_SPACING
-        );
+      $generic-mobile-toolbar-height,
+      $generic-mobile-toolbar-padding,
+      $generic-mobile-toolbar-label-font-size,
+      $generic-mobile-toolbar-item-spacing
+    );
   }
 
   &.dx-state-disabled {
@@ -139,12 +141,12 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 
 .dx-toolbar-after {
   .dx-toolbar-item {
-    @include dx-toolbar-item-padding($GENERIC_TOOLBAR_ITEM_SPACING);
+    @include dx-toolbar-item-padding($generic-toolbar-item-spacing);
   }
 
   .dx-device-mobile & {
     .dx-toolbar-item {
-      @include dx-toolbar-item-padding($GENERIC_MOBILE_TOOLBAR_ITEM_SPACING);
+      @include dx-toolbar-item-padding($generic-mobile-toolbar-item-spacing);
     }
   }
 }
@@ -168,7 +170,7 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   }
 
   .dx-toolbar-item-auto-hide {
-    padding: $GENERIC_TOOLBAR_ITEM_SPACING $GENERIC_TOOLBAR_ITEM_SPACING * 2;
+    padding: $generic-toolbar-item-spacing $generic-toolbar-item-spacing * 2;
   }
 }
 
@@ -183,12 +185,12 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 .dx-toolbar-button {
   .dx-menu {
     .dx-menu-item {
-      border: $GENERIC_BUTTON_BORDER_WEIGHT solid transparent;
+      border: $generic-button-border-weight solid transparent;
       border-radius: $button-border-radius;
 
       .dx-menu-item-content {
-        padding-top: $GENERIC_TOOLBAR_MENU_TOP_PADDING;
-        padding-bottom: $GENERIC_TOOLBAR_MENU_BOTTOM_PADDING;
+        padding-top: $generic-toolbar-menu-top-padding;
+        padding-bottom: $generic-toolbar-menu-bottom-padding;
         line-height: 0;
 
         .dx-menu-item-text {
@@ -200,13 +202,13 @@ $GENERIC_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 }
 
 .dx-toolbar-hidden-button-group {
-  margin-top: $GENERIC_TOOLBAR_ITEM_SPACING;
-  margin-bottom: $GENERIC_TOOLBAR_ITEM_SPACING;
+  margin-top: $generic-toolbar-item-spacing;
+  margin-bottom: $generic-toolbar-item-spacing;
 
   .dx-buttongroup-wrapper {
     .dx-buttongroup-item.dx-button {
       .dx-button-content {
-        padding: $GENERIC_TOOLBAR_ITEM_SPACING 2 * $GENERIC_TOOLBAR_ITEM_SPACING;
+        padding: $generic-toolbar-item-spacing 2 * $generic-toolbar-item-spacing;
       }
     }
   }

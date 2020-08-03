@@ -695,6 +695,21 @@ QUnit.test('Horizontal orientation. two rows', function(assert) {
     ]);
 });
 
+QUnit.test('Horizontal orientation, update in two rows', function(assert) {
+    this.options.orientation = 'horizontal';
+    this.options.itemTextPosition = 'right';
+    const legend = this.createSimpleLegend();
+
+    legend.measure([200, 200]);
+    legend.measure([91, 200]);
+
+    this.checkItems(assert, [
+        { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
+        { id: 1, marker: { translateX: 0, translateY: 22 }, label: { translateX: 20, translateY: 21 } },
+        { id: 2, marker: { translateX: 0, translateY: 44 }, label: { translateX: 20, translateY: 43 } }
+    ]);
+});
+
 QUnit.test('Horizontal orientation. itemTextPosition = \'left\'', function(assert) {
     this.options.orientation = 'horizontal';
     this.options.itemTextPosition = 'left';
@@ -1686,7 +1701,7 @@ QUnit.test('layoutOptions is null if legend is not visible', function(assert) {
 });
 
 QUnit.test('measure', function(assert) {
-    assert.deepEqual(this.createSimpleLegend().measure(100, 200), [36, 26]);
+    assert.deepEqual(this.createSimpleLegend().measure([100, 200]), [36, 26]);
 });
 
 QUnit.test('move', function(assert) {
@@ -1697,13 +1712,66 @@ QUnit.test('move', function(assert) {
 
 QUnit.test('free space', function(assert) {
     const legend = this.createSimpleLegend();
-    legend.measure(100, 200);
+    legend.measure([100, 200]);
 
     legend.freeSpace();
 
     assert.ok(this.renderer.g.returnValues[1].dispose.calledOnce);
     assert.ok(this.options._incidentOccurred.calledOnce);
     assert.ok(this.options._incidentOccurred.calledWith('W2104'));
+});
+
+QUnit.test('Legend should not redraw if the options is not updated', function(assert) {
+    this.markerBBoxes = [
+        { x: 0, y: 0, width: 0, height: 0 },
+        { x: 0, y: 0, width: 0, height: 0 },
+        { x: 0, y: 0, width: 0, height: 0 }
+    ];
+
+    const legend = this.createSimpleLegend();
+    legend.measure([100, 200]);
+
+    assert.equal(this.renderer.text.callCount, 3);
+    assert.equal(this.renderer.rect.callCount, 3);
+    legend._items.forEach((item) => {
+        assert.deepEqual(item.bBox, { width: 27, height: 10 });
+    });
+
+    this.markerBBoxes = [
+        { x: 1, y: 2, width: 10, height: 10 },
+        { x: 1, y: 2, width: 10, height: 10 },
+        { x: 1, y: 2, width: 10, height: 10 }
+    ];
+
+    legend.measure([100, 200]);
+
+    assert.equal(this.renderer.text.callCount, 3);
+    assert.equal(this.renderer.rect.callCount, 3);
+    legend._items.forEach((item) => {
+        assert.deepEqual(item.bBox, { width: 37, height: 10 });
+    });
+});
+
+QUnit.test('Legend should redraw if the options is updated', function(assert) {
+    const legend = this.createSimpleLegend();
+    legend.measure([100, 200]);
+
+    legend.update(this.data, this.options);
+
+    legend.measure([100, 200]);
+
+    assert.equal(this.renderer.text.callCount, 6);
+    assert.equal(this.renderer.rect.callCount, 6);
+});
+
+QUnit.test('Legend should redraw if it is was erased', function(assert) {
+    const legend = this.createSimpleLegend();
+    legend.measure([100, 200]);
+    legend.freeSpace();
+    legend.measure([100, 200]);
+
+    assert.equal(this.renderer.text.callCount, 6);
+    assert.equal(this.renderer.rect.callCount, 6);
 });
 
 QUnit.module('Legend Options', environment);
@@ -1850,15 +1918,6 @@ QUnit.test('applySelected from invisible series', function(assert) {
     this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
     this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.applySelected(4);
-
-    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
-});
-
-QUnit.test('resetItem from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
-    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
-    this.legend.resetItem(4);
 
     assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
     assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
@@ -2118,15 +2177,6 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: 1 }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');
     });
-});
-
-QUnit.module('probeDraw', environment);
-
-QUnit.test('probeDraw', function(assert) {
-    const legend = this.createSimpleLegend();
-    legend.draw = sinon.stub();
-    legend.probeDraw();
-    assert.ok(legend.draw.calledOnce);
 });
 
 QUnit.module('getActionCallback', environment);
@@ -2693,7 +2743,7 @@ QUnit.test('Pass customized item opacity for different states', function(assert)
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.9);
 });
 
-QUnit.test('Request change if template is asynchronous', function(assert) {
+QUnit.test('Request change if template is asynchronous, first drawing', function(assert) {
     this.options.customizeItems = items => {
         items.forEach(i => i.marker.size = 60);
     };
@@ -2704,7 +2754,33 @@ QUnit.test('Request change if template is asynchronous', function(assert) {
 
     assert.ok(!widget._requestChange.called);
     widget.template.render.lastCall.args[0].onRendered();
-    assert.deepEqual(widget._requestChange.lastCall.args[0], ['LAYOUT']);
+    assert.deepEqual(widget._requestChange.lastCall.args[0], [
+        'LAYOUT',
+        'FULL_RENDER',
+        'FORCE_FIRST_DRAWING'
+    ]);
+});
+
+QUnit.test('Request change if template is asynchronous, subsequent drawing', function(assert) {
+    this.options.customizeItems = items => {
+        items.forEach(i => i.marker.size = 60);
+    };
+
+    const legend = this.createAndDrawLegend();
+
+    const widget = this.legend._widget;
+
+    assert.ok(!widget._requestChange.called);
+    widget.template.render.lastCall.args[0].onRendered();
+
+    legend.draw(this.size.width, this.size.height);
+    widget.template.render.lastCall.args[0].onRendered();
+
+    assert.deepEqual(widget._requestChange.lastCall.args[0], [
+        'LAYOUT',
+        'FULL_RENDER',
+        'FORCE_DRAWING'
+    ]);
 });
 
 QUnit.test('Do not request change if template is asynchronous but marker group is not empty', function(assert) {

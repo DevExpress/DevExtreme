@@ -4,6 +4,7 @@ import CustomStore from 'data/custom_store';
 const { test } = QUnit;
 import 'common.css!';
 import 'ui/gantt';
+import { extend } from 'core/utils/extend';
 
 QUnit.testStart(() => {
     const markup = '<div id="gantt"></div>';
@@ -32,6 +33,7 @@ const TIME_MARKER_SELECTOR = '.dx-gantt-tm';
 const TIME_INTERVAL_SELECTOR = '.dx-gantt-ti';
 const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
 const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
+const CONTEXT_MENU_ITEM_SELECTOR = '.dx-menu-item-text';
 const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
 const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
 const PARENT_TASK_SELECTOR = '.dx-gantt-parent';
@@ -359,6 +361,26 @@ QUnit.module('Options', moduleConfig, () => {
 });
 
 QUnit.module('Events', moduleConfig, () => {
+    test('onCustomCommand', function(assert) {
+        let executedCommandName;
+        const options = {
+            contextMenu: {
+                items: [{ name: 'custom', text: 'customItem' }]
+            },
+            onCustomCommand: (e) => {
+                executedCommandName = e.name;
+            }
+        };
+        this.createInstance(extend(tasksOnlyOptions, options));
+        this.clock.tick();
+
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const popupItem = $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR).find(CONTEXT_MENU_ITEM_SELECTOR).eq(0);
+        popupItem.trigger('dxclick');
+
+        this.clock.tick();
+        assert.equal(executedCommandName, options.contextMenu.items[0].name, 'onCustomCommand was raised');
+    });
     test('selection changed', function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
@@ -811,6 +833,49 @@ QUnit.module('Context Menu', moduleConfig, () => {
         const $cellElement = $(this.instance._treeList.getCellElement(0, 0));
         $cellElement.trigger('contextmenu');
         assert.equal(getContextMenuElement().length, 2, 'menu is visible after right click in tree list');
+    });
+    test('enabled', function(assert) {
+        this.createInstance(extend(tasksOnlyOptions, { contextMenu: { enabled: false } }));
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        assert.equal(getContextMenuElement().length, 0, 'menu is hidden after right click');
+        this.instance.option('contextMenu.enabled', true);
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        assert.equal(getContextMenuElement().length, 1, 'menu is visible after right click');
+    });
+    test('customization', function(assert) {
+        const contextMenuOptions = {
+            contextMenu: {
+                items: [
+                    'undo',
+                    'redo',
+                    'taskDetails',
+                    'zoomIn',
+                    'zoomOut',
+                    { name: 'custom', text: 'customItem', icon: 'blockquote', beginGroup: true }
+                ]
+            }
+        };
+        this.createInstance(extend(tasksOnlyOptions, contextMenuOptions));
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        const getItems = () => {
+            return getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        };
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getItems();
+        assert.equal(items.length, 6, 'there are 6 items');
+        assert.equal(items.eq(0).text().toLowerCase(), contextMenuOptions.contextMenu.items[0].toLowerCase(), 'undo item was rendered');
+        assert.equal(items.eq(5).text(), contextMenuOptions.contextMenu.items[5].text, 'custom item was rendered');
+        this.instance.option('contextMenu.items', []);
+        assert.equal(getItems().length, 4, 'there are 4 items by default');
     });
 });
 

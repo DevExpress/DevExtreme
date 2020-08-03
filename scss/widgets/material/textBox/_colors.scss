@@ -1,25 +1,11 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$textbox-search-icon-color: null !default;
-
-
-@if $mode == "light" {
-  /**
-    * $name 80. Search icon color
-    * $type color
-    */
-  $textbox-search-icon-color: $base-icon-color !default;
-}
-
-@if $mode == "dark" {
-  /**
-    * $name 70. Search icon color
-    * $type color
-    */
-  $textbox-search-icon-color: $base-icon-color !default;
-}
-
+/**
+* $name 80. Search icon color
+* $type color
+*/
+$textbox-search-icon-color: $base-icon-color !default;

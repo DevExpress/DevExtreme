@@ -1,239 +1,137 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
 $treeview-color: null !default;
+
+/**
+* $name 10. Focused state background color
+* $type color
+*/
 $treeview-focused-bg: null !default;
 $treeview-focus-color: null !default;
+
+/**
+* $name 90. Hovered state background color
+* $type color
+*/
 $treeview-hover-bg: null !default;
 $treeview-item-hover-color: null !default;
-$treeview-border-color: null !default;
+
+/**
+* $name 100. Border color
+* $type color
+*/
+$treeview-border-color: $base-border-color !default;
+
+/**
+* $name 110. Selected item text color
+* $type color
+*/
 $treeview-item-selected-color: null !default;
 $treeview-item-selected-bg: null !default;
 $treeview-item-selected-hover-bg: null !default;
+
+/**
+* $name 120. Spin icon color
+* $type color
+*/
 $treeview-spin-icon-color: null !default;
 
-
 @if $color == "carmine" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 10. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
-
-  /**
-    * $name 120. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-header-color !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 80. Focused state background color ('showCheckBoxes' mode is false)
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-color !default;
   $treeview-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $treeview-hover-bg: $base-hover-color !default;
   $treeview-item-hover-color: $base-text-color !default;
-
-  /**
-    * $name 100. Border color
-    * $type color
-    */
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $base-inverted-text-color !default;
   $treeview-item-selected-bg: $base-inverted-bg !default;
   $treeview-item-selected-hover-bg: $base-inverted-bg !default;
-
-  /**
-    * $name 120. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 10. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#fff, $alpha: 0.12) !default;
   $treeview-item-selected-hover-bg: color.change(#fff, $alpha: 0.09) !default;
-
-  /**
-    * $name 120. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkmoon" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 80. Focused state background color ('showCheckBoxes' mode is false)
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $treeview-color !default;
-
-  /**
-    * $name 100. Border color
-    * $type color
-    */
-  $treeview-border-color: $base-border-color !default;
-
-  /**
-    * $name 110. Selected item text color
-    * $type color
-    */
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#748fbc, $alpha: 0.42) !default;
   $treeview-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
-
-  /**
-    * $name 120. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 10. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
-
-  /**
-    * $name 20. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-header-color !default;
 }
 
 @if $color == "greenmist" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 10. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: color.change(darken($base-bg, 9%), $alpha: 0.2) !default;
   $treeview-item-hover-color: $base-hover-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.2) !default;
-
-  /**
-    * $name 20. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 10. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $treeview-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
-
-  /**
-    * $name 20. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "softblue" {
-
-
   $treeview-color: $base-text-color !default;
-
-  /**
-    * $name 10. Focused state background color
-    * $type color
-    */
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
   $treeview-hover-bg: $base-hover-bg !default;
   $treeview-item-hover-color: $treeview-color !default;
-  $treeview-border-color: $base-border-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.15) !default;
-
-  /**
-    * $name 20. Spin icon color
-    * $type color
-    */
   $treeview-spin-icon-color: $base-icon-color !default;
 }
 

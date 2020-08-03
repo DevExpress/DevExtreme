@@ -2,122 +2,52 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
+/**
+* $name 130. Badge text color
+* $type color
+*/
+$badge-color: $base-inverted-text-color !default;
 
-$badge-color: null !default;
+/**
+* $name 140. Badge background color
+* $type color
+*/
 $badge-bg: null !default;
 
 
 @if $color == "carmine" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
   $badge-bg: #ff5f42 !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Badge background color
-    * $type color
-    */
   $badge-bg: $base-accent !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
   $badge-bg: $base-accent !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
   $badge-bg: lighten($base-accent, 25%) !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
   $badge-color: $base-icon-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
   $badge-bg: $base-accent-highlight-color !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
   $badge-bg: #23ada4 !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
   $badge-bg: $base-accent !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
-  $badge-bg: extcolor.difference($base-accent, #171717) !default; // #7ab8eb => #60a1d6
+  $badge-bg: extcolor.difference($base-accent, #171717) !default;
 }
 

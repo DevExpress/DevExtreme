@@ -16,6 +16,7 @@ import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import { getPublicElement } from '../core/element';
 
+// STYLE dropDownBox
 const getActiveElement = domAdapter.getActiveElement;
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';

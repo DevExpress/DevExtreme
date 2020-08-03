@@ -35,6 +35,8 @@ import DiagramCommandsManager from './diagram.commands_manager';
 import NodesOption from './diagram.nodes_option';
 import EdgesOption from './diagram.edges_option';
 
+// STYLE diagram
+
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
@@ -1087,8 +1089,7 @@ class Diagram extends Widget {
                         svgHeight: s.backgroundImageHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
-                        toolboxWidth: s.toolboxWidth,
-                        toolboxHeight: s.toolboxHeight,
+                        toolboxWidthToHeightRatio: s.toolboxWidthToHeightRatio,
                         minWidth: s.minWidth,
                         minHeight: s.minHeight,
                         maxWidth: s.maxWidth,
@@ -1204,7 +1205,7 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._onToggleFullScreen(false);
+            this.option('fullScreen', false);
         }
     }
     _onShowContextMenu(x, y, selection) {
@@ -1826,11 +1827,7 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.toolboxWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.toolboxHeight
+                * @name dxDiagramOptions.customShapes.toolboxWidthToHeightRatio
                 * @type Number
                 */
                 /**
@@ -2315,7 +2312,8 @@ class Diagram extends Widget {
             this._nativeShapeToDiagramShape.bind(this) :
             this._nativeConnectorToDiagramConnector.bind(this);
         return extend({
-            id: nativeItem.id
+            id: nativeItem.id,
+            dataItem: undefined
         }, createMethod(nativeItem));
     }
     _nativeShapeToDiagramShape(nativeShape) {

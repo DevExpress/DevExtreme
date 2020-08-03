@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import easing from '../../animation/easing';
 

@@ -6,9 +6,9 @@
   $uri2: replace("#{$uri1}", "currentSuccessBgColor", escape("#{$success-bg-color}"));
   $uri3: replace("#{$uri2}", "currentSuccessTextColor", escape("#{$success-text-color}"));
   $uri4: replace("#{$uri3}", "currentDangerBgColor", escape("#{$danger-bg-color}"));
-  $uriFinal: replace("#{$uri4}", "currentDangerTextColor", escape("#{$danger-text-color}"));
+  $uri-final: replace("#{$uri4}", "currentDangerTextColor", escape("#{$danger-text-color}"));
 
-  background: string.unquote($uriFinal);
+  background: string.unquote($uri-final);
   width: $width;
   height: $height;
 }

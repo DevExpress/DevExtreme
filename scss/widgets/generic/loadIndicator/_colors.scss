@@ -1,89 +1,62 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
+/**
+* $name 10. Load indicator color
+* $type color
+*/
 $loadindicator-bg: null !default;
 $loadindicator-segment-shadow-color: null !default;
 $loadindicator-image-bg: null !default;
 
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
+
   $loadindicator-bg: $base-accent !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 30. Load indicator background color
-    * $type color
-    */
   $loadindicator-bg: $base-inverted-bg !default;
   $loadindicator-segment-shadow-color: $base-shadow-color !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
   $loadindicator-bg: darken($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
   $loadindicator-bg: $base-accent !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
   $loadindicator-bg: $base-accent-highlight-color !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
   $loadindicator-bg: lighten($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
   $loadindicator-bg: lighten($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Load indicator color
-    * $type color
-    */
   $loadindicator-bg: $base-accent !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;

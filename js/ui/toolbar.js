@@ -9,6 +9,8 @@ import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 
+// STYLE toolbar
+
 const STRATEGIES = {
     actionSheet: ActionSheetStrategy,
     dropDownMenu: DropDownMenuStrategy

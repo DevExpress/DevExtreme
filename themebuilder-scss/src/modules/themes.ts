@@ -5,7 +5,7 @@ interface Theme {
   text: string;
   group: string;
 }
-const themes: Array<Theme> = [
+const themes: Theme[] = [
   {
     themeId: 1, name: 'generic', colorScheme: 'light', text: 'Light', group: 'Generic',
   },

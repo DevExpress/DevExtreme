@@ -1,8 +1,9 @@
 @use "../base/mixins" as *;
+
 // adduse
-$HANDLE_OFFSET: 0;
-$ONE_SIDE_HANDLE_SIZE: 3px + $HANDLE_OFFSET;
-$TWO_SIDE_HANDLE_SIZE: 6px + $HANDLE_OFFSET;
+$handle-offset: 0;
+$one-side-handle-size: 3px + $handle-offset;
+$two-side-handle-size: 6px + $handle-offset;
 
 .dx-resizable {
   display: block;
@@ -20,35 +21,35 @@ $TWO_SIDE_HANDLE_SIZE: 6px + $HANDLE_OFFSET;
 
 .dx-resizable-handle-left,
 .dx-resizable-handle-right {
-  top: -$HANDLE_OFFSET;
+  top: -$handle-offset;
   height: 100%;
-  width: $ONE_SIDE_HANDLE_SIZE;
+  width: $one-side-handle-size;
 }
 
 .dx-resizable-handle-left {
-  left: -$HANDLE_OFFSET;
+  left: -$handle-offset;
   cursor: e-resize;
 }
 
 .dx-resizable-handle-right {
-  right: -$HANDLE_OFFSET;
+  right: -$handle-offset;
   cursor: e-resize;
 }
 
 .dx-resizable-handle-top,
 .dx-resizable-handle-bottom {
-  left: -$HANDLE_OFFSET;
+  left: -$handle-offset;
   width: 100%;
-  height: $ONE_SIDE_HANDLE_SIZE;
+  height: $one-side-handle-size;
 }
 
 .dx-resizable-handle-top {
-  top: -$HANDLE_OFFSET;
+  top: -$handle-offset;
   cursor: s-resize;
 }
 
 .dx-resizable-handle-bottom {
-  bottom: -$HANDLE_OFFSET;
+  bottom: -$handle-offset;
   cursor: s-resize;
 }
 
@@ -56,8 +57,8 @@ $TWO_SIDE_HANDLE_SIZE: 6px + $HANDLE_OFFSET;
 .dx-resizable-handle-corner-bottom-right,
 .dx-resizable-handle-corner-top-left,
 .dx-resizable-handle-corner-top-right {
-  width: $TWO_SIDE_HANDLE_SIZE;
-  height: $TWO_SIDE_HANDLE_SIZE;
+  width: $two-side-handle-size;
+  height: $two-side-handle-size;
 }
 
 .dx-resizable-handle-corner-top-left,
@@ -72,22 +73,22 @@ $TWO_SIDE_HANDLE_SIZE: 6px + $HANDLE_OFFSET;
 
 .dx-resizable-handle-corner-top-left,
 .dx-resizable-handle-corner-bottom-left {
-  left: -$HANDLE_OFFSET;
+  left: -$handle-offset;
   border-bottom-right-radius: 100%;
 }
 
 .dx-resizable-handle-corner-top-right,
 .dx-resizable-handle-corner-bottom-right {
-  right: -$HANDLE_OFFSET;
+  right: -$handle-offset;
   border-bottom-left-radius: 100%;
 }
 
 .dx-resizable-handle-corner-top-left,
 .dx-resizable-handle-corner-top-right {
-  top: -$HANDLE_OFFSET;
+  top: -$handle-offset;
 }
 
 .dx-resizable-handle-corner-bottom-left,
 .dx-resizable-handle-corner-bottom-right {
-  bottom: -$HANDLE_OFFSET;
+  bottom: -$handle-offset;
 }

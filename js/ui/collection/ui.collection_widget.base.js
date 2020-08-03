@@ -382,6 +382,8 @@ const CollectionWidget = Widget.inherit({
             this._refreshItemId($target, needCleanItemId);
             this._toggleFocusClass(isFocused, $target);
         }
+
+        this._updateParentActiveDescendant();
     },
 
     _refreshActiveDescendant: function($target) {
@@ -455,6 +457,8 @@ const CollectionWidget = Widget.inherit({
         const index = $item.data(this._itemIndexKey());
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
+
+    _updateParentActiveDescendant: noop,
 
     _optionChanged: function(args) {
         if(args.name === 'items') {
@@ -1066,7 +1070,7 @@ const CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods.itemElements
     * @publicName itemElements()
-    * @return Array<Node>
+    * @return Array<Element>
     * @hidden
     */
     itemElements: function() {
@@ -1076,7 +1080,7 @@ const CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods.itemsContainer
     * @publicName itemsContainer()
-    * @return Node
+    * @return Element
     * @hidden
     */
     itemsContainer: function() {

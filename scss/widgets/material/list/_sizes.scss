@@ -1,57 +1,41 @@
 @use "../sizes" as *;
 @use "../list/colors" as *;
+
 // adduse
 
-$MATERIAL_LIST_VERTICAL_PADDING: null !default;
-$MATERIAL_LIST_ITEM_HEIGHT: null !default;
-$MATERIAL_LIST_ITEM_VERTICAL_PADDING: null !default;
-$MATERIAL_LIST_ITEM_HORIZONTAL_PADDING: null !default;
-$MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING: null !default;
-$MATERIAL_LIST_SELECT_ALL_MARGIN_TOP: null !default;
-$MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: null !default;
-$MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: null !default;
-$MATERIAL_LIST_SELECT_ALL_LABEL_LINE_HEIGHT: null !default;
-$MATERIAL_LIST_DELETEBUTTON_PADDING: null !default;
-$MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING: null !default;
-$MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING: null !default;
-$MATERIAL_LIST_MAIN_FONT_SIZE: null !default;
+$material-list-vertical-padding: null !default;
+$material-list-item-height: null !default;
+$material-list-item-vertical-padding: null !default;
+$material-list-item-horizontal-padding: null !default;
+$material-list-group-header-vertical-padding: null !default;
+$material-list-select-all-label-margin-top: null !default;
+$material-list-select-all-label-line-height: null !default;
+$material-list-main-font-size: null !default;
+
+$material-list-searchbox-vertical-padding: 6px;
+$material-list-next-button-horizontal-padding: 58px;
+$material-list-deletebutton-padding: 3px;
+$material-list-select-all-margin-right: 0;
+$material-list-select-all-margin-top: -1px;
 
 @if $size == "default" {
-  $MATERIAL_LIST_VERTICAL_PADDING: 8px;
-
-  $MATERIAL_LIST_ITEM_HEIGHT: 48px;
-  $MATERIAL_LIST_ITEM_VERTICAL_PADDING: 14px;
-  $MATERIAL_LIST_ITEM_HORIZONTAL_PADDING: 16px;
-  $MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING: 14px;
-
-  $MATERIAL_LIST_SELECT_ALL_MARGIN_TOP: -1px;
-  $MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: 0;
-  $MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 2px;
-  $MATERIAL_LIST_SELECT_ALL_LABEL_LINE_HEIGHT: 17px;
-  $MATERIAL_LIST_DELETEBUTTON_PADDING: 3px;
-
-  $MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING: 6px;
-  $MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING: 58px;
-
-  $MATERIAL_LIST_MAIN_FONT_SIZE: 16px;
+  $material-list-vertical-padding: 8px;
+  $material-list-item-height: 48px;
+  $material-list-item-vertical-padding: 14px;
+  $material-list-item-horizontal-padding: 16px;
+  $material-list-group-header-vertical-padding: 14px;
+  $material-list-select-all-label-margin-top: 2px;
+  $material-list-select-all-label-line-height: 17px;
+  $material-list-main-font-size: 16px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_LIST_VERTICAL_PADDING: 4px;
-
-  $MATERIAL_LIST_ITEM_HEIGHT: 36px;
-  $MATERIAL_LIST_ITEM_VERTICAL_PADDING: 10px;
-  $MATERIAL_LIST_ITEM_HORIZONTAL_PADDING: 8px;
-  $MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING: 10px;
-
-  $MATERIAL_LIST_SELECT_ALL_MARGIN_TOP: -1px;
-  $MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: 0;
-  $MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 1px;
-  $MATERIAL_LIST_SELECT_ALL_LABEL_LINE_HEIGHT: 15px;
-  $MATERIAL_LIST_DELETEBUTTON_PADDING: 3px;
-
-  $MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING: 6px;
-  $MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING: 58px;
-
-  $MATERIAL_LIST_MAIN_FONT_SIZE: 13px;
+  $material-list-vertical-padding: 4px;
+  $material-list-item-height: 36px;
+  $material-list-item-vertical-padding: 10px;
+  $material-list-item-horizontal-padding: 8px;
+  $material-list-group-header-vertical-padding: 10px;
+  $material-list-select-all-label-margin-top: 1px;
+  $material-list-select-all-label-line-height: 15px;
+  $material-list-main-font-size: 13px;
 }

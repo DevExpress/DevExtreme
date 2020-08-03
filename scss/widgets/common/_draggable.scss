@@ -1,6 +1,7 @@
 @use "../base/mixins" as *;
+
 // adduse
-$MAX_INTEGER: 2147483647;
+$max-integer: 2147483647;
 
 .dx-draggable {
   left: 0;
@@ -18,5 +19,5 @@ $MAX_INTEGER: 2147483647;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: $MAX_INTEGER;
+  z-index: $max-integer;
 }

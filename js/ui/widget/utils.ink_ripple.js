@@ -10,12 +10,15 @@ const ANIMATION_DURATION = 300;
 const HOLD_ANIMATION_DURATION = 1000;
 const DEFAULT_WAVE_INDEX = 0;
 
-export const initConfig = ({ useHoldAnimation, waveSizeCoefficient, isCentered, wavesNumber } = {}) => ({
-    waveSizeCoefficient: waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
-    isCentered: isCentered || false,
-    wavesNumber: wavesNumber || 1,
-    durations: getDurations(useHoldAnimation ?? true)
-});
+export const initConfig = (config = {}) => {
+    const { useHoldAnimation, waveSizeCoefficient, isCentered, wavesNumber } = config;
+    return {
+        waveSizeCoefficient: waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
+        isCentered: isCentered || false,
+        wavesNumber: wavesNumber || 1,
+        durations: getDurations(useHoldAnimation ?? true)
+    };
+};
 
 export const render = function(args) {
     const config = initConfig(args);

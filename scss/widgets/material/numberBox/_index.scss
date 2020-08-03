@@ -4,15 +4,16 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
+
 // adduse
+@use "../textEditor" as *;
 
 
 .dx-numberbox-spin-container {
   overflow: hidden;
-  width: $MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH;
+  width: $material-numberbox-spin-container-width;
 
   .dx-state-disabled & {
     opacity: 1;
@@ -33,18 +34,18 @@
 
 .dx-numberbox-spin-up-icon,
 .dx-numberbox-spin-down-icon {
-  @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+  @include dx-icon-font-centered-sizing($material-base-icon-size);
 }
 
 .dx-numberbox-spin-button {
-  padding: $MATERIAL_NUMBERBOX_SPIN_PADDING;
+  padding: $material-numberbox-spin-padding;
   height: 50%;
 }
 
 .dx-numberbox-spin.dx-numberbox-box {
   &.dx-editor-underlined {
     .dx-texteditor-input {
-      padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      padding-right: $material-base-standard-texteditor-input-horizontal-padding;
     }
 
     @include validation-icon-position();
@@ -53,7 +54,7 @@
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-texteditor-input {
-      padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      padding-right: $material-filled-texteditor-input-horizontal-padding;
     }
 
     @include validation-icon-position();
@@ -64,7 +65,7 @@
   @include validation-icon-position();
 
   .dx-numberbox-spin-container {
-    width: $MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    width: $material-numberbox-touch-friendly-spin-container-width;
     border-left: none;
   }
 
@@ -75,14 +76,14 @@
 
   &.dx-editor-underlined {
     &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      padding-right: $material-base-standard-texteditor-input-horizontal-padding;
     }
   }
 
   &.dx-editor-filled,
   &.dx-editor-outlined {
     &.dx-show-clear-button .dx-texteditor-input {
-      padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+      padding-right: $material-filled-texteditor-input-horizontal-padding;
     }
   }
 }
@@ -96,27 +97,27 @@
     }
 
     &.dx-show-clear-button .dx-texteditor-input {
-      padding-left: $MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH;
+      padding-left: $material-numberbox-spin-container-width;
     }
   }
 
   &.dx-numberbox-spin {
     &.dx-show-clear-button {
       .dx-texteditor-input {
-        padding-left: $MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH;
+        padding-left: $material-numberbox-spin-container-width;
       }
     }
 
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-left: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-left: $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
 
     &.dx-editor-filled,
     &.dx-editor-outlined {
       .dx-texteditor-input {
-        padding-left: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-left: $material-filled-texteditor-input-horizontal-padding;
       }
     }
   }

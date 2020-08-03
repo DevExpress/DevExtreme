@@ -1,39 +1,13 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$checkbox-border-color: null !default;
-$checkbox-checked-color: null !default;
-$checkbox-indeterminate-bg: null !default;
-$checkbox-bg: null !default;
-$checkbox-hover-border-color: null !default;
-$checkbox-invalid-focused-border-color: null !default;
-$checkbox-icon-border-radius: null !default;
-
-
-@if $mode == "light" {
-
-
-  $checkbox-border-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $checkbox-checked-color: $base-element-bg !default;
-  $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-bg: $base-accent !default;
-  $checkbox-hover-border-color: darken($base-accent, 12%) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-icon-border-radius: $base-border-radius - 2 !default;
-}
-
-@if $mode == "dark" {
-
-
-  $checkbox-border-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $checkbox-checked-color: $base-element-bg !default;
-  $checkbox-indeterminate-bg: $base-accent !default;
-  $checkbox-bg: $base-accent !default;
-  $checkbox-hover-border-color: darken($base-accent, 12%) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-icon-border-radius: $base-border-radius - 2 !default;
-}
-
+$checkbox-border-color: color.change($base-text-color, $alpha: 0.54) !default;
+$checkbox-checked-color: $base-element-bg !default;
+$checkbox-indeterminate-bg: $base-accent !default;
+$checkbox-bg: $base-accent !default;
+$checkbox-hover-border-color: darken($base-accent, 12%) !default;
+$checkbox-invalid-focused-border-color: $base-invalid-color !default;
+$checkbox-icon-border-radius: $base-border-radius - 2 !default;

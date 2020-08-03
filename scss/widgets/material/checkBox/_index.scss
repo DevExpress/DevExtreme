@@ -4,10 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
-$MATERIAL_CHECKBOX_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
 .dx-checkbox {
   line-height: 0;
@@ -60,25 +61,25 @@ $MATERIAL_CHECKBOX_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .dx-checkbox-icon {
-  width: $MATERIAL_CHECKBOX_SIZE;
-  height: $MATERIAL_CHECKBOX_SIZE;
+  width: $material-checkbox-size;
+  height: $material-checkbox-size;
   border: 2px solid $checkbox-border-color;
-  border-radius: $MATERIAL_CHECKBOX_BORDER_RADIUS;
+  border-radius: $material-checkbox-border-radius;
 
   &:after {
     content: "";
-    width: $MATERIAL_CHECKBOX_RIPPLE_SIZE;
-    height: $MATERIAL_CHECKBOX_RIPPLE_SIZE;
+    width: $material-checkbox-ripple-size;
+    height: $material-checkbox-ripple-size;
     top: 50%;
     left: 50%;
-    margin-top: -$MATERIAL_CHECKBOX_RIPPLE_SIZE / 2;
-    margin-left: -$MATERIAL_CHECKBOX_RIPPLE_SIZE / 2;
+    margin-top: -$material-checkbox-ripple-size / 2;
+    margin-left: -$material-checkbox-ripple-size / 2;
     border-radius: 50%;
     display: block;
     position: absolute;
     z-index: 1;
     transform: scale(0.5);
-    transition: $MATERIAL_CHECKBOX_RIPPLE_TRANSITION;
+    transition: $material-checkbox-ripple-transition;
   }
 
   &:before {
@@ -91,7 +92,7 @@ $MATERIAL_CHECKBOX_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     border: none;
 
     @include dx-icon(check);
-    @include dx-icon-font-centered-sizing($MATERIAL_CHECKBOX_ARROW_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($material-checkbox-arrow-icon-size);
   }
 
   .dx-checkbox-indeterminate & {
@@ -100,18 +101,18 @@ $MATERIAL_CHECKBOX_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     border: none;
 
     @include dx-font-icon("\f074");
-    @include dx-icon-font-centered-sizing($MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($material-checkbox-intermidiate-icon-size);
   }
 }
 
 .dx-checkbox-text {
-  margin-left: -$MATERIAL_CHECKBOX_SIZE;
-  padding-left: $MATERIAL_CHECKBOX_SIZE + 5px;
+  margin-left: -$material-checkbox-size;
+  padding-left: $material-checkbox-size + 5px;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    margin-right: -$MATERIAL_CHECKBOX_SIZE;
-    padding-right: $MATERIAL_CHECKBOX_SIZE + 5px;
+    margin-right: -$material-checkbox-size;
+    padding-right: $material-checkbox-size + 5px;
   }
 }
 

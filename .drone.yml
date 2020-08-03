@@ -33,6 +33,7 @@ matrix:
     - { TARGET: test, CONSTEL: misc, TZ: 'Japan' }
     - { TARGET: test, CONSTEL: misc, TZ: 'Australia/ACT' }
     - { TARGET: test, CONSTEL: ui }
+    - { TARGET: test, CONSTEL: ui.widgets }
     - { TARGET: test, CONSTEL: ui.editors }
     - { TARGET: test, CONSTEL: ui.editors, TZ: 'PST8PDT' }
     - { TARGET: test, CONSTEL: ui.editors, TZ: 'Japan' }
@@ -68,4 +69,5 @@ matrix:
     - { TARGET: test_testcafe, COMPONENT: editors }
     - { TARGET: test_testcafe, COMPONENT: navigation }
     - { TARGET: test_jest }
+    - { TARGET: native_components }
     - { TARGET: test_scss }

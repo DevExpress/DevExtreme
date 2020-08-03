@@ -160,29 +160,27 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @extends Action
      * @type function|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 item:dxFunnelItem
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
+    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
     /**
      * @docid dxFunnelOptions.onLegendClick
      * @extends Action
      * @type function|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 item:dxFunnelItem
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
+    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
     /**
      * @docid dxFunnelOptions.onSelectionChanged
      * @extends Action
@@ -314,7 +312,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field4 percent:Number
      * @type_function_param1_field5 percentText:string
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

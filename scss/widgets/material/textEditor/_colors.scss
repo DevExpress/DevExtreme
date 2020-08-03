@@ -1,127 +1,71 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
+/**
+* $name 10. Text color
+* $type color
+*/
+$texteditor-color: $base-text-color !default;
 
-$texteditor-color: null !default;
+/**
+* $name 20. Placeholder text color
+* $type color
+*/
 $texteditor-placeholder-color: null !default;
-$texteditor-bg: null !default;
-$texteditor-focused-bg: null !default;
-$texteditor-border-color: null !default;
-$texteditor-hover-border-color: null !default;
-$texteditor-focused-border-color: null !default;
-$texteditor-hover-bg: null !default;
+
+/**
+* $name 30. Background color
+* $type color
+*/
+$texteditor-bg: color.change($base-text-color, $alpha: 0.04) !default;
+
+/**
+* $name 40. Focused background color
+* $type color
+*/
+$texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
+
+/**
+* $name 50. Border color
+* $type color
+*/
+$texteditor-border-color: color.change($texteditor-color, $alpha: 0.42) !default;
+
+/**
+* $name 60. Hovered border color
+* $type color
+*/
+$texteditor-hover-border-color: $texteditor-color !default;
+
+/**
+* $name 70. Focused border color
+* $type color
+*/
+$texteditor-focused-border-color: $base-accent !default;
+
+/**
+* $name 40. Hovered background color
+* $type color
+*/
+$texteditor-hover-bg: color.change($base-text-color, $alpha: 0.07) !default;
 $texteditor-button-clear-icon-color: null !default;
 $texteditor-button-clear-icon-color-bg: null !default;
-$texteditor-invalid-focused-border-color: null !default;
-$texteditor-invalid-faded-border-color: null !default;
-$texteditor-input-border-radius: null !default;
-
+$texteditor-invalid-focused-border-color: $base-invalid-color !default;
+$texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$texteditor-input-border-radius: $base-border-radius !default;
 
 @if $mode == "light" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $texteditor-color: $base-text-color !default;
-
-  /**
-    * $name 20. Placeholder text color
-    * $type color
-    */
   $texteditor-placeholder-color: lighten($texteditor-color, 58%) !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
-  $texteditor-bg: color.change($base-text-color, $alpha: 0.04) !default;
-
-  /**
-    * $name 40. Focused background color
-    * $type color
-    */
-  $texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
-
-  /**
-    * $name 50. Border color
-    * $type color
-    */
-  $texteditor-border-color: color.change($texteditor-color, $alpha: 0.42) !default;
-
-  /**
-    * $name 60. Hovered border color
-    * $type color
-    */
-  $texteditor-hover-border-color: $texteditor-color !default;
-
-  /**
-    * $name 70. Focused border color
-    * $type color
-    */
-  $texteditor-focused-border-color: $base-accent !default;
-  $texteditor-hover-bg: color.change($base-text-color, $alpha: 0.07) !default;
   $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
   $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
-  $texteditor-invalid-focused-border-color: $base-invalid-color !default;
-  $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $texteditor-input-border-radius: $base-border-radius !default;
 }
 
 @if $mode == "dark" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $texteditor-color: $base-text-color !default;
-
-  /**
-    * $name 20. Placeholder text color
-    * $type color
-    */
   $texteditor-placeholder-color: darken($texteditor-color, 50%) !default;
-
-  /**
-    * $name 10. Background color
-    * $type color
-    */
-  $texteditor-bg: color.change($base-text-color, $alpha: 0.04) !default;
-
-  /**
-    * $name 30. Focused background color
-    * $type color
-    */
-  $texteditor-focused-bg: color.change($base-text-color, $alpha: 0.04) !default;
-
-  /**
-    * $name 20. Border color
-    * $type color
-    */
-  $texteditor-border-color: color.change($texteditor-color, $alpha: 0.42) !default;
-
-  /**
-    * $name 40. Hovered border color
-    * $type color
-    */
-  $texteditor-hover-border-color: $texteditor-color !default;
-
-  /**
-    * $name 30. Focused border color
-    * $type color
-    */
-  $texteditor-focused-border-color: $base-accent !default;
-
-  /**
-    * $name 40. Hovered background color
-    * $type color
-    */
-  $texteditor-hover-bg: color.change($base-text-color, $alpha: 0.07) !default;
-
   $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
   $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
-  $texteditor-invalid-focused-border-color: $base-invalid-color !default;
-  $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $texteditor-input-border-radius: $base-border-radius !default;
 }
 

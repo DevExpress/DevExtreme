@@ -104,9 +104,6 @@ const environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('export').returns({});
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
-        that.themeManager.getOptions.withArgs('margin').returns({
-            marginsThemeApplied: true
-        });
         that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
             backgroundColor: 'none',
             border: {
@@ -169,7 +166,6 @@ const environment = {
         this.validateData.restore();
         this.templateManagerCtor.restore();
 
-        this.layoutManager.layoutElements.reset();
         this.layoutManager = null;
 
         this.themeManager.getOptions.reset();
@@ -1832,19 +1828,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         chart.render({ force: true });
 
         assert.strictEqual(chart.series[0].hideLayoutLabels, false);
-    });
-
-    QUnit.test('Adaptive layout with small canvas does not cause exceptions', function(assert) {
-        chartMocks.seriesMockData.series.push(new MockSeries({}));
-        const chart = this.createPieChart({
-            dataSource: [{}],
-            series: {}
-        });
-        chart.layoutManager.layoutElements = sinon.spy(function() { arguments[2](true); });
-
-        chart.render({ force: true });
-
-        assert.ok(true);
     });
 
     QUnit.module('drawn', {

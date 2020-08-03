@@ -1,61 +1,61 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_COLORVIEW_CONTAINER_WIDTH: null !default;
-$GENERIC_COLORVIEW_PALETTE_WIDTH: null !default;
-$GENERIC_COLORVIEW_PALETTE_HEIGHT: null !default;
-$GENERIC_COLORVIEW_ALPHA_MARGIN: null !default;
-$GENERIC_COLORVIEW_HUE_SCALE_WIDTH: null !default;
-$GENERIC_COLORVIEW_HUE_SCALE_MARGIN: null !default;
-$GENERIC_COLORVIEW_COLOR_PREVIEW_HEIGHT: null !default;
-$GENERIC_COLORVIEW_PREVIEW_CONTAINER_MARGIN: null !default;
-$GENERIC_COLORVIEW_CONTAINER_LINE_HEIGHT: null !default;
-$GENERIC_COLORVIEW_CONTAINER_HEX_MARGIN: null !default;
-$GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH: null !default;
-$GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN: null !default;
-$GENERIC_COLORVIEW_CONTAINER_TEXTBOX_WIDTH: null !default;
-$GENERIC_COLORVIEW_CONTAINER_TEXTBOX_MARGIN: null !default;
-$GENERIC_COLORVIEW_CONTROLS_CONTAINER_WIDTH: null !default;
-$GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN: null !default;
+$generic-colorview-container-width: null !default;
+$generic-colorview-palette-width: null !default;
+$generic-colorview-palette-height: null !default;
+$generic-colorview-alpha-margin: null !default;
+$generic-colorview-hue-scale-margin: null !default;
+$generic-colorview-color-preview-height: null !default;
+$generic-colorview-preview-container-margin: null !default;
+$generic-colorview-container-line-height: null !default;
+$generic-colorview-container-hex-margin: null !default;
+$generic-colorview-container-alpha-label-width: null !default;
+$generic-colorview-container-alpha-label-margin: null !default;
+$generic-colorview-container-textbox-width: null !default;
+$generic-colorview-container-textbox-margin: null !default;
+$generic-colorview-controls-container-width: null !default;
+$generic-colorview-controls-container-margin: null !default;
+
+$generic-colorview-hue-scale-width: 18px;
 
 @if $size == "default" {
-  $GENERIC_COLORVIEW_CONTAINER_WIDTH: 450px;
-  $GENERIC_COLORVIEW_PALETTE_WIDTH: 288px;
-  $GENERIC_COLORVIEW_PALETTE_HEIGHT: 299px;
-  $GENERIC_COLORVIEW_ALPHA_MARGIN: 10px;
-  $GENERIC_COLORVIEW_HUE_SCALE_WIDTH: 18px;
-  $GENERIC_COLORVIEW_HUE_SCALE_MARGIN: 19px;
-  $GENERIC_COLORVIEW_COLOR_PREVIEW_HEIGHT: 40px;
-  $GENERIC_COLORVIEW_PREVIEW_CONTAINER_MARGIN: 34px;
+  $generic-colorview-container-width: 450px;
+  $generic-colorview-palette-width: 288px;
+  $generic-colorview-palette-height: 299px;
+  $generic-colorview-alpha-margin: 10px;
+  $generic-colorview-hue-scale-margin: 19px;
+  $generic-colorview-color-preview-height: 40px;
+  $generic-colorview-preview-container-margin: 34px;
 
-  $GENERIC_COLORVIEW_CONTAINER_LINE_HEIGHT: 36px;
-  $GENERIC_COLORVIEW_CONTAINER_HEX_MARGIN: 10px 0 0 0;
-  $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH: 115px;
-  $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN: 43px;
-  $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_WIDTH: 69px;
-  $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_MARGIN: 1px 1px 10px 0;
+  $generic-colorview-container-line-height: 36px;
+  $generic-colorview-container-hex-margin: 10px 0 0 0;
+  $generic-colorview-container-alpha-label-width: 115px;
+  $generic-colorview-container-alpha-label-margin: 43px;
+  $generic-colorview-container-textbox-width: 69px;
+  $generic-colorview-container-textbox-margin: 1px 1px 10px 0;
 
-  $GENERIC_COLORVIEW_CONTROLS_CONTAINER_WIDTH: 90px;
-  $GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN: 27px;
+  $generic-colorview-controls-container-width: 90px;
+  $generic-colorview-controls-container-margin: 27px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_COLORVIEW_CONTAINER_WIDTH: 316px;
-  $GENERIC_COLORVIEW_PALETTE_WIDTH: 190px;
-  $GENERIC_COLORVIEW_PALETTE_HEIGHT: 200px;
-  $GENERIC_COLORVIEW_ALPHA_MARGIN: 5px;
-  $GENERIC_COLORVIEW_HUE_SCALE_WIDTH: 18px;
-  $GENERIC_COLORVIEW_HUE_SCALE_MARGIN: 15px;
-  $GENERIC_COLORVIEW_COLOR_PREVIEW_HEIGHT: 25px;
-  $GENERIC_COLORVIEW_PREVIEW_CONTAINER_MARGIN: 15px;
+  $generic-colorview-container-width: 316px;
+  $generic-colorview-palette-width: 190px;
+  $generic-colorview-palette-height: 200px;
+  $generic-colorview-alpha-margin: 5px;
+  $generic-colorview-hue-scale-margin: 15px;
+  $generic-colorview-color-preview-height: 25px;
+  $generic-colorview-preview-container-margin: 15px;
 
-  $GENERIC_COLORVIEW_CONTAINER_LINE_HEIGHT: 25px;
-  $GENERIC_COLORVIEW_CONTAINER_HEX_MARGIN: 5px 0 0 0;
-  $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH: 92px;
-  $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN: 29px;
-  $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_WIDTH: 51px;
-  $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_MARGIN: 1px 1px 8px 0;
+  $generic-colorview-container-line-height: 25px;
+  $generic-colorview-container-hex-margin: 5px 0 0 0;
+  $generic-colorview-container-alpha-label-width: 92px;
+  $generic-colorview-container-alpha-label-margin: 29px;
+  $generic-colorview-container-textbox-width: 51px;
+  $generic-colorview-container-textbox-margin: 1px 1px 8px 0;
 
-  $GENERIC_COLORVIEW_CONTROLS_CONTAINER_WIDTH: 70px;
-  $GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN: 15px;
+  $generic-colorview-controls-container-width: 70px;
+  $generic-colorview-controls-container-margin: 15px;
 }

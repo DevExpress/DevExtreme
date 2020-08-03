@@ -6,25 +6,26 @@
 @use "../../base/treeView" as *;
 @use "../../base/icons" as *;
 @use "../checkBox/colors" as *;
+
 // adduse
 
 
-$GENERIC_TREEVIEW_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_BASE_FONT_SIZE) + $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING + 2 * $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET: -4px;
+$generic-treeview-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
+$generic-treeview-toggle-item-visibility-offset: -4px;
 
 .dx-treeview-node-loadindicator {
-  top: $GENERIC_TREEVIEW_LOADINCICATOR_OFFSET_TOP;
-  left: $GENERIC_TREEVIEW_LOADINCICATOR_OFFSET_LEFT;
-  width: $GENERIC_TREEVIEW_LOADINCICATOR_SIZE;
-  height: $GENERIC_TREEVIEW_LOADINCICATOR_SIZE;
+  top: $generic-treeview-loadincicator-offset-top;
+  left: $generic-treeview-loadincicator-offset-left;
+  width: $generic-treeview-loadincicator-size;
+  height: $generic-treeview-loadincicator-size;
 }
 
 .dx-treeview {
   &.dx-rtl {
-    @include dx-treeview-make-rtl($GENERIC_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET, $GENERIC_TREEVIEW_NODE_OFFSET, $GENERIC_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, $GENERIC_TREEVIEW_CHECKBOX_OFFSET, $GENERIC_SELECT_ALL_TEXT_OFFSET, $GENERIC_SELECT_ALL_ITEM_LEFT_PADDING, $GENERIC_TREEVIEW_BORDER_PADDING);
+    @include dx-treeview-make-rtl($generic-treeview-container-with-border-offset, $generic-treeview-node-offset, $generic-treeview-item-with-checkbox-offset, $generic-treeview-checkbox-offset, $generic-select-all-text-offset, $generic-select-all-item-left-padding, $generic-treeview-border-padding);
 
     .dx-treeview-toggle-item-visibility {
-      right: $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET;
+      right: $generic-treeview-toggle-item-visibility-offset;
     }
 
     .dx-treeview-item-with-checkbox .dx-checkbox {
@@ -35,39 +36,39 @@ $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET: -4px;
 
 
 .dx-treeview-search {
-  margin-bottom: $GENERIC_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
+  margin-bottom: $generic-treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview-with-search > .dx-scrollable {
-  height: calc(100% - #{round($GENERIC_TREEVIEW_SEARCH_EDITOR_HEIGHT + $GENERIC_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM)});
+  height: calc(100% - #{round($generic-treeview-search-editor-height + $generic-treeview-searchbox-margin-bottom)});
 }
 
 .dx-treeview-border-visible {
   border: 1px solid $treeview-border-color;
 
   .dx-treeview-select-all-item {
-    padding-left: $GENERIC_SELECT_ALL_ITEM_LEFT_PADDING;
+    padding-left: $generic-select-all-item-left-padding;
   }
 
   .dx-scrollable-content {
     > .dx-treeview-node-container {
-      padding: $GENERIC_TREEVIEW_CONTAINER_PADDING;
+      padding: $generic-treeview-container-padding;
     }
   }
 }
 
 .dx-treeview-select-all-item {
-  margin: 0 0 $GENERIC_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET 0;
+  margin: 0 0 $generic-treeview-container-with-border-offset 0;
   border-bottom: 1px solid $treeview-border-color;
-  padding: $GENERIC_SELECT_ALL_ITEM_PADDING;
+  padding: $generic-select-all-item-padding;
 
   .dx-checkbox-text {
-    padding-left: $GENERIC_SELECT_ALL_TEXT_OFFSET;
+    padding-left: $generic-select-all-text-offset;
   }
 }
 
 .dx-treeview-node {
-  padding-left: $GENERIC_TREEVIEW_NODE_OFFSET;
+  padding-left: $generic-treeview-node-offset;
 }
 
 .dx-state-selected {
@@ -79,12 +80,12 @@ $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET: -4px;
 .dx-treeview-item-with-checkbox {
   .dx-treeview-item {
     color: $base-text-color;
-    padding-left: $GENERIC_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
+    padding-left: $generic-treeview-item-with-checkbox-offset;
   }
 
   .dx-checkbox {
     top: 5px;
-    left: $GENERIC_TREEVIEW_CHECKBOX_OFFSET;
+    left: $generic-treeview-checkbox-offset;
   }
 
   &.dx-state-focused {
@@ -119,11 +120,11 @@ $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET: -4px;
 }
 
 .dx-treeview-item {
-  padding: $GENERIC_TREEVIEW_ITEM_PADDING;
-  min-height: $GENERIC_TREEVIEW_MIN_ITEM_HEIGHT;
+  padding: $generic-treeview-item-padding;
+  min-height: $generic-treeview-min-item-height;
 
   .dx-icon {
-    @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+    @include dx-icon-sizing($generic-base-icon-size);
   }
 
   &.dx-state-hover {
@@ -134,16 +135,16 @@ $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET: -4px;
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(spinright);
-  @include dx-icon-font-centered-sizing($GENERIC_TREEVIEW_ARROW_ICON_SIZE);
+  @include dx-icon-font-centered-sizing($generic-treeview-arrow-icon-size);
 
   color: $treeview-spin-icon-color;
-  width: $GENERIC_TREEVIEW_TOGGLE_ITEM_WIDTH;
-  height: $GENERIC_TREEVIEW_MIN_ITEM_HEIGHT;
+  width: $generic-treeview-toggle-item-width;
+  height: $generic-treeview-min-item-height;
   top: 0;
-  left: $GENERIC_TREEVIEW_TOGGLE_ITEM_VISIBILITY_OFFSET;
+  left: $generic-treeview-toggle-item-visibility-offset;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(spindown);
-    @include dx-icon-font-centered-sizing($GENERIC_TREEVIEW_ARROW_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($generic-treeview-arrow-icon-size);
   }
 }

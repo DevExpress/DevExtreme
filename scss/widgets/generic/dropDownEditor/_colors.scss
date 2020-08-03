@@ -3,230 +3,101 @@
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../textEditor/colors" as *;
+
 // adduse
 
-
+/**
+* $name 20. Dropdown button hovered state background color
+* $type color
+*/
 $dropdowneditor-button-hover-bg: null !default;
-$dropdowneditor-filled-button-hover-bg: null !default;
+$dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
 $dropdowneditor-button-hover-border-color: null !default;
+
+
+/**
+* $name 30. Dropdown button active state background color
+* $type color
+*/
 $dropdowneditor-button-active-bg: null !default;
-$dropdowneditor-filled-button-active-bg: null !default;
-$dropdowneditor-filled-button-invalid-hover-bg: null !default;
-$dropdowneditor-filled-button-invalid-active-bg: null !default;
-$dropdowneditor-button-active-border-color: null !default;
-$dropdowneditor-icon-color: null !default;
+$dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
+$dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
+$dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
+$dropdowneditor-button-active-border-color: transparent !default;
+
+/**
+* $name 80. Spin icon color
+* $type color
+*/
+$dropdowneditor-icon-color: $base-icon-color !default;
+
+/**
+* $name 90. Spin active icon color
+* $type color
+*/
 $dropdowneditor-icon-active-color: null !default;
 $dropdowneditor-icon-border-radius: null !default;
 
-
 @if $color == "carmine" {
-
-
   $dropdowneditor-button-hover-bg: darken($base-bg, 4%) !default; // #fff => #f5f6f7
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "contrast" {
-
-
   $dropdowneditor-button-hover-border-color: $base-border-color !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
   $dropdowneditor-button-hover-bg: $base-bg !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-active-bg: $base-inverted-bg !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-
-  $dropdowneditor-icon-color: $base-icon-color !default;
   $dropdowneditor-icon-active-color: $base-inverted-icon-color !default;
-
   $dropdowneditor-icon-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "dark" {
-
-
   $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 20. Dropdown button hovered state background color
-    * $type color
-    */
   $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-
-  /**
-    * $name 30. Dropdown button active state background color
-    * $type color
-    */
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "darkviolet" {
-
-
   $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "greenmist" {
-
-
   $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "light" {
-
-
   $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 20. Dropdown button hovered state background color
-    * $type color
-    */
   $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
-  $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
-  $dropdowneditor-filled-button-active-bg: color.change($base-accent, $alpha: 0.3) !default;
-  $dropdowneditor-filled-button-invalid-hover-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.2) !default;
-  $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invalid-focused-border-color, $alpha: 0.3) !default;
-  $dropdowneditor-button-active-border-color: transparent !default;
-
-  /**
-    * $name 80. Spin icon color
-    * $type color
-    */
-  $dropdowneditor-icon-color: $base-icon-color !default;
-
-  /**
-    * $name 90. Spin active icon color
-    * $type color
-    */
   $dropdowneditor-icon-active-color: $base-icon-color !default;
   $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }

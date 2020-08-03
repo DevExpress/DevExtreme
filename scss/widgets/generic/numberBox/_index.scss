@@ -4,15 +4,16 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
+
 // adduse
+@use "../textEditor" as *;
 
 
 .dx-numberbox-spin-container {
   overflow: hidden;
-  width: $GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH;
+  width: $generic-numberbox-spin-container-width;
   border-radius: $numberbox-spin-container-border-radius;
 }
 
@@ -30,13 +31,13 @@
 
 .dx-numberbox-spin-up-icon,
 .dx-numberbox-spin-down-icon {
-  @include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);
+  @include dx-icon-font-centered-sizing($generic-base-icon-size);
 
   border-radius: $numberbox-spin-icon-border-radius;
 }
 
 .dx-numberbox-spin-button {
-  padding: $GENERIC_NUMBERBOX_SPIN_PADDING;
+  padding: $generic-numberbox-spin-padding;
 
   .dx-editor-underlined & {
     background: $texteditor-underlined-bg;
@@ -65,7 +66,7 @@
 
 .dx-numberbox-spin-touch-friendly {
   .dx-numberbox-spin-container {
-    width: $GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    width: $generic-numberbox-touch-friendly-spin-container-width;
     border-left: none;
   }
 
@@ -86,7 +87,7 @@
 
   &.dx-numberbox-spin {
     .dx-texteditor-input {
-      padding-right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
     }
   }
 }

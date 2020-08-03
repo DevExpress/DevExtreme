@@ -19,7 +19,7 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _getDefaultOptions() {
-    return extend(
+    return extend(true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
       this._getDefaultTwoWayProps(),
@@ -90,13 +90,16 @@ export default class PreactWrapper extends DOMComponent {
     }
     this._elementAttr.style = style;
 
-    const cssClass = this.$element()[0].getAttribute('class');
-    if (cssClass) {
-      this._elementAttr.class = cssClass
-        .split(' ')
-        .filter((name) => name.indexOf('dx-') < 0)
-        .join(' ');
-    }
+    const cssClass = this.$element()[0].getAttribute('class') || '';
+    this.storedClasses = this.storedClasses ?? cssClass
+      .split(' ')
+      .filter((name) => name.indexOf('dx-') === 0)
+      .join(' ');
+    this._elementAttr.class = cssClass
+      .split(' ')
+      .filter((name) => name.indexOf('dx-') !== 0)
+      .concat(this.storedClasses)
+      .join(' ');
 
     return this._elementAttr;
   }
@@ -136,9 +139,20 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _addAction(event, action) {
-    this._actionsMap[event] = action
-            || this._createActionByOption(event, this._getActionConfigs()[event]);
-  }
+    if(!action) {
+      const actionByOption = this._createActionByOption(event, this._getActionConfigs()[event]);
+
+      action = function(args) {
+        for(const name in args) {
+          if(name.match(/element$/i)) {
+            args[name] = getPublicElement($(args[name]));
+          }
+        }
+        return actionByOption(args);
+      };
+    }
+    this._actionsMap[event] = action;
+}
 
   _optionChanged(option) {
     const { name } = option || {};
@@ -148,10 +162,6 @@ export default class PreactWrapper extends DOMComponent {
 
     super._optionChanged(option);
     this._invalidate();
-  }
-
-  _stateChange(name) {
-    return (value) => this.option(name, value);
   }
 
   _extractDefaultSlot() {

@@ -45,7 +45,6 @@
     "js/renovation",
     "themebuilder-scss",
     "themebuilder",
-    "testing/jest",
     "testing/testcafe"
   ]
 }

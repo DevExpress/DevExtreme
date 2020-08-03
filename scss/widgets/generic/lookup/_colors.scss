@@ -1,57 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$lookup-icon-color: null !default;
-
-
-@if $color == "carmine" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "contrast" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "dark" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "darkmoon" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "darkviolet" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "greenmist" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "light" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
-@if $color == "softblue" {
-
-
-  $lookup-icon-color: $base-icon-color !default;
-}
-
+$lookup-icon-color: $base-icon-color !default;

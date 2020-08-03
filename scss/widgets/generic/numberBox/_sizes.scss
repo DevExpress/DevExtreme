@@ -1,21 +1,21 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH: null !default;
-$GENERIC_NUMBERBOX_SPIN_PADDING: null !default;
-$GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: null !default;
-$GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: null !default;
+$generic-numberbox-spin-container-width: null !default;
+$generic-numberbox-touch-friendly-spin-container-width: null !default;
+$generic-numberbox-clear-button-area-width: null !default;
+
+$generic-numberbox-spin-padding: 1px;
 
 @if $size == "default" {
-  $GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH: 34px;
-  $GENERIC_NUMBERBOX_SPIN_PADDING: 1px;
-  $GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 74px;
-  $GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 32px;
+  $generic-numberbox-spin-container-width: 34px;
+  $generic-numberbox-touch-friendly-spin-container-width: 74px;
+  $generic-numberbox-clear-button-area-width: 32px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH: 20px;
-  $GENERIC_NUMBERBOX_SPIN_PADDING: 1px;
-  $GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 60px;
-  $GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 20px;
+  $generic-numberbox-spin-container-width: 20px;
+  $generic-numberbox-touch-friendly-spin-container-width: 60px;
+  $generic-numberbox-clear-button-area-width: 20px;
 }

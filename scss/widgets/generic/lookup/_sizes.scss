@@ -1,49 +1,50 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_LOOKUP_HEIGHT: null !default;
-$GENERIC_LOOKUP_POPUP_CONTENT_TOP: null !default;
-$GENERIC_LOOKUP_POPUP_CONTENT_PADDING: null !default;
-$GENERIC_LOOKUP_LIST_TOP: null !default;
-$GENERIC_LOOKUP_ARROW_MARGIN: null !default;
-$GENERIC_LOOKUP_ARROW_RIGHT: null !default;
-$GENERIC_LOOKUP_ARROW_LEFT: null !default;
-$GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE: null !default;
-$GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL: null !default;
-$GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_TOP: null !default;
-$GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM: null !default;
-$GENERIC_LOOKUP_INVALID_MESSAGE_MARGIN_BOTTOM: null !default;
+$generic-lookup-height: null !default;
+$generic-lookup-popup-content-top: null !default;
+$generic-lookup-popup-content-padding: null !default;
+$generic-lookup-list-top: null !default;
+$generic-lookup-arrow-margin: null !default;
+$generic-lookup-arrow-right: null !default;
+$generic-lookup-arrow-left: null !default;
+$generic-lookup-invalid-message-font-size: null !default;
+$generic-lookup-invalid-message-padding-horizontal: null !default;
+$generic-lookup-invalid-message-padding-top: null !default;
+$generic-lookup-invalid-message-padding-bottom: null !default;
+$generic-lookup-invalid-message-margin-bottom: null !default;
 
 @if $size == "default" {
-  $GENERIC_LOOKUP_HEIGHT: 36px;
-  $GENERIC_LOOKUP_POPUP_CONTENT_TOP: 49px;
-  $GENERIC_LOOKUP_POPUP_CONTENT_PADDING: 20px;
-  $GENERIC_LOOKUP_LIST_TOP: 70px;
+  $generic-lookup-height: 36px;
+  $generic-lookup-popup-content-top: 49px;
+  $generic-lookup-popup-content-padding: 20px;
+  $generic-lookup-list-top: 70px;
 
-  $GENERIC_LOOKUP_ARROW_MARGIN: -6px;
-  $GENERIC_LOOKUP_ARROW_RIGHT: 10px;
-  $GENERIC_LOOKUP_ARROW_LEFT: 16px;
+  $generic-lookup-arrow-margin: -6px;
+  $generic-lookup-arrow-right: 10px;
+  $generic-lookup-arrow-left: 16px;
 
-  $GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE: 14px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL: 20px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_TOP: 13px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM: 12px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_MARGIN_BOTTOM: 20px;
+  $generic-lookup-invalid-message-font-size: 14px;
+  $generic-lookup-invalid-message-padding-horizontal: 20px;
+  $generic-lookup-invalid-message-padding-top: 13px;
+  $generic-lookup-invalid-message-padding-bottom: 12px;
+  $generic-lookup-invalid-message-margin-bottom: 20px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_LOOKUP_HEIGHT: 26px;
-  $GENERIC_LOOKUP_POPUP_CONTENT_TOP: 36px;
-  $GENERIC_LOOKUP_POPUP_CONTENT_PADDING: 10px;
-  $GENERIC_LOOKUP_LIST_TOP: 40px;
+  $generic-lookup-height: 26px;
+  $generic-lookup-popup-content-top: 36px;
+  $generic-lookup-popup-content-padding: 10px;
+  $generic-lookup-list-top: 40px;
 
-  $GENERIC_LOOKUP_ARROW_MARGIN: -5px;
-  $GENERIC_LOOKUP_ARROW_RIGHT: 5px;
-  $GENERIC_LOOKUP_ARROW_LEFT: 11px;
+  $generic-lookup-arrow-margin: -5px;
+  $generic-lookup-arrow-right: 5px;
+  $generic-lookup-arrow-left: 11px;
 
-  $GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE: 12px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL: 10px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_TOP: 7px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM: 10px;
-  $GENERIC_LOOKUP_INVALID_MESSAGE_MARGIN_BOTTOM: 10px;
+  $generic-lookup-invalid-message-font-size: 12px;
+  $generic-lookup-invalid-message-padding-horizontal: 10px;
+  $generic-lookup-invalid-message-padding-top: 7px;
+  $generic-lookup-invalid-message-padding-bottom: 10px;
+  $generic-lookup-invalid-message-margin-bottom: 10px;
 }

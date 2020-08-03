@@ -18,13 +18,12 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxProgressBarOptions.showStatus
      * @type boolean

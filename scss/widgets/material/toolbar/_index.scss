@@ -8,18 +8,22 @@
 @use "../button" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
+@use "../typography/sizes" as *;
+@use "../checkBox/sizes" as *;
+
 // adduse
+@use "../dropDownMenu";
 
 
-$MATERIAL_TOOLBAR_PADDING: 0;
-$MATERIAL_TOOLBAR_ITEM_SPACING: 5px;
-$MATERIAL_TOOLBAR_LABEL_FONT_SIZE: $MATERIAL_M_FONT_SIZE;
-$MATERIAL_TOOLBAR_SECTION_PADDING: 15px;
+$material-toolbar-padding: 0;
+$material-toolbar-item-spacing: 5px;
+$material-toolbar-label-font-size: $material-m-font-size;
+$material-toolbar-section-padding: 15px;
 
-$MATERIAL_MOBILE_TOOLBAR_HEIGHT: $MATERIAL_TOOLBAR_HEIGHT;
-$MATERIAL_MOBILE_TOOLBAR_PADDING: 0;
-$MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING: 5px;
-$MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
+$material-mobile-toolbar-height: $material-toolbar-height;
+$material-mobile-toolbar-padding: 0;
+$material-mobile-toolbar-item-spacing: 5px;
+$material-mobile-toolbar-label-font-size: 20px;
 
 
 @mixin dx-toolbar-sizing($height, $padding, $label-font-size, $item-spacing) {
@@ -27,20 +31,20 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   overflow: visible;
 
   .dx-toolbar-before {
-    padding-right: $MATERIAL_TOOLBAR_SECTION_PADDING;
+    padding-right: $material-toolbar-section-padding;
 
     @at-root #{selector-append(".dx-rtl", &)} {
       padding-right: 0;
-      padding-left: $MATERIAL_TOOLBAR_SECTION_PADDING;
+      padding-left: $material-toolbar-section-padding;
     }
   }
 
   .dx-toolbar-after {
-    padding-left: $MATERIAL_TOOLBAR_SECTION_PADDING;
+    padding-left: $material-toolbar-section-padding;
 
     @at-root #{selector-append(".dx-rtl", &)} {
       padding-left: 0;
-      padding-right: $MATERIAL_TOOLBAR_SECTION_PADDING;
+      padding-right: $material-toolbar-section-padding;
     }
   }
 
@@ -66,7 +70,7 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
     padding: 0 $item-spacing 0 0;
 
     &.dx-toolbar-first-in-group {
-      padding-left: $MATERIAL_TOOLBAR_ITEM_SPACING*4;
+      padding-left: $material-toolbar-item-spacing * 4;
     }
 
     &:last-child {
@@ -111,19 +115,19 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   color: $toolbar-color;
 
   @include dx-toolbar-sizing(
-        $MATERIAL_TOOLBAR_HEIGHT,
-        $MATERIAL_TOOLBAR_PADDING,
-        $MATERIAL_TOOLBAR_LABEL_FONT_SIZE,
-        $MATERIAL_TOOLBAR_ITEM_SPACING
-    );
+    $material-toolbar-height,
+    $material-toolbar-padding,
+    $material-toolbar-label-font-size,
+    $material-toolbar-item-spacing
+  );
 
   .dx-device-mobile & {
     @include dx-toolbar-sizing(
-            $MATERIAL_MOBILE_TOOLBAR_HEIGHT,
-            $MATERIAL_MOBILE_TOOLBAR_PADDING,
-            $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE,
-            $MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING
-        );
+      $material-mobile-toolbar-height,
+      $material-mobile-toolbar-padding,
+      $material-mobile-toolbar-label-font-size,
+      $material-mobile-toolbar-item-spacing
+    );
   }
 
   &.dx-state-disabled {
@@ -133,12 +137,12 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 
 .dx-toolbar-after {
   .dx-toolbar-item {
-    @include dx-toolbar-item-padding($MATERIAL_TOOLBAR_ITEM_SPACING);
+    @include dx-toolbar-item-padding($material-toolbar-item-spacing);
   }
 
   .dx-device-mobile & {
     .dx-toolbar-item {
-      @include dx-toolbar-item-padding($MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING);
+      @include dx-toolbar-item-padding($material-mobile-toolbar-item-spacing);
     }
   }
 }
@@ -156,12 +160,12 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
     }
 
     .dx-button {
-      height: $MATERIAL_LIST_ITEM_HEIGHT;
+      height: $material-list-item-height;
       padding: 0;
     }
 
     .dx-button-content {
-      padding: 0 $MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+      padding: 0 $material-list-item-horizontal-padding;
     }
   }
 
@@ -171,15 +175,15 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
     .dx-icon {
       color: $toolbar-color;
 
-      @include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);
+      @include dx-icon-sizing($material-button-icon-size);
     }
   }
 
   .dx-toolbar-item-auto-hide {
-    padding: 0 $MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+    padding: 0 $material-list-item-horizontal-padding;
 
     .dx-checkbox {
-      padding: ($MATERIAL_LIST_ITEM_HEIGHT - $MATERIAL_CHECKBOX_SIZE) / 2 0;
+      padding: ($material-list-item-height - $material-checkbox-size) / 2 0;
     }
   }
 }
@@ -187,7 +191,7 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 .dx-toolbar-button {
   .dx-button-has-text:not(.dx-button-back) {
     .dx-icon {
-      @include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);
+      @include dx-icon-sizing($material-button-icon-size);
       @include dx-icon-margin(6px);
     }
   }
@@ -203,13 +207,13 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
   .dx-menu {
     .dx-menu-item {
       color: $toolbar-color;
-      font-size: $MATERIAL_BASE_FONT_SIZE;
+      font-size: $material-base-font-size;
       font-weight: 500;
-      height: $MATERIAL_BUTTON_HEIGHT;
+      height: $material-button-height;
 
       .dx-menu-item-content {
-        padding-top: $MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING;
-        padding-bottom: $MATERIAL_TOOLBAR_MENU_VERTICAL_PADDING;
+        padding-top: $material-toolbar-menu-vertical-padding;
+        padding-bottom: $material-toolbar-menu-vertical-padding;
       }
 
       &.dx-menu-item-has-text.dx-menu-item-has-icon {
@@ -239,15 +243,15 @@ $MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
 }
 
 .dx-toolbar-hidden-button-group {
-  margin-top: $MATERIAL_TOOLBAR_PADDING;
-  margin-bottom: $MATERIAL_TOOLBAR_PADDING;
+  margin-top: $material-toolbar-padding;
+  margin-bottom: $material-toolbar-padding;
 
   .dx-buttongroup-wrapper {
     .dx-buttongroup-item.dx-button {
       box-shadow: none;
 
       .dx-button-content {
-        padding: $MATERIAL_TOOLBAR_PADDING $MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+        padding: $material-toolbar-padding $material-list-item-horizontal-padding;
       }
     }
   }

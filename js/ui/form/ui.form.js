@@ -37,6 +37,8 @@ import {
 import '../validation_summary';
 import '../validation_group';
 
+// STYLE form
+
 const FORM_CLASS = 'dx-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
@@ -963,6 +965,11 @@ const Form = Widget.inherit({
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
+                if(optionName === 'editorType') { // T903774
+                    if(layoutManager.option(fullOptionName) !== value) {
+                        return false;
+                    }
+                }
                 if(optionName === 'visible') { // T874843
                     const formItems = this.option(getFullOptionName(itemPath, 'items'));
                     if(formItems && formItems.length) {

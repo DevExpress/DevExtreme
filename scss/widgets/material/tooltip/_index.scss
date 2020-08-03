@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
@@ -15,7 +16,7 @@
     min-height: auto;
 
     .dx-popup-content {
-      padding: $MATERIAL_TOOLTIP_PADDING;
+      padding: $material-tooltip-padding;
       font-size: 12px;
     }
   }

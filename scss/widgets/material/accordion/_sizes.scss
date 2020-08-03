@@ -1,37 +1,37 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_ACCORDION_TITLE_PADDING: null !default;
-$MATERIAL_ACCORDION_BODY_PADDING: null !default;
-$MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: null !default;
-$MATERIAL_ACCORDION_TITLE_HEIGHT: null !default;
-$MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT: null !default;
-$MATERIAL_ACCORDION_TITLE_FONT_SIZE: null !default;
-$MATERIAL_ACCORDION_OPENED_MARGIN: null !default;
-$MATERIAL_ACCORDION_SHADOW: null !default;
+$material-accordion-title-padding: null !default;
+$material-accordion-body-padding: null !default;
+$material-accordion-title-height: null !default;
+$material-accordion-opened-title-height: null !default;
+$material-accordion-opened-margin: null !default;
+$material-accordion-shadow: null !default;
+$accordion-title-icon-top-offset: null !default;
+$accordion-title-icon-margin: null !default;
+
+$material-accordion-arrow-line-height: 16px;
+$material-accordion-title-font-size: 15px;
 
 @if $size == "default" {
-  $MATERIAL_ACCORDION_TITLE_PADDING: 24px;
-  $MATERIAL_ACCORDION_BODY_PADDING: 24px;
-
-  $MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: 16px;
-
-  $MATERIAL_ACCORDION_TITLE_HEIGHT: 48px;
-  $MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT: 64px;
-  $MATERIAL_ACCORDION_TITLE_FONT_SIZE: 15px;
-  $MATERIAL_ACCORDION_OPENED_MARGIN: 16px;
-  $MATERIAL_ACCORDION_SHADOW: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  $material-accordion-title-padding: 24px;
+  $material-accordion-body-padding: 24px;
+  $material-accordion-title-height: 48px;
+  $material-accordion-opened-title-height: 64px;
+  $material-accordion-opened-margin: 16px;
+  $material-accordion-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  $accordion-title-icon-top-offset: 4px;
+  $accordion-title-icon-margin: 8px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_ACCORDION_TITLE_PADDING: 16px;
-  $MATERIAL_ACCORDION_BODY_PADDING: 16px;
-
-  $MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: 16px;
-
-  $MATERIAL_ACCORDION_TITLE_HEIGHT: 40px;
-  $MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT: 40px;
-  $MATERIAL_ACCORDION_TITLE_FONT_SIZE: 15px;
-  $MATERIAL_ACCORDION_OPENED_MARGIN: 8px;
-  $MATERIAL_ACCORDION_SHADOW: 0 3px 1px -2px rgba(0, 0, 0, 0.1), 0 2px 2px 0 rgba(0, 0, 0, 0.07), 0 1px 5px 0 rgba(0, 0, 0, 0.06);
+  $material-accordion-title-padding: 16px;
+  $material-accordion-body-padding: 16px;
+  $material-accordion-title-height: 40px;
+  $material-accordion-opened-title-height: 40px;
+  $material-accordion-opened-margin: 8px;
+  $material-accordion-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.1), 0 2px 2px 0 rgba(0, 0, 0, 0.07), 0 1px 5px 0 rgba(0, 0, 0, 0.06);
+  $accordion-title-icon-top-offset: 3px;
+  $accordion-title-icon-margin: 6px;
 }

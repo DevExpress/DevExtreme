@@ -13,6 +13,8 @@ import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 
+// STYLE selectBox
+
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
@@ -421,7 +423,10 @@ const SelectBox = DropDownList.inherit({
         const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
         if(!(fieldTemplate && this.option('fieldTemplate'))) {
-            this._renderDisplayText(this._displayGetter(item));
+            const text = this._displayGetter(item);
+
+            this.option('text', text);
+            this._renderDisplayText(text);
             return;
         }
 

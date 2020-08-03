@@ -1,15 +1,19 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_SLIDER_WIDTH: null !default;
-$GENERIC_SLIDER_TRACK_HEIGHT: null !default;
+$generic-slider-width: null !default;
+$generic-slider-track-height: null !default;
+$generic-slider-height: null !default;
 
 @if $size == "default" {
-  $GENERIC_SLIDER_WIDTH: 14px;
-  $GENERIC_SLIDER_TRACK_HEIGHT: 4px;
+  $generic-slider-width: 14px;
+  $generic-slider-track-height: 4px;
+  $generic-slider-height: 28px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_SLIDER_WIDTH: 9px;
-  $GENERIC_SLIDER_TRACK_HEIGHT: 2px;
+  $generic-slider-width: 9px;
+  $generic-slider-track-height: 2px;
+  $generic-slider-height: 20px;
 }

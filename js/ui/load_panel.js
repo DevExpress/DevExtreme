@@ -8,6 +8,8 @@ import Overlay from './overlay';
 import { Deferred } from '../core/utils/deferred';
 import themes from './themes';
 
+// STYLE loadPanel
+
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
 const LOADPANEL_INDICATOR_CLASS = 'dx-loadpanel-indicator';

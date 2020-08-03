@@ -44,7 +44,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -81,13 +81,12 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
+     * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
+    onItemClick?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
     /**
      * @docid CollectionWidgetOptions.onItemContextMenu
      * @extends Action
@@ -96,13 +95,12 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
+     * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onItemContextMenu?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
     /**
      * @docid CollectionWidgetOptions.onItemHold
      * @extends Action
@@ -212,7 +210,7 @@ export interface CollectionWidgetItem {
     /**
      * @docid CollectionWidgetItem.template
      * @type template|function
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -10,7 +10,7 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import { act } from 'preact/test-utils';
 
-import 'renovation/button.j';
+import 'renovation/ui/button.j';
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -50,7 +50,7 @@ QUnit.test('should render button with default template', function(assert) {
     const $element = this.Button({ text: 'test', icon: 'check' });
     const $contentElements = $element.find('.dx-button-content').children();
 
-    assert.strictEqual($element.dxrButton('option', 'template'), '', 'default template value');
+    assert.strictEqual($element.dxrButton('option', 'template'), undefined, 'default template value');
     assert.ok($contentElements.eq(0).hasClass('dx-icon'), 'render icon');
     assert.ok($contentElements.eq(1).hasClass('dx-button-text'), 'render test');
 });

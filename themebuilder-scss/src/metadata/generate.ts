@@ -1,5 +1,6 @@
 /* eslint no-console: 0 */
 import MetadataCollector from './collector';
+import DependencyCollector from './dependency-collector';
 import { version } from '../../../build/gulp/context';
 import { resolveDataUri } from '../../../build/gulp/gulp-data-uri';
 import { browserslist } from '../../../package.json';
@@ -14,9 +15,18 @@ const sourceHandler = (content: string): string => resolveDataUri(content.replac
 const generate = async (): Promise<void> => {
   try {
     const collector = new MetadataCollector();
+    const dependencyCollector = new DependencyCollector();
     const sourceFiles = collector.readFiles(stylesDirectory, sourceHandler);
     await MetadataCollector.saveScssFiles(sourceFiles, stylesDestinationDirectory);
-    await collector.saveMetadata(metadataDestinationFile, version.package, browserslist);
+
+    dependencyCollector.collect();
+
+    await collector.saveMetadata(
+      metadataDestinationFile,
+      version.package,
+      browserslist,
+      dependencyCollector.flatStylesDependencyTree,
+    );
   } catch (e) {
     console.error(e);
     process.exit(1);

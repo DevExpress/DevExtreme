@@ -7,6 +7,8 @@ const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 import { isWindow } from '../../core/utils/type';
 
+// STYLE tooltip
+
 const Tooltip = Popover.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {

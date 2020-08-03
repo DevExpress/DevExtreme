@@ -3,10 +3,11 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
-$GENERIC_SLIDER_RADIUS: 2px;
+$generic-slider-radius: 2px;
 
 
 .dx-slider {
@@ -39,25 +40,25 @@ $GENERIC_SLIDER_RADIUS: 2px;
 }
 
 .dx-slider-wrapper {
-  height: $GENERIC_SLIDER_HEIGHT;
+  height: $generic-slider-height;
 }
 
 .dx-slider-bar {
-  margin: $GENERIC_SLIDER_HEIGHT/2 $GENERIC_SLIDER_WIDTH / 2;
-  height: $GENERIC_SLIDER_TRACK_HEIGHT;
+  margin: $generic-slider-height / 2 $generic-slider-width / 2;
+  height: $generic-slider-track-height;
   background: $slider-bar-bg;
-  border-radius: $GENERIC_SLIDER_RADIUS;
+  border-radius: $generic-slider-radius;
 }
 
 .dx-slider-range {
   border: 1px solid transparent;
-  height: $GENERIC_SLIDER_TRACK_HEIGHT - 2px;
+  height: $generic-slider-track-height - 2px;
   box-sizing: content-box;
 
   &.dx-slider-range-visible {
     border: 1px solid $slider-range-border-color;
     background: $slider-range-bg;
-    border-radius: $GENERIC_SLIDER_RADIUS;
+    border-radius: $generic-slider-radius;
   }
 }
 
@@ -75,10 +76,10 @@ $GENERIC_SLIDER_RADIUS: 2px;
 
 
 .dx-slider-handle {
-  margin-top: -$GENERIC_SLIDER_HEIGHT / 2;
-  margin-right: -$GENERIC_SLIDER_WIDTH / 2;
-  width: $GENERIC_SLIDER_WIDTH;
-  height: $GENERIC_SLIDER_HEIGHT;
+  margin-top: -$generic-slider-height / 2;
+  margin-right: -$generic-slider-width / 2;
+  width: $generic-slider-width;
+  height: $generic-slider-height;
   border: 1px solid $slider-handle-border-color;
   background-color: $slider-handle-bg;
   border-radius: $slider-handle-border-radius;
@@ -117,6 +118,6 @@ $GENERIC_SLIDER_RADIUS: 2px;
 }
 
 .dx-rtl .dx-slider-handle {
-  margin-left: -($GENERIC_SLIDER_WIDTH + 1px) / 2;
+  margin-left: -($generic-slider-width + 1px) / 2;
 }
 

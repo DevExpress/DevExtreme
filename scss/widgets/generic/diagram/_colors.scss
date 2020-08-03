@@ -3,11 +3,12 @@
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../loadIndicator/colors" as *;
+
 // adduse
 
 
-$diagram-border-color: null !default;
-$diagram-toolbar-border-color: null !default;
+$diagram-border-color: $base-border-color !default;
+$diagram-toolbar-border-color: $base-border-color !default;
 $diagram-normal-format-active-bg: null !default;
 $diagram-default-format-active-bg: null !default;
 $diagram-danger-format-active-bg: null !default;
@@ -18,9 +19,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 
 
 @if $color == "carmine" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: darken($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: darken($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: darken($base-danger, 10%) !default;
@@ -31,11 +29,7 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "contrast" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: $base-bg !default;
-
   $diagram-default-format-active-bg: $base-default !default;
   $diagram-danger-format-active-bg: $base-danger !default;
   $diagram-success-format-active-bg: $base-success !default;
@@ -45,9 +39,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "dark" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: darken($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: darken($base-danger, 10%) !default;
@@ -58,9 +49,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "darkmoon" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: lighten($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: lighten($base-danger, 10%) !default;
@@ -71,9 +59,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "darkviolet" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: lighten($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: lighten($base-danger, 10%) !default;
@@ -84,9 +69,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "greenmist" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: lighten($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: lighten($base-danger, 10%) !default;
@@ -97,9 +79,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "light" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: darken($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: darken($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: darken($base-danger, 10%) !default;
@@ -110,9 +89,6 @@ $diagram-toolbox-shape-text-opacity: null !default;
 }
 
 @if $color == "softblue" {
-
-  $diagram-border-color: $base-border-color !default;
-  $diagram-toolbar-border-color: $base-border-color !default;
   $diagram-normal-format-active-bg: darken($base-element-bg, 10%) !default;
   $diagram-default-format-active-bg: darken($base-accent, 10%) !default;
   $diagram-danger-format-active-bg: darken($base-danger, 10%) !default;

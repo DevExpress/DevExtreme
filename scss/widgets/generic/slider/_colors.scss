@@ -2,209 +2,98 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
+/**
+* $name 10. Slider bar background color
+* $type color
+*/
+$slider-bar-bg: $base-border-color !default;
 
-$slider-bar-bg: null !default;
-$slider-range-bg: null !default;
-$slider-range-border-color: null !default;
+/**
+* $name 30. Selected range background color
+* $type color
+*/
+$slider-range-bg: $base-accent !default;
+$slider-range-border-color: $slider-range-bg !default;
 $slider-handle-bg: null !default;
 $slider-handle-border-color: null !default;
 $slider-handle-active-bg: null !default;
 $slider-handle-hover-bg: null !default;
 $slider-handle-focused-bg: null !default;
 $slider-invalid-handle-accent-bg: null !default;
-$slider-handle-border-radius: null !default;
-
+$slider-handle-border-radius: $base-border-radius - 1px !default;
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
   $slider-handle-bg: $base-inverted-bg !default;
   $slider-handle-border-color: extcolor.difference(#fff, $base-border-color) !default;
   $slider-handle-active-bg: $base-inverted-bg !default;
   $slider-handle-hover-bg: $slider-range-bg !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Slider bar background color
-    * $type color
-    */
-  $slider-bar-bg: $base-border-color !default;
-
-  /**
-    * $name 30. Selected range background color
-    * $type color
-    */
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 

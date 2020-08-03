@@ -358,15 +358,14 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid GridBaseOptions.onKeyDown
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 handled:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 handled:boolean
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, handled?: boolean }) => any);
+    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, handled?: boolean }) => any);
     /**
      * @docid GridBaseOptions.onRowCollapsed
      * @type function(e)
@@ -1195,7 +1194,7 @@ export interface GridBase {
     /**
      * @docid GridBaseMethods.focus
      * @publicName focus(element)
-     * @param1 element:Node|jQuery
+     * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -1251,7 +1250,7 @@ export interface GridBase {
      * @docid GridBaseMethods.getRowElement
      * @publicName getRowElement(rowIndex)
      * @param1 rowIndex:number
-     * @return Array<Node>|jQuery|undefined
+     * @return Array<Element>|jQuery|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -2021,25 +2020,24 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid dxDataGridOptions.onCellClick
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 data:object
-     * @type_function_param1_field7 key:any
-     * @type_function_param1_field8 value:any
-     * @type_function_param1_field9 displayValue:any
-     * @type_function_param1_field10 text:string
-     * @type_function_param1_field11 columnIndex:number
-     * @type_function_param1_field12 column:object
-     * @type_function_param1_field13 rowIndex:number
-     * @type_function_param1_field14 rowType:string
-     * @type_function_param1_field15 cellElement:dxElement
-     * @type_function_param1_field16 row:dxDataGridRowObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 data:object
+     * @type_function_param1_field6 key:any
+     * @type_function_param1_field7 value:any
+     * @type_function_param1_field8 displayValue:any
+     * @type_function_param1_field9 text:string
+     * @type_function_param1_field10 columnIndex:number
+     * @type_function_param1_field11 column:object
+     * @type_function_param1_field12 rowIndex:number
+     * @type_function_param1_field13 rowType:string
+     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field15 row:dxDataGridRowObject
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxDataGridRowObject }) => any) | string;
+    onCellClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxDataGridRowObject }) => any) | string;
     /**
      * @docid dxDataGridOptions.onCellDblClick
      * @type function(e)
@@ -2290,26 +2288,25 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid dxDataGridOptions.onRowClick
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 data:object
-     * @type_function_param1_field7 key:any
-     * @type_function_param1_field8 values:Array<any>
-     * @type_function_param1_field9 columns:Array<Object>
-     * @type_function_param1_field10 rowIndex:number
-     * @type_function_param1_field11 rowType:string
-     * @type_function_param1_field12 isSelected:boolean
-     * @type_function_param1_field13 isExpanded:boolean
-     * @type_function_param1_field14 isNewRow:boolean
-     * @type_function_param1_field15 groupIndex:number
-     * @type_function_param1_field16 rowElement:dxElement
-     * @type_function_param1_field17 handled:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 data:object
+     * @type_function_param1_field6 key:any
+     * @type_function_param1_field7 values:Array<any>
+     * @type_function_param1_field8 columns:Array<Object>
+     * @type_function_param1_field9 rowIndex:number
+     * @type_function_param1_field10 rowType:string
+     * @type_function_param1_field11 isSelected:boolean
+     * @type_function_param1_field12 isExpanded:boolean
+     * @type_function_param1_field13 isNewRow:boolean
+     * @type_function_param1_field14 groupIndex:number
+     * @type_function_param1_field15 rowElement:dxElement
+     * @type_function_param1_field16 handled:boolean
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: dxElement, handled?: boolean }) => any) | string;
+    onRowClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: dxElement, handled?: boolean }) => any) | string;
     /**
      * @docid dxDataGridOptions.onRowDblClick
      * @type function(e)
@@ -2912,7 +2909,7 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @type_function_param2_field6 rowIndex:number
      * @type_function_param2_field7 rowType:string
      * @type_function_param2_field8 row:dxDataGridRowObject
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

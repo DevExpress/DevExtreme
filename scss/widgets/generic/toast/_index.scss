@@ -3,25 +3,27 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
+@use "../overlay";
 
 
-$GENERIC_TOAST_SHADOW: 0 2px 3px 0 $toast-shadow-color;
+$generic-toast-shadow: 0 2px 3px 0 $toast-shadow-color;
 
 
 .dx-toast-content {
   color: $toast-color;
-  font-size: $GENERIC_BASE_FONT_SIZE;
+  font-size: $generic-base-font-size;
   font-weight: 600;
-  line-height: $GENERIC_TOAST_LINE_HEIGHT;
-  padding: $GENERIC_TOAST_CONTENT_PADDING;
-  box-shadow: $GENERIC_TOAST_SHADOW;
+  line-height: $generic-toast-line-height;
+  padding: $generic-toast-content-padding;
+  box-shadow: $generic-toast-shadow;
   border-radius: $toast-border-radius;
 }
 
 .dx-toast-icon {
-  width: $GENERIC_TOAST_ICON_SIZE;
-  height: $GENERIC_TOAST_ICON_SIZE;
+  width: $generic-toast-icon-size;
+  height: $generic-toast-icon-size;
 }
 
 .dx-toast-info {

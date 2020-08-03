@@ -1,9 +1,11 @@
 import './core';
 
+// eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import messageLocalization from '../message';
 import coreLocalization from '../core';
 
+// eslint-disable-next-line no-restricted-imports
 import 'globalize/message';
 
 if(Globalize && Globalize.formatMessage) {

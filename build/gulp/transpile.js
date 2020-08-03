@@ -33,11 +33,16 @@ gulp.task('transpile', gulp.series('generate-components', 'bundler-config', 'tra
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 
-gulp.task('version-replace', gulp.series('transpile', function() {
-    return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
+const replaceTask = (sourcePath) => {
+    return () => gulp.src(path.join(sourcePath, VERSION_FILE_PATH), { base: './' })
         .pipe(replace('%VERSION%', context.version.script))
         .pipe(gulp.dest('./'));
-}));
+};
+
+gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
+    replaceTask(context.TRANSPILED_PATH),
+    replaceTask(context.TRANSPILED_PROD_PATH)
+])));
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {
     return watch(SRC)

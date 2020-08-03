@@ -3515,6 +3515,30 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(instance.option('value'), ['test1', 'test2'], 'Correct value');
     });
 
+    QUnit.test('TagBox with selection controls shouldn\'t clear value and text when searchValue lenght becomes smaller then minSearchLength (T898390)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            searchEnabled: true,
+            minSearchLength: 3,
+            showSelectionControls: true,
+        });
+
+        const instance = $tagBox.dxTagBox('instance');
+        const keyboard = keyboardMock(instance._input());
+        this.clock.tick(TIME_TO_WAIT);
+        keyboard.type('111');
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = $('.' + LIST_ITEM_CLASS);
+        $listItems.first().trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.press('backspace');
+
+        assert.deepEqual(instance.option('value'), [111], 'value is correct');
+        assert.strictEqual(instance.option('text'), '11', 'text is correct');
+    });
+
     QUnit.test('load tags data should not raise an error after widget has been disposed', function(assert) {
         assert.expect(1);
 
@@ -4770,6 +4794,36 @@ QUnit.module('single line mode', {
         const event = spy.args[0][0];
         assert.ok(event.isDefaultPrevented(), 'default is prevented');
         assert.ok(event.isPropagationStopped(), 'propagation is stopped');
+    });
+
+    QUnit.test('stopPropagation and preventDefault should not be called for the mouse wheel event at scroll end/start position', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        const spy = sinon.spy();
+
+        $(this.$element).on('dxmousewheel', spy);
+
+        $(this.$element).trigger($.Event('dxmousewheel', {
+            delta: 120
+        }));
+
+        this.$element
+            .find('.dx-tag-container')
+            .scrollLeft(1000);
+
+        $(this.$element).trigger($.Event('dxmousewheel', {
+            delta: -120
+        }));
+
+        const startingPositionEvent = spy.args[0][0];
+        const endingPositionEvent = spy.args[1][0];
+        assert.notOk(startingPositionEvent.isDefaultPrevented(), 'event is not prevented for the starting position');
+        assert.notOk(startingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the starting position');
+        assert.notOk(endingPositionEvent.isDefaultPrevented(), 'event is not prevented for the ending position');
+        assert.notOk(endingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the ending position');
     });
 
     QUnit.test('it is should be possible to scroll tag container natively on mobile device', function(assert) {

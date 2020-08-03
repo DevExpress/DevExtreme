@@ -29,7 +29,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     animation?: dxPopupAnimation;
     /**
      * @docid dxPopupOptions.container
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -147,7 +147,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type template|function
      * @default "title"
      * @type_function_param1 titleElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

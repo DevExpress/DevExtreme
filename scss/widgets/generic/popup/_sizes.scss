@@ -1,34 +1,35 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_POPUP_CLOSEBUTTON_SIZE: null !default;
-$GENERIC_POPUP_CLOSEBUTTON_ICON_SIZE: null !default;
-$GENERIC_POPUP_CONTENT_PADDING: null !default;
-$GENERIC_POPUP_BUTTON_MARGIN: null !default;
-$GENERIC_POPUP_TOOLBAR_ITEM_SPACING: null !default;
-$GENERIC_POPUP_TOOLBARTOP_PADDING: null !default;
-$GENERIC_POPUP_TOOLBARBOTTOM_PADDING: null !default;
+$generic-popup-closebutton-size: null !default;
+$generic-popup-closebutton-icon-size: null !default;
+$generic-popup-content-padding: null !default;
+$generic-popup-button-margin: null !default;
+$generic-popup-toolbar-item-spacing: null !default;
+$generic-popup-toolbartop-padding: null !default;
+$generic-popup-toolbarbottom-padding: null !default;
 
 @if $size == "default" {
-  $GENERIC_POPUP_CLOSEBUTTON_SIZE: 23px;
-  $GENERIC_POPUP_CLOSEBUTTON_ICON_SIZE: 15px;
+  $generic-popup-closebutton-size: 23px;
+  $generic-popup-closebutton-icon-size: 15px;
 
-  $GENERIC_POPUP_CONTENT_PADDING: 20px;
-  $GENERIC_POPUP_BUTTON_MARGIN: 0 10px;
+  $generic-popup-content-padding: 20px;
+  $generic-popup-button-margin: 0 10px;
 
-  $GENERIC_POPUP_TOOLBAR_ITEM_SPACING: 10px;
-  $GENERIC_POPUP_TOOLBARTOP_PADDING: 6px 20px;
-  $GENERIC_POPUP_TOOLBARBOTTOM_PADDING: 20px;
+  $generic-popup-toolbar-item-spacing: 10px;
+  $generic-popup-toolbartop-padding: 6px 20px;
+  $generic-popup-toolbarbottom-padding: 20px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_POPUP_CLOSEBUTTON_SIZE: 19px;
-  $GENERIC_POPUP_CLOSEBUTTON_ICON_SIZE: 11px;
+  $generic-popup-closebutton-size: 19px;
+  $generic-popup-closebutton-icon-size: 11px;
 
-  $GENERIC_POPUP_CONTENT_PADDING: 10px;
-  $GENERIC_POPUP_BUTTON_MARGIN: 0 5px;
+  $generic-popup-content-padding: 10px;
+  $generic-popup-button-margin: 0 5px;
 
-  $GENERIC_POPUP_TOOLBAR_ITEM_SPACING: 5px;
-  $GENERIC_POPUP_TOOLBARTOP_PADDING: 2px 10px;
-  $GENERIC_POPUP_TOOLBARBOTTOM_PADDING: 10px;
+  $generic-popup-toolbar-item-spacing: 5px;
+  $generic-popup-toolbartop-padding: 2px 10px;
+  $generic-popup-toolbarbottom-padding: 10px;
 }

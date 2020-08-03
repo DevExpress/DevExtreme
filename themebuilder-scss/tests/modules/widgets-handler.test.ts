@@ -6,7 +6,7 @@ const mockError = new Error('File not found');
 jest.mock('fs', () => ({
   promises: {
     readFile: jest.fn().mockImplementation((path: string) => {
-      if (/reject/.test(path)) return Promise.reject(mockError);
+      if (path.includes('reject')) return Promise.reject(mockError);
       return Promise.resolve('');
     }),
   },
@@ -14,14 +14,14 @@ jest.mock('fs', () => ({
 
 describe('Widgets handler tests', () => {
   test('getIndexWidgetItems', () => {
-    const widgetsHandler = new WidgetsHandler([], '');
+    const widgetsHandler = new WidgetsHandler([], '', {});
     const indexContent = 'common content\n'
             + '@use "./commonUse";\n'
             + '// public widgets\n'
             + '@use "./accordion";\n'
             + '@use "./dateBox";\n';
 
-    const expectedWidgetArray: Array<WidgetItem> = [
+    const expectedWidgetArray: WidgetItem[] = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'datebox', widgetImportString: '@use "./dateBox";' },
     ];
@@ -31,18 +31,18 @@ describe('Widgets handler tests', () => {
   });
 
   test('getWidgetLists', () => {
-    const userWidgets = ['accordion', 'box', 'wrongWidget', 'wrongWidget2'];
-    const widgetsFromIndex: Array<WidgetItem> = [
+    const userWidgets = ['Accordion', 'box', 'wrongWidget', 'wrongWidget2'];
+    const widgetsFromIndex: WidgetItem[] = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'box', widgetImportString: '@use "./box";' },
       { widgetName: 'datebox', widgetImportString: '@use "./dateBox";' },
     ];
-    const widgetsHandler = new WidgetsHandler(userWidgets, '');
+    const widgetsHandler = new WidgetsHandler(userWidgets, '', {});
     widgetsHandler.baseIndexContent = 'base content\n';
 
     const expected: WidgetHandlerResult = {
       widgets: ['accordion', 'box'],
-      unusedWidgets: ['wrongWidget', 'wrongWidget2'],
+      unusedWidgets: ['wrongwidget', 'wrongwidget2'],
       indexContent: 'base content\n@use "./accordion";\n@use "./box";',
     };
 
@@ -50,13 +50,13 @@ describe('Widgets handler tests', () => {
   });
 
   test('getWidgetLists with empty array', () => {
-    const userWidgets: Array<string> = [];
-    const widgetsFromIndex: Array<WidgetItem> = [
+    const userWidgets: string[] = [];
+    const widgetsFromIndex: WidgetItem[] = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'box', widgetImportString: '@use "./box";' },
       { widgetName: 'datebox', widgetImportString: '@use "./dateBox";' },
     ];
-    const widgetsHandler = new WidgetsHandler(userWidgets, '');
+    const widgetsHandler = new WidgetsHandler(userWidgets, '', {});
     widgetsHandler.baseIndexContent = 'base content\n';
 
     const expected: WidgetHandlerResult = {
@@ -69,7 +69,7 @@ describe('Widgets handler tests', () => {
   });
 
   test('getIndexContent', async () => {
-    const widgetsHandler = new WidgetsHandler([], '/path/dx.light.scss');
+    const widgetsHandler = new WidgetsHandler([], '/path/dx.light.scss', {});
     await widgetsHandler.getIndexContent();
 
     expect(fs.promises.readFile).toBeCalledTimes(1);
@@ -78,7 +78,7 @@ describe('Widgets handler tests', () => {
   });
 
   test('getIndexContent (material)', async () => {
-    const widgetsHandler = new WidgetsHandler([], '/path/dx.material.blue.light.scss');
+    const widgetsHandler = new WidgetsHandler([], '/path/dx.material.blue.light.scss', {});
     await widgetsHandler.getIndexContent();
 
     expect(fs.promises.readFile).toBeCalledTimes(1);
@@ -87,14 +87,35 @@ describe('Widgets handler tests', () => {
   });
 
   test('getIndexContent if bundle does not exists', async () => {
-    const widgetsHandler = new WidgetsHandler([], '/reject/reject/bundle');
+    const widgetsHandler = new WidgetsHandler([], '/reject/reject/bundle', {});
 
     await expect(widgetsHandler.getIndexContent()).rejects.toBe(mockError);
   });
 
   test('check that list of widgets will be an empty array if constructor receive null', () => {
-    const widgetsHandler = new WidgetsHandler(null, '/');
+    const widgetsHandler = new WidgetsHandler(null, '/', {});
 
     expect(widgetsHandler.widgets).toEqual([]);
+  });
+
+  test('getWidgetsWithDependencies', () => {
+    const widgetsHandler = new WidgetsHandler(['box', 'accordion', 'popup'], '', {});
+    widgetsHandler.dependencies = {
+      accordion: ['box', 'overlay', 'button'],
+      box: [],
+      popup: ['overlay', 'toolbar'],
+    };
+
+    const expectedWidgetsList = [
+      'box',
+      'accordion',
+      'overlay',
+      'button',
+      'popup',
+      'toolbar',
+    ];
+
+    expect(widgetsHandler.getWidgetsWithDependencies().sort())
+      .toEqual(expectedWidgetsList.sort());
   });
 });

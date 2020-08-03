@@ -113,15 +113,14 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:basePointObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:basePointObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
+    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, target?: basePointObject }) => any) | string;
     /**
      * @docid BaseChartOptions.onPointHoverChanged
      * @type function(e)
@@ -274,7 +273,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @type template|function(pointInfo, element)
      * @type_function_param1 pointInfo:object
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -579,7 +578,7 @@ export interface BaseChartAnnotationConfig {
      * @type template|function(annotation, element)
      * @type_function_param1 annotation:BaseChartAnnotationConfig|any
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

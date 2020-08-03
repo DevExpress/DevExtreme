@@ -1,33 +1,11 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$radiogroup-checked-bg: null !default;
-$radiogroup-border-color: null !default;
-$radiogroup-bg: null !default;
-$radiobutton-invalid-focused-border-color: null !default;
-$radiobutton-invalid-faded-border-color: null !default;
-
-
-@if $mode == "light" {
-
-
-  $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-}
-
-@if $mode == "dark" {
-
-
-  $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-}
-
+$radiogroup-checked-bg: $base-accent !default;
+$radiogroup-border-color: color.change($base-text-color, $alpha: 0.54) !default;
+$radiogroup-bg: $base-element-bg !default;
+$radiobutton-invalid-focused-border-color: $base-invalid-color !default;
+$radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
