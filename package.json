@@ -65,7 +65,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-generator": "1.0.97",
+    "devextreme-generator": "1.0.98",
     "devextreme-internal-tools": "stable",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
