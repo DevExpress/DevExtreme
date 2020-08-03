@@ -5873,7 +5873,7 @@ QUnit.module('Vertical headers', {
                 }).dxPivotGrid('instance');
                 this.clock.tick();
 
-                grid._useFloatingWidthCorrection = () => true;
+                grid._needFloatingWidthCorrection = () => true;
                 grid.$element().css('zoom', 1.35);
                 grid.repaint();
 

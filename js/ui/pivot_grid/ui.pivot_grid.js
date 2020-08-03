@@ -1265,7 +1265,7 @@ const PivotGrid = Widget.inherit({
         testElement.remove();
     },
 
-    _useFloatingWidthCorrection() { // T914454
+    _needFloatingWidthCorrection() { // T914454
         return hasWindow() && getWindow().devicePixelRatio > 1;
     },
 
@@ -1613,7 +1613,7 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
-            if(that._useFloatingWidthCorrection() && Math.abs(totalWidth - groupWidth) <= 2) { // T914454
+            if(that._needFloatingWidthCorrection() && Math.abs(totalWidth - groupWidth) <= 2) { // T914454
                 groupWidth = totalWidth;
             }
 
