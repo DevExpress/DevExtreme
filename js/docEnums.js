@@ -1072,7 +1072,7 @@
  */
 
 /**
- * @typedef {string} Enums.FileManagerContextMenuViewArea
+ * @typedef {string} Enums.FileManagerViewArea
  * @enum {'navPane'|'itemView'}
  */
 

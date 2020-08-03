@@ -98,7 +98,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
-     * @type_function_param1_field9 viewArea:Enums.FileManagerContextMenuViewArea
+     * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
