@@ -5877,9 +5877,9 @@ QUnit.module('Vertical headers', {
                 grid.$element().css('zoom', 1.35);
                 grid.repaint();
 
-                const containerWidth = grid._dataArea.element().find('.dx-pivotgrid-area-data').get(0).getBoundingClientRect().width;
-                const tableWidth = grid._dataArea.element().find('table').last().get(0).getBoundingClientRect().width;
-                assert.roughEqual(containerWidth, tableWidth, 0.03, `containerWidth = ${containerWidth}, tableWidth=${tableWidth}`);
+                const containerWidth = grid._dataArea.element().find('.dx-scrollable-container').get(0).getBoundingClientRect().width;
+                const contentWidth = grid._dataArea.element().find('.dx-scrollable-content').last().get(0).getBoundingClientRect().width;
+                assert.roughEqual(containerWidth, contentWidth, 0.03, `containerWidth = ${containerWidth}, contentWidth=${contentWidth}`);
             });
         });
     });
