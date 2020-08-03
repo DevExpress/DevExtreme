@@ -412,7 +412,7 @@ const corePlugin = {
             if(!items?.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);
+            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation', true), this._pullOptions);
         },
         _setAnnotationTooltipOptions() {
             const tooltipOptions = extend({}, this._getOption('tooltip'));
