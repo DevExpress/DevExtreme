@@ -67,7 +67,8 @@ QUnit.module('zIndex conflicts', {
             let recursionLevel = 0;
             const recursiveCheckZIndex = ($element) => {
                 const currentElementStyle = getComputedStyle($element[0]);
-                if(recursionLevel > 100 || currentElementStyle.display === 'none') {
+                const currentElementRect = $element[0].getBoundingClientRect();
+                if(recursionLevel > 100 || currentElementStyle.display === 'none' || currentElementRect.width === 0 || currentElementRect.height === 0 || $element.hasClass('dx-drawer-panel-content')) {
                     return;
                 }
                 if(isNumeric(currentElementStyle.zIndex) && Number(currentElementStyle.zIndex) > Number(shaderZIndex)) {
@@ -112,6 +113,7 @@ QUnit.module('zIndex conflicts', {
                     }
                 ],
                 height: 300,
+                width: 300,
                 permissions: { create: true, copy: true, move: true, delete: true, rename: true, upload: true, download: true }
             });
 
