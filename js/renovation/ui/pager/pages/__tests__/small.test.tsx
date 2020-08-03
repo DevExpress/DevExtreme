@@ -1,11 +1,9 @@
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../utils/get_computed_style';
 import { NumberBox } from '../../../number_box';
 
-jest.mock('../../../number_box', () => ({ __esModule: true, NumberBox: jest.fn() }));
-jest.mock('../page', () => ({ __esModule: true, Page: jest.fn() }));
 jest.mock('../../utils/get_computed_style');
 
 describe('Small pager pages', () => {
@@ -30,7 +28,7 @@ describe('Small pager pages', () => {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
-      pageIndexRef: pageIndexRef as NumberBox,
+      pageIndexRef: pageIndexRef as unknown as NumberBox,
       selectLastPageIndex: jest.fn(),
       props: { pageCount: 100, pagesCountText: 'of', rtlEnabled: true },
     } as Partial<PagesSmall>;
@@ -40,12 +38,12 @@ describe('Small pager pages', () => {
     expect(tree.props().className).toBe('dx-light-pages');
 
     expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
-    expect(pageIndexNumberBox.props()).toEqual({
-      children: [], className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: props.valueChange, width: 40,
+    expect(pageIndexNumberBox.props()).toMatchObject({
+      className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: props.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
-    expect(maxPage.props()).toEqual({
-      children: [], index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
+    expect(maxPage.props()).toMatchObject({
+      index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
     });
   });
 

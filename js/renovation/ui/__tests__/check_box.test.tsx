@@ -106,7 +106,7 @@ describe('CheckBox', () => {
 
     it('should pass all necessary properties to the Widget', () => {
       const renderOptions = {
-        aria: 'area',
+        aria: { role: 'aria' },
         onActive: (): null => null,
         onInactive: (): null => null,
         onFocusIn: (): null => null,
