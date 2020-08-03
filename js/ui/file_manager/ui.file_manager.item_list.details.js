@@ -184,6 +184,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const $row = component.$element().closest(this._getItemSelector());
         const fileItemInfo = $row.data('item');
         this._selectItem(fileItemInfo);
+        this._contextMenu.setContextMenuTarget('itemView', fileItemInfo.fileItem);
         this._showContextMenu(this._getFileItemsForContextMenu(fileItemInfo), element);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
@@ -283,6 +284,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         e.items = this._contextMenu.createContextMenuItems(fileItems);
+        this._contextMenu.setContextMenuTarget('itemView', e.row && e.row.data ? e.row.data.fileItem : null);
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {

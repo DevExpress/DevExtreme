@@ -164,11 +164,19 @@ class FileManagerContextMenu extends Widget {
     _onContextMenuItemClick(commandName, args) {
         const changedArgs = extend(true, {}, args);
         changedArgs.itemData = args.itemData.originalItemData;
+        if(this._contextMenuTarget) {
+            changedArgs.fileSystemItem = this._contextMenuTarget.fileSystemItem;
+            changedArgs.viewArea = this._contextMenuTarget.viewArea;
+        }
         this._actions.onItemClick(changedArgs);
         if(this._isDefaultItem(commandName)) {
             const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
             this._commandManager.executeCommand(commandName, targetFileItems);
         }
+    }
+
+    setContextMenuTarget(viewArea, fileSystemItem) {
+        this._contextMenuTarget = { viewArea, fileSystemItem };
     }
 
     _initActions() {
