@@ -57,9 +57,17 @@ export const fileSaver = {
         const formAttributes = { method: 'post', action: proxyUrl, enctype: 'multipart/form-data' };
         const exportForm = $('<form>').css({ 'display': 'none' }).attr(formAttributes);
 
-        exportForm.append($('input').attr({ type: 'hidden', name: 'fileName', value: fileName }));
-        exportForm.append($('input').attr({ type: 'hidden', name: 'contentType', value: contentType }));
-        exportForm.append($('input').attr({ type: 'hidden', name: 'data', value: data }));
+        function setAttributes(element, attributes) {
+            for(const key in attributes) {
+                element.setAttribute(key, attributes[key]);
+            }
+
+            return element;
+        }
+
+        exportForm.append(setAttributes(domAdapter.createElement('input'), { type: 'hidden', name: 'fileName', value: fileName }));
+        exportForm.append(setAttributes(domAdapter.createElement('input'), { type: 'hidden', name: 'contentType', value: contentType }));
+        exportForm.append(setAttributes(domAdapter.createElement('input'), { type: 'hidden', name: 'data', value: data }));
 
         exportForm.appendTo('body');
         eventsEngine.trigger(exportForm, 'submit');
