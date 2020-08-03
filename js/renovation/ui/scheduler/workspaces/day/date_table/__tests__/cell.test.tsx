@@ -27,6 +27,23 @@ describe('DayDateTableCell', () => {
         .toBe('customAttribute');
     });
 
+    it('should ahead props correctly', () => {
+      const cell = render({
+        props: {
+          isFirstCell: true,
+          isLastCell: true,
+          className: 'some-class',
+        },
+      });
+
+      expect(cell.prop('isFirstCell'))
+        .toBe(true);
+      expect(cell.prop('isLastCell'))
+        .toBe(true);
+      expect(cell.prop('className'))
+        .toEqual('some-class');
+    });
+
     it('should render day correctly', () => {
       const cell = render({});
 

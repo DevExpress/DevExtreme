@@ -1111,10 +1111,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRAllDayPanel() {
-        const isVisible = this.option('showAllDayPanel') && this.viewData.groupedData?.length >= 1;
         const options = {
             viewData: this.viewData,
-            visible: isVisible
+            visible: this.option('showAllDayPanel')
         };
 
         this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
