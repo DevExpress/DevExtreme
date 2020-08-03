@@ -1395,7 +1395,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     headerPanelOffsetRecalculate() {
         if(!this.option('resourceCellTemplate') &&
-           !this.option('dateCellTemplate')) {
+            !this.option('dateCellTemplate')) {
             return;
         }
 
@@ -2695,7 +2695,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateScrollPosition(date) {
-        date = this.invoke('convertDateByTimezone', date);
+        date = this.invoke('convertDateByTimezone', date); // TODO:
 
         const bounds = this.getVisibleBounds();
         const startDateHour = date.getHours();

@@ -13,6 +13,7 @@ import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
+import utils from './utils';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -67,7 +68,7 @@ const subscribes = {
     },
 
     updateAppointmentAfterResize: function(options) {
-        const { info } = $(options.$appointment).data('dxAppointmentSettings');
+        const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
         const exceptionDate = info.sourceAppointment.startDate;
 
         this._checkRecurringAppointment(options.target, options.data, exceptionDate, (function() {
@@ -82,7 +83,8 @@ const subscribes = {
     },
 
     updateAppointmentAfterDrag: function(options) {
-        const { info } = $(options.$appointment).data('dxAppointmentSettings');
+        const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
+
         const sourceAppointment = options.data;
         const sourceAppointmentAdapter = this.createAppointmentAdapter(sourceAppointment);
 
