@@ -1,5 +1,5 @@
 /* eslint-disable jest/expect-expect */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { GridPager, viewFunction as GridPagerComponent } from '../grid_pager';
 

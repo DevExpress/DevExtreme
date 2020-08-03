@@ -13,16 +13,18 @@ module.exports = {
     collectCoverageFrom: [
         './js/renovation/**/*.tsx',
         '!./js/renovation/ui/list.tsx',
+        '!./js/renovation/ui/select_box.tsx',
         '!./js/renovation/**/*.j.tsx',
+        '!./js/renovation/**/__tests__/**/*',
         '!./js/renovation/utils/render_template.tsx',
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
         './js/renovation/**/*.tsx': {
-            functions: 0, // Should set code coverage to 100%
-            statements: 0, // (after start testing declarations)
-            lines: 0,
-            branches: 0
+            functions: 100, // Should set code coverage to 100%
+            statements: 100, // (after start testing declarations)
+            lines: 100,
+            branches: 100
         }
     },
     roots: ['<rootDir>/js/renovation'],

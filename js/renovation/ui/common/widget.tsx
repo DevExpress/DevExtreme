@@ -23,7 +23,7 @@ import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 
-const getAria = (args): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
+const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
     return {
       ...r,
@@ -53,7 +53,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
 
 export const viewFunction = (viewModel: Widget): JSX.Element => (
   <div
-    ref={viewModel.widgetRef}
+    ref={viewModel.widgetRef as any}
     {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
     tabIndex={viewModel.tabIndex}
     title={viewModel.props.hint}
@@ -124,7 +124,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const canBeFocusedByKey = isFocusable && accessKey;
 
     if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef, (e) => {
+      dxClick.on(this.widgetRef, (e: Event) => {
         if (isFakeClickEvent(e)) {
           e.stopImmediatePropagation();
           this.focused = true;
@@ -148,11 +148,11 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (activeStateEnabled && !disabled) {
       active.on(this.widgetRef,
-        ({ event }) => {
+        ({ event }: { event: Event }) => {
           this.active = true;
           onActive?.(event);
         },
-        ({ event }) => {
+        ({ event }: { event: Event }) => {
           this.active = false;
           onInactive?.(event);
         }, {
@@ -174,9 +174,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const namespace = name;
 
     if (onClick && !disabled) {
-      dxClick.on(this.widgetRef,
-        (e) => onClick(e),
-        { namespace });
+      dxClick.on(this.widgetRef, onClick, { namespace });
       return (): void => dxClick.off(this.widgetRef, { namespace });
     }
 
@@ -198,13 +196,13 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (isFocusable) {
       focus.on(this.widgetRef,
-        (e) => {
+        (e: Event & { isDefaultPrevented: () => boolean }) => {
           if (!e.isDefaultPrevented()) {
             this.focused = true;
             onFocusIn?.(e);
           }
         },
-        (e) => {
+        (e: Event & { isDefaultPrevented: () => boolean }) => {
           if (!e.isDefaultPrevented()) {
             this.focused = false;
             onFocusOut?.(e);
@@ -240,10 +238,10 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   keyboardEffect(): EffectReturn {
-    const { focusStateEnabled, onKeyDown } = this.props;
+    const { onKeyDown } = this.props;
 
-    if (focusStateEnabled || onKeyDown) {
-      const id = keyboard.on(this.widgetRef, this.widgetRef, (e): void => onKeyDown?.(e));
+    if (onKeyDown) {
+      const id = keyboard.on(this.widgetRef, this.widgetRef, (e: Event): void => onKeyDown(e));
 
       return (): void => keyboard.off(id);
     }

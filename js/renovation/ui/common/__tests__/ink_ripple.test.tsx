@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
 import { shallow } from 'enzyme';
 import { InkRipple, viewFunction } from '../ink_ripple';
 import { initConfig, showWave, hideWave } from '../../../../ui/widget/utils.ink_ripple';
@@ -18,11 +17,11 @@ describe('InkRipple', () => {
 
   describe('Render', () => {
     it('should pass all necessary properties to the root element', () => {
-      const inkRipple = shallow(viewFunction({ restAttributes: { restAttributes: 'restAttributes' } } as any) as any);
+      const inkRipple = shallow(viewFunction({ restAttributes: { 'rest-attributes': 'restAttributes' } } as any) as any);
 
       expect(inkRipple.props()).toEqual({
         className: 'dx-inkripple',
-        restAttributes: 'restAttributes',
+        'rest-attributes': 'restAttributes',
       });
     });
   });
