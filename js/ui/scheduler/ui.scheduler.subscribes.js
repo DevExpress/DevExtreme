@@ -50,14 +50,15 @@ const subscribes = {
         this.hideAppointmentTooltip();
     },
 
-    showAddAppointmentPopup: function(cellData) {
+    showAddAppointmentPopup: function(cellData, cellGroups) {
         const appointmentAdapter = this.createAppointmentAdapter({});
 
         appointmentAdapter.allDay = cellData.allDay;
         appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
         appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
 
-        this.showAppointmentPopup(appointmentAdapter.source(), true);
+        const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
+        this.showAppointmentPopup(resultAppointment, true);
     },
 
     showEditAppointmentPopup: function(options) {
