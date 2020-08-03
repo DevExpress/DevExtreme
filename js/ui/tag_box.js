@@ -39,6 +39,7 @@ const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const NATIVE_CLICK_CLASS = 'dx-native-click';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -154,6 +155,16 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             }
         });
+    },
+
+    _renderTemplatedField: function(data, fieldTemplate) {
+        this.callBase(data, fieldTemplate);
+
+        this._$tagsContainer = $(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`)
+            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
+            .addClass(NATIVE_CLICK_CLASS);
+        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
+        this._renderTagRemoveAction();
     },
 
     _allowSelectItemByTab: function() {
