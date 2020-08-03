@@ -4,11 +4,9 @@ const gulp = require('gulp');
 const eol = require('gulp-eol');
 const replace = require('gulp-replace');
 const merge = require('merge-stream');
-const through = require('through2');
-const lazyPipe = require('lazypipe');
-const dataUri = require('./gulp-data-uri').gulpPipe;
 const fs = require('fs');
 
+const tasksNPM = require('./npm');
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
@@ -59,20 +57,6 @@ const DIST_GLOBS = [
     '!artifacts/css/dx-gantt.*'
 ];
 
-const MODULES = require('./modules_metadata.json');
-
-const addDefaultExport = lazyPipe().pipe(function() {
-    return through.obj(function(chunk, enc, callback) {
-        const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
-        const moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
-
-        if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
-            chunk.contents = Buffer.from(String(chunk.contents) + 'module.exports.default = module.exports;');
-        }
-        callback(null, chunk);
-    });
-});
-
 gulp.task('rename-renovation-folder', function(done) {
     fs.rename(packagePath + '/dist/js-renovation', packagePath + '/dist/js', function(err) {
         if(err) {
@@ -88,7 +72,7 @@ gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
     return merge(
 
         gulp.src(TRANSPILED_GLOBS)
-            .pipe(addDefaultExport())
+            .pipe(tasksNPM.addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())
             .pipe(gulp.dest(packagePath)),
@@ -118,20 +102,6 @@ gulp.task('renovation-npm-sources', gulp.series('ts-sources', function() {
     );
 }, 'rename-renovation-folder'));
 
-gulp.task('renovation-npm-sass', gulp.parallel(() => {
-    return gulp
-        .src('scss/**/*')
-        .pipe(dataUri())
-        .pipe(gulp.dest(scssPackagePath));
-
-}, () => {
-    return gulp
-        .src('fonts/**/*', { base: '.' })
-        .pipe(gulp.dest(scssPackagePath + '/widgets/material/typography'));
-}, () => {
-    return gulp
-        .src('icons/**/*', { base: '.' })
-        .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
-}));
+gulp.task('renovation-npm-sass', tasksNPM.createSassStream(scssPackagePath));
 
 gulp.task('renovation-npm', gulp.series('renovation-npm-sources', 'npm-check', 'renovation-npm-sass'));

@@ -60,6 +60,24 @@ const DIST_GLOBS = [
 
 const MODULES = require('./modules_metadata.json');
 
+function createSassStream(destPath) {
+    return gulp.parallel(() => {
+        return gulp
+            .src('scss/**/*')
+            .pipe(dataUri())
+            .pipe(gulp.dest(destPath));
+
+    }, () => {
+        return gulp
+            .src('fonts/**/*', { base: '.' })
+            .pipe(gulp.dest(destPath + '/widgets/material/typography'));
+    }, () => {
+        return gulp
+            .src('icons/**/*', { base: '.' })
+            .pipe(gulp.dest(destPath + '/widgets/base'));
+    });
+}
+
 const addDefaultExport = lazyPipe().pipe(function() {
     return through.obj(function(chunk, enc, callback) {
         const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
@@ -103,23 +121,13 @@ gulp.task('npm-sources', gulp.series('ts-sources', function() {
     );
 }));
 
-gulp.task('npm-sass', gulp.parallel(() => {
-    return gulp
-        .src('scss/**/*')
-        .pipe(dataUri())
-        .pipe(gulp.dest(scssPackagePath));
-
-}, () => {
-    return gulp
-        .src('fonts/**/*', { base: '.' })
-        .pipe(gulp.dest(scssPackagePath + '/widgets/material/typography'));
-}, () => {
-    return gulp
-        .src('icons/**/*', { base: '.' })
-        .pipe(gulp.dest(scssPackagePath + '/widgets/base'));
-}));
-
+gulp.task('npm-sass', createSassStream(scssPackagePath));
 
 gulp.task('npm-check', gulp.series('ts-modules-check'));
 
 gulp.task('npm', gulp.series('npm-sources', 'npm-check', 'npm-sass'));
+
+module.exports = {
+    addDefaultExport,
+    createSassStream,
+};

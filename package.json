@@ -182,7 +182,8 @@
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage",
-    "test-jest:watch": "jest --watch"
+    "test-jest:watch": "jest --watch",
+    "aa": "gulp js-bundles-dev"
   },
   "browserslist": [
     "last 2 versions",
