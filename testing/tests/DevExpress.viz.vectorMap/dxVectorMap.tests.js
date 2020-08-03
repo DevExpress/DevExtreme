@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const noop = require('core/utils/common').noop;
 const commons = require('./vectorMapParts/commons.js');
 const rendererModule = require('viz/core/renderers/renderer');
 const projectionModule = require('viz/vector_map/projection.main');
@@ -19,6 +20,7 @@ const stubLayersEnvironment = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
+        this.tracker.on = sinon.stub().returns(noop);
     }
 });
 

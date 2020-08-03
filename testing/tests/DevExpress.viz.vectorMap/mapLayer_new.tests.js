@@ -79,7 +79,7 @@ const environment = {
     },
 
     getMarker: function(index) {
-        return this.renderer.g.getCall(2 + index).returnValue;
+        return this.renderer.g.getCall(3 + index).returnValue;
     },
 
     getLabel: function(index) {
