@@ -18,6 +18,10 @@ import {
     dxToolbarItem
 } from './toolbar';
 
+import {
+    dxContextMenuItem
+} from './context_menu';
+
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid dxGanttOptions.allowSelection
@@ -68,6 +72,17 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     onSelectionChanged?: ((e: { component?: dxGantt, element?: dxElement, model?: any, selectedRowKey?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onCustomCommand
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field3 name:String
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);
     /**
      * @docid dxGanttOptions.resourceAssignments
      * @type Object
@@ -155,6 +170,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     toolbar?: dxGanttToolbar;
+    /**
+     * @docid dxGanttOptions.contextMenu
+     * @type Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    contextMenu?: { enabled?: boolean, items?: Array<dxContextMenuItem| 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails'> };
     /**
      * @docid dxGanttOptions.stripLines
      * @type Array<dxGanttStripLine>
