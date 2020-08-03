@@ -14,7 +14,7 @@ const context = require('./context.js');
 require('./generator/gulpfile');
 
 const GLOB_TS = require('./ts').GLOB_TS;
-const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.{tsx,ts}'];
+const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.{tsx,ts}', '!js/renovation/code_coverage/**/*.*'];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
