@@ -113,6 +113,7 @@ class Gantt extends Widget {
         this._updateToolbarContent();
         this._bars.push(this._toolbar);
         this._contextMenuBar = new GanttContextMenuBar(this._$contextMenu, this);
+        this._updateContextMenu();
         this._bars.push(this._contextMenuBar);
     }
 
@@ -479,12 +480,22 @@ class Gantt extends Widget {
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
+    _createCustomCommandAction() {
+        this._customCommandAction = this._createActionByOption('onCustomCommand');
+    }
     _raiseSelectionChangedAction(selectedRowKey) {
         if(!this._selectionChangedAction) {
             this._createSelectionChangedAction();
         }
         this._selectionChangedAction({ selectedRowKey: selectedRowKey });
     }
+    _raiseCustomCommand(commandName) {
+        if(!this._customCommandAction) {
+            this._createCustomCommandAction();
+        }
+        this._customCommandAction({ name: commandName });
+    }
+
     _getSelectionMode(allowSelection) {
         return allowSelection ? 'single' : 'none';
     }
@@ -506,6 +517,13 @@ class Gantt extends Widget {
         this._toolbar && this._toolbar.createItems(items);
         this._updateBarItemsState();
     }
+    _updateContextMenu() {
+        const contextMenuOptions = this.option('contextMenu');
+        if(contextMenuOptions.enabled && this._contextMenuBar) {
+            this._contextMenuBar.createItems(contextMenuOptions.items);
+            this._updateBarItemsState();
+        }
+    }
     _updateBarItemsState() {
         this._ganttView && this._ganttView.updateBarItemsState();
     }
@@ -517,8 +535,10 @@ class Gantt extends Widget {
         this._dialogInstance.show(e.name, e.parameters, e.callback, e.afterClosing, this.option('editing'));
     }
     _showPopupMenu(e) {
-        this._ganttView.getBarManager().updateContextMenu();
-        this._contextMenuBar.show(e.position);
+        if(this.option('contextMenu.enabled')) {
+            this._ganttView.getBarManager().updateContextMenu();
+            this._contextMenuBar.show(e.position);
+        }
     }
     _executeCoreCommand(id) {
         this._ganttView.executeCoreCommand(id);
@@ -693,6 +713,7 @@ class Gantt extends Widget {
             firstDayOfWeek: undefined,
             selectedRowKey: undefined,
             onSelectionChanged: null,
+            onCustomCommand: null,
             allowSelection: true,
             showRowLines: true,
             stripLines: undefined,
@@ -767,7 +788,11 @@ class Gantt extends Widget {
                 */
                 autoUpdateParentTasks: false
             },
-            toolbar: null
+            toolbar: null,
+            contextMenu: {
+                enabled: true,
+                items: undefined
+            }
         });
     }
 
@@ -806,6 +831,9 @@ class Gantt extends Widget {
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
                 break;
+            case 'onCustomCommand':
+                this._createCustomCommandAction();
+                break;
             case 'allowSelection':
                 this._setTreeListOption('selection.mode', this._getSelectionMode(args.value));
                 this._setGanttViewOption('allowSelection', args.value);
@@ -828,6 +856,9 @@ class Gantt extends Widget {
                 break;
             case 'toolbar':
                 this._updateToolbarContent();
+                break;
+            case 'contextMenu':
+                this._updateContextMenu();
                 break;
             default:
                 super._optionChanged(args);
