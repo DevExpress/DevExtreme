@@ -94,7 +94,7 @@ describe('Button', () => {
       expect(button.find(Icon).exists()).toBe(false);
     });
 
-    it.skip('should render icon component on the left side', () => {
+    it('should render icon component on the left side', () => {
       const button = shallow(viewFunction({
         props: {
           text: 'button-text',
@@ -104,13 +104,13 @@ describe('Button', () => {
       } as any) as any);
       const buttonContent = button.find('.dx-button-content');
       expect(buttonContent.childAt(0).is(Icon)).toBe(true);
-      expect(buttonContent.find(Icon).props()).toEqual({
-        source: 'icon-surce',
+      expect(buttonContent.find(Icon).props()).toMatchObject({
+        source: 'icon-source',
         position: 'left',
       });
     });
 
-    it.skip('should render icon component on the right side', () => {
+    it('should render icon component on the right side', () => {
       const button = shallow(viewFunction({
         props: {
           text: 'button-text',
@@ -121,8 +121,8 @@ describe('Button', () => {
       const buttonContent = button.find('.dx-button-content');
       expect(buttonContent.childAt(1).is(Icon)).toBe(true);
       expect(buttonContent.childAt(0).text()).toBe('button-text');
-      expect(buttonContent.find(Icon).props()).toEqual({
-        source: 'icon-surce',
+      expect(buttonContent.find(Icon).props()).toMatchObject({
+        source: 'icon-source',
         position: 'right',
       });
     });
@@ -197,6 +197,11 @@ describe('Button', () => {
           button.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
           expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
+        });
+
+        it('should not raise any error if "onContentReady" is not defined', () => {
+          const button = new Button({ onContentReady: undefined });
+          expect(button.contentReadyEffect.bind(button)).not.toThrow();
         });
       });
 
