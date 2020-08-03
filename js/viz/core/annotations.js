@@ -216,8 +216,8 @@ const chartPlugin = {
                 return;
             }
 
-            this.hideTooltip();
-            this.clearHover();
+            this._clear();
+
 
             if(annotation.options.allowDragging && event.type === pointerEvents.down) {
                 this._annotations._hideToolTipForDrag = true;
@@ -248,6 +248,10 @@ const chartPlugin = {
         },
         _forceAnnotationRender() {
             this._change(['FORCE_RENDER']);
+        },
+        _clear() {
+            this.hideTooltip();
+            this.clearHover();
         }
     }
 };
@@ -308,7 +312,8 @@ const polarChartPlugin = {
 
             return polarOptions;
         },
-        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender
+        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender,
+        _clear: chartPlugin.members._clear
     }
 };
 const vectorMapPlugin = {
@@ -333,7 +338,7 @@ const vectorMapPlugin = {
 
             return coords;
         },
-        _annotationsPointerEventHandler() {}, // chartPlugin.members._annotationsPointerEventHandler,
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
         _isAnnotationBounded(options) {
             return isDefined(options.coordinates);
         },
@@ -344,7 +349,8 @@ const vectorMapPlugin = {
         },
         _forceAnnotationRender() {
             this._change(['EXTRA_ELEMENTS']);
-        }
+        },
+        _clear() {}
     },
     extenders: {
         _prepareExtraElements() {
