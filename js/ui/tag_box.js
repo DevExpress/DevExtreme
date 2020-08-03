@@ -157,13 +157,17 @@ const TagBox = SelectBox.inherit({
         });
     },
 
-    _renderTemplatedField: function(data, fieldTemplate) {
-        this.callBase(data, fieldTemplate);
-
-        this._$tagsContainer = $(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`)
+    _updateTagsContainer: function($element) {
+        this._$tagsContainer = $element
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
         this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
+    },
+
+    _renderTemplatedField: function(data, fieldTemplate) {
+        this.callBase(data, fieldTemplate);
+
+        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
 
@@ -643,12 +647,7 @@ const TagBox = SelectBox.inherit({
     _renderMultiSelect: function() {
         const d = new Deferred();
 
-        this._$tagsContainer = this._$textEditorInputContainer
-            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
-
-        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
-
+        this._updateTagsContainer(this._$textEditorInputContainer);
         this._renderInputSize();
         this._renderTags()
             .done(() => {
