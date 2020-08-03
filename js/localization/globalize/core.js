@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import coreLocalization from '../core';
 
