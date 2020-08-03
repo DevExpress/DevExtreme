@@ -579,9 +579,14 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         const { info } = $element.data('dxAppointmentSettings');
         const sourceAppointment = this._getItemData($element);
-        const dateRange = this._getDateRange(e, info.sourceAppointment.startDate, info.sourceAppointment.endDate);
 
         const modifiedAppointmentAdapter = scheduler.createAppointmentAdapter(sourceAppointment).clone();
+
+        const startDate = modifiedAppointmentAdapter.allDay ? info.sourceAppointment.startDate : info.appointment.startDate;
+        const endDate = modifiedAppointmentAdapter.allDay ? info.sourceAppointment.endDate : info.appointment.endDate;
+
+        const dateRange = this._getDateRange(e, startDate, endDate);
+
         modifiedAppointmentAdapter.startDate = new Date(dateRange[0]);
         modifiedAppointmentAdapter.endDate = new Date(dateRange[1]);
 
