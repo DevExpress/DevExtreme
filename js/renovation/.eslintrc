@@ -5,9 +5,6 @@
         "excludedFiles": "**/__tests__/**/*"
     }, {
         "files": ["**/__tests__/**/*.ts?(x)", "**/test_utils/**/*.ts?(x)"],
-        "extends": ["devextreme/jest"],
-        "settings": {
-            "react": { "pragma": "h" }
-        }
+        "extends": ["devextreme/jest"]
     }]
 }

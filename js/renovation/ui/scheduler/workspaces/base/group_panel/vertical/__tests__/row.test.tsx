@@ -32,9 +32,9 @@ describe('GroupPanel Vertical Row', () => {
     });
 
     it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(row.prop('customAttribute'))
+      expect(row.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

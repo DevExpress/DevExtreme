@@ -1,21 +1,9 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTitle } from '../title';
 import { AllDayPanelTableBody } from '../table_body';
-
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children, props }) => <div {...props}>{children}</div>,
-}));
-jest.mock('../table_body', () => ({
-  ...require.requireActual('../table_body'),
-  AllDayPanelTableBody: () => null,
-}));
-jest.mock('../../../table', () => ({
-  ...require.requireActual('../../../table'),
-  Table: () => null,
-}));
+import { GroupedViewData } from '../../../../types.d';
 
 describe('AllDayPanelLayout', () => {
   describe('Render', () => {
@@ -25,19 +13,20 @@ describe('AllDayPanelLayout', () => {
         { allDayPanel: [{ startDate: new Date(2020, 6, 9, 1) }] },
       ],
     };
-    const render = (viewModel) => shallow(LayoutView({
+    const render = (viewModel) => shallow(<LayoutView {...{
       ...viewModel,
       props: {
         visible: true,
         ...viewModel.props,
         viewData,
       },
-    } as any) as any).childAt(0);
+    }}
+    />).childAt(0);
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 
@@ -84,7 +73,7 @@ describe('AllDayPanelLayout', () => {
               allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
             },
           ],
-        };
+        } as GroupedViewData;
         const layout = new AllDayPanelLayout({ viewData });
 
         expect(layout.allDayPanelData)

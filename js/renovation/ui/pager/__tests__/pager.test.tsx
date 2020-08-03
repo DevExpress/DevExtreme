@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { PagerContentComponent } from '../content';
 import { Pager as PagerComponent } from '../pager';
@@ -11,8 +11,7 @@ describe('Pager', () => {
     it('render pager with defaults', () => {
       const tree = shallow<PagerComponent>(<PagerComponent /> as any);
       expect(tree.props()).toEqual({
-        children: [],
-        restAttributes: 'restAttributes',
+        'rest-attributes': 'restAttributes',
         pagesNavigatorVisible: 'auto',
         visible: true,
         contentTemplate: PagerContentComponent,

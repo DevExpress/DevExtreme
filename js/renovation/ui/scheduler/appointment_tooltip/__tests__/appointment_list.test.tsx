@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { mount } from 'enzyme';
 import {
   AppointmentList,
@@ -64,7 +64,7 @@ describe('AppointmentList', () => {
         itemContentTemplate: jest.fn(),
         focusStateEnabled: true,
       };
-      const restAttributes = { customAttribute: 'customAttribute' };
+      const restAttributes = { 'custom-attribute': 'customAttribute' };
       const onItemClick = jest.fn();
 
       const appointmentList = render({

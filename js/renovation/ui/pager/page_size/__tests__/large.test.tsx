@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import {
   PageSizeLarge,

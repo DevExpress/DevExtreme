@@ -1,21 +1,10 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TableBodyView } from '../table_body';
 import { DateTableRow as Row } from '../row';
-import { getKeyByDateAndGroup } from '../../../utils';
+import * as utilsModule from '../../../utils';
 
-jest.mock('../../../utils', () => ({
-  ...require.requireActual('../../../utils'),
-  getKeyByDateAndGroup: jest.fn(),
-}));
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
-}));
-jest.mock('../row', () => ({
-  ...require.requireActual('../row'),
-  DateTableRow: ({ children }) => <div>{children}</div>,
-}));
+const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
 
 describe('DateTableBody', () => {
   describe('Render', () => {
@@ -29,16 +18,17 @@ describe('DateTableBody', () => {
     };
     const cellTemplate = () => null;
 
-    const render = (viewModel) => shallow(TableBodyView({
+    const render = (viewModel) => shallow(<TableBodyView {...{
       ...viewModel,
       props: {
         viewData,
         cellTemplate,
         ...viewModel.props,
       },
-    }) as any);
+    }}
+    />);
 
-    afterEach(() => jest.resetAllMocks());
+    beforeEach(() => getKeyByDateAndGroup.mockClear());
 
     it('should render rows', () => {
       const rows = render({}).find(Row);
