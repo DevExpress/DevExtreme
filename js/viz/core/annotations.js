@@ -28,7 +28,7 @@ function coreAnnotation(options, contentTemplate) {
             this.plaque = new Plaque(
                 extend(true, {}, options, { cornerRadius: (options.border || {}).cornerRadius }),
                 widget, annotationGroup, contentTemplate,
-                isDefined(options.value) || isDefined(options.argument)
+                widget._isAnnotationBounded(options)
             );
             this.plaque.draw(widget._getAnnotationCoords(this));
 
@@ -228,6 +228,9 @@ const chartPlugin = {
                 event.stopPropagation();
             }
         },
+        _isAnnotationBounded(options) {
+            return isDefined(options.value) || isDefined(options.argument);
+        },
         _pullOptions(options) {
             return {
                 type: options.type,
@@ -242,6 +245,9 @@ const chartPlugin = {
                 offsetX: options.offsetX,
                 offsetY: options.offsetY
             };
+        },
+        _forceAnnotationRender() {
+            this._change(['FORCE_RENDER']);
         }
     }
 };
@@ -291,6 +297,7 @@ const polarChartPlugin = {
             return coords;
         },
         _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _isAnnotationBounded: chartPlugin.members._isAnnotationBounded,
         _pullOptions(options) {
             const polarOptions = extend({}, {
                 radius: options.radius,
@@ -300,6 +307,56 @@ const polarChartPlugin = {
             delete polarOptions.axis;
 
             return polarOptions;
+        },
+        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender
+    }
+};
+const vectorMapPlugin = {
+    name: 'annotations_vector_map',
+    init() {},
+    dispose() {
+        this._annotations._offTracker();
+        this._annotations._offTracker = null;
+    },
+    members: {
+        _getAnnotationCoords(annotation) {
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY
+            };
+            coords.canvas = this._projection.getCanvas();
+            if(annotation.coordinates) {
+                const data = this._projection.toScreenPoint(annotation.coordinates);
+                coords.x = data[0];
+                coords.y = data[1];
+            }
+
+            return coords;
+        },
+        _annotationsPointerEventHandler() {}, // chartPlugin.members._annotationsPointerEventHandler,
+        _isAnnotationBounded(options) {
+            return isDefined(options.coordinates);
+        },
+        _pullOptions(options) {
+            return extend({}, {
+                coordinates: options.coordinates
+            }, chartPlugin.members._pullOptions(options));
+        },
+        _forceAnnotationRender() {
+            this._change(['EXTRA_ELEMENTS']);
+        }
+    },
+    extenders: {
+        _prepareExtraElements() {
+            const that = this;
+            that._annotations._offTracker = that._tracker.on({
+                'move': function() {
+                    that._renderExtraElements();
+                },
+                'zoom': function() {
+                    that._renderExtraElements();
+                }
+            });
         }
     }
 };
@@ -322,11 +379,6 @@ const corePlugin = {
         };
 
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-        const tooltipOptions = extend({}, this._themeManager.getOptions('tooltip'));
-
-        tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
-
-        this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
@@ -356,11 +408,16 @@ const corePlugin = {
         _buildAnnotations() {
             this._annotations.items = [];
 
-            const items = this._getOption('annotations');
+            const items = this._getOption('annotations', true);
             if(!items?.length) {
                 return;
             }
             this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);
+        },
+        _setAnnotationTooltipOptions() {
+            const tooltipOptions = extend({}, this._getOption('tooltip'));
+            tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
+            this._annotations.tooltip.update(tooltipOptions);
         },
         _getAnnotationCoords() { return {}; },
         _pullOptions() { return {}; }
@@ -388,7 +445,8 @@ const corePlugin = {
             code: 'ANNOTATIONS',
             handler() {
                 this._buildAnnotations();
-                this._change(['FORCE_RENDER']);
+                this._setAnnotationTooltipOptions();
+                this._forceAnnotationRender();
             },
             isThemeDependent: true,
             isOptionChange: true
@@ -400,5 +458,6 @@ const corePlugin = {
 export const plugins = {
     core: corePlugin,
     chart: chartPlugin,
-    polarChart: polarChartPlugin
+    polarChart: polarChartPlugin,
+    vectorMap: vectorMapPlugin
 };
