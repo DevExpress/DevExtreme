@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import themes_callback from '../../ui/themes_callback';
 import { add as ready } from '../../core/utils/ready_callbacks';

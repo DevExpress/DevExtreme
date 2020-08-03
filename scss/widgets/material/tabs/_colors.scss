@@ -9,28 +9,28 @@
 * $name 10. Tab text color
 * $type color
 */
-$tabs-tab-color: null !default;
+$tabs-tab-color: color.change($base-text-color, $alpha: 0.54) !default;
 
 /**
 * $name 20. Selected tab text color
 * $type color
 */
-$tabs-tab-selected-color: null !default;
+$tabs-tab-selected-color: $base-accent !default;
 
 /**
 * $name 30. Selected tab bottom border color
 * $type color
 */
-$tabs-selected-tab-bottom-border-color: null !default;
+$tabs-selected-tab-bottom-border-color: $base-accent !default;
 
 /**
 * $name 40. Tab background color
 * $type color
 */
-$tabs-tab-bg: null !default;
-$tabs-tab-icon-color: null !default;
-$tabs-tab-icon-selected-color: null !default;
-$tabs-tab-button-disabled-opacity: null !default;
+$tabs-tab-bg: darken($base-bg, 3%) !default;
+$tabs-tab-icon-color: $tabs-tab-color !default;
+$tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
+$tabs-tab-button-disabled-opacity: 0 !default;
 
 /**
 * $name 50. Hovered tab background color
@@ -39,35 +39,10 @@ $tabs-tab-button-disabled-opacity: null !default;
 $tabs-hovered-tab-bg-color: null !default;
 
 @if $mode == "light" {
-
-  $tabs-tab-color: color.change($base-text-color, $alpha: 0.54) !default;
-
-  $tabs-tab-selected-color: $base-accent !default;
-
-  $tabs-selected-tab-bottom-border-color: $base-accent !default;
-
-  $tabs-tab-bg: darken($base-bg, 3%) !default;
-
-  $tabs-tab-icon-color: $tabs-tab-color !default;
-  $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
-  $tabs-tab-button-disabled-opacity: 0 !default;
-
   $tabs-hovered-tab-bg-color: darken($base-bg, 7%) !default;
 }
 
 @if $mode == "dark" {
-
-  $tabs-tab-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $tabs-tab-icon-color: $tabs-tab-color !default;
-
-  $tabs-tab-selected-color: $base-accent !default;
-  $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
-  $tabs-tab-button-disabled-opacity: 0 !default;
-
-  $tabs-selected-tab-bottom-border-color: $base-accent !default;
-
-  $tabs-tab-bg: darken($base-bg, 3%) !default;
-
   $tabs-hovered-tab-bg-color: lighten($base-bg, 7%) !default;
 }
 

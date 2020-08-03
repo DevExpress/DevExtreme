@@ -106,7 +106,7 @@ describe('CheckBox', () => {
 
     it('should pass all necessary properties to the Widget', () => {
       const renderOptions = {
-        aria: 'area',
+        aria: { role: 'aria' },
         onActive: (): null => null,
         onInactive: (): null => null,
         onFocusIn: (): null => null,
@@ -157,12 +157,14 @@ describe('CheckBox', () => {
         it('should call "onContentReady" callback with the widget root node', () => {
           const onContentReady = jest.fn();
           const checkBox = new CheckBox({ onContentReady });
-          const node = {};
-          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-          checkBox.widgetRef = node as any;
           checkBox.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({ element: node });
+          expect(onContentReady).toHaveBeenCalledWith({});
+        });
+
+        it('should not raise any error if contentReady is not defined', () => {
+          const checkBox = new CheckBox({ onContentReady: undefined });
+          expect(checkBox.contentReadyEffect.bind(checkBox)).not.toThrow();
         });
       });
 
@@ -229,10 +231,20 @@ describe('CheckBox', () => {
               const checkBox = new CheckBox({
                 value: false,
               });
-
-              // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-              checkBox.onWidgetClick({ stopPropagation: jest.fn() } as any);
+              checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(true);
+            });
+
+            it('should call saveValueChangeEvent by Widget click', () => {
+              const saveValueChangeEvent = jest.fn();
+              const checkBox = new CheckBox({
+                saveValueChangeEvent,
+                value: false,
+              });
+              const event = {} as Event;
+              checkBox.onWidgetClick(event);
+              expect(saveValueChangeEvent).toBeCalled();
+              expect(saveValueChangeEvent).toBeCalledWith(event);
             });
 
             it('should not change value by Widget click of readOnly is true', () => {
@@ -240,8 +252,7 @@ describe('CheckBox', () => {
                 value: false,
                 readOnly: true,
               });
-              // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-              checkBox.onWidgetClick({ stopPropagation: jest.fn() } as any);
+              checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(false);
             });
           });

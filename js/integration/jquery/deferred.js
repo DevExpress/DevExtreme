@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import { setStrategy } from '../../core/utils/deferred';
 import { compare as compareVersion } from '../../core/utils/version';

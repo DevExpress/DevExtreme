@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as RowView } from '../row';
 
@@ -15,9 +15,9 @@ describe('RowBase', () => {
     }) as any);
 
     it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(row.prop('customAttribute'))
+      expect(row.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

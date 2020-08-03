@@ -15,7 +15,7 @@ export const viewFunction = ({ text, htmlRef }: InfoText) => (
 
 @ComponentBindings()
 export class InfoTextProps {
-  @OneWay() infoText?: string;
+  @OneWay() infoText?: string = '';
 
   @OneWay() pageCount?: number = 10;
 

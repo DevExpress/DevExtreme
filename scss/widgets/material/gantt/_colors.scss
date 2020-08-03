@@ -5,20 +5,23 @@
 
 // adduse
 
-
 $gantt-collapsable-row-bg: null !default;
-$gantt-icon-color: null !default;
+$gantt-icon-color: $datagrid-columnchooser-item-color !default;
+$gantt-parent-task-background-color: null !default;
 
+@if $color == "lime" {
+  $gantt-parent-task-background-color: #f44336 !default;
+}
+
+@if $color == "blue" or $color == "orange" or $color == "purple" or $color == "teal" {
+  $gantt-parent-task-background-color: #8bc34a !default;
+}
 
 @if $mode == "light" {
-
   $gantt-collapsable-row-bg: darken($base-bg, 5%) !default;
-  $gantt-icon-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $mode == "dark" {
-
   $gantt-collapsable-row-bg: lighten($base-bg, 5%) !default;
-  $gantt-icon-color: $datagrid-columnchooser-item-color !default;
 }
 

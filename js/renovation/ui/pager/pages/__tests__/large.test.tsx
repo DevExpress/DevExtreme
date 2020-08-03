@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { PagesLarge, viewFunction as PagesLargeComponent } from '../large';
 import { Page } from '../page';
@@ -15,11 +15,11 @@ describe('View', () => {
       page2,
     ];
     const tree = shallow(<PagesLargeComponent {...{ pages } as any} /> as any);
-    expect(tree.find(Page).at(0).props()).toEqual({ children: [], ...page1.pageProps });
+    expect(tree.find(Page).at(0).props()).toEqual({ ...page1.pageProps });
     expect(tree.find(Page).at(0).key()).toBe('0');
     expect(tree.childAt(1).html()).toBe('<div class="dx-separator">. . .</div>');
     expect(tree.childAt(1).key()).toBe('low');
-    expect(tree.find(Page).at(1).props()).toEqual({ children: [], ...page2.pageProps });
+    expect(tree.find(Page).at(1).props()).toEqual({ ...page2.pageProps });
     expect(tree.find(Page).at(1).key()).toBe('1');
   });
 });

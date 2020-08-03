@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../small';
 import getElementComputedStyle from '../../utils/get_computed_style';
@@ -23,7 +23,6 @@ describe('Pager size selector', () => {
     } as Partial<PageSizeSmall>;
     const tree = shallow(<PageSizeSmallComponent {...props as any} /> as any);
     expect(tree.props()).toEqual({
-      children: [],
       displayExpr: 'text',
       valueExpr: 'value',
       dataSource: [{ text: '5', value: 5 }, { text: '10', value: 10 }],

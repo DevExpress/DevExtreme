@@ -8,14 +8,4 @@
 * $name 80. Search icon color
 * $type color
 */
-$textbox-search-icon-color: null !default;
-
-
-@if $mode == "light" {
-  $textbox-search-icon-color: $base-icon-color !default;
-}
-
-@if $mode == "dark" {
-  $textbox-search-icon-color: $base-icon-color !default;
-}
-
+$textbox-search-icon-color: $base-icon-color !default;

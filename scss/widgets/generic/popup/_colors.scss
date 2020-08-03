@@ -9,103 +9,58 @@
 * $type color
 */
 $popup-title-bg: null !default;
-$popup-title-color: null !default;
-$popup-title-border-color: null !default;
 $popup-bottom-bg: null !default;
-$popup-bottom-color: null !default;
+$popup-title-color: $base-text-color !default;
+$popup-title-border-color: $base-border-color !default;
+$popup-bottom-color: $base-text-color !default;
 $popup-border-radius: null !default;
 
 
 @if $color == "carmine" {
-
   $popup-title-bg: transparent !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
-
   $popup-border-radius: $base-border-radius-large !default;
 }
 
 @if $color == "contrast" {
-
   $popup-title-bg: $base-bg !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
-
   $popup-border-radius: $base-border-radius + 2px !default;
 }
 
 @if $color == "dark" {
-
   $popup-title-bg: transparent !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
-
   $popup-border-radius: $base-border-radius-large !default;
 }
 
 @if $color == "darkmoon" {
-
   $popup-title-bg: transparent !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
-
   $popup-border-radius: $base-border-radius-large !default;
 }
 
 @if $color == "darkviolet" {
-
   $popup-title-bg: transparent !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
-
   $popup-border-radius: $base-border-radius-large !default;
 }
 
 @if $color == "greenmist" {
-
   $popup-title-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
-
   $popup-border-radius: $base-border-radius-large !default;
 }
 
 @if $color == "light" {
-
   $popup-title-bg: transparent !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
-
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
   $popup-border-radius: $base-border-radius-large !default;
 }
 
 @if $color == "softblue" {
-
   $popup-title-bg: transparent !default;
-  $popup-title-color: $base-text-color !default;
-  $popup-title-border-color: $base-border-color !default;
   $popup-bottom-bg: $popup-title-bg !default;
-  $popup-bottom-color: $base-text-color !default;
   $popup-border-radius: $base-border-radius-large !default;
 }
 

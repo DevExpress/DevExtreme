@@ -12,6 +12,15 @@
             {
                 "patterns": ["*.js"]
             }
-        ]
+        ],
+        "no-restricted-imports": [ "error", {
+            "paths": [
+                { "name": "jquery"},
+                { "name": "angular"},
+                { "name": "knockout"},
+                { "name": "globalize"}
+            ],
+            "patterns": ["jquery/*", "angular/*", "knockout/*", "globalize/*"]
+        }]
     }
 }

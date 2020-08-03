@@ -4,7 +4,7 @@ const getCacheKey = require('./get_cache_key');
 
 const THIS_FILE = fs.readFileSync(__filename);
 const jestTransformer = tsJest.createTransformer();
-const addCreateElementImport = (src) => `import { h } from 'preact'; ${src}`;
+const addCreateElementImport = (src) => `import React from 'react'; ${src}`;
 
 module.exports = {
     process(src, filename, config) {

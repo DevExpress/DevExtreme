@@ -1,6 +1,7 @@
 import eventRegistratorCallbacks from '../../events/core/event_registrator_callbacks';
 import eventsEngine from '../../events/core/events_engine';
 import ngModule from './module';
+// eslint-disable-next-line no-restricted-imports
 import angular from 'angular';
 
 if(angular) {
