@@ -9,11 +9,12 @@ import { getDatePartIndexByPosition, renderDateParts } from './ui.date_box.mask.
 import dateLocalization from '../../localization/date';
 import { getRegExpInfo } from '../../localization/ldml/date.parser';
 import { getFormat } from '../../localization/ldml/date.format';
-import { isString } from '../../core/utils/type';
+import { isString, isDate } from '../../core/utils/type';
 import { sign } from '../../core/utils/math';
 import DateBoxBase from './ui.date_box.base';
 import numberLocalization from '../../localization/number';
 import devices from '../../core/devices';
+import browser from '../../core/utils/browser';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
@@ -129,23 +130,37 @@ const DateBoxMask = DateBoxBase.inherit({
         return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
     },
 
+    isSingleDigitKey(e) {
+        const data = e.originalEvent?.data;
+        return data?.length === 1 && parseInt(data);
+    },
+
     _useBeforeInputEvent: function() {
         const device = devices.real();
         return device.android && device.version[0] > 4;
     },
 
     _keyboardHandler(e) {
-        const key = e.originalEvent.key;
+        let key = e.originalEvent.key;
 
         const result = this.callBase(e);
 
-        if(!this._useMaskBehavior() || this._useBeforeInputEvent() || !this._isSingleCharKey(e)) {
-            return result;
+        if((browser.chrome) && e.key === 'Process' && e.code.indexOf('Digit') === 0) {
+            key = e.code.replace('Digit', '');
+            this._processInputKey(key);
+            this._maskInputHandler = () => {
+                this._renderSelectedPart();
+            };
+        } else {
+            if(!this._useMaskBehavior() || this._useBeforeInputEvent() || !this._isSingleCharKey(e)) {
+                return result;
+            }
+
+            this._processInputKey(key);
+
+            e.originalEvent.preventDefault();
         }
 
-        this._processInputKey(key);
-
-        e.originalEvent.preventDefault();
 
         return result;
     },
@@ -157,8 +172,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
         if(inputType === 'insertCompositionText') {
             this._maskInputHandler = () => {
-                this._renderDisplayText(this._getDisplayedText(this._maskValue));
-                this._selectNextPart();
+                this._renderSelectedPart();
             };
         }
 
@@ -183,6 +197,11 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _keyPressHandler(e) {
+        if(e.originalEvent && e.originalEvent.inputType === 'insertCompositionText' && this.isSingleDigitKey(e)) {
+            this._processInputKey(e.originalEvent.data);
+            this._renderDisplayText(this._getDisplayedText(this._maskValue));
+            this._selectNextPart();
+        }
         this.callBase(e);
 
         if(this._maskInputHandler) {
@@ -356,13 +375,19 @@ const DateBoxMask = DateBoxBase.inherit({
         eventsEngine.on(this._input(), addNamespace('dxclick', MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
         eventsEngine.on(this._input(), addNamespace('paste', MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
         eventsEngine.on(this._input(), addNamespace('drop', MASK_EVENT_NAMESPACE), () => {
-            this._renderDisplayText(this._getDisplayedText(this._maskValue));
-            this._selectNextPart();
+            this._renderSelectedPart();
         });
+
+        eventsEngine.on(this._input(), 'compositionend', this._maskCompositionEndHandler.bind(this));
 
         if(this._useBeforeInputEvent()) {
             eventsEngine.on(this._input(), addNamespace('beforeinput', MASK_EVENT_NAMESPACE), this._maskBeforeInputHandler.bind(this));
         }
+    },
+
+    _renderSelectedPart() {
+        this._renderDisplayText(this._getDisplayedText(this._maskValue));
+        this._selectNextPart();
     },
 
     _selectLastPart() {
@@ -523,11 +548,26 @@ const DateBoxMask = DateBoxBase.inherit({
         }
     },
 
+    _maskCompositionEndHandler(e) {
+        if(browser.msie && this.isSingleDigitKey(e)) {
+            const key = e.originalEvent.data;
+            this._processInputKey(key);
+
+        } else {
+            this._input().val(this._getDisplayedText(this._maskValue));
+            this._selectNextPart();
+
+            this._maskInputHandler = () => {
+                this._renderSelectedPart();
+            };
+        }
+    },
+
     _maskPasteHandler(e) {
         const newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
         const date = dateLocalization.parse(newText, this._getFormatPattern());
 
-        if(date) {
+        if(date && this._isDateValid(date)) {
             this._maskValue = date;
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._renderDateParts();
@@ -535,6 +575,10 @@ const DateBoxMask = DateBoxBase.inherit({
         }
 
         e.preventDefault();
+    },
+
+    _isDateValid(date) {
+        return isDate(date) && !isNaN(date);
     },
 
     _isValueDirty() {
