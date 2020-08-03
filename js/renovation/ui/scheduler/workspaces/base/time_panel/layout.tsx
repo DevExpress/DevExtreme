@@ -3,6 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
+import { CellBase } from '../cell';
 import { getKeyByDateAndGroup, getIsGroupedAllDayPanel } from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
@@ -15,9 +16,17 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
     className={`dx-scheduler-time-panel ${viewModel.props.className}`}
   >
     {viewModel.props.viewData!
-      .groupedData.map(({ dateTable }) => (
-        <Fragment>
-          { getIsGroupedAllDayPanel(viewModel.props.viewData!) && <Row><AllDayPanelTitle /></Row> }
+      .groupedData.map(({ dateTable }, groupIndex) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Fragment key={groupIndex}>
+          { getIsGroupedAllDayPanel(viewModel.props.viewData!)
+          && (
+          <Row>
+            <CellBase className="dx-scheduler-time-panel-title-cell">
+              <AllDayPanelTitle />
+            </CellBase>
+          </Row>
+          )}
           {
             dateTable.map((cellsRow, index) => {
               const isFirstCell = index === 0;
@@ -33,7 +42,6 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
                     text={cellsRow[0].text}
                     isFirstCell={isFirstCell}
                     isLastCell={isLastCell}
-                    key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
                   />
                 </Row>
               );

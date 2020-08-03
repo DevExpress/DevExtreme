@@ -1,39 +1,35 @@
-import { h } from 'preact';
-import { mount } from 'enzyme';
+import React from 'react';
+import { mount, ReactWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
-import { getIsGroupedAllDayPanel } from '../../../utils';
+import * as utilsModule from '../../../utils';
 import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
-}));
-jest.mock('../../../utils', () => ({
-  ...require.requireActual('../../../utils'),
-  getIsGroupedAllDayPanel: jest.fn(),
-}));
+const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
 
 describe('TimePanelLayout', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{
         dateTable: [
-          [{ startDate: new Date(2020, 6, 9, 0), text: '0:00 AM' }, { startDate: new Date(2020, 6, 9, 1), text: '0:00 AM' }],
-          [{ startDate: new Date(2020, 6, 9, 1), text: '1:00 AM' }, { startDate: new Date(2020, 6, 9, 2), text: '1:00 AM' }],
+          [{ startDate: new Date(2020, 6, 9, 1), text: '0:00 AM' }, { startDate: new Date(2020, 6, 9, 2), text: '0:00 AM' }],
+          [{ startDate: new Date(2020, 6, 9, 3), text: '1:00 AM' }, { startDate: new Date(2020, 6, 9, 4), text: '1:00 AM' }],
         ],
       }],
     };
-    const render = (viewModel) => mount(LayoutView({
+    const render = (viewModel): ReactWrapper => mount(<LayoutView {...{
       ...viewModel,
       props: { viewData, ...viewModel.props },
-    }) as any);
+    }}
+    />);
 
-    afterEach(() => jest.resetAllMocks());
+    beforeEach(() => getIsGroupedAllDayPanel.mockClear());
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
+      const layout = render(
+        { restAttributes: { 'custom-attribute': 'customAttribute' } },
+      ).childAt(0);
 
       expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
@@ -92,10 +88,10 @@ describe('TimePanelLayout', () => {
           viewData: {
             groupedData: [{
               dateTable: [
-                [{ startDate: new Date(2020, 6, 9, 0), text: '0:00 AM' }],
-                [{ startDate: new Date(2020, 6, 9, 1), text: '1:00 AM' }],
-                [{ startDate: new Date(2020, 6, 9, 2), text: '2:00 AM' }],
-                [{ startDate: new Date(2020, 6, 9, 3), text: '3:00 AM' }],
+                [{ startDate: new Date(2020, 6, 9, 1), text: '0:00 AM' }],
+                [{ startDate: new Date(2020, 6, 9, 2), text: '1:00 AM' }],
+                [{ startDate: new Date(2020, 6, 9, 3), text: '2:00 AM' }],
+                [{ startDate: new Date(2020, 6, 9, 4), text: '3:00 AM' }],
               ],
             }],
           },
@@ -141,11 +137,12 @@ describe('TimePanelLayout', () => {
 
     [true, false].forEach((mockValue) => {
       it(`AllDayPanelTitle if groupedAllDayPanel=${mockValue}`, () => {
-        (getIsGroupedAllDayPanel as jest.Mock).mockReturnValueOnce(mockValue);
+        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
         const layout = render({ });
+        const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
 
-        expect(layout.find(AllDayPanelTitle).exists())
+        expect(titleCell.find(AllDayPanelTitle).exists())
           .toBe(mockValue);
       });
     });

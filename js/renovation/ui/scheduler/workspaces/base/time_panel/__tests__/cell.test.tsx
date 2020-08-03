@@ -1,24 +1,20 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as CellView } from '../cell';
-
-jest.mock('../../cell', () => ({
-  ...require.requireActual('../../cell'),
-  CellBase: (props) => <div {...props} />,
-}));
 
 describe('TimePanelCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9, 9);
     const text = 'Some Text';
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel) => shallow(<CellView {...{
       ...viewModel,
       props: {
         ...viewModel.props,
         startDate,
         text,
       },
-    }) as any);
+    }}
+    />);
 
     it('should spread restAttributes', () => {
       const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });

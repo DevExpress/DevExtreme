@@ -25,8 +25,8 @@ export const addHeightToStyle = (
 };
 
 export const getGroupCellClasses = (
-  isFirstCell: boolean,
-  isLastCell: boolean,
+  isFirstCell: boolean | undefined = false,
+  isLastCell: boolean | undefined = false,
   className = '',
 ): string => combineClasses({
   'dx-scheduler-first-group-cell': isFirstCell,

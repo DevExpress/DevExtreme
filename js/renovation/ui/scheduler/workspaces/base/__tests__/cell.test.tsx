@@ -1,5 +1,5 @@
-import { h } from 'preact';
-import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
 import {
   viewFunction as CellView, CellBase,
 } from '../cell';
@@ -12,10 +12,10 @@ jest.mock('../../utils', () => ({
 
 describe('DateTableCellBase', () => {
   describe('Render', () => {
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel): ShallowWrapper => shallow(CellView({
       ...viewModel,
       props: { ...viewModel.props },
-    }) as any);
+    }));
 
     it('should spread restAttributes', () => {
       const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });

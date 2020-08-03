@@ -11,8 +11,9 @@ export const viewFunction = (viewModel: DateTableBody) => (
   <Fragment>
     {
     viewModel.props.viewData!
-      .groupedData.map(({ dateTable, allDayPanel }) => (
-        <Fragment>
+      .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Fragment key={groupIndex}>
           {
             getIsGroupedAllDayPanel(viewModel.props.viewData!)
               && <AllDayPanelTableBody viewData={allDayPanel} />

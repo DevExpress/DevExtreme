@@ -2,21 +2,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TableBodyView } from '../table_body';
 import { DateTableRow as Row } from '../row';
+import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
 
 const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
-}));
-jest.mock('../row', () => ({
-  ...require.requireActual('../row'),
-  DateTableRow: ({ children }) => <div>{children}</div>,
-}));
-jest.mock('../all_day_panel/table_body', () => ({
-  ...require.requireActual('../all_day_panel/table_body'),
-  AllDayPanelTableBody: (props) => <div {...props} />,
-}));
+const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
 
 describe('DateTableBody', () => {
   describe('Render', () => {
@@ -41,7 +31,10 @@ describe('DateTableBody', () => {
     }}
     />);
 
-    beforeEach(() => getKeyByDateAndGroup.mockClear());
+    beforeEach(() => {
+      getKeyByDateAndGroup.mockClear();
+      getIsGroupedAllDayPanel.mockClear();
+    });
 
     it('should render rows', () => {
       const rows = render({}).find(Row);
@@ -129,10 +122,10 @@ describe('DateTableBody', () => {
       expect(tableBody.find(AllDayPanelTableBody).exists())
         .toBe(true);
 
-      expect(getIsGroupedAllDayPanel)
+      expect(utilsModule.getIsGroupedAllDayPanel)
         .toHaveBeenCalledTimes(1);
 
-      expect(getIsGroupedAllDayPanel)
+      expect(utilsModule.getIsGroupedAllDayPanel)
         .toHaveBeenNthCalledWith(
           1,
           viewData,
