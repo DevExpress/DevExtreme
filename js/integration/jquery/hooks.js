@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import useJQueryFn from './use_jquery';
 const useJQuery = useJQueryFn();
