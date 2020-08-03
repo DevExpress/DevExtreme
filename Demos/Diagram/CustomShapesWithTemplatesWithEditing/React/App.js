@@ -170,7 +170,7 @@ class App extends React.Component {
       <div id="container">
         <Diagram id="diagram" ref={this.diagramRef} customShapeRender={this.customShapeTemplate} customShapeToolboxRender={this.customShapeToolboxTemplate}>
           <CustomShape type="employee" baseType="rectangle" category="employee"
-            defaultWidth={1.5} defaultHeight={1} toolboxWidth={2} toolboxHeight={1}
+            defaultWidth={1.5} defaultHeight={1} toolboxWidthToHeightRatio={2}
             minWidth={1.5} minHeight={1} maxWidth={3} maxHeight={2}
             allowEditText={false} />
           <Nodes dataSource={this.dataSource} keyExpr="ID" typeExpr={this.itemTypeExpr} customDataExpr={this.itemCustomDataExpr} parentKeyExpr="Head_ID">
