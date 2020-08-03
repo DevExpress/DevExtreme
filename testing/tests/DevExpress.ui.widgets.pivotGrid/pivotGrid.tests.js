@@ -5879,7 +5879,7 @@ QUnit.module('Vertical headers', {
 
                 const containerWidth = grid._dataArea.element().find('.dx-pivotgrid-area-data').get(0).getBoundingClientRect().width;
                 const tableWidth = grid._dataArea.element().find('table').last().get(0).getBoundingClientRect().width;
-                assert.roughEqual(containerWidth, tableWidth, 0.1, `containerWidth = ${containerWidth}, tableWidth=${tableWidth}`);
+                assert.roughEqual(containerWidth, tableWidth, 0.03, `containerWidth = ${containerWidth}, tableWidth=${tableWidth}`);
             });
         });
     });
