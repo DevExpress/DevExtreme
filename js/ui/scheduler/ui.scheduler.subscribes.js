@@ -41,7 +41,7 @@ const subscribes = {
         return this.getWorkSpace().isGroupedByDate();
     },
 
-    showAppointmentTooltip: function(options) { // TODO:
+    showAppointmentTooltip: function(options) {
         const targetedAppointment = this.getTargetedAppointment(options.data, options.target);
         this.showAppointmentTooltip(options.data, options.target, targetedAppointment);
     },
@@ -50,27 +50,19 @@ const subscribes = {
         this.hideAppointmentTooltip();
     },
 
-    showAddAppointmentPopup: function(appointmentData) {
-        const processedData = {};
+    showAddAppointmentPopup: function(cellData) {
+        const appointmentAdapter = this.createAppointmentAdapter({});
 
-        each(['startDate', 'endDate', 'allDay'], (function(_, field) {
-            if(appointmentData[field] !== undefined) {
-                this.fire('setField', field, processedData, appointmentData[field]);
-                delete appointmentData[field];
-            }
-        }).bind(this));
+        appointmentAdapter.allDay = cellData.allDay;
+        appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
+        appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
 
-        this.showAppointmentPopup(extend(processedData, appointmentData), true);
+        this.showAppointmentPopup(appointmentAdapter.source(), true);
     },
 
-    showEditAppointmentPopup: function(options) { // TODO: rename
-        const appointmentData = options.data;
-
-        options.$appointment = $(options.target);
-        options.skipHoursProcessing = true; // TODO
-
-        const targetedData = this._getAppointmentData(appointmentData, options);
-        this.showAppointmentPopup(appointmentData, false, targetedData);
+    showEditAppointmentPopup: function(options) {
+        const targetedData = this.getTargetedAppointment(options.data, options.target);
+        this.showAppointmentPopup(options.data, false, targetedData);
     },
 
     updateAppointmentAfterResize: function(options) {
@@ -83,24 +75,6 @@ const subscribes = {
             });
         }).bind(this));
     },
-
-    // updateAppointmentAfterResize: function(options) {
-    //     const targetAppointment = options.target;
-
-    //     options.isAppointmentResized = true;
-
-    //     const targetedData = this._getAppointmentData(targetAppointment, options);
-    //     const startDate = this.fire('getField', 'startDate', targetedData);
-    //     const updatedData = extend(true, {}, options.data);
-
-    //     this._convertDatesByTimezoneBack(true, updatedData);
-
-    //     this._checkRecurringAppointment(targetAppointment, targetedData, startDate, (function() {
-    //         this._updateAppointment(targetAppointment, updatedData, function() {
-    //             this._appointments.moveAppointmentBack();
-    //         });
-    //     }).bind(this));
-    // },
 
     getUpdatedData: function(options) {
         return this._getUpdatedData({ data: options.data });
@@ -410,9 +384,8 @@ const subscribes = {
         return this._workSpace._getGroupCount();
     },
 
-    mapAppointmentFields: function(config) { // TODO
+    mapAppointmentFields: function(config) {
         const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
-        // const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
 
         return {
             appointmentData: config.itemData,

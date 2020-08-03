@@ -1,4 +1,3 @@
-// import translator from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import config from '../../core/config';
 import devices from '../../core/devices';
@@ -1084,22 +1083,6 @@ class Scheduler extends Widget {
         return timeZoneUtils.calculateTimezoneByValue(this.option('timeZone'), date);
     }
 
-    getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData) { // TODO: remove
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-        const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimeZone);
-        const needCheckTimezoneOffset = isDefined(startDateTimeZone) && isDefined(this._getTimezoneOffsetByOption(originalStartDate));
-
-        if(needCheckTimezoneOffset) {
-            dates = dates.map((date) => {
-                const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
-
-                return timeZoneUtils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
-            });
-        }
-
-        return dates;
-    }
-
     _filterAppointmentsByDate() {
         const dateRange = this._workSpace.getDateRange();
         this._appointmentModel.filterByDate(dateRange[0], dateRange[1], this.option('remoteFiltering'), this.option('dateSerializationFormat'));
@@ -2178,7 +2161,6 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointmentData);
 
         const recurrenceRule = adapter.recurrenceRule;
-        // const recurrenceException = this._getRecurrenceException2(appointmentData);
         const dateRange = this._workSpace.getDateRange();
         let allDay = this.appointmentTakesAllDay(appointmentData);
 
@@ -2192,9 +2174,7 @@ class Scheduler extends Widget {
 
         const recurrenceOptions = {
             rule: recurrenceRule,
-            // exception: recurrenceException, // TODO
             exception: adapter.recurrenceException,
-            // start: originalStartDate || adapter.startDate, // TODO:
             start: adapter.startDate,
             end: adapter.endDate,
             min: minRecurrenceDate,
@@ -2236,11 +2216,6 @@ class Scheduler extends Widget {
         });
 
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, appointmentData);
-
-        // recurrenceDates = this.getCorrectedDatesByDaylightOffsets(adapter.startDate, recurrenceDates, appointment); // TODO:
-        // initialDates = recurrenceDates;
-        //
-        //
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
             let longParts = [];
@@ -2705,7 +2680,7 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) {
-        const singleAppointment = currentAppointmentData || this._getAppointmentData(appointmentData, { skipDateCalculation: true });
+        const singleAppointment = currentAppointmentData || this._getAppointmentData(appointmentData, { skipDateCalculation: true }); // TODO:
         const adapter = this.createAppointmentAdapter(currentAppointmentData || appointmentData);
 
         this._checkRecurringAppointment(appointmentData, singleAppointment, adapter.startDate, function() {

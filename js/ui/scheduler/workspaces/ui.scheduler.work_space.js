@@ -1319,18 +1319,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         const firstCellData = this.getCellData($cell.first());
         const lastCellData = this.getCellData($cell.last());
 
-        const args = {
-            startDate: this.invoke('convertDateByTimezoneBack', firstCellData.startDate) || firstCellData.startDate,
-            endDate: this.invoke('convertDateByTimezoneBack', lastCellData.endDate) || lastCellData.endDate
-        };
+        const data = extend({
+            startDate: firstCellData.startDate,
+            endDate: lastCellData.endDate,
+            allDay: lastCellData.allDay
+        }, lastCellData.groups);
 
-        if(isDefined(lastCellData.allDay)) {
-            args.allDay = lastCellData.allDay;
-        }
-
-        extend(args, lastCellData.groups);
-
-        this.notifyObserver('showAddAppointmentPopup', args);
+        this.notifyObserver('showAddAppointmentPopup', data);
     }
 
     _attachContextMenuEvent() {

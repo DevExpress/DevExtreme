@@ -190,18 +190,9 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    // _getAppointmentCoordinates(itemData) {
-    //     return this.instance.fire('createAppointmentSettings', {
-    //         startDate: this.startDate(itemData),
-    //         originalStartDate: this.startDate(itemData, true),
-    //         appointmentData: itemData,
-    //     });
-    // }
-
     _getAppointmentCoordinates(appointmentData) {
         return this.instance.fire('createAppointmentSettings', {
-            appointmentData: appointmentData,
-            // originalStartDate: this.startDate(appointmentData, true),
+            appointmentData: appointmentData
         });
     }
 
