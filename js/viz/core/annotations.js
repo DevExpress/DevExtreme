@@ -343,9 +343,15 @@ const vectorMapPlugin = {
             return isDefined(options.coordinates);
         },
         _pullOptions(options) {
-            return extend({}, {
+            const vectorMapOptions = extend({}, {
                 coordinates: options.coordinates
             }, chartPlugin.members._pullOptions(options));
+
+            delete vectorMapOptions.axis;
+            delete vectorMapOptions.series;
+            delete vectorMapOptions.argument;
+            delete vectorMapOptions.value;
+            return vectorMapOptions;
         },
         _forceAnnotationRender() {
             this._change(['EXTRA_ELEMENTS']);
