@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import { compare as compareVersions } from '../core/utils/version';
 import errors from '../core/utils/error';
