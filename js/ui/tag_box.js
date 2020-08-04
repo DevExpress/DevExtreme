@@ -164,13 +164,6 @@ const TagBox = SelectBox.inherit({
         this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
     },
 
-    _renderTemplatedField: function(data, fieldTemplate) {
-        this.callBase(data, fieldTemplate);
-
-        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
-        this._renderTagRemoveAction();
-    },
-
     _allowSelectItemByTab: function() {
         return false;
     },
@@ -938,6 +931,12 @@ const TagBox = SelectBox.inherit({
         }, this);
 
         return selectedItems;
+    },
+
+    _integrateInput: function($input) {
+        this.callBase($input);
+        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {
