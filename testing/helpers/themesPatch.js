@@ -1,8 +1,10 @@
 
-import themes from 'ui/themes';
+// import themes from 'ui/themes';
 
-themes.setDefaultTimeout(0);
+// themes.setDefaultTimeout(0);
 
-QUnit.moduleStart(function() {
-    return new Promise((resolve) => themes.initialized(resolve));
-});
+// QUnit.testStart(function() {
+//     return new Promise((resolve) => themes.initialized(() => {
+//         resolve();
+//     }));
+// });
