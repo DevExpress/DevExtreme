@@ -176,7 +176,6 @@ QUnit.module('All images are defined with data-uri and will be inlined', () => {
 
 QUnit.module('dx-theme changing', () => {
     test('Themes functions return right value after themes switching', function(assert) {
-        const done = assert.async();
         const genericThemeName = 'generic.light';
         const materialThemeName = 'material.blue.light';
         const linksContainer = $('<div>').addClass('links-container').appendTo('body');
@@ -192,28 +191,24 @@ QUnit.module('dx-theme changing', () => {
         linksContainer.append('<link rel=\'dx-theme\' href=\'style2.css\' data-theme=\'' + materialThemeName + '\' />');
         linksContainer.append('<link rel=\'dx-theme\' href=\'style1.css\' data-theme=\'' + genericThemeName + '\' />');
 
-        themes.initialized(() => {
-            assert.ok(themes.isMaterial(), 'isMaterial is true after material theme init');
-            assert.notOk(themes.isGeneric(), 'isGeneric is false after material theme init');
-
-            themes.current(genericThemeName);
-            assert.ok(themes.isGeneric(), 'isGeneric after activate generic theme');
-            assert.notOk(themes.isMaterial(), 'isMaterial is false after generic theme init');
-            themes.resetTheme();
-            assert.notOk(themes.isGeneric(), 'isGeneric is false after reset');
-
-            $.each(testThemes, function(_, themeData) {
-                const anotherThemeName = themeData.anotherThemeName || genericThemeName;
-                assert.ok(themes[themeData.functionName](themeData.themeName), themeData.functionName + ' with ' + themeData.themeName + ' argument');
-                assert.notOk(themes[themeData.functionName](anotherThemeName), themeData.functionName + ' with ' + anotherThemeName + ' argument');
-            });
-
-            linksContainer.remove();
-            done();
-        });
-
         themes.init({ context: window.document, theme: materialThemeName });
 
+        assert.ok(themes.isMaterial(), 'isMaterial is true after material theme init');
+        assert.notOk(themes.isGeneric(), 'isGeneric is false after material theme init');
+
+        themes.current(genericThemeName);
+        assert.ok(themes.isGeneric(), 'isGeneric after activate generic theme');
+        assert.notOk(themes.isMaterial(), 'isMaterial is false after generic theme init');
+        themes.resetTheme();
+        assert.notOk(themes.isGeneric(), 'isGeneric is false after reset');
+
+        $.each(testThemes, function(_, themeData) {
+            const anotherThemeName = themeData.anotherThemeName || genericThemeName;
+            assert.ok(themes[themeData.functionName](themeData.themeName), themeData.functionName + ' with ' + themeData.themeName + ' argument');
+            assert.notOk(themes[themeData.functionName](anotherThemeName), themeData.functionName + ' with ' + anotherThemeName + ' argument');
+        });
+
+        linksContainer.remove();
     });
 
     test('Themes functions return right value if theme file loaded after ready event (T666366)', function(assert) {
@@ -482,8 +477,9 @@ QUnit.module('dx-theme links', (hooks) => {
         });
     });
 
-    test('current theme name is null if without any links', function(assert) {
+    test('current theme name is null if without any links (first load)', function(assert) {
         const done = assert.async();
+        themes.resetTheme();
         themes.init({ context: frameDoc(), _autoInit: true });
         assert.strictEqual(themes.current(), null);
         themes.ready(done);

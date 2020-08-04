@@ -113,9 +113,15 @@ function isPendingThemeLoaded() {
         return true;
     }
 
+    const anyThemePending = pendingThemeName === ANY_THEME;
+
+    if(inited && anyThemePending) {
+        return true;
+    }
+
     const themeMarker = readThemeMarker();
 
-    if(pendingThemeName === ANY_THEME && themeMarker) {
+    if(themeMarker && anyThemePending) {
         return true;
     }
 

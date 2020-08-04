@@ -7,6 +7,8 @@
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
+    var themesPatch = Url.Content("~/testing/helpers/themesPatch.js");
+
     string GetJQueryUrl() {
         if(isNoJQueryTest)
             return Url.Content("~/testing/helpers/noJQuery.js");
@@ -260,6 +262,8 @@
         imports.push(new Promise(function(resolve) {
             jQuery(resolve);
         }));
+
+        imports.push(SystemJS.import("@themesPatch"));
 
         Promise.all(imports)
         .then(function() {
