@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
 import errors from '../../core/errors';

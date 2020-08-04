@@ -1385,6 +1385,40 @@ QUnit.module('placeholder', () => {
 
         assert.ok($placeholder.is(':visible'), 'placeholder is visible');
     });
+
+    QUnit.test('placeholder should not be visible after tag add when fieldTemplate is used (T918886)', function(assert) {
+        const fieldTemplate = () => {
+            return $('<div>').dxTextBox({
+                placeholder: 'placeholder'
+            });
+        };
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            fieldTemplate,
+            acceptCustomValue: true,
+            items: [],
+            onCustomItemCreating: function(args) {
+                const newValue = args.text;
+                const component = args.component;
+                const currentItems = component.option('items');
+                currentItems.unshift(newValue);
+                component.option('items', currentItems);
+                args.customItem = newValue;
+            }
+        });
+
+        const $input = $tagBox.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type('123')
+            .press('enter');
+        $input.trigger('blur');
+        $input.trigger('focusout');
+
+        const $placeholder = $tagBox.find('.dx-placeholder');
+        assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
+    });
 });
 
 QUnit.module('tag template', moduleSetup, () => {
@@ -3513,6 +3547,37 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual(instance.option('value'), ['test1', 'test2'], 'Correct value');
+    });
+
+    QUnit.testInActiveWindow('TagBox with selection controls shouldn\'t clear value when searchValue length becomes smaller then minSearchLength (T898390)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            searchEnabled: true,
+            minSearchLength: 3,
+            showSelectionControls: true,
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('111');
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.press('enter');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.deepEqual(instance.option('value'), [111], 'value is selected');
+
+        $input.focusout();
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.deepEqual(instance.option('value'), [111], 'value is not removed');
+        assert.strictEqual(instance.option('text'), '1', 'text is correct');
     });
 
     QUnit.test('load tags data should not raise an error after widget has been disposed', function(assert) {

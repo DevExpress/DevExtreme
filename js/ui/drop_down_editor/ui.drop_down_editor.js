@@ -357,6 +357,11 @@ const DropDownEditor = TextBox.inherit({
         this._renderFocusState();
     },
 
+    _refreshEmptinessEvent: function() {
+        eventsEngine.off(this._input(), 'input blur', this._toggleEmptinessEventHandler);
+        this._renderEmptinessEvent();
+    },
+
     _fieldRenderData: function() {
         return this.option('value');
     },
