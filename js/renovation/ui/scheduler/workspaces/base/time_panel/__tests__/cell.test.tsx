@@ -1,18 +1,20 @@
+import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as CellView } from '../cell';
 
-describe('TimePanelTableCell', () => {
+describe('TimePanelCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9, 9);
     const text = 'Some Text';
-    const render = (viewModel) => shallow(CellView({
+    const render = (viewModel) => shallow(<CellView {...{
       ...viewModel,
       props: {
         ...viewModel.props,
         startDate,
         text,
       },
-    }) as any);
+    }}
+    />);
 
     it('should spread restAttributes', () => {
       const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
@@ -33,10 +35,24 @@ describe('TimePanelTableCell', () => {
       expect(cell.hasClass('dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical'))
         .toBe(true);
 
-      expect(cell.hasClass('dx-scheduler-first-group-cell dx-scheduler-last-group-cell'))
-        .toBe(true);
-
       expect(cell.hasClass('test-class'))
+        .toBe(true);
+    });
+
+    it('should render props correctly', () => {
+      const cell = render({
+        props: {
+          className: 'some-class',
+          isFirstCell: true,
+          isLastCell: true,
+        },
+      });
+
+      expect(cell.prop('className'))
+        .toContain('some-class');
+      expect(cell.prop('isFirstCell'))
+        .toBe(true);
+      expect(cell.prop('isLastCell'))
         .toBe(true);
     });
   });
