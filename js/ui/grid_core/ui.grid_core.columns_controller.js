@@ -204,11 +204,7 @@ export default {
                         };
                     }
 
-                    const dataField = columnOptions.dataField;
-
-                    if(!isDefined(columnOptions.name) && isDefined(dataField)) {
-                        columnOptions.name = dataField;
-                    }
+                    that.setName(columnOptions);
 
                     let result = { };
                     if(columnOptions.command) {
@@ -2249,10 +2245,19 @@ export default {
                     }
                     return result;
                 },
+                setName: function(column) {
+                    const dataField = column.dataField;
+
+                    if(!isDefined(column.name) && isDefined(dataField)) {
+                        column.name = dataField;
+                    }
+                },
                 setUserState: function(state) {
                     const that = this;
                     const dataSource = that._dataSource;
                     let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
+
+                    state?.forEach(this.setName);
 
                     if(!ignoreColumnOptionNames) {
                         ignoreColumnOptionNames = [];

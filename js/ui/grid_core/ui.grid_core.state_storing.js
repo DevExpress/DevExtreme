@@ -182,13 +182,6 @@ export default {
                         extend(this._state, state);
                     }
                 },
-                _setNames: function(columns) {
-                    columns?.forEach(column => {
-                        if(!column.name && column.dataField) {
-                            column.name = column.dataField;
-                        }
-                    });
-                },
                 applyState: function(state) {
                     const that = this;
                     const allowedPageSizes = state.allowedPageSizes;
@@ -203,8 +196,6 @@ export default {
                     const showPageSizeSelector = that.option('pager.visible') === true && that.option('pager.showPageSizeSelector');
 
                     that.component.beginUpdate();
-
-                    that._setNames(state.columns);
 
                     if(columnsController) {
                         columnsController.setUserState(state.columns);
