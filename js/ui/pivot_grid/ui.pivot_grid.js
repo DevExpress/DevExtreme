@@ -1613,8 +1613,8 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
-            if(Math.abs(totalWidth - groupWidth) <= 2) { // T914454
-                const diff = totalWidth - groupWidth;
+            const diff = totalWidth - groupWidth;
+            if(diff >= 0 && diff <= 2) { // T914454
                 adjustSizeArray(resultWidths, diff);
                 totalWidth = groupWidth;
             }
