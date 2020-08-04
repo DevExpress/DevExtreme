@@ -130,7 +130,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok(dataGrid, 'dataGrid is created');
-        assert.deepEqual(dataGrid.option('columns'), ['field1', { dataField: 'field2' }], 'columns option is not changed');
+        assert.deepEqual(dataGrid.option('columns'), ['field1', { dataField: 'field2', name: 'field2' }], 'columns option is not changed');
     });
 
     QUnit.test('formatValue for grouped column with calculateGroupValue', function(assert) {
@@ -6939,7 +6939,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(visibleColumns.length, 3, 'visible column count');
         assert.equal(visibleColumns[0].command, 'select', 'select column');
         assert.equal(visibleColumns[1].dataField, 'field1', 'field1 column');
-        assert.equal(visibleColumns[2].dataField, 'field2', 'field1 column');
+        assert.equal(visibleColumns[2].dataField, 'field2', 'field2 column');
     });
 
     // T235091
