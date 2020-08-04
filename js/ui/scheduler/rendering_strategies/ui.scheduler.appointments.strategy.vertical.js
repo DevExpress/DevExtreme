@@ -244,8 +244,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         if(!this.isAllDay(appointment)) {
             return 0;
         }
-
-        let startDate = new Date(this.startDate(appointment, false, position));
+        let startDate = position.info.appointment.startDate;
+        // let startDate = new Date(this.startDate(appointment, false, position));
         const endDate = this.endDate(appointment, position, isRecurring);
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
