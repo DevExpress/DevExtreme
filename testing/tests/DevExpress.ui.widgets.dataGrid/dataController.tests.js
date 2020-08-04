@@ -3807,7 +3807,10 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             });
             return dataItems;
         };
-
+        this.applyOptions = function(options) {
+            $.extend(this.options, options);
+            this.columnsController.init();
+        };
     },
     afterEach: teardownModule
 }, () => {
