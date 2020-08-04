@@ -1,1 +1,9 @@
-The **DataGrid** widget supports inline data editing for both visible and invisible row cells. To&nbsp;see inline data editing in&nbsp;action, click the _&laquo;Edit&raquo;_ button to&nbsp;the right of&nbsp;a&nbsp;row. To&nbsp;apply changes, click the _&laquo;Save&raquo;_ button.
+**DataGrid** can use the [Form](/Documentation/ApiReference/UI_Widgets/dxForm/) widget to arrange cell editors when users modify a row. Users can edit value in [visible](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#visible) and hidden columns (see the `Notes` column).
+
+To use the Form widget as the row editor UI, specify the following options:
+- **editing**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#mode) to *"form"*
+- **editing**.[allowUpdating](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowUpdating) to **true**
+
+A column's default editor is defined automatically based on this column's [dataType](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#dataType). To customize this editor or replace it with another editor, use the column's [formItem](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#formItem) object. This demo shows how to replace the default editor in the `Notes` column with a [TextArea](/Documentation/ApiReference/UI_Widgets/dxTextArea/). Refer to the [SimpleItem](/Documentation/ApiReference/UI_Widgets/dxForm/Item_Types/SimpleItem/) help topic for information on all settings that you can define in the **formItem** object.
+
+You can also set up the edit **Form** from scratch. The widget's [configuration section](/Documentation/ApiReference/UI_Widgets/dxForm/) lists available settings. Specify these settings in the **editing**.[form](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#form) object. Refer to this object's description for more information about this edit mode's limitations.
