@@ -15,11 +15,11 @@ $material-timeview-time-separator-margin: 5px;
 @if $size == "default" {
   $material-timeview-clock-min-size: 252px;
   $material-timeview-clock-image-min-size: 215px;
-  $material-timeview-format12-width: 70px;
+  $material-timeview-format12-width: 74px;
 }
 
 @else if $size == "compact" {
   $material-timeview-clock-min-size: 200px;
   $material-timeview-clock-image-min-size: 190px;
-  $material-timeview-format12-width: 56px;
+  $material-timeview-format12-width: 63px;
 }
