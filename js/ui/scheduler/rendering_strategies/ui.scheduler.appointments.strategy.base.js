@@ -515,37 +515,39 @@ class BaseRenderingStrategy {
     }
 
     endDate(appointment, position, isRecurring, ignoreViewDates = false) {
-        const info = position?.info;
-        let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
-        const realStartDate = this.startDate(appointment, true);
-        const viewStartDate = this.startDate(appointment, false, position);
+        const info = position.info;
+        // let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
+        // const realStartDate = this.startDate(appointment, true);
+        // const viewStartDate = this.startDate(appointment, false, position);
 
-        if(info?.appointment.endDate) {
-            endDate = info?.appointment.endDate;
-        } else if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            // TODO: most likely in this condition, 'realStartDate' do not need anymore
-            const recurrencePartStartDate = info?.appointment.startDate || realStartDate;
+        let endDate = info.appointment.endDate;
+        // if(info?.appointment.endDate) {
+        //     endDate = info?.appointment.endDate;
+        // }
+        // else if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
+        //     // TODO: most likely in this condition, 'realStartDate' do not need anymore
+        //     const recurrencePartStartDate = info?.appointment.startDate || realStartDate;
 
-            let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
-                this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
-                endDate.getTime() - realStartDate.getTime();
+        //     let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
+        //         this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
+        //         endDate.getTime() - realStartDate.getTime();
 
-            fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
+        //     fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
 
-            endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()));
+        //     endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()));
 
-            if(isRecurring) {
-                endDate = new Date(endDate.getTime() + fullDuration);
-            }
+        //     if(isRecurring) {
+        //         endDate = new Date(endDate.getTime() + fullDuration);
+        //     }
 
-            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
-                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime();
-                const tailDuration = fullDuration - headDuration || fullDuration;
+        //     if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
+        //         const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime();
+        //         const tailDuration = fullDuration - headDuration || fullDuration;
 
-                endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
-            }
+        //         endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
+        //     }
 
-        }
+        // }
 
         if(!this.isAllDay(appointment)) {
             const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));

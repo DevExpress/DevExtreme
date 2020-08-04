@@ -260,8 +260,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     calculateAppointmentHeight(appointment, position, isRecurring) {
         // TODO
+        // const endDate = position.info.appointment.endDate;
+        const startDate = position.info.appointment.startDate;
         const endDate = this.endDate(appointment, position, isRecurring);
-        const startDate = this.startDate(appointment, false, position);
+        // const startDate = this.startDate(appointment, false, position);
         const allDay = this.instance.fire('getField', 'allDay', appointment);
 
         if(this.isAllDay(appointment)) {
