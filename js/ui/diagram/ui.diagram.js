@@ -2520,8 +2520,11 @@ class Diagram extends Widget {
                 this._updateDefaultItemProperties();
                 break;
             case 'export':
-                if(this._mainToolbar) {
-                    this._mainToolbar.option('export', args.value);
+                this._toolbars.forEach(toolbar => {
+                    toolbar.option('export', this.option('export'));
+                });
+                if(this._contextMenu) {
+                    this._contextMenu.option('export', this.option('export'));
                 }
                 break;
             case 'hasChanges':
