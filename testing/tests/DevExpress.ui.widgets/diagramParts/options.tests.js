@@ -527,6 +527,14 @@ QUnit.module('Options', {
         assert.equal(this.instance._viewToolbar.option('export.fileName'), 'file');
         assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'file');
         assert.equal(this.instance._contextMenu.option('export.fileName'), 'file');
+
+        this.instance.option('export', { fileName: 'file1' });
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'file1');
     });
 });
 
