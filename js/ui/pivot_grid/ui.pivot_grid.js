@@ -1614,6 +1614,10 @@ const PivotGrid = Widget.inherit({
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
             if(Math.abs(totalWidth - groupWidth) <= 2) { // T914454
+                // eslint-disable-next-line no-undef
+                QUnit.assert.equal(totalWidth, 1, 'totalWidth');
+                // eslint-disable-next-line no-undef
+                QUnit.assert.equal(groupWidth, 1, 'groupWidth');
                 groupWidth = totalWidth;
             }
 
