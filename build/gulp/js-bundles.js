@@ -42,35 +42,34 @@ function processBundles(bundles, pathPrefix) {
 function muteWebPack() {
 }
 
-gulp.task('js-bundles-prod-renovation', gulp.series('version-replace', function() {
+const bundleProdPipe = lazyPipe()
+    .pipe(named)
+    .pipe(() => webpackStream(webpackConfig, webpack, muteWebPack))
+    .pipe(headerPipes.useStrict)
+    .pipe(headerPipes.bangLicense)
+    .pipe(compressionPipes.minify);
+
+gulp.task('js-bundles-prod-renovation', function() {
     return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_RENOVATION_PATH))
-        .pipe(named())
-        .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
-        .pipe(headerPipes.useStrict())
-        .pipe(headerPipes.bangLicense())
-        .pipe(compressionPipes.minify())
+        .pipe(bundleProdPipe())
         .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
-}));
+});
 
-gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
+gulp.task('js-bundles-prod', function() {
     return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_PATH))
-        .pipe(named())
-        .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
-        .pipe(headerPipes.useStrict())
-        .pipe(headerPipes.bangLicense())
-        .pipe(compressionPipes.minify())
+        .pipe(bundleProdPipe())
         .pipe(gulp.dest(context.RESULT_JS_PATH));
-}));
+});
 
-function prepareDebugMeta(watch) {
+function prepareDebugMeta(watch, renovation) {
     let debugConfig;
     let bundles;
     if(watch) {
         debugConfig = Object.assign({}, webpackConfigDev);
-        bundles = processBundles(DEBUG_BUNDLES, 'js');
+        bundles = processBundles(DEBUG_BUNDLES, renovation ? renovationPipes.TEMP_PATH : 'js');
     } else {
         debugConfig = Object.assign({}, webpackConfig);
-        bundles = processBundles(DEBUG_BUNDLES, context.TRANSPILED_PROD_PATH);
+        bundles = processBundles(DEBUG_BUNDLES, renovation ? context.TRANSPILED_PROD_RENOVATION_PATH : context.TRANSPILED_PROD_PATH);
     }
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
@@ -82,7 +81,7 @@ function prepareDebugMeta(watch) {
 }
 
 function createDebugBundlesStream(watch) {
-    const { debugConfig, bundles } = prepareDebugMeta(watch);
+    const { debugConfig, bundles } = prepareDebugMeta(watch, false);
 
     return gulp.src(bundles)
         .pipe(namedDebug())
@@ -98,9 +97,9 @@ function createDebugBundlesStream(watch) {
 }
 
 function createDebugBundlesStreamRenovation(watch) {
-    const { debugConfig } = prepareDebugMeta(watch);
+    const { debugConfig, bundles } = prepareDebugMeta(watch, true);
 
-    return gulp.src(processBundles(DEBUG_BUNDLES, renovationPipes.tempFolder))
+    return gulp.src(bundles)
         .pipe(namedDebug())
         .pipe(gulpIf(watch, plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')
@@ -113,18 +112,20 @@ function createDebugBundlesStreamRenovation(watch) {
         .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
 }
 
-gulp.task('js-bundles-debug', gulp.series('version-replace', function() {
-    return createDebugBundlesStream(false);
-}));
+gulp.task('create-renovation-temp', function() {
+    return gulp.src(['js/**/*.*'])
+        .pipe(renovationPipes.replaceWidgets())
+        .pipe(gulp.dest(renovationPipes.TEMP_PATH));
+});
 
-const SRC = ['js/**/*.*'];
+gulp.task('js-bundles-debug', gulp.series(function() {
+    return createDebugBundlesStream(false);
+}, function() {
+    return createDebugBundlesStreamRenovation(false);
+}));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true);
-}, gulp.series(function() {
-    return gulp.src(SRC)
-        .pipe(renovationPipes.replaceWidgets())
-        .pipe(gulp.dest(renovationPipes.tempFolder));
 }, function() {
     return createDebugBundlesStreamRenovation(true);
-})));
+}));

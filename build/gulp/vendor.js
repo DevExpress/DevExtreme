@@ -87,7 +87,6 @@ gulp.task('vendor-js', function() {
         }
 
         const path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
-        console.log(path);
 
         return merge(stream, gulp.src(path, sourceConfig)
             .pipe(gulp.dest(DESTINATION_JS_PATH))

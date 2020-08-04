@@ -35,7 +35,7 @@ const DIST_GLOBS = [
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
     '!' + context.RESULT_JS_PATH + '/**/*.*',
     '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
-    '!' + renovationPipes.tempFolder + '/**/*.*',
+    '!' + renovationPipes.TEMP_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js-renovation/angular**/*.*',
     '!artifacts/js-renovation/angular*',

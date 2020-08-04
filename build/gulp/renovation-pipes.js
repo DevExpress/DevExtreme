@@ -18,7 +18,7 @@ function isOldComponentRenovated(file) {
 }
 
 module.exports = {
-    tempFolder: 'artifacts/_renovation-temp',
+    TEMP_PATH: 'artifacts/_renovation-temp',
     replaceWidgets: lazyPipe()
         .pipe(function() {
             return gulpIf(isOldComponentRenovated, gulpEach((content, file, callback) => {
