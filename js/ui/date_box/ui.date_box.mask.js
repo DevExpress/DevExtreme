@@ -130,9 +130,9 @@ const DateBoxMask = DateBoxBase.inherit({
         return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
     },
 
-    isSingleDigitKey(e) {
+    _isSingleDigitKey(e) {
         const data = e.originalEvent?.data;
-        return data?.length === 1 && parseInt(data);
+        return data?.length === 1 && parseInt(data, 10);
     },
 
     _useBeforeInputEvent: function() {
@@ -145,22 +145,20 @@ const DateBoxMask = DateBoxBase.inherit({
 
         const result = this.callBase(e);
 
+        if(!this._useMaskBehavior() || this._useBeforeInputEvent()) {
+            return result;
+        }
+
         if((browser.chrome) && e.key === 'Process' && e.code.indexOf('Digit') === 0) {
             key = e.code.replace('Digit', '');
             this._processInputKey(key);
             this._maskInputHandler = () => {
                 this._renderSelectedPart();
             };
-        } else {
-            if(!this._useMaskBehavior() || this._useBeforeInputEvent() || !this._isSingleCharKey(e)) {
-                return result;
-            }
-
+        } else if(this._isSingleCharKey(e)) {
             this._processInputKey(key);
-
             e.originalEvent.preventDefault();
         }
-
 
         return result;
     },
@@ -197,7 +195,8 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _keyPressHandler(e) {
-        if(e.originalEvent && e.originalEvent.inputType === 'insertCompositionText' && this.isSingleDigitKey(e)) {
+        const { originalEvent: event } = e;
+        if(event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e)) {
             this._processInputKey(e.originalEvent.data);
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart();
@@ -378,7 +377,7 @@ const DateBoxMask = DateBoxBase.inherit({
             this._renderSelectedPart();
         });
 
-        eventsEngine.on(this._input(), 'compositionend', this._maskCompositionEndHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace('compositionend', MASK_EVENT_NAMESPACE), this._maskCompositionEndHandler.bind(this));
 
         if(this._useBeforeInputEvent()) {
             eventsEngine.on(this._input(), addNamespace('beforeinput', MASK_EVENT_NAMESPACE), this._maskBeforeInputHandler.bind(this));
@@ -549,7 +548,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskCompositionEndHandler(e) {
-        if(browser.msie && this.isSingleDigitKey(e)) {
+        if(browser.msie && this._isSingleDigitKey(e)) {
             const key = e.originalEvent.data;
             this._processInputKey(key);
 
