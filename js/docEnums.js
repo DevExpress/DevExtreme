@@ -1065,6 +1065,11 @@
  */
 
 /**
+ * @typedef {string} Enums.FileManagerViewArea
+ * @enum {'navPane'|'itemView'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramDataLayoutType
  * @enum {'auto'|'off'|'tree'|'layered'}
  */
