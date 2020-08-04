@@ -41,6 +41,7 @@ const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const NATIVE_CLICK_CLASS = 'dx-native-click';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -156,6 +157,13 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             }
         });
+    },
+
+    _updateTagsContainer: function($element) {
+        this._$tagsContainer = $element
+            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
+            .addClass(NATIVE_CLICK_CLASS);
+        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
     },
 
     _allowSelectItemByTab: function() {
@@ -634,12 +642,7 @@ const TagBox = SelectBox.inherit({
     _renderMultiSelect: function() {
         const d = new Deferred();
 
-        this._$tagsContainer = this._$textEditorInputContainer
-            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
-
-        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
-
+        this._updateTagsContainer(this._$textEditorInputContainer);
         this._renderInputSize();
         this._renderTags()
             .done(() => {
@@ -930,6 +933,12 @@ const TagBox = SelectBox.inherit({
         }, this);
 
         return selectedItems;
+    },
+
+    _integrateInput: function() {
+        this.callBase();
+        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {

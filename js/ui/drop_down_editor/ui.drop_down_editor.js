@@ -342,16 +342,19 @@ const DropDownEditor = TextBox.inherit({
                     throw errors.Error('E1010');
                 }
 
-                this._refreshEvents();
-                this._refreshValueChangeEvent();
-                this._renderFocusState();
-                this._refreshEmptinessEvent();
+                this._integrateInput();
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
 
         $container.prepend(this._$beforeButtonsContainer);
         $container.append(this._$afterButtonsContainer);
+    },
+
+    _integrateInput: function() {
+        this._refreshEvents();
+        this._refreshValueChangeEvent();
+        this._renderFocusState();
     },
 
     _refreshEmptinessEvent: function() {
