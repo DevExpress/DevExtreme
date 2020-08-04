@@ -417,80 +417,42 @@ QUnit.test('page index change', function(assert) {
 
 });
 
-QUnit.test('all fields with mapping', function(assert) {
+QUnit.test('save custom field after mapping', function(assert) {
     const source = new DataSource({
-        load: function() {
-            return [
-                {
-                    key: 1,
-                    items: [
-                        {
-                            id: 1,
-                            name: 'Test'
-                        }
-                    ],
-                    number: 1,
-                },
-                {
-                    key: 2,
-                    items: [
-                        { id: 2, b: 'b' }
-                    ],
-                    digit: 3,
-                    char: 'a'
-                },
-                {
-                    items: [
-                        { id: 3, a: 'a' }
-                    ],
-                    key: 3,
-                    array: [ 1, 2, 3 ]
-                }
-            ];
+        store: [
+            {
+                'key': 1,
+                'field': 'text'
+            },
+            {
+                'key': 1,
+                'field': 'test'
+            }
+        ],
+        onCustomizeLoadResult: function(loadResult) {
+            loadResult.data[0].customField = true;
         },
         map: item => {
-            return item;
+            return { ...item };
         },
-        key: 'key',
-        group: 'id'
+        group: 'key'
     });
 
     source.load();
     assert.deepEqual(source.items(), [
         {
+            'customField': true,
             'items': [
                 {
-                    'id': 1,
-                    'name': 'Test'
-                }
-            ],
-            'key': 1,
-            'number': 1
-        },
-        {
-            'char': 'a',
-            'digit': 3,
-            'items': [
+                    'field': 'text',
+                    'key': 1
+                },
                 {
-                    'b': 'b',
-                    'id': 2
+                    'field': 'test',
+                    'key': 1
                 }
             ],
-            'key': 2
-        },
-        {
-            'array': [
-                1,
-                2,
-                3
-            ],
-            'items': [
-                {
-                    'a': 'a',
-                    'id': 3
-                }
-            ],
-            'key': 3
+            'key': 1
         }
     ]);
 });
