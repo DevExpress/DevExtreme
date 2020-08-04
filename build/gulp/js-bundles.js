@@ -80,8 +80,11 @@ function prepareDebugMeta(watch, renovation) {
     return { debugConfig, bundles };
 }
 
-function createDebugBundlesStream(watch) {
-    const { debugConfig, bundles } = prepareDebugMeta(watch, false);
+function createDebugBundlesStream(watch, renovation) {
+    const { debugConfig, bundles } = prepareDebugMeta(watch, renovation);
+    const destination = renovation
+        ? context.RESULT_JS_RENOVATION_PATH
+        : context.RESULT_JS_PATH;
 
     return gulp.src(bundles)
         .pipe(namedDebug())
@@ -93,23 +96,7 @@ function createDebugBundlesStream(watch) {
         .pipe(headerPipes.useStrict())
         .pipe(headerPipes.bangLicense())
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
-        .pipe(gulp.dest(context.RESULT_JS_PATH));
-}
-
-function createDebugBundlesStreamRenovation(watch) {
-    const { debugConfig, bundles } = prepareDebugMeta(watch, true);
-
-    return gulp.src(bundles)
-        .pipe(namedDebug())
-        .pipe(gulpIf(watch, plumber({
-            errorHandler: notify.onError('Error: <%= error.message %>')
-                .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
-        })))
-        .pipe(webpackStream(debugConfig, webpack, muteWebPack))
-        .pipe(headerPipes.useStrict())
-        .pipe(headerPipes.bangLicense())
-        .pipe(gulpIf(!watch, compressionPipes.beautify()))
-        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
+        .pipe(gulp.dest(destination));
 }
 
 gulp.task('create-renovation-temp', function() {
@@ -119,13 +106,13 @@ gulp.task('create-renovation-temp', function() {
 });
 
 gulp.task('js-bundles-debug', gulp.series(function() {
-    return createDebugBundlesStream(false);
+    return createDebugBundlesStream(false, false);
 }, function() {
-    return createDebugBundlesStreamRenovation(false);
+    return createDebugBundlesStream(false, true);
 }));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
-    return createDebugBundlesStream(true);
+    return createDebugBundlesStream(true, false);
 }, function() {
-    return createDebugBundlesStreamRenovation(true);
+    return createDebugBundlesStream(true, true);
 }));
