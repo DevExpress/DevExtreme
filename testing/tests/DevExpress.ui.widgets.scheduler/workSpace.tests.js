@@ -3962,15 +3962,15 @@ QUnit.module('Renovated Render', {
         const $element = this.instance.$element();
 
         const keyboard = keyboardMock($element);
-        const notifyObserverSpy = sinon.spy(noop);
-        this.instance.notifyObserver = notifyObserverSpy;
+        const invokeSpy = sinon.spy(noop);
+        this.instance.invoke = invokeSpy;
 
         $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
-        assert.equal(notifyObserverSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-        assert.deepEqual(notifyObserverSpy.getCall(0).args[1], {
+        assert.equal(invokeSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
+        assert.deepEqual(invokeSpy.getCall(0).args[1], {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),
