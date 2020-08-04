@@ -57,7 +57,7 @@ export default class AppointmentDragBehavior {
 
     getItemData(appointmentElement) {
         const itemData = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
-        return itemData?.targetedAppointment || itemData?.appointment || this.appointments._getItemData(appointmentElement); // TODO:
+        return itemData?.targetedAppointment || itemData?.appointment || this.appointments._getItemData(appointmentElement);
     }
 
     getItemSettings(appointment) {

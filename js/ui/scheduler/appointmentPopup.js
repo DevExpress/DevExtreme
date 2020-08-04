@@ -138,7 +138,6 @@ export default class AppointmentPopup {
     _createPopupContent() {
         const formElement = $('<div>');
         this._appointmentForm = this._createForm(formElement);
-        // this._updateForm();
         return formElement;
     }
 
@@ -307,13 +306,6 @@ export default class AppointmentPopup {
         const validation = this._appointmentForm.validate();
         const state = this.state.appointment;
 
-        // const convert = (obj, dateFieldName) => {
-        //     const date = new Date(this.scheduler.fire('getField', dateFieldName, obj));
-        //     const tzDiff = this.scheduler._getTimezoneOffsetByOption() * toMs('hour') + this.scheduler.fire('getClientTimezoneOffset', date);
-
-        //     return new Date(date.getTime() + tzDiff);
-        // };
-
         showLoadPanel && this._showLoadPanel();
 
         when(validation && validation.complete || validation).done((validation) => {
@@ -344,10 +336,6 @@ export default class AppointmentPopup {
                 delete appointment.repeat; // TODO
             }
 
-            // if(oldData) {
-            //     this.scheduler._convertDatesByTimezoneBack(false, formData);
-            // }
-
             if(oldData && !recData) {
                 this.scheduler.updateAppointment(oldData, appointment)
                     .done(deferred.resolve);
@@ -355,11 +343,6 @@ export default class AppointmentPopup {
                 if(recData) {
                     this.scheduler.updateAppointment(oldData, recData);
                     delete this.scheduler._updatedRecAppointment;
-
-                    // if(typeof this.scheduler._getTimezoneOffsetByOption() === 'number') {
-                    //     this.scheduler.fire('setField', 'startDate', appointment, convert.call(this, appointment, 'startDate'));
-                    //     this.scheduler.fire('setField', 'endDate', appointment, convert.call(this, appointment, 'endDate'));
-                    // }
                 }
 
                 this.scheduler.addAppointment(appointment)

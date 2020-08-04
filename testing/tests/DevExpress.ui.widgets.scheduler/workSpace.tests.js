@@ -1565,7 +1565,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
         const instance = $element.dxSchedulerWorkSpaceMonth('instance');
         const updateSpy = sinon.spy(noop);
 
-        instance.notifyObserver = updateSpy;
+        instance.invoke = updateSpy;
 
         $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
 
@@ -1886,7 +1886,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
         const instance = $element.dxSchedulerWorkSpaceMonth('instance');
         const updateSpy = sinon.spy(noop);
 
-        instance.notifyObserver = updateSpy;
+        instance.invoke = updateSpy;
 
         $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
 

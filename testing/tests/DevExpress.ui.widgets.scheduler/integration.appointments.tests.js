@@ -3930,7 +3930,6 @@ QUnit.module('Appointments', () => {
             }
         ];
 
-        // TODO:
         cases.forEach(testCase => {
             QUnit.test(`model.targetedAppointmentData argument should have current appointment data, ${testCase.name} case`, function(assert) {
                 const scheduler = createScheduler(testCase.data, testCase.options);

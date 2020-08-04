@@ -590,35 +590,12 @@ const SchedulerAppointments = CollectionWidget.inherit({
         modifiedAppointmentAdapter.startDate = new Date(dateRange[0]);
         modifiedAppointmentAdapter.endDate = new Date(dateRange[1]);
 
-        this.notifyObserver('updateAppointmentAfterResize', { // TODO: rename arguments
+        this.notifyObserver('updateAppointmentAfterResize', {
             target: sourceAppointment,
             data: modifiedAppointmentAdapter.clone({ pathTimeZone: 'fromGrid' }).source(),
             $appointment: $element
         });
     },
-
-    // _resizeEndHandler1: function(e) {
-    //     debugger;
-    //     const $element = $(e.element);
-    //     const itemData = this._getItemData($element);
-    //     const startDate = this.invoke('getStartDate', itemData, true);
-    //     const endDate = this.invoke('getEndDate', itemData, true);
-
-    //     const dateRange = this._getDateRange(e, startDate, endDate);
-
-    //     const updatedDates = {};
-
-    //     this.invoke('setField', 'startDate', updatedDates, new Date(dateRange[0]));
-    //     this.invoke('setField', 'endDate', updatedDates, new Date(dateRange[1]));
-
-    //     const data = extend({}, itemData, updatedDates);
-
-    //     this.notifyObserver('updateAppointmentAfterResize', {
-    //         target: itemData,
-    //         data: data,
-    //         $appointment: $element
-    //     });
-    // },
 
     _getDateRange: function(e, startDate, endDate) {
         const itemData = this._getItemData(e.element);

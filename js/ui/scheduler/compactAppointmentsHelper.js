@@ -57,7 +57,7 @@ export class CompactAppointmentsHelper {
                 targetedAdapter.endDate = info.sourceAppointment.endDate;
             }
 
-            return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]); // TODO
+            return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]);
         });
     }
 
@@ -85,8 +85,6 @@ export class CompactAppointmentsHelper {
                 itemData: e.itemData.appointment,
                 itemElement: e.itemElement
             };
-
-            // TODO e.itemData.targetedAppointment,
 
             const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
             delete createClickEvent.itemData;
@@ -121,7 +119,7 @@ export class CompactAppointmentsHelper {
 
                     if(itemData && !itemData.appointment.disabled) {
                         event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings); // TODO
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
 
                         dragBehavior.onDragStart(event.data);
                         translator.resetPosition($(dragElement));
