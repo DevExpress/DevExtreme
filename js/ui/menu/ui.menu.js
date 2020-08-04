@@ -831,6 +831,7 @@ class Menu extends MenuBase {
         }
 
         if(submenu) {
+            this._clearTimeouts();
             submenu.show();
             this.option('focusedElement', submenu.option('focusedElement'));
         }
@@ -899,7 +900,6 @@ class Menu extends MenuBase {
         const $itemElement = $(args.itemElement);
         const currentSubmenu = this._getSubmenuByElement($itemElement, args.itemData);
 
-        this._clearTimeouts();
         this._updateSelectedItemOnClick(actionArgs);
 
         if(this._visibleSubmenu) {
