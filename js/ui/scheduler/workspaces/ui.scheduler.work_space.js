@@ -1319,11 +1319,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         const firstCellData = this.getCellData($cell.first());
         const lastCellData = this.getCellData($cell.last());
 
-        this.notifyObserver('showAddAppointmentPopup', {
+        const result = {
             startDate: firstCellData.startDate,
-            endDate: lastCellData.endDate,
-            allDay: lastCellData.allDay
-        }, lastCellData.groups);
+            endDate: lastCellData.endDate
+        };
+
+        if(lastCellData.allDay !== undefined) {
+            result.allDay = lastCellData.allDay;
+        }
+
+        this.notifyObserver('showAddAppointmentPopup', result, lastCellData.groups);
     }
 
     _attachContextMenuEvent() {
