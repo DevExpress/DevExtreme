@@ -1614,30 +1614,9 @@ const PivotGrid = Widget.inherit({
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
             if(Math.abs(totalWidth - groupWidth) <= 2) { // T914454
-                // eslint-disable-next-line no-undef
-                if(QUnit.config.current.testName === 'T317921: dxPivotGrid - Scrollbar overlaps the last column when the document height slightly exceeds the window height. Without columns scroll') {
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.equal(elementWidth, 1, 'elementWidth');
-
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.equal(rowsAreaWidth, 1, 'rowsAreaWidth');
-
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.equal(that._rowsArea.element().get(0).getBoundingClientRect().width, 1, 'rowsAreaWidth real width');
-
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.deepEqual(rowsAreaColumnWidths, 1, 'rowsAreaColumnWidths');
-
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.equal(bordersWidth, 1, 'bordersWidth');
-
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.equal(totalWidth, 1, 'totalWidth');
-
-                    // eslint-disable-next-line no-undef
-                    QUnit.assert.equal(groupWidth, 1, 'groupWidth');
-                }
-                groupWidth = totalWidth;
+                const diff = totalWidth - groupWidth;
+                adjustSizeArray(resultWidths, diff);
+                totalWidth = groupWidth;
             }
 
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
