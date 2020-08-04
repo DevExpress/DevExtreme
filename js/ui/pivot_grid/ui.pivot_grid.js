@@ -1443,9 +1443,7 @@ const PivotGrid = Widget.inherit({
     _update: function(isFirstDrawing) {
         const that = this;
         const updateHandler = function() {
-            that.updateDimensions().done(function() {
-                that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
-            });
+            that.updateDimensions();
         };
         if(that._needDelayResizing(that._dataArea.getData()) && isFirstDrawing) {
             setTimeout(updateHandler);
@@ -1742,6 +1740,7 @@ const PivotGrid = Widget.inherit({
 
                 when.apply($, updateScrollableResults).done(function() {
                     that._updateScrollPosition(columnsArea, rowsArea, dataArea);
+                    that._subscribeToEvents(columnsArea, rowsArea, dataArea);
                     d.resolve();
                 });
             });

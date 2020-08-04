@@ -3325,6 +3325,54 @@ QUnit.module('dxPivotGrid', {
         }
     });
 
+    ['standard', 'virtual'].forEach(scrollMode => {
+        [true, false].forEach(useNative => {
+            [40, 80].forEach(scrollDistance => {
+                QUnit.test(`Container.visibility= false -> Container.visibility= true -> dataArea.trigger(scrollTop), useNative=${useNative}, scrollMode=${scrollMode}, scrollDistance = ${scrollDistance} (T907207)`, function(assert) {
+                    $('#pivotGrid').wrap($('<div id="wrapper"></div>').css('display', 'none'));
+
+                    const grid = $('#pivotGrid').dxPivotGrid({
+                        width: 500,
+                        height: 100,
+                        scrolling: {
+                            mode: scrollMode,
+                            useNative: useNative
+                        },
+                        dataSource: {
+                            fields: [
+                                { area: 'row', dataField: 'row1' },
+                                { area: 'column', dataField: 'col1' },
+                                { area: 'data', summaryType: 'count', dataType: 'number' },
+                            ],
+                            store: [
+                                { row1: 'r1', col1: 'c1' },
+                                { row1: 'r2', col1: 'c1' },
+                                { row1: 'r3', col1: 'c1' },
+                                { row1: 'r4', col1: 'c1' },
+                                { row1: 'r5', col1: 'c1' }
+                            ]
+                        }
+                    }).dxPivotGrid('instance');
+                    this.clock.tick();
+
+                    $('#wrapper').css('display', 'block');
+                    grid.updateDimensions();
+
+                    const eventArgs = { scrollOffset: { top: scrollDistance, left: 0 } };
+                    grid._dataArea.element()
+                        .find('.dx-scrollable').dxScrollable('instance')
+                        ._eventsStrategy.fireEvent('scroll', [eventArgs]);
+
+                    const $rowsElement = grid._rowsArea.element();
+                    const containerTop = $rowsElement.find('.dx-scrollable-container').get(0).getBoundingClientRect().top;
+                    const contentTop = $rowsElement.find('.dx-scrollable-content').get(0).getBoundingClientRect().top;
+
+                    assert.equal(containerTop - contentTop, scrollDistance);
+                });
+            });
+        });
+    });
+
     QUnit.test('getScrollPath for rows', function(assert) {
         const done = assert.async();
         $('#pivotGrid').height(150).width(800);
@@ -6350,6 +6398,5 @@ QUnit.module('Data area', () => {
 
         clock.restore();
     });
-
 });
 
