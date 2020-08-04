@@ -1623,6 +1623,9 @@ const PivotGrid = Widget.inherit({
                     QUnit.assert.equal(rowsAreaWidth, 1, 'rowsAreaWidth');
 
                     // eslint-disable-next-line no-undef
+                    QUnit.assert.equal(that._rowsArea.element().get(0).getBoundingClientRect().width, 1, 'rowsAreaWidth real width');
+
+                    // eslint-disable-next-line no-undef
                     QUnit.assert.deepEqual(rowsAreaColumnWidths, 1, 'rowsAreaColumnWidths');
 
                     // eslint-disable-next-line no-undef
