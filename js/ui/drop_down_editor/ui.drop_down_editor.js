@@ -345,12 +345,18 @@ const DropDownEditor = TextBox.inherit({
                 this._refreshEvents();
                 this._refreshValueChangeEvent();
                 this._renderFocusState();
+                this._refreshEmptinessEvent();
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
 
         $container.prepend(this._$beforeButtonsContainer);
         $container.append(this._$afterButtonsContainer);
+    },
+
+    _refreshEmptinessEvent: function() {
+        eventsEngine.off(this._input(), 'input blur', this._toggleEmptinessEventHandler);
+        this._renderEmptinessEvent();
     },
 
     _fieldRenderData: function() {

@@ -1385,6 +1385,40 @@ QUnit.module('placeholder', () => {
 
         assert.ok($placeholder.is(':visible'), 'placeholder is visible');
     });
+
+    QUnit.test('placeholder should not be visible after tag add when fieldTemplate is used (T918886)', function(assert) {
+        const fieldTemplate = () => {
+            return $('<div>').dxTextBox({
+                placeholder: 'placeholder'
+            });
+        };
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            fieldTemplate,
+            acceptCustomValue: true,
+            items: [],
+            onCustomItemCreating: function(args) {
+                const newValue = args.text;
+                const component = args.component;
+                const currentItems = component.option('items');
+                currentItems.unshift(newValue);
+                component.option('items', currentItems);
+                args.customItem = newValue;
+            }
+        });
+
+        const $input = $tagBox.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type('123')
+            .press('enter');
+        $input.trigger('blur');
+        $input.trigger('focusout');
+
+        const $placeholder = $tagBox.find('.dx-placeholder');
+        assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
+    });
 });
 
 QUnit.module('tag template', moduleSetup, () => {
