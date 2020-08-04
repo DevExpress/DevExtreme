@@ -2567,10 +2567,9 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) {
-        const singleAppointment = currentAppointmentData || this._getAppointmentData(appointmentData, { skipDateCalculation: true }); // TODO:
         const adapter = this.createAppointmentAdapter(currentAppointmentData || appointmentData);
 
-        this._checkRecurringAppointment(appointmentData, singleAppointment, adapter.startDate, function() {
+        this._checkRecurringAppointment(appointmentData, currentAppointmentData, adapter.startDate, function() {
             if(createNewAppointment || isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
                 this._editing.allowAdding && this._appointmentPopup.show(appointmentData, true);
