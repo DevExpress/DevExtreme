@@ -39,13 +39,13 @@ class FileManagerContextMenu extends Widget {
         super._initMarkup();
     }
 
-    showAt(fileItems, element, offset) {
+    showAt(fileItems, element, offset, targetFileItem) {
         if(this._isVisible) {
             this._raiseContextMenuHidden();
         }
         this._isVisible = true;
 
-        const items = this.createContextMenuItems(fileItems);
+        const items = this.createContextMenuItems(fileItems, null, targetFileItem);
 
         const position = {
             of: element,
@@ -71,8 +71,13 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu.show();
     }
 
-    createContextMenuItems(fileItems, contextMenuItems) {
+    createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {
         this._targetFileItems = fileItems;
+        if(targetFileItem === null) {
+            this._targetFileItem = null;
+        } else {
+            this._targetFileItem = targetFileItem ? targetFileItem.fileItem : fileItems[0].fileItem;
+        }
 
         const result = [];
 
@@ -164,19 +169,13 @@ class FileManagerContextMenu extends Widget {
     _onContextMenuItemClick(commandName, args) {
         const changedArgs = extend(true, {}, args);
         changedArgs.itemData = args.itemData.originalItemData;
-        if(this._contextMenuTarget) {
-            changedArgs.fileSystemItem = this._contextMenuTarget.fileSystemItem;
-            changedArgs.viewArea = this._contextMenuTarget.viewArea;
-        }
+        changedArgs.fileSystemItem = this._targetFileItem;
+        changedArgs.viewArea = this.option('viewArea');
         this._actions.onItemClick(changedArgs);
         if(this._isDefaultItem(commandName)) {
             const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
             this._commandManager.executeCommand(commandName, targetFileItems);
         }
-    }
-
-    setContextMenuTarget(viewArea, fileSystemItem) {
-        this._contextMenuTarget = { viewArea, fileSystemItem };
     }
 
     _initActions() {
