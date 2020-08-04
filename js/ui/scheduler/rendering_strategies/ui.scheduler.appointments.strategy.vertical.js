@@ -56,10 +56,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const allDay = this.isAllDay(appointment);
         const isRecurring = !!adapter.recurrenceRule;
 
-        // const appointmentStartDate = this.startDate(appointment, true);
-        // const appointmentEndDate = this.endDate(appointment);
-        // NOTE: startDate(...) method contains comparison with rangeStartDate
-
         const appointmentStartDate = adapter.calculateStartDate('toGrid');
         const appointmentEndDate = adapter.calculateEndDate('toGrid');
 
@@ -74,8 +70,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
         for(let j = 0; j < settings.length; j++) {
             const currentSetting = settings[j];
-            const height = this.calculateAppointmentHeight(appointment, currentSetting, isRecurring);
-            const width = this.calculateAppointmentWidth(appointment, currentSetting, isRecurring);
+            const height = this.calculateAppointmentHeight(appointment, currentSetting);
+            const width = this.calculateAppointmentWidth(appointment, currentSetting);
 
             let resultHeight = height;
             let appointmentReduced = null;
@@ -239,16 +235,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return this.getDefaultCellWidth() - this._getAppointmentDefaultOffset();
     }
 
-    calculateAppointmentWidth(appointment, position, isRecurring) {
+    calculateAppointmentWidth(appointment, position) {
         if(!this.isAllDay(appointment)) {
             return 0;
         }
-        let startDate = position.info.appointment.startDate;
-        // let startDate = new Date(this.startDate(appointment, false, position));
-        const endDate = this.endDate(appointment, position, isRecurring);
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
-        startDate = dateUtils.trimTime(startDate);
+        const startDate = dateUtils.trimTime(position.info.appointment.startDate);
+        const endDate = this.endDate(appointment, position);
+        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const durationInHours = (endDate.getTime() - startDate.getTime()) / toMs('hour');
 
         let width = Math.ceil(durationInHours / 24) * cellWidth;
@@ -257,18 +251,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return width;
     }
 
-    calculateAppointmentHeight(appointment, position, isRecurring) {
-        // TODO
-        // const endDate = position.info.appointment.endDate;
-        const startDate = position.info.appointment.startDate;
-        const endDate = this.endDate(appointment, position, isRecurring);
-        // const startDate = this.startDate(appointment, false, position);
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
-
+    calculateAppointmentHeight(appointment, position) {
         if(this.isAllDay(appointment)) {
             return 0;
         }
 
+        const startDate = position.info.appointment.startDate;
+        const endDate = this.endDate(appointment, position);
+        const allDay = this.instance.fire('getField', 'allDay', appointment);
         const fullDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
         const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / toMs('minute');
 

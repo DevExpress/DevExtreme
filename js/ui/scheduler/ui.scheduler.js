@@ -2175,7 +2175,7 @@ class Scheduler extends Widget {
                     info: {
                         appointment: gridAppointment
                     }
-                }, !!recurrenceRule);
+                });
 
                 longParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
@@ -2463,32 +2463,6 @@ class Scheduler extends Widget {
 
     appointmentTakesAllDay(appointment) {
         return this._appointmentModel.appointmentTakesAllDay(appointment, this._getCurrentViewOption('startDayHour'), this._getCurrentViewOption('endDayHour'));
-    }
-
-    _getStartDate(appointment, skipNormalize) {
-        let startDate = this.fire('getField', 'startDate', appointment);
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
-        startDate = this.fire('convertDateByTimezone', dateUtils.makeDate(startDate), startDateTimeZone);
-        return !skipNormalize ? this.fire('updateAppointmentStartDate', {
-            startDate: startDate,
-            appointment: appointment,
-        }) : startDate;
-    }
-
-    _getEndDate(appointment, skipNormalize) {
-        let endDate = new Date(this.fire('getField', 'endDate', appointment));
-        const startDate = new Date(this.fire('getField', 'startDate', appointment));
-        const isSameDate = dateUtils.sameDate(startDate, endDate);
-
-        if(endDate) {
-            const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
-            endDate = this.fire('convertDateByTimezone', dateUtils.makeDate(endDate), endDateTimeZone);
-            return !skipNormalize ? this.fire('updateAppointmentEndDate', {
-                endDate: endDate,
-                isSameDate: isSameDate,
-            }) : endDate;
-        }
-        return endDate;
     }
 
     // TODO: use for appointment model

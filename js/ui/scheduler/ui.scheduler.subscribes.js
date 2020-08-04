@@ -275,10 +275,6 @@ const subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentHeight();
     },
 
-    getStartDate: function(appointmentData, skipNormalize) {
-        return this._getStartDate(appointmentData, skipNormalize);
-    },
-
     getCellWidth: function() {
         return this._cellWidth;
     },
@@ -296,10 +292,6 @@ const subscribes = {
         }
 
         return cellWidth;
-    },
-
-    getEndDate: function(appointmentData, skipNormalize) {
-        return this._getEndDate(appointmentData, skipNormalize);
     },
 
     getRenderingStrategy: function() {
@@ -745,6 +737,7 @@ const subscribes = {
     fixWrongEndDate: function(appointment, startDate, endDate) {
         return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
     },
+
     calculateAppointmentEndDate: function(isAllDay, startDate) {
         return this._appointmentModel._calculateAppointmentEndDate(isAllDay, startDate);
     },
