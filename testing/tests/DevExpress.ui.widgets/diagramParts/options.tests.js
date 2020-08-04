@@ -432,6 +432,32 @@ QUnit.module('Options', moduleConfig, () => {
         ]);
         assert.equal(this.instance.option('hasChanges'), false, 'on data bind after edit');
     });
+
+    test('should change export options', function(assert) {
+        this.instance.option('mainToolbar.visible', true);
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'Diagram');
+
+        this.instance.option('export.fileName', 'file');
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'file');
+
+        this.instance.option('export', { fileName: 'file1' });
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'file1');
+    });
 });
 
 QUnit.module('Options (initially set)', {}, () => {
