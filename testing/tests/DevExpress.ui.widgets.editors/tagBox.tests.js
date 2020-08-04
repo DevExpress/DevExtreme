@@ -4171,6 +4171,25 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.equal(fieldTemplateSpy.callCount, 0, 'fieldTemplate render was not called');
     });
 
+    QUnit.test('tag can be removed by click on the remove button', function(assert) {
+        const fieldTemplate = () => {
+            return $('<div>').dxTextBox();
+        };
+        const tagBox = $('#tagBox').dxTagBox({
+            fieldTemplate,
+            items: [1, 2, 3],
+            value: [1],
+            opened: true,
+            focusStateEnabled: true
+        }).dxTagBox('instance');
+
+        const $container = tagBox.$element().find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+        const $tagRemoveButtons = $container.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS);
+        $($tagRemoveButtons.eq(0)).trigger('dxclick');
+
+        assert.deepEqual(tagBox.option('value'), [], 'tag is removed');
+    });
+
     QUnit.test('tagbox should get template classes after fieldTemplate option change', function(assert) {
         const fieldTemplate = () => {
             return $('<div>').dxTextBox();
