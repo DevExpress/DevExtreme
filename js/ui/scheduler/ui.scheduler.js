@@ -2105,8 +2105,7 @@ class Scheduler extends Widget {
         });
     }
 
-    _createAppointmentSettings(info) {
-        const { appointmentData } = info; // TODO:
+    _createAppointmentSettings(appointmentData) {
         const adapter = this.createAppointmentAdapter(appointmentData);
 
         const recurrenceRule = adapter.recurrenceRule;
@@ -2221,17 +2220,6 @@ class Scheduler extends Widget {
         const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
 
         return recurrenceRule && getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid;
-    }
-
-    // TODO: not used anywhere
-    _getRealData(appointmentData, options) {
-        const $appointment = options.$appointment;
-        const settings = $appointment.data('dxAppointmentSettings');
-
-        return extend({}, appointmentData, {
-            startDate: settings.info.appointment.startDate,
-            endDate: settings.info.appointment.endDate,
-        });
     }
 
     getTargetedAppointment(appointment, element) {

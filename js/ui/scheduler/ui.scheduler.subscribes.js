@@ -34,8 +34,8 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(info) {
-        return this._createAppointmentSettings(info); // TODO: temporary solution
+    createAppointmentSettings: function(args) {
+        return this._createAppointmentSettings(args.appointmentData); // TODO: temporary solution
     },
 
     isGroupedByDate: function() {
