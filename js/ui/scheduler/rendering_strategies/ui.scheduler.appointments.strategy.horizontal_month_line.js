@@ -9,7 +9,7 @@ const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position, isRecurring) {
-        const startDate = dateUtils.trimTime(new Date(this.startDate(appointment, false, position)));
+        const startDate = dateUtils.trimTime(new Date(position.info.appointment.startDate));
         const endDate = new Date(this.endDate(appointment, position, isRecurring, true));
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
