@@ -4,19 +4,12 @@ require('common.css!');
 
 const $ = require('jquery');
 const resizeCallbacks = require('core/utils/resize_callbacks');
-const themes = require('ui/themes');
-
-themes.setDefaultTimeout(0);
 
 require('ui/accordion');
 require('ui/tabs');
 
 QUnit.testStart(function() {
-    return new Promise(function(resolve) {
-        $('#qunit-fixture').html('<div id="element"></div>');
-        themes.initialized(resolve);
-    });
-
+    $('#qunit-fixture').html('<div id="element"></div>');
 });
 
 QUnit.performanceTest('dxTabs should force minimum relayout count on creation', function(assert) {
