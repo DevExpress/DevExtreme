@@ -342,7 +342,7 @@ const DropDownEditor = TextBox.inherit({
                     throw errors.Error('E1010');
                 }
 
-                this._integrateInput($input);
+                this._integrateInput();
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
@@ -351,7 +351,7 @@ const DropDownEditor = TextBox.inherit({
         $container.append(this._$afterButtonsContainer);
     },
 
-    _integrateInput: function($input) {
+    _integrateInput: function() {
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();

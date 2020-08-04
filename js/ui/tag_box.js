@@ -933,8 +933,8 @@ const TagBox = SelectBox.inherit({
         return selectedItems;
     },
 
-    _integrateInput: function($input) {
-        this.callBase($input);
+    _integrateInput: function() {
+        this.callBase();
         this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
