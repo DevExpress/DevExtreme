@@ -8,38 +8,4 @@
 * $name 10. Shader background color
 * $type color
 */
-$drawer-shader-background-color: null !default;
-
-
-@if $color == "carmine" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "contrast" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "dark" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "darkmoon" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "darkviolet" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "greenmist" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "light" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $color == "softblue" {
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
+$drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;

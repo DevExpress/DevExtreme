@@ -50,9 +50,9 @@ describe('Marker', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tree = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const tree = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(tree.prop('customAttribute'))
+      expect(tree.prop('custom-attribute'))
         .toBe('customAttribute');
     });
   });

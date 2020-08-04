@@ -2,7 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
       "jsx": "react",
-      "jsxFactory": "h",
       "target": "ES2019"
   }
 }

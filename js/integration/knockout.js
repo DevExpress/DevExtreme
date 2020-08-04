@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import errors from '../core/errors';
 import { compare as compareVersion } from '../core/utils/version';

@@ -16,104 +16,48 @@ $progressbar-border-color: null !default;
 * $name 20. Selected range background color
 * $type color
 */
-$progressbar-range-bg: null !default;
-$progressbar-range-border-color: null !default;
-$progressbar-range-disabled-bg: null !default;
-$progressbar-range-indeterminate-color: null !default;
+$progressbar-range-bg: $base-accent !default;
+$progressbar-range-border-color: $base-accent !default;
+$progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
+$progressbar-range-indeterminate-color: $base-accent !default;
 
 @if $color == "carmine" {
-
   $progressbar-bg: darken($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "contrast" {
-
   $progressbar-bg: $base-bg !default;
   $progressbar-border-color: $base-accent !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "dark" {
-
   $progressbar-bg: lighten($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "darkmoon" {
-
   $progressbar-bg: extcolor.difference($base-bg, #212121) !default; // #465672 => #253552
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "darkviolet" {
-
   $progressbar-bg: lighten($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "greenmist" {
-
   $progressbar-bg: darken($base-bg, 9%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "light" {
-
   $progressbar-bg: darken($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "softblue" {
-
   $progressbar-bg: darken($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 

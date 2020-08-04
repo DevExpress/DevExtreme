@@ -6,84 +6,40 @@
 
 
 $validation-message-color: null !default;
-$validation-message-background-color: null !default;
-$validation-summary-color: null !default;
-$validation-overlay-border-radius: null !default;
+$validation-message-background-color: $base-invalid-color !default;
+$validation-summary-color: $base-invalid-color !default;
+$validation-overlay-border-radius: $base-border-radius !default;
 
 
 @if $color == "carmine" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-
-  $validation-summary-color: $base-invalid-color !default;
-
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "contrast" {
-
-
   $validation-message-color: $base-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-
-  $validation-summary-color: $base-invalid-color !default;
-
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "dark" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-  $validation-summary-color: $base-invalid-color !default;
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkmoon" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-  $validation-summary-color: $base-invalid-color !default;
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkviolet" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-  $validation-summary-color: $base-invalid-color !default;
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "greenmist" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-  $validation-summary-color: $base-invalid-color !default;
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "light" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-  $validation-summary-color: $base-invalid-color !default;
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 
 @if $color == "softblue" {
-
-
   $validation-message-color: $base-inverted-text-color !default;
-  $validation-message-background-color: $base-invalid-color !default;
-  $validation-summary-color: $base-invalid-color !default;
-  $validation-overlay-border-radius: $base-border-radius !default;
 }
 

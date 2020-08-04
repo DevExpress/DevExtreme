@@ -8,7 +8,7 @@
 * $name 10. Filename text color
 * $type color
 */
-$fileuploader-filename-color: null !default;
+$fileuploader-filename-color: $base-text-color !default;
 
 /**
 * $name 20. File status text color
@@ -20,77 +20,36 @@ $fileuploader-falename-status-color: null !default;
 * $name 30. Border color on dragover
 * $type color
 */
-$fileuploader-border-color: null !default;
+$fileuploader-border-color: $base-border-color !default;
 
 @if $color == "carmine" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "contrast" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: $base-text-color !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "dark" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "darkmoon" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "darkviolet" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "greenmist" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "light" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "softblue" {
-
-  $fileuploader-filename-color: $base-text-color !default;
-
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  $fileuploader-border-color: $base-border-color !default;
 }
-

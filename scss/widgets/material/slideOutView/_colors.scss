@@ -4,20 +4,5 @@
 
 // adduse
 
-
-$slideoutview-content-border-color: null !default;
-$slideoutview-bg: null !default;
-
-
-@if $mode == "light" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
-  $slideoutview-bg: $base-element-bg !default;
-}
-
-@if $mode == "dark" {
-
-  $slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
-  $slideoutview-bg: $base-element-bg !default;
-}
-
+$slideoutview-content-border-color: color.change($base-border-color, $alpha: 0.5) !default;
+$slideoutview-bg: $base-element-bg !default;
