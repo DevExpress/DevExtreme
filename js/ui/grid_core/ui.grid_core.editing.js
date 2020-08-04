@@ -1518,6 +1518,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataSource = dataController.dataSource();
             const editMode = getEditMode(this);
             const result = new Deferred();
+            const editData = this._editData.slice(0);
 
             const resetEditIndices = () => {
                 if(editMode !== EDIT_MODE_CELL) {
@@ -1525,14 +1526,24 @@ const EditingController = modules.ViewController.inherit((function() {
                     this._editRowIndex = -1;
                 }
             };
-
+            const resetModifiedClassCells = () => {
+                if(editMode === EDIT_MODE_BATCH) {
+                    const columnsCount = this._columnsController.getVisibleColumns().length;
+                    editData.forEach(({ key }) => {
+                        const rowIndex = this._dataController.getRowIndexByKey(key);
+                        if(rowIndex !== -1) {
+                            for(let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+                                this._rowsView._getCellElement(rowIndex, columnIndex).removeClass(CELL_MODIFIED);
+                            }
+                        }
+                    });
+                }
+            };
             const afterSaveEditData = (error) => {
                 when(this._afterSaveEditData()).done(function() {
                     result.resolve(error);
                 });
             };
-
-            const editData = this._editData.slice(0);
 
             if(!this._saveEditDataCore(deferreds, results, changes) && editMode === EDIT_MODE_CELL) {
                 this._focusEditingCell();
@@ -1545,6 +1556,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 when.apply($, deferreds).done(() => {
                     if(this._processSaveEditDataResult(results)) {
+                        resetModifiedClassCells();
                         resetEditIndices();
 
                         if(editMode === EDIT_MODE_POPUP && this._editPopup) {
