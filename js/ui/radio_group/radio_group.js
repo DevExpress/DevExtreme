@@ -203,8 +203,7 @@ class RadioGroup extends Editor {
     }
 
     _optionChanged(args) {
-        const { name, value } = args;
-
+        const { name, value, previousValue } = args;
         this._dataExpressionOptionChanged(args);
 
         switch(name) {
@@ -221,8 +220,10 @@ class RadioGroup extends Editor {
                 this._setCollectionWidgetOption(name, value);
                 break;
             case 'dataSource':
-                this._setCollectionWidgetOption('dataSource', this._dataSource);
-                this._setSelection(this.option('value'));
+                if(value !== previousValue) {
+                    this._setSelection(this.option('value'));
+                    this._setCollectionWidgetOption('dataSource', this._dataSource);
+                }
                 break;
             case 'valueExpr':
                 this._setCollectionWidgetOption('keyExpr', this._getCollectionKeyExpr());

@@ -1,7 +1,6 @@
 import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import RadioGroup from '../../model/radioGroup';
-import { convertCompilerOptionsFromJson } from 'typescript';
 
 fixture`Radio Group`
   .page(url(__dirname, './pages/t816449.html'));
@@ -66,3 +65,10 @@ test('Radio buttons placed into the template should not be selected after clicki
   await checkGroup(secondChildGroup, false, true);
   await checkGroup(thirdChildGroup, false, false, true);
 });
+
+fixture `Radio Group dataSource updating`
+  .page(url(__dirname, './pages/t901779.html'));
+
+  test('There is no error on updating async CustomStore', async (t) => {
+    await t.wait(50);
+  });
