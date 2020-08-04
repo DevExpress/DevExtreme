@@ -197,7 +197,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _keyPressHandler(e) {
         const { originalEvent: event } = e;
         if(event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e)) {
-            this._processInputKey(e.originalEvent.data);
+            this._processInputKey(event.data);
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart();
         }
