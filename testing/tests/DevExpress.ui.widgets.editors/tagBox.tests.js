@@ -3515,28 +3515,35 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(instance.option('value'), ['test1', 'test2'], 'Correct value');
     });
 
-    QUnit.test('TagBox with selection controls shouldn\'t clear value and text when searchValue lenght becomes smaller then minSearchLength (T898390)', function(assert) {
+    QUnit.testInActiveWindow('TagBox with selection controls shouldn\'t clear value when searchValue length becomes smaller then minSearchLength (T898390)', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: [111, 222],
             searchEnabled: true,
             minSearchLength: 3,
             showSelectionControls: true,
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const instance = $tagBox.dxTagBox('instance');
-        const keyboard = keyboardMock(instance._input());
-        this.clock.tick(TIME_TO_WAIT);
-        keyboard.type('111');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('111');
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $('.' + LIST_ITEM_CLASS);
-        $listItems.first().trigger('dxclick');
+        keyboard.press('enter');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.deepEqual(instance.option('value'), [111], 'value is selected');
+
+        $input.focusout();
         this.clock.tick(TIME_TO_WAIT);
 
-        keyboard.press('backspace');
-
-        assert.deepEqual(instance.option('value'), [111], 'value is correct');
-        assert.strictEqual(instance.option('text'), '11', 'text is correct');
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.deepEqual(instance.option('value'), [111], 'value is not removed');
+        assert.strictEqual(instance.option('text'), '1', 'text is correct');
     });
 
     QUnit.test('load tags data should not raise an error after widget has been disposed', function(assert) {
