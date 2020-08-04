@@ -242,6 +242,16 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1058: 'The "startDayHour" must be earlier than the "endDayHour"',
 
     /**
+    * @name ErrorsUIWidgets.E1059
+    */
+    E1059: 'All column names must be different',
+
+    /**
+    * @name ErrorsUIWidgets.E1060
+    */
+    E1060: 'All editable columns must have names',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
