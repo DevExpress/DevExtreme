@@ -184,8 +184,8 @@ class FileManagerItemListBase extends Widget {
         return devices.real().deviceType === 'desktop';
     }
 
-    _showContextMenu(items, element, offset) {
-        this._contextMenu.showAt(items, element, offset);
+    _showContextMenu(items, element, offset, targetFileItem) {
+        this._contextMenu.showAt(items, element, offset, targetFileItem);
     }
 
     get _contextMenu() {
