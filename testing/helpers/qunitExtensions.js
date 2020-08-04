@@ -411,8 +411,7 @@
         if(timerType === 'timeouts') {
             if(
                 callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
-                callback.indexOf('e._drain()') > -1 || // NOTE: SystemJS Promise polyfill
-                callback.indexOf('W0004') > -1 // NOTE: Themes waiting
+                callback.indexOf('e._drain()') > -1 // NOTE: SystemJS Promise polyfill
             ) {
                 return true;
             }
@@ -423,6 +422,10 @@
             ) {
                 return true;
             }
+        }
+
+        if(timerType === 'intervals' && callback.indexOf('W0004') > -1) { // NOTE: Themes timeout
+            return true;
         }
 
         if(callback.match(/function\(\)\{clearTimeout\(\w+\),(\w+&&)*cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
