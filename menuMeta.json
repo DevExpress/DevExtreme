@@ -173,6 +173,21 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Cell Editing and Editing API",
+            "Name": "CellEditingAndEditingAPI",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/State.cs",
+              "/Models/SampleData/DataGridEmployees.cs",
+              "/Models/SampleData/States.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
             "Title": "Batch Editing",
             "Name": "BatchEditing",
             "Widget": "DataGrid",
@@ -188,22 +203,32 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Cell Editing and Editing API",
-            "Name": "CellEditingAndEditingAPI",
-            "DocUrl": "Guide/Widgets/DataGrid/Editing/#User_Interaction/Cell_Mode",
+            "Title": "Form Editing",
+            "Name": "FormEditing",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
               "/Controllers/ApiControllers/DataGridEmployeesController.cs",
               "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
               "/Models/DataGrid/Employee.cs",
-              "/Models/State.cs",
-              "/Models/SampleData/DataGridEmployees.cs",
-              "/Models/SampleData/States.cs"
+              "/Models/SampleData/DataGridEmployees.cs"
             ],
             "DemoType": "Web"
           },
-	  {
+          {
+            "Title": "Popup Editing",
+            "Name": "PopupEditing",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
+              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
+              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
             "Title": "Custom Editors",
             "Name": "CustomEditors",
             "Widget": "DataGrid",
@@ -233,37 +258,8 @@
             "Modules": "devextreme-aspnet-data-nojquery"
           },
           {
-            "Title": "Form Editing",
-            "Name": "FormEditing",
-            "DocUrl": "Guide/Widgets/DataGrid/Editing/#User_Interaction/Form_Mode",
-            "Widget": "DataGrid",
-            "MvcAdditionalFiles": [
-              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
-              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
-              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
-              "/Models/DataGrid/Employee.cs",
-              "/Models/SampleData/DataGridEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Popup Editing",
-            "Name": "PopupEditing",
-            "DocUrl": "Guide/Widgets/DataGrid/Editing/#User_Interaction/Popup_Mode",
-            "Widget": "DataGrid",
-            "MvcAdditionalFiles": [
-              "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
-              "/Controllers/ApiControllers/DataGridEmployeesController.cs",
-              "/Models/DataGrid/InMemoryEmployeesDataContext.cs",
-              "/Models/DataGrid/Employee.cs",
-              "/Models/SampleData/DataGridEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Cascading Lookups",
             "Name": "CascadingLookups",
-            "DocUrl": "Guide/Widgets/DataGrid/Columns/Column_Types/Lookup_Columns/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesWithCitiesController.cs",
