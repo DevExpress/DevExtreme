@@ -417,7 +417,7 @@ QUnit.test('page index change', function(assert) {
 
 });
 
-QUnit.test('save custom field after mapping', function(assert) {
+QUnit.test('save custom field after mapping with grouping enabled', function(assert) {
     const source = new DataSource({
         store: [
             {
