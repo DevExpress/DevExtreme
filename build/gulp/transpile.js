@@ -36,9 +36,7 @@ gulp.task('transpile-prod-old', function() {
         .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 });
 
-gulp.task('transpile-prod', gulp.parallel('transpile-prod-old', 'transpile-prod-renovation'));
-
-gulp.task('transpile', gulp.series('bundler-config', 'transpile-prod', function() {
+gulp.task('transpile', gulp.series('bundler-config', 'transpile-prod-old', 'transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
