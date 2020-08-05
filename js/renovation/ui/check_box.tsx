@@ -65,7 +65,6 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       onActive={viewModel.onActive}
       onFocusIn={viewModel.onFocusIn}
       onFocusOut={viewModel.onFocusOut}
-      saveValueChangeEvent={viewModel.props.saveValueChangeEvent}
       aria={viewModel.aria}
       onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}

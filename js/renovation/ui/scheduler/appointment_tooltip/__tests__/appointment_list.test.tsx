@@ -112,7 +112,6 @@ describe('AppointmentList', () => {
           itemContentTemplate: renderProps.itemContentTemplate,
           getTextAndFormatDate: renderProps.getTextAndFormatDate,
           singleAppointment: { text: 'singleAppointment' },
-          container: 'container',
           showDeleteButton: true,
         });
       expect(getSingleAppointmentData)

@@ -82,7 +82,55 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);
+    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);    
+    /**
+     * @docid dxGanttOptions.onTaskInserting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskInserting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onDependencyInserting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDependencyInserting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onResourceInserting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceInserting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onResourceAssigning
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceAssigning?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
     /**
      * @docid dxGanttOptions.resourceAssignments
      * @type Object
