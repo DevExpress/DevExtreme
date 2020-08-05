@@ -810,6 +810,99 @@ QUnit.module('DataSources', moduleConfig, () => {
     });
 });
 
+QUnit.module('Client side edit events', moduleConfig, () => {
+    test('task inserting - canceling', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date('2019-02-21');
+        const newEnd = new Date('2019-02-22');
+        const newTitle = 'New';
+        this.instance.option('onTaskInserting', (e) => {
+            e.cancel = true;
+        });
+
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '1');
+        this.clock.tick();
+        assert.equal(tasks.length, tasksCount, 'new task was not created in ds');
+    });
+    test('task inserting - update args', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date('2019-02-23');
+        const newEnd = new Date('2019-02-24');
+        this.instance.option('onTaskInserting', (e) => {
+            e.values['title'] = 'My text';
+            e.values['start'] = newStart;
+            e.values['end'] = newEnd;
+        });
+
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute('2019-02-21', '2019-02-22', 'New', '1');
+        this.clock.tick();
+        assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
+        const createdTask = tasks[tasks.length - 1];
+        assert.equal(createdTask.title, 'My text', 'new task title is right');
+        assert.equal(createdTask.start, newStart, 'new task start is right');
+        assert.equal(createdTask.end, newEnd, 'new task end is right');
+    });
+    test('dependency inserting - canceling', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        const count = dependencies.length;
+        this.instance.option('onDependencyInserting', (e) => { e.cancel = true; });
+        getGanttViewCore(this.instance).commandManager.createDependencyCommand.execute('0', '1', '2');
+        this.clock.tick();
+        assert.equal(dependencies.length, count, 'new dependency was not created');
+    });
+    test('resource inserting - canceling', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const count = resources.length;
+        this.instance.option('onResourceInserting', (e) => {
+            e.cancel = true;
+        });
+
+        getGanttViewCore(this.instance).commandManager.createResourceCommand.execute('text');
+        this.clock.tick();
+        assert.equal(resources.length, count, 'new resource was not created');
+    });
+    test('resource inserting - update text', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const count = resources.length;
+        this.instance.option('onResourceInserting', (e) => { e.values['text'] = 'My text'; });
+
+        getGanttViewCore(this.instance).commandManager.createResourceCommand.execute('text');
+        this.clock.tick();
+        assert.equal(resources.length, count + 1, 'new resource was created');
+        const newResource = resources[resources.length - 1];
+        this.instance.option('onResourceAssigning', (e) => { });
+        assert.equal(newResource.text, 'My text', 'new resource text is right');
+    });
+    test('resource assigning - canceling', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const count = resourceAssignments.length;
+        this.instance.option('onResourceAssigning', (e) => { e.cancel = true; });
+
+        getGanttViewCore(this.instance).commandManager.assignResourceCommand.execute('1', '2');
+        this.clock.tick();
+        assert.equal(resourceAssignments.length, count, 'new resource was not assigned');
+    });
+});
+
 QUnit.module('Context Menu', moduleConfig, () => {
     test('showing', function(assert) {
         this.createInstance(allSourcesOptions);
