@@ -1100,6 +1100,19 @@
             "DemoType": "Web"
           }
         ]
+      },
+      {
+        "Name": "Export to Excel",
+        "Equivalents": "",
+        "Badge": "New",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "ExcelJSOverview",
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver"
+            "DemoType": "Web"
+          }
       }
     ]
   },

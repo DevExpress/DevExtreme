@@ -1,0 +1,3 @@
+To enable export in the **PivotGrid**, import the <a href="https://github.com/exceljs/exceljs" target="_blank">ExcelJS</a> and <a href="https://github.com/eligrey/FileSaver.js/" target="_blank">FileSaver</a> libraries. Set **export**.[enabled](/Documentation/ApiReference/UI_Widgets/dxPivotGrid/Configuration/export/#enabled) to **true**. 
+
+Now you can use the [exportPivotGrid(options)](/Documentation/ApiReference/Common/Utils/excelExporter/#exportPivotGridoptions) method to export the **PivotGrid** into an Excel <a href="https://github.com/exceljs/exceljs#create-a-workbook" target="_blank">workbook</a>.
