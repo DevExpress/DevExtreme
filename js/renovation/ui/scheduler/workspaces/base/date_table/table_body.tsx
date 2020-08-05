@@ -12,10 +12,9 @@ export const viewFunction = (viewModel: DateTableBody) => (
     {
     viewModel.props.viewData!
       .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Fragment key={groupIndex}>
+        <Fragment>
           {
-            getIsGroupedAllDayPanel(viewModel.props.viewData!)
+            getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
               && <AllDayPanelTableBody viewData={allDayPanel} />
           }
           { dateTable.map((cellsRow, index) => (

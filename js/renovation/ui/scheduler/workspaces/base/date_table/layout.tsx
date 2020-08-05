@@ -14,6 +14,8 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
       <VirtualTable
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...viewModel.restAttributes}
+        topVirtualRowHeight={viewModel.topVirtualRowHeight}
+        bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
         className={`dx-scheduler-date-table ${viewModel.props.className}`}
       >
         <DateTableBody
@@ -52,5 +54,13 @@ export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) 
   get isVirtual(): boolean {
     const { viewData } = this.props;
     return !!viewData!.isVirtual;
+  }
+
+  get topVirtualRowHeight(): number | undefined {
+    return this.props.viewData?.topVirtualRowHeight || 0;
+  }
+
+  get bottomVirtualRowHeight(): number | undefined {
+    return this.props.viewData?.bottomVirtualRowHeight || 0;
   }
 }

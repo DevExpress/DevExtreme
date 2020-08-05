@@ -10,9 +10,9 @@ export const viewFunction = (viewModel: VirtualTable) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
-    <Row className="dx-scheduler-virtual-row" />
+    <Row className="dx-scheduler-virtual-row" height={viewModel.props.topVirtualRowHeight} />
     {viewModel.props.children}
-    <Row className="dx-scheduler-virtual-row" />
+    <Row className="dx-scheduler-virtual-row" height={viewModel.props.bottomVirtualRowHeight} />
   </Table>
 );
 
@@ -21,6 +21,12 @@ export class VirtualTableProps {
   @OneWay() className?: string;
 
   @Slot() children?: any;
+
+  @OneWay() topVirtualRowHeight?: number = 0;
+
+  @OneWay() bottomVirtualRowHeight?: number = 0;
+
+  @OneWay() startIndex?: number = 0;
 }
 
 @Component({

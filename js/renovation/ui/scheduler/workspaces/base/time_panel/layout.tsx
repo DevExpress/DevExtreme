@@ -8,18 +8,24 @@ import { getKeyByDateAndGroup, getIsGroupedAllDayPanel } from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
+import { VirtualTable } from '../virtual_table';
 
-export const viewFunction = (viewModel: TimePanelTableLayout) => (
-  <Table
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    className={`dx-scheduler-time-panel ${viewModel.props.className}`}
-  >
-    {viewModel.props.viewData!
-      .groupedData.map(({ dateTable }, groupIndex) => (
+export const viewFunction = (viewModel: TimePanelTableLayout) => {
+  const TableComponent = viewModel.isVirtual ? VirtualTable : Table;
+
+  return (
+    <TableComponent
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...viewModel.restAttributes}
+      topVirtualRowHeight={viewModel.topVirtualRowHeight}
+      bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+      className={`dx-scheduler-time-panel ${viewModel.props.className}`}
+    >
+      {viewModel.props.viewData!
+        .groupedData.map(({ dateTable }, groupIndex) => (
         // eslint-disable-next-line react/no-array-index-key
-        <Fragment key={groupIndex}>
-          { getIsGroupedAllDayPanel(viewModel.props.viewData!)
+          <Fragment key={groupIndex}>
+            { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
           && (
           <Row>
             <CellBase className="dx-scheduler-time-panel-title-cell">
@@ -27,7 +33,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
             </CellBase>
           </Row>
           )}
-          {
+            {
             dateTable.map((cellsRow, index) => {
               const isFirstCell = index === 0;
               const isLastCell = index === dateTable.length - 1;
@@ -47,10 +53,11 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
               );
             })
           }
-        </Fragment>
-      ))}
-  </Table>
-);
+          </Fragment>
+        ))}
+    </TableComponent>
+  );
+};
 
 @ComponentBindings()
 export class TimePanelTableLayoutProps extends LayoutProps {
@@ -65,4 +72,16 @@ export class TimePanelTableLayoutProps extends LayoutProps {
   },
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
+  get isVirtual(): boolean {
+    const { viewData } = this.props;
+    return viewData ? !!viewData.isVirtual : false;
+  }
+
+  get topVirtualRowHeight(): number {
+    return this.props.viewData?.topVirtualRowHeight || 0;
+  }
+
+  get bottomVirtualRowHeight(): number {
+    return this.props.viewData?.bottomVirtualRowHeight || 0;
+  }
 }
