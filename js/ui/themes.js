@@ -80,7 +80,7 @@ export function waitForThemeLoad(themeName) {
         }
     }
 
-    if(isPendingThemeLoaded()) {
+    if(isPendingThemeLoaded() || !defaultTimeout) {
         handleLoaded();
     } else {
 

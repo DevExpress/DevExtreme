@@ -5,6 +5,8 @@ const uiThemeModule = require('ui/themes');
 require('viz/core/themes/generic.light');
 require('viz/core/themes/generic.dark');
 
+uiThemeModule.setDefaultTimeout(0);
+
 QUnit.moduleStart(function() {
     $.each([
         { platform: 'platform' },
@@ -373,6 +375,7 @@ QUnit.module('Interaction with ui.themes', {
     beforeEach: function() {
         themeModule.resetCurrentTheme();
         this.$frame = $('<iframe></iframe>').appendTo('body');
+        return new Promise((resolve) => uiThemeModule.initialized(resolve));
     },
     afterEach: function() {
         this.$frame.remove();
