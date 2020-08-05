@@ -8672,6 +8672,44 @@ QUnit.module('Editing with real dataController', {
                 'rowIndex': 0
             }, 'editRowKey');
         });
+
+        QUnit.test('Multiple editRowKey changes should work correctly', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            rowsView.render($testElement);
+
+            // act
+            this.option('editing.editRowKey', 1);
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
+
+            // assert
+            assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
+
+            // act
+            this.option('editing.editRowKey', 2);
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 2, previousValue: 1 });
+
+            // assert
+            assert.notOk($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'first row is not edited');
+            assert.ok($(rowsView.getRowElement(1)).hasClass('dx-edit-row'), 'second row is edited');
+            assert.equal(this.option('editing.editRowKey'), 2, 'editRowKey');
+
+            // act
+            this.option('editing.editRowKey', 3);
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 3, previousValue: 2 });
+
+            // assert
+            assert.notOk($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'first row is not edited');
+            assert.notOk($(rowsView.getRowElement(1)).hasClass('dx-edit-row'), 'second row is not edited');
+            assert.ok($(rowsView.getRowElement(2)).hasClass('dx-edit-row'), 'third row is edited');
+            assert.equal(this.option('editing.editRowKey'), 3, 'editRowKey');
+        });
     });
 });
 

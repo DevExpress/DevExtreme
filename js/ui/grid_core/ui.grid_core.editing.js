@@ -593,7 +593,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const needResetIndexes = editMode === EDIT_MODE_BATCH || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
             if(editMode !== EDIT_MODE_BATCH && editMode !== EDIT_MODE_CELL) {
-                isDefined(this.getEditRowKey()) && this._resetEditRowKey();
+                isDefined(this.option('editing.editRowKey')) && this._resetEditRowKey();
 
                 this.init();
             } else if(needResetIndexes) {
@@ -617,10 +617,6 @@ const EditingController = modules.ViewController.inherit((function() {
             } else {
                 this.option('editing.editRowKey', value);
             }
-        },
-
-        getEditRowKey: function() {
-            return this.option('editing.editRowKey');
         },
 
         getEditRowIndex: function() {
@@ -989,14 +985,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const items = dataController.items();
             const item = items[rowIndex];
             const params = { data: item && item.data, cancel: false };
-            const oldEditRowIndex = oldRowIndex || that._getVisibleEditRowIndex();
             let $editingCell;
+
+            if(!isDefined(oldRowIndex)) {
+                oldRowIndex = that._getVisibleEditRowIndex();
+            }
 
             if(!item) {
                 return;
             }
 
-            if(rowIndex === oldEditRowIndex) {
+            if(rowIndex === oldRowIndex) {
                 return true;
             }
 
@@ -1022,10 +1021,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 oldData: item.data
             });
 
-            const rowIndices = [oldEditRowIndex, rowIndex];
+            const rowIndices = [oldRowIndex, rowIndex];
             const editMode = getEditMode(that);
 
-            that._beforeUpdateItems(rowIndices, rowIndex, oldEditRowIndex);
+            that._beforeUpdateItems(rowIndices, rowIndex, oldRowIndex);
 
             if(editMode === EDIT_MODE_POPUP) {
                 that._showEditPopup(rowIndex);
