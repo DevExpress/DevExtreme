@@ -492,7 +492,7 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    endDate(appointment, position) {
+    normalizeDateByViewEnd(appointment, position) {
         const info = position.info;
         let endDate = info.appointment.endDate;
 

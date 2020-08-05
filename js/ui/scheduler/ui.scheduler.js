@@ -2172,7 +2172,7 @@ class Scheduler extends Widget {
 
             gridAppointmentList.forEach(gridAppointment => {
                 const maxDate = new Date(dateRange[1]);
-                const endDateOfPart = renderingStrategy.endDate(appointmentData, {
+                const endDateOfPart = renderingStrategy.normalizeDateByViewEnd(appointmentData, {
                     info: {
                         appointment: gridAppointment
                     }
