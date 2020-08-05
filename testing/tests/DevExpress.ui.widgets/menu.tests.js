@@ -1349,6 +1349,25 @@ QUnit.module('Menu tests', {
         assert.equal(hidingCount, 0, 'submenu should not hides');
     });
 
+    QUnit.test('Menu should not hide when root item clicked right after mouseleave, hideSubmenuOnMouseLeave: true', function(assert) {
+        if(!isDeviceDesktop(assert)) return;
+
+        const menu = createMenu({
+            items: [{ text: 'Item_1', items: [{ text: 'item_1_1' }] }, { text: 'Item_2', items: [{ text: 'item_2_1' }] }],
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItems = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
+        $($rootMenuItems).eq(0).trigger('dxclick');
+
+        assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(0)).option('visible'), true, 'submenu_1.visible');
+
+        $(menu.element).trigger($.Event('mouseleave', { target: $rootMenuItems.eq(0).get(0), relatedTarget: $rootMenuItems.eq(1).get(0) }));
+        $($rootMenuItems.eq(1)).trigger('dxclick');
+        this.clock.tick(300);
+
+        assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(0)).option('visible'), false, 'submenu_1.not_visible');
+        assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(1)).option('visible'), true, 'submenu_2.visible');
+    });
     // T431949
     QUnit.test('Menu should stop show submenu timeout when another level submenu was hovered', function(assert) {
         if(!isDeviceDesktop(assert)) return;
