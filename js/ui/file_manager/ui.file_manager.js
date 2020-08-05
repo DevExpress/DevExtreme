@@ -144,7 +144,7 @@ class FileManager extends Widget {
     }
 
     _createFilesTreeView(container) {
-        this._filesTreeViewContextMenu = this._createContextMenu();
+        this._filesTreeViewContextMenu = this._createContextMenu(false, 'navPane');
 
         const $filesTreeView = $('<div>')
             .addClass(FILE_MANAGER_DIRS_PANEL_CLASS)
@@ -161,7 +161,7 @@ class FileManager extends Widget {
     }
 
     _createItemView($container, viewMode) {
-        this._itemViewContextMenu = this._createContextMenu(true);
+        this._itemViewContextMenu = this._createContextMenu(true, 'itemView');
 
         const itemViewOptions = this.option('itemView');
 
@@ -198,13 +198,14 @@ class FileManager extends Widget {
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
 
-    _createContextMenu(isolateCreationItemCommands) {
+    _createContextMenu(isolateCreationItemCommands, viewArea) {
         const $contextMenu = $('<div>').appendTo(this._$wrapper);
         return this._createComponent($contextMenu, FileManagerContextMenu, {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
             onItemClick: (args) => this._actions.onContextMenuItemClick(args),
-            isolateCreationItemCommands
+            isolateCreationItemCommands,
+            viewArea
         });
     }
 
