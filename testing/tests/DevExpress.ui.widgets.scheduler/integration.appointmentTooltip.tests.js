@@ -807,7 +807,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         this.clock.tick(300);
 
         assert.ok(notifyStub.called, 'notify is called');
-        assert.ok(notifyStub.withArgs('deleteAppointment').called, 'deleteAppointment is called');
+        assert.ok(notifyStub.withArgs('onDeleteButtonPress').called, 'onDeleteButtonPress is called');
         assert.notOk(notifyStub.withArgs('showAppointmentTooltip').called, 'showAppointmentTooltip isn\'t called');
     });
 

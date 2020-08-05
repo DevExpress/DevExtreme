@@ -958,15 +958,12 @@ QUnit.test('Appointment should be deleted after delete key press, if allowDelete
     assert.ok(notifyStub.called, 'notify is called');
 
     const deleteEventName = notifyStub.getCall(0).args[0];
-    const hideTooltipEventName = notifyStub.getCall(1).args[0];
 
-    assert.equal(deleteEventName, 'deleteAppointment', 'deleteAppointment is called');
+    assert.equal(deleteEventName, 'onDeleteButtonPress', 'onDeleteButtonPress is called');
 
     const eventOptions = notifyStub.getCall(0).args[1];
     assert.deepEqual(eventOptions.data, items[1].itemData, 'data is ok');
     assert.deepEqual($(eventOptions.target).get(0), $targetAppointment.get(0), 'target is ok');
-
-    assert.equal(hideTooltipEventName, 'hideAppointmentTooltip', 'hideAppointmentTooltip is called');
 });
 
 QUnit.test('Appointment should not be deleted after delete key press, if allowDelete = false', function(assert) {
