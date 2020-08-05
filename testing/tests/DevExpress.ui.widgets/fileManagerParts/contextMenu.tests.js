@@ -334,6 +334,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         $items.eq(1).trigger('dxclick');
         this.clock.tick(800);
 
+        const targetFileSystemItem = fileManager.option('fileSystemProvider[1]');
+
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
         assert.strictEqual($(spy.args[0][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
@@ -341,6 +343,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].itemData, 'rename', 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
+        assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
     test('Raise the ContextMenuItemClick event on subitems', function(assert) {
@@ -387,6 +391,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.clock.tick(800);
 
         const itemData = fileManager.option('contextMenu.items[0].items[0]');
+        const targetFileSystemItem = fileManager.option('fileSystemProvider[1]');
 
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
@@ -395,6 +400,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
+        assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
 });
