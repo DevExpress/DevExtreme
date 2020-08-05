@@ -3363,6 +3363,8 @@ declare module DevExpress.ui {
     }
     /** @name dxDropDownButtonItem */
     export interface dxDropDownButtonItem extends dxListItem {
+        /** @name dxDropDownButtonItem.onClick */
+        onClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
     }
     /** @name dxDropDownEditor.Options */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
