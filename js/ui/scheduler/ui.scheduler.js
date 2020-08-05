@@ -1942,6 +1942,7 @@ class Scheduler extends Widget {
         this.fire('setField', 'recurrenceException', updatedAppointment, recurrenceException);
 
         if(isPopupEditing) {
+            // TODO: need to refactor - move as parameter to appointment popup
             this._updatedRecAppointment = updatedAppointment;
 
             this._appointmentPopup.show(singleAppointment, true);
@@ -2569,7 +2570,7 @@ class Scheduler extends Widget {
     showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) {
         const adapter = this.createAppointmentAdapter(currentAppointmentData || appointmentData);
 
-        this._checkRecurringAppointment(appointmentData, currentAppointmentData, adapter.startDate, function() {
+        this._checkRecurringAppointment(appointmentData, currentAppointmentData || appointmentData, adapter.startDate, function() {
             if(createNewAppointment || isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
                 this._editing.allowAdding && this._appointmentPopup.show(appointmentData, true);
