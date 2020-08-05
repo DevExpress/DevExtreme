@@ -237,7 +237,7 @@ const Component = Class.inherit({
                     this._optionChangedAction(extend({}, args));
                 }
 
-                if(!this._disposed && this._cancelOptionChange !== args.name) {
+                if(!this._disposed && this._cancelOptionChange !== name) {
                     this._optionChanged(args);
                 }
             }

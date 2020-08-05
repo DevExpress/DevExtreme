@@ -2,6 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import formatHelper from 'format_helper';
 import errors from 'ui/widget/ui.errors';
+import dataErrors from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -7911,6 +7912,52 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         // assert
         assert.equal(removeHandlerCallCount, 2, 'row is deleted');
     });
+
+    QUnit.test('update error', function(assert) {
+        const errors = dataErrors.errors;
+        sinon.spy(errors, 'log');
+        const dataSource = new DataSource({
+            key: 'field1',
+            load: function() {
+                return [{ field1: 1, field2: 2 }];
+            },
+            totalCount: function() {
+                return 1;
+            },
+            update: function() {
+                return $.Deferred().reject('Update error');
+            }
+        });
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        this.applyOptions({
+            columns: ['field1', { setCellValue: function(data, value) { data.field1 = value; }, allowEditing: true }]
+        });
+
+        // act
+        this.editingController.getFirstEditableCellInRow = function() { return $([]); };
+
+        this.clock.tick();
+
+        // act
+        this.editingController.editRow(0);
+        this.editingController.updateFieldValue({
+            key: 1,
+            column: {
+                setCellValue: function(data, value) { data.field1 = value; }
+            },
+            value: 4
+        });
+        this.editingController.saveEditData();
+
+        // assert
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
+        assert.equal(errors.log.callCount, 1, 'error fired');
+        assert.equal(errors.log.lastCall.args[0], 'E4000', 'error code');
+        errors.log.restore();
+    });
 });
 
 QUnit.module('Error handling', {
@@ -8095,51 +8142,6 @@ QUnit.module('Error handling', {
 
         // assert
         assert.deepEqual(dataErrors, ['Remove error']);
-    });
-
-    QUnit.test('update error', function(assert) {
-        const dataErrors = [];
-
-        this.options = {
-            columns: ['field1', { setCellValue: function(data, value) { data.field1 = value; }, allowEditing: true }],
-            dataSource: {
-                key: 'field1',
-                load: function() {
-                    return [{ field1: 1, field2: 2 }];
-                },
-                totalCount: function() {
-                    return 1;
-                },
-                update: function() {
-                    return $.Deferred().reject('Update error');
-                }
-            },
-            onDataErrorOccurred: function(e) {
-                dataErrors.push(e.error.message);
-            }
-        };
-
-        // act
-        setupDataGridModules(this, ['data', 'columns', 'editing']);
-
-        this.editingController.getFirstEditableCellInRow = function() { return $([]); };
-
-        this.clock.tick();
-
-        // act
-        this.editingController.editRow(0);
-        this.editingController.updateFieldValue({
-            key: 1,
-            column: {
-                setCellValue: function(data, value) { data.field1 = value; }
-            },
-            value: 4
-        });
-        this.editingController.saveEditData();
-
-        // assert
-        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.deepEqual(dataErrors, ['Update error']);
     });
 });
 

@@ -1183,10 +1183,12 @@ export default {
                         case 'columnWidth': {
                             args.handled = true;
                             const ignoreColumnOptionNames = args.fullName === 'columnWidth' && ['width'];
-                            const isEditingPopup = args.fullName && args.fullName.indexOf('editing.popup') === 0;
-                            const isEditingForm = args.fullName && args.fullName.indexOf('editing.form') === 0;
+                            const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
+                            const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
+                            const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
+                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey;
 
-                            if(!isEditingPopup && !isEditingForm) {
+                            if(needReinit) {
                                 this.reinit(ignoreColumnOptionNames);
                             }
                             break;
