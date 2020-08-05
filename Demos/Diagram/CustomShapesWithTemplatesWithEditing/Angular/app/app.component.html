@@ -18,8 +18,8 @@
         <text class="template-button" x="62%" y="85%" (click)="deleteEmployee(item.dataItem)">Delete</text>
     </svg>
     <svg *dxTemplate="let item of 'customShapeToolboxTemplate'" class="template">
-        <text class="template-name" x="50%" y="40%">New</text>
-        <text class="template-title" x="50%" y="70%">Employee</text>
+        <text x="50%" y="40%">New</text>
+        <text x="50%" y="70%">Employee</text>
     </svg>
     <dxo-nodes [dataSource]="dataSource" keyExpr="ID" [typeExpr]="itemTypeExpr" [customDataExpr]="itemCustomDataExpr" parentKeyExpr="Head_ID">
         <dxo-auto-layout type="tree"></dxo-auto-layout>

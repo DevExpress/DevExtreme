@@ -1,14 +1,12 @@
 <template>
   <svg class="template">
     <text
-      class="template-name"
       x="50%"
       y="40%"
     >
       New
     </text>
     <text
-      class="template-title"
       x="50%"
       y="70%"
     >

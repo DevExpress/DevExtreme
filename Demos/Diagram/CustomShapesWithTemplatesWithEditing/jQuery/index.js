@@ -45,8 +45,8 @@ $(function() {
         customShapeToolboxTemplate: function(item, $container) {
             var employee = item.dataItem;
             var $content = $("<svg class='template'>" +
-                "<text class='template-name' x='50%' y='40%'>New</text>" +
-                "<text class='template-title' x='50%' y='70%'>Employee</text>" +
+                "<text x='50%' y='40%'>New</text>" +
+                "<text x='50%' y='70%'>Employee</text>" +
                 "</svg >");
             $container.append($content);
         },
