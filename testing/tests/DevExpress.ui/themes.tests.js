@@ -647,7 +647,6 @@ QUnit.module('initialized method', (hooks) => {
     });
 
     hooks.afterEach(function() {
-        themes.setDefaultTimeout(defaultTimeout);
         $frame.remove();
     });
 
