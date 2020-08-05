@@ -132,6 +132,7 @@ describe('TimePanelLayout', () => {
         .toHaveBeenNthCalledWith(
           1,
           viewData,
+          0,
         );
     });
 

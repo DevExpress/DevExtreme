@@ -4,7 +4,11 @@ import {
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
 import { CellBase } from '../cell';
-import { getKeyByDateAndGroup, getIsGroupedAllDayPanel } from '../../utils';
+import {
+  getKeyByDateAndGroup,
+  getKeyByGroup,
+  getIsGroupedAllDayPanel,
+} from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
@@ -23,8 +27,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => {
     >
       {viewModel.props.viewData!
         .groupedData.map(({ dateTable }, groupIndex) => (
-        // eslint-disable-next-line react/no-array-index-key
-          <Fragment key={groupIndex}>
+          <Fragment key={getKeyByGroup(groupIndex)}>
             { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
           && (
           <Row>

@@ -13,6 +13,8 @@ export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
   return key;
 };
 
+export const getKeyByGroup = (groupIndex: number): string => `key_${groupIndex}`;
+
 export const addHeightToStyle = (
   height?: number, style?: any,
 ): { [key: string]: string | number | undefined } => {
