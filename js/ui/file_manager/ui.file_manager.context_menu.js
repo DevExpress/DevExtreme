@@ -73,18 +73,14 @@ class FileManagerContextMenu extends Widget {
 
     createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {
         this._targetFileItems = fileItems;
-        if(targetFileItem === null) {
-            this._targetFileItem = null;
-        } else {
-            this._targetFileItem = targetFileItem ? targetFileItem.fileItem : fileItems[0].fileItem;
-        }
+        this._targetFileItem = isDefined(targetFileItem) ? targetFileItem : fileItems?.[0];
 
         const result = [];
 
         const itemArray = contextMenuItems || this.option('items');
         itemArray.forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.name;
-            const item = this._configureItemByCommandName(commandName, srcItem, fileItems);
+            const item = this._configureItemByCommandName(commandName, srcItem, fileItems, this._targetFileItem);
             if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
             }
@@ -121,13 +117,13 @@ class FileManagerContextMenu extends Widget {
         });
     }
 
-    _configureItemByCommandName(commandName, item, fileItems) {
+    _configureItemByCommandName(commandName, item, fileItems, targetFileItem) {
         if(!this._isDefaultItem(commandName)) {
             const res = extend(true, {}, item);
             res.originalItemData = item;
             this._addItemClickHandler(commandName, res);
             if(Array.isArray(item.items)) {
-                res.items = this.createContextMenuItems(fileItems, item.items);
+                res.items = this.createContextMenuItems(fileItems, item.items, targetFileItem);
             }
             return res;
         }
@@ -169,7 +165,7 @@ class FileManagerContextMenu extends Widget {
     _onContextMenuItemClick(commandName, args) {
         const changedArgs = extend(true, {}, args);
         changedArgs.itemData = args.itemData.originalItemData;
-        changedArgs.fileSystemItem = this._targetFileItem;
+        changedArgs.fileSystemItem = this._targetFileItem?.fileItem;
         changedArgs.viewArea = this.option('viewArea');
         this._actions.onItemClick(changedArgs);
         if(this._isDefaultItem(commandName)) {
