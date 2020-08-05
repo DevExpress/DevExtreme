@@ -2245,60 +2245,6 @@ class Scheduler extends Widget {
         return targetedAdapter.source();
     }
 
-    // TODO:
-    _getAppointmentData(appointmentData, options) {
-        options = options || {};
-
-        const $appointment = options.$appointment;
-        const updatedData = options.skipDateCalculation ? {} : this._getUpdatedData(options);
-        const resultAppointmentData = extend({}, appointmentData, updatedData);
-        // const allDay = this.fire('getField', 'allDay', appointmentData);
-        // const isAllDay = this._workSpace.supportAllDayRow() && allDay;
-        const startDate = new Date(this.fire('getField', 'startDate', resultAppointmentData));
-        const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
-        const appointmentDuration = endDate.getTime() - startDate.getTime();
-        let updatedStartDate = startDate;
-        let appointmentStartDate;
-        let appointmentEndDate;
-
-        if(isDefined($appointment)) {
-            const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
-
-            if(isFunction(apptDataCalculator) && this._isAppointmentRecurrence(appointmentData)) {
-                updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
-            } else {
-                const settings = $appointment.data('dxAppointmentSettings');
-
-                // appointmentStartDate = settings && settings.originalAppointmentStartDate;
-                // appointmentEndDate = settings && settings.originalAppointmentEndDate;
-
-                // TODO
-                if(settings) {
-                    appointmentStartDate = settings.info?.sourceAppointment.startDate;
-                    appointmentEndDate = settings.info?.sourceAppointment.endDate;
-                }
-
-                // if(this._isAppointmentRecurrence(appointmentData)) {
-                //     appointmentStartDate = settings && settings.startDate;
-                //     appointmentEndDate = settings && settings.endDate;
-                // }
-
-                if(appointmentStartDate) {
-                    updatedStartDate = appointmentStartDate;
-                }
-            }
-        }
-
-        this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
-        this.fire('setField', 'endDate', resultAppointmentData, appointmentEndDate || new Date(updatedStartDate.getTime() + appointmentDuration));
-
-        if(!options.skipHoursProcessing && !options.isAppointmentResized) { // TODO: isAppointmentResized no exists
-            this._convertDatesByTimezoneBack(false, resultAppointmentData);
-        }
-
-        return resultAppointmentData;
-    }
-
     subscribe(subject, action) {
         this._subscribes[subject] = subscribes[subject] = action;
     }

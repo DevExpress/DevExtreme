@@ -670,24 +670,6 @@ const subscribes = {
         return this.getTargetedAppointment(appointment, element);
     },
 
-    // getTargetedAppointmentData: function(appointment, appointmentElement, needConvertByTimezones) { // TODO: replace on getTargetedAppointment
-    //     const $appointmentElement = $(appointmentElement);
-    //     const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
-
-    //     const targetedAppointment = this._getAppointmentData(appointment, {
-    //         skipDateCalculation: true,
-    //         $appointment: $appointmentElement,
-    //         skipHoursProcessing: needConvertByTimezones ? false : true
-    //     });
-    //     const result = {};
-
-    //     extend(true, result, appointment, targetedAppointment);
-
-    //     appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
-
-    //     return result;
-    // },
-
     getAppointmentDurationInMs: function(options) {
         const startDate = options.startDate;
         const endDate = options.endDate;
