@@ -2245,6 +2245,7 @@ class Scheduler extends Widget {
         return targetedAdapter.source();
     }
 
+    // TODO:
     _getAppointmentData(appointmentData, options) {
         options = options || {};
 

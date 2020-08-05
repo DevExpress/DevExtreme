@@ -70,8 +70,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 if(this.option('allowDelete')) {
                     e.preventDefault();
                     const data = this._getItemData(e.target);
-                    this.notifyObserver('deleteAppointment', { data: data, target: e.target });
-                    this.notifyObserver('hideAppointmentTooltip');
+                    this.notifyObserver('onDeleteButtonPress', { data: data, target: e.target });
                 }
             }).bind(this),
             tab: tabHandler

@@ -114,13 +114,11 @@ const subscribes = {
         }
     },
 
-    deleteAppointment: function(options) {
-        options.$appointment = $(options.target);
+    onDeleteButtonPress: function(options) {
+        const targetedData = this.getTargetedAppointment(options.data, $(options.target));
+        this.checkAndDeleteAppointment(options.data, targetedData);
 
-        const appointmentData = options.data;
-        const targetedData = this._getAppointmentData(appointmentData, options);
-
-        this.checkAndDeleteAppointment(appointmentData, targetedData);
+        this.hideAppointmentTooltip();
     },
 
     getAppointmentColor: function(options) {
