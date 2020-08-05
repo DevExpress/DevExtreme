@@ -9,8 +9,8 @@ const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position) {
-        const startDate = dateUtils.trimTime(new Date(position.info.appointment.startDate));
-        const endDate = this.normalizeDateByViewEnd(appointment, position);
+        const startDate = dateUtils.trimTime(position.info.appointment.startDate);
+        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const duration = this._getDurationInDays(startDate, endDate);
         const width = this.cropAppointmentWidth(Math.ceil(duration) * cellWidth, cellWidth);

@@ -16,7 +16,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const allDay = this.instance.fire('getField', 'allDay', appointment);
         const startDate = position.info.appointment.startDate;
-        const endDate = this.normalizeDateByViewEnd(appointment, position);
+        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
 
         let appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
