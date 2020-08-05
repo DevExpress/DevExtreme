@@ -28,7 +28,7 @@ export class RowProps {
   view: viewFunction,
 })
 export class Row extends JSXComponent(RowProps) {
-  get style(): object {
+  get style(): { [key: string]: string | number | undefined } {
     const { height } = this.props;
     const { style } = this.restAttributes;
 

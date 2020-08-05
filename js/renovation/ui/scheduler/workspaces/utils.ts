@@ -15,7 +15,7 @@ export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
 
 export const addHeightToStyle = (
   height?: number, style?: any,
-): object => {
+): { [key: string]: string | number | undefined } => {
   const nextStyle = style || {};
 
   return {
