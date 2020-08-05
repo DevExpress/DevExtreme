@@ -417,16 +417,16 @@ QUnit.test('page index change', function(assert) {
 
 });
 
-QUnit.test('save custom field after mapping with grouping enabled', function(assert) {
+QUnit.test('save custom field of groups after mapping', function(assert) {
     const source = new DataSource({
         store: [
             {
                 'key': 1,
-                'field': 'text'
+                'field': 'value 1'
             },
             {
                 'key': 1,
-                'field': 'test'
+                'field': 'value 2'
             }
         ],
         onCustomizeLoadResult: function(loadResult) {
@@ -444,11 +444,11 @@ QUnit.test('save custom field after mapping with grouping enabled', function(ass
             'customField': true,
             'items': [
                 {
-                    'field': 'text',
+                    'field': 'value 1',
                     'key': 1
                 },
                 {
-                    'field': 'test',
+                    'field': 'value 2',
                     'key': 1
                 }
             ],
