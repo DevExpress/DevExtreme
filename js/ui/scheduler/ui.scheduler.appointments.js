@@ -455,7 +455,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
         return itemTemplate.render({
             model: {
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
+                // targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
+                targetedAppointmentData: this.invoke('getTargetedAppointment', itemData, $(container).parent())
             },
             container: container,
             index: index
