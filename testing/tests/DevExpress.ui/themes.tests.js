@@ -722,17 +722,4 @@ QUnit.module('initialized method', (hooks) => {
             done();
         });
     });
-
-    ('initialized fires syncroniously if timeout === 0', function(assert) {
-        themes.setDefaultTimeout(0);
-        themes.init({
-            _autoInit: true,
-            _forceTimeout: true
-        });
-
-        themes.initialized(() => {
-            assert.ok(true);
-        });
-    });
-
 });
