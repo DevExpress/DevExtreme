@@ -383,7 +383,19 @@ class Gantt extends Widget {
 
             NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
             NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
-            NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); }
+            NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); },
+
+            NotifyTaskCreating: (args) => { this._raiseInsertingAction(GANTT_TASKS, args); },
+            NotifyTaskRemoving: (args) => { },
+            NotifyTaskUpdating: (args) => { },
+            NotifyTaskMoving: (args) => { },
+            NotifyTaskEditDialogShowing: (args) => { },
+            NotifyDependencyInserting: (args) => { this._raiseInsertingAction(GANTT_DEPENDENCIES, args); },
+            NotifyDependencyRemoving: (args) => { },
+            NotifyResourceCreating: (args) => { this._raiseInsertingAction(GANTT_RESOURCES, args); },
+            NotifyResourceRemoving: (args) => { },
+            NotifyResourceAssigning: (args) => { this._raiseInsertingAction(GANTT_RESOURCE_ASSIGNMENTS, args); },
+            // NotifyResourceUnassigning: function(args) { }
         };
     }
     _onRecordInserted(optionName, record, callback) {
@@ -494,6 +506,85 @@ class Gantt extends Widget {
             this._createCustomCommandAction();
         }
         this._customCommandAction({ name: commandName });
+    }
+
+    _raiseInsertingAction(optionName, coreArgs) {
+        const action = this._getInsertingAction(optionName);
+        if(action) {
+            const args = { cancel: false, values: this._convertCoreToMappedData(optionName, coreArgs.values) };
+            action(args);
+            coreArgs.cancel = args.cancel;
+            coreArgs.values = this._convertMappedToCoreData(optionName, args.values);
+        }
+    }
+    _getInsertingAction(optionName) {
+        switch(optionName) {
+            case GANTT_TASKS:
+                return this._getTaskInsertingAction();
+            case GANTT_DEPENDENCIES:
+                return this._getDependencyInsertingAction();
+            case GANTT_RESOURCES:
+                return this._getResourceInsertingAction();
+            case GANTT_RESOURCE_ASSIGNMENTS:
+                return this._getResourceAssigningAction();
+        }
+    }
+    _getTaskInsertingAction() {
+        if(!this._taskInsertingAction) {
+            this._createTaskInsertingAction();
+        }
+        return this._taskInsertingAction;
+    }
+    _getDependencyInsertingAction() {
+        if(!this._dependencyInsertingAction) {
+            this._createDependencyInsertingAction();
+        }
+        return this._dependencyInsertingAction;
+    }
+    _getResourceInsertingAction() {
+        if(!this._resourceInsertingAction) {
+            this._createResourceInsertingAction();
+        }
+        return this._resourceInsertingAction;
+    }
+    _getResourceAssigningAction() {
+        if(!this._resourceAssigningAction) {
+            this._createResourceAssigningAction();
+        }
+        return this._resourceAssigningAction;
+    }
+    _createTaskInsertingAction() {
+        this._taskInsertingAction = this._createActionByOption('onTaskInserting');
+    }
+    _createDependencyInsertingAction() {
+        this._dependencyInsertingAction = this._createActionByOption('onDependencyInserting');
+    }
+    _createResourceInsertingAction() {
+        this._resourceInsertingAction = this._createActionByOption('onResourceInserting');
+    }
+    _createResourceAssigningAction() {
+        this._resourceAssigningAction = this._createActionByOption('onResourceAssigning');
+    }
+    _convertCoreToMappedData(optionName, coreData) {
+        return Object.keys(coreData).reduce((previous, f) => {
+            const setter = dataCoreUtils.compileSetter(this.option(`${optionName}.${f}Expr`));
+            setter(previous, coreData[f]);
+            return previous;
+        }, {});
+    }
+    _convertMappedToCoreData(optionName, mappedData) {
+        const coreData = {};
+        if(mappedData) {
+            const mappedFields = this.option(optionName);
+            for(const field in mappedFields) {
+                const exprMatches = field.match(/(\w*)Expr/);
+                if(exprMatches && mappedData[exprMatches[1]] !== undefined) {
+                    const getter = dataCoreUtils.compileGetter(mappedFields[exprMatches[0]]);
+                    coreData[exprMatches[1]] = getter(mappedData);
+                }
+            }
+        }
+        return coreData;
     }
 
     _getSelectionMode(allowSelection) {
@@ -713,6 +804,10 @@ class Gantt extends Widget {
             firstDayOfWeek: undefined,
             selectedRowKey: undefined,
             onSelectionChanged: null,
+            onTaskInserting: null,
+            onDependencyInserting: null,
+            onResourceInserting: null,
+            onResourceAssigning: null,
             onCustomCommand: null,
             allowSelection: true,
             showRowLines: true,
@@ -830,6 +925,18 @@ class Gantt extends Widget {
                 break;
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
+                break;
+            case 'onTaskInserting':
+                this._createTaskInsertingAction();
+                break;
+            case 'onDependencyInserting':
+                this._createDependencyInsertingAction();
+                break;
+            case 'onResourceInserting':
+                this._createResourceInsertingAction();
+                break;
+            case 'onResourceAssigning':
+                this._createResourceAssigningAction();
                 break;
             case 'onCustomCommand':
                 this._createCustomCommandAction();
