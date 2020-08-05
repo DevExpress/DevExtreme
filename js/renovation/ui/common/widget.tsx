@@ -75,7 +75,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() aria?: object = {};
 
-  @Slot() children?: JSX.Element;
+  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
   @OneWay() classes?: string | undefined = '';
 
@@ -279,7 +279,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     return undefined;
   }
 
-  get attributes(): object {
+  get attributes(): { [key: string]: string } {
     const {
       aria,
       disabled,
@@ -294,7 +294,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     };
   }
 
-  get styles(): object {
+  get styles(): { [key: string]: string | number } {
     const { width, height } = this.props;
     const style = this.restAttributes.style || {};
 

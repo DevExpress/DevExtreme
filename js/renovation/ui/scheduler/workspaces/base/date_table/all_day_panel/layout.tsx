@@ -49,7 +49,7 @@ export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
     return this.props.viewData!.groupedData[0].allDayPanel;
   }
 
-  get style(): object {
+  get style(): { [key: string]: string | number | undefined } {
     const { height } = this.props;
     const { style } = this.restAttributes;
 
