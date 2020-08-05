@@ -294,7 +294,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     };
   }
 
-  get styles(): { [key: string]: string } {
+  get styles(): { [key: string]: string | number } {
     const { width, height } = this.props;
     const style = this.restAttributes.style || {};
 
