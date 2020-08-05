@@ -439,6 +439,7 @@ QUnit.test('save custom field of groups after mapping', function(assert) {
     });
 
     source.load();
+
     assert.ok(source.items()[0].customField);
 });
 
