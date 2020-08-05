@@ -2412,10 +2412,6 @@ class Scheduler extends Widget {
         this._fireContentReadyAction();
     }
 
-    _showAppointmentPopup(data, visibleButtons, isProcessTimeZone) {
-        this._appointmentPopup.show(data, visibleButtons, isProcessTimeZone);
-    }
-
     getAppointmentPopup() {
         return this._appointmentPopup.getPopup();
     }
@@ -2563,18 +2559,19 @@ class Scheduler extends Widget {
         return this._workSpace.getEndViewDate();
     }
 
-    showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) {
-        const adapter = this.createAppointmentAdapter(currentAppointmentData || appointmentData);
+    showAppointmentPopup(appointment, createNewAppointment, currentAppointment) {
+        const adapter = this.createAppointmentAdapter(currentAppointment || appointment);
+        const newCurrentAppointment = extend({}, appointment, currentAppointment);
 
-        this._checkRecurringAppointment(appointmentData, currentAppointmentData || appointmentData, adapter.startDate, function() {
-            if(createNewAppointment || isEmptyObject(appointmentData)) {
+        this._checkRecurringAppointment(appointment, newCurrentAppointment, adapter.startDate, () => {
+            if(createNewAppointment || isEmptyObject(appointment)) {
                 delete this._editAppointmentData;
-                this._editing.allowAdding && this._appointmentPopup.show(appointmentData, true);
+                this._editing.allowAdding && this._appointmentPopup.show(appointment, true);
             } else {
-                this._editAppointmentData = appointmentData;
-                this._appointmentPopup.show(appointmentData, this._editing.allowUpdating);
+                this._editAppointmentData = appointment;
+                this._appointmentPopup.show(appointment, this._editing.allowUpdating);
             }
-        }.bind(this), false, true);
+        }, false, true);
     }
 
     hideAppointmentPopup(saveChanges) {
