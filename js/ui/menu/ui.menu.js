@@ -831,6 +831,7 @@ class Menu extends MenuBase {
         }
 
         if(submenu) {
+            this._clearTimeouts();
             submenu.show();
             this.option('focusedElement', submenu.option('focusedElement'));
         }
