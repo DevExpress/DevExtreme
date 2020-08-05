@@ -157,20 +157,19 @@ $(function() {
 
     function onItemClick(args) {
         var updated = false;
+
         if(args.itemData.extension) {
-            updated = createFile(args.itemData.extension);
+            updated = createFile(args.itemData.extension, args.fileSystemItem);
         } else if(args.itemData.category !== undefined) {
-            updated = updateCategory(args.itemData.category);
+            updated = updateCategory(args.itemData.category, args.fileSystemItem, args.viewArea);
         }
-         
+
         if(updated) {
             fileManager.refresh();
         }
     }
 
-    function createFile(fileExtension) {
-        var currentDirectory = fileManager.getCurrentDirectory();
-
+    function createFile(fileExtension, directory) {
         var newItem = {
             __KEY__: Date.now(),
             name: "New file" + fileExtension,
@@ -178,21 +177,41 @@ $(function() {
             size: 0
         };
 
-        if(currentDirectory.dataItem) {
-            currentDirectory.dataItem.items.push(newItem);
-        } else {
-            fileSystem.push(newItem);
+        directory = directory || fileManager.getCurrentDirectory();
+        if(!directory.isDirectory) {
+            return false;
         }
+
+        var array =  null;
+        if(!directory.dataItem) {
+          array = fileSystem;
+        }
+        else {
+            array = directory.dataItem.items;
+            if(!array) {
+                directory.dataItem.items = array = [];
+            }
+        }
+
+        array.push(newItem);
         return true;
     }
 
-    function updateCategory(newCategory) {
-        var selectedItems = fileManager.getSelectedItems();
+    function updateCategory(newCategory, directory, viewArea) {
+        var items = null;
 
-        selectedItems.forEach(function(selectedItem) {
-            selectedItem.dataItem.category = newCategory;
+        if(viewArea === "navPane") {
+            items = [ directory ];
+        } else {
+            items = fileManager.getSelectedItems();
+        }
+
+        items.forEach(function(item) {
+            if(item.dataItem) {
+                item.dataItem.category = newCategory;
+            }
         });
 
-        return selectedItems.length > 0;
+        return items.length > 0;
     }
 });
