@@ -6630,6 +6630,8 @@ declare module DevExpress.ui {
         static current(): string;
         /** @name ui.themes.current(themeName) */
         static current(themeName: string): void;
+        /** @name ui.themes.initialized(callback) */
+        static initialized(callback: Function): void;
         /** @name ui.themes.ready(callback) */
         static ready(callback: Function): void;
     }
