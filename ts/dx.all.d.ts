@@ -6760,66 +6760,12 @@ declare module DevExpress.viz {
     }
     /** @name BaseChartAnnotationConfig */
     export interface BaseChartAnnotationConfig {
-        /** @name BaseChartAnnotationConfig.allowDragging */
-        allowDragging?: boolean;
         /** @name BaseChartAnnotationConfig.argument */
         argument?: number | Date | string;
-        /** @name BaseChartAnnotationConfig.arrowLength */
-        arrowLength?: number;
-        /** @name BaseChartAnnotationConfig.arrowWidth */
-        arrowWidth?: number;
-        /** @name BaseChartAnnotationConfig.border */
-        border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
-        /** @name BaseChartAnnotationConfig.color */
-        color?: string;
-        /** @name BaseChartAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: BaseChartAnnotationConfig | any) => any);
-        /** @name BaseChartAnnotationConfig.data */
-        data?: any;
-        /** @name BaseChartAnnotationConfig.description */
-        description?: string;
-        /** @name BaseChartAnnotationConfig.font */
-        font?: Font;
-        /** @name BaseChartAnnotationConfig.height */
-        height?: number;
-        /** @name BaseChartAnnotationConfig.image */
-        image?: string | { height?: number, url?: string, width?: number };
-        /** @name BaseChartAnnotationConfig.offsetX */
-        offsetX?: number;
-        /** @name BaseChartAnnotationConfig.offsetY */
-        offsetY?: number;
-        /** @name BaseChartAnnotationConfig.opacity */
-        opacity?: number;
-        /** @name BaseChartAnnotationConfig.paddingLeftRight */
-        paddingLeftRight?: number;
-        /** @name BaseChartAnnotationConfig.paddingTopBottom */
-        paddingTopBottom?: number;
         /** @name BaseChartAnnotationConfig.series */
         series?: string;
-        /** @name BaseChartAnnotationConfig.shadow */
-        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-        /** @name BaseChartAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: BaseChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
-        /** @name BaseChartAnnotationConfig.text */
-        text?: string;
-        /** @name BaseChartAnnotationConfig.textOverflow */
-        textOverflow?: 'ellipsis' | 'hide' | 'none';
-        /** @name BaseChartAnnotationConfig.tooltipEnabled */
-        tooltipEnabled?: boolean;
-        /** @name BaseChartAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: BaseChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name BaseChartAnnotationConfig.type */
-        type?: 'text' | 'image' | 'custom';
         /** @name BaseChartAnnotationConfig.value */
         value?: number | Date | string;
-        /** @name BaseChartAnnotationConfig.width */
-        width?: number;
-        /** @name BaseChartAnnotationConfig.wordWrap */
-        wordWrap?: 'normal' | 'breakWord' | 'none';
-        /** @name BaseChartAnnotationConfig.x */
-        x?: number;
-        /** @name BaseChartAnnotationConfig.y */
-        y?: number;
     }
     /** @name BaseChartLegendItem */
     export interface BaseChartLegendItem extends BaseLegendItem {
@@ -7163,6 +7109,63 @@ declare module DevExpress.viz {
         showLoadingIndicator(): void;
         /** @name BaseWidget.svg() */
         svg(): string;
+    }
+    /** @name BaseWidgetAnnotationConfig */
+    export interface BaseWidgetAnnotationConfig {
+        /** @name BaseWidgetAnnotationConfig.allowDragging */
+        allowDragging?: boolean;
+        /** @name BaseWidgetAnnotationConfig.arrowLength */
+        arrowLength?: number;
+        /** @name BaseWidgetAnnotationConfig.arrowWidth */
+        arrowWidth?: number;
+        /** @name BaseWidgetAnnotationConfig.border */
+        border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+        /** @name BaseWidgetAnnotationConfig.color */
+        color?: string;
+        /** @name BaseWidgetAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: BaseWidgetAnnotationConfig | any) => any);
+        /** @name BaseWidgetAnnotationConfig.data */
+        data?: any;
+        /** @name BaseWidgetAnnotationConfig.description */
+        description?: string;
+        /** @name BaseWidgetAnnotationConfig.font */
+        font?: Font;
+        /** @name BaseWidgetAnnotationConfig.height */
+        height?: number;
+        /** @name BaseWidgetAnnotationConfig.image */
+        image?: string | { height?: number, url?: string, width?: number };
+        /** @name BaseWidgetAnnotationConfig.offsetX */
+        offsetX?: number;
+        /** @name BaseWidgetAnnotationConfig.offsetY */
+        offsetY?: number;
+        /** @name BaseWidgetAnnotationConfig.opacity */
+        opacity?: number;
+        /** @name BaseWidgetAnnotationConfig.paddingLeftRight */
+        paddingLeftRight?: number;
+        /** @name BaseWidgetAnnotationConfig.paddingTopBottom */
+        paddingTopBottom?: number;
+        /** @name BaseWidgetAnnotationConfig.shadow */
+        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name BaseWidgetAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name BaseWidgetAnnotationConfig.text */
+        text?: string;
+        /** @name BaseWidgetAnnotationConfig.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
+        /** @name BaseWidgetAnnotationConfig.tooltipEnabled */
+        tooltipEnabled?: boolean;
+        /** @name BaseWidgetAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name BaseWidgetAnnotationConfig.type */
+        type?: 'text' | 'image' | 'custom';
+        /** @name BaseWidgetAnnotationConfig.width */
+        width?: number;
+        /** @name BaseWidgetAnnotationConfig.wordWrap */
+        wordWrap?: 'normal' | 'breakWord' | 'none';
+        /** @name BaseWidgetAnnotationConfig.x */
+        x?: number;
+        /** @name BaseWidgetAnnotationConfig.y */
+        y?: number;
     }
     /** @name ChartSeries */
     export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
@@ -10197,14 +10200,20 @@ declare module DevExpress.viz {
     }
     /** @name dxVectorMap.Options */
     export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
+        /** @name dxVectorMap.Options.annotations */
+        annotations?: Array<dxVectorMapAnnotationConfig | any>;
         /** @name dxVectorMap.Options.background */
         background?: { borderColor?: string, color?: string };
         /** @name dxVectorMap.Options.bounds */
         bounds?: Array<number>;
         /** @name dxVectorMap.Options.center */
         center?: Array<number>;
+        /** @name dxVectorMap.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
         /** @name dxVectorMap.Options.controlBar */
         controlBar?: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: 'center' | 'left' | 'right', margin?: number, opacity?: number, verticalAlignment?: 'bottom' | 'top' };
+        /** @name dxVectorMap.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
         /** @name dxVectorMap.Options.layers */
         layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
         /** @name dxVectorMap.Options.legends */
@@ -10218,9 +10227,9 @@ declare module DevExpress.viz {
         /** @name dxVectorMap.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
         /** @name dxVectorMap.Options.onTooltipHidden */
-        onTooltipHidden?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
+        onTooltipHidden?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig }) => any);
         /** @name dxVectorMap.Options.onTooltipShown */
-        onTooltipShown?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
+        onTooltipShown?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig }) => any);
         /** @name dxVectorMap.Options.onZoomFactorChanged */
         onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, zoomFactor?: number }) => any);
         /** @name dxVectorMap.Options.panningEnabled */
@@ -10297,6 +10306,16 @@ declare module DevExpress.viz {
         zoomFactor(): number;
         /** @name dxVectorMap.zoomFactor(zoomFactor) */
         zoomFactor(zoomFactor: number): void;
+    }
+    /** @name dxVectorMapAnnotationConfig */
+    export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
+        /** @name dxVectorMapAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxVectorMapCommonAnnotationConfig */
+    export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+        /** @name dxVectorMapCommonAnnotationConfig.coordinates */
+        coordinates?: Array<number>;
     }
     /** @name linearCircle */
     export type linearCircle = CommonIndicator;

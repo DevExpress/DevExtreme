@@ -132,6 +132,10 @@ Projection.prototype = {
         this._setupScreen();
     },
 
+    getCanvas: function() {
+        return this._canvas;
+    },
+
     _toScreen: function(coordinates) {
         return [
             this._x0 + this._xRadius * coordinates[0],

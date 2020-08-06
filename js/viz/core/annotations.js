@@ -28,7 +28,7 @@ function coreAnnotation(options, contentTemplate) {
             this.plaque = new Plaque(
                 extend(true, {}, options, { cornerRadius: (options.border || {}).cornerRadius }),
                 widget, annotationGroup, contentTemplate,
-                isDefined(options.value) || isDefined(options.argument)
+                widget._isAnnotationBounded(options)
             );
             this.plaque.draw(widget._getAnnotationCoords(this));
 
@@ -216,8 +216,8 @@ const chartPlugin = {
                 return;
             }
 
-            this.hideTooltip();
-            this.clearHover();
+            this._clear();
+
 
             if(annotation.options.allowDragging && event.type === pointerEvents.down) {
                 this._annotations._hideToolTipForDrag = true;
@@ -227,6 +227,9 @@ const chartPlugin = {
                 annotation.showTooltip(this._annotations.tooltip, coords);
                 event.stopPropagation();
             }
+        },
+        _isAnnotationBounded(options) {
+            return isDefined(options.value) || isDefined(options.argument);
         },
         _pullOptions(options) {
             return {
@@ -242,6 +245,13 @@ const chartPlugin = {
                 offsetX: options.offsetX,
                 offsetY: options.offsetY
             };
+        },
+        _forceAnnotationRender() {
+            this._change(['FORCE_RENDER']);
+        },
+        _clear() {
+            this.hideTooltip();
+            this.clearHover();
         }
     }
 };
@@ -291,6 +301,7 @@ const polarChartPlugin = {
             return coords;
         },
         _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _isAnnotationBounded: chartPlugin.members._isAnnotationBounded,
         _pullOptions(options) {
             const polarOptions = extend({}, {
                 radius: options.radius,
@@ -300,6 +311,64 @@ const polarChartPlugin = {
             delete polarOptions.axis;
 
             return polarOptions;
+        },
+        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender,
+        _clear: chartPlugin.members._clear
+    }
+};
+const vectorMapPlugin = {
+    name: 'annotations_vector_map',
+    init() {},
+    dispose() {
+        this._annotations._offTracker();
+        this._annotations._offTracker = null;
+    },
+    members: {
+        _getAnnotationCoords(annotation) {
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY
+            };
+            coords.canvas = this._projection.getCanvas();
+            if(annotation.coordinates) {
+                const data = this._projection.toScreenPoint(annotation.coordinates);
+                coords.x = data[0];
+                coords.y = data[1];
+            }
+
+            return coords;
+        },
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _isAnnotationBounded(options) {
+            return isDefined(options.coordinates);
+        },
+        _pullOptions(options) {
+            const vectorMapOptions = extend({}, {
+                coordinates: options.coordinates
+            }, chartPlugin.members._pullOptions(options));
+
+            delete vectorMapOptions.axis;
+            delete vectorMapOptions.series;
+            delete vectorMapOptions.argument;
+            delete vectorMapOptions.value;
+            return vectorMapOptions;
+        },
+        _forceAnnotationRender() {
+            this._change(['EXTRA_ELEMENTS']);
+        },
+        _clear() {}
+    },
+    extenders: {
+        _prepareExtraElements() {
+            const that = this;
+            that._annotations._offTracker = that._tracker.on({
+                'move': function() {
+                    that._renderExtraElements();
+                },
+                'zoom': function() {
+                    that._renderExtraElements();
+                }
+            });
         }
     }
 };
@@ -322,11 +391,6 @@ const corePlugin = {
         };
 
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-        const tooltipOptions = extend({}, this._themeManager.getOptions('tooltip'));
-
-        tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
-
-        this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
@@ -356,11 +420,16 @@ const corePlugin = {
         _buildAnnotations() {
             this._annotations.items = [];
 
-            const items = this._getOption('annotations');
+            const items = this._getOption('annotations', true);
             if(!items?.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);
+            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation', true), this._pullOptions);
+        },
+        _setAnnotationTooltipOptions() {
+            const tooltipOptions = extend({}, this._getOption('tooltip'));
+            tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
+            this._annotations.tooltip.update(tooltipOptions);
         },
         _getAnnotationCoords() { return {}; },
         _pullOptions() { return {}; }
@@ -388,7 +457,8 @@ const corePlugin = {
             code: 'ANNOTATIONS',
             handler() {
                 this._buildAnnotations();
-                this._change(['FORCE_RENDER']);
+                this._setAnnotationTooltipOptions();
+                this._forceAnnotationRender();
             },
             isThemeDependent: true,
             isOptionChange: true
@@ -400,5 +470,6 @@ const corePlugin = {
 export const plugins = {
     core: corePlugin,
     chart: chartPlugin,
-    polarChart: polarChartPlugin
+    polarChart: polarChartPlugin,
+    vectorMap: vectorMapPlugin
 };

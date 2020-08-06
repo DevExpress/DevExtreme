@@ -208,6 +208,17 @@ QUnit.test('setSize', function(assert) {
     assert.strictEqual(onScreen.callCount, 2, 'screen event is triggered');
 });
 
+QUnit.test('getCanvas', function(assert) {
+    this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
+
+    assert.deepEqual(this.projection.getCanvas(), {
+        height: 700,
+        left: 200,
+        top: 100,
+        width: 800
+    });
+});
+
 QUnit.test('isInvertible', function(assert) {
     this.engine.isInvertible = returnValue('test');
 
