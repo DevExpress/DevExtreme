@@ -1111,6 +1111,11 @@
             "Name": "ExcelJSOverview",
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
             "DemoType": "Web"
           }
         ]
