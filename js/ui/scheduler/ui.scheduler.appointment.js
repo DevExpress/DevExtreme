@@ -192,8 +192,10 @@ const Appointment = DOMComponent.inherit({
         const config = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
         config.roundStepValue = true;
 
-        if(!this.invoke('isGroupedByDate')) {
-            config.stepPrecision = 'strict';
+        config.stepPrecision = 'strict';
+
+        if(this.invoke('isGroupedByDate') || !!this.option('allDay')) {
+            config.stepPrecision = 'simple';
         }
 
         return config;
