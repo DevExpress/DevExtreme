@@ -17,7 +17,17 @@ const weekData = require('cldr-core/supplemental/weekData.json');
 const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
 const parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
 
-const getParentLocale = require('../../js/localization/parentLocale.js');
+const PARENT_LOCALE_SEPARATOR = '-';
+
+const getParentLocale = (parentLocales, locale) => {
+    const parentLocale = parentLocales[locale];
+
+    if(parentLocale) {
+        return parentLocale !== 'root' && parentLocale;
+    }
+
+    return locale.substr(0, locale.lastIndexOf(PARENT_LOCALE_SEPARATOR));
+};
 
 const firstDayOfWeekData = function() {
     const DAY_INDEXES = {
