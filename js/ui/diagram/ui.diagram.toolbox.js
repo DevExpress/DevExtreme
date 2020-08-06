@@ -54,9 +54,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
         }
         return position;
     }
-    _getPopupContainer() {
-        return this.isMobileView() ? super._getPopupContainer() : undefined;
-    }
     _getPopupAnimation() {
         const $parent = this.option('offsetParent');
         if(this.isMobileView()) {

@@ -182,7 +182,7 @@ QUnit.module('Rows view', {
 
         navigationController._isCellValid = function($cell) {
             const cell = $cell[0];
-            return cell.cellIndex > 0 && cell.cellIndex < 2;
+            return cell.cellIndex === 3;
         };
         navigationController._focusedView = rowsView;
         navigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };

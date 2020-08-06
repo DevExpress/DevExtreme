@@ -2,6 +2,7 @@ import openXmlCurrencyFormat from '../open_xml_currency_format';
 import './core';
 import './number';
 import '../currency';
+// eslint-disable-next-line no-restricted-imports
 import 'globalize/currency';
 
 const enCurrencyUSD = {
@@ -47,6 +48,7 @@ const currencyData = {
     }
 };
 
+// eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import config from '../../core/config';
 import numberLocalization from '../number';
