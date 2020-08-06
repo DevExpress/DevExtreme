@@ -56,9 +56,9 @@ test('Popup wrapper left top corner should be the same as the container right le
 
   await t
     .expect(wrapperRect.top)
-    .eql(containerRect.top);
+    .within(containerRect.top - 0.5, containerRect.top + 0.5);
 
   await t
     .expect(wrapperRect.left)
-    .eql(containerRect.left);
+    .within(containerRect.left - 0.5, containerRect.left + 0.5);
 });
