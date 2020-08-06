@@ -112,7 +112,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid dxDrawerOptions.template
      * @type_function_param1 Element:dxElement
      * @type template|function
-     * @default null
+     * @default 'panel'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
