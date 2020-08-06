@@ -1,0 +1,105 @@
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/validation" as *;
+@use "../list/sizes" as *;
+
+$badge-invalid-bg: $base-invalid-color;
+$generic-dropdownlist-min-height:
+  $generic-base-font-size * $generic-base-line-height +
+  2 * $generic-list-item-vertical-padding;
+
+@mixin dx-base-typography() {
+  @include dx-base-typography-mixin(
+    $typography-color,
+    $generic-base-font-size,
+    $base-font-family,
+    $generic-base-line-height
+);
+}
+
+@mixin disabled-widget($opacity: $base-disabled-opacity) {
+  @include disabled-widget-mixin($opacity);
+}
+
+@mixin badge-settings() {
+  pointer-events: none;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  margin-top: -$generic-invalid-badge-size / 2;
+  width: $generic-invalid-badge-size;
+  height: $generic-invalid-badge-size;
+  text-align: center;
+  line-height: $generic-invalid-badge-size;
+  font-size: $generic-base-font-size - 1px;
+}
+
+@mixin dx-invalid-generic-badge() {
+  @include badge-settings();
+
+  background-color: $badge-invalid-bg;
+  color: $base-inverted-text-color;
+  content: '!';
+  border-radius: 50%;
+}
+
+@mixin dx-valid-generic-badge() {
+  @include badge-settings();
+
+  font-family: 'DXIcons', sans-serif;
+  color: $base-success;
+  content: '\f005';
+
+  @include validation-badge-animation();
+}
+
+@mixin dx-pending-indicator-generic() {
+  @include dx-pending-indicator($generic-pending-indicator-size);
+}
+
+@mixin dx-dropdownlist-list-appearance() {
+  height: 100%;
+
+  &.dx-popup-wrapper .dx-overlay-content {
+    border-top-width: 0;
+    border-bottom-width: 1px;
+
+    &.dx-dropdowneditor-overlay-flipped {
+      border-top-width: 1px;
+      border-bottom-width: 0;
+    }
+  }
+
+  .dx-popup-content {
+    height: 100%;
+    padding: 1px;
+  }
+
+  .dx-list {
+    height: 100%;
+    min-height: $generic-dropdownlist-min-height;
+
+    &:not(.dx-list-select-decorator-enabled) {
+      min-height: $generic-dropdownlist-min-height - (3px * 2);
+
+      .dx-list-item-content {
+        padding: $generic-list-item-vertical-padding - 3px $generic-list-item-horizontal-padding - 1px;
+      }
+    }
+  }
+
+  .dx-list-select-all {
+    padding: $generic-list-item-vertical-padding + 2px 0 $generic-list-item-vertical-padding - 2px;
+  }
+
+  .dx-list-item,
+  .dx-empty-message {
+    border-top: 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}

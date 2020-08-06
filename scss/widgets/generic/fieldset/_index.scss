@@ -4,8 +4,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/sizes" as *;
-@use "../common" as *;
-@use "../typography" as *;
+@use "../common/mixins" as *;
+@use "../typography/mixins" as *;
 @use "../checkBox/sizes" as *;
 @use "../switch/sizes" as *;
 @use "../slider/sizes" as *;
@@ -14,9 +14,6 @@
 
 
 $generic-field-min-height: $generic-base-inline-widget-height;
-$generic-field-value-top-padding: $generic-base-inline-widget-top-padding;
-$generic-field-value-horizontal-padding: $generic-base-inline-horizontal-padding;
-$generic-field-value-bottom-padding: $generic-base-inline-widget-bottom-padding;
 $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size;
 
 $generic-mobile-fieldset-vertical-margin: 20px;

@@ -5,6 +5,7 @@
 $generic-button-horizontal-padding: null !default;
 $generic-button-icon-horizontal-padding: null !default;
 $generic-button-box-shadow-size: null !default;
+$generic-button-border-weight: $generic-base-border-width;
 
 @if $size == "default" {
   $generic-button-horizontal-padding: 18px;

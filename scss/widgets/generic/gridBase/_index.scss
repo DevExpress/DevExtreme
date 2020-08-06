@@ -6,11 +6,11 @@
 @use "../../base/icons" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
 @use "../popup/colors" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
 
