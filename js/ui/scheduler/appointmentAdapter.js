@@ -109,8 +109,7 @@ class AppointmentAdapter {
     }
 
     clone(options = undefined) {
-        const result = new AppointmentAdapter(this.scheduler, objectUtils.deepExtendArraySafe({}, this.appointment)); // NOTE: deepExtendArraySafe works safer for embedded data
-        // const result = new AppointmentAdapter(this.scheduler, extend({}, this.appointment));
+        const result = new AppointmentAdapter(this.scheduler, objectUtils.deepExtendArraySafe({}, this.appointment));
 
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);
