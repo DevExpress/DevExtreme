@@ -1875,26 +1875,6 @@ class Scheduler extends Widget {
         this._appointmentPopup && this._appointmentPopup.dispose();
     }
 
-    // TODO:
-    _convertDatesByTimezoneBack(applyAppointmentTimezone, sourceAppointmentData, targetAppointmentData) {
-        targetAppointmentData = targetAppointmentData || sourceAppointmentData;
-
-        const processedStartDate = this.fire(
-            'convertDateByTimezoneBack',
-            this.fire('getField', 'startDate', sourceAppointmentData),
-            applyAppointmentTimezone && this.fire('getField', 'startDateTimeZone', sourceAppointmentData)
-        );
-
-        const processedEndDate = this.fire(
-            'convertDateByTimezoneBack',
-            this.fire('getField', 'endDate', sourceAppointmentData),
-            applyAppointmentTimezone && this.fire('getField', 'endDateTimeZone', sourceAppointmentData)
-        );
-
-        this.fire('setField', 'startDate', targetAppointmentData, processedStartDate);
-        this.fire('setField', 'endDate', targetAppointmentData, processedEndDate);
-    }
-
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
         delete this._updatedRecAppointment;
 

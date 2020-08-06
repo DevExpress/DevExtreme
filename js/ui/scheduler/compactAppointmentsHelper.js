@@ -34,7 +34,7 @@ export class CompactAppointmentsHelper {
         this._makeBackgroundDarker($button);
 
         this.elements.push($button);
-        $button.data('items', this._createAppointmentsData(items));
+        $button.data('items', this._createTooltipInfos(items));
 
         return $button;
     }
@@ -47,7 +47,7 @@ export class CompactAppointmentsHelper {
         this.elements = [];
     }
 
-    _createAppointmentsData(items) {
+    _createTooltipInfos(items) {
         return items.data.map((appointment, index) => {
             const targetedAdapter = this.instance.createAppointmentAdapter(appointment).clone();
 
