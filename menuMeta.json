@@ -1110,7 +1110,7 @@
             "Title": "Overview",
             "Name": "ExcelJSOverview",
             "Widget": "PivotGrid",
-            "Modules": "exceljs&file-saver"
+            "Modules": "exceljs&file-saver",
             "DemoType": "Web"
           }
         ]
