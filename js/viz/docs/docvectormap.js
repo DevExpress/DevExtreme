@@ -320,3 +320,22 @@ const dxVectorMap = {
     convertToGeo: function() { },
     convertToXY: function() { }
 };
+
+/**
+* @name dxVectorMapCommonAnnotationConfig
+* @type object
+* @inherits BaseWidgetAnnotationConfig
+*/
+const dxVectorMapCommonAnnotationConfig = {
+    coordinates: undefined
+};
+
+/**
+* @name dxVectorMapAnnotationConfig
+* @type object
+* @inherits dxVectorMapCommonAnnotationConfig
+*/
+const dxVectorMapAnnotationConfig = {
+    name: undefined
+};
+
