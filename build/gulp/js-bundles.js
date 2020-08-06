@@ -99,20 +99,20 @@ function createDebugBundlesStream(watch, renovation) {
         .pipe(gulp.dest(destination));
 }
 
-gulp.task('create-renovation-temp', function() {
+gulp.task('create-renovation-temp', renovationPipes.skipTaskOnCI(function() {
     return gulp.src(['js/**/*.*'])
         .pipe(renovationPipes.replaceWidgets())
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
-});
+}));
 
 gulp.task('js-bundles-debug', gulp.series(function() {
     return createDebugBundlesStream(false, false);
 }, function() {
-    return createDebugBundlesStream(false, true);
+    return renovationPipes.skipTaskOnCI(() => createDebugBundlesStream(false, true))();
 }));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true, false);
 }, function() {
-    return createDebugBundlesStream(true, true);
+    return renovationPipes.skipTaskOnCI(() => createDebugBundlesStream(true, true))();
 }));

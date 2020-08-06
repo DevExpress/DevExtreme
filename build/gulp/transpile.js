@@ -21,13 +21,13 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile-prod-renovation', function() {
+gulp.task('transpile-prod-renovation', renovationPipes.skipTaskOnCI(function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(renovationPipes.replaceWidgets())
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
-});
+}));
 
 gulp.task('transpile-prod-old', function() {
     return gulp.src(SRC)
@@ -51,7 +51,7 @@ const replaceTask = (sourcePath) => {
 gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
     replaceTask(context.TRANSPILED_PATH),
     replaceTask(context.TRANSPILED_PROD_PATH),
-    replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH),
+    renovationPipes.skipTaskOnCI(() => replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH))(),
 ])));
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {
