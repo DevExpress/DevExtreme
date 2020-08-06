@@ -84,7 +84,7 @@ QUnit.module('Editing', {
             { allowEditing: true, calculateCellValue: function(data) { return data.customer && data.customer.name; }, defaultSetCellValue: defaultSetCellValue, setCellValue: function(data, value) { data.customer = { name: value }; }, dataType: 'string' },
             { command: 'edit' }
         ];
-
+        this.isResizing = false;
         setupDataGridModules(this, ['data', 'columns', 'headerPanel', 'rows', 'pager', 'editing', 'editorFactory', 'keyboardNavigation', 'virtualScrolling'], {
             initViews: true,
             options: {
@@ -94,7 +94,8 @@ QUnit.module('Editing', {
             },
             controllers: {
                 columns: new MockColumnsController(this.columns),
-                data: new MockDataController(this.dataControllerOptions)
+                data: new MockDataController(this.dataControllerOptions),
+                columnsResizer: { isResizing: () => this.isResizing }
             }
         });
         this.clock = sinon.useFakeTimers();
@@ -2005,6 +2006,40 @@ QUnit.module('Editing', {
 
         // assert
         assert.deepEqual(updateArgs, [['test1', { 'name': 'Test1' }], ['test2', { 'name': 'Test2' }]], 'changed rows are saved');
+    });
+
+    // T450598, T915568
+    QUnit.test('Dont close editor then column resize', function(assert) {
+        // arrange
+        const that = this;
+        const headerPanel = this.headerPanel;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        that.options.editing = {
+            allowUpdating: true,
+            mode: 'batch'
+        };
+
+        headerPanel.render(testElement);
+        rowsView.render(testElement);
+        this.isResizing = true;
+
+        testElement.find('td').eq(0).trigger('dxclick'); // Edit
+        assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1);
+        getInputElements(testElement).eq(0).val('Test11_Modified');
+        const inputEl = getInputElements(testElement)[0];
+
+        const mouse = pointerMock(testElement).start();
+
+        // act
+        mouse.down();
+        this.clock.tick();
+        mouse.up();
+
+        // assert
+        assert.equal(inputEl, getInputElements(testElement)[0]);
+        assert.equal(inputEl.value, 'Test11_Modified');
     });
 
     QUnit.test('Cancel changes when batch mode', function(assert) {
