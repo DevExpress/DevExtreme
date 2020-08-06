@@ -49,9 +49,11 @@ const FileUploader = require('ui/file_uploader');
 const Toolbar = require('ui/toolbar');
 const Form = require('ui/form');
 
+themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="cmp"></div>');
+    return new Promise((resolve) => themes.initialized(resolve));
 });
 
 QUnit.module('widgets defaults');

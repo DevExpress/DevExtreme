@@ -1,37 +1,40 @@
-const $ = require('../core/renderer');
-const domAdapter = require('../core/dom_adapter');
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.getWindow();
-const Deferred = require('../core/utils/deferred').Deferred;
-const errors = require('./widget/ui.errors');
-const domUtils = require('../core/utils/dom');
-const readyCallbacks = require('../core/utils/ready_callbacks');
+import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
+import Promise from '../core/polyfills/promise';
+import $ from '../core/renderer';
+import { Deferred } from '../core/utils/deferred';
+import { parseHTML } from '../core/utils/html_parser';
+import { each } from '../core/utils/iterator';
+import readyCallbacks from '../core/utils/ready_callbacks';
+import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
+import { getWindow, hasWindow } from '../core/utils/window';
+import { themeReadyCallback, themeInitializedCallback } from './themes_callback';
+import errors from './widget/ui.errors';
+const window = getWindow();
 const ready = readyCallbacks.add;
-const each = require('../core/utils/iterator').each;
-const devices = require('../core/devices');
-const viewPortUtils = require('../core/utils/view_port');
-const themeReadyCallback = require('./themes_callback');
-const viewPort = viewPortUtils.value;
-const Promise = require('../core/polyfills/promise');
-const viewPortChanged = viewPortUtils.changeCallback;
+const viewPort = viewPortValue;
+const viewPortChanged = changeCallback;
 
 const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
 const THEME_ATTR = 'data-theme';
 const ACTIVE_ATTR = 'data-active';
 const DX_HAIRLINES_CLASS = 'dx-hairlines';
+const ANY_THEME = 'any';
 
 let context;
 let $activeThemeLink;
 let knownThemes;
 let currentThemeName;
 let pendingThemeName;
-
-let timerId;
+const defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
+let inited = false;
+themeInitializedCallback.add(() => inited = true);
+
 function readThemeMarker() {
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         return null;
     }
     const element = $('<div>', context).addClass('dx-theme-marker').appendTo(context.documentElement);
@@ -58,32 +61,47 @@ function readThemeMarker() {
 // http://stackoverflow.com/a/3078636
 function waitForThemeLoad(themeName) {
     let waitStartTime;
+    let timerId;
+    let intervalCleared = true;
 
     pendingThemeName = themeName;
 
     function handleLoaded() {
         pendingThemeName = null;
+        clearInterval(timerId);
+        intervalCleared = true;
 
         themeReadyCallback.fire();
         themeReadyCallback.empty();
+
+        if(!inited) {
+            themeInitializedCallback.fire();
+            themeInitializedCallback.empty();
+        }
     }
 
-    if(isPendingThemeLoaded()) {
+    if(isPendingThemeLoaded() || !defaultTimeout) {
         handleLoaded();
     } else {
+
+        if(!intervalCleared) {
+            if(pendingThemeName) {
+                pendingThemeName = themeName;
+            }
+            return;
+        }
         waitStartTime = Date.now();
+
+        intervalCleared = false;
         timerId = setInterval(function() {
             const isLoaded = isPendingThemeLoaded();
-            const isTimeout = !isLoaded && Date.now() - waitStartTime > 15 * 1000;
+            const isTimeout = !isLoaded && Date.now() - waitStartTime > defaultTimeout;
 
             if(isTimeout) {
                 errors.log('W0004', pendingThemeName);
             }
 
             if(isLoaded || isTimeout) {
-                clearInterval(timerId);
-                timerId = undefined;
-
                 handleLoaded();
             }
         }, 10);
@@ -91,7 +109,23 @@ function waitForThemeLoad(themeName) {
 }
 
 function isPendingThemeLoaded() {
-    return !pendingThemeName || readThemeMarker() === pendingThemeName;
+    if(!pendingThemeName) {
+        return true;
+    }
+
+    const anyThemePending = pendingThemeName === ANY_THEME;
+
+    if(inited && anyThemePending) {
+        return true;
+    }
+
+    const themeMarker = readThemeMarker();
+
+    if(themeMarker && anyThemePending) {
+        return true;
+    }
+
+    return themeMarker === pendingThemeName;
 }
 
 function processMarkup() {
@@ -101,7 +135,7 @@ function processMarkup() {
     }
 
     knownThemes = {};
-    $activeThemeLink = $(domUtils.createMarkupFromString('<link rel=stylesheet>'), context);
+    $activeThemeLink = $(parseHTML('<link rel=stylesheet>'), context);
 
     $allThemeLinks.each(function() {
         const link = $(this, context);
@@ -214,17 +248,12 @@ function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
-        if((themeReadyCallback.has() || options._forceTimeout) && !timerId) {
+        if((themeReadyCallback.has() || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
-        } else {
-            if(pendingThemeName) {
-                pendingThemeName = currentThemeName;
-            }
         }
     } else {
         if(isAutoInit) {
-            themeReadyCallback.fire();
-            themeReadyCallback.empty();
+            waitForThemeLoad(ANY_THEME);
         } else {
             throw errors.Error('E0021', currentThemeName);
         }
@@ -232,7 +261,7 @@ function current(options) {
 
     checkThemeDeprecation();
 
-    attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
+    attachCssClasses(originalViewPort(), currentThemeName);
 }
 
 function getCssClasses(themeName) {
@@ -261,7 +290,7 @@ function attachCssClasses(element, themeName) {
     $(element).addClass(themeClasses);
 
     const activateHairlines = function() {
-        const pixelRatio = windowUtils.hasWindow() && window.devicePixelRatio;
+        const pixelRatio = hasWindow() && window.devicePixelRatio;
 
         if(!pixelRatio || pixelRatio < 2) {
             return;
@@ -382,7 +411,7 @@ function autoInit() {
     initDeferred.resolve();
 }
 
-if(windowUtils.hasWindow()) {
+if(hasWindow()) {
     autoInit();
 } else {
     ready(autoInit);
