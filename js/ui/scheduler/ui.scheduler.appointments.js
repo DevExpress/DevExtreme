@@ -329,7 +329,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const formatText = this.invoke(
             'getTextAndFormatDate',
             model.appointmentData,
-            model.targetedAppointmentData,
+            model.appointmentData.settings || model.targetedAppointmentData, // TODO:
             'TIME'
         );
 
