@@ -34,7 +34,6 @@ import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import commonUtils from 'core/utils/common';
-import { keyboard } from 'events/short';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
@@ -2615,66 +2614,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         assert.equal($inputs.length, 2, 'dataGrid has two inputs');
         assert.ok($inputs.eq(1).is(':focus'), 'second input is focused');
-    });
-
-    QUnit.testInActiveWindow('\'Form\' edit mode correctly change focus after edit a field with defined \'setCellValue\' handler', function(assert) {
-        // arrange
-        const data = [{ firstName: 'Alex', lastName: 'Black' }, { firstName: 'John', lastName: 'Dow' }];
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            editing: {
-                mode: 'form',
-                allowUpdating: true
-            },
-            dataSource: data,
-            columns: [
-                {
-                    dataField: 'firstName',
-                    setCellValue: function(rowData, value) {
-                        rowData.lastName = 'test';
-                        this.defaultSetCellValue(rowData, value);
-                    },
-                }, 'lastName']
-        });
-        const triggerTabPress = function(target) {
-            const keyboardListenerId = dataGrid.getController('keyboardNavigation')._keyDownListener;
-
-            keyboard._getProcessor(keyboardListenerId).process({
-                key: 'Tab',
-                keyName: 'tab',
-                target: target && target[0] || target,
-                preventDefault: $.noop,
-                isDefaultPrevented: function() {
-                    return false;
-                },
-                stopPropagation: $.noop
-            });
-        };
-
-        // act
-        dataGrid.editRow(0);
-        this.clock.tick();
-
-        const editor = $(dataGrid.$element()).find('.dx-form .dx-texteditor').first().dxTextBox('instance');
-        const $input = $(editor.$element().find('.dx-texteditor-input'));
-
-        editor.focus();
-        $input.val('Josh');
-        triggerTabPress($input);
-        $($input).trigger('change');
-        $(dataGrid.$element()).find('.dx-form .dx-texteditor-input').eq(1).focus();
-        this.clock.tick();
-
-        // assert
-        const $secondEditor = $(dataGrid.$element()).find('.dx-form .dx-texteditor').eq(1);
-
-        assert.deepEqual(
-            dataGrid.getController('keyboardNavigation')._focusedCellPosition,
-            { columnIndex: 1, rowIndex: 0 },
-            'Focused cell position is correct'
-        );
-        assert.equal($secondEditor.find('.dx-texteditor-input').val(), 'test', '\'lastName\' editor has correct value');
-        assert.ok($secondEditor.hasClass('dx-state-focused'), '\'lastName\' editor focused');
     });
 
     QUnit.testInActiveWindow('Filter row editor should have focus after _synchronizeColumns (T638737)', function(assert) {
