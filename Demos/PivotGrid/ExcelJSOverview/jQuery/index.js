@@ -47,13 +47,7 @@ $(function(){
             DevExpress.excelExporter.exportPivotGrid({
                 component: e.component,
                 worksheet: worksheet,
-                autoFilterEnabled: true,
-                //keepColumnWidths: false,
                 topLeftCell: { row: 2, column: 3 },
-                customizeCell: function({excelCell, pivotCell}) {
-                // cell customization
-                }
-            }).then(function(dataGridRange) {
             }).then(function() {
                 // https://github.com/exceljs/exceljs#writing-xlsx
                 workbook.xlsx.writeBuffer().then(function(buffer) {
