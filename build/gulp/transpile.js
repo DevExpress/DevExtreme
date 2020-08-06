@@ -9,6 +9,7 @@ const path = require('path');
 const notify = require('gulp-notify');
 const compressionPipes = require('./compression-pipes.js');
 const renovationPipes = require('./renovation-pipes');
+const utils = require('./utils');
 
 const context = require('./context.js');
 
@@ -21,13 +22,13 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile-prod-renovation', function() {
+gulp.task('transpile-prod-renovation', utils.skipTaskOnTestCI(function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(renovationPipes.replaceWidgets())
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
-});
+}));
 
 gulp.task('transpile-prod-old', function() {
     return gulp.src(SRC)
@@ -36,9 +37,7 @@ gulp.task('transpile-prod-old', function() {
         .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
 });
 
-gulp.task('transpile-prod', gulp.parallel('transpile-prod-old', 'transpile-prod-renovation'));
-
-gulp.task('transpile', gulp.series('bundler-config', 'transpile-prod', function() {
+gulp.task('transpile', gulp.series('bundler-config', 'transpile-prod-old', 'transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
@@ -53,7 +52,7 @@ const replaceTask = (sourcePath) => {
 gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
     replaceTask(context.TRANSPILED_PATH),
     replaceTask(context.TRANSPILED_PROD_PATH),
-    replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH),
+    utils.skipTaskOnTestCI(() => replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH))(),
 ])));
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {

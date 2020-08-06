@@ -31,5 +31,5 @@ module.exports = {
             return gulpIf(function(file) {
                 return file.basename === 'ui.scheduler.work_space.js';
             }, replace('renovateRender: false', 'renovateRender: true'));
-        }),
+        })
 };
