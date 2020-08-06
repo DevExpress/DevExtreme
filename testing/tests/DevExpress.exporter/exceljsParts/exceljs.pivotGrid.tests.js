@@ -165,6 +165,94 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Export [string x string x number] & showColumnGrandTotals: false & showRowGrandTotals: false & data.showValues: false', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number', showValues: false }
+            ],
+            store: [
+                { row1: 'A', col1: 'a' },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object' }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+        ], [
+            { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object' }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+            { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object' }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: 'currency', rowPath: ['A'], rowType: 'D', rowspan: 1, text: '$1' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 2, column: 2 }, topLeft);
+            helper.checkFont(expectedCells);
+            helper.checkAlignment(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+            done();
+        });
+    });
+
+    QUnit.test('Export [string x string x number] & showColumnGrandTotals: true & showRowGrandTotals: true & data.showValues: false', function(assert) {
+        const done = assert.async();
+        const ds = {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number', showValues: false }
+            ],
+            store: [
+                { row1: 'A', col1: 'a' },
+            ]
+        };
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            width: 1000,
+            showColumnGrandTotals: true,
+            showRowGrandTotals: true,
+            dataSource: ds
+        }).dxPivotGrid('instance');
+
+        const expectedCells = [[
+            { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, text: 'Grand Total', type: 'GT', width: 100 } },
+        ], [
+            { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '1' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+            helper.checkFont(expectedCells);
+            helper.checkAlignment(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            helper.checkMergeCells(expectedCells, topLeft);
+            helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+            done();
+        });
+    });
+
     QUnit.test('Export [string x string/string(c1,c2) x number] & data_1.dataField_exist & data_2.dataField_not_exist with caption', function(assert) {
         const done = assert.async();
         const ds = {
