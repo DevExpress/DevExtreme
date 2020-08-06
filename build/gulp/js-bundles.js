@@ -107,12 +107,12 @@ gulp.task('create-renovation-temp', renovationPipes.skipTaskOnCI(function() {
 
 gulp.task('js-bundles-debug', gulp.series(function() {
     return createDebugBundlesStream(false, false);
-}, function() {
-    return renovationPipes.skipTaskOnCI(() => createDebugBundlesStream(false, true))();
-}));
+}, renovationPipes.skipTaskOnCI(function() {
+    return createDebugBundlesStream(false, true);
+})));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true, false);
-}, function() {
-    return renovationPipes.skipTaskOnCI(() => createDebugBundlesStream(true, true))();
-}));
+}, renovationPipes.skipTaskOnCI(function() {
+    return createDebugBundlesStream(true, true);
+})));
