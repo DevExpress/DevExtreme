@@ -9,6 +9,7 @@ const path = require('path');
 const notify = require('gulp-notify');
 const compressionPipes = require('./compression-pipes.js');
 const renovationPipes = require('./renovation-pipes');
+const utils = require('./utils');
 
 const context = require('./context.js');
 
@@ -21,7 +22,7 @@ const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile-prod-renovation', renovationPipes.skipTaskOnCI(function() {
+gulp.task('transpile-prod-renovation', utils.skipTaskOnTestCI(function() {
     return gulp.src(SRC)
         .pipe(compressionPipes.removeDebug())
         .pipe(renovationPipes.replaceWidgets())
@@ -51,7 +52,7 @@ const replaceTask = (sourcePath) => {
 gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
     replaceTask(context.TRANSPILED_PATH),
     replaceTask(context.TRANSPILED_PROD_PATH),
-    renovationPipes.skipTaskOnCI(() => replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH))(),
+    utils.skipTaskOnTestCI(() => replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH))(),
 ])));
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {

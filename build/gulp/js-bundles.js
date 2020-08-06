@@ -16,6 +16,7 @@ const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
 const renovationPipes = require('./renovation-pipes');
 const context = require('./context.js');
+const utils = require('./utils');
 
 const namedDebug = lazyPipe()
     .pipe(named, function(file) {
@@ -99,7 +100,7 @@ function createDebugBundlesStream(watch, renovation) {
         .pipe(gulp.dest(destination));
 }
 
-gulp.task('create-renovation-temp', renovationPipes.skipTaskOnCI(function() {
+gulp.task('create-renovation-temp', utils.skipTaskOnTestCI(function() {
     return gulp.src(['js/**/*.*'])
         .pipe(renovationPipes.replaceWidgets())
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
@@ -107,12 +108,12 @@ gulp.task('create-renovation-temp', renovationPipes.skipTaskOnCI(function() {
 
 gulp.task('js-bundles-debug', gulp.series(function() {
     return createDebugBundlesStream(false, false);
-}, renovationPipes.skipTaskOnCI(function() {
+}, utils.skipTaskOnTestCI(function() {
     return createDebugBundlesStream(false, true);
 })));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true, false);
-}, renovationPipes.skipTaskOnCI(function() {
+}, utils.skipTaskOnTestCI(function() {
     return createDebugBundlesStream(true, true);
 })));

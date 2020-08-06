@@ -1,14 +1,11 @@
 'use strict';
 
-
-const gulp = require('gulp');
 const lazyPipe = require('lazypipe');
 const gulpEach = require('gulp-each');
 const gulpIf = require('gulp-if');
 const replace = require('gulp-replace');
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 
-const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
 const renovatedFileNames = renovatedComponents.map(component => component.name);
 
 function isOldComponentRenovated(file) {
@@ -19,10 +16,6 @@ function isOldComponentRenovated(file) {
 
     return isRenovatedName && isNotRenovationFolder && isJsFile && isCorrectFilePath;
 }
-
-gulp.task('empty', function(done) {
-    done();
-});
 
 module.exports = {
     TEMP_PATH: 'artifacts/_renovation-temp',
@@ -38,11 +31,5 @@ module.exports = {
             return gulpIf(function(file) {
                 return file.basename === 'ui.scheduler.work_space.js';
             }, replace('renovateRender: false', 'renovateRender: true'));
-        }),
-    skipTaskOnCI: function(task) {
-        if(TEST_CI) {
-            return (done) => done ? done() : gulp.series('empty');
-        }
-        return () => task();
-    }
+        })
 };
