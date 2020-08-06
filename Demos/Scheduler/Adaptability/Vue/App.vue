@@ -52,12 +52,7 @@ export default {
     },
 
     showPopup: function() {
-      const appointment = {
-        startDate: new Date(this.currentDate),
-        endDate: new Date(this.currentDate.setMinutes(this.cellDuration))
-      };
-
-      this.scheduler.showAppointmentPopup(appointment);
+      this.scheduler.showAppointmentPopup();
     }
   }
 };

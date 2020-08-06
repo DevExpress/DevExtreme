@@ -30,10 +30,7 @@ export class AppComponent {
     }
 
     showAppointmentPopup(e) {
-        this.scheduler.instance.showAppointmentPopup({
-            startDate: new Date(this.currentDate),
-            endDate: new Date(this.currentDate.setMinutes(this.cellDuration))
-        });
+        this.scheduler.instance.showAppointmentPopup();
     }
 }
 

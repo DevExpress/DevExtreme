@@ -59,13 +59,7 @@ class App extends React.Component {
   }
 
   showAppointmentPopup() {
-    const currentDate = this.state.currentDate;
-    const cellDuration = this.state.cellDuration;
-
-    this.state.scheduler.showAppointmentPopup({
-      startDate: new Date(currentDate),
-      endDate: new Date(currentDate.setMinutes(cellDuration))
-    });
+    this.state.scheduler.showAppointmentPopup();
   }
 }
 
