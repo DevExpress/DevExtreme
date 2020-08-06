@@ -1114,6 +1114,32 @@
               "/Models/SampleData/Sales.cs"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "Cell Customization",
+            "Name": "ExcelJSCellCustomization",
+            "Hidden":  true,
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Header and Footer",
+            "Name": "ExcelJSHeaderAndFooter",
+            "Hidden":  true,
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
           }
         ]
       }
