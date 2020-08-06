@@ -914,7 +914,6 @@
       {
         "Name": "Overview",
         "Equivalents": "",
-        "Hidden":  true,
         "Demos": [
           {
             "Title": "Overview",
@@ -1110,6 +1109,7 @@
           {
             "Title": "Overview",
             "Name": "ExcelJSOverview",
+            "Hidden":  true,
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
             "MvcAdditionalFiles": [
