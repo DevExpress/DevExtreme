@@ -8,7 +8,7 @@ import { each } from '../core/utils/iterator';
 import readyCallbacks from '../core/utils/ready_callbacks';
 import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
 import { getWindow, hasWindow } from '../core/utils/window';
-import themeReadyCallback from './themes_callback';
+import { themeReadyCallback, themeInitializedCallback } from './themes_callback';
 import errors from './widget/ui.errors';
 const window = getWindow();
 const ready = readyCallbacks.add;
@@ -19,16 +19,19 @@ const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
 const THEME_ATTR = 'data-theme';
 const ACTIVE_ATTR = 'data-active';
 const DX_HAIRLINES_CLASS = 'dx-hairlines';
+const ANY_THEME = 'any';
 
 let context;
 let $activeThemeLink;
 let knownThemes;
 let currentThemeName;
 let pendingThemeName;
-
-let timerId;
+let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
+
+let inited = false;
+themeInitializedCallback.add(() => inited = true);
 
 function readThemeMarker() {
     if(!hasWindow()) {
@@ -58,32 +61,47 @@ function readThemeMarker() {
 // http://stackoverflow.com/a/3078636
 export function waitForThemeLoad(themeName) {
     let waitStartTime;
+    let timerId;
+    let intervalCleared = true;
 
     pendingThemeName = themeName;
 
     function handleLoaded() {
         pendingThemeName = null;
+        clearInterval(timerId);
+        intervalCleared = true;
 
         themeReadyCallback.fire();
         themeReadyCallback.empty();
+
+        if(!inited) {
+            themeInitializedCallback.fire();
+            themeInitializedCallback.empty();
+        }
     }
 
-    if(isPendingThemeLoaded()) {
+    if(isPendingThemeLoaded() || !defaultTimeout) {
         handleLoaded();
     } else {
+
+        if(!intervalCleared) {
+            if(pendingThemeName) {
+                pendingThemeName = themeName;
+            }
+            return;
+        }
         waitStartTime = Date.now();
+
+        intervalCleared = false;
         timerId = setInterval(function() {
             const isLoaded = isPendingThemeLoaded();
-            const isTimeout = !isLoaded && Date.now() - waitStartTime > 15 * 1000;
+            const isTimeout = !isLoaded && Date.now() - waitStartTime > defaultTimeout;
 
             if(isTimeout) {
                 errors.log('W0004', pendingThemeName);
             }
 
             if(isLoaded || isTimeout) {
-                clearInterval(timerId);
-                timerId = undefined;
-
                 handleLoaded();
             }
         }, 10);
@@ -91,7 +109,23 @@ export function waitForThemeLoad(themeName) {
 }
 
 function isPendingThemeLoaded() {
-    return !pendingThemeName || readThemeMarker() === pendingThemeName;
+    if(!pendingThemeName) {
+        return true;
+    }
+
+    const anyThemePending = pendingThemeName === ANY_THEME;
+
+    if(inited && anyThemePending) {
+        return true;
+    }
+
+    const themeMarker = readThemeMarker();
+
+    if(themeMarker && anyThemePending) {
+        return true;
+    }
+
+    return themeMarker === pendingThemeName;
 }
 
 function processMarkup() {
@@ -214,17 +248,12 @@ export function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
-        if((themeReadyCallback.has() || options._forceTimeout) && !timerId) {
+        if((themeReadyCallback.has() || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
-        } else {
-            if(pendingThemeName) {
-                pendingThemeName = currentThemeName;
-            }
         }
     } else {
         if(isAutoInit) {
-            themeReadyCallback.fire();
-            themeReadyCallback.empty();
+            waitForThemeLoad(ANY_THEME);
         } else {
             throw errors.Error('E0021', currentThemeName);
         }
@@ -395,5 +424,19 @@ export function resetTheme() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
+    inited = false;
+    themeInitializedCallback.add(() => inited = true);
+}
+
+export function initialized(callback) {
+    if(inited) {
+        callback();
+    } else {
+        themeInitializedCallback.add(callback);
+    }
+}
+
+export function setDefaultTimeout(timeout) {
+    defaultTimeout = timeout;
 }
 

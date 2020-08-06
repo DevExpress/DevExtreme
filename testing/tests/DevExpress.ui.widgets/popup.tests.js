@@ -9,6 +9,7 @@ import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
+import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import 'common.css!';
@@ -18,6 +19,8 @@ import 'ui/tab_panel';
 const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_SAFARI = !!browser.safari;
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
+
+themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
     const markup =
@@ -582,6 +585,7 @@ QUnit.module('options changed callbacks', {
         devices.current('desktop');
         fx.off = true;
         this.clock = sinon.useFakeTimers();
+        return new Promise((resolve) => themes.initialized(resolve));
     },
 
     afterEach: function() {
@@ -1353,6 +1357,7 @@ QUnit.module('rendering', {
         this.element = $('#popup').dxPopup();
         this.instance = this.element.dxPopup('instance');
         devices.current('desktop');
+        return new Promise((resolve) => themes.initialized(resolve));
     }
 }, () => {
     QUnit.test('anonymous content template rendering', function(assert) {

@@ -1,2 +1,4 @@
 import Callbacks from '../core/utils/callbacks';
-export default new Callbacks();
+export const themeReadyCallback = new Callbacks();
+export const themeInitializedCallback = new Callbacks();
+
