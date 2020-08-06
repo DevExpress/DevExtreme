@@ -1096,6 +1096,26 @@
             "DemoType": "Web"
           }
         ]
+      },
+      {
+        "Name": "Export to Excel",
+        "Equivalents": "",
+        "Badge": "New",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "ExcelJSOverview",
+            "Hidden":  true,
+            "Widget": "PivotGrid",
+            "Modules": "exceljs&file-saver",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/PivotGridDataController.cs",
+              "/Models/Sale.cs",
+              "/Models/SampleData/Sales.cs"
+            ],
+            "DemoType": "Web"
+          }
+        ]
       }
     ]
   },
