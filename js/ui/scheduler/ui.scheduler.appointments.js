@@ -2,13 +2,13 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
-import translator from '../../animation/translator';
+import { locate, move } from '../../animation/translator';
 import dateUtils from '../../core/utils/date';
 import { noop, normalizeKey } from '../../core/utils/common';
 import { isDefined, isDeferred, isPlainObject, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import objectUtils from '../../core/utils/object';
-import arrayUtils from '../../core/utils/array';
+import { deepExtendArraySafe } from '../../core/utils/object';
+import { merge } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
 import { getRecurrenceProcessor } from './recurrence';
@@ -545,7 +545,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 }
 
                 this._initialSize = { width: e.width, height: e.height };
-                this._initialCoordinates = translator.locate(this._$currentAppointment);
+                this._initialCoordinates = locate(this._$currentAppointment);
             }).bind(this),
             onResizeEnd: (function(e) {
                 if(this._escPressed) {
@@ -865,7 +865,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _combineAppointments: function(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            arrayUtils.merge(appointments, additionalAppointments);
+            merge(appointments, additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
     },
@@ -897,7 +897,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         if($appointment && !dragEvent) {
             if(coords) {
-                translator.move($appointment, coords);
+                move($appointment, coords);
                 delete this._initialSize;
             }
             if(size) {
@@ -949,7 +949,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             this._checkStartDate(currentStartDate, originalStartDate, startDayHour);
             this._checkEndDate(currentEndDate, endDate, endDayHour);
 
-            const appointmentData = objectUtils.deepExtendArraySafe({}, appointment, true);
+            const appointmentData = deepExtendArraySafe({}, appointment, true);
             const appointmentSettings = {};
             this._applyStartDateToObj(currentStartDate, appointmentSettings);
             this._applyEndDateToObj(currentEndDate, appointmentSettings);

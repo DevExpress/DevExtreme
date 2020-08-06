@@ -1,11 +1,11 @@
 import { smartFormatter as _format, formatRange } from './smart_formatter';
-import vizUtils from '../core/utils';
+import { vizUtils } from '../core/utils';
 import { isDefined, isFunction, isPlainObject, isNumeric, type } from '../../core/utils/type';
 import constants from './axes_constants';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import formatHelper from '../../format_helper';
-import parseUtils from '../components/parse_utils';
+import { getParser } from '../components/parse_utils';
 import tickGeneratorModule from './tick_generator';
 import Translator2DModule from '../translators/translator2d';
 import { Range } from '../translators/range';
@@ -2113,7 +2113,7 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
         const dataType = that.isArgumentAxis ? options.argumentType : options.valueType;
-        const parser = dataType ? parseUtils.getParser(dataType) : function(unit) { return unit; };
+        const parser = dataType ? getParser(dataType) : function(unit) { return unit; };
 
         that.parser = parser;
         options.dataType = dataType;

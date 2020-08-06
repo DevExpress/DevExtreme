@@ -8,7 +8,7 @@ import { isDefined } from '../core/utils/type';
 import { addNamespace, eventData } from '../events/utils';
 import pointerEvents from '../events/pointer';
 import scrollEvents from '../ui/scroll_view/ui.events.emitter.gesture.scroll';
-import sizeUtils from '../core/utils/size';
+import { getVerticalOffsets, getElementBoxParams, parseHeight } from '../core/utils/size';
 import { allowScroll, prepareScrollData } from './text_box/utils.scroll';
 import TextBox from './text_box';
 
@@ -170,10 +170,10 @@ const TextArea = TextBox.inherit({
     },
 
     _getHeightDifference($input) {
-        return sizeUtils.getVerticalOffsets(this._$element.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
-            + sizeUtils.getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
+        return getVerticalOffsets(this._$element.get(0), false)
+            + getVerticalOffsets(this._$textEditorContainer.get(0), false)
+            + getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
+            + getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
     },
 
     _updateInputHeight: function() {
@@ -221,7 +221,7 @@ const TextArea = TextBox.inherit({
         const boundaryValue = this.option(optionName);
 
         if(isDefined(boundaryValue)) {
-            return typeof boundaryValue === 'number' ? boundaryValue : sizeUtils.parseHeight(boundaryValue, this._$textEditorContainer.get(0));
+            return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this._$textEditorContainer.get(0));
         }
     },
 

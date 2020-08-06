@@ -1,6 +1,6 @@
 import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
-import iteratorUtils from '../../core/utils/iterator';
+import { each, map } from '../../core/utils/iterator';
 import Provider from './provider';
 const abstract = Provider.abstract;
 
@@ -59,12 +59,12 @@ const DynamicProvider = Provider.inherit({
     _attachHandlers: abstract,
 
     addMarkers: function(options) {
-        return Promise.all(iteratorUtils.map(options, function(options) {
+        return Promise.all(map(options, function(options) {
             return this._addMarker(options);
         }.bind(this))).then(function(markerObjects) {
             this._fitBounds();
 
-            return [false, iteratorUtils.map(markerObjects, function(markerObject) {
+            return [false, map(markerObjects, function(markerObject) {
                 return markerObject.marker;
             })];
         }.bind(this));
@@ -90,7 +90,7 @@ const DynamicProvider = Provider.inherit({
     removeMarkers: function(markersOptionsToRemove) {
         const that = this;
 
-        iteratorUtils.each(markersOptionsToRemove, function(_, markerOptionToRemove) {
+        each(markersOptionsToRemove, function(_, markerOptionToRemove) {
             that._removeMarker(markerOptionToRemove);
         });
 
@@ -100,7 +100,7 @@ const DynamicProvider = Provider.inherit({
     _removeMarker: function(markersOptionToRemove) {
         const that = this;
 
-        iteratorUtils.each(this._markers, function(markerIndex, markerObject) {
+        each(this._markers, function(markerIndex, markerObject) {
             if(markerObject.options !== markersOptionToRemove) {
                 return true;
             }
@@ -126,12 +126,12 @@ const DynamicProvider = Provider.inherit({
     },
 
     addRoutes: function(options) {
-        return Promise.all(iteratorUtils.map(options, function(options) {
+        return Promise.all(map(options, function(options) {
             return this._addRoute(options);
         }.bind(this))).then(function(routeObjects) {
             this._fitBounds();
 
-            return [false, iteratorUtils.map(routeObjects, function(routeObject) {
+            return [false, map(routeObjects, function(routeObject) {
                 return routeObject.instance;
             })];
         }.bind(this));
@@ -157,7 +157,7 @@ const DynamicProvider = Provider.inherit({
     removeRoutes: function(options) {
         const that = this;
 
-        iteratorUtils.each(options, function(routeIndex, options) {
+        each(options, function(routeIndex, options) {
             that._removeRoute(options);
         });
 
@@ -167,7 +167,7 @@ const DynamicProvider = Provider.inherit({
     _removeRoute: function(options) {
         const that = this;
 
-        iteratorUtils.each(this._routes, function(routeIndex, routeObject) {
+        each(this._routes, function(routeIndex, routeObject) {
             if(routeObject.options !== options) {
                 return true;
             }
@@ -211,11 +211,11 @@ const DynamicProvider = Provider.inherit({
             return;
         }
 
-        iteratorUtils.each(this._markers, function(_, markerObject) {
+        each(this._markers, function(_, markerObject) {
             that._extendBounds(markerObject.location);
         });
 
-        iteratorUtils.each(this._routes, function(_, routeObject) {
+        each(this._routes, function(_, routeObject) {
             routeObject.northEast && that._extendBounds(routeObject.northEast);
             routeObject.southWest && that._extendBounds(routeObject.southWest);
         });

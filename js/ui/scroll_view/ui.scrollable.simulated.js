@@ -7,7 +7,7 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import { each, map } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
-import translator from '../../animation/translator';
+import { resetPosition, move, locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
 import devices from '../../core/devices';
@@ -229,11 +229,11 @@ export const Scroller = Class.inherit({
         this._translateOffset = translateOffset;
 
         if(translateOffset === 0) {
-            translator.resetPosition(this._$content);
+            resetPosition(this._$content);
             return;
         }
 
-        translator.move(this._$content, targetLocation);
+        move(this._$content, targetLocation);
     },
 
     _moveScrollbar: function() {
@@ -423,7 +423,7 @@ export const Scroller = Class.inherit({
     },
 
     _updateLocation: function() {
-        this._location = (translator.locate(this._$content)[this._prop] - this._$container[this._scrollProp]()) * this._getScaleRatio();
+        this._location = (locate(this._$content)[this._prop] - this._$container[this._scrollProp]()) * this._getScaleRatio();
     },
 
     _updateBounds: function() {
@@ -899,7 +899,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     location: function() {
-        const location = translator.locate(this._$content);
+        const location = locate(this._$content);
 
         location.top -= this._$container.scrollTop();
         location.left -= this._$container.scrollLeft();

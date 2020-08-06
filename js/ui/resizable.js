@@ -1,4 +1,4 @@
-import translator from '../animation/translator';
+import { locate, move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
@@ -164,7 +164,7 @@ const Resizable = DOMComponent.inherit({
         this._toggleResizingClass(true);
         this._movingSides = this._getMovingSides(e);
 
-        this._elementLocation = translator.locate($element);
+        this._elementLocation = locate($element);
 
         const elementRect = getBoundingRect($element.get(0));
 
@@ -234,7 +234,7 @@ const Resizable = DOMComponent.inherit({
         const offsetTop = offset.y - ((elementRect.height || height) - height);
         const offsetLeft = offset.x - ((elementRect.width || width) - width);
 
-        translator.move($element, {
+        move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
             left: location.left + (sides.left ? offsetLeft : 0)
         });

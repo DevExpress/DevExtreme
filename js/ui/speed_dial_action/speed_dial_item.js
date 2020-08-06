@@ -5,7 +5,7 @@ import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
 import Overlay from '../overlay';
-import inkRipple from '../widget/utils.ink_ripple';
+import { render } from '../widget/utils.ink_ripple';
 import themes from '../themes';
 
 const FAB_CLASS = 'dx-fa-button';
@@ -166,7 +166,7 @@ class SpeedDialItem extends Overlay {
     }
 
     _renderInkRipple() {
-        this._inkRipple = inkRipple.render();
+        this._inkRipple = render();
     }
 
     _getInkRippleContainer() {

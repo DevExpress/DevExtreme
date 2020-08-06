@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import CollectionWidget from './ui.collection_widget.edit';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import arrayUtils from '../../data/array_utils';
+import { update, insert, indexByKey } from '../../data/array_utils';
 import { keysEqual } from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
@@ -122,9 +122,9 @@ export default CollectionWidget.inherit({
         if(isPartialRefresh) {
             this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
         } else {
-            const changedItem = items[arrayUtils.indexByKey(keyInfo, items, change.key)];
+            const changedItem = items[indexByKey(keyInfo, items, change.key)];
             if(changedItem) {
-                arrayUtils.update(keyInfo, items, change.key, change.data).done(() => {
+                update(keyInfo, items, change.key, change.data).done(() => {
                     this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByKey(change.key));
                 });
             }
@@ -132,7 +132,7 @@ export default CollectionWidget.inherit({
     },
 
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
-        when(isPartialRefresh || arrayUtils.insert(keyInfo, items, change.data, change.index)).done(() => {
+        when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
             this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
             this._afterItemElementInserted();
@@ -163,7 +163,7 @@ export default CollectionWidget.inherit({
     _afterItemElementInserted: noop,
 
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
-        const index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key);
+        const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);
         const removedItem = isPartialRefresh ? change.oldItem : items[index];
         if(removedItem) {
             const $removedItemElement = this._findItemElementByKey(change.key);

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import support from '../../core/utils/support';
+import { nativeScrolling } from '../../core/utils/support';
 import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
@@ -72,7 +72,7 @@ const Scrollable = DOMComponent.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return support.nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
+                    return nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
                 },
                 options: {
                     useSimulatedScrollbar: true

@@ -1,4 +1,4 @@
-import translator from '../animation/translator';
+import { move } from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import devices from '../core/devices';
 import { getPublicElement } from '../core/element';
@@ -10,7 +10,7 @@ import { noop } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { camelize } from '../core/utils/inflector';
 import { each } from '../core/utils/iterator';
-import sizeUtils from '../core/utils/size';
+import { getVisibleHeight, addOffsetToMaxHeight, addOffsetToMinHeight, getVerticalOffsets } from '../core/utils/size';
 import { getBoundingRect } from '../core/utils/position';
 import { isDefined } from '../core/utils/type';
 import { compare as compareVersions } from '../core/utils/version';
@@ -567,8 +567,8 @@ const Popup = Overlay.inherit({
             }
         } else {
             const container = $(this._getContainer()).get(0);
-            const maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
-            const minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+            const maxHeightValue = addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
+            const minHeightValue = addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
             cssStyles = {
                 height: 'auto',
@@ -601,11 +601,11 @@ const Popup = Overlay.inherit({
         const bottomToolbar = this.bottomToolbar();
 
         return {
-            header: sizeUtils.getVisibleHeight(topToolbar && topToolbar.get(0)),
-            footer: sizeUtils.getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
-            contentVerticalOffsets: sizeUtils.getVerticalOffsets(this.overlayContent().get(0), true),
-            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true),
-            popupVerticalPaddings: sizeUtils.getVerticalOffsets(this.$content().get(0), false)
+            header: getVisibleHeight(topToolbar && topToolbar.get(0)),
+            footer: getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
+            contentVerticalOffsets: getVerticalOffsets(this.overlayContent().get(0), true),
+            popupVerticalOffsets: getVerticalOffsets(this.$content().get(0), true),
+            popupVerticalPaddings: getVerticalOffsets(this.$content().get(0), false)
         };
     },
 
@@ -646,7 +646,7 @@ const Popup = Overlay.inherit({
 
     _renderPosition: function() {
         if(this.option('fullScreen')) {
-            translator.move(this._$content, {
+            move(this._$content, {
                 top: 0,
                 left: 0
             });

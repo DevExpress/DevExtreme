@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import { eventData } from '../../events/utils';
 import NativeStrategy from './ui.scrollable.native';
 import LoadIndicator from '../load_indicator';
@@ -118,7 +118,7 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
             })
             .toggleClass(SCROLLVIEW_PULLDOWN_REFRESHING_CLASS, top < pullDownHeight);
 
-        translator.move(this._$pullDown, { top: top });
+        move(this._$pullDown, { top: top });
 
         this._$icon.css({
             transform: 'rotate(' + angle + 'deg)'
@@ -204,7 +204,7 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _refreshPullDown: function() {
         this._$pullDown.addClass(SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS);
-        translator.move(this._$pullDown, { top: this._getPullDownHeight() });
+        move(this._$pullDown, { top: this._getPullDownHeight() });
     },
 
     pullDownEnable: function(enabled) {

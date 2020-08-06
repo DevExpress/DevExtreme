@@ -2,16 +2,16 @@ import $ from '../../core/renderer';
 import caretUtils from './utils.caret';
 import { isInputEventsL2Supported } from './utils.support';
 import { each } from '../../core/utils/iterator';
-import eventUtils from '../../events/utils';
+import { addNamespace, createEvent, normalizeKeyName } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { noop } from '../../core/utils/common';
-import stringUtils from '../../core/utils/string';
+import { isEmpty } from '../../core/utils/string';
 import wheelEvent from '../../events/core/wheel';
-import MaskRules from './ui.text_editor.mask.rule';
+import { EmptyMaskRule, StubMaskRule, MaskRule } from './ui.text_editor.mask.rule';
 import TextEditorBase from './ui.text_editor.base';
 import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
 import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
@@ -131,7 +131,7 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         const input = this._input();
-        const eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
+        const eventName = addNamespace(wheelEvent.name, this.NAME);
         const mouseWheelAction = this._createAction((function(e) {
             if(focused(input)) {
                 const dxEvent = e.event;
@@ -203,7 +203,7 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         this._changedValue = inputValue;
-        const changeEvent = eventUtils.createEvent(e, { type: 'change' });
+        const changeEvent = createEvent(e, { type: 'change' });
         eventsEngine.trigger($input, changeEvent);
     },
 
@@ -215,13 +215,13 @@ const TextEditorMask = TextEditorBase.inherit({
     _parseMaskRule: function(index) {
         const mask = this.option('mask');
         if(index >= mask.length) {
-            return new MaskRules.EmptyMaskRule();
+            return new EmptyMaskRule();
         }
 
         const currentMaskChar = mask[index];
         const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
         const result = isEscapedChar
-            ? new MaskRules.StubMaskRule({ maskChar: mask[index + 1] })
+            ? new StubMaskRule({ maskChar: mask[index + 1] })
             : this._getMaskRule(currentMaskChar);
 
         result.next(this._parseMaskRule(index + 1 + isEscapedChar));
@@ -242,8 +242,8 @@ const TextEditorMask = TextEditorBase.inherit({
         });
 
         return isDefined(ruleConfig)
-            ? new MaskRules.MaskRule(extend({ maskChar: this.option('maskChar') }, ruleConfig))
-            : new MaskRules.StubMaskRule({ maskChar: pattern });
+            ? new MaskRule(extend({ maskChar: this.option('maskChar') }, ruleConfig))
+            : new StubMaskRule({ maskChar: pattern });
     },
 
     _renderMaskedValue: function() {
@@ -284,7 +284,7 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _isValueEmpty: function() {
-        return stringUtils.isEmpty(this._value);
+        return isEmpty(this._value);
     },
 
     _shouldShowMask: function() {
@@ -317,7 +317,7 @@ const TextEditorMask = TextEditorBase.inherit({
                 const value = this._maskRulesChain.value();
                 const hiddenElementValue = this._isMaskedValueMode() ? text : value;
 
-                this._$hiddenElement.val(!stringUtils.isEmpty(value) ? hiddenElementValue : '');
+                this._$hiddenElement.val(!isEmpty(value) ? hiddenElementValue : '');
             }
         }
         return this.callBase();
@@ -335,7 +335,7 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _isControlKeyFired: function(e) {
-        return this._isControlKey(eventUtils.normalizeKeyName(e)) || e.ctrlKey // NOTE: FF fires control keys on keypress
+        return this._isControlKey(normalizeKeyName(e)) || e.ctrlKey // NOTE: FF fires control keys on keypress
                 || e.metaKey; // NOTE: Safari fires keys with ctrl modifier on keypress
     },
 
@@ -495,7 +495,7 @@ const TextEditorMask = TextEditorBase.inherit({
         if(!this._maskRulesChain) {
             return;
         }
-        const isValid = stringUtils.isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+        const isValid = isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
 
         this.option({
             isValid: isValid,

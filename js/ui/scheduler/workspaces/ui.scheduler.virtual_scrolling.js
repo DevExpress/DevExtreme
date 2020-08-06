@@ -1,4 +1,4 @@
-import typeUtils from '../../../core/utils/type';
+import { isFunction } from '../../../core/utils/type';
 
 const ROW_HEIGHT = 50;
 
@@ -241,7 +241,7 @@ export default class VirtualScrolling {
 
             if(cellClass) {
                 if(options.cellClass) {
-                    if(typeUtils.isFunction(options.cellClass)) {
+                    if(isFunction(options.cellClass)) {
                         cellModel.className = options.cellClass(rowIndex, cellIndex);
                     } else {
                         cellModel.className = options.cellClass;

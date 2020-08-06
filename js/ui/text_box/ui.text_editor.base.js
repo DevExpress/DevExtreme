@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import domUtils from '../../core/utils/dom';
+import { resetActiveElement } from '../../core/utils/dom';
 import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -784,7 +784,7 @@ const TextEditorBase = Editor.inherit({
 
     blur: function() {
         if(this._input().is(domAdapter.getActiveElement())) {
-            domUtils.resetActiveElement();
+            resetActiveElement();
         }
     },
 

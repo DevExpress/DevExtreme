@@ -9,7 +9,7 @@ import { inArray } from '../../core/utils/array';
 import browser from '../../core/utils/browser';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
-import dataCoreUtils from '../../core/utils/data';
+import { compileGetter, compileSetter } from '../../core/utils/data';
 import { getBoundingRect } from '../../core/utils/position';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -39,7 +39,11 @@ import SchedulerHeader from './ui.scheduler.header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
-import timeZoneUtils from './utils.timeZone';
+import { getCorrectedDateByDaylightOffsets,
+    correctRecurrenceExceptionByTimezone,
+    getTimezoneOffsetChangeInMs,
+    calculateTimezoneByValue
+} from './utils.timeZone';
 import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
 import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
 import SchedulerTimelineMonth from './workspaces/ui.scheduler.timeline_month';
@@ -1078,7 +1082,7 @@ class Scheduler extends Widget {
     }
 
     _getTimezoneOffsetByOption(date) {
-        return timeZoneUtils.calculateTimezoneByValue(this.option('timeZone'), date);
+        return calculateTimezoneByValue(this.option('timeZone'), date);
     }
 
     getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData) {
@@ -1090,7 +1094,7 @@ class Scheduler extends Widget {
             dates = dates.map((date) => {
                 const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
 
-                return timeZoneUtils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
+                return getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
             });
         }
 
@@ -1254,7 +1258,7 @@ class Scheduler extends Widget {
 
     _initAppointmentTemplate() {
         const { expr } = this._dataAccessors;
-        const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
+        const createGetter = (property) => compileGetter(`appointmentData.${property}`);
 
         this._templateManager.addDefaultTemplates({
             ['item']: new BindableTemplate(($container, data, model) => {
@@ -1344,8 +1348,8 @@ class Scheduler extends Widget {
         each(fields, (function(name, expr) {
             if(expr) {
 
-                const getter = dataCoreUtils.compileGetter(expr);
-                const setter = dataCoreUtils.compileSetter(expr);
+                const getter = compileGetter(expr);
+                const setter = compileSetter(expr);
 
                 let dateGetter;
                 let dateSetter;
@@ -2021,7 +2025,7 @@ class Scheduler extends Widget {
         exceptionStartDate = this.fire('convertDateByTimezoneBack', exceptionStartDate, startDateTimeZone);
         const appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
 
-        exceptionStartDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(exceptionStartDate, appointmentStartDate, this.option('timeZone'), startDateTimeZone, true);
+        exceptionStartDate = correctRecurrenceExceptionByTimezone(exceptionStartDate, appointmentStartDate, this.option('timeZone'), startDateTimeZone, true);
 
         isAllDay && exceptionStartDate.setHours(appointmentStartDate.getHours(),
             appointmentStartDate.getMinutes(),
@@ -2095,7 +2099,7 @@ class Scheduler extends Widget {
             }
         }
 
-        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        endDate = new Date(endDate.getTime() - getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
 
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
@@ -2390,7 +2394,7 @@ class Scheduler extends Widget {
         const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
         let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
 
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        convertedExceptionDate = correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
         exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     }

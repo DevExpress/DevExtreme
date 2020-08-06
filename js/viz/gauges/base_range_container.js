@@ -1,4 +1,4 @@
-import iterateUtils from '../../core/utils/iterator';
+import { each } from '../../core/utils/iterator';
 import { BaseElement } from './base_indicators';
 
 const _Number = Number;
@@ -6,7 +6,7 @@ const _abs = Math.abs;
 import { isString as _isString } from '../../core/utils/type';
 const _isArray = Array.isArray;
 const _isFinite = isFinite;
-const _each = iterateUtils.each;
+const _each = each;
 
 const BaseRangeContainer = BaseElement.inherit({
     _init: function() {

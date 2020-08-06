@@ -14,7 +14,7 @@ import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
 import themes from '../themes';
 import TrackBar from '../track_bar';
-import inkRipple from '../widget/utils.ink_ripple';
+import { render } from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
 
 // STYLE slider
@@ -267,7 +267,7 @@ const Slider = TrackBar.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render({
+        this._inkRipple = render({
             waveSizeCoefficient: 0.7,
             isCentered: true,
             wavesNumber: 2,

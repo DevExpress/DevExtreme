@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import { getRecurrenceProcessor } from './recurrence';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
-import tooltip from '../tooltip/ui.tooltip';
+import { hide, show } from '../tooltip/ui.tooltip';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
@@ -109,7 +109,7 @@ const Appointment = DOMComponent.inherit({
     _renderAppointmentGeometry: function() {
         const geometry = this.option('geometry');
         const $element = this.$element();
-        translator.move($element, {
+        move($element, {
             top: geometry.top,
             left: geometry.left
         });
@@ -153,14 +153,14 @@ const Appointment = DOMComponent.inherit({
 
         eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
         eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, function() {
-            tooltip.show({
+            show({
                 target: $icon,
                 content: tooltipText
             });
         });
         eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME);
         eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, function() {
-            tooltip.hide();
+            hide();
         });
     },
 

@@ -1,6 +1,6 @@
 import fx from '../../animation/fx';
 import positionUtils from '../../animation/position';
-import translator from '../../animation/translator';
+import { locate, move, resetPosition } from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
@@ -1070,9 +1070,9 @@ const Overlay = Widget.inherit({
     },
 
     _changePosition: function(offset) {
-        const position = translator.locate(this._$content);
+        const position = locate(this._$content);
 
-        translator.move(this._$content, {
+        move(this._$content, {
             left: position.left + offset.left,
             top: position.top + offset.top
         });
@@ -1081,10 +1081,10 @@ const Overlay = Widget.inherit({
     },
 
     _allowedOffsets: function() {
-        const position = translator.locate(this._$content);
+        const position = locate(this._$content);
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 };
+        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? locate(this._$wrapper) : { top: 0, left: 0 };
         const boundaryOffset = this.option('boundaryOffset');
 
         return {
@@ -1243,7 +1243,7 @@ const Overlay = Widget.inherit({
         } else {
             this._renderOverlayBoundaryOffset();
 
-            translator.resetPosition(this._$content);
+            resetPosition(this._$content);
 
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);

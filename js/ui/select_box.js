@@ -8,7 +8,7 @@ import { Deferred, fromPromise } from '../core/utils/deferred';
 import { getPublicElement } from '../core/element';
 import errors from '../core/errors';
 import domAdapter from '../core/dom_adapter';
-import inkRipple from './widget/utils.ink_ripple';
+import { render } from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
@@ -206,7 +206,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render();
+        this._inkRipple = render();
     },
 
     _toggleActiveState: function($element, value, e) {

@@ -3,7 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import Button from './button';
-import inkRipple from './widget/utils.ink_ripple';
+import { render } from './widget/utils.ink_ripple';
 import { addNamespace } from '../events/utils';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
@@ -273,7 +273,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render();
+        this._inkRipple = render();
     },
 
     _toggleActiveState: function($element, value, e) {

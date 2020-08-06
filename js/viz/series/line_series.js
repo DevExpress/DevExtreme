@@ -3,7 +3,7 @@ import series from './scatter_series';
 
 const chartScatterSeries = series.chart;
 const polarScatterSeries = series.polar;
-import objectUtils from '../../core/utils/object';
+import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import vizUtils from '../core/utils';
@@ -23,7 +23,7 @@ const chart = {};
 const polar = {};
 
 function clonePoint(point, newX, newY, newAngle) {
-    const p = objectUtils.clone(point);
+    const p = clone(point);
     p.x = newX;
     p.y = newY;
     p.angle = newAngle;
@@ -266,7 +266,7 @@ chart['stepline'] = _extend({}, lineSeries, {
             }
             const step = segment[segment.length - 1][coordName];
             if(step !== pt[coordName]) {
-                point = objectUtils.clone(pt);
+                point = clone(pt);
                 point[coordName] = step;
                 segment.push(point);
             }

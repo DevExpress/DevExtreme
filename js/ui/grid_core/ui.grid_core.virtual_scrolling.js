@@ -5,7 +5,7 @@ import virtualScrollingCore from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -531,7 +531,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const top = that._dataController.getContentOffset();
 
                 deferRender(function() {
-                    translator.move($contentTable, { left: 0, top: top });
+                    move($contentTable, { left: 0, top: top });
 
                     // TODO jsdmitry: Separate this functionality on render and resize
                     const isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
