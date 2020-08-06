@@ -138,6 +138,7 @@
     "string-replace-loader": "^2.1.1",
     "stylelint": "^13.1.0",
     "stylelint-config-standard": "^20.0.0",
+    "stylelint-devextreme": "0.0.1",
     "stylelint-scss": "^3.17.2",
     "systemjs": "<=0.19.41",
     "systemjs-plugin-babel": "0.0.25",
