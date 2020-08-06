@@ -1,6 +1,6 @@
 <dx-vector-map 
     id="vector-map" #vectorMap
-    [bounds]="viewportData[0].coordinates" 
+    [bounds]="[-180, 85, 180, -60]" 
     (onZoomFactorChanged)="zoomChanged($event)" 
     (onCenterChanged)="centerChanged($event)">
     <dxi-layer [dataSource]="worldMap"></dxi-layer>
@@ -13,8 +13,9 @@
             [dataSource]="viewportData" 
             [width]="210" 
             displayExpr="continent" 
-            valueExpr="coordinates" 
-            [(value)]="vectorMap.bounds"></dx-select-box>
+            valueExpr="coordinates"
+            [value]="viewportData[0].coordinates"
+            (onValueChanged)="onValueChanged($event)"></dx-select-box>
 
     </div>
     <div class="option">
