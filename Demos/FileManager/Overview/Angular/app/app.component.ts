@@ -27,7 +27,7 @@ export class AppComponent {
     }
 
     displayImagePopup(e) {
-        this.imageItemToDisplay = e.fileItem;
+        this.imageItemToDisplay = e.file;
         this.popupVisible = true;
     }
 }

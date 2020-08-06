@@ -27,8 +27,8 @@ class App extends React.Component {
     this.setState({
       popupVisible: true,
       imageItemToDisplay: {
-        name: e.fileItem.name,
-        url: e.fileItem.dataItem.url
+        name: e.file.name,
+        url: e.file.dataItem.url
       }
     });
   }

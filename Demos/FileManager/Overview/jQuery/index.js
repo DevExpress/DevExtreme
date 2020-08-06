@@ -19,8 +19,8 @@ $(function () {
 		onSelectedFileOpened: function(e) {
 			var popup = $("#photo-popup").dxPopup("instance");
             popup.option({
-                "title": e.fileItem.name,
-                "contentTemplate": "<img src=\"" + e.fileItem.dataItem.url + "\" class=\"photo-popup-image\" />"
+                "title": e.file.name,
+                "contentTemplate": "<img src=\"" + e.file.dataItem.url + "\" class=\"photo-popup-image\" />"
             });
             popup.show();
 		}
