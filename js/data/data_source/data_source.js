@@ -158,14 +158,11 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 
     function mapGroup(group, level) {
         return iteratorUtils.map(group, function(item) {
-            const result = {
-                key: item.key,
-                items: mapRecursive(item.items, level - 1)
+            const { items, ...restItem } = item;
+            return {
+                ...restItem,
+                items: mapRecursive(items, level - 1, mapper)
             };
-            if('aggregates' in item) {
-                result.aggregates = item.aggregates;
-            }
-            return result;
         });
     }
 
