@@ -2058,25 +2058,6 @@ class Scheduler extends Widget {
         });
     }
 
-    updateAppointmentStartDate(options) {
-        const appointment = options.appointment;
-        const firstViewDate = this._workSpace.getStartViewDate();
-        let startDate = new Date(options.startDate);
-        const startDayHour = this._getCurrentViewOption('startDayHour');
-        let updatedStartDate;
-
-        if(this.appointmentTakesAllDay(appointment)) {
-            updatedStartDate = dateUtils.normalizeDate(startDate, firstViewDate);
-        } else {
-            if(startDate < firstViewDate) {
-                startDate = firstViewDate;
-            }
-            updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
-        }
-
-        return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
-    }
-
     _cropAppointmentsByStartDayHour(appointments, appointmentData) {
         const adapter = this.createAppointmentAdapter(appointmentData);
         const startDayHour = this._getCurrentViewOption('startDayHour');
