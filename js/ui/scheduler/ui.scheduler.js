@@ -1477,7 +1477,7 @@ class Scheduler extends Widget {
             MobileTooltipStrategy : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
         this._appointmentPopup = new AppointmentPopup(this);
 
-        if(this._isLoaded()) {
+        if(this._isLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(this._loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
             this._fireContentReadyAction();
