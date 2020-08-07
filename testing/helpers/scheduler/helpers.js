@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { locate } from 'animation/translator';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
 
@@ -181,7 +181,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
-            getAppointmentPosition: (index = 0) => translator.locate($(this.appointments.getAppointment(index))),
+            getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
 
             find: (text) => {
                 return this.appointments
