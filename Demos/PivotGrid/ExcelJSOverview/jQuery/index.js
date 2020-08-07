@@ -17,7 +17,8 @@ $(function(){
                 caption: "Region",
                 width: 120,
                 dataField: "region",
-                area: "row" 
+                area: "row",
+                expanded: true
             }, {
                 caption: "City",
                 dataField: "city",
@@ -29,7 +30,8 @@ $(function(){
             }, {
                 dataField: "date",
                 dataType: "date",
-                area: "column"
+                area: "column",
+                expanded: true
             }, {
                 caption: "Sales",
                 dataField: "amount",
@@ -47,7 +49,7 @@ $(function(){
             DevExpress.excelExporter.exportPivotGrid({
                 component: e.component,
                 worksheet: worksheet,
-                topLeftCell: { row: 2, column: 3 },
+                topLeftCell: { row: 1, column: 1 },
             }).then(function() {
                 // https://github.com/exceljs/exceljs#writing-xlsx
                 workbook.xlsx.writeBuffer().then(function(buffer) {

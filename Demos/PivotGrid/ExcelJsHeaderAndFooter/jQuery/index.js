@@ -6,8 +6,16 @@ $(function(){
         allowExpandAll: true,
         height: 440,
         showBorders: true,
+        fieldPanel: {
+            showColumnFields: true,
+            showDataFields: true,
+            showFilterFields: true,
+            showRowFields: true,
+            allowFieldDragging: true,
+            visible: true
+        },        
         fieldChooser: {
-            enabled: false
+            enabled: true
         },
         export: {
             enabled: true
@@ -17,19 +25,22 @@ $(function(){
                 caption: "Region",
                 width: 120,
                 dataField: "region",
-                area: "row" 
+                area: "row",
+                expanded: true
             }, {
                 caption: "City",
                 dataField: "city",
                 width: 150,
-                area: "row",
+                area: "filter",
                 selector: function(data) {
                     return  data.city + " (" + data.country + ")";
                 }
             }, {
                 dataField: "date",
                 dataType: "date",
-                area: "column"
+                area: "column",
+                filterValues: [[2014], [2015]],
+                expanded: true
             }, {
                 caption: "Sales",
                 dataField: "amount",
@@ -44,36 +55,54 @@ $(function(){
             var workbook = new ExcelJS.Workbook();
             var worksheet = workbook.addWorksheet('Sales');
 
-            // https://github.com/exceljs/exceljs#columns
-            worksheet.columns = [
-                { width: 10 }, { width: 10 }, { width: 10 }, { width: 20 }, { width: 20 }, { width: 20 }, { width: 20 }
-            ];            
-
+            var grid = e.component;
             DevExpress.excelExporter.exportPivotGrid({
-                component: e.component,
+                component: grid,
                 worksheet: worksheet,
-                topLeftCell: { row: 2, column: 3 },
-                keepColumnWidths: false,
-            }).then(function(dataGridRange) {
+                topLeftCell: { row: 2, column: 1 },
+                keepColumnWidths: true,
+            }).then(function(gridRange) {
                     // header
                     var headerRow = worksheet.getRow(1);
                     headerRow.height = 70; 
-                    worksheet.mergeCells('D1:H1');
-                    headerRow.getCell(4).value = 'Average Sales \n Amount by Region';
-                    headerRow.getCell(4).font = { name: 'Segoe UI Light', size: 22, bold: true };
-                    headerRow.getCell(4).alignment = { horizontal: 'center',  wrapText: true };
-                    worksheet.getCell('D1').note = 'Based on open data';
+                    worksheet.mergeCells('B1:K1');
+                    headerRow.getCell(3).value = 'Average Sales \n Amount by Region';
+                    headerRow.getCell(3).font = { name: 'Segoe UI Light', size: 22, bold: true };
+                    headerRow.getCell(3).alignment = { horizontal: 'center',  wrapText: true };
+                    worksheet.getCell('C1').note = 'Based on open data';
               
                     worksheet.getRow(2).height = 40;
 
                     // footer
-                    var footerRowIndex = dataGridRange.to.row + 2;
+                    var footerRowIndex = gridRange.to.row + 2;
                     var footerRow = worksheet.getRow(footerRowIndex);
-                    worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
+                    worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 11);
 
                     footerRow.getCell(1).value = 'www.wikipedia.org';
                     footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
                     footerRow.getCell(1).alignment = { horizontal: 'right' };
+
+                    // field panel
+                    var fields = grid.getDataSource().fields();      
+                    var rowFields = fields.filter(r => r.area === 'row').map(r => r.dataField);
+                    var dataFields = fields.filter(r => r.area === 'data').map(r => `[${r.summaryType}(${r.dataField}])`);
+                    var columnFields = [...new Set(fields.filter(r => r.area === 'column').map(r => r.dataField))];
+                    var filterFields = fields.filter(r => r.area === 'filter').map(r => r.dataField);
+                    var appliedFilters = fields.filter(r => r.filterValues !== undefined).map(r => `[${r.dataField}:${r.filterValues}]`);
+                    var firstRow = worksheet.getRow(1),
+                        fieldPanelCell = firstRow.getCell(13);
+                  
+                    firstRow.height = 90;
+                    worksheet.mergeCells('L1:N1');
+                    fieldPanelCell.value = 'Feld Panel area:'
+                      + ` \n - Filter fields: [${filterFields.join(', ')}]`              
+                      + ` \n - Row fields: [${rowFields.join(', ')}]`
+                      + ` \n - Column fields: [${columnFields.join(', ')}]`
+                      + ` \n - Data fields: [${dataFields.join(', ')}]`
+                      + ` \n - Applied filters: [${appliedFilters.join(', ')}]`;
+                 
+                    fieldPanelCell.alignment = { horizontal: 'left', vertical: 'top',  wrapText: true };
+                    fieldPanelCell.width = 30;
         
                     return Promise.resolve();
                 }).then(function() {
