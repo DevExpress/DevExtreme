@@ -46,16 +46,16 @@ matrix:
     - { TARGET: test, CONSTEL: viz }
     - { TARGET: test, CONSTEL: renovation }
     - { TARGET: test, PERF: true, JQUERY: true, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: viz }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.editors, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.grid, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.scheduler }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: viz }
+    - { TARGET: test, MOBILE_UA: ios9, JQUERY: true, CONSTEL: ui }
+    - { TARGET: test, MOBILE_UA: ios9, JQUERY: true, CONSTEL: ui.editors, NO_HEADLESS: true }
+    - { TARGET: test, MOBILE_UA: ios9, JQUERY: true, CONSTEL: ui.grid, NO_HEADLESS: true }
+    - { TARGET: test, MOBILE_UA: ios9, JQUERY: true, CONSTEL: ui.scheduler }
+    - { TARGET: test, MOBILE_UA: ios9, JQUERY: true, CONSTEL: viz }
+    - { TARGET: test, MOBILE_UA: android6, CONSTEL: ui }
+    - { TARGET: test, MOBILE_UA: android6, CONSTEL: ui.editors, NO_HEADLESS: true }
+    - { TARGET: test, MOBILE_UA: android6, CONSTEL: ui.grid, NO_HEADLESS: true }
+    - { TARGET: test, MOBILE_UA: android6, CONSTEL: ui.scheduler }
+    - { TARGET: test, MOBILE_UA: android6, CONSTEL: viz }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: export }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: misc }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui }
