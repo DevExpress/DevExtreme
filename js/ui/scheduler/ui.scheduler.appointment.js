@@ -57,6 +57,7 @@ const Appointment = DOMComponent.inherit({
             case 'resizableConfig':
             case 'cellHeight':
             case 'cellWidth':
+            case 'allDay':
                 this._invalidate();
                 break;
             default:
@@ -75,7 +76,8 @@ const Appointment = DOMComponent.inherit({
             handles: this.option('reduced') ? reducedHandles[this.option('reduced')] : DEFAULT_HORIZONTAL_HANDLES,
             minHeight: 0,
             minWidth: this.invoke('getCellWidth'),
-            step: this.invoke('getResizableStep')
+            step: this.invoke('getResizableStep'),
+            areaLeftOffset: this.option('allDay') ? this.invoke('getWorkSpaceDateTableOffset') : 0
         };
     },
 
@@ -194,7 +196,6 @@ const Appointment = DOMComponent.inherit({
 
         if(!this.invoke('isGroupedByDate')) {
             config.stepPrecision = 'strict';
-            config.stepPrecisionCorrection = this.option('rtlEnabled') ? 0 : this.invoke('getWorkSpaceDateTableOffset');
         }
 
         return config;

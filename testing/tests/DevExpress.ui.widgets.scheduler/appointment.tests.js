@@ -26,6 +26,9 @@ const moduleOptions = {
             if(command === 'isGroupedByDate') {
                 return false;
             }
+            if(command === 'getWorkSpaceDateTableOffset') {
+                return 100;
+            }
         }, this);
     },
     afterEach: function() {
@@ -78,6 +81,22 @@ QUnit.test('Scheduler appointment has right resizable config for horizontal dire
     assert.equal(resizableInstance.option('step'), this.cellWidth, 'Resizable has a right step');
     assert.equal(resizableInstance.option('minWidth'), this.cellWidth, 'Resizable has a right minWidth');
     assert.equal(resizableInstance.option('minHeight'), 0, 'Resizable has a right minHeight');
+    assert.equal(resizableInstance.option('stepPrecision'), 'strict', 'Resizable has a right stepPresicion');
+    assert.equal(resizableInstance.option('areaLeftOffset'), 0, 'Resizable has a right areaLeftOffset');
+});
+
+QUnit.test('areaLeftOffset resizable config should depend on allDay option', function(assert) {
+    this.instance.option({
+        direction: 'horizontal',
+        allDay: true
+    });
+
+    const resizableInstance = this.instance.$element().dxResizable('instance');
+    assert.equal(resizableInstance.option('areaLeftOffset'), 100, 'Resizable has a right areaLeftOffset');
+
+    this.instance.option('allDay', false);
+
+    assert.equal(resizableInstance.option('areaLeftOffset'), 0, 'Resizable has a right areaLeftOffset');
 });
 
 QUnit.test('Scheduler appointment has right resizing handles, horizontal direction', function(assert) {
