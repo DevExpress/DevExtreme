@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import iconUtils from '../../core/utils/icon';
+import { getImageContainer } from '../../core/utils/icon';
 
 if(ko) {
     ko.bindingHandlers.dxControlsDescendantBindings = {
@@ -13,7 +13,7 @@ if(ko) {
     ko.bindingHandlers.dxIcon = {
         init: function(element, valueAccessor) {
             const options = ko.utils.unwrapObservable(valueAccessor()) || {};
-            const iconElement = iconUtils.getImageContainer(options);
+            const iconElement = getImageContainer(options);
 
             ko.virtualElements.emptyNode(element);
             if(iconElement) {
@@ -22,7 +22,7 @@ if(ko) {
         },
         update: function(element, valueAccessor) {
             const options = ko.utils.unwrapObservable(valueAccessor()) || {};
-            const iconElement = iconUtils.getImageContainer(options);
+            const iconElement = getImageContainer(options);
 
             ko.virtualElements.emptyNode(element);
             if(iconElement) {
