@@ -32,7 +32,6 @@ import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import fx from 'animation/fx';
 import commonUtils from 'core/utils/common';
 import { keyboard } from 'events/short';
@@ -2770,48 +2769,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.updateDimensions();
 
         assert.notOk($(':focus').length, 'focus is lost');
-    });
-
-    QUnit.testInActiveWindow('Filter row editor should have focus after _synchronizeColumns (T638737)', function(assert) {
-        $('#qunit-fixture').css('position', 'static');
-        // arrange, act
-        const dataGrid = createDataGrid({
-            filterRow: { visible: true },
-            editing: { allowAdding: true },
-            columns: [
-                { dataField: 'field1' },
-                { dataField: 'field2' }
-            ],
-            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
-        });
-
-        this.clock.tick();
-
-        const $input = $(dataGrid.$element()).find('.dx-editor-cell').first().find('.dx-texteditor-input');
-        $input.focus().val('1').trigger('change');
-
-        const selectionRangeArgs = [];
-
-        const oldSetSelectionRange = gridCoreUtils.setSelectionRange;
-        gridCoreUtils.setSelectionRange = function(element, range) {
-            oldSetSelectionRange.apply(this, arguments);
-            selectionRangeArgs.push([element, range]);
-        };
-
-        this.clock.tick();
-
-        gridCoreUtils.setSelectionRange = oldSetSelectionRange;
-
-        // assert
-        const $focusedInput = dataGrid.$element().find('.dx-editor-cell .dx-texteditor-input:focus');
-        assert.equal(dataGrid.getVisibleRows().length, 1, 'filter was applied');
-        assert.ok($focusedInput.length, 'filter cell has focus after filter applyed');
-        // T662207
-        if(devices.real().deviceType === 'desktop') {
-            assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], 'setSelectionRange args');
-        }
-
-        $('#qunit-fixture').css('position', '');
     });
 });
 
