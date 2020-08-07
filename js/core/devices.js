@@ -367,8 +367,8 @@ changeCallback.add((viewPort, prevViewport) => {
     devices.attachCssClasses(viewPort);
 });
 
-// ///#DEBUG
+///#DEBUG
 devices.Devices = Devices;
-// ///#ENDDEBUG
+///#ENDDEBUG
 
 export default devices;
