@@ -5358,6 +5358,52 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(rows[rows.length - 1].key, 150, 'last row key');
     });
 
+
+    ['repaint', 'reshape'].forEach((refreshMode) => {
+        QUnit.test(`loading data on scroll after adding row if scrolling mode is infinite and refreshMode is ${refreshMode} (T914296)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 150; i++) {
+                array.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 400,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    mode: 'cell',
+                    allowAdding: true,
+                    refreshMode: refreshMode
+                },
+                paging: {
+                    pageSize: 50
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false
+                },
+                columns: ['id'],
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.addRow();
+            dataGrid.saveEditData();
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.strictEqual(dataGrid.totalCount(), refreshMode === 'repaint' ? 152 : 151, 'totalCount'); // TODO: Fix duplicate added row when editing.refreshMode = 'repaint'
+            assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
+        });
+    });
+
     QUnit.test('height from extern styles', function(assert) {
     // arrange, act
         const $dataGrid = $('#dataGrid').addClass('fixed-height').dxDataGrid({
