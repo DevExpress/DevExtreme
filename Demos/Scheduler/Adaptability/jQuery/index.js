@@ -14,19 +14,10 @@ $(function () {
         }]
     }).dxScheduler("instance");
     
-    var createAppointmentPopupData = function() {
-        var currentDate = scheduler.option('currentDate');
-        var cellDuration = scheduler.option('cellDuration');
-        return {
-            startDate: new Date(currentDate),
-            endDate: new Date(currentDate.setMinutes(cellDuration))
-        };
-    }
-    
     $("#speedDialAction").dxSpeedDialAction({
         icon: "plus",
         onClick: function () {
-            scheduler.showAppointmentPopup(createAppointmentPopupData());
+            scheduler.showAppointmentPopup();
         }
     })
 });
