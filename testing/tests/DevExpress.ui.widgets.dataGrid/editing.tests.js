@@ -3083,6 +3083,29 @@ QUnit.module('Editing with real dataController', {
         assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass('dx-state-disabled'), 'save changes button enabled');
         assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass('dx-state-disabled'), 'cancel changes button enabled');
     });
+    // T919206
+    QUnit.test('Reset modified cell class (T919206)', function(assert) {
+    // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        that.options.editing = {
+            allowUpdating: true,
+            mode: 'batch'
+        };
+        this.options.columns = [{ dataField: 'stateId', dataType: 'boolean' }];
+        this.options.repaintChangesOnly = true;
+        this.columnsController.init();
+        rowsView.render(testElement);
+
+        // act
+        $(this.getCellElement(0, 0)).find('.dx-checkbox').trigger('dxclick');
+        $(this.getCellElement(1, 0)).find('.dx-checkbox').trigger('dxclick');
+        assert.equal($('.dx-cell-modified').length, 2);
+        this.saveEditData();
+        // assert
+        assert.equal($('.dx-cell-modified').length, 0);
+    });
 
     // T181661
     QUnit.test('Close Editing Cell on hold', function(assert) {
