@@ -828,13 +828,28 @@ module('Expanded items', {
                 });
             });
 
+            QUnit.test(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. ExpandItem(1) -> CollapseItem(1) -> repaint() -> expandItem(1) //T920415`, function(assert) {
+                const options = createOptions(
+                    { virtualModeEnabled, dataSourceOption, rootValue: 0 },
+                    [{ id: 1, text: 'item1', parentId: 0 }, { id: 2, text: 'item1_1', parentId: 1 }]
+                );
+
+                const wrapper = new TreeViewTestWrapper(options);
+                wrapper.instance.expandItem(1);
+                wrapper.instance.collapseItem(1);
+                wrapper.instance.repaint();
+
+                wrapper.instance.expandItem(1);
+                const item1_1 = wrapper.getElement().find('[data-item-id="2"]');
+                assert.equal(item1_1.length, 1, 'item1_1 is rendered');
+            });
+
             function createOptions(options, items) {
                 const result = $.extend({ dataStructure: 'plain', rootValue: 1 }, options);
                 if(result.dataSourceOption === 'createChildren') {
                     const createChildFunction = (parent) => {
-                        return parent == null
-                            ? [ items[1] ]
-                            : items.filter(function(item) { return parent.itemData.id === item.parentId; });
+                        const parentId = parent === null ? result.rootValue : parent.itemData.id;
+                        return items.filter(function(item) { return item.parentId === parentId; });
                     };
                     result.createChildren = createChildFunction;
                 } else {

@@ -323,10 +323,10 @@ const DataAdapter = Class.inherit({
 
         const itemKey = this.options.dataAccessors.getters.key(item);
         each(this._dataStructure, function(_, node) {
-            const isNodesEqual = itemKey
+            const isNodeFound = itemKey
                 ? node.internalFields.key === itemKey
                 : node.internalFields.item === item;
-            if(isNodesEqual) {
+            if(isNodeFound) {
                 result = node;
                 return false;
             }
