@@ -32,9 +32,9 @@ import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import commonUtils from 'core/utils/common';
 import { keyboard } from 'events/short';
+import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
@@ -49,6 +49,8 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Erase differences in user agent stylesheet
     $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
 }
+
+fx.off = true;
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Correct background color of focused grouped row when RTL', function(assert) {
@@ -2701,48 +2703,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         );
         assert.equal($secondEditor.find('.dx-texteditor-input').val(), 'test', '\'lastName\' editor has correct value');
         assert.ok($secondEditor.hasClass('dx-state-focused'), '\'lastName\' editor focused');
-    });
-
-    QUnit.testInActiveWindow('Filter row editor should have focus after _synchronizeColumns (T638737)', function(assert) {
-        $('#qunit-fixture').css('position', 'static');
-        // arrange, act
-        const dataGrid = createDataGrid({
-            filterRow: { visible: true },
-            editing: { allowAdding: true },
-            columns: [
-                { dataField: 'field1' },
-                { dataField: 'field2' }
-            ],
-            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
-        });
-
-        this.clock.tick();
-
-        const $input = $(dataGrid.$element()).find('.dx-editor-cell').first().find('.dx-texteditor-input');
-        $input.focus().val('1').trigger('change');
-
-        const selectionRangeArgs = [];
-
-        const oldSetSelectionRange = gridCoreUtils.setSelectionRange;
-        gridCoreUtils.setSelectionRange = function(element, range) {
-            oldSetSelectionRange.apply(this, arguments);
-            selectionRangeArgs.push([element, range]);
-        };
-
-        this.clock.tick();
-
-        gridCoreUtils.setSelectionRange = oldSetSelectionRange;
-
-        // assert
-        const $focusedInput = dataGrid.$element().find('.dx-editor-cell .dx-texteditor-input:focus');
-        assert.equal(dataGrid.getVisibleRows().length, 1, 'filter was applied');
-        assert.ok($focusedInput.length, 'filter cell has focus after filter applyed');
-        // T662207
-        if(devices.real().deviceType === 'desktop') {
-            assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], 'setSelectionRange args');
-        }
-
-        $('#qunit-fixture').css('position', '');
     });
 
     // T179519
