@@ -534,6 +534,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     _resizableConfig: function(appointmentData, itemSetting) {
         return {
             area: this._calculateResizableArea(itemSetting, appointmentData),
+            areaLeftOffset: this.option('allDay') && !this.option('rtlEnabled') ? this.invoke('getWorkSpaceDateTableOffset') : 0,
             onResizeStart: (function(e) {
                 this._$currentAppointment = $(e.element);
 
