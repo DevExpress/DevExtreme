@@ -192,10 +192,9 @@ const Appointment = DOMComponent.inherit({
         const config = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
         config.roundStepValue = true;
 
-        config.stepPrecision = 'strict';
-
-        if(this.invoke('isGroupedByDate') || !!this.option('allDay')) {
-            config.stepPrecision = 'simple';
+        if(!this.invoke('isGroupedByDate')) {
+            config.stepPrecision = 'strict';
+            config.stepPrecisionCorrection = this.option('rtlEnabled') ? 0 : this.invoke('getWorkSpaceDateTableOffset');
         }
 
         return config;

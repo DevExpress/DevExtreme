@@ -54,6 +54,7 @@ const Resizable = DOMComponent.inherit({
             * @hidden
             */
             stepPrecision: 'simple',
+            stepPrecisionCorrection: 0,
 
             area: undefined,
 
@@ -273,8 +274,10 @@ const Resizable = DOMComponent.inherit({
         const size = this._elementSize;
         const xPos = sides.left ? location.left : location.left + size.width;
         const yPos = sides.top ? location.top : location.top + size.height;
-        const newXShift = (xPos + offset.x) % steps.h;
+
+        const newXShift = (xPos + offset.x - this.option('stepPrecisionCorrection')) % steps.h;
         const newYShift = (yPos + offset.y) % steps.v;
+
         const sign = Math.sign || (x => {
             x = +x;
             if(x === 0 || isNaN(x)) {
@@ -445,6 +448,7 @@ const Resizable = DOMComponent.inherit({
             case 'stepPrecision':
             case 'step':
             case 'roundStepValue':
+            case 'stepPrecisionCorrection':
                 break;
             default:
                 this.callBase(args);
