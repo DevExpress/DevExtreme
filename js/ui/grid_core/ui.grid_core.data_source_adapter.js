@@ -137,11 +137,14 @@ module.exports = gridCore.Controller.inherit((function() {
             const dataSource = that._dataSource;
 
             if(operationTypes.reload) {
-                that._currentTotalCount = 0;
-                that._skipCorrection = 0;
+                that.resetCurrentTotalCount();
                 that._isLastPage = !dataSource.paginate();
                 that._hasLastPage = that._isLastPage;
             }
+        },
+        resetCurrentTotalCount: function() {
+            this._currentTotalCount = 0;
+            this._skipCorrection = 0;
         },
         resetCache: function() {
             this._cachedStoreData = undefined;
@@ -543,7 +546,7 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         pageCount: function() {
             const that = this;
-            const count = that.totalItemsCount();
+            const count = that.totalItemsCount() - that._skipCorrection;
             const pageSize = that.pageSize();
 
             if(pageSize && count > 0) {
