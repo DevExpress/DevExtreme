@@ -58,7 +58,6 @@ $(function(){
               topLeftCell: { row: 1, column: 1 },
               keepColumnWidths: false,
               customizeCell: function({excelCell, pivotCell}) {
-                // cell customization
                 if( pivotCell.area === 'row') {
                   if (pivotCell.type === 'T') {
                     excelCell.fill = { type: 'pattern', pattern:'solid', fgColor: { argb:'94FF82'} }
@@ -77,6 +76,7 @@ $(function(){
                 if(pivotCell.rowType === 'GT') {
                   excelCell.fill = { type: 'pattern', pattern:'solid', fgColor: { argb:'5EFF5E'} }
                   excelCell.font = { bold: true, size: 10 };
+                  excelCell.numFmt = '#,##,"K"';                  
                 }
                 if(pivotCell.columnType === 'GT') {
                   if(pivotCell.rowPath && pivotCell.rowPath[0] === 'Africa') {

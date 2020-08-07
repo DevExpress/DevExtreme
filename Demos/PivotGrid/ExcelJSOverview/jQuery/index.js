@@ -5,6 +5,7 @@ $(function(){
         allowFiltering: true,
         allowExpandAll: true,
         height: 440,
+        rowHeaderLayout: 'tree',
         showBorders: true,
         fieldChooser: {
             enabled: false

@@ -62,56 +62,63 @@ $(function(){
                 topLeftCell: { row: 2, column: 1 },
                 keepColumnWidths: true,
             }).then(function(gridRange) {
-                    // header
-                    var headerRow = worksheet.getRow(1);
-                    headerRow.height = 70; 
-                    worksheet.mergeCells('B1:K1');
-                    headerRow.getCell(3).value = 'Average Sales \n Amount by Region';
-                    headerRow.getCell(3).font = { name: 'Segoe UI Light', size: 22, bold: true };
-                    headerRow.getCell(3).alignment = { horizontal: 'center',  wrapText: true };
-                    worksheet.getCell('C1').note = 'Based on open data';
-              
-                    worksheet.getRow(2).height = 40;
-
-                    // footer
-                    var footerRowIndex = gridRange.to.row + 2;
-                    var footerRow = worksheet.getRow(footerRowIndex);
-                    worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 11);
-
-                    footerRow.getCell(1).value = 'www.wikipedia.org';
-                    footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
-                    footerRow.getCell(1).alignment = { horizontal: 'right' };
-
-                    // field panel
-                    var fields = grid.getDataSource().fields();      
-                    var rowFields = fields.filter(r => r.area === 'row').map(r => r.dataField);
-                    var dataFields = fields.filter(r => r.area === 'data').map(r => `[${r.summaryType}(${r.dataField}])`);
-                    var columnFields = [...new Set(fields.filter(r => r.area === 'column').map(r => r.dataField))];
-                    var filterFields = fields.filter(r => r.area === 'filter').map(r => r.dataField);
-                    var appliedFilters = fields.filter(r => r.filterValues !== undefined).map(r => `[${r.dataField}:${r.filterValues}]`);
-                    var firstRow = worksheet.getRow(1),
-                        fieldPanelCell = firstRow.getCell(13);
-                  
-                    firstRow.height = 90;
-                    worksheet.mergeCells('L1:N1');
-                    fieldPanelCell.value = 'Feld Panel area:'
-                      + ` \n - Filter fields: [${filterFields.join(', ')}]`              
-                      + ` \n - Row fields: [${rowFields.join(', ')}]`
-                      + ` \n - Column fields: [${columnFields.join(', ')}]`
-                      + ` \n - Data fields: [${dataFields.join(', ')}]`
-                      + ` \n - Applied filters: [${appliedFilters.join(', ')}]`;
-                 
-                    fieldPanelCell.alignment = { horizontal: 'left', vertical: 'top',  wrapText: true };
-                    fieldPanelCell.width = 30;
-        
-                    return Promise.resolve();
-                }).then(function() {
-                    // https://github.com/exceljs/exceljs#writing-xlsx
-                    workbook.xlsx.writeBuffer().then(function(buffer) {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
-                    });
+                exportHeader(worksheet);
+                exportFooter(gridRange, worksheet);
+                exportFieldPanel(worksheet, grid);
+            }).then(function() {
+                // https://github.com/exceljs/exceljs#writing-xlsx
+                workbook.xlsx.writeBuffer().then(function(buffer) {
+                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
                 });
+            });
             e.cancel = true;
         }  
     });
 });
+
+function exportHeader(worksheet) {
+    var headerRow = worksheet.getRow(1);
+    headerRow.height = 70;
+    worksheet.mergeCells('B1:K1');
+    headerRow.getCell(3).value = 'Average Sales. Amount by Region';
+    headerRow.getCell(3).font = { name: 'Segoe UI Light', size: 22, bold: true };
+    headerRow.getCell(3).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+}
+
+function exportFooter(gridRange, worksheet) {
+    var footerRowIndex = gridRange.to.row + 1;
+    var footerRow = worksheet.getRow(footerRowIndex);
+    worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 11);
+    footerRow.getCell(1).value = 'www.wikipedia.org';
+    footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
+    footerRow.getCell(1).alignment = { horizontal: 'right' };
+}
+
+function exportFieldPanel(worksheet, grid) {
+    var fields = grid.getDataSource().fields();
+
+    var rowFields = getFields(fields, 'row', r => r.dataField);
+    var dataFields = getFields(fields, 'data', r => `[${r.summaryType}(${r.dataField}])`);
+    var columnFields = getFields(fields, 'column', r => r.dataField);
+    var appliedFilters = fields.filter(r => r.filterValues !== undefined).map(r => `[${r.dataField}:${r.filterValues}]`);
+    var filterFields = getFields(fields, 'filter', r => r.dataField);    
+    
+    var firstRow = worksheet.getRow(1),
+        fieldPanelCell = firstRow.getCell(13);
+
+    worksheet.mergeCells('L1:N1');
+    fieldPanelCell.value = 'Feld Panel area:'
+        + ` \n - Filter fields: [${filterFields.join(', ')}]`
+        + ` \n - Row fields: [${rowFields.join(', ')}]`
+        + ` \n - Column fields: [${columnFields.join(', ')}]`
+        + ` \n - Data fields: [${dataFields.join(', ')}]`
+        + ` \n - Applied filters: [${appliedFilters.join(', ')}]`;
+
+    fieldPanelCell.alignment = { horizontal: 'left', vertical: 'top', wrapText: true };
+    fieldPanelCell.width = 30;
+    firstRow.height = 90;    
+}
+
+function getFields(fields, area, mapper){
+    return [...new Set(fields.filter(r => r.area === area).map(mapper))];
+}
