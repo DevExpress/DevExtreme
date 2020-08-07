@@ -248,7 +248,7 @@ const numberLocalization = dependencyInjector({
         const negativeEtalon = this.format(-1, format).replace(regExp, '1');
         const cleanedText = text.replace(regExp, '1');
 
-        return cleanedText === negativeEtalon ? -1 : 1;
+        return cleanedText.startsWith(negativeEtalon) ? -1 : 1;
     },
 
     format: function(value, format) {
