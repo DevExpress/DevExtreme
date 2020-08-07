@@ -25,7 +25,7 @@ const mapGroup = (group, level, mapper) => map(group, item => {
     const { items, ...restItem } = item;
     return {
         ...restItem,
-        items: mapRecursive(item.items, level - 1, mapper)
+        items: mapRecursive(items, level - 1, mapper)
     };
 });
 
