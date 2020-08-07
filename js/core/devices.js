@@ -5,6 +5,7 @@ import { isPlainObject } from './utils/type';
 import { each } from './utils/iterator';
 import errors from './errors';
 import Callbacks from './utils/callbacks';
+import readyCallbacks from './utils/ready_callbacks';
 import resizeCallbacks from './utils/resize_callbacks';
 import { EventsStrategy } from './events_strategy';
 import { sessionStorage as SessionStorage } from './utils/storage';
@@ -132,8 +133,9 @@ class Devices {
         this._eventsStrategy = new EventsStrategy(this);
 
         this.changed = Callbacks();
+
         if(windowUtils.hasWindow()) {
-            this._recalculateOrientation();
+            readyCallbacks.add(this._recalculateOrientation.bind(this));
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }
     }
@@ -365,5 +367,9 @@ viewPort.changeCallback.add((viewPort, prevViewport) => {
     devices.detachCssClasses(prevViewport);
     devices.attachCssClasses(viewPort);
 });
+
+///#DEBUG
+devices.Devices = Devices;
+///#ENDDEBUG
 
 module.exports = devices;
