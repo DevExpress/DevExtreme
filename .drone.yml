@@ -48,7 +48,7 @@ matrix:
     - { TARGET: test, PERF: true, JQUERY: true, NO_HEADLESS: true }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid }
+    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid, NO_HEADLESS: true }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: viz }
     - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui }
