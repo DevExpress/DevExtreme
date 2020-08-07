@@ -2,12 +2,14 @@ window.includeThemesLinks();
 
 const $ = require('jquery');
 const renderer = require('core/renderer');
+const domAdapter = require('core/dom_adapter');
 const themes = require('ui/themes');
 const devices = require('core/devices');
 const fromUA = $.proxy(devices._fromUA, devices);
 const viewPort = require('core/utils/view_port');
 const viewPortChanged = viewPort.changeCallback;
 const resizeCallbacks = require('core/utils/resize_callbacks');
+const readyCallbacks = require('core/utils/ready_callbacks');
 const config = require('core/config');
 
 const userAgents = {
@@ -386,6 +388,37 @@ QUnit.test('isSimulator return true when is ripple emulator', function(assert) {
     }
 });
 
+QUnit.test('should not call document properties before content is loaded', function(assert) {
+    if(!Proxy) {
+        assert.expect(0);
+        return;
+    }
+
+    const originalDocumentGetter = domAdapter.getDocumentElement;
+    const originalReadyCallbacksAdd = readyCallbacks.add;
+
+    try {
+        let documentPropertiesCallCount = 0;
+        const documentMock = new Proxy({}, {
+            get() {
+                documentPropertiesCallCount++;
+                return;
+            }
+        });
+
+        domAdapter.getDocumentElement = () => {
+            return documentMock;
+        };
+        readyCallbacks.add = () => {};
+
+        new devices.Devices();
+
+        assert.strictEqual(documentPropertiesCallCount, 0, 'document properties call count');
+    } finally {
+        domAdapter.getDocumentElement = originalDocumentGetter;
+        readyCallbacks.add = originalReadyCallbacksAdd;
+    }
+});
 
 QUnit.module('orientation', {
     beforeEach: function() {
