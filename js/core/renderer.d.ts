@@ -34,7 +34,6 @@ export interface dxElementWrapper {
     
     css(propertyName: string, value: (index: number, value: string) => string|number): JQuery;
     
-    
     height(): number;
     
     height(value: number|string): JQuery;

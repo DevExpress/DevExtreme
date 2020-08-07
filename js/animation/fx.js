@@ -10,7 +10,7 @@ import { each, map } from '../core/utils/iterator';
 import { getTranslateCss, parseTranslate, clearCache, locate, getTranslate } from './translator';
 import { convertTransitionTimingFuncToEasing, getEasing } from './easing';
 import animationFrame from './frame';
-import support from '../core/utils/support';
+import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';
 import removeEvent from '../core/remove_event';
 import { addNamespace } from '../events/utils';
@@ -92,16 +92,16 @@ const TransitionAnimationStrategy = {
         const transitionEndFired = new Deferred();
         const simulatedTransitionEndFired = new Deferred();
         let simulatedEndEventTimer;
-        const transitionEndEventName = transitionEndEventName() + '.dxFX';
+        const transitionEndEventFullName = transitionEndEventName() + '.dxFX';
 
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
             clearTimeout(waitForJSCompleteTimer);
-            eventsEngine.off($element, transitionEndEventName);
+            eventsEngine.off($element, transitionEndEventFullName);
             eventsEngine.off($element, removeEventName);
         };
 
-        eventsEngine.one($element, transitionEndEventName, function() {
+        eventsEngine.one($element, transitionEndEventFullName, function() {
             // NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
             if(Date.now() - startTime >= config.duration) {
                 transitionEndFired.reject();
@@ -375,13 +375,13 @@ const FallbackToNoAnimationStrategy = {
 const getAnimationStrategy = function(config) {
     config = config || {};
     const animationStrategies = {
-        'transition': support.transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
+        'transition': transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
         'frame': FrameAnimationStrategy,
         'noAnimation': FallbackToNoAnimationStrategy
     };
     let strategy = config.strategy || 'transition';
 
-    if(config.type === 'css' && !support.transition()) {
+    if(config.type === 'css' && !transition()) {
         strategy = 'noAnimation';
     }
 
