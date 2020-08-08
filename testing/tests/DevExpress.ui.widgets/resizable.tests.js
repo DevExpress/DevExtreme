@@ -383,6 +383,32 @@ QUnit.module('drag integration', () => {
         assert.equal($resizable.outerWidth(), 80, 'left offset - correct width');
     });
 
+    QUnit.test('Resizable horizontal offset should be right when stepPrecision is strict, areaLeftOffset is specified', function(assert) {
+        const $resizable = $('#resizable').dxResizable({
+            handles: 'right left',
+            stepPrecision: 'strict',
+            areaLeftOffset: 100,
+            step: 40,
+            width: 60
+        });
+
+        const $handle = $resizable.find('.' + RESIZABLE_HANDLE_RIGHT_CLASS); const pointer = pointerMock($handle).start();
+
+        pointer.dragStart().drag(20, 0);
+        assert.equal($resizable.outerWidth(), 100, 'right offset - correct width');
+
+        pointer.dragStart().drag(-20, 0);
+        assert.equal($resizable.outerWidth(), 100, 'back offset - width didn\'t change');
+
+        pointer.dragStart().drag(-40, 0);
+        assert.equal($resizable.outerWidth(), 60, 'back offset - correct width');
+
+        const $leftHandle = $resizable.find('.' + RESIZABLE_HANDLE_LEFT_CLASS); const leftPointer = pointerMock($leftHandle).start();
+
+        leftPointer.dragStart().drag(-40, 0);
+        assert.equal($resizable.outerWidth(), 80, 'left offset - correct width');
+    });
+
     QUnit.test('Resizable vertical offset should be right when stepPrecision is strict', function(assert) {
         const $resizable = $('#resizable').dxResizable({
             handles: 'top bottom',
