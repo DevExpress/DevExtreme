@@ -389,6 +389,7 @@ QUnit.test('isSimulator return true when is ripple emulator', function(assert) {
 });
 
 QUnit.test('should not call document properties before content is loaded', function(assert) {
+    const Proxy = window.Proxy;
     if(!Proxy) {
         assert.expect(0);
         return;
