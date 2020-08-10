@@ -8469,6 +8469,27 @@ QUnit.module('Editing with real dataController', {
             this.options.dataSource = this.options.dataSource.store;
             this.options.keyExpr = 'room';
             this.dataController.init();
+
+            this.checkRowIsEdited = function(assert, $editRow, editMode) {
+                if(editMode === 'row') {
+                    assert.ok($editRow.hasClass('dx-edit-row'), 'row is edited');
+                } else if(editMode === 'popup') {
+                    assert.ok($('.dx-datagrid-edit-popup').length, 'edit popup was shown');
+                } else if(editMode === 'form') {
+                    assert.ok($editRow.hasClass('dx-datagrid-edit-form'), 'edit form was shown');
+                }
+            };
+
+            this.checkRowIsNotEdited = function(assert, $editRow, editMode) {
+                if(editMode === 'row') {
+                    assert.notOk($editRow.hasClass('dx-edit-row'), 'row is not edited');
+                } else if(editMode === 'popup') {
+                    const $editPopup = $('.dx-datagrid-edit-popup').eq(0);
+                    assert.notOk($editPopup.dxPopup('instance').option('visible'), 'edit popup is hidden');
+                } else if(editMode === 'form') {
+                    assert.notOk($editRow.hasClass('dx-datagrid-edit-form'), 'edit form was not shown');
+                }
+            };
         }
     }, () => {
         QUnit.test('editRow should change editRowKey', function(assert) {
@@ -8489,63 +8510,56 @@ QUnit.module('Editing with real dataController', {
             assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
         });
 
-        QUnit.test('Row should be edited via editRowKey change', function(assert) {
-            // arrange
-            const rowsView = this.rowsView;
-            const $testElement = $('#container');
+        ['row', 'popup', 'form'].forEach(editMode => {
+            QUnit.test(`Row should be edited via editRowKey change (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
 
-            this.options.editing = {
-                allowUpdating: true
-            };
-            rowsView.render($testElement);
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
 
-            // act
-            this.option('editing.editRowKey', 1);
-            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
+                // act
+                this.option('editing.editRowKey', 1);
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
 
-            // assert
-            assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-        });
+                // assert
+                const $editRow = $(rowsView.getRowElement(0));
+                this.checkRowIsEdited(assert, $editRow, editMode);
+            });
 
-        QUnit.test('Row should be edited via editRowKey change (editing.mode = popup)', function(assert) {
-            // arrange
-            const rowsView = this.rowsView;
-            const $testElement = $('#container');
+            QUnit.test(`editRowKey reset should cancel editing (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
 
-            this.options.editing = {
-                allowUpdating: true,
-                mode: 'popup'
-            };
-            rowsView.render($testElement);
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
 
-            // act
-            this.option('editing.editRowKey', 1);
-            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
+                // act
+                this.editRow(0);
+                this.cellValue(0, 'name', 'Molly');
 
-            // assert
-            assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.ok($('.dx-datagrid-edit-popup').length, 'edit popup was shown');
-        });
+                // assert
+                this.checkRowIsEdited(assert, $(rowsView.getRowElement(0)), editMode);
+                assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
 
-        QUnit.test('Row should be edited via editRowKey change (editing.mode = form)', function(assert) {
-            // arrange
-            const rowsView = this.rowsView;
-            const $testElement = $('#container');
+                // act
+                this.option('editing.editRowKey', null);
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: null, previousValue: 1 });
+                this.clock.tick();
 
-            this.options.editing = {
-                allowUpdating: true,
-                mode: 'form'
-            };
-            rowsView.render($testElement);
-
-            // act
-            this.option('editing.editRowKey', 1);
-            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
-
-            // assert
-            const $editRow = $(rowsView.getRowElement(0));
-            assert.ok($editRow.hasClass('dx-edit-row'), 'row is edited');
-            assert.ok($editRow.hasClass('dx-datagrid-edit-form'), 'edit form was shown');
+                // assert
+                this.checkRowIsNotEdited(assert, $(rowsView.getRowElement(0)), editMode);
+                assert.equal(this.option('editing.editRowKey'), null, 'editRowKey');
+                assert.equal($(rowsView.getCellElement(0, 0)).text(), 'Alex', 'name was not changed');
+            });
         });
 
         ['batch', 'cell'].forEach(editMode => {
@@ -8621,34 +8635,6 @@ QUnit.module('Editing with real dataController', {
             assert.equal(this.option('editing.editRowKey'), null, 'editRowKey');
         });
 
-        QUnit.test('editRowKey reset should cancel editing', function(assert) {
-            // arrange
-            const rowsView = this.rowsView;
-            const $testElement = $('#container');
-
-            this.options.editing = {
-                allowUpdating: true
-            };
-            rowsView.render($testElement);
-
-            // act
-            this.editRow(0);
-            this.cellValue(0, 'name', 'Molly');
-
-            // assert
-            assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
-
-            // act
-            this.option('editing.editRowKey', null);
-            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: null });
-
-            // assert
-            assert.notOk($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
-            assert.equal(this.option('editing.editRowKey'), null, 'editRowKey');
-            assert.equal($(rowsView.getCellElement(0, 0)).text(), 'Alex', 'name was not changed');
-        });
-
         QUnit.test('addRow should change editRowKey', function(assert) {
             // arrange
             const rowsView = this.rowsView;
@@ -8686,12 +8672,6 @@ QUnit.module('Editing with real dataController', {
             // act
             this.option('editing.editRowKey', 1);
             this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
-
-            // assert
-            assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
-
-            // act
             this.option('editing.editRowKey', 2);
             this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 2, previousValue: 1 });
 

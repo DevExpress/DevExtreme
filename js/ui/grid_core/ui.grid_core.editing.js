@@ -593,9 +593,11 @@ const EditingController = modules.ViewController.inherit((function() {
             const needResetIndexes = editMode === EDIT_MODE_BATCH || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
             if(editMode !== EDIT_MODE_BATCH && editMode !== EDIT_MODE_CELL) {
-                isDefined(this.option('editing.editRowKey')) && this._resetEditRowKey();
-
                 this.init();
+                // TODO this condition is for T733748
+                if(isDefined(this.option('editing.editRowKey'))) {
+                    this._resetEditRowKey();
+                }
             } else if(needResetIndexes) {
                 this._editColumnIndex = -1;
                 this._resetEditRowKey();
@@ -976,7 +978,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         editRow: function(rowIndex) {
-            this._editRow(rowIndex);
+            return this._editRow(rowIndex);
         },
 
         _editRow: function(rowIndex, oldRowIndex) {
@@ -1237,7 +1239,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 return false;
             }
 
-            // need this to addRow
             that._setEditRowKey(item.key, true);
             that._editColumnIndex = editColumnIndex;
             that._pageIndex = that._dataController.pageIndex();
