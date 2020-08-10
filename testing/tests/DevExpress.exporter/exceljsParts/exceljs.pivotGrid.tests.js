@@ -4616,7 +4616,7 @@ QUnit.module('Sort options', moduleConfig, () => {
         const pivotGrid = $('#pivotGrid').dxPivotGrid({
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row', sortOrder: 'desc', sortingMethod: (a, b) => a.value.slice(-1) - b.value.slice(-1) },
+                    { area: 'row', dataField: 'row', sortingMethod: (a, b) => a.value.slice(-1) - b.value.slice(-1) },
                     { area: 'column', dataField: 'col' },
                     { area: 'data', dataField: 'field1', summaryType: 'max' },
                 ],
@@ -4628,7 +4628,7 @@ QUnit.module('Sort options', moduleConfig, () => {
             }
         }).dxPivotGrid('instance');
 
-        const expectedRows = ['row3', 'row2', 'row1'];
+        const expectedRows = ['row1', 'row2', 'row3'];
 
         const done = assert.async();
         exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
