@@ -44,7 +44,7 @@ export class PageSizeSmallProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeSmall extends JSXComponent<PageSizeSmallProps, 'parentRef'|'pageSizes'|'pageSizeChange'>() {
+export class PageSizeSmall extends JSXComponent<PageSizeSmallProps, 'parentRef'|'pageSizes'|'pageSizeChange'>(PageSizeSmallProps) {
   @InternalState() private minWidth = 10;
 
   get width(): number {

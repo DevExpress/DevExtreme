@@ -7,7 +7,7 @@ describe('Pager size selector', () => {
   const pageSizes = [{ text: '5', value: 5 }, { text: '10', value: 10 }];
 
   it('render large page sizes', () => {
-    const tree = shallow<PageSizeLarge>(<PageSizeLarge pageSize={5} pageSizes={pageSizes} />);
+    const tree = shallow<PageSizeLarge>(<PageSizeLarge pageSizes={pageSizes} />);
     expect(tree.children()).toHaveLength(2);
     expect(tree.children().map((c) => c.props())).toEqual([
       {
