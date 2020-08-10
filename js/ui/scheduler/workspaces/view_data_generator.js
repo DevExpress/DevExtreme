@@ -7,7 +7,7 @@ export default class ViewDataGenerator {
     set workspace(value) { this._workspace = value; }
 
     generate() {
-        if(this.workspace._isVirtualScrollingEnabled()) {
+        if(this.workspace.isVirtualScrolling()) {
             return this._generateVirtualView();
         }
 

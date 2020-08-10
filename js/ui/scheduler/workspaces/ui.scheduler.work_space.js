@@ -547,6 +547,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'selectedCellData':
                 break;
             case 'virtualScrolling':
+                this.option('renovateRender', args.value);
+                break;
             case 'renovateRender':
                 this.repaint();
                 break;
@@ -686,7 +688,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._initAllDayPanelElements();
 
-        if(this.option('renovateRender')) {
+        if(this.isRenovateRender()) {
             this.createRAllDayPanelElements();
         } else {
             this._createAllDayPanelElements();
@@ -991,8 +993,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._setFocusOnCellByOption(this.option('selectedCellData'));
     }
 
-    _isVirtualScrollingEnabled() {
-        return this.option('virtualScrolling.enabled') && this.option('renovateRender');
+    isRenovateRender() {
+        return this.renovateRenderSupported() && this.option('renovateRender');
+    }
+
+    isVirtualScrolling() {
+        return this.isRenovateRender() && this.option('virtualScrolling.enabled');
     }
 
     _initVirtualScrolling() {
@@ -1002,7 +1008,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._virtualScrolling = null;
         }
 
-        if(this._isVirtualScrollingEnabled()) {
+        if(this.isVirtualScrolling()) {
             const viewportHeight = this.$element().height();
             this._virtualScrolling = new VirtualScrolling(this, viewportHeight, this._dateTableScrollable);
         }
@@ -1029,7 +1035,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._renderDateHeader();
 
-        if(this.option('renovateRender')) {
+        if(this.isRenovateRender()) {
             this.renderRWorkspace();
         } else {
             this._renderTimePanel();
@@ -1063,7 +1069,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startRowIndex: 0
         };
 
-        if(this._isVirtualScrollingEnabled()) {
+        if(this.isVirtualScrolling()) {
             const virtualScrollingState = this._virtualScrolling.getState();
             Object.assign(options, {
                 topVirtualRowHeight: virtualScrollingState.topVirtualRowHeight,
@@ -1077,6 +1083,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         return options;
     }
+
+    renovateRenderSupported() { return false; }
 
     renderRWorkspace() {
         this.viewData = this.viewDataGenerator.generate();
@@ -2283,7 +2291,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const currentCell = $cell[0];
 
         if(currentCell) {
-            if(this.option('renovateRender')) {
+            if(this.isRenovateRender()) {
                 data = this._getCellDataInRenovatedView($cell);
             } else {
                 data = elementData(currentCell, CELL_DATA);

@@ -18,7 +18,9 @@ module('Virtual Scrolling model', {
             option: name => this.worksSpaceMock._options[name],
             _getCellData: noop,
             _insertAllDayRowsIntoDateTable: noop,
-            _allDayPanels: undefined
+            _allDayPanels: undefined,
+            isGroupedAllDayPanel: noop,
+            renderRWorkspace: noop
         };
 
         this.scrollableMock = {
@@ -103,7 +105,7 @@ module('Virtual Scrolling model', {
         });
     });
 
-    test('Layout map virtual heights', function(assert) {
+    test('Virtual heights', function(assert) {
         [
             { top: 10, bottomVirtualRowHeight: 4700, topVirtualRowHeight: 0 },
             { top: 13, bottomVirtualRowHeight: 4700, topVirtualRowHeight: 0 },
@@ -115,10 +117,10 @@ module('Virtual Scrolling model', {
         ].forEach(step => {
             this.scrollDown(step.top);
 
-            const layoutMap = this.virtualScrolling.getLayoutMap();
+            const state = this.virtualScrolling.getState();
 
-            assert.deepEqual(layoutMap.topVirtualRowHeight, step.topVirtualRowHeight, 'Layout map topVirtualRowHeight');
-            assert.deepEqual(layoutMap.bottomVirtualRowHeight, step.bottomVirtualRowHeight, 'Layout map bottomVirtualRowHeight');
+            assert.deepEqual(state.topVirtualRowHeight, step.topVirtualRowHeight, 'Layout map topVirtualRowHeight');
+            assert.deepEqual(state.bottomVirtualRowHeight, step.bottomVirtualRowHeight, 'Layout map bottomVirtualRowHeight');
         });
     });
 
