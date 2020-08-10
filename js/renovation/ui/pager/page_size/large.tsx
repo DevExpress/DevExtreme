@@ -33,7 +33,7 @@ export class PageSizeLargeProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent(PageSizeLargeProps) {
+export class PageSizeLarge extends JSXComponent<PageSizeLargeProps, 'pageSizes'>() {
   get pageSizesText() {
     const { pageSize, pageSizes } = this.props;
     return pageSizes.map(({ value: processedPageSize, text }) => {

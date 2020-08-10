@@ -40,11 +40,11 @@ export class PageSizeSmallProps {
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageSizeChange!: (pageSize: number) => void;
+  @Event() pageSizeChange?: (pageSize: number) => void;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeSmall extends JSXComponent(PageSizeSmallProps) {
+export class PageSizeSmall extends JSXComponent<PageSizeSmallProps, 'parentRef'|'pageSizes'|'pageSizeChange'>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {
