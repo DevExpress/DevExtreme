@@ -230,6 +230,7 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
+            container: this.$element(),
             excludeCommands: this._getExcludeCommands(),
             onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this),
