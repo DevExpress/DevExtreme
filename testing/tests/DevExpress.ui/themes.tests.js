@@ -640,48 +640,56 @@ QUnit.module('web font checker', () => {
 
 
 QUnit.module('initialized method', (hooks) => {
-    let $frame;
-    hooks.beforeEach(function() {
-        themes.resetTheme();
-        $frame = $('<iframe></iframe>').appendTo('body');
+    const createdFrames = [];
+
+    hooks.after(function() {
+        createdFrames.forEach($frame => $frame.remove());
     });
 
-    hooks.afterEach(function() {
-        $frame.remove();
-    });
+    function writeToFrame($frame, markup) {
+        frameDoc($frame).write(markup);
+    }
 
-    function frameDoc() {
+    function frameDoc($frame) {
         return $frame[0].contentWindow.document;
     }
 
-    function writeToFrame(markup) {
-        frameDoc().write(markup);
+    function createFrame() {
+        const $frame = $('<iframe></iframe>').appendTo('body');
+        createdFrames.push($frame);
+        return $frame;
     }
 
     test('initialized fires for data-theme link (init after link addition)', function(assert) {
         const done = assert.async();
         const url = ROOT_URL + 'testing/helpers/themeMarker.css';
-        writeToFrame('<link id=\'testTheme\' rel=\'dx-theme\' data-theme=\'sampleTheme.sampleColorScheme\' href=\'' + url + '\' />');
+        const $frame = createFrame();
+        writeToFrame($frame, '<link id=\'testTheme\' rel=\'dx-theme\' data-theme=\'sampleTheme.sampleColorScheme\' href=\'' + url + '\' />');
 
+        themes.resetTheme();
         themes.init({
             _autoInit: true,
             _forceTimeout: true,
-            context: frameDoc()
+            context: frameDoc($frame)
         });
 
         themes.initialized(() => {
             assert.equal(themes.current(), 'sampleTheme.sampleColorScheme');
             done();
         });
+
     });
 
     test('initialized fires for ordinary link (init after style addition - should run immediately)', function(assert) {
         const done = assert.async();
-        writeToFrame('<style>.dx-theme-marker { font-family: "dx.sampleTheme2"}</style>');
+        const $frame = createFrame();
+        writeToFrame($frame, '<style>.dx-theme-marker { font-family: "dx.sampleTheme2"}</style>');
+
+        themes.resetTheme();
         themes.init({
             _autoInit: true,
             _forceTimeout: true,
-            context: frameDoc()
+            context: frameDoc($frame)
         });
 
         themes.initialized(() => {
@@ -693,7 +701,9 @@ QUnit.module('initialized method', (hooks) => {
     test('initialized fires for ordinary link (init before link addition - should wait theme loading)', function(assert) {
         const done = assert.async();
         const url = ROOT_URL + 'testing/helpers/themeMarker.css';
+        const $frame = createFrame();
 
+        themes.resetTheme();
         themes.initialized(() => {
             assert.equal(themes.current(), 'sampleTheme.sampleColorScheme');
             done();
@@ -702,23 +712,42 @@ QUnit.module('initialized method', (hooks) => {
         themes.init({
             _autoInit: true,
             _forceTimeout: true,
-            context: frameDoc()
+            context: frameDoc($frame)
         });
 
-        writeToFrame('<link rel=stylesheet href=\'' + url + '\' />');
+        writeToFrame($frame, '<link rel=stylesheet href=\'' + url + '\' />');
     });
 
     test('initialized fires after timeout if theme is not loaded', function(assert) {
         const done = assert.async();
+        const $frame = createFrame();
 
+        themes.resetTheme();
         themes.init({
             _autoInit: true,
-            _forceTimeout: true
+            _forceTimeout: true,
+            context: frameDoc($frame)
         });
 
         themes.initialized(() => {
             assert.equal(themes.current(), null);
             done();
+        });
+    });
+
+    test('initialized fires syncroniously if timeout === 0', function(assert) {
+        const $frame = createFrame();
+
+        themes.resetTheme();
+        themes.setDefaultTimeout(0);
+        themes.init({
+            _autoInit: true,
+            _forceTimeout: true,
+            context: frameDoc($frame)
+        });
+
+        themes.initialized(() => {
+            assert.ok(true);
         });
     });
 });
