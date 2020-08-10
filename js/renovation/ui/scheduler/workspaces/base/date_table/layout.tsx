@@ -1,44 +1,25 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
+  Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Table } from '../table';
-import { VirtualTable } from '../virtual_table';
 import { DateTableBody } from './table_body';
 import { LayoutProps } from '../layout_props';
 
 export const viewFunction = (viewModel: DateTableLayoutBase) => (
-  // This is a workaround because of bug in generator:
-  // it's impossible use ternary operator to choose between tables
-  <Fragment>
-    {viewModel.isVirtual && (
-      <VirtualTable
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...viewModel.restAttributes}
-        topVirtualRowHeight={viewModel.topVirtualRowHeight}
-        bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-        className={`dx-scheduler-date-table ${viewModel.props.className}`}
-      >
-        <DateTableBody
-          viewData={viewModel.props.viewData}
-          cellTemplate={viewModel.props.cellTemplate}
-        />
-      </VirtualTable>
-    )}
-    {!viewModel.isVirtual && (
-      <Table
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...viewModel.restAttributes}
-        className={`dx-scheduler-date-table ${viewModel.props.className}`}
-      >
-        <DateTableBody
-          viewData={viewModel.props.viewData}
-          cellTemplate={viewModel.props.cellTemplate}
-        />
-      </Table>
-    )}
-  </Fragment>
+  <Table
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...viewModel.restAttributes}
+    isVirtual={viewModel.isVirtual}
+    topVirtualRowHeight={viewModel.topVirtualRowHeight}
+    bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+    className={`dx-scheduler-date-table ${viewModel.props.className}`}
+  >
+    <DateTableBody
+      viewData={viewModel.props.viewData}
+      cellTemplate={viewModel.props.cellTemplate}
+    />
+  </Table>
 );
-
 @ComponentBindings()
 export class DateTableLayoutBaseProps extends LayoutProps {
   @OneWay() className?: string;

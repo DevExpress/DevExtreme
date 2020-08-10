@@ -12,23 +12,20 @@ import {
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
-import { VirtualTable } from '../virtual_table';
 
-export const viewFunction = (viewModel: TimePanelTableLayout) => {
-  const TableComponent = viewModel.isVirtual ? VirtualTable : Table;
-
-  return (
-    <TableComponent
+export const viewFunction = (viewModel: TimePanelTableLayout) => (
+  <Table
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      topVirtualRowHeight={viewModel.topVirtualRowHeight}
-      bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-      className={`dx-scheduler-time-panel ${viewModel.props.className}`}
-    >
-      {viewModel.props.viewData!
-        .groupedData.map(({ dateTable }, groupIndex) => (
-          <Fragment key={getKeyByGroup(groupIndex)}>
-            { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
+    {...viewModel.restAttributes}
+    isVirtual={viewModel.isVirtual}
+    topVirtualRowHeight={viewModel.topVirtualRowHeight}
+    bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+    className={`dx-scheduler-time-panel ${viewModel.props.className}`}
+  >
+    {viewModel.props.viewData!
+      .groupedData.map(({ dateTable }, groupIndex) => (
+        <Fragment key={getKeyByGroup(groupIndex)}>
+          { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
           && (
           <Row>
             <CellBase className="dx-scheduler-time-panel-title-cell">
@@ -36,7 +33,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => {
             </CellBase>
           </Row>
           )}
-            {
+          {
             dateTable.map((cellsRow, index) => {
               const isFirstCell = index === 0;
               const isLastCell = index === dateTable.length - 1;
@@ -56,11 +53,10 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => {
               );
             })
           }
-          </Fragment>
-        ))}
-    </TableComponent>
-  );
-};
+        </Fragment>
+      ))}
+  </Table>
+);
 
 @ComponentBindings()
 export class TimePanelTableLayoutProps extends LayoutProps {
