@@ -204,7 +204,6 @@ const EditingController = modules.ViewController.inherit((function() {
         init: function() {
             const that = this;
 
-            that._editRowKey = null;
             that._editData = [];
             that._editColumnIndex = -1;
             that._columnsController = that.getController('columns');
@@ -269,6 +268,8 @@ const EditingController = modules.ViewController.inherit((function() {
             }
             that._updateEditColumn();
             that._updateEditButtons();
+
+            this.component._optionsByReference['editing.editRowKey'] = true;
         },
 
         getUpdatedData: function(data) {
@@ -496,7 +497,8 @@ const EditingController = modules.ViewController.inherit((function() {
             let columnIndex;
 
             if(getEditMode(this) === EDIT_MODE_FORM && firstFormItem) {
-                const editRowIndex = this._dataController.getRowIndexByKey(this._editRowKey);
+                const editRowKey = this.option('editing.editRowKey');
+                const editRowIndex = this._dataController.getRowIndexByKey(editRowKey);
                 const $editFormElements = this._rowsView.getCellElements(editRowIndex);
                 columnIndex = this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
             } else {
@@ -563,8 +565,20 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                 } else if(editPopup && editPopup.option('visible') && fullName.indexOf('editing.form') === 0) {
                     this._repaintEditPopup();
+                } else if(fullName === 'editing.editRowKey') {
+                    if(isDefined(args.value)) {
+                        if(args.value !== args.previousValue) {
+                            const rowIndex = this._dataController.getRowIndexByKey(args.value);
+                            const oldRowIndex = this._dataController.getRowIndexByKey(args.previousValue);
+
+                            this._editRow(rowIndex, oldRowIndex);
+                        }
+                    } else {
+                        this.cancelEditData();
+                    }
                 } else {
                     this.init();
+                    this._resetEditRowKey();
                 }
                 args.handled = true;
             } else {
@@ -583,14 +597,18 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(editMode !== EDIT_MODE_BATCH && editMode !== EDIT_MODE_CELL) {
                 this.init();
+                // TODO this condition is for T733748
+                if(isDefined(this.option('editing.editRowKey'))) {
+                    this._resetEditRowKey();
+                }
             } else if(needResetIndexes) {
-                this._resetEditRowKey();
                 this._editColumnIndex = -1;
+                this._resetEditRowKey();
             }
         },
 
         isEditing: function() {
-            return this._editRowKey !== null;
+            return isDefined(this.option('editing.editRowKey'));
         },
 
         isEditRow: function(rowIndex) {
@@ -598,8 +616,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return this._getVisibleEditRowIndex() === rowIndex && ROW_BASED_MODES.indexOf(editMode) !== -1;
         },
 
-        getEditRowKey: function() {
-            return this._editRowKey;
+        _setEditRowKey: function(value, silent) {
+            if(silent) {
+                this.component._setOptionWithoutOptionChange('editing.editRowKey', value);
+            } else {
+                this.option('editing.editRowKey', value);
+            }
         },
 
         getEditRowIndex: function() {
@@ -784,7 +806,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }).length;
 
             if(editMode !== EDIT_MODE_BATCH) {
-                that._editRowKey = insertKey;
+                this._setEditRowKey(insertKey, true);
             }
 
             insertKey[INSERT_INDEX] = that._getInsertIndex();
@@ -939,7 +961,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getVisibleEditRowIndex: function() {
             const dataController = this._dataController;
-            const rowIndex = dataController.getRowIndexByKey(this._editRowKey);
+            const editRowKey = this.option('editing.editRowKey');
+            const rowIndex = dataController.getRowIndexByKey(editRowKey);
 
             if(rowIndex === -1) {
                 return rowIndex;
@@ -954,23 +977,30 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _resetEditRowKey: function() {
-            this._editRowKey = null;
+            this._setEditRowKey(null, true);
         },
 
         editRow: function(rowIndex) {
+            return this._editRow(rowIndex);
+        },
+
+        _editRow: function(rowIndex, oldRowIndex) {
             const that = this;
             const dataController = that._dataController;
             const items = dataController.items();
             const item = items[rowIndex];
             const params = { data: item && item.data, cancel: false };
-            const oldEditRowIndex = that._getVisibleEditRowIndex();
             let $editingCell;
+
+            if(!isDefined(oldRowIndex)) {
+                oldRowIndex = that._getVisibleEditRowIndex();
+            }
 
             if(!item) {
                 return;
             }
 
-            if(rowIndex === oldEditRowIndex) {
+            if(rowIndex === oldRowIndex) {
                 return true;
             }
 
@@ -989,17 +1019,17 @@ const EditingController = modules.ViewController.inherit((function() {
 
             that.init();
             that._pageIndex = dataController.pageIndex();
-            that._editRowKey = item.key;
+            that._setEditRowKey(item.key, true);
             that._addEditData({
                 data: {},
                 key: item.key,
                 oldData: item.data
             });
 
-            const rowIndices = [oldEditRowIndex, rowIndex];
+            const rowIndices = [oldRowIndex, rowIndex];
             const editMode = getEditMode(that);
 
-            that._beforeUpdateItems(rowIndices, rowIndex, oldEditRowIndex);
+            that._beforeUpdateItems(rowIndices, rowIndex, oldRowIndex);
 
             if(editMode === EDIT_MODE_POPUP) {
                 that._showEditPopup(rowIndex);
@@ -1212,7 +1242,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 return false;
             }
 
-            that._editRowKey = item.key;
+            that._setEditRowKey(item.key, true);
             that._editColumnIndex = editColumnIndex;
             that._pageIndex = that._dataController.pageIndex();
 
@@ -1730,6 +1760,7 @@ const EditingController = modules.ViewController.inherit((function() {
             that._beforeCancelEditData();
 
             that.init();
+            that._resetEditRowKey();
 
             if(ROW_BASED_MODES.indexOf(editMode) !== -1 && rowIndex >= 0) {
                 dataController.updateItems({
@@ -1924,7 +1955,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(showEditorAlways && !forceUpdateRow) {
                 if(isUpdateInCellMode) {
-                    that._editRowKey = options.row.key;
+                    that._setEditRowKey(options.row.key, true);
 
                     that._editColumnIndex = options.columnIndex;
                     return that.saveEditData();
@@ -2429,7 +2460,9 @@ export default {
 
                 popup: {},
 
-                startEditAction: 'click'
+                startEditAction: 'click',
+
+                editRowKey: null
             }
         };
     },
@@ -2454,7 +2487,7 @@ export default {
                 },
                 _updateEditRow: function(items) {
                     const editingController = this._editingController;
-                    const editRowKey = editingController._editRowKey;
+                    const editRowKey = this.option('editing.editRowKey');
                     const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
                     const editItem = items[editRowIndex];
 

@@ -159,6 +159,20 @@ QUnit.module('default', {}, () => {
         assert.strictEqual(log.length, 0, 'optionChanged method has not been called');
     });
 
+    QUnit.test('setOptionSilently method (nested option)', function(assert) {
+        const instance = new TestComponent({
+            opt1: {
+                nested: 1
+            }
+        });
+
+        instance._setOptionWithoutOptionChange('opt1.nested', 'new custom');
+
+        assert.strictEqual(instance.option('opt1.nested'), 'new custom', 'option has been changed');
+        const log = instance._getTraceLogByMethod('_optionChanged');
+        assert.strictEqual(log.length, 0, 'optionChanged method has not been called');
+    });
+
     QUnit.test('options api - \'onOptionChanged\' action', function(assert) {
         const actionChangeLog = [];
         const eventChangeLog = [];
