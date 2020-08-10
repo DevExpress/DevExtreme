@@ -80,9 +80,9 @@ function exportHeader(worksheet) {
     var headerRow = worksheet.getRow(1);
     headerRow.height = 70;
     worksheet.mergeCells('B1:K1');
-    headerRow.getCell(3).value = 'Average Sales. Amount by Region';
-    headerRow.getCell(3).font = { name: 'Segoe UI Light', size: 22, bold: true };
-    headerRow.getCell(3).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+    headerRow.getCell(2).value = 'Average Sales. Amount by Region';
+    headerRow.getCell(2).font = { name: 'Segoe UI Light', size: 22, bold: true };
+    headerRow.getCell(2).alignment = { horizontal: 'left', vertical: 'top', wrapText: true };
 }
 
 function exportFooter(gridRange, worksheet) {
