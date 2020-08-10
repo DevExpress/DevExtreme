@@ -682,6 +682,13 @@ export interface GridBaseEditing {
      */
     confirmDelete?: boolean;
     /**
+    * @docid GridBaseOptions.editing.editColumnName
+    * @type string
+    * @default null
+    * @public
+    */
+    editColumnName?: string;
+    /**
     * @docid GridBaseOptions.editing.editRowKey
     * @type any
     * @default null
