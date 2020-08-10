@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const noop = require('core/utils/common').noop;
 const commons = require('./vectorMapParts/commons.js');
 const rendererModule = require('viz/core/renderers/renderer');
 const projectionModule = require('viz/vector_map/projection.main');
@@ -12,6 +13,7 @@ const mapLayerModule = require('viz/vector_map/map_layer');
 const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
 const vizMocks = require('../../helpers/vizMocks.js');
 const typeUtils = require('core/utils/type');
+const plaqueModule = require('viz/core/plaque');
 
 require('viz/vector_map/vector_map');
 
@@ -19,6 +21,11 @@ const stubLayersEnvironment = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
+        this.tracker.on = sinon.stub().returns(noop);
+        sinon.stub(plaqueModule, 'Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub() });
+    },
+    afterEach: function() {
+        plaqueModule.Plaque.restore();
     }
 });
 
@@ -414,6 +421,88 @@ QUnit.test('Disposing - elements disposing order', function(assert) {
     }
 });
 
+QUnit.module('Annotations', stubLayersEnvironment);
+
+QUnit.test('Should created group for annotations', function(assert) {
+    this.createMap();
+
+    assert.equal(this.renderer.g.returnValues[1].attr.args[0][0]['class'], 'dxm-annotations');
+    assert.ok(this.renderer.g.returnValues[1].linkAppend.called);
+    assert.deepEqual(this.renderer.g.returnValues[1].linkOn.args[0], [this.renderer.root, 'annotations']);
+});
+
+QUnit.test('Should be rendered', function(assert) {
+    this.createMap({ annotations: [{ type: 'text' }] });
+
+    assert.equal(plaqueModule.Plaque.lastCall.args[0].type, 'text');
+    assert.deepEqual(plaqueModule.Plaque.returnValues[0].draw.lastCall.args[0], {
+        canvas: undefined,
+        offsetX: undefined,
+        offsetY: undefined
+    });
+});
+
+QUnit.test('With map coordinates', function(assert) {
+    this.projection.getCanvas = sinon.stub().returns('canvas');
+    this.projection.toScreenPoint = function(value) { return value; };
+    this.createMap({ annotations: [{ type: 'text', text: 'annotation text', coordinates: [20, 40], offsetX: 2, offsetY: 3 }] });
+
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[0].type, 'text');
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[0].text, 'annotation text');
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[4], true, 'bounding annotation');
+    assert.deepEqual(plaqueModule.Plaque.returnValues[0].draw.lastCall.args[0], {
+        canvas: 'canvas',
+        offsetX: 2,
+        offsetY: 3,
+        x: 20,
+        y: 40
+    });
+});
+
+QUnit.test('With pixel coordinates', function(assert) {
+    this.projection.getCanvas = sinon.stub().returns('canvas');
+    this.projection.toScreenPoint = function(value) { return value; };
+    this.createMap({ annotations: [{ type: 'text', text: 'annotation text', x: 40, y: 50, offsetX: 2, offsetY: 3 }] });
+
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[0].type, 'text');
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[0].text, 'annotation text');
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[4], false, 'not bounding annotation');
+    assert.deepEqual(plaqueModule.Plaque.returnValues[0].draw.lastCall.args[0], {
+        canvas: 'canvas',
+        offsetX: 2,
+        offsetY: 3
+    });
+});
+
+
+QUnit.test('Should subscribe on change move and zoom events', function(assert) {
+    this.createMap({ annotations: [{ type: 'text' }] });
+
+    assert.ok(this.tracker.on.args[0][0].move);
+    assert.ok(this.tracker.on.args[0][0].zoom);
+
+    // render after move
+    this.tracker.on.args[0][0].move();
+
+    assert.ok(plaqueModule.Plaque.callCount, 1);
+    assert.ok(plaqueModule.Plaque.returnValues[0].draw.callCount, 1);
+
+    // render after zoom
+    this.tracker.on.args[0][0].zoom();
+
+    assert.ok(plaqueModule.Plaque.callCount, 2);
+    assert.ok(plaqueModule.Plaque.returnValues[0].draw.callCount, 2);
+});
+
+QUnit.test('Annotation should be re-render after update size', function(assert) {
+    this.createMap({ annotations: [{ type: 'text', text: 'annotation' }] });
+
+    this.map.option('size', { width: 300, height: 400 });
+
+    assert.equal(plaqueModule.Plaque.callCount, 2);
+    assert.equal(plaqueModule.Plaque.returnValues[0].draw.callCount, 2);
+});
+
 QUnit.module('Map - API', stubLayersEnvironment);
 
 QUnit.test('Applying bounds by data', function(assert) {
@@ -705,6 +794,15 @@ QUnit.test('"zoomingEnabled" option', function(assert) {
     assert.deepEqual(this.controlBar.setInteraction.lastCall.args, [{ centeringEnabled: true, zoomingEnabled: false }], 'control bar settings');
     assert.deepEqual(this.gestureHandler.setInteraction.lastCall.args, [{ centeringEnabled: true, zoomingEnabled: false }], 'gesture handler settings');
     assert.deepEqual(this.themeManager.theme.withArgs('zoomingEnabled').callCount, 2, 'theme');
+});
+
+QUnit.test('`Annotations` option', function(assert) {
+    this.createMap({ annotations: [{ type: 'text', text: 'annotation' }] });
+
+    this.map.option('annotations', [{ type: 'text', text: 'updates annotation' }]);
+
+    assert.deepEqual(plaqueModule.Plaque.lastCall.args[0], { type: 'text', text: 'updates annotation' });
+    assert.equal(plaqueModule.Plaque.returnValues[0].draw.callCount, 2);
 });
 
 QUnit.module('Map - preventing option merging', stubLayersEnvironment);

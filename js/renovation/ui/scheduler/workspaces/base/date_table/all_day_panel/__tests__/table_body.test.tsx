@@ -1,32 +1,37 @@
-import { mount } from 'enzyme';
-import { viewFunction as TableBodyView } from '../table_body';
+import React from 'react';
+import { mount, ReactWrapper } from 'enzyme';
+import { viewFunction as TableBodyView, AllDayPanelTableBody } from '../table_body';
 import { AllDayPanelRow as Row } from '../row';
 import { AllDayPanelCell as Cell } from '../cell';
-import { getKeyByDateAndGroup } from '../../../../utils';
+import * as utilsModule from '../../../../utils';
 
-jest.mock('../../../../utils', () => ({
-  ...require.requireActual('../../../../utils'),
-  getKeyByDateAndGroup: jest.fn(),
-}));
+const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
 
 describe('AllDayPanelTableBody', () => {
   describe('Render', () => {
-    const render = (viewModel) => mount(TableBodyView({
-      ...viewModel,
-      props: {
-        ...viewModel.props,
-      },
-    } as any) as any);
+    const render = (viewModel): ReactWrapper<AllDayPanelTableBody> => mount(
+      <table>
+        <tbody>
+          <TableBodyView {...{
+            ...viewModel,
+            props: {
+              ...viewModel.props,
+            },
+          }}
+          />
+        </tbody>
+      </table>,
+    ).find(TableBodyView).childAt(0);
 
-    afterEach(() => jest.resetAllMocks());
+    afterEach(() => getKeyByDateAndGroup.mockClear());
 
     it('should spread restAttributes', () => {
       const tableBody = render({
-        restAttributes: { customAttribute: 'customAttribute' },
+        restAttributes: { 'custom-attribute': 'customAttribute' },
         props: { viewData: [{ startDate: new Date(2020, 7, 28) }] },
       });
 
-      expect(tableBody.prop('customAttribute'))
+      expect(tableBody.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

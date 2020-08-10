@@ -116,7 +116,8 @@ class TaskEditDialogInfo extends DialogInfoBase {
             dataField: 'title',
             editorType: 'dxTextBox',
             label: { text: messageLocalization.format('dxGantt-dialogTitle') },
-            editorOptions: { readOnly: readOnly }
+            editorOptions: { readOnly: readOnly || this._isReadOnlyField('title') },
+            visible: !this._isHiddenField('title')
         }, {
             dataField: 'start',
             editorType: 'dxDateBox',
@@ -124,8 +125,9 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
-                readOnly: readOnlyRange
-            }
+                readOnly: readOnlyRange || this._isReadOnlyField('start')
+            },
+            visible: !this._isHiddenField('start')
         }, {
             dataField: 'end',
             editorType: 'dxDateBox',
@@ -133,8 +135,9 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
-                readOnly: readOnlyRange
-            }
+                readOnly: readOnlyRange || this._isReadOnlyField('end')
+            },
+            visible: !this._isHiddenField('end')
         }, {
             dataField: 'progress',
             editorType: 'dxNumberBox',
@@ -145,8 +148,9 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 max: 1,
                 format: '#0%',
                 step: 0.01,
-                readOnly: readOnlyRange
-            }
+                readOnly: readOnlyRange || this._isReadOnlyField('progress')
+            },
+            visible: !this._isHiddenField('progress')
         }, {
             dataField: 'assigned.items',
             editorType: 'dxTagBox',
@@ -168,6 +172,12 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 }]
             }
         }];
+    }
+    _isReadOnlyField(field) {
+        return this._parameters.readOnlyFields.indexOf(field) > -1;
+    }
+    _isHiddenField(field) {
+        return this._parameters.hiddenFields.indexOf(field) > -1;
     }
     _getFormData() {
         const data = {};

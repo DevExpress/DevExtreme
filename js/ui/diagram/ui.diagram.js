@@ -230,6 +230,7 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
+            container: this.$element(),
             excludeCommands: this._getExcludeCommands(),
             onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this),
@@ -2520,8 +2521,11 @@ class Diagram extends Widget {
                 this._updateDefaultItemProperties();
                 break;
             case 'export':
-                if(this._mainToolbar) {
-                    this._mainToolbar.option('export', args.value);
+                this._toolbars.forEach(toolbar => {
+                    toolbar.option('export', this.option('export'));
+                });
+                if(this._contextMenu) {
+                    this._contextMenu.option('export', this.option('export'));
                 }
                 break;
             case 'hasChanges':

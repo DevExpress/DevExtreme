@@ -14,6 +14,7 @@ require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
+require('./build/gulp/renovation-npm');
 require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
@@ -47,7 +48,7 @@ function createMiscBatch() {
 function createMainBatch() {
     const tasks = ['js-bundles-debug'];
     if(!TEST_CI) {
-        tasks.push('js-bundles-prod');
+        tasks.push('js-bundles-prod', 'js-bundles-prod-renovation');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
     return DOCKER_CI
@@ -56,9 +57,9 @@ function createMainBatch() {
 }
 
 function createDefaultBatch() {
-    const tasks = [ 'clean', 'localization', createMainBatch() ];
+    const tasks = ['clean', 'localization', 'generate-components', 'create-renovation-temp', 'version-replace', createMainBatch()];
     if(!TEST_CI) {
-        tasks.push('npm', 'themebuilder-npm');
+        tasks.push('npm', 'renovation-npm', 'themebuilder-npm');
     }
     return gulp.series(tasks);
 }
@@ -68,5 +69,9 @@ gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
 gulp.task('default', createDefaultBatch());
 
-gulp.task('dev', gulp.series('generate-jquery-components', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev', 'generate-jquery-components-watch')));
+gulp.task('dev', gulp.series(
+    'generate-jquery-components',
+    'create-renovation-temp',
+    gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev', 'generate-jquery-components-watch')),
+);
 

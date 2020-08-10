@@ -6,6 +6,9 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
+    var npmModule = Model.Renovation
+        ? "transpiled-renovation-npm"
+        : "transpiled";
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -21,12 +24,13 @@
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
+
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
-                yield return Url.Content("~/artifacts/transpiled/integration/jquery/component_registrator.js");
+                yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
             } else {
-                yield return Url.Content("~/artifacts/transpiled/integration/jquery.js");
+                yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
             }
         }
         if(isServerSideTest) {
@@ -124,6 +128,12 @@
                 tooltip: "Don't use jQuery for widget rendering"
             });
 
+            QUnit.config.urlConfig.push({
+                id: "renovation",
+                label: "Renovation",
+                tooltip: "Use renovation components with old tests",
+            });
+
             function notifyExtraDoneCall() {
                 var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
 
@@ -157,8 +167,12 @@
                 }
             }
 
+            var baseURL = QUnit.urlParams.renovation
+                ? '@Url.Content("~/artifacts/transpiled-renovation-npm")'
+                : '@Url.Content("~/artifacts/transpiled")';
+
             SystemJS.config({
-                baseURL: '@Url.Content("~/artifacts/transpiled")',
+                baseURL: baseURL,
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps

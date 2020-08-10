@@ -82,7 +82,151 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);
+    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);    
+    /**
+     * @docid dxGanttOptions.onTaskInserting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskInserting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onTaskDeleting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @type_function_param1_field6 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskDeleting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onTaskUpdating
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 newValues:any
+     * @type_function_param1_field6 values:any
+     * @type_function_param1_field7 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskUpdating?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onTaskMoving
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 newValues:any
+     * @type_function_param1_field6 values:any
+     * @type_function_param1_field7 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskMoving?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onTaskEditDialogShowing
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @type_function_param1_field6 key:any
+     * @type_function_param1_field7 readOnlyFields:Array<string>
+     * @type_function_param1_field8 hiddenFields:Array<string>
+     * 
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskEditDialogShowing?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any, key?: any, readOnlyFields?: Array<string>, hiddenFields?: Array<string> }) => any);
+    /**
+     * @docid dxGanttOptions.onDependencyInserting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDependencyInserting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onDependencyDeleting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @type_function_param1_field6 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDependencyDeleting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onResourceInserting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceInserting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onResourceDeleting
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @type_function_param1_field6 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceDeleting?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onResourceAssigning
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceAssigning?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onResourceUnassigning
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @type_function_param1_field6 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceUnassigning?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
     /**
      * @docid dxGanttOptions.resourceAssignments
      * @type Object
