@@ -1,4 +1,5 @@
 import devices from 'core/devices';
+import errors from 'ui/widget/ui.errors';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
@@ -172,6 +173,137 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.deepEqual(selectedKeys, [1]);
         assert.notOk(onSelectionChangedHandler.called, 'onSelectionChanged is not called');
+    });
+
+    QUnit.test('selectedRowKeys option', function(assert) {
+        // act
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: 'array', key: 'id', data: [
+                        { id: 1, value: 'value 1' },
+                        { id: 2, value: 'value 2' },
+                        { id: 3, value: 'value 3' }
+                    ]
+                }
+            },
+            selectedRowKeys: [2, 3, 4]
+        }).dxDataGrid('instance');
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 3], 'isSelected keys');
+        assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 2, value: 'value 2' }, { id: 3, value: 'value 3' }], 'isSelected items');
+        assert.equal($('#dataGrid').find('.dx-row.dx-selection').length, 2, 'isSelected rows');
+    });
+
+    // T489478
+    QUnit.test('Console errors should not be occurs when stateStoring enabled with selectedRowKeys value', function(assert) {
+        sinon.spy(errors, 'log');
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1, text: 'Text 1' }]
+                }
+            },
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: [1]
+                    };
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.ok(dataGrid);
+        assert.deepEqual(errors.log.getCalls().length, 0, 'no error maeesages in console');
+    });
+
+    // T748677
+    QUnit.test('getSelectedRowsData should works if selectedRowKeys is defined and state is empty', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1, text: 'Text 1' }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {};
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'selectedRowKeys');
+        assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 1, text: 'Text 1' }], 'getSelectedRowsData result');
+    });
+
+    QUnit.test('empty selection should be restored from state storing if selectedRowKeys option is defined', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1, text: 'Text 1' }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: []
+                    };
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [], 'selectedRowKeys');
+        assert.deepEqual(dataGrid.getSelectedRowsData(), [], 'getSelectedRowsData result');
+    });
+
+    QUnit.test('assign null to selectedRowKeys option unselect selected items', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{
+                'id': 1,
+            }, {
+                'id': 2,
+            }],
+            keyExpr: 'id',
+            selectedRowKeys: [1]
+        });
+
+        // act
+        dataGrid.option('selectedRowKeys', null);
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [], 'zero items are selected');
+        assert.deepEqual(dataGrid.option('selectedRowKeys'), [], 'empty array in option');
     });
 });
 
@@ -600,6 +732,33 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ a: 1111, b: 222 }], 'selected row keys');
         assert.equal($(dataGrid.$element()).find('.dx-selection').length, 1, 'one row is selected');
+    });
+
+    // T709078
+    QUnit.test('selectedRowKeys change several times', function(assert) {
+        // arrange
+        const selectionChangedSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            keyExpr: 'id',
+            onSelectionChanged: selectionChangedSpy,
+            dataSource: [{ id: 1 }, { id: 2 }]
+        });
+
+        const resizingController = dataGrid.getController('resizing');
+        sinon.spy(resizingController, 'updateDimensions');
+
+        // act
+        dataGrid.beginUpdate();
+        dataGrid.option('selectedRowKeys', [1]);
+        dataGrid.option('selectedRowKeys', [2]);
+        dataGrid.endUpdate();
+
+        // assert
+        assert.strictEqual(resizingController.updateDimensions.callCount, 0, 'updateDimensions is not called');
+        assert.strictEqual(selectionChangedSpy.callCount, 2, 'onSelectionChanged is called twice');
+        assert.notOk($(dataGrid.getRowElement(0)).hasClass('dx-selection'), 'no dx-selection on the first row');
+        assert.ok($(dataGrid.getRowElement(1)).hasClass('dx-selection'), 'dx-selection on the second row');
     });
 });
 
