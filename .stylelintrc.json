@@ -40,6 +40,6 @@
         "scss/operator-no-newline-before": true,
         "scss/operator-no-unspaced": true,
         "scss/no-duplicate-mixins": true,
-        "devextreme/only-variables-in-use": true
+        "devextreme/at-use-no-public-widgets": true
     }
 }
