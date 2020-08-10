@@ -1,6 +1,6 @@
 import { isFunction } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import config from '../../core/config';
+import { oDataFilterToLower } from '../../core/config';
 import { extend } from '../../core/utils/extend';
 import queryAdapters from '../query_adapters';
 import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
@@ -142,7 +142,7 @@ const compileCriteria = (() => {
 
     return (criteria, version, types, filterToLower) => {
         fieldTypes = types;
-        forceLowerCase = filterToLower ?? config().oDataFilterToLower;
+        forceLowerCase = filterToLower ?? oDataFilterToLower;
         protocolVersion = version;
 
         return compileCore(criteria);

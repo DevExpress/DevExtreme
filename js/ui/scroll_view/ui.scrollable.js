@@ -12,7 +12,7 @@ import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 import { focusable } from '../widget/selectors';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
 import { SimulatedStrategy } from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';

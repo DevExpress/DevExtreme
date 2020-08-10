@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
-import { eventData } from '../../events/utils';
+import { eventData } from '../../events/utils/index';
 import NativeStrategy from './ui.scrollable.native';
 import LoadIndicator from '../load_indicator';
 import { Deferred } from '../../core/utils/deferred';

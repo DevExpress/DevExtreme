@@ -1,5 +1,5 @@
 /* globals Intl */
-import dxConfig from '../../core/config';
+import { defaultCurrency } from '../../core/config';
 import { locale, getValueByClosestLocale } from '../core';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
 import accountingFormats from '../cldr-data/accounting_formats';
@@ -47,7 +47,7 @@ export default {
             config.style = 'percent';
         } else if(format === 'currency') {
             config.style = 'currency';
-            config.currency = formatConfig.currency || dxConfig().defaultCurrency;
+            config.currency = formatConfig.currency || defaultCurrency;
         }
 
         return config;
@@ -77,7 +77,7 @@ export default {
         format = this._normalizeFormat(format);
 
         if(format.currency === 'default') {
-            format.currency = dxConfig().defaultCurrency;
+            format.currency = defaultCurrency;
         }
 
         if(!format || 'function' !== typeof format && !format.type && !format.formatter) {
@@ -105,7 +105,7 @@ export default {
 
     getCurrencySymbol: function(currency) {
         if(!currency) {
-            currency = dxConfig().defaultCurrency;
+            currency = defaultCurrency;
         }
 
         const symbolInfo = this._getCurrencySymbolInfo(currency);
@@ -114,7 +114,7 @@ export default {
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {
-        const targetCurrency = currency || dxConfig().defaultCurrency;
+        const targetCurrency = currency || defaultCurrency;
         const currencySymbol = this._getCurrencySymbolInfo(targetCurrency).symbol;
         const closestAccountingFormat = getValueByClosestLocale(locale => accountingFormats[locale]);
 

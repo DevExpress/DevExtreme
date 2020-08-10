@@ -12,7 +12,7 @@ import { each } from '../../core/utils/iterator';
 import Action from '../../core/action';
 import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';

@@ -15,7 +15,7 @@ import { getRecurrenceProcessor } from './recurrence';
 import registerComponent from '../../core/component_registrator';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
-import { addNamespace, isFakeClickEvent } from '../../events/utils';
+import { addNamespace, isFakeClickEvent } from '../../events/utils/index';
 import { name as dblclickEvent } from '../../events/double_click';
 import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';

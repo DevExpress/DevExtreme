@@ -10,7 +10,7 @@ import { getPublicElement } from '../core/element';
 import iteratorUtils from '../core/utils/iterator';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import registerComponent from '../core/component_registrator';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import CollectionWidget from './collection/ui.collection_widget.live_update';
 import { when, Deferred } from '../core/utils/deferred';
 import { BindableTemplate } from '../core/templates/bindable_template';

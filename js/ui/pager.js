@@ -13,7 +13,7 @@ import messageLocalization from '../localization/message';
 import Widget from './widget/ui.widget';
 import SelectBox from './select_box';
 import NumberBox from './number_box';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { registerKeyboardAction, setTabIndex, restoreFocus } from './shared/accessibility';
 
 const PAGES_LIMITER = 4;

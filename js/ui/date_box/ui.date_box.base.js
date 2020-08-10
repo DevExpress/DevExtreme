@@ -8,7 +8,7 @@ import { compare as compareVersions } from '../../core/utils/version';
 import { extend } from '../../core/utils/extend';
 import support from '../../core/utils/support';
 import devices from '../../core/devices';
-import config from '../../core/config';
+import { forceIsoDateParsing } from '../../core/config';
 import dateUtils from '../../core/utils/date';
 import uiDateUtils from './ui.date_utils';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -701,7 +701,7 @@ const DateBox = DropDownEditor.inherit({
     _getSerializationFormat: function() {
         const value = this.option('value');
 
-        if(this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
+        if(this.option('dateSerializationFormat') && forceIsoDateParsing) {
             return this.option('dateSerializationFormat');
         }
 

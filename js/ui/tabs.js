@@ -4,7 +4,7 @@ import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import Button from './button';
 import { render } from './widget/utils.ink_ripple';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
 import pointerEvents from '../events/pointer';

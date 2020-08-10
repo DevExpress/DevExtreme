@@ -9,7 +9,7 @@ import { lock } from '../../events/core/emitter.feedback';
 import eventsEngine from '../../events/core/events_engine';
 import Swipeable from '../../events/gesture/swipeable';
 import pointerEvents from '../../events/pointer';
-import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils';
+import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils/index';
 import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
 import themes from '../themes';

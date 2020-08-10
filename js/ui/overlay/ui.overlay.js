@@ -27,7 +27,7 @@ import {
 } from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
-import { addNamespace, normalizeKeyName } from '../../events/utils';
+import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';

@@ -11,7 +11,7 @@ import { name as clickEventName } from '../events/click';
 import { move } from '../animation/translator';
 import devices from '../core/devices';
 import Widget from './widget/ui.widget';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';

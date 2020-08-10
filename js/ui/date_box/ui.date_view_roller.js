@@ -4,7 +4,7 @@ import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
 import fx from '../../animation/fx';

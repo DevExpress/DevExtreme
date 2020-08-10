@@ -8,7 +8,7 @@ import iteratorUtils from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import config from '../../core/config';
+import { forceIsoDateParsing } from '../../core/config';
 import { orderEach, deepExtendArraySafe } from '../../core/utils/object';
 import errors from '../widget/ui.errors';
 import modules from './ui.grid_core.modules';
@@ -2091,7 +2091,7 @@ export default {
                         const column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
-                            if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
+                            if(forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
                                 filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], 'filter');
                             }
                         } else {

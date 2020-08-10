@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import angular from 'angular';
 import eventsEngine from '../../events/core/events_engine';
-import Config from '../../core/config';
+import { wrapActionsBeforeExecute } from '../../core/config';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
@@ -435,7 +435,7 @@ if(angular) {
 
             result.templatesRenderAsynchronously = true;
 
-            if(Config().wrapActionsBeforeExecute) {
+            if(wrapActionsBeforeExecute) {
                 result.forceApplyBindings = () => {
                     safeApply(() => {}, scope);
                 };
@@ -467,7 +467,7 @@ if(angular) {
                         callback(immediateValue);
                     }
 
-                    if(Config().wrapActionsBeforeExecute) {
+                    if(wrapActionsBeforeExecute) {
                         this._applyAsync(() => {}, scope);
                     }
 

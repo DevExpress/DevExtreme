@@ -3,7 +3,7 @@ import Widget from './widget/ui.widget';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import pointerEvents from '../events/pointer';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { isString } from '../core/utils/type';
 
 const SPLITTER_CLASS = 'dx-splitter';

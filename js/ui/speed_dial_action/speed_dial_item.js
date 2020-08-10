@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
 import Overlay from '../overlay';

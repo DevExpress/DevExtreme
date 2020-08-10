@@ -11,7 +11,7 @@ import { render } from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import themes from './themes';
 import { name as clickEventName } from '../events/click';

@@ -16,7 +16,7 @@ import { render } from '../widget/utils.ink_ripple';
 import devices from '../../core/devices';
 import ListItem from './item';
 import Button from '../button';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import themes from '../themes';
 import { hasWindow } from '../../core/utils/window';
 import ScrollView from '../scroll_view';

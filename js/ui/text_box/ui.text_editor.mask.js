@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import caretUtils from './utils.caret';
 import { isInputEventsL2Supported } from './utils.support';
 import { each } from '../../core/utils/iterator';
-import { addNamespace, createEvent, normalizeKeyName } from '../../events/utils';
+import { addNamespace, createEvent, normalizeKeyName } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../widget/selectors';

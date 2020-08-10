@@ -22,7 +22,7 @@ import animationFrame from './frame';
 import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';
 import removeEvent from '../core/remove_event';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { when, Deferred } from '../core/utils/deferred';
 const removeEventName = addNamespace(removeEvent, 'dxFX');
 import { noop } from '../core/utils/common';

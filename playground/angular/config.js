@@ -48,7 +48,7 @@ System.config({
             defaultExtension: 'js',
             main: 'index.js'
         },
-        'devextreme/events/utils': {
+        'devextreme/events/utils/index': {
             defaultExtension: 'js',
             main: 'index.js'
         },

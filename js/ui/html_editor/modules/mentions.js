@@ -4,7 +4,7 @@ import { compileGetter } from '../../../core/utils/data';
 import { isString } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
-import { Event as dxEvent } from '../../../events/core/events_engine';
+import eventsEngine from '../../../events/core/events_engine';
 
 import PopupModule from './popup';
 import Mention from '../formats/mention';
@@ -366,7 +366,7 @@ if(Quill) {
             const position = this.getPosition();
             const { left: mentionLeft, top: mentionTop, height: mentionHeight } = this.quill.getBounds(position ? position - 1 : position);
             const { left: leftOffset, top: topOffset } = $(this.quill.root).offset();
-            const positionEvent = dxEvent('positionEvent', {
+            const positionEvent = eventsEngine.Event('positionEvent', {
                 pageX: leftOffset + mentionLeft,
                 pageY: topOffset + mentionTop
             });

@@ -1,6 +1,6 @@
 import translator from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
-import config from '../../core/config';
+import { forceIsoDateParsing } from '../../core/config';
 import devices from '../../core/devices';
 import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
@@ -1358,7 +1358,7 @@ class Scheduler extends Widget {
                     const that = this;
                     dateGetter = function() {
                         let value = getter.apply(this, arguments);
-                        if(config().forceIsoDateParsing) {
+                        if(forceIsoDateParsing) {
                             if(!that.option('dateSerializationFormat')) {
                                 const format = dateSerialization.getDateSerializationFormat(value);
                                 if(format) {
@@ -1370,7 +1370,7 @@ class Scheduler extends Widget {
                         return value;
                     };
                     dateSetter = function(object, value) {
-                        if(config().forceIsoDateParsing || that.option('dateSerializationFormat')) {
+                        if(forceIsoDateParsing || that.option('dateSerializationFormat')) {
                             value = dateSerialization.serializeDate(value, that.option('dateSerializationFormat'));
                         }
                         setter.call(this, object, value);

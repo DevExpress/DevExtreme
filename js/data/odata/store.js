@@ -1,6 +1,6 @@
 
 import { isDefined } from '../../core/utils/type';
-import config from '../../core/config';
+import { useLegacyStoreResult } from '../../core/config';
 import {
     generateExpand,
     generateSelect,
@@ -135,7 +135,7 @@ const ODataStore = Store.inherit({
         when(this._requestDispatcher.sendRequest(this._requestDispatcher.url, 'POST', null, values))
             .done(serverResponse =>
                 d.resolve(
-                    serverResponse && !config().useLegacyStoreResult ? serverResponse : values,
+                    serverResponse && !useLegacyStoreResult ? serverResponse : values,
                     this.keyOf(serverResponse)
                 )
             )
@@ -150,7 +150,7 @@ const ODataStore = Store.inherit({
         when(
             this._requestDispatcher.sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
         ).done(serverResponse =>
-            config().useLegacyStoreResult
+            useLegacyStoreResult
                 ? d.resolve(key, values)
                 : d.resolve(serverResponse || values, key)
         )

@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import { render } from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import Editor from '../editor/editor';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';

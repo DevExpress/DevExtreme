@@ -10,12 +10,12 @@ import { each } from '../../core/utils/iterator';
 import { current, isMaterial } from '../themes';
 import devices from '../../core/devices';
 import Editor from '../editor/editor';
-import { addNamespace } from '../../events/utils';
-import { normalizeKeyName } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import ClearButton from './ui.text_editor.clear';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
-import config from '../../core/config';
+import { editorStylingMode } from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
@@ -138,7 +138,7 @@ const TextEditorBase = Editor.inherit({
             },
 
 
-            stylingMode: config().editorStylingMode || 'outlined',
+            stylingMode: editorStylingMode || 'outlined',
 
             showValidationMark: true
         });
@@ -153,7 +153,7 @@ const TextEditorBase = Editor.inherit({
                     return isMaterial(themeName);
                 },
                 options: {
-                    stylingMode: config().editorStylingMode || 'underlined'
+                    stylingMode: editorStylingMode || 'underlined'
                 }
             }
         ]);

@@ -12,7 +12,7 @@ import messageLocalization from '../../../localization/message';
 import dateLocalization from '../../../localization/date';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
-import { addNamespace, isMouseEvent } from '../../../events/utils';
+import { addNamespace, isMouseEvent } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import errors from '../../widget/ui.errors';
 import { name as clickEventName } from '../../../events/click';

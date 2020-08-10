@@ -7,7 +7,7 @@ import {
     addNamespace,
     normalizeKeyName,
     getChar
-} from 'events/utils';
+} from 'events/utils/index';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 

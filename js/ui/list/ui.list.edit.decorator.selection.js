@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import CheckBox from '../check_box';
 import RadioButton from '../radio_group/radio_button';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import EditDecorator from './ui.list.edit.decorator';
 

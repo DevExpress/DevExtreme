@@ -8,7 +8,7 @@ import { KoTemplate } from './template';
 import Editor from '../../ui/editor/editor';
 import Locker from '../../core/utils/locker';
 import { getClosestNodeWithContext } from './utils';
-import config from '../../core/config';
+import { knockout } from '../../core/config';
 
 if(ko) {
     const LOCKS_DATA_KEY = 'dxKoLocks';
@@ -27,7 +27,7 @@ if(ko) {
                 const optionChangedCallbacks = Callbacks();
                 let optionsByReference = {};
                 let component;
-                const knockoutConfig = config().knockout;
+                const knockoutConfig = knockout;
                 const isBindingPropertyPredicateName = knockoutConfig && knockoutConfig.isBindingPropertyPredicateName;
                 let isBindingPropertyPredicate;
                 let ctorOptions = {

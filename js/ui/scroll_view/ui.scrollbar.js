@@ -4,7 +4,7 @@ import eventsEngine from '../../events/core/events_engine';
 import readyCallback from '../../core/utils/ready_callbacks';
 import { move } from '../../animation/translator';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { deferRenderer } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';

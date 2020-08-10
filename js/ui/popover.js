@@ -11,7 +11,7 @@ import { move } from '../animation/translator';
 import positionUtils from '../animation/position';
 import { isObject, isString } from '../core/utils/type';
 import { fitIntoRange } from '../core/utils/math';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 

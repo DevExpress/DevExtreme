@@ -4,7 +4,7 @@ import { noop } from '../../core/utils/common';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
 import { locate, move } from '../../animation/translator';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { active } from '../../events/core/emitter.feedback';
 import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
