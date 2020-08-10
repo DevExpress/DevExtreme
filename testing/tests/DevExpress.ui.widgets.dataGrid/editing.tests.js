@@ -1964,7 +1964,11 @@ QUnit.module('Editing', {
 
     // T501010
     QUnit.test('Save changes on save button click when batch mode', function(assert) {
-    // arrange
+        if(device.deviceType !== 'desktop') {
+            assert.ok(true, 'event emulation wrong');
+            return;
+        }
+        // arrange
         const that = this;
         const headerPanel = this.headerPanel;
         const rowsView = this.rowsView;
