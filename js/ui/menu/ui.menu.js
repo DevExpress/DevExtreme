@@ -478,7 +478,7 @@ class Menu extends MenuBase {
     }
 
     _getKeyboardListeners() {
-        return super._getKeyboardListeners().concat(this._submenus);
+        return super._getKeyboardListeners().concat(this._visibleSubmenu);
     }
 
     _createSubmenu(node, $rootItem) {
