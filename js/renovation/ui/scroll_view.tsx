@@ -7,27 +7,35 @@ import {
   Method,
   Ref,
 } from 'devextreme-generator/component_declaration/common';
-import { isNumeric } from '../core/utils/type';
-import Widget from './widget';
-import config from '../core/config';
+import { isNumeric } from '../../core/utils/type';
+import { Widget } from './common/widget';
+import config from '../../core/config';
 
-enum Direction {
-  VERTICAL = 'vertical',
-  HORIZONTAL = 'horizontal',
-  BOTH = 'both'
-}
+const DIRECTION_VERTICAL = 'vertical';
+const DIRECTION_HORIZONTAL = 'horizontal';
+const DIRECTION_BOTH = 'both';
 
 export interface Location {
   top: number;
   left: number;
 }
 
+export const ensureLocation = (location: number | Location): Location => {
+  if (isNumeric(location)) {
+    return {
+      left: location,
+      top: location,
+    } as Location;
+  }
+  return { ...{ top: 0, left: 0 }, ...(location as Location) } as Location;
+};
+
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
     disabled, height, width, rtlEnabled, children,
   },
-}: ScrollView) => (
+}: ScrollView): JSX.Element => (
   <Widget
     classes={cssClasses}
     disabled={disabled}
@@ -70,35 +78,47 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   @Ref() containerRef!: HTMLDivElement;
 
   @Method()
-  content() {
+  content(): HTMLDivElement {
     return this.contentRef;
   }
 
   @Method()
-  scrollBy(distance: number | Location) {
+  scrollBy(distance: number | Location): void {
     const { direction } = this.props;
-    const location = ScrollView.ensureLocation(distance);
+    const location = ensureLocation(distance);
 
-    if (direction === Direction.VERTICAL || direction === Direction.BOTH) {
+    if (direction === DIRECTION_VERTICAL || direction === DIRECTION_BOTH) {
       this.containerRef.scrollTop = Math.round(this.scrollLocation.top + location.top);
     }
-    if (direction === Direction.HORIZONTAL || direction === Direction.BOTH) {
+    if (direction === DIRECTION_HORIZONTAL || direction === DIRECTION_BOTH) {
       this.containerRef.scrollLeft = Math.round(this.scrollLocation.left + location.left);
     }
   }
 
   @Method()
-  scrollTo(targetLocation: number | Location) {
-    const location = ScrollView.ensureLocation(targetLocation);
+  scrollTo(targetLocation: number | Location): void {
+    const location = ensureLocation(targetLocation);
     this.scrollBy({
       left: location.left - this.scrollLocation.left,
       top: location.top - this.scrollLocation.top,
     } as Location);
   }
 
+  @Method()
+  scrollToElement(element: HTMLElement): void {
+    this.scrollTo({
+      top: this.getScrollTopLocation(element),
+      left: this.getScrollLeftLocation(element),
+    } as Location);
+  }
+
   get cssClasses(): string {
     const { direction } = this.props;
     return `dx-scrollview dx-scrollable dx-scrollable-${direction} dx-scrollable-native dx-scrollable-native-generic`;
+  }
+
+  private get scrollBarWidth(): number {
+    return this.containerRef.offsetWidth - this.containerRef.clientWidth;
   }
 
   private get scrollLocation(): Location {
@@ -108,10 +128,31 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
     } as Location;
   }
 
-  private static ensureLocation(location: number | Location): Location {
-    return (isNumeric(location) ? {
-      left: location,
-      top: location,
-    } : location) as Location;
+  private getScrollTopLocation(element: HTMLElement): number {
+    const { offsetHeight, offsetTop } = element;
+    const containerHeight = this.containerRef.offsetHeight;
+    const { top } = this.scrollLocation;
+
+    if ((offsetHeight >= containerHeight) || (offsetTop + offsetHeight <= top)) {
+      return offsetTop;
+    }
+    if (offsetTop + offsetHeight >= top + containerHeight) {
+      return offsetTop + offsetHeight + this.scrollBarWidth - containerHeight;
+    }
+    return top;
+  }
+
+  private getScrollLeftLocation(element: HTMLElement): number {
+    const { offsetWidth, offsetLeft } = element;
+    const containerWidth = this.containerRef.offsetWidth;
+    const { left } = this.scrollLocation;
+
+    if ((offsetWidth >= containerWidth) || (offsetLeft + offsetWidth <= left)) {
+      return offsetLeft;
+    }
+    if (offsetLeft + offsetWidth >= left + containerWidth) {
+      return offsetLeft + offsetWidth + this.scrollBarWidth - containerWidth;
+    }
+    return left;
   }
 }
