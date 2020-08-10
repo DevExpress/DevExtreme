@@ -1,3 +1,33 @@
+interface JQueryCoordinates {
+    left: number;
+    top: number;
+}
+
+interface JQueryAnimationOptions {
+
+    duration?: any;
+
+    easing?: string;
+
+    complete?: Function;
+
+    step?: (now: number, tween: any) => any;
+
+    progress?: (animation: JQueryPromise<any>, progress: number, remainingMs: number) => any;
+
+    start?: (animation: JQueryPromise<any>) => any;
+
+    done?: (animation: JQueryPromise<any>, jumpedToEnd: boolean) => any;
+
+    fail?: (animation: JQueryPromise<any>, jumpedToEnd: boolean) => any;
+
+    always?: (animation: JQueryPromise<any>, jumpedToEnd: boolean) => any;
+
+    queue?: any;
+
+    specialEasing?: Object;
+}
+
 export interface dxElementWrapper {
     
     addClass(className: string): JQuery;
