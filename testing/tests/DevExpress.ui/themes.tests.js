@@ -751,6 +751,7 @@ QUnit.module('initialized method', (hooks) => {
 
         themes.initialized(() => {
             assert.ok(true);
+            themes.setDefaultTimeout(defaultTimeout);
         });
     });
 });
