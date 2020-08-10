@@ -10,7 +10,12 @@ import { noop } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { camelize } from '../core/utils/inflector';
 import { each } from '../core/utils/iterator';
-import { getVisibleHeight, addOffsetToMaxHeight, addOffsetToMinHeight, getVerticalOffsets } from '../core/utils/size';
+import {
+    getVisibleHeight,
+    addOffsetToMaxHeight,
+    addOffsetToMinHeight,
+    getVerticalOffsets
+} from '../core/utils/size';
 import { getBoundingRect } from '../core/utils/position';
 import { isDefined } from '../core/utils/type';
 import { compare as compareVersions } from '../core/utils/version';
@@ -20,9 +25,9 @@ import messageLocalization from '../localization/message';
 import Button from './button';
 import Overlay from './overlay';
 import themes from './themes';
-const window = getWindow();
-
 import './toolbar/ui.toolbar.base';
+
+const window = getWindow();
 
 // STYLE popup
 

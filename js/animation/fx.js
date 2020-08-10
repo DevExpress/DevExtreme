@@ -7,8 +7,17 @@ import { getPublicElement } from '../core/element';
 import { extend } from '../core/utils/extend';
 import { isFunction, isPlainObject } from '../core/utils/type';
 import { each, map } from '../core/utils/iterator';
-import { getTranslateCss, parseTranslate, clearCache, locate, getTranslate } from './translator';
-import { convertTransitionTimingFuncToEasing, getEasing } from './easing';
+import {
+    getTranslateCss,
+    parseTranslate,
+    clearCache,
+    locate,
+    getTranslate
+} from './translator';
+import {
+    convertTransitionTimingFuncToEasing,
+    getEasing
+} from './easing';
 import animationFrame from './frame';
 import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';

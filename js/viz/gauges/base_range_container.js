@@ -1,12 +1,11 @@
 import { each } from '../../core/utils/iterator';
 import { BaseElement } from './base_indicators';
+import { isString } from '../../core/utils/type';
 
 const _Number = Number;
 const _abs = Math.abs;
-import { isString as _isString } from '../../core/utils/type';
 const _isArray = Array.isArray;
 const _isFinite = isFinite;
-const _each = each;
 
 const BaseRangeContainer = BaseElement.inherit({
     _init: function() {
@@ -36,7 +35,7 @@ const BaseRangeContainer = BaseElement.inherit({
         let ranges = [];
         let backgroundRanges = [{ start: totalStart, end: totalEnd }];
         const threshold = _abs(totalDelta) / 1E4;
-        const backgroundColor = _isString(options.backgroundColor) ? options.backgroundColor : 'none';
+        const backgroundColor = isString(options.backgroundColor) ? options.backgroundColor : 'none';
         const width = options.width || {};
         const startWidth = _Number(width > 0 ? width : width.start);
         const endWidth = _Number(width > 0 ? width : width.end);
@@ -65,14 +64,14 @@ const BaseRangeContainer = BaseElement.inherit({
             count: list.length
         });
 
-        _each(list, function(_, item) {
+        each(list, function(_, item) {
             const paletteColor = palette.getNextColor();
-            item.color = (_isString(item.color) && item.color) || paletteColor || 'none';
+            item.color = (isString(item.color) && item.color) || paletteColor || 'none';
             item.className = 'dxg-range dxg-range-' + item.classIndex;
             delete item.classIndex;
         });
 
-        _each(list, function(_, item) {
+        each(list, function(_, item) {
             let i;
             let ii;
             let sub;
@@ -97,12 +96,12 @@ const BaseRangeContainer = BaseElement.inherit({
             }
             backgroundRanges = newBackgroundRanges;
         });
-        _each(backgroundRanges, function(_, range) {
+        each(backgroundRanges, function(_, range) {
             range.color = backgroundColor;
             range.className = 'dxg-range dxg-background-range';
             ranges.push(range);
         });
-        _each(ranges, function(_, range) {
+        each(ranges, function(_, range) {
             range.startWidth = (range.start - totalStart) / totalDelta * deltaWidth + startWidth;
             range.endWidth = (range.end - totalStart) / totalDelta * deltaWidth + startWidth;
         });
@@ -125,7 +124,7 @@ const BaseRangeContainer = BaseElement.inherit({
         const that = this;
         that._root.clear();
         if(that._isVisible(layout)) {
-            _each(that._ranges, function(_, range) {
+            each(that._ranges, function(_, range) {
                 that._createRange(range, layout).attr({ fill: range.color, 'class': range.className }).append(that._root);
             });
         }
@@ -141,7 +140,7 @@ const BaseRangeContainer = BaseElement.inherit({
     // S170193
     getColorForValue: function(value) {
         let color = null;
-        _each(this._ranges, function(_, range) {
+        each(this._ranges, function(_, range) {
             if((range.start <= value && value <= range.end) || (range.start >= value && value >= range.end)) {
                 color = range.color;
                 return false;

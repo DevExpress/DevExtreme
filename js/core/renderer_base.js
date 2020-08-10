@@ -5,6 +5,7 @@ import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFu
 import { styleProp, normalizeStyleProp } from './utils/style';
 import { getSize, getElementBoxParams } from './utils/size';
 import { parseHTML, isTablePart } from './utils/html_parser';
+
 const window = getWindow();
 
 let renderer;

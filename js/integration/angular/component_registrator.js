@@ -16,7 +16,8 @@ import CollectionWidget from '../../ui/collection/ui.collection_widget.edit';
 import { compileGetter, compileSetter } from '../../core/utils/data';
 import { extendFromObject } from '../../core/utils/extend';
 import { equals } from '../../core/utils/comparator';
-import inflector from '../../core/utils/inflector';
+import { dasherize } from '../../core/utils/inflector';
+
 const ITEM_ALIAS_ATTRIBUTE_NAME = 'dxItemAlias';
 const SKIP_APPLY_ACTION_CATEGORIES = ['rendering'];
 const NG_MODEL_OPTION = 'value';
@@ -480,7 +481,7 @@ if(angular) {
                                 return;
                             }
 
-                            const markup = $('<div>').attr(inflector.dasherize(widgetName), 'options').get(0);
+                            const markup = $('<div>').attr(dasherize(widgetName), 'options').get(0);
                             const newScope = this._scope.$new();
 
                             newScope.options = options.model.options;

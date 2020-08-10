@@ -11,7 +11,6 @@ import { noop } from '../../core/utils/common';
 
 const PRIVATE_KEY_FIELD = '__dx_key__';
 
-
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
