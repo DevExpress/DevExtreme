@@ -236,7 +236,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 // chrome 73+
                 let $pointerDownTarget;
                 let isResizing;
-                that._pointerUpEditorHandler = () => isResizing = that.getController('columnsResizer')?.isResizing();
+                that._pointerUpEditorHandler = () => { isResizing = that.getController('columnsResizer')?.isResizing(); };
                 that._pointerDownEditorHandler = e => $pointerDownTarget = $(e.target);
                 that._saveEditorHandler = that.createAction(function(e) {
                     const event = e.event;
