@@ -1,3 +1,5 @@
+@import (once) "./overlay.less";
+
 .dx-drawer {
     height: 100%;
     width: 100%;
@@ -31,6 +33,7 @@
 }
 
 .dx-drawer-shader {
+    z-index: @OVERLAY_ZINDEX + 1;
     position: absolute;
     top: 0;
     height: 100%;
