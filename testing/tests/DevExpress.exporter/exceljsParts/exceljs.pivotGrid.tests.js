@@ -4618,7 +4618,7 @@ QUnit.module('Sort options', moduleConfig, () => {
                 fields: [
                     { area: 'row', dataField: 'row', sortingMethod: (a, b) => a.value.slice(-1) - b.value.slice(-1) },
                     { area: 'column', dataField: 'col' },
-                    { area: 'data', dataField: 'field1', summaryType: 'max' },
+                    { area: 'data' },
                 ],
                 store: [
                     { row: 'row2', col: 'col1' },
