@@ -1557,7 +1557,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = {
             startDate: startDate,
             endDate: startDate,
-            // endDate: new Date(startDate.getTime() + DAY_MS - 1),
             allDay: true
         };
 
