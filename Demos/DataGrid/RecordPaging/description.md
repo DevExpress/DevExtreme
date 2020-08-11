@@ -1,4 +1,4 @@
-The **DataGrid** automatically splits records across multiple pages. This optimizes performance as the **DataGrid** loads and renders only the records on the current page. Users can scroll the pages or use the pager to navigate between them. This demo illustrates the second case.
+The **DataGrid** automatically splits records across multiple pages. This optimizes performance as the **DataGrid** loads and renders only the current page records. Users can scroll the pages or use the pager to navigate between them. This demo illustrates the second case.
 
 The pager is configured in the [pager](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/pager/) object and consists of the following elements:
 
