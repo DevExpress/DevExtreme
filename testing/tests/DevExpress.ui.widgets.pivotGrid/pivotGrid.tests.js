@@ -6453,5 +6453,39 @@ QUnit.module('Data area', () => {
 
         clock.restore();
     });
+
+    [true, false].forEach(remoteOperations => {
+        QUnit.test(`dataSource.remoteOperations=${remoteOperations}, store.load = returns empty array`, function(assert) {
+            const grid = $('#pivotGrid').dxPivotGrid({
+                remoteOperations: remoteOperations,
+                dataSource: {
+                    load: function() {
+                        const d = $.Deferred();
+                        d.resolve();
+                        return d.promise();
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+
+            assert.deepEqual($(grid._dataArea.element()).text(), 'No data');
+        });
+
+        QUnit.test(`dataSource.remoteOperations=${remoteOperations}, store.load = returns empty array with summary`, function(assert) {
+            const grid = $('#pivotGrid').dxPivotGrid({
+                remoteOperations: remoteOperations,
+                dataSource: {
+                    load: function() {
+                        const d = $.Deferred();
+                        d.resolve([], { summary: [10] });
+                        return d.promise();
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+
+            assert.deepEqual($(grid._dataArea.element()).text(), '$10');
+        });
+    });
 });
 
