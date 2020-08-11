@@ -290,10 +290,11 @@ const HtmlEditor = Editor.inherit({
 
             if(newDelta.ops.length) {
                 this._quillInstance.setContents(newDelta);
-            } else {
-                this._finalizeContentRendering();
+                return;
             }
         }
+
+        this._finalizeContentRendering();
     },
 
     _hasTranscludedContent: function() {
