@@ -29,7 +29,7 @@ afterEach(() => {
 
 describe('Misc cases', () => {
   it('empty component creation does not fail', () => {
-    expect(() => act(() => $('#component').dxrEmptyTestWidget({}))).not.toThrowError();
+    expect(() => act(() => $('#component').dxEmptyTestWidget({}))).not.toThrowError();
   });
 
   it('on disposing should clean preact effects', () => {
@@ -312,7 +312,7 @@ describe('templates and slots', () => {
   it('pass anonymous template content as children', () => {
     $('#component').html('<span>Default slot</span>');
 
-    act(() => $('#component').dxrTemplatedTestWidget({}));
+    act(() => $('#component').dxTemplatedTestWidget({}));
 
     expect($('#component').children().length).toBe(1);
     expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
@@ -322,7 +322,7 @@ describe('templates and slots', () => {
     const element = $('<span>').html('Default slot');
     $('#component').append(element);
 
-    act(() => $('#component').dxrTemplatedTestWidget({}));
+    act(() => $('#component').dxTemplatedTestWidget({}));
 
     expect($('#component').children()[0]).toBe(element[0]);
   });
@@ -331,10 +331,10 @@ describe('templates and slots', () => {
     const slotContent = $('<span>').html('Default slot');
     $('#component').append(slotContent);
 
-    act(() => $('#component').dxrTemplatedTestWidget({}));
+    act(() => $('#component').dxTemplatedTestWidget({}));
     slotContent.html('Update slot');
 
-    act(() => $('#component').dxrTemplatedTestWidget('repaint'));
+    act(() => $('#component').dxTemplatedTestWidget('repaint'));
 
     expect($('#component')[0].innerHTML).toBe('<span>Update slot</span>');
   });
@@ -343,7 +343,7 @@ describe('templates and slots', () => {
     it('template without index', () => {
       const template = jest.fn();
 
-      act(() => $('#component').dxrTemplatedTestWidget({
+      act(() => $('#component').dxTemplatedTestWidget({
         template,
       }));
 
@@ -356,7 +356,7 @@ describe('templates and slots', () => {
     it('template with index', () => {
       const template = jest.fn();
 
-      act(() => $('#component').dxrTemplatedTestWidget({
+      act(() => $('#component').dxTemplatedTestWidget({
         indexedTemplate: template,
       }));
 
@@ -368,7 +368,7 @@ describe('templates and slots', () => {
   });
 
   it('insert template content to templates root', () => {
-    act(() => $('#component').dxrTemplatedTestWidget({
+    act(() => $('#component').dxTemplatedTestWidget({
       template(data, element) {
         $(element).html('<span>Template content</span>');
       },
@@ -380,14 +380,14 @@ describe('templates and slots', () => {
   });
 
   it('remove old template content between renders', () => {
-    act(() => $('#component').dxrTemplatedTestWidget({
+    act(() => $('#component').dxTemplatedTestWidget({
       template(data, element) {
         $(element).append(`<span>Template - ${data.simpleTemplate}</span>`);
       },
     }));
     const templateRoot = $('#component').children('.templates-root')[0];
 
-    act(() => $('#component').dxrTemplatedTestWidget({
+    act(() => $('#component').dxTemplatedTestWidget({
       text: 'new data',
     }));
 
@@ -395,7 +395,7 @@ describe('templates and slots', () => {
   });
 
   it('replace root with template if it returns .dx-template-wrapper node', () => {
-    act(() => $('#component').dxrTemplatedTestWidget({
+    act(() => $('#component').dxTemplatedTestWidget({
       template() {
         return '<div class="dx-template-wrapper">Template content</div>';
       },
