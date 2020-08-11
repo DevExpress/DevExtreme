@@ -284,7 +284,7 @@ const HtmlEditor = Editor.inherit({
 
     _applyTranscludedContent: function() {
         const valueOption = this.option('value');
-        if(valueOption === undefined || valueOption === null) {
+        if(!isDefined(valueOption)) {
             const markup = this._deltaConverter.toHtml();
             const newDelta = this._quillInstance.clipboard.convert(markup);
 
