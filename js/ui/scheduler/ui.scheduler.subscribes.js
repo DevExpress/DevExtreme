@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import array from '../../core/utils/array';
-import { getRecurrenceProcessor } from './recurrence';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -14,6 +13,7 @@ import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
+import utils from './utils';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -34,68 +34,8 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    needCoordinates: function(options) {
-        const appointmentData = options.appointmentData;
-        const startDate = options.startDate;
-        const originalEndDate = this._getEndDate(appointmentData, true);
-        const recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
-        const recurrenceException = this._getRecurrenceException(appointmentData);
-        const dateRange = this._workSpace.getDateRange();
-        let allDay = this.appointmentTakesAllDay(appointmentData);
-        const startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0];
-        const originalStartDate = options.originalStartDate || startDate;
-        const renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
-        const firstDayOfWeek = this.getFirstDayOfWeek();
-
-        const recurrenceOptions = {
-            rule: recurrenceRule,
-            exception: recurrenceException,
-            start: originalStartDate,
-            end: originalEndDate,
-            min: startViewDate,
-            max: dateRange[1],
-            firstDayOfWeek: firstDayOfWeek
-        };
-
-        let dates = getRecurrenceProcessor().generateDates(recurrenceOptions);
-        let initialDates;
-
-        if(!dates.length) {
-            dates.push(startDate);
-            initialDates = dates;
-        } else {
-            dates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData);
-            initialDates = dates;
-
-            dates = dates.map((date) => {
-                return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
-            });
-        }
-
-        if(renderingStrategy.needSeparateAppointment(allDay)) {
-            const datesLength = dates.length;
-            let longParts = [];
-            let resultDates = [];
-
-            for(let i = 0; i < datesLength; i++) {
-                const endDateOfPart = renderingStrategy.endDate(appointmentData, {
-                    startDate: dates[i]
-                }, !!recurrenceRule);
-
-                longParts = dateUtils.getDatesOfInterval(dates[i], endDateOfPart, {
-                    milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
-                });
-                const maxDate = new Date(dateRange[1]);
-                resultDates = resultDates.concat(longParts.filter(el => new Date(el) < maxDate));
-            }
-
-            dates = resultDates;
-        }
-
-        const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
-        allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
-
-        return this._getCoordinates(initialDates, dates, itemResources, allDay);
+    createAppointmentSettings: function(args) {
+        return this._createAppointmentSettings(args.appointmentData); // TODO: temporary solution
     },
 
     isGroupedByDate: function() {
@@ -103,53 +43,36 @@ const subscribes = {
     },
 
     showAppointmentTooltip: function(options) {
-        const appointmentData = options.data;
-        const targetedData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
-        this.showAppointmentTooltip(appointmentData, options.target, targetedData);
+        const targetedAppointment = this.getTargetedAppointment(options.data, options.target);
+        this.showAppointmentTooltip(options.data, options.target, targetedAppointment);
     },
 
     hideAppointmentTooltip: function() {
         this.hideAppointmentTooltip();
     },
 
-    showAddAppointmentPopup: function(appointmentData) {
-        const processedData = {};
+    showAddAppointmentPopup: function(cellData, cellGroups) {
+        const appointmentAdapter = this.createAppointmentAdapter({});
 
-        each(['startDate', 'endDate', 'allDay'], (function(_, field) {
-            if(appointmentData[field] !== undefined) {
-                this.fire('setField', field, processedData, appointmentData[field]);
-                delete appointmentData[field];
-            }
-        }).bind(this));
+        appointmentAdapter.allDay = cellData.allDay;
+        appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
+        appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
 
-        this.showAppointmentPopup(extend(processedData, appointmentData), true);
+        const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
+        this.showAppointmentPopup(resultAppointment, true);
     },
 
     showEditAppointmentPopup: function(options) {
-        const appointmentData = options.data;
-
-        options.$appointment = $(options.target);
-        options.skipHoursProcessing = true;
-
-        const targetedData = this._getAppointmentData(appointmentData, options);
-        const startDate = this.fire('getField', 'startDate', targetedData);
-
-        this.showAppointmentPopup(appointmentData, false, targetedData, startDate);
+        const targetedData = this.getTargetedAppointment(options.data, options.target);
+        this.showAppointmentPopup(options.data, false, targetedData);
     },
 
     updateAppointmentAfterResize: function(options) {
-        const targetAppointment = options.target;
+        const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
+        const exceptionDate = info.sourceAppointment.startDate;
 
-        options.isAppointmentResized = true;
-
-        const targetedData = this._getAppointmentData(targetAppointment, options);
-        const startDate = this.fire('getField', 'startDate', targetedData);
-        const updatedData = extend(true, {}, options.data);
-
-        this._convertDatesByTimezoneBack(true, updatedData);
-
-        this._checkRecurringAppointment(targetAppointment, targetedData, startDate, (function() {
-            this._updateAppointment(targetAppointment, updatedData, function() {
+        this._checkRecurringAppointment(options.target, options.data, exceptionDate, (function() {
+            this._updateAppointment(options.target, options.data, function() {
                 this._appointments.moveAppointmentBack();
             });
         }).bind(this));
@@ -160,26 +83,29 @@ const subscribes = {
     },
 
     updateAppointmentAfterDrag: function(options) {
-        const target = options.data;
-        const updatedData = this._getUpdatedData(options);
+        const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
+
+        const sourceAppointment = options.data;
+        const sourceAppointmentAdapter = this.createAppointmentAdapter(sourceAppointment);
+
+        const currentAppointmentAdapter = this.createAppointmentAdapter(extend({}, sourceAppointment, this._getUpdatedData(options)))
+            .clone({ pathTimeZone: 'fromGrid' });
+        const currentAppointmentWithoutConverting = currentAppointmentAdapter.source();
+
         const newCellIndex = this._workSpace.getDroppableCellIndex();
         const oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates);
-        const becomeAllDay = this.fire('getField', 'allDay', updatedData);
-        const wasAllDay = this.fire('getField', 'allDay', target);
+
+        const becomeAllDay = currentAppointmentAdapter.allDay;
+        const wasAllDay = sourceAppointmentAdapter.allDay;
+
         const dragEvent = options.event;
 
-        const appointment = extend({}, target, updatedData);
-
-        const movedToAllDay = this._workSpace.supportAllDayRow() && becomeAllDay;
-        const cellData = this._workSpace.getCellDataByCoordinates(options.coordinates, movedToAllDay);
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(target, appointment, cellData.startDate, (function() {
+            this._checkRecurringAppointment(sourceAppointment, currentAppointmentWithoutConverting, info.sourceAppointment.startDate, (function() {
 
-                this._convertDatesByTimezoneBack(true, updatedData, appointment);
-
-                this._updateAppointment(target, appointment, function() {
+                this._updateAppointment(sourceAppointment, currentAppointmentWithoutConverting, function() {
                     this._appointments.moveAppointmentBack(dragEvent);
                 }, dragEvent);
             }).bind(this), undefined, undefined, dragEvent);
@@ -188,13 +114,11 @@ const subscribes = {
         }
     },
 
-    deleteAppointment: function(options) {
-        options.$appointment = $(options.target);
+    onDeleteButtonPress: function(options) {
+        const targetedData = this.getTargetedAppointment(options.data, $(options.target));
+        this.checkAndDeleteAppointment(options.data, targetedData);
 
-        const appointmentData = options.data;
-        const targetedData = this._getAppointmentData(appointmentData, options);
-
-        this.checkAndDeleteAppointment(appointmentData, targetedData);
+        this.hideAppointmentTooltip();
     },
 
     getAppointmentColor: function(options) {
@@ -237,17 +161,16 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(data, currentData, format) {
-        const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
-        const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        const startDate = appointmentFields.startDate;
-        const endDate = appointmentFields.endDate;
+    getTextAndFormatDate(appointment, targetedAppointment, format) { // TODO: rename to createFormattedDateText
+        const appointmentAdapter = this.createAppointmentAdapter(appointment);
+        const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
+            .clone({ pathTimeZone: 'toGrid' });
 
-        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, appointmentFields.allDay);
+        const formatType = format || this.fire('_getTypeFormat', adapter.startDate, adapter.endDate, adapter.allDay);
 
         return {
-            text: this.fire('_createAppointmentTitle', appointmentFields),
-            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
+            text: adapter.text || appointmentAdapter.text,
+            formatDate: this.fire('_formatDates', adapter.startDate, adapter.endDate, formatType)
         };
     },
 
@@ -350,10 +273,6 @@ const subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentHeight();
     },
 
-    getStartDate: function(appointmentData, skipNormalize) {
-        return this._getStartDate(appointmentData, skipNormalize);
-    },
-
     getCellWidth: function() {
         return this._cellWidth;
     },
@@ -371,10 +290,6 @@ const subscribes = {
         }
 
         return cellWidth;
-    },
-
-    getEndDate: function(appointmentData, skipNormalize) {
-        return this._getEndDate(appointmentData, skipNormalize);
     },
 
     getRenderingStrategy: function() {
@@ -463,7 +378,7 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
+        const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
 
         return {
             appointmentData: config.itemData,
@@ -751,22 +666,8 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, needConvertByTimezones) {
-        const $appointmentElement = $(appointmentElement);
-        const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
-
-        const targetedData = this._getAppointmentData(appointmentData, {
-            skipDateCalculation: true,
-            $appointment: $appointmentElement,
-            skipHoursProcessing: needConvertByTimezones ? false : true
-        });
-        const result = {};
-
-        extend(true, result, appointmentData, targetedData);
-
-        appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
-
-        return result;
+    getTargetedAppointmentData: function(appointment, element) {
+        return this.getTargetedAppointment(appointment, element);
     },
 
     getAppointmentDurationInMs: function(options) {
@@ -820,6 +721,7 @@ const subscribes = {
     fixWrongEndDate: function(appointment, startDate, endDate) {
         return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
     },
+
     calculateAppointmentEndDate: function(isAllDay, startDate) {
         return this._appointmentModel._calculateAppointmentEndDate(isAllDay, startDate);
     },

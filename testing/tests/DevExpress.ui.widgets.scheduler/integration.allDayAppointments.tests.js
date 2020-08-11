@@ -9,7 +9,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import Query from 'data/query';
 import dataUtils from 'core/element_data';
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -126,12 +126,13 @@ QUnit.test('AllDay appointments should not be filtered by start & end day hour (
 });
 
 QUnit.test('All-day appointment should be resized correctly', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2015, 1, 9),
         editing: true,
         views: ['week'],
         currentView: 'week',
         allDayExpr: 'AllDay',
+        width: 700,
         dataSource: [{
             text: 'a',
             startDate: new Date(2015, 1, 9),
@@ -140,16 +141,19 @@ QUnit.test('All-day appointment should be resized correctly', function(assert) {
         }]
     });
 
-    const cellWidth = $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+    const cellWidth = scheduler.workSpace.getCellWidth();
+    let pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.right)).start();
 
-    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
     pointer.dragStart().drag(cellWidth, 0).dragEnd();
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 11), 'End date is OK');
 
-    assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 11), 'End date is OK');
+    pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.right)).start();
+    pointer.dragStart().drag(-cellWidth, 0).dragEnd();
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 10), 'End date is OK');
 });
 
 QUnit.test('All-day appointment endDate should be correct after resize when startDayHour & endDayHour', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2015, 1, 9),
         editing: true,
         views: ['week'],
@@ -157,6 +161,7 @@ QUnit.test('All-day appointment endDate should be correct after resize when star
         startDayHour: 8,
         endDayHour: 19,
         allDayExpr: 'AllDay',
+        width: 700,
         dataSource: [{
             text: 'a',
             startDate: new Date(2015, 1, 9),
@@ -165,16 +170,19 @@ QUnit.test('All-day appointment endDate should be correct after resize when star
         }]
     });
 
-    const cellWidth = $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+    const cellWidth = scheduler.workSpace.getCellWidth();
+    let pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.right)).start();
 
-    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
     pointer.dragStart().drag(cellWidth, 0).dragEnd();
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 11), 'End date is OK');
 
-    assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 11), 'End date is OK');
+    pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.right)).start();
+    pointer.dragStart().drag(-cellWidth, 0).dragEnd();
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 10), 'End date is OK');
 });
 
 QUnit.test('All-day appointment startDate should be correct after resize when startDayHour & endDayHour', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2015, 1, 9),
         editing: true,
         views: ['week'],
@@ -190,12 +198,15 @@ QUnit.test('All-day appointment startDate should be correct after resize when st
         }]
     });
 
-    const cellWidth = $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+    const cellWidth = scheduler.workSpace.getCellWidth();
+    let pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.left)).start();
 
-    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
     pointer.dragStart().drag(-(cellWidth - 10), 0).dragEnd();
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9), 'Start date is OK');
 
-    assert.deepEqual(this.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9), 'Start date is OK');
+    pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.left)).start();
+    pointer.dragStart().drag(cellWidth, 0).dragEnd();
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 10), 'Start date is OK');
 });
 
 QUnit.test('Task dragging into the allDay container', function(assert) {

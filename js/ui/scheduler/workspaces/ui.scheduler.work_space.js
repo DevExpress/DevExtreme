@@ -1319,18 +1319,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         const firstCellData = this.getCellData($cell.first());
         const lastCellData = this.getCellData($cell.last());
 
-        const args = {
-            startDate: this.invoke('convertDateByTimezoneBack', firstCellData.startDate) || firstCellData.startDate,
-            endDate: this.invoke('convertDateByTimezoneBack', lastCellData.endDate) || lastCellData.endDate
+        const result = {
+            startDate: firstCellData.startDate,
+            endDate: lastCellData.endDate
         };
 
-        if(isDefined(lastCellData.allDay)) {
-            args.allDay = lastCellData.allDay;
+        if(lastCellData.allDay !== undefined) {
+            result.allDay = lastCellData.allDay;
         }
 
-        extend(args, lastCellData.groups);
-
-        this.notifyObserver('showAddAppointmentPopup', args);
+        this.invoke('showAddAppointmentPopup', result, lastCellData.groups);
     }
 
     _attachContextMenuEvent() {
@@ -1402,7 +1400,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     headerPanelOffsetRecalculate() {
         if(!this.option('resourceCellTemplate') &&
-           !this.option('dateCellTemplate')) {
+            !this.option('dateCellTemplate')) {
             return;
         }
 
@@ -2702,7 +2700,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateScrollPosition(date) {
-        date = this.invoke('convertDateByTimezone', date);
+        date = this.invoke('convertDateByTimezone', date); // TODO:
 
         const bounds = this.getVisibleBounds();
         const startDateHour = date.getHours();
