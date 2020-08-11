@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import mappedAddNamespace from './add_namespace';
-import eventsEngine from '../core/events_engine/index';
+import eventsEngine from '../core/events_engine';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../../ui/widget/selectors';
