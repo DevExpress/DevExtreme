@@ -21,6 +21,7 @@ $(function() {
             type: "employee",
             category: "employee",
             baseType: "rectangle",
+            title: "New Employee",
             defaultWidth: 1.5,
             defaultHeight: 1,
             toolboxWidthToHeightRatio: 2,

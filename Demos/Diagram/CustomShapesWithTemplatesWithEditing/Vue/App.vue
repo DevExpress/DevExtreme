@@ -10,6 +10,7 @@
         :type="'employee'"
         :category="'employee'"
         :base-type="'rectangle'"
+        :title="'New Empliyee'"
         :default-width="1.5"
         :default-height="1"
         :toolbox-width-to-height-ratio="2"

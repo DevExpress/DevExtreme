@@ -2127,7 +2127,8 @@
                     "Widget": "Diagram",
                     "DemoType": "Web",
                     "WideDemo": true,
-                    "Modules": "whatwg-fetch"
+                    "Modules": "whatwg-fetch",
+                    "Badge": "Upd"
                 }
             ]
         },
