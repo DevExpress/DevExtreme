@@ -36,6 +36,7 @@ import VirtualScrolling from './ui.scheduler.virtual_scrolling';
 import ViewDataGenerator from './view_data_generator';
 
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
+import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 
 const abstract = WidgetObserver.abstract;
@@ -709,6 +710,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     createRAllDayPanelElements() {
         this._$allDayPanel = $('<div>');
+        this._$allDayTitle = $('<div>').appendTo(this.$element());
     }
 
     _createAllDayPanelElements() {
@@ -1051,7 +1053,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isGroupedAllDayPanel() {
-        return this.option('showAllDayPanel') && this._getGroupCount() > 1;
+        return this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace();
     }
 
     generateRenderOptions() {
@@ -1097,12 +1099,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRAllDayPanel() {
-        const options = {
-            viewData: this.viewData,
-            visible: this.option('showAllDayPanel')
-        };
+        const visible = this.option('showAllDayPanel') && !this.isGroupedAllDayPanel();
+        if(visible) {
+            const options = {
+                viewData: this.viewData,
+                visible
+            };
 
-        this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
+            this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
+            this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+        }
     }
 
     renderRTimeTable() {

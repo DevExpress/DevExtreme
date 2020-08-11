@@ -29,6 +29,7 @@ export default class ViewDataGenerator {
         const groupedData = [];
         const firstGroupIndex = Math.floor(startRowIndex / rowCountInGroup);
         const lastGroupIndex = Math.floor((startRowIndex + rowCount) / rowCountInGroup);
+        const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
             let allDayPanelData = [];
@@ -59,7 +60,7 @@ export default class ViewDataGenerator {
             groupedData.push({
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
-                isGroupedAllDayPanel: workspace._getGroupCount() > 1
+                isGroupedAllDayPanel
             });
         }
 
@@ -74,6 +75,7 @@ export default class ViewDataGenerator {
     _generateView() {
         const workspace = this._workspace;
         const options = workspace.generateRenderOptions();
+        const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
         const {
             rowCount,
             cellCount,
@@ -88,7 +90,7 @@ export default class ViewDataGenerator {
             groupedData.push({
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
-                isGroupedAllDayPanel: workspace._getGroupCount() > 1
+                isGroupedAllDayPanel
             });
         }
 

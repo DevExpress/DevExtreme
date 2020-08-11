@@ -67,8 +67,7 @@ const stubInvokeMethod = function(instance, options) {
 };
 
 QUnit.testStart(function() {
-    // $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
-    $('body').append('<div id="scheduler-work-space"></div>');
+    $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
 });
 
 (function() {

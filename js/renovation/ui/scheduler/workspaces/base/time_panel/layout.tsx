@@ -14,53 +14,58 @@ import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 
 export const viewFunction = (viewModel: TimePanelTableLayout) => (
-  <Table
-      // eslint-disable-next-line react/jsx-props-no-spreading
+  <div
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    isVirtual={viewModel.isVirtual}
-    topVirtualRowHeight={viewModel.topVirtualRowHeight}
-    bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-    className={`dx-scheduler-time-panel ${viewModel.props.className}`}
   >
-    {viewModel.props.viewData!
-      .groupedData.map(({ dateTable }, groupIndex) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
-          { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
-          && (
-          <Row>
-            <CellBase className="dx-scheduler-time-panel-title-cell">
-              <AllDayPanelTitle />
-            </CellBase>
-          </Row>
-          )}
-          {
-            dateTable.map((cellsRow, index) => {
-              const isFirstCell = index === 0;
-              const isLastCell = index === dateTable.length - 1;
+    <Table
+      isVirtual={viewModel.isVirtual}
+      topVirtualRowHeight={viewModel.topVirtualRowHeight}
+      bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+      className={`dx-scheduler-time-panel ${viewModel.props.className}`}
+    >
+      {viewModel.props.viewData!
+        .groupedData.map(({ dateTable }, groupIndex) => (
+          <Fragment key={getKeyByGroup(groupIndex)}>
+            { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
+            && (
+            <Row>
+              <CellBase className="dx-scheduler-time-panel-title-cell">
+                <AllDayPanelTitle />
+              </CellBase>
+            </Row>
+            )}
+            {
+              dateTable.map((cellsRow, index) => {
+                const isFirstCell = index === 0;
+                const isLastCell = index === dateTable.length - 1;
 
-              return (
-                <Row
-                  className="dx-scheduler-time-panel-row"
-                  key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-                >
-                  <Cell
-                    startDate={cellsRow[0].startDate}
-                    text={cellsRow[0].text}
-                    isFirstCell={isFirstCell}
-                    isLastCell={isLastCell}
-                  />
-                </Row>
-              );
-            })
-          }
-        </Fragment>
-      ))}
-  </Table>
+                return (
+                  <Row
+                    className="dx-scheduler-time-panel-row"
+                    key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+                  >
+                    <Cell
+                      startDate={cellsRow[0].startDate}
+                      text={cellsRow[0].text}
+                      isFirstCell={isFirstCell}
+                      isLastCell={isLastCell}
+                    />
+                  </Row>
+                );
+              })
+            }
+          </Fragment>
+        ))}
+    </Table>
+  </div>
 );
 
 @ComponentBindings()
 export class TimePanelTableLayoutProps extends LayoutProps {
-  @OneWay() className?: string;
+  @OneWay() className? = '';
+
+  @OneWay() allDayPanelVisible? = false;
 }
 
 @Component({

@@ -173,7 +173,10 @@ describe('TimePanelLayout', () => {
       [true, false].forEach((isVirtual) => {
         it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
           const layout = new TimePanelTableLayout({
-            viewData: { groupedData: [], isVirtual },
+            viewData: {
+              groupedData: [],
+              isVirtual,
+            },
           });
 
           expect(layout.isVirtual)
