@@ -8,10 +8,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         allowExpandAll: true,
         height: 570,
         showBorders: true,
-        export: {
-            enabled: true,
-            fileName: "Adventure Works"
-        },
         fieldChooser: {
             allowSearch: true
         },

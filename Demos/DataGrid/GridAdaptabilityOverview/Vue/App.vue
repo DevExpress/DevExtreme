@@ -6,10 +6,6 @@
       :column-hiding-enabled="true"
       :show-borders="true"
     >
-      <DxExport
-        :enabled="true"
-        file-name="Orders"
-      />
       <DxEditing
         :allow-adding="true"
         :allow-updating="true"

@@ -13,10 +13,6 @@
       :show-borders="true"
       :data-source="dataSource"
     >
-      <DxExport
-        :enabled="true"
-        file-name="Sales"
-      />
       <DxFieldChooser :enabled="false"/>
     </DxPivotGrid>
   </div>

@@ -12,10 +12,6 @@
       :show-borders="true"
       :data-source="dataSource"
     >
-      <DxExport
-        :enabled="true"
-        file-name="Adventure Works"
-      />
       <DxFieldChooser
         :enabled="true"
         :allow-search="true"

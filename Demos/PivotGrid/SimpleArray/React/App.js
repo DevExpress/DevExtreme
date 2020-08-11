@@ -25,7 +25,6 @@ class App extends React.Component {
           height={440}
           showBorders={true}
         >
-          <Export enabled={true} fileName="Sales" />
           <FieldChooser enabled={false} />
         </PivotGrid>
       </React.Fragment>
