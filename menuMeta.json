@@ -122,7 +122,6 @@
           {
             "Title": "Remote Virtual Scrolling",
             "Name": "RemoteVirtualScrolling",
-            "DocUrl": "Guide/Widgets/DataGrid/Scrolling/",
             "Widget": "DataGrid",
             "Modules": "devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
@@ -133,7 +132,6 @@
           {
             "Title": "Horizontal Virtual Scrolling",
             "Name": "HorizontalVirtualScrolling",
-            "DocUrl": "ApiReference/UI_Widgets/dxDataGrid/Configuration/scrolling/#columnRenderingMode",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridHorizontalScrollingController.cs"
