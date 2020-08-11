@@ -725,7 +725,7 @@ extend(legendPrototype, {
                 height: item.markerBBox.height,
                 element: item.marker,
                 pos: {
-                    horizontal: CENTER,
+                    horizontal: labelBox.pos.vertical === TOP || labelBox.pos.vertical === BOTTOM ? CENTER : LEFT,
                     vertical: CENTER
                 },
                 bBox: { width: item.markerBBox.width, height: item.markerBBox.height, x: item.markerBBox.x, y: item.markerBBox.y },
