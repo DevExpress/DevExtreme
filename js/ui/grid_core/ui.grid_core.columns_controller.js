@@ -1417,8 +1417,11 @@ module.exports = {
 
                     return result.map(columns => {
                         return columns.map(column => {
-                            const headerId = column.headerId ? column.headerId + '-fixed' : column.headerId;
-                            return { ...column, headerId };
+                            const newColumn = { ...column };
+                            if(newColumn.headerId) {
+                                newColumn.headerId += '-fixed';
+                            }
+                            return newColumn;
                         });
                     });
                 },
