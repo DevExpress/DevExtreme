@@ -1417,7 +1417,12 @@ module.exports = {
                         }
                     }
 
-                    return result;
+                    return result.map(columns => {
+                        return columns.map(column => {
+                            const headerId = column.headerId ? column.headerId + '-fixed' : column.headerId;
+                            return { ...column, headerId };
+                        });
+                    });
                 },
                 _isColumnFixing: function() {
                     let isColumnFixing = this.option('columnFixing.enabled');
