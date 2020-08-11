@@ -3204,12 +3204,17 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         const $testElement = $('#container');
         this.setupDataGrid();
         this.rowsView.render($testElement);
-        const columns = this.columnsController.getFixedColumns();
-        const firstColumn = columns[0];
-        const secondColumn = columns[1];
+        const columns = this.getVisibleColumns();
+        const fixedColumns = this.columnsController.getFixedColumns();
+        const firstColumn = fixedColumns[0];
+        const secondColumn = fixedColumns[1];
 
         // assert
-        assert.equal(columns.length, 2);
+        assert.ok(columns.length);
+        columns.forEach(col => {
+            assert.equal(col.headerId.indexOf('-fixed'), -1, 'headerId of a data column should not have the \'-fixed\' postfix');
+        });
+        assert.equal(fixedColumns.length, 2);
         assert.ok(firstColumn.headerId.indexOf('-fixed') > 0, 'headerId of the first column has the \'-fixed\' postfix');
         assert.equal(secondColumn.command, 'transparent', 'the second column is transparent');
         assert.notOk(secondColumn.headerId, 'headerId of the second column is not defined');
