@@ -5972,11 +5972,16 @@ QUnit.module('Vertical headers', {
     [true, false].forEach(remoteOperations => {
         QUnit.test(`dataSource.remoteOperations=${remoteOperations}, store.load = returns empty array`, function(assert) {
             const grid = $('#pivotGrid').dxPivotGrid({
-                remoteOperations: remoteOperations,
                 dataSource: {
+                    remoteOperations: remoteOperations,
+                    fields: [
+                        { area: 'row' },
+                        { area: 'column' },
+                        { area: 'data' }
+                    ],
                     load: function() {
                         const d = $.Deferred();
-                        d.resolve();
+                        d.resolve([]);
                         return d.promise();
                     }
                 }
@@ -5985,22 +5990,27 @@ QUnit.module('Vertical headers', {
 
             assert.deepEqual($(grid._dataArea.element()).text(), 'No data');
         });
+    });
 
-        QUnit.test(`dataSource.remoteOperations=${remoteOperations}, store.load = returns empty array with summary`, function(assert) {
-            const grid = $('#pivotGrid').dxPivotGrid({
-                remoteOperations: remoteOperations,
-                dataSource: {
-                    load: function() {
-                        const d = $.Deferred();
-                        d.resolve([], { summary: [10] });
-                        return d.promise();
-                    }
+    QUnit.test('dataSource.remoteOperations=true, store.load = returns empty array with summary', function(assert) {
+        const grid = $('#pivotGrid').dxPivotGrid({
+            dataSource: {
+                remoteOperations: true,
+                fields: [
+                    { area: 'row' },
+                    { area: 'column' },
+                    { area: 'data' }
+                ],
+                load: function() {
+                    const d = $.Deferred();
+                    d.resolve([], { summary: [10] });
+                    return d.promise();
                 }
-            }).dxPivotGrid('instance');
-            this.clock.tick();
+            }
+        }).dxPivotGrid('instance');
+        this.clock.tick();
 
-            assert.deepEqual($(grid._dataArea.element()).text(), '$10');
-        });
+        assert.deepEqual($(grid._dataArea.element()).text(), '10');
     });
 });
 
