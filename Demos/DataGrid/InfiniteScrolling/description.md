@@ -1,1 +1,5 @@
-The **DataGrid** widget provides a&nbsp;capability to&nbsp;navigate from a&nbsp;page to&nbsp;a&nbsp;page gradually without using a&nbsp;pager. For this purpose, an&nbsp;infinite scroll mode has been introduced. Data pages in&nbsp;this mode are loaded when the scroll bar reaches the end of&nbsp;its scale. This demo illustrates how you can enable the infinite scroll mode.
+Infinite scrolling enables users to scroll the dataset page by page, but pages cannot be skipped. Each next page is loaded once the scrollbar reaches the end of its scale.
+
+To enable infinite scrolling, set the **scrolling**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/scrolling/#mode) to *"infinite"*.
+
+In this demo, the **DataGrid** is bound to a dataset of 100,000 records. Scroll to the last loaded record, and you should see that the **DataGrid** loads the next page.
