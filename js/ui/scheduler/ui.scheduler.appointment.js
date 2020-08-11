@@ -58,6 +58,7 @@ const Appointment = DOMComponent.inherit({
             case 'cellHeight':
             case 'cellWidth':
             case 'allDay':
+            case 'rtlEnabled':
                 this._invalidate();
                 break;
             default:
