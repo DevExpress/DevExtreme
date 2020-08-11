@@ -913,7 +913,7 @@ QUnit.test('Vertical orientation. Transform must be rounded', function(assert) {
     this.checkItems(assert, [
         { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
         { id: 1, marker: { translateX: 0, translateY: 22 }, label: { translateX: 20, translateY: 21 } },
-        { id: 2, marker: { translateX: 1 - 5, translateY: 44 - 3 }, label: { translateX: 20, translateY: 43 } }
+        { id: 2, marker: { translateX: -5, translateY: 44 - 3 }, label: { translateX: 20, translateY: 43 } }
     ]);
 });
 
