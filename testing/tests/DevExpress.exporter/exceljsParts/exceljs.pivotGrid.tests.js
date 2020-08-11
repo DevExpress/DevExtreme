@@ -4999,6 +4999,155 @@ QUnit.module('LoadPanel', moduleConfig, () => {
     });
 });
 
+QUnit.module('Sort options', moduleConfig, () => {
+    ['asc', 'desc'].forEach(sortOrder => {
+        QUnit.test(`Export [3 rows x 1 column] & row.sortOrder = ${sortOrder}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row', sortOrder: sortOrder },
+                        { area: 'column', dataField: 'col', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [
+                        { row: 'row1', col: 'col1' },
+                        { row: 'row2', col: 'col1' },
+                        { row: 'row3', col: 'col1' }
+                    ]
+                }
+            }).dxPivotGrid('instance');
+
+            const expectedRows = sortOrder === 'asc'
+                ? ['row1', 'row2', 'row3']
+                : ['row3', 'row2', 'row1'];
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                const actualRows = [2, 3, 4].map(rowIndex => this.worksheet.getRow(rowIndex).getCell(1).value);
+                assert.deepEqual(actualRows, expectedRows, `actual: ${JSON.stringify(actualRows)}, expected: ${JSON.stringify(expectedRows)}`);
+                done();
+            });
+        });
+    });
+
+    ['field1', 'field2'].forEach(sortField => {
+        QUnit.test(`Export [3 rows x 1 column] & row.sortOrder = 'desc' & row.sortBySummaryField=${sortField}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row', sortOrder: 'desc', sortBySummaryField: sortField },
+                        { area: 'column', dataField: 'col' },
+                        { area: 'data', dataField: 'field1', summaryType: 'max' },
+                        { area: 'data', dataField: 'field2', summaryType: 'max' }
+                    ],
+                    store: [
+                        { row: 'row1', col: 'col1', field1: 1, field2: 2 },
+                        { row: 'row2', col: 'col1', field1: 2, field2: 3 },
+                        { row: 'row3', col: 'col1', field1: 3, field2: 1 }
+                    ]
+                }
+            }).dxPivotGrid('instance');
+
+            const expectedRows = sortField === 'field1'
+                ? ['row3', 'row2', 'row1']
+                : ['row2', 'row1', 'row3'];
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                const actualRows = [3, 4, 5].map(rowIndex => this.worksheet.getRow(rowIndex).getCell(1).value);
+                assert.deepEqual(actualRows, expectedRows, `actual: ${JSON.stringify(actualRows)}, expected: ${JSON.stringify(expectedRows)}`);
+                done();
+            });
+        });
+    });
+
+    [['2010'], ['2020']].forEach(summaryPath => {
+        QUnit.test(`Export [3 rows x 1 column] & row.sortOrder = 'desc' & row.sortBySummaryField=field & row.sortBySummaryPath=${summaryPath}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row', sortOrder: 'desc', sortBySummaryField: 'field', sortBySummaryPath: summaryPath },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'field', summaryType: 'max' },
+                    ],
+                    store: [
+                        { row: 'row1', date: new Date(2010, 0, 1), field: 1 },
+                        { row: 'row2', date: new Date(2010, 1, 1), field: 3 },
+                        { row: 'row3', date: new Date(2020, 2, 1), field: 2 }
+                    ]
+                }
+            }).dxPivotGrid('instance');
+
+            const expectedRows = summaryPath[0] === '2010'
+                ? ['row2', 'row1', 'row3']
+                : ['row3', 'row2', 'row1'];
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                const actualRows = [2, 3, 4].map(rowIndex => this.worksheet.getRow(rowIndex).getCell(1).value);
+                assert.deepEqual(actualRows, expectedRows, `actual: ${JSON.stringify(actualRows)}, expected: ${JSON.stringify(expectedRows)}`);
+                done();
+            });
+        });
+    });
+
+    ['displayText', 'value'].forEach(sortBy => {
+        QUnit.test(`Export [3 rows x 1 column] & row.sortBy = ${sortBy}`, function(assert) {
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row', sortOrder: 'asc', sortBy: sortBy, format: 'MMMM dd yyyy', expanded: true },
+                        { area: 'column', dataField: 'col' },
+                        { area: 'data' }
+                    ],
+                    store: [
+                        { row: new Date(2010, 0, 1), col: 'col1' },
+                        { row: new Date(2010, 1, 1), col: 'col1' },
+                        { row: new Date(2010, 2, 1), col: 'col1' }
+                    ]
+                }
+            }).dxPivotGrid('instance');
+
+            const expectedRows = sortBy === 'value'
+                ? ['January', 'February', 'March']
+                : ['February', 'January', 'March'];
+
+            const done = assert.async();
+            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+                const actualRows = [2, 3, 4].map(rowIndex => this.worksheet.getRow(rowIndex).getCell(3).value);
+                assert.deepEqual(actualRows, expectedRows, `actual: ${JSON.stringify(actualRows)}, expected: ${JSON.stringify(expectedRows)}`);
+                done();
+            });
+        });
+    });
+
+    QUnit.test('Export [3 rows x 1 column] & row.sortingMethod', function(assert) {
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row', sortingMethod: (a, b) => a.value.slice(-1) - b.value.slice(-1) },
+                    { area: 'column', dataField: 'col' },
+                    { area: 'data' },
+                ],
+                store: [
+                    { row: 'row2', col: 'col1' },
+                    { row: 'row1', col: 'col1' },
+                    { row: 'row3', col: 'col1' }
+                ]
+            }
+        }).dxPivotGrid('instance');
+
+        const expectedRows = ['row1', 'row2', 'row3'];
+
+        const done = assert.async();
+        exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
+            const actualRows = [2, 3, 4].map(rowIndex => this.worksheet.getRow(rowIndex).getCell(1).value);
+            assert.deepEqual(actualRows, expectedRows, `actual: ${JSON.stringify(actualRows)}, expected: ${JSON.stringify(expectedRows)}`);
+            done();
+        });
+    });
+});
+
 ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
     { value: 'RUB', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
