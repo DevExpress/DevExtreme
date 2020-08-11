@@ -99,6 +99,21 @@ QUnit.test('areaLeftOffset resizable config should depend on allDay option', fun
     assert.equal(resizableInstance.option('areaLeftOffset'), 0, 'Resizable has a right areaLeftOffset');
 });
 
+QUnit.test('areaLeftOffset resizable config should depend on rtlEnabled option', function(assert) {
+    this.instance.option({
+        direction: 'horizontal',
+        allDay: true,
+        rtlEnabled: false
+    });
+
+    const resizableInstance = this.instance.$element().dxResizable('instance');
+    assert.equal(resizableInstance.option('areaLeftOffset'), 100, 'Resizable has a right areaLeftOffset');
+
+    this.instance.option('rtlEnabled', true);
+
+    assert.equal(resizableInstance.option('areaLeftOffset'), 0, 'Resizable has a right areaLeftOffset');
+});
+
 QUnit.test('Scheduler appointment has right resizing handles, horizontal direction', function(assert) {
     this.instance.option({
         direction: 'horizontal',

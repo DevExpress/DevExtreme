@@ -66,10 +66,12 @@ const Appointment = DOMComponent.inherit({
     },
 
     _getHorizontalResizingRule: function() {
+        const isRtl = this.option('rtlEnabled');
+
         const reducedHandles = {
-            head: this.option('rtlEnabled') ? 'right' : 'left',
+            head: isRtl ? 'right' : 'left',
             body: '',
-            tail: this.option('rtlEnabled') ? 'left' : 'right'
+            tail: isRtl ? 'left' : 'right'
         };
 
         return {
@@ -77,7 +79,7 @@ const Appointment = DOMComponent.inherit({
             minHeight: 0,
             minWidth: this.invoke('getCellWidth'),
             step: this.invoke('getResizableStep'),
-            areaLeftOffset: this.option('allDay') ? this.invoke('getWorkSpaceDateTableOffset') : 0
+            areaLeftOffset: this.option('allDay') && !isRtl ? this.invoke('getWorkSpaceDateTableOffset') : 0
         };
     },
 

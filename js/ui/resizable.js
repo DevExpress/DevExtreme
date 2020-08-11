@@ -46,16 +46,6 @@ const Resizable = DOMComponent.inherit({
 
             step: '1',
 
-            /**
-            * @name dxResizableOptions.stepPrecision
-            * @type string
-            * @default "simple"
-            * @acceptValues 'simple'|'strict'
-            * @hidden
-            */
-            stepPrecision: 'simple',
-            areaLeftOffset: 0,
-
             area: undefined,
 
             minWidth: 30,
@@ -72,7 +62,24 @@ const Resizable = DOMComponent.inherit({
 
             onResizeEnd: null,
 
-            roundStepValue: true
+            roundStepValue: true,
+
+            /**
+            * @name dxResizableOptions.stepPrecision
+            * @type string
+            * @default "simple"
+            * @acceptValues 'simple'|'strict'
+            * @hidden
+            */
+            stepPrecision: 'simple',
+
+            /**
+             * @name dxResizableOptions.areaLeftOffset
+             * @type number
+             * @default 0
+             * @hidden
+             */
+            areaLeftOffset: 0
         });
     },
 
