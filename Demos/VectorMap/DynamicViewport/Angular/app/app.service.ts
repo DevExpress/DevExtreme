@@ -7,7 +7,7 @@ export class ViewportCoordinate {
 
 let viewportCoordinates: ViewportCoordinate[] = [{
     continent: "all",
-    coordinates: [-180, 85, 180, -60]
+    coordinates: "null"
 }, {
     continent: "NorthAmerica",
     coordinates: [-180, 84.52, -22.11, -1.57]

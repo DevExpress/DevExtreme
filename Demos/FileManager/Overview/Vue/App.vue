@@ -58,8 +58,8 @@ export default {
   methods: {
     displayImagePopup(e) {
       this.imageItemToDisplay = {
-        name: e.fileItem.name,
-        url: e.fileItem.dataItem.url
+        name: e.file.name,
+        url: e.file.dataItem.url
       };
       this.popupVisible = true;
     }

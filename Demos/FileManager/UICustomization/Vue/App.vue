@@ -136,15 +136,15 @@ export default {
     };
   },
   methods: {
-    onItemClick({ itemData }) {
+    onItemClick({ itemData, viewArea, fileSystemItem }) {
       let updated = false;
       const extension = itemData.options ? itemData.options.extension : undefined;
       const category = itemData.options ? itemData.options.category : undefined;
 
       if(extension) {
-        updated = this.createFile(extension);
+        updated = this.createFile(extension, fileSystemItem);
       } else if(category !== undefined) {
-        updated = this.updateCategory(category);
+        updated = this.updateCategory(category, fileSystemItem, viewArea);
       }
 
       if(updated) {
@@ -152,32 +152,50 @@ export default {
       }
     },
 
-    createFile(fileExtension) {
-      const currentDirectory = this.$refs.fileManager.instance.getCurrentDirectory();
-
-      const newItem = {
+    createFile(fileExtension, directory) {
+      var newItem = {
         __KEY__: Date.now(),
         name: `New file${ fileExtension}`,
         isDirectory: false,
         size: 0
       };
 
-      if(currentDirectory.dataItem) {
-        currentDirectory.dataItem.items.push(newItem);
-      } else {
-        this.fileItems.push(newItem);
+      directory = directory || this.$refs.fileManager.instance.getCurrentDirectory();
+      if(!directory.isDirectory) {
+        return false;
       }
+
+      var array = null;
+      if(!directory.dataItem) {
+        array = this.fileItems;
+      }
+      else {
+        array = directory.dataItem.items;
+        if(!array) {
+          directory.dataItem.items = array = [];
+        }
+      }
+
+      array.push(newItem);
       return true;
     },
 
-    updateCategory(newCategory) {
-      const selectedItems = this.$refs.fileManager.instance.getSelectedItems();
+    updateCategory(newCategory, directory, viewArea) {
+      var items = null;
 
-      selectedItems.forEach(function(selectedItem) {
-        selectedItem.dataItem.category = newCategory;
+      if(viewArea === 'navPane') {
+        items = [ directory ];
+      } else {
+        items = this.$refs.fileManager.instance.getSelectedItems();
+      }
+
+      items.forEach(function(item) {
+        if(item.dataItem) {
+          item.dataItem.category = newCategory;
+        }
       });
 
-      return selectedItems.length > 0;
+      return items.length > 0;
     },
 
     getNewFileMenuOptions: function() {

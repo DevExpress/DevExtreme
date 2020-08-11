@@ -90,21 +90,6 @@
 			"endItemKey": "125",
 			"endConnectionPointIndex": 0
 		}, {
-			"key": "128",
-			"points": [{
-					"x": 4500,
-					"y": 9540
-				}, {
-					"x": 4500,
-					"y": 9540
-				}
-			],
-			"zIndex": 0,
-			"beginItemKey": "120",
-			"beginConnectionPointIndex": 2,
-			"endItemKey": "120",
-			"endConnectionPointIndex": 2
-		}, {
 			"key": "130",
 			"points": [{
 					"x": 5220,

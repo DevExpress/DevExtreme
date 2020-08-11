@@ -1,4 +1,4 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapModule, DxSelectBoxModule, DxTextBoxModule } from 'devextreme-angular';
@@ -23,11 +23,16 @@ export class AppComponent {
     zoomFactorValue: string;
     centerValue: string;
     viewportData: ViewportCoordinate[];
+    @ViewChild("vectorMap", { static: false }) map: DxVectorMapComponent
 
     constructor(service: Service) {
         this.centerValue = "0.000, 46.036";
         this.zoomFactorValue = "1.00";
         this.viewportData = service.getCoordinates();
+    }
+
+    onValueChanged(e){
+        this.map.instance.viewport(e.value);
     }
 
     zoomChanged(e) {

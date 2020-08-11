@@ -129,12 +129,13 @@ class App extends React.Component {
     return this.fileManagerRef.current.instance;
   }
 
-  onItemClick({ itemData }) {
+  onItemClick({ itemData, viewArea, fileSystemItem }) {
     let updated = false;
+
     if(itemData.extension) {
-      updated = this.createFile(itemData.extension);
+      updated = this.createFile(itemData.extension, fileSystemItem);
     } else if(itemData.category !== undefined) {
-      updated = this.updateCategory(itemData.category);
+      updated = this.updateCategory(itemData.category, fileSystemItem, viewArea);
     }
 
     if(updated) {
@@ -142,32 +143,50 @@ class App extends React.Component {
     }
   }
 
-  createFile(fileExtension) {
-    const currentDirectory = this.fileManager.getCurrentDirectory();
-
-    const newItem = {
+  createFile(fileExtension, directory) {
+    var newItem = {
       __KEY__: Date.now(),
       name: `New file${ fileExtension}`,
       isDirectory: false,
       size: 0
     };
 
-    if(currentDirectory.dataItem) {
-      currentDirectory.dataItem.items.push(newItem);
-    } else {
-      fileItems.push(newItem);
+    directory = directory || this.fileManager.instance.getCurrentDirectory();
+    if(!directory.isDirectory) {
+      return false;
     }
+
+    var array = null;
+    if(!directory.dataItem) {
+      array = fileItems;
+    }
+    else {
+      array = directory.dataItem.items;
+      if(!array) {
+        directory.dataItem.items = array = [];
+      }
+    }
+
+    array.push(newItem);
     return true;
   }
 
-  updateCategory(newCategory) {
-    const selectedItems = this.fileManager.getSelectedItems();
+  updateCategory(newCategory, directory, viewArea) {
+    var items = null;
 
-    selectedItems.forEach(function(selectedItem) {
-      selectedItem.dataItem.category = newCategory;
+    if(viewArea === 'navPane') {
+      items = [ directory ];
+    } else {
+      items = this.fileManager.instance.getSelectedItems();
+    }
+
+    items.forEach(function(item) {
+      if(item.dataItem) {
+        item.dataItem.category = newCategory;
+      }
     });
 
-    return selectedItems.length > 0;
+    return items.length > 0;
   }
 }
 

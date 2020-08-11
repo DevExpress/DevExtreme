@@ -21,6 +21,7 @@ $(function() {
             type: "employee",
             category: "employee",
             baseType: "rectangle",
+            title: "New Employee",
             defaultWidth: 1.5,
             defaultHeight: 1,
             toolboxWidthToHeightRatio: 2,
@@ -45,8 +46,8 @@ $(function() {
         customShapeToolboxTemplate: function(item, $container) {
             var employee = item.dataItem;
             var $content = $("<svg class='template'>" +
-                "<text class='template-name' x='50%' y='40%'>New</text>" +
-                "<text class='template-title' x='50%' y='70%'>Employee</text>" +
+                "<text x='50%' y='40%'>New</text>" +
+                "<text x='50%' y='70%'>Employee</text>" +
                 "</svg >");
             $container.append($content);
         },

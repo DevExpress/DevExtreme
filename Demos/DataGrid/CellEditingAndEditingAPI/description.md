@@ -1,1 +1,7 @@
-The **DataGrid** widget ships with &laquo;in-cell&raquo; editing capabilities. When used, all changes made within the **DataGrid** are transmitted to&nbsp;the data source immediately. In&nbsp;this example, you can switch a&nbsp;grid cell into edit mode by&nbsp;clicking&nbsp;it. In&nbsp;addition, you can also select multiple grid records and click the _&laquo;Delete Selected Records&raquo;_ button.
+Users can modify **DataGrid** data cell by cell. In this mode, only one cell can be in the edit state at a time. **DataGrid** saves changes immediately after the focus leaves cell.
+
+To enable the cell mode, do the following:
+- Set the **editing**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#mode) to *"cell*".
+- Assign **true** to the [editing](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/) object's [allowUpdating](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowUpdating), [allowAdding](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowAdding), and [allowDeleting](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowDeleting) options.
+
+This demo also shows how to delete selected records. Review the [onSelectionChanged](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onSelectionChanged) and `deleteRecords` functions for implementation details.

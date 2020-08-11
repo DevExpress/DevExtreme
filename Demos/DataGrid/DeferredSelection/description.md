@@ -1,1 +1,12 @@
-The **DataGrid** widget supports deferred row selection. When it&nbsp;is&nbsp;enabled, the **DataGrid** does not make requests for data until this is&nbsp;demanded from the API. In&nbsp;this demo, data is&nbsp;loaded when the jQuery Deferred object returned by&nbsp;the **getSelectedRowsData()** method is&nbsp;resolved. To&nbsp;specify initially selected rows, the **selectionFilter** option is&nbsp;used. Use deferred selection mode when working with a&nbsp;huge amount of&nbsp;remote data.
+If you enable deferred row selection, the grid does not request selected rows' data with every selection change. For example, if a user clicks the checkbox in the column header to select all the rows, the grid does not immediately fetch all data from the server. This is helpful in the following cases:
+
+- You process data on the server and do not want to load the selected rows' data.
+- You do process selected records on the client, but want to reduce the number of requests that are sent.
+
+This demo illustrates the second scenario. Deferred selection is enabled and the selected rows are only requested when you click the button below the grid.
+
+To enable deferred selection in your application, set the **selection**.[deferred](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/selection/#deferred) option to **true**.
+
+To specify the initially selected rows, use the [selectionFilter](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#selectionFilter) option. The widget updates this option's value at runtime and you can always access the applied filter. In this demo, the **selectionFilter** selects rows whose `Status` is `Completed`.
+
+To load the selected rows' data, call the [getSelectedRowsData()](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#getSelectedRowsData) method. In deferred selection mode, this method returns a Promise. You can access row data in its fulfillment handler. In this demo, the **getSelectedRowsData()** method gets data objects that are then used to calculate statistics for the selected tasks.

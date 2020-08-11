@@ -24,17 +24,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     function showAppointmentPopup() {
         var scheduler = $('#scheduler').dxScheduler('instance');
-        scheduler.showAppointmentPopup(createAppointmentPopupData());
-    }
-    
-    function createAppointmentPopupData() {
-        var scheduler = $('#scheduler').dxScheduler('instance');
-        var currentDate = scheduler.option('currentDate');
-        var cellDuration = scheduler.option('cellDuration');
-        
-        return {
-            startDate: new Date(currentDate),
-            endDate: new Date(currentDate.setMinutes(cellDuration))
-        };
+        scheduler.showAppointmentPopup();
     }
 });
