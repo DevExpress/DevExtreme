@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { PagerContentComponent } from '../content';
 import { Pager as PagerComponent } from '../pager';
+import { PageSizeLarge } from '../page_size/large';
+import { PageIndexSelector } from '../pages/page_index_selector';
 
 jest.mock('../../select_box', () => ({ __esModule: true, SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {
     it('render pager with defaults', () => {
-      const tree = shallow<PagerComponent>(<PagerComponent /> as any);
-      expect(tree.props()).toEqual({
+      const tree = mount<PagerComponent>(<PagerComponent />);
+      const pager = tree.childAt(0);
+      expect(pager.props()).toEqual({
         'rest-attributes': 'restAttributes',
         pagesNavigatorVisible: 'auto',
         visible: true,
@@ -32,6 +35,11 @@ describe('Pager', () => {
         showNavigationButtons: false,
         totalCount: 0,
       });
+      expect(tree.find(PagerContentComponent)).not.toBeNull();
+      expect(tree.find(PageSizeLarge).props().pageSizeChange)
+        .toEqual(tree.instance().pageSizeChange);
+      expect(tree.find(PageIndexSelector).props().pageIndexChange)
+        .toEqual(tree.instance().pageIndexChange);
     });
   });
 

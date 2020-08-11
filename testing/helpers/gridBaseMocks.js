@@ -1002,6 +1002,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             return instance;
         };
 
+        that._setOptionWithoutOptionChange = that.option;
+
         that._notifyOptionChanged = function() {};
 
         that._createActionByOption = function(optionName, config) {

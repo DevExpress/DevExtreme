@@ -47,7 +47,7 @@ export class PageSizeSelectorProps {
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageSizeChange!: (pageSize: number) => void; // commonUtils.noop
+  @Event() pageSizeChange?: (pageSize: number) => void;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
