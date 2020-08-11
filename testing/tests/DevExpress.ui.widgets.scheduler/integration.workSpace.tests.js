@@ -177,7 +177,7 @@ QUnit.test('Double click on workspace cell should call scheduler.showAppointment
         assert.ok(spy.calledOnce, 'showAppointmentPopup is called');
         assert.deepEqual(spy.getCall(0).args[0], {
             startDate: new Date(2015, 1, 10, 0, 0),
-            endDate: new Date(2015, 1, 11, 0, 0),
+            endDate: new Date(2015, 1, 10, 0, 0),
             allDay: true
         }, 'showAppointmentPopup has a right arguments');
         assert.ok(spy.calledOn(this.instance), 'showAppointmentPopup has a right context');

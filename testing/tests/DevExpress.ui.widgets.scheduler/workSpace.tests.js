@@ -860,7 +860,7 @@ QUnit.testStart(function() {
 
         const cellData = {
             allDay: true,
-            endDate: new Date(2015, 5, 30, 0),
+            endDate: new Date(2015, 5, 29, 0),
             startDate: new Date(2015, 5, 29, 0)
         };
 
@@ -3736,7 +3736,7 @@ QUnit.module('Renovated Render', {
                 groupedData: [{
                     allDayPanel: [{
                         startDate: new Date(2020, 6, 29),
-                        endDate: new Date(2020, 6, 30),
+                        endDate: new Date(2020, 6, 29),
                         allDay: true,
                     }],
                     dateTable: [[{

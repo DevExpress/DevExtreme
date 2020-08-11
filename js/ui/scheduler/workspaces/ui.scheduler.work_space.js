@@ -1278,11 +1278,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _createCellClickAction() {
-        const that = this;
         this._cellClickAction = this._createActionByOption('onCellClick', {
-            afterExecute(e) {
-                that._moveToClosestNonStub(e.args[0].event);
-            }
+            afterExecute: (e) => this._cellClickHandler(e.args[0].event)
         });
     }
 
@@ -1290,7 +1287,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
 
-    _moveToClosestNonStub(e) {
+    _cellClickHandler(e) {
         const $target = $(e.target);
 
         if(this._showPopup && this._hasFocusClass($target)) {
@@ -1559,7 +1556,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const data = {
             startDate: startDate,
-            endDate: new Date(startDate.getTime() + DAY_MS),
+            endDate: startDate,
+            // endDate: new Date(startDate.getTime() + DAY_MS - 1),
             allDay: true
         };
 
