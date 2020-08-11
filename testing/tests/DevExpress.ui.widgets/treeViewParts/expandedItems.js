@@ -849,7 +849,7 @@ module('Expanded items', {
                 if(result.dataSourceOption === 'createChildren') {
                     const createChildFunction = (parent) => {
                         const parentId = parent === null ? result.rootValue : parent.itemData.id;
-                        return items.filter(function(item) { return item.parentId === parentId; });
+                        return JSON.parse(JSON.stringify(items.filter(function(item) { return item.parentId === parentId; })));
                     };
                     result.createChildren = createChildFunction;
                 } else {
