@@ -83,7 +83,7 @@ export default class ViewDataGenerator {
         const groupedData = [];
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
-            const viewCellsData = this._generateViewCellsData(options, rowCount);
+            const viewCellsData = this._generateViewCellsData(options, rowCount, 0, rowCount * groupIndex);
             const allDayPanelData = this._generateAllDayPanelData(groupIndex, rowCount, cellCount);
             groupedData.push({
                 dateTable: viewCellsData,

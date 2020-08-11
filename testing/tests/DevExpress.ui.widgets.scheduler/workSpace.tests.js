@@ -67,7 +67,8 @@ const stubInvokeMethod = function(instance, options) {
 };
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
+    // $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
+    $('body').append('<div id="scheduler-work-space"></div>');
 });
 
 (function() {
@@ -3731,7 +3732,7 @@ QUnit.module('Renovated Render', {
     QUnit.module('Generate View Data', () => {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
-            const result = this.instance._generateViewData();
+            const result = this.instance.viewDataGenerator.generate();
             const expected = {
                 groupedData: [{
                     allDayPanel: [{
@@ -3749,7 +3750,8 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                    }]]
+                    }]],
+                    isGroupedAllDayPanel: false
                 }],
             };
 
@@ -3770,7 +3772,7 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            const result = this.instance._generateViewData();
+            const result = this.instance.viewDataGenerator.generate();
             const expected = {
                 groupedData: [{
                     dateTable: [[{
@@ -3823,7 +3825,7 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            const result = this.instance._generateViewData();
+            const result = this.instance.viewDataGenerator.generate();
             const expected = {
                 groupedData: [{
                     dateTable: [[{
@@ -3914,7 +3916,7 @@ QUnit.module('Renovated Render', {
                     ]
                 }
             ]);
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(1);
+            const $cell = this.instance.$element().find(`.${CELL_CLASS}`).eq(1);
             const result = this.instance.getCellData($cell);
             const expected = {
                 startDate: new Date(2020, 6, 29, 0, 0),
