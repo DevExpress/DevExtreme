@@ -325,7 +325,7 @@ QUnit.test('Recurring appointments should be rendered correctly with a custom ti
         const expectedLeftPosition = $element.find('.dx-scheduler-time-panel').outerWidth();
         const apptPosition = $appt.position();
 
-        assert.roughEqual(apptPosition.top, 0, 2.001, 'Appts top is OK');
+        assert.roughEqual(apptPosition.top, 200, 2.001, 'Appts top is OK');
         assert.roughEqual(apptPosition.left, expectedLeftPosition, 2.001, 'Appts left is OK');
 
     } finally {
