@@ -17,7 +17,15 @@ import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { touch } from '../../core/utils/support';
-import { isDefined, isString, isObject, isFunction, isEmptyObject, isDeferred, isPromise } from '../../core/utils/type';
+import {
+    isDefined,
+    isString,
+    isObject,
+    isFunction,
+    isEmptyObject,
+    isDeferred,
+    isPromise
+} from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 import DataHelperMixin from '../../data_helper';
 import { triggerResizeEvent } from '../../events/visibility_change';
@@ -39,7 +47,8 @@ import SchedulerHeader from './ui.scheduler.header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
-import { getCorrectedDateByDaylightOffsets,
+import {
+    getCorrectedDateByDaylightOffsets,
     correctRecurrenceExceptionByTimezone,
     getTimezoneOffsetChangeInMs,
     calculateTimezoneByValue
