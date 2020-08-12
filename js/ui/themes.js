@@ -59,7 +59,7 @@ function readThemeMarker() {
 // FYI
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
-function waitForThemeLoad(themeName) {
+export function waitForThemeLoad(themeName) {
     let waitStartTime;
     let timerId;
     let intervalCleared = true;
@@ -204,7 +204,7 @@ function initContext(newContext) {
     context = newContext;
 }
 
-function init(options) {
+export function init(options) {
     options = options || {};
     initContext(options.context || domAdapter.getDocument());
 
@@ -214,7 +214,7 @@ function init(options) {
     current(options);
 }
 
-function current(options) {
+export function current(options) {
     if(!arguments.length) {
         currentThemeName = currentThemeName || readThemeMarker();
         return currentThemeName;
@@ -285,7 +285,7 @@ function getCssClasses(themeName) {
 }
 
 let themeClasses;
-function attachCssClasses(element, themeName) {
+export function attachCssClasses(element, themeName) {
     themeClasses = getCssClasses(themeName).join(' ');
     $(element).addClass(themeClasses);
 
@@ -309,7 +309,7 @@ function attachCssClasses(element, themeName) {
     activateHairlines();
 }
 
-function detachCssClasses(element) {
+export function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
