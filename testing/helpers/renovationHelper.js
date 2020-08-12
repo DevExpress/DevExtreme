@@ -6,7 +6,7 @@ import rButton from 'renovation/ui/button.j';
 
 export const isRenovation = () => rButton === Button;
 
-export const createModuleConfig = (oldWidget, renovatedWidget, config) => {
+export const createModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
     const widgetName = getName(oldWidget);
     if(isRenovation()) {
         return {
@@ -20,6 +20,13 @@ export const createModuleConfig = (oldWidget, renovatedWidget, config) => {
                         return res;
                     },
                     option: function() {
+                        let res;
+                        act(() => {
+                            res = this.callBase.apply(this, arguments);
+                        });
+                        return res;
+                    },
+                    focus: function() {
                         let res;
                         act(() => {
                             res = this.callBase.apply(this, arguments);
