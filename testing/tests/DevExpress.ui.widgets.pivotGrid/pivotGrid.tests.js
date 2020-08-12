@@ -5969,11 +5969,34 @@ QUnit.module('Vertical headers', {
         assert.strictEqual($lastCells.get(3).colSpan, 2);
     });
 
-    [true, false].forEach(remoteOperations => {
-        QUnit.test(`dataSource.remoteOperations=${remoteOperations}, store.load = returns empty array`, function(assert) {
+    [null, undefined, []].forEach(loadResult => {
+        [true, false].forEach(remoteOperations => {
+            QUnit.test(`dataSource.remoteOperations=${remoteOperations}, store.load = returns ${JSON.stringify(loadResult)}`, function(assert) {
+                const grid = $('#pivotGrid').dxPivotGrid({
+                    dataSource: {
+                        remoteOperations: remoteOperations,
+                        fields: [
+                            { area: 'row' },
+                            { area: 'column' },
+                            { area: 'data' }
+                        ],
+                        load: function() {
+                            const d = $.Deferred();
+                            d.resolve(loadResult);
+                            return d.promise();
+                        }
+                    }
+                }).dxPivotGrid('instance');
+                this.clock.tick();
+
+                assert.deepEqual($(grid._dataArea.element()).text(), 'No data');
+            });
+        });
+
+        QUnit.test(`dataSource.remoteOperations=true, store.load = returns returns ${JSON.stringify(loadResult)} with summary`, function(assert) {
             const grid = $('#pivotGrid').dxPivotGrid({
                 dataSource: {
-                    remoteOperations: remoteOperations,
+                    remoteOperations: true,
                     fields: [
                         { area: 'row' },
                         { area: 'column' },
@@ -5981,36 +6004,15 @@ QUnit.module('Vertical headers', {
                     ],
                     load: function() {
                         const d = $.Deferred();
-                        d.resolve([]);
+                        d.resolve(loadResult, { summary: [10] });
                         return d.promise();
                     }
                 }
             }).dxPivotGrid('instance');
             this.clock.tick();
 
-            assert.deepEqual($(grid._dataArea.element()).text(), 'No data');
+            assert.deepEqual($(grid._dataArea.element()).text(), '10');
         });
-    });
-
-    QUnit.test('dataSource.remoteOperations=true, store.load = returns empty array with summary', function(assert) {
-        const grid = $('#pivotGrid').dxPivotGrid({
-            dataSource: {
-                remoteOperations: true,
-                fields: [
-                    { area: 'row' },
-                    { area: 'column' },
-                    { area: 'data' }
-                ],
-                load: function() {
-                    const d = $.Deferred();
-                    d.resolve([], { summary: [10] });
-                    return d.promise();
-                }
-            }
-        }).dxPivotGrid('instance');
-        this.clock.tick();
-
-        assert.deepEqual($(grid._dataArea.element()).text(), '10');
     });
 });
 
