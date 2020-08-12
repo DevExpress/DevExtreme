@@ -26,7 +26,7 @@ let $activeThemeLink;
 let knownThemes;
 let currentThemeName;
 let pendingThemeName;
-const defaultTimeout = 15000;
+let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
@@ -325,29 +325,29 @@ function isTheme(themeRegExp, themeName) {
     return new RegExp(themeRegExp).test(themeName);
 }
 
-function isMaterial(themeName) {
+export function isMaterial(themeName) {
     return isTheme('material', themeName);
 }
 
-function isIos7(themeName) {
+export function isIos7(themeName) {
     return isTheme('ios7', themeName);
 }
 
-function isGeneric(themeName) {
+export function isGeneric(themeName) {
     return isTheme('generic', themeName);
 }
 
-function isDark(themeName) {
+export function isDark(themeName) {
     return isTheme('dark', themeName);
 }
 
-function checkThemeDeprecation() {
+export function checkThemeDeprecation() {
     if(isIos7()) {
         errors.log('W0010', 'The \'ios7\' theme', '19.1', 'Use the \'generic\' theme instead.');
     }
 }
 
-function isWebFontLoaded(text, fontWeight) {
+export function isWebFontLoaded(text, fontWeight) {
     const testedFont = 'Roboto, RobotoFallback, Arial';
     const etalonFont = 'Arial';
 
@@ -374,7 +374,7 @@ function isWebFontLoaded(text, fontWeight) {
     return etalonFontWidth !== testedFontWidth;
 }
 
-function waitWebFont(text, fontWeight) {
+export function waitWebFont(text, fontWeight) {
     const interval = 15;
     const timeout = 2000;
 
@@ -428,27 +428,27 @@ devices.changed.add(function() {
     init({ _autoInit: true });
 });
 
-exports.current = current;
+export {
+    themeReady as ready,
+};
 
-exports.ready = themeReady;
-
-exports.init = init;
-
-exports.attachCssClasses = attachCssClasses;
-exports.detachCssClasses = detachCssClasses;
-
-exports.waitForThemeLoad = waitForThemeLoad;
-exports.isMaterial = isMaterial;
-exports.isIos7 = isIos7;
-exports.isGeneric = isGeneric;
-exports.isDark = isDark;
-exports.isWebFontLoaded = isWebFontLoaded;
-exports.waitWebFont = waitWebFont;
-
-
-exports.resetTheme = function() {
+export function resetTheme() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
-};
+    inited = false;
+    themeInitializedCallback.add(() => inited = true);
+}
+
+export function initialized(callback) {
+    if(inited) {
+        callback();
+    } else {
+        themeInitializedCallback.add(callback);
+    }
+}
+
+export function setDefaultTimeout(timeout) {
+    defaultTimeout = timeout;
+}
 
