@@ -40,13 +40,15 @@ gulp.task('ts-bundle', gulp.series(
             .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
             .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
             .pipe(footer('\nexport default DevExpress;'))
-            .pipe(gulp.dest(PACKAGE_BUNDLES_DIR));
+            .pipe(gulp.dest(PACKAGE_BUNDLES_DIR))
+            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles'));
     },
 
     function writeAngularHack() {
         return file('dx.all.js', '// This file is required to compile devextreme-angular', { src: true })
             .pipe(headerPipes.starLicense())
-            .pipe(gulp.dest(PACKAGE_BUNDLES_DIR));
+            .pipe(gulp.dest(PACKAGE_BUNDLES_DIR))
+            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles'));
     }
 ));
 
@@ -98,7 +100,8 @@ gulp.task('ts-modules', function generateModules() {
         .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
 
         .pipe(headerPipes.starLicense())
-        .pipe(gulp.dest(PACKAGE_DIR));
+        .pipe(gulp.dest(PACKAGE_DIR))
+        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation'));
 });
 
 gulp.task('ts-sources', gulp.series('ts-modules', 'ts-bundle'));

@@ -252,6 +252,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         this.clock.tick(800);
 
         let itemData = fileManager.option('contextMenu.items')[0];
+        const targetFileSystemItem = fileManager.option('fileSystemProvider[3]');
 
         assert.strictEqual(spy.callCount, 1, 'event raised');
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
@@ -260,6 +261,8 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
+        assert.strictEqual(spy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
 
         $items.eq(1).trigger('dxclick');
         this.clock.tick(800);
@@ -273,6 +276,8 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.strictEqual(spy.args[1][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
+        assert.strictEqual(spy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
     });
 
     test('Select all - parent directory ignored', function(assert) {

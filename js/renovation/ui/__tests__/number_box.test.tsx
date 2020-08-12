@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
 import DxNumberBox from '../../../ui/number_box';
 import { viewFunction as NumberBoxView, NumberBoxProps, NumberBox } from '../number_box';
@@ -17,13 +17,13 @@ describe('NumberBox', () => {
       const props = {
         props: new NumberBoxProps(),
         widgetRef,
-        restAttributes: { restAttributes: true },
+        restAttributes: { 'rest-attributes': 'true' },
       } as any as Partial<NumberBox>;
       const tree = mount<typeof NumberBoxView>(<NumberBoxView {...props as any} /> as any);
 
       expect(tree.find('div').props()).toEqual({
         className: '',
-        restAttributes: true,
+        'rest-attributes': 'true',
       });
       expect(tree.find('div').instance()).toBe(widgetRef.current);
     });

@@ -14,6 +14,47 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
 
+const simulateIMEInput = function(eventsData) {
+    this.$input.trigger($.Event('keydown', {
+        key: 'Process',
+        code: eventsData.keyDownCode,
+        originalEvent: $.Event('keydown', {
+            key: 'Process',
+            code: eventsData.keyDownCode
+        })
+    }));
+
+    this.$input.trigger($.Event('compositionstart', {
+        type: 'compositionstart',
+        originalEvent: $.Event('compositionstart', {
+            type: 'compositionstart'
+        })
+    }));
+
+    this.$input.trigger($.Event('input', {
+        type: 'input',
+        originalEvent: $.Event('input', {
+            inputType: 'insertCompositionText',
+            isComposing: true,
+            data: eventsData.inputData // for ff
+        })
+    }));
+
+    this.$input.trigger($.Event('keyup', {
+        key: 'Process',
+        code: eventsData.keyDownCode,
+        originalEvent: $.Event('keyup', {
+            key: 'Process',
+            code: eventsData.keyDownCode,
+        })
+    }));
+
+    this.$input.trigger($.Event('compositionend', {
+        originalEvent: $.Event('compositionend', {
+            data: eventsData.compositionEndData // for msie
+        })
+    }));
+};
 
 const setupModule = {
     beforeEach: function() {
@@ -884,6 +925,58 @@ module('Search', setupModule, () => {
         } catch(e) {
             assert.notOk(true, 'Infinite loop detected');
         }
+    });
+
+    test('Typing an non-digital IME composition should not ignore mask rules (T905190)', function(assert) {
+        this.instance.option('displayFormat', 'yyyy/MM/dd');
+
+        this.keyboard.caret({ start: 0, end: 4 });
+
+        this.$input.val('f/10/10');
+
+        const eventsData = {
+            keyDownCode: 'KeyF',
+            inputData: 'f',
+            compositionEndData: '分'
+        };
+
+        simulateIMEInput.call(this, eventsData);
+
+        assert.strictEqual(this.$input.val(), '2012/10/10', 'year was not changed');
+    });
+
+
+    test('Typing an digital IME composition should not ignore mask rules (T905190)', function(assert) {
+        this.instance.option('displayFormat', 'yyyy/MM/dd');
+
+        this.keyboard.caret({ start: 0, end: 4 });
+
+        const eventsData = {
+            keyDownCode: 'Digit5',
+            inputData: '5',
+            compositionEndData: '5'
+        };
+
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+        simulateIMEInput.call(this, eventsData);
+
+        assert.strictEqual(this.$input.val(), '5555/05/05', 'year was changed');
+    });
+
+
+    test('Pasting incorrect value to the date part should not ignore mask rules', function(assert) {
+        this.instance.option('displayFormat', 'yyyy/MM/dd');
+
+        this.keyboard
+            .caret({ start: 0, end: 4 })
+            .paste('555555')
+            .change();
+
+        assert.strictEqual(this.$input.val(), '2012/10/10', 'year was not changed');
     });
 });
 

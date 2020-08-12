@@ -682,6 +682,13 @@ export interface GridBaseEditing {
      */
     confirmDelete?: boolean;
     /**
+    * @docid GridBaseOptions.editing.editRowKey
+    * @type any
+    * @default null
+    * @public
+    */
+    editRowKey?: any;
+    /**
      * @docid GridBaseOptions.editing.form
      * @type dxFormOptions
      * @prevFileNamespace DevExpress.ui

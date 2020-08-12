@@ -4,27 +4,12 @@
 
 // adduse
 
-$form-field-item-color: null !default;
+$form-field-item-color: lighten($base-label-color, 46%) !default;
 
 /**
 * $name 20. Group border color
 * $type color
 */
-$form-group-border-color: null !default;
-$form-field-required-color: null !default;
-$form-field-mark-color: null !default;
-
-@if $mode == "light" {
-  $form-field-item-color: lighten($base-label-color, 46%) !default;
-  $form-group-border-color: $base-border-color !default;
-  $form-field-required-color: $form-field-item-color !default;
-  $form-field-mark-color: $form-field-item-color !default;
-}
-
-@if $mode == "dark" {
-  $form-field-item-color: lighten($base-label-color, 46%) !default;
-  $form-group-border-color: $base-border-color !default;
-  $form-field-required-color: $form-field-item-color !default;
-  $form-field-mark-color: $form-field-item-color !default;
-}
-
+$form-group-border-color: $base-border-color !default;
+$form-field-required-color: $form-field-item-color !default;
+$form-field-mark-color: $form-field-item-color !default;

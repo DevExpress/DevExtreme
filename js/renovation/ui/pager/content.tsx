@@ -1,7 +1,7 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event, ForwardRef,
+  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
@@ -81,10 +81,6 @@ export type TwoWayProps = {
 
 @ComponentBindings()
 export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
-  @Event() pageIndexChange!: (pageIndex: number) => void;
-
-  @Event() pageSizeChange!: (pageSize: number) => void;
-
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;

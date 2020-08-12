@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { h } from 'preact';
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
@@ -26,14 +24,13 @@ interface ListItemProps {
 
 export const viewFunction = (viewModel: AppointmentList) => (
   <List
-    itemTemplate={({ item, index, container }: ItemTemplateProps) => (
+    itemTemplate={({ item, index }: ItemTemplateProps): JSX.Element => (
       <TooltipItemLayout
         item={item}
         index={index}
         onDelete={viewModel.props.checkAndDeleteAppointment}
         onHide={viewModel.props.onHide}
         itemContentTemplate={viewModel.props.itemContentTemplate}
-        container={container}
         getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
         singleAppointment={viewModel.props.getSingleAppointmentData!(
           item.data, viewModel.props.target!,

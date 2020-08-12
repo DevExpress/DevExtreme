@@ -138,7 +138,10 @@ class DiagramToolbar extends DiagramPanel {
             options: {
                 dataSource: items,
                 displayExpr: displayExpr || 'text',
-                valueExpr: valueExpr || 'value'
+                valueExpr: valueExpr || 'value',
+                dropDownOptions: {
+                    container: this.option('container')
+                }
             }
         });
 
@@ -211,6 +214,9 @@ class DiagramToolbar extends DiagramPanel {
         }
         options = extend(true, options, {
             options: {
+                dropDownOptions: {
+                    container: this.option('container')
+                },
                 onOpened: () => {
                     if(this.option('isMobileView')) {
                         $('body').addClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
@@ -427,6 +433,7 @@ class DiagramToolbar extends DiagramPanel {
             case 'onCustomCommand':
                 this._createOnCustomCommand();
                 break;
+            case 'container':
             case 'commands':
                 this._invalidate();
                 break;

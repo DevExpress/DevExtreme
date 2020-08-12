@@ -50,35 +50,40 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     }
 
-    _getItemPosition(item) {
-        const allDay = this.isAllDay(item);
-        const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
-        const appointmentStartDate = this.startDate(item, true);
-        const appointmentEndDate = this.endDate(item);
+    _getItemPosition(appointment) {
+        const adapter = this.instance.createAppointmentAdapter(appointment);
+
+        const allDay = this.isAllDay(appointment);
+        const isRecurring = !!adapter.recurrenceRule;
+
+        const appointmentStartDate = adapter.calculateStartDate('toGrid');
+        const appointmentEndDate = adapter.calculateEndDate('toGrid');
 
         const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
-            return super._getItemPosition(item);
+            return super._getItemPosition(appointment);
         }
 
-        const position = this._getAppointmentCoordinates(item);
+        const settings = this._getAppointmentCoordinates(appointment);
         let result = [];
 
-        for(let j = 0; j < position.length; j++) {
-            const height = this.calculateAppointmentHeight(item, position[j], isRecurring);
-            const width = this.calculateAppointmentWidth(item, position[j], isRecurring);
+        for(let j = 0; j < settings.length; j++) {
+            const currentSetting = settings[j];
+            const height = this.calculateAppointmentHeight(appointment, currentSetting);
+            const width = this.calculateAppointmentWidth(appointment, currentSetting);
+
             let resultHeight = height;
             let appointmentReduced = null;
             let multiDaysAppointmentParts = [];
-            const currentMaxAllowedPosition = position[j].vMax;
+            const currentMaxAllowedPosition = currentSetting.vMax;
 
-            if(this._isMultiDayAppointment(position[j], height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
-                if(dateUtils.sameDate(appointmentStartDate, position[j].startDate) || isRecurring) {
+            if(this._isMultiDayAppointment(currentSetting, height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
+                if(dateUtils.sameDate(appointmentStartDate, currentSetting.info.appointment.startDate) || isRecurring) {
                     appointmentReduced = 'head';
 
                     resultHeight = this._reduceMultiDayAppointment(height, {
-                        top: position[j].top,
+                        top: currentSetting.top,
                         bottom: currentMaxAllowedPosition
                     });
 
@@ -86,23 +91,20 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                         sourceAppointmentHeight: height,
                         reducedHeight: resultHeight,
                         width: width
-                    }, position[j]);
+                    }, currentSetting);
                 } else {
                     appointmentReduced = 'tail';
                 }
             }
 
-            extend(position[j], {
+            extend(currentSetting, {
                 height: resultHeight,
                 width: width,
                 allDay: allDay,
-                originalAppointmentStartDate: appointmentStartDate,
-                originalAppointmentEndDate: appointmentEndDate,
-                endDate: this.endDate(item, position[j], isRecurring),
                 appointmentReduced: appointmentReduced
             });
 
-            result = this._getAppointmentPartsPosition(multiDaysAppointmentParts, position[j], result);
+            result = this._getAppointmentPartsPosition(multiDaysAppointmentParts, currentSetting, result);
         }
 
         return result;
@@ -233,16 +235,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return this.getDefaultCellWidth() - this._getAppointmentDefaultOffset();
     }
 
-    calculateAppointmentWidth(appointment, position, isRecurring) {
+    calculateAppointmentWidth(appointment, position) {
         if(!this.isAllDay(appointment)) {
             return 0;
         }
 
-        let startDate = new Date(this.startDate(appointment, false, position));
-        const endDate = this.endDate(appointment, position, isRecurring);
+        const startDate = dateUtils.trimTime(position.info.appointment.startDate);
+        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
-
-        startDate = dateUtils.trimTime(startDate);
         const durationInHours = (endDate.getTime() - startDate.getTime()) / toMs('hour');
 
         let width = Math.ceil(durationInHours / 24) * cellWidth;
@@ -251,15 +251,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return width;
     }
 
-    calculateAppointmentHeight(appointment, position, isRecurring) {
-        const endDate = this.endDate(appointment, position, isRecurring);
-        const startDate = this.startDate(appointment, false, position);
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
-
+    calculateAppointmentHeight(appointment, position) {
         if(this.isAllDay(appointment)) {
             return 0;
         }
 
+        const startDate = position.info.appointment.startDate;
+        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
+        const allDay = this.instance.fire('getField', 'allDay', appointment);
         const fullDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
         const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / toMs('minute');
 

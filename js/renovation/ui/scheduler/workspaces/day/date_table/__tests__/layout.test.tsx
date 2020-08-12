@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { DayDateTableCell } from '../cell';
@@ -25,9 +25,9 @@ describe('DayDateTableLayout', () => {
     }) as any);
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

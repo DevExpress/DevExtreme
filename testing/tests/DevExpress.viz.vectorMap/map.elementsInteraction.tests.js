@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const noop = require('core/utils/common').noop;
 const renderer = require('core/renderer');
 const commons = require('./vectorMapParts/commons.js');
 const mapLayerModule = require('viz/vector_map/map_layer');
@@ -10,6 +11,7 @@ QUnit.module('Map - projection events', $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
+        this.tracker.on = sinon.stub().returns(noop);
     }
 }));
 
@@ -50,6 +52,7 @@ const environmentForSize = $.extend({}, commons.environment, {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
         vizMocks.stubIncidentOccurredCreation();
+        this.tracker.on = sinon.stub().returns(noop);
     },
 
     afterEach: function() {

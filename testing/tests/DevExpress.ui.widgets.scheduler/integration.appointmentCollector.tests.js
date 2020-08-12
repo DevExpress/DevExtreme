@@ -8,6 +8,7 @@ import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
+import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
 
 import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
@@ -91,6 +92,14 @@ QUnit.module('Integration: Appointments Collector Base Tests', {
             },
             _getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
+            },
+            createAppointmentAdapter(date) {
+                const schedulerMock = {
+                    fire: (methodName, fieldName, appointment) => {
+                        return appointment[fieldName];
+                    }
+                };
+                return new AppointmentAdapter(schedulerMock, date);
             }
         }))($('<div>'));
 

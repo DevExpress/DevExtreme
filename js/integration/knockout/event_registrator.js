@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
+// eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import { isPlainObject } from '../../core/utils/type';
 import eventRegistratorCallbacks from '../../events/core/event_registrator_callbacks';

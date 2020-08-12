@@ -295,6 +295,20 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         const content = $container.find('.dx-htmleditor-content').html();
         assert.strictEqual(content, listMarkup);
     });
+
+    test('it should keep value with nested lists if the widget has transcluded content', function(assert) {
+        const $container = $('#htmlEditor');
+        $container.html('123');
+        const expected = '<ol><li>vehicles<ol><li>cars<ol><li>electric cars</li></ol></li><li>ships<ol><li>sailing ships</li></ol></li><li>planes<ol><li>propeller air crafts</li><li>jet</li></ol></li></ol></li></ol>';
+
+        const instance = $container
+            .dxHtmlEditor({ 'value': expected })
+            .dxHtmlEditor('instance');
+
+        this.clock.tick();
+
+        assert.strictEqual(instance.option('value'), expected);
+    });
 });
 
 

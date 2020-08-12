@@ -5,6 +5,7 @@ import { EventsStrategy } from '../../core/events_strategy';
 import ValidationEngine from '../../ui/validation_engine';
 import { Deferred } from '../../core/utils/deferred';
 import Guid from '../../core/guid';
+// eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 
 if(ko) {

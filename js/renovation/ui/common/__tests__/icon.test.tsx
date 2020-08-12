@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { Icon } from '../icon';
 

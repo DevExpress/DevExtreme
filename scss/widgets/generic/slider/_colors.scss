@@ -9,154 +9,91 @@
 * $name 10. Slider bar background color
 * $type color
 */
-$slider-bar-bg: null !default;
+$slider-bar-bg: $base-border-color !default;
 
 /**
 * $name 30. Selected range background color
 * $type color
 */
-$slider-range-bg: null !default;
-$slider-range-border-color: null !default;
+$slider-range-bg: $base-accent !default;
+$slider-range-border-color: $slider-range-bg !default;
 $slider-handle-bg: null !default;
 $slider-handle-border-color: null !default;
 $slider-handle-active-bg: null !default;
 $slider-handle-hover-bg: null !default;
 $slider-handle-focused-bg: null !default;
 $slider-invalid-handle-accent-bg: null !default;
-$slider-handle-border-radius: null !default;
+$slider-handle-border-radius: $base-border-radius - 1px !default;
 
 @if $color == "carmine" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "contrast" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
   $slider-handle-bg: $base-inverted-bg !default;
   $slider-handle-border-color: extcolor.difference(#fff, $base-border-color) !default;
   $slider-handle-active-bg: $base-inverted-bg !default;
   $slider-handle-hover-bg: $slider-range-bg !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "dark" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "darkmoon" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "darkviolet" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "greenmist" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "light" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "softblue" {
-
-  $slider-bar-bg: $base-border-color !default;
-
-  $slider-range-bg: $base-accent !default;
-  $slider-range-border-color: $slider-range-bg !default;
-
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
   $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
   $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
-
-  $slider-handle-border-radius: $base-border-radius - 1px !default;
 }
 

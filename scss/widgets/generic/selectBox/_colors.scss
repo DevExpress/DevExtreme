@@ -8,45 +8,4 @@
 * $name 10. Item background color
 * $type color
 */
-$selectbox-list-bg: null !default;
-
-@if $color == "carmine" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "contrast" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "dark" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "darkmoon" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "darkviolet" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "greenmist" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "light" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "softblue" {
-
-  $selectbox-list-bg: $base-bg !default;
-}
-
+$selectbox-list-bg: $base-bg !default;

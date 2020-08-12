@@ -70,8 +70,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 if(this.option('allowDelete')) {
                     e.preventDefault();
                     const data = this._getItemData(e.target);
-                    this.notifyObserver('deleteAppointment', { data: data, target: e.target });
-                    this.notifyObserver('hideAppointmentTooltip');
+                    this.notifyObserver('onDeleteButtonPress', { data: data, target: e.target });
                 }
             }).bind(this),
             tab: tabHandler
@@ -330,7 +329,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const formatText = this.invoke(
             'getTextAndFormatDate',
             model.appointmentData,
-            model.appointmentData.settings || model.targetedAppointmentData || {},
+            model.appointmentData.settings || model.targetedAppointmentData, // TODO:
             'TIME'
         );
 
@@ -494,6 +493,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
         if(settings.virtual) {
             this._processVirtualAppointment(settings, $appointment, data, deferredColor);
         } else {
+            const { info } = settings;
+
             this._createComponent($appointment, Appointment, {
                 observer: this.option('observer'),
                 data: data,
@@ -504,7 +505,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
-                startDate: new Date(settings.startDate),
+                startDate: new Date(info?.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(data, settings)
@@ -572,23 +573,25 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _resizeEndHandler: function(e) {
+        const scheduler = this.option('observer');
         const $element = $(e.element);
-        const itemData = this._getItemData($element);
-        const startDate = this.invoke('getStartDate', itemData, true);
-        const endDate = this.invoke('getEndDate', itemData, true);
+
+        const { info } = $element.data('dxAppointmentSettings');
+        const sourceAppointment = this._getItemData($element);
+
+        const modifiedAppointmentAdapter = scheduler.createAppointmentAdapter(sourceAppointment).clone();
+
+        const startDate = modifiedAppointmentAdapter.allDay ? info.sourceAppointment.startDate : info.appointment.startDate;
+        const endDate = modifiedAppointmentAdapter.allDay ? info.sourceAppointment.endDate : info.appointment.endDate;
 
         const dateRange = this._getDateRange(e, startDate, endDate);
 
-        const updatedDates = {};
-
-        this.invoke('setField', 'startDate', updatedDates, new Date(dateRange[0]));
-        this.invoke('setField', 'endDate', updatedDates, new Date(dateRange[1]));
-
-        const data = extend({}, itemData, updatedDates);
+        modifiedAppointmentAdapter.startDate = new Date(dateRange[0]);
+        modifiedAppointmentAdapter.endDate = new Date(dateRange[1]);
 
         this.notifyObserver('updateAppointmentAfterResize', {
-            target: itemData,
-            data: data,
+            target: sourceAppointment,
+            data: modifiedAppointmentAdapter.clone({ pathTimeZone: 'fromGrid' }).source(),
             $appointment: $element
         });
     },

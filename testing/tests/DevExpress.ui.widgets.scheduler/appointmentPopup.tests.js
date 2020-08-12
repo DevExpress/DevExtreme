@@ -138,6 +138,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         assert.ok(form.getEditor('repeat').option('value'), 'repeat checkbox should be checked');
         assert.ok(form.option('items')[1].visible, 'recurrence form should be visible');
 
+        scheduler.instance.getAppointmentPopup().hide();
         scheduler.instance.showAppointmentPopup();
 
         assert.notOk(form.getEditor('repeat').option('value'), 'repeat checkbox should be unchecked if empty form');

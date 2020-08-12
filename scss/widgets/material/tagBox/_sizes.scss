@@ -13,6 +13,7 @@ $material-tagbox-remove-button-right: 4px;
 $material-tagbox-remove-button-width: 24px;
 $material-tagbox-select-all-padding-bottom: 12px;
 $material-tagbox-select-all-margin-bottom: 3px;
+$tagbox-tag-border-radius: 16px !default;
 
 @if $size == "default" {
   $material-tagbox-tag-content-padding-left: 12px;
