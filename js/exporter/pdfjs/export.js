@@ -99,7 +99,14 @@ export const Export = {
                     this.addRow(autoTableOptions, rowType, row);
                 }
 
+                jsPDFDocument.setFontStyle = function(fontStyle) {
+                    const fontName = jsPDFDocument.getFont().fontStyle;
+                    jsPDFDocument.setFont(fontName, fontStyle);
+                };
+
                 jsPDFDocument.autoTable(autoTableOptions);
+
+                delete jsPDFDocument.setFontStyle;
 
                 resolve(autoTableOptions);
             }).always(() => {

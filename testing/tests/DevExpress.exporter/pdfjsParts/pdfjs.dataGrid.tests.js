@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'jspdf';
+import jsPDF from 'jspdf';
 import { applyPlugin } from 'jspdf-autotable';
 
 import { PdfJSDataGridTestHelper } from './PdfJSTestHelper.js';
@@ -22,9 +22,7 @@ let helper;
 
 const moduleConfig = {
     beforeEach: function() {
-        // eslint-disable-next-line no-undef
         applyPlugin(jsPDF);
-        // eslint-disable-next-line no-undef
         this.jsPDFDocument = new jsPDF('p', 'pt', 'a4');
         this.customizeCellCallCount = 0;
 
