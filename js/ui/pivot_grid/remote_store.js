@@ -479,9 +479,7 @@ export default Class.inherit((function() {
             const result = {
                 rows: [],
                 columns: [],
-                values: [
-                    [[]]
-                ],
+                values: [],
                 grandTotalRowIndex: 0,
                 grandTotalColumnIndex: 0,
 
