@@ -11,7 +11,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import {
   keyboard,
-} from '../../../../events/short';
+} from '../../../../../events/short';
 
 export const view = (viewModel: PreactTestWidget) => (
   <div
@@ -38,6 +38,8 @@ export class PreactTestWidgetProps {
   @OneWay() subscribeEffect?: any;
 
   @OneWay() unsubscribeEffect?: any;
+
+  @OneWay() objectProp? = { someVal: true };
 
   @Event() onKeyDown?: (e: any) => any;
 
@@ -88,7 +90,7 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
     const { onKeyDown } = this.props;
 
     if (onKeyDown) {
-      const id = keyboard.on(this.rootRef, this.rootRef, (e) => onKeyDown!(e));
+      const id = keyboard.on(this.rootRef, this.rootRef, (e) => onKeyDown(e));
 
       return (): void => keyboard.off(id);
     }

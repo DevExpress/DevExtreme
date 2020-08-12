@@ -1,4 +1,4 @@
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { registerKeyboardAction } from '../../../../../ui/shared/accessibility';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
@@ -14,10 +14,10 @@ describe('LightButton', () => {
     it('should render valid markup', () => {
       const widgetRef = createRef();
       const props = {
-        widgetRef,
+        widgetRef: widgetRef as any,
         props: { children: 'text', className: 'class', label: 'label' },
       } as Partial<LightButton>;
-      const tree = mount(<LightButtonComponent {...props as any} />as any);
+      const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
       expect(tree.find('div').instance()).toBe(widgetRef.current);
 
@@ -29,7 +29,7 @@ describe('LightButton', () => {
       const props = {
         props: { children: <div className="child" />, className: 'class', label: 'label' },
       } as Partial<LightButton>;
-      const tree = mount(<LightButtonComponent {...props as any} />as any);
+      const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
       expect(tree.find('.child').exists()).toBe(true);
     });

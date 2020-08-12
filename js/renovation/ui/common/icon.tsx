@@ -3,7 +3,11 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { getImageSourceType } from '../../../core/utils/icon';
 
-export const viewFunction = ({ sourceType, cssClass, props: { source } }: Icon) => (
+export const viewFunction = ({
+  sourceType,
+  cssClass,
+  props: { source },
+}: Icon): JSX.Element => (
   <Fragment>
     {sourceType === 'dxIcon' && <i className={`dx-icon dx-icon-${source} ${cssClass}`} />}
     {sourceType === 'fontIcon' && <i className={`dx-icon ${source} ${cssClass}`} />}
@@ -24,11 +28,11 @@ export class IconProps {
   view: viewFunction,
 })
 export class Icon extends JSXComponent(IconProps) {
-  get sourceType() {
+  get sourceType(): string | false {
     return getImageSourceType(this.props.source);
   }
 
-  get cssClass() {
+  get cssClass(): string {
     return this.props.position !== 'left' ? 'dx-icon-right' : '';
   }
 }

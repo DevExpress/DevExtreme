@@ -1927,26 +1927,26 @@ if(devices.real().deviceType === 'desktop') {
         [{
             view: 'day',
             startCell: {
-                index: 0, startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false,
+                index: 0, cellData: { startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false },
             },
             endCell: {
-                index: 1, startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false,
+                index: 1, cellData: { startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false },
             },
         }, {
             view: 'week',
             startCell: {
-                index: 0, startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false,
+                index: 0, cellData: { startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false },
             },
             endCell: {
-                index: 7, startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false,
+                index: 7, cellData: { startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false },
             },
         }, {
             view: 'month',
             startCell: {
-                index: 0, startDate: new Date(2018, 3, 1), endDate: new Date(2018, 3, 2),
+                index: 0, cellData: { startDate: new Date(2018, 3, 1), endDate: new Date(2018, 3, 2) },
             },
             endCell: {
-                index: 1, startDate: new Date(2018, 3, 2), endDate: new Date(2018, 3, 3),
+                index: 1, cellData: { startDate: new Date(2018, 3, 2), endDate: new Date(2018, 3, 3) },
             },
         }].forEach((config) => {
             const { view, startCell, endCell } = config;
@@ -1972,8 +1972,7 @@ if(devices.real().deviceType === 'desktop') {
                 assert.deepEqual(
                     instance.option('selectedCellData'),
                     [
-                        { startDate: startCell.startDate, endDate: startCell.endDate, allDay: startCell.allDay },
-                        { startDate: endCell.startDate, endDate: endCell.endDate, allDay: endCell.allDay },
+                        startCell.cellData, endCell.cellData,
                     ], 'correct cells have been selected');
             });
         });

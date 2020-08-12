@@ -4,14 +4,14 @@
 
 import { act } from 'preact/test-utils';
 import $ from '../../../core/renderer';
-import './test_components/empty_test_widget';
-import './test_components/preact_test_widget';
-import './test_components/templated_test_widget';
+import './utils/test_components/empty_test_widget';
+import './utils/test_components/preact_test_widget';
+import './utils/test_components/templated_test_widget';
 import {
   defaultEvent,
   emitKeyboard,
   KEY,
-} from '../../__tests__/events_mock';
+} from '../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../core/element';
 
 beforeEach(() => {
@@ -121,13 +121,14 @@ describe('Widget\'s container manipulations', () => {
   it('pass custom class and attributes (with id) as props on first render', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
+    $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
 
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
     expect($('#my-id').dxrPreactTestWidget('getLastProps')).toMatchObject({
       id: 'my-id',
-      className: 'custom-css-class',
+      className: 'custom-css-class dx-custom-css-class',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -135,6 +136,7 @@ describe('Widget\'s container manipulations', () => {
   it('keep passing custom class and attributes (with id) props on repaint', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
+    $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
@@ -142,7 +144,7 @@ describe('Widget\'s container manipulations', () => {
 
     expect($('#my-id').dxrPreactTestWidget('getLastProps')).toMatchObject({
       id: 'my-id',
-      className: 'custom-css-class',
+      className: 'custom-css-class dx-custom-css-class',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -150,13 +152,26 @@ describe('Widget\'s container manipulations', () => {
   it('pass updated custom class on repaint', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
+    $('#my-id').addClass('dx-custom-css-class');
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
     $('#my-id').addClass('custom-css-class2');
 
     act(() => $('#my-id').dxrPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class custom-css-class2');
+    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class custom-css-class2 dx-custom-css-class');
+  });
+
+  it('should save only initial "dx-" custom classes', () => {
+    $('#component').attr('id', 'my-id');
+    $('#my-id').addClass('custom-css-class');
+    act(() => $('#my-id').dxrPreactTestWidget({}));
+
+    $('#my-id').addClass('dx-custom-css-class');
+
+    act(() => $('#my-id').dxrPreactTestWidget('repaint'));
+
+    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class');
   });
 
   it('widget does not show className option', () => {
@@ -227,6 +242,25 @@ describe('option', () => {
     expect($('#component').dxrPreactTestWidget('option').text).toBe('default text');
   });
 
+  it('should copy default props of preact component (not by reference)', () => {
+    document.body.innerHTML = `
+      <div id="components">
+          <div id="component1"></div>
+          <div id="component2"></div>
+      </div>
+      `;
+
+    act(() => {
+      $('#component1').dxrPreactTestWidget({});
+      $('#component2').dxrPreactTestWidget({});
+    });
+
+    const objectProp1 = $('#component1').dxrPreactTestWidget('option').objectProp;
+    const objectProp2 = $('#component2').dxrPreactTestWidget('option').objectProp;
+
+    expect(objectProp1).not.toBe(objectProp2);
+  });
+
   it('should return default value of TwoWay prop', () => {
     act(() => $('#component').dxrPreactTestWidget({}));
 
@@ -258,6 +292,19 @@ describe('option', () => {
       element: $('#component').get(0),
       component: $('#component').dxrPreactTestWidget('instance'),
     });
+  });
+
+  it('convert `undefined` to `null` for TwoWay props', () => {
+    act(() => $('#component').dxrPreactTestWidget({
+      twoWayProp: 15,
+    }));
+
+    act(() => $('#component').dxrPreactTestWidget({
+      twoWayProp: undefined,
+    }));
+
+    expect($('#component').dxrPreactTestWidget('getLastProps').twoWayProp).toBe(null);
+    expect($('#component').dxrPreactTestWidget('option').twoWayProp).toBe(undefined);
   });
 });
 

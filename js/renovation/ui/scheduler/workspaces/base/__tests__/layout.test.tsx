@@ -44,12 +44,12 @@ describe('LayoutBase', () => {
         viewData,
         ...viewModel.props,
       },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

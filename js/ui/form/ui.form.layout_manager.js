@@ -153,7 +153,7 @@ const LayoutManager = Widget.inherit({
             const propertyName = nameParts.pop();
             const layoutData = this.option(nameParts.join('.'));
 
-            return propertyName in layoutData;
+            return layoutData && (propertyName in layoutData);
         }
 
         return false;

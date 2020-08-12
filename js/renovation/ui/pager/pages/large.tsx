@@ -41,14 +41,14 @@ export class PagesLargeProps {
 }
 
 const PAGES_LIMITER = 4;
-type PageType = {
+interface PageType {
   key: string;
   pageProps: Partial<PageProps> | null;
-};
-type SlidingWindowState = {
+}
+interface SlidingWindowState {
   indexesForReuse: number[];
   slidingWindowIndexes: number[];
-};
+}
 type PageIndex = number | 'low' | 'high';
 type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';

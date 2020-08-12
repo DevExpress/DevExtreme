@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import eventsEngine from '../../events/core/events_engine';
 import useJQueryFn from './use_jquery';

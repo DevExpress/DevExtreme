@@ -27,7 +27,7 @@ export class ListProps extends WidgetProps {
 
   //   @OneWay() collapsibleGroups?: boolean;
 
-  @OneWay() dataSource?: string | Array<string | dxListItem | any> | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | (string | dxListItem | any)[] | DataSource | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
 

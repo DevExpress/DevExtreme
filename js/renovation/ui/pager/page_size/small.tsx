@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, JSXComponent, Event, OneWay, InternalState, Effect, Component, Ref,
+  ComponentBindings, JSXComponent, Event, OneWay, TwoWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import { SelectBox } from '../../select_box';
@@ -34,17 +34,17 @@ export const viewFunction = ({
 export class PageSizeSmallProps {
   @Ref() parentRef!: HTMLElement;
 
-  @OneWay() pageSize?: number = 5;
+  @TwoWay() pageSize?: number = 5;
 
   @OneWay() pageSizes!: FullPageSize[];
 
   @OneWay() rtlEnabled?: boolean = false;
 
-  @Event() pageSizeChange!: (pageSize: number) => void;
+  @Event() pageSizeChange?: (pageSize: number) => void;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeSmall extends JSXComponent(PageSizeSmallProps) {
+export class PageSizeSmall extends JSXComponent<PageSizeSmallProps, 'parentRef'|'pageSizes'|'pageSizeChange'>(PageSizeSmallProps) {
   @InternalState() private minWidth = 10;
 
   get width(): number {

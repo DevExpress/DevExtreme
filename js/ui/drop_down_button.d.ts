@@ -293,6 +293,19 @@ export default class dxDropDownButton extends Widget {
 }
 
 export interface dxDropDownButtonItem extends dxListItem {
+    /**
+     * @docid dxDropDownButtonItem.onClick
+     * @type function(e)|string
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDropDownButton
+     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field3 model:object
+     * @type_function_param1_field4 event:event
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event }) => any) | string;
 }
 
 declare global {

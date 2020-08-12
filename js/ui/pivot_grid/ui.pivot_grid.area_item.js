@@ -369,7 +369,6 @@ export const AreaItem = Class.inherit({
 
     setColumnsWidth: function(values) {
         let i;
-        let totalWidth = 0;
         const tableElement = this._tableElement[0];
         let colgroupElementHTML = '';
         const columnsCount = this.getColumnsCount();
@@ -384,11 +383,11 @@ export const AreaItem = Class.inherit({
         }
 
         for(i = 0; i < columnsCount; i++) {
-            totalWidth += columnWidth[i];
             colgroupElementHTML += '<col style="width: ' + columnWidth[i] + 'px">';
         }
         this._colgroupElement.html(colgroupElementHTML);
-        this._tableWidth = totalWidth - this._groupWidth > 0.01 ? Math.ceil(totalWidth) : totalWidth;
+        this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
+
         tableElement.style.width = this._tableWidth + 'px';
         tableElement.style.tableLayout = 'fixed';
     },

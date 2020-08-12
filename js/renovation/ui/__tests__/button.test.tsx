@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { mount, shallow } from 'enzyme';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
@@ -9,7 +9,7 @@ import {
   emit,
   getEventHandlers,
   EVENT,
-} from '../../__tests__/events_mock';
+} from '../../test_utils/events_mock';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';
@@ -94,7 +94,7 @@ describe('Button', () => {
       expect(button.find(Icon).exists()).toBe(false);
     });
 
-    it.skip('should render icon component on the left side', () => {
+    it('should render icon component on the left side', () => {
       const button = shallow(viewFunction({
         props: {
           text: 'button-text',
@@ -104,13 +104,13 @@ describe('Button', () => {
       } as any) as any);
       const buttonContent = button.find('.dx-button-content');
       expect(buttonContent.childAt(0).is(Icon)).toBe(true);
-      expect(buttonContent.find(Icon).props()).toEqual({
-        source: 'icon-surce',
+      expect(buttonContent.find(Icon).props()).toMatchObject({
+        source: 'icon-source',
         position: 'left',
       });
     });
 
-    it.skip('should render icon component on the right side', () => {
+    it('should render icon component on the right side', () => {
       const button = shallow(viewFunction({
         props: {
           text: 'button-text',
@@ -121,8 +121,8 @@ describe('Button', () => {
       const buttonContent = button.find('.dx-button-content');
       expect(buttonContent.childAt(1).is(Icon)).toBe(true);
       expect(buttonContent.childAt(0).text()).toBe('button-text');
-      expect(buttonContent.find(Icon).props()).toEqual({
-        source: 'icon-surce',
+      expect(buttonContent.find(Icon).props()).toMatchObject({
+        source: 'icon-source',
         position: 'right',
       });
     });
@@ -143,7 +143,7 @@ describe('Button', () => {
 
     it('should pass all necessary properties to the Widget', () => {
       const renderOptions = {
-        aria: 'area',
+        aria: { role: 'aria' },
         onActive: () => null,
         onInactive: () => null,
       };
@@ -197,6 +197,11 @@ describe('Button', () => {
           button.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
           expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
+        });
+
+        it('should not raise any error if "onContentReady" is not defined', () => {
+          const button = new Button({ onContentReady: undefined });
+          expect(button.contentReadyEffect.bind(button)).not.toThrow();
         });
       });
 

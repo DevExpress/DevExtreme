@@ -695,8 +695,8 @@ export default {
                         lookup: null,
                         value: options.value,
                         setValue: function(value, e) {
-                            if(e && e.event && e.event.type === 'keydown') {
-                                eventsEngine.trigger(container, clickEventName, e);
+                            if(e?.event?.type === 'keydown') {
+                                eventsEngine.trigger(e.element, clickEventName, e);
                             }
                         },
                         row: options.row

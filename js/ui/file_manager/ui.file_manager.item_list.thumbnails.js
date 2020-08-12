@@ -56,13 +56,14 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
         let items = null;
         const targetItemElement = $(e.target).closest(this._getItemSelector());
+        let targetItem = null;
         if(targetItemElement.length > 0) {
-            const targetItem = this._itemList.getItemByItemElement(targetItemElement);
+            targetItem = this._itemList.getItemByItemElement(targetItemElement);
             this._itemList.selectItem(targetItem);
             items = this._getFileItemsForContextMenu(targetItem);
         }
 
-        this._showContextMenu(items, e.target, e);
+        this._showContextMenu(items, e.target, e, targetItem);
     }
 
     _getItemThumbnailCssClass() {

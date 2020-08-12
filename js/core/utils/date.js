@@ -598,12 +598,7 @@ const makeDate = function(date) {
 
 const getDatesOfInterval = function(startDate, endDate, step) {
     const result = [];
-
     let currentDate = new Date(startDate.getTime());
-
-    if(startDate.getTime() === endDate.getTime()) {
-        result.push(new Date(startDate.getTime()));
-    }
 
     while(currentDate < endDate) {
         result.push(new Date(currentDate.getTime()));

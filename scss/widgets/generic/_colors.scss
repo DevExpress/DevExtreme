@@ -1,3 +1,7 @@
+
+@forward "./variables";
+
+@use "./variables" as *;
 @use "sass:color";
 @use "./color" as extcolor;
 $color: null !default;
@@ -8,7 +12,7 @@ $generic-color-postfix: null !default;
 * $name 10. Font family
 * $type text
 */
-$base-font-family: null !default;
+$base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
 
 /**
 * $name 10. Accent color
@@ -110,7 +114,7 @@ $base-focus-color: null !default;
 */
 $base-focus-bg: null !default;
 $base-inverted-icon-color: null !default;
-$base-disabled-opacity: null !default;
+$base-disabled-opacity: 0.5 !default;
 $base-dropdown-shadow-color: null !default;
 
 /**
@@ -154,7 +158,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "carmine" {
   $generic-color-postfix: ".carmine" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-accent: #f05b41 !default;
   $base-label-color: #8899a8 !default;
   $base-link-color: $base-accent !default;
@@ -181,7 +184,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-focus-color: $base-inverted-text-color !default;
   $base-focus-bg: $base-accent !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -197,7 +199,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "contrast" {
   $generic-color-postfix: ".contrast" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-bg: #000 !default;
   $base-inverted-bg: extcolor.difference(#fff, $base-bg) !default;
   $base-border-color: #fff !default;
@@ -219,7 +220,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-invalid-color: #ea4444 !default;
   $base-invalid-faded-border-color: $base-invalid-color !default;
   $base-label-color: $base-text-color !default;
@@ -233,7 +233,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "dark" {
   $generic-color-postfix: ".dark" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-accent: #1ca8dd !default;
   $base-text-color: #dedede !default;
   $base-bg: #2a2a2a !default;
@@ -260,7 +259,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -275,7 +273,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "darkmoon" {
   $generic-color-postfix: ".darkmoon" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-label-color: #c1c7c9 !default;
   $base-icon-color: #aab2b5 !default;
   $base-accent: #3debd3 !default;
@@ -305,7 +302,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -322,7 +318,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "darkviolet" {
   $generic-color-postfix: ".darkviolet" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-link-color: #83a2c7 !default;
   $base-icon-color: #fff !default;
   $base-accent: #9c63ff !default;
@@ -349,7 +344,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-header-color: #8894a0 !default;
   $base-row-alternation-background: #1d2026 !default;
   $base-selected-border: #6c48a8 !default;
@@ -368,7 +362,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "greenmist" {
   $generic-color-postfix: ".greenmist" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-label-color: #728e94 !default;
   $base-link-color: #3eb8b0 !default;
   $base-icon-color: $base-label-color !default;
@@ -395,7 +388,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -410,7 +402,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "light" {
   $generic-color-postfix: ".light" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-accent: #337ab7 !default;
   $base-text-color: #333 !default;
   $base-label-color: $base-text-color !default;
@@ -437,7 +428,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
@@ -452,7 +442,6 @@ $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "softblue" {
   $generic-color-postfix: ".softblue" !default;
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
   $base-icon-color: #99a1a8 !default;
   $base-accent: #7ab8eb !default;
   $base-text-color: #333 !default;
@@ -482,7 +471,6 @@ $base-grid-selectedrow-border-color: null !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-webwidget-hover-background: #edf0f2 !default;
   $base-grid-selection-background: #d1e0ed !default;
   $base-grid-selectedrow-border-color: #e1ecf5 !default;

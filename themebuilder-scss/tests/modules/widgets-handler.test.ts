@@ -6,7 +6,7 @@ const mockError = new Error('File not found');
 jest.mock('fs', () => ({
   promises: {
     readFile: jest.fn().mockImplementation((path: string) => {
-      if (/reject/.test(path)) return Promise.reject(mockError);
+      if (path.includes('reject')) return Promise.reject(mockError);
       return Promise.resolve('');
     }),
   },
@@ -21,7 +21,7 @@ describe('Widgets handler tests', () => {
             + '@use "./accordion";\n'
             + '@use "./dateBox";\n';
 
-    const expectedWidgetArray: Array<WidgetItem> = [
+    const expectedWidgetArray: WidgetItem[] = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'datebox', widgetImportString: '@use "./dateBox";' },
     ];
@@ -32,7 +32,7 @@ describe('Widgets handler tests', () => {
 
   test('getWidgetLists', () => {
     const userWidgets = ['Accordion', 'box', 'wrongWidget', 'wrongWidget2'];
-    const widgetsFromIndex: Array<WidgetItem> = [
+    const widgetsFromIndex: WidgetItem[] = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'box', widgetImportString: '@use "./box";' },
       { widgetName: 'datebox', widgetImportString: '@use "./dateBox";' },
@@ -50,8 +50,8 @@ describe('Widgets handler tests', () => {
   });
 
   test('getWidgetLists with empty array', () => {
-    const userWidgets: Array<string> = [];
-    const widgetsFromIndex: Array<WidgetItem> = [
+    const userWidgets: string[] = [];
+    const widgetsFromIndex: WidgetItem[] = [
       { widgetName: 'accordion', widgetImportString: '@use "./accordion";' },
       { widgetName: 'box', widgetImportString: '@use "./box";' },
       { widgetName: 'datebox', widgetImportString: '@use "./dateBox";' },

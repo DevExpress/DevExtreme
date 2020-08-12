@@ -481,6 +481,7 @@
         text-overflow: clip;
         width: $grid-command-edit-column-width;
         min-width: $grid-command-edit-column-width;
+        white-space: nowrap;
 
         &.dx-command-edit-with-icons {
           width: $grid-command-edit-column-with-icons-width;

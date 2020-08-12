@@ -1,7 +1,6 @@
 import BasePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.base';
 import AdaptivePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.adaptive';
 import { extend } from '../../../core/utils/extend';
-import errors from '../../widget/ui.errors';
 import dateUtils from '../../../core/utils/date';
 import { isNumeric, isObject } from '../../../core/utils/type';
 import themes from '../../themes';
@@ -112,16 +111,18 @@ class BaseRenderingStrategy {
         return this.getDefaultCellWidth();
     }
 
-    _getItemPosition(item) {
-        const position = this._getAppointmentCoordinates(item);
-        const allDay = this.isAllDay(item);
+    _getItemPosition(appointment) {
+        const adapter = this.instance.createAppointmentAdapter(appointment);
+
+        const position = this._getAppointmentCoordinates(appointment);
+        const allDay = this.isAllDay(appointment);
+        const startDate = new Date(adapter.startDate);
+
         let result = [];
-        const startDate = new Date(this.instance.fire('getField', 'startDate', item));
-        const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
 
         for(let j = 0; j < position.length; j++) {
-            const height = this.calculateAppointmentHeight(item, position[j], isRecurring);
-            const width = this.calculateAppointmentWidth(item, position[j], isRecurring);
+            const height = this.calculateAppointmentHeight(appointment, position[j]);
+            const width = this.calculateAppointmentWidth(appointment, position[j]);
             let resultWidth = width;
             let appointmentReduced = null;
             let multiWeekAppointmentParts = [];
@@ -167,9 +168,6 @@ class BaseRenderingStrategy {
                 rowIndex: initialRowIndex,
                 cellIndex: initialCellIndex,
                 appointmentReduced: appointmentReduced,
-                originalAppointmentStartDate: this.startDate(item, true),
-                originalAppointmentEndDate: this.endDate(item),
-                endDate: this.endDate(item, position[j], isRecurring)
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
         }
@@ -188,11 +186,9 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _getAppointmentCoordinates(itemData) {
-        return this.instance.fire('needCoordinates', {
-            startDate: this.startDate(itemData),
-            originalStartDate: this.startDate(itemData, true),
-            appointmentData: itemData,
+    _getAppointmentCoordinates(appointmentData) {
+        return this.instance.fire('createAppointmentSettings', {
+            appointmentData: appointmentData
         });
     }
 
@@ -496,52 +492,7 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    startDate(appointment, skipNormalize, position) {
-        let startDate = position && position.startDate;
-        const rangeStartDate = this.instance._getStartDate(appointment, skipNormalize);
-        const text = this.instance.fire('getField', 'text', appointment);
-
-        if((startDate && rangeStartDate > startDate) || !startDate) {
-            startDate = rangeStartDate;
-        }
-
-        if(isNaN(startDate.getTime())) {
-            throw errors.Error('E1032', text);
-        }
-
-        return startDate;
-    }
-
-    endDate(appointment, position, isRecurring, ignoreViewDates = false) {
-        let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
-        const realStartDate = this.startDate(appointment, true);
-        const viewStartDate = this.startDate(appointment, false, position);
-
-        if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate;
-            const recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate;
-
-            let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
-                this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
-                endDate.getTime() - realStartDate.getTime();
-
-            fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
-
-            endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()));
-
-            if(isRecurring) {
-                endDate = new Date(endDate.getTime() + fullDuration);
-            }
-
-            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartCroppedByViewStartDate.getTime() < viewStartDate.getTime()) {
-                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime();
-                const tailDuration = fullDuration - headDuration || fullDuration;
-
-                endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
-            }
-
-        }
-
+    normalizeEndDateByViewEnd(appointment, endDate) {
         if(!this.isAllDay(appointment)) {
             const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
@@ -550,7 +501,8 @@ class BaseRenderingStrategy {
             }
         }
 
-        const currentViewEndTime = new Date(new Date(endDate).setHours(this.instance.option('endDayHour'), 0, 0));
+        const endDayHour = this.instance._getCurrentViewOption('endDayHour');
+        const currentViewEndTime = new Date(new Date(endDate).setHours(endDayHour, 0, 0));
 
         if(endDate.getTime() > currentViewEndTime.getTime()) {
             endDate = currentViewEndTime;

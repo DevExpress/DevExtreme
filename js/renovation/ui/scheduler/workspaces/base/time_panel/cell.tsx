@@ -1,30 +1,27 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
+import { CellBase as Cell, CellBaseProps } from '../cell';
 
 export const viewFunction = (viewModel: TimePanelCell) => (
-  <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
+  <Cell
+      // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={
-      `dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical
-      dx-scheduler-first-group-cell dx-scheduler-last-group-cell
-      ${viewModel.props.className}`
-    }
+    isFirstCell={viewModel.props.isFirstCell}
+    isLastCell={viewModel.props.isLastCell}
+    className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`}
   >
     <div>
       {viewModel.props.text}
     </div>
-  </td>
+  </Cell>
 );
 
 @ComponentBindings()
-export class TimePanelCellProps {
+export class TimePanelCellProps extends CellBaseProps {
   @OneWay() startDate?: Date = new Date();
 
   @OneWay() text?: string = '';
-
-  @OneWay() className?: string;
 }
 
 @Component({

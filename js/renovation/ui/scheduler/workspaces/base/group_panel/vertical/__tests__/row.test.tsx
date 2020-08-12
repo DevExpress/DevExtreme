@@ -20,7 +20,7 @@ describe('GroupPanel Vertical Row', () => {
     const render = (viewModel) => shallow(RowView({
       ...viewModel,
       props: { groupItems, ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should combine default and custom classNames', () => {
       const row = render({ props: { className: 'custom-class' } });
@@ -32,9 +32,9 @@ describe('GroupPanel Vertical Row', () => {
     });
 
     it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(row.prop('customAttribute'))
+      expect(row.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

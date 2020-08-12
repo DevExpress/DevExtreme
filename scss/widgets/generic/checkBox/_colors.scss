@@ -8,7 +8,7 @@
 * $name 10. Border color
 * $type color
 */
-$checkbox-border-color: null !default;
+$checkbox-border-color: $base-border-color !default;
 $checkbox-checked-color: null !default;
 $checkbox-indeterminate-bg: null !default;
 
@@ -35,140 +35,97 @@ $checkbox-hover-border-color: null !default;
 * $type color
 */
 $checkbox-active-icon-bg: null !default;
-$checkbox-invalid-focused-border-color: null !default;
-$checkbox-invalid-faded-border-color: null !default;
 $checkbox-readonly-border-color: null !default;
-$checkbox-readonly-bg: null !default;
 $checkbox-icon-border-radius: null !default;
+$checkbox-invalid-focused-border-color: $base-invalid-color !default;
+$checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 
 @if $color == "carmine" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
 @if $color == "contrast" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-text-color !default;
   $checkbox-indeterminate-bg: $base-inverted-bg !default;
   $checkbox-focused-borderd-color: $base-focus-color !default;
   $checkbox-bg: $base-bg !default;
   $checkbox-hover-border-color: $base-border-color !default;
   $checkbox-active-icon-bg: $base-inverted-bg !default;
-
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-
   $checkbox-readonly-border-color: darken($checkbox-border-color, 50%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
-
   $checkbox-icon-border-radius: $base-border-radius - 2px !default;
 }
 
 @if $color == "dark" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: lighten($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: darken($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
 @if $color == "darkmoon" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: lighten($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: darken($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
 @if $color == "darkviolet" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-color !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: $base-accent-highlight-color !default;
   $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: darken($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
 @if $color == "greenmist" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
 @if $color == "light" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
 @if $color == "softblue" {
-
-  $checkbox-border-color: $base-border-color !default;
   $checkbox-checked-color: $base-accent !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-focused-borderd-color: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: darken($base-accent, 12%) !default;
   $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-invalid-focused-border-color: $base-invalid-color !default;
-  $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
-  $checkbox-readonly-bg: $checkbox-bg !default;
   $checkbox-icon-border-radius: $base-border-radius-exsmall !default;
 }
 
+$checkbox-readonly-bg: $checkbox-bg !default;

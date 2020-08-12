@@ -81,6 +81,7 @@ export default gridCore.Controller.inherit((function() {
             that._lastOperationTypes = {};
             that._eventsStrategy = dataSource._eventsStrategy;
             that._skipCorrection = 0;
+            that._isLoadingAll = false;
 
 
             that.changed = Callbacks();
@@ -138,11 +139,14 @@ export default gridCore.Controller.inherit((function() {
             const dataSource = that._dataSource;
 
             if(operationTypes.reload) {
-                that._currentTotalCount = 0;
-                that._skipCorrection = 0;
+                that.resetCurrentTotalCount();
                 that._isLastPage = !dataSource.paginate();
                 that._hasLastPage = that._isLastPage;
             }
+        },
+        resetCurrentTotalCount: function() {
+            this._currentTotalCount = 0;
+            this._skipCorrection = 0;
         },
         resetCache: function() {
             this._cachedStoreData = undefined;
@@ -544,7 +548,7 @@ export default gridCore.Controller.inherit((function() {
         },
         pageCount: function() {
             const that = this;
-            const count = that.totalItemsCount();
+            const count = that.totalItemsCount() - that._skipCorrection;
             const pageSize = that.pageSize();
 
             if(pageSize && count > 0) {
@@ -595,6 +599,8 @@ export default gridCore.Controller.inherit((function() {
                     }
                 });
 
+                this._isLoadingAll = options.isLoadingAll;
+
                 that._scheduleCustomLoadCallbacks(d);
                 dataSource._scheduleLoadCallbacks(d);
 
@@ -622,6 +628,8 @@ export default gridCore.Controller.inherit((function() {
 
                 return d.fail(function() {
                     that._eventsStrategy.fireEvent('loadError', arguments);
+                }).always(() => {
+                    this._isLoadingAll = false;
                 }).promise();
             } else {
                 return dataSource.load();

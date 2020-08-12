@@ -145,9 +145,9 @@ QUnit.module('initialization from dataSource', {
         const visibleColumns = this.columnsController.getVisibleColumns();
 
         assert.deepEqual(processColumnsForCompare(visibleColumns), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', serializationFormat: null },
-            { index: 2, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'birthDate', caption: 'Birth Date', alignment: 'left', dataType: 'date', format: 'shortDate', serializationFormat: null }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', name: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', name: 'age', caption: 'Age', alignment: 'right', dataType: 'number', serializationFormat: null },
+            { index: 2, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'birthDate', name: 'birthDate', caption: 'Birth Date', alignment: 'left', dataType: 'date', format: 'shortDate', serializationFormat: null }
         ]);
 
         assert.strictEqual(visibleColumns[0].index, 0);

@@ -9,7 +9,7 @@ interface ThemeData {
 
 describe('Bundle resolver', () => {
   test('resolveBundle - the right filename is generated', () => {
-    const fileNamesForThemes: Array<ThemeData> = [
+    const fileNamesForThemes: ThemeData[] = [
       { theme: 'generic', colorScheme: 'light', fileName: 'dx.light.scss' },
       { theme: 'generic', colorScheme: 'dark', fileName: 'dx.dark.scss' },
       { theme: 'generic', colorScheme: 'greenmist', fileName: 'dx.greenmist.scss' },

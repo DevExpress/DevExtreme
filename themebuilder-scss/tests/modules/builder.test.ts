@@ -69,7 +69,7 @@ describe('Builder integration tests', () => {
 
     return buildTheme(config).then((result) => {
       expect(result.css).not.toBe('');
-      expect(/#abcdef/.test(result.css)).toBe(true);
+      expect(result.css.includes('#abcdef')).toBe(true);
     });
   }, buildTimeout);
 
@@ -83,7 +83,7 @@ describe('Builder integration tests', () => {
 
     return buildTheme(config).then((result) => {
       expect(result.css).not.toBe('');
-      expect(/#abcdef/.test(result.css)).toBe(true);
+      expect(result.css.includes('#abcdef')).toBe(true);
     });
   }, buildTimeout);
 

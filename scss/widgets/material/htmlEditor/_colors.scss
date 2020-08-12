@@ -6,50 +6,24 @@
 
 // adduse
 
-
-$htmleditor-border-color: null !default;
-$htmleditor-invalid-border-color: null !default;
-$htmleditor-invalid-faded-border-color: null !default;
-$htmleditor-toolbar-border-color: null !default;
-$htmleditor-normal-format-active-bg: null !default;
-$htmleditor-default-format-active-bg: null !default;
-$htmleditor-danger-format-active-bg: null !default;
-$htmleditor-success-format-active-bg: null !default;
-$htmleditor-variable-bg: null !default;
-$htmleditor-resize-frame-border-color: null !default;
-$htmleditor-resize-handle-bg: null !default;
+$htmleditor-border-color: $base-border-color !default;
+$htmleditor-invalid-border-color: $base-invalid-color !default;
+$htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$htmleditor-toolbar-border-color: $base-border-color !default;
+$htmleditor-normal-format-active-bg: darken($button-normal-bg, 10%) !default;
+$htmleditor-default-format-active-bg: darken($button-default-bg, 10%) !default;
+$htmleditor-danger-format-active-bg: darken($button-danger-bg, 10%) !default;
+$htmleditor-success-format-active-bg: darken($button-success-bg, 10%) !default;
+$htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
+$htmleditor-resize-frame-border-color: $base-accent !default;
+$htmleditor-resize-handle-bg: $base-accent !default;
 $htmleditor-mention-bg: null !default;
 
 
 @if $mode == "light" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
-  $htmleditor-normal-format-active-bg: darken($button-normal-bg, 10%) !default;
-  $htmleditor-default-format-active-bg: darken($button-default-bg, 10%) !default;
-  $htmleditor-danger-format-active-bg: darken($button-danger-bg, 10%) !default;
-  $htmleditor-success-format-active-bg: darken($button-success-bg, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: darken($base-bg, 12%) !default;
 }
 
 @if $mode == "dark" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
-  $htmleditor-normal-format-active-bg: darken($button-normal-bg, 10%) !default;
-  $htmleditor-default-format-active-bg: darken($button-default-bg, 10%) !default;
-  $htmleditor-danger-format-active-bg: darken($button-danger-bg, 10%) !default;
-  $htmleditor-success-format-active-bg: darken($button-success-bg, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: lighten($base-bg, 12%) !default;
 }
-

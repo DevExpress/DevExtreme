@@ -3,32 +3,47 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow } from './row';
 import { ViewCellData } from '../../types.d';
-import { getKeyByDateAndGroup } from '../../utils';
+import { getKeyByDateAndGroup, getIsGroupedAllDayPanel } from '../../utils';
 import { LayoutProps } from '../layout_props';
+import { AllDayPanelTableBody } from './all_day_panel/table_body';
 
 export const viewFunction = (viewModel: DateTableBody) => (
   <Fragment>
-    {viewModel.props.viewData!
-      .groupedData.map((table) => table.dateTable.map((cellsRow) => (
-        <DateTableRow
-          key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
-        >
-          {cellsRow.map(({
-            startDate,
-            endDate,
-            groups,
-          }: ViewCellData) => (
-            <viewModel.props.cellTemplate
-              startDate={startDate}
-              endDate={endDate}
-              groups={groups}
-              key={getKeyByDateAndGroup(startDate, groups)}
-            />
+    {
+    viewModel.props.viewData!
+      .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Fragment key={groupIndex}>
+          {
+            getIsGroupedAllDayPanel(viewModel.props.viewData!)
+              && <AllDayPanelTableBody viewData={allDayPanel} />
+          }
+          { dateTable.map((cellsRow, index) => (
+            <DateTableRow
+              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+            >
+              {cellsRow.map(({
+                startDate,
+                endDate,
+                groups,
+              }: ViewCellData) => (
+                <viewModel.props.cellTemplate
+                  isFirstCell={index === 0}
+                  isLastCell={index === dateTable.length - 1}
+                  startDate={startDate}
+                  endDate={endDate}
+                  groups={groups}
+                  key={getKeyByDateAndGroup(startDate, groups)}
+                />
+              ))}
+            </DateTableRow>
           ))}
-        </DateTableRow>
-      )))}
+        </Fragment>
+      ))
+    }
   </Fragment>
 );
+
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
   @Template() cellTemplate?: any;

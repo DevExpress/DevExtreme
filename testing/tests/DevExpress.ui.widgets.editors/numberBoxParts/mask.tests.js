@@ -391,6 +391,22 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.equal(this.input.val(), '<<123.4>>', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, 'caret preserved');
     });
+
+    QUnit.test('typing zero-based value should not revert negative sign', function(assert) {
+        this.instance.option({
+            format: '0.00',
+            value: -1.1
+        });
+
+        this.keyboard
+            .caret({ start: 1, end: 5 })
+            .type('0.51')
+            .change();
+
+        this.clock.tick();
+        assert.strictEqual(this.input.val(), '-0.51', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), -0.51, 'value is correct');
+    });
 });
 
 QUnit.module('format: fixed point format', moduleConfig, () => {

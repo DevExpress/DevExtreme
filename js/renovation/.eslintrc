@@ -4,10 +4,7 @@
         "extends": ["devextreme/renovation-declarations"],
         "excludedFiles": "**/__tests__/**/*"
     }, {
-        "files": ["**/__tests__/**/*.ts?(x)"],
-        "extends": ["devextreme/jest"],
-        "settings": {
-            "react": { "pragma": "h" }
-        }
+        "files": ["**/__tests__/**/*.ts?(x)", "**/test_utils/**/*.ts?(x)"],
+        "extends": ["devextreme/jest"]
     }]
 }

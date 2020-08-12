@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, Event, ForwardRef,
+  Effect, Template, InternalState, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -34,7 +34,7 @@ export const viewFunction = ({
     infoTextVisible={infoTextVisible}
     isLargeDisplayMode={isLargeDisplayMode}
       // eslint-disable-next-line react/jsx-props-no-spreading
-    {...{ ...pagerProps as PagerProps, ...restAttributes }}
+    {...{ ...pagerProps, ...restAttributes }}
   />
 );
 type ChildElementsName = 'pageSizes' | 'pages' | 'info';
@@ -42,10 +42,10 @@ type AllElementsName = 'parent' | ChildElementsName;
 type AllElementsWidth = Record<AllElementsName, number>;
 type ChildElementsWidth = Record<ChildElementsName, number>;
 type HTMLRefType = Record<AllElementsName, HTMLElement | undefined>;
-type ChildElementProps = {
+interface ChildElementProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
-};
+}
 
 export function getContentProps({
   parent: parentWidth, pageSizes: pageSizesWidth,
@@ -117,10 +117,6 @@ export function updateChildProps(
 
 @ComponentBindings()
 export class ResizableContainerProps extends PagerProps {
-  @Event() pageIndexChange!: (pageIndex: number) => void;
-
-  @Event() pageSizeChange!: (pageSize: number) => void;
-
   // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
   @Template() contentTemplate: any;
 }

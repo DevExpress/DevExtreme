@@ -1,10 +1,10 @@
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 // Should be before component import
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
-} from '../../../__tests__/events_mock';
+} from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils/index';
 import config from '../../../../core/config';
@@ -40,18 +40,18 @@ describe('Widget', () => {
     });
 
     it('should pass REF into the main div element', () => {
-      const mockRef = createRef();
+      const mockRef = createRef<HTMLDivElement>();
       const props = {
         hint: 'hint',
         visible: true,
       };
-      shallow(viewFunction({
+      mount(viewFunction({
         widgetRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
 
-      expect(mockRef.current.className).toBe('cssClasses');
+      expect(mockRef.current?.className).toBe('cssClasses');
     });
 
     it('should render children', () => {
@@ -116,7 +116,7 @@ describe('Widget', () => {
           const detach = widget.accessKeyEffect();
 
           expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
         });
 
@@ -197,7 +197,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.active).length).toBe(0);
           expect(getEventHandlers(EVENT.inactive).length).toBe(0);
         });
@@ -257,7 +257,7 @@ describe('Widget', () => {
           const widget = new Widget({ onClick });
 
           const detach = widget.clickEffect();
-          detach!();
+          detach();
           emit(EVENT.dxClick);
 
           expect(onClick).toHaveBeenCalledTimes(0);
@@ -276,7 +276,30 @@ describe('Widget', () => {
         const e = { ...defaultEvent, isDefaultPrevented: jest.fn() };
 
         it('should subscribe to focus event', () => {
-          const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          const onFocusIn = jest.fn();
+          const onFocusOut = jest.fn();
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
+          });
+          widget.widgetRef = {} as any;
+
+          widget.focusEffect();
+
+          emit(EVENT.focus, e);
+          expect(widget.focused).toBe(true);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+          expect(onFocusIn).toHaveBeenCalledTimes(1);
+
+          emit(EVENT.blur, e);
+          expect(widget.focused).toBe(false);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
+          expect(onFocusOut).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not raise any error if onFocusIn or onFocusOut is undefined', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusIn: undefined, onFocusOut: undefined,
+          });
           widget.widgetRef = {} as any;
 
           widget.focusEffect();
@@ -290,6 +313,32 @@ describe('Widget', () => {
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
         });
 
+        it('should not raise onFocusIn/onFocusOut if event is prevented', () => {
+          try {
+            e.isDefaultPrevented = jest.fn(() => true);
+            const onFocusIn = jest.fn();
+            const onFocusOut = jest.fn();
+            const widget = new Widget({
+              focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
+            });
+            widget.widgetRef = {} as any;
+
+            widget.focusEffect();
+
+            emit(EVENT.focus, e);
+            expect(widget.focused).toBe(false);
+            expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+            expect(onFocusIn).not.toHaveBeenCalled();
+
+            emit(EVENT.blur, e);
+            expect(widget.focused).toBe(false);
+            expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
+            expect(onFocusOut).not.toHaveBeenCalled();
+          } finally {
+            e.isDefaultPrevented = jest.fn();
+          }
+        });
+
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
 
@@ -297,12 +346,12 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
           expect(getEventHandlers(EVENT.blur).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.focus).length).toBe(0);
           expect(getEventHandlers(EVENT.blur).length).toBe(0);
         });
 
-        it('should subscribe is widget is disabled', () => {
+        it('should subscribe if widget is disabled', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: true });
           widget.widgetRef = {} as any;
           widget.focused = false;
@@ -315,7 +364,9 @@ describe('Widget', () => {
         });
 
         it('should subscribe is widget is not focusable', () => {
-          const widget = new Widget({ focusStateEnabled: false, disabled: false });
+          const onFocusIn = jest.fn();
+
+          const widget = new Widget({ focusStateEnabled: false, disabled: false, onFocusIn });
           widget.widgetRef = {} as any;
           widget.focused = false;
 
@@ -324,6 +375,7 @@ describe('Widget', () => {
           emit(EVENT.focus, e);
           expect(widget.focused).toBe(false);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
+          expect(onFocusIn).toHaveBeenCalledTimes(0);
         });
       });
 
@@ -348,7 +400,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(0);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(0);
         });
@@ -411,7 +463,7 @@ describe('Widget', () => {
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
 
-          detach!();
+          detach();
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -453,7 +505,7 @@ describe('Widget', () => {
           const detach = widget.resizeEffect();
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.resize).length).toBe(0);
         });
 
@@ -490,7 +542,7 @@ describe('Widget', () => {
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
           expect(getEventHandlers(EVENT.hiding).length).toBe(1);
-          detach!();
+          detach();
           expect(getEventHandlers(EVENT.shown).length).toBe(0);
           expect(getEventHandlers(EVENT.hiding).length).toBe(0);
         });
@@ -529,25 +581,25 @@ describe('Widget', () => {
           const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
 
           expect(widget.attributes).toEqual({
-            'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', restAttributes: 'restAttributes',
+            'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', 'rest-attributes': 'restAttributes',
           });
         });
 
         it('should not return accessKey if widget is not focusable', () => {
           const widget1 = new Widget({ accessKey: 'c', visible: true });
-          expect(widget1.attributes).toEqual({ restAttributes: 'restAttributes' });
+          expect(widget1.attributes).toEqual({ 'rest-attributes': 'restAttributes' });
         });
 
         it('should return accessKey if widget is focusable', () => {
           const widget2 = new Widget({ accessKey: 'c', focusStateEnabled: true, visible: true });
-          expect(widget2.attributes).toEqual({ accessKey: 'c', restAttributes: 'restAttributes' });
+          expect(widget2.attributes).toEqual({ accessKey: 'c', 'rest-attributes': 'restAttributes' });
         });
 
         it('should not return accessKay if widget is disabled', () => {
           const widget3 = new Widget({
             accessKey: 'c', focusStateEnabled: true, disabled: true, visible: true,
           });
-          expect(widget3.attributes).toEqual({ 'aria-disabled': 'true', restAttributes: 'restAttributes' });
+          expect(widget3.attributes).toEqual({ 'aria-disabled': 'true', 'rest-attributes': 'restAttributes' });
         });
       });
 

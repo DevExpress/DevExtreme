@@ -133,17 +133,15 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             });
         },
         _handleLoadingChanged: function(isLoading) {
-            const that = this;
-
-            if(!isVirtualMode(that)) {
-                that._isLoading = isLoading;
-                that.callBase.apply(that, arguments);
+            if(!isVirtualMode(this) || this._isLoadingAll) {
+                this._isLoading = isLoading;
+                this.callBase.apply(this, arguments);
             }
 
             if(isLoading) {
-                that._startLoadTime = new Date();
+                this._startLoadTime = new Date();
             } else {
-                that._startLoadTime = undefined;
+                this._startLoadTime = undefined;
             }
         },
         _handleLoadError: function() {
@@ -249,7 +247,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                         storeLoadOptions.skip = that.pageIndex() * that.pageSize();
                     }
                 }
-            } else if(isAppendMode(that) && storeLoadOptions.skip) {
+            } else if(isAppendMode(that) && storeLoadOptions.skip && that._skipCorrection < 0) {
                 storeLoadOptions.skip += that._skipCorrection;
             }
             return that.callBase.apply(that, arguments);
@@ -1081,6 +1079,15 @@ export default {
 
                         const dataSource = this._dataSource;
                         return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
+                    },
+                    refresh: function(options) {
+                        const dataSource = this._dataSource;
+
+                        if(dataSource && options && options.load && isAppendMode(this)) {
+                            dataSource.resetCurrentTotalCount();
+                        }
+
+                        return this.callBase.apply(this, arguments);
                     },
                     dispose: function() {
                         const rowsScrollController = this._rowsScrollController;

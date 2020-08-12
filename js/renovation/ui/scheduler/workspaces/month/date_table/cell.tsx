@@ -5,9 +5,9 @@ import { DateTableCellBase, DateTableCellBaseProps } from '../../base/date_table
 
 export const viewFunction = (viewModel: MonthDateTableCell) => (
   <DateTableCellBase
-    className={viewModel.classes}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    className={viewModel.classes}
   >
     <div>
       {viewModel.props.startDate!.getDate()}

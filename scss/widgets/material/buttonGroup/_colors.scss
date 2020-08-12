@@ -9,7 +9,7 @@
 * $name 10. Selected item text color
 * $type color
 */
-$button-group-normal-selected-color: null !default;
+$button-group-normal-selected-color: $base-text-color !default;
 $button-group-normal-contained-selected-bg: null !default;
 $button-group-normal-contained-selected-bg-hover: null !default;
 $button-group-normal-contained-selected-bg-focused: null !default;
@@ -19,22 +19,20 @@ $button-group-normal-contained-selected-bg-focused: null !default;
 * $type color
 */
 $button-group-normal-selected-bg: null !default;
-$button-group-normal-selected-bg-hover: null !default;
-$button-group-normal-selected-bg-focused: null !default;
 
 /**
 * $name 10. Selected item text color
 * $type color
 */
-$button-group-default-selected-color: null !default;
+$button-group-default-selected-color: $button-default-bg !default;
 
 /**
 * $name 20. Selected item background color
 * $type color
 */
-$button-group-default-selected-bg: null !default;
-$button-group-default-selected-bg-hover: null !default;
-$button-group-default-selected-bg-focused: null !default;
+$button-group-default-selected-bg: color.change($button-default-bg, $alpha: 0.22) !default;
+$button-group-default-selected-bg-hover: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
+$button-group-default-selected-bg-focused: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
 $button-group-default-contained-hover-bg: null !default;
 $button-group-default-contained-focused-bg: null !default;
 
@@ -42,15 +40,15 @@ $button-group-default-contained-focused-bg: null !default;
 * $name 10. Selected item text color
 * $type color
 */
-$button-group-danger-selected-color: null !default;
+$button-group-danger-selected-color: $button-danger-bg !default;
 
 /**
 * $name 20. Selected item background color
 * $type color
 */
-$button-group-danger-selected-bg: null !default;
-$button-group-danger-selected-bg-hover: null !default;
-$button-group-danger-selected-bg-focused: null !default;
+$button-group-danger-selected-bg: color.change($button-danger-bg, $alpha: 0.22) !default;
+$button-group-danger-selected-bg-hover: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
+$button-group-danger-selected-bg-focused: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
 $button-group-danger-contained-hover-bg: null !default;
 $button-group-danger-contained-focused-bg: null !default;
 
@@ -58,103 +56,44 @@ $button-group-danger-contained-focused-bg: null !default;
 * $name 10. Selected item text color
 * $type color
 */
-$button-group-success-selected-color: null !default;
+$button-group-success-selected-color: $button-success-bg !default;
 
 /**
 * $name 20. Selected item background color
 * $type color
 */
-$button-group-success-selected-bg: null !default;
-$button-group-success-selected-bg-hover: null !default;
-$button-group-success-selected-bg-focused: null !default;
+$button-group-success-selected-bg: color.change($button-success-bg, $alpha: 0.22) !default;
+$button-group-success-selected-bg-hover: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;
+$button-group-success-selected-bg-focused: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;
 $button-group-success-contained-hover-bg: null !default;
 $button-group-success-contained-focused-bg: null !default;
 
 @if $mode == "light" {
-
-  $button-group-normal-selected-color: $base-text-color !default;
-
   $button-group-normal-contained-selected-bg: darken($button-normal-bg, 18%) !default;
   $button-group-normal-contained-selected-bg-hover: lighten($button-group-normal-contained-selected-bg, 6%) !default;
   $button-group-normal-contained-selected-bg-focused: lighten($button-group-normal-contained-selected-bg, 6%) !default;
-
   $button-group-normal-selected-bg: color.change(darken($button-normal-bg, 100%), $alpha: 0.18) !default;
-
-  $button-group-normal-selected-bg-hover: color.change($button-group-normal-selected-bg, $alpha: 0.12) !default;
-  $button-group-normal-selected-bg-focused: color.change($button-group-normal-selected-bg, $alpha: 0.12) !default;
-
-  $button-group-default-selected-color: $button-default-bg !default;
-
-  $button-group-default-selected-bg: color.change($button-default-bg, $alpha: 0.22) !default;
-
-  $button-group-default-selected-bg-hover: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
-  $button-group-default-selected-bg-focused: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
-
   $button-group-default-contained-hover-bg: lighten($button-default-bg, 43.5%) !default;
   $button-group-default-contained-focused-bg: lighten($button-default-bg, 43.5%) !default;
-
-  $button-group-danger-selected-color: $button-danger-bg !default;
-
-  $button-group-danger-selected-bg: color.change($button-danger-bg, $alpha: 0.22) !default;
-
-  $button-group-danger-selected-bg-hover: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
-  $button-group-danger-selected-bg-focused: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
-
   $button-group-danger-contained-hover-bg: lighten($button-danger-bg, 38.3%) !default;
   $button-group-danger-contained-focused-bg: lighten($button-danger-bg, 38.3%) !default;
-
-  $button-group-success-selected-color: $button-success-bg !default;
-
-  $button-group-success-selected-bg: color.change($button-success-bg, $alpha: 0.22) !default;
-
-  $button-group-success-selected-bg-hover: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;
-  $button-group-success-selected-bg-focused: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;
-
   $button-group-success-contained-hover-bg: lighten($button-success-bg, 43.5%) !default;
   $button-group-success-contained-focused-bg: lighten($button-success-bg, 43.5%) !default;
 }
 
 @if $mode == "dark" {
-
-  $button-group-normal-selected-color: $base-text-color !default;
-
   $button-group-normal-contained-selected-bg: lighten($button-normal-bg, 18%) !default;
   $button-group-normal-contained-selected-bg-hover: darken($button-group-normal-contained-selected-bg, 6%) !default;
   $button-group-normal-contained-selected-bg-focused: darken($button-group-normal-contained-selected-bg, 6%) !default;
-
   $button-group-normal-selected-bg: color.change(lighten($button-normal-bg, 100%), $alpha: 0.18) !default;
-
-  $button-group-normal-selected-bg-hover: color.change($button-group-normal-selected-bg, $alpha: 0.12) !default;
-  $button-group-normal-selected-bg-focused: color.change($button-group-normal-selected-bg, $alpha: 0.12) !default;
-
-  $button-group-default-selected-color: $button-default-bg !default;
-
-  $button-group-default-selected-bg: color.change($button-default-bg, $alpha: 0.22) !default;
-
-  $button-group-default-selected-bg-hover: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
-  $button-group-default-selected-bg-focused: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
-
   $button-group-default-contained-hover-bg: mix($button-normal-bg, $button-default-bg, 92%) !default;
   $button-group-default-contained-focused-bg: mix($button-normal-bg, $button-default-bg, 92%) !default;
-
-  $button-group-danger-selected-color: $button-danger-bg !default;
-
-  $button-group-danger-selected-bg: color.change($button-danger-bg, $alpha: 0.22) !default;
-
-  $button-group-danger-selected-bg-hover: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
-  $button-group-danger-selected-bg-focused: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
-
   $button-group-danger-contained-hover-bg: mix($button-normal-bg, $button-danger-bg, 92%) !default;
   $button-group-danger-contained-focused-bg: mix($button-normal-bg, $button-danger-bg, 92%) !default;
-
-  $button-group-success-selected-color: $button-success-bg !default;
-
-  $button-group-success-selected-bg: color.change($button-success-bg, $alpha: 0.22) !default;
-
-  $button-group-success-selected-bg-hover: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;
-  $button-group-success-selected-bg-focused: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;
-
   $button-group-success-contained-hover-bg: mix($button-normal-bg, $button-success-bg, 92%) !default;
   $button-group-success-contained-focused-bg: mix($button-normal-bg, $button-success-bg, 92%) !default;
 }
+
+$button-group-normal-selected-bg-hover: color.change($button-group-normal-selected-bg, $alpha: 0.12) !default;
+$button-group-normal-selected-bg-focused: color.change($button-group-normal-selected-bg, $alpha: 0.12) !default;
 

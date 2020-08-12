@@ -12,7 +12,7 @@ export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef a
 
 @ComponentBindings()
 export class SelectBoxProps extends WidgetProps {
-  @OneWay() dataSource?: string | Array<string | any> | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | (string | any)[] | DataSource | DataSourceOptions;
 
   @OneWay() displayExpr?: string;
 
