@@ -5897,7 +5897,16 @@ QUnit.module('Vertical headers', {
         assert.deepEqual(columnsWidth, dataWidth);
     });
 
-    if(!browser.msie) {
+    function needRunZoomTest() {
+        if(browser.msie) {
+            return false;
+        }
+        const isNoJquery = !config().useJQuery;
+        const isNewJQuery = parseInt($.fn.jquery) >= 3;
+        return isNoJquery || isNewJQuery;
+    }
+
+    if(needRunZoomTest()) {
         ['standard', 'virtual'].forEach(scrollingMode => {
             [true, false].forEach(useNative => {
                 QUnit.test(`No extra scrollbar on zoom, useNative=${useNative}, scrollingMode=${scrollingMode} (T914454)`, function(assert) {
