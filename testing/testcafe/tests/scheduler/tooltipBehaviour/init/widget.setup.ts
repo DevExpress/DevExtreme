@@ -12,7 +12,7 @@ export const createScheduler = (options = {}) => createWidget('dxScheduler', ext
   maxAppointmentsPerCell: 5,
   currentView: 'day',
   currentDate: new Date(2019, 3, 1),
-}, options));
+}, options), true);
 
 export const scroll = (horizontal: number, vertical: number) => ClientFunction(
   () => { window.scroll(horizontal, vertical); },
