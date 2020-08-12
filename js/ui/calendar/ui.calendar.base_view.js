@@ -97,7 +97,6 @@ const BaseView = Widget.inherit({
             for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
                 this._renderCell(rowData, colIndex);
             }
-            this.$body.get(0).appendChild(rowData.row);
         }
     },
 
@@ -105,6 +104,7 @@ const BaseView = Widget.inherit({
         const row = domAdapter.createElement('tr');
 
         this.setAria('role', 'row', $(row));
+        this.$body.get(0).appendChild(row);
 
         return row;
     },
