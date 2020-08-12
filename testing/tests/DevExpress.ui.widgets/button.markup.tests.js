@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import { createModuleConfig } from '../../helpers/renovationHelper.js';
+import dxrButton from 'renovation/ui/button.j';
+import dxButton from 'ui/button';
 
 import 'ui/button';
 import 'common.css!';
@@ -29,7 +32,7 @@ const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 
-QUnit.module('Button markup', () => {
+QUnit.module('Button markup', createModuleConfig(dxButton, dxrButton), function() {
     QUnit.test('markup init', function(assert) {
         const element = $('#button').dxButton();
 
@@ -189,9 +192,10 @@ QUnit.module('Button markup', () => {
 
     QUnit.test('dxButton should render custom template with render function that returns dom node', function(assert) {
         const $element = $('#button').dxButton({
+            template: 'test',
             integrationOptions: {
                 templates: {
-                    'content': {
+                    'test': {
                         render: function(args) {
                             const $element = $('<span>')
                                 .addClass('dx-template-wrapper')
@@ -206,56 +210,55 @@ QUnit.module('Button markup', () => {
 
         assert.equal($element.text(), 'button text', 'container is correct');
     });
-});
 
-QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
-        const $element = $('#button').dxButton({});
+    QUnit.module('aria accessibility', () => {
+        QUnit.test('aria role', function(assert) {
+            const $element = $('#button').dxButton({});
 
-        assert.equal($element.attr('role'), 'button', 'aria role is correct');
-    });
-
-    QUnit.test('aria-label attribute', function(assert) {
-        const $element = $('#button').dxButton({
-            text: 'test',
-            icon: 'find',
-            type: 'danger'
-        });
-        const instance = $element.dxButton('instance');
-
-        assert.equal($element.attr('aria-label'), 'test', 'aria label for all params is correct');
-
-        instance.option('text', '');
-        assert.equal($element.attr('aria-label'), 'find', 'aria label without text is correct');
-
-        instance.option('icon', '/path/file.png');
-        assert.equal($element.attr('aria-label'), 'file', 'aria label without text and icon is correct');
-
-        instance.option('icon', '');
-        assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
-    });
-
-    QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
-        const $element = $('#button').dxButton({
-            icon: 'data:image/png;base64,'
+            assert.equal($element.attr('role'), 'button', 'aria role is correct');
         });
 
-        assert.equal($element.attr('aria-label'), 'Base64', 'aria label is not exist');
-    });
+        QUnit.test('aria-label attribute', function(assert) {
+            const $element = $('#button').dxButton({
+                text: 'test',
+                icon: 'find',
+                type: 'danger'
+            });
+            const instance = $element.dxButton('instance');
 
-    QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {
-        const $element = $('#button').dxButton({});
-        const instance = $element.dxButton('instance');
+            assert.equal($element.attr('aria-label'), 'test', 'aria label for all params is correct');
 
-        const backIconClass = '.dx-icon-back';
+            instance.option('text', '');
+            assert.equal($element.attr('aria-label'), 'find', 'aria label without text is correct');
 
-        assert.equal($element.find(backIconClass).length, 0, 'button hasn\'t \'back\' icon');
+            instance.option('icon', '/path/file.png');
+            assert.equal($element.attr('aria-label'), 'file', 'aria label without text and icon is correct');
 
-        instance.option('type', 'back');
-        assert.equal($element.find(backIconClass).length, 1, 'button has \'back\' icon');
+            instance.option('icon', '');
+            assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
+        });
 
-        instance.option('type', 'normal');
-        assert.equal($element.find(backIconClass).length, 0, 'button hasn\'t \'back\' icon');
+        QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
+            const $element = $('#button').dxButton({
+                icon: 'data:image/png;base64,'
+            });
+
+            assert.equal($element.attr('aria-label'), 'Base64', 'aria label is not exist');
+        });
+
+        QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {
+            const $element = $('#button').dxButton({});
+            const instance = $element.dxButton('instance');
+
+            const backIconClass = '.dx-icon-back';
+
+            assert.equal($element.find(backIconClass).length, 0, 'button hasn\'t \'back\' icon');
+
+            instance.option('type', 'back');
+            assert.equal($element.find(backIconClass).length, 1, 'button has \'back\' icon');
+
+            instance.option('type', 'normal');
+            assert.equal($element.find(backIconClass).length, 0, 'button hasn\'t \'back\' icon');
+        });
     });
 });
-

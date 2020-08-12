@@ -1,14 +1,17 @@
 import registerComponent from 'core/component_registrator';
 import { name as getName } from 'core/utils/public_component';
 import { act } from 'preact/test-utils';
-import Button from 'ui/button';
-import rButton from 'renovation/ui/button.j';
 
-export const isRenovation = () => rButton === Button;
+export const isRenovationWidget = (oldWidget) => {
+    if(oldWidget.prototype._renderPreact !== undefined) {
+        return true;
+    }
+    return false;
+};
 
 export const createModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
     const widgetName = getName(oldWidget);
-    if(isRenovation()) {
+    if(isRenovationWidget(oldWidget)) {
         return {
             beforeEach: function() {
                 const renovatedWidgetWrapper = renovatedWidget.inherit({
@@ -32,7 +35,14 @@ export const createModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
                             res = this.callBase.apply(this, arguments);
                         });
                         return res;
-                    }
+                    },
+                    repaint: function() {
+                        let res;
+                        act(() => {
+                            res = this.callBase.apply(this, arguments);
+                        });
+                        return res;
+                    },
                 });
                 renovatedWidgetWrapper.getInstance = renovatedWidget.getInstance;
                 registerComponent(widgetName, renovatedWidgetWrapper);
@@ -46,12 +56,4 @@ export const createModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
     } else {
         return config;
     }
-};
-
-export const getQUnitModuleForTestingRenovationWidget = (oldWidget, newWidget) => (name, config, tests) => {
-    const realConfig = tests ? config : {};
-    const realTests = tests || config;
-    QUnit.module(name, config, () => realTests(false));
-    const newConfig = createModuleConfig(oldWidget, newWidget, realConfig);
-    QUnit.module(`Renovated ${name}`, newConfig, () => realTests(true));
 };

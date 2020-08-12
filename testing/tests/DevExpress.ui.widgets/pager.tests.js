@@ -5,7 +5,7 @@ import typeUtils from 'core/utils/type';
 import 'common.css!';
 import 'generic_light.css!';
 import Pager from 'ui/pager';
-import { createModuleConfig, isRenovation } from '../../helpers/renovationHelper.js';
+import { createModuleConfig, isRenovationWidget } from '../../helpers/renovationHelper.js';
 import { RenovatedPagerForTest } from '../../helpers/renovationPagerHelper.js';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
@@ -48,7 +48,8 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
         };
     }
 }),
-() => {
+function() {
+    const isRenovation = isRenovationWidget(Pager);
     const getPagesElement = function(rootElement) {
         return rootElement.find('.dx-pages')[0].childNodes;
     };
@@ -62,7 +63,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
         assert.equal(instance.option('pageCount'), 10, 'pageCount');
         assert.deepEqual(instance.option('pageSizes'), [5, 10], 'pageSizes');
         assert.ok(instance.option('hasKnownLastPage'), 'hasKnownLastPage');
-        if(isRenovation()) {
+        if(isRenovationWidget(Pager)) {
             assert.equal(instance.option('defaultPageSize'), 5, 'pageSize');
         } else {
             assert.equal(instance.option('pageSize'), 5, 'pageSize');
@@ -140,7 +141,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
         const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 1, hasKnownLastPage: false });
         const instance = $pager.dxPager('instance');
 
-        if(isRenovation()) {
+        if(isRenovation) {
             assert.strictEqual($pager.find('.dx-next-button').length, 1, 'pager has next page button');
             assert.strictEqual($pager.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
         } else {
@@ -172,7 +173,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
 
         const instance = $pager.dxPager('instance');
 
-        if(isRenovation()) {
+        if(isRenovation) {
             assert.strictEqual($pager.find('.dx-next-button').length, 1, 'pager has next page button');
             assert.strictEqual($pager.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
             assert.ok(this.checkPages(instance._pages, [1, 2, 3, 4, 5, 13], '1'), 'pages');
@@ -420,7 +421,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
         assert.equal(getText(pageSizesElements[1]), 10, 'page size = 10');
         assert.equal(getText(pageSizesElements[2]), 20, 'page size = 20');
     });
-    if(!isRenovation()) {
+    if(!isRenovation) {
         QUnit.test('Page sizes render when pageSizes is false', function(assert) {
             $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, pageSizes: false });
 
@@ -716,7 +717,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
         assert.equal(instance.option('pageIndex'), 8);
     });
 
-    if(!isRenovation()) {
+    if(!isRenovation) {
         QUnit.test('Pointer up on navigate button', function(assert) {
             const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
             const instance = $pager.dxPager('instance');
@@ -1486,7 +1487,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
         assert.ok(!isPageChanged);
     });
 
-    if(!isRenovation()) {
+    if(!isRenovation) {
         QUnit.test('Pager is not re-rendered in the Light mode when width is not changed', function(assert) {
             const pager = $('#container')
                 .width(PAGER_LIGHT_MODE_WIDTH)
