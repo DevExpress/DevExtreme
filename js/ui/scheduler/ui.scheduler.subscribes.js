@@ -35,7 +35,7 @@ const subscribes = {
     },
 
     createAppointmentSettings: function(args) {
-        return this._createAppointmentSettings(args.appointmentData); // TODO: temporary solution
+        return this._getAppointmentSettingsGenerator()._createAppointmentSettings(args.appointmentData); // TODO: temporary solution
     },
 
     isGroupedByDate: function() {
