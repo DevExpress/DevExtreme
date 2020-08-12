@@ -117,8 +117,10 @@ export default class ViewDataGenerator {
                 const cellDataValue = { };
 
                 cellDataGetters.forEach(getter => {
-                    Object.assign(cellDataValue, getter(undefined, rowIndex, j).value);
+                    const cellValue = getter(undefined, rowIndex, j).value;
+                    Object.assign(cellDataValue, cellValue);
                 });
+
                 viewCellsData[i].push(cellDataValue);
             }
         }

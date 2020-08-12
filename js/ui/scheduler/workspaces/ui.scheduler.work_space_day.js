@@ -55,7 +55,8 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         options.cellDataGetters.push((_, rowIndex, cellIndex) => {
             return {
                 value: {
-                    startDate: this._getTimeCellDate(rowIndex, cellIndex),
+                    // TODO check the need
+                    // startDate: this._getTimeCellDate(rowIndex, cellIndex),
                     text: _getTimeText(rowIndex, cellIndex)
                 }
             };

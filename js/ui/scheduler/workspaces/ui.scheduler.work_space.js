@@ -2013,7 +2013,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellCoordinatesByIndex(index) {
         const cellIndex = Math.floor(index / this._getRowCount());
-        const rowIndex = index - this._getRowCount() * cellIndex;
+        let rowIndex = index - this._getRowCount() * cellIndex;
+
+        rowIndex -= this._getVirtualRowOffset();
 
         return {
             cellIndex: cellIndex,
@@ -2307,17 +2309,25 @@ class SchedulerWorkSpace extends WidgetObserver {
         return extend(true, {}, data);
     }
 
+    _getVirtualRowOffset() {
+        return this.isVirtualScrolling() ? this._virtualScrolling.getState().startIndex : 0;
+    }
+
     _getCellDataInRenovatedView($cell) {
         const isAllDayCell = this._hasAllDayClass($cell);
+        const virtualRowOffset = this._getVirtualRowOffset();
 
-        const rowIndex = $cell.parent().index();
+        const rowIndex = $cell.parent().index() + virtualRowOffset;
 
         const columnIndex = $cell.index();
-        const cellIndex = this.option('rtlEnabled') ? cellCount - columnIndex : columnIndex;
         const cellCount = this._getTotalCellCount();
+        const cellIndex = this.option('rtlEnabled') ? cellCount - columnIndex : columnIndex;
         const rowCount = this._getRowCountWithAllDayRows();
-        const indexDiff = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace()
-            ? 1 : 0;
+
+        let indexDiff = 0;
+        const isGroupedAllDayPanel = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace();
+        isGroupedAllDayPanel && ++indexDiff;
+        this.isVirtualScrolling() && ++indexDiff;
 
         const groupIndex = Math.floor(rowIndex / rowCount);
         const currentGroup = this.viewData.groupedData[groupIndex];
