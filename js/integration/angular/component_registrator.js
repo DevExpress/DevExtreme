@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 // eslint-disable-next-line no-restricted-imports
 import angular from 'angular';
 import eventsEngine from '../../events/core/events_engine';
-import { wrapActionsBeforeExecute } from '../../core/config';
+import config from '../../core/config';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
@@ -436,7 +436,7 @@ if(angular) {
 
             result.templatesRenderAsynchronously = true;
 
-            if(wrapActionsBeforeExecute) {
+            if(config().wrapActionsBeforeExecute) {
                 result.forceApplyBindings = () => {
                     safeApply(() => {}, scope);
                 };
@@ -468,7 +468,7 @@ if(angular) {
                         callback(immediateValue);
                     }
 
-                    if(wrapActionsBeforeExecute) {
+                    if(config().wrapActionsBeforeExecute) {
                         this._applyAsync(() => {}, scope);
                     }
 

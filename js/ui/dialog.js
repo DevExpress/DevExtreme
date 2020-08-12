@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import Component from '../core/component';
 import Action from '../core/action';
 import devices from '../core/devices';
-import { rtlEnabled } from '../core/config';
+import config from '../core/config';
 
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
@@ -177,7 +177,7 @@ export const custom = function(options) {
                 }
             }
         },
-        rtlEnabled: rtlEnabled,
+        rtlEnabled: config().rtlEnabled,
         boundaryOffset: { h: 10, v: 0 }
     }, options.popupOptions));
 

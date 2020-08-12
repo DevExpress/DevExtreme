@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import dataUtils from './utils';
 import { applyBatch } from './array_utils';
 import { isFunction } from '../core/utils/type';
-import { useLegacyStoreResult } from '../core/config';
+import config from '../core/config';
 import { errors } from './errors';
 import Store from './abstract_store';
 import arrayQuery from './array_query';
@@ -321,7 +321,7 @@ const CustomStore = Store.inherit({
 
         fromPromise(userResult)
             .done(function(serverResponse) {
-                if(useLegacyStoreResult) {
+                if(config().useLegacyStoreResult) {
                     d.resolve(values, serverResponse);
                 } else {
                     d.resolve(serverResponse || values, that.keyOf(serverResponse));
@@ -346,7 +346,7 @@ const CustomStore = Store.inherit({
 
         fromPromise(userResult)
             .done(function(serverResponse) {
-                if(useLegacyStoreResult) {
+                if(config().useLegacyStoreResult) {
                     d.resolve(key, values);
                 } else {
                     d.resolve(serverResponse || values, key);

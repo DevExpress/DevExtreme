@@ -1,5 +1,5 @@
 import registerComponent from '../../core/component_registrator';
-import { forceIsoDateParsing } from '../../core/config';
+import config from '../../core/config';
 import devices from '../../core/devices';
 import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
@@ -46,12 +46,7 @@ import SchedulerHeader from './ui.scheduler.header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
-import {
-    getCorrectedDateByDaylightOffsets,
-    correctRecurrenceExceptionByTimezone,
-    getTimezoneOffsetChangeInMs,
-    calculateTimezoneByValue
-} from './utils.timeZone';
+import timeZoneUtils from './utils.timeZone';
 import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
 import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
 import SchedulerTimelineMonth from './workspaces/ui.scheduler.timeline_month';
@@ -1093,7 +1088,7 @@ class Scheduler extends Widget {
     }
 
     _getTimezoneOffsetByOption(date) {
-        return calculateTimezoneByValue(this.option('timeZone'), date);
+        return timeZoneUtils.calculateTimezoneByValue(this.option('timeZone'), date);
     }
 
 
@@ -1106,7 +1101,7 @@ class Scheduler extends Widget {
             dates = dates.map((date) => {
                 const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
 
-                return getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
+                return timeZoneUtils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
             });
         }
 
@@ -1372,7 +1367,7 @@ class Scheduler extends Widget {
                     const that = this;
                     dateGetter = function() {
                         let value = getter.apply(this, arguments);
-                        if(forceIsoDateParsing) {
+                        if(config().forceIsoDateParsing) {
                             if(!that.option('dateSerializationFormat')) {
                                 const format = dateSerialization.getDateSerializationFormat(value);
                                 if(format) {
@@ -1384,7 +1379,7 @@ class Scheduler extends Widget {
                         return value;
                     };
                     dateSetter = function(object, value) {
-                        if(forceIsoDateParsing || that.option('dateSerializationFormat')) {
+                        if(config().forceIsoDateParsing || that.option('dateSerializationFormat')) {
                             value = dateSerialization.serializeDate(value, that.option('dateSerializationFormat'));
                         }
                         setter.call(this, object, value);
@@ -2051,7 +2046,7 @@ class Scheduler extends Widget {
             }
         }
 
-        endDate = new Date(endDate.getTime() - getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
 
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
@@ -2423,7 +2418,7 @@ class Scheduler extends Widget {
         const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
         let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
 
-        convertedExceptionDate = correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
         exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     }

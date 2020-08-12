@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { floatingActionButtonConfig } from '../../core/config';
+import config from '../../core/config';
 import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
 import errors from '../widget/ui.errors';
@@ -50,7 +50,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
         return extend(
             super._getDefaultOptions(),
-            extend(defaultOptions, floatingActionButtonConfig, { shading: false })
+            extend(defaultOptions, config().floatingActionButtonConfig, { shading: false })
         );
     }
 
@@ -129,7 +129,7 @@ class SpeedDialMainItem extends SpeedDialItem {
             actions[i].toggle();
         }
 
-        if(floatingActionButtonConfig.shading) {
+        if(config().floatingActionButtonConfig.shading) {
             this._isShadingShown = !this.option('shading');
             this.option('shading', this._isShadingShown);
         }

@@ -4,7 +4,7 @@ import { escapeRegExp } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import { isPlainObject } from '../core/utils/type';
 import { getFormatter } from './ldml/number';
-import { thousandsSeparator, decimalSeparator } from '../core/config';
+import config from '../core/config';
 import errors from '../core/errors';
 import { toFixed } from './utils';
 import currencyLocalization from './currency';
@@ -148,7 +148,7 @@ const numberLocalization = dependencyInjector({
     _addGroupSeparators: function(value) {
         const parts = value.toString().split('.');
 
-        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator) + (parts[1] ? decimalSeparator + parts[1] : '');
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().thousandsSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : '');
     },
 
     _formatNumberCore: function(value, format, formatConfig) {
@@ -175,7 +175,7 @@ const numberLocalization = dependencyInjector({
         if(format !== 'decimal') {
             value = this._addGroupSeparators(value);
         } else {
-            value = value.toString().replace('.', decimalSeparator);
+            value = value.toString().replace('.', config().decimalSeparator);
         }
 
         if(format === 'percent') {

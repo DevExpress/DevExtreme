@@ -15,7 +15,7 @@ import { normalizeKeyName } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import ClearButton from './ui.text_editor.clear';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
-import { editorStylingMode } from '../../core/config';
+import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
@@ -138,7 +138,7 @@ const TextEditorBase = Editor.inherit({
             },
 
 
-            stylingMode: editorStylingMode || 'outlined',
+            stylingMode: config().editorStylingMode || 'outlined',
 
             showValidationMark: true
         });
@@ -153,7 +153,7 @@ const TextEditorBase = Editor.inherit({
                     return isMaterial(themeName);
                 },
                 options: {
-                    stylingMode: editorStylingMode || 'underlined'
+                    stylingMode: config().editorStylingMode || 'underlined'
                 }
             }
         ]);

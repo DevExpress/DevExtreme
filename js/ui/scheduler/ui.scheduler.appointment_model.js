@@ -1,4 +1,4 @@
-import { forceIsoDateParsing } from '../../core/config';
+import config from '../../core/config';
 import { map, each } from '../../core/utils/iterator';
 import dateSerialization from '../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from './recurrence';
@@ -405,7 +405,7 @@ class AppointmentModel {
         const endDate = this._dataAccessors.expr.endDateExpr;
 
         if(isString(filter[0])) {
-            if(forceIsoDateParsing && filter.length > 1) {
+            if(config().forceIsoDateParsing && filter.length > 1) {
                 if(filter[0] === startDate || filter[0] === endDate) {
                     // TODO: wrap filter value to new Date only necessary for case T838165(details in note)
                     filter[filter.length - 1] = dateSerialization.serializeDate(new Date(filter[filter.length - 1]), dateSerializationFormat);

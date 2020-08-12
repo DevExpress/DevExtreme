@@ -50,7 +50,7 @@ const currencyData = {
 
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
-import { defaultCurrency } from '../../core/config';
+import config from '../../core/config';
 import numberLocalization from '../number';
 
 if(Globalize && Globalize.formatCurrency) {
@@ -86,7 +86,7 @@ if(Globalize && Globalize.formatCurrency) {
     const globalizeCurrencyLocalization = {
         _formatNumberCore: function(value, format, formatConfig) {
             if(format === 'currency') {
-                const currency = formatConfig && formatConfig.currency || defaultCurrency;
+                const currency = formatConfig && formatConfig.currency || config().defaultCurrency;
                 return getFormatter(currency, this._normalizeFormatConfig(format, formatConfig, value))(value);
             }
 
@@ -110,7 +110,7 @@ if(Globalize && Globalize.formatCurrency) {
 
             if(format) {
                 if(format.currency === 'default') {
-                    format.currency = defaultCurrency;
+                    format.currency = config().defaultCurrency;
                 }
 
                 if(format.type === 'currency') {
@@ -124,7 +124,7 @@ if(Globalize && Globalize.formatCurrency) {
         },
         getCurrencySymbol: function(currency) {
             if(!currency) {
-                currency = defaultCurrency;
+                currency = config().defaultCurrency;
             }
 
             return Globalize.cldr.main('numbers/currencies/' + currency);

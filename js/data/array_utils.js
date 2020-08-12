@@ -1,5 +1,5 @@
 import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
-import { useLegacyStoreResult } from '../core/config';
+import config from '../core/config';
 import Guid from '../core/guid';
 import { extend } from '../core/utils/extend';
 import { errors } from './errors';
@@ -116,7 +116,7 @@ function update(keyInfo, array, key, data, isBatch) {
 
     deepExtendArraySafe(target, data, extendComplexObject);
     if(!isBatch) {
-        if(useLegacyStoreResult) {
+        if(config().useLegacyStoreResult) {
             return trivialPromise(key, data);
         } else {
             return trivialPromise(target, key);
@@ -154,7 +154,7 @@ function insert(keyInfo, array, data, index, isBatch) {
     setDataByKeyMapValue(array, keyValue, obj);
 
     if(!isBatch) {
-        return trivialPromise(useLegacyStoreResult ? data : obj, keyValue);
+        return trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);
     }
 }
 
