@@ -1618,6 +1618,12 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
+            const diff = totalWidth - groupWidth;
+            const needAdjustWidthOnZoom = diff >= 0 && diff <= 2;
+            if(needAdjustWidthOnZoom) { // T914454
+                adjustSizeArray(resultWidths, diff);
+                totalWidth = groupWidth;
+            }
 
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);

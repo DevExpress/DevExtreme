@@ -476,7 +476,7 @@ class Menu extends MenuBase {
     }
 
     _getKeyboardListeners() {
-        return super._getKeyboardListeners().concat(this._submenus);
+        return super._getKeyboardListeners().concat(this._visibleSubmenu);
     }
 
     _createSubmenu(node, $rootItem) {
@@ -829,6 +829,7 @@ class Menu extends MenuBase {
         }
 
         if(submenu) {
+            this._clearTimeouts();
             submenu.show();
             this.option('focusedElement', submenu.option('focusedElement'));
         }

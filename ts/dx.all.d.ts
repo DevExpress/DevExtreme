@@ -3487,6 +3487,8 @@ declare module DevExpress.ui {
     }
     /** @name dxDropDownButtonItem */
     export interface dxDropDownButtonItem extends dxListItem {
+        /** @name dxDropDownButtonItem.onClick */
+        onClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.events.event }) => any) | string;
     }
     /** @name dxDropDownEditor.Options */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
@@ -3633,7 +3635,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.itemView */
         itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onContextMenuItemClick */
-        onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
+        onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
         onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.onErrorOccurred */

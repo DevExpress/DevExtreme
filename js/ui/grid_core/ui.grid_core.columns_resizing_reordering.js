@@ -706,9 +706,6 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const e = args.event;
         const that = e.data;
         const eventData = getEventData(e);
-        const editingController = that.getController('editing');
-        const editingMode = that.option('editing.mode');
-        const isCellEditing = editingController.isEditing() && (editingMode === 'batch' || editingMode === 'cell');
 
         if(isTouchEvent(e)) {
             if(that._isHeadersRowArea(eventData.y)) {
@@ -722,7 +719,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             }
         }
 
-        if(that._isReadyResizing && !isCellEditing) {
+        if(that._isReadyResizing) {
             ///#DEBUG
             if(that._targetPoint) {
                 that._testColumnIndex = that._targetPoint.columnIndex;
