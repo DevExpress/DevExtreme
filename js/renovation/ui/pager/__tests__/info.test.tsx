@@ -1,5 +1,5 @@
-import { h, createRef } from 'preact';
-import { shallow } from 'enzyme';
+import React, { createRef } from 'react';
+import { shallow, mount } from 'enzyme';
 import { InfoText, viewFunction as InfoTextComponent } from '../info';
 
 describe('Info, separate view and component approach', () => {
@@ -11,10 +11,10 @@ describe('Info, separate view and component approach', () => {
     });
 
     it('ref test', () => {
-      const ref = createRef();
-      shallow(<InfoTextComponent {...{ htmlRef: ref, text: 'text' } as any} /> as any);
+      const ref = createRef<HTMLDivElement>();
+      mount(<InfoTextComponent {...{ htmlRef: ref, text: 'text' } as any} /> as any);
       expect(ref.current).not.toBeNull();
-      expect(ref.current.className).toBe('dx-info');
+      expect(ref.current!.className).toBe('dx-info');
     });
   });
 

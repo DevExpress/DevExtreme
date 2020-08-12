@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import { getImageContainer } from '../../core/utils/icon';
 

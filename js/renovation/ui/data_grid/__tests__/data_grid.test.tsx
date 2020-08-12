@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h, createRef } from 'preact';
+import React from 'react';
 import { mount, shallow } from 'enzyme';
-import DxDataGrid from '../../../ui/data_grid';
+import DxDataGrid from '../../../../ui/data_grid';
 import { viewFunction as DataGridView, DataGrid } from '../data_grid';
 import { DataGridProps } from '../props';
 
 const mockDispose = jest.fn();
 const mockOption = jest.fn();
 
-jest.mock('../../../ui/data_grid', () => {
+jest.mock('../../../../ui/data_grid', () => {
   const MockDxDataGrid = jest.fn().mockImplementation(() => ({
     dispose: mockDispose,
     option: mockOption,
@@ -24,17 +24,17 @@ describe('DataGrid', () => {
 
   describe('View', () => {
     it('default render', () => {
-      const widgetRef = createRef();
+      const widgetRef = React.createRef();
       const props = {
         props: new DataGridProps(),
         widgetRef,
-        restAttributes: { restAttributes: true },
+        restAttributes: { 'rest-attributes': 'true' },
       } as any as Partial<DataGrid>;
       const tree = mount(<DataGridView {...props as any} /> as any);
 
       expect(tree.find('div').props()).toEqual({
         className: '',
-        restAttributes: true,
+        'rest-attributes': 'true',
       });
       expect(tree.find('div').instance()).toBe(widgetRef.current);
     });

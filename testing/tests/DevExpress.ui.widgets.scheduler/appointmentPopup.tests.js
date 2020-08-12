@@ -11,6 +11,7 @@ import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import messageLocalization from 'localization/message';
 import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointment_form';
+import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
@@ -137,6 +138,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         assert.ok(form.getEditor('repeat').option('value'), 'repeat checkbox should be checked');
         assert.ok(form.option('items')[1].visible, 'recurrence form should be visible');
 
+        scheduler.instance.getAppointmentPopup().hide();
         scheduler.instance.showAppointmentPopup();
 
         assert.notOk(form.getEditor('repeat').option('value'), 'repeat checkbox should be unchecked if empty form');
@@ -1539,40 +1541,51 @@ QUnit.test('Multiple showing appointment popup for recurrence appointments shoul
 
 QUnit.test('Appointment popup will render even if no appointmentData is provided (T734413)', function(assert) {
     const scheduler = createInstance();
+    const currentDate = new Date(2020, 2, 4);
+    const cellDuration = 60;
+    scheduler.option('currentDate', currentDate);
+    scheduler.option('cellDuration', cellDuration);
+
     scheduler.instance.showAppointmentPopup({}, true);
     scheduler.instance.hideAppointmentPopup(true);
     scheduler.instance.showAppointmentPopup({}, true);
     const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
     const appointmentPopup = scheduler.appointmentPopup;
 
-    assert.equal(startDate, null, 'startDate has null in the dxForm');
-    assert.equal(endDate, null, 'endDate has null in the dxForm');
+    assert.equal(startDate.getTime(), currentDate.getTime(), 'startDate is currentDate in Appointment Form');
+    assert.equal(endDate.getTime(), new Date(currentDate.getTime() + cellDuration * toMs('minute')).getTime(), 'endDate is currentDate + cellDuration in Appointment Form');
     assert.ok(appointmentPopup.isVisible(), 'Popup is rendered');
 
     const $popup = appointmentPopup.getPopup();
     const $startDate = $popup.find('input[name=\'startDate\']')[0];
     const $endDate = $popup.find('input[name=\'endDate\']')[0];
 
-    assert.equal($startDate.value, '', 'startDate is rendered empty');
-    assert.equal($endDate.value, '', 'endDate is rendered empty');
+    assert.equal($startDate.value, '2020-03-04T00:00:00', 'startDate is specified');
+    assert.equal($endDate.value, '2020-03-04T01:00:00', 'endDate is specified');
 });
 
-QUnit.test('Appointment popup will render on showAppointmentPopup with no arguments', function(assert) {
+QUnit.test('Appointment popup will render with currentDate on showAppointmentPopup with no arguments', function(assert) {
     const scheduler = createInstance();
+    const currentDate = new Date(2020, 2, 4);
+    const cellDuration = 60;
+    scheduler.option('currentDate', currentDate);
+    scheduler.option('cellDuration', cellDuration);
+
     scheduler.instance.showAppointmentPopup();
+
     const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
     const appointmentPopup = scheduler.appointmentPopup;
 
-    assert.equal(startDate, null, 'startDate has null in the dxForm');
-    assert.equal(endDate, null, 'endDate has null in the dxForm');
+    assert.equal(startDate.getTime(), currentDate.getTime(), 'startDate is currentDate in Appointment Form');
+    assert.equal(endDate.getTime(), new Date(currentDate.getTime() + cellDuration * toMs('minute')).getTime(), 'endDate is currentDate + cellDuration in Appointment Form');
     assert.ok(appointmentPopup.isVisible(), 'Popup is rendered');
 
     const $popup = appointmentPopup.getPopup();
     const $startDate = $popup.find('input[name=\'startDate\']')[0];
     const $endDate = $popup.find('input[name=\'endDate\']')[0];
 
-    assert.equal($startDate.value, '', 'startDate is rendered empty');
-    assert.equal($endDate.value, '', 'endDate is rendered empty');
+    assert.equal($startDate.value, '2020-03-04T00:00:00', 'startDate is specified');
+    assert.equal($endDate.value, '2020-03-04T01:00:00', 'endDate is specified');
 });
 
 QUnit.test('Appointment form will have right dates on multiple openings (T727713)', function(assert) {

@@ -4,7 +4,7 @@ import {
 
 export declare type Rule<T> = {
     device: () => boolean | Device | Device[];
-    options: T;
+    options: Partial<T>;
 };
 
 export declare function convertRulesToOptions<T>(rules: Rule<T>[]): T;

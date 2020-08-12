@@ -10,7 +10,7 @@ describe('TooltipItemContent', () => {
     const render = (viewModel) => shallow(TooltipItemContentView({
       ...viewModel,
       props: { ...defaultProps, ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should combine `className` with predefined classes', () => {
       const tree = render({ props: { className: 'custom-class' } });
@@ -22,9 +22,9 @@ describe('TooltipItemContent', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tree = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const tree = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(tree.prop('customAttribute'))
+      expect(tree.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

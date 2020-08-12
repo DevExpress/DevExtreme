@@ -3,6 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
   Event,
+  TwoWay,
   OneWay,
   Effect,
   Ref,
@@ -55,7 +56,7 @@ export const viewFunction = ({
 export class PagesSmallProps {
   @OneWay() pageCount?: number = 10;
 
-  @OneWay() pageIndex?: number = 0;
+  @TwoWay() pageIndex?: number = 0;
 
   @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
 
@@ -89,6 +90,6 @@ export class PagesSmall extends JSXComponent(PagesSmallProps) {
   }
 
   valueChange(value: number): void {
-    this.props.pageIndexChange?.(value - 1);
+    this.props.pageIndex = value - 1;
   }
 }

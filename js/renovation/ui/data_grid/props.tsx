@@ -7,18 +7,18 @@ import {
   Nested,
   Template,
 } from 'devextreme-generator/component_declaration/common';
-import DxDataGrid from '../../ui/data_grid';
-import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../ui/data_grid';
-import { WidgetProps } from '../ui/common/widget';
+import DxDataGrid from '../../../ui/data_grid';
+import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../ui/data_grid';
+import { WidgetProps } from '../common/widget';
 
-import type { dxFilterBuilderOptions } from '../../ui/filter_builder';
-import type { dxElement } from '../../core/element';
-import type { template } from '../../core/templates/template';
-import type { event } from '../../events/index';
-import DataSource from '../../data/data_source';
-import type { DataSourceOptions } from '../../data/data_source';
-import type { dxPopupOptions } from '../../ui/popup';
-import type { dxToolbarOptions } from '../../ui/toolbar';
+import type { dxFilterBuilderOptions } from '../../../ui/filter_builder';
+import type { dxElement } from '../../../core/element';
+import type { template } from '../../../core/templates/template';
+import type { event } from '../../../events/index';
+import DataSource from '../../../data/data_source';
+import type { DataSourceOptions } from '../../../data/data_source';
+import type { dxPopupOptions } from '../../../ui/popup';
+import type { dxToolbarOptions } from '../../../ui/toolbar';
 import type {
   RequiredRule,
   NumericRule,
@@ -29,14 +29,14 @@ import type {
   CompareRule,
   EmailRule,
   AsyncRule,
-} from '../../ui/validation_engine';
+} from '../../../ui/validation_engine';
 // import { ExcelFont } from '../../exporter/excel/excel.doc_comments';
 // import { ExcelDataGridCell } from '../../excel_exporter';
-import type { format } from '../../ui/widget/ui.widget';
-import type dxSortable from '../../ui/sortable';
-import type dxDraggable from '../../ui/draggable';
-import type { dxFormSimpleItem, dxFormOptions } from '../../ui/form';
-import type Store from '../../data/abstract_store';
+import type { format } from '../../../ui/widget/ui.widget';
+import type dxSortable from '../../../ui/sortable';
+import type dxDraggable from '../../../ui/draggable';
+import type { dxFormSimpleItem, dxFormOptions } from '../../../ui/form';
+import type Store from '../../../data/abstract_store';
 
 @ComponentBindings()
 export class DataGridColumnButton {
@@ -89,7 +89,7 @@ export class DataGridColumnHeaderFilter {
 
   @OneWay()
   dataSource?:
-  | Array<any>
+  | any[]
   | ((options: { component?: any; dataSource?: DataSourceOptions }) => any)
   | DataSourceOptions;
 
@@ -113,10 +113,10 @@ export class DataGridColumnLookup {
 
   @OneWay()
   dataSource?:
-  | Array<any>
+  | any[]
   | DataSourceOptions
   | Store
-  | ((options: { data?: any; key?: any }) => Array<any> | DataSourceOptions | Store);
+  | ((options: { data?: any; key?: any }) => any[] | DataSourceOptions | Store);
 
   @OneWay()
   displayExpr?: string | ((data: any) => string);
@@ -168,7 +168,7 @@ export class DataGridColumn {
     filterValue: any,
     selectedFilterOperation: string,
     target: string,
-  ) => string | Array<any> | Function;
+  ) => string | any[] | Function;
 
   @Event()
   calculateSortValue?: string | ((rowData: any) => any);
@@ -203,8 +203,7 @@ export class DataGridColumn {
   falseText?: string;
 
   @OneWay()
-  filterOperations?: Array<
-  | '='
+  filterOperations?: (| '='
   | '<>'
   | '<'
   | '<='
@@ -218,8 +217,7 @@ export class DataGridColumn {
   | 'startswith'
   | 'between'
   | 'anyof'
-  | 'noneof'
-  >;
+  | 'noneof')[];
 
   @OneWay()
   filterType?: 'exclude' | 'include';
@@ -228,7 +226,7 @@ export class DataGridColumn {
   filterValue?: any;
 
   @OneWay()
-  filterValues?: Array<any>;
+  filterValues?: any[];
 
   @OneWay()
   fixed?: boolean;
@@ -306,8 +304,7 @@ export class DataGridColumn {
   trueText?: string;
 
   @OneWay()
-  validationRules?: Array<
-  | RequiredRule
+  validationRules?: (| RequiredRule
   | NumericRule
   | RangeRule
   | StringLengthRule
@@ -315,8 +312,7 @@ export class DataGridColumn {
   | CompareRule
   | PatternRule
   | EmailRule
-  | AsyncRule
-  >;
+  | AsyncRule)[];
 
   @OneWay()
   visible?: boolean;
@@ -337,7 +333,7 @@ export class DataGridColumn {
   autoExpandGroup?: boolean;
 
   @Nested()
-  buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | DataGridColumnButton>;
+  buttons?: ('cancel' | 'delete' | 'edit' | 'save' | 'undelete' | DataGridColumnButton)[];
 
   @OneWay()
   calculateGroupValue?: string | ((rowData: any) => any);
@@ -364,7 +360,7 @@ export class DataGridColumn {
   ) => any);
 
   @OneWay()
-  columns?: Array<dxDataGridColumn | string>;
+  columns?: (dxDataGridColumn | string)[];
 
   @OneWay()
   editCellTemplate?:
@@ -402,7 +398,7 @@ export class DataGridColumn {
       rowIndex?: number;
       column?: dxDataGridColumn;
       row?: dxDataGridRowObject;
-      summaryItems?: Array<any>;
+      summaryItems?: any[];
       groupContinuesMessage?: string;
       groupContinuedMessage?: string;
     },
@@ -690,7 +686,7 @@ export class DataGridSummary {
   }) => any;
 
   @Nested()
-  groupItems?: Array<DataGridSummaryGroupItem>;
+  groupItems?: DataGridSummaryGroupItem[];
 
   @OneWay()
   recalculateWhileEditing?: boolean;
@@ -712,13 +708,13 @@ export class DataGridSummary {
   };
 
   @Nested()
-  totalItems?: Array<DataGridSummaryTotalItem>;
+  totalItems?: DataGridSummaryTotalItem[];
 }
 
 @ComponentBindings()
 export class DataGridPager {
   @OneWay()
-  allowedPageSizes?: Array<number> | 'auto';
+  allowedPageSizes?: number[] | 'auto';
 
   @OneWay()
   infoText?: string;
@@ -1170,7 +1166,7 @@ export declare type DataGridExport = {
 
 @ComponentBindings()
 export class DataGridProps extends WidgetProps /* implements Options */ {
-  @Nested() columns?: Array<DataGridColumn | string>;
+  @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing;
 
@@ -1185,7 +1181,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @Nested() selection?: DataGridSelection;
 
-  @Nested() sortByGroupSummaryInfo?: Array<DataGridSortByGroupSummaryInfoItem>;
+  @Nested() sortByGroupSummaryInfo?: DataGridSortByGroupSummaryInfoItem[];
 
   @Nested() summary?: DataGridSummary;
 
@@ -1217,14 +1213,14 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @Template() rowTemplate?: template | ((rowElement: dxElement, rowInfo: any) => any);
 
-  @OneWay() customizeColumns?: (columns: Array<dxDataGridColumn>) => any;
+  @OneWay() customizeColumns?: (columns: dxDataGridColumn[]) => any;
 
   @OneWay() customizeExportData?: (
-    columns: Array<dxDataGridColumn>,
-    rows: Array<dxDataGridRowObject>,
+    columns: dxDataGridColumn[],
+    rows: dxDataGridRowObject[],
   ) => any;
 
-  @OneWay() keyExpr?: string | Array<string>;
+  @OneWay() keyExpr?: string | string[];
 
   @OneWay() remoteOperations?:
   | boolean
@@ -1258,7 +1254,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @OneWay() columnWidth?: number;
 
-  @OneWay() dataSource?: string | Array<any> | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | any[] | DataSource | DataSourceOptions;
 
   @OneWay() dateSerializationFormat?: string;
 
@@ -1294,7 +1290,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue?: string | Array<any> | Function;
+  @TwoWay() filterValue?: string | any[] | Function;
 
   @TwoWay() focusedColumnIndex?: number;
 
@@ -1302,9 +1298,9 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @TwoWay() focusedRowKey?: any;
 
-  @TwoWay() selectedRowKeys?: Array<any>;
+  @TwoWay() selectedRowKeys?: any[];
 
-  @TwoWay() selectionFilter?: string | Array<any> | Function;
+  @TwoWay() selectionFilter?: string | any[] | Function;
 
   @Event() onCellClick?:
   | string
@@ -1389,7 +1385,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    items?: Array<any>;
+    items?: any[];
     target?: string;
     targetElement?: dxElement;
     columnIndex?: number;
@@ -1485,8 +1481,8 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     newColumnIndex?: number;
     newRowIndex?: number;
     event?: event;
-    rows?: Array<dxDataGridRowObject>;
-    columns?: Array<dxDataGridColumn>;
+    rows?: dxDataGridRowObject[];
+    columns?: dxDataGridColumn[];
     cancel?: boolean;
     isHighlighted?: boolean;
   }) => any;
@@ -1508,7 +1504,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     prevRowIndex?: number;
     newRowIndex?: number;
     event?: event;
-    rows?: Array<dxDataGridRowObject>;
+    rows?: dxDataGridRowObject[];
     cancel?: boolean;
   }) => any;
 
@@ -1520,8 +1516,8 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     event?: event;
     data?: any;
     key?: any;
-    values?: Array<any>;
-    columns?: Array<any>;
+    values?: any[];
+    columns?: any[];
     rowIndex?: number;
     rowType?: string;
     isSelected?: boolean;
@@ -1539,8 +1535,8 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     event?: event;
     data?: any;
     key?: any;
-    values?: Array<any>;
-    columns?: Array<dxDataGridColumn>;
+    values?: any[];
+    columns?: dxDataGridColumn[];
     rowIndex?: number;
     rowType?: string;
     isSelected?: boolean;
@@ -1556,8 +1552,8 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     model?: any;
     data?: any;
     key?: any;
-    values?: Array<any>;
-    columns?: Array<dxDataGridColumn>;
+    values?: any[];
+    columns?: dxDataGridColumn[];
     rowIndex?: number;
     rowType?: string;
     groupIndex?: number;
@@ -1686,8 +1682,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    brokenRules?: Array<
-    | RequiredRule
+    brokenRules?: (| RequiredRule
     | NumericRule
     | RangeRule
     | StringLengthRule
@@ -1695,8 +1690,7 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     | CompareRule
     | PatternRule
     | EmailRule
-    | AsyncRule
-    >;
+    | AsyncRule)[];
     isValid?: boolean;
     key?: any;
     newData?: any;
@@ -1709,10 +1703,10 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    currentSelectedRowKeys?: Array<any>;
-    currentDeselectedRowKeys?: Array<any>;
-    selectedRowKeys?: Array<any>;
-    selectedRowsData?: Array<any>;
+    currentSelectedRowKeys?: any[];
+    currentDeselectedRowKeys?: any[];
+    selectedRowKeys?: any[];
+    selectedRowsData?: any[];
   }) => any;
 
   @Event() onToolbarPreparing?: (e: {

@@ -1,3 +1,7 @@
+
+@forward "./variables";
+
+@use "./variables" as *;
 @use "sass:color";
 $color: null !default;
 $mode: null !default;
@@ -9,14 +13,13 @@ $material-color-accent-modificator: null !default;
   * $type color
   */
 $base-accent: null !default;
-$gantt-parent-task-background-color: null !default;
 $material-color-theme-modificator: null !default;
 
 /**
 * $name 10. Font family
 * $type text
 */
-$base-font-family: null !default;
+$base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif !default;
 
 /**
 * $name 20. Text color
@@ -29,12 +32,6 @@ $base-text-color: null !default;
 * $type color
 */
 $base-label-color: null !default;
-
-/**
-* $name 30. Link color
-* $type color
-*/
-$base-link-color: null !default;
 
 /**
 * $name 40. Icon color
@@ -67,19 +64,19 @@ $base-shadow-color: null !default;
 * $name 50. Success color
 * $type color
 */
-$base-success: null !default;
+$base-success: #8bc34a !default;
 
 /**
 * $name 60. Warning color
 * $type color
 */
-$base-warning: null !default;
+$base-warning: #ffc107 !default;
 
 /**
 * $name 70. Danger color
 * $type color
 */
-$base-danger: null !default;
+$base-danger: #f44336 !default;
 
 /**
 * $name 80. Hovered state text color
@@ -107,54 +104,55 @@ $base-focus-color: null !default;
 $base-focus-bg: null !default;
 $typography-bg: null !default;
 $typography-color: null !default;
-$typography-link-color: null !default;
 $base-inverted-icon-color: null !default;
-$base-disabled-opacity: null !default;
+$base-disabled-opacity: 0.38 !default;
 $base-dropdown-shadow-color: null !default;
-$base-invalid-color: null !default;
-$base-invalid-faded-border-color: null !default;
+$base-invalid-color: $base-danger !default;
+$base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 $scrollview-pulldown-path: null !default;
 $loadindicator-image-path: null !default;
 $loadindicator-image-small-path: null !default;
 $loadindicator-image-large-path: null !default;
 
+
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
   $base-accent: #03a9f4 !default;
-  $gantt-parent-task-background-color: #8bc34a !default;
 }
 
 @if $color == "lime" {
   $material-color-accent-modificator: "lime" !default;
   $base-accent: #cddc39 !default;
-  $gantt-parent-task-background-color: #f44336 !default;
 }
 
 @if $color == "orange" {
   $material-color-accent-modificator: "orange" !default;
   $base-accent: #ff5722 !default;
-  $base-danger: #e91e63 !default; // TODO - change by light
-  $gantt-parent-task-background-color: #8bc34a !default;
+  $base-danger: #e91e63 !default;
 }
 
 @if $color == "purple" {
   $material-color-accent-modificator: "purple" !default;
   $base-accent: #9c27b0 !default;
-  $gantt-parent-task-background-color: #8bc34a !default;
 }
 
 @if $color == "teal" {
   $material-color-accent-modificator: "teal" !default;
   $base-accent: #009688 !default;
-  $gantt-parent-task-background-color: #8bc34a !default;
 }
+
+/**
+* $name 30. Link color
+* $type color
+*/
+$base-link-color: $base-accent !default;
+
+$typography-link-color: $base-link-color !default;
 
 @if $mode == "light" {
   $material-color-theme-modificator: "light" !default;
-  $base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif !default;
   $base-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-label-color: $base-text-color !default;
-  $base-link-color: $base-accent !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #fff !default;
@@ -162,9 +160,6 @@ $loadindicator-image-large-path: null !default;
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
-  $base-success: #8bc34a !default;
-  $base-warning: #ffc107 !default;
-  $base-danger: #f44336 !default;
   $base-hover-color: $base-text-color !default;
   $base-hover-bg: color.change(#000, $alpha: 0.04) !default;
   $base-inverted-text-color: #fff !default;
@@ -172,12 +167,8 @@ $loadindicator-image-large-path: null !default;
   $base-focus-bg: color.change(#000, $alpha: 0.04) !default;
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
-  $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.38 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $base-invalid-color: $base-danger !default;
-  $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/light/pulldown.png') !default;
   $loadindicator-image-path: data-uri('images/widgets/material/color-schemes/light/loader.gif') !default;
@@ -187,10 +178,8 @@ $loadindicator-image-large-path: null !default;
 
 @if $mode == "dark" {
   $material-color-theme-modificator: "dark" !default;
-  $base-font-family: "Roboto", "RobotoFallback", "Noto Kufi Arabic", "Helvetica",  "Arial", sans-serif !default;
   $base-text-color: #fff !default;
   $base-label-color: $base-text-color !default;
-  $base-link-color: $base-accent !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #363640 !default;
@@ -198,9 +187,6 @@ $loadindicator-image-large-path: null !default;
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
-  $base-success: #8bc34a !default;
-  $base-warning: #ffc107 !default;
-  $base-danger: #f44336 !default;
   $base-hover-color: $base-text-color !default;
   $base-hover-bg: color.change(#fff, $alpha: 0.05) !default;
   $base-inverted-text-color: rgba(0, 0, 0, 0.87) !default;
@@ -208,12 +194,8 @@ $loadindicator-image-large-path: null !default;
   $base-focus-bg: color.change(#fff, $alpha: 0.05) !default;
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
-  $typography-link-color: $base-link-color !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.38 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
-  $base-invalid-color: $base-danger !default;
-  $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
   $loadindicator-image-path: data-uri('images/widgets/material/color-schemes/dark/loader.gif') !default;

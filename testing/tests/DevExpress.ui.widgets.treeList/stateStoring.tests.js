@@ -106,8 +106,8 @@ QUnit.module('State Storing', {
         // assert
         assert.deepEqual(state, {
             columns: [
-                { dataField: 'name', dataType: 'string', visible: true, visibleIndex: 0 },
-                { dataField: 'age', dataType: 'number', visible: true, visibleIndex: 1 }
+                { dataField: 'name', name: 'name', dataType: 'string', visible: true, visibleIndex: 0 },
+                { dataField: 'age', name: 'age', dataType: 'number', visible: true, visibleIndex: 1 }
             ],
             filterPanel: {},
             filterValue: null,
@@ -147,8 +147,8 @@ QUnit.module('State Storing', {
     // arrange
         let state = {
             columns: [
-                { visibleIndex: 0, dataField: 'name', dataType: 'string', visible: true },
-                { visibleIndex: 1, dataField: 'age', dataType: 'number', visible: true }
+                { visibleIndex: 0, dataField: 'name', name: 'name', dataType: 'string', visible: true },
+                { visibleIndex: 1, dataField: 'age', name: 'age', dataType: 'number', visible: true }
             ],
             filterPanel: {},
             filterValue: null,

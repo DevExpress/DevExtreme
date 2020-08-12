@@ -283,14 +283,18 @@ const HtmlEditor = Editor.inherit({
     },
 
     _applyTranscludedContent: function() {
-        const markup = this._deltaConverter.toHtml();
-        const newDelta = this._quillInstance.clipboard.convert(markup);
+        const valueOption = this.option('value');
+        if(!isDefined(valueOption)) {
+            const markup = this._deltaConverter.toHtml();
+            const newDelta = this._quillInstance.clipboard.convert(markup);
 
-        if(newDelta.ops.length) {
-            this._quillInstance.setContents(newDelta);
-        } else {
-            this._finalizeContentRendering();
+            if(newDelta.ops.length) {
+                this._quillInstance.setContents(newDelta);
+                return;
+            }
         }
+
+        this._finalizeContentRendering();
     },
 
     _hasTranscludedContent: function() {

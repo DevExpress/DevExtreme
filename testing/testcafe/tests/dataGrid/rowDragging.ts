@@ -11,7 +11,7 @@ const scrollTo = ClientFunction((x, y) => {
 
 function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<void> {
   return ClientFunction(() => {
-    const gridInstance = grid.getGridInstance() as any;
+    const gridInstance = grid.getGridInstance();
     const $row = $(gridInstance.getRowElement(rowIndex));
     const $cell = $row.children('.dx-command-drag');
     const cellOffset = $cell.offset();

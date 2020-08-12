@@ -2192,6 +2192,38 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(getTextSelection(input), input.value, 'input value is selected');
     });
 
+    // T916569
+    testInDesktop('Not select all text if input is readonly', function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: 'batch',
+                selectTextOnEditStart: true
+            }
+        };
+        this.columns = [{
+            dataField: 'name',
+            editorOptions: {
+                readOnly: true
+            }
+        }];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(0, 1);
+        this.triggerKeyDown('Enter');
+        this.clock.tick();
+
+        // assert
+        const $input = $('.dx-texteditor-input');
+
+        assert.equal($input.length, 1, 'editor input');
+        assert.ok($input.prop('readonly'), 'input is readonly');
+        assert.equal(getTextSelection($input.get(0)), '', 'no selection');
+    });
+
     testInDesktop('Not select all text if editing mode is batch', function(assert) {
         // arrange
         const rooms = [

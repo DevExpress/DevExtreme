@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { mount } from 'enzyme';
 import {
   viewFunction as LayoutView,
@@ -8,10 +7,6 @@ import { Table } from '../../table';
 import { VirtualTable } from '../../virtual_table';
 import { DateTableBody } from '../table_body';
 
-jest.mock('devextreme-generator/component_declaration/common', () => ({
-  ...require.requireActual('devextreme-generator/component_declaration/common'),
-  Fragment: ({ children }) => <div>{children}</div>,
-}));
 jest.mock('../table_body', () => ({
   DateTableBody: () => null,
 }));
@@ -35,14 +30,14 @@ describe('DateTableLayoutBase', () => {
         viewData,
         ...viewModel.props,
       },
-    } as any) as any).childAt(0).childAt(0);
+    } as any) as any);
 
     afterEach(() => jest.resetAllMocks());
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

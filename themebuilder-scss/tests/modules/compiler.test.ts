@@ -107,7 +107,7 @@ describe('compile', () => {
 
 describe('compile with widgets', () => {
   test('getImportType', () => {
-    expect(Compiler.getImportType('tb/url')).toBe(ImportType.Color);
+    expect(Compiler.getImportType('tb_generic')).toBe(ImportType.Color);
     expect(Compiler.getImportType('../widgets/generic/tb_index')).toBe(ImportType.Index);
     expect(Compiler.getImportType('colors')).toBe(ImportType.Unknown);
   });

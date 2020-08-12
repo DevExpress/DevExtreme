@@ -26,7 +26,8 @@ const SRC = [
     'js/renovation/**/*.{tsx,ts}',
     `!${jQueryComponentsGlob}`,
     '!js/renovation/**/*.d.ts',
-    '!js/renovation/**/__tests__/**/*'
+    '!js/renovation/**/__tests__/**/*',
+    '!js/renovation/test_utils/**/*'
 ];
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
@@ -38,7 +39,8 @@ const knownErrors = [
     'Cannot find module \'preact/hooks\'',
     'Cannot find module \'preact/compat\'',
     'js/renovation/preact_wrapper/',
-    'js\\renovation\\preact_wrapper\\'
+    'js\\renovation\\preact_wrapper\\',
+    'has no exported member \'RefObject\''
 ];
 
 function deleteJQueryComponents(cb) {
@@ -87,6 +89,7 @@ function generatePreactComponents(dev = false) {
             .pipe(babel())
             .pipe(gulp.dest(context.TRANSPILED_PATH))
             .pipe(gulp.dest(context.TRANSPILED_PROD_PATH))
+            .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH))
             .on('end', function() {
                 done(!dev && errors.length || undefined);
             });
@@ -103,7 +106,7 @@ function processRenovationMeta() {
             fs.existsSync(meta.path));
 
     const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
-        widgetName: `dxr${meta.name}`,
+        widgetName: `dx${meta.name}`,
         ...meta,
         path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
     })), null, 2);
@@ -146,7 +149,7 @@ function addGenerationTask(
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
     }
 
-    generator.defaultOptionsModule = 'js/core/options/utils';
+    generator.options = BASE_GENERATOR_OPTIONS;
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function() {
         return gulp.src(SRC, { base: 'js' })

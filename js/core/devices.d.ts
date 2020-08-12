@@ -149,6 +149,7 @@ declare class DevicesObject {
      * @public
      */
     real(): Device;
+    isSimulator(): boolean;
 }
 
 /**

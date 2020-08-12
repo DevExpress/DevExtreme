@@ -128,9 +128,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         const visibleColumns = this.columnsController.getVisibleColumns();
 
         assert.deepEqual(processColumnsForCompare(visibleColumns, null, ['id']), [
-            { index: 0, visible: true, allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1' },
-            { index: 1, visible: true, allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2' },
-            { index: 2, visible: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3' }
+            { index: 0, visible: true, allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1', name: 'TestField1' },
+            { index: 1, visible: true, allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2', name: 'TestField2' },
+            { index: 2, visible: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3', name: 'TestField3' }
         ]);
 
         assert.strictEqual(visibleColumns[0].index, 0);
@@ -205,9 +205,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         const visibleColumns = this.columnsController.getVisibleColumns();
 
         assert.deepEqual(processColumnsForCompare(visibleColumns), [
-            { index: 0, visible: true, showEditorAlways: false, dataType: 'boolean', allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1', alignment: 'center' },
-            { index: 1, visible: true, showEditorAlways: true, dataType: 'boolean', allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2', alignment: 'center' },
-            { index: 2, visible: true, showEditorAlways: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3' }
+            { index: 0, visible: true, showEditorAlways: false, dataType: 'boolean', allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1', alignment: 'center', name: 'TestField1' },
+            { index: 1, visible: true, showEditorAlways: true, dataType: 'boolean', allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2', alignment: 'center', name: 'TestField2' },
+            { index: 2, visible: true, showEditorAlways: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3', name: 'TestField3' }
         ]);
     });
 
@@ -236,9 +236,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         const visibleColumns = this.columnsController.getVisibleColumns();
 
         assert.deepEqual(processColumnsForCompare(visibleColumns), [
-            { index: 0, visible: true, showEditorAlways: false, dataType: 'boolean', allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1', alignment: 'center' },
-            { index: 1, visible: true, showEditorAlways: false, dataType: 'boolean', allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2', alignment: 'center' },
-            { index: 2, visible: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3' }
+            { index: 0, visible: true, showEditorAlways: false, dataType: 'boolean', allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1', alignment: 'center', name: 'TestField1' },
+            { index: 1, visible: true, showEditorAlways: false, dataType: 'boolean', allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2', alignment: 'center', name: 'TestField2' },
+            { index: 2, visible: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3', name: 'TestField3' }
         ]);
     });
 
@@ -249,8 +249,8 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
 
         assert.ok(this.columnsController.isInitialized());
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, allowFiltering: true, dataField: 'TestField1', caption: 'Custom Title 1' },
-            { index: 1, visible: false, allowFiltering: false, dataField: 'TestField2', caption: 'Custom Title 2', allowSorting: false }
+            { index: 0, visible: true, allowFiltering: true, dataField: 'TestField1', caption: 'Custom Title 1', name: 'TestField1' },
+            { index: 1, visible: false, allowFiltering: false, dataField: 'TestField2', caption: 'Custom Title 2', allowSorting: false, name: 'TestField2' }
         ]);
     });
 
@@ -385,7 +385,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
 
         assert.ok(this.columnsController.isInitialized());
         assert.deepEqual(processColumnsForCompare(this.columnsController.getVisibleColumns()), [
-            { index: 1, visible: true, allowFiltering: true, dataField: 'TestField2', caption: 'Custom Title 2', allowSorting: false }
+            { index: 1, visible: true, allowFiltering: true, dataField: 'TestField2', caption: 'Custom Title 2', allowSorting: false, name: 'TestField2' }
         ]);
     });
 
@@ -1378,6 +1378,284 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.strictEqual(visibleColumns[1].minWidth, 20);
         assert.strictEqual(visibleColumns[2].minWidth, 20);
     });
+
+    QUnit.module('Auto-generated names', () => {
+        QUnit.test('No duplicated dataFields', function(assert) {
+            const columns = ['TestField1', 'TestField2', 'TestField3'];
+            this.applyOptions({ columns });
+
+            // act
+            const visibleColumns = this.columnsController.getVisibleColumns();
+
+            // assert
+            assert.strictEqual(visibleColumns.length, 3);
+            for(let i = 0; i < columns.length; i++) {
+                assert.equal(visibleColumns[i].name, columns[i], 'name is correct');
+            }
+        });
+
+        QUnit.test('Predefined names', function(assert) {
+            const columns = [{
+                dataField: 'TestField',
+                name: 'someName'
+            }, 'TestField', {
+                dataField: 'TestField',
+                name: 'anotherName'
+            }];
+
+            this.applyOptions({ columns });
+
+            // act
+            const visibleColumns = this.columnsController.getVisibleColumns();
+
+            // assert
+            assert.strictEqual(visibleColumns.length, 3);
+            assert.equal(visibleColumns[0].name, 'someName', 'name is correct');
+            assert.equal(visibleColumns[1].name, 'TestField', 'name is correct');
+            assert.equal(visibleColumns[2].name, 'anotherName', 'name is correct');
+        });
+
+        QUnit.test('Add column', function(assert) {
+            const columns = ['TestField1', 'TestField2'];
+            this.applyOptions({ columns });
+            let visibleColumns = this.columnsController.getVisibleColumns();
+
+            // assert
+            assert.strictEqual(visibleColumns.length, 2);
+            assert.equal(visibleColumns[0].name, 'TestField1', 'name is correct');
+            assert.equal(visibleColumns[1].name, 'TestField2', 'name is correct');
+
+            // act
+            this.addColumn('TestField3');
+            visibleColumns = this.columnsController.getVisibleColumns();
+
+            // assert
+            assert.strictEqual(visibleColumns.length, 3);
+            assert.equal(visibleColumns[0].name, 'TestField1', 'name is correct');
+            assert.equal(visibleColumns[1].name, 'TestField2', 'name is correct');
+            assert.equal(visibleColumns[2].name, 'TestField3', 'name is correct');
+        });
+
+        QUnit.test('Add column with predefined name', function(assert) {
+            const columns = ['TestField'];
+            this.applyOptions({ columns });
+            let visibleColumns = this.columnsController.getVisibleColumns();
+
+            // assert
+            assert.strictEqual(visibleColumns.length, 1);
+            assert.equal(visibleColumns[0].name, 'TestField', 'name is correct');
+
+            // act
+            this.addColumn({
+                dataField: 'TestField',
+                name: 'some'
+            });
+            visibleColumns = this.columnsController.getVisibleColumns();
+
+            // assert
+            assert.strictEqual(visibleColumns.length, 2);
+            assert.equal(visibleColumns[0].name, 'TestField', 'name is correct');
+            assert.equal(visibleColumns[1].name, 'some', 'name is correct');
+        });
+
+        QUnit.test('Duplicated dataFields', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['TestField', 'TestField'];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Duplicated dataFields (non-editable columns)', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                dataField: 'TestField',
+                allowEditing: false
+            }, {
+                dataField: 'TestField',
+                allowEditing: false
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Add column with duplicated dataField', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['TestField'];
+            this.applyOptions({ columns });
+
+            // act
+            this.addColumn('TestField');
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Add non-editable column with duplicated dataField', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['TestField'];
+            this.applyOptions({ columns });
+
+            // act
+            this.addColumn({
+                dataField: 'TestField',
+                allowEditing: false
+            });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Editable column without dataField and name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: 'Test',
+                allowEditing: true
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Non-editable column without dataField and name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: 'Test',
+                allowEditing: false
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no errors');
+            errors.log.restore();
+        });
+
+        QUnit.test('Editable column with name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: 'Test',
+                name: 'Test',
+                allowEditing: true
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no errors');
+            errors.log.restore();
+        });
+
+        QUnit.test('Add editable column without dataField and name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [];
+            this.applyOptions({ columns });
+
+            // act
+            this.addColumn({
+                caption: 'Test',
+                allowEditing: true
+            });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Add non-editable column without dataField and name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [];
+            this.applyOptions({ columns });
+
+            // act
+            this.addColumn({
+                caption: 'Test',
+                allowEditing: false
+            });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no errors');
+            errors.log.restore();
+        });
+
+        QUnit.test('Add editable column with name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [];
+            this.applyOptions({ columns });
+
+            // act
+            this.addColumn({
+                caption: 'Test',
+                name: 'Test',
+                allowEditing: true
+            });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no errors');
+            errors.log.restore();
+        });
+
+        QUnit.test('Duplicated names and editable column without dataField and name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['Test', 'Test', {
+                caption: 'Test',
+                allowEditing: true
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 2, 'two errors');
+
+            const errorLogCalls = errors.log.getCalls();
+            assert.equal(errorLogCalls[0].args[0], 'E1059', 'error code');
+            assert.equal(errorLogCalls[1].args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Change name to non-unique', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['Test', 'Test1'];
+            this.applyOptions({ columns });
+
+            // act
+            this.columnOption(0, 'name', 'Test1');
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Change allowEditing to true for column without name', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: '',
+                allowEditing: false
+            }];
+            this.applyOptions({ columns });
+
+            // act
+            this.columnOption(0, 'allowEditing', true);
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
+    });
 });
 
 QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterEach: teardownModule }, () => {
@@ -1394,8 +1672,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         const visibleColumns = this.columnsController.getVisibleColumns();
 
         assert.deepEqual(processColumnsForCompare(visibleColumns), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', name: 'name' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', name: 'age' }
         ]);
 
         assert.strictEqual(visibleColumns[0].index, 0);
@@ -1414,8 +1692,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         const visibleColumns = this.columnsController.getVisibleColumns();
 
         assert.deepEqual(processColumnsForCompare(visibleColumns), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', name: 'name' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', name: 'age' }
         ]);
 
         assert.strictEqual(visibleColumns[0].index, 0);
@@ -1905,8 +2183,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
         assert.equal(this.getColumns().length, 2);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', name: 'name' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', name: 'age' }
         ]);
     });
 
@@ -1922,8 +2200,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
         assert.equal(this.getColumns().length, 2);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', name: 'name' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', name: 'age' }
         ]);
     });
 
@@ -1949,10 +2227,10 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         this.columnsController.applyDataSource(dataSource);
 
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name1', caption: 'Name 1', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age1', caption: 'Age 1', alignment: 'right', dataType: 'number' },
-            { index: 2, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name2', caption: 'Name 2', alignment: 'left', dataType: 'string' },
-            { index: 3, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age2', caption: 'Age 2', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name1', caption: 'Name 1', alignment: 'left', dataType: 'string', name: 'name1' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age1', caption: 'Age 1', alignment: 'right', dataType: 'number', name: 'age1' },
+            { index: 2, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name2', caption: 'Name 2', alignment: 'left', dataType: 'string', name: 'name2' },
+            { index: 3, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age2', caption: 'Age 2', alignment: 'right', dataType: 'number', name: 'age2' }
         ]);
     });
 
@@ -2220,8 +2498,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         assert.ok(this.columnsController.__groupingUpdated);
         assert.ok(!this.columnsController.__sortingUpdated);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', groupIndex: 0, sortOrder: 'asc' }
+            { name: 'name', index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
+            { name: 'age', index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', groupIndex: 0, sortOrder: 'asc' }
         ]);
     });
 
@@ -2322,8 +2600,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         this.columnsController.applyDataSource(dataSource);
         assert.ok(!this.columnsController.__sortingGroupingUpdated);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', groupIndex: 0, sortOrder: 'asc' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', name: 'name', caption: 'Name', alignment: 'left', dataType: 'string', groupIndex: 0, sortOrder: 'asc' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', name: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
         ]);
     });
 
@@ -2349,8 +2627,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         this.columnsController.applyDataSource(dataSource);
         assert.ok(!this.columnsController.__sortingGroupingUpdated);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', sortOrder: 'desc', sortIndex: 0, autoExpandGroup: false },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', groupIndex: 0, sortOrder: 'asc', autoExpandGroup: false }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', name: 'name', caption: 'Name', alignment: 'left', dataType: 'string', sortOrder: 'desc', sortIndex: 0, autoExpandGroup: false },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', name: 'age', caption: 'Age', alignment: 'right', dataType: 'number', groupIndex: 0, sortOrder: 'asc', autoExpandGroup: false }
         ]);
     });
 
@@ -2369,8 +2647,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         assert.ok(this.columnsController.__groupingUpdated);
         assert.ok(!this.columnsController.__sortingUpdated);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', groupIndex: 0, sortOrder: 'desc' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', name: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', name: 'age', caption: 'Age', alignment: 'right', dataType: 'number', groupIndex: 0, sortOrder: 'desc' }
         ]);
     });
 
@@ -2389,8 +2667,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         assert.ok(this.columnsController.__sortingUpdated);
         assert.ok(!this.columnsController.__groupingUpdated);
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string', sortOrder: 'desc', sortIndex: 1 },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number', sortOrder: 'asc', sortIndex: 0 }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', name: 'name', caption: 'Name', alignment: 'left', dataType: 'string', sortOrder: 'desc', sortIndex: 1 },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', name: 'age', caption: 'Age', alignment: 'right', dataType: 'number', sortOrder: 'asc', sortIndex: 0 }
         ]);
     });
 
@@ -2486,8 +2764,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
 
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'id', caption: 'Id', alignment: 'right', dataType: 'number' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'value', caption: 'Value', alignment: 'left', dataType: 'string' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'id', caption: 'Id', alignment: 'right', dataType: 'number', name: 'id' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'value', caption: 'Value', alignment: 'left', dataType: 'string', name: 'value' }
         ]);
     });
 
@@ -2549,8 +2827,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
 
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'id', caption: 'Id', alignment: 'right', dataType: 'number' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'value', caption: 'Value', alignment: 'left', dataType: 'string' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'id', name: 'id', caption: 'Id', alignment: 'right', dataType: 'number' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'value', name: 'value', caption: 'Value', alignment: 'left', dataType: 'string' }
         ]);
     });
 
@@ -2579,8 +2857,8 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
 
         assert.deepEqual(this.getColumns(), [
-            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
-            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
+            { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', name: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
+            { index: 1, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'age', name: 'age', caption: 'Age', alignment: 'right', dataType: 'number' }
         ]);
     });
 
@@ -2604,6 +2882,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
                 index: 0,
                 dataField: 'a',
                 caption: 'A',
+                name: 'a',
                 visible: true,
                 showEditorAlways: false,
                 allowFiltering: true,
@@ -5194,9 +5473,9 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
 
         // assert
         assert.deepEqual(this.option('columns'), [
-            { dataField: 'field1', caption: 'field 1' },
-            { dataField: 'field2', caption: 'field 2' },
-            { dataField: 'field3', caption: 'field 3' }
+            { name: 'field1', dataField: 'field1', caption: 'field 1' },
+            { name: 'field2', dataField: 'field2', caption: 'field 2' },
+            { name: 'field3', dataField: 'field3', caption: 'field 3' }
         ], 'initial columns');
     });
 });
@@ -6455,7 +6734,7 @@ QUnit.module('Edit Column', { beforeEach: setupModule, afterEach: teardownModule
         assert.equal(columns[1].dataField, 'AddedColumn', 'dynamically column is not removed');
         assert.equal(columns[1].caption, 'My Column', 'dynamically column caption');
         assert.equal(columns[1].filterValue, 'Test', 'dynamically column sortIndex');
-        assert.deepEqual(columns[1].added, { dataField: 'AddedColumn', caption: 'My Column' }, 'dynamically column added flag');
+        assert.deepEqual(columns[1].added, { dataField: 'AddedColumn', caption: 'My Column', name: 'AddedColumn' }, 'dynamically column added flag');
     });
 
     // T313168
@@ -6649,8 +6928,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], filterType: 'include', fixed: true, fixedPosition: 'right' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'dataType': 'string', 'visibleIndex': 1, 'visible': true, 'width': 50, 'sortOrder': 'asc', 'sortIndex': 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith' });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], filterType: 'include', fixed: true, fixedPosition: 'right' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'dataType': 'string', 'visibleIndex': 1, 'visible': true, 'width': 50, 'sortOrder': 'asc', 'sortIndex': 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith' });
     });
 
     QUnit.test('Get user state for dynamically added column', function(assert) {
@@ -6668,8 +6947,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], filterType: 'include', fixed: true, fixedPosition: 'right' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visibleIndex': 1, 'visible': true, 'added': 'TestField2' });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], filterType: 'include', fixed: true, fixedPosition: 'right' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visibleIndex': 1, 'visible': true, 'added': 'TestField2' });
     });
 
     QUnit.test('Get user state after columns reordering', function(assert) {
@@ -6688,8 +6967,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'dataType': 'string', 'visibleIndex': 1, 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 50, 'sortOrder': 'asc', sortIndex: 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith' });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 1, 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 50, 'sortOrder': 'asc', sortIndex: 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith' });
     });
 
 
@@ -6714,8 +6993,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', defaultSelectedFilterOperation: '=' /* T381048 */, index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', defaultSelectedFilterOperation: 'startswith' /* T381048 */, index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', defaultSelectedFilterOperation: '=' /* T381048 */, index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', defaultSelectedFilterOperation: 'startswith' /* T381048 */, index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', showEditorAlways: false });
     });
 
     QUnit.test('Apply user state for dynamically added column', function(assert) {
@@ -6738,8 +7017,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: null, showEditorAlways: false, added: { dataField: 'TestField2', dataType: 'string' } });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: null, showEditorAlways: false, added: { dataField: 'TestField2', dataType: 'string', name: 'TestField2' } });
     });
 
     QUnit.test('Apply user state for dynamically added band column', function(assert) {
@@ -6764,9 +7043,10 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 4);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
         assert.deepEqual(columns[1], {
             dataField: 'TestField2',
+            name: 'TestField2',
             visible: true,
             index: 1,
             caption: 'TestField2',
@@ -6777,6 +7057,7 @@ QUnit.module('State storing', {
         });
         assert.deepEqual(columns[2], {
             dataField: 'TestField21',
+            name: 'TestField21',
             visible: true,
             index: 2,
             caption: 'Test Field 21',
@@ -6784,6 +7065,7 @@ QUnit.module('State storing', {
         });
         assert.deepEqual(columns[3], {
             dataField: 'TestField22',
+            name: 'TestField22',
             visible: true,
             index: 3,
             caption: 'Test Field 22',
@@ -6822,8 +7104,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': true, 'width': 50, 'sortOrder': 'asc', sortIndex: 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': true, 'width': 50, 'sortOrder': 'asc', sortIndex: 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
     });
 
     QUnit.test('Apply user state with ignoreColumnOptionNames option', function(assert) {
@@ -6856,8 +7138,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false, filterValues: ['test'], filterType: 'exclude', fixed: true, fixedPosition: 'right' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, 'width': 50, 'sortOrder': 'asc', sortIndex: 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false, filterValues: ['test'], filterType: 'exclude', fixed: true, fixedPosition: 'right' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, 'width': 50, 'sortOrder': 'asc', sortIndex: 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
     });
 
     // T243567
@@ -6904,8 +7186,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, index: 0, caption: 'Test Field 1' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, index: 1, caption: 'Test Field 2', groupIndex: 0 });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, index: 0, caption: 'Test Field 1' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, index: 1, caption: 'Test Field 2', groupIndex: 0 });
     });
 
     QUnit.test('Apply user state columns are generated by dataSource', function(assert) {
@@ -6927,8 +7209,8 @@ QUnit.module('State storing', {
         const columns = this.getColumns();
 
         // assert
-        assert.deepEqual(columns[0], { 'dataField': 'name', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', alignment: 'left', index: 0, caption: 'Name', dataType: 'string', defaultSelectedFilterOperation: null, showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'age', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test2', 'selectedFilterOperation': '=', alignment: 'right', index: 1, caption: 'Age', dataType: 'number', defaultSelectedFilterOperation: null, showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'name', 'name': 'name', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', alignment: 'left', index: 0, caption: 'Name', dataType: 'string', defaultSelectedFilterOperation: null, showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'dataField': 'age', 'name': 'age', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test2', 'selectedFilterOperation': '=', alignment: 'right', index: 1, caption: 'Age', dataType: 'number', defaultSelectedFilterOperation: null, showEditorAlways: false });
         assert.deepEqual(this.getColumns(['visibleIndex']), [{ visibleIndex: 1 }, { visibleIndex: 0 }]);
     });
 
@@ -6970,8 +7252,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField2', 'visible': true, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': true, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
     });
 
     QUnit.test('Columns order when apply user state old version (without visibleIndex but with initialIndex)', function(assert) {
@@ -6992,8 +7274,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField2', 'visible': true, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 1, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': true, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 1, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
     });
 
     QUnit.test('Apply user state when 15_1 options in columns', function(assert) {
@@ -7017,8 +7299,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false, fixed: true, fixedPosition: 'right' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false, fixed: true, fixedPosition: 'right' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
     });
 
     QUnit.test('Apply user state when 15_1 options in user state', function(assert) {
@@ -7042,8 +7324,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false, fixed: false, fixedPosition: 'right' });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false, fixed: true });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false, fixed: false, fixedPosition: 'right' });
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false, fixed: true });
     });
 
     QUnit.test('No apply user state when dataField in columns and user state are different', function(assert) {
@@ -7067,8 +7349,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, 'state is not applied');
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, 'state is applied');
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'visible': true, 'width': 100, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, 'state is not applied');
+        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, 'state is applied');
     });
 
     QUnit.test('apply user state when several calculated columns without names', function(assert) {
@@ -7117,8 +7399,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { dataField: 'Test', caption: 'Test', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false }, 'state is applied');
-        assert.deepEqual(columns[1], { dataField: 'Test', caption: 'Test', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, 'state is applied');
+        assert.deepEqual(columns[0], { 'name': 'Test', dataField: 'Test', caption: 'Test', 'visible': true, 'width': 50, 'sortOrder': 'desc', sortIndex: 0, 'filterValue': 'Test1', 'selectedFilterOperation': 'startswith', index: 0, dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false }, 'state is applied');
+        assert.deepEqual(columns[1], { 'name': 'Test', dataField: 'Test', caption: 'Test', 'visible': false, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test2', 'selectedFilterOperation': '=', index: 1, dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, 'state is applied');
     });
 
     // T352648
@@ -7139,8 +7421,8 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
-        assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'visible': true, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test1', 'selectedFilterOperation': '<>', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+        assert.deepEqual(columns[0], { 'name': 'TestField1', 'dataField': 'TestField1', 'visible': true, 'width': 50, 'sortOrder': 'asc', sortIndex: 0, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith', index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
+        assert.deepEqual(columns[1], { 'name': 'TestField2', 'dataField': 'TestField2', 'visible': true, 'width': 150, 'sortOrder': 'desc', sortIndex: 1, 'filterValue': 'Test1', 'selectedFilterOperation': '<>', index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
     });
 });
 
@@ -7895,7 +8177,7 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         });
 
         this.columnsController.setUserState([
-            { dataField: 'TestField1', sortOrder: 'desc', sortIndex: 0, index: 0 },
+            { dataField: 'TestField1', sortOrder: 'desc', sortIndex: 0, index: 0, name: 'TestField1' },
             { caption: 'Band Column 1', index: 1 },
             { dataField: 'TestField2', index: 2 },
             { dataField: 'TestField3', index: 3 }

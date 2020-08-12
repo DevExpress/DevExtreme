@@ -7,7 +7,7 @@ const CLASS = {
 export default class Overlay {
   element: Selector;
 
-  getOverlayInstance: ClientFunction<any>;
+  getOverlayInstance: ClientFunction;
 
   constructor() {
     this.element = Selector(`.${CLASS.overlay}`);

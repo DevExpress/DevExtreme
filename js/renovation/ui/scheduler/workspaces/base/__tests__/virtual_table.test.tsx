@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { mount } from 'enzyme';
 import { viewFunction as VirtualTableView } from '../virtual_table';
 import { Table } from '../table';
@@ -10,12 +10,12 @@ describe('LayoutBase', () => {
       props: {
         ...viewModel.props,
       },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 
@@ -23,7 +23,7 @@ describe('LayoutBase', () => {
       const layout = render({
         props: {
           className: 'some-class',
-          children: <div className="some-content" />,
+          children: <tr className="some-content" />,
         },
       });
 

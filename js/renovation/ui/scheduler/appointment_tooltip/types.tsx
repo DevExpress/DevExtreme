@@ -7,15 +7,15 @@ import { dxPromise } from '../../../../core/utils/deferred';
 export type Color = string | undefined;
 export type DeferredColor = dxPromise<Color>;
 
-export type AppointmentItem = {
+export interface AppointmentItem {
   data: dxSchedulerAppointment;
   currentData?: dxSchedulerAppointment;
   settings?: AppointmentItemSettings;
   color?: DeferredColor;
   disabled?: boolean;
-};
+}
 
-export type AppointmentItemSettings = {
+export interface AppointmentItemSettings {
   targetedAppointmentData?: dxSchedulerAppointment;
   originalAppointmentStartDate?: Date;
   originalAppointmentEndDate?: Date;
@@ -28,12 +28,12 @@ export type AppointmentItemSettings = {
   groupIndex?: number;
   appointmentReduced?: boolean;
   sortedIndex?: number;
-};
+}
 
-export type FormattedContent = {
+export interface FormattedContent {
   text: string;
   formatDate: string;
-};
+}
 
 export type GetTextAndFormatDateFn = (
   appointment?: dxSchedulerAppointment, currentAppointment?: dxSchedulerAppointment,

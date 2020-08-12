@@ -587,7 +587,7 @@ const GroupingRowsViewExtender = (function() {
             const allowCollapsing = this._columnsController.columnOption('groupIndex:' + row.groupIndex, 'allowCollapsing');
 
             if(row.rowType === 'data' || row.rowType === 'group' && allowCollapsing !== false) {
-                dataController.changeRowExpand(row.key);
+                dataController.changeRowExpand(row.key, true);
                 e.event.preventDefault();
                 e.handled = true;
             }

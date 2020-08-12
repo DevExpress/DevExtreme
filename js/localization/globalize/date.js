@@ -1,5 +1,6 @@
 import './core';
 import './number';
+// eslint-disable-next-line no-restricted-imports
 import 'globalize/date';
 
 const timeData = {
@@ -562,6 +563,7 @@ const weekData = {
 const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
 const RTL_MARKS_REGEX = /[\u200E\u200F]/g;
 
+// eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import dateLocalization from '../date';
 import { isObject } from '../../core/utils/type';

@@ -5,6 +5,7 @@ const merge = require('merge-stream');
 const rename = require('gulp-rename');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');
+const context = require('./context');
 
 gulp.task('aspnet', function() {
     return merge(
@@ -12,6 +13,7 @@ gulp.task('aspnet', function() {
             .pipe(rename('dx.aspnet.mvc.js'))
             .pipe(compressionPipes.beautify())
             .pipe(headerPipes.bangLicense())
-            .pipe(gulp.dest('artifacts/js'))
+            .pipe(gulp.dest(context.RESULT_JS_PATH))
+            .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH))
     );
 });

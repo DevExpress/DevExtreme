@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { Row, viewFunction as RowView } from '../row';
 import { addHeightToStyle } from '../../utils';
@@ -12,7 +12,7 @@ describe('RowBase', () => {
     const render = (viewModel) => shallow(RowView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should pass className and style', () => {
       const row = render({ props: { className: 'custom-class' }, style: 'style' });
@@ -24,9 +24,9 @@ describe('RowBase', () => {
     });
 
     it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(row.prop('customAttribute'))
+      expect(row.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

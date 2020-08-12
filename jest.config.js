@@ -13,31 +13,32 @@ module.exports = {
     collectCoverageFrom: [
         './js/renovation/**/*.tsx',
         '!./js/renovation/ui/list.tsx',
+        '!./js/renovation/ui/select_box.tsx',
         '!./js/renovation/**/*.j.tsx',
+        '!./js/renovation/**/__tests__/**/*',
         '!./js/renovation/utils/render_template.tsx',
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
         './js/renovation/**/*.tsx': {
-            functions: 0, // Should set code coverage to 100%
-            statements: 0, // (after start testing declarations)
-            lines: 0,
-            branches: 0
+            functions: 100, // Should set code coverage to 100%
+            statements: 100, // (after start testing declarations)
+            lines: 100,
+            branches: 100
         }
     },
-    roots: ['<rootDir>/testing/jest', '<rootDir>/js/renovation'],
+    roots: ['<rootDir>/js/renovation'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './js/renovation/__tests__/setup_enzyme.ts'),
+        path.join(path.resolve('.'), './js/renovation/test_utils/setup_enzyme.ts'),
     ],
     testMatch: [
-        '<rootDir>/testing/jest/**/*.tests.[jt]s?(x)',
         '<rootDir>/js/renovation/**/__tests__/**/*.test.[jt]s?(x)'
     ],
     transform: {
-        'test_components.+\\.tsx$': path.resolve('./js/renovation/__tests__/transformers/declaration.js'),
+        'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),
         '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
-        '\\.(tsx)$': path.resolve('./js/renovation/__tests__/transformers/tsx.js')
+        '\\.(tsx)$': path.resolve('./js/renovation/test_utils/transformers/tsx.js')
     }
 };

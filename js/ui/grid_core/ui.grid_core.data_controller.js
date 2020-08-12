@@ -495,7 +495,8 @@ export default {
                     const changeType = change.changeType;
                     const visibleColumns = that._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
                     const visibleItems = that._items;
-                    const dataIndex = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0;
+                    const lastVisibleItem = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null;
+                    const dataIndex = isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
                     const options = {
                         visibleColumns: visibleColumns,
                         dataIndex: dataIndex

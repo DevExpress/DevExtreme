@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+// eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import Callbacks from '../../core/utils/callbacks';
 import { isPlainObject } from '../../core/utils/type';

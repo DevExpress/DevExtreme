@@ -319,7 +319,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         if(this._isRowEditMode()) {
-            const editRowKey = this._editingController.getEditRowKey();
+            const editRowKey = this.option('editing.editRowKey');
             if(equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
                 return true;
             }

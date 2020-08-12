@@ -2,6 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import formatHelper from 'format_helper';
 import errors from 'ui/widget/ui.errors';
+import dataErrors from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -4582,6 +4583,65 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(changedArgs.changeType, 'append');
         assert.deepEqual(changedArgs.removeCount, 40, 'removeCount is correct');
     });
+
+    // T907168
+    QUnit.test('Check dataIndex for grouped items in the next page if group row is in the prev page', function(assert) {
+        const array = [];
+        const pageSize = 5;
+        const groupRowCountInFirstPage = 2;
+        const firstGroupItemsCount = pageSize - groupRowCountInFirstPage;
+        for(let group = 1; group <= 10; group++) {
+            const rowCount = group === 1 ? firstGroupItemsCount : 4;
+            for(let row = 1; row <= rowCount; row++) {
+                array.push({ id: group * row, group: group, name: `text ${group},${row}` });
+            }
+        }
+        this.applyOptions({
+            remoteOperations: {},
+            columns: [
+                'id', { dataField: 'group', groupIndex: 0 }, 'name'
+            ] });
+        this.setupDataSource({
+            data: array,
+            pageSize
+        });
+        this.dataController.viewportSize(pageSize);
+        const items = this.dataController.items();
+        assert.equal(items[pageSize - 1].rowType, 'group');
+        assert.equal(items[pageSize].data.name, 'text 2,1');
+        assert.equal(items[pageSize].dataIndex, 0);
+    });
+
+    // T907168
+    QUnit.test('Check dataIndex for the first and the second row in group', function(assert) {
+        const array = [];
+        const pageSize = 5;
+        const groupRowCountInFirstPage = 2;
+        const firstGroupItemsCount = pageSize - groupRowCountInFirstPage - 1;
+        for(let group = 1; group <= 10; group++) {
+            const rowCount = group === 1 ? firstGroupItemsCount : 4;
+            for(let row = 1; row <= rowCount; row++) {
+                array.push({ id: group * row, group: group, name: `text ${group},${row}` });
+            }
+        }
+        this.applyOptions({
+            remoteOperations: {},
+            columns: [
+                'id', { dataField: 'group', groupIndex: 0 }, 'name'
+            ] });
+        this.setupDataSource({
+            data: array,
+            pageSize
+        });
+        this.dataController.viewportSize(pageSize);
+        const items = this.dataController.items();
+        assert.equal(items[pageSize - 2].rowType, 'group');
+        assert.equal(items[pageSize - 1].data.name, 'text 2,1');
+        assert.equal(items[pageSize - 1].dataIndex, 0);
+        assert.equal(items[pageSize].data.name, 'text 2,2');
+        assert.equal(items[pageSize].dataIndex, 1);
+    });
+
 });
 
 QUnit.module('Infinite scrolling', {
@@ -7852,6 +7912,52 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         // assert
         assert.equal(removeHandlerCallCount, 2, 'row is deleted');
     });
+
+    QUnit.test('update error', function(assert) {
+        const errors = dataErrors.errors;
+        sinon.spy(errors, 'log');
+        const dataSource = new DataSource({
+            key: 'field1',
+            load: function() {
+                return [{ field1: 1, field2: 2 }];
+            },
+            totalCount: function() {
+                return 1;
+            },
+            update: function() {
+                return $.Deferred().reject('Update error');
+            }
+        });
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        this.applyOptions({
+            columns: ['field1', { setCellValue: function(data, value) { data.field1 = value; }, allowEditing: true }]
+        });
+
+        // act
+        this.editingController.getFirstEditableCellInRow = function() { return $([]); };
+
+        this.clock.tick();
+
+        // act
+        this.editingController.editRow(0);
+        this.editingController.updateFieldValue({
+            key: 1,
+            column: {
+                setCellValue: function(data, value) { data.field1 = value; }
+            },
+            value: 4
+        });
+        this.editingController.saveEditData();
+
+        // assert
+        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
+        assert.equal(errors.log.callCount, 1, 'error fired');
+        assert.equal(errors.log.lastCall.args[0], 'E4000', 'error code');
+        errors.log.restore();
+    });
 });
 
 QUnit.module('Error handling', {
@@ -8036,51 +8142,6 @@ QUnit.module('Error handling', {
 
         // assert
         assert.deepEqual(dataErrors, ['Remove error']);
-    });
-
-    QUnit.test('update error', function(assert) {
-        const dataErrors = [];
-
-        this.options = {
-            columns: ['field1', { setCellValue: function(data, value) { data.field1 = value; }, allowEditing: true }],
-            dataSource: {
-                key: 'field1',
-                load: function() {
-                    return [{ field1: 1, field2: 2 }];
-                },
-                totalCount: function() {
-                    return 1;
-                },
-                update: function() {
-                    return $.Deferred().reject('Update error');
-                }
-            },
-            onDataErrorOccurred: function(e) {
-                dataErrors.push(e.error.message);
-            }
-        };
-
-        // act
-        setupDataGridModules(this, ['data', 'columns', 'editing']);
-
-        this.editingController.getFirstEditableCellInRow = function() { return $([]); };
-
-        this.clock.tick();
-
-        // act
-        this.editingController.editRow(0);
-        this.editingController.updateFieldValue({
-            key: 1,
-            column: {
-                setCellValue: function(data, value) { data.field1 = value; }
-            },
-            value: 4
-        });
-        this.editingController.saveEditData();
-
-        // assert
-        assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.deepEqual(dataErrors, ['Update error']);
     });
 });
 

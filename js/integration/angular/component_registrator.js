@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+// eslint-disable-next-line no-restricted-imports
 import angular from 'angular';
 import eventsEngine from '../../events/core/events_engine';
 import { wrapActionsBeforeExecute } from '../../core/config';

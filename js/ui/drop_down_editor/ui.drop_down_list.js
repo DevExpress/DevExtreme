@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 const window = getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
@@ -20,6 +20,7 @@ import messageLocalization from '../../localization/message';
 import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
 import { Deferred } from '../../core/utils/deferred';
 import DataConverterMixin from '../shared/grouped_data_converter_mixin';
+import typeUtils from '../../core/utils/type';
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
@@ -161,6 +162,10 @@ const DropDownList = DropDownEditor.inherit({
         this._validateSearchMode();
         this._clearSelectedItem();
         this._initItems();
+    },
+
+    _setListFocusedElementOptionChange: function() {
+        this._list._updateParentActiveDescendant = this._updateActiveDescendant.bind(this);
     },
 
     _initItems: function() {
@@ -346,6 +351,17 @@ const DropDownList = DropDownEditor.inherit({
         return plainItems;
     },
 
+    _updateActiveDescendant() {
+        const opened = this.option('opened');
+        const listFocusedItemId = this._list?.getFocusedItemId();
+        const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
+        const activedescendant = opened && isElementOnDom && listFocusedItemId;
+
+        this.setAria({
+            'activedescendant': activedescendant || null
+        });
+    },
+
     _setSelectedItem: function(item) {
         const displayValue = this._displayValue(item);
         this.option('selectedItem', ensureDefined(item, null));
@@ -471,6 +487,7 @@ const DropDownList = DropDownEditor.inherit({
         this._list.option('_listAttributes', { 'role': 'combobox' });
 
         this._renderPreventBlur(this._$list);
+        this._setListFocusedElementOptionChange();
     },
 
     _renderPreventBlur: function($target) {
@@ -487,11 +504,11 @@ const DropDownList = DropDownEditor.inherit({
 
         const opened = this.option('opened') || undefined;
 
+        this._list && this._updateActiveDescendant();
         this.setAria({
-            'activedescendant': opened && this._list.getFocusedItemId(),
-            'controls': opened && this._listId
+            'controls': opened && this._listId,
+            'owns': opened && this._popupContentId
         });
-
     },
 
     _setDefaultAria: function() {
@@ -509,7 +526,8 @@ const DropDownList = DropDownEditor.inherit({
 
     _shouldRefreshDataSource: function() {
         const dataSourceProvided = !!this._list.option('dataSource');
-        return dataSourceProvided !== this._needPassDataSourceToList();
+        const someItemsSelected = this.option('selectedItems')?.length > 0;
+        return dataSourceProvided !== this._needPassDataSourceToList() && !someItemsSelected;
     },
 
     _isDesktopDevice: function() {
@@ -744,16 +762,42 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
-    _updatePopupMinWidth() {
-        hasWindow() && this._popup && this._setPopupOption('minWidth', this.$element().outerWidth());
+    _updatePopupMinWidth(popupWidth) {
+        if(window && this._popup) {
+            if(popupWidth === undefined) {
+                popupWidth = this.$element().outerWidth();
+            }
+            this._popup.overlayContent().css('minWidth', popupWidth);
+        }
     },
 
     _popupShowingHandler: function() {
         this._dimensionChanged();
     },
 
+    _getPopupWidth() {
+        const popupWidth = this.option('dropDownOptions.width');
+
+        if(popupWidth === null) {
+            return undefined;
+        }
+        if(typeof popupWidth === 'function') {
+            return popupWidth();
+        }
+
+        return popupWidth;
+    },
+
     _dimensionChanged: function() {
-        this._updatePopupMinWidth();
+        const popupWidth = this._getPopupWidth();
+        const popupMinWidth = this.option('dropDownOptions.minWidth');
+
+        if(popupWidth === undefined) {
+            this._setPopupOption('width', (this._getInputWidth.bind(this)));
+        }
+        if(!typeUtils.isDefined(popupMinWidth)) {
+            this._updatePopupMinWidth(popupWidth);
+        }
         this._popup && this._updatePopupDimensions();
     },
 
@@ -823,6 +867,12 @@ const DropDownList = DropDownEditor.inherit({
             case 'hoverStateEnabled':
             case 'focusStateEnabled':
                 this._isDesktopDevice() && this._setListOption(args.name, args.value);
+                this.callBase(args);
+                break;
+            case 'dropDownOptions':
+                if(args.fullName === 'dropDownOptions.width') {
+                    this._dimensionChanged();
+                }
                 this.callBase(args);
                 break;
             case 'items':

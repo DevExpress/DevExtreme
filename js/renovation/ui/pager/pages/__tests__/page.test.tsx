@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { Page, viewFunction as PageComponent } from '../page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../common/consts';
@@ -9,7 +9,7 @@ describe('Small pager pages', () => {
     const tree = shallow<typeof PageComponent>(<PageComponent {...{
       className: 'className', value: 1, label: 'label', onClick: click, props: { onClick: click },
     } as any}
-    />as any);
+    /> as any);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(tree.props()).toEqual({
       children: 1, className: 'className', label: 'label', onClick: click,

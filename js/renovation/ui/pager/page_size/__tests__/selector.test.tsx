@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h, createRef } from 'preact';
+import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../selector';
-
-jest.mock('../small', () => ({ PageSizeSmall: jest.fn() }));
-jest.mock('../large', () => ({ PageSizeLarge: jest.fn() }));
 
 describe('Pager size selector', () => {
   function defaultProps(): PageSizeSelector {
     const htmlRef = createRef();
     return {
-      htmlRef: htmlRef as HTMLDivElement,
+      htmlRef: htmlRef as unknown as HTMLDivElement,
       visible: true,
       normalizedPageSizes: [{
         text: '5',
@@ -33,9 +30,8 @@ describe('Pager size selector', () => {
   it('View, isLargeDisplayMode = true', () => {
     const props = defaultProps();
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
-    expect(tree.props()).toEqual({ className: 'dx-page-sizes' });
-    expect(tree.childAt(0).props()).toEqual({
-      children: [],
+    expect(tree.props()).toMatchObject({ className: 'dx-page-sizes' });
+    expect(tree.childAt(0).props()).toMatchObject({
       pageSize: 5,
       pageSizeChange: props.props?.pageSizeChange,
       pageSizes: [
@@ -55,10 +51,9 @@ describe('Pager size selector', () => {
     const props = defaultProps();
     props.props.isLargeDisplayMode = false;
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
-    expect(tree.props()).toEqual({ className: 'dx-page-sizes' });
+    expect(tree.props()).toMatchObject({ className: 'dx-page-sizes' });
     expect(tree.instance()).toBe((props.htmlRef as any).current);
-    expect(tree.childAt(0).props()).toEqual({
-      children: [],
+    expect(tree.childAt(0).props()).toMatchObject({
       pageSize: 5,
       pageSizes: [
         {

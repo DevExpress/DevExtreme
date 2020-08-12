@@ -1,7 +1,12 @@
 import $ from 'jquery';
 
+import dxCheckBox from 'ui/check_box';
+import dxrCheckBox from 'renovation/ui/check_box.j.js';
+import registerComponent from 'core/component_registrator.js';
+import { name as getName } from 'core/utils/public_component';
+import { act } from 'preact/test-utils';
+
 import 'common.css!';
-import 'ui/check_box';
 
 QUnit.testStart(function() {
     const markup =
@@ -19,8 +24,55 @@ const ICON_SELECTOR = '.dx-checkbox-icon';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
+const createModuleConfig = (oldWidget, renovatedWidget, config) => {
+    const widgetName = getName(oldWidget);
+    return {
+        beforeEach: function() {
+            const renovatedWidgetWrapper = renovatedWidget.inherit({
+                ctor: function() {
+                    let res;
+                    act(() => {
+                        res = this.callBase.apply(this, arguments);
+                    });
+                    return res;
+                },
+                option: function() {
+                    let res;
+                    act(() => {
+                        res = this.callBase.apply(this, arguments);
+                    });
+                    return res;
+                },
+                focus: function() {
+                    let res;
+                    act(() => {
+                        res = this.callBase.apply(this, arguments);
+                    });
+                    return res;
+                }
+            });
+            renovatedWidgetWrapper.getInstance = renovatedWidget.getInstance;
+            registerComponent(widgetName, renovatedWidgetWrapper);
+            config.beforeEach && config.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            config.afterEach && config.afterEach.apply(this);
+            registerComponent(widgetName, oldWidget);
+        }
+    };
+};
 
-QUnit.module('Checkbox markup', () => {
+export const getQUnitModuleForTestingRenovationWidget = (oldWidget, newWidget) => (name, config, tests) => {
+    const realConfig = tests ? config : {};
+    const realTests = tests || config;
+    QUnit.module(name, config, () => realTests(false));
+    const newConfig = createModuleConfig(oldWidget, newWidget, realConfig);
+    QUnit.module(`Renovated ${name}`, newConfig, () => realTests(true));
+};
+
+QUnit.module_r = getQUnitModuleForTestingRenovationWidget(dxCheckBox, dxrCheckBox);
+
+QUnit.module_r('Checkbox markup', () => {
     QUnit.test('markup init', function(assert) {
         const element = $('#checkbox').dxCheckBox();
 
@@ -52,6 +104,7 @@ QUnit.module('Checkbox markup', () => {
     });
 });
 
+// NOTE: it's skipped for renovated widget because of bug genarator - undefined is non-selectable value
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria role', function(assert) {
         const $element = $('#checkbox').dxCheckBox({});
@@ -59,7 +112,8 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('aria checked attributes', function(assert) {
-        const $element = $('#checkbox').dxCheckBox({ value: true }); const instance = $element.dxCheckBox('instance');
+        const $element = $('#checkbox').dxCheckBox({ value: true });
+        const instance = $element.dxCheckBox('instance');
 
         assert.equal($element.attr('aria-checked'), 'true', 'checked state is correct');
 

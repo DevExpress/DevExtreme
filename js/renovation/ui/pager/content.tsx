@@ -1,7 +1,7 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event, ForwardRef,
+  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
@@ -30,10 +30,10 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContentComponent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef as any} className={className} {...restAttributes}>
+  <div ref={parentRef} className={className} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
-      ref={pageSizesRef as any}
+      ref={pageSizesRef}
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
@@ -43,10 +43,19 @@ export const viewFunction = ({
     )}
     {pagesContainerVisible && (
       <div
-        ref={pagesRef as any}
+        ref={pagesRef}
         className={PAGER_PAGES_CLASS}
         style={{ visibility: pagesContainerVisibility }}
       >
+        {infoVisible && (
+        <InfoText
+          ref={infoTextRef}
+          infoText={infoText}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          totalCount={totalCount}
+        />
+        )}
         <PageIndexSelector
           hasKnownLastPage={hasKnownLastPage}
           isLargeDisplayMode={isLargeDisplayMode}
@@ -59,15 +68,6 @@ export const viewFunction = ({
           showNavigationButtons={showNavigationButtons}
           totalCount={totalCount}
         />
-        {infoVisible && (
-        <InfoText
-          ref={infoTextRef as any}
-          infoText={infoText}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-        />
-        )}
       </div>
     )}
   </div>
@@ -81,10 +81,6 @@ export type TwoWayProps = {
 
 @ComponentBindings()
 export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
-  @Event() pageIndexChange!: (pageIndex: number) => void;
-
-  @Event() pageSizeChange!: (pageSize: number) => void;
-
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;

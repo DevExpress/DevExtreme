@@ -1,6 +1,6 @@
 import {
   EVENT, emit, getEventHandlers, clear,
-} from '../../__tests__/events_mock';
+} from '../../test_utils/events_mock';
 
 import { subscribeToClickEvent } from '../subscribe_to_event';
 

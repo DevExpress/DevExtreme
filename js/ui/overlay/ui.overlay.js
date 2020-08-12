@@ -612,7 +612,7 @@ const Overlay = Widget.inherit({
                         that._renderVisibility(false);
 
                         completeHideAnimation.apply(this, arguments);
-                        that._actions.onHidden();
+                        that._actions?.onHidden();
 
                         deferred.resolve();
                     },

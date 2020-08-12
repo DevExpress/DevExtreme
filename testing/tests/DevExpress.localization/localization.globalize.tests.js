@@ -837,7 +837,6 @@ define(function(require, exports, module) {
             });
 
             QUnit.test('currency large number format', function(assert) {
-                // debugger;
                 assert.strictEqual(formatHelper.format(12345.67, { type: 'currency largeNumber', precision: 2 }), '$12.35K');
                 assert.strictEqual(formatHelper.format(12345.67, { type: 'currency thoUSands', precision: 2 }), '$12.35K');
                 assert.strictEqual(formatHelper.format(12345.67, { type: 'currency miLLions', precision: 3 }), '$0.012M');

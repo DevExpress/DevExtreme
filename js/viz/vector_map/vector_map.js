@@ -180,6 +180,8 @@ const dxVectorMap = BaseWidget.inherit({
         that._initLayerCollection(dataKey);
         that._initControlBar(dataKey);
         that._initLegendsControl();
+        that._createHtmlStructure();
+        that._prepareExtraElements();
         that._tooltipViewer = new tooltipViewerModule.TooltipViewer({ tracker: that._tracker, tooltip: that._tooltip, layerCollection: that._layerCollection });
     },
 
@@ -190,6 +192,8 @@ const dxVectorMap = BaseWidget.inherit({
     _initialChanges: ['PROJECTION', 'RESUME_LAYOUT', 'LAYOUT_INIT', 'BOUNDS', 'MAX_ZOOM_FACTOR', 'ZOOM_FACTOR', 'CENTER'],
 
     _layoutChangesOrder: ['RESUME_LAYOUT', 'LAYERS'],
+
+    _customChangesOrder: ['EXTRA_ELEMENTS'],
 
     _initCore: function() {
         this._root = this._renderer.root.attr({ align: 'center', cursor: 'default' });
@@ -230,6 +234,7 @@ const dxVectorMap = BaseWidget.inherit({
         this._projection.setSize(layout);
         this._layoutControl.setSize(layout);
         this._layerCollection.setRect([layout.left, layout.top, layout.width, layout.height]);
+        this._requestChange(['EXTRA_ELEMENTS']);
     },
 
     // The "layers_data", "mapData", "markers" options must never be merged (because of their meaning)
@@ -260,6 +265,7 @@ const dxVectorMap = BaseWidget.inherit({
     _optionChangesMap: {
         background: 'BACKGROUND',
         layers: 'LAYERS',
+        extraElements: 'EXTRA_ELEMENTS',
         controlBar: 'CONTROL_BAR',
         legends: 'LEGENDS',
         touchEnabled: 'TRACKER',
@@ -305,6 +311,10 @@ const dxVectorMap = BaseWidget.inherit({
 
     _change_CONTROL_BAR: function() {
         this._setControlBarOptions();
+    },
+
+    _change_EXTRA_ELEMENTS: function() {
+        this._renderExtraElements();
     },
 
     _change_LEGENDS: function() {
@@ -465,8 +475,12 @@ import { plugin as ExportPlugin } from '../core/export';
 import { plugin as TitlePlugin } from '../core/title';
 import { plugin as TooltipPlugin } from '../core/tooltip';
 import { plugin as LoadingIndicatorPlugin } from '../core/loading_indicator';
+import { plugins as annotationsPlugins } from '../core/annotations';
+
 dxVectorMap.addPlugin(ExportPlugin);
 dxVectorMap.addPlugin(TitlePlugin);
 dxVectorMap.addPlugin(TooltipPlugin);
 dxVectorMap.addPlugin(LoadingIndicatorPlugin);
+dxVectorMap.addPlugin(annotationsPlugins.core);
+dxVectorMap.addPlugin(annotationsPlugins.vectorMap);
 
