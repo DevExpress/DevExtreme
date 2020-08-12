@@ -1,1 +1,15 @@
-The **DataGrid** has been created with an&nbsp;intention to&nbsp;look simple and informative. However, you can change the visibility of&nbsp;column and row lines as&nbsp;well as&nbsp;use row alternation to&nbsp;reach the most appropriate appearance for your task. In&nbsp;this demo, you can spot the difference between various grid appearances by&nbsp;enabling and disabling the **showBorders**, **showColumnLines**, **showRowLines** and **rowAlternationEnabled** options.
+This example demonstrates the following options:
+
+* [showBorders](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#showBorders)
+Specifies whether the outer borders of the widget are visible.
+
+* [showColumnLines](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#showColumnLines)
+Specifies whether vertical lines that separate columns are visible.
+
+* [showRowLines](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#showRowLines)
+Specifies whether horizontal lines that separate rows are visible.
+
+* [rowAlternationEnabled](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#rowAlternationEnabled)
+Specifies whether rows should be in alternate colors.
+
+To toggle these options, select the corresponding checkbox under the **DataGrid**.
