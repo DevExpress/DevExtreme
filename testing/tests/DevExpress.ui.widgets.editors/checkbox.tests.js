@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import { createModuleConfig } from '../../helpers/renovationHelper.js';
+import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
 import { validateGroup } from 'ui/validation_engine';
 import dxrCheckBox from 'renovation/ui/check_box.j.js';
 import dxCheckBox from 'ui/check_box';
@@ -28,7 +28,7 @@ const CHECKED_CLASS = 'dx-checkbox-checked';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
-QUnit.module('Checkbox', createModuleConfig(dxCheckBox, dxrCheckBox), function() {
+QUnit.module('Checkbox', createRenovationModuleConfig(dxCheckBox, dxrCheckBox), function() {
     QUnit.module('render', function() {
 
         QUnit.test('markup init', function(assert) {

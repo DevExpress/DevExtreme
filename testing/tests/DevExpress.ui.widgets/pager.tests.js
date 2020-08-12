@@ -5,7 +5,7 @@ import typeUtils from 'core/utils/type';
 import 'common.css!';
 import 'generic_light.css!';
 import Pager from 'ui/pager';
-import { createModuleConfig, isRenovationWidget } from '../../helpers/renovationHelper.js';
+import { createRenovationModuleConfig, isRenovationSources } from '../../helpers/renovationHelper.js';
 import { RenovatedPagerForTest } from '../../helpers/renovationPagerHelper.js';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
@@ -23,7 +23,7 @@ function isLightMode(pager) {
     return pager.$element().hasClass('dx-light-mode');
 }
 
-QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
+QUnit.module('Pager', createRenovationModuleConfig(Pager, RenovatedPagerForTest, {
     beforeEach: function() {
         this.checkPages = function(pages, values, selectedValue) {
             let i;
@@ -49,7 +49,7 @@ QUnit.module('Pager', createModuleConfig(Pager, RenovatedPagerForTest, {
     }
 }),
 function() {
-    const isRenovation = isRenovationWidget(Pager);
+    const isRenovation = isRenovationSources(Pager);
     const getPagesElement = function(rootElement) {
         return rootElement.find('.dx-pages')[0].childNodes;
     };
@@ -63,7 +63,7 @@ function() {
         assert.equal(instance.option('pageCount'), 10, 'pageCount');
         assert.deepEqual(instance.option('pageSizes'), [5, 10], 'pageSizes');
         assert.ok(instance.option('hasKnownLastPage'), 'hasKnownLastPage');
-        if(isRenovationWidget(Pager)) {
+        if(isRenovationSources(Pager)) {
             assert.equal(instance.option('defaultPageSize'), 5, 'pageSize');
         } else {
             assert.equal(instance.option('pageSize'), 5, 'pageSize');

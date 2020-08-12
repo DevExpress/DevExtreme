@@ -2,16 +2,16 @@ import registerComponent from 'core/component_registrator';
 import { name as getName } from 'core/utils/public_component';
 import { act } from 'preact/test-utils';
 
-export const isRenovationWidget = (oldWidget) => {
+export const isRenovationSources = (oldWidget) => {
     if(oldWidget.prototype._renderPreact !== undefined) {
         return true;
     }
     return false;
 };
 
-export const createModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
+export const createRenovationModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
     const widgetName = getName(oldWidget);
-    if(isRenovationWidget(oldWidget)) {
+    if(isRenovationSources(oldWidget)) {
         return {
             beforeEach: function() {
                 const renovatedWidgetWrapper = renovatedWidget.inherit({

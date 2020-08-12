@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import dxCheckBox from 'ui/check_box';
 import dxrCheckBox from 'renovation/ui/check_box.j.js';
-import { createModuleConfig } from '../../helpers/renovationHelper.js';
+import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
 
 import 'common.css!';
 
@@ -22,7 +22,7 @@ const ICON_SELECTOR = '.dx-checkbox-icon';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
-QUnit.module('Checkbox markup', createModuleConfig(dxCheckBox, dxrCheckBox), () => {
+QUnit.module('Checkbox markup', createRenovationModuleConfig(dxCheckBox, dxrCheckBox), () => {
     QUnit.test('markup init', function(assert) {
         const element = $('#checkbox').dxCheckBox();
 
