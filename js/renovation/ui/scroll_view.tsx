@@ -14,6 +14,7 @@ import config from '../../core/config';
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
 const DIRECTION_BOTH = 'both';
+const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 export interface Location {
   top: number;
@@ -28,6 +29,17 @@ export const ensureLocation = (location: number | Location): Location => {
     } as Location;
   }
   return { ...{ top: 0, left: 0 }, ...(location as Location) } as Location;
+};
+
+export const getRelativeLocation = (element: HTMLElement): Location => {
+  const result = { top: 0, left: 0 } as Location;
+  let targetElement = element;
+  while (!targetElement.matches(`.${SCROLLABLE_CONTENT_CLASS}`)) {
+    result.top += targetElement.offsetTop;
+    result.left += targetElement.offsetLeft;
+    targetElement = targetElement.offsetParent as HTMLElement;
+  }
+  return result;
 };
 
 export const viewFunction = ({
@@ -45,7 +57,7 @@ export const viewFunction = ({
   >
     <div className="dx-scrollable-wrapper">
       <div className="dx-scrollable-container" ref={containerRef as any}>
-        <div className="dx-scrollable-content" ref={contentRef as any}>
+        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
           {children}
         </div>
       </div>
@@ -106,10 +118,12 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
 
   @Method()
   scrollToElement(element: HTMLElement): void {
-    this.scrollTo({
-      top: this.getScrollTopLocation(element),
-      left: this.getScrollLeftLocation(element),
-    } as Location);
+    if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
+      this.scrollTo({
+        top: this.getScrollTopLocation(element),
+        left: this.getScrollLeftLocation(element),
+      } as Location);
+    }
   }
 
   get cssClasses(): string {
@@ -129,7 +143,8 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   }
 
   private getScrollTopLocation(element: HTMLElement): number {
-    const { offsetHeight, offsetTop } = element;
+    const offsetTop = getRelativeLocation(element).top;
+    const { offsetHeight } = element;
     const containerHeight = this.containerRef.offsetHeight;
     const { top } = this.scrollLocation;
 
@@ -143,7 +158,8 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   }
 
   private getScrollLeftLocation(element: HTMLElement): number {
-    const { offsetWidth, offsetLeft } = element;
+    const offsetLeft = getRelativeLocation(element).left;
+    const { offsetWidth } = element;
     const containerWidth = this.containerRef.offsetWidth;
     const { left } = this.scrollLocation;
 
