@@ -705,7 +705,6 @@ extend(legendPrototype, {
     },
 
     _createLines: function(lines, layoutOptions) {
-
         this._items.forEach((item, i) => {
             const tableLine = getLines(lines, layoutOptions, i);
             const labelBox = {
@@ -721,7 +720,7 @@ extend(legendPrototype, {
                 height: item.markerBBox.height,
                 element: item.marker,
                 pos: {
-                    horizontal: labelBox.pos.vertical === TOP || labelBox.pos.vertical === BOTTOM ? CENTER : LEFT,
+                    horizontal: labelBox.pos.vertical === TOP || labelBox.pos.vertical === BOTTOM ? CENTER : labelBox.pos.horizontal,
                     vertical: CENTER
                 },
                 bBox: { width: item.markerBBox.width, height: item.markerBBox.height, x: item.markerBBox.x, y: item.markerBBox.y },
