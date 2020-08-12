@@ -241,7 +241,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
+        const endDate = new Date(this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate));
+        const endDayHour = this.instance._getCurrentViewOption('endDayHour');
+
+        if(endDate.getHours() < endDayHour) {
+            endDate.setHours(endDayHour, 0, 0, 0);
+            // appointment.endDate = new Date(appointment.endDate.getTime() - 1);
+        }
+
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const durationInHours = (endDate.getTime() - startDate.getTime()) / toMs('hour');
 

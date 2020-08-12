@@ -2039,9 +2039,9 @@ class Scheduler extends Widget {
     }
 
     _cropAppointmentsByStartDayHour(appointments, appointmentData) {
-        const adapter = this.createAppointmentAdapter(appointmentData);
+        // const adapter = this.createAppointmentAdapter(appointmentData);
         const startDayHour = this._getCurrentViewOption('startDayHour');
-        const endDayHour = this._getCurrentViewOption('endDayHour');
+        // const endDayHour = this._getCurrentViewOption('endDayHour');
 
         const firstViewDate = this._workSpace.getStartViewDate();
 
@@ -2050,9 +2050,10 @@ class Scheduler extends Widget {
             let resultDate = new Date(appointment.startDate);
 
             if(this.appointmentTakesAllDay(appointmentData)) {
-                if(adapter.allDay && appointment.endDate.getHours() < endDayHour) {
-                    appointment.endDate.setHours(endDayHour, 0, 0, 0);
-                }
+                // if(adapter.allDay && appointment.endDate.getHours() < endDayHour) {
+                //     appointment.endDate.setHours(endDayHour, 0, 0, 0);
+                //     appointment.endDate = new Date(appointment.endDate.getTime() - 1);
+                // }
                 resultDate = dateUtils.normalizeDate(startDate, firstViewDate);
             } else {
                 if(startDate < firstViewDate) {
