@@ -26,7 +26,7 @@ let $activeThemeLink;
 let knownThemes;
 let currentThemeName;
 let pendingThemeName;
-let defaultTimeout = 15000;
+const defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
@@ -445,23 +445,10 @@ exports.isDark = isDark;
 exports.isWebFontLoaded = isWebFontLoaded;
 exports.waitWebFont = waitWebFont;
 
+
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
-    inited = false;
-    themeInitializedCallback.add(() => inited = true);
-};
-
-exports.initialized = function(callback) {
-    if(inited) {
-        callback();
-    } else {
-        themeInitializedCallback.add(callback);
-    }
-};
-
-exports.setDefaultTimeout = function(timeout) {
-    defaultTimeout = timeout;
 };
 
