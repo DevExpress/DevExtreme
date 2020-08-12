@@ -4,13 +4,13 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 import { PdfJSDataGridTestHelper } from './PdfJSTestHelper.js';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../exceljsParts/objectAssignHelper.js';
 import { exportDataGrid } from 'pdf_exporter';
 
 import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
 import 'generic_light.css!';
-
 
 QUnit.testStart(() => {
     const markup = '<div id=\'dataGrid\'></div>';
@@ -21,11 +21,17 @@ QUnit.testStart(() => {
 let helper;
 
 const moduleConfig = {
+    before: function() {
+        initializeDxObjectAssign();
+    },
     beforeEach: function() {
         this.jsPDFDocument = new jsPDF('p', 'pt', 'a4');
         this.customizeCellCallCount = 0;
 
         helper = new PdfJSDataGridTestHelper(this.jsPDFDocument);
+    },
+    after: function() {
+        clearDxObjectAssign();
     }
 };
 
