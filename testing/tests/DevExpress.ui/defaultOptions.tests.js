@@ -401,7 +401,7 @@ testComponentDefaults(Lookup,
         searchEnabled: false,
         showCancelButton: false,
         showPopupTitle: false,
-        itemCenteringEnabled: true
+        dropDownCentered: true
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

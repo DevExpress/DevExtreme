@@ -235,7 +235,7 @@ const Lookup = DropDownList.inherit({
             * @hidden
             */
 
-            itemCenteringEnabled: false,
+            dropDownCentered: false,
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
@@ -309,7 +309,7 @@ const Lookup = DropDownList.inherit({
 
                     shading: false,
 
-                    itemCenteringEnabled: true,
+                    dropDownCentered: true,
 
                     _scrollToSelectedItemEnabled: true
                 }
@@ -574,7 +574,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        if(!this.option('itemCenteringEnabled')) return;
+        if(!this.option('dropDownCentered')) return;
 
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
@@ -731,7 +731,7 @@ const Lookup = DropDownList.inherit({
         result.maxHeight = function() { return $(window).height(); };
 
         if(this.option('_scrollToSelectedItemEnabled')) {
-            result.position = this.option('itemCenteringEnabled') ? {
+            result.position = this.option('dropDownCentered') ? {
                 my: 'left top',
                 at: 'left top',
                 of: this.element()
@@ -1128,7 +1128,7 @@ const Lookup = DropDownList.inherit({
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
                 break;
-            case 'itemCenteringEnabled':
+            case 'dropDownCentered':
                 if(this.option('_scrollToSelectedItemEnabled')) {
                     this.option('position', undefined);
                     this._renderPopup();
