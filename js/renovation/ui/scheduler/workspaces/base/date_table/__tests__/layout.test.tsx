@@ -41,7 +41,10 @@ describe('DateTableLayoutBase', () => {
     });
 
     it('should render table', () => {
-      const layout = render({});
+      const layout = render({ classes: 'some-class' });
+
+      expect(layout.hasClass('some-class'))
+        .toBe(true);
 
       expect(layout.find(Table).exists())
         .toBe(true);
@@ -86,6 +89,16 @@ describe('DateTableLayoutBase', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
+      it('classes', () => {
+        const layout = new DateTableLayoutBase({ className: 'some-class' });
+
+        expect(layout.classes.split(' '))
+          .toEqual([
+            'dx-scheduler-date-table',
+            'some-class',
+          ]);
+      });
+
       [true, false].forEach((isVirtual) => {
         it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
           const layout = new DateTableLayoutBase({ viewData: { groupedData: [], isVirtual } });
@@ -95,19 +108,26 @@ describe('DateTableLayoutBase', () => {
         });
       });
 
-      it('topVirtualRowHeight, bottomVirtualRowHeight', () => {
-        const layout = new DateTableLayoutBase({
-          viewData: {
-            groupedData: [],
-            topVirtualRowHeight: 100,
-            bottomVirtualRowHeight: 200,
-          },
-        });
+      [100, undefined].forEach((topVirtualRowHeight) => {
+        [500, undefined].forEach((bottomVirtualRowHeight) => {
+          it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
+            const layout = new DateTableLayoutBase({
+              viewData: {
+                groupedData: [],
+                topVirtualRowHeight,
+                bottomVirtualRowHeight,
+              },
+            });
 
-        expect(layout.topVirtualRowHeight)
-          .toEqual(100);
-        expect(layout.bottomVirtualRowHeight)
-          .toEqual(200);
+            let value = topVirtualRowHeight || 0;
+            expect(layout.topVirtualRowHeight)
+              .toEqual(value);
+
+            value = bottomVirtualRowHeight || 0;
+            expect(layout.bottomVirtualRowHeight)
+              .toEqual(value);
+          });
+        });
       });
     });
   });

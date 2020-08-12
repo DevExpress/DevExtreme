@@ -18,6 +18,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { extend } from 'core/utils/extend';
+import devices from 'core/devices';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -68,7 +69,6 @@ const stubInvokeMethod = function(instance, options) {
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
-    // $('body').append('<div id="scheduler-work-space"></div>');
 });
 
 (function() {
@@ -4016,6 +4016,11 @@ QUnit.module('Virtual Scrolling', {
     },
 }, () => {
     QUnit.test('_getCellCoordinatesByIndex should correct rowIndex', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'This test is for the desktop');
+            return;
+        }
+
         this.createInstance();
 
         this.instance.getScrollable().scrollTo({ y: 600 });
@@ -4026,5 +4031,6 @@ QUnit.module('Virtual Scrolling', {
             rowIndex: 7,
             cellIndex: 0
         });
+
     });
 });

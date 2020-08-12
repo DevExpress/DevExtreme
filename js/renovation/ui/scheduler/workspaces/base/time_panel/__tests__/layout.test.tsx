@@ -184,19 +184,26 @@ describe('TimePanelLayout', () => {
         });
       });
 
-      it('topVirtualRowHeight, bottomVirtualRowHeight', () => {
-        const layout = new TimePanelTableLayout({
-          viewData: {
-            groupedData: [],
-            topVirtualRowHeight: 100,
-            bottomVirtualRowHeight: 200,
-          },
-        });
+      [100, undefined].forEach((topVirtualRowHeight) => {
+        [500, undefined].forEach((bottomVirtualRowHeight) => {
+          it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
+            const layout = new TimePanelTableLayout({
+              viewData: {
+                groupedData: [],
+                topVirtualRowHeight,
+                bottomVirtualRowHeight,
+              },
+            });
 
-        expect(layout.topVirtualRowHeight)
-          .toEqual(100);
-        expect(layout.bottomVirtualRowHeight)
-          .toEqual(200);
+            let value = topVirtualRowHeight || 0;
+            expect(layout.topVirtualRowHeight)
+              .toEqual(value);
+
+            value = bottomVirtualRowHeight || 0;
+            expect(layout.bottomVirtualRowHeight)
+              .toEqual(value);
+          });
+        });
       });
     });
   });

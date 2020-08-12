@@ -12,7 +12,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
     isVirtual={viewModel.isVirtual}
     topVirtualRowHeight={viewModel.topVirtualRowHeight}
     bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-    className={`dx-scheduler-date-table ${viewModel.props.className}`}
+    className={viewModel.classes}
   >
     <DateTableBody
       viewData={viewModel.props.viewData}
@@ -32,16 +32,20 @@ export class DateTableLayoutBaseProps extends LayoutProps {
   view: viewFunction,
 })
 export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+  get classes(): string {
+    return `dx-scheduler-date-table ${this.props.className}`;
+  }
+
   get isVirtual(): boolean {
     const { viewData } = this.props;
     return !!viewData!.isVirtual;
   }
 
   get topVirtualRowHeight(): number | undefined {
-    return this.props.viewData?.topVirtualRowHeight || 0;
+    return this.props.viewData!.topVirtualRowHeight || 0;
   }
 
   get bottomVirtualRowHeight(): number | undefined {
-    return this.props.viewData?.bottomVirtualRowHeight || 0;
+    return this.props.viewData!.bottomVirtualRowHeight || 0;
   }
 }

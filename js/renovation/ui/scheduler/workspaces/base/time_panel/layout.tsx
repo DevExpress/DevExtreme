@@ -78,14 +78,14 @@ export class TimePanelTableLayoutProps extends LayoutProps {
 export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
   get isVirtual(): boolean {
     const { viewData } = this.props;
-    return viewData ? !!viewData.isVirtual : false;
+    return !!viewData!.isVirtual;
   }
 
   get topVirtualRowHeight(): number {
-    return this.props.viewData?.topVirtualRowHeight || 0;
+    return this.props.viewData!.topVirtualRowHeight || 0;
   }
 
   get bottomVirtualRowHeight(): number {
-    return this.props.viewData?.bottomVirtualRowHeight || 0;
+    return this.props.viewData!.bottomVirtualRowHeight || 0;
   }
 }
