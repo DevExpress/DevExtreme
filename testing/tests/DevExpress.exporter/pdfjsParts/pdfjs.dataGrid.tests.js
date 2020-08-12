@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 import jsPDF from 'jspdf';
-import { applyPlugin } from 'jspdf-autotable';
+import 'jspdf-autotable';
 
 import { PdfJSDataGridTestHelper } from './PdfJSTestHelper.js';
 import { exportDataGrid } from 'pdf_exporter';
@@ -22,7 +22,6 @@ let helper;
 
 const moduleConfig = {
     beforeEach: function() {
-        applyPlugin(jsPDF);
         this.jsPDFDocument = new jsPDF('p', 'pt', 'a4');
         this.customizeCellCallCount = 0;
 
