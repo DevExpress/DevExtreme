@@ -155,7 +155,7 @@ QUnit.module('Loading root data', moduleConfig, () => {
             assert.equal(data.rows.length, 0, 'rows should not be loaded');
             assert.equal(data.columns.length, 0, 'columns should not be loaded');
             assert.equal(data.rows.length, 0, 'rows should not be loaded');
-            assert.deepEqual(data.values, [[[]]], 'values is an empty 3-dimensional array');
+            assert.deepEqual(data.values, [], 'values is an empty 1-dimensional array');
             assert.deepEqual(loadSpy.lastCall.args[0], {
                 group: undefined,
                 groupSummary: [],
