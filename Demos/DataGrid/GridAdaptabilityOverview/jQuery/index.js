@@ -8,10 +8,6 @@ $(function(){
             allowUpdating: true,
             mode: "batch"
         },
-        export: {
-            enabled: true,
-            fileName: "Orders"
-        },
         grouping: {
             contextMenuEnabled: true,
             expandMode: "rowClick"

@@ -24,7 +24,6 @@ class App extends React.Component {
           height={570}
           showBorders={true}
         >
-          <Export enabled={true} fileName="Adventure Works" />
           <FieldChooser enabled={true} allowSearch={true} />
         </PivotGrid>
       </React.Fragment>

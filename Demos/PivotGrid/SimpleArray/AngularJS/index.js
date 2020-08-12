@@ -11,10 +11,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         fieldChooser: {
             enabled: false
         },
-        export: {
-            enabled: true,
-            fileName: "Sales"
-        },
         dataSource: {
             fields: [{
                 caption: "Region",

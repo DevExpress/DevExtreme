@@ -7,10 +7,6 @@ window.onload = function() {
             allowExpandAll: true,
             height: 570,
             showBorders: true,
-            export: {
-                enabled: true,
-                fileName: "Adventure Works"
-            }, 
             fieldChooser: {
                 allowSearch: true
             },

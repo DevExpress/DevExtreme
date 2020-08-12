@@ -16,7 +16,6 @@ class App extends React.Component {
           dataSource={this.dataSource}
           columnHidingEnabled={true}
           showBorders={true}>
-          <Export enabled={true} fileName="Orders" />
           <Editing allowAdding={true} allowUpdating={true} mode="batch" />
           <Grouping contextMenuEnabled={true} expandMode="rowClick" />
           <GroupPanel visible={true} emptyPanelText="Use the context menu of header columns to group data" />

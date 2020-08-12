@@ -10,10 +10,6 @@ window.onload = function() {
             fieldChooser: {
                 enabled: false
             },
-            export: {
-                enabled: true,
-                fileName: "Sales"
-            },
             dataSource: {
                 fields: [{
                     caption: "Region",
