@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import 'promise-polyfill';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
+import { isFunction } from 'core/utils/type';
 import { PdfJSDataGridTestHelper } from './PdfJSTestHelper.js';
 import { exportDataGrid } from 'pdf_exporter';
 
@@ -21,7 +22,8 @@ let helper;
 
 const moduleConfig = {
     beforeEach: function() {
-        this.jsPDFDocument = new jsPDF('p', 'pt', 'a4');
+        const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
+        this.jsPDFDocument = _jsPDF('p', 'pt', 'a4');
         this.customizeCellCallCount = 0;
 
         helper = new PdfJSDataGridTestHelper(this.jsPDFDocument);
