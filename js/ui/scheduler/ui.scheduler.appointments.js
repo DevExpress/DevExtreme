@@ -584,9 +584,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const startDate = info.appointment.startDate;
         const endDate = info.appointment.endDate;
 
-        // const startDate = modifiedAppointmentAdapter.allDay ? info.sourceAppointment.startDate : info.appointment.startDate;
-        // const endDate = modifiedAppointmentAdapter.allDay ? info.sourceAppointment.endDate : info.appointment.endDate;
-
         const dateRange = this._getDateRange(e, startDate, endDate);
 
         modifiedAppointmentAdapter.startDate = new Date(dateRange[0]);
