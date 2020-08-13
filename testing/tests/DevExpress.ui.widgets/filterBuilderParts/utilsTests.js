@@ -1,6 +1,7 @@
 import utils from 'ui/filter_builder/utils';
 import between from 'ui/filter_builder/between';
 import CustomStore from 'data/custom_store';
+import messageLocalization from 'localization/message';
 import fields from '../../../helpers/filterBuilderTestData.js';
 
 const condition1 = ['CompanyName', '=', 'Super Mart of the West'];
@@ -447,13 +448,15 @@ QUnit.module('Utils', function() {
         assert.equal(field.dataField, 'State');
     });
 
-    // T603218
+    // T603218 T922354
     QUnit.test('getNormalizedFields', function(assert) {
         const field = {
             dataField: 'Weight',
             dataType: 'number',
             width: 100
         };
+        const defaultTrueText = messageLocalization.format('dxDataGrid-trueText');
+        const defaultFalseText = messageLocalization.format('dxDataGrid-falseText');
         const normalizedFields = utils.getNormalizedFields([field, { }]);
 
         assert.strictEqual(normalizedFields.length, 1);
@@ -461,6 +464,25 @@ QUnit.module('Utils', function() {
         assert.strictEqual(normalizedFields[0].dataType, field.dataType);
         assert.ok(normalizedFields[0].defaultCalculateFilterExpression);
         assert.notOk(normalizedFields[0].width);
+        assert.strictEqual(normalizedFields[0].trueText, defaultTrueText);
+        assert.strictEqual(normalizedFields[0].falseText, defaultFalseText);
+    });
+
+    QUnit.test('A normilized field should have custom trueText and falseText options (T922354)', function(assert) {
+        const trueText = 'trueText';
+        const falseText = 'falseText';
+        const field = {
+            dataField: 'Weight',
+            dataType: 'number',
+            width: 100,
+            trueText,
+            falseText
+        };
+        const normalizedFields = utils.getNormalizedFields([field]);
+
+        assert.strictEqual(normalizedFields.length, 1);
+        assert.strictEqual(normalizedFields[0].trueText, trueText);
+        assert.strictEqual(normalizedFields[0].falseText, falseText);
     });
 });
 
