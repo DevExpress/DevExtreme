@@ -913,7 +913,30 @@ QUnit.test('Vertical orientation. Transform must be rounded', function(assert) {
     this.checkItems(assert, [
         { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
         { id: 1, marker: { translateX: 0, translateY: 22 }, label: { translateX: 20, translateY: 21 } },
-        { id: 2, marker: { translateX: 1 - 5, translateY: 44 - 3 }, label: { translateX: 20, translateY: 43 } }
+        { id: 2, marker: { translateX: -5, translateY: 44 - 3 }, label: { translateX: 20, translateY: 43 } }
+    ]);
+});
+
+QUnit.test('Vertical orientation. Different marker size, default text position (T918106)', function(assert) {
+    this.markerBBoxes = [{ x: 0, y: 0, width: 2, height: 2 }, defaultMarkerBBox, defaultMarkerBBox];
+    this.createSimpleLegend().draw(200, 200);
+
+    this.checkItems(assert, [
+        { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
+        { id: 1, marker: { translateX: 0, translateY: 22 }, label: { translateX: 20, translateY: 21 } },
+        { id: 2, marker: { translateX: 0, translateY: 48 }, label: { translateX: 20, translateY: 41 } }
+    ]);
+});
+
+QUnit.test('Vertical orientation. Different marker size, text position is left (T918106)', function(assert) {
+    this.options.itemTextPosition = 'left';
+    this.markerBBoxes = [{ x: 0, y: 0, width: 2, height: 2 }, defaultMarkerBBox, defaultMarkerBBox];
+    this.createSimpleLegend().draw(200, 200);
+
+    this.checkItems(assert, [
+        { id: 0, marker: { translateX: 27, translateY: 0 }, label: { translateX: -1, translateY: -1 } },
+        { id: 1, marker: { translateX: 27, translateY: 22 }, label: { translateX: -1, translateY: 21 } },
+        { id: 2, marker: { translateX: 39, translateY: 48 }, label: { translateX: -1, translateY: 41 } }
     ]);
 });
 
