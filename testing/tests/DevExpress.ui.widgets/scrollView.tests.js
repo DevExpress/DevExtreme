@@ -47,6 +47,8 @@ const getScrollOffset = function($scrollView) {
     };
 };
 
+themes.setDefaultTimeout(0);
+
 devices.current('iPhone');
 
 const moduleConfig = {
@@ -56,6 +58,7 @@ const moduleConfig = {
         animationFrame.requestAnimationFrame = function(callback) {
             callback();
         };
+        return new Promise((resolve) => themes.initialized(resolve));
     },
     afterEach: function() {
         this.clock.restore();

@@ -1,10 +1,13 @@
 const $ = require('jquery');
 const viewPort = require('core/utils/view_port').value;
 const devices = require('core/devices');
+const themes = require('ui/themes');
 const ko = require('knockout');
 
 require('ui/popup');
 require('integration/knockout');
+
+themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
     const markup =
@@ -32,6 +35,9 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').addClass('dx-theme-ios').addClass('dx-viewport').html(markup);
+    return new Promise(function(resolve) {
+        themes.initialized(resolve);
+    });
 });
 
 const POPUP_TITLE_CLASS = 'dx-popup-title';

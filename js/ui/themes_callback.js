@@ -1,3 +1,4 @@
-const Callbacks = require('../core/utils/callbacks');
+import Callbacks from '../core/utils/callbacks';
+export const themeReadyCallback = new Callbacks();
+export const themeInitializedCallback = new Callbacks();
 
-module.exports = new Callbacks();
