@@ -634,7 +634,64 @@ QUnit.module('Events', moduleConfig, () => {
         }, 'element position');
     });
 
+    QUnit.test('onDragEnd - check toComponent arg when cross-component dragging into nested draggable', function(assert) {
+        // arrange
+        const onDragEndSpy = sinon.spy();
 
+        this.createDraggable({
+            group: 'shared',
+            onDragEnd: onDragEndSpy
+        }, $('#other'));
+
+        this.createDraggable({
+            group: 'shared'
+        }, $('#area'));
+
+        const draggable = this.createDraggable({
+            group: 'shared'
+        });
+        const otherOffset = $('#other').offset();
+        const draggableOffset = $('#draggable').offset();
+
+        // act
+        pointerMock($('#other'))
+            .start({ x: otherOffset.left, y: otherOffset.top })
+            .down()
+            .move(draggableOffset.left - otherOffset.left + 1, draggableOffset.top - otherOffset.top + 1)
+            .move(10, 10)
+            .up();
+
+        // assert
+        assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable, 'args - toComponent');
+    });
+
+    QUnit.test('onDragEnd - check toComponent arg when dragging over a nested draggable (clone is true)', function(assert) {
+        // arrange
+        const onDragEndSpy = sinon.spy();
+
+        const draggable = this.createDraggable({
+            group: 'shared',
+            onDragEnd: onDragEndSpy,
+            clone: true
+        }, $('#area'));
+
+        this.createDraggable({
+            group: 'shared'
+        });
+        const areaOffset = $('#area').offset();
+        const draggableOffset = $('#draggable').offset();
+
+        // act
+        pointerMock($('#area'))
+            .start({ x: areaOffset.left, y: areaOffset.top })
+            .down()
+            .move(draggableOffset.left - areaOffset.left + 1, draggableOffset.top - areaOffset.top + 1)
+            .move(10, 10)
+            .up();
+
+        // assert
+        assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable, 'args - toComponent');
+    });
 });
 
 QUnit.module('\'dragDirection\' option', moduleConfig, () => {
