@@ -59,7 +59,7 @@ function readThemeMarker() {
 // FYI
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
-export function waitForThemeLoad(themeName) {
+function waitForThemeLoad(themeName) {
     let waitStartTime;
     let timerId;
     let intervalCleared = true;
@@ -204,7 +204,7 @@ function initContext(newContext) {
     context = newContext;
 }
 
-export function init(options) {
+function init(options) {
     options = options || {};
     initContext(options.context || domAdapter.getDocument());
 
@@ -214,7 +214,7 @@ export function init(options) {
     current(options);
 }
 
-export function current(options) {
+function current(options) {
     if(!arguments.length) {
         currentThemeName = currentThemeName || readThemeMarker();
         return currentThemeName;
@@ -285,7 +285,7 @@ function getCssClasses(themeName) {
 }
 
 let themeClasses;
-export function attachCssClasses(element, themeName) {
+function attachCssClasses(element, themeName) {
     themeClasses = getCssClasses(themeName).join(' ');
     $(element).addClass(themeClasses);
 
@@ -309,7 +309,7 @@ export function attachCssClasses(element, themeName) {
     activateHairlines();
 }
 
-export function detachCssClasses(element) {
+function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
@@ -325,29 +325,29 @@ function isTheme(themeRegExp, themeName) {
     return new RegExp(themeRegExp).test(themeName);
 }
 
-export function isMaterial(themeName) {
+function isMaterial(themeName) {
     return isTheme('material', themeName);
 }
 
-export function isIos7(themeName) {
+function isIos7(themeName) {
     return isTheme('ios7', themeName);
 }
 
-export function isGeneric(themeName) {
+function isGeneric(themeName) {
     return isTheme('generic', themeName);
 }
 
-export function isDark(themeName) {
+function isDark(themeName) {
     return isTheme('dark', themeName);
 }
 
-export function checkThemeDeprecation() {
+function checkThemeDeprecation() {
     if(isIos7()) {
         errors.log('W0010', 'The \'ios7\' theme', '19.1', 'Use the \'generic\' theme instead.');
     }
 }
 
-export function isWebFontLoaded(text, fontWeight) {
+function isWebFontLoaded(text, fontWeight) {
     const testedFont = 'Roboto, RobotoFallback, Arial';
     const etalonFont = 'Arial';
 
@@ -374,7 +374,7 @@ export function isWebFontLoaded(text, fontWeight) {
     return etalonFontWidth !== testedFontWidth;
 }
 
-export function waitWebFont(text, fontWeight) {
+function waitWebFont(text, fontWeight) {
     const interval = 15;
     const timeout = 2000;
 
@@ -428,27 +428,36 @@ devices.changed.add(function() {
     init({ _autoInit: true });
 });
 
-export {
-    themeReady as ready,
-};
+exports.init = init;
+exports.waitForThemeLoad = waitForThemeLoad;
+exports.current = current;
+exports.attachCssClasses = attachCssClasses;
+exports.detachCssClasses = detachCssClasses;
+exports.isMaterial = isMaterial;
+exports.isIos7 = isIos7;
+exports.isGeneric = isGeneric;
+exports.isDark = isDark;
+exports.checkThemeDeprecation = checkThemeDeprecation;
+exports.isWebFontLoaded = isWebFontLoaded;
+exports.waitWebFont = waitWebFont;
+exports.ready = themeReady;
 
-export function resetTheme() {
+exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
     inited = false;
     themeInitializedCallback.add(() => inited = true);
-}
+},
 
-export function initialized(callback) {
+exports.setDefaultTimeout = function(timeout) {
+    defaultTimeout = timeout;
+};
+
+exports.initialized = function(callback) {
     if(inited) {
         callback();
     } else {
         themeInitializedCallback.add(callback);
     }
-}
-
-export function setDefaultTimeout(timeout) {
-    defaultTimeout = timeout;
-}
-
+};
