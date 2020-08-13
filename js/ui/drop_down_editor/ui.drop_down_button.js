@@ -32,7 +32,7 @@ export default class ClearButton extends TextEditorButton {
 
         this._addToContainer($element);
 
-        const instance = editor._createComponent($element, Button, extend({}, options, { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) }));
+        const instance = editor._createComponent($element, Button, extend({}, options, { elementAttr: { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) } }));
 
         this._legacyRender(editor.$element(), $element, options.visible);
 
