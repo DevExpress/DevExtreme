@@ -597,6 +597,40 @@ QUnit.test('Recurrence appointment with custom timezone should be resized correc
     }
 });
 
+QUnit.test('AllDay appointment with custom timezone should be resized correctly', function(assert) {
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+
+    try {
+        this.createInstance({
+            currentDate: new Date(2015, 5, 12),
+            views: ['week'],
+            currentView: 'week',
+            editing: true,
+            timeZone: 'America/Araguaina', // -3
+            dataSource: [{
+                text: 'a',
+                startDate: new Date(2015, 5, 8, 10),
+                endDate: new Date(2015, 5, 10, 1),
+                allDay: true
+            }]
+        });
+
+        const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().width;
+        let $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
+
+        pointer.dragStart().drag(cellWidth, 0);
+        pointer.dragEnd();
+
+        $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+
+        assert.roughEqual($appointment.outerWidth(), cellWidth * 3, 2.001, 'Appointment width is OK');
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
 QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', function(assert) {
     const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
