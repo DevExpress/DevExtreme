@@ -5,7 +5,7 @@ import 'jspdf-autotable';
 
 import { PdfJSDataGridTestHelper } from './PdfJSTestHelper.js';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../exceljsParts/objectAssignHelper.js';
-import 'core/polyfills/promise';
+import './promiseHelper.js';
 import { exportDataGrid } from 'pdf_exporter';
 
 import 'ui/data_grid/ui.data_grid';
