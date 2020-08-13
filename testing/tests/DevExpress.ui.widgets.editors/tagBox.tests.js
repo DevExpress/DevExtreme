@@ -8,6 +8,7 @@ import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
 import errors from 'core/errors';
+import dataErrors from 'data/errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'localization/message';
@@ -861,6 +862,50 @@ QUnit.module('multi tag support', {
         assert.equal($tagBox.dxTagBox('option', 'value').length, 5, 'first page is selected');
         assert.equal($tagBox.find('.' + TAGBOX_MULTI_TAG_CLASS).text(), '5 selected', 'text is correct');
     });
+
+    QUnit.test('TagBox should correctly process the rejected load promise of the dataSource', function(assert) {
+        const dataErrorStub = sinon.stub(dataErrors.errors, 'log');
+        const $editor = $('#tagBox').dxTagBox({
+            dataSource: {
+                store: new CustomStore({
+                    load: function(loadOptions) {
+                        const deferred = $.Deferred();
+                        setTimeout(() => {
+                            if(loadOptions.filter) {
+                                deferred.reject({
+                                    type: 'error',
+                                    message: 'data load error'
+                                });
+                            } else {
+                                deferred.resolve([1, 2, 3]);
+                            }
+                        }, 100);
+                        return deferred.promise();
+                    }
+                })
+            },
+            showSelectionControls: true,
+            searchEnabled: true,
+            maxDisplayedTags: 1,
+            showMultiTagOnly: false,
+            opened: true
+        });
+        const $input = $editor.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input);
+
+        this.clock.tick(100);
+        keyboard.type('t');
+        this.clock.tick(100);
+
+        $('.dx-list-select-checkbox').each((i, elem) => {
+            $(elem).trigger('dxclick');
+            this.clock.tick(100);
+        });
+
+        const tagCount = $editor.find('.dx-tag').length;
+        assert.strictEqual(tagCount, 1, 'There is only one tag');
+        dataErrorStub.restore();
+    });
 });
 
 QUnit.module('the \'value\' option', moduleSetup, () => {
@@ -1092,6 +1137,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($tags.eq(0).text(), 'display ' + customValue);
         assert.ok(logStub.calledOnce, 'There was an one message');
         assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
+        logStub.restore();
     });
 
     QUnit.test('creating custom item via the \'customItem\' event parameter', function(assert) {
