@@ -7629,8 +7629,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             stateStoring: {
                 enabled: true,
-                type: 'localStorage',
-                storageKey: 'storage'
+                type: 'custom',
+                customLoad: function() {
+                    return {};
+                }
             }
         });
 
