@@ -7505,9 +7505,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(() => {
-                        d.resolve([], {
-                            totalCount: 0
-                        });
+                        d.resolve([]);
                     });
 
                     return d;
@@ -7517,13 +7515,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 dataField: 'field1',
                 fixed: true
             }, 'field2', 'field3', 'field4', 'field5'],
-            filterRow: {
-                visible: true
-            },
-            scrolling: {
-                mode: 'virtual'
-            },
-            height: 600,
             showBorders: true,
             editing: {
                 allowAdding: true
@@ -7535,18 +7526,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
+        // act
         $('.dx-datagrid-addrow-button').trigger('dxclick');
+        this.clock.tick();
 
-        try {
-            // act
-            this.clock.tick();
-
-            // assert
-            const rows = dataGrid.getVisibleRows();
-            assert.equal(rows.length, 1, 'row was added');
-        } catch(e) {
-            assert.notOk(true, 'error was thrown');
-        }
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 1, 'row was added');
     });
 });
 
