@@ -899,7 +899,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return completionCallback.promise();
         }
 
-        if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
+        if(node.internalFields.childrenKeys.length === 0 && (this._isVirtualMode() || this._useCustomChildrenLoader())) {
             this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
             return completionCallback.promise();
         }
