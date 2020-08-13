@@ -1,6 +1,7 @@
 {
     "plugins": [
-        "stylelint-scss"
+        "stylelint-scss",
+        "stylelint-devextreme"
     ],
     "extends": "stylelint-config-standard",
     "ignoreFiles": "!**/*.{css,scss}",
@@ -38,6 +39,7 @@
         "scss/map-keys-quotes": "always",
         "scss/operator-no-newline-before": true,
         "scss/operator-no-unspaced": true,
-        "scss/no-duplicate-mixins": true
+        "scss/no-duplicate-mixins": true,
+        "devextreme/at-use-no-public-widgets": true
     }
 }

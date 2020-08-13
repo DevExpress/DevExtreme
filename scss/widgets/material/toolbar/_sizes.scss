@@ -1,9 +1,15 @@
 @use "../sizes" as *;
+@use "../typography/sizes" as *;
 
 // adduse
 
 $material-toolbar-height: null !default;
 $material-toolbar-menu-vertical-padding: null !default;
+
+$material-toolbar-padding: 0;
+$material-toolbar-item-spacing: 5px;
+$material-toolbar-label-font-size: $material-m-font-size;
+$material-toolbar-section-padding: 15px;
 
 @if $size == "default" {
   $material-toolbar-height: 76px;
@@ -14,3 +20,8 @@ $material-toolbar-menu-vertical-padding: null !default;
   $material-toolbar-height: 56px;
   $material-toolbar-menu-vertical-padding: 5px;
 }
+
+$material-mobile-toolbar-height: $material-toolbar-height;
+$material-mobile-toolbar-padding: 0;
+$material-mobile-toolbar-item-spacing: 5px;
+$material-mobile-toolbar-label-font-size: 20px;

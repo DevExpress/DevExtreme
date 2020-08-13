@@ -5,9 +5,8 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../overlay/colors" as *;
-@use "../toolbar" as *;
+@use "../toolbar/mixins" as *;
 @use "../toolbar/sizes" as *;
-@use "../button" as *;
 @use "../typography/sizes" as *;
 
 // adduse

@@ -7,7 +7,7 @@
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../dropDownEditor" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
 
 // adduse
 @use "../dropDownList";
