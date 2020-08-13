@@ -493,6 +493,8 @@ class BaseRenderingStrategy {
     }
 
     normalizeEndDateByViewEnd(appointment, endDate) {
+        endDate = new Date(endDate);
+
         if(!this.isAllDay(appointment)) {
             const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
