@@ -1415,7 +1415,15 @@ module.exports = {
                         }
                     }
 
-                    return result;
+                    return result.map(columns => {
+                        return columns.map(column => {
+                            const newColumn = { ...column };
+                            if(newColumn.headerId) {
+                                newColumn.headerId += '-fixed';
+                            }
+                            return newColumn;
+                        });
+                    });
                 },
                 _isColumnFixing: function() {
                     let isColumnFixing = this.option('columnFixing.enabled');
