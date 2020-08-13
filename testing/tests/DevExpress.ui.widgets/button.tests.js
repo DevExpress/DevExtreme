@@ -4,7 +4,7 @@ import Validator from 'ui/validator';
 import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { createRenovationModuleConfig, isRenovationSources } from '../../helpers/renovationHelper.js';
+import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import dxrButton from 'renovation/ui/button.j';
@@ -42,7 +42,7 @@ const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
 const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('Button', createRenovationModuleConfig(dxButton, dxrButton), function() {
-    const isRenovation = isRenovationSources(dxButton);
+    const isRenovation = !!dxButton.IS_RENOVATED_WIDGET;
 
     QUnit.module('options changed callbacks', {
         beforeEach: function() {
