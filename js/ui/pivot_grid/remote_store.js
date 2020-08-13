@@ -355,7 +355,7 @@ function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapse
         if(filterValues.length) {
             result.push(extend({}, field, {
                 filterType: 'include',
-                filterValues: filterValues
+                filterValues: [...new Set(filterValues)]
             }));
         }
     });
