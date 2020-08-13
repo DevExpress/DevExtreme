@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'babel-polyfill';
+import 'promise-polyfill';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
