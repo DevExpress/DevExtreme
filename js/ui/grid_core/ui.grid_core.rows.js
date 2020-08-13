@@ -367,9 +367,7 @@ export default {
                                             break;
                                         case 'insert':
                                             if(!$rowsElement.length) {
-                                                if(tableElement) {
-                                                    $newRowElement.prependTo(tableElement.children('tbody'));
-                                                }
+                                                tableElement && $newRowElement.prependTo(tableElement.children('tbody'));
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
