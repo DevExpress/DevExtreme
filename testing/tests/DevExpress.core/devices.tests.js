@@ -24,12 +24,15 @@ const userAgents = {
     win8_1_ie11: 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729; Tablet PC 2.0; rv:11.0) like Gecko'
 };
 
+themes.setDefaultTimeout(200);
+
 QUnit.module('devices', {
     beforeEach: function() {
         this._savedDevice = devices.current();
     },
     afterEach: function() {
         devices.current(this._savedDevice);
+        return new Promise((resolve) => themes.initialized(resolve));
     }
 });
 
