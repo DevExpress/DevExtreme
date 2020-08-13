@@ -242,13 +242,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
         const endDate = new Date(this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate));
-        const endDayHour = this.instance._getCurrentViewOption('endDayHour');
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        // const endDayHour = this.instance._getCurrentViewOption('endDayHour');
+        // const allDay = this.instance.fire('getField', 'allDay', appointment);
 
-        if(allDay && endDate.getHours() < endDayHour) {
-            endDate.setHours(endDayHour, 0, 0, 0);
-            // appointment.endDate = new Date(appointment.endDate.getTime() - 1);
-        }
+        // if(allDay && endDate.getHours() < endDayHour) {
+        //     endDate.setHours(endDayHour, 0, 0, 0);
+        //     // appointment.endDate = new Date(appointment.endDate.getTime() - 1);
+        // }
 
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const durationInHours = (endDate.getTime() - startDate.getTime()) / toMs('hour');

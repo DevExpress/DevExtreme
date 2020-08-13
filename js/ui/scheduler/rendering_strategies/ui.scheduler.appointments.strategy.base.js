@@ -500,8 +500,13 @@ class BaseRenderingStrategy {
                 endDate = viewEndDate;
             }
         }
-
         const endDayHour = this.instance._getCurrentViewOption('endDayHour');
+        const allDay = this.instance.fire('getField', 'allDay', appointment);
+
+        if(allDay && endDate.getHours() < endDayHour) {
+            endDate.setHours(endDayHour, 0, 0, 0);
+        }
+
         const currentViewEndTime = new Date(new Date(endDate).setHours(endDayHour, 0, 0));
 
         if(endDate.getTime() > currentViewEndTime.getTime()) {
