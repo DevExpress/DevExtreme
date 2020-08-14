@@ -1,8 +1,8 @@
 <template>
   <div>
     <DxButton
-        text="Export to PDF"
-        @click="onExport()"
+      text="Export to PDF"
+      @click="onExport()"
     />
 
     <DxDataGrid
@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import { DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import service from './data.js';
 
@@ -46,7 +46,7 @@ import 'jspdf-autotable';
 
 export default {
   components: {
-    DxDataGrid, DxButton, DxColumn, DxExport, DxSelection, DxGroupPanel
+    DxDataGrid, DxButton, DxColumn
   },
   data() {
     return {
@@ -76,7 +76,7 @@ export default {
 
       const doc = new jsPDF();
       doc.autoTable(autoTableOptions);
-      doc.save("filePDF.pdf");
+      doc.save('filePDF.pdf');
 
       e.cancel = true;
     }
