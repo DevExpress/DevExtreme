@@ -2706,14 +2706,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateScrollPosition(date) {
-        date = this.invoke('convertDateByTimezone', date); // TODO:
+        const scheduler = this.option('observer');
+        const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
-        const startDateHour = date.getHours();
-        const startDateMinutes = date.getMinutes();
+        const startDateHour = newDate.getHours();
+        const startDateMinutes = newDate.getMinutes();
 
-        if(this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, date)) {
-            this.scrollToTime(startDateHour, startDateMinutes, date);
+        if(this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
+            this.scrollToTime(startDateHour, startDateMinutes, newDate);
         }
     }
 
