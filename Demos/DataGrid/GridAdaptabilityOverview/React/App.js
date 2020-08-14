@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import DataGrid, { Column, Export, Editing, Grouping, GroupPanel, Pager, Paging, ColumnChooser } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, Grouping, GroupPanel, Pager, Paging, ColumnChooser } from 'devextreme-react/data-grid';
 
 import service from './data.js';
 

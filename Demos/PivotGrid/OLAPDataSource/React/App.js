@@ -1,8 +1,7 @@
 ﻿import React from 'react';
 
 import PivotGrid, {
-  FieldChooser,
-  Export
+  FieldChooser
 } from 'devextreme-react/pivot-grid';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
