@@ -57,6 +57,11 @@ System.config({
     'file-saver': 'npm:file-saver/FileSaver.js',
     /**/
 
+    /** jspdf&jspdf-autotable */
+    'jspdf': 'npm:jspdf/dist/jspdf.es.min.js',
+    'jspdf-autotable': 'npm:jspdf-autotable/dist/jspdf.plugin.autotable.min.js',
+    /**/
+
     /** devextreme-intl */
     'devextreme-intl': 'npm:devextreme-intl',
     'json': 'npm:systemjs-plugin-json/json.js',

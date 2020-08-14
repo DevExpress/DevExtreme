@@ -790,6 +790,21 @@
         ]
       },
       {
+        "Name": "Export to PDF",
+        "Hidden":  true,
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "ExportToPDF",
+            "DocUrl": "Guide/Widgets/DataGrid/Client-Side_Exporting/",
+            "Widget": "DataGrid",
+            "Modules": "jspdf&jspdf-autotable",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
         "Name": "Export to Excel",
         "Equivalents": "",
         "Badge": "New",
