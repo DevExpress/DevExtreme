@@ -59,15 +59,12 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._storedCoords = this._lastStoredCoordinates.coords;
                 this._storedLabelsCoords = this._lastStoredCoordinates.labelCoords;
             },
-            areCoordsOutsideAxis() {
-                return axis.areCoordsOutsideAxis(this.coords);
-            },
             drawMark(options) {
                 if(!tickOptions.visible || skippedCategory === value) {
                     return;
                 }
 
-                if(this.areCoordsOutsideAxis()) {
+                if(axis.areCoordsOutsideAxis(this.coords)) {
                     return;
                 }
 
