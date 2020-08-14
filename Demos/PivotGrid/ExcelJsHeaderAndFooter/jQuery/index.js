@@ -62,7 +62,6 @@ $(function(){
                 keepColumnWidths: false
             }).then(function(cellRange) {
                 exportHeader(worksheet);
-                exportRowHeaders(worksheet, grid, cellRange);
                 exportFooter(worksheet, cellRange, cellRange);
             }).then(function() {
                 workbook.xlsx.writeBuffer().then(function(buffer) {
@@ -86,20 +85,6 @@ function exportHeader(worksheet) {
     headerCell.value = 'Sales Amount by Region';
     headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
     headerCell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
-}
-
-function exportRowHeaders(worksheet, grid, cellRange){
-    var rowFields = grid.getDataSource().fields()
-        .filter(function(r) { return r.area === 'row'; })
-        .map(function(r) { return r.dataField; });
-
-    var columnToIndex = worksheet.views[0].xSplit;
-    worksheet.unMergeCells(cellRange.from.row, 1, cellRange.from.row, columnToIndex);
-    rowFields.forEach(function(field, index) {
-        var rowHeaderCell = worksheet.getRow(worksheet.views[0].ySplit).getCell(index + 1);
-        rowHeaderCell.alignment = { horizontal: 'left', vertical: 'middle' };
-        rowHeaderCell.value = field.charAt(0).toUpperCase() + field.slice(1);
-    });
 }
 
 function exportFooter(worksheet, cellRange) {
