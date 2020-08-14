@@ -887,15 +887,17 @@ const TagBox = SelectBox.inherit({
         }
 
         if(!isPlainDataUsed) {
-            this._loadTagsData().always((items) => {
-                if(this._disposed) {
-                    d.reject();
-                    return;
-                }
+            this._loadTagsData()
+                .done((items) => {
+                    if(this._disposed) {
+                        d.reject();
+                        return;
+                    }
 
-                this._renderTagsImpl(items);
-                d.resolve();
-            });
+                    this._renderTagsImpl(items);
+                    d.resolve();
+                })
+                .fail(d.reject);
         }
 
         return d.promise();

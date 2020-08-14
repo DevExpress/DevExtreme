@@ -1,40 +1,35 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
+import { combineClasses } from '../../../../../../utils/combine_classes';
 import { Table } from '../../table';
 import { AllDayPanelTableBody as TableBody } from './table_body';
 import { addHeightToStyle } from '../../../utils';
 import { ViewCellData } from '../../../types.d';
-import { AllDayPanelTitle as Title } from './title';
 import { LayoutProps } from '../../layout_props';
 
 export const viewFunction = (viewModel: AllDayPanelLayout) => (
-  <Fragment>
-    {viewModel.props.visible && (
-    <div
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      className={`dx-scheduler-all-day-panel ${viewModel.props.className}`}
-      style={viewModel.style}
-    >
-      <Title />
-      <div>
-        <Table className="dx-scheduler-all-day-table">
-          <TableBody viewData={viewModel.allDayPanelData} />
-        </Table>
-      </div>
-    </div>
+  <div
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...viewModel.restAttributes}
+    className={viewModel.classes}
+    style={viewModel.style}
+  >
+    { viewModel.props.visible && (
+      <Table className="dx-scheduler-all-day-table">
+        <TableBody viewData={viewModel.allDayPanelData} />
+      </Table>
     )}
-  </Fragment>
+  </div>
 );
 
 @ComponentBindings()
 export class AllDayPanelLayoutProps extends LayoutProps {
-  @OneWay() className?: string = '';
+  @OneWay() className? = '';
 
-  @OneWay() height?: number = 25;
+  @OneWay() height? = 25;
 
-  @OneWay() visible?: boolean;
+  @OneWay() visible? = true;
 }
 
 @Component({
@@ -54,5 +49,13 @@ export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
     const { style } = this.restAttributes;
 
     return addHeightToStyle(height, style);
+  }
+
+  get classes(): string {
+    return combineClasses({
+      'dx-scheduler-all-day-panel': true,
+      'dx-hidden': !this.props.visible,
+      [this.props.className!]: !!this.props.className,
+    });
   }
 }

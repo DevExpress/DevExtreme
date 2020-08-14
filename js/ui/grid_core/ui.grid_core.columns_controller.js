@@ -1427,7 +1427,15 @@ export default {
                         }
                     }
 
-                    return result;
+                    return result.map(columns => {
+                        return columns.map(column => {
+                            const newColumn = { ...column };
+                            if(newColumn.headerId) {
+                                newColumn.headerId += '-fixed';
+                            }
+                            return newColumn;
+                        });
+                    });
                 },
                 _isColumnFixing: function() {
                     let isColumnFixing = this.option('columnFixing.enabled');
@@ -2295,12 +2303,14 @@ export default {
                     let hasDuplicatedNames = false;
                     this._columns.forEach(column => {
                         const name = column.name;
+                        const isBand = column.columns?.length;
+                        const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
                         if(name) {
                             if(usedNames[name]) {
                                 hasDuplicatedNames = true;
                             }
                             usedNames[name] = true;
-                        } else if(column.allowEditing) {
+                        } else if(isEditable) {
                             hasEditableColumnWithoutName = true;
                         }
                     });

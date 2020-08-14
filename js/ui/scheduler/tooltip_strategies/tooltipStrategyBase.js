@@ -36,7 +36,12 @@ export class TooltipStrategyBase {
             this._list.option('dataSource', dataList);
         }
 
+        this._prepareBeforeVisibleChanged(dataList);
         this._tooltip.option('visible', true);
+    }
+
+    _prepareBeforeVisibleChanged(dataList) {
+
     }
 
     _getContentTemplate(dataList) {

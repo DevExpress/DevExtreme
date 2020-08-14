@@ -18,6 +18,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { extend } from 'core/utils/extend';
+import devices from 'core/devices';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -860,7 +861,7 @@ QUnit.testStart(function() {
 
         const cellData = {
             allDay: true,
-            endDate: new Date(2015, 5, 30, 0),
+            endDate: new Date(2015, 5, 29, 0),
             startDate: new Date(2015, 5, 29, 0)
         };
 
@@ -3731,12 +3732,12 @@ QUnit.module('Renovated Render', {
     QUnit.module('Generate View Data', () => {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
-            const result = this.instance._generateViewData();
+            const result = this.instance.viewDataGenerator.generate();
             const expected = {
                 groupedData: [{
                     allDayPanel: [{
                         startDate: new Date(2020, 6, 29),
-                        endDate: new Date(2020, 6, 30),
+                        endDate: new Date(2020, 6, 29),
                         allDay: true,
                     }],
                     dateTable: [[{
@@ -3749,7 +3750,8 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                    }]]
+                    }]],
+                    isGroupedAllDayPanel: false
                 }],
             };
 
@@ -3770,7 +3772,7 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            const result = this.instance._generateViewData();
+            const result = this.instance.viewDataGenerator.generate();
             const expected = {
                 groupedData: [{
                     dateTable: [[{
@@ -3823,7 +3825,7 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            const result = this.instance._generateViewData();
+            const result = this.instance.viewDataGenerator.generate();
             const expected = {
                 groupedData: [{
                     dateTable: [[{
@@ -3870,87 +3872,93 @@ QUnit.module('Renovated Render', {
     });
 
     QUnit.module('getCellData', () => {
-        QUnit.test('should return cell data in basic case', function(assert) {
-            this.createInstance({
-                showAllDayPanel: false,
+
+        [true, false].forEach(virtualScrollingEnabled => {
+            QUnit.test(`should return cell data in basic case if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+                this.createInstance({
+                    showAllDayPanel: false,
+                    virtualScrolling: {
+                        enabled: virtualScrollingEnabled
+                    }
+                });
+                const $cell = this.instance.$element().find(`.${CELL_CLASS}`).eq(0);
+                const result = this.instance.getCellData($cell);
+                const expected = {
+                    startDate: new Date(2020, 6, 29, 0, 0),
+                    endDate: new Date(2020, 6, 29, 0, 30),
+                    allDay: false,
+                    text: '12:00 AM',
+                };
+
+                assert.deepEqual(result, expected, 'correct cell data');
             });
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
-            const result = this.instance.getCellData($cell);
-            const expected = {
-                startDate: new Date(2020, 6, 29, 0, 0),
-                endDate: new Date(2020, 6, 29, 0, 30),
-                allDay: false,
-                text: '12:00 AM',
-            };
 
-            assert.deepEqual(result, expected, 'correct cell data');
-        });
+            QUnit.test(`should return cell data when all-day-panel is enabled if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+                this.createInstance({
+                    showAllDayPanel: true,
+                });
+                const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
+                const result = this.instance.getCellData($cell);
+                const expected = {
+                    startDate: new Date(2020, 6, 29, 0, 0),
+                    endDate: new Date(2020, 6, 29, 0, 30),
+                    allDay: false,
+                    text: '12:00 AM',
+                };
 
-        QUnit.test('should return cell data when all-day-panel is enabled', function(assert) {
-            this.createInstance({
-                showAllDayPanel: true,
+                assert.deepEqual(result, expected, 'correct cell data');
             });
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
-            const result = this.instance.getCellData($cell);
-            const expected = {
-                startDate: new Date(2020, 6, 29, 0, 0),
-                endDate: new Date(2020, 6, 29, 0, 30),
-                allDay: false,
-                text: '12:00 AM',
-            };
 
-            assert.deepEqual(result, expected, 'correct cell data');
-        });
+            QUnit.test(`should return cell data when appointments are grouped horizontally if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+                this.createInstance({
+                    groupOrientation: 'horizontal',
+                });
+                this.instance.option('groups', [
+                    {
+                        name: 'res',
+                        items: [
+                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                        ]
+                    }
+                ]);
+                const $cell = this.instance.$element().find(`.${CELL_CLASS}`).eq(1);
+                const result = this.instance.getCellData($cell);
+                const expected = {
+                    startDate: new Date(2020, 6, 29, 0, 0),
+                    endDate: new Date(2020, 6, 29, 0, 30),
+                    allDay: false,
+                    text: '12:00 AM',
+                    groups: { res: 2 },
+                };
 
-        QUnit.test('should return cell data when appointments are grouped horizontally', function(assert) {
-            this.createInstance({
-                groupOrientation: 'horizontal',
+                assert.deepEqual(result, expected, 'correct cell data');
             });
-            this.instance.option('groups', [
-                {
-                    name: 'res',
-                    items: [
-                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                    ]
-                }
-            ]);
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(1);
-            const result = this.instance.getCellData($cell);
-            const expected = {
-                startDate: new Date(2020, 6, 29, 0, 0),
-                endDate: new Date(2020, 6, 29, 0, 30),
-                allDay: false,
-                text: '12:00 AM',
-                groups: { res: 2 },
-            };
 
-            assert.deepEqual(result, expected, 'correct cell data');
-        });
+            QUnit.test(`should return cell data when appointments are grouped vertically if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+                this.createInstance({
+                    groupOrientation: 'vertical',
+                    showAllDayPanel: false,
+                });
+                this.instance.option('groups', [
+                    {
+                        name: 'res',
+                        items: [
+                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                        ]
+                    }
+                ]);
+                const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(1);
+                const result = this.instance.getCellData($cell);
+                const expected = {
+                    startDate: new Date(2020, 6, 29, 0, 30),
+                    endDate: new Date(2020, 6, 29, 1, 0),
+                    allDay: false,
+                    text: '',
+                    groups: { res: 1 },
+                };
 
-        QUnit.test('should return cell data when appointments are grouped vertically', function(assert) {
-            this.createInstance({
-                groupOrientation: 'vertical',
-                showAllDayPanel: false,
+                assert.deepEqual(result, expected, 'correct cell data');
             });
-            this.instance.option('groups', [
-                {
-                    name: 'res',
-                    items: [
-                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                    ]
-                }
-            ]);
-            const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(1);
-            const result = this.instance.getCellData($cell);
-            const expected = {
-                startDate: new Date(2020, 6, 29, 0, 30),
-                endDate: new Date(2020, 6, 29, 1, 0),
-                allDay: false,
-                text: '',
-                groups: { res: 1 },
-            };
-
-            assert.deepEqual(result, expected, 'correct cell data');
         });
     });
 
@@ -3989,5 +3997,40 @@ QUnit.module('Renovated Render', {
             endDate: undefined,
             groups: undefined,
         }, 'Cell Data is correct');
+    });
+});
+
+QUnit.module('Virtual Scrolling', {
+    beforeEach() {
+        this.createInstance = (options = {}) => {
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(extend({
+                height: 400,
+                renovateRender: true,
+                currentDate: new Date(2020, 6, 29),
+                virtualScrolling: {
+                    enabled: true
+                },
+            }, options)).dxSchedulerWorkSpaceDay('instance');
+            stubInvokeMethod(this.instance);
+        };
+    },
+}, () => {
+    QUnit.test('_getCellCoordinatesByIndex should correct rowIndex', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'This test is for the desktop');
+            return;
+        }
+
+        this.createInstance();
+
+        this.instance.getScrollable().scrollTo({ y: 600 });
+
+        const cellCoordinates = this.instance._getCellCoordinatesByIndex(19);
+
+        assert.deepEqual(cellCoordinates, {
+            rowIndex: 7,
+            cellIndex: 0
+        });
+
     });
 });

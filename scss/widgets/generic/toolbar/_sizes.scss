@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../typography/sizes" as *;
 
 // adduse
 
@@ -15,3 +16,13 @@ $generic-mobile-toolbar-height: 36px;
   $generic-toolbar-menu-top-padding: 4px;
   $generic-toolbar-menu-bottom-padding: 4px;
 }
+
+$generic-toolbar-height: $generic-base-inline-widget-height;
+$generic-toolbar-padding: 0;
+$generic-toolbar-item-spacing: 5px;
+$generic-toolbar-label-font-size: $generic-m-font-size;
+$generic-toolbar-section-padding: 15px;
+
+$generic-mobile-toolbar-padding: 0;
+$generic-mobile-toolbar-item-spacing: 5px;
+$generic-mobile-toolbar-label-font-size: 20px;

@@ -61,14 +61,14 @@ QUnit.test('Show tooltip', function(assert) {
     assert.ok(tooltip, 'tooltip is created');
 
     assert.equal(stubComponent.option.callCount, 2);
-    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', true], 'tooltip is visible');
-    assert.deepEqual(stubComponent.option.getCall(1).args, ['position', {
+    assert.deepEqual(stubComponent.option.getCall(0).args, ['position', {
         'at': 'top',
         'collision': 'fit flipfit',
         'my': 'bottom',
         boundary: '<div>',
         offset: 'offset',
     }], 'tooltip has correct position');
+    assert.deepEqual(stubComponent.option.getCall(1).args, ['visible', true], 'tooltip is visible');
 
     assert.ok(stubCreateComponent.calledOnce);
 });
@@ -90,32 +90,13 @@ QUnit.test('createComponent should be called with correct options', function(ass
 
     assert.equal(stubCreateComponent.getCall(0).args[0][0].className, 'dx-scheduler-appointment-tooltip-wrapper');
     assert.deepEqual(stubCreateComponent.getCall(0).args[1], Tooltip);
-    assert.equal(Object.keys(stubCreateComponent.getCall(0).args[2]).length, 7);
+    assert.equal(Object.keys(stubCreateComponent.getCall(0).args[2]).length, 5);
     assert.equal(stubCreateComponent.getCall(0).args[2].target, 'target');
     assert.equal(stubCreateComponent.getCall(0).args[2].maxHeight, 200);
     assert.equal(stubCreateComponent.getCall(0).args[2].rtlEnabled, true);
 
-    assert.ok(stubCreateComponent.getCall(0).args[2].onShowing);
     assert.ok(stubCreateComponent.getCall(0).args[2].onShown);
     assert.ok(stubCreateComponent.getCall(0).args[2].contentTemplate);
-    assert.ok(stubCreateComponent.getCall(0).args[2].closeOnTargetScroll);
-});
-
-QUnit.test('onShowing and closeOnTargetScroll options passed to createComponent should work correct', function(assert) {
-    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-    const dataList = ['data1', 'data2'];
-
-    tooltip.show('target', dataList, this.extraOptions);
-
-    const done = assert.async();
-
-    stubCreateComponent.getCall(0).args[2].onShowing();
-    assert.equal(stubCreateComponent.getCall(0).args[2].closeOnTargetScroll(), true);
-    assert.timeout(1000);
-    setTimeout(function() {
-        assert.equal(stubCreateComponent.getCall(0).args[2].closeOnTargetScroll(), false);
-        done();
-    });
 });
 
 QUnit.test('contentTemplate passed to createComponent should work correct', function(assert) {
@@ -157,14 +138,14 @@ QUnit.test('Tooltip should update the content after call method "show" several t
     assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false]);
     assert.deepEqual(stubComponent.option.getCall(1).args, ['target', 'target']);
     assert.deepEqual(stubComponent.option.getCall(2).args, ['dataSource', ['updatedData1', 'updatedData2']]);
-    assert.deepEqual(stubComponent.option.getCall(3).args, ['visible', true]);
-    assert.deepEqual(stubComponent.option.getCall(4).args, ['position', {
+    assert.deepEqual(stubComponent.option.getCall(3).args, ['position', {
         'at': 'top',
         'collision': 'fit flipfit',
         'my': 'bottom',
         boundary: '<div>',
         offset: 'offset'
     }]);
+    assert.deepEqual(stubComponent.option.getCall(4).args, ['visible', true]);
 });
 
 QUnit.test('onShown passed to createComponent should work correct, one element in tooltip', function(assert) {

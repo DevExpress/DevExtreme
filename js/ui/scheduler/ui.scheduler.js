@@ -659,6 +659,8 @@ class Scheduler extends Widget {
                 outlineRowCount: 0
             },
 
+            renovateRender: false,
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
             _appointmentTooltipOpenButtonText: messageLocalization.format('dxScheduler-openAppointment'),
@@ -1011,6 +1013,9 @@ class Scheduler extends Widget {
                 break;
             case 'virtualScrolling':
                 this._updateOption('workSpace', args.fullName, value);
+                break;
+            case 'renovateRender':
+                this._updateOption('workSpace', name, value);
                 break;
             default:
                 super._optionChanged(args);
@@ -1741,7 +1746,8 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', args.selectedCellData);
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
-            virtualScrolling: this.option('virtualScrolling')
+            virtualScrolling: this.option('virtualScrolling'),
+            renovateRender: this.option('renovateRender'),
         }, currentViewOptions);
 
         result.observer = this;

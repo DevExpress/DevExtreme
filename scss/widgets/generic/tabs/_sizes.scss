@@ -1,4 +1,6 @@
 @use "../sizes" as *;
+@use "../colors" as *;
+@use "colors" as *;
 
 // adduse
 
@@ -6,6 +8,10 @@ $generic-tabs-item-padding: null !default;
 $generic-tab-text-line-height: null !default;
 $generic-tabs-nav-button-position: null !default;
 $generic-tabs-nav-button-size: null !default;
+$generic-tabs-border-width: $generic-base-border-width;
+$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color;
+$generic-tabs-transparent-border: $generic-tabs-border-width solid $tabs-tab-bg;
+$generic-tab-focus-border: $generic-tabs-border-width solid $tabs-focused-border-color;
 
 @if $size == "default" {
   $generic-tabs-item-padding: 9px;

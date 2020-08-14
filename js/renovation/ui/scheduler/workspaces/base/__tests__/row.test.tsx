@@ -15,7 +15,10 @@ describe('RowBase', () => {
     }) as any);
 
     it('should pass className and style', () => {
-      const row = render({ props: { className: 'custom-class' }, style: 'style' });
+      const row = render({
+        classes: 'custom-class',
+        style: 'style',
+      });
 
       expect(row.is('.custom-class'))
         .toBe(true);
@@ -51,6 +54,22 @@ describe('RowBase', () => {
 
           expect(addHeightToStyle)
             .toHaveBeenCalledWith(500, style);
+        });
+      });
+
+      describe('classes', () => {
+        it('should correctly combine classes if isVirtual', () => {
+          const row = new Row({ className: 'some-class', isVirtual: true });
+
+          expect(row.classes)
+            .toEqual('dx-scheduler-virtual-row some-class');
+        });
+
+        it('should correctly combine classes if not isVirtual', () => {
+          const row = new Row({ className: 'some-class' });
+
+          expect(row.classes)
+            .toEqual('some-class');
         });
       });
     });

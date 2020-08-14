@@ -129,6 +129,7 @@ describe('DateTableBody', () => {
         .toHaveBeenNthCalledWith(
           1,
           viewData,
+          0,
         );
     });
   });
