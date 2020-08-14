@@ -1,15 +1,13 @@
 $(function(){
     $("#sales").dxPivotGrid({
-        allowSortingBySummary: true,
         allowSorting: true,
         allowFiltering: true,
-        allowExpandAll: true,
         height: 440,
         showBorders: true,
         fieldPanel: {
             showColumnFields: true,
             showDataFields: true,
-            showFilterFields: true,
+            showFilterFields: false,
             showRowFields: true,
             allowFieldDragging: true,
             visible: true
@@ -31,16 +29,13 @@ $(function(){
                 caption: "City",
                 dataField: "city",
                 width: 150,
-                area: "filter",
-                selector: function(data) {
-                    return  data.city + " (" + data.country + ")";
-                }
+                area: "row"
             }, {
                 dataField: "date",
                 dataType: "date",
                 area: "column",
-                filterValues: [[2014], [2015]],
-                expanded: true
+                filterValues: [[2013], [2014], [2015]],
+                expanded: false,
             }, {
                 caption: "Sales",
                 dataField: "amount",
@@ -59,12 +54,13 @@ $(function(){
             DevExpress.excelExporter.exportPivotGrid({
                 component: grid,
                 worksheet: worksheet,
-                topLeftCell: { row: 2, column: 1 },
+                topLeftCell: { row: 4, column: 1 },
                 keepColumnWidths: true,
             }).then(function(gridRange) {
-                exportHeader(worksheet);
-                exportFooter(gridRange, worksheet);
-                exportFieldPanel(worksheet, grid);
+                exportHeader(worksheet, grid);
+                exportRowHeaders(worksheet, grid, gridRange);
+                exportColumnHeaders(worksheet, grid, gridRange);
+                exportFooter(worksheet, gridRange, gridRange);
             }).then(function() {
                 // https://github.com/exceljs/exceljs#writing-xlsx
                 workbook.xlsx.writeBuffer().then(function(buffer) {
@@ -76,47 +72,63 @@ $(function(){
     });
 });
 
-function exportHeader(worksheet) {
-    var headerRow = worksheet.getRow(1);
-    headerRow.height = 70;
-    worksheet.mergeCells('B1:K1');
-    headerRow.getCell(2).value = 'Average Sales. Amount by Region';
-    headerRow.getCell(2).font = { name: 'Segoe UI Light', size: 22, bold: true };
-    headerRow.getCell(2).alignment = { horizontal: 'left', vertical: 'top', wrapText: true };
+function exportHeader(worksheet, grid) {
+    var rowIndex = 1;
+    var headerRow = worksheet.getRow(rowIndex);
+    headerRow.height = 50;
+
+    var columnFromIndex = worksheet.views[0].xSplit + 1;
+    var columnToIndex = columnFromIndex + 7;
+    worksheet.mergeCells(rowIndex, columnFromIndex, rowIndex, columnToIndex);
+
+    var headerCell = headerRow.getCell(columnFromIndex);
+    headerCell.value = 'Sales Amount by Region' + getYearsRange(grid);
+    headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
+    headerCell.alignment = { horizontal: 'left', vertical: 'top', wrapText: true };
 }
 
-function exportFooter(gridRange, worksheet) {
-    var footerRowIndex = gridRange.to.row + 1;
-    var footerRow = worksheet.getRow(footerRowIndex);
-    worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 11);
-    footerRow.getCell(1).value = 'www.wikipedia.org';
-    footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
-    footerRow.getCell(1).alignment = { horizontal: 'right' };
-}
-
-function exportFieldPanel(worksheet, grid) {
+function exportRowHeaders(worksheet, grid, gridRange){
     var fields = grid.getDataSource().fields();
-
     var rowFields = getFields(fields, 'row', r => r.dataField);
-    var dataFields = getFields(fields, 'data', r => `[${r.summaryType}(${r.dataField}])`);
+
+    var columnFromIndex = 1;
+    var columnToIndex = worksheet.views[0].xSplit;
+    worksheet.unMergeCells(gridRange.from.row, columnFromIndex, gridRange.from.row, columnToIndex);
+    rowFields.forEach(function(field, index) {
+        var rowHeaderCell = worksheet.getRow(worksheet.views[0].ySplit).getCell(index + 1)
+        rowHeaderCell.value = field;
+    });
+}
+
+function exportColumnHeaders(worksheet, grid, gridRange){
+    var fields = grid.getDataSource().fields();
     var columnFields = getFields(fields, 'column', r => r.dataField);
-    var appliedFilters = fields.filter(r => r.filterValues !== undefined).map(r => `[${r.dataField}:${r.filterValues}]`);
-    var filterFields = getFields(fields, 'filter', r => r.dataField);    
-    
-    var firstRow = worksheet.getRow(1),
-        fieldPanelCell = firstRow.getCell(13);
+    var dataFields = getFields(fields, 'data', r => r.dataField);
 
-    worksheet.mergeCells('L1:N1');
-    fieldPanelCell.value = 'Feld Panel area:'
-        + ` \n - Filter fields: [${filterFields.join(', ')}]`
-        + ` \n - Row fields: [${rowFields.join(', ')}]`
-        + ` \n - Column fields: [${columnFields.join(', ')}]`
-        + ` \n - Data fields: [${dataFields.join(', ')}]`
-        + ` \n - Applied filters: [${appliedFilters.join(', ')}]`;
+    var rowIndex = gridRange.from.row - 1;    
+    var columnIndex = worksheet.views[0].xSplit + 1;
+    var columnHeaderCell = worksheet.getRow(rowIndex).getCell(columnIndex);
+    columnHeaderCell.value = dataFields.join(',') + ' by ' + columnFields.join(' and ');
+}
 
-    fieldPanelCell.alignment = { horizontal: 'left', vertical: 'top', wrapText: true };
-    fieldPanelCell.width = 30;
-    firstRow.height = 90;    
+function exportFooter(worksheet, gridRange) {
+    var footerRowIndex = gridRange.to.row + 2;
+    var footerCell = worksheet.getRow(footerRowIndex).getCell(gridRange.to.column);
+    footerCell.value = 'www.wikipedia.org';
+    footerCell.font = { color: { argb: 'BFBFBF' }, italic: true };
+    footerCell.alignment = { horizontal: 'right' };
+}
+
+function getYearsRange(grid) {
+    var dateFieldIndex = 2;
+    var filterValues = grid.getDataSource().fields()[dateFieldIndex].filterValues;
+    if(filterValues === null) {
+        return '';
+    }
+
+    var uniqueYears = [...new Set(filterValues.map(f => f[0]))];
+    return ' for ' + uniqueYears.join(', ') 
+        + (uniqueYears.length > 1 ? ' years': ' year');
 }
 
 function getFields(fields, area, mapper){
