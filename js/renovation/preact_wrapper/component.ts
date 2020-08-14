@@ -284,3 +284,7 @@ export default class PreactWrapper extends DOMComponent {
     );
   }
 }
+
+///#DEBUG
+PreactWrapper.IS_RENOVATED_WIDGET = true;
+///#ENDDEBUG
