@@ -50,17 +50,12 @@ $(function() {
                 if(e.cell.dataIndex === 1) {
                     e.cellElement.css({ 'font-weight': 'bold' });
                 } else {
-                    console.log(e)
                     if(e.cell.value < 100000) {
                         e.cellElement.css({ color: '#DC3545' });
                     } else {
                         e.cellElement.css({ color: '#28A745' });
                     }
                 }
-            }
-
-            if(e.area === 'row' || e.area === 'column') {
-                e.cellElement.css({ 'font-weight': 'bold' });
             }
         },
         onExporting: function(e) {
@@ -88,10 +83,6 @@ $(function() {
                             var color = pivotCell.value < 100000 ? 'DC3545' : '28A745';
                             excelCell.font = { color: { argb: color } };
                         }
-                    }
-
-                    if(pivotCell.area === 'row' || pivotCell.area === 'column') {
-                        excelCell.font = { bold: true };
                     }
 
                     var borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
