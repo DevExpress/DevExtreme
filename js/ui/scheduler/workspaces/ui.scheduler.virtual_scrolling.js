@@ -1,6 +1,3 @@
-
-import { isFunction } from '../../../core/utils/type';
-
 const ROW_HEIGHT = 50;
 
 export default class VirtualScrolling {

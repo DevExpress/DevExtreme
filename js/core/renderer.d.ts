@@ -11,7 +11,7 @@ export interface dxElementWrapper {
 
     hasClass(className: string): boolean;
     
-    html(htmlString: string): JQuery;
+    html(value: string): JQuery;
 
     prop(propertyName: string, value: string|number|boolean): JQuery;
 
@@ -25,61 +25,57 @@ export interface dxElementWrapper {
     
     css(propertyName: string, value: string|number): JQuery;
     
-    height(): number;
+    height(value: string|number): number;
     
-    innerHeight(): number;
+    innerHeight(value: string|number): number;
     
-    innerWidth(): number;
+    innerWidth(value: string|number): number;
     
-    offset(): Coordinates | undefined;
+    offset(): Coordinates|undefined;
     
     outerHeight(value: number|string): JQuery;
     
     outerWidth(value: number|string): JQuery;
     
-    position(): Coordinates;
+    position(): Coordinates|undefined;
     
-    scrollLeft(value: number): JQuery;
+    scrollLeft(value: string|undefined): JQuery;
     
-    scrollTop(value: number): JQuery;
+    scrollTop(value: string|undefined): JQuery;
     
     width(value: number|string): JQuery;
     
-    clearQueue(queueName?: string): JQuery;
-    
     data(key: string, value: any): JQuery;
        
-    removeData(name: string): JQuery;
+    removeData(key: string): JQuery;
     
-    hide(duration?: number|string, complete?: Function): JQuery;
+    hide(): JQuery;
     
-    show(duration?: number|string, complete?: Function): JQuery;
+    show(): JQuery;
     
-    toggle(duration?: number|string, complete?: Function): JQuery;
-    
-    scroll(): JQuery;
+    toggle(value: string|undefined): JQuery;
   
-    after(func: (index: number, html: string) => string|Element|JQuery): JQuery;
+    after(element: Element|JQuery): JQuery;
     
-    append(func: (index: number, html: string) => string|Element|JQuery): JQuery;
+    append(element: Element|JQuery): JQuery;
     
-    appendTo(target: JQuery|any[]|Element|string): JQuery;
+    appendTo(element: Element|JQuery): JQuery;
 
     clone(withDataAndEvents?: boolean, deepWithDataAndEvents?: boolean): JQuery;
     
-    detach(selector?: string): JQuery;
+    detach(): JQuery;
     
     empty(): JQuery;
     
-    insertAfter(target: JQuery|any[]|Element|Text|string): JQuery;
+    insertAfter(element: Element|JQuery): JQuery;
     
-    insertBefore(target: JQuery|any[]|Element|Text|string): JQuery;
+    insertBefore(element: Element|JQuery): JQuery;
     
-    prepend(func: (index: number, html: string) => string|Element|JQuery): JQuery;
+    prepend(element: Element|JQuery): JQuery;
     
-    remove(selector?: string): JQuery;
+    remove(element: Element|JQuery): JQuery;
     
-    replaceWith(func: () => Element|JQuery): JQuery;
+    replaceWith(element: Element|JQuery): JQuery;
  
     text(text: string|number|boolean): JQuery;
     
@@ -89,17 +85,17 @@ export interface dxElementWrapper {
     
     wrapInner(wrappingElement: JQuery|Element|string): JQuery;
     
-    each(func: (index: number, elem: Element) => boolean | void): JQuery;
+    each(func: () => boolean | void): JQuery;
     
     get(index: number): Element;
 
-    index(selector: string|JQuery|Element): number;
+    index(element: Element|JQuery): number;
     
-    add(...elements: Element[]): JQuery;
+    add(selector: string): JQuery;
     
-    children(selector?: string): JQuery;   
+    children(selector: string): JQuery;   
     
-    closest(selector: string, context?: Element): JQuery;
+    closest(selector: string): JQuery;
     
     contents(): JQuery;
     
@@ -115,19 +111,19 @@ export interface dxElementWrapper {
     
     last(): JQuery;
     
-    next(selector?: string): JQuery;
+    next(selector: string): JQuery;
     
     not(selector: string): JQuery;
 
     offsetParent(): JQuery;
     
-    parent(selector?: string): JQuery;
+    parent(selector: string): JQuery;
     
-    parents(selector?: string): JQuery;
+    parents(selector: string): JQuery;
     
-    prev(selector?: string): JQuery;
+    prev(): JQuery;
     
-    siblings(selector?: string): JQuery;
+    siblings(): JQuery;
     
-    slice(start: number, end?: number): JQuery;
+    slice(): JQuery;
 }
