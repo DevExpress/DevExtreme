@@ -12802,54 +12802,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok(dataGrid.getScrollable().scrollTop() > 100, 'vertical scroll is exists');
     });
 
-    QUnit.test('Column hiding should works with masterDetail and column fixing', function(assert) {
-    // arrange
-        let detailGridCount = 0;
-        const dataGrid = createDataGrid({
-            dataSource: [{ id: 1 }],
-            columnHidingEnabled: true,
-            columnFixing: {
-                enabled: true
-            },
-            columnAutoWidth: true,
-            width: 1000,
-            columns: [
-                { dataField: 'column1', width: 1000 },
-                { dataField: 'column2' }
-            ],
-            masterDetail: {
-                enabled: true,
-                template: function() {
-                    detailGridCount++;
-                    return $('<div>').dxDataGrid({
-                        dataSource: [{}]
-                    });
-                }
-            }
-        });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.expandRow({ id: 1 });
-        this.clock.tick();
-
-        dataGrid.collapseRow({ id: 1 });
-        this.clock.tick();
-
-        dataGrid.expandAdaptiveDetailRow({ id: 1 });
-        this.clock.tick();
-
-        dataGrid.collapseAdaptiveDetailRow({ id: 1 });
-        this.clock.tick(1000);
-
-        // assert
-        const $masterDetailRows = $($(dataGrid.$element()).find('.dx-master-detail-row'));
-        assert.equal($masterDetailRows.length, 2, 'master-detail row count');
-        assert.notOk($masterDetailRows.is(':visible'), 'master-detail rows are not visible');
-        assert.equal(detailGridCount, 1, 'master detail is rendered once');
-    });
-
     // T648744
     QUnit.test('Scrollbar should not be shown if column hiding is enabled and all columns are visible', function(assert) {
     // arrange, act
