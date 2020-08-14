@@ -1,6 +1,7 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
+  Component, ComponentBindings, JSXComponent, OneWay, Slot, Fragment,
 } from 'devextreme-generator/component_declaration/common';
+import { Row } from './row';
 
 export const viewFunction = (viewModel: Table) => (
   <table
@@ -9,7 +10,17 @@ export const viewFunction = (viewModel: Table) => (
     className={viewModel.props.className}
   >
     <tbody>
-      {viewModel.props.children}
+      <Fragment>
+        {
+        viewModel.props.isVirtual
+        && <Row isVirtual height={viewModel.props.topVirtualRowHeight} />
+        }
+        {viewModel.props.children}
+        {
+        viewModel.props.isVirtual
+         && <Row isVirtual height={viewModel.props.bottomVirtualRowHeight} />
+        }
+      </Fragment>
     </tbody>
   </table>
 );
@@ -17,6 +28,12 @@ export const viewFunction = (viewModel: Table) => (
 @ComponentBindings()
 export class TableProps {
   @OneWay() className?: string = '';
+
+  @OneWay() topVirtualRowHeight?: number = 0;
+
+  @OneWay() bottomVirtualRowHeight?: number = 0;
+
+  @OneWay() isVirtual?: boolean = false;
 
   @Slot() children?: any;
 }

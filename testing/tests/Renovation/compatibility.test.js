@@ -7,7 +7,7 @@ import { act } from 'preact/test-utils';
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
-const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout', 'TimePanelTableLayout', 'DayDateTableLayout', 'AllDayPanelLayout', 'GridPager'];
+const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout', 'TimePanelTableLayout', 'DayDateTableLayout', 'AllDayPanelLayout', 'AllDayPanelTitle', 'GridPager'];
 const WRAPPER_WIDGETS = ['DataGrid'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxrGridPager': 'datagrid-pager', 'dxrDataGrid': 'widget' };
 
