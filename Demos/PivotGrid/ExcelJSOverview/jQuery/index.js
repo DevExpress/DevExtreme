@@ -1,9 +1,5 @@
 $(function(){
     $("#sales").dxPivotGrid({
-        allowSortingBySummary: true,
-        allowSorting: true,
-        allowFiltering: true,
-        allowExpandAll: true,
         height: 440,
         rowHeaderLayout: 'tree',
         showBorders: true,
@@ -16,18 +12,14 @@ $(function(){
         dataSource: {
             fields: [{
                 caption: "Region",
-                width: 120,
                 dataField: "region",
                 area: "row",
                 expanded: true
             }, {
                 caption: "City",
                 dataField: "city",
-                width: 150,
                 area: "row",
-                selector: function(data) {
-                    return  data.city + " (" + data.country + ")";
-                }
+                width: 150
             }, {
                 dataField: "date",
                 dataType: "date",
@@ -37,9 +29,9 @@ $(function(){
                 caption: "Sales",
                 dataField: "amount",
                 dataType: "number",
+                area: "data",
                 summaryType: "sum",
                 format: "currency",
-                area: "data"
             }],
             store: sales
         },
@@ -49,8 +41,7 @@ $(function(){
             
             DevExpress.excelExporter.exportPivotGrid({
                 component: e.component,
-                worksheet: worksheet,
-                topLeftCell: { row: 1, column: 1 },
+                worksheet: worksheet
             }).then(function() {
                 // https://github.com/exceljs/exceljs#writing-xlsx
                 workbook.xlsx.writeBuffer().then(function(buffer) {
@@ -58,6 +49,6 @@ $(function(){
                 });
             });
             e.cancel = true;
-        },        
+        }
     });
 });

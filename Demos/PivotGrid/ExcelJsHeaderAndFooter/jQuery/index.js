@@ -9,11 +9,11 @@ $(function(){
             showDataFields: true,
             showFilterFields: false,
             showRowFields: true,
-            allowFieldDragging: true,
+            allowFieldDragging: false,
             visible: true
         },        
         fieldChooser: {
-            enabled: true
+            enabled: false
         },
         export: {
             enabled: true
@@ -50,16 +50,19 @@ $(function(){
             var workbook = new ExcelJS.Workbook();
             var worksheet = workbook.addWorksheet('Sales');
 
+            worksheet.columns = [
+                { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }
+            ];  
+
             var grid = e.component;
             DevExpress.excelExporter.exportPivotGrid({
                 component: grid,
                 worksheet: worksheet,
                 topLeftCell: { row: 4, column: 1 },
-                keepColumnWidths: true,
+                keepColumnWidths: false
             }).then(function(gridRange) {
-                exportHeader(worksheet, grid);
+                exportHeader(worksheet);
                 exportRowHeaders(worksheet, grid, gridRange);
-                exportColumnHeaders(worksheet, grid, gridRange);
                 exportFooter(worksheet, gridRange, gridRange);
             }).then(function() {
                 // https://github.com/exceljs/exceljs#writing-xlsx
@@ -72,43 +75,32 @@ $(function(){
     });
 });
 
-function exportHeader(worksheet, grid) {
-    var rowIndex = 1;
-    var headerRow = worksheet.getRow(rowIndex);
-    headerRow.height = 50;
+function exportHeader(worksheet) {
+    var headerRow = worksheet.getRow(2);
+    headerRow.height = 30; 
 
     var columnFromIndex = worksheet.views[0].xSplit + 1;
-    var columnToIndex = columnFromIndex + 7;
-    worksheet.mergeCells(rowIndex, columnFromIndex, rowIndex, columnToIndex);
+    var columnToIndex = columnFromIndex + 3;
+    worksheet.mergeCells(2, columnFromIndex, 2, columnToIndex);
 
     var headerCell = headerRow.getCell(columnFromIndex);
-    headerCell.value = 'Sales Amount by Region' + getYearsRange(grid);
+    headerCell.value = 'Sales Amount by Region';
     headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
-    headerCell.alignment = { horizontal: 'left', vertical: 'top', wrapText: true };
+    headerCell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
 }
 
 function exportRowHeaders(worksheet, grid, gridRange){
     var fields = grid.getDataSource().fields();
-    var rowFields = getFields(fields, 'row', r => r.dataField);
+    var rowFields = getFields(fields, 'row', function(r) { return r.dataField; });
 
     var columnFromIndex = 1;
     var columnToIndex = worksheet.views[0].xSplit;
     worksheet.unMergeCells(gridRange.from.row, columnFromIndex, gridRange.from.row, columnToIndex);
     rowFields.forEach(function(field, index) {
-        var rowHeaderCell = worksheet.getRow(worksheet.views[0].ySplit).getCell(index + 1)
-        rowHeaderCell.value = field;
+        var rowHeaderCell = worksheet.getRow(worksheet.views[0].ySplit).getCell(index + 1);
+        rowHeaderCell.alignment = { horizontal: 'left', vertical: 'middle' };
+        rowHeaderCell.value = field.charAt(0).toUpperCase() + field.slice(1);
     });
-}
-
-function exportColumnHeaders(worksheet, grid, gridRange){
-    var fields = grid.getDataSource().fields();
-    var columnFields = getFields(fields, 'column', r => r.dataField);
-    var dataFields = getFields(fields, 'data', r => r.dataField);
-
-    var rowIndex = gridRange.from.row - 1;    
-    var columnIndex = worksheet.views[0].xSplit + 1;
-    var columnHeaderCell = worksheet.getRow(rowIndex).getCell(columnIndex);
-    columnHeaderCell.value = dataFields.join(',') + ' by ' + columnFields.join(' and ');
 }
 
 function exportFooter(worksheet, gridRange) {
@@ -117,18 +109,6 @@ function exportFooter(worksheet, gridRange) {
     footerCell.value = 'www.wikipedia.org';
     footerCell.font = { color: { argb: 'BFBFBF' }, italic: true };
     footerCell.alignment = { horizontal: 'right' };
-}
-
-function getYearsRange(grid) {
-    var dateFieldIndex = 2;
-    var filterValues = grid.getDataSource().fields()[dateFieldIndex].filterValues;
-    if(filterValues === null) {
-        return '';
-    }
-
-    var uniqueYears = [...new Set(filterValues.map(f => f[0]))];
-    return ' for ' + uniqueYears.join(', ') 
-        + (uniqueYears.length > 1 ? ' years': ' year');
 }
 
 function getFields(fields, area, mapper){

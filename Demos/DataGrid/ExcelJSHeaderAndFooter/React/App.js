@@ -85,7 +85,7 @@ class App extends React.Component {
       component: e.component,
       worksheet: worksheet,
       topLeftCell: { row: 4, column: 1 }
-    }).then(function(dataGridRange) {
+    }).then(function(cellRange) {
       // header
       // https://github.com/exceljs/exceljs#rows
       const headerRow = worksheet.getRow(2);
@@ -101,7 +101,7 @@ class App extends React.Component {
       headerRow.getCell(1).alignment = { horizontal: 'center' };
 
       // footer
-      const footerRowIndex = dataGridRange.to.row + 2;
+      const footerRowIndex = cellRange.to.row + 2;
       const footerRow = worksheet.getRow(footerRowIndex);
       worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
 

@@ -15,7 +15,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         component: e.component,
         worksheet: worksheet,
         topLeftCell: { row: 4, column: 1 }
-      }).then(function(dataGridRange) {
+      }).then(function(cellRange) {
         // header
         // https://github.com/exceljs/exceljs#rows
         var headerRow = worksheet.getRow(2);
@@ -31,7 +31,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         headerRow.getCell(1).alignment = { horizontal: 'center' };
         
         // footer
-        var footerRowIndex = dataGridRange.to.row + 2;
+        var footerRowIndex = cellRange.to.row + 2;
         var footerRow = worksheet.getRow(footerRowIndex);
         worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
         

@@ -142,7 +142,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             Object.assign(excelCell.font, { italic: true });
           }
         }
-      }).then(function(dataGridRange) {
+      }).then(function(cellRange) {
         // header
         worksheet.getRow(2).height = 20; // https://github.com/exceljs/exceljs#rows
         worksheet.mergeCells(2, 1, 2, 4); // https://github.com/exceljs/exceljs#merged-cells
@@ -152,7 +152,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
           alignment: { horizontal: 'center' }
         });
         // footer
-        var currentRowIndex = dataGridRange.to.row + 2;
+        var currentRowIndex = cellRange.to.row + 2;
         worksheet.mergeCells(currentRowIndex, 1, currentRowIndex, 4);
         worksheet.getRow(currentRowIndex).getCell(1).value = "For demonstration purposes only";
         Object.assign(worksheet.getRow(currentRowIndex).getCell(1), {

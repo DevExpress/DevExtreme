@@ -1132,6 +1132,7 @@
             "Hidden":  true,
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
+            "Credits": "www.wikipedia.org",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
               "/Models/Sale.cs",
