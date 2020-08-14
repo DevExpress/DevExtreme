@@ -43,7 +43,6 @@ $(function(){
                 component: e.component,
                 worksheet: worksheet
             }).then(function() {
-                // https://github.com/exceljs/exceljs#writing-xlsx
                 workbook.xlsx.writeBuffer().then(function(buffer) {
                     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
                 });

@@ -60,12 +60,11 @@ $(function(){
                 worksheet: worksheet,
                 topLeftCell: { row: 4, column: 1 },
                 keepColumnWidths: false
-            }).then(function(gridRange) {
+            }).then(function(cellRange) {
                 exportHeader(worksheet);
-                exportRowHeaders(worksheet, grid, gridRange);
-                exportFooter(worksheet, gridRange, gridRange);
+                exportRowHeaders(worksheet, grid, cellRange);
+                exportFooter(worksheet, cellRange, cellRange);
             }).then(function() {
-                // https://github.com/exceljs/exceljs#writing-xlsx
                 workbook.xlsx.writeBuffer().then(function(buffer) {
                     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
                 });
@@ -89,13 +88,13 @@ function exportHeader(worksheet) {
     headerCell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
 }
 
-function exportRowHeaders(worksheet, grid, gridRange){
-    var fields = grid.getDataSource().fields();
-    var rowFields = getFields(fields, 'row', function(r) { return r.dataField; });
+function exportRowHeaders(worksheet, grid, cellRange){
+    var rowFields = grid.getDataSource().fields()
+        .filter(function(r) { return r.area === 'row'; })
+        .map(function(r) { return r.dataField; });
 
-    var columnFromIndex = 1;
     var columnToIndex = worksheet.views[0].xSplit;
-    worksheet.unMergeCells(gridRange.from.row, columnFromIndex, gridRange.from.row, columnToIndex);
+    worksheet.unMergeCells(cellRange.from.row, 1, cellRange.from.row, columnToIndex);
     rowFields.forEach(function(field, index) {
         var rowHeaderCell = worksheet.getRow(worksheet.views[0].ySplit).getCell(index + 1);
         rowHeaderCell.alignment = { horizontal: 'left', vertical: 'middle' };
@@ -103,14 +102,10 @@ function exportRowHeaders(worksheet, grid, gridRange){
     });
 }
 
-function exportFooter(worksheet, gridRange) {
-    var footerRowIndex = gridRange.to.row + 2;
-    var footerCell = worksheet.getRow(footerRowIndex).getCell(gridRange.to.column);
+function exportFooter(worksheet, cellRange) {
+    var footerRowIndex = cellRange.to.row + 2;
+    var footerCell = worksheet.getRow(footerRowIndex).getCell(cellRange.to.column);
     footerCell.value = 'www.wikipedia.org';
     footerCell.font = { color: { argb: 'BFBFBF' }, italic: true };
     footerCell.alignment = { horizontal: 'right' };
-}
-
-function getFields(fields, area, mapper){
-    return [...new Set(fields.filter(r => r.area === area).map(mapper))];
 }
