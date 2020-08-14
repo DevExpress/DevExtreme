@@ -1257,7 +1257,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return coreResult !== undefined ? coreResult : d.promise();
         },
 
-        _normalizeEditCellOptions: function({ oldColumnIndex, oldRowIndex, columnIndex, rowIndex }) {
+        _getNormalizedEditCellOptions: function({ oldColumnIndex, oldRowIndex, columnIndex, rowIndex }) {
             const columnsController = this._columnsController;
             const visibleColumns = columnsController.getVisibleColumns();
             const items = this._dataController.items();
@@ -1287,7 +1287,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _editCellCore: function(options) {
             const dataController = this._dataController;
             const isEditByOptionChanged = isDefined(options.oldColumnIndex) || isDefined(options.oldRowIndex);
-            const { oldColumn, columnIndex, oldRowIndex, rowIndex, column, item } = this._normalizeEditCellOptions(options);
+            const { oldColumn, columnIndex, oldRowIndex, rowIndex, column, item } = this._getNormalizedEditCellOptions(options);
             const params = {
                 data: item?.data,
                 cancel: false,
