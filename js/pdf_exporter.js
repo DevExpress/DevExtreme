@@ -1,4 +1,4 @@
-import { exportDataGrid } from './exporter/pdfjs/export_data_grid';
+import { exportDataGrid } from './exporter/jspdf/export_data_grid';
 
 
 export {

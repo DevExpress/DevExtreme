@@ -3,7 +3,7 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
 import { isFunction } from 'core/utils/type';
-import { PdfJSDataGridTestHelper } from './PdfJSTestHelper.js';
+import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
 import { exportDataGrid } from 'pdf_exporter';
 
 import 'ui/data_grid/ui.data_grid';
@@ -25,7 +25,7 @@ const moduleConfig = {
         this.jsPDFDocument = _jsPDF('p', 'pt', 'a4');
         this.customizeCellCallCount = 0;
 
-        helper = new PdfJSDataGridTestHelper(this.jsPDFDocument);
+        helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
     }
 };
 

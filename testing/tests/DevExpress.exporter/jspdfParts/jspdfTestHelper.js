@@ -1,8 +1,8 @@
 import { isDefined, isNumeric } from 'core/utils/type';
-import { Export } from 'exporter/pdfjs/export';
+import { Export } from 'exporter/jspdf/export';
 const { assert } = QUnit;
 
-class PdfJSDataGridTestHelper {
+class JSPdfDataGridTestHelper {
     constructor(jsPDFDocument) {
         this.jsPDFDocument = jsPDFDocument;
     }
@@ -55,4 +55,4 @@ class PdfJSDataGridTestHelper {
     }
 }
 
-export { PdfJSDataGridTestHelper };
+export { JSPdfDataGridTestHelper };
