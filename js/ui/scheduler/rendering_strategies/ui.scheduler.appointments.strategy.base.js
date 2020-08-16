@@ -509,7 +509,7 @@ class BaseRenderingStrategy {
             result.setHours(endDayHour, 0, 0, 0);
         }
 
-        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0));
+        const currentViewEndTime = new Date(endDate.getTime()).setHours(endDayHour, 0, 0);
 
         if(result.getTime() > currentViewEndTime.getTime()) {
             result = currentViewEndTime;
