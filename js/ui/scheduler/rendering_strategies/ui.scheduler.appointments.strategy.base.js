@@ -502,16 +502,12 @@ class BaseRenderingStrategy {
                 result = viewEndDate;
             }
         }
+
         const endDayHour = this.instance._getCurrentViewOption('endDayHour');
         const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
 
-        if(allDay && result.getHours() < endDayHour) {
-            result.setHours(endDayHour, 0, 0, 0);
-        }
-
-        const currentViewEndTime = new Date(endDate.getTime()).setHours(endDayHour, 0, 0);
-
-        if(result.getTime() > currentViewEndTime.getTime()) {
+        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
             result = currentViewEndTime;
         }
 
