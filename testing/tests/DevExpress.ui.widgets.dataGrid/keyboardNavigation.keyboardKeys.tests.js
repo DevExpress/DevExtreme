@@ -2026,7 +2026,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, 2, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 2, 'edit column index');
     });
 
     QUnit.testInActiveWindow('Edit cell should not lose focus after enter key', function(assert) {
@@ -2081,7 +2081,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, 0, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 0, 'edit column index');
 
         // act
         this.triggerKeyDown('enter', false, false, false, {
@@ -2092,7 +2092,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, 0, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 0, 'edit column index');
 
         // act
         this.triggerKeyDown('enter');
@@ -2100,7 +2100,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, -1, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), -1, 'edit column index');
     });
 
     QUnit.testInActiveWindow('Edit cell after enter key (\'cell\' edit mode)', function(assert) {
@@ -2118,7 +2118,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('enter');
 
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, 2, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 2, 'edit column index');
     });
 
     QUnit.testInActiveWindow('Edit next cell after tab key', function(assert) {
@@ -2140,7 +2140,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(that.editingController._getVisibleEditRowIndex(), 1, 'edit row index');
-        assert.equal(that.editingController._editColumnIndex, 2, 'edit column index');
+        assert.equal(that.editingController._getVisibleEditColumnIndex(), 2, 'edit column index');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
 
@@ -2872,7 +2872,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, 1, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 1, 'edit column index');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
 
@@ -2891,7 +2891,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'we are do not editing anything');
-        assert.equal(this.editingController._editColumnIndex, -1, 'we are do not editing anything');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), -1, 'we are do not editing anything');
         assert.equal(this.keyboardNavigationController._getFocusedCell().text(), 'test2', 'at now we are focused at second cell');
     });
 
@@ -2912,7 +2912,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'we are do not editing anything');
-        assert.equal(this.editingController._editColumnIndex, 1, 'we are do not editing anything');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 1, 'we are do not editing anything');
         assert.equal(this.keyboardNavigationController._getFocusedCell().find('input').length, 1, 'focused cell contains editor');
     });
 
@@ -3085,7 +3085,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'edit row index');
-        assert.equal(this.editingController._editColumnIndex, 2, 'edit column index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 2, 'edit column index');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
         assert.ok(isFocusedInput, 'is focused input');
     });

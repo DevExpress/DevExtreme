@@ -314,6 +314,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             columns[key].index = parseInt(key);
         }
 
+        columns?.forEach(column => {
+            if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
+                column.name = column.dataField;
+            }
+        });
+
         return {
             updateOptions: [],
 
@@ -353,6 +359,19 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     }
                 }
                 return -1;
+            },
+
+            getVisibleColumnIndex: function(id) {
+                let columnIndex = -1;
+
+                this.getVisibleColumns().some((column, index) => {
+                    if(column.name === id) {
+                        columnIndex = index;
+                        return true;
+                    }
+                });
+
+                return columnIndex;
             },
 
             getVisibleColumns: function(rowIndex) {
