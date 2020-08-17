@@ -1103,7 +1103,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(visible) {
             const options = {
                 viewData: this.viewData,
-                visible
+                visible,
+                dataCellTemplate: this.option('dataCellTemplate'),
             };
 
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);

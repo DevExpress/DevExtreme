@@ -1,32 +1,24 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-import { getGroupCellClasses } from '../../../utils';
+import { DateTableCellBaseProps, DateTableCellBase } from '../cell';
 
 export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
-  <td
+  <DateTableCellBase
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={viewModel.classes}
+    className={`dx-scheduler-all-day-table-cell ${viewModel.props.className}`}
+    startDate={viewModel.props.startDate}
+    endDate={viewModel.props.endDate}
+    groups={viewModel.props.groups}
+    isFirstCell={viewModel.props.isFirstCell}
+    isLastCell={viewModel.props.isLastCell}
+    dataCellTemplate={viewModel.props.dataCellTemplate}
   />
 );
-
-@ComponentBindings()
-export class AllDayPanelCellProps {
-  @OneWay() className?: string = '';
-
-  @OneWay() isFirstCell?: boolean;
-
-  @OneWay() isLastCell?: boolean;
-}
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class AllDayPanelCell extends JSXComponent(AllDayPanelCellProps) {
-  get classes() {
-    const groupClasses = getGroupCellClasses(this.props.isFirstCell, this.props.isLastCell);
-    return `dx-scheduler-all-day-table-cell dx-scheduler-cell-sizes-horizontal ${groupClasses} ${this.props.className}`;
-  }
-}
+export class AllDayPanelCell extends JSXComponent(DateTableCellBaseProps) {}
