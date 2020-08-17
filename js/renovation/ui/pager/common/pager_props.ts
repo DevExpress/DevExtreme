@@ -5,6 +5,8 @@ import messageLocalization from '../../../../localization/message';
 
 @ComponentBindings()
 export default class PagerProps {
+  @OneWay() gridCompatibility? = true;
+
   @OneWay() className?: string;
 
   @OneWay() showInfo?: boolean = false;
@@ -25,7 +27,7 @@ export default class PagerProps {
 
   @OneWay() pagesNavigatorVisible?: boolean | 'auto' = 'auto';
 
-  @TwoWay() pageIndex?: number = 0;
+  @TwoWay() pageIndex?: number = 1;
 
   @Event() pageIndexChange?: (newPageIndex: number) => void;
 

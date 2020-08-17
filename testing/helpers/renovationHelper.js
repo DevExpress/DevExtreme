@@ -47,6 +47,7 @@ export const createRenovationModuleConfig = (oldWidget, renovatedWidget, config 
             }
         };
     } else {
+        registerComponent(widgetName, oldWidget);
         return config;
     }
 };
