@@ -21,7 +21,7 @@ export class CellBaseProps {
 
   @OneWay() isLastCell? = false;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({
