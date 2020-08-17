@@ -23,6 +23,8 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => {
             startDate: viewModel.props.startDate,
             endDate: viewModel.props.endDate,
             text: viewModel.props.text,
+            groups: viewModel.props.groups,
+            allDay: viewModel.props.allDay,
           }}
           // index={viewModel.props.index}
         />

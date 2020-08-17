@@ -11,6 +11,7 @@ export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
     startDate={viewModel.props.startDate}
     endDate={viewModel.props.endDate}
     groups={viewModel.props.groups}
+    allDay
     isFirstCell={viewModel.props.isFirstCell}
     isLastCell={viewModel.props.isLastCell}
     dataCellTemplate={viewModel.props.dataCellTemplate}

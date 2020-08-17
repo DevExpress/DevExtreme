@@ -25,6 +25,8 @@ export class CellBaseProps {
 
   @OneWay() endDate?: Date = new Date();
 
+  @OneWay() allDay?: boolean = false;
+
   @OneWay() groups?: object;
 
   @OneWay() text?: string = '';
