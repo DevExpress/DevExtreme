@@ -5300,7 +5300,7 @@ QUnit.module('Editing with real dataController', {
             isCloseEditCell = true;
         };
 
-        this.editRow(0);
+        this.editCell(0, 0);
 
         this.rowsView.render(testElement);
         this.selectionController.init();
@@ -6140,7 +6140,7 @@ QUnit.module('Editing with real dataController', {
         this.editCell(0, 0);
 
         // assert
-        assert.equal(this.editingController._editColumnIndex, 0, 'edit cell index');
+        assert.equal(this.editingController._getVisibleEditColumnIndex(), 0, 'edit cell index');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
         assert.ok(isEditingCell, 'isEditing parameter of the cell');
         assert.ok(isEditingRow, 'isEditing parameter of the row');
@@ -8522,7 +8522,7 @@ QUnit.module('Editing with real dataController', {
         assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
     });
 
-    QUnit.module('editRowKey', {
+    QUnit.module('Editing state', {
         beforeEach: function() {
             this.options.dataSource = this.options.dataSource.store;
             this.options.keyExpr = 'room';
@@ -8747,6 +8747,269 @@ QUnit.module('Editing with real dataController', {
             assert.notOk($(rowsView.getRowElement(1)).hasClass('dx-edit-row'), 'second row is not edited');
             assert.ok($(rowsView.getRowElement(2)).hasClass('dx-edit-row'), 'third row is edited');
             assert.equal(this.option('editing.editRowKey'), 3, 'editRowKey');
+        });
+
+        ['cell', 'batch'].forEach(editMode => {
+            QUnit.test(`editColumnName should be reset after cancelEditData (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
+
+                // act
+                this.editCell(0, 0);
+
+                // assert
+                assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+
+                // act
+                this.cancelEditData();
+
+                // assert
+                assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+                assert.equal(this.option('editing.editColumnName'), null, 'editColumnName');
+            });
+
+            QUnit.test(`editColumnName should be reset after saveEditData (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
+
+                // act
+                this.editCell(0, 0);
+
+                // assert
+                assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+
+                // act
+                this.saveEditData();
+
+                // assert
+                if(editMode === 'cell') {
+                    // this is current behavior
+                    // TODO fix this
+                    assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                    assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+                } else {
+                    assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+                    assert.equal(this.option('editing.editColumnName'), null, 'editColumnName');
+                }
+            });
+
+            QUnit.test(`editColumnName change should change current editing cell (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
+
+                // act
+                this.editCell(0, 'name');
+
+                // assert
+                assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+
+                // act
+                this.option('editing.editColumnName', 'age');
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editColumnName', value: 'age', previousValue: 'name' });
+
+                // assert
+                assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+                assert.ok($(rowsView.getCellElement(0, 1)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editColumnName'), 'age', 'editColumnName');
+            });
+
+            QUnit.test(`editRowKey change should change current editing cell (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
+
+                // act
+                this.editCell(0, 'name');
+
+                // assert
+                assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
+
+                // act
+                this.option('editing.editRowKey', 2);
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 2, previousValue: 1 });
+
+                // assert
+                assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+                assert.ok($(rowsView.getCellElement(1, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editRowKey'), 2, 'editRowKey');
+            });
+
+            QUnit.test(`Cell editing should be started via setting editRowKey and editColumnName (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
+
+                // act
+                this.option('editing.editRowKey', 1);
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 2 });
+
+                // assert
+                assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+
+                // act
+                this.option('editing.editColumnName', 'name');
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editColumnName', value: 'name' });
+
+                // assert
+                assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
+                assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+            });
+
+            QUnit.test(`Cell editing should be started via setting editColumnName and editRowKey (editing.mode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                this.options.editing = {
+                    allowUpdating: true,
+                    mode: editMode
+                };
+                rowsView.render($testElement);
+
+                // act
+                this.option('editing.editColumnName', 'name');
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editColumnName', value: 'name' });
+
+                // assert
+                assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+
+                // act
+                this.option('editing.editRowKey', 1);
+                this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1 });
+
+                // assert
+                assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+                assert.equal(this.option('editing.editRowKey'), 1, 'editRowKey');
+                assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+            });
+        });
+
+        QUnit.test('Control new row editing via state (editing.mode = batch)', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.editing = {
+                allowUpdating: true,
+                allowAdding: true,
+                mode: 'batch'
+            };
+            rowsView.render($testElement);
+
+            // act
+            this.addRow();
+            this.clock.tick();
+            const newRowKey = this.option('editing.editRowKey');
+
+            // assert
+            assert.ok(newRowKey.__DX_INSERT_INDEX__, 'insert index');
+            assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+            assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+
+            // act
+            this.option('editing.editColumnName', 'name');
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editColumnName', value: 'age', previousValue: 'name' });
+
+            // assert
+            assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+            assert.ok($(rowsView.getCellElement(0, 1)).hasClass('dx-editor-cell'), 'cell is edited');
+
+            // act
+            this.option('editing.editRowKey', 1);
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1, previousValue: newRowKey });
+
+            // assert
+            assert.notOk($(rowsView.getCellElement(0, 1)).hasClass('dx-editor-cell'), 'cell is not edited');
+            assert.ok($(rowsView.getCellElement(1, 1)).hasClass('dx-editor-cell'), 'cell is edited');
+
+            // act
+            this.option('editing.editRowKey', newRowKey);
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: newRowKey, previousValue: 1 });
+
+            // assert
+            assert.notOk($(rowsView.getCellElement(1, 1)).hasClass('dx-editor-cell'), 'cell is not edited');
+            assert.ok($(rowsView.getCellElement(0, 1)).hasClass('dx-editor-cell'), 'cell is edited');
+        });
+
+        QUnit.test('Control new row editing via state (editing.mode = cell)', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.editing = {
+                allowUpdating: true,
+                allowAdding: true,
+                mode: 'cell'
+            };
+            rowsView.render($testElement);
+
+            // act
+            this.addRow();
+            this.clock.tick();
+            const newRowKey = this.option('editing.editRowKey');
+
+            // assert
+            assert.ok(newRowKey.__DX_INSERT_INDEX__, 'insert index');
+            assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
+            assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
+
+            // act
+            this.option('editing.editColumnName', 'name');
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editColumnName', value: 'age', previousValue: 'name' });
+
+            // assert
+            assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is not edited');
+            assert.ok($(rowsView.getCellElement(0, 1)).hasClass('dx-editor-cell'), 'cell is edited');
+
+            // act
+            this.option('editing.editRowKey', 1);
+            this.editingController.optionChanged({ name: 'editing', fullName: 'editing.editRowKey', value: 1, previousValue: newRowKey });
+
+            // assert
+            assert.ok($(rowsView.getCellElement(0, 1)).hasClass('dx-editor-cell'), 'cell is edited');
+            const visibleRows = this.getVisibleRows();
+            visibleRows.forEach(row => {
+                assert.notEqual(row.key, newRowKey, 'not insert key');
+                assert.notOk(row.isNewRow, 'not new row');
+            });
         });
     });
 });
@@ -11379,7 +11642,7 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.equal(editingController._getVisibleEditRowIndex(), 0, 'Correct editRowIndex');
-        assert.equal(editingController._editColumnIndex, 1, 'Second cell still editing');
+        assert.equal(editingController._getVisibleEditColumnIndex(), 1, 'Second cell still editing');
     });
 
     QUnit.test('Insert row when set validate in column and edit mode cell', function(assert) {
