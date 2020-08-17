@@ -20,29 +20,29 @@ $(function(){
         },
         dataSource: {
             fields: [{
-                caption: "Region",
+                caption: 'Region',
                 width: 120,
-                dataField: "region",
-                area: "row",
+                dataField: 'region',
+                area: 'row',
                 expanded: true
             }, {
-                caption: "City",
-                dataField: "city",
+                caption: 'City',
+                dataField: 'city',
                 width: 150,
-                area: "row"
+                area: 'row'
             }, {
-                dataField: "date",
-                dataType: "date",
-                area: "column",
+                dataField: 'date',
+                dataType: 'date',
+                area: 'column',
                 filterValues: [[2013], [2014], [2015]],
                 expanded: false,
             }, {
-                caption: "Sales",
-                dataField: "amount",
-                dataType: "number",
-                summaryType: "sum",
-                format: "currency",
-                area: "data"
+                caption: 'Sales',
+                dataField: 'amount',
+                dataType: 'number',
+                summaryType: 'sum',
+                format: 'currency',
+                area: 'data'
             }],
             store: sales
         },

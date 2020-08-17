@@ -14,36 +14,36 @@ $(function() {
         },
         dataSource: {
             fields: [{
-                caption: "Region",
-                dataField: "region",
-                area: "row"
+                caption: 'Region',
+                dataField: 'region',
+                area: 'row'
             }, {
-                caption: "City",
-                dataField: "city",
+                caption: 'City',
+                dataField: 'city',
                 width: 150,
-                area: "row"
+                area: 'row'
             }, {
-                dataField: "date",
-                dataType: "date",
-                area: "column"
+                dataField: 'date',
+                dataType: 'date',
+                area: 'column'
             }, {
-                caption: "Amount",
-                dataField: "amount",
-                dataType: "number",
-                summaryType: "sum",
-                format: "currency",
-                area: "data"
+                caption: 'Amount',
+                dataField: 'amount',
+                dataType: 'number',
+                summaryType: 'sum',
+                format: 'currency',
+                area: 'data'
             }, {
-                caption: "Count",
-                dataField: "amount",
-                dataType: "number",
-                summaryType: "count",
-                area: "data"
+                caption: 'Count',
+                dataField: 'amount',
+                dataType: 'number',
+                summaryType: 'count',
+                area: 'data'
             }],
             store: sales
         },
         onCellPrepared: function(e) {
-            if(e.rowType === 'T' || e.type === 'T' || e.type === 'GT' || e.type === "GT" || e.rowType === "GT" || e.columnType === "GT") {
+            if(e.rowType === 'T' || e.type === 'T' || e.type === 'GT' || e.type === 'GT' || e.rowType === 'GT' || e.columnType === 'GT') {
                 e.cellElement.css({ backgroundColor: '#DDDDDD' });
             }
             if(e.area === 'data') {
@@ -69,7 +69,7 @@ $(function() {
                     var excelCell = options.excelCell;
                     var pivotCell = options.pivotCell;
 
-                    if(pivotCell.rowType === 'T' || pivotCell.type === 'T' || pivotCell.type === 'GT' || pivotCell.rowType === "GT" || pivotCell.columnType === "GT") {
+                    if(pivotCell.rowType === 'T' || pivotCell.type === 'T' || pivotCell.type === 'GT' || pivotCell.rowType === 'GT' || pivotCell.columnType === 'GT') {
                         excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'DDDDDD' } };
                         if(pivotCell.dataIndex === 0) {
                             excelCell.numFmt = '$ #,##.#,"K"';

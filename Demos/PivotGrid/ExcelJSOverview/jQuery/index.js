@@ -11,27 +11,27 @@ $(function(){
         },
         dataSource: {
             fields: [{
-                caption: "Region",
-                dataField: "region",
-                area: "row",
+                caption: 'Region',
+                dataField: 'region',
+                area: 'row',
                 expanded: true
             }, {
-                caption: "City",
-                dataField: "city",
-                area: "row",
+                caption: 'City',
+                dataField: 'city',
+                area: 'row',
                 width: 150
             }, {
-                dataField: "date",
-                dataType: "date",
-                area: "column",
+                dataField: 'date',
+                dataType: 'date',
+                area: 'column',
                 expanded: true
             }, {
-                caption: "Sales",
-                dataField: "amount",
-                dataType: "number",
-                area: "data",
-                summaryType: "sum",
-                format: "currency",
+                caption: 'Sales',
+                dataField: 'amount',
+                dataType: 'number',
+                area: 'data',
+                summaryType: 'sum',
+                format: 'currency',
             }],
             store: sales
         },

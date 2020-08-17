@@ -8,8 +8,8 @@ import ExcelJS from 'exceljs';
 import saveAs from 'file-saver';
 /*
   // Use this import for codeSandBox
-  import * as ExcelJS from "exceljs/dist/exceljs.min.js";
-  import * as FileSaver from "file-saver";
+  import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
+  import * as FileSaver from 'file-saver';
 */
 
 if(!/localhost/.test(document.location.host)) {
