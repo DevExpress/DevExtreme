@@ -317,11 +317,11 @@ const calculatePosition = function(what, options) {
             v.atSize = of.height();
         } else {
             const ofRect = getBoundingRect(of.get(0));
-            const o = getOffsetWithoutScale(of);
+            const o = of.offset();
             h.atLocation = o.left;
             v.atLocation = o.top;
-            h.atSize = Math.max(ofRect.width, of.outerWidth());
-            v.atSize = Math.max(ofRect.height, of.outerHeight());
+            h.atSize = ofRect.width;
+            v.atSize = ofRect.height;
         }
     }
 
@@ -395,22 +395,6 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
-const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
-    const currentElement = $currentElement.get(0);
-    if(!currentElement || $currentElement.is('body')) {
-        return $startElement.offset();
-    }
-
-    const transform = $currentElement.get(0).style.transform;
-    const scale = (transform.match(/scale(.+)/) || [])[0];
-
-    currentElement.style.transform = transform.replace(scale, '');
-    const offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-    currentElement.style.transform = transform;
-
-    return offset;
-};
-
 const position = function(what, options) {
     const $what = $(what);
 
@@ -420,8 +404,7 @@ const position = function(what, options) {
 
     translator.resetPosition($what, true);
 
-
-    const offset = getOffsetWithoutScale($what);
+    const offset = $what.offset();
     const targetPosition = (options.h && options.v) ? options : calculatePosition($what, options);
 
     const preciser = function(number) {
