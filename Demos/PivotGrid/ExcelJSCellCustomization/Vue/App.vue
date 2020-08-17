@@ -76,7 +76,7 @@ export default {
     onExporting(e) {
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet('Sales');
-      
+
       exportPivotGrid({
         component: e.component,
         worksheet: worksheet,
@@ -87,7 +87,7 @@ export default {
               excelCell.numFmt = '$ #,##.#,"K"';
             }
           }
-          
+
           if(pivotCell.area === 'data') {
             if(pivotCell.dataIndex === 1) {
               excelCell.font = { bold: true };
@@ -96,7 +96,7 @@ export default {
               excelCell.font = { color: { argb: color } };
             }
           }
-          
+
           const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
           excelCell.border = {
             bottom: borderStyle,

@@ -124,8 +124,7 @@ export default {
 </script>
 <style scoped>
 .long-title h3 {
-  font-family: "Segoe UI Light", "Helvetica Neue Light", "Segoe UI",
-    "Helvetica Neue", "Trebuchet MS", Verdana;
+  font-family: "Segoe UI Light", "Helvetica Neue Light", "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana;
   font-weight: 200;
   font-size: 28px;
   text-align: center;

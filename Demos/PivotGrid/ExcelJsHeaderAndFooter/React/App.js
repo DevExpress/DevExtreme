@@ -51,7 +51,7 @@ class App extends React.Component {
     worksheet.columns = [
       { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }
     ];
-    
+
     exportPivotGrid({
       component: e.component,
       worksheet: worksheet,
@@ -60,7 +60,7 @@ class App extends React.Component {
     }).then((cellRange) => {
       // Header
       const headerRow = worksheet.getRow(2);
-      headerRow.height = 30; 
+      headerRow.height = 30;
 
       const columnFromIndex = worksheet.views[0].xSplit + 1;
       const columnToIndex = columnFromIndex + 3;
