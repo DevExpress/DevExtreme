@@ -4,7 +4,7 @@ import asyncForEach from '../../helpers/asyncForEach';
 
 fixture`Popup`
   .page(url(__dirname, './pages/T920408.html'))
-  .beforeEach(async (t) => { await t.wait(); });
+  .beforeEach(async (t) => { await t.wait(10000); });
 
 test('Popup should be centered regarding the container even if container is animated (T920408)', async (t) => {
   const outerPopup = new Popup('#popup');
@@ -45,7 +45,7 @@ test('Popup wrapper left top corner should be the same as the container right le
   const wrapperRect: {top: number; left: number} = { top: 0, left: 0 };
   const containerRect: {top: number; left: number} = { top: 0, left: 0 };
 
-  await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
+  await asyncForEach(['left', 'top'], async (prop) => {
     wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
     containerRect[prop] = await container.getBoundingClientRectProperty(prop);
   });
