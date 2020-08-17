@@ -126,7 +126,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxrPreactTestWidget({}));
 
-    expect($('#my-id').dxrPreactTestWidget('getLastProps')).toMatchObject({
+    expect($('#my-id').dxrPreactTestWidget('getLastPreactReceivedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
       'data-custom-attr': 'attr-value',
@@ -142,7 +142,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxrPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxrPreactTestWidget('getLastProps')).toMatchObject({
+    expect($('#my-id').dxrPreactTestWidget('getLastPreactReceivedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
       'data-custom-attr': 'attr-value',
@@ -159,7 +159,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxrPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class custom-css-class2 dx-custom-css-class');
+    expect($('#my-id').dxrPreactTestWidget('getLastPreactReceivedProps').className).toBe('custom-css-class custom-css-class2 dx-custom-css-class');
   });
 
   it('should save only initial "dx-" custom classes', () => {
@@ -171,7 +171,24 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxrPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxrPreactTestWidget('getLastProps').className).toBe('custom-css-class');
+    expect($('#my-id').dxrPreactTestWidget('getLastPreactReceivedProps').className).toBe('custom-css-class');
+  });
+
+  it('should pass empty string if no classes present on element', () => {
+    act(() => $('#component').dxrPreactTestWidget({}));
+
+    act(() => $('#component').dxrPreactTestWidget('repaint'));
+
+    expect($('#component').dxrPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
+      class: '',
+      className: '',
+    });
+
+    expect($('#component').dxrPreactTestWidget('getLastPreactReceivedProps')).toMatchObject({
+      class: '',
+      className: '',
+    });
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
   it('widget does not show className option', () => {
@@ -187,7 +204,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxrPreactTestWidget({ elementAttr: { id: 'attr-id' } }));
 
-    expect($('#attr-id').dxrPreactTestWidget('getLastProps').id).toBe('attr-id');
+    expect($('#attr-id').dxrPreactTestWidget('getLastPreactReceivedProps').id).toBe('attr-id');
   });
 
   it('merge unique css classes from elementAttr option with container class', () => {
@@ -195,7 +212,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#component').dxrPreactTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } }));
 
-    expect($('#component').dxrPreactTestWidget('getLastProps').class).toBe('custom-css-class attr-class attr-css-class');
+    expect($('#component').dxrPreactTestWidget('getLastPreactReceivedProps').class).toBe('custom-css-class attr-class attr-css-class');
   });
 
   it('keep elementAttr option untouched', () => {
@@ -212,7 +229,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#component').dxrPreactTestWidget({}));
 
-    expect($('#component').dxrPreactTestWidget('getLastProps').style).toEqual({
+    expect($('#component').dxrPreactTestWidget('getLastPreactReceivedProps').style).toEqual({
       width: '123.5px',
       height: '456.6px',
     });
@@ -227,7 +244,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#component').dxrPreactTestWidget('repaint'));
 
-    expect($('#component').dxrPreactTestWidget('getLastProps').style).toEqual({
+    expect($('#component').dxrPreactTestWidget('getLastPreactReceivedProps').style).toEqual({
       width: '23.5px',
       height: '56.6px',
       display: 'inline',
@@ -303,7 +320,7 @@ describe('option', () => {
       twoWayProp: undefined,
     }));
 
-    expect($('#component').dxrPreactTestWidget('getLastProps').twoWayProp).toBe(null);
+    expect($('#component').dxrPreactTestWidget('getLastPreactReceivedProps').twoWayProp).toBe(null);
     expect($('#component').dxrPreactTestWidget('option').twoWayProp).toBe(undefined);
   });
 });
