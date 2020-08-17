@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
@@ -13,7 +13,7 @@ import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 
-export const viewFunction = (viewModel: TimePanelTableLayout) => (
+export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
   <div
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -50,6 +50,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout) => (
                       text={cellsRow[0].text}
                       isFirstCell={isFirstCell}
                       isLastCell={isLastCell}
+                      timeCellTemplate={viewModel.props.timeCellTemplate}
                     />
                   </Row>
                 );
@@ -66,6 +67,8 @@ export class TimePanelTableLayoutProps extends LayoutProps {
   @OneWay() className? = '';
 
   @OneWay() allDayPanelVisible? = false;
+
+  @Template() timeCellTemplate?: any;
 }
 
 @Component({

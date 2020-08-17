@@ -1093,7 +1093,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRAllDayPanel();
 
-        this.renderRTimeTable();
+        this.renderRTimePanel();
 
         this.renderRDateTable();
     }
@@ -1112,8 +1112,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    renderRTimeTable() {
-        this.renderRComponent(this._$timePanel, dxrTimePanelTableLayout, 'renovatedTimePanel', { viewData: this.viewData });
+    renderRTimePanel() {
+        this.renderRComponent(this._$timePanel, dxrTimePanelTableLayout, 'renovatedTimePanel', {
+            viewData: this.viewData,
+            timeCellTemplate: this.option('timeCellTemplate'),
+        });
     }
 
     renderRDateTable() { }

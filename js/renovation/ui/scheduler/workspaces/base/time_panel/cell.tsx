@@ -1,27 +1,40 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 
-export const viewFunction = (viewModel: TimePanelCell) => (
-  <Cell
+export const viewFunction = (viewModel: TimePanelCell): JSX.Element => {
+  const TimeCellTemplate = viewModel.props.timeCellTemplate;
+
+  return (
+    <Cell
       // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    isFirstCell={viewModel.props.isFirstCell}
-    isLastCell={viewModel.props.isLastCell}
-    className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`}
-  >
-    <div>
-      {viewModel.props.text}
-    </div>
-  </Cell>
-);
+      {...viewModel.restAttributes}
+      isFirstCell={viewModel.props.isFirstCell}
+      isLastCell={viewModel.props.isLastCell}
+      className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`}
+    >
+      {TimeCellTemplate && (
+        <TimeCellTemplate
+          data={{
+            text: viewModel.props.text,
+            date: viewModel.props.startDate,
+          }}
+          // index
+        />
+      )}
+      {!TimeCellTemplate && (
+        <div>
+          {viewModel.props.text}
+        </div>
+      )}
+    </Cell>
+  );
+};
 
 @ComponentBindings()
 export class TimePanelCellProps extends CellBaseProps {
-  @OneWay() startDate?: Date = new Date();
-
-  @OneWay() text?: string = '';
+  @Template() timeCellTemplate?: any;
 }
 
 @Component({
