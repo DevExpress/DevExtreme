@@ -1,7 +1,7 @@
 import {
   Ref, Effect, Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-import DxDataGrid from '../../../ui/data_grid';
+import LegacyDataGrid from '../../../ui/data_grid';
 
 import { DataGridProps } from './props';
 
@@ -25,13 +25,13 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Effect()
   updateWidget(): void {
-    const widget = DxDataGrid.getInstance(this.widgetRef);
+    const widget = LegacyDataGrid.getInstance(this.widgetRef);
     widget?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
-    const widget = new DxDataGrid(this.widgetRef, this.properties);
+    const widget = new LegacyDataGrid(this.widgetRef, this.properties);
 
     return (): void => {
       widget.dispose();
