@@ -498,23 +498,23 @@ QUnit.test('Appointment should have a correct template with custom timezone(T387
 
     this.createInstance({
         currentDate: new Date(2016, 4, 7),
-        views: ['day'],
-        currentView: 'day',
+        views: ['week'],
+        currentView: 'week',
         dataSource: []
     });
 
     this.instance.option('dataSource', [{
-        startDate: new Date(Date.UTC(2016, 4, 7, 5)),
+        startDate: new Date(Date.UTC(2016, 4, 7, 1)),
         startDateTimeZone: 'Asia/Yekaterinburg',
         endDateTimeZone: 'Asia/Yekaterinburg',
-        endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
+        endDate: new Date(Date.UTC(2016, 4, 7, 1, 30)),
         text: 'new Date sample'
     }]);
 
     const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
     const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
-    const expectedStartDate = new Date(new Date(2016, 4, 7, 5).getTime() - clientTzOffset);
-    const expectedEndDate = new Date(new Date(2016, 4, 7, 5, 30).getTime() - clientTzOffset);
+    const expectedStartDate = new Date(new Date(2016, 4, 7, 1).getTime() - clientTzOffset);
+    const expectedEndDate = new Date(new Date(2016, 4, 7, 1, 30).getTime() - clientTzOffset);
 
     assert.equal($contentDates.first().text(), `${dateLocalization.format(expectedStartDate, 'shorttime')} - ${dateLocalization.format(expectedEndDate, 'shorttime')}`, 'Date is correct');
 });
