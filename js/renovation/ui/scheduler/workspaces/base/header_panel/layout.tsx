@@ -5,7 +5,7 @@ import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
 import { getKeyByDateAndGroup } from '../../utils';
 
-export const viewFunction = (viewModel: HeaderPanelLayout) => (
+export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
   <table
     className={`dx-scheduler-header-panel ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -19,7 +19,9 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
           <viewModel.props.cellTemplate
             startDate={startDate}
             endDate={endDate}
+            groups={groups}
             today={today}
+            dateCellTemplate={viewModel.props.dateCellTemplate}
             key={getKeyByDateAndGroup(startDate, groups)}
           />
         ))}
@@ -35,6 +37,8 @@ export class HeaderPanelLayoutProps {
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 
   @Template() cellTemplate?: any;
+
+  @Template() dateCellTemplate?: any;
 }
 
 @Component({
