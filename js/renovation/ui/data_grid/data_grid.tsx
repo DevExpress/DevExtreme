@@ -16,7 +16,7 @@ export const viewFunction = ({ widgetRef, props: { className }, restAttributes }
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  // jQuery: { register: true },
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
