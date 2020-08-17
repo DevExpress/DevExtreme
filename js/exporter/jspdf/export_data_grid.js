@@ -2,11 +2,8 @@ import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import DataGrid from '../../ui/data_grid';
 
-const privateOptions = {
-};
-
 function exportDataGrid(options) {
-    return Export.export(_getFullOptions(options), privateOptions);
+    return Export.export(_getFullOptions(options));
 }
 
 function _getFullOptions(options) {

@@ -34,22 +34,19 @@ class JSPdfDataGridTestHelper {
         assert.deepEqual(actualWidths, expectedWidths, 'Column widths');
     }
 
-    checkCellsContent(expectedHead, expectedBody, actualAutoTableOptions) {
-        this._iterateCells(expectedHead, (pdfCell, rowIndex, columnIndex) => {
-            assert.equal(actualAutoTableOptions.head[rowIndex][columnIndex].content, pdfCell.content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
+    checkCellsContent(headCellsArray, bodyCellsArray, actualAutoTableOptions) {
+        this._iterateCells(headCellsArray, (content, rowIndex, columnIndex) => {
+            assert.equal(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
         });
-        this._iterateCells(expectedBody, (pdfCell, rowIndex, columnIndex) => {
-            assert.equal(actualAutoTableOptions.body[rowIndex][columnIndex].content, pdfCell.content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
+        this._iterateCells(bodyCellsArray, (content, rowIndex, columnIndex) => {
+            assert.equal(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
         });
     }
 
-    _iterateCells(rows, callback) {
-        for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-            for(let columnIndex = 0; columnIndex < rows[rowIndex].length; columnIndex++) {
-                const pdfCell = {
-                    content: rows[rowIndex][columnIndex]
-                };
-                callback(pdfCell, rowIndex, columnIndex);
+    _iterateCells(cellsArray, callback) {
+        for(let rowIndex = 0; rowIndex < cellsArray.length; rowIndex++) {
+            for(let columnIndex = 0; columnIndex < cellsArray[rowIndex].length; columnIndex++) {
+                callback(cellsArray[rowIndex][columnIndex], rowIndex, columnIndex);
             }
         }
     }

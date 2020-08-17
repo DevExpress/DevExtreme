@@ -50,7 +50,7 @@ export const Export = {
         };
     },
 
-    export: function(options, privateOptions) {
+    export: function(options) {
         const {
             jsPDFDocument,
             autoTableOptions,
@@ -68,7 +68,10 @@ export const Export = {
                 const styles = dataProvider.getStyles();
                 const dataRowsCount = dataProvider.getRowsCount();
 
-                this.setTableWidth(autoTableOptions, tableWidth);
+                if(tableWidth) {
+                    autoTableOptions.tableWidth = this.convertUnitToPoints(tableWidth, 'px');
+                }
+
                 this.setColumnWidths(autoTableOptions, columns, keepColumnWidths);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
@@ -96,7 +99,8 @@ export const Export = {
                         }
                     }
 
-                    this.addRow(autoTableOptions, rowType, row);
+                    if(rowType === 'header') { autoTableOptions.head.push(row); }
+                    if(rowType === 'data') { autoTableOptions.body.push(row); }
                 }
 
                 jsPDFDocument.autoTable(autoTableOptions);
@@ -106,11 +110,6 @@ export const Export = {
 
             });
         });
-    },
-
-    addRow: function(autoTableOptions, rowType, row) {
-        if(rowType === 'header') { autoTableOptions.head.push(row); }
-        if(rowType === 'data') { autoTableOptions.body.push(row); }
     },
 
     assignCellStyle: function(pdfCell, gridCell, column, cellStyle) {
@@ -128,10 +127,6 @@ export const Export = {
         }
     },
 
-    setTableWidth: function(autoTableOptions, width) {
-        if(width) { autoTableOptions.tableWidth = this.convertUnitToPoints(width, 'px'); }
-    },
-
     setColumnWidths: function(autoTableOptions, columns, keepColumnWidths) {
         const columnStyles = autoTableOptions.columnStyles;
 
@@ -147,32 +142,34 @@ export const Export = {
         }
     },
 
-    getRelativeProportionsToPt: function(unit) {
-        // Unit table from https://github.com/MrRio/jsPDF/blob/ddbfc0f0250ca908f8061a72fa057116b7613e78/jspdf.js#L791
+    getRelativeProportionsToPt: function(unitType) {
         let k = 1;
-        switch(unit) {
-            case 'pt': k = 1; break;
-            case 'mm': k = 72 / 25.4; break;
-            case 'cm': k = 72 / 2.54; break;
-            case 'in': k = 72; break;
-            case 'px': k = 96 / 72; break;
-            case 'pc': k = 12; break;
-            case 'em': k = 12; break;
-            case 'ex': k = 6; break;
-            default:
-                throw ('Invalid unit: ' + unit);
+        if(unitType === 'mm') {
+            k = 72 / 25.4;
+        } else if(unitType === 'cm') {
+            k = 72 / 2.54;
+        } else if(unitType === 'in') {
+            k = 72;
+        } else if(unitType === 'px') {
+            k = 96 / 72;
+        } else if(unitType === 'pc') {
+            k = 12;
+        } else if(unitType === 'em') {
+            k = 12;
+        } else if(unitType === 'ex') {
+            k = 6;
         }
         return k;
     },
 
-    convertUnitToPoints: function(value, unit) {
-        const k = this.getRelativeProportionsToPt(unit);
+    convertUnitToPoints: function(value, unitType) {
+        const k = this.getRelativeProportionsToPt(unitType);
         return value / k;
     },
 
-    convertPointsToUnit: function(points, unit) {
-        const k = this.getRelativeProportionsToPt(unit);
-        return points * k;
+    convertPointsToUnit: function(value, unitType) {
+        const k = this.getRelativeProportionsToPt(unitType);
+        return value * k;
     }
 };
 

@@ -12,7 +12,7 @@ import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
-    const markup = '<div id=\'dataGrid\'></div>';
+    const markup = '<div id="dataGrid"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -21,9 +21,9 @@ let helper;
 
 const moduleConfig = {
     beforeEach: function() {
+        // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
         this.jsPDFDocument = _jsPDF('p', 'pt', 'a4');
-        this.customizeCellCallCount = 0;
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
     }
