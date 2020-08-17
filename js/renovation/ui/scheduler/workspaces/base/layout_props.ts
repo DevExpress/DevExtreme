@@ -5,5 +5,5 @@ import { GroupedViewData } from '../types.d';
 
 @ComponentBindings()
 export class LayoutProps {
-  @OneWay() viewData!: GroupedViewData;
+  @OneWay() viewData: GroupedViewData = { groupedData: [] };
 }
