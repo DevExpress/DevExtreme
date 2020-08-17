@@ -30,7 +30,7 @@ export const viewFunction = (viewModel: Row): JSX.Element => (
 export class RowProps {
   @OneWay() groupItems!: GroupRenderItem[];
 
-  @Template() cellTemplate?: GroupPanelCellTemplateProps;
+  @Template() cellTemplate?: (props: GroupPanelCellTemplateProps) => JSX.Element;
 
   @OneWay() className?: string = '';
 }

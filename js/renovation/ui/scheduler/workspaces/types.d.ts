@@ -38,7 +38,7 @@ export interface Group {
   data: GroupItem[];
 }
 
-export type GroupPanelCellTemplateProps = (props: {
+export interface GroupPanelCellTemplateProps {
   data: {
     data?: GroupItem;
     id?: string | number;
@@ -46,4 +46,4 @@ export type GroupPanelCellTemplateProps = (props: {
     text?: string;
   };
   index?: number;
-}) => JSX.Element;
+}

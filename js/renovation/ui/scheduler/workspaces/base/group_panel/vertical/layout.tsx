@@ -54,7 +54,7 @@ export class GroupPanelVerticalLayoutProps {
 
   @OneWay() height?: number;
 
-  @Template() cellTemplate?: GroupPanelCellTemplateProps;
+  @Template() cellTemplate?: (props: GroupPanelCellTemplateProps) => JSX.Element;
 
   @OneWay() className?: string = '';
 }
