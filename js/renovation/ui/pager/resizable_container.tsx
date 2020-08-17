@@ -7,12 +7,8 @@ import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
 import { GetHtmlElement } from './common/types.d';
 import { getElementWidth } from './utils/get_element_width';
-// bug in generator: Max call stack
-// import { TwoWayProps } from './pager-content';
-// import type PagerContentProps from './pager-content';
-
-// TODO Vitik: move to declaration common types
-type EffectCallback = () => void | (() => void);
+import { PagerContentProps } from './content';
+import { EffectReturn } from '../../utils/effect_return.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -118,14 +114,13 @@ export function updateChildProps(
 export class ResizableContainerProps {
   @OneWay() pagerProps!: PagerProps;
 
-  // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
-  @Template() contentTemplate: any;
+  @Template() contentTemplate!: (props: PagerContentProps) => JSX.Element;
 }
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps'>(ResizableContainerProps) {
+export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>(ResizableContainerProps) {
   @ForwardRef() parentRef!: HTMLElement;
 
   @ForwardRef() pageSizesRef?: GetHtmlElement;
@@ -138,15 +133,13 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @InternalState() isLargeDisplayMode = true;
 
-  @InternalState() parentWidth = -1;
-
   @InternalState() elementsWidth: ChildElementsWidth = {
     pageSizes: 0,
     pages: 0,
     info: 0,
   };
 
-  @Effect({ run: 'once' }) subscribeToResize(): EffectCallback {
+  @Effect({ run: 'once' }) subscribeToResize(): EffectReturn {
     const callback = (): void => this.updateChildrenProps();
     resizeCallbacks.add(callback);
     return (): void => { resizeCallbacks.remove(callback); };
@@ -154,15 +147,10 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @Effect() effectUpdateChildProps(): void {
     const parentWidth = getElementWidth(this.parentRef);
-    if ((this.parentWidth === -1 && parentWidth > 0) || this.parentWidth === parentWidth) {
+    if (parentWidth > 0) {
       this.updateChildrenProps();
     }
   }
-
-  /* get pagerProps(): PagerProps {
-    const { contentTemplate, ...pagerProps } = this.props;
-    return pagerProps;
-  } */
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
