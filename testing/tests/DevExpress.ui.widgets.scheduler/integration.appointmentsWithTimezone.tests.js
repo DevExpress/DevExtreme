@@ -494,34 +494,29 @@ QUnit.test('onAppointmentAdding event args should be consistent with adding appo
 });
 
 QUnit.test('Appointment should have a correct template with custom timezone(T387040)', function(assert) {
-    this.clock.restore();
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+    const clientTzOffset = new Date(2016, 4, 7).getTimezoneOffset() * 60000;
 
-    try {
-        this.createInstance({
-            currentDate: new Date(2016, 4, 7),
-            startDayHour: 7,
-            views: ['day'],
-            currentView: 'day',
-            dataSource: []
-        });
+    this.createInstance({
+        currentDate: new Date(2016, 4, 7),
+        views: ['day'],
+        currentView: 'day',
+        dataSource: []
+    });
 
-        this.instance.option('dataSource', [{
-            startDate: new Date(Date.UTC(2016, 4, 7, 5)),
-            startDateTimeZone: 'Asia/Qyzylorda',
-            endDateTimeZone: 'Asia/Qyzylorda',
-            endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
-            text: 'new Date sample'
-        }]);
+    this.instance.option('dataSource', [{
+        startDate: new Date(Date.UTC(2016, 4, 7, 5)),
+        startDateTimeZone: 'Asia/Yekaterinburg',
+        endDateTimeZone: 'Asia/Yekaterinburg',
+        endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
+        text: 'new Date sample'
+    }]);
 
-        const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-        const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+    const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+    const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+    const expectedStartDate = new Date(new Date(2016, 4, 7, 5).getTime() - clientTzOffset);
+    const expectedEndDate = new Date(new Date(2016, 4, 7, 5, 30).getTime() - clientTzOffset);
 
-        assert.equal($contentDates.first().text(), '8:00 AM - 8:30 AM', 'Date is correct');
-
-    } finally {
-        tzOffsetStub.restore();
-    }
+    assert.equal($contentDates.first().text(), `${dateLocalization.format(expectedStartDate, 'shorttime')} - ${dateLocalization.format(expectedEndDate, 'shorttime')}`, 'Date is correct');
 });
 
 QUnit.test('Appointment with custom timezone should be resized correctly(T390801)', function(assert) {
