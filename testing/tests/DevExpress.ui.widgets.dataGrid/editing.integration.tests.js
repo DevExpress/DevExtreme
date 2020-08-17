@@ -540,7 +540,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const gridInstance = $grid.dxDataGrid('instance');
 
         // act
-        gridInstance.insertRow();
+        gridInstance.addRow();
         this.clock.tick();
 
         // assert
