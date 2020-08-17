@@ -13,71 +13,71 @@ import saveAs from 'file-saver';
 */
 
 if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service]
 })
 export class AppComponent {
-    sales: Sale[];
-    dataSource: any;
-
-    constructor(service: Service) {
-        this.dataSource = {
-            fields: [{
-                caption: "Region",
-                dataField: "region",
-                area: "row",
-                expanded: true
-            }, {
-                caption: "City",
-                dataField: "city",
-                area: "row",
-                width: 150
-            }, {
-                dataField: "date",
-                dataType: "date",
-                area: "column",
-                expanded: true
-            }, {
-                caption: "Sales",
-                dataField: "amount",
-                dataType: "number",
-                area: "data",
-                summaryType: "sum",
-                format: "currency",
-            }],
-            store: service.getSales()
-        }
+  sales: Sale[];
+  dataSource: any;
+  
+  constructor(service: Service) {
+    this.dataSource = {
+      fields: [{
+        caption: 'Region',
+        dataField: 'region',
+        area: 'row',
+        expanded: true
+      }, {
+        caption: 'City',
+        dataField: 'city',
+        area: 'row',
+        width: 150
+      }, {
+        dataField: 'date',
+        dataType: 'date',
+        area: 'column',
+        expanded: true
+      }, {
+        caption: 'Sales',
+        dataField: 'amount',
+        dataType: 'number',
+        area: 'data',
+        summaryType: 'sum',
+        format: 'currency',
+      }],
+      store: service.getSales()
     }
-
-    onExporting(e) {
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Sales');
-
-        exportPivotGrid({
-            component: e.component,
-            worksheet: worksheet
-        }).then(() => {
-            workbook.xlsx.writeBuffer().then((buffer) => {
-                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
-            });
-        });
-        e.cancel = true;
-    }
+  }
+  
+  onExporting(e) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sales');
+    
+    exportPivotGrid({
+      component: e.component,
+      worksheet: worksheet
+    }).then(() => {
+      workbook.xlsx.writeBuffer().then((buffer) => {
+        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
+      });
+    });
+    e.cancel = true;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPivotGridModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPivotGridModule
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 

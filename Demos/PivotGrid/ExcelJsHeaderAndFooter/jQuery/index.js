@@ -52,7 +52,7 @@ $(function(){
 
             worksheet.columns = [
                 { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }
-            ];  
+            ];
 
             DevExpress.excelExporter.exportPivotGrid({
                 component: e.component,
