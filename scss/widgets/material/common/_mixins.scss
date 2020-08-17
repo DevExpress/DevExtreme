@@ -1,0 +1,106 @@
+
+
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/validation" as *;
+@use "../list/sizes" as *;
+
+$badge-invalid-bg: $base-invalid-color;
+
+@mixin dx-base-typography() {
+  @include dx-base-typography-mixin(
+      $typography-color,
+      $material-base-font-size,
+      $base-font-family,
+      $material-line-height
+    );
+}
+
+@mixin disabled-widget($opacity: $base-disabled-opacity) {
+  @include disabled-widget-mixin($opacity);
+}
+
+
+@mixin badge-settings() {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  margin-top: -$material-invalid-badge-size / 2;
+  width: $material-invalid-badge-size;
+  height: $material-invalid-badge-size;
+  text-align: center;
+  line-height: $material-invalid-badge-size + 1;
+  font-size: $material-base-font-size;
+}
+
+@mixin dx-invalid-material-badge() {
+  @include badge-settings();
+
+  font-size: $material-base-font-size;
+  font-weight: 500;
+  background-color: $badge-invalid-bg;
+  color: $base-inverted-text-color;
+  content: '!';
+  border-radius: 50%;
+}
+
+@mixin dx-valid-material-badge() {
+  @include badge-settings();
+
+  font-size: $material-valid-badge-font-size;
+  font-weight: bold;
+  font-family: 'DXIcons', sans-serif;
+  color: $base-success;
+  content: '\f005';
+
+  @include validation-badge-animation();
+}
+
+@mixin dx-pending-indicator-material() {
+  @include dx-pending-indicator($material-invalid-badge-size);
+}
+
+@mixin dx-dropdownlist-list-appearance() {
+  height: 100%;
+
+  &.dx-popup-wrapper .dx-overlay-content {
+    box-shadow: $material-base-dropdown-widgets-shadow;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+
+    &.dx-dropdowneditor-overlay-flipped {
+      border-top-width: 1px;
+      border-bottom-width: 0;
+    }
+  }
+
+  .dx-popup-content {
+    height: 100%;
+    padding: 1px;
+  }
+
+  .dx-list {
+    height: 100%;
+    min-height: $material-list-item-height;
+
+    &:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+      padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding - 1px;
+    }
+  }
+
+  .dx-list-select-all {
+    padding: $material-list-item-vertical-padding + 2px 0 $material-list-item-vertical-padding - 2px;
+  }
+
+  .dx-list-item,
+  .dx-empty-message {
+    border-top: 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}

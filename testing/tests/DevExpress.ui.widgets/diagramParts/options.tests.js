@@ -397,6 +397,88 @@ QUnit.module('Options', {
             }
         ]);
         assert.equal(Object.keys(descriptions).length, 44);
+
+        this.instance.option('customShapes', [
+            {
+                category: 'category',
+                type: 'type',
+                baseType: 'triangle',
+                title: 'title',
+                backgroundImageUrl: 'backgroundImageUrl',
+                backgroundImageToolboxUrl: 'backgroundImageToolboxUrl',
+                backgroundImageLeft: 0,
+                backgroundImageTop: 0,
+                backgroundImageWidth: 1,
+                backgroundImageHeight: 1,
+                defaultWidth: 1,
+                defaultHeight: 1,
+                toolboxWidthToHeightRatio: 1,
+                minWidth: 0,
+                minHeight: 0,
+                maxWidth: 1,
+                maxHeight: 1,
+                allowResize: false,
+                defaultText: 'defaultText',
+                allowEditText: false,
+                textLeft: 0,
+                textTop: 0,
+                textWidth: 1,
+                textHeight: 1,
+                defaultImageUrl: 'defaultImageUrl',
+                allowEditImage: false,
+                imageLeft: 0,
+                imageTop: 0,
+                imageWidth: 1,
+                imageHeight: 1,
+                connectionPoints: [{ 'x': 1, 'y': 1 }],
+                template: (container, item) => {},
+                toolboxTemplate: (container, item) => {},
+                templateLeft: 0,
+                templateTop: 0,
+                templateWidth: 1,
+                templateHeight: 1
+            }
+        ]);
+        const keys = Object.keys(descriptions);
+        assert.equal(keys.length, 44);
+        const description = descriptions[keys[keys.length - 1]];
+        assert.equal(this.instance._diagramInstance.shapeDescriptionManager.descriptionCategories['type'], 'category');
+        assert.equal(description.key, 'type');
+        assert.equal(description.baseDescription.key, 'triangle');
+        assert.equal(description.title, 'title');
+        assert.equal(description.properties.svgUrl, 'backgroundImageUrl');
+        assert.equal(description.properties.svgToolboxUrl, 'backgroundImageToolboxUrl');
+        assert.equal(description.properties.svgLeft, 0);
+        assert.equal(description.properties.svgTop, 0);
+        assert.equal(description.properties.svgWidth, 1);
+        assert.equal(description.properties.svgHeight, 1);
+        assert.equal(description.properties.defaultWidth, 1440);
+        assert.equal(description.properties.defaultHeight, 1440);
+        assert.equal(description.properties.toolboxWidthToHeightRatio, 1);
+        assert.equal(description.properties.minWidth, 0);
+        assert.equal(description.properties.minHeight, 0);
+        assert.equal(description.properties.maxWidth, 1440);
+        assert.equal(description.properties.maxHeight, 1440);
+        assert.equal(description.properties.allowResize, false);
+        assert.equal(description.properties.defaultText, 'defaultText');
+        assert.equal(description.properties.allowEditText, false);
+        assert.equal(description.properties.textLeft, 0);
+        assert.equal(description.properties.textTop, 0);
+        assert.equal(description.properties.textWidth, 1);
+        assert.equal(description.properties.textHeight, 1);
+        assert.equal(description.properties.defaultImageUrl, 'defaultImageUrl');
+        assert.equal(description.properties.allowEditImage, false);
+        assert.equal(description.properties.imageLeft, 0);
+        assert.equal(description.properties.imageTop, 0);
+        assert.equal(description.properties.imageWidth, 1);
+        assert.equal(description.properties.imageHeight, 1);
+        assert.equal(description.properties.connectionPoints.length, 1);
+        assert.notEqual(description.properties.createTemplate, undefined);
+        assert.notEqual(description.properties.createToolboxTemplate, undefined);
+        assert.equal(description.properties.templateLeft, 0);
+        assert.equal(description.properties.templateTop, 0);
+        assert.equal(description.properties.templateWidth, 1);
+        assert.equal(description.properties.templateHeight, 1);
     });
 
     test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
@@ -427,6 +509,32 @@ QUnit.module('Options', {
         this.instance._diagramInstance.selection.set(['1']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
         assert.equal(this.instance.option('hasChanges'), true, 'on edit');
+    });
+
+    test('should change export options', function(assert) {
+        this.instance.option('mainToolbar.visible', true);
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'Diagram');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'Diagram');
+
+        this.instance.option('export.fileName', 'file');
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'file');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'file');
+
+        this.instance.option('export', { fileName: 'file1' });
+
+        assert.equal(this.instance._mainToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._historyToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._viewToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._propertiesToolbar.option('export.fileName'), 'file1');
+        assert.equal(this.instance._contextMenu.option('export.fileName'), 'file1');
     });
 });
 

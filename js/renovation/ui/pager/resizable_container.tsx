@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, Event, ForwardRef,
+  Effect, Template, InternalState, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -117,10 +117,6 @@ export function updateChildProps(
 
 @ComponentBindings()
 export class ResizableContainerProps extends PagerProps {
-  @Event() pageIndexChange!: (pageIndex: number) => void;
-
-  @Event() pageSizeChange!: (pageSize: number) => void;
-
   // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
   @Template() contentTemplate: any;
 }

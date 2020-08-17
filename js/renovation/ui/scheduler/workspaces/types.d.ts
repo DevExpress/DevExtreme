@@ -11,11 +11,14 @@ export interface ViewCellData {
 interface ViewData {
   dateTable: ViewCellData[][];
   allDayPanel?: ViewCellData[];
+  isGroupedAllDayPanel?: boolean;
 }
 
 export interface GroupedViewData {
   groupedData: ViewData[];
   isVirtual?: boolean;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
 }
 
 export interface GroupItem {

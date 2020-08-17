@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { h } from 'preact';
+import React from 'react';
 import { shallow } from 'enzyme';
 import getElementComputedStyle from '../utils/get_computed_style';
 import {
@@ -58,7 +58,6 @@ describe('resizable-container', () => {
       expect(tree.props()).toEqual({
         pagerPropsProp1: 'pagerPropsProp1',
         pagerPropsProp2: 'pagerPropsProp2',
-        children: [],
         restAttribute: props.restAttributes.restAttribute,
         infoTextRef: 'infoTextRef',
         infoTextVisible: true,

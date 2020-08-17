@@ -3,7 +3,8 @@ import {
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
 
-const views = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const supportedViews = ['day'];
+const unsupportedViews = ['week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
 const { testStart, test, module } = QUnit;
 
@@ -13,15 +14,16 @@ module('Initialization', {
     beforeEach: function() {
     }
 }, () => {
-    views.forEach(view => {
+    supportedViews.forEach(view => {
         [true, false].forEach(virtualScrollingEnabled => {
             test(`Virtual scrolling if view: ${view}, virtualScrolling.enabled: ${virtualScrollingEnabled}`, function(assert) {
                 const instance = createWrapper({
-                    views: views,
+                    views: supportedViews,
                     currentView: view,
                     virtualScrolling: {
                         enabled: virtualScrollingEnabled
-                    }
+                    },
+                    renovateRender: true
                 }).instance;
 
                 assert.equal(!!instance.getWorkSpace()._virtualScrolling, virtualScrollingEnabled, 'Virtual scrolling initialization');
@@ -30,7 +32,7 @@ module('Initialization', {
 
         test(`Virtual scrolling optional if view: ${view}`, function(assert) {
             const instance = createWrapper({
-                views: views,
+                views: supportedViews,
                 currentView: view
             }).instance;
 
@@ -39,6 +41,36 @@ module('Initialization', {
 
             instance.option('virtualScrolling.enabled', false);
             assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+        });
+    });
+
+    unsupportedViews.forEach(view => {
+        [true, false].forEach(virtualScrollingEnabled => {
+            test(`Virtual scrolling if view: ${view}, virtualScrolling.enabled: ${virtualScrollingEnabled}`, function(assert) {
+                const instance = createWrapper({
+                    views: unsupportedViews,
+                    currentView: view,
+                    virtualScrolling: {
+                        enabled: virtualScrollingEnabled
+                    },
+                    renovateRender: true
+                }).instance;
+
+                assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+            });
+        });
+
+        test(`Virtual scrolling optional if view: ${view}`, function(assert) {
+            const instance = createWrapper({
+                views: unsupportedViews,
+                currentView: view
+            }).instance;
+
+            instance.option('virtualScrolling.enabled', true);
+            assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+
+            instance.option('virtualScrolling.enabled', false);
+            assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
         });
     });
 });

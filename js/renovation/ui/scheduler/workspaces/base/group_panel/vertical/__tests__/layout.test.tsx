@@ -37,7 +37,7 @@ describe('GroupPanel Vertical Layout', () => {
       resourceName: 'resource 3',
       data: 'data 3',
     }]];
-    const defaultStyle = 'default style';
+    const defaultStyle = { color: 'red' };
 
     const render = (viewModel): ReactWrapper => mount(LayoutView({
       groupsRenderData,
@@ -51,14 +51,14 @@ describe('GroupPanel Vertical Layout', () => {
     it('should spread restAttributes correctly', () => {
       const layout = render({
         restAttributes: {
-          customAttribute: 'customAttribute', style: 'custom style',
+          'custom-attribute': 'customAttribute', style: { color: 'green' },
         },
       });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
       expect(layout.prop('style'))
-        .toBe('default style');
+        .toEqual({ color: 'red' });
     });
 
     it('should pass correct class names to components', () => {

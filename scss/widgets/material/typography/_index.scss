@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+@use "mixins" as *;
 
 // adduse
 @import "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700";
@@ -55,10 +56,6 @@
     url("fonts/Roboto-700.woff2") format('woff2'),
     url("fonts/Roboto-700.woff") format('woff'),
     url("fonts/Roboto-700.ttf") format('truetype');
-}
-
-@mixin dx-s-font-mixin() {
-  font-size: $material-s-font-size;
 }
 
 .dx-theme-material-typography {

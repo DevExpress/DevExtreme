@@ -1113,7 +1113,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             case 'nextInRow':
             case 'next':
                 visibleColumnsCount = this._getVisibleColumnCount();
-                if(columnIndex < visibleColumnsCount - 1 && !this._isLastValidCell({ columnIndex: columnIndex, rowIndex: rowIndex }) && elementType !== 'row') {
+                if(columnIndex < visibleColumnsCount - 1 && elementType !== 'row' && this._hasValidCellAfterPosition({ columnIndex: columnIndex, rowIndex: rowIndex })) {
                     columnIndex++;
                 } else if(!this._isLastRow(rowIndex) && code === 'next') {
                     columnIndex = 0;
@@ -1122,7 +1122,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 break;
             case 'previousInRow':
             case 'previous':
-                if(columnIndex > 0 && !this._isFirstValidCell({ columnIndex: columnIndex, rowIndex: rowIndex }) && elementType !== 'row') {
+                if(columnIndex > 0 && elementType !== 'row' && this._hasValidCellBeforePosition({ columnIndex: columnIndex, rowIndex: rowIndex })) {
                     columnIndex--;
                 } else if(rowIndex > 0 && code === 'previous') {
                     rowIndex--;
@@ -1209,18 +1209,31 @@ const KeyboardNavigationController = core.ViewController.inherit({
         let isFirstValidCell = false;
 
         if(cellPosition.rowIndex === 0 && cellPosition.columnIndex >= 0) {
-            isFirstValidCell = isFirstValidCell || !this._haveValidCellBeforePosition(cellPosition);
+            isFirstValidCell = isFirstValidCell || !this._hasValidCellBeforePosition(cellPosition);
         }
 
         return isFirstValidCell;
     },
 
-    _haveValidCellBeforePosition: function(cellPosition) {
+    _hasValidCellBeforePosition: function(cellPosition) {
         let columnIndex = cellPosition.columnIndex;
         let hasValidCells = false;
 
         while(columnIndex > 0 && !hasValidCells) {
             const checkingPosition = { columnIndex: --columnIndex, rowIndex: cellPosition.rowIndex };
+
+            hasValidCells = this._isCellByPositionValid(checkingPosition);
+        }
+        return hasValidCells;
+    },
+
+    _hasValidCellAfterPosition: function(cellPosition) {
+        let columnIndex = cellPosition.columnIndex;
+        let hasValidCells = false;
+        const visibleColumnCount = this._getVisibleColumnCount();
+
+        while(columnIndex < visibleColumnCount - 1 && !hasValidCells) {
+            const checkingPosition = { columnIndex: ++columnIndex, rowIndex: cellPosition.rowIndex };
 
             hasValidCells = this._isCellByPositionValid(checkingPosition);
         }

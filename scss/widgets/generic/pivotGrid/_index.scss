@@ -3,11 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
 @use "../../base/icons" as *;
 @use "../gridBase/colors" as *;
 @use "../treeView/sizes" as *;
-@use "../button" as *;
 @use "../button/colors" as *;
 @use "../../base/pivotGrid" as basePivotGrid with (
   $pivotgrid-drag-header-border-color: $pivotgrid-drag-header-border-color,

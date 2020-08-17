@@ -136,6 +136,9 @@ function patchTheme(theme) {
     _each(['chart', 'polar'], function(_, section) {
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAxisSettings', null, theme['chart:common:axis']);
+    });
+    _each(['chart', 'polar', 'map'], function(_, section) {
+        theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAnnotationSettings', null, theme['chart:common:annotation']);
     });
     mergeObject(theme.rangeSelector.chart, 'commonSeriesSettings', theme.chart);

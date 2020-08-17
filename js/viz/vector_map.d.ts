@@ -28,7 +28,8 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    BaseWidgetAnnotationConfig
 } from './core/base_widget';
 
 import {
@@ -282,25 +283,25 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement
+     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement }) => any);
+    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
     /**
      * @docid dxVectorMapOptions.onTooltipShown
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement
+     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement }) => any);
+    onTooltipShown?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
     /**
      * @docid dxVectorMapOptions.onZoomFactorChanged
      * @extends Action
@@ -370,7 +371,56 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @public
      */
     zoomingEnabled?: boolean;
+    /**
+     * @docid dxVectorMapOptions.commonAnnotationSettings
+     * @type dxVectorMapCommonAnnotationConfig
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
+    /**
+     * @docid dxVectorMapOptions.annotations
+     * @type Array<dxVectorMapAnnotationConfig,object>
+     * @inherits dxVectorMapOptions.commonAnnotationSettings
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    annotations?: Array<dxVectorMapAnnotationConfig | any>;
+    /**
+     * @docid dxVectorMapOptions.customizeAnnotation
+     * @type function(annotation)
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
+     * @type_function_return dxVectorMapAnnotationConfig
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
 }
+
+export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
+    /**
+     * @docid dxVectorMapAnnotationConfig.name
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    name?: string;
+}
+
+export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+    /**
+     * @docid dxVectorMapCommonAnnotationConfig.coordinates
+     * @type Array<number>
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    coordinates?: Array<number>
+}
+
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint

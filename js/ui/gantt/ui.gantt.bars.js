@@ -26,7 +26,48 @@ class Bar {
     constructor(element, owner) {
         this._element = element;
         this._owner = owner;
+        this._items = [];
         this._createControl();
+    }
+
+    createItems(items) {
+        this._cache = null;
+        this._items = this._createItemsCore(items);
+        this._menu.option('items', this._items);
+    }
+    _createItemsCore(items) {
+        return items.map(item => {
+            let result;
+            if(typeof item === 'string') {
+                result = this._createItemByText(item);
+            } else {
+                result = item.name ? extend(this._createItemByText(item.name), item) : extend(this._getDefaultItemOptions(), item);
+            }
+            if(item.items) {
+                result.items = this._createItemsCore(item.items);
+            }
+            return result;
+        });
+    }
+    _createItemByText(text) {
+        switch(text.toLowerCase()) {
+            case 'separator': return this._createSeparator();
+            case 'undo': return this._createDefaultItem(COMMANDS.undo, messageLocalization.format('dxGantt-undo'), this._getIcon('undo'));
+            case 'redo': return this._createDefaultItem(COMMANDS.redo, messageLocalization.format('dxGantt-redo'), this._getIcon('redo'));
+            case 'expandall': return this._createDefaultItem(COMMANDS.expandAll, messageLocalization.format('dxGantt-expandAll'), this._getIcon('expand'));
+            case 'collapseall': return this._createDefaultItem(COMMANDS.collapseAll, messageLocalization.format('dxGantt-collapseAll'), this._getIcon('collapse'));
+            case 'addtask': return this._createDefaultItem(COMMANDS.createTask, messageLocalization.format('dxGantt-addNewTask'), this._getIcon('add'));
+            case 'deletetask': return this._createDefaultItem(COMMANDS.removeTask, messageLocalization.format('dxGantt-deleteSelectedTask'), this._getIcon('delete'));
+            case 'deletedependency': return this._createDefaultItem(COMMANDS.removeDependency, messageLocalization.format('dxGantt-contextMenuDeleteDependency'), this._getIcon('delete-dependency'));
+            case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, messageLocalization.format('dxGantt-zoomIn'), this._getIcon('zoom-in'));
+            case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, messageLocalization.format('dxGantt-zoomOut'), this._getIcon('zoom-out'));
+            case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
+            case 'taskdetails': return this._createDefaultItem(COMMANDS.taskInformation, messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', this._getIcon('task-details'));
+            default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
+        }
+    }
+    _getDefaultItemOptions() {
+        return {};
     }
 
     _getItemsCache() {
@@ -100,36 +141,7 @@ export class GanttToolbar extends Bar {
             }
         });
     }
-    createItems(items) {
-        this._cache = null;
-        this._items = items.map(item => {
-            if(typeof item === 'string') {
-                return this._createItemByText(item);
-            } else {
-                if(item.name) {
-                    return extend(this._createItemByText(item.name), item);
-                } else {
-                    return extend(this._getDefaultItemOptions(), item);
-                }
-            }
-        });
-        this._menu.option('items', this._items);
-    }
-    _createItemByText(text) {
-        switch(text.toLowerCase()) {
-            case 'separator': return this._createSeparator();
-            case 'undo': return this._createDefaultItem(COMMANDS.undo, messageLocalization.format('dxGantt-undo'), this._getIcon('undo'));
-            case 'redo': return this._createDefaultItem(COMMANDS.redo, messageLocalization.format('dxGantt-redo'), this._getIcon('redo'));
-            case 'expandall': return this._createDefaultItem(COMMANDS.expandAll, messageLocalization.format('dxGantt-expandAll'), this._getIcon('expand'));
-            case 'collapseall': return this._createDefaultItem(COMMANDS.collapseAll, messageLocalization.format('dxGantt-collapseAll'), this._getIcon('collapse'));
-            case 'addtask': return this._createDefaultItem(COMMANDS.createTask, messageLocalization.format('dxGantt-addNewTask'), this._getIcon('add'));
-            case 'deletetask': return this._createDefaultItem(COMMANDS.removeTask, messageLocalization.format('dxGantt-deleteSelectedTask'), this._getIcon('delete'));
-            case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, messageLocalization.format('dxGantt-zoomIn'), this._getIcon('zoom-in'));
-            case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, messageLocalization.format('dxGantt-zoomOut'), this._getIcon('zoom-out'));
-            case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
-            default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
-        }
-    }
+
     _createDefaultItem(commandId, hint, icon) {
         return {
             commandId: commandId,
@@ -166,21 +178,27 @@ export class GanttToolbar extends Bar {
 
 export class GanttContextMenuBar extends Bar {
     _createControl() {
-        this._createItems();
-
         this._menu = this._owner._createComponent(this._element, ContextMenu, {
             showEvent: undefined,
-            items: this._items,
             onItemClick: (e) => {
-                const commandId = e.itemData.commandId;
-                if(commandId !== undefined) {
+                if(e.itemData.commandId !== undefined) {
                     this._owner._executeCoreCommand(e.itemData.commandId);
+                } else {
+                    if(e.itemData.name !== undefined) {
+                        this._owner._raiseCustomCommand(e.itemData.name);
+                    }
                 }
             }
         });
     }
-    _createItems() {
-        this._items = [
+    createItems(items) {
+        if(!items || items.length === 0) {
+            items = this._getDefaultItems();
+        }
+        super.createItems(items);
+    }
+    _getDefaultItems() {
+        return [
             { text: messageLocalization.format('dxGantt-dialogButtonAdd'),
                 commandId: COMMANDS.taskAddContextItem,
                 icon: this._getIcon('add'),
@@ -193,6 +211,14 @@ export class GanttContextMenuBar extends Bar {
             { text: messageLocalization.format('dxGantt-contextMenuDeleteTask'), commandId: COMMANDS.removeTask, icon: this._getIcon('delete') },
             { text: messageLocalization.format('dxGantt-contextMenuDeleteDependency'), commandId: COMMANDS.removeDependency, icon: this._getIcon('delete-dependency') },
         ];
+    }
+
+    _createDefaultItem(commandId, text, icon) {
+        return {
+            commandId: commandId,
+            text: text,
+            icon: icon
+        };
     }
 
     show(point) {

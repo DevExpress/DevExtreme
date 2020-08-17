@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Fragment } from 'devextreme-generator/component_declaration/common';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
@@ -65,9 +65,9 @@ describe('TooltipItemLayout', () => {
     });
 
     it('should spread restAttributes', () => {
-      const tooltipItemLayout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const tooltipItemLayout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(tooltipItemLayout.childAt(0).prop('customAttribute'))
+      expect(tooltipItemLayout.childAt(0).prop('custom-attribute'))
         .toBe('customAttribute');
     });
 
@@ -164,7 +164,6 @@ describe('TooltipItemLayout', () => {
               targetedAppointmentData: currentAppointment,
             },
             index: 0,
-            children: [],
           });
       });
 
@@ -208,7 +207,6 @@ describe('TooltipItemLayout', () => {
               targetedAppointmentData: currentAppointment,
             },
             index: 0,
-            children: [],
           });
 
         const nextItem = {
@@ -233,7 +231,6 @@ describe('TooltipItemLayout', () => {
               targetedAppointmentData: nextItem.currentData,
             },
             index: nextIndex,
-            children: [],
           });
       });
     });

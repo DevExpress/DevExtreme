@@ -1,31 +1,30 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
+  Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
+import { CellBase as Cell, CellBaseProps } from '../cell';
 
 export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
-  <td
-    className={
-      `dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal
-      dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`
-    }
-      // eslint-disable-next-line react/jsx-props-no-spreading
+  <Cell
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    isFirstCell={viewModel.props.isFirstCell}
+    isLastCell={viewModel.props.isLastCell}
+    className={
+        `dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal
+        dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`
+      }
   >
     {viewModel.props.children}
-  </td>
+  </Cell>
 );
 
 @ComponentBindings()
-export class DateTableCellBaseProps {
+export class DateTableCellBaseProps extends CellBaseProps {
   @OneWay() startDate: Date = new Date();
 
   @OneWay() endDate?: Date = new Date();
 
   @OneWay() groups?: object;
-
-  @OneWay() className?: string = '';
-
-  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({

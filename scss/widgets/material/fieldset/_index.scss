@@ -3,9 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common/sizes" as *;
-@use "../common" as *;
-@use "../typography" as *;
+@use "../common/mixins" as *;
+@use "../typography/mixins" as *;
 @use "../form/sizes" as *;
 @use "../checkBox/sizes" as *;
 @use "../switch/sizes" as *;
@@ -13,20 +12,6 @@
 
 
 // adduse
-
-
-$material-field-min-height: $material-base-inline-widget-height;
-$material-field-value-top-padding: 21px;
-$material-field-value-horizontal-padding: $material-base-inline-horizontal-padding;
-$material-field-value-bottom-padding: 20px;
-$material-fieldset-attention-icon-offset: $material-base-inline-horizontal-padding + $material-invalid-badge-size;
-$material-radiogroup-min-height: 26px;
-
-$material-mobile-fieldset-vertical-margin: 20px;
-$material-mobile-fieldset-horizontal-margin: 15px;
-$material-mobile-fieldset-header-vertical-margin: 20px;
-$material-mobile-field-vertical-margin: 10px;
-
 
 @mixin dx-fieldset-styling() {
   .dx-field {

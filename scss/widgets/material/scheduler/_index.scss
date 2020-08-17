@@ -29,7 +29,7 @@
   $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
 );
 @use "../button/colors" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../tooltip/colors" as *;
 
 // adduse

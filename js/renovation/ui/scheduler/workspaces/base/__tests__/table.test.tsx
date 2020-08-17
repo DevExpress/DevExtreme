@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as TableView } from '../table';
 
@@ -12,9 +12,9 @@ describe('LayoutBase', () => {
     }));
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 
@@ -43,6 +43,47 @@ describe('LayoutBase', () => {
 
       const content = layout.find('.some-class');
       expect(content.exists())
+        .toBe(true);
+    });
+
+    it('should render virtual table', () => {
+      const layout = render({
+        props: {
+          className: 'some-class',
+          children: <tr className="some-content" />,
+          isVirtual: true,
+        },
+      });
+
+      const table = layout.find('table');
+      expect(table.hasClass('some-class'))
+        .toBe(true);
+
+      const virtualRows = layout.find('[isVirtual=true]');
+      expect(virtualRows)
+        .toHaveLength(2);
+
+      expect(layout.find('.some-content').exists())
+        .toBe(true);
+    });
+
+    it('should not render virtual table', () => {
+      const layout = render({
+        props: {
+          className: 'some-class',
+          children: <tr className="some-content" />,
+        },
+      });
+
+      const table = layout.find('table');
+      expect(table.hasClass('some-class'))
+        .toBe(true);
+
+      const virtualRows = layout.find('[isVirtual=true]');
+      expect(virtualRows)
+        .toHaveLength(0);
+
+      expect(layout.find('.some-content').exists())
         .toBe(true);
     });
   });

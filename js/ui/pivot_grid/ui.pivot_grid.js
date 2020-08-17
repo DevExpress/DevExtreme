@@ -442,6 +442,17 @@ const PivotGrid = Widget.inherit({
                 */
                 showPane: true
 
+                /**
+                * @name dxPivotGridOptions.loadPanel.shading
+                * @type boolean
+                * @default false
+                */
+
+                /**
+                * @name dxPivotGridOptions.loadPanel.shadingColor
+                * @type string
+                * @default ''
+                */
             },
             texts: {
                 /**
@@ -1432,9 +1443,7 @@ const PivotGrid = Widget.inherit({
     _update: function(isFirstDrawing) {
         const that = this;
         const updateHandler = function() {
-            that.updateDimensions().done(function() {
-                that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
-            });
+            that.updateDimensions();
         };
         if(that._needDelayResizing(that._dataArea.getData()) && isFirstDrawing) {
             setTimeout(updateHandler);
@@ -1613,6 +1622,12 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
+            const diff = totalWidth - groupWidth;
+            const needAdjustWidthOnZoom = diff >= 0 && diff <= 2;
+            if(needAdjustWidthOnZoom) { // T914454
+                adjustSizeArray(resultWidths, diff);
+                totalWidth = groupWidth;
+            }
 
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
@@ -1731,6 +1746,7 @@ const PivotGrid = Widget.inherit({
 
                 when.apply($, updateScrollableResults).done(function() {
                     that._updateScrollPosition(columnsArea, rowsArea, dataArea);
+                    that._subscribeToEvents(columnsArea, rowsArea, dataArea);
                     d.resolve();
                 });
             });

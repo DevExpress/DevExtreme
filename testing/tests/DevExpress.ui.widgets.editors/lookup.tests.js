@@ -3179,7 +3179,7 @@ if(devices.real().deviceType === 'desktop') {
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
                 helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-expanded': 'true', 'aria-activedescendant': getList().getFocusedItemId(), tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
+                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
                 if($input.length) {
@@ -3188,7 +3188,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes($list, { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox', tabindex: '0' }, 'list');
-                helper.checkAttributes($field, { role: 'combobox', 'aria-expanded': 'true', 'aria-activedescendant': getList().getFocusedItemId(), tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
+                helper.checkAttributes($field, { role: 'combobox', 'aria-owns': helper.widget._popupContentId, 'aria-expanded': 'true', tabindex: '0', 'aria-controls': helper.widget._listId }, 'field');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
                 if($input.length) {
@@ -3456,7 +3456,7 @@ QUnit.module('default options', {
         }
     });
 
-    QUnit.test('Check when itemCenteringEnabled option for Material theme', function(assert) {
+    QUnit.test('Check when dropDownCentered option for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -3539,13 +3539,13 @@ QUnit.module('default options', {
 
             lookup.close();
 
-            lookup.option('itemCenteringEnabled', false);
+            lookup.option('dropDownCentered', false);
 
             $(lookup.field()).trigger('dxclick');
 
             $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if itemCenteringEnabled option is false');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if dropDownCentered option is false');
         } finally {
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
@@ -3553,7 +3553,7 @@ QUnit.module('default options', {
     });
 
 
-    QUnit.test('Check when itemCenteringEnabled option is false and change options for Material theme', function(assert) {
+    QUnit.test('Check when dropDownCentered option is false and change options for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -3567,7 +3567,7 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({
                 dataSource: ['blue', 'orange', 'lime', 'purple', 'green'],
                 value: 'blue',
-                itemCenteringEnabled: false,
+                dropDownCentered: false,
                 dropDownOptions: {
                     position: {
                         at: 'center',
@@ -3619,7 +3619,7 @@ QUnit.module('default options', {
     });
 
 
-    QUnit.test('Check itemCenteringEnabled option for Generic theme', function(assert) {
+    QUnit.test('Check dropDownCentered option for Generic theme', function(assert) {
         const $lookup = $('<div>').prependTo('body');
 
         try {
@@ -3627,7 +3627,7 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
 
             lookup.option('usePopover', true);
-            lookup.option('itemCenteringEnabled', true);
+            lookup.option('dropDownCentered', true);
 
             $(lookup.field()).trigger('dxclick');
 

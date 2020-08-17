@@ -9,7 +9,7 @@
 * $type color
 */
 $radiogroup-checked-bg: null !default;
-$radiogroup-border-color: null !default;
+$radiogroup-border-color: $base-border-color !default;
 $radiogroup-bg: null !default;
 
 /**
@@ -19,132 +19,88 @@ $radiogroup-bg: null !default;
 $radiobutton-active-bg: null !default;
 $radiogroup-hover-border-color: null !default;
 $radiobutton-focused-border-color: null !default;
-$radiobutton-invalid-hover-border-color: null !default;
-$radiobutton-invalid-focused-border-color: null !default;
-$radiobutton-invalid-faded-border-color: null !default;
+$radiobutton-invalid-hover-border-color: $base-invalid-color !default;
+$radiobutton-invalid-focused-border-color: $base-invalid-color !default;
+$radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $radiogroup-readonly-border-color: null !default;
 $radiogroup-readonly-bg: null !default;
 
 @if $color == "carmine" {
-
   $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "contrast" {
-
   $radiogroup-checked-bg: $base-inverted-bg !default;
-
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-bg !default;
-
   $radiobutton-active-bg: $base-inverted-bg !default;
   $radiogroup-hover-border-color: $base-border-color !default;
   $radiobutton-focused-border-color: $base-focus-color !default;
-
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 50%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "dark" {
-
   $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "darkmoon" {
-
   $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "darkviolet" {
-
   $radiogroup-checked-bg: $base-accent-highlight-color !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "greenmist" {
-
   $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "light" {
-
   $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "softblue" {
-
   $radiogroup-checked-bg: $base-accent !default;
-  $radiogroup-border-color: $base-border-color !default;
   $radiogroup-bg: $base-element-bg !default;
   $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
-  $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
   $radiogroup-readonly-bg: $radiogroup-bg !default;
 }

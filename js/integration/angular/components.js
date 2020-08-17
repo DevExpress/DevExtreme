@@ -1,5 +1,6 @@
 import Callbacks from '../../core/utils/callbacks';
 import ngModule from './module';
+// eslint-disable-next-line no-restricted-imports
 import angular from 'angular';
 
 if(angular) {

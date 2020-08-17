@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';
@@ -31,8 +32,7 @@ export default class ClearButton extends TextEditorButton {
 
         this._addToContainer($element);
 
-        const instance = editor._createComponent($element, Button, options);
-        instance.setAria('label', messageLocalization.format(BUTTON_MESSAGE));
+        const instance = editor._createComponent($element, Button, extend({}, options, { elementAttr: { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) } }));
 
         this._legacyRender(editor.$element(), $element, options.visible);
 

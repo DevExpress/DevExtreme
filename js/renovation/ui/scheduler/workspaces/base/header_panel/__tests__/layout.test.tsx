@@ -1,14 +1,9 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { Row } from '../../row';
-import { getKeyByDateAndGroup } from '../../../utils';
+import * as utilsModule from '../../../utils';
 
-jest.mock('../../row', () => ({
-  Row: (): null => null,
-}));
-jest.mock('../../../utils', () => ({
-  getKeyByDateAndGroup: jest.fn(),
-}));
+const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
 
 describe('HeaderPanelLayoutBase', () => {
   describe('Render', () => {
@@ -26,7 +21,7 @@ describe('HeaderPanelLayoutBase', () => {
       props: { cellTemplate, ...viewModel.props, viewCellsData },
     }));
 
-    afterEach(() => jest.resetAllMocks());
+    beforeEach(() => getKeyByDateAndGroup.mockClear());
 
     it('should combine `className` with predefined classes', () => {
       const layout = render({ props: { className: 'custom-class' } });
@@ -38,9 +33,9 @@ describe('HeaderPanelLayoutBase', () => {
     });
 
     it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(layout.prop('customAttribute'))
+      expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 

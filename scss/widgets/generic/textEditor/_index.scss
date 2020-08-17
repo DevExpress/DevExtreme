@@ -5,9 +5,9 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../common/sizes" as *;
+@use "../common/mixins" as *;
 @use "../button/sizes" as *;
-@use "../common" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 
 // adduse
 

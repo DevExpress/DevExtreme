@@ -20,21 +20,15 @@ export default class PreactWrapper extends DOMComponent {
 
   _getDefaultOptions() {
     return extend(
+      true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
-      this._getDefaultTwoWayProps(),
+      (this._twoWayProps || []).reduce((options, [name, eventName, defaultValue]) => ({
+        ...options,
+        [name]: defaultValue,
+        [eventName]: (value) => this.option(name, value),
+      }), {}),
     );
-  }
-
-  _getDefaultTwoWayProps() {
-    const { defaultProps } = this._viewComponent;
-    const options = {};
-    const twoWayProps = this._twoWayProps || [];
-    twoWayProps.forEach(([name, defaultName, eventName]) => {
-      options[name] = defaultProps[defaultName];
-      options[eventName] = (value) => this.option(name, value);
-    });
-    return options;
   }
 
   _initMarkup() {
@@ -43,7 +37,12 @@ export default class PreactWrapper extends DOMComponent {
       this._shouldRefresh = false;
 
       this._renderPreact({
-        ...props, width: null, height: null, style: '', className: '', children: null,
+        ...props,
+        width: null,
+        height: null,
+        style: '',
+        className: '',
+        children: null,
       });
     }
     this._renderPreact(props);
@@ -51,7 +50,9 @@ export default class PreactWrapper extends DOMComponent {
 
   _renderPreact(props) {
     const containerNode = this.$element().get(0);
-    const replaceNode = (!this._preactReplaced && containerNode.parentNode) ? containerNode : undefined;
+    const replaceNode = !this._preactReplaced && containerNode.parentNode
+      ? containerNode
+      : undefined;
 
     if (containerNode.parentNode) {
       this._preactReplaced = true;
@@ -64,7 +65,7 @@ export default class PreactWrapper extends DOMComponent {
     );
   }
 
-  _render() { }
+  _render() {}
 
   _dispose() {
     Preact.render(null, this.$element().get(0));
@@ -90,13 +91,16 @@ export default class PreactWrapper extends DOMComponent {
     }
     this._elementAttr.style = style;
 
-    const cssClass = this.$element()[0].getAttribute('class');
-    if (cssClass) {
-      this._elementAttr.class = cssClass
-        .split(' ')
-        .filter((name) => name.indexOf('dx-') < 0)
-        .join(' ');
-    }
+    const cssClass = this.$element()[0].getAttribute('class') || '';
+    this.storedClasses = this.storedClasses ?? cssClass
+      .split(' ')
+      .filter((name) => name.indexOf('dx-') === 0)
+      .join(' ');
+    this._elementAttr.class = cssClass
+      .split(' ')
+      .filter((name) => name.indexOf('dx-') !== 0)
+      .concat(this.storedClasses)
+      .join(' ');
 
     return this._elementAttr;
   }
@@ -107,6 +111,13 @@ export default class PreactWrapper extends DOMComponent {
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     };
+
+    (this._twoWayProps || []).forEach(([name]) => {
+      if (options.hasOwnProperty(name) && options[name] === undefined) {
+        options[name] = null;
+      }
+    });
+
     return {
       ...options,
       ...this.elementAttr,
@@ -129,7 +140,9 @@ export default class PreactWrapper extends DOMComponent {
     super._init();
     this._actionsMap = {};
 
-    Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
+    Object.keys(this._getActionConfigs()).forEach((name) =>
+      this._addAction(name)
+    );
 
     this._viewRef = Preact.createRef();
     this._supportedKeys = () => ({});
@@ -137,19 +150,22 @@ export default class PreactWrapper extends DOMComponent {
 
   _addAction(event, action) {
     if(!action) {
-      const actionByOption = this._createActionByOption(event, this._getActionConfigs()[event]);
+      const actionByOption = this._createActionByOption(
+        event,
+        this._getActionConfigs()[event]
+      );
 
       action = function(args) {
-        for(const name in args) {
-          if(name.match(/element$/i)) {
+        Object.keys(args).forEach((name) => {
+          if (/element$/i.exec(name)) {
             args[name] = getPublicElement($(args[name]));
           }
-        }
+        });
         return actionByOption(args);
       };
     }
     this._actionsMap[event] = action;
-}
+  }
 
   _optionChanged(option) {
     const { name } = option || {};
@@ -167,12 +183,20 @@ export default class PreactWrapper extends DOMComponent {
         if (!dummyDivRef) return null;
         const { parentNode } = dummyDivRef;
         parentNode.removeChild(dummyDivRef);
-        this._getTemplate(this._templateManager.anonymousTemplateName)
-          .render({ container: getPublicElement($(parentNode)), transclude: true });
+        this._getTemplate(this._templateManager.anonymousTemplateName).render({
+          container: getPublicElement($(parentNode)),
+          transclude: true,
+        });
       };
 
-      return Preact.h(Preact.Fragment, {},
-        Preact.h('div', { style: { display: 'none' }, ref: dummyDivRefCallback }));
+      return Preact.h(
+        Preact.Fragment,
+        {},
+        Preact.h('div', {
+          style: { display: 'none' },
+          ref: dummyDivRefCallback,
+        })
+      );
     }
   }
 
@@ -191,11 +215,13 @@ export default class PreactWrapper extends DOMComponent {
           const $parent = $(parentNode);
           const $children = $parent.contents();
 
-          const $template = $(template.render({
-            container: getPublicElement($parent),
-            model: data,
-            ...(isFinite(index) ? { index } : {}),
-          }));
+          const $template = $(
+            template.render({
+              container: getPublicElement($parent),
+              model: data,
+              ...(isFinite(index) ? { index } : {}),
+            })
+          );
 
           if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
             wrapElement($parent, $template);
@@ -209,8 +235,11 @@ export default class PreactWrapper extends DOMComponent {
         },
         Object.keys(props).map((key) => props[key]),
       );
-      return Preact.h(Preact.Fragment, {},
-        Preact.h('div', { style: { display: 'none' }, ref: dummyDivRef }));
+      return Preact.h(
+        Preact.Fragment,
+        {},
+        Preact.h('div', { style: { display: 'none' }, ref: dummyDivRef })
+      );
     };
   }
 
@@ -255,3 +284,7 @@ export default class PreactWrapper extends DOMComponent {
     );
   }
 }
+
+///#DEBUG
+PreactWrapper.IS_RENOVATED_WIDGET = true;
+///#ENDDEBUG

@@ -4,35 +4,21 @@
 
 // adduse
 
-$scrollable-bg: null !default;
+$scrollable-bg: $base-bg !default;
 
 /**
 * $name 10. Scroller background color
 * $type color
 */
 $scrollable-scroll-bg: null !default;
-$scrollable-scroll-shadow-color: null !default;
-$scrollable-scrollbar-bg: null !default;
+$scrollable-scroll-shadow-color: transparent !default;
+$scrollable-scrollbar-bg: transparent !default;
 
 @if $mode == "light" {
-
-  $scrollable-bg: $base-bg !default;
-
   $scrollable-scroll-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.7) !default;
-
-  $scrollable-scroll-shadow-color: transparent !default;
-
-  $scrollable-scrollbar-bg: transparent !default;
 }
 
 @if $mode == "dark" {
-
-  $scrollable-bg: $base-bg !default;
-
   $scrollable-scroll-bg: color.change(lighten($scrollable-bg, 25%), $alpha: 0.7) !default;
-
-  $scrollable-scroll-shadow-color: transparent !default;
-
-  $scrollable-scrollbar-bg: transparent !default;
 }
 

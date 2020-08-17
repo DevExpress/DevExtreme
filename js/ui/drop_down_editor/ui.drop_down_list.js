@@ -164,6 +164,10 @@ const DropDownList = DropDownEditor.inherit({
         this._initItems();
     },
 
+    _setListFocusedElementOptionChange: function() {
+        this._list._updateParentActiveDescendant = this._updateActiveDescendant.bind(this);
+    },
+
     _initItems: function() {
         const items = this.option().items;
         if(items && !items.length && this._dataSource) {
@@ -347,6 +351,17 @@ const DropDownList = DropDownEditor.inherit({
         return plainItems;
     },
 
+    _updateActiveDescendant() {
+        const opened = this.option('opened');
+        const listFocusedItemId = this._list?.getFocusedItemId();
+        const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
+        const activedescendant = opened && isElementOnDom && listFocusedItemId;
+
+        this.setAria({
+            'activedescendant': activedescendant || null
+        });
+    },
+
     _setSelectedItem: function(item) {
         const displayValue = this._displayValue(item);
         this.option('selectedItem', ensureDefined(item, null));
@@ -472,6 +487,7 @@ const DropDownList = DropDownEditor.inherit({
         this._list.option('_listAttributes', { 'role': 'combobox' });
 
         this._renderPreventBlur(this._$list);
+        this._setListFocusedElementOptionChange();
     },
 
     _renderPreventBlur: function($target) {
@@ -488,11 +504,11 @@ const DropDownList = DropDownEditor.inherit({
 
         const opened = this.option('opened') || undefined;
 
+        this._list && this._updateActiveDescendant();
         this.setAria({
-            'activedescendant': opened && this._list.getFocusedItemId(),
-            'controls': opened && this._listId
+            'controls': opened && this._listId,
+            'owns': opened && this._popupContentId
         });
-
     },
 
     _setDefaultAria: function() {
@@ -510,7 +526,8 @@ const DropDownList = DropDownEditor.inherit({
 
     _shouldRefreshDataSource: function() {
         const dataSourceProvided = !!this._list.option('dataSource');
-        return dataSourceProvided !== this._needPassDataSourceToList();
+        const someItemsSelected = this.option('selectedItems')?.length > 0;
+        return dataSourceProvided !== this._needPassDataSourceToList() && !someItemsSelected;
     },
 
     _isDesktopDevice: function() {

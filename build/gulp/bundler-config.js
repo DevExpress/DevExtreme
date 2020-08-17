@@ -33,7 +33,8 @@ gulp.task('bundler-config', function() {
         .pipe(gulp.dest('js/bundles'))
         .pipe(rename('dx.custom.config.js'))
         .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
-        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme/bundles'));
+        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme/bundles'))
+        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles'));
 });
 
 gulp.task('bundler-config-dev', function() {

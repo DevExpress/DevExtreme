@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Row, viewFunction as RowView } from '../row';
 import { addHeightToStyle } from '../../utils';
@@ -15,7 +15,10 @@ describe('RowBase', () => {
     }));
 
     it('should pass className and style', () => {
-      const row = render({ props: { className: 'custom-class' }, style: 'style' });
+      const row = render({
+        classes: 'custom-class',
+        style: 'style',
+      });
 
       expect(row.is('.custom-class'))
         .toBe(true);
@@ -24,9 +27,9 @@ describe('RowBase', () => {
     });
 
     it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { customAttribute: 'customAttribute' } });
+      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(row.prop('customAttribute'))
+      expect(row.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 
@@ -51,6 +54,22 @@ describe('RowBase', () => {
 
           expect(addHeightToStyle)
             .toHaveBeenCalledWith(500, style);
+        });
+      });
+
+      describe('classes', () => {
+        it('should correctly combine classes if isVirtual', () => {
+          const row = new Row({ className: 'some-class', isVirtual: true });
+
+          expect(row.classes)
+            .toEqual('dx-scheduler-virtual-row some-class');
+        });
+
+        it('should correctly combine classes if not isVirtual', () => {
+          const row = new Row({ className: 'some-class' });
+
+          expect(row.classes)
+            .toEqual('some-class');
         });
       });
     });

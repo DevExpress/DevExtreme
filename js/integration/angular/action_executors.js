@@ -1,4 +1,5 @@
 import Action from '../../core/action';
+// eslint-disable-next-line no-restricted-imports
 import angular from 'angular';
 
 if(angular) {
