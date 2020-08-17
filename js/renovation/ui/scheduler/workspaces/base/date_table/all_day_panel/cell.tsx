@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { getGroupCellClasses } from '../../../utils';
 
-export const viewFunction = (viewModel: AllDayPanelCell) => (
+export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
   <td
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}

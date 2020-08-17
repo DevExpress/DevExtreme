@@ -10,6 +10,7 @@ export const viewFunction = (viewModel: DayDateTableCell) => (
   <DateTableCellBase
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
+    dataCellTemplate={viewModel.props.dataCellTemplate}
     isFirstCell={viewModel.props.isFirstCell}
     isLastCell={viewModel.props.isLastCell}
     className={viewModel.props.className}

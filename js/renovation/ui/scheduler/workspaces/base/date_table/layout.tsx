@@ -5,7 +5,7 @@ import { Table } from '../table';
 import { DateTableBody } from './table_body';
 import { LayoutProps } from '../layout_props';
 
-export const viewFunction = (viewModel: DateTableLayoutBase) => (
+export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
   <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -15,8 +15,9 @@ export const viewFunction = (viewModel: DateTableLayoutBase) => (
     className={viewModel.classes}
   >
     <DateTableBody
-      viewData={viewModel.props.viewData}
       cellTemplate={viewModel.props.cellTemplate}
+      viewData={viewModel.props.viewData}
+      dataCellTemplate={viewModel.props.dataCellTemplate}
     />
   </Table>
 );

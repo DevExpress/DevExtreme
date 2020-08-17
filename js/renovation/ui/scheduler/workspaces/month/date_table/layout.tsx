@@ -3,10 +3,11 @@ import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { MonthDateTableCell } from './cell';
 import { LayoutProps } from '../../base/layout_props';
 
-export const viewFunction = (viewModel: MonthDateTableLayout): object => (
+export const viewFunction = (viewModel: MonthDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
-    viewData={viewModel.props.viewData}
     cellTemplate={MonthDateTableCell}
+    viewData={viewModel.props.viewData}
+    dataCellTemplate={viewModel.props.dataCellTemplate}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   />

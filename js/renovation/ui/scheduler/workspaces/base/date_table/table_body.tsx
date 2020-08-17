@@ -11,10 +11,9 @@ import {
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 
-export const viewFunction = (viewModel: DateTableBody) => (
+export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
   <Fragment>
-    {
-    viewModel.props.viewData!
+    {viewModel.props.viewData!
       .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
           {
@@ -37,13 +36,13 @@ export const viewFunction = (viewModel: DateTableBody) => (
                   endDate={endDate}
                   groups={groups}
                   key={getKeyByDateAndGroup(startDate, groups)}
+                  dataCellTemplate={viewModel.props.dataCellTemplate}
                 />
               ))}
             </DateTableRow>
           ))}
         </Fragment>
-      ))
-    }
+      ))}
   </Fragment>
 );
 

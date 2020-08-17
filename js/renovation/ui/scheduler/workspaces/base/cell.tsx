@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { getGroupCellClasses } from '../utils';
 
-export const viewFunction = (viewModel: CellBase) => (
+export const viewFunction = (viewModel: CellBase): JSX.Element => (
   <td
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -20,6 +20,14 @@ export class CellBaseProps {
   @OneWay() isFirstCell? = false;
 
   @OneWay() isLastCell? = false;
+
+  @OneWay() startDate?: Date = new Date();
+
+  @OneWay() endDate?: Date = new Date();
+
+  @OneWay() groups?: object;
+
+  @OneWay() text?: string = '';
 
   @Slot() children?: any;
 }
