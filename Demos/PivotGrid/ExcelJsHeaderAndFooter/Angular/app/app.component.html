@@ -1,0 +1,21 @@
+<div class="long-title"><h3>Sales Amount by Region</h3></div>
+<dx-pivot-grid
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [allowExpandAll]="true"
+  [height]="440"
+  [showBorders]="true"
+  [dataSource]="dataSource"
+  (onExporting)="onExporting($event)">
+  <dxo-field-panel
+    [showDataFields]="true"
+    [showRowFields]="true"
+    [showColumnFields]="true"
+    [showFilterFields]="false"
+    [allowFieldDragging]="false"
+    [visible]="true">
+  </dxo-field-panel>
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+  <dxo-export [enabled]="true"></dxo-export>
+</dx-pivot-grid>

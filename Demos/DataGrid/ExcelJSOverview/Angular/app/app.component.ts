@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
-import { Service, Order, Employee } from './app.service';
+import { Service, Employee } from './app.service';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import ExcelJS from 'exceljs';
 import saveAs from 'file-saver';

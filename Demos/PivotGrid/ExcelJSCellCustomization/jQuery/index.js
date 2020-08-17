@@ -69,7 +69,7 @@ $(function() {
                     var excelCell = options.excelCell;
                     var pivotCell = options.pivotCell;
 
-                    if(pivotCell.rowType === 'T' || pivotCell.type === 'T' || pivotCell.type === 'GT' || pivotCell.type === "GT" || pivotCell.rowType === "GT" || pivotCell.columnType === "GT") {
+                    if(pivotCell.rowType === 'T' || pivotCell.type === 'T' || pivotCell.type === 'GT' || pivotCell.rowType === "GT" || pivotCell.columnType === "GT") {
                         excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'DDDDDD' } };
                         if(pivotCell.dataIndex === 0) {
                             excelCell.numFmt = '$ #,##.#,"K"';

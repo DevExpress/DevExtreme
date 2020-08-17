@@ -1,9 +1,12 @@
-<div class="long-title"><h3>Sales Amount by Region</h3></div>
 <dx-pivot-grid
-  [rowHeaderLayout]="tree"
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [allowExpandAll]="true"
   [height]="440"
   [showBorders]="true"
   [dataSource]="dataSource"
+  (onCellPrepared)="onCellPrepared($event)"
   (onExporting)="onExporting($event)">
   <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
   <dxo-export [enabled]="true"></dxo-export>

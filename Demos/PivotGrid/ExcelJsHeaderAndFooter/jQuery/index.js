@@ -54,9 +54,8 @@ $(function(){
                 { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }
             ];  
 
-            var grid = e.component;
             DevExpress.excelExporter.exportPivotGrid({
-                component: grid,
+                component: e.component,
                 worksheet: worksheet,
                 topLeftCell: { row: 4, column: 1 },
                 keepColumnWidths: false
