@@ -42,6 +42,7 @@ const EDIT_MODE_FORM = 'form';
 const EDIT_MODE_POPUP = 'popup';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const GROUP_CELL_CLASS = 'dx-group-cell';
+const GROUP_ROW_CLASS = 'dx-group-row';
 
 function getColumnId(that, column) {
     return that._columnsController.getColumnId(column);
@@ -415,7 +416,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 if(!cancelClassAdding) {
                     const currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
-                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
+                        const $rowElement = $rowElements.eq(rowIndex);
+                        $cellElement = this._findCellElementInRow($rowElement, currentVisibleIndex);
                         this._isCellValid($cellElement) && this._hideVisibleCellInView({
                             viewName,
                             isCommandColumn,
@@ -425,6 +427,27 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 }
             }
         }
+    },
+
+    _findCellElementInRow($rowElement, visibleColumnIndex) {
+        const $rowCells = $rowElement.children();
+        let visibleIndex = visibleColumnIndex;
+        let cellIsInsideGroup = false;
+        if($rowElement.hasClass(GROUP_ROW_CLASS)) {
+            const $groupCell = $rowElement.find(`.${GROUP_CELL_CLASS}`);
+            const colSpan = $groupCell.attr('colspan');
+            if($groupCell.length && isDefined(colSpan)) {
+                const groupCellLength = parseInt(colSpan);
+                const endGroupIndex = $groupCell.index() + groupCellLength - 1;
+                if(visibleColumnIndex > endGroupIndex) {
+                    visibleIndex = visibleColumnIndex - groupCellLength + 1;
+                } else {
+                    cellIsInsideGroup = true;
+                }
+            }
+        }
+        const $cellElement = !cellIsInsideGroup ? $rowCells.eq(visibleIndex) : undefined;
+        return $cellElement;
     },
 
     _hideVisibleCellInView: function({ $cell, isCommandColumn }) {
