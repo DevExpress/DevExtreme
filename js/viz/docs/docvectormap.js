@@ -318,7 +318,10 @@ const dxVectorMap = {
     viewport: function() { },
     convertCoordinates: function() { },
     convertToGeo: function() { },
-    convertToXY: function() { }
+    convertToXY: function() { },
+    commonAnnotationSettings: undefined,
+    annotations: [{}],
+    customizeAnnotation: undefined,
 };
 
 /**

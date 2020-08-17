@@ -1249,6 +1249,7 @@ const BaseChart = {
 /**
 * @name BaseChartAnnotationConfig
 * @type object
+* @inherits BaseWidgetAnnotationConfig
 */
 const BaseChartAnnotationConfig = {
     argument: undefined,
