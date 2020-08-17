@@ -1590,7 +1590,7 @@ QUnit.module('Expanding items', moduleConfig, () => {
                     { dataField: expandedPathOptionName === 'columnExpandedPaths' ? 'date2' : 'anotherField' }
                 ]
             };
-            loadOptions[expandedPathOptionName] = [[2010, 2010], [2010, 2010, 1]];
+            loadOptions[expandedPathOptionName] = [[2010], [2010, 2010, 1]];
             store.load(loadOptions).done(function() {
                 assert.deepEqual(actualFilter, [[['date1', '=', 2010]], 'and', [['date2', '=', 2010]]], 'rows count');
             });
