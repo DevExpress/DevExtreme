@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, ForwardRef,
+  Effect, Template, InternalState, ForwardRef, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -22,8 +22,7 @@ export const viewFunction = ({
   pagesRef,
   infoTextVisible,
   isLargeDisplayMode,
-  pagerProps,
-  props: { contentTemplate: Content },
+  props: { contentTemplate: Content, pagerProps },
   restAttributes,
 }: ResizableContainer) => (
   <Content
@@ -33,7 +32,7 @@ export const viewFunction = ({
     pagesRef={pagesRef}
     infoTextVisible={infoTextVisible}
     isLargeDisplayMode={isLargeDisplayMode}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...{ ...pagerProps, ...restAttributes }}
   />
 );
@@ -116,7 +115,9 @@ export function updateChildProps(
 }
 
 @ComponentBindings()
-export class ResizableContainerProps extends PagerProps {
+export class ResizableContainerProps {
+  @OneWay() pagerProps!: PagerProps;
+
   // TODO Vitik: bug in generator it should be @Template() content!: ContentPagerProps;
   @Template() contentTemplate: any;
 }
@@ -124,7 +125,7 @@ export class ResizableContainerProps extends PagerProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
+export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps'>(ResizableContainerProps) {
   @ForwardRef() parentRef!: HTMLElement;
 
   @ForwardRef() pageSizesRef?: GetHtmlElement;
@@ -158,10 +159,10 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
     }
   }
 
-  get pagerProps(): PagerProps {
+  /* get pagerProps(): PagerProps {
     const { contentTemplate, ...pagerProps } = this.props;
     return pagerProps;
-  }
+  } */
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {

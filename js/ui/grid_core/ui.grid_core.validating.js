@@ -727,7 +727,7 @@ export default {
                                     case EDIT_MODE_BATCH:
                                         if(!isFullValid) {
                                             this._resetEditRowKey();
-                                            this._editColumnIndex = -1;
+                                            this._resetEditColumnName();
                                             this.getController('data').updateItems();
                                         }
                                         break;
