@@ -1197,10 +1197,6 @@ const Calendar = Editor.inherit({
                 this._setSubmitValue(value);
                 this.callBase(args);
                 break;
-            case 'disabled':
-                this._view.option('disabled', value);
-                this.callBase(args);
-                break;
             case 'onCellClick':
                 this._view.option('onCellClick', value);
                 break;
