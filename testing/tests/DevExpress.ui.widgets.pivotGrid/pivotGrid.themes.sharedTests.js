@@ -72,9 +72,9 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 const grandTotalTextRect = grandTotalCellElement.lastChild.getBoundingClientRect();
 
                 if(rtlEnabled) {
-                    assert.strictEqual(totalCellRect.right - totalTextRect.right, grandTotalRect.right - grandTotalTextRect.right, 'total & grandTotal cells have the same padding');
+                    assert.roughEqual(totalCellRect.right - totalTextRect.right, grandTotalRect.right - grandTotalTextRect.right, 0.1, 'total & grandTotal cells have the same padding');
                 } else {
-                    assert.strictEqual(totalTextRect.left - totalCellRect.left, grandTotalTextRect.left - grandTotalRect.left, 'total & grandTotal cells have the same padding');
+                    assert.roughEqual(totalTextRect.left - totalCellRect.left, grandTotalTextRect.left - grandTotalRect.left, 0.1, 'total & grandTotal cells have the same padding');
                 }
             });
         });
