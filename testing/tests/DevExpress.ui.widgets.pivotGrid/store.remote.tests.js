@@ -1543,6 +1543,31 @@ QUnit.module('Expanding items', moduleConfig, () => {
         });
     });
 
+    ['rowExpandedPaths', 'columnExpandedPaths'].forEach(expandedPathOptionName => {
+        QUnit.test(`${expandedPathOptionName}. Redundant filter value (T758282)`, function(assert) {
+            const dataSource = { date: new Date(2010, 1, 1), anotherField: 'field' };
+
+            let actualFilter = [];
+            const store = new RemoteStore({
+                store: getCustomArrayStore(dataSource),
+                load: function(e) {
+                    if(e.filter) {
+                        actualFilter = e.filter;
+                    }
+                }
+            });
+
+            const loadOptions = {
+                rows: [{ dataField: expandedPathOptionName === 'rowExpandedPaths' ? 'date' : 'anotherField' }],
+                columns: [{ dataField: expandedPathOptionName === 'columnExpandedPaths' ? 'date' : 'anotherField' }]
+            };
+            loadOptions[expandedPathOptionName] = [[2010], [2010, 1], [2010, 4, 1]];
+            store.load(loadOptions).done(function() {
+                assert.deepEqual(actualFilter, [['date', '=', 2010]], 'rows count');
+            });
+        });
+    });
+
     QUnit.test('Load initially expanded child after parent expand when rows have no data fields', function(assert) {
         this.load({
             columns: [
