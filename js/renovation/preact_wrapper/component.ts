@@ -130,6 +130,7 @@ export default class PreactWrapper extends DOMComponent {
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')
         .trim(),
+      class: '',
       ...this._actionsMap,
     };
   }

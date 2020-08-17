@@ -126,9 +126,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget({}));
 
-    expect($('#my-id').dxPreactTestWidget('getLastPreactReceivedProps')).toMatchObject({
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
+      class: '',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -142,9 +143,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxPreactTestWidget('getLastPreactReceivedProps')).toMatchObject({
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
+      class: '',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -159,7 +161,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxPreactTestWidget('getLastPreactReceivedProps').className).toBe('custom-css-class custom-css-class2 dx-custom-css-class');
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
+      className: 'custom-css-class custom-css-class2 dx-custom-css-class',
+      class: '',
+    });
   });
 
   it('should save only initial "dx-" custom classes', () => {
@@ -171,7 +176,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxPreactTestWidget('getLastPreactReceivedProps').className).toBe('custom-css-class');
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
+      className: 'custom-css-class',
+      class: '',
+    });
   });
 
   it('should pass empty string if no classes present on element', () => {
