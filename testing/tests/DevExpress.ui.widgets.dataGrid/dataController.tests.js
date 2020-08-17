@@ -663,6 +663,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(this.dataController.items().length, itemsCount, 'There are no excess items');
     });
 
+    // T922884
+    QUnit.test('expandAll for second level if calculateDisplayValue is defined and autoExpandGroup is false', function(assert) {
+        this.applyOptions({
+            dataSource: [{ group1: 'group1', group2: 'group2', id: 1 }],
+            columns: [
+                {
+                    dataField: 'group1',
+                    groupIndex: 0,
+                    autoExpandGroup: true
+                },
+                {
+                    dataField: 'group2',
+                    groupIndex: 1,
+                    autoExprGroup: false,
+                    calculateDisplayValue: function(data) {
+                        return data.group2;
+                    }
+                }
+            ]
+        });
+
+        this.dataController._refreshDataSource();
+
+        // act
+        this.dataController.expandAll(1);
+
+        // assert
+        assert.equal(this.columnsController.getGroupColumns().length, 2, '2 columns are grouped');
+        assert.equal(this.dataController.items().length, 3, 'tree rows are visible');
+    });
+
     QUnit.test('Using focusedRowEnabled should set sorting for the not sorted simple key column if remoteOperations enabled', function(assert) {
     // arrange
         const dataSource = createDataSource([
