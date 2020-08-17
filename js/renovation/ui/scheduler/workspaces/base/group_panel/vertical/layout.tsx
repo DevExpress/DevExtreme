@@ -1,7 +1,9 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
-import { Group, GroupRenderItem, GroupItem } from '../../../types.d';
+import {
+  Group, GroupRenderItem, GroupItem, GroupPanelCellTemplateProps,
+} from '../../../types.d';
 import { Row } from './row';
 import { addHeightToStyle } from '../../../utils';
 
@@ -52,15 +54,7 @@ export class GroupPanelVerticalLayoutProps {
 
   @OneWay() height?: number;
 
-  @Template() cellTemplate!: (props: {
-    data: {
-      data?: GroupItem;
-      id?: string | number;
-      color?: string;
-      text?: string;
-    };
-    index?: number;
-  }) => JSX.Element;
+  @Template() cellTemplate?: GroupPanelCellTemplateProps;
 
   @OneWay() className?: string = '';
 }

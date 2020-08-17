@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { GroupPanelVerticalCell } from './cell';
-import { GroupRenderItem, GroupItem } from '../../../types.d';
+import { GroupRenderItem, GroupPanelCellTemplateProps } from '../../../types.d';
 
 export const viewFunction = (viewModel: Row): JSX.Element => (
   <div
@@ -30,15 +30,7 @@ export const viewFunction = (viewModel: Row): JSX.Element => (
 export class RowProps {
   @OneWay() groupItems!: GroupRenderItem[];
 
-  @Template() cellTemplate!: (props: {
-    data: {
-      data?: GroupItem;
-      id?: string | number;
-      color?: string;
-      text?: string;
-    };
-    index?: number;
-  }) => JSX.Element;
+  @Template() cellTemplate?: GroupPanelCellTemplateProps;
 
   @OneWay() className?: string = '';
 }

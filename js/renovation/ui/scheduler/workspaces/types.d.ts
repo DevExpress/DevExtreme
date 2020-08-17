@@ -37,3 +37,13 @@ export interface Group {
   items: GroupItem[];
   data: GroupItem[];
 }
+
+export type GroupPanelCellTemplateProps = (props: {
+  data: {
+    data?: GroupItem;
+    id?: string | number;
+    color?: string;
+    text?: string;
+  };
+  index?: number;
+}) => JSX.Element;
