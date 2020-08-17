@@ -4,7 +4,7 @@ import asyncForEach from '../../helpers/asyncForEach';
 
 fixture`Popup`
   .page(url(__dirname, './pages/T920408.html'))
-  .beforeEach(async (t) => { await t.resizeWindow(1437, 1438).wait(5000); });
+  .beforeEach(async (t) => { await t.wait(); });
 
 test('Popup should be centered regarding the container even if container is animated (T920408)', async (t) => {
   const outerPopup = new Popup('#popup');
