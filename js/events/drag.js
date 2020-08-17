@@ -286,7 +286,7 @@ const DragEmitter = GestureEmitter.inherit({
             return false;
         }
 
-        if($prevTarget.length && $target.find($prevTarget).length) {
+        if($prevTarget.length && $prevTarget.closest($target).length) {
             return false;
         }
 
