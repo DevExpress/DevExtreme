@@ -7604,6 +7604,46 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataErrorOccurred.getCall(0).args[0].error, 'Unknown error', 'default error message');
         assert.notOk($errorRow.length, 'error row is not rendered');
     });
+
+    // T921829
+    QUnit.test('Row adding should work correctly if add button was clicked before table render', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: {
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        d.resolve([]);
+                    });
+
+                    return d;
+                }
+            },
+            columns: [{
+                dataField: 'field1',
+                fixed: true
+            }, 'field2', 'field3', 'field4', 'field5'],
+            showBorders: true,
+            editing: {
+                allowAdding: true
+            },
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {};
+                }
+            }
+        });
+
+        // act
+        $('.dx-datagrid-addrow-button').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 1, 'row was added');
+    });
 });
 
 
