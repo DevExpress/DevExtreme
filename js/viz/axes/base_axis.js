@@ -540,7 +540,7 @@ Axis.prototype = {
     _adjustLabelsCoord(offset, maxWidth, checkCanvas) {
         const that = this;
         that._majorTicks.forEach(function(tick) {
-            if(tick.label && !that.areCoordsOutsideAxis(tick.coords)) {
+            if(tick.label) {
                 tick.updateMultilineTextAlignment();
                 tick.label.attr(that._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas));
             }

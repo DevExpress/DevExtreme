@@ -125,7 +125,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(!labelIsVisible) {
                     if(this.label) {
-                        this.label.remove();
+                        this.removeLabel();
                     }
                     return;
                 }
