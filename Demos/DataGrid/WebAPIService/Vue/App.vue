@@ -115,7 +115,7 @@ import {
   DxValueFormat
 } from 'devextreme-vue/data-grid';
 
-import MasterDetailGrid from 'MasterDetailGrid.vue';
+import MasterDetailGrid from './MasterDetailGrid.vue';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
