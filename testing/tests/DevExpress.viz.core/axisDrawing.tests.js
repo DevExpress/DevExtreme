@@ -2006,9 +2006,8 @@ QUnit.test('Vertical right. Alignment not set - render as left', function(assert
 
     this.generatedTicks = [1, 2];
 
-    this.translator.stub('translate').returns(0);
-    this.translator.stub('translate').withArgs(1, undefined, false).returns(40);
-    this.translator.stub('translate').withArgs(2, undefined, false).returns(60);
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
 
     this.renderer.bBoxTemplate = (function() {
         let idx = 0;
@@ -2331,6 +2330,39 @@ QUnit.test('Labels are outside canvas (on zoom) - do not draw outside labels', f
     this.axis.draw(this.canvas);
 
     assert.equal(this.renderer.stub('text').callCount, 0);
+});
+
+QUnit.test('Labels are outside after zoom, should not adjust', function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'top',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left'
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // zoom
+    this.translator.stub('translate').withArgs(1).returns(0);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(this.renderer.text.callCount, 2, 'Text call count');
+
+    assert.equal(this.renderer.text.getCall(0).returnValue.attr.callCount, 4);
+    assert.equal(this.renderer.text.getCall(1).returnValue.attr.callCount, 8);
 });
 
 QUnit.module('XY linear axis. Draw. Check tick labels. WordWrap and textOverflow', environment);
