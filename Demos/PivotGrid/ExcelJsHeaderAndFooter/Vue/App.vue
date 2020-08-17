@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       dataSource: new PivotGridDataSource({
-          fields: [{
+        fields: [{
           caption: 'Region',
           width: 120,
           dataField: 'region',

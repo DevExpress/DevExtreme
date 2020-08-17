@@ -41,32 +41,32 @@ export default {
     return {
       dataSource: new PivotGridDataSource({
         fields: [{
-        caption: 'Region',
-        dataField: 'region',
-        area: 'row'
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row'
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column'
-      }, {
-        caption: 'Amount',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data'
-      }, {
-        caption: 'Count',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'count',
-        area: 'data'
-      }],
+          caption: 'Region',
+          dataField: 'region',
+          area: 'row'
+        }, {
+          caption: 'City',
+          dataField: 'city',
+          width: 150,
+          area: 'row'
+        }, {
+          dataField: 'date',
+          dataType: 'date',
+          area: 'column'
+        }, {
+          caption: 'Amount',
+          dataField: 'amount',
+          dataType: 'number',
+          summaryType: 'sum',
+          format: 'currency',
+          area: 'data'
+        }, {
+          caption: 'Count',
+          dataField: 'amount',
+          dataType: 'number',
+          summaryType: 'count',
+          area: 'data'
+        }],
         store: sales
       })
     };
@@ -113,19 +113,19 @@ export default {
     },
     onCellPrepared(e) {
       if(e.rowType === 'T' || e.type === 'T' || e.type === 'GT' || e.rowType === 'GT' || e.columnType === 'GT') {
-      e.cellElement.style.backgroundColor = '#DDDDDD';
-    }
-    if(e.area === 'data') {
-      if(e.cell.dataIndex === 1) {
-        e.cellElement.style.fontWeight = 'bold';
-      } else {
-        if(e.cell.value < 100000) {
-          e.cellElement.style.color = '#DC3545';
+        e.cellElement.style.backgroundColor = '#DDDDDD';
+      }
+      if(e.area === 'data') {
+        if(e.cell.dataIndex === 1) {
+          e.cellElement.style.fontWeight = 'bold';
         } else {
-          e.cellElement.style.color = '#28A745';
+          if(e.cell.value < 100000) {
+            e.cellElement.style.color = '#DC3545';
+          } else {
+            e.cellElement.style.color = '#28A745';
+          }
         }
       }
-    }
     }
   }
 };
