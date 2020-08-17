@@ -202,11 +202,11 @@ QUnit.test('All-day appointment startDate should be correct after resize when st
     let pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.left)).start();
 
     pointer.dragStart().drag(-(cellWidth - 10), 0).dragEnd();
-    assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9), 'Start date is OK');
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9, 8), 'Start date is OK');
 
     pointer = pointerMock(scheduler.appointments.getAppointment(0).find(CLASSES.resizableHandle.left)).start();
     pointer.dragStart().drag(cellWidth, 0).dragEnd();
-    assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 10), 'Start date is OK');
+    assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 10, 8), 'Start date is OK');
 });
 
 QUnit.test('Task dragging into the allDay container', function(assert) {
