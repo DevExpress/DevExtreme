@@ -16,8 +16,7 @@
         :show-filter-fields="false"
         :allow-field-dragging="false"
         :visible="true"
-      >
-      </DxFieldPanel>
+      />
       <DxFieldChooser :enabled="false"/>
       <DxExport :enabled="true"/>
     </DxPivotGrid>
@@ -49,31 +48,31 @@ export default {
   data() {
     return {
       dataSource: new PivotGridDataSource({
-        fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-        expanded: true
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row'
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-        filterValues: [[2013], [2014], [2015]],
-        expanded: false,
-      }, {
-        caption: 'Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data'
-      }],
+          fields: [{
+          caption: 'Region',
+          width: 120,
+          dataField: 'region',
+          area: 'row',
+          expanded: true
+        }, {
+          caption: 'City',
+          dataField: 'city',
+          width: 150,
+          area: 'row'
+        }, {
+          dataField: 'date',
+          dataType: 'date',
+          area: 'column',
+          filterValues: [[2013], [2014], [2015]],
+          expanded: false,
+        }, {
+          caption: 'Sales',
+          dataField: 'amount',
+          dataType: 'number',
+          summaryType: 'sum',
+          format: 'currency',
+          area: 'data'
+        }],
         store: sales
       })
     };

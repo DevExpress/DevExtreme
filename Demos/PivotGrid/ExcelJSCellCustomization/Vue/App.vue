@@ -1,17 +1,16 @@
 <template>
   <div>
     <DxPivotGrid
-      :allowSortingBySummary="true"
-      :allowSorting="true"
-      :allowFiltering="true"
-      :allowExpandAll="true"
+      :allow-sorting-by-summary="true"
+      :allow-sorting="true"
+      :allow-filtering="true"
+      :allow-expand-all="true"
       :height="440"
       :show-borders="true"
       :data-source="dataSource"
       @exporting="onExporting"
       @cell-prepared="onCellPrepared"
     >
-      </DxFieldPanel>
       <DxFieldChooser :enabled="false"/>
       <DxExport :enabled="true"/>
     </DxPivotGrid>
