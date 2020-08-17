@@ -2031,7 +2031,13 @@ export default {
                                     const selector = sortParameters[i].selector;
                                     const isExpanded = sortParameters[i].isExpanded;
 
-                                    if(selector === column.dataField || selector === column.name || selector === column.selector || selector === column.calculateCellValue || selector === column.calculateGroupValue) {
+                                    if(selector === column.dataField ||
+                                        selector === column.name ||
+                                        selector === column.selector ||
+                                        selector === column.calculateCellValue ||
+                                        selector === column.calculateGroupValue ||
+                                        selector === column.calculateDisplayValue
+                                    ) {
                                         column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
 
                                         if(isExpanded !== undefined) {
