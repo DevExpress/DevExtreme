@@ -29,6 +29,15 @@ const createInstance = function(options) {
     return new SchedulerTestWrapper(instance);
 };
 
+const triggerDragEnter = function($element, $appointment) {
+    const appointmentOffset = $appointment.offset();
+
+    $element.trigger($.Event(dragEvents.enter, {
+        pageX: appointmentOffset.left,
+        pageY: appointmentOffset.top
+    }));
+};
+
 QUnit.module('Integration: allDay appointments', {
     beforeEach: function() {
         fx.off = true;
@@ -219,11 +228,7 @@ QUnit.test('Task dragging into the allDay container', function(assert) {
     const $appointment = $element.find('.dx-scheduler-appointment').eq(0);
 
     let pointer = pointerMock($appointment).start().down().move(10, 10);
-    const appointmentOffset = $appointment.offset();
-    $element.find('.dx-scheduler-all-day-table-cell').trigger($.Event(dragEvents.enter, {
-        pageX: appointmentOffset.left,
-        pageY: appointmentOffset.top
-    }));
+    triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
     pointer.up();
     this.clock.tick();
 
@@ -233,11 +238,7 @@ QUnit.test('Task dragging into the allDay container', function(assert) {
     assert.ok(this.instance.option('dataSource').items()[0].allDay, 'New data is correct');
 
     pointer = pointerMock($allDayAppointment).start().down().move(10, 10);
-    const allDayAppointmentOffset = $allDayAppointment.offset();
-    $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(5).trigger($.Event(dragEvents.enter, {
-        pageX: allDayAppointmentOffset.left,
-        pageY: allDayAppointmentOffset.top
-    }));
+    triggerDragEnter($(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(5), $allDayAppointment);
     pointer.up();
 
     assert.ok(!this.instance.option('dataSource').items()[0].allDay, 'New data is correct');
@@ -259,11 +260,7 @@ QUnit.test('Task dragging into the allDay container when allDay-cell is exactly 
     const $appointment = $element.find('.dx-scheduler-appointment').eq(0);
 
     let pointer = pointerMock($appointment).start().down().move(10, 10);
-    const appointmentOffset = $appointment.offset();
-    $element.find('.dx-scheduler-all-day-table-cell').eq(3).trigger($.Event(dragEvents.enter, {
-        pageX: appointmentOffset.left,
-        pageY: appointmentOffset.top
-    }));
+    triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell').eq(3), $appointment);
     pointer.up();
     this.clock.tick();
 
@@ -273,11 +270,7 @@ QUnit.test('Task dragging into the allDay container when allDay-cell is exactly 
     assert.ok(this.instance.option('dataSource').items()[0].allDay, 'New data is correct');
 
     pointer = pointerMock($allDayAppointment).start().down().move(10, 10);
-    const allDayAppointmentOffset = $allDayAppointment.offset();
-    $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(3).trigger($.Event(dragEvents.enter, {
-        pageX: allDayAppointmentOffset.left,
-        pageY: allDayAppointmentOffset.top
-    }));
+    triggerDragEnter($(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(3), $allDayAppointment);
     pointer.up();
 
     assert.ok(!this.instance.option('dataSource').items()[0].allDay, 'New data is correct');
@@ -301,11 +294,7 @@ QUnit.test('End date of appointment should be calculated if it\'s dragged off fr
     const $appointment = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
 
     const pointer = pointerMock($appointment).start().down().move(10, 10);
-    const appointmentOffset = $appointment.offset();
-    $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).trigger($.Event(dragEvents.enter, {
-        pageX: appointmentOffset.left,
-        pageY: appointmentOffset.top
-    }));
+    triggerDragEnter($(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0), $appointment);
     pointer.up();
 
     this.clock.tick();
@@ -335,11 +324,7 @@ QUnit.test('allDayExpanded option of workspace should be updated after dragged i
     assert.equal(workspace.option('allDayExpanded'), false);
 
     const pointer = pointerMock($appointment).start().down().move(10, 10);
-    const appointmentOffset = $appointment.offset();
-    $element.find('.dx-scheduler-all-day-table-cell').trigger($.Event(dragEvents.enter, {
-        pageX: appointmentOffset.left,
-        pageY: appointmentOffset.top
-    }));
+    triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
     pointer.up();
     this.clock.tick();
 
@@ -363,11 +348,7 @@ QUnit.test('Height of appointment should be correct after dragged into the all d
     const $appointment = $element.find('.dx-scheduler-appointment').eq(0);
 
     const pointer = pointerMock($appointment).start().down().move(10, 10);
-    const appointmentOffset = $appointment.offset();
-    $element.find('.dx-scheduler-all-day-table-cell').trigger($.Event(dragEvents.enter, {
-        pageX: appointmentOffset.left,
-        pageY: appointmentOffset.top
-    }));
+    triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
     pointer.up();
     this.clock.tick();
 
@@ -433,11 +414,7 @@ QUnit.test('allDayExpanded option of workspace should be updated after dragged o
     const $appointment = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
 
     const pointer = pointerMock($appointment).start().down().move(10, 10);
-    const appointmentOffset = $appointment.offset();
-    $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).trigger($.Event(dragEvents.enter, {
-        pageX: appointmentOffset.left,
-        pageY: appointmentOffset.top
-    }));
+    triggerDragEnter($(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0), $appointment);
     pointer.up();
 
     this.clock.tick();
