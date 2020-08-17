@@ -818,14 +818,13 @@ QUnit.test('Appointment with custom tz that is equal to scheduler tz should be r
 QUnit.test('Appointment with custom tz should be resized correctly if the scheduler tz is empty(T392414)', function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 11, 25),
-        startDayHour: 6,
         views: ['day'],
         currentView: 'day',
         editing: true,
         dataSource: [{
             text: 'a',
-            startDate: '2015-12-25T17:00:00.000Z',
-            endDate: '2015-12-25T17:15:00.000Z',
+            startDate: '2015-12-25T10:00:00.000Z',
+            endDate: '2015-12-25T10:15:00.000Z',
             startDateTimeZone: 'America/Lima', // -5
             endDateTimeZone: 'America/Lima'
         }]
