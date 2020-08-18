@@ -2,20 +2,18 @@ import {
   Component, ComponentBindings, JSXComponent, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
+import { combineClasses } from '../../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => {
   const DataCellTemplate = viewModel.props.dataCellTemplate;
 
   return (
     <Cell
-    // eslint-disable-next-line react/jsx-props-no-spreading
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
       isFirstCell={viewModel.props.isFirstCell}
       isLastCell={viewModel.props.isLastCell}
-      className={
-        `dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal
-        dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`
-      }
+      className={viewModel.classes}
     >
       {DataCellTemplate && (
         <DataCellTemplate
@@ -43,4 +41,13 @@ export class DateTableCellBaseProps extends CellBaseProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {}
+export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
+  get classes(): string {
+    const { className = '', allDay } = this.props;
+    return combineClasses({
+      'dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal': true,
+      'dx-scheduler-cell-sizes-vertical': !allDay,
+      [className]: true,
+    });
+  }
+}
