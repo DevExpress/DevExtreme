@@ -10,6 +10,17 @@ function createTagBox(): Promise<void> {
     applyValueMode: 'useButtons',
   }, true);
 }
+const pureClick = async (t, selector): Promise<void> => {
+  await t
+    .click(selector.element)
+    .wait(200);
+};
+
+const purePressKey = async (t, key): Promise<void> => {
+  await t
+    .pressKey(key)
+    .wait(200);
+};
 
 fixture`TagBox`
   .page(url(__dirname, '../container.html'));
@@ -17,10 +28,10 @@ fixture`TagBox`
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {
   const tagBox = new TagBox('#container');
 
+  await pureClick(t, tagBox);
   await t
-    .click(tagBox.element)
     .expect(tagBox.isFocused).ok()
-    .expect(tagBox.opened)
+    .expect(await tagBox.isOpened())
     .ok();
 
   const list = await tagBox.getList();
@@ -78,10 +89,10 @@ test('Keyboard navigation should work then tagBox is focused or list is focused'
 test('Select all checkbox should be focused by tab and closed by escape (T389453)', async (t) => {
   const tagBox = new TagBox('#container');
 
+  await pureClick(t, tagBox);
   await t
-    .click(tagBox.element)
     .expect(tagBox.isFocused).ok()
-    .expect(tagBox.opened)
+    .expect(await tagBox.isOpened())
     .ok();
 
   const list = await tagBox.getList();
@@ -104,11 +115,12 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
     .expect(tagBox.isFocused)
     .notOk()
     .expect(selectAllCheckBox.isFocused)
-    .ok()
+    .ok();
 
-    .pressKey('esc')
+  await purePressKey(t, 'esc');
+  await t
     .expect(tagBox.isFocused)
     .ok()
-    .expect(tagBox.opened)
+    .expect(await tagBox.isOpened())
     .notOk();
 }).before(createTagBox);
