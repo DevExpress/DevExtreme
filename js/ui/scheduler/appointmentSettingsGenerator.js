@@ -104,15 +104,15 @@ export default class AppointmentSettingsGenerator {
     }
 
     _cropAppointmentsByStartDayHour(appointments, appointmentData) {
-        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const startDayHour = this.scheduler._getCurrentViewOption('startDayHour');
 
-        const firstViewDate = this._workSpace.getStartViewDate();
+        const firstViewDate = this.scheduler._workSpace.getStartViewDate();
 
         return appointments.map(appointment => {
             let startDate = new Date(appointment.startDate);
             let resultDate = new Date(appointment.startDate);
 
-            if(this.appointmentTakesAllDay(appointmentData)) {
+            if(this.scheduler.appointmentTakesAllDay(appointmentData)) {
                 resultDate = dateUtils.normalizeDate(startDate, firstViewDate);
             } else {
                 if(startDate < firstViewDate) {
@@ -126,7 +126,6 @@ export default class AppointmentSettingsGenerator {
             return appointment;
         });
     }
-
 
     _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
         let result = [];
