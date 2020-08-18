@@ -1009,6 +1009,9 @@ class Scheduler extends Widget {
             case 'virtualScrolling':
                 this._updateOption('workSpace', args.fullName, value);
                 break;
+            case 'renovateRender':
+                this._updateOption('workSpace', name, value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -1738,7 +1741,8 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', args.selectedCellData);
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
-            virtualScrolling: this.option('virtualScrolling')
+            virtualScrolling: this.option('virtualScrolling'),
+            renovateRender: this.option('renovateRender'),
         }, currentViewOptions);
 
         result.observer = this;
