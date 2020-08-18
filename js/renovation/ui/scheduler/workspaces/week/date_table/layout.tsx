@@ -3,7 +3,7 @@ import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { LayoutProps } from '../../base/layout_props';
 import { DateTableCellBase } from '../../base/date_table/cell';
 
-export const viewFunction = (viewModel: DayDateTableLayout): object => (
+export const viewFunction = (viewModel: WeekTableLayout): object => (
   <DateTableLayoutBase
     viewData={viewModel.props.viewData}
     cellTemplate={DateTableCellBase}
@@ -19,4 +19,5 @@ export const viewFunction = (viewModel: DayDateTableLayout): object => (
     register: true,
   },
 })
-export class DayDateTableLayout extends JSXComponent(LayoutProps) {}
+export class WeekTableLayout extends JSXComponent(LayoutProps) {
+}
