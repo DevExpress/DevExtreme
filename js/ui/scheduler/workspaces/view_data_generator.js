@@ -7,11 +7,15 @@ export default class ViewDataGenerator {
     set workspace(value) { this._workspace = value; }
 
     generate() {
+        let result;
+
         if(this.workspace.isVirtualScrolling()) {
-            return this._generateVirtualView();
+            result = this._generateVirtualView();
+        } else {
+            result = this._generateView();
         }
 
-        return this._generateView();
+        return result;
     }
 
     _generateVirtualView() {
@@ -53,7 +57,7 @@ export default class ViewDataGenerator {
 
                 const needRenderAllDayPanel = ((startRowIndex + groupOffset) / rowCountInGroup) === groupIndex;
                 if(needRenderAllDayPanel) {
-                    allDayPanelData = this._generateAllDayPanelData(groupIndex, rowCount, cellCount);
+                    allDayPanelData = this._generateAllDayPanelData(groupIndex, cellCount);
                 }
             }
 
@@ -65,10 +69,13 @@ export default class ViewDataGenerator {
         }
 
         return {
-            groupedData,
-            isVirtual: true,
-            topVirtualRowHeight,
-            bottomVirtualRowHeight
+            viewData: {
+                groupedData,
+                isVirtual: true,
+                topVirtualRowHeight,
+                bottomVirtualRowHeight
+            },
+            viewDataMap: this._getViewDataMap(groupedData)
         };
     }
 
@@ -86,7 +93,7 @@ export default class ViewDataGenerator {
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
             const viewCellsData = this._generateViewCellsData(options, rowCount, 0, rowCount * groupIndex);
-            const allDayPanelData = this._generateAllDayPanelData(groupIndex, rowCount, cellCount);
+            const allDayPanelData = this._generateAllDayPanelData(groupIndex, cellCount);
             groupedData.push({
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
@@ -95,8 +102,10 @@ export default class ViewDataGenerator {
         }
 
         return {
-            groupedData,
-            isVirtual: false
+            viewData: {
+                groupedData
+            },
+            viewDataMap: this._getViewDataMap(groupedData)
         };
     }
 
@@ -128,19 +137,38 @@ export default class ViewDataGenerator {
         return viewCellsData;
     }
 
-    _generateAllDayPanelData(groupIndex, rowCount, cellCount) {
+    _generateAllDayPanelData(groupIndex, cellCount) {
         if(!this.workspace.option('showAllDayPanel')) {
             return null;
         }
 
+        const rowCount = this.workspace._getRowCount();
+
         const allDayPanel = [];
 
         for(let i = 0; i < cellCount; ++i) {
-            const rowIndex = Math.max(groupIndex * rowCount - 1, 0);
+            const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, i).value;
             allDayPanel.push(cellDataValue);
         }
 
         return allDayPanel;
+    }
+
+    _getViewDataMap(groupedData) {
+        const result = [];
+
+        groupedData?.forEach(({
+            dateTable,
+            allDayPanel,
+            isGroupedAllDayPanel
+        }) => {
+            isGroupedAllDayPanel
+                && allDayPanel?.length
+                && result.push(allDayPanel);
+            result.push(...dateTable);
+        });
+
+        return result;
     }
 }
