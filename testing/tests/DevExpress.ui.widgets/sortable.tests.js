@@ -18,15 +18,17 @@ QUnit.testStart(function() {
                 cursor: default;
             }
         </style>
-        <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item1" class="draggable" style="background: yellow;">item1</div>
-            <div id="item2" class="draggable" style="background: red;">item2</div>
-            <div id="item3" class="draggable" style="background: blue;">item3</div>
-        </div>
-        <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item4" class="draggable" style="background: yellow;">item4</div>
-            <div id="item5" class="draggable" style="background: red;">item5</div>
-            <div id="item6" class="draggable" style="background: blue;">item6</div>
+        <div id="container">
+            <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+                <div id="item1" class="draggable" style="background: yellow;">item1</div>
+                <div id="item2" class="draggable" style="background: red;">item2</div>
+                <div id="item3" class="draggable" style="background: blue;">item3</div>
+            </div>
+            <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+                <div id="item4" class="draggable" style="background: yellow;">item4</div>
+                <div id="item5" class="draggable" style="background: red;">item5</div>
+                <div id="item6" class="draggable" style="background: blue;">item6</div>
+            </div>
         </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
@@ -3054,6 +3056,36 @@ QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, (
         assert.deepEqual(onAdd.getCall(0).args[0].fromComponent, sortable1, 'onAdd args - fromComponent');
         assert.deepEqual(onAdd.getCall(0).args[0].toComponent, sortable2, 'onAdd args - toComponent');
         assert.strictEqual(onAdd.getCall(0).args[0].toIndex, 1, 'onAdd args - toIndex');
+    });
+
+    QUnit.test('Placeholder should have correct height when drag and drop item from nested sortable to parent sortable', function(assert) {
+        // arrange
+        const sortable1 = this.createSortable({
+            group: 'shared',
+            dropFeedbackMode: 'indicate'
+        }, $('#items'));
+
+        this.createSortable({
+            group: 'shared',
+            dropFeedbackMode: 'indicate'
+        }, $('#items2'));
+
+        this.createSortable({
+            group: 'shared',
+            itemOrientation: 'horizontal',
+            dropFeedbackMode: 'indicate'
+        }, $('#container'));
+
+        const $itemElement = sortable1.$element().children().eq(0);
+        const pointer = pointerMock($itemElement);
+
+        pointer.start().down().move(610, 0).move(40, 0);
+
+        const $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual($placeholder.length, 1, 'placeholder exists');
+        assert.equal($placeholder.get(0).style.height, '250px', 'placeholder height style');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
+        assert.deepEqual(translator.locate($placeholder), { left: 604, top: 0 }, 'placeholder position');
     });
 });
 
