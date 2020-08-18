@@ -239,6 +239,28 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), -14500.55, 'value is correct');
     });
 
+    QUnit.test('incorrect input should not reset the sign if minus consists of several characters (T920936)', function(assert) {
+        this.instance.option({
+            format: '#0.00;$ (#0.00)',
+            value: -14500.55
+        });
+
+        this.keyboard.caret(6).type('a').change();
+        assert.strictEqual(this.input.val(), '$ (14500.55)', 'value is correct');
+        assert.strictEqual(this.instance.option('value'), -14500.55, 'value is correct');
+    });
+
+    QUnit.test('incorrect input should not reset the sign if minus consists of several specific characters (T920936)', function(assert) {
+        this.instance.option({
+            format: '#0.00;$*/\\?||(?)^   & [({#0.00])}',
+            value: -14500.55
+        });
+
+        this.keyboard.caret(6).type('a').change();
+        assert.strictEqual(this.input.val(), '$*/\\?||(?)^   & [({14500.55])}', 'value is correct');
+        assert.strictEqual(this.instance.option('value'), -14500.55, 'value is correct');
+    });
+
     QUnit.test('correct input should not reset the sign if minus is specific character (T920936)', function(assert) {
         this.instance.option({
             format: '#0.00;M#0.00',

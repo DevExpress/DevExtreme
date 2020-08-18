@@ -235,6 +235,21 @@ const numberLocalization = dependencyInjector({
         });
     },
 
+    getNegativeEtalonRegExp: function(format) {
+        const separators = this._getSeparators();
+        const digitalRegExp = new RegExp('[0-9' + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + ']+', 'g');
+        const specialCharacters = ['\\', '(', ')', '[', ']', '*', '+', '$', '^', '?', '|', '{', '}'];
+
+        let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
+        specialCharacters.forEach(char => {
+            negativeEtalon = negativeEtalon.replace(char, `\\${char}`);
+        });
+        negativeEtalon = negativeEtalon.replace(' ', '\\s');
+        negativeEtalon = negativeEtalon.replace('1', '.+');
+
+        return new RegExp(negativeEtalon, 'g');
+    },
+
     getSign: function(text, format) {
         if(text.replace(/[^0-9-]/g, '').charAt(0) === '-') {
             return -1;
@@ -243,12 +258,8 @@ const numberLocalization = dependencyInjector({
             return 1;
         }
 
-        const separators = this._getSeparators();
-        const regExp = new RegExp('[0-9' + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + ']+', 'g');
-        const negativeEtalon = this.format(-1, format).replace(regExp, '1');
-        const cleanedText = text.replace(regExp, '1');
-
-        return cleanedText.startsWith(negativeEtalon) ? -1 : 1;
+        const negativeEtalon = this.getNegativeEtalonRegExp(format);
+        return text.match(negativeEtalon) ? -1 : 1;
     },
 
     format: function(value, format) {
