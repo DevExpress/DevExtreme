@@ -15,40 +15,6 @@ import { exportPivotGrid } from 'devextreme/excel_exporter';
 
 import { sales } from './data.js';
 
-class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <PivotGrid
-          dataSource={dataSource}
-          height={440}
-          showBorders={true}
-          rowHeaderLayout="tree"
-          onExporting={this.onExporting}
-        >
-          <FieldChooser enabled={false} />
-          <Export enabled={true} />
-        </PivotGrid>
-      </React.Fragment>
-    );
-  }
-
-  onExporting(e) {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Sales');
-
-    exportPivotGrid({
-      component: e.component,
-      worksheet: worksheet
-    }).then(() => {
-      workbook.xlsx.writeBuffer().then((buffer) => {
-        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
-      });
-    });
-    e.cancel = true;
-  }
-}
-
 const dataSource = new PivotGridDataSource({
   fields: [{
     caption: 'Region',
@@ -76,4 +42,34 @@ const dataSource = new PivotGridDataSource({
   store: sales
 });
 
-export default App;
+export default function App {
+  const onExporting = (e) => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sales');
+
+    exportPivotGrid({
+      component: e.component,
+      worksheet: worksheet
+    }).then(() => {
+      workbook.xlsx.writeBuffer().then((buffer) => {
+        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
+      });
+    });
+    e.cancel = true;
+  };
+
+  return (
+    <React.Fragment>
+      <PivotGrid
+        dataSource={dataSource}
+        height={440}
+        showBorders={true}
+        rowHeaderLayout="tree"
+        onExporting={onExporting}
+      >
+        <FieldChooser enabled={false} />
+        <Export enabled={true} />
+      </PivotGrid>
+    </React.Fragment>
+  );
+}
