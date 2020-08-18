@@ -1400,7 +1400,7 @@ if(isDesktopEnvironment()) {
             stubClientTimeZone: false
         }];
 
-        const test = function(config, assert) {
+        const test = (config, assert) => {
             const scheduler = createInstance({
                 currentDate: new Date(2020, 1, 4),
                 views: ['day'],
