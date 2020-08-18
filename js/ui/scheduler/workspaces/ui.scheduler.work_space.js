@@ -547,7 +547,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'selectedCellData':
                 break;
             case 'scrolling':
-                this.option('renovateRender', args.value === 'virtual');
+                this.option('renovateRender', this.option('scrolling.mode') === 'virtual');
                 break;
             case 'renovateRender':
                 this.repaint();
