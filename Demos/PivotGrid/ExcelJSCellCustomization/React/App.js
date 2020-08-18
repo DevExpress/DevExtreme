@@ -46,7 +46,7 @@ const dataSource = new PivotGridDataSource({
   store: sales
 });
 
-export default function App {
+export default function App() {
   const onExporting = (e) => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sales');
@@ -114,8 +114,8 @@ export default function App {
         dataSource={dataSource}
         height={440}
         showBorders={true}
-        onExporting={this.onExporting}
-        onCellPrepared={this.onCellPrepared}
+        onExporting={onExporting}
+        onCellPrepared={onCellPrepared}
       >
         <FieldChooser enabled={false} />
         <Export enabled={true} />
