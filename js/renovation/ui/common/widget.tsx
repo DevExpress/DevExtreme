@@ -16,6 +16,7 @@ import '../../../events/hover';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
+import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
@@ -34,21 +35,22 @@ const getAria = (args: object): { [name: string]: string } => Object.keys(args).
 }, {});
 
 const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string => {
-  const className = ['dx-widget'];
-  const isFocusable = model.focusStateEnabled && !model.disabled;
-  const isHoverable = model.hoverStateEnabled && !model.disabled;
+  const isFocusable = !!model.focusStateEnabled && !model.disabled;
+  const isHoverable = !!model.hoverStateEnabled && !model.disabled;
+  const classesMap = {
+    'dx-widget': true,
+    [String(model.classes)]: !!model.classes,
+    [String(model.className)]: !!model.className,
+    'dx-state-disabled': !!model.disabled,
+    'dx-state-invisible': !model.visible,
+    'dx-state-focused': !!model.focused && isFocusable,
+    'dx-state-active': !!model.active,
+    'dx-state-hover': !!model.hovered && isHoverable && !model.active,
+    'dx-rtl': !!model.rtlEnabled,
+    'dx-visibility-change-handler': !!model.onVisibilityChange,
+  };
 
-  model.classes && className.push(model.classes);
-  model.className && className.push(model.className);
-  model.disabled && className.push('dx-state-disabled');
-  !model.visible && className.push('dx-state-invisible');
-  model.focused && isFocusable && className.push('dx-state-focused');
-  model.active && className.push('dx-state-active');
-  model.hovered && isHoverable && !model.active && className.push('dx-state-hover');
-  model.rtlEnabled && className.push('dx-rtl');
-  model.onVisibilityChange && className.push('dx-visibility-change-handler');
-
-  return className.join(' ');
+  return combineClasses(classesMap);
 };
 
 export const viewFunction = (viewModel: Widget): JSX.Element => (
