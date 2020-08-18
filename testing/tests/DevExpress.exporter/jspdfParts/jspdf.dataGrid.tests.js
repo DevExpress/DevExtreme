@@ -70,7 +70,7 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
         }).dxDataGrid('instance');
         const expectedCells = [];
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((autoTableOptions) => {
-            helper.checkTableAndColumnWidths(Export.convertPixelsToPoint(500), [Export.convertPixelsToPoint(50), 'auto'], autoTableOptions);
+            helper.checkTableAndColumnWidths(Export.convertPixelsToPoints(500), [Export.convertPixelsToPoints(50), 'auto'], autoTableOptions);
             helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
             done();
         });
