@@ -447,7 +447,10 @@
 .dx-filemanager-dialog-delete-item-popup > .dx-overlay-content {
   max-width: 340px;
   min-height: 180px;
-  max-height: 180px;
+
+  .dx-popup-content .dx-filemanager-dialog-delete-item {
+    overflow-wrap: break-word;
+  }
 }
 
 .dx-filemanager-progresspanel {
