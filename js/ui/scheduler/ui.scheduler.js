@@ -334,6 +334,11 @@ class Scheduler extends Widget {
                 * @type Enums.Orientation
                 */
 
+            /**
+                * @name dxSchedulerOptions.views.scrolling
+                * @type dxSchedulerScrolling
+                */
+
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
             currentDate: dateUtils.trimTime(new Date()),
             min: undefined,
