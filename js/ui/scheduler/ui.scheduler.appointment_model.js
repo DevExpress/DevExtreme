@@ -241,7 +241,7 @@ class AppointmentModel {
                    (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
     }
 
-    _createCombinedFilter(filterOptions, timeZoneProcessor) {
+    _createCombinedFilter(filterOptions, timeZoneCalculator) {
         const dataAccessors = this._dataAccessors;
         const startDayHour = filterOptions.startDayHour;
         const endDayHour = filterOptions.endDayHour;
@@ -277,8 +277,18 @@ class AppointmentModel {
 
             const startDateTimeZone = dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = dataAccessors.getter.endDateTimeZone(appointment);
-            const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
-            const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+
+            const comparableStartDate = timeZoneCalculator.createDate(startDate, {
+                appointmentTimeZone: startDateTimeZone,
+                path: 'toGrid'
+            });
+            const comparableEndDate = timeZoneCalculator.createDate(endDate, {
+                appointmentTimeZone: endDateTimeZone,
+                path: 'toGrid'
+            });
+
+            // const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
+            // const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
 
             if(result && useRecurrence) {
                 const recurrenceException = getRecurrenceException ? getRecurrenceException(appointment) : dataAccessors.getter.recurrenceException(appointment);
@@ -420,14 +430,14 @@ class AppointmentModel {
         return filter;
     }
 
-    filterLoadedAppointments(filterOptions, timeZoneProcessor) {
-        if(!isFunction(timeZoneProcessor)) {
-            timeZoneProcessor = (date) => {
+    filterLoadedAppointments(filterOptions, timeZoneCalculator) {
+        if(!isFunction(timeZoneCalculator.createDate)) {
+            timeZoneCalculator.createDate = (date) => {
                 return date;
             };
         }
 
-        const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneProcessor);
+        const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneCalculator);
 
         if(this._filterMaker.isRegistered()) {
             this._filterMaker.make('user', undefined);
@@ -436,7 +446,7 @@ class AppointmentModel {
 
             this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
 
-            const dateFilter = this.customizeDateFilter(this._filterMaker.combine(), timeZoneProcessor);
+            const dateFilter = this.customizeDateFilter(this._filterMaker.combine(), timeZoneCalculator);
 
             combinedFilter.push([dateFilter]);
         }
@@ -512,7 +522,7 @@ class AppointmentModel {
         return !dateUtils.sameDate(startDate, endDate);
     }
 
-    customizeDateFilter(dateFilter, timeZoneProcessor) {
+    customizeDateFilter(dateFilter, timeZoneCalculator) {
         const currentFilter = extend(true, [], dateFilter);
 
         return ((appointment) => {
@@ -526,8 +536,17 @@ class AppointmentModel {
             const startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
 
-            const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
-            const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+            // const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
+            // const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+
+            const comparableStartDate = timeZoneCalculator.createDate(startDate, {
+                appointmentTimeZone: startDateTimeZone,
+                path: 'toGrid'
+            });
+            const comparableEndDate = timeZoneCalculator.createDate(endDate, {
+                appointmentTimeZone: endDateTimeZone,
+                path: 'toGrid'
+            });
 
             this._dataAccessors.setter.startDate(appointment, comparableStartDate);
             this._dataAccessors.setter.endDate(appointment, comparableEndDate);
