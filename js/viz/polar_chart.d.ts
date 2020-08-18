@@ -29,6 +29,10 @@ import {
 } from './chart_components/base_chart';
 
 import {
+    template
+} from '../core/templates/template';
+
+import {
     VizRange,
     DashStyleType,
     TimeIntervalType
@@ -1393,6 +1397,39 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @public
      */
     radius?: number;
+    /**	
+     * @docid dxPolarChartCommonAnnotationConfig.customizeTooltip	
+     * @type function(annotation)	
+     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
+     * @type_function_return object	
+     * @default undefined	
+     * @notUsedInTheme	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    customizeTooltip?: ((annotation: dxPolarChartCommonAnnotationConfig | any) => any);
+    /**	
+     * @docid dxPolarChartCommonAnnotationConfig.template	
+     * @type template|function	
+     * @default undefined	
+     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
+     * @type_function_param2 element:SVGGElement	
+     * @type_function_return string|SVGElement|jQuery	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    template?: template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    /**	
+     * @docid dxPolarChartCommonAnnotationConfig.tooltipTemplate	
+     * @type template|function(annotation, element)	
+     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
+     * @type_function_param2 element:dxElement	
+     * @type_function_return string|Element|jQuery	
+     * @default undefined	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    tooltipTemplate?: template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
 }
 
 export interface dxPolarChartSeriesTypes {

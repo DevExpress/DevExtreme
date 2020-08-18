@@ -7133,8 +7133,6 @@ declare module DevExpress.viz {
         border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name BaseWidgetAnnotationConfig.color */
         color?: string;
-        /** @name BaseWidgetAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: BaseWidgetAnnotationConfig | any) => any);
         /** @name BaseWidgetAnnotationConfig.data */
         data?: any;
         /** @name BaseWidgetAnnotationConfig.description */
@@ -7157,16 +7155,12 @@ declare module DevExpress.viz {
         paddingTopBottom?: number;
         /** @name BaseWidgetAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-        /** @name BaseWidgetAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name BaseWidgetAnnotationConfig.text */
         text?: string;
         /** @name BaseWidgetAnnotationConfig.textOverflow */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name BaseWidgetAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
-        /** @name BaseWidgetAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseWidgetAnnotationConfig.type */
         type?: 'text' | 'image' | 'custom';
         /** @name BaseWidgetAnnotationConfig.width */
@@ -8171,6 +8165,12 @@ declare module DevExpress.viz {
     export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
+        /** @name dxChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxChartCommonAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartCommonAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -9723,8 +9723,14 @@ declare module DevExpress.viz {
     export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxPolarChartCommonAnnotationConfig.angle */
         angle?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxPolarChartCommonAnnotationConfig | any) => any);
         /** @name dxPolarChartCommonAnnotationConfig.radius */
         radius?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPolarChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
@@ -10327,6 +10333,12 @@ declare module DevExpress.viz {
     export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
         /** @name dxVectorMapCommonAnnotationConfig.coordinates */
         coordinates?: Array<number>;
+        /** @name dxVectorMapCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxVectorMapCommonAnnotationConfig | any) => any);
+        /** @name dxVectorMapCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxVectorMapCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxVectorMapCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxVectorMapCommonAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name linearCircle */
     export type linearCircle = CommonIndicator;
