@@ -436,7 +436,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         if($rowElement.hasClass(GROUP_ROW_CLASS)) {
             const $groupCell = $rowElement.find(`.${GROUP_CELL_CLASS}`);
             const colSpan = $groupCell.attr('colspan');
-            if($groupCell.length && isDefined(colSpan)) {
+            if($groupCell.length && typeUtils.isDefined(colSpan)) {
                 const groupCellLength = parseInt(colSpan);
                 const endGroupIndex = $groupCell.index() + groupCellLength - 1;
                 if(visibleColumnIndex > endGroupIndex) {
