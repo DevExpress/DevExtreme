@@ -4007,8 +4007,8 @@ QUnit.module('Virtual Scrolling', {
                 height: 400,
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
-                virtualScrolling: {
-                    enabled: true
+                scrolling: {
+                    mode: 'virtual',
                 },
             }, options)).dxSchedulerWorkSpaceDay('instance');
             stubInvokeMethod(this.instance);
