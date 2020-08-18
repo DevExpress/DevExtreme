@@ -9,10 +9,6 @@ import {
 } from '../../core/element';
 
 import {
-    template
-} from '../../core/templates/template';
-
-import {
     format
 } from '../../ui/widget/ui.widget';
 

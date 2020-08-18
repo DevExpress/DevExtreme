@@ -13,6 +13,10 @@ import {
 } from '../ui/widget/ui.widget';
 
 import {
+    template
+} from '../core/templates/template';
+
+import {
     BaseChart,
     BaseChartLegend,
     BaseChartOptions,

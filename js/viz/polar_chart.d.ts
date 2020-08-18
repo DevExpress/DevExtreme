@@ -29,6 +29,10 @@ import {
 } from './chart_components/base_chart';
 
 import {
+    template
+} from '../core/templates/template';
+
+import {
     VizRange,
     DashStyleType,
     TimeIntervalType
