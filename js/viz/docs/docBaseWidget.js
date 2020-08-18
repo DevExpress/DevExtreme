@@ -681,12 +681,9 @@ const BaseWidgetAnnotationConfig = {
         height: 30
     },
     text: undefined,
-    template: undefined,
     description: undefined,
     width: undefined,
     height: undefined,
-    customizeTooltip: undefined,
-    tooltipTemplate: undefined,
     wordWrap: "normal",
     textOverflow: "ellipsis",
     allowDragging: false,
