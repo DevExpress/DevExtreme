@@ -6779,7 +6779,7 @@ declare module DevExpress.viz {
         render(renderOptions: any): void;
     }
     /** @name BaseChartAnnotationConfig */
-    export interface BaseChartAnnotationConfig {
+    export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
         /** @name BaseChartAnnotationConfig.argument */
         argument?: number | Date | string;
         /** @name BaseChartAnnotationConfig.series */
