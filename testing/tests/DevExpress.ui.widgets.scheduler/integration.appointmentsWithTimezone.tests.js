@@ -9,7 +9,7 @@ import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
 import dateUtils from 'core/utils/date';
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -1315,128 +1315,131 @@ QUnit.test('New added appointment should be rendered correctly in specified time
     assert.equal(startDate.getTime(), task.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
 });
 
-QUnit.module('Appointments rendering when appointment timeZone is set', () => {
-    const cases = [{
-        caseName: 'startDateTimeZone = endDateTimezone',
-        appointment: {
-            startDate: new Date(2020, 1, 4, 5).toString(),
-            startDateTimeZone: 'Asia/Yekaterinburg',
-            endDateTimeZone: 'Asia/Yekaterinburg',
-            endDate: new Date(2020, 1, 4, 6).toString(),
-            text: 'abc'
+if(isDesktopEnvironment()) {
+    QUnit.module('Appointments rendering when appointment timeZone is set', () => {
+        const cases = [{
+            caseName: 'startDateTimeZone = endDateTimezone',
+            appointment: {
+                startDate: new Date(2020, 1, 4, 5).toString(),
+                startDateTimeZone: 'Asia/Yekaterinburg',
+                endDateTimeZone: 'Asia/Yekaterinburg',
+                endDate: new Date(2020, 1, 4, 6).toString(),
+                text: 'abc'
+            },
+            expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
+            expectedPosition: {
+                top: 500,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 7:00 AM',
+                endDate: '2/4/2020, 8:00 AM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: true
         },
-        expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
-        expectedPosition: {
-            top: 500,
-            left: 100
+        {
+            caseName: 'startDateTimeZone != endDateTimezone',
+            appointment: {
+                startDate: new Date(2020, 1, 4, 5).toString(),
+                startDateTimeZone: 'Europe/Moscow',
+                endDateTimeZone: 'Asia/Yekaterinburg',
+                endDate: new Date(2020, 1, 4, 6).toString(),
+                text: 'abc'
+            },
+            expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
+            expectedPosition: {
+                top: 500,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 5:00 AM',
+                endDate: '2/4/2020, 8:00 AM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: true
         },
-        expectedPopupDates: {
-            startDate: '2/4/2020, 7:00 AM',
-            endDate: '2/4/2020, 8:00 AM'
+        {
+            caseName: 'startDateTimeZone = endDateTimezone and scheduler timeZone is set',
+            appointment: {
+                text: 'Daily meeting',
+                startDate: new Date('2020-02-04T14:00:00.000Z'),
+                endDate: new Date('2020-02-04T15:00:00.000Z'),
+                startDateTimeZone: 'Africa/Algiers',
+                endDateTimeZone: 'Africa/Algiers'
+            },
+            schedulerTimeZone: 'Asia/Yekaterinburg',
+            expectedContent: '7:00 PM - 8:00 PM',
+            expectedPosition: {
+                top: 1900,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 3:00 PM',
+                endDate: '2/4/2020, 4:00 PM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: false
         },
-        expectedHeight: 100,
-        stubClientTimeZone: true
-    },
-    {
-        caseName: 'startDateTimeZone != endDateTimezone',
-        appointment: {
-            startDate: new Date(2020, 1, 4, 5).toString(),
-            startDateTimeZone: 'Europe/Moscow',
-            endDateTimeZone: 'Asia/Yekaterinburg',
-            endDate: new Date(2020, 1, 4, 6).toString(),
-            text: 'abc'
-        },
-        expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
-        expectedPosition: {
-            top: 500,
-            left: 100
-        },
-        expectedPopupDates: {
-            startDate: '2/4/2020, 5:00 AM',
-            endDate: '2/4/2020, 8:00 AM'
-        },
-        expectedHeight: 100,
-        stubClientTimeZone: true
-    },
-    {
-        caseName: 'startDateTimeZone = endDateTimezone and scheduler timeZone is set',
-        appointment: {
-            text: 'Daily meeting',
-            startDate: new Date('2020-02-04T14:00:00.000Z'),
-            endDate: new Date('2020-02-04T15:00:00.000Z'),
-            startDateTimeZone: 'Africa/Algiers',
-            endDateTimeZone: 'Africa/Algiers'
-        },
-        schedulerTimeZone: 'Asia/Yekaterinburg',
-        expectedContent: '7:00 PM - 8:00 PM',
-        expectedPosition: {
-            top: 1900,
-            left: 100
-        },
-        expectedPopupDates: {
-            startDate: '2/4/2020, 3:00 PM',
-            endDate: '2/4/2020, 4:00 PM'
-        },
-        expectedHeight: 100,
-        stubClientTimeZone: false
-    },
-    {
-        caseName: 'startDateTimeZone != endDateTimezone and scheduler timeZone is set',
-        appointment: {
-            text: 'Daily meeting',
-            startDate: new Date('2020-02-04T14:00:00.000Z'),
-            endDate: new Date('2020-02-04T15:00:00.000Z'),
-            startDateTimeZone: 'Africa/Algiers',
-            endDateTimeZone: 'Africa/Cairo'
-        },
-        schedulerTimeZone: 'Asia/Yekaterinburg',
-        expectedContent: '7:00 PM - 8:00 PM',
-        expectedPosition: {
-            top: 1900,
-            left: 100
-        },
-        expectedPopupDates: {
-            startDate: '2/4/2020, 3:00 PM',
-            endDate: '2/4/2020, 5:00 PM'
-        },
-        expectedHeight: 100,
-        stubClientTimeZone: false
-    }];
+        {
+            caseName: 'startDateTimeZone != endDateTimezone and scheduler timeZone is set',
+            appointment: {
+                text: 'Daily meeting',
+                startDate: new Date('2020-02-04T14:00:00.000Z'),
+                endDate: new Date('2020-02-04T15:00:00.000Z'),
+                startDateTimeZone: 'Africa/Algiers',
+                endDateTimeZone: 'Africa/Cairo'
+            },
+            schedulerTimeZone: 'Asia/Yekaterinburg',
+            expectedContent: '7:00 PM - 8:00 PM',
+            expectedPosition: {
+                top: 1900,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 3:00 PM',
+                endDate: '2/4/2020, 5:00 PM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: false
+        }];
 
-    const test = function(config, assert) {
-        const scheduler = createInstance({
-            currentDate: new Date(2020, 1, 4),
-            views: ['day'],
-            currentView: 'day',
-            firstDayOfWeek: 1,
-            dataSource: [config.appointment],
-            timeZone: config.schedulerTimeZone
-        });
+        const test = function(config, assert) {
+            const scheduler = createInstance({
+                currentDate: new Date(2020, 1, 4),
+                views: ['day'],
+                currentView: 'day',
+                firstDayOfWeek: 1,
+                dataSource: [config.appointment],
+                timeZone: config.schedulerTimeZone
+            });
 
-        assert.equal(scheduler.appointments.getDateText(), config.expectedContent, 'Appointment content has correct dates');
-        assert.deepEqual(scheduler.appointments.getAppointmentPosition(), config.expectedPosition, 'Appointment is rendered in right cell');
+            assert.equal(scheduler.appointments.getDateText(), config.expectedContent, 'Appointment content has correct dates');
+            assert.deepEqual(scheduler.appointments.getAppointmentPosition(), config.expectedPosition, 'Appointment is rendered in right cell');
 
-        scheduler.appointments.dblclick(0);
-        const form = scheduler.instance.getAppointmentDetailsForm();
-        const startDateBox = form.getEditor('startDate');
-        const endDateBox = form.getEditor('endDate');
+            scheduler.appointments.dblclick(0);
+            const form = scheduler.instance.getAppointmentDetailsForm();
+            const startDateBox = form.getEditor('startDate');
+            const endDateBox = form.getEditor('endDate');
 
-        assert.equal(startDateBox.option('text'), config.expectedPopupDates.startDate, 'Appointment content has right startDate');
-        assert.equal(endDateBox.option('text'), config.expectedPopupDates.endDate, 'Appointment content has right endDate');
-    };
+            assert.equal(startDateBox.option('text'), config.expectedPopupDates.startDate, 'Appointment content has right startDate');
+            assert.equal(endDateBox.option('text'), config.expectedPopupDates.endDate, 'Appointment content has right endDate');
+        };
 
-    cases.forEach((config) => {
-        QUnit.test(`Appointment should have correct size, position and popup content if ${config.caseName}`, function(assert) {
-            if(config.stubClientTimeZone) {
-                const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
-                try {
+        cases.forEach((config) => {
+            QUnit.test(`Appointment should have correct size, position and popup content if ${config.caseName}`, function(assert) {
+                if(config.stubClientTimeZone) {
+                    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+                    try {
+                        test(config, assert);
+                    } finally {
+                        tzOffsetStub.restore();
+                    }
+                } else {
                     test(config, assert);
-                } finally {
-                    tzOffsetStub.restore();
                 }
-            } else {
-                test(config, assert);
-            }
+            });
         });
     });
-});
+
+}
