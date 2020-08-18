@@ -33,8 +33,3 @@
 ::ng-deep .drive-panel:last-of-type {
     border-right: none;
 }
-
-::ng-deep .dx-treeview-item {
-    position: relative;
-    left: -2px;
-}
