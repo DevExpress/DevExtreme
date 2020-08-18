@@ -3095,18 +3095,12 @@ declare module DevExpress.ui {
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /** @name dxDataGrid.getVisibleRows() */
         getVisibleRows(): Array<dxDataGridRowObject>;
-        /** @deprecated */
-        /** @name dxDataGrid.insertRow() */
-        insertRow(): void;
         /** @name dxDataGrid.isRowExpanded(key) */
         isRowExpanded(key: any): boolean;
         /** @name dxDataGrid.isRowSelected(data) */
         isRowSelected(data: any): boolean;
         /** @name GridBase.isRowSelected(key) */
         isRowSelected(key: any): boolean;
-        /** @deprecated */
-        /** @name dxDataGrid.removeRow(rowIndex) */
-        removeRow(rowIndex: number): void;
         /** @name dxDataGrid.totalCount() */
         totalCount(): number;
     }
@@ -6325,9 +6319,6 @@ declare module DevExpress.ui {
         getRootNode(): dxTreeListNode;
         /** @name dxTreeList.getSelectedRowKeys() */
         getSelectedRowKeys(): Array<any>;
-        /** @deprecated */
-        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
-        getSelectedRowKeys(leavesOnly: boolean): Array<any>;
         /** @name dxTreeList.getSelectedRowKeys(mode) */
         getSelectedRowKeys(mode: string): Array<any>;
         /** @name dxTreeList.getSelectedRowsData() */

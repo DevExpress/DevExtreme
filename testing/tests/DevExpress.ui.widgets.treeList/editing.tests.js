@@ -175,7 +175,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.ok(!$editPopupContent.find('.dx-treelist-icon-container').length, 'hasn\'t expand icon');
     });
 
-    QUnit.test('Insert row', function(assert) {
+    QUnit.test('Add row', function(assert) {
     // arrange
         let $rowElements;
         const $testElement = $('#treeList');
@@ -184,7 +184,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.rowsView.render($testElement);
 
         // act
-        this.insertRow();
+        this.addRow();
 
         // assert
         $rowElements = $testElement.find('tbody > .dx-data-row');
@@ -1077,7 +1077,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             this.loadingCount = 0;
 
             // act
-            this.removeRow(1);
+            this.deleteRow(1);
             this.clock.tick();
             this.saveEditData();
 
@@ -1098,7 +1098,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             this.loadingCount = 0;
 
             // act
-            this.removeRow(0);
+            this.deleteRow(0);
             this.clock.tick();
             this.saveEditData();
 

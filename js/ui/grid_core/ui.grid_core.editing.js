@@ -16,7 +16,6 @@ import dialog from '../dialog';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
 import Popup from '../popup';
-import errors from '../widget/ui.errors';
 import devices from '../../core/devices';
 import Form from '../form';
 import holdEvent from '../../events/hold';
@@ -610,7 +609,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         publicMethods: function() {
-            return ['insertRow', 'addRow', 'removeRow', 'deleteRow', 'undeleteRow', 'editRow', 'editCell', 'closeEditCell', 'saveEditData', 'cancelEditData', 'hasEditData'];
+            return ['addRow', 'deleteRow', 'undeleteRow', 'editRow', 'editCell', 'closeEditCell', 'saveEditData', 'cancelEditData', 'hasEditData'];
         },
 
         refresh: function(isPageChanged) {
@@ -791,11 +790,6 @@ const EditingController = modules.ViewController.inherit((function() {
                         break;
                 }
             }
-        },
-
-        insertRow: function() {
-            errors.log('W0002', 'dxDataGrid', 'insertRow', '15.2', 'Use the \'addRow\' method instead');
-            return this.addRow();
         },
 
         _initNewRow: function(options) {
@@ -1415,12 +1409,6 @@ const EditingController = modules.ViewController.inherit((function() {
 
             $editCell = $editCell || rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), editColumnIndex);
             that._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
-        },
-
-
-        removeRow: function(rowIndex) {
-            errors.log('W0002', 'dxDataGrid', 'removeRow', '15.2', 'Use the \'deleteRow\' method instead');
-            return this.deleteRow(rowIndex);
         },
 
         deleteRow: function(rowIndex) {

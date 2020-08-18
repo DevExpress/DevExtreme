@@ -15,7 +15,6 @@ import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import fx from 'animation/fx';
-import errors from 'ui/widget/ui.errors';
 import ArrayStore from 'data/array_store';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
@@ -944,7 +943,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('getSelectedRowKeys with \'leavesOnly\' parameter', function(assert) {
     // arrange
-        sinon.spy(errors, 'log');
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -960,13 +958,7 @@ QUnit.module('Recursive selection', {
         this.rowsView.render($testElement);
 
         // act, assert
-        assert.deepEqual(this.getSelectedRowKeys(true), [2, 5], 'only leaves selected'); // deprecated in 18.1
-        assert.equal(errors.log.lastCall.args[0], 'W0002', 'Warning is raised');
-
         assert.deepEqual(this.getSelectedRowKeys('leavesOnly'), [2, 5], 'only leaves selected');
-        assert.equal(errors.log.callCount, 1, 'Warning is raised one time');
-
-        errors.log.restore();
     });
 
     QUnit.test('getSelectedRowKeys with \'all\' parameter', function(assert) {
