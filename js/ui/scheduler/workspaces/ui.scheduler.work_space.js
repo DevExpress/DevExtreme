@@ -463,9 +463,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupOrientation: 'horizontal',
             selectedCellData: [],
             groupByDate: false,
-            virtualScrolling: {
-                enabled: false,
-                outlineRowCount: 0
+            scrolling: {
+                mode: 'standard',
             },
             renovateRender: false
         });
@@ -547,8 +546,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'selectedCellData':
                 break;
-            case 'virtualScrolling':
-                this.option('renovateRender', args.value);
+            case 'scrolling':
+                this.option('renovateRender', args.value === 'virtual');
                 break;
             case 'renovateRender':
                 this.repaint();
@@ -1000,7 +999,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isVirtualScrolling() {
-        return this.isRenovateRender() && this.option('virtualScrolling.enabled');
+        return this.isRenovateRender() && this.option('scrolling.mode') === 'virtual';
     }
 
     _initVirtualScrolling() {
