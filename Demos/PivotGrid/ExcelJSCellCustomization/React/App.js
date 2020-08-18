@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
@@ -47,7 +47,7 @@ const dataSource = new PivotGridDataSource({
 });
 
 export default function App() {
-  const onExporting = (e) => {
+  function onExporting(e) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sales');
 
@@ -85,9 +85,9 @@ export default function App() {
       });
     });
     e.cancel = true;
-  };
+  }
 
-  const onCellPrepared = (e) => {
+  function onCellPrepared(e) {
     if(e.rowType === 'T' || e.type === 'T' || e.type === 'GT' || e.rowType === 'GT' || e.columnType === 'GT') {
       e.cellElement.style.backgroundColor = '#DDDDDD';
     }
