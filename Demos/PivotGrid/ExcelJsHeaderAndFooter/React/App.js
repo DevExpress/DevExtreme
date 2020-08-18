@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
@@ -46,7 +46,7 @@ const dataSource = new PivotGridDataSource({
 });
 
 export default function App() {
-  const onExporting = (e) => {
+  function onExporting(e) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sales');
 
@@ -85,7 +85,7 @@ export default function App() {
       });
     });
     e.cancel = true;
-  };
+  }
 
   return (
     <React.Fragment>
