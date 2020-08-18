@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
@@ -25,7 +26,7 @@ class FileManagerDialogBase extends Widget {
             $popup.addClass(options.popupCssClass);
         }
 
-        this._popup = this._createComponent($popup, Popup, {
+        const popupOptions = {
             showTitle: true,
             title: options.title,
             visible: false,
@@ -56,7 +57,15 @@ class FileManagerDialogBase extends Widget {
             },
             onHidden: this._onPopupHidden.bind(this),
             onShown: this._onPopupShown.bind(this)
-        });
+        };
+        if(isDefined(options.height)) {
+            popupOptions.height = options.height;
+        }
+        if(isDefined(options.maxHeight)) {
+            popupOptions.maxHeight = options.maxHeight;
+        }
+
+        this._popup = this._createComponent($popup, Popup, popupOptions);
     }
 
     show() {

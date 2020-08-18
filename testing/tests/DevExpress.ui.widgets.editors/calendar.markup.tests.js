@@ -21,6 +21,8 @@ const toSelector = function(className) {
     return '.' + className;
 };
 
+const { module: testModule, test } = QUnit;
+
 QUnit.module('Calendar markup', {
     beforeEach: function() {
         this.$element = $('<div>').appendTo('#qunit-fixture');
@@ -249,6 +251,45 @@ QUnit.module('Aria accessibility', {
 
             assert.strictEqual(role, 'grid', 'role is correct');
             assert.equal(label, 'Calendar', 'label is correct');
+        });
+    });
+});
+
+testModule('OptionChanged', {
+    beforeEach: function() {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+        this.createCalendar = (config = {}) => this.$element.dxCalendar(config).dxCalendar('instance');
+        this.getViews = () => this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, function() {
+    [false, true].forEach((initialBoolOption) => {
+        test(`Calendar with initial disabled=${initialBoolOption} option`, function(assert) {
+            const instance = this.createCalendar({ disabled: initialBoolOption });
+            this.getViews().each((index, element) => {
+                assert.strictEqual($(element).hasClass('dx-state-disabled'), initialBoolOption, 'initial view\'s disabled state is correct');
+            });
+
+            instance.option('disabled', !initialBoolOption);
+
+            this.getViews().each((index, element) => {
+                assert.strictEqual($(element).hasClass('dx-state-disabled'), !initialBoolOption, 'updated view\'s disabled state is correct');
+            });
+        });
+
+        test(`Calendar with initial rtlEnabled=${initialBoolOption} option`, function(assert) {
+            const instance = this.createCalendar({ rtlEnabled: initialBoolOption });
+            this.getViews().each((index, element) => {
+                assert.strictEqual($(element).hasClass('dx-rtl'), initialBoolOption, 'initial view\'s RTL state is correct');
+            });
+
+            instance.option('rtlEnabled', !initialBoolOption);
+
+            this.getViews().each((index, element) => {
+                assert.strictEqual($(element).hasClass('dx-rtl'), !initialBoolOption, 'updated view\'s RTL state is correct');
+            });
         });
     });
 });
