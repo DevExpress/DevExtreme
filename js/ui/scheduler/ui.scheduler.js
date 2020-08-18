@@ -652,6 +652,8 @@ class Scheduler extends Widget {
                 outlineRowCount: 0
             },
 
+            renovateRender: false,
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
             _appointmentTooltipOpenButtonText: messageLocalization.format('dxScheduler-openAppointment'),
