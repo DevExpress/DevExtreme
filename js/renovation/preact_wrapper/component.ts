@@ -100,7 +100,8 @@ export default class PreactWrapper extends DOMComponent {
       .split(' ')
       .filter((name) => name.indexOf('dx-') !== 0)
       .concat(this.storedClasses)
-      .join(' ');
+      .join(' ')
+      .trim();
 
     return this._elementAttr;
   }
@@ -127,7 +128,9 @@ export default class PreactWrapper extends DOMComponent {
         ...(options.elementAttr.class || '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
-        .join(' '),
+        .join(' ')
+        .trim(),
+      class: '',
       ...this._actionsMap,
     };
   }

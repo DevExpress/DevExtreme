@@ -126,9 +126,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget({}));
 
-    expect($('#my-id').dxPreactTestWidget('getLastProps')).toMatchObject({
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
+      class: '',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -142,9 +143,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxPreactTestWidget('getLastProps')).toMatchObject({
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
+      class: '',
       'data-custom-attr': 'attr-value',
     });
   });
@@ -159,7 +161,10 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxPreactTestWidget('getLastProps').className).toBe('custom-css-class custom-css-class2 dx-custom-css-class');
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
+      className: 'custom-css-class custom-css-class2 dx-custom-css-class',
+      class: '',
+    });
   });
 
   it('should save only initial "dx-" custom classes', () => {
@@ -171,7 +176,27 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget('repaint'));
 
-    expect($('#my-id').dxPreactTestWidget('getLastProps').className).toBe('custom-css-class');
+    expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
+      className: 'custom-css-class',
+      class: '',
+    });
+  });
+
+  it('should pass empty string if no classes present on element', () => {
+    act(() => $('#component').dxPreactTestWidget({}));
+
+    act(() => $('#component').dxPreactTestWidget('repaint'));
+
+    expect($('#component').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
+      class: '',
+      className: '',
+    });
+
+    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps')).toMatchObject({
+      class: '',
+      className: '',
+    });
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
   it('widget does not show className option', () => {
@@ -187,7 +212,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#my-id').dxPreactTestWidget({ elementAttr: { id: 'attr-id' } }));
 
-    expect($('#attr-id').dxPreactTestWidget('getLastProps').id).toBe('attr-id');
+    expect($('#attr-id').dxPreactTestWidget('getLastPreactReceivedProps').id).toBe('attr-id');
   });
 
   it('merge unique css classes from elementAttr option with container class', () => {
@@ -195,7 +220,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#component').dxPreactTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } }));
 
-    expect($('#component').dxPreactTestWidget('getLastProps').class).toBe('custom-css-class attr-class attr-css-class');
+    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').class).toBe('custom-css-class attr-class attr-css-class');
   });
 
   it('keep elementAttr option untouched', () => {
@@ -212,7 +237,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#component').dxPreactTestWidget({}));
 
-    expect($('#component').dxPreactTestWidget('getLastProps').style).toEqual({
+    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').style).toEqual({
       width: '123.5px',
       height: '456.6px',
     });
@@ -227,7 +252,7 @@ describe('Widget\'s container manipulations', () => {
 
     act(() => $('#component').dxPreactTestWidget('repaint'));
 
-    expect($('#component').dxPreactTestWidget('getLastProps').style).toEqual({
+    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').style).toEqual({
       width: '23.5px',
       height: '56.6px',
       display: 'inline',
@@ -303,7 +328,7 @@ describe('option', () => {
       twoWayProp: undefined,
     }));
 
-    expect($('#component').dxPreactTestWidget('getLastProps').twoWayProp).toBe(null);
+    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').twoWayProp).toBe(null);
     expect($('#component').dxPreactTestWidget('option').twoWayProp).toBe(undefined);
   });
 });
