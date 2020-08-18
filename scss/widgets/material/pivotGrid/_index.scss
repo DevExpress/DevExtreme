@@ -113,7 +113,7 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-grandtotal.dx-last-cell {
-    padding-left: 14px;
+    padding-left: 22px;
   }
 
   .dx-column-header,
@@ -128,7 +128,7 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-expand-icon-container {
-    margin: 0;
+    margin: 0 10px 0 5px;
 
     @include dx-icon(chevronright);
 
