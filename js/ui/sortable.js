@@ -459,7 +459,7 @@ const Sortable = Draggable.inherit({
     _updatePlaceholderSizes: function($placeholderElement, itemElement) {
         const that = this;
         const dropInsideItem = that.option('dropInsideItem');
-        const $item = itemElement ? $(itemElement) : that._getSourceElement();
+        const $item = $(itemElement);
         const isVertical = that._isVerticalOrientation();
         let width = '';
         let height = '';
@@ -634,14 +634,12 @@ const Sortable = Draggable.inherit({
         const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
         const items = that._getItems();
         const toIndex = that.option('toIndex');
-        const itemElement = items[toIndex];
         const isVerticalOrientation = that._isVerticalOrientation();
         const rtlEnabled = this.option('rtlEnabled');
         const dropInsideItem = that.option('dropInsideItem');
         let position = null;
         let leftMargin = 0;
-
-        that._updatePlaceholderSizes($placeholderElement, itemElement);
+        let itemElement = items[toIndex];
 
         if(itemElement) {
             const $itemElement = $(itemElement);
@@ -653,7 +651,7 @@ const Sortable = Draggable.inherit({
                 position.left += $itemElement.outerWidth(true);
             }
         } else {
-            const prevVisibleItemElement = this._getPrevVisibleItem(items, toIndex);
+            const prevVisibleItemElement = itemElement = this._getPrevVisibleItem(items, toIndex);
 
             if(prevVisibleItemElement) {
                 position = $(prevVisibleItemElement).offset();
@@ -665,6 +663,8 @@ const Sortable = Draggable.inherit({
                 }
             }
         }
+
+        that._updatePlaceholderSizes($placeholderElement, itemElement);
 
         if(position && !that._isPositionVisible(position)) {
             position = null;
