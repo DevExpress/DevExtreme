@@ -1324,7 +1324,6 @@ if(isDesktopEnvironment()) {
                 startDateTimeZone: 'Asia/Yekaterinburg',
                 endDateTimeZone: 'Asia/Yekaterinburg',
                 endDate: new Date(2020, 1, 4, 6).toString(),
-                text: 'abc'
             },
             expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
             expectedPosition: {
@@ -1344,8 +1343,7 @@ if(isDesktopEnvironment()) {
                 startDate: new Date(2020, 1, 4, 5).toString(),
                 startDateTimeZone: 'Europe/Moscow',
                 endDateTimeZone: 'Asia/Yekaterinburg',
-                endDate: new Date(2020, 1, 4, 6).toString(),
-                text: 'abc'
+                endDate: new Date(2020, 1, 4, 6).toString()
             },
             expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
             expectedPosition: {
@@ -1362,7 +1360,6 @@ if(isDesktopEnvironment()) {
         {
             caseName: 'startDateTimeZone = endDateTimezone and scheduler timeZone is set',
             appointment: {
-                text: 'Daily meeting',
                 startDate: new Date('2020-02-04T14:00:00.000Z'),
                 endDate: new Date('2020-02-04T15:00:00.000Z'),
                 startDateTimeZone: 'Africa/Algiers',
@@ -1384,7 +1381,6 @@ if(isDesktopEnvironment()) {
         {
             caseName: 'startDateTimeZone != endDateTimezone and scheduler timeZone is set',
             appointment: {
-                text: 'Daily meeting',
                 startDate: new Date('2020-02-04T14:00:00.000Z'),
                 endDate: new Date('2020-02-04T15:00:00.000Z'),
                 startDateTimeZone: 'Africa/Algiers',
@@ -1422,8 +1418,8 @@ if(isDesktopEnvironment()) {
             const startDateBox = form.getEditor('startDate');
             const endDateBox = form.getEditor('endDate');
 
-            assert.equal(startDateBox.option('text'), config.expectedPopupDates.startDate, 'Appointment content has right startDate');
-            assert.equal(endDateBox.option('text'), config.expectedPopupDates.endDate, 'Appointment content has right endDate');
+            assert.equal(startDateBox.option('text'), config.expectedPopupDates.startDate, 'Appointment popup has right startDate');
+            assert.equal(endDateBox.option('text'), config.expectedPopupDates.endDate, 'Appointment popup has right endDate');
         };
 
         cases.forEach((config) => {
