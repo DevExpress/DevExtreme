@@ -1,4 +1,4 @@
-Virtual scrolling enables users to scroll grid records in order or jump to any record. In this mode, records are loaded when they get into the viewport and removed once they leave it.
+If the DataGrid component works with a large dataset, you can enable virtual scrolling to optimize data loading and navigation. The component calculates the overall number of visible rows and displays a scrollbar so users can jump to any location. When users release the scroll thumb, the control loads the records to be displayed in the viewport and removes other rows from memory. 
 
 To enable virtual scrolling, set the **scrolling**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/scrolling/#mode) to *"virtual"*.
 
