@@ -10,6 +10,7 @@ import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
 import 'generic_light.css!';
+import { Export } from 'exporter/jspdf/export';
 
 QUnit.testStart(() => {
     const markup = '<div id="dataGrid"></div>';
@@ -47,8 +48,7 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
         const expectedCells = [];
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((autoTableOptions) => {
-            helper.checkTableWidth(undefined, autoTableOptions);
-            helper.checkColumnWidths([], autoTableOptions);
+            helper.checkTableAndColumnWidths(undefined, [], autoTableOptions);
             helper.checkCellsContent([], [], autoTableOptions);
             done();
         });
@@ -70,8 +70,7 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
         }).dxDataGrid('instance');
         const expectedCells = [];
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((autoTableOptions) => {
-            helper.checkTableWidth(500, autoTableOptions);
-            helper.checkColumnWidths([50, 'auto'], autoTableOptions);
+            helper.checkTableAndColumnWidths(Export.convertPixelsToPoint(500), [Export.convertPixelsToPoint(50), 'auto'], autoTableOptions);
             helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
             done();
         });

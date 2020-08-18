@@ -16,9 +16,6 @@ function _getFullOptions(options) {
     if(!isDefined(options.selectedRowsOnly)) {
         options.selectedRowsOnly = false;
     }
-    if(!isDefined(options.autoFilterEnabled)) {
-        options.autoFilterEnabled = false;
-    }
     return Export.getFullOptions(options);
 }
 

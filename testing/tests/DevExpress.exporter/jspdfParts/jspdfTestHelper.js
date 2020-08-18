@@ -1,5 +1,3 @@
-import { isDefined, isNumeric } from 'core/utils/type';
-import { Export } from 'exporter/jspdf/export';
 const { assert } = QUnit;
 
 class JSPdfDataGridTestHelper {
@@ -7,31 +5,18 @@ class JSPdfDataGridTestHelper {
         this.jsPDFDocument = jsPDFDocument;
     }
 
-    checkTableWidth(expectedWidth, actualAutoTableOptions) {
-        let actualTableWidth = actualAutoTableOptions.tableWidth;
+    checkTableAndColumnWidths(expectedTableWidth, expectedColumnWidths, actualAutoTableOptions) {
+        assert.equal(actualAutoTableOptions.tableWidth, expectedTableWidth, 'Table width');
 
-        if(isDefined(actualTableWidth) && isNumeric(actualTableWidth)) {
-            actualTableWidth = Export.convertPointsToUnit(actualTableWidth, 'px');
-        }
-
-        assert.equal(expectedWidth, actualTableWidth, 'Table width');
-    }
-
-    checkColumnWidths(expectedWidths, actualAutoTableOptions) {
         const columnStyles = actualAutoTableOptions.columnStyles;
         const actualWidths = [];
 
-        for(let i = 0; i < expectedWidths.length; i++) {
-            let width = columnStyles[i] ? columnStyles[i].cellWidth : 'auto';
-
-            if(isNumeric(width)) {
-                width = Export.convertPointsToUnit(width, 'px');
-            }
-
+        for(let i = 0; i < expectedColumnWidths.length; i++) {
+            const width = columnStyles[i] ? columnStyles[i].cellWidth : 'auto';
             actualWidths.push(width);
         }
 
-        assert.deepEqual(actualWidths, expectedWidths, 'Column widths');
+        assert.deepEqual(actualWidths, expectedColumnWidths, 'Column widths');
     }
 
     checkCellsContent(headCellsArray, bodyCellsArray, actualAutoTableOptions) {

@@ -69,7 +69,7 @@ export const Export = {
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(tableWidth) {
-                    autoTableOptions.tableWidth = this.convertUnitToPoints(tableWidth, 'px');
+                    autoTableOptions.tableWidth = this.convertPixelsToPoints(tableWidth);
                 }
 
                 this.setColumnWidths(autoTableOptions, columns, keepColumnWidths);
@@ -91,12 +91,9 @@ export const Export = {
 
                         this.assignCellStyle(pdfCell, gridCell, columns[cellIndex], cellStyle);
 
-                        rowType = rowType || gridCell.rowType;
-                        if(rowType === 'header') {
-                            if(pdfCell.content !== '') { row.push(pdfCell); }
-                        } else {
-                            row.push(pdfCell);
-                        }
+                        if(!isDefined(rowType)) { rowType = gridCell.rowType; }
+
+                        row.push(pdfCell);
                     }
 
                     if(rowType === 'header') { autoTableOptions.head.push(row); }
@@ -106,8 +103,6 @@ export const Export = {
                 jsPDFDocument.autoTable(autoTableOptions);
 
                 resolve(autoTableOptions);
-            }).always(() => {
-
             });
         });
     },
@@ -135,44 +130,16 @@ export const Export = {
 
             const columnWidth = columns[i].gridColumn.width;
             if(keepColumnWidths && (typeof columnWidth === 'number') && isFinite(columnWidth)) {
-                columnStyles[i].cellWidth = this.convertUnitToPoints(columnWidth, 'px');
+                columnStyles[i].cellWidth = this.convertPixelsToPoints(columnWidth);
             } else {
                 columnStyles[i].cellWidth = 'auto';
             }
         }
     },
 
-    getRelativeProportionsToPt: function(unitType) {
-        let k = 1;
-        if(unitType === 'mm') {
-            k = 72 / 25.4;
-        } else if(unitType === 'cm') {
-            k = 72 / 2.54;
-        } else if(unitType === 'in') {
-            k = 72;
-        } else if(unitType === 'px') {
-            k = 96 / 72;
-        } else if(unitType === 'pc') {
-            k = 12;
-        } else if(unitType === 'em') {
-            k = 12;
-        } else if(unitType === 'ex') {
-            k = 6;
-        }
-        return k;
-    },
-
-    convertUnitToPoints: function(value, unitType) {
-        const k = this.getRelativeProportionsToPt(unitType);
-        return value / k;
-    },
-
-    convertPointsToUnit: function(value, unitType) {
-        const k = this.getRelativeProportionsToPt(unitType);
-        return value * k;
+    convertPixelsToPoints: function(value) {
+        const pointsPerInch = 72;
+        const dotsPerInch = 96;
+        return pointsPerInch / dotsPerInch * value;
     }
 };
-
-//#DEBUG
-Export.__internals = { };
-//#ENDDEBUG
