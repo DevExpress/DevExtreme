@@ -1,4 +1,4 @@
-Infinite scrolling enables users to scroll records page by page, but pages cannot be skipped. Each next page is loaded once the scrollbar reaches the end of its scale.
+If the **DataGrid** component works with a large dataset, you can enable infinite scrolling to optimize data loading and navigation. The component initially displays one page of rows. When users scroll the view to the end, the **DataGrid** loads one more page and so on. Users can only load pages sequentially and cannot skip to arbitrary positions in the dataset.
 
 To enable infinite scrolling, set the **scrolling**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/scrolling/#mode) to *"infinite"*.
 
