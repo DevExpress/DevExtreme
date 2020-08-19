@@ -348,11 +348,6 @@ const LayoutManager = Widget.inherit({
             if(!windowUtils.hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
-
-            if(that.option('colCount') === 'auto') { // T923489
-                that._cashedColCount = null;
-                that._getColCount();
-            }
         }
     },
 
@@ -497,7 +492,8 @@ const LayoutManager = Widget.inherit({
     },
 
     isCachedColCountObsolete: function() {
-        return this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
+        const virtualColCount = this._items.filter(i => i.merged === true).length;
+        return this._cashedColCount && this._getMaxColCount() !== (this._cashedColCount + virtualColCount);
     },
 
     _prepareItemsWithMerging: function(colCount) {
