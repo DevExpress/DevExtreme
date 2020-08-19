@@ -3,8 +3,6 @@ import dateUtils from '../../../core/utils/date';
 import workWeekUtils from './utils.work_week';
 import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
 
-import dxrWeekTableLayout from '../../../renovation/ui/scheduler/workspaces/week/date_table/layout.j';
-
 const toMs = dateUtils.dateToMilliseconds;
 
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
@@ -71,16 +69,6 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
         const weekendCount = Math.floor(cellIndex / 5);
 
         return toMs('day') * weekendCount * 2;
-    }
-
-    renovateRenderSupported() { return true; }
-    renderRDateTable() {
-        this.renderRComponent(
-            this._$dateTable,
-            dxrWeekTableLayout,
-            'renovatedDateTable',
-            { viewData: this.viewData }
-        );
     }
 }
 
