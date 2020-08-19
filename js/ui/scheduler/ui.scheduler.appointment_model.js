@@ -431,12 +431,6 @@ class AppointmentModel {
     }
 
     filterLoadedAppointments(filterOptions, timeZoneCalculator) {
-        if(!isFunction(timeZoneCalculator.createDate)) {
-            timeZoneCalculator.createDate = (date) => {
-                return date;
-            };
-        }
-
         const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneCalculator);
 
         if(this._filterMaker.isRegistered()) {
