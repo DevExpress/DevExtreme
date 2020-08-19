@@ -287,9 +287,6 @@ class AppointmentModel {
                 path: 'toGrid'
             });
 
-            // const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
-            // const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
-
             if(result && useRecurrence) {
                 const recurrenceException = getRecurrenceException ? getRecurrenceException(appointment) : dataAccessors.getter.recurrenceException(appointment);
                 result = that._filterAppointmentByRRule({

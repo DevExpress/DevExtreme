@@ -464,16 +464,6 @@ const subscribes = {
             allDay = false;
         }
 
-        // const startDate = this.timeZoneCalculator.createDate(source.startDate, {
-        //     appointmentTimeZone: adapter.startDateTimeZone,
-        //     path: 'toGrid'
-        // });
-        // const endDate = this.timeZoneCalculator.createDate(source.endDate, {
-        //     appointmentTimeZone: adapter.endDateTimeZone,
-        //     path: 'toGrid'
-        // });
-
-
         return this._appointmentModel.filterLoadedAppointments({
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
