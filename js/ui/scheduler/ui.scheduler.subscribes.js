@@ -644,7 +644,7 @@ const subscribes = {
 
         return {
             client: clientTimezoneOffset,
-            common: commonTimezoneOffset,
+            common: isDefined(commonTimezoneOffset) ? commonTimezoneOffset : clientTimezoneOffset,
             appointment: appointmentTimezoneOffset
         };
     },
