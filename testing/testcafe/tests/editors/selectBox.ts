@@ -7,13 +7,13 @@ fixture`SelectBox`
 const pureClick = async (t, selector): Promise<void> => {
   await t
     .click(selector.element)
-    .wait(200);
+    .wait(500);
 };
 
 const purePressKey = async (t, key): Promise<void> => {
   await t
     .pressKey(key)
-    .wait(200);
+    .wait(500);
 };
 
 test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async (t) => {
