@@ -8,12 +8,16 @@ const renovatedComponents = require('../../js/bundles/modules/parts/renovation')
 
 const toUnderscoreCase = str => str.replace(/\.?([A-Z])/g, (x, y) => '_' + y.toLowerCase()).replace(/^_/, '');
 const renovatedComponentsMeta = renovatedComponents.map(component => ({ name: component.name, fileName: toUnderscoreCase(component.name), ...component }));
+const renovatedNamesRegEx = new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('^' + fileName + '\\b')).join('|'), 'i');
+const renovationFolder = /renovation/g;
+const renovationFileRegEx = new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('ui(\\\\|\\/)' + fileName)).join('|'), 'i');
+const jsFileExtension = '.js';
 
 function isOldComponentRenovated(file) {
-    const isRenovatedName = !!file.basename.match(new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('^' + fileName + '\\b')).join('|'), 'i')); // only renovated file names
-    const isNotRenovationFolder = file.path.match(/renovation/g) === null; // without renovation folder
-    const isJsFile = file.extname === '.js';
-    const isCorrectFilePath = !!file.path.match(new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('ui(\\\\|\\/)' + fileName)).join('|'), 'i')); // without ui/text_box/../button.js
+    const isRenovatedName = !!file.basename.match(renovatedNamesRegEx); // only renovated file names
+    const isNotRenovationFolder = file.path.match(renovationFolder) === null; // without renovation folder
+    const isJsFile = file.extname === jsFileExtension;
+    const isCorrectFilePath = !!file.path.match(renovationFileRegEx); // without ui/text_box/../button.js
 
     return isRenovatedName && isNotRenovationFolder && isJsFile && isCorrectFilePath;
 }
