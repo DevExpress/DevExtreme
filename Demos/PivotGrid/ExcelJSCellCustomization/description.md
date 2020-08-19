@@ -1,6 +1,4 @@
-You can use the [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExportPivotGridProps/#customizeCell) callback to modify cell data and formatting when you export PivotGrid to an Excel file. You can access and change the following attributes:    
-
-The **PivotGrid** allows you to&nbsp;customize data when exporting it&nbsp;to&nbsp;an&nbsp;Excel file: adjust the font options, specify a&nbsp;cell&rsquo;s background, modify exported values or&nbsp;specify their alignment and formatting options.
+You can use the [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExportPivotGridProps/#customizeCell) callback to modify cell data and formatting when you export PivotGrid to an Excel file. You can access and change the following attributes:
 
 - <a href="https://github.com/exceljs/exceljs#fonts" target="_blank">Font</a> options    
 - <a href="https://github.com/exceljs/exceljs#fills" target="_blank">Cell background</a>     
