@@ -527,9 +527,6 @@ class AppointmentModel {
             const startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
 
-            // const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
-            // const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
-
             const comparableStartDate = timeZoneCalculator.createDate(startDate, {
                 appointmentTimeZone: startDateTimeZone,
                 path: 'toGrid'
