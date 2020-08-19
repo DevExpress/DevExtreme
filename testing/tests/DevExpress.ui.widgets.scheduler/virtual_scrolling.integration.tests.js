@@ -20,7 +20,7 @@ module('Initialization', {
         }, {
             mode: 'virtual', result: true,
         }].forEach(scrolling => {
-            test(`Virtual scrolling if view: ${view}, virtualScrolling.mode: ${scrolling.mode}`, function(assert) {
+            test(`Virtual Scrolling as the ${view} view option, scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: supportedViews,
                     currentView: view,
@@ -35,7 +35,7 @@ module('Initialization', {
                 assert.equal(instance.getWorkSpace().isRenovatedRender(), scrolling.result, 'Correct render is used');
             });
 
-            test(`Virtual scrolling as view's option in ${view} view, virtualScrolling.mode: ${scrolling.mode}`, function(assert) {
+            test(`Virtual scrolling as view's option in ${view} view, scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: [{
                         type: view,
@@ -92,7 +92,7 @@ module('Initialization', {
         }, {
             mode: 'virtual', result: true,
         }].forEach(scrolling => {
-            test(`Virtual scrolling if view: ${view}, virtualScrolling.mode: ${scrolling.mode}`, function(assert) {
+            test(`Virtual Scrolling as the ${view} view option, scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: unsupportedViews,
                     currentView: view,
@@ -105,7 +105,7 @@ module('Initialization', {
                 assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
-            test(`Virtual scrolling as view's option in ${view} view, virtualScrolling.mode: ${scrolling.mode}`, function(assert) {
+            test(`Virtual scrolling as view's option in ${view} view, scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: [{
                         type: view,
