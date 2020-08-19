@@ -20,7 +20,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
             getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
               && <AllDayPanelTableBody viewData={allDayPanel} />
           }
-          { dateTable.map((cellsRow, index) => (
+          {dateTable.map((cellsRow, index) => (
             <DateTableRow
               key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
             >
@@ -28,6 +28,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                 startDate,
                 endDate,
                 groups,
+                groupIndex: cellGroupIndex,
               }: ViewCellData) => (
                 <viewModel.props.cellTemplate
                   isFirstCell={index === 0}
@@ -35,6 +36,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                   startDate={startDate}
                   endDate={endDate}
                   groups={groups}
+                  groupIndex={cellGroupIndex}
                   key={getKeyByDateAndGroup(startDate, groups)}
                   dataCellTemplate={viewModel.props.dataCellTemplate}
                 />

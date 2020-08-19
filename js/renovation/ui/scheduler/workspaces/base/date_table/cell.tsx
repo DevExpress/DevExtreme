@@ -23,6 +23,7 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => {
             text: viewModel.props.text,
             groups: viewModel.props.groups,
             allDay: viewModel.props.allDay,
+            groupIndex: viewModel.props.groupIndex,
           }}
           // index={viewModel.props.index}
         />
@@ -45,8 +46,9 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
   get classes(): string {
     const { className = '', allDay } = this.props;
     return combineClasses({
-      'dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal': true,
+      'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-cell-sizes-vertical': !allDay,
+      'dx-scheduler-date-table-cell': !allDay,
       [className]: true,
     });
   }

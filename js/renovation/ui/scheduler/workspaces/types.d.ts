@@ -6,6 +6,7 @@ export interface ViewCellData {
   today?: boolean;
   allDay?: boolean;
   groups?: object;
+  groupIndex?: number;
 }
 
 interface ViewData {

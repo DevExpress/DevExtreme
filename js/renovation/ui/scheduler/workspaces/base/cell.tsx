@@ -29,6 +29,8 @@ export class CellBaseProps {
 
   @OneWay() groups?: object;
 
+  @OneWay() groupIndex?: number;
+
   @OneWay() text?: string = '';
 
   @Slot() children?: any;
