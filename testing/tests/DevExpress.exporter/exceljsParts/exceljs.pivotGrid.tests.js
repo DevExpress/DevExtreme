@@ -2042,7 +2042,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             done();
@@ -2086,7 +2086,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             done();
@@ -2129,7 +2129,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkAlignment(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
-            helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+            helper.checkOutlineLevel([0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
             helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             done();
