@@ -680,6 +680,7 @@ const TagBox = SelectBox.inherit({
         if(isEmptyInput && canTypeText) {
             const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
+            $calculationElement.css('whiteSpace', 'pre');
             $calculationElement.insertAfter($input);
             width = $calculationElement.outerWidth() + cursorWidth;
 
