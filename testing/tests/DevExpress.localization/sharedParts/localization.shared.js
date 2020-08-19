@@ -675,6 +675,26 @@ module.exports = function() {
             assert.equal(localization.parseNumber('(12,34.56)', '#,##0.##;(#,##0.##)'), -1234.56, 'negative with removed digit and decimal part');
         });
 
+        QUnit.test('parse by predefined formats', function(assert) {
+            assert.strictEqual(localization.parseNumber('4B', 'largeNumber'), 4000000000);
+            assert.strictEqual(localization.parseNumber('41K', 'thousands'), 41000);
+            assert.strictEqual(localization.parseNumber('4,120M', 'miLLions'), 4120000000);
+            assert.strictEqual(localization.parseNumber('4B', 'biLLions'), 4000000000);
+            assert.strictEqual(localization.parseNumber('4T', 'triLLions'), 4000000000000);
+            assert.strictEqual(localization.parseNumber('15.5%', 'percent'), 0.155);
+            assert.strictEqual(localization.parseNumber('1K %', 'thousands percent'), 10);
+            assert.strictEqual(localization.parseNumber('1.2M %', {
+                type: 'percent largeNumber'
+            }), 12000);
+        });
+
+        QUnit.test('parse different positive and negative parts with minus consists of several specific characters', function(assert) {
+            assert.equal(localization.parseNumber('12,345', '##,##0.##;$*/\\?||(?)^   & [({#,##0.##])}'), 12345, 'positive');
+            assert.equal(localization.parseNumber('$*/\\?||(?)^   & [({12,345])}', '##,##0.##;$*/\\?||(?)^   & [({#,##0.##])}'), -12345, 'negative');
+            assert.equal(localization.parseNumber('$minus^ {12,345}', '##,##0.##;$minus^ {##,##0}'), -12345, 'negative');
+            assert.equal(localization.parseNumber('$minus {12,345}', '##,##0.##;$minus^ {##,##0}'), 12345, 'positive, there is no `^` in the text');
+        });
+
         QUnit.test('format: base', function(assert) {
             assert.equal(localization.formatNumber(12), '12');
             assert.equal(localization.formatNumber(1, { type: 'decimal', precision: 2 }), '01');

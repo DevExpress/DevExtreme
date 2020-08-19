@@ -228,6 +228,50 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
         assert.equal(this.instance.option('value'), 123.456, 'value has been changed after valueChange event');
     });
 
+    QUnit.test('incorrect input should not reset the sign if minus is specific character (T920936)', function(assert) {
+        this.instance.option({
+            format: '#0.00;M#0.00',
+            value: -14500.55
+        });
+
+        this.keyboard.caret(6).type('a').change();
+        assert.strictEqual(this.input.val(), 'M14500.55', 'value is correct');
+        assert.strictEqual(this.instance.option('value'), -14500.55, 'value is correct');
+    });
+
+    QUnit.test('incorrect input should not reset the sign if minus consists of several characters (T920936)', function(assert) {
+        this.instance.option({
+            format: '#0.00;$ (#0.00)',
+            value: -14500.55
+        });
+
+        this.keyboard.caret(6).type('a').change();
+        assert.strictEqual(this.input.val(), '$ (14500.55)', 'value is correct');
+        assert.strictEqual(this.instance.option('value'), -14500.55, 'value is correct');
+    });
+
+    QUnit.test('incorrect input should not reset the sign if minus consists of several specific characters (T920936)', function(assert) {
+        this.instance.option({
+            format: '#0.00;$*/\\?||(?)^   & [({#0.00])}',
+            value: -14500.55
+        });
+
+        this.keyboard.caret(6).type('a').change();
+        assert.strictEqual(this.input.val(), '$*/\\?||(?)^   & [({14500.55])}', 'value is correct');
+        assert.strictEqual(this.instance.option('value'), -14500.55, 'value is correct');
+    });
+
+    QUnit.test('correct input should not reset the sign if minus is specific character (T920936)', function(assert) {
+        this.instance.option({
+            format: '#0.00;M#0.00',
+            value: -14500.55
+        });
+
+        this.keyboard.caret(6).type('1').change();
+        assert.strictEqual(this.input.val(), 'M145001.55', 'value is correct');
+        assert.strictEqual(this.instance.option('value'), -145001.55, 'value is correct');
+    });
+
     QUnit.test('pressing numpad minus button should revert the number', function(assert) {
         const isIE = browser.msie;
         const keyName = isIE ? IE_NUMPAD_MINUS_KEY : '-';
