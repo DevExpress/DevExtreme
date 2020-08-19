@@ -101,8 +101,11 @@ export const Export = {
                 }
 
                 jsPDFDocument.autoTable(autoTableOptions);
+                ///#DEBUG
+                jsPDFDocument.autoTable.__autoTableOptions = autoTableOptions;
+                ///#ENDDEBUG
 
-                resolve(autoTableOptions);
+                resolve(jsPDFDocument);
             });
         });
     },

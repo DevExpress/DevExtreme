@@ -47,7 +47,8 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
         const expectedCells = [];
 
-        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((autoTableOptions) => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkTableAndColumnWidths(undefined, [], autoTableOptions);
             helper.checkCellsContent([], [], autoTableOptions);
             done();
@@ -69,7 +70,8 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
             width: 500
         }).dxDataGrid('instance');
         const expectedCells = [];
-        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((autoTableOptions) => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkTableAndColumnWidths(Export.convertPixelsToPoints(500), [Export.convertPixelsToPoints(50), 'auto'], autoTableOptions);
             helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
             done();
