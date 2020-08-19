@@ -57,5 +57,15 @@
     .dx-scrollable-scrollbar {
       z-index: 100;
     }
+
+    .dx-gantt-parent:before {
+      border-left-color: inherit;
+      border-top-color: inherit;
+    }
+
+    .dx-gantt-parent:after {
+      border-right-color: inherit;
+      border-top-color: inherit;
+    }
   }
 }
