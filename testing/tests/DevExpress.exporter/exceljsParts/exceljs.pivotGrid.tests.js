@@ -2011,7 +2011,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             fields: [
                 { area: 'row', dataField: 'row1', selector: () => 'Merged (r1, r2)' },
                 { area: 'column', dataField: 'col1' },
-                { area: 'data', dataField: 'data' }
+                { area: 'data', dataField: 'data', summaryType: 'sum' }
             ],
             store: [
                 { row1: 'r1', col1: 'c1', data: 2 },
@@ -2030,7 +2030,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 'c1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'c1', width: 100, path: ['c1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } }
         ], [
             { excelCell: { value: 'Merged (r1, r2)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Merged (r1, r2)', path: ['Merged (r1, r2)'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'row' } },
-            { excelCell: { value: '2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '2', value: 2, dataType: 'number', rowPath: ['Merged (r1, r2)'], columnPath: ['c1'], dataIndex: 0, area: 'data', rowType: 'D', columnType: 'D' } }
+            { excelCell: { value: '10', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '10', value: 10, dataType: 'number', rowPath: ['Merged (r1, r2)'], columnPath: ['c1'], dataIndex: 0, area: 'data', rowType: 'D', columnType: 'D' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
@@ -2055,11 +2055,11 @@ QUnit.module('Scenarios', moduleConfig, () => {
             fields: [
                 { area: 'row', dataField: 'row1' },
                 { area: 'column', dataField: 'col1', selector: () => 'Merged (c1, c2)' },
-                { area: 'data', dataField: 'data' }
+                { area: 'data', dataField: 'data', summaryType: 'sum' }
             ],
             store: [
                 { row1: 'r1', col1: 'c1', data: 3 },
-                { row1: 'r1', col1: 'c2', data: 5 }
+                { row1: 'r1', col1: 'c2', data: 7 }
             ]
         };
 
@@ -2074,7 +2074,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
             { excelCell: { value: 'Merged (c1, c2)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'Merged (c1, c2)', width: 100, path: ['Merged (c1, c2)'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'column' } }
         ], [
             { excelCell: { value: 'r1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: 'r1', path: ['r1'], type: 'D', isLast: true, dataSourceIndex: 1, area: 'row' } },
-            { excelCell: { value: '2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '2', value: 2, dataType: 'number', rowPath: ['r1'], columnPath: ['Merged (c1, c2)'], dataIndex: 0, area: 'data', rowType: 'D', columnType: 'D' } }
+            { excelCell: { value: '10', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { colspan: 1, rowspan: 1, text: '10', value: 10, dataType: 'number', rowPath: ['r1'], columnPath: ['Merged (c1, c2)'], dataIndex: 0, area: 'data', rowType: 'D', columnType: 'D' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
