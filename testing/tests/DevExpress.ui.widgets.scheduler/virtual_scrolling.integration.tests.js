@@ -68,7 +68,7 @@ module('Initialization', {
             assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
         });
 
-        test(`Optional virtual scrolling as view's option in ${view} view`, function(assert) {
+        test(`Optional Virtual Scrolling as the ${view} view option`, function(assert) {
             const instance = createWrapper({
                 views: [{
                     type: view,
@@ -136,7 +136,7 @@ module('Initialization', {
             assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
         });
 
-        test(`Virtual scrolling as view's option in ${view} view`, function(assert) {
+        test(`Optional Virtual Scrolling as the ${view} view option`, function(assert) {
             const instance = createWrapper({
                 views: [{
                     type: view,
