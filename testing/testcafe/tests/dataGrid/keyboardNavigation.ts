@@ -1480,3 +1480,173 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 });
+
+test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  let columnIndex = 0;
+  let cell = dataGrid.getDataCell(0, columnIndex);
+
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // Moving right
+  for (let i = 0; i < 19; i += 1) {
+    await t.pressKey('right');
+
+    columnIndex = i + 1;
+    cell = dataGrid.getDataCell(0, columnIndex);
+    await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
+  }
+
+  // Moving left
+  for (let i = 19; i >= 1; i -= 1) {
+    await t.pressKey('left');
+
+    columnIndex = i - 1;
+    cell = dataGrid.getDataCell(0, columnIndex);
+    await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
+  }
+}).before(() => {
+  const generateData = function (rowCount, columnCount) {
+    const items = [];
+
+    for (let i = 0; i < rowCount; i += 1) {
+      const item = {};
+      for (let j = 0; j < columnCount; j += 1) {
+        item[`field${j}`] = `${i}-${j}`;
+      }
+      items.push(item);
+    }
+    return items;
+  };
+  const data = generateData(2, 20);
+
+  return createWidget('dxDataGrid', {
+    width: 300,
+    dataSource: data,
+    columnWidth: 90,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    paging: {
+      enabled: false,
+    },
+    onFocusedCellChanging: (e) => { e.isHighlighted = true; },
+  });
+});
+
+test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  let rowIndex = 0;
+  let cell = dataGrid.getDataCell(rowIndex, 0);
+
+  await t.click(cell.element);
+
+  // Moving Down
+  for (let i = 0; i < 19; i += 1) {
+    await t.pressKey('down');
+    rowIndex = i + 1;
+    cell = dataGrid.getDataCell(rowIndex, 0);
+    await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
+  }
+
+  // Moving Up
+  for (let i = 19; i >= 1; i -= 1) {
+    await t.pressKey('up');
+
+    rowIndex = i - 1;
+    cell = dataGrid.getDataCell(rowIndex, 0);
+    await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
+  }
+}).before(() => {
+  const generateData = function (rowCount, columnCount) {
+    const items = [];
+
+    for (let i = 0; i < rowCount; i += 1) {
+      const item = {};
+      for (let j = 0; j < columnCount; j += 1) {
+        item[`field${j}`] = `${i}-${j}`;
+      }
+      items.push(item);
+    }
+    return items;
+  };
+  const data = generateData(20, 2);
+
+  return createWidget('dxDataGrid', {
+    width: 300,
+    height: 200,
+    dataSource: data,
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+    },
+    paging: {
+      enabled: false,
+    },
+    onFocusedCellChanging: (e) => { e.isHighlighted = true; },
+  });
+});
+
+['cell', 'batch'].forEach((editMode) => {
+  test(`Moving by "tab" key if scrolling.rowRenderingMode: virtual, editing.mode: ${editMode}`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+
+    await t.click(dataGrid.getDataCell(0, 0).element);
+
+    // Tab
+    for (let rowIndex = 0; rowIndex < 2; rowIndex += 1) {
+      for (let columnIndex = 0; columnIndex < 10; columnIndex += 1) {
+        const cell = dataGrid.getDataCell(rowIndex, columnIndex);
+
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
+        await t.expect(cell.isEditCell).ok(`Cell[${rowIndex}, ${columnIndex}] is in edit mode`);
+
+        await t.pressKey('tab');
+      }
+    }
+
+    await t.click(dataGrid.getDataCell(1, 9).element);
+
+    // Shift + Tab
+    for (let rowIndex = 1; rowIndex >= 0; rowIndex -= 1) {
+      for (let columnIndex = 9; columnIndex >= 0; columnIndex -= 1) {
+        const cell = dataGrid.getDataCell(rowIndex, columnIndex);
+
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
+        await t.expect(cell.isEditCell).ok(`Cell[${rowIndex}, ${columnIndex}] is in edit mode`);
+
+        await t.pressKey('shift+tab');
+      }
+    }
+  }).before(() => {
+    const generateData = function (rowCount, columnCount) {
+      const items = [];
+
+      for (let i = 0; i < rowCount; i += 1) {
+        const item = { };
+        for (let j = 0; j < columnCount; j += 1) {
+          item[`field${j}`] = `${i}-${j}`;
+        }
+        items.push(item);
+      }
+      return items;
+    };
+    const data = generateData(2, 10);
+
+    return createWidget('dxDataGrid', {
+      width: 300,
+      columnWidth: 70,
+      dataSource: data,
+      scrolling: {
+        columnRenderingMode: 'virtual',
+      },
+      editing: {
+        mode: editMode,
+        allowUpdating: true,
+      },
+      paging: {
+        enabled: false,
+      },
+    });
+  });
+});
