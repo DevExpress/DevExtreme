@@ -547,7 +547,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'selectedCellData':
                 break;
             case 'scrolling':
-                this.option('renovateRender', this.option('scrolling.mode') === 'virtual');
+                this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
                 this.repaint();
@@ -998,8 +998,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.renovateRenderSupported() && this.option('renovateRender');
     }
 
+    _isVirtualModeOn() {
+        return this.option('scrolling.mode') === 'virtual';
+    }
+
     isVirtualScrolling() {
-        return this.isRenovateRender() && this.option('scrolling.mode') === 'virtual';
+        return this.isRenovateRender() && this._isVirtualModeOn();
     }
 
     _initVirtualScrolling() {
