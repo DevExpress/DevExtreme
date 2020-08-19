@@ -819,6 +819,10 @@ interface JQuery {
 }
 export type Options = dxSchedulerOptions;
 
+/**
+ * @docid dxSchedulerScrolling
+ * @public
+ */
 export interface dxSchedulerScrolling {
   /**
    * @docid dxSchedulerScrolling.mode
