@@ -232,7 +232,6 @@ export interface dxGanttStripLine {
      */
     start?: Date | number | string | (() => Date | number | string);
     /**
-     /**
      * @docid dxGanttStripLine.title
      * @type string
      * @default undefined
