@@ -349,7 +349,7 @@ const LayoutManager = Widget.inherit({
                 that._renderTemplates(templatesInfo);
             }
 
-            if(that.option('colCount') === 'auto') {
+            if(that.option('colCount') === 'auto') { // T923489
                 that._cashedColCount = null;
                 that._getColCount();
             }
