@@ -250,9 +250,4 @@ export default {
 .drive-panel:last-of-type {
     border-right: none;
 }
-
-.dx-treeview-item {
-    position: relative;
-    left: -2px;
-}
 </style>
