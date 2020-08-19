@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
   Effect, Template, InternalState, ForwardRef, OneWay,
@@ -8,7 +9,7 @@ import PagerProps from './common/pager_props';
 import { GetHtmlElement } from './common/types.d';
 import { getElementWidth } from './utils/get_element_width';
 import { PagerContentProps } from './content';
-import { EffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -42,7 +43,7 @@ interface ChildElementProps {
   isLargeDisplayMode: boolean;
 }
 
-export function getContentProps({
+export function calculateAdaptivityProps({
   parent: parentWidth, pageSizes: pageSizesWidth,
   pages: pagesWidth, info: infoWidth,
 }: AllElementsWidth): ChildElementProps {
@@ -70,46 +71,6 @@ function getElementsWidth({
   };
 }
 
-function updateElementsWidthIfNeed(
-  elementsWidth: ChildElementsWidth,
-  currentElementsWidth: ChildElementsWidth,
-): ChildElementsWidth {
-  const updated = {
-    pageSizes: Math.max(elementsWidth.pageSizes, currentElementsWidth.pageSizes),
-    info: Math.max(elementsWidth.info, currentElementsWidth.info),
-    pages: Math.max(elementsWidth.pages, currentElementsWidth.pages),
-  };
-  const isEqual = (elementsWidth.pageSizes === updated.pageSizes)
-  && (elementsWidth.pages === updated.pages)
-  && (elementsWidth.info === updated.info);
-  return isEqual ? elementsWidth : updated;
-}
-export function updateChildProps(
-  parentRef: HTMLElement,
-  pageSizesHtmlRef: GetHtmlElement| undefined,
-  infoTextRef: GetHtmlElement| undefined,
-  pagesRef: HTMLElement | undefined,
-  elementsWidth: ChildElementsWidth,
-):
-  { elementsWidth: ChildElementsWidth } & ChildElementProps {
-  const { parent: parentWidth, ...currentElementsWidth } = getElementsWidth({
-    parent: parentRef,
-    pageSizes: pageSizesHtmlRef?.getHtmlElement(),
-    info: infoTextRef?.getHtmlElement(),
-    pages: pagesRef,
-  });
-  const newElementsWidth = updateElementsWidthIfNeed(elementsWidth, currentElementsWidth);
-  const { infoTextVisible, isLargeDisplayMode } = getContentProps({
-    parent: parentWidth,
-    ...newElementsWidth,
-  });
-  return {
-    elementsWidth: newElementsWidth,
-    infoTextVisible,
-    isLargeDisplayMode,
-  };
-}
-
 @ComponentBindings()
 export class ResizableContainerProps {
   @OneWay() pagerProps!: PagerProps;
@@ -133,33 +94,58 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @InternalState() isLargeDisplayMode = true;
 
-  @InternalState() elementsWidth: ChildElementsWidth = {
+  @InternalState() elementsWidth: ChildElementsWidth & { isEmpty: boolean } = {
+    isEmpty: true,
     pageSizes: 0,
     pages: 0,
     info: 0,
   };
 
-  @Effect({ run: 'once' }) subscribeToResize(): EffectReturn {
+  @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => this.updateChildrenProps();
     resizeCallbacks.add(callback);
     return (): void => { resizeCallbacks.remove(callback); };
   }
 
-  @Effect() effectUpdateChildProps(): void {
+  @Effect({ run: 'always' }) effectUpdateChildProps(): void {
     const parentWidth = getElementWidth(this.parentRef);
     if (parentWidth > 0) {
       this.updateChildrenProps();
     }
   }
 
+  updateElementsWidth(currentElementsWidth): void {
+    this.elementsWidth.isEmpty = false;
+    this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
+    this.elementsWidth.info = currentElementsWidth.info;
+    this.elementsWidth.pages = currentElementsWidth.pages;
+  }
+
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
-    const { isLargeDisplayMode, infoTextVisible, elementsWidth } = updateChildProps(
-      this.parentRef, this.pageSizesRef, this.infoTextRef, this.pagesRef,
-      this.elementsWidth,
-    );
-    this.elementsWidth = elementsWidth;
-    this.infoTextVisible = infoTextVisible;
-    this.isLargeDisplayMode = isLargeDisplayMode;
+    const elementsWidth = getElementsWidth({
+      parent: this.parentRef,
+      pageSizes: this.pageSizesRef?.getHtmlElement(),
+      info: this.infoTextRef?.getHtmlElement(),
+      pages: this.pagesRef,
+    });
+    const current = calculateAdaptivityProps(elementsWidth);
+    const isNotFittedWithCurrentWidths = (!current.infoTextVisible && this.infoTextVisible)
+    || (!current.isLargeDisplayMode && this.isLargeDisplayMode);
+    if (this.elementsWidth.isEmpty || isNotFittedWithCurrentWidths) {
+      this.updateElementsWidth(elementsWidth);
+      this.infoTextVisible = current.infoTextVisible;
+      this.isLargeDisplayMode = current.isLargeDisplayMode;
+    } else {
+      const cached = calculateAdaptivityProps({
+        parent: elementsWidth.parent,
+        ...this.elementsWidth,
+      });
+      if (cached.infoTextVisible && cached.isLargeDisplayMode) {
+        this.updateElementsWidth(elementsWidth);
+      }
+      this.infoTextVisible = cached.infoTextVisible;
+      this.isLargeDisplayMode = cached.isLargeDisplayMode;
+    }
   }
 }

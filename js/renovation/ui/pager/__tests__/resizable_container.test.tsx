@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
@@ -6,7 +7,7 @@ import {
   ResizableContainer,
   viewFunction as ResizableContainerComponent,
   ResizableContainerProps,
-  updateChildProps,
+  calculateAdaptivityProps,
 } from '../resizable_container';
 import { GetHtmlElement } from '../common/types.d';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
@@ -71,7 +72,7 @@ describe('resizable-container', () => {
     });
   });
 
-  describe('behaviour', () => {
+  describe('Logic', () => {
     function createComponent(sizes: {
       width; pageSizes; info; pages;
     }) {
@@ -85,49 +86,241 @@ describe('resizable-container', () => {
       component.infoTextRef = infoHtmlEl;
       return component;
     }
-
-    it('effectUpdateChildProps', () => {
-      const component = createComponent({
-        width: 400, pageSizes: 100, info: 50, pages: 100,
-      });
-      component.effectUpdateChildProps();
-      expect(component.elementsWidth).toEqual({
-        info: 50,
-        pageSizes: 100,
-        pages: 150,
-      });
-      expect(component.infoTextVisible).toBe(true);
-      expect(component.isLargeDisplayMode).toBe(true);
-    });
-
-    it('effectUpdateChildProps, visible change from false to true', () => {
-      // visible false
-      const component = createComponent({
-        width: 0, pageSizes: 0, info: 0, pages: 0,
-      });
-      component.effectUpdateChildProps();
-      expect(component.elementsWidth).toEqual({
-        info: 0,
-        pageSizes: 0,
-        pages: 0,
-      });
-      expect(component.isLargeDisplayMode).toBe(true);
-      expect(component.infoTextVisible).toBe(true);
-      const { elementsWidth } = component;
-      // visible true
+    function updateComponent(component: ResizableContainer, sizes: {
+      width; pageSizes; info; pages;
+    }) {
       const {
         parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-      } = getElementsRef({
-        width: 400, pageSizes: 100, info: 50, pages: 100,
-      });
+      } = getElementsRef(sizes);
       component.parentRef = parentHtmlEl;
       component.pageSizesRef = pageSizesHtmlEl;
-      component.pagesRef = pagesHtmlEl;
+      component.pagesRef = pagesHtmlEl as HTMLElement;
       component.infoTextRef = infoHtmlEl;
-      component.effectUpdateChildProps();
-      expect(component.isLargeDisplayMode).toBe(true);
-      expect(component.infoTextVisible).toBe(true);
-      expect(elementsWidth).not.toBe(component.elementsWidth);
+      return component;
+    }
+
+    describe('UpdateChildProps', () => {
+      it('first render should update elementsWidth', () => {
+        const component = createComponent({
+          width: 400, pageSizes: 100, info: 50, pages: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 50,
+          pageSizes: 100,
+          pages: 150,
+        });
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+      });
+
+      it('no pageSizes and info', () => {
+        const component = createComponent({
+          width: 400, pageSizes: null, info: null, pages: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 0,
+          pageSizes: 0,
+          pages: 100,
+        });
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+      });
+
+      it('resize from large to small', () => {
+        const component = createComponent({
+          width: 450, pageSizes: 100, pages: 200, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 400, pageSizes: 100, pages: 200, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 300, pageSizes: 50, pages: 50, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(false);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 100,
+          pageSizes: 100,
+          pages: 300,
+        });
+      });
+
+      it('resize from small to lagre', () => {
+        const component = createComponent({
+          width: 300, pageSizes: 100, pages: 200, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(false);
+        updateComponent(component, {
+          width: 300, pageSizes: 50, pages: 50, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(false);
+        updateComponent(component, {
+          width: 400, pageSizes: 50, pages: 50, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 400, pageSizes: 100, pages: 200, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 450, pageSizes: 100, pages: 200, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 450, pageSizes: 100, pages: 200, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 100,
+          pageSizes: 100,
+          pages: 300,
+        });
+      });
+
+      it('pageIndex changed and info not fitted to size', () => {
+        const component = createComponent({
+          width: 450, pageSizes: 100, pages: 200, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 100,
+          pageSizes: 100,
+          pages: 300,
+        });
+        // pageIndex is changed and info text size grows
+        updateComponent(component, {
+          width: 450, pageSizes: 100, pages: 200, info: 160,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 160,
+          pageSizes: 100,
+          pages: 360,
+        });
+      });
+
+      it('pageSize changed and large content not fitted to size', () => {
+        const component = createComponent({
+          width: 210, pageSizes: 100, pages: 100, info: 20,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 20,
+          pageSizes: 100,
+          pages: 120,
+        });
+        // pageSizes is changed and content size grows
+        updateComponent(component, {
+          width: 210, pageSizes: 120, pages: 100, info: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(false);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 0,
+          pageSizes: 120,
+          pages: 100,
+        });
+      });
+
+      it('update elementswidths if widths changed', () => {
+        const component = createComponent({
+          width: 350, pageSizes: 100, pages: 100, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 100,
+          pageSizes: 100,
+          pages: 200,
+        });
+        // pageIndex and pageSizes is changed
+        updateComponent(component, {
+          width: 350, pageSizes: 110, pages: 110, info: 90,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.elementsWidth).toEqual({
+          isEmpty: false,
+          info: 90,
+          pageSizes: 110,
+          pages: 200,
+        });
+      });
+
+      it('visible is changed from false to true', () => {
+      // visible false
+        const component = createComponent({
+          width: 0, pageSizes: 0, info: 0, pages: 0,
+        });
+        component.effectUpdateChildProps();
+        expect(component.elementsWidth).toEqual({
+          isEmpty: true,
+          info: 0,
+          pageSizes: 0,
+          pages: 0,
+        });
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.infoTextVisible).toBe(true);
+        const { elementsWidth } = component;
+        // visible true
+        const {
+          parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
+        } = getElementsRef({
+          width: 400, pageSizes: 100, info: 50, pages: 100,
+        });
+        component.parentRef = parentHtmlEl;
+        component.pageSizesRef = pageSizesHtmlEl;
+        component.pagesRef = pagesHtmlEl;
+        component.infoTextRef = infoHtmlEl;
+        component.effectUpdateChildProps();
+        expect(component.isLargeDisplayMode).toBe(true);
+        expect(component.infoTextVisible).toBe(true);
+        expect(elementsWidth).toEqual({
+          isEmpty: false,
+          info: 50,
+          pageSizes: 100,
+          pages: 150,
+        });
+      });
     });
 
     describe('subscribeToResize', () => {
@@ -145,7 +338,7 @@ describe('resizable-container', () => {
         expect(resizeCallbacks.add).toBeCalledTimes(1);
         expect(resizeCallbacks.remove).toBeCalledTimes(0);
 
-        dispose();
+        dispose?.();
       });
 
       it('remove', () => {
@@ -154,7 +347,7 @@ describe('resizable-container', () => {
         });
         const dispose = component.subscribeToResize();
 
-        dispose();
+        dispose?.();
 
         expect(resizeCallbacks.remove).toBeCalledTimes(1);
         const callbackPassedToAdd = (resizeCallbacks as any).add.mock.calls[0][0];
@@ -187,125 +380,14 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
 
-        dispose();
+        dispose?.();
       });
     });
-
-    // it('pagerProps', () => {
-    //   const props: ResizableContainerProps = {
-    //     contentTemplate: 'template',
-    //     pageIndexChange: () => { },
-    //     pageSizeChange: () => { },
-    //     pageIndex: 1,
-    //     pageCount: 2,
-    //     pageSize: 10,
-    //     pageSizes: [1, 2],
-    //     pagesCountText: 'count',
-    //   };
-    //   const component = new ResizableContainer(props);
-
-    //   const { contentTemplate, ...expected } = props;
-    //   expect(component.pagerProps).toMatchObject(expected);
-    // });
   });
 
-  describe('updateChildProps', () => {
-    it('init', () => {
-      const prevElementsWidth = {
-        pageSizes: 0,
-        pages: 0,
-        info: 0,
-      };
-      const {
-        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-      } = getElementsRef({
-        width: 400, pageSizes: 100, info: 50, pages: 100,
-      });
-      const {
-        elementsWidth,
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, prevElementsWidth);
-      expect(elementsWidth).toEqual({
-        info: 50,
-        pageSizes: 100,
-        pages: 150,
-      });
-      expect(infoTextVisible).toBe(true);
-      expect(isLargeDisplayMode).toBe(true);
-    });
-
-    it('no pageSizes and info', () => {
-      const prevElementsWidth = {
-        pageSizes: 0,
-        pages: 0,
-        info: 0,
-      };
-      const {
-        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-      } = getElementsRef({
-        width: 400, pageSizes: null, info: null, pages: 100,
-      });
-      const {
-        elementsWidth,
-        infoTextVisible,
-        isLargeDisplayMode,
-      } = updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, prevElementsWidth);
-      expect(elementsWidth).toEqual({
-        info: 0,
-        pageSizes: 0,
-        pages: 100,
-      });
-      expect(infoTextVisible).toBe(true);
-      expect(isLargeDisplayMode).toBe(true);
-    });
-
-    it('second update not mutate elementsWidth', () => {
-      const prevElementsWidth = {
-        pageSizes: 0,
-        pages: 0,
-        info: 0,
-      };
-      const {
-        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-      } = getElementsRef({
-        width: 400, pageSizes: 100, info: 50, pages: 100,
-      });
-      const { elementsWidth } = updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, prevElementsWidth);
-      const { elementsWidth: nextElementsWidth } = updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, elementsWidth);
-      expect(elementsWidth === nextElementsWidth).toBe(true);
-    });
-
-    it('update from large to small not mutate elementsWidth', () => {
-      const largeElementsWidth = {
-        pageSizes: 100,
-        pages: 200,
-        info: 100,
-      };
-      const {
-        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-      } = getElementsRef({
-        width: 400, pageSizes: 100, info: 100, pages: 100,
-      });
-      const { elementsWidth } = updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, largeElementsWidth);
-      expect(elementsWidth === largeElementsWidth).toBe(true);
-    });
-
+  describe('calculateAdaptivityProps', () => {
     function testChildProps(widths: Parameters<typeof getElementsRef>[0]) {
-      const {
-        parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
-      } = getElementsRef(widths);
-      return updateChildProps(parentHtmlEl,
-        pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl, {
-          pageSizes: 0,
-          pages: 0,
-          info: 0,
-        } as any);
+      return calculateAdaptivityProps({ parent: widths.width, ...widths });
     }
 
     it('fit size', () => {
@@ -313,7 +395,7 @@ describe('resizable-container', () => {
         infoTextVisible,
         isLargeDisplayMode,
       } = testChildProps({
-        width: 400, pageSizes: 100, info: 50, pages: 100,
+        width: 400, pageSizes: 100, info: 50, pages: 100 + 50,
       });
       expect(infoTextVisible).toBe(true);
       expect(isLargeDisplayMode).toBe(true);
@@ -335,7 +417,7 @@ describe('resizable-container', () => {
         infoTextVisible,
         isLargeDisplayMode,
       } = testChildProps({
-        width: 400, pageSizes: 100, info: 300, pages: 100,
+        width: 400, pageSizes: 100, info: 300, pages: 300 + 100,
       });
       expect(infoTextVisible).toBe(false);
       expect(isLargeDisplayMode).toBe(true);
@@ -346,7 +428,7 @@ describe('resizable-container', () => {
         infoTextVisible,
         isLargeDisplayMode,
       } = testChildProps({
-        width: 400, pageSizes: 250, info: 100, pages: 250,
+        width: 400, pageSizes: 250, info: 100, pages: 100 + 250,
       });
       expect(infoTextVisible).toBe(false);
       expect(isLargeDisplayMode).toBe(false);
