@@ -13,13 +13,13 @@ function createTagBox(): Promise<void> {
 const pureClick = async (t, selector): Promise<void> => {
   await t
     .click(selector.element)
-    .wait(200);
+    .wait(500);
 };
 
 const purePressKey = async (t, key): Promise<void> => {
   await t
     .pressKey(key)
-    .wait(200);
+    .wait(500);
 };
 
 fixture`TagBox`
