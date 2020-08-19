@@ -254,6 +254,8 @@ export function current(options) {
     } else {
         if(isAutoInit) {
             waitForThemeLoad(ANY_THEME);
+            themeReadyCallback.fire();
+            themeReadyCallback.empty();
         } else {
             throw errors.Error('E0021', currentThemeName);
         }
