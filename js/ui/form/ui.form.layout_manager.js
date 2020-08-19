@@ -348,6 +348,11 @@ const LayoutManager = Widget.inherit({
             if(!windowUtils.hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
+
+            if(that.option('colCount') === 'auto') {
+                that._cashedColCount = null;
+                that._getColCount();
+            }
         }
     },
 
