@@ -688,7 +688,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._initAllDayPanelElements();
 
-        if(this.isRenovateRender()) {
+        if(this.isRenovatedRender()) {
             this.createRAllDayPanelElements();
         } else {
             this._createAllDayPanelElements();
@@ -994,8 +994,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._setFocusOnCellByOption(this.option('selectedCellData'));
     }
 
-    isRenovateRender() {
-        return this.renovateRenderSupported() && this.option('renovateRender');
+    isRenovatedRender() {
+        return this.renovatedRenderSupported() && this.option('renovateRender');
     }
 
     _isVirtualModeOn() {
@@ -1003,7 +1003,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isVirtualScrolling() {
-        return this.isRenovateRender() && this._isVirtualModeOn();
+        return this.isRenovatedRender() && this._isVirtualModeOn();
     }
 
     _initVirtualScrolling() {
@@ -1040,7 +1040,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._renderDateHeader();
 
-        if(this.isRenovateRender()) {
+        if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
             this._renderTimePanel();
@@ -1089,7 +1089,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return options;
     }
 
-    renovateRenderSupported() { return false; }
+    renovatedRenderSupported() { return false; }
 
     renderRWorkspace() {
         this.viewData = this.viewDataGenerator.generate();
@@ -2297,7 +2297,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const currentCell = $cell[0];
 
         if(currentCell) {
-            if(this.isRenovateRender()) {
+            if(this.isRenovatedRender()) {
                 data = this._getCellDataInRenovatedView($cell);
             } else {
                 data = elementData(currentCell, CELL_DATA);
