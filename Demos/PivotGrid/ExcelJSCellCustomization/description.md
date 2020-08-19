@@ -6,4 +6,4 @@ You can use the [customizeCell](/Documentation/ApiReference/Common/Object_Struct
 - Text <a href="https://github.com/exceljs/exceljs#alignment" target="_blank">alignment</a>        
 - <a href="https://github.com/exceljs/exceljs#number-formats" target="_blank">Formatting</a> options    
 
-The **customizeCell** function also allows you to identify cell types. also allows you to identify cell area types. For example, this demo shows how to change the background color and font weight for cells that belong to the certain [areas](/Documentation/ApiReference/UI_Widgets/dxPivotGrid/Configuration/#dataFieldArea).
+The **customizeCell** function also allows you to identify cell area types. For example, this demo shows how to change the background color and font weight for cells that belong to the certain [areas](/Documentation/ApiReference/UI_Widgets/dxPivotGrid/Configuration/#dataFieldArea).
