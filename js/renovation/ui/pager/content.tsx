@@ -73,14 +73,8 @@ export const viewFunction = ({
   </div>
 );
 
-/* Vitik bug in generator try to use in resizable-container
-export type TwoWayProps = {
-  pageIndexChange?: (pageIndex: number) => void;
-  pageSizeChange?: (pageSize: number) => void;
-}; */
-
 @ComponentBindings()
-export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
+export class PagerContentProps extends PagerProps {
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;
