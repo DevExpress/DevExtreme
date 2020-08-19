@@ -330,7 +330,10 @@ const dxVectorMap = {
 * @inherits BaseWidgetAnnotationConfig
 */
 const dxVectorMapCommonAnnotationConfig = {
-    coordinates: undefined
+    coordinates: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 };
 
 /**

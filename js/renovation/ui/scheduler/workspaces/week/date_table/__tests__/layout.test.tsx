@@ -8,7 +8,7 @@ jest.mock('../../../base/date_table/layout', () => ({
   DateTableLayoutBase: (props) => <div {...props} />,
 }));
 
-describe('DayDateTableLayout', () => {
+describe('WeekTableLayout', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{

@@ -82,6 +82,7 @@ const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
+const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
 
 const DATE_TABLE_DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -1092,7 +1093,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     renovatedRenderSupported() { return false; }
 
     renderRWorkspace() {
-        this.viewData = this.viewDataGenerator.generate();
+        const viewModel = this.viewDataGenerator.generate();
+
+        this.viewData = viewModel.viewData;
+        this.viewDataMap = viewModel.viewDataMap;
 
         this.renderRAllDayPanel();
 
@@ -2011,9 +2015,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellCoordinatesByIndex(index) {
         const cellIndex = Math.floor(index / this._getRowCount());
-        let rowIndex = index - this._getRowCount() * cellIndex;
-
-        rowIndex -= this._getVirtualRowOffset();
+        const rowIndex = index - this._getRowCount() * cellIndex;
 
         return {
             cellIndex: cellIndex,
@@ -2138,7 +2140,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
 
         return this._$dateTable
-            .find('tr')
+            .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
             .eq(indexes.rowIndex)
             .find('td')
             .eq(indexes.cellIndex);
@@ -2308,33 +2310,29 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getVirtualRowOffset() {
-        return this.isVirtualScrolling() ? this._virtualScrolling.getState().startIndex : 0;
+        return this.isVirtualScrolling()
+            ? this._virtualScrolling.getState().startIndex
+            : 0;
     }
 
     _getCellDataInRenovatedView($cell) {
-        const isAllDayCell = this._hasAllDayClass($cell);
-        const virtualRowOffset = this._getVirtualRowOffset();
-
-        const rowIndex = $cell.parent().index() + virtualRowOffset;
+        let rowIndex = $cell.parent().index();
+        this.isVirtualScrolling() && --rowIndex;
 
         const columnIndex = $cell.index();
         const cellCount = this._getTotalCellCount();
         const cellIndex = this.option('rtlEnabled') ? cellCount - columnIndex : columnIndex;
-        const rowCount = this._getRowCountWithAllDayRows();
 
-        let indexDiff = 0;
-        const isGroupedAllDayPanel = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace();
-        isGroupedAllDayPanel && ++indexDiff;
-        this.isVirtualScrolling() && ++indexDiff;
-
-        const groupIndex = Math.floor(rowIndex / rowCount);
-        const currentGroup = this.viewData.groupedData[groupIndex];
-
+        const isAllDayCell = this._hasAllDayClass($cell);
         if(isAllDayCell) {
-            return currentGroup.allDayPanel[cellIndex];
+            const allDayPanel = this._isVerticalGroupedWorkSpace()
+                ? this.viewDataMap[rowIndex]
+                : this.viewData.groupedData[0].allDayPanel;
+
+            return allDayPanel[cellIndex];
         }
 
-        return currentGroup.dateTable[rowIndex % rowCount - indexDiff][cellIndex];
+        return this.viewDataMap[rowIndex][cellIndex];
     }
 
     _getHorizontalMax(groupIndex) {
@@ -2709,14 +2707,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateScrollPosition(date) {
-        date = this.invoke('convertDateByTimezone', date); // TODO:
+        const scheduler = this.option('observer');
+        const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
-        const startDateHour = date.getHours();
-        const startDateMinutes = date.getMinutes();
+        const startDateHour = newDate.getHours();
+        const startDateMinutes = newDate.getMinutes();
 
-        if(this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, date)) {
-            this.scrollToTime(startDateHour, startDateMinutes, date);
+        if(this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
+            this.scrollToTime(startDateHour, startDateMinutes, newDate);
         }
     }
 

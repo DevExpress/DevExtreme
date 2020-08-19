@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 
 import messageLocalization from '../../localization/message';
 
+import ScrollView from '../scroll_view/ui.scroll_view.js';
 import FileManagerDialogBase from './ui.file_manager.dialog.js';
 
 const FILE_MANAGER_DIALOG_DELETE_ITEM = 'dx-filemanager-dialog-delete-item';
@@ -29,7 +30,9 @@ class FileManagerDeleteItemDialog extends FileManagerDialogBase {
             title: messageLocalization.format('dxFileManager-dialogDeleteItemTitle'),
             buttonText: messageLocalization.format('dxFileManager-dialogDeleteItemButtonText'),
             contentCssClass: FILE_MANAGER_DIALOG_DELETE_ITEM,
-            popupCssClass: FILE_MANAGER_DIALOG_DELETE_ITEM_POPUP
+            popupCssClass: FILE_MANAGER_DIALOG_DELETE_ITEM_POPUP,
+            height: 'auto',
+            maxHeight: '80vh'
         });
     }
 
@@ -39,6 +42,11 @@ class FileManagerDeleteItemDialog extends FileManagerDialogBase {
         this._$text = $('<div>')
             .text(this._initialText)
             .appendTo(this._$contentElement);
+
+        this._createComponent(this._$contentElement, ScrollView, {
+            width: '100%',
+            height: '100%'
+        });
     }
 
     _getDialogResult() {

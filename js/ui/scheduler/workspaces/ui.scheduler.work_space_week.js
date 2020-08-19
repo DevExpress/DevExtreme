@@ -3,6 +3,8 @@ import dateUtils from '../../../core/utils/date';
 import dateLocalization from '../../../localization/date';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 
+import dxrWeekTableLayout from '../../../renovation/ui/scheduler/workspaces/week/date_table/layout.j';
+
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -49,6 +51,16 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
             return false;
         }
         return super._isApplyCompactAppointmentOffset();
+    }
+
+    renovateRenderSupported() { return true; }
+    renderRDateTable() {
+        this.renderRComponent(
+            this._$dateTable,
+            dxrWeekTableLayout,
+            'renovatedDateTable',
+            { viewData: this.viewData }
+        );
     }
 }
 
