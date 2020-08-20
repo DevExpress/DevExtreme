@@ -362,4 +362,11 @@ QUnit.module('number formatter', () => {
             'EEE', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
         ]);
     });
+
+    QUnit.test('getRegExpInfo should return correct pattern set when there is "ww" inside of it', function(assert) {
+        const regExpInfo = getRegExpInfo('ww, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'ww', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
+        ]);
+    });
 });
