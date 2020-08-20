@@ -22,6 +22,7 @@ $scheduler-dd-appointment-hover-text-color: null !default;
 
 @use "../mixins" as *;
 @use "../icons" as *;
+@use "./common";
 @use "./tooltip" with (
   $scheduler-appointment-base-color: $scheduler-appointment-base-color
 );
