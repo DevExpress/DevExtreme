@@ -52,6 +52,9 @@ const PATTERN_REGEXPS = {
     },
     S: function(count) {
         return '[0-9]{1,' + count + '}';
+    },
+    w: function(count) {
+        return '0?[0-9]|[1-5][0-9]';
     }
 };
 
