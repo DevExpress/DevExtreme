@@ -675,6 +675,13 @@ module.exports = function() {
             assert.equal(localization.parseNumber('(12,34.56)', '#,##0.##;(#,##0.##)'), -1234.56, 'negative with removed digit and decimal part');
         });
 
+        QUnit.test('parse different positive and negative parts with minus consists of several specific characters', function(assert) {
+            assert.equal(localization.parseNumber('12,345', '##,##0.##;$*/\\?||(?)^   & [({#,##0.##])}'), 12345, 'positive');
+            assert.equal(localization.parseNumber('$*/\\?||(?)^   & [({12,345])}', '##,##0.##;$*/\\?||(?)^   & [({#,##0.##])}'), -12345, 'negative');
+            assert.equal(localization.parseNumber('$minus^ {12,345}', '##,##0.##;$minus^ {##,##0}'), -12345, 'negative');
+            assert.equal(localization.parseNumber('$minus {12,345}', '##,##0.##;$minus^ {##,##0}'), 12345, 'positive, there is no `^` in the text');
+        });
+
         QUnit.test('format: base', function(assert) {
             assert.equal(localization.formatNumber(12), '12');
             assert.equal(localization.formatNumber(1, { type: 'decimal', precision: 2 }), '01');
