@@ -17,6 +17,8 @@ export const CLASSES = {
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
     navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
+    scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
+    schedulerSmall: '.dx-scheduler-small',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -108,7 +110,7 @@ class HeaderWrapper extends ElementWrapper {
 
 export class SchedulerTestWrapper extends ElementWrapper {
     constructor(instance) {
-        super(`.${SCHEDULER_ID}`);
+        super(`#${SCHEDULER_ID}`);
         this.instance = instance;
 
         this.timePanel = {
