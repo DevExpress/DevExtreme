@@ -332,7 +332,6 @@ export default class dxTextEditor extends Editor {
 
 export interface dxTextEditorButton {
     /**
-     /**
      * @docid dxTextEditorButton.location
      * @type Enums.TextEditorButtonLocation
      * @default "after"
