@@ -4,7 +4,7 @@ import { getWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import Callbacks from '../core/utils/callbacks';
-import { isDefined, isFunction } from '../core/utils/type';
+import { isDefined, isFunction, isNumeric } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
@@ -959,6 +959,18 @@ class FileUploader extends Editor {
         }
 
         super._clean();
+    }
+
+    upload(fileData) {
+        if(isDefined(fileData)) {
+            const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
+            const file = this._files.filter(file => file.value === targetFileValue)[0];
+            if(file && isFormDataSupported()) {
+                this._uploadFile(file);
+            }
+        } else {
+            this._uploadFiles();
+        }
     }
 
     _uploadFiles() {
