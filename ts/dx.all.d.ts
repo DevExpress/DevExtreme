@@ -8173,11 +8173,11 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: dxChartCommonAnnotationConfig | any) => any);
+        customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
         /** @name dxChartCommonAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: dxChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartCommonAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -9731,13 +9731,13 @@ declare module DevExpress.viz {
         /** @name dxPolarChartCommonAnnotationConfig.angle */
         angle?: number;
         /** @name dxPolarChartCommonAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: dxPolarChartCommonAnnotationConfig | any) => any);
+        customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
         /** @name dxPolarChartCommonAnnotationConfig.radius */
         radius?: number;
         /** @name dxPolarChartCommonAnnotationConfig.template */
         template?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxPolarChartCommonAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPolarChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
@@ -10341,11 +10341,11 @@ declare module DevExpress.viz {
         /** @name dxVectorMapCommonAnnotationConfig.coordinates */
         coordinates?: Array<number>;
         /** @name dxVectorMapCommonAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: dxVectorMapCommonAnnotationConfig | any) => any);
+        customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
         /** @name dxVectorMapCommonAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: dxVectorMapCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxVectorMapCommonAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: dxVectorMapCommonAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name linearCircle */
     export type linearCircle = CommonIndicator;

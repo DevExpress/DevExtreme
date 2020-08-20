@@ -422,36 +422,36 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     /**
      * @docid dxVectorMapCommonAnnotationConfig.customizeTooltip
      * @type function(annotation)
-     * @type_function_param1 annotation:dxVectorMapCommonAnnotationConfig|any
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeTooltip?: ((annotation: dxVectorMapCommonAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
     /**
      * @docid dxVectorMapCommonAnnotationConfig.template
      * @type template|function
      * @default undefined
-     * @type_function_param1 annotation:dxVectorMapCommonAnnotationConfig|any
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxVectorMapCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxVectorMapCommonAnnotationConfig.tooltipTemplate
      * @type template|function(annotation, element)
-     * @type_function_param1 annotation:dxVectorMapCommonAnnotationConfig|any
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapCommonAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
 }
 
 export interface dxVectorMapLegends extends BaseLegend {

@@ -1400,14 +1400,14 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
     /**	
      * @docid dxPolarChartCommonAnnotationConfig.customizeTooltip	
      * @type function(annotation)	
-     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any	
      * @type_function_return object	
      * @default undefined	
      * @notUsedInTheme	
      * @prevFileNamespace DevExpress.viz	
      * @public	
      */	
-    customizeTooltip?: ((annotation: dxPolarChartCommonAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
     /**	
      * @docid dxPolarChartCommonAnnotationConfig.template	
      * @type template|function	
@@ -1418,18 +1418,18 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz	
      * @public	
      */	
-    template?: template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
     /**	
      * @docid dxPolarChartCommonAnnotationConfig.tooltipTemplate	
      * @type template|function(annotation, element)	
-     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any	
      * @type_function_param2 element:dxElement	
      * @type_function_return string|Element|jQuery	
      * @default undefined	
      * @prevFileNamespace DevExpress.viz	
      * @public	
      */	
-    tooltipTemplate?: template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
 }
 
 export interface dxPolarChartSeriesTypes {
