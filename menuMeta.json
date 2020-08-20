@@ -140,7 +140,6 @@
           {
             "Title": "Infinite Scrolling",
             "Name": "InfiniteScrolling",
-            "DocUrl": "Guide/Widgets/DataGrid/Scrolling/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridScrollingController.cs",
