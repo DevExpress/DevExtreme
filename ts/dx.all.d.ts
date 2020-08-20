@@ -3827,6 +3827,12 @@ declare module DevExpress.ui {
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
+        /** @name dxFileUploader.upload() */
+        upload(): void;
+        /** @name dxFileUploader.upload(file) */
+        upload(file: File): void;
+        /** @name dxFileUploader.upload(fileIndex) */
+        upload(fileIndex: number): void;
     }
     /** @name dxFilterBuilder.Options */
     export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
