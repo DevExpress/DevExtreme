@@ -434,7 +434,9 @@ const Map = Widget.inherit({
     },
 
     _triggerReadyAction: function() {
-        this._createActionByOption('onReady')({ originalMap: this._provider.map() });
+        if(!this._disposed) {
+            this._createActionByOption('onReady')({ originalMap: this._provider.map() });
+        }
     },
 
     _triggerUpdateAction: function() {
