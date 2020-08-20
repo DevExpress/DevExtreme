@@ -7,8 +7,6 @@ import { getBoundingRect } from '../../core/utils/position';
 import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
-import fx from '../../animation/fx';
-import translator from '../../animation/translator';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 const DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active';
@@ -185,24 +183,7 @@ const DateViewRoller = Scrollable.inherit({
 
         if(this._isVisible() && (delta.x || delta.y)) {
             this._strategy._prepareDirections(true);
-
-            if(this._animation) {
-                const that = this;
-
-                fx.stop(this._$content);
-                fx.animate(this._$content, {
-                    duration: 200,
-                    type: 'slide',
-                    to: { top: Math.floor(delta.y) },
-                    complete: function() {
-                        translator.resetPosition(that._$content);
-                        that._strategy.handleMove({ delta: delta });
-                    }
-                });
-                delete this._animation;
-            } else {
-                this._strategy.handleMove({ delta: delta });
-            }
+            this._strategy.handleMove({ delta: delta });
         }
     },
 
@@ -212,10 +193,13 @@ const DateViewRoller = Scrollable.inherit({
 
     _endActionHandler: function() {
         const currentSelectedIndex = this.option('selectedIndex');
-        const ratio = -this._location().top / this._itemHeight();
-        const newSelectedIndex = Math.round(ratio);
+        const itemsCount = this.option('items').length;
+        const locationTop = -this._location().top;
 
-        this._animation = true;
+        const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
+        const dy = locationTop - currentSelectedIndexPosition;
+        const direction = dy > 0 || dy === 0 && currentSelectedIndex > 0 ? 1 : -1;
+        const newSelectedIndex = Math.max(Math.min(currentSelectedIndex + direction, itemsCount - 1), 0);
 
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);

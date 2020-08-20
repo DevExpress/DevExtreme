@@ -3232,6 +3232,37 @@ QUnit.module('datebox with time component', {
         assert.equal($input.val(), dateLocalization.format(date, format), 'input value is correct');
     });
 
+    QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY (T921228)', function(assert) {
+        const date = new Date(2015, 0, 1);
+        $('#dateBox').dxDateBox({
+            pickerType: 'rollers',
+            value: date,
+            opened: true
+        });
+
+        const $monthRollerView = $('.dx-dateviewroller-month');
+        const monthRollerView = $monthRollerView.dxDateViewRoller('instance');
+        const deltaY = 100;
+        const pointer = pointerMock(monthRollerView._$container);
+
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+
+        pointer.start().down().move(0, deltaY).wait(500).up();
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+
+        pointer.start().down().move(0, -deltaY).wait(500).up();
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
+
+        pointer.start().down().move(0, -deltaY).wait(500).up();
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
+
+        pointer.start().down().move(0, deltaY).wait(500).up();
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
+
+        pointer.start().down().move(0, deltaY, 5).wait(3000).up();
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+    });
+
     QUnit.test('DateBox with time should be rendered correctly in IE, templatesRenderAsynchronously=true', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
