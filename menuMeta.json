@@ -111,7 +111,6 @@
           {
             "Title": "Local Virtual Scrolling",
             "Name": "VirtualScrolling",
-            "DocUrl": "Guide/Widgets/DataGrid/Scrolling/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridScrollingController.cs",
