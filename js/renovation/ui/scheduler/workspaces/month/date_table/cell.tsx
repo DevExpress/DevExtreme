@@ -12,6 +12,8 @@ export const viewFunction = (viewModel: MonthDateTableCell): JSX.Element => (
     startDate={viewModel.props.startDate}
     endDate={viewModel.props.endDate}
     groups={viewModel.props.groups}
+    groupIndex={viewModel.props.groupIndex}
+    index={viewModel.props.index}
   >
     <div>
       {viewModel.props.startDate!.getDate()}

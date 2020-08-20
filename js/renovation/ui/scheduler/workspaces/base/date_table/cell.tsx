@@ -25,7 +25,7 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => {
             allDay: viewModel.props.allDay,
             groupIndex: viewModel.props.groupIndex,
           }}
-          // index={viewModel.props.index}
+          index={viewModel.props.index}
         />
       )}
       {!DataCellTemplate && viewModel.props.children}

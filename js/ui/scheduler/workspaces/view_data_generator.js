@@ -113,17 +113,22 @@ export default class ViewDataGenerator {
             const rowIndex = startRowIndex + rowOffset + i;
 
             viewCellsData.push([]);
-            for(let j = 0; j < cellCount; ++j) {
+            for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
 
                 const cellDataValue = { };
 
                 cellDataGetters.forEach(getter => {
-                    const cellValue = getter(undefined, rowIndex, j).value;
+                    const cellValue = getter(undefined, rowIndex, columnIndex).value;
                     Object.assign(cellDataValue, cellValue);
                 });
+
                 cellDataValue.groupIndex = this._calculateGroupIndex(
                     realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
-                    groupIndex, j, cellCount,
+                    groupIndex, columnIndex, cellCount,
+                );
+                cellDataValue.index = this._calculateCellIndex(
+                    realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
+                    i, columnIndex, cellCount,
                 );
 
                 viewCellsData[i].push(cellDataValue);
@@ -168,5 +173,21 @@ export default class ViewDataGenerator {
         }
 
         return groupIndex;
+    }
+
+    _calculateCellIndex(realGroupCount, groupOrientation, isGroupedByDate, rowIndex, columnIndex, columnsNumber) {
+        let index = rowIndex * columnsNumber + columnIndex;
+        const columnsInGroup = columnsNumber / realGroupCount;
+
+        if(groupOrientation === 'horizontal') {
+            let columnIndexInCurrentGroup = columnIndex % columnsInGroup;
+            if(isGroupedByDate) {
+                columnIndexInCurrentGroup = columnIndex % realGroupCount;
+            }
+
+            index = rowIndex * columnsInGroup + columnIndexInCurrentGroup;
+        }
+
+        return index;
     }
 }

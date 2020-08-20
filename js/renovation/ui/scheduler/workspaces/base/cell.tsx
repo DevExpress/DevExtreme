@@ -33,6 +33,8 @@ export class CellBaseProps {
 
   @OneWay() text?: string = '';
 
+  @OneWay() index?: number;
+
   @Slot() children?: any;
 }
 

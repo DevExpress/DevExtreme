@@ -7,6 +7,7 @@ export interface ViewCellData {
   allDay?: boolean;
   groups?: object;
   groupIndex?: number;
+  index: number;
 }
 
 interface ViewData {
