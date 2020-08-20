@@ -258,7 +258,7 @@ describe('resizable-container', () => {
         });
       });
 
-      it('update elementswidths if widths changed', () => {
+      it('update elementsWidth if widths changed', () => {
         const component = createComponent({
           width: 350, pageSizes: 100, pages: 100, info: 100,
         });
