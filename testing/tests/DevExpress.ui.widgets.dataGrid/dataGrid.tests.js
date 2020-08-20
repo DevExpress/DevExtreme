@@ -5,11 +5,8 @@ QUnit.testStart(function() {
                 <div data-options="dxTemplate: { name: 'test' }">Template Content</div>
                 <div data-options="dxTemplate: { name: 'test2' }">Template Content2</div>
                 <table data-options="dxTemplate: { name: 'testRow' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>
-                <table data-options="dxTemplate: { name: 'testRowWithExpand' }"><tr class="dx-row"><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>
-                <div data-options="dxTemplate: { name: 'testDetail' }"><p>Test Details</p></div>
             </div>
             <div id="dataGridWithStyle" style="width: 500px;"></div>
-            <div id="form"></div>
         </div>
     `;
     const markup = `
@@ -34,10 +31,10 @@ QUnit.testStart(function() {
             <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>
         </script>
         <script id="scriptTestTemplate1" type="text/html">
-        <span id="template1">Template1</span>
+            <span id="template1">Template1</span>
         </script>
         <script id="scriptTestTemplate2" type="text/html">
-        <span>Template2</span>
+            <span>Template2</span>
         </script>
     `;
 
@@ -406,38 +403,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($('[aria-describedby]').length, 0, 'No elements with aria-describedby attribute');
-    });
-
-    QUnit.testInActiveWindow('Global column index should be unique for the different grids', function(assert) {
-        const testObj = { };
-        let id;
-        const dataGrid = createDataGrid({
-            columns: ['field1', 'field2'],
-            dataSource: [{ field1: '1', field2: '2' }],
-            keyExpr: 'field1',
-            masterDetail: {
-                enabled: true,
-                template: function(container, e) {
-                    $('<div>').addClass('detail-grid').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
-                        columns: ['field3', 'field4'],
-                        dataSource: [{ field1: '3', field2: '4' }]
-                    });
-                }
-            },
-        });
-
-        // act
-        dataGrid.expandRow('1');
-        this.clock.tick();
-
-        $('[id*=\'dx-col\']').each((_, element) => {
-            id = $(element).attr('id');
-            // assert
-            assert.notOk(testObj[id], `ID '${id}' is uniq`);
-            // arrange
-            testObj[id] = true;
-        });
     });
 
     QUnit.test('Customize text called for column only (T653374)', function(assert) {
@@ -2228,41 +2193,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(columnIndex, 1, 'index of column');
     });
 
-    // T592757
-    QUnit.test('onCellClick event should have correct row parameters when event is occurred in detail grid', function(assert) {
-    // arrange
-        const cellClickArgs = [];
-        const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            dataSource: [{ id: 1, text: 'Text 1' }],
-            keyExpr: 'id',
-            onCellClick: function(e) {
-                cellClickArgs.push(e);
-            },
-            masterDetail: {
-                template: function(container, e) {
-                    $('<div>').addClass('detail-grid').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
-                        keyExpr: 'id',
-                        dataSource: [
-                            { id: 2, text: 'Text 2' },
-                            { id: 3, text: 'Text 3' }
-                        ]
-                    });
-                }
-            }
-        });
-
-        $dataGrid.dxDataGrid('instance').expandRow(1);
-
-        // act
-        $dataGrid.find('.detail-grid .dx-data-row').eq(1).children().eq(0).trigger('dxclick');
-
-        // assert
-        assert.equal(cellClickArgs.length, 1, 'cellClick fired once');
-        assert.equal(cellClickArgs[0].key, 1, 'clicked row key');
-    });
-
     QUnit.test('DataGrid - A fixed rows should be synchronized after change column width if wordWrapEnabled and height are set (T830739)', function(assert) {
     // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -3441,58 +3371,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(visibleRows[visibleRows.length - 1].key, 15, 'last visible row key');
     });
 
-    QUnit.test('Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height', function(assert) {
-    // arrange
-        const array = [];
-
-        for(let i = 0; i < 4; i++) {
-            array.push({ author: 'J. D. Salinger', title: 'The Catcher in the Rye', year: 1951 + i });
-        }
-
-        const $dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
-            dataSource: array,
-            showColumnHeaders: false,
-            scrolling: { mode: 'virtual' },
-            masterDetail: {
-                enabled: true,
-                template: function(container, options) {
-                    const currentData = options.data;
-                    $('<div>').text(currentData.author + ' ' + currentData.title + ' Tasks:').appendTo(container);
-                    $('<div>')
-                        .dxDataGrid({
-                            columnAutoWidth: true,
-                            dataSource: currentData
-                        }).appendTo(container);
-                }
-            }
-        });
-        const gridInstance = $dataGrid.dxDataGrid('instance');
-
-        this.clock.tick();
-        const key1 = gridInstance.getKeyByRowIndex(0);
-        const key2 = gridInstance.getKeyByRowIndex(1);
-
-        // act
-        gridInstance.expandRow(key1);
-        gridInstance.expandRow(key2);
-        gridInstance.collapseRow(key1);
-        gridInstance.collapseRow(key2);
-
-        const $contentTable = $('.dx-datagrid-rowsview .dx-datagrid-content').children().first();
-        let dataRowsHeight = 0;
-
-        $contentTable.find('.dx-data-row:visible').each(function(index) {
-            dataRowsHeight += $(this).outerHeight();
-        });
-
-        const heightCorrection = gridInstance.getView('rowsView')._getHeightCorrection();
-        const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight - heightCorrection;
-
-        // assert
-        assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(2).height(), expectedFreeSpaceRowHeight, 1, 'Height of the freeSpace row');
-    });
-
     QUnit.test('DataGrid should apply columns that are dynamically added to a band (T815945)', function(assert) {
     // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -4248,22 +4126,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.equal($dataGrid.width(), 100);
         assert.equal($dataGrid.find('.dx-row').first().find('td')[0].getBoundingClientRect().width, 25);
-    });
-
-    // T242473
-    QUnit.test('width of grid when master detail enabled and columns are not defined', function(assert) {
-    // arrange, act
-        $('#container').width(300);
-
-        const $dataGrid = $('#dataGrid').dxDataGrid({
-            masterDetail: {
-                enabled: true
-            },
-            dataSource: [{ field1: 1, field2: 2 }]
-        });
-
-        // assert
-        assert.equal($dataGrid.width(), 300);
     });
 
     // T144297
@@ -5550,51 +5412,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(!$loadPanel.is(':visible'), 'load panel is not visible');
     });
 
-    // T389866
-    QUnit.test('Collapse the group row of the grid, nested in the master detail', function(assert) {
-    // arrange
-        const dataSource = [{ field1: '1', field2: '2' }];
-
-        const dataGrid = createDataGrid({
-            dataSource: dataSource,
-            loadPanel: { enabled: false },
-            columns: ['field1', 'field2'],
-            masterDetail: {
-                enabled: true,
-                template: function($container, options) {
-                    $('<div>').dxDataGrid({
-                        loadPanel: { enabled: false },
-                        groupPanel: {
-                            visible: true
-                        },
-                        columns: ['field1', { dataField: 'field2', groupIndex: 0 }],
-                        dataSource: dataSource
-                    }).appendTo($container);
-                }
-            }
-        });
-        const $dataGrid = $($(dataGrid.$element()));
-
-        this.clock.tick();
-        $($dataGrid.find('.dx-datagrid-rowsview .dx-command-expand').first()).trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        const $masterDetail = $dataGrid.find('.dx-master-detail-row');
-        assert.equal($masterDetail.length, 1, 'has master detail row');
-        assert.ok($masterDetail.find('.dx-datagrid').length, 'has dataGrid in master detail row');
-
-        // act
-        $($masterDetail.find('.dx-datagrid-rowsview .dx-command-expand').first()).trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.equal($dataGrid.find('.dx-datagrid-rowsview .dx-command-expand').first().find('.dx-datagrid-group-opened').length, 1, 'master detail row opened');
-        assert.ok($dataGrid.find('.dx-datagrid-rowsview .dx-row').eq(1).hasClass('dx-master-detail-row'), 'has master detail row');
-        assert.ok($dataGrid.find('.dx-datagrid-rowsview .dx-row').eq(1).is(':visible'), 'master detail row is visible');
-        assert.equal($masterDetail.find('.dx-datagrid-rowsview .dx-command-expand').first().find('.dx-datagrid-group-closed').length, 1, 'first group row of the grid in master detail row is collapsed');
-    });
-
     // T439040
     QUnit.test('Toolbar templates should be called when toolbar is attached to dom', function(assert) {
     // arrange, act
@@ -5644,29 +5461,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
-    });
-
-    // T689367
-    QUnit.test('Horizontal scroll should not exist if master-detail contains the simple nested grid', function(assert) {
-    // arrange, act
-        const dataGrid = createDataGrid({
-            dataSource: [{ id: 1 }],
-            loadingTimeout: undefined,
-            columnAutoWidth: true,
-            masterDetail: {
-                autoExpandAll: true,
-                template: function(detailElement) {
-                    $('<div>').appendTo(detailElement).dxDataGrid({
-                        loadingTimeout: undefined,
-                        columns: ['field1']
-                    });
-                }
-            }
-        });
-
-        // assert
-        const scrollable = dataGrid.getScrollable();
-        assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), 'no scroll');
     });
 
     // T728069
@@ -9291,71 +9085,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal(dataGrid.getView('rowsView')._loadPanel.option('message'), 'Loading...');
     });
 
-    QUnit.test('LoadPanel show when grid rendering in detail row', function(assert) {
-    // arrange, act
-
-
-        createDataGrid({
-            loadPanel: { enabled: true },
-            loadingTimeout: 200,
-            dataSource: [{ id: 1111 }],
-            masterDetail: {
-                enabled: true,
-                template: function($container, options) {
-                    $('<div />').appendTo($container).dxDataGrid({
-                        loadingTimeout: 200,
-                        loadPanel: { enabled: true },
-                        dataSource: {
-                            store: [{ id: 200 }]
-                        }
-                    });
-                }
-            }
-        });
-
-        // act
-        this.clock.tick(200);
-        $('.dx-command-expand').eq(1).trigger('dxclick');
-        this.clock.tick(200);
-
-        // assert
-        assert.equal($('.dx-loadpanel').length, 2, 'We have two loadpanels');
-        assert.equal($('.dx-loadpanel.dx-state-invisible').length, 1, 'One of them is invisible');
-
-        // act
-        this.clock.tick(200);
-
-        // assert
-        assert.equal($('.dx-loadpanel').length, 2, 'We have two loadpanels');
-        assert.equal($('.dx-loadpanel.dx-state-invisible').length, 2, 'two load panels are invisible');
-    });
-
-    // T691043
-    QUnit.test('List with vertical scroll in detail row', function(assert) {
-    // arrange, act
-        const dataGrid = createDataGrid({
-            height: 300,
-            loadingTimeout: undefined,
-            dataSource: [{ id: 1 }],
-            keyExpr: 'id',
-            masterDetail: {
-                enabled: true,
-                template: function($container) {
-                    $('<div>').addClass('detail-list').appendTo($container).dxList({
-                        height: 200,
-                        useNativeScrolling: true
-                    });
-                }
-            }
-        });
-
-        // act
-        dataGrid.expandRow(1);
-
-        // assert
-        assert.equal($(dataGrid.element()).find('.detail-list .dx-scrollable-container').height(), 200, 'scrollable container height is correct');
-    });
-
     QUnit.test('add column', function(assert) {
     // arrange, act
         const dataGrid = createDataGrid({
@@ -9387,47 +9116,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // assert
         assert.ok(groupedRows.length, 'We have grouped row');
         assert.equal(cells.eq(1).css('textAlign'), 'right', 'Grouped cell has correct text-align');
-    });
-
-    QUnit.test('CellTemplate and master-detail template cells has correct text-align in RTL', function(assert) {
-    // arrange, act
-
-        const dataGrid = createDataGrid({
-            rtlEnabled: true,
-            loadingTimeout: undefined,
-            dataSource: {
-                store: [{ field1: '1', field2: '2' }]
-            },
-            columns: [{
-                cellTemplate: function(container, options) {
-                    const $container = $(container);
-                    $container.height(100);
-                    $('<div />').dxButton({
-                        text: 'cell template'
-                    }).appendTo($container);
-                }
-            }, 'field1', 'field2'],
-            masterDetail: {
-                enabled: true,
-                autoExpandAll: true,
-                template: function(container, options) {
-                    assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, 'container is correct');
-                    const $container = $(container);
-                    $container.height(100);
-                    $('<div />').dxButton({
-                        text: 'master-detail template'
-                    }).appendTo($container);
-                }
-
-            }
-        });
-        const getCellTextAlignByButtonNumber = function(buttonNumber) {
-            return $(dataGrid.$element()).find('.dx-button').eq(buttonNumber).closest('td').css('textAlign');
-        };
-
-        // assert
-        assert.equal(getCellTextAlignByButtonNumber(0), 'right', 'Cell template has correct text-align');
-        assert.equal(getCellTextAlignByButtonNumber(1), 'right', 'Detail cell has correct text-align');
     });
 
     QUnit.test('expandAll', function(assert) {
@@ -10366,142 +10054,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok(!errorMessage, 'There is no errors');
     });
 
-    QUnit.test('Click on detail cell with cellIndex more than number of parent grid columns', function(assert) {
-    // arrange
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            columns: [{ dataField: 'field1' }],
-            dataSource: {
-                store: [
-                    { field1: 1 },
-                    { field1: 2 }
-                ]
-            },
-            masterDetail: {
-                enabled: true,
-                template: function(container, info) {
-                    $('<div />').dxDataGrid({
-                        dataSource: {
-                            store: [
-                                { id: 1, col1: 2 },
-                                { id: 2, col1: 3 }
-                            ]
-                        },
-                        loadingTimeout: undefined,
-                        columns: [
-                            { dataField: 'id' },
-                            { dataField: 'col1' },
-                            { dataField: 'col2' }
-                        ]
-                    }).appendTo(container);
-                }
-            }
-        });
-
-        // act
-        $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
-        this.clock.tick();
-
-        $($(dataGrid.$element()).find('td').eq(14)).trigger(pointerEvents.up); // check that error is not raised
-
-        assert.ok(dataGrid.getController('keyboardNavigation')._isCellValid($(dataGrid.$element()).find('td').eq(14)), 'detail-grid cell with cellIndex greater than number of parent columns causes no errors');
-    });
-
-    // T454990
-    QUnit.test('Row heights should be synchronized after expand master detail row with nested DataGrid', function(assert) {
-    // arrange
-        const dataGrid = createDataGrid({
-            columns: [{ dataField: 'field1', fixed: true }, { dataField: 'field2' }],
-            dataSource: [
-                { id: 1 },
-                { id: 2 }
-            ],
-            masterDetail: {
-                enabled: true,
-                template: function(container) {
-                    $('<div>').dxDataGrid({
-                        width: 500,
-                        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
-                        columns: [{ dataField: 'id', width: 1000 }]
-                    }).appendTo(container);
-                }
-            }
-        });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.expandRow({ id: 1 });
-        this.clock.tick();
-
-        // assert
-        const $rows = $(dataGrid.getRowElement(1));
-
-        assert.equal($rows.length, 2, 'two rows: main row + fixed row');
-        assert.ok($rows.eq(0).hasClass('dx-master-detail-row'), 'first row is master detail');
-        assert.ok($rows.eq(1).hasClass('dx-master-detail-row'), 'second row is master detail');
-        assert.equal($rows.eq(0).height(), $rows.eq(1).height(), 'row heights are synchronized');
-        // T641332
-        assert.equal($rows.find('col').get(0).style.width, '1000px', 'column width in detail grid is corrent');
-    });
-
-    // T803571
-    QUnit.test('Detail Grid should not have scroll if vertical scrollbar is shown after expand master detail', function(assert) {
-    // arrange
-        const data = [
-            { OrderID: 1 },
-            { OrderID: 2 },
-            { OrderID: 3 },
-            { OrderID: 4 },
-            { OrderID: 5 }
-        ];
-        let nestedDataGrid;
-        const dataGrid = createDataGrid({
-            width: 1000,
-            height: 400,
-            dataSource: data,
-            keyExpr: 'OrderID',
-            scrolling: {
-                useNative: true
-            },
-            columns: [{
-                dataField: 'OrderID',
-                fixed: true,
-                width: 100
-            }, {
-                dataField: 'ShipCity',
-                width: 1000
-            }],
-            masterDetail: {
-                enabled: true,
-                template: function(container) {
-                    nestedDataGrid = $('<div>').appendTo(container).dxDataGrid({
-                        columnAutoWidth: true,
-                        dataSource: data,
-                        columns: ['OrderID']
-                    }).dxDataGrid('instance');
-                }
-            }
-        });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.expandRow(1);
-        this.clock.tick();
-
-        // assert
-        const $rows = $(dataGrid.getRowElement(1));
-
-        assert.equal($rows.length, 2, 'two rows: main row + fixed row');
-        assert.ok($rows.eq(0).hasClass('dx-master-detail-row'), 'first row is master detail');
-        assert.ok($rows.eq(1).hasClass('dx-master-detail-row'), 'second row is master detail');
-        assert.equal($rows.eq(0).height(), $rows.eq(1).height(), 'row heights are synchronized');
-
-        const scrollable = nestedDataGrid.getScrollable();
-        assert.equal(scrollable.clientWidth(), scrollable.scrollWidth(), 'detail grid does not have scroll');
-    });
-
     QUnit.test('Should update grid after error row rendered (T755293)', function(assert) {
     // arrange act
         const eventArray = [];
@@ -10529,101 +10081,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.equal(eventArray[2], 'onContentReady', 'onContentReady event fired after closing error row');
-    });
-
-    // T749068
-    QUnit.test('Row heights should be synchronized after expand master detail row in second nested DataGrid', function(assert) {
-    // arrange
-        let nestedDataGrid;
-        let secondNestedDataGrid;
-
-        const dataGrid = createDataGrid({
-            columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
-            columnFixing: { enabled: true },
-            columnAutoWidth: true,
-            keyExpr: 'id',
-            dataSource: [{ id: 1 }, { id: 2 }],
-            masterDetail: {
-                enabled: true,
-                template: function(container) {
-                    nestedDataGrid = $('<div>').appendTo(container).dxDataGrid({
-                        columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
-                        columnFixing: { enabled: true },
-                        columnAutoWidth: true,
-                        keyExpr: 'id',
-                        dataSource: [{ id: 1 }, { id: 2 }],
-                        masterDetail: {
-                            enabled: true,
-                            template: function(container) {
-                                secondNestedDataGrid = $('<div>').appendTo(container).dxDataGrid({
-                                    keyExpr: 'id',
-                                    dataSource: [{ id: 1 }, { id: 2 }],
-                                    masterDetail: {
-                                        enabled: true
-                                    }
-                                }).dxDataGrid('instance');
-                            }
-                        }
-                    }).dxDataGrid('instance');
-                }
-            }
-        });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.expandRow(1);
-        this.clock.tick();
-
-        nestedDataGrid.expandRow(1);
-        this.clock.tick();
-
-        secondNestedDataGrid.expandRow(1);
-        this.clock.tick();
-
-        // assert
-        const $rows = $(dataGrid.getRowElement(1));
-        const $nestedRows = $(nestedDataGrid.getRowElement(1));
-
-        assert.equal($rows.length, 2, 'two rows: main row + fixed row');
-        assert.equal($rows.eq(0).height(), $rows.eq(1).height(), 'row heights are synchronized');
-
-        assert.equal($nestedRows.length, 2, 'two rows: main row + fixed row');
-        assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), 'nested row heights are synchronized');
-
-        // act
-        secondNestedDataGrid.collapseRow(1);
-        this.clock.tick();
-
-        // assert
-        assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), 'nested row heights are synchronized after collapse');
-    });
-
-    // T607490
-    QUnit.test('Scrollable should be updated after expand master detail row with nested DataGrid', function(assert) {
-    // arrange
-        const dataGrid = createDataGrid({
-            height: 200,
-            keyExpr: 'id',
-            dataSource: [{ id: 1 }],
-            masterDetail: {
-                template: function(container) {
-                    $('<div>').appendTo(container).dxDataGrid({
-                        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
-                    });
-                }
-            }
-        });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.expandRow(1);
-        this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ x: 0, y: 1000 });
-
-        // assert
-        assert.ok(dataGrid.getScrollable().scrollTop() > 100, 'vertical scroll is exists');
     });
 
     // T648744
@@ -11581,36 +11038,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), 'test6', 'third row - value of the first cell');
     });
 
-    QUnit.test('Row should be updated via watchMethod after detail row expand (T810967)', function(assert) {
-    // arrange
-        const watchCallbacks = [];
-        const dataSource = [{ id: 1, value: 1 }, { id: 2, value: 2 }];
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            dataSource: dataSource,
-            keyExpr: 'id',
-            integrationOptions: {
-                watchMethod: function(fn, callback, options) {
-                    watchCallbacks.push(callback);
-                    return function() {
-                    };
-                },
-            },
-            masterDetail: {
-                enabled: true
-            },
-            columns: ['id', 'value']
-        });
-
-        // act
-        dataGrid.expandRow(1);
-        dataSource[1].value = 666;
-        watchCallbacks[1]();
-
-        // assert
-        assert.equal($(dataGrid.getCellElement(2, 2)).text(), 666, 'value is updated');
-    });
-
     QUnit.test('Repaint rows with repaintChangesOnly', function(assert) {
     // arrange
         const dataSource = new DataSource({
@@ -11810,35 +11237,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // assert
         assert.ok($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
         assert.ok($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
-    });
-
-    // T700770
-    QUnit.test('highlighting is skipped when clicking by expand button', function(assert) {
-    // arrange
-        const dataSource = [
-            { id: 1, field1: 'test1' },
-            { id: 2, field1: 'test2' },
-            { id: 3, field1: 'test3' },
-            { id: 4, field1: 'test4' }
-        ];
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            dataSource: dataSource,
-            highlightChanges: true,
-            repaintChangesOnly: true,
-            masterDetail: {
-                enabled: true,
-            }
-        });
-
-        this.clock.tick();
-        const expandColumn = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand').first();
-        assert.ok(expandColumn.length);
-        expandColumn.trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(0, 0)).hasClass(CELL_UPDATED_CLASS));
     });
 
     QUnit.test('Refresh with changesOnly and cellTemplate', function(assert) {
@@ -12766,45 +12164,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         ]);
     });
 
-    QUnit.test('Master Row - expandRow should resolve its promise only after re-rendering (T880769)', function(assert) {
-        // arrange
-        const getRowsInfo = function(element) {
-            const $rows = $(element).find('.dx-datagrid-rowsview .dx-row[role=\'row\']');
-            return {
-                rowCount: $rows.length,
-                masterRow: $($rows.eq(0)).hasClass('dx-data-row'),
-                detailRow: $($rows.eq(1)).hasClass('dx-master-detail-row')
-            };
-        };
-        const dataGrid = createDataGrid({
-            keyExpr: 'id',
-            dataSource: [
-                { id: 1 }
-            ],
-            masterDetail: {
-                enabled: true
-            },
-            onRowExpanded: function() {
-                const info = getRowsInfo(dataGrid.element());
-                assert.step(`rowExpanded rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
-            }
-        });
-        this.clock.tick();
-
-        // act
-        dataGrid.expandRow(1).done(() => {
-            const info = getRowsInfo(dataGrid.element());
-
-            assert.step(`done rowCount: ${info.rowCount}, masterRow: ${info.masterRow}, detailRow: ${info.detailRow}`);
-        });
-        this.clock.tick();
-
-        assert.verifySteps([
-            'rowExpanded rowCount: 2, masterRow: true, detailRow: true',
-            'done rowCount: 2, masterRow: true, detailRow: true'
-        ]);
-    });
-
     QUnit.testInActiveWindow('Filter row editor should have focus after _synchronizeColumns (T638737)', function(assert) {
         $('#qunit-fixture').css('position', 'static');
         // arrange, act
@@ -13048,37 +12407,6 @@ QUnit.module('templates', baseModuleConfig, () => {
         });
     });
 
-    // T484419
-    QUnit.test('rowTemplate via dxTemplate should works with masterDetail template', function(assert) {
-    // arrange, act
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            dataSource: [
-                { name: 'First Grid Item' },
-                { name: 'Second Grid Item' },
-                { name: 'Third Grid Item' }
-            ],
-            columns: ['name'],
-            masterDetail: {
-                enabled: true,
-                template: 'testDetail'
-            },
-            rowTemplate: 'testRowWithExpand'
-        });
-
-
-        // act
-        $($(dataGrid.$element()).find('.dx-datagrid-expand').eq(0)).trigger('dxclick');
-
-        // assert
-        const $rowElements = $($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('table > tbody').find('.dx-row'));
-        assert.strictEqual($rowElements.length, 5, 'row element count');
-        assert.strictEqual($rowElements.eq(0).text(), 'Row Content More info', 'row 0 content');
-        assert.strictEqual($rowElements.eq(1).children().first().text(), 'Test Details', 'row 1 content');
-        assert.strictEqual($rowElements.eq(2).text(), 'Row Content More info', 'row 2 content');
-        assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
-    });
-
     // T821418, T878862
     QUnit.test('rowTemplate with tbody should works with virtual scrolling', function(assert) {
         // arrange, act
@@ -13138,83 +12466,6 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         // assert
         assert.equal(totalCount, 5, 'totalCount');
-    });
-
-    // T587150
-    QUnit.testInActiveWindow('DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell', function(assert) {
-    // arrange
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            dataSource: {
-                store: {
-                    type: 'array',
-                    data: [{ name: 'Grid Item' }],
-                    key: 'name'
-                }
-            },
-            masterDetail: {
-                enabled: true,
-                template: function($container, options) {
-                    $('<div/>')
-                        .addClass('inside-grid')
-                        .dxDataGrid({
-                            dataSource: [{ name: 'Inside Grid Item' }],
-                            columns: [{ dataField: 'name', dataType: 'date', editorOptions: { mode: 'text' } }],
-                            filterRow: {
-                                visible: true
-                            }
-                        }).appendTo($container);
-                }
-            }
-        });
-
-        dataGrid.expandRow('Grid Item');
-        this.clock.tick();
-
-        const $dateBoxInput = $('.inside-grid').find('.dx-datagrid-filter-row .dx-texteditor-input');
-        $dateBoxInput.val('abc');
-        $dateBoxInput.trigger('change');
-        this.clock.tick();
-
-        // assert
-        assert.strictEqual($('.inside-grid').find('.dx-datagrid-filter-row > td').find('.dx-overlay.dx-invalid-message').length, 1, 'has invalid message');
-
-        // act
-        $dateBoxInput.focus();
-        this.clock.tick();
-
-        // assert
-        assert.strictEqual($('.inside-grid').find('.dx-datagrid-filter-row > td').find('.dx-overlay.dx-invalid-message').length, 1, 'has invalid message');
-    });
-
-    // T756639
-    QUnit.test('Rows should be synchronized after expand if column fixing is enabled and deferUpdate is used in masterDetail template', function(assert) {
-    // arrange
-        const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
-            keyExpr: 'id',
-            dataSource: [{ id: 1 }],
-            columnFixing: {
-                enabled: true
-            },
-            masterDetail: {
-                enabled: true,
-                template: function($container, options) {
-                // deferUpdate is called in template in devextreme-react
-                    commonUtils.deferUpdate(function() {
-                        $('<div>').addClass('my-detail').css('height', 400).appendTo($container);
-                    });
-                }
-            }
-        });
-
-        dataGrid.expandRow(1);
-
-        // assert
-        const $masterDetailRows = $(dataGrid.getRowElement(1));
-        assert.strictEqual($masterDetailRows.eq(1).find('.my-detail').length, 1, 'masterDetail template is rendered');
-        assert.ok($masterDetailRows.eq(1).height() > 400, 'masterDetail row height is applied');
-        assert.strictEqual($masterDetailRows.eq(0).height(), $masterDetailRows.eq(1).height(), 'main and fixed master detail row are synchronized');
     });
 });
 
@@ -13305,40 +12556,6 @@ QUnit.module('columnWidth auto option', {
         // assert
         assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, '', 'width style is not defined for group cell');
         assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, '150px', 'width style is defined for data cell');
-    });
-
-    QUnit.test('Detail cell should not have width and max-width styles', function(assert) {
-        const dataSource = [
-            { id: 1, firstName: 'Alex', lastName: 'Black', room: 903 },
-            { id: 2, firstName: 'Alex', lastName: 'White', room: 904 }
-        ];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            dataSource: dataSource,
-            keyExpr: 'id',
-            columnAutoWidth: true,
-            masterDetail: {
-                enabled: true
-            },
-            columns: [{
-                dataField: 'firstName',
-                width: 100,
-            }, {
-                dataField: 'lastName',
-                width: 150
-            }, 'room']
-        }).dxDataGrid('instance');
-
-        // act
-        dataGrid.expandRow(1);
-        dataGrid.updateDimensions();
-
-        // assert
-        assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, '100px', 'width style is defined for data cell');
-        assert.equal($(dataGrid.getCellElement(1, 0)).get(0).style.width, '', 'width style is not defined for detail cell');
-        // T650963
-        assert.equal($(dataGrid.getCellElement(1, 0)).css('maxWidth'), 'none', 'max width style for detail cell');
     });
 
     // T661361

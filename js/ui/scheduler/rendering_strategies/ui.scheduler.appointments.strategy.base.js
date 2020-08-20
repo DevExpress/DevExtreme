@@ -186,10 +186,8 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _getAppointmentCoordinates(appointmentData) {
-        return this.instance.fire('createAppointmentSettings', {
-            appointmentData: appointmentData
-        });
+    _getAppointmentCoordinates(appointment) {
+        return this.instance.fire('createAppointmentSettings', appointment);
     }
 
     _isRtl() {

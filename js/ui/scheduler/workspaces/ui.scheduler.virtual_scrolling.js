@@ -30,22 +30,33 @@ export default class VirtualScrolling {
         return this._state;
     }
 
+    _getPageSize() {
+        return Math.ceil(this.getViewportHeight() / this.getRowHeight());
+    }
+
+    _getOutlineCount() {
+        return Math.floor(this._getPageSize() / 2);
+    }
+
     _init() {
-        const pageSize = Math.ceil(this.getViewportHeight() / this.getRowHeight());
         const scrollOffset = {
             top: 0,
             left: 0
         };
 
         this._state = {
-            pageSize: pageSize,
+            pageSize: this._getPageSize(),
             scrollOffset: scrollOffset,
             startIndex: -1,
             rowCount: 0,
             topVirtualRowCount: 0,
             bottomVirtualRowCount: 0,
+            topOutlineCount: 0,
+            bottomOutlineCount: 0,
             topVirtualRowHeight: 0,
             bottomVirtualRowHeight: 0,
+            topOutlineHeight: 0,
+            bottomOutlineHeight: 0
         };
 
         this._updateState(scrollOffset);
@@ -57,9 +68,8 @@ export default class VirtualScrolling {
         const scrollable = this.getScrollable();
         const onScroll = scrollable.option('onScroll');
         scrollable.option('onScroll', e => {
-            if(onScroll) {
-                onScroll.apply(scrollable, [e]);
-            }
+
+            onScroll?.apply(scrollable, [e]);
 
             const scrollOffset = e?.scrollOffset;
             if(scrollOffset && this._updateState(scrollOffset)) {
@@ -69,7 +79,6 @@ export default class VirtualScrolling {
     }
 
     _updateState(scrollOffset) {
-        const workspace = this.getWorkspace();
         const state = this.getState();
         const top = scrollOffset.top;
         const currentStartIndex = state.startIndex;
@@ -79,21 +88,26 @@ export default class VirtualScrolling {
         state.startIndex = Math.floor(top / rowHeight);
 
         if(currentStartIndex !== state.startIndex) {
-            const pageSize = state.pageSize;
-            const groupCount = workspace._getGroupCount();
+            const topRowsInfo = this._calcTopRowsInfo(scrollOffset);
+            const topRowsDelta = this._calcTopRowsDelta(topRowsInfo);
+            const {
+                bottomOutlineCount,
+                bottomVirtualRowCount,
+                rowCountWithBottom
+            } = this._calcBottomRowsInfo(topRowsDelta);
 
-            const topVirtualRowCount = Math.floor(top / rowHeight);
-            const totalRowCount = workspace._getTotalRowCount(groupCount);
-            const deltaRowCount = totalRowCount - topVirtualRowCount;
-            const rowCount = deltaRowCount >= pageSize ? pageSize : deltaRowCount;
+            const {
+                topVirtualRowCount,
+                topOutlineCount
+            } = topRowsInfo;
 
-            let bottomVirtualRowCount = totalRowCount - topVirtualRowCount - rowCount;
-            if(workspace.isGroupedAllDayPanel()) {
-                bottomVirtualRowCount -= 1;
-            }
+            const rowCount = topOutlineCount + rowCountWithBottom + bottomOutlineCount;
 
+            state.startIndex -= topOutlineCount;
             state.topVirtualRowCount = topVirtualRowCount;
+            state.topOutlineCount = topOutlineCount;
             state.rowCount = rowCount;
+            state.bottomOutlineCount = bottomOutlineCount;
             state.bottomVirtualRowCount = bottomVirtualRowCount;
 
             this._updateStateCore();
@@ -104,19 +118,85 @@ export default class VirtualScrolling {
         return false;
     }
 
+    _calcTopRowsInfo(scrollOffset) {
+        const { top } = scrollOffset;
+        const rowHeight = this.getRowHeight();
+        let topVirtualRowCount = Math.floor(top / rowHeight);
+        const topOutlineCount = Math.min(topVirtualRowCount, this._getOutlineCount());
+
+        topVirtualRowCount -= topOutlineCount;
+
+        return {
+            topVirtualRowCount,
+            topOutlineCount
+        };
+    }
+
+    _calcTopRowsDelta(topRowsInfo) {
+        const {
+            topVirtualRowCount,
+            topOutlineCount
+        } = topRowsInfo;
+
+        const workspace = this.getWorkspace();
+        const groupCount = workspace._getGroupCount();
+        const totalRowCount = workspace._getTotalRowCount(groupCount);
+
+        return totalRowCount - topVirtualRowCount - topOutlineCount;
+    }
+
+    _calcBottomRowsInfo(topRowsDelta) {
+        const workspace = this.getWorkspace();
+        const { pageSize } = this.getState();
+        const rowCountWithBottom = topRowsDelta >= pageSize
+            ? pageSize
+            : topRowsDelta;
+
+        let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
+        if(workspace.isGroupedAllDayPanel()) {
+            bottomVirtualRowCount -= 1;
+        }
+
+        const bottomOutlineCount = bottomVirtualRowCount > 0
+            ? Math.min(bottomVirtualRowCount, this._getOutlineCount())
+            : 0;
+
+        if(bottomVirtualRowCount > 0) {
+            bottomVirtualRowCount -= bottomOutlineCount;
+        }
+
+        return {
+            bottomVirtualRowCount,
+            bottomOutlineCount,
+            rowCountWithBottom
+        };
+    }
+
     _updateStateCore() {
         const state = this.getState();
         const rowHeight = this.getRowHeight();
         const topVirtualRowCount = state.topVirtualRowCount;
         const bottomVirtualRowCount = state.bottomVirtualRowCount;
+        const topOutlineCount = state.topOutlineCount;
+        const bottomOutlineCount = state.bottomOutlineCount;
 
         const prevTopVirtualRowHeight = state.topVirtualRowHeight;
         const prevBottomVirtualRowHeight = state.bottomVirtualRowHeight;
+        const prevTopOutlineHeight = state.topOutlineHeight;
+        const prevBottomOutlineHeight = state.bottomOutlineHeight;
+
         const topVirtualRowHeight = rowHeight * topVirtualRowCount;
         const bottomVirtualRowHeight = rowHeight * bottomVirtualRowCount;
+        const topOutlineHeight = rowHeight * topOutlineCount;
+        const bottomOutlineHeight = rowHeight * bottomOutlineCount;
 
-        const isAppend = prevTopVirtualRowHeight < topVirtualRowHeight;
-        const isPrepend = prevBottomVirtualRowHeight < bottomVirtualRowHeight;
+        const prevTopVirtualHeight = prevTopVirtualRowHeight + prevTopOutlineHeight;
+        const topVirtualHeight = topVirtualRowHeight + topOutlineHeight;
+        const prevBottomVirtualHeight = prevBottomVirtualRowHeight + prevBottomOutlineHeight;
+        const bottomVirtualHeight = bottomVirtualRowHeight + bottomOutlineHeight;
+
+        const isAppend = prevTopVirtualHeight < topVirtualHeight;
+        const isPrepend = prevBottomVirtualHeight < bottomVirtualHeight;
         const needAddRows = isAppend || isPrepend;
 
         if(needAddRows) {

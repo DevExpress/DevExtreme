@@ -18,7 +18,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { extend } from 'core/utils/extend';
-import devices from 'core/devices';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -3732,15 +3731,31 @@ QUnit.module('Renovated Render', {
     QUnit.module('Generate View Data', () => {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
-            const result = this.instance.viewDataGenerator.generate();
+            const viewModel = this.instance.viewDataGenerator.generate();
             const expected = {
-                groupedData: [{
-                    allDayPanel: [{
-                        startDate: new Date(2020, 6, 29),
-                        endDate: new Date(2020, 6, 29),
-                        allDay: true,
-                    }],
-                    dateTable: [[{
+                viewData: {
+                    groupedData: [{
+                        allDayPanel: [{
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            allDay: true,
+                        }],
+                        dateTable: [[{
+                            startDate: new Date(2020, 6, 29, 0, 0),
+                            endDate: new Date(2020, 6, 29, 0, 30),
+                            allDay: false,
+                            text: '12:00 AM',
+                        }], [{
+                            startDate: new Date(2020, 6, 29, 0, 30),
+                            endDate: new Date(2020, 6, 29, 1, 0),
+                            allDay: false,
+                            text: '',
+                        }]],
+                        isGroupedAllDayPanel: false
+                    }]
+                },
+                viewDataMap: [
+                    [{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
@@ -3750,13 +3765,11 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                    }]],
-                    isGroupedAllDayPanel: false
-                }],
+                    }]
+                ]
             };
 
-            assert.deepEqual(result.groupedData, expected.groupedData, 'correct view data');
-            assert.notOk(result.isVirtual, 'View Data is not virtual');
+            assert.deepEqual(viewModel, expected, 'correct view model');
         });
 
         QUnit.test('should work with horizontal grouping', function(assert) {
@@ -3772,9 +3785,23 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            const result = this.instance.viewDataGenerator.generate();
-            const expected = {
+            const { viewData, viewDataMap } = this.instance.viewDataGenerator.generate();
+            const expectedViewData = {
                 groupedData: [{
+                    allDayPanel: [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            groups: { res: 1 }
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            groups: { res: 2 }
+                        }
+                    ],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
@@ -3799,18 +3826,14 @@ QUnit.module('Renovated Render', {
                         allDay: false,
                         text: '',
                         groups: { res: 2 },
-                    }]]
+                    }]],
+                    isGroupedAllDayPanel: false
                 }],
             };
 
-            assert.equal(result.groupedData.length, 1, 'correct number of tables');
-            assert.equal(result.groupedData[0].dateTable.length, 2, 'correct number of rows');
-            assert.equal(result.groupedData[0].dateTable[0].length, 2, 'correct number of columns');
-            assert.deepEqual(result.groupedData[0].dateTable[0][0], expected.groupedData[0].dateTable[0][0], 'correct first cell');
-            assert.deepEqual(result.groupedData[0].dateTable[0][1], expected.groupedData[0].dateTable[0][1], 'correct second cell');
-            assert.deepEqual(result.groupedData[0].dateTable[1][0], expected.groupedData[0].dateTable[1][0], 'correct third cell');
-            assert.deepEqual(result.groupedData[0].dateTable[1][1], expected.groupedData[0].dateTable[1][1], 'correct fourth cell');
-            assert.notOk(result.isVirtual, 'View Data is not virtual');
+            assert.deepEqual(viewData.groupedData[0].allDayPanel, expectedViewData.groupedData[0].allDayPanel, 'correct allDayPanel');
+            assert.deepEqual(viewData.groupedData[0].dateTable, expectedViewData.groupedData[0].dateTable, 'correct dateTable');
+            assert.deepEqual(viewDataMap, expectedViewData.groupedData[0].dateTable, 'correct viewDataMap');
         });
 
         QUnit.test('should work with vertical grouping', function(assert) {
@@ -3825,9 +3848,17 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            const result = this.instance.viewDataGenerator.generate();
-            const expected = {
+            const { viewData, viewDataMap } = this.instance.viewDataGenerator.generate();
+            const expectedViewData = {
                 groupedData: [{
+                    allDayPanel: [{
+                        allDay: true,
+                        startDate: new Date(2020, 6, 29),
+                        endDate: new Date(2020, 6, 29),
+                        groups: {
+                            res: 1
+                        },
+                    }],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
@@ -3842,6 +3873,14 @@ QUnit.module('Renovated Render', {
                         groups: { res: 1 },
                     }]]
                 }, {
+                    allDayPanel: [{
+                        allDay: true,
+                        startDate: new Date(2020, 6, 29),
+                        endDate: new Date(2020, 6, 29),
+                        groups: {
+                            res: 2
+                        },
+                    }],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
@@ -3857,17 +3896,18 @@ QUnit.module('Renovated Render', {
                     }]]
                 }],
             };
+            const expectedViewDataMap = [
+                expectedViewData.groupedData[0].allDayPanel,
+                ...expectedViewData.groupedData[0].dateTable,
+                expectedViewData.groupedData[1].allDayPanel,
+                ...expectedViewData.groupedData[1].dateTable
+            ];
 
-            assert.equal(result.groupedData.length, 2, 'correct number of tables');
-            assert.equal(result.groupedData[0].dateTable.length, 2, 'correct number of rows in the first table');
-            assert.equal(result.groupedData[0].dateTable[0].length, 1, 'correct number of columns in the first table');
-            assert.equal(result.groupedData[1].dateTable.length, 2, 'correct number of rows in the first table');
-            assert.equal(result.groupedData[1].dateTable[0].length, 1, 'correct number of columns in the first table');
-            assert.deepEqual(result.groupedData[0].dateTable[0][0], expected.groupedData[0].dateTable[0][0], 'correct first cell');
-            assert.deepEqual(result.groupedData[0].dateTable[1][0], expected.groupedData[0].dateTable[1][0], 'correct second cell');
-            assert.deepEqual(result.groupedData[1].dateTable[0][0], expected.groupedData[1].dateTable[0][0], 'correct third cell');
-            assert.deepEqual(result.groupedData[1].dateTable[1][0], expected.groupedData[1].dateTable[1][0], 'correct fourth cell');
-            assert.notOk(result.isVirtual, 'View Data is not virtual');
+            assert.deepEqual(viewData.groupedData[0].allDayPanel, expectedViewData.groupedData[0].allDayPanel, 'correct allDayPanel');
+            assert.deepEqual(viewData.groupedData[0].dateTable, expectedViewData.groupedData[0].dateTable, 'correct dateTable');
+            assert.deepEqual(viewData.groupedData[1].allDayPanel, expectedViewData.groupedData[1].allDayPanel, 'correct allDayPanel');
+            assert.deepEqual(viewData.groupedData[1].dateTable, expectedViewData.groupedData[1].dateTable, 'correct dateTable');
+            assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
         });
     });
 
@@ -3896,6 +3936,9 @@ QUnit.module('Renovated Render', {
             QUnit.test(`should return cell data when all-day-panel is enabled if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
                 this.createInstance({
                     showAllDayPanel: true,
+                    virtualScrolling: {
+                        enabled: virtualScrollingEnabled
+                    }
                 });
                 const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
                 const result = this.instance.getCellData($cell);
@@ -3912,6 +3955,9 @@ QUnit.module('Renovated Render', {
             QUnit.test(`should return cell data when appointments are grouped horizontally if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
                 this.createInstance({
                     groupOrientation: 'horizontal',
+                    virtualScrolling: {
+                        enabled: virtualScrollingEnabled
+                    }
                 });
                 this.instance.option('groups', [
                     {
@@ -3938,6 +3984,9 @@ QUnit.module('Renovated Render', {
                 this.createInstance({
                     groupOrientation: 'vertical',
                     showAllDayPanel: false,
+                    virtualScrolling: {
+                        enabled: virtualScrollingEnabled
+                    }
                 });
                 this.instance.option('groups', [
                     {
@@ -3997,40 +4046,5 @@ QUnit.module('Renovated Render', {
             endDate: undefined,
             groups: undefined,
         }, 'Cell Data is correct');
-    });
-});
-
-QUnit.module('Virtual Scrolling', {
-    beforeEach() {
-        this.createInstance = (options = {}) => {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(extend({
-                height: 400,
-                renovateRender: true,
-                currentDate: new Date(2020, 6, 29),
-                virtualScrolling: {
-                    enabled: true
-                },
-            }, options)).dxSchedulerWorkSpaceDay('instance');
-            stubInvokeMethod(this.instance);
-        };
-    },
-}, () => {
-    QUnit.test('_getCellCoordinatesByIndex should correct rowIndex', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'This test is for the desktop');
-            return;
-        }
-
-        this.createInstance();
-
-        this.instance.getScrollable().scrollTo({ y: 600 });
-
-        const cellCoordinates = this.instance._getCellCoordinatesByIndex(19);
-
-        assert.deepEqual(cellCoordinates, {
-            rowIndex: 7,
-            cellIndex: 0
-        });
-
     });
 });

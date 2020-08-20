@@ -3,8 +3,8 @@ import {
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day'];
-const unsupportedViews = ['week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const supportedViews = ['day', 'week', 'workWeek'];
+const unsupportedViews = ['month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
 const { testStart, test, module } = QUnit;
 
