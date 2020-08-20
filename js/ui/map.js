@@ -417,11 +417,11 @@ const Map = Widget.inherit({
                 result = wrapToArray(result);
 
                 const mapRefreshed = result[0];
-                if(mapRefreshed) {
+                if(mapRefreshed && !this._disposed) {
                     this._triggerReadyAction();
                 }
                 ///#DEBUG
-                if(!mapRefreshed && name !== 'clean') {
+                if(!mapRefreshed && name !== 'clean' && !this._disposed) {
                     this._triggerUpdateAction();
                 }
                 ///#ENDDEBUG
@@ -434,9 +434,7 @@ const Map = Widget.inherit({
     },
 
     _triggerReadyAction: function() {
-        if(!this._disposed) {
-            this._createActionByOption('onReady')({ originalMap: this._provider.map() });
-        }
+        this._createActionByOption('onReady')({ originalMap: this._provider.map() });
     },
 
     _triggerUpdateAction: function() {
