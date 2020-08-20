@@ -2126,10 +2126,8 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-small & {
         &.dx-rtl {
           padding-left: 0;
-          padding-right: $scheduler-agenda-left-column-width * $scheduler-small-size-factor;
+          padding-right: $scheduler-agenda-left-column-width;
         }
-
-        padding-left: $scheduler-agenda-left-column-width * $scheduler-small-size-factor;
       }
 
       width: 100%;
