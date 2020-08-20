@@ -3428,6 +3428,7 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
                     { dataField: 'field2', colSpan: colSpan }
                 ]
             }).dxForm('instance');
+
             resizeCallbacks.fire();
 
             assert.equal(1, 1, 'resize of the form does not freeze the page');

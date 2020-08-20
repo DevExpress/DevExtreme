@@ -492,8 +492,11 @@ const LayoutManager = Widget.inherit({
     },
 
     isCachedColCountObsolete: function() {
-        const virtualColCount = this._items.filter(i => i.merged === true).length;
-        return this._cashedColCount && this._getMaxColCount() !== (this._cashedColCount + virtualColCount);
+        if(this._cashedColCount) {
+            const virtualColCount = this._items.filter(i => i.merged === true).length;
+            return this._getMaxColCount() !== (this._cashedColCount + virtualColCount);
+        }
+        return false;
     },
 
     _prepareItemsWithMerging: function(colCount) {
