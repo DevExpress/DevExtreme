@@ -2,15 +2,14 @@
 
 const gulp = require('gulp');
 
-const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
-
 gulp.task('skippedTask', done => done());
 
 module.exports = {
-    skipTaskOnTestCI: (task) => {
-        if(TEST_CI) {
-            return (done) => done ? done() : gulp.series('skippedTask');
+    runTaskByCondition: (condition, task) => {
+        console.log(`RENOVATION_RUN === ${condition}`);
+        if(condition) {
+            return () => task();
         }
-        return () => task();
+        return (done) => done ? done() : gulp.series('skippedTask');
     }
 };
