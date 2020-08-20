@@ -146,7 +146,7 @@ test('TextArea should be focused on editing start', async (t) => {
   const getTextArea = () => dataCell.element.find('.text-area-1');
 
   await t
-  // act, assert
+    // act, assert
     .click(commandCell.find('.dx-link-edit'))
     .expect(dataCell.isEditCell).ok()
     .expect(getTextArea().exists)
@@ -246,7 +246,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
 
   // rowsView
   await t
-  // 1st row
+    // 1st row
     .pressKey('tab')
     .expect(dataGrid.getDataRow(0).getCommandCell(0).getSelectCheckBox().focused).ok()
     .expect(dataGrid.getDataRow(0).getCommandCell(0).element.focused)
@@ -274,7 +274,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(1).focused)
     .ok()
 
-  // 2nd row
+    // 2nd row
     .pressKey('tab')
     .expect(dataGrid.getDataRow(1).getCommandCell(0).getSelectCheckBox().focused)
     .ok()
@@ -411,7 +411,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
 
   // rowsView
   await t
-  // 2nd row
+    // 2nd row
     .pressKey('shift+tab')
     .expect(dataGrid.getDataRow(1).getCommandCell(3).getButton(1).focused).ok()
 
@@ -439,7 +439,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .expect(dataGrid.getDataRow(1).getCommandCell(0).isFocused)
     .ok()
 
-  // 1st row
+    // 1st row
     .pressKey('shift+tab')
     .expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(1).focused)
     .ok()
@@ -1623,7 +1623,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
       const items = [];
 
       for (let i = 0; i < rowCount; i += 1) {
-        const item = { };
+        const item = {};
         for (let j = 0; j < columnCount; j += 1) {
           item[`field${j}`] = `${i}-${j}`;
         }

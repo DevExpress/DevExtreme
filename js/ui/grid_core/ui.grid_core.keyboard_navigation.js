@@ -152,19 +152,20 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _initDocumentHandlers: function() {
-        const that = this;
         const document = domAdapter.getDocument();
 
-        that._documentClickHandler = that.createAction(function(e) {
+        this._documentClickHandler = this.createAction((e) => {
             const $target = $(e.event.target);
-            const isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest(`.${that.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
+            const isCurrentRowsViewClick = this._isEventInCurrentGrid(e.event) && $target.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
             const isEditorOverlay = $target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
-            if(!isCurrentRowsViewClick && !isEditorOverlay) {
-                that._resetFocusedCell(true);
+            const columnsResizerController = this.getController('columnsResizer');
+            const isColumnResizing = !!columnsResizerController && columnsResizerController.isResizing();
+            if(!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
+                this._resetFocusedCell(true);
             }
         });
 
-        eventsEngine.on(document, addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
+        eventsEngine.on(document, addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
     },
 
     _setRowsViewAttributes: function() {
@@ -179,9 +180,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const pointerEventName = !isMobile() ? pointerEvents.down : clickEventName;
         const clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
         const $rowsView = this._getRowsViewElement();
-        const pointerEventAction = this.createAction(this._pointerEventHandler);
-        eventsEngine.off($rowsView, addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), pointerEventAction);
-        eventsEngine.on($rowsView, addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, pointerEventAction);
+        if(!isDefined(this._pointerEventAction)) {
+            this._pointerEventAction = this.createAction(this._pointerEventHandler);
+        }
+        eventsEngine.off($rowsView, addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), this._pointerEventAction);
+        eventsEngine.on($rowsView, addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, this._pointerEventAction);
     },
 
     _initKeyDownHandler: function() {
@@ -1008,7 +1011,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if($focusElement) {
             if($focusViewElement) {
                 $focusViewElement
-                    .find('.dx-row[tabIndex], .dx-row > td[tabindex]')
+                    .find('.dx-row[tabindex], .dx-row > td[tabindex]')
                     .not($focusElement)
                     .removeClass(CELL_FOCUS_DISABLED_CLASS)
                     .removeAttr('tabindex');
