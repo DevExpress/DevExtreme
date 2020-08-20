@@ -609,6 +609,33 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(request.loadedSize, files[1].size, 'correct file was uploaded');
     });
 
+    QUnit.test('upload of all files with upload method does not work in useForm mode', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useForm'
+        });
+        simulateFileChoose($element, fakeFile);
+
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(!request, 'request is not created');
+    });
+
+    QUnit.test('upload of all files with upload method works in instantly mode if set files to value option', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly'
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile]);
+        this.clock.tick(300);
+        instance.upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(request.uploaded, 'upload is done');
+    });
+
 });
 
 QUnit.module('uploading by chunks', moduleConfig, function() {

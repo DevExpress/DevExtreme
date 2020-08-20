@@ -962,6 +962,9 @@ class FileUploader extends Editor {
     }
 
     upload(fileData) {
+        if(this.option('uploadMode') === 'useForm') {
+            return;
+        }
         if(isDefined(fileData)) {
             const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
             const file = this._files.filter(file => file.value === targetFileValue)[0];
