@@ -6,6 +6,7 @@ import { Axis as originalAxis } from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import xyMethods from 'viz/axes/xy_axes';
+import { isFunction, isDeferred } from 'core/utils/type';
 
 const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
@@ -96,7 +97,8 @@ QUnit.test('Create axis', function(assert) {
         axisType: 'xyAxes',
         drawingType: 'linear',
         axisClass: 'testType',
-        widgetClass: 'testWidget'
+        widgetClass: 'testWidget',
+        getTemplate() {}
     });
 
     assert.ok(axis, 'Axis was created');
@@ -136,7 +138,8 @@ QUnit.test('Create axis when axis class is undefined', function(assert) {
         gridGroup: gridGroup,
         axisType: 'xyAxes',
         drawingType: 'linear',
-        widgetClass: 'testWidget'
+        widgetClass: 'testWidget',
+        getTemplate() {}
     });
 
     assert.equal(renderer.g.getCall(4).returnValue._stored_settings['class'], 'testWidget-line', 'Group for axis was created');
@@ -144,7 +147,8 @@ QUnit.test('Create axis when axis class is undefined', function(assert) {
 
 QUnit.test('Update options', function(assert) {
     const axis = new Axis({
-        renderer: this.renderer
+        renderer: this.renderer,
+        getTemplate() {}
     });
 
     axis.updateOptions({
@@ -181,7 +185,8 @@ QUnit.module('API', {
             labelAxesGroup: labelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
-            gridGroup: gridGroup
+            gridGroup: gridGroup,
+            getTemplate() {}
         });
         this.translator.stub('from').withArgs(100).returns(20);
         this.translator.stub('from').withArgs(120).returns('Second');
@@ -500,7 +505,8 @@ QUnit.test('applyClipRects', function(assert) {
     this.renderer.g.reset();
     const renderer = this.renderer;
     const axis = new Axis({
-        renderer: renderer
+        renderer: renderer,
+        getTemplate() {}
     });
 
     axis.applyClipRects('clipRectForElements', 'clipRectForCanvas');
@@ -637,6 +643,192 @@ QUnit.test('getCanvasRange', function(assert) {
     assert.deepEqual(canvasRange, { startValue: 'startValue', endValue: 'endValue' });
 });
 
+QUnit.module('Labels template', {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+
+        const renderer = this.renderer;
+        const stripsGroup = renderer.g();
+        const labelAxesGroup = renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = renderer.g();
+        const gridGroup = renderer.g();
+
+        renderer.g.reset();
+        this.templateRender = sinon.spy();
+        this.getTemplate = sinon.spy(() => {
+            return {
+                render: this.templateRender
+            };
+        });
+        this.axis = new Axis({
+            renderer: renderer,
+            stripsGroup: stripsGroup,
+            labelAxesGroup: labelAxesGroup,
+            constantLinesGroup: constantLinesGroup,
+            axesContainerGroup: axesContainerGroup,
+            gridGroup: gridGroup,
+            getTemplate: this.getTemplate
+        });
+
+        this.generatedTicks = [1, 2, 3];
+    },
+    afterEach: environment.afterEach,
+    updateOptions: environment.updateOptions
+});
+
+QUnit.test('getTemplate called on labels drawing', function(assert) {
+    this.updateOptions({
+        label: {
+            template: function() {}
+        }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    // assert
+    assert.strictEqual(this.getTemplate.callCount, 1);
+});
+
+QUnit.test('arguments passing to render', function(assert) {
+    this.updateOptions({
+        label: {
+            font: {
+                prop: true
+            },
+            template: sinon.spy()
+        }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.renderer.g.reset();
+    this.axis.draw();
+
+    // assert
+    assert.strictEqual(this.templateRender.callCount, 3);
+    const ticks = this.axis.getFullTicks();
+
+    this.templateRender.getCalls().forEach((currentCall, i) => {
+        const callArg = currentCall.args[0];
+        assert.strictEqual(callArg.model.text, ticks[i].toString(), 'text');
+        assert.strictEqual(callArg.model.value, ticks[i], 'value');
+        assert.deepEqual(callArg.model.labelFontStyle, { 'font-prop': true }, 'labelFontStyle');
+        assert.deepEqual(callArg.model.labelStyle, { align: 'center', 'class': undefined, 'opacity': undefined }, 'labelStyle');
+        assert.strictEqual(callArg.container, this.renderer.g.getCall(i).returnValue.element, 'container');
+        assert.strictEqual(isFunction(callArg.onRendered), true, 'onRendered');
+    });
+});
+
+QUnit.test('Get drawn state after init axis', function(assert) {
+    assert.strictEqual(this.axis.drawn(), undefined);
+});
+
+QUnit.test('Get drawn state after set', function(assert) {
+    this.axis.drawn(true);
+
+    assert.strictEqual(this.axis.drawn(), true);
+});
+
+QUnit.test('getTemplatesDef after drawing', function(assert) {
+    this.updateOptions({
+        label: { template: sinon.spy() }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    const def = this.axis.getTemplatesDef();
+
+    assert.strictEqual(isDeferred(def), true);
+    assert.strictEqual(def.state(), 'pending');
+});
+
+QUnit.test('getTemplatesDef. State after template draw', function(assert) {
+    const done = assert.async();
+    this.updateOptions({
+        label: { template: sinon.spy() }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    const def = this.axis.getTemplatesDef();
+
+    def.done(function() {
+        assert.ok(true, 'deferred resolved');
+        done();
+    });
+
+    this.templateRender.getCalls().forEach(currentCall => {
+        currentCall.args[0].onRendered();
+    });
+});
+
+QUnit.test('templatesDef after dispose axis', function(assert) {
+    this.updateOptions({
+        label: { template: sinon.spy() }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    const def = this.axis.getTemplatesDef();
+    this.axis.dispose();
+
+    assert.strictEqual(def.state(), 'rejected');
+});
+
+QUnit.test('templatesDef on redrawing', function(assert) {
+    this.updateOptions({
+        label: { template: sinon.spy() }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    const def = this.axis.getTemplatesDef();
+    this.axis.draw();
+
+    assert.strictEqual(def.state(), 'rejected');
+});
+
 QUnit.module('Labels Settings', {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -656,7 +848,8 @@ QUnit.module('Labels Settings', {
             labelAxesGroup: labelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
-            gridGroup: gridGroup
+            gridGroup: gridGroup,
+            getTemplate() {}
         });
 
         this.generatedTicks = [1, 2, 3];
@@ -744,7 +937,8 @@ QUnit.module('Validate', {
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
             incidentOccurred: this.incidentOccurred,
-            isArgumentAxis: true
+            isArgumentAxis: true,
+            getTemplate() {}
         });
     },
     afterEach: environment.afterEach,
@@ -847,7 +1041,7 @@ QUnit.module('Zoom', {
         this.generatedTicks = [0, 1, 2];
     },
     createAxis(options) {
-        const axis = new Axis($.extend({}, this.axisOptions, options));
+        const axis = new Axis($.extend({ getTemplate() {} }, this.axisOptions, options));
         axis.parser = function(value) {
             return value;
         };
@@ -1253,7 +1447,8 @@ QUnit.module('VisualRange', {
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
             incidentOccurred: this.incidentOccurred,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         this.axis.parser = function(value) {
@@ -1346,7 +1541,8 @@ const dataMarginsEnvironment = {
             axesContainerGroup: renderer.g(),
             gridGroup: renderer.g(),
             isArgumentAxis: isArgumentAxis,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         axis.updateOptions($.extend(true, {
@@ -3229,7 +3425,8 @@ QUnit.module('Set business range', {
             axisType: 'xyAxes',
             drawingType: 'linear',
             isArgumentAxis: true,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         this.updateOptions({});
@@ -4073,7 +4270,8 @@ QUnit.module('Set business range. Value axis', {
             axisType: 'xyAxes',
             drawingType: 'linear',
             isArgumentAxis: false,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         this.updateOptions({});
@@ -4238,7 +4436,8 @@ QUnit.module('Visual range on update. Argument axis', {
             axisType: 'xyAxes',
             drawingType: 'linear',
             isArgumentAxis: true,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         this.canvas = {
@@ -4621,7 +4820,8 @@ QUnit.module('Get scroll bounds', {
             axisType: 'xyAxes',
             drawingType: 'linear',
             isArgumentAxis: true,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         this.updateOptions({});
@@ -4705,7 +4905,8 @@ QUnit.module('dataVisualRangeIsReduced method', {
             axisType: 'xyAxes',
             drawingType: 'linear',
             isArgumentAxis: true,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         });
 
         this.updateOptions({});

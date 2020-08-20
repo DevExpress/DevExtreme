@@ -1396,6 +1396,41 @@ QUnit.test('click on argument axis element. Axis hoverMode is \'none\'', functio
     assert.deepEqual(this.options.eventTrigger.withArgs('argumentAxisClick').lastCall.args[1], { argument: 'argument1', event: event });
 });
 
+QUnit.test('click on argument axis. Parent of target has data', function(assert) {
+    const parent = this.renderer.g();
+    const target = this.renderer.g();
+
+    parent.element.append(target.element);
+
+    parent.element['chart-data-argument'] = 'argument1';
+    this.tracker.update(this.options);
+
+    const event = getEvent('dxclick', { pageX: 100, pageY: 50, target: target.element });
+    this.axis.coordsIn.withArgs(97, 45).returns(true);
+
+    $(this.renderer.root.element).trigger(event);
+
+    assert.deepEqual(this.options.eventTrigger.withArgs('argumentAxisClick').lastCall.args[1], { argument: 'argument1', event: event });
+});
+
+QUnit.test('hover on argument axis. Parent of target has data', function(assert) {
+    const axisElement = this.renderer.g();
+    const parent = this.renderer.g();
+
+    parent.element.append(axisElement.element);
+
+    this.axis.coordsIn.withArgs(97, 45).returns(true);
+
+    parent.element['chart-data-argument'] = 'argument1';
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: axisElement.element }));
+
+    assert.strictEqual(this.series.notify.callCount, 1);
+    assert.strictEqual(this.series.notify.lastCall.args[0].action, 'pointHover');
+    assert.strictEqual(this.series.notify.lastCall.args[0].target.argument, 'argument1');
+    assert.strictEqual(this.series.notify.lastCall.args[0].target.getOptions().hoverMode, 'allargumentpoints');
+});
+
 QUnit.test('pointermove on axis element. Axis hoverMode is \'none\'', function(assert) {
     const axisElement = this.renderer.g();
 

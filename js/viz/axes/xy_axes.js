@@ -800,7 +800,7 @@ export default {
                 .append(rootElement);
             const titleElement = that._drawTitleText(rootElement, { x: 0, y: 0 });
             const constantLinesLabelsElement = that._drawConstantLinesForEstimating(constantLineOptions);
-            const labelBox = labelElement && labelElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 };
+            const labelBox = !options.label.template && labelElement && labelElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 };
             const titleBox = titleElement && titleElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 };
             const constantLinesBox = constantLinesLabelsElement.getBBox();
             const titleHeight = titleBox.height ? titleBox.height + options.title.margin : 0;

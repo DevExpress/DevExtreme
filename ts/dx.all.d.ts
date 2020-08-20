@@ -8002,6 +8002,8 @@ declare module DevExpress.viz {
         rotationAngle?: number;
         /** @name dxChart.Options.commonAxisSettings.label.staggeringSpacing */
         staggeringSpacing?: number;
+        /** @name dxChart.Options.commonAxisSettings.label.template */
+        template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxChart.Options.commonAxisSettings.label.textOverflow */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChart.Options.commonAxisSettings.label.visible */
