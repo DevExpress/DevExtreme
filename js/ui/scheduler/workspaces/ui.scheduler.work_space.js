@@ -464,9 +464,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupOrientation: 'horizontal',
             selectedCellData: [],
             groupByDate: false,
-            virtualScrolling: {
-                enabled: false,
-                outlineRowCount: 0
+            scrolling: {
+                mode: 'standard',
             },
             renovateRender: false
         });
@@ -548,8 +547,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'selectedCellData':
                 break;
-            case 'virtualScrolling':
-                this.option('renovateRender', args.value);
+            case 'scrolling':
+                this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
                 this.repaint();
@@ -690,7 +689,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._initAllDayPanelElements();
 
-        if(this.isRenovateRender()) {
+        if(this.isRenovatedRender()) {
             this.createRAllDayPanelElements();
         } else {
             this._createAllDayPanelElements();
@@ -996,12 +995,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._setFocusOnCellByOption(this.option('selectedCellData'));
     }
 
-    isRenovateRender() {
-        return this.renovateRenderSupported() && this.option('renovateRender');
+    isRenovatedRender() {
+        return this.renovatedRenderSupported() && this.option('renovateRender');
+    }
+
+    _isVirtualModeOn() {
+        return this.option('scrolling.mode') === 'virtual';
     }
 
     isVirtualScrolling() {
-        return this.isRenovateRender() && this.option('virtualScrolling.enabled');
+        return this.isRenovatedRender() && this._isVirtualModeOn();
     }
 
     _initVirtualScrolling() {
@@ -1038,7 +1041,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._renderDateHeader();
 
-        if(this.isRenovateRender()) {
+        if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
             this._renderTimePanel();
@@ -1087,7 +1090,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return options;
     }
 
-    renovateRenderSupported() { return false; }
+    renovatedRenderSupported() { return false; }
 
     renderRWorkspace() {
         const viewModel = this.viewDataGenerator.generate();
@@ -2296,7 +2299,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const currentCell = $cell[0];
 
         if(currentCell) {
-            if(this.isRenovateRender()) {
+            if(this.isRenovatedRender()) {
                 data = this._getCellDataInRenovatedView($cell);
             } else {
                 data = elementData(currentCell, CELL_DATA);

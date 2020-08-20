@@ -38,7 +38,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
     }
 
-    renovateRenderSupported() { return true; }
+    renovatedRenderSupported() { return true; }
 
     generateRenderOptions() {
         const startViewDate = this._getDateWithSkippedDST();

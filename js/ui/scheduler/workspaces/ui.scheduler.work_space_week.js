@@ -53,7 +53,7 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
         return super._isApplyCompactAppointmentOffset();
     }
 
-    renovateRenderSupported() { return true; }
+    renovatedRenderSupported() { return true; }
     renderRDateTable() {
         this.renderRComponent(
             this._$dateTable,

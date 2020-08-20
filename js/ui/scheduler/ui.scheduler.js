@@ -335,6 +335,11 @@ class Scheduler extends Widget {
                 * @type Enums.Orientation
                 */
 
+            /**
+                * @name dxSchedulerOptions.views.scrolling
+                * @type dxSchedulerScrolling
+                */
+
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
             currentDate: dateUtils.trimTime(new Date()),
             min: undefined,
@@ -647,9 +652,8 @@ class Scheduler extends Widget {
 
             allowMultipleCellSelection: true,
 
-            virtualScrolling: {
-                enabled: false,
-                outlineRowCount: 0
+            scrolling: {
+                mode: 'standard',
             },
 
             renovateRender: false,
@@ -1008,7 +1012,7 @@ class Scheduler extends Widget {
                 this._toggleAdaptiveClass();
                 this.repaint();
                 break;
-            case 'virtualScrolling':
+            case 'scrolling':
                 this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'renovateRender':
@@ -1716,6 +1720,7 @@ class Scheduler extends Widget {
 
     _workSpaceConfig(groups, countConfig) {
         const currentViewOptions = this._getCurrentViewOptions();
+        const scrolling = this.option('scrolling');
 
         const result = extend({
             noDataText: this.option('noDataText'),
@@ -1743,8 +1748,10 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', args.selectedCellData);
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
-            virtualScrolling: this.option('virtualScrolling'),
-            renovateRender: this.option('renovateRender'),
+            scrolling: scrolling,
+            renovateRender: this.option('renovateRender')
+                || scrolling.mode === 'virtual'
+                || currentViewOptions.scrolling?.mode === 'virtual',
         }, currentViewOptions);
 
         result.observer = this;
