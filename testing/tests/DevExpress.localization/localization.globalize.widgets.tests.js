@@ -55,14 +55,17 @@ const commonEnvironment = {
 
 QUnit.module('DateBox', commonEnvironment, () => {
     QUnit.test('"ww" format should not raise any errors (T924017)', function(assert) {
-        const $dateBox = $('#dateBox').dxDateBox({
-            useMaskBehavior: true,
-            displayFormat: 'ww, d of MMM, yyyy HH:mm',
-            value: new Date(2018, 9, 16, 15, 8, 12)
-        });
-
-        const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
-        assert.equal(date, '42, 16 of Oct, 2018 15:08', 'date format is correct');
+        try {
+            $('#dateBox').dxDateBox({
+                useMaskBehavior: true,
+                displayFormat: 'ww, d of MMM, yyyy HH:mm',
+                value: new Date(2018, 9, 16, 15, 8, 12)
+            });
+        } catch(e) {
+            assert.ok(false, e);
+        } finally {
+            assert.ok(true, 'no errors has been raised');
+        }
     });
 
     QUnit.test('Date and serializing date in locales different than EN', function(assert) {
