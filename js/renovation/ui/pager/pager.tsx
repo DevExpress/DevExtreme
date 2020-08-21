@@ -4,7 +4,7 @@ import {
 
 import { ResizableContainer } from './resizable_container';
 import PagerProps from './common/pager_props';
-import { PagerContentComponent } from './content';
+import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../preact_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
 
@@ -14,7 +14,7 @@ export const viewFunction = ({
   restAttributes,
 }: Pager) => (
   <ResizableContainer
-    contentTemplate={PagerContentComponent}
+    contentTemplate={PagerContent}
     pagerProps={pagerProps}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -26,7 +26,7 @@ export const viewFunction = ({
   jQuery: { register: true, component: GridPagerWrapper },
   view: viewFunction,
 })
-export class Pager extends JSXComponent(PagerProps) {
+export class Pager extends JSXComponent<PagerProps>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
       this.props.pageIndex = newPageIndex + 1;
@@ -37,23 +37,23 @@ export class Pager extends JSXComponent(PagerProps) {
 
   get pageIndex(): number {
     if (this.props.gridCompatibility) {
-      return this.props.pageIndex! - 1;
+      return this.props.pageIndex - 1;
     }
-    return this.props.pageIndex!;
+    return this.props.pageIndex;
   }
 
   pageSizeChange(newPageSize: number): void {
     this.props.pageSize = newPageSize;
   }
 
-  get className(): string {
+  get className(): string | undefined {
     if (this.props.gridCompatibility) {
       return combineClasses({
         'dx-datagrid-pager': true,
-        [this.props.className!]: !!this.props.className,
+        [`${this.props.className}`]: !!this.props.className,
       });
     }
-    return this.props.className!;
+    return this.props.className;
   }
 
   get pagerProps(): PagerProps {

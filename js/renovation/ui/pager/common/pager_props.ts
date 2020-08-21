@@ -1,47 +1,46 @@
 import {
   ComponentBindings, OneWay, TwoWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-import messageLocalization from '../../../../localization/message';
 
 @ComponentBindings()
 export default class PagerProps {
-  @OneWay() gridCompatibility? = true;
+  @OneWay() gridCompatibility = true;
 
   @OneWay() className?: string;
 
-  @OneWay() showInfo?: boolean = false;
+  @OneWay() showInfo = false;
 
-  @OneWay() infoText?: string = messageLocalization.getFormatter('dxPager-infoText')();
+  @OneWay() infoText?: string;
 
-  @OneWay() lightModeEnabled?: boolean = false;
+  @OneWay() lightModeEnabled = false;
 
-  @OneWay() maxPagesCount?: number = 10;
+  @OneWay() maxPagesCount = 10;
 
-  @OneWay() pageCount?: number = 10;
+  @OneWay() pageCount = 10;
 
-  @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
+  @OneWay() pagesCountText?: string;
 
-  @OneWay() visible?: boolean = true;
+  @OneWay() visible = true;
 
-  @OneWay() hasKnownLastPage?: boolean = true;
+  @OneWay() hasKnownLastPage = true;
 
-  @OneWay() pagesNavigatorVisible?: boolean | 'auto' = 'auto';
+  @OneWay() pagesNavigatorVisible: boolean | 'auto' = 'auto';
 
-  @TwoWay() pageIndex?: number = 1;
+  @TwoWay() pageIndex = 1;
 
-  @Event() pageIndexChange?: (newPageIndex: number) => void;
+  @Event() pageIndexChange?: EventCallback<number>;
 
-  @TwoWay() pageSize?: number = 5;
+  @TwoWay() pageSize = 5;
 
-  @Event() pageSizeChange?: (newPageSize: number) => void;
+  @Event() pageSizeChange?: EventCallback<number>;
 
-  @OneWay() showPageSizes? = true;
+  @OneWay() showPageSizes = true;
 
-  @OneWay() pageSizes?: number[] = [5, 10];
+  @OneWay() pageSizes = [5, 10];
 
-  @OneWay() rtlEnabled?: boolean = false;
+  @OneWay() rtlEnabled = false;
 
-  @OneWay() showNavigationButtons?: boolean = false;
+  @OneWay() showNavigationButtons = false;
 
-  @OneWay() totalCount?: number = 0;
+  @OneWay() totalCount = 0;
 }

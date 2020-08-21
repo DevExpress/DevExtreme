@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, JSXComponent, Event, OneWay, TwoWay, InternalState, Effect, Component, Ref,
+  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import { SelectBox } from '../../select_box';
@@ -7,6 +7,7 @@ import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_wid
 import { FullPageSize } from '../common/types.d';
 import { PAGER_SELECTION_CLASS } from '../common/consts';
 import { getElementMinWidth } from '../utils/get_element_width';
+import PagerProps from '../common/pager_props';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
@@ -34,21 +35,21 @@ export const viewFunction = ({
 export class PageSizeSmallProps {
   @Ref() parentRef!: HTMLElement;
 
-  @TwoWay() pageSize?: number = 5;
-
   @OneWay() pageSizes!: FullPageSize[];
-
-  @OneWay() rtlEnabled?: boolean = false;
-
-  @Event() pageSizeChange?: (pageSize: number) => void;
 }
+type PageSizeSmallPropsType = Pick<PagerProps,
+'pageSize' | 'pageSizeChange' | 'rtlEnabled'> & PageSizeSmallProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeSmall extends JSXComponent<PageSizeSmallProps, 'parentRef'|'pageSizes'|'pageSizeChange'>(PageSizeSmallProps) {
+export class PageSizeSmall
+  extends JSXComponent<PageSizeSmallPropsType, 'parentRef' | 'pageSizes' | 'pageSizeChange'>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {
-    return calculateValuesFittedWidth(this.minWidth, this.props.pageSizes.map((p) => p.value));
+    return calculateValuesFittedWidth(
+      this.minWidth,
+      this.props.pageSizes.map((p) => p.value),
+    );
   }
 
   @Effect() updateWidth(): void {

@@ -1,10 +1,6 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
-  Event,
-  TwoWay,
-  OneWay,
   Effect,
   Ref,
   InternalState,
@@ -16,6 +12,7 @@ import { NumberBox } from '../../number_box';
 import messageLocalization from '../../../../localization/message';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getElementMinWidth } from '../utils/get_element_width';
+import PagerProps from '../common/pager_props';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
@@ -29,7 +26,8 @@ export const viewFunction = ({
   valueChange,
   width,
   value,
-  props: { pageCount, pagesCountText, rtlEnabled },
+  pagesCountText,
+  props: { pageCount, rtlEnabled },
 }: PagesSmall) => (
   <div className={LIGHT_PAGES_CLASS}>
     <NumberBox
@@ -52,30 +50,24 @@ export const viewFunction = ({
   </div>
 );
 
-@ComponentBindings()
-export class PagesSmallProps {
-  @OneWay() pageCount?: number = 10;
-
-  @TwoWay() pageIndex?: number = 0;
-
-  @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
-
-  @OneWay() rtlEnabled?: boolean = false;
-
-  @Event() pageIndexChange?: (pageIndex: number) => void;
-}
+type PagesSmallPropsType = Pick<PagerProps,
+'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |'rtlEnabled'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent(PagesSmallProps) {
+export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {
   @Ref() pageIndexRef!: NumberBox;
 
   get value(): number {
-    return this.props.pageIndex! + 1;
+    return this.props.pageIndex + 1;
   }
 
   get width(): number {
     const pageCount = this.props.pageCount as number;
     return calculateValuesFittedWidth(this.minWidth, [pageCount]);
+  }
+
+  get pagesCountText(): string {
+    return this.props.pagesCountText || messageLocalization.getFormatter('dxPager-pagesCountText')();
   }
 
   @InternalState() private minWidth = 10;
@@ -85,7 +77,7 @@ export class PagesSmall extends JSXComponent(PagesSmallProps) {
   }
 
   selectLastPageIndex(): void {
-    const { pageCount } = this.props as Required<PagesSmallProps>;
+    const { pageCount } = this.props;
     this.props.pageIndexChange?.(pageCount - 1);
   }
 

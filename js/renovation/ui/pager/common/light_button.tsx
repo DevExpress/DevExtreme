@@ -26,23 +26,25 @@ export const viewFunction = ({
   </div>
 );
 
+/* istanbul ignore next: class has only props default */
 @ComponentBindings()
 export class LightButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Slot() children?: any;
 
-  @OneWay() className?: string = '';
+  @OneWay() className = '';
 
-  @OneWay() label?: string = '';
+  @OneWay() label = '';
+  /* istanbul ignore next: EventCallback cannot be tested */
 
-  @Event() onClick?: () => void;
+  @Event() onClick?: EventCallback;
 }
 
 function createActionByOption(): () => void {
   return (): void => { };
 }
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class LightButton extends JSXComponent(LightButtonProps) {
+export class LightButton extends JSXComponent<LightButtonProps>() {
   @Ref() widgetRef!: HTMLDivElement;
 
   @Effect() keyboardEffect(): DisposeEffectReturn {
