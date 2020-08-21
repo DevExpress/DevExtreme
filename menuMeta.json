@@ -3990,16 +3990,14 @@
             "Title": "Overview",
             "Name": "Overview",
             "DocUrl": "Guide/Widgets/DateBox/Overview/",
-            "Widget": "DateBox",
-            "Modules": "globalize"
+            "Widget": "DateBox"
           },
           {
             "Title": "Formatting",
             "Name": "Formatting",
             "Equivalents": "mask",
             "DocUrl": "ApiReference/UI_Widgets/dxDateBox/Configuration/#useMaskBehavior",
-            "Widget": "DateBox",
-            "Modules": "globalize"
+            "Widget": "DateBox"
           }
         ]
       },
@@ -4924,7 +4922,6 @@
             "Name": "ItemTemplate",
             "DocUrl": "Guide/Widgets/Gallery/Customize_Item_Appearance/",
             "Widget": "Gallery",
-            "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
               "/Models/SampleData/GalleryItems.cs",
               "/Models/GalleryItem.cs"
@@ -5090,8 +5087,7 @@
             "Title": "Item Template",
             "Name": "ItemTemplate",
             "DocUrl": "Guide/Widgets/TileView/Customize_Tile_Appearance/",
-            "Widget": "TileView",
-            "Modules": "globalize--vue&react"
+            "Widget": "TileView"
           },
           {
             "Title": "Item 3rd Party Engine Template",
