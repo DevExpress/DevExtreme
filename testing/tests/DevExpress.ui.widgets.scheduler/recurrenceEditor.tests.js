@@ -1,5 +1,3 @@
-import 'common.css!';
-
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
 import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';

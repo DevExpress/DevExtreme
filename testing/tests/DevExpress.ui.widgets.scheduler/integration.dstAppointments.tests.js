@@ -4,7 +4,7 @@ import fx from 'animation/fx';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
+
 import 'generic_light.css!';
 import devices from 'core/devices';
 
