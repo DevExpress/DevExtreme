@@ -19,8 +19,10 @@ export const viewFunction = (viewModel: TimePanelCell): JSX.Element => {
           data={{
             text: viewModel.props.text,
             date: viewModel.props.startDate,
+            groups: viewModel.props.groups,
+            groupIndex: viewModel.props.groupIndex,
           }}
-          // index
+          index={viewModel.props.index}
         />
       )}
       {!TimeCellTemplate && (

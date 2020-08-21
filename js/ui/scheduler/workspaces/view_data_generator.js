@@ -24,7 +24,8 @@ export default class ViewDataGenerator {
             startRowIndex,
             groupCount,
             rowCount,
-            rowCountInGroup
+            rowCountInGroup,
+            cellCountInGroupRow,
         } = options;
         const groupedData = [];
         const firstGroupIndex = Math.floor(startRowIndex / rowCountInGroup);
@@ -68,7 +69,8 @@ export default class ViewDataGenerator {
             groupedData,
             isVirtual: true,
             topVirtualRowHeight,
-            bottomVirtualRowHeight
+            bottomVirtualRowHeight,
+            cellCountInGroupRow,
         };
     }
 
@@ -80,6 +82,7 @@ export default class ViewDataGenerator {
             rowCount,
             cellCount,
             groupCount,
+            cellCountInGroupRow,
         } = options;
 
         const groupedData = [];
@@ -96,7 +99,8 @@ export default class ViewDataGenerator {
 
         return {
             groupedData,
-            isVirtual: false
+            isVirtual: false,
+            cellCountInGroupRow,
         };
     }
 

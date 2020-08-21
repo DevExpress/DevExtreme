@@ -25,39 +25,47 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
       className={`dx-scheduler-time-panel ${viewModel.props.className}`}
     >
       {viewModel.props.viewData!
-        .groupedData.map(({ dateTable }, groupIndex) => (
-          <Fragment key={getKeyByGroup(groupIndex)}>
-            { getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
-            && (
-            <Row>
-              <CellBase className="dx-scheduler-time-panel-title-cell">
-                <AllDayPanelTitle />
-              </CellBase>
-            </Row>
-            )}
-            {
-              dateTable.map((cellsRow, index) => {
-                const isFirstCell = index === 0;
-                const isLastCell = index === dateTable.length - 1;
+        .groupedData.map(({ dateTable }, index) => {
+          const { groupIndex = index } = dateTable[0][0];
+
+          return (
+            <Fragment key={getKeyByGroup(groupIndex)}>
+              {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
+                <Row>
+                  <CellBase className="dx-scheduler-time-panel-title-cell">
+                    <AllDayPanelTitle />
+                  </CellBase>
+                </Row>
+              )}
+              {dateTable.map((cellsRow, rowIndex) => {
+                const { cellCountInGroupRow } = viewModel.props.viewData!;
+                const isFirstCell = rowIndex === 0;
+                const isLastCell = rowIndex === dateTable.length - 1;
+                const {
+                  groups, startDate, text, index: cellIndex,
+                } = cellsRow[0];
 
                 return (
                   <Row
                     className="dx-scheduler-time-panel-row"
-                    key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+                    key={getKeyByDateAndGroup(startDate, groups)}
                   >
                     <Cell
-                      startDate={cellsRow[0].startDate}
-                      text={cellsRow[0].text}
+                      startDate={startDate}
+                      text={text}
+                      groups={viewModel.isVerticalGroupOrientation ? groups : undefined}
+                      groupIndex={viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
                       isFirstCell={isFirstCell}
                       isLastCell={isLastCell}
+                      index={Math.floor(cellIndex / cellCountInGroupRow)}
                       timeCellTemplate={viewModel.props.timeCellTemplate}
                     />
                   </Row>
                 );
-              })
-            }
-          </Fragment>
-        ))}
+              })}
+            </Fragment>
+          );
+        })}
     </Table>
   </div>
 );
@@ -90,5 +98,11 @@ export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps
 
   get bottomVirtualRowHeight(): number {
     return this.props.viewData!.bottomVirtualRowHeight || 0;
+  }
+
+  get isVerticalGroupOrientation(): boolean {
+    const { groupOrientation } = this.props;
+
+    return groupOrientation === 'vertical';
   }
 }

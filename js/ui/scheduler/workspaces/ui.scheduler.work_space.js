@@ -1067,6 +1067,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupCount: groupCountForRender,
             rowCountInGroup,
             cellCount: this._getTotalCellCount(groupCount),
+            cellCountInGroupRow: this._getCellCount(),
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0
@@ -1127,7 +1128,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         const modelName = Object.getOwnPropertyNames(viewModel)[0];
         if(!component) {
             const container = getPublicElement(parentElement);
-            component = this._createComponent(container, componentClass, viewModel);
+            component = this._createComponent(container, componentClass, {
+                ...viewModel,
+                groupOrientation: this.option('groupOrientation'),
+            });
             this[componentName] = component;
         } else {
             component.option(modelName, viewModel[modelName]);

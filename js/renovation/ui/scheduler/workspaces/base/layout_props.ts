@@ -7,5 +7,7 @@ import { GroupedViewData } from '../types.d';
 export class LayoutProps {
   @OneWay() viewData?: GroupedViewData;
 
+  @OneWay() groupOrientation?: 'vertical' | 'horizontal';
+
   @Template() dataCellTemplate?: any;
 }

@@ -21,6 +21,7 @@ export interface GroupedViewData {
   isVirtual?: boolean;
   topVirtualRowHeight?: number;
   bottomVirtualRowHeight?: number;
+  cellCountInGroupRow: number;
 }
 
 export interface GroupItem {
