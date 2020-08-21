@@ -191,15 +191,25 @@ const DateViewRoller = Scrollable.inherit({
         return this._strategy.validate(e);
     },
 
-    _endActionHandler: function() {
-        const currentSelectedIndex = this.option('selectedIndex');
+    _fitSelectedIndexInRange: function(index) {
         const itemsCount = this.option('items').length;
+        return Math.max(Math.min(index, itemsCount - 1), 0);
+    },
+
+    _getSelectedIndexAfterScroll: function(currentSelectedIndex) {
         const locationTop = -this._location().top;
 
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
         const direction = dy > 0 || dy === 0 && currentSelectedIndex > 0 ? 1 : -1;
-        const newSelectedIndex = Math.max(Math.min(currentSelectedIndex + direction, itemsCount - 1), 0);
+        const newSelectedIndex = this._fitSelectedIndexInRange(currentSelectedIndex + direction);
+
+        return newSelectedIndex;
+    },
+
+    _endActionHandler: function() {
+        const currentSelectedIndex = this.option('selectedIndex');
+        const newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
 
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);
