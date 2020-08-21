@@ -86,6 +86,44 @@ export default _extend({}, symbolPoint, {
         return options.position;
     },
 
+    getCenterX: function() {
+        const that = this;
+        const radiusInner = that.radiusInner;
+        const radiusOuter = that.radiusOuter;
+        const rad = radiusInner + (radiusOuter - radiusInner) / 2;
+        const angleFunctions = _getCosAndSin(that.middleAngle);
+        return that.centerX + rad * angleFunctions.cos;
+    },
+
+    getCenterY: function() {
+        const that = this;
+        const radiusInner = that.radiusInner;
+        const radiusOuter = that.radiusOuter;
+        const angleFunctions = _getCosAndSin(that.middleAngle);
+        const rad = radiusInner + (radiusOuter - radiusInner) / 2;
+        return _round(that.centerY - rad * angleFunctions.sin);
+    },
+
+    getEdgeX: function() {
+        const that = this;
+        const rad = that.radiusOuter;
+        const angleFunctions = _getCosAndSin(that.middleAngle);
+        if(angleFunctions.cos > 0.1) {
+            return that.centerX + rad * angleFunctions.cos;
+        } else if(angleFunctions.cos < -0.1) {
+            return that.centerX + rad * angleFunctions.cos;
+        } else {
+            return that.centerX + rad * angleFunctions.cos;
+        }
+    },
+
+    getEdgeY: function() {
+        const that = this;
+        const rad = that.radiusOuter;
+        const angleFunctions = _getCosAndSin(that.middleAngle);
+        return _round(that.centerY - rad * angleFunctions.sin);
+    },
+
     _getLabelCoords: function(label) {
         const that = this;
         const bBox = label.getBoundingRect();
