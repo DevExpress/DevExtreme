@@ -99,7 +99,6 @@
           {
             "Title": "Record Paging",
             "Name": "RecordPaging",
-            "DocUrl": "Guide/Widgets/DataGrid/Paging/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridCustomersController.cs",
