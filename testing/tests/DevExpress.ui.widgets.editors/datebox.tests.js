@@ -3232,7 +3232,11 @@ QUnit.module('datebox with time component', {
         assert.equal($input.val(), dateLocalization.format(date, format), 'input value is correct');
     });
 
-    QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY (T921228)', function(assert) {
+    QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY when device is desktop (T921228)', function(assert) {
+        if(devices.real().type !== 'desktop') {
+            assert.ok(true, 'device is not desktop');
+        }
+
         const date = new Date(2015, 0, 1);
         $('#dateBox').dxDateBox({
             pickerType: 'rollers',

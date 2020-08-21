@@ -7,6 +7,9 @@ import { getBoundingRect } from '../../core/utils/position';
 import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
+import devices from '../../core/devices';
+import fx from '../../animation/fx';
+import translator from '../../animation/translator';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 const DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active';
@@ -183,7 +186,24 @@ const DateViewRoller = Scrollable.inherit({
 
         if(this._isVisible() && (delta.x || delta.y)) {
             this._strategy._prepareDirections(true);
-            this._strategy.handleMove({ delta: delta });
+
+            if(this._animation && devices.real().deviceType !== 'desktop') {
+                const that = this;
+
+                fx.stop(this._$content);
+                fx.animate(this._$content, {
+                    duration: 200,
+                    type: 'slide',
+                    to: { top: Math.floor(delta.y) },
+                    complete: function() {
+                        translator.resetPosition(that._$content);
+                        that._strategy.handleMove({ delta: delta });
+                    }
+                });
+                delete this._animation;
+            } else {
+                this._strategy.handleMove({ delta: delta });
+            }
         }
     },
 
@@ -209,7 +229,14 @@ const DateViewRoller = Scrollable.inherit({
 
     _endActionHandler: function() {
         const currentSelectedIndex = this.option('selectedIndex');
-        const newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
+        let newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
+
+        if(devices.real().deviceType !== 'desktop') {
+            const ratio = -this._location().top / this._itemHeight();
+            newSelectedIndex = Math.round(ratio);
+
+            this._animation = true;
+        }
 
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);
