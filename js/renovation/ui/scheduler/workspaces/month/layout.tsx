@@ -5,14 +5,14 @@ import { MonthHeaderPanelCell } from './header_panel/cell';
 import { MonthDateTableLayout } from './date_table/layout';
 import { LayoutProps } from '../base/layout_props';
 
-const HeaderTemplate = ({ viewCellsData }: HeaderPanelLayoutProps) => (
+const HeaderTemplate = ({ viewCellsData }: HeaderPanelLayoutProps): JSX.Element => (
   <HeaderPanelLayout
     cellTemplate={MonthHeaderPanelCell}
     viewCellsData={viewCellsData}
   />
 );
 
-export const viewFunction = (viewModel: MonthLayout) => (
+export const viewFunction = (viewModel: MonthLayout): JSX.Element => (
   <LayoutBase
     viewData={viewModel.props.viewData}
     headerPanelTemplate={HeaderTemplate}
