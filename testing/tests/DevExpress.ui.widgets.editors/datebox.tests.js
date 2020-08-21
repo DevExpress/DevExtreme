@@ -3235,6 +3235,7 @@ QUnit.module('datebox with time component', {
     QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY when device is desktop (T921228)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'device is not desktop');
+            return;
         }
 
         const date = new Date(2015, 0, 1);
