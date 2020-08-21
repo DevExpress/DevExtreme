@@ -35,6 +35,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import { roundPoints } from '../../helpers/grid/getPointsByColumnsHelper.js';
 
 const MockTablePositionViewController = dataGridMocks.MockTablePositionViewController;
 const MockTrackerView = dataGridMocks.MockTrackerView;
@@ -59,6 +60,7 @@ import { GroupingHeaderPanelExtender } from 'ui/data_grid/ui.data_grid.grouping'
 import { HeaderPanel } from 'ui/data_grid/ui.data_grid.header_panel';
 import Action from 'core/action';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import publicComponentUtils from 'core/utils/public_component';
 
 const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
@@ -2943,7 +2945,7 @@ QUnit.module('Columns resizing', {
             resizeController._columnsSeparatorView.render($container);
 
             // assert
-            assert.deepEqual(resizeController.pointsByColumns(), [
+            assert.deepEqual(roundPoints(resizeController.pointsByColumns()), [
                 { x: -9500, y: -10000, columnIndex: 0, index: 0 },
                 { x: -9625, y: -10000, columnIndex: 1, index: 1 },
                 { x: -9750, y: -10000, columnIndex: 2, index: 2 },
@@ -3048,8 +3050,16 @@ QUnit.module('Columns resizing', {
             assert.strictEqual($headers.length, 3, 'header count');
 
             $headers.each((index, header) => {
+                const isIE11 = browser.msie && parseInt(browser.version) <= 11;
                 const $dataCell = $dataCells.eq(index);
-                assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+                const cellOffset = $dataCell.offset().left;
+                let headerOffset = $(header).offset().left;
+
+                if(isIE11) {
+                    // header has border, so offset for it is fractional in IE
+                    headerOffset = Math.floor(headerOffset);
+                }
+                assert.strictEqual(headerOffset, cellOffset, `cells with index ${index}: header position matches cell position`);
             });
         });
 
@@ -3072,7 +3082,7 @@ QUnit.module('Columns resizing', {
             resizeController._columnsSeparatorView.render($container);
 
             // assert
-            assert.deepEqual(resizeController.pointsByColumns(), [
+            assert.deepEqual(roundPoints(resizeController.pointsByColumns()), [
                 { x: -9125, y: -10000, columnIndex: 0, index: 1 },
                 { x: -9250, y: -10000, columnIndex: 1, index: 2 },
                 { x: -9375, y: -10000, columnIndex: 2, index: 3 },
@@ -3297,7 +3307,8 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
     });
 
@@ -3309,7 +3320,8 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5),
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5);
+        assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
     });
 
@@ -3324,15 +3336,16 @@ QUnit.module('Headers reordering', {
         // act
         this.renderViews($('#container'));
 
-        $('#container').css('direction', 'rtl');
+        $('#container').addClass('dx-rtl');
 
         // assert
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
         assert.deepEqual(
-            gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
+            roundPoints(points),
             [
-                { x: -9001, y: -10000, columnIndex: 0, index: 0 },
-                { x: -9501, y: -10000, columnIndex: 1, index: 1 },
-                { x: -10001, y: -10000, columnIndex: 2, index: 2 }
+                { x: -9000, y: -10000, columnIndex: 0, index: 0 },
+                { x: -9500, y: -10000, columnIndex: 1, index: 1 },
+                { x: -10000, y: -10000, columnIndex: 2, index: 2 }
             ], 'dragging points for RTL');
     });
 
@@ -3350,9 +3363,10 @@ QUnit.module('Headers reordering', {
 
         // assert
         const $cells = controller._columnHeadersView._tableElement.find('td');
-        assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
+        const points = gridCore.getPointsByColumns($cells, function(point) {
             return controller._pointCreated(point, testColumns, 'headers', testColumns[1]);
-        }), [
+        });
+        assert.deepEqual(roundPoints(points), [
             { x: -9930, y: -10000, columnIndex: 1, index: 1 },
             { x: -9805, y: -10000, columnIndex: 2, index: 2 },
             { x: -9680, y: -10000, columnIndex: 3, index: 3 }
@@ -3373,9 +3387,10 @@ QUnit.module('Headers reordering', {
         const $cells = controller._columnHeadersView._tableElement.find('td');
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
+        const points = gridCore.getPointsByColumns($cells, function(point) {
             return controller._pointCreated(point, testColumns);
-        }), [
+        });
+        assert.deepEqual(roundPoints(points), [
             { x: -10000, y: -10000, columnIndex: 0, index: 0 },
             { x: -9875, y: -10000, columnIndex: 1, index: 1 },
             { x: -9750, y: -10000, columnIndex: 2, index: 2 }
@@ -5687,11 +5702,11 @@ QUnit.module('column chooser reordering', {
 
         // act, assert
         assert.equal(pointsByColumns.length, 3, 'count points by columns');
-        assert.equal(pointsByColumns[0].x, -10000, 'points[0] x');
+        assert.roughEqual(pointsByColumns[0].x, -10000, 0.5, 'points[0] x');
         assert.ok(pointsByColumns[0].y > -10000, 'point[0] y');
-        assert.equal(pointsByColumns[1].x, -10000, 'points[1] x');
+        assert.roughEqual(pointsByColumns[1].x, -10000, 0.5, 'points[1] x');
         assert.ok(pointsByColumns[1].y > pointsByColumns[0].y, 'point[1] y');
-        assert.equal(pointsByColumns[2].x, -10000, 'points[2] x');
+        assert.roughEqual(pointsByColumns[2].x, -10000, 0.5, 'points[2] x');
         assert.ok(pointsByColumns[2].y > pointsByColumns[1].y, 'point[2] y');
     });
 
