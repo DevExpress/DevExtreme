@@ -347,6 +347,29 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
 export default class dxFileUploader extends Editor {
     constructor(element: Element, options?: dxFileUploaderOptions)
     constructor(element: JQuery, options?: dxFileUploaderOptions)
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(): void;
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(file: File): void;
 }
 
 declare global {

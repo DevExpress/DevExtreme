@@ -7,11 +7,15 @@ export default class ViewDataGenerator {
     set workspace(value) { this._workspace = value; }
 
     generate() {
+        let result;
+
         if(this.workspace.isVirtualScrolling()) {
-            return this._generateVirtualView();
+            result = this._generateVirtualView();
+        } else {
+            result = this._generateView();
         }
 
-        return this._generateView();
+        return result;
     }
 
     _generateVirtualView() {
@@ -66,11 +70,14 @@ export default class ViewDataGenerator {
         }
 
         return {
-            groupedData,
-            isVirtual: true,
-            topVirtualRowHeight,
-            bottomVirtualRowHeight,
-            cellCountInGroupRow,
+            viewData: {
+                groupedData,
+                isVirtual: true,
+                topVirtualRowHeight,
+                bottomVirtualRowHeight,
+                cellCountInGroupRow,
+            },
+            viewDataMap: this._getViewDataMap(groupedData)
         };
     }
 
@@ -98,9 +105,12 @@ export default class ViewDataGenerator {
         }
 
         return {
-            groupedData,
-            isVirtual: false,
-            cellCountInGroupRow,
+            viewData: {
+                groupedData,
+                isVirtual: false,
+                cellCountInGroupRow,
+            },
+            viewDataMap: this._getViewDataMap(groupedData)
         };
     }
 
@@ -150,11 +160,12 @@ export default class ViewDataGenerator {
         }
 
         const { realGroupCount } = options;
+        // const rowCount = this.workspace._getRowCount();
 
         const allDayPanel = [];
 
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
-            const rowIndex = Math.max(groupIndex * rowCount - 1, 0);
+            const rowIndex = Math.max(groupIndex * rowCount - 1, 0); // const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex).value;
             cellDataValue.groupIndex = this._calculateGroupIndex(
                 realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
@@ -166,7 +177,6 @@ export default class ViewDataGenerator {
             );
             allDayPanel.push(cellDataValue);
         }
-        console.log(allDayPanel);
 
         return allDayPanel;
     }
@@ -206,5 +216,22 @@ export default class ViewDataGenerator {
         }
 
         return index;
+    }
+
+    _getViewDataMap(groupedData) {
+        const result = [];
+
+        groupedData?.forEach(({
+            dateTable,
+            allDayPanel,
+            isGroupedAllDayPanel
+        }) => {
+            isGroupedAllDayPanel
+                && allDayPanel?.length
+                && result.push(allDayPanel);
+            result.push(...dateTable);
+        });
+
+        return result;
     }
 }

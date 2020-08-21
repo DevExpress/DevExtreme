@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import RenovatedPager from 'renovation/ui/pager/grid_pager.j.js';
+import RenovatedPager from 'renovation/ui/pager/pager.j.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { act } from 'preact/test-utils';
 

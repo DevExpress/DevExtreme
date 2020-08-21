@@ -620,7 +620,7 @@ const Calendar = Editor.inherit({
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
-        return new specificView($view, config);
+        return this._createComponent($view, specificView, config);
     },
 
     _viewConfig: function(date) {
@@ -633,8 +633,6 @@ const Calendar = Editor.inherit({
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             value: this._dateOption('value'),
-            rtlEnabled: this.option('rtlEnabled'),
-            disabled: this.option('disabled'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
@@ -1199,10 +1197,6 @@ const Calendar = Editor.inherit({
                 this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
-                this.callBase(args);
-                break;
-            case 'disabled':
-                this._view.option('disabled', value);
                 this.callBase(args);
                 break;
             case 'onCellClick':

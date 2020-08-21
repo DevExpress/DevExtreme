@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
+
 import 'generic_light.css!';
 import dxPopup from 'ui/popup';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';

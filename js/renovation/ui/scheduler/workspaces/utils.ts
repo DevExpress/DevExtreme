@@ -44,7 +44,7 @@ export const getIsGroupedAllDayPanel = (viewData: GroupedViewData, groupIndex: n
   const isAllDayPanel = !!(groupData?.allDayPanel?.length);
   const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
 
-  return isAllDayPanel && isGroupedAllDayPanel;
+  return (isAllDayPanel && isGroupedAllDayPanel); // WA for Vue Generator (#335)
 };
 
 export const isVerticalGroupOrientation = (

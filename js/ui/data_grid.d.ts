@@ -2625,14 +2625,6 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getVisibleRows(): Array<dxDataGridRowObject>;
     /**
-     * @docid dxDataGridMethods.insertRow
-     * @publicName insertRow()
-     * @deprecated dxDataGridMethods.addRow
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    insertRow(): void;
-    /**
      * @docid dxDataGridMethods.isRowExpanded
      * @publicName isRowExpanded(key)
      * @param1 key:any
@@ -2651,15 +2643,6 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     isRowSelected(data: any): boolean;
     isRowSelected(key: any): boolean;
-    /**
-     * @docid dxDataGridMethods.removeRow
-     * @publicName removeRow(rowIndex)
-     * @param1 rowIndex:number
-     * @deprecated GridBaseMethods.deleteRow
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    removeRow(rowIndex: number): void;
     /**
      * @docid dxDataGridMethods.totalCount
      * @publicName totalCount()

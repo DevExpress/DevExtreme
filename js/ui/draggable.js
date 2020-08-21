@@ -850,18 +850,26 @@ const Draggable = DOMComponent.inherit({
             return false;
         }
 
-        if(!sourceDraggable._dragElementIsCloned()) {
-            return true;
-        }
-
+        const $dragElement = sourceDraggable._$dragElement;
         const $sourceDraggableElement = sourceDraggable.$element();
-        const elements = this.getElementsFromPoint({
-            x: e.pageX,
-            y: e.pageY
-        }, e.target);
-        const firstWidgetElement = elements.filter((element) => $(element).hasClass(this._addWidgetPrefix()))[0];
+        const $targetDraggableElement = this.$element();
 
-        return firstWidgetElement !== $sourceDraggableElement.get(0);
+        const mousePosition = getMousePosition(e);
+        const elements = this.getElementsFromPoint(mousePosition, e.target);
+        const firstWidgetElement = elements.filter((element) => {
+            const $element = $(element);
+
+            if($element.hasClass(this._addWidgetPrefix())) {
+                return !$element.closest($dragElement).length;
+            }
+        })[0];
+
+        const $sourceElement = this._getSourceElement();
+        const isTargetOverItself = firstWidgetElement === $sourceDraggableElement.get(0);
+        const isTargetOverNestedDraggable = $(firstWidgetElement).closest($sourceElement).length;
+
+        return !firstWidgetElement || firstWidgetElement === $targetDraggableElement.get(0) && !isTargetOverItself && !isTargetOverNestedDraggable;
+
     },
 
     _dragEnterHandler: function(e) {

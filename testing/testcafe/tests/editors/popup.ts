@@ -3,12 +3,10 @@ import Popup from '../../model/popup';
 import asyncForEach from '../../helpers/asyncForEach';
 
 fixture`Popup`
-  .page(url(__dirname, './pages/T920408.html'));
+  .page(url(__dirname, './pages/T920408.html'))
+  .beforeEach(async (t) => { await t.wait(10000); });
 
-test('Popup should be centered regarding the container event if container is animated (T920408)', async (t) => {
-  // NOTE: wait until animation completes
-  await t.wait(5000);
-
+test('Popup should be centered regarding the container even if container is animated (T920408)', async (t) => {
   const outerPopup = new Popup('#popup');
   const wrapper = outerPopup.content.find('.dx-overlay-wrapper');
   const content = wrapper.find('.dx-overlay-content');
@@ -40,8 +38,6 @@ test('Popup should be centered regarding the container event if container is ani
 });
 
 test('Popup wrapper left top corner should be the same as the container right left corner even if container is animated', async (t) => {
-  await t.wait(5000);
-
   const outerPopup = new Popup('#popup');
   const wrapper = outerPopup.content.find('.dx-overlay-wrapper');
   const container = wrapper.parent();
@@ -49,7 +45,7 @@ test('Popup wrapper left top corner should be the same as the container right le
   const wrapperRect: {top: number; left: number} = { top: 0, left: 0 };
   const containerRect: {top: number; left: number} = { top: 0, left: 0 };
 
-  await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
+  await asyncForEach(['left', 'top'], async (prop) => {
     wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
     containerRect[prop] = await container.getBoundingClientRectProperty(prop);
   });

@@ -4,7 +4,7 @@ import {
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
 import { WidgetProps } from './common/widget';
-import DxList, { dxListItem, Options } from '../../ui/list';
+import LegacyList, { dxListItem, Options } from '../../ui/list';
 import { dxElement } from '../../core/element';
 import { event } from '../../events/index';
 import renderTemplate from '../utils/render_template';
@@ -62,7 +62,7 @@ export class ListProps extends WidgetProps {
   // }) => any);
 
   @Event() onItemClick?: ((e: {
-    component?: DxList;
+    component?: LegacyList;
     element?: dxElement;
     model?: any;
     itemData?: any;
@@ -165,13 +165,13 @@ export class List extends JSXComponent(ListProps) {
 
   @Effect()
   updateWidget(): void {
-    const widget = DxList.getInstance(this.widgetRef);
+    const widget = LegacyList.getInstance(this.widgetRef);
     widget?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
-    const widget = new DxList(this.widgetRef, this.properties);
+    const widget = new LegacyList(this.widgetRef, this.properties);
 
     return (): void => widget.dispose();
   }

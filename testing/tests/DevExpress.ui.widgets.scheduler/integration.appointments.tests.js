@@ -2851,7 +2851,7 @@ QUnit.test('Recurrence icon position should be correct (T718691)', function(asse
 
     assert.equal($appointmentRecurringIcon.eq(0).css('right'), '20px', 'Icon position is OK');
     assert.equal($appointmentRecurringIcon.eq(1).css('right'), '5px', 'Icon position is OK');
-    assert.equal($appointmentRecurringIcon.eq(2).css('right'), '5px', 'Icon position is OK');
+    assert.equal($appointmentRecurringIcon.eq(2).css('right'), '20px', 'Icon position is OK');
 });
 
 QUnit.test('Appointment startDate should be preprocessed before position calculating', function(assert) {
