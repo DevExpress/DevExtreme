@@ -501,12 +501,10 @@ const DropDownList = DropDownEditor.inherit({
     _renderOpenedState: function() {
         this.callBase();
 
-        const opened = this.option('opened') || undefined;
-
         this._list && this._updateActiveDescendant();
         this.setAria({
-            'controls': opened && this._listId,
-            'owns': opened && this._popupContentId
+            'controls': this._list && this._listId,
+            'owns': this._popup && this._popupContentId
         });
     },
 
