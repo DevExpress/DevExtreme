@@ -1116,7 +1116,6 @@
           {
             "Title": "Overview",
             "Name": "ExcelJSOverview",
-            "Hidden":  true,
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
             "MvcAdditionalFiles": [
@@ -1129,7 +1128,6 @@
           {
             "Title": "Cell Customization",
             "Name": "ExcelJSCellCustomization",
-            "Hidden":  true,
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
             "MvcAdditionalFiles": [
@@ -1142,7 +1140,6 @@
           {
             "Title": "Header and Footer",
             "Name": "ExcelJSHeaderAndFooter",
-            "Hidden":  true,
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
             "Credits": "www.wikipedia.org",
