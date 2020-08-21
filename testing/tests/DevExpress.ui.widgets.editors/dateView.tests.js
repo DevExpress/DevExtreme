@@ -159,7 +159,12 @@ QUnit.module('dateViewRoller', {
         assert.equal(content.position().top, -itemHeight);
 
         pointer.start().down().move(0, -itemHeight * 0.4).wait(500).up();
-        assert.equal(content.position().top, -itemHeight * 2);
+
+        if(devices.real().type === 'desktop') {
+            assert.equal(content.position().top, -itemHeight * 2);
+        } else {
+            assert.equal(content.position().top, -itemHeight);
+        }
     });
 
     QUnit.test('items changing leads to selected item recalculation', function(assert) {
