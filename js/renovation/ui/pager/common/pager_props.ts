@@ -1,6 +1,7 @@
 import {
   ComponentBindings, OneWay, TwoWay, Event,
 } from 'devextreme-generator/component_declaration/common';
+import { EventCallback } from '../../common/event_callback.d';
 
 @ComponentBindings()
 export default class PagerProps {

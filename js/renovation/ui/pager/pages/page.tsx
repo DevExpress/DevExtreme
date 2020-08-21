@@ -5,6 +5,7 @@ import {
 import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
+import { EventCallback } from '../../common/event_callback.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
