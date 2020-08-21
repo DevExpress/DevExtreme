@@ -158,7 +158,7 @@ QUnit.module('dateViewRoller', {
 
         pointer.start().down().move(0, -itemHeight * 0.4).wait(500).up();
 
-        if(devices.real().deviceType === 'desktop') {
+        if(devices.real().deviceType !== 'desktop') {
             assert.equal(content.position().top, -itemHeight);
         } else {
             assert.equal(content.position().top, -itemHeight * 2);
