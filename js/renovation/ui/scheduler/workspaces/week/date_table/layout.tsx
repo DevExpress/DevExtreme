@@ -7,6 +7,7 @@ export const viewFunction = (viewModel: WeekTableLayout): JSX.Element => (
   <DateTableLayoutBase
     viewData={viewModel.props.viewData}
     cellTemplate={DateTableCellBase}
+    dataCellTemplate={viewModel.props.dataCellTemplate}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   />
