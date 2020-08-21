@@ -229,13 +229,15 @@ const DateViewRoller = Scrollable.inherit({
 
     _endActionHandler: function() {
         const currentSelectedIndex = this.option('selectedIndex');
-        let newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
+        let newSelectedIndex;
 
         if(devices.real().deviceType !== 'desktop') {
             const ratio = -this._location().top / this._itemHeight();
             newSelectedIndex = Math.round(ratio);
 
             this._animation = true;
+        } else {
+            newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
         }
 
         if(newSelectedIndex === currentSelectedIndex) {
