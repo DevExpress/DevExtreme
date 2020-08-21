@@ -3,7 +3,7 @@
     <DxPivotGrid
       :height="440"
       :show-borders="true"
-      :row-header-layout="tree"
+      row-header-layout="tree"
       :data-source="dataSource"
       @exporting="onExporting"
     >
