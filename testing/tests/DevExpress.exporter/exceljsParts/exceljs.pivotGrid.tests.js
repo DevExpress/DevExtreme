@@ -1141,7 +1141,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string(row1,row2) x string x number] & group.area=row & row1.index=1 & row2.index=0', function(assert) {
+    QUnit.test('Export [string(row1,row2) x string x number] & group.area=row & row1.groupIndex=1 & row2.groupIndex=0', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
@@ -1191,7 +1191,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Export [string x string(col1,col2) x number] & group.area=column & col1.index=1 & col2.index=0', function(assert) {
+    QUnit.test('Export [string x string(col1,col2) x number] & group.area=column & col1.groupIndex=1 & col2.groupIndex=0', function(assert) {
         const done = assert.async();
         const ds = {
             fields: [
