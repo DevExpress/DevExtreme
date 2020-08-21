@@ -27,6 +27,7 @@ QUnit.testStart(function() {
 });
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
@@ -2082,7 +2083,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         const posX = resizeController._targetPoint.x + (-9840 - resizeController._resizingInfo.startPosX);
-        assert.equal(resizeController._columnsSeparatorView._testPosX, posX, 'posX of columnsSeparator');
+        assert.equal(resizeController._columnsSeparatorView._testPosX, posX, 'posX of columnsSeparator'); // TODO fail
         assert.equal(testPosX, -9840, 'posX');
     });
 
@@ -3314,7 +3315,11 @@ QUnit.module('Headers reordering', {
 
     QUnit.test('Get points by columns RTL', function(assert) {
         // arrange
-        const controller = this.createDraggingHeaderViewController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]);
+        const controller = this.createDraggingHeaderViewController(
+            [
+                { caption: 'Column 1', width: 500 },
+                { caption: 'Column 2', width: 500 }
+            ]);
 
         // act
         this.renderViews($('#container'));
@@ -3322,8 +3327,13 @@ QUnit.module('Headers reordering', {
         $('#container').css('direction', 'rtl');
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
-            [{ x: -9000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -10000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points for RTL');
+        assert.deepEqual(
+            gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
+            [
+                { x: -9001, y: -10000, columnIndex: 0, index: 0 },
+                { x: -9501, y: -10000, columnIndex: 1, index: 1 },
+                { x: -10001, y: -10000, columnIndex: 2, index: 2 }
+            ], 'dragging points for RTL');
     });
 
     QUnit.test('Get points by columns with checkbox cell', function(assert) {
@@ -4634,7 +4644,7 @@ QUnit.module('Headers reordering', {
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
         assert.ok($dragHeader.hasClass('dx-drag-command-cell'), 'draggable header element has class dx-command-cell');
-        assert.strictEqual($dragHeader.outerWidth(), 100, 'width');
+        assert.strictEqual($dragHeader.outerWidth(), 102, 'width');
         assert.strictEqual($dragHeader.text(), '', 'text');
     });
 });

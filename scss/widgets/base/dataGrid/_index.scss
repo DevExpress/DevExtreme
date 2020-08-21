@@ -12,8 +12,9 @@ $base-focus-color: null !default;
 $datagrid-text-stub-background-image-path: null !default;
 
 @use "sass:color";
-@use "./mixins" as *;
-@use "./icons" as *;
+@use "../mixins" as *;
+@use "../icons" as *;
+@use "./common";
 
 .dx-datagrid-borders {
   > .dx-datagrid-headers,
