@@ -7,6 +7,8 @@ import { GetHtmlElement, FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
 import PagerProps from '../common/pager_props';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { EventCallback } from '../../common/event_callback.d';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
