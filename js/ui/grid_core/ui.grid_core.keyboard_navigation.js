@@ -161,7 +161,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const columnsResizerController = this.getController('columnsResizer');
             const isColumnResizing = !!columnsResizerController && columnsResizerController.isResizing();
             if(!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
-                this._resetFocusedCell(true);
+                this._resetFocusedView();
             }
         });
 
@@ -195,7 +195,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     dispose: function() {
         this.callBase();
-        this._focusedView = null;
+        this._resetFocusedView();
         keyboard.off(this._keyDownListener);
         eventsEngine.off(domAdapter.getDocument(), addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
         clearTimeout(this._updateFocusTimeout);
@@ -480,7 +480,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(isOriginalHandlerRequired) {
             this.getController('editorFactory').loseFocus();
             if(this._editingController.isEditing() && !this._isRowEditMode()) {
-                this._resetFocusedCell(true);
+                this._resetFocusedView();
                 this._closeEditCell();
             }
         } else {
@@ -836,7 +836,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(!isRevertButton && this._isEventInCurrentGrid(event) && (this._isCellValid($target, !isInteractiveElement) || isExpandCommandCell)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
 
-            this._focusView();
+            this._focusView(this.getView('rowsView'));
             $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
 
             if($parent.hasClass(FREESPACE_ROW_CLASS)) {
@@ -931,7 +931,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     setupFocusedView: function() {
         if(this.isKeyboardEnabled() && !isDefined(this._focusedView)) {
-            this._focusView();
+            this._focusView(this.getView('rowsView'));
         }
     },
 
@@ -945,7 +945,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             return;
         }
 
-        this._focusView();
+        this._focusView(this.getView('rowsView'));
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
@@ -970,8 +970,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return $element && $element.closest($view).length !== 0;
     },
 
-    _focusView: function() {
-        this._focusedView = this.getView('rowsView');
+    _focusView: function(view) {
+        this._focusedView = view;
+    },
+
+    _resetFocusedView: function() {
+        const $cell = this._getFocusedCell();
+        this._focusedView = null;
+        this._resetFocusedCell($cell);
     },
 
     _focusInteractiveElement: function($cell, isLast) {
@@ -1146,22 +1152,18 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _resetFocusedCell: function(resetFocusedView) {
-        const $cell = this._getFocusedCell();
-
-        $cell && $cell.removeAttr('tabindex');
+    _resetFocusedCell: function($cellElement) {
+        const $cell = isElementDefined($cellElement) ? $cellElement : this._getFocusedCell();
+        isElementDefined($cell) && $cell.removeAttr('tabindex');
 
         this._isNeedFocus = false;
-
-        if(resetFocusedView) {
-            this._focusedView = null;
-        } else if(this._focusedView && this._focusedView.renderFocusState) {
-            this._focusedView.renderFocusState();
-        }
-
         this._isNeedScroll = false;
         this._focusedCellPosition = {};
         clearTimeout(this._updateFocusTimeout);
+
+        if(this._focusedView && this._focusedView.renderFocusState) {
+            this._focusedView.renderFocusState();
+        }
     },
 
     restoreFocusableElement: function(rowIndex, $event) {
@@ -2013,7 +2015,7 @@ export default {
                         }
                     };
 
-                    keyboardController._focusedView = this;
+                    keyboardController._focusView(this);
 
                     const $cell = cellElements.filter(`[aria-colindex='${columnIndex + 1}']`);
                     if($cell.length) {
@@ -2029,7 +2031,7 @@ export default {
                         }
                     }
 
-                    keyboardController._focusedView = oldFocusedView;
+                    keyboardController._focusView(oldFocusedView);
                 },
 
                 renderDelayedTemplates: function(change) {
