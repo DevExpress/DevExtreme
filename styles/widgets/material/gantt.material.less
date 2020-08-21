@@ -90,6 +90,9 @@
                 height: @GANTT_TASK_HEIGHT - 2px;
                 line-height: @GANTT_TASK_HEIGHT - 2px;
                 background-color: @gantt_parent_task_background_color;
+                border-left-color: @gantt_parent_task_background_color;
+                border-right-color: @gantt_parent_task_background_color;
+                border-top-color: @gantt_parent_task_background_color;
                 border-bottom-right-radius: 0;
                 border-bottom-left-radius: 0;
 
@@ -115,11 +118,6 @@
                     border-bottom-color: transparent;
                 }
 
-                &::before {
-                    border-left-color: @gantt_parent_task_background_color;
-                    border-top-color: @gantt_parent_task_background_color;
-                }
-
                 &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
                     border-left-color: rgba(255, 255, 255, 0.2);
                     border-top-color: rgba(255, 255, 255, 0.2);
@@ -130,11 +128,6 @@
                     right: 0;
                     border-left-color: transparent;
                     border-bottom-color: transparent;
-                }
-
-                &::after {
-                    border-right-color: @gantt_parent_task_background_color;
-                    border-top-color: @gantt_parent_task_background_color;
                 }
 
                 &.dx-gantt-cmpl::after {

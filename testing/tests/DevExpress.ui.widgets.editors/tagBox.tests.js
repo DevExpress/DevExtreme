@@ -2977,6 +2977,27 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
     });
 
+    QUnit.test('space entering should increase input element size (T923429)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            searchEnabled: true
+        });
+
+        const text = '123456789          ';
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type(text);
+        const $inputCopy = createTextElementHiddenCopy($input, text, { includePaddings: true });
+        $inputCopy
+            .css('whiteSpace', 'pre')
+            .appendTo('#qunit-fixture');
+        const textWidth = $inputCopy.width();
+
+        const currentWidth = $tagBox.find(`.${TEXTBOX_CLASS}`).width();
+        assert.ok(currentWidth > textWidth, `input width (${currentWidth}) should be grester then input text width (${textWidth})`);
+        $inputCopy.remove();
+    });
+
     QUnit.test('size of input is 1 when searchEnabled and acceptCustomValue is false', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             searchEnabled: false,
