@@ -1,5 +1,7 @@
 import { combineClasses } from '../../../utils/combine_classes';
 import { GroupedViewData } from './types.d';
+import { GroupOrientation } from '../types.d';
+import { VERTICAL_GROUP_ORIENTATION } from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
   let key = date.toString();
@@ -44,3 +46,7 @@ export const getIsGroupedAllDayPanel = (viewData: GroupedViewData, groupIndex: n
 
   return isAllDayPanel && isGroupedAllDayPanel;
 };
+
+export const isVerticalGroupOrientation = (
+  groupOrientation?: GroupOrientation,
+): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;

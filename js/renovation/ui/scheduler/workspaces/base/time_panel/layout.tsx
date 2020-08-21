@@ -8,6 +8,7 @@ import {
   getKeyByDateAndGroup,
   getKeyByGroup,
   getIsGroupedAllDayPanel,
+  isVerticalGroupOrientation,
 } from '../../utils';
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
@@ -103,6 +104,6 @@ export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps
   get isVerticalGroupOrientation(): boolean {
     const { groupOrientation } = this.props;
 
-    return groupOrientation === 'vertical';
+    return isVerticalGroupOrientation(groupOrientation);
   }
 }
