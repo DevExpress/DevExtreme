@@ -979,7 +979,8 @@ const moduleConfig = {
                     helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, newTopLeft);
-                    helper.checkOutlineLevel([0, 0], newTopLeft.row);
+                    assert.strictEqual(this.worksheet.getRow(newTopLeft).outlineLevel, 0, `worksheet.getRow(${newTopLeft}).outlineLevel`);
+                    assert.strictEqual(this.worksheet.getRow(newTopLeft + 1).outlineLevel, 0, `worksheet.getRow(${newTopLeft + 1}).outlineLevel`);
                     helper.checkCellRange(cellRange, { row: 2, column: 2 }, newTopLeft);
                     done();
                 });
@@ -1232,7 +1233,7 @@ const moduleConfig = {
                     if(gridCell.rowType === 'header') { excelCell.font = undefined; }
                     if(gridCell.rowType === 'data') { excelCell.font = { bold: true }; }
                 }
-            }).then((cellRange) => {
+            }).then(() => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).font, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).font`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).font, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).font`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).font, { bold: true }, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).font`);
@@ -1257,7 +1258,7 @@ const moduleConfig = {
                 component: dataGrid,
                 worksheet: this.worksheet,
                 topLeftCell: topLeft
-            }).then((cellRange) => {
+            }).then(() => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).alignment, alignCenterTopWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).alignment, alignCenterTopWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).alignment, alignLeftTopWrap, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).alignment`);
@@ -1289,7 +1290,7 @@ const moduleConfig = {
                     if(gridCell.rowType === 'header') { excelCell.alignment = undefined; }
                     if(gridCell.rowType === 'data') { excelCell.alignment = alignment; }
                 }
-            }).then((cellRange) => {
+            }).then(() => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).alignment, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).alignment, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).alignment, alignment, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).alignment`);
@@ -1305,33 +1306,30 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [
-                    { dataField: 'f1', dataType: 'string' },
-                    { dataField: 'f1', dataType: 'number' }
+                    { dataField: 'f1', dataType: 'string' }
                 ],
                 dataSource: ds,
                 loadingTimeout: undefined
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, type: ExcelJS.ValueType.String, dataType: 'string', font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } },
-                { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, type: ExcelJS.ValueType.String, dataType: 'string', font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(1) } }
+                { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, type: ExcelJS.ValueType.String, dataType: 'string', font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
             ], [
-                { excelCell: { value: '1', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: undefined, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
+                { excelCell: { value: '1', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: undefined, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
+                helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
+                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
                 done();
             });
         });
@@ -1532,7 +1530,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
@@ -1796,13 +1794,13 @@ const moduleConfig = {
             const date = new Date(2019, 3, 12);
             const expectedExcelDateValue = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 
-            const ds = [{ f1: date }];
+            const ds = [{ f1: date, f2: date }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [
                     { dataField: 'f1', dataType: 'date',
                         format: (date) => date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear()
                     },
-                    { dataField: 'f1', dataType: 'date',
+                    { dataField: 'f2', dataType: 'date',
                         format: {
                             type: 'date',
                             formatter: (date) => date.getDate() + '+' + (date.getMonth() + 1) + '+' + date.getFullYear(),
@@ -2009,16 +2007,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'percent\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'percent', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'percent', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'percent' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'percent', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'percent', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'percent', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'percent' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'percent', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'percent', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2047,16 +2045,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'fixedPoint\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'fixedPoint', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'fixedPoint', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'fixedPoint' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'fixedPoint', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'fixedPoint', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'fixedPoint', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'fixedPoint' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'fixedPoint', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'fixedPoint', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2085,16 +2083,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'decimal\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'decimal', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'decimal', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'decimal' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'decimal', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'decimal', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'decimal', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'decimal' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'decimal', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'decimal', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2123,16 +2121,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'exponential\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'exponential', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'exponential', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'exponential' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'exponential', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'exponential', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'exponential', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'exponential' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'exponential', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'exponential', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2161,16 +2159,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'largeNumber\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'largeNumber', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'largeNumber', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'largeNumber' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'largeNumber', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'largeNumber', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'largeNumber', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'largeNumber' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'largeNumber', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'largeNumber', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2199,16 +2197,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'thousands\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'thousands', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'thousands', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'thousands' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'thousands', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'thousands', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'thousands', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'thousands' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'thousands', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'thousands', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2237,16 +2235,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'millions\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'millions', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'millions', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'millions' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'millions', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'millions', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'millions', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'millions' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'millions', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'millions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2275,16 +2273,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'billions\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'billions', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'billions', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'billions' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'billions', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'billions', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'billions', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'billions' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'billions', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'billions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2313,16 +2311,16 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'trillions\'', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'trillions', precision: 3 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'trillions', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'trillions' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'trillions', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'trillions', precision: 6 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'trillions', precision: 0 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'trillions' } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'trillions', precision: 1 } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'trillions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -2351,17 +2349,17 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: number, columns.format.type: \'currency\' with presicion', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: 1 }];
+            const ds = [{ f1: 1, f2: 1, f3: 1, f4: 1, f5: 1, f6: 1 }];
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [
                     { dataField: 'f1', dataType: 'number', format: { type: 'currency', precision: 2 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'currency', precision: 4 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'currency', precision: 0 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'currency' } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'currency', precision: 1 } },
-                    { dataField: 'f1', dataType: 'number', format: { type: 'currency', precision: 5 } },
+                    { dataField: 'f2', dataType: 'number', format: { type: 'currency', precision: 4 } },
+                    { dataField: 'f3', dataType: 'number', format: { type: 'currency', precision: 0 } },
+                    { dataField: 'f4', dataType: 'number', format: { type: 'currency' } },
+                    { dataField: 'f5', dataType: 'number', format: { type: 'currency', precision: 1 } },
+                    { dataField: 'f6', dataType: 'number', format: { type: 'currency', precision: 5 } },
                 ],
                 showColumnHeaders: false,
                 loadingTimeout: undefined
@@ -3039,7 +3037,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 1, 1], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
@@ -4370,7 +4368,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 1, 1], topLeft.row);
+                helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
@@ -4529,7 +4527,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
+                helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
@@ -4734,7 +4732,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
@@ -4970,7 +4968,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
@@ -5165,7 +5163,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
@@ -5251,7 +5249,7 @@ const moduleConfig = {
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0], topLeft.row);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
@@ -5558,7 +5556,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 1, column: 4 }, topLeft);
                 done();
             });
@@ -5601,7 +5599,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
@@ -5644,7 +5642,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
@@ -5689,7 +5687,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
@@ -5737,7 +5735,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
@@ -5782,7 +5780,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
@@ -5984,7 +5982,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
@@ -6038,7 +6036,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
@@ -6088,7 +6086,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 1 }, topLeft);
                 done();
             });
@@ -6146,7 +6144,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
@@ -6200,7 +6198,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
@@ -6250,7 +6248,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 1 }, topLeft);
                 done();
             });
@@ -6308,7 +6306,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
@@ -6362,7 +6360,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
@@ -6416,7 +6414,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
