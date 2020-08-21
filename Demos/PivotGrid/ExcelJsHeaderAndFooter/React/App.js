@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 import PivotGrid, {
   FieldChooser,
@@ -16,35 +16,37 @@ import { exportPivotGrid } from 'devextreme/excel_exporter';
 
 import { sales } from './data.js';
 
-class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <div className="long-title">
-          <h3>Sales Amount by Region</h3>
-        </div>
-        <PivotGrid
-          dataSource={dataSource}
-          height={440}
-          showBorders={true}
-          onExporting={this.onExporting}
-        >
-          <FieldPanel
-            showDataFields={true}
-            showRowFields={true}
-            showColumnFields={true}
-            showFilterFields={false}
-            allowFieldDragging={false}
-            visible={true}>
-          </FieldPanel>
-          <FieldChooser enabled={false} />
-          <Export enabled={true} />
-        </PivotGrid>
-      </React.Fragment>
-    );
-  }
+const dataSource = new PivotGridDataSource({
+  fields: [{
+    caption: 'Region',
+    width: 120,
+    dataField: 'region',
+    area: 'row',
+    expanded: true
+  }, {
+    caption: 'City',
+    dataField: 'city',
+    width: 150,
+    area: 'row'
+  }, {
+    dataField: 'date',
+    dataType: 'date',
+    area: 'column',
+    filterValues: [[2013], [2014], [2015]],
+    expanded: false,
+  }, {
+    caption: 'Sales',
+    dataField: 'amount',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data'
+  }],
+  store: sales
+});
 
-  onExporting(e) {
+export default function App() {
+  function onExporting(e) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sales');
 
@@ -84,35 +86,29 @@ class App extends React.Component {
     });
     e.cancel = true;
   }
+
+  return (
+    <React.Fragment>
+      <div className="long-title">
+        <h3>Sales Amount by Region</h3>
+      </div>
+      <PivotGrid
+        dataSource={dataSource}
+        height={440}
+        showBorders={true}
+        onExporting={onExporting}
+      >
+        <FieldPanel
+          showDataFields={true}
+          showRowFields={true}
+          showColumnFields={true}
+          showFilterFields={false}
+          allowFieldDragging={false}
+          visible={true}>
+        </FieldPanel>
+        <FieldChooser enabled={false} />
+        <Export enabled={true} />
+      </PivotGrid>
+    </React.Fragment>
+  );
 }
-
-const dataSource = new PivotGridDataSource({
-  fields: [{
-    caption: 'Region',
-    width: 120,
-    dataField: 'region',
-    area: 'row',
-    expanded: true
-  }, {
-    caption: 'City',
-    dataField: 'city',
-    width: 150,
-    area: 'row'
-  }, {
-    dataField: 'date',
-    dataType: 'date',
-    area: 'column',
-    filterValues: [[2013], [2014], [2015]],
-    expanded: false,
-  }, {
-    caption: 'Sales',
-    dataField: 'amount',
-    dataType: 'number',
-    summaryType: 'sum',
-    format: 'currency',
-    area: 'data'
-  }],
-  store: sales
-});
-
-export default App;
