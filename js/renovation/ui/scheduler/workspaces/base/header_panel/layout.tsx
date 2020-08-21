@@ -4,6 +4,7 @@ import {
 import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
 import { getKeyByDateAndGroup, isVerticalGroupOrientation } from '../../utils';
+import { GroupOrientation } from '../../../types.d';
 
 export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
   <table
@@ -38,7 +39,7 @@ export class HeaderPanelLayoutProps {
 
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 
-  @OneWay() groupOrientation?: 'vertical' | 'horizontal';
+  @OneWay() groupOrientation?: GroupOrientation;
 
   @Template() cellTemplate?: any;
 
