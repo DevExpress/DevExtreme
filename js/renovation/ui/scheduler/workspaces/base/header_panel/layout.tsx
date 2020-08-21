@@ -14,17 +14,22 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
     <thead>
       <Row>
         {viewModel.props.viewCellsData![0].map(({
-          startDate, endDate, today, groups,
-        }) => (
-          <viewModel.props.cellTemplate
-            startDate={startDate}
-            endDate={endDate}
-            groups={groups}
-            today={today}
-            dateCellTemplate={viewModel.props.dateCellTemplate}
-            key={getKeyByDateAndGroup(startDate, groups)}
-          />
-        ))}
+          startDate, endDate, today, groups, groupIndex, index,
+        }) => {
+          const isVerticalGroupOrientation = viewModel.props.groupOrientation === 'vertical';
+          return (
+            <viewModel.props.cellTemplate
+              startDate={startDate}
+              endDate={endDate}
+              groups={!isVerticalGroupOrientation ? groups : undefined}
+              groupIndex={!isVerticalGroupOrientation ? groupIndex : undefined}
+              today={today}
+              index={index}
+              dateCellTemplate={viewModel.props.dateCellTemplate}
+              key={getKeyByDateAndGroup(startDate, groups)}
+            />
+          );
+        })}
       </Row>
     </thead>
   </table>
@@ -35,6 +40,8 @@ export class HeaderPanelLayoutProps {
   @OneWay() className?: string = '';
 
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+
+  @OneWay() groupOrientation?: 'vertical' | 'horizontal';
 
   @Template() cellTemplate?: any;
 

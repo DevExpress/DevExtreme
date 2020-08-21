@@ -1,7 +1,8 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component, ComponentBindings, JSXComponent, Template,
 } from 'devextreme-generator/component_declaration/common';
 import dateLocalization from '../../../../../../localization/date';
+import { CellBaseProps } from '../../base/cell';
 
 export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
   const DateCellTemplate = viewModel.props.dateCellTemplate;
@@ -19,8 +20,10 @@ export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
           data={{
             date: viewModel.props.startDate,
             text: viewModel.props.text,
+            groups: viewModel.props.groups,
+            groupIndex: viewModel.props.groupIndex,
           }}
-          // index
+          index={viewModel.props.index}
         />
       )}
       {!DateCellTemplate && (
@@ -33,15 +36,7 @@ export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
 };
 
 @ComponentBindings()
-export class MonthHeaderPanelCellProps {
-  @OneWay() startDate?: Date = new Date();
-
-  @OneWay() endDate?: Date = new Date();
-
-  @OneWay() text?: string = '';
-
-  @OneWay() className?: string = '';
-
+export class MonthHeaderPanelCellProps extends CellBaseProps {
   @Template() dateCellTemplate?: any;
 }
 
