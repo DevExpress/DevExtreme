@@ -105,6 +105,7 @@ export default class ViewDataGenerator {
             cellCount,
             cellDataGetters,
             realGroupCount,
+            rowCountInGroup,
         } = options;
 
         const viewCellsData = [];
@@ -128,7 +129,7 @@ export default class ViewDataGenerator {
                 );
                 cellDataValue.index = this._calculateCellIndex(
                     realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
-                    i, columnIndex, cellCount,
+                    rowIndex % rowCountInGroup, columnIndex, cellCount,
                 );
 
                 viewCellsData[i].push(cellDataValue);
