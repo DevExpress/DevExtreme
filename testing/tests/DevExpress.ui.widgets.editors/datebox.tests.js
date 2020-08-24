@@ -5217,12 +5217,13 @@ QUnit.module('DateBox number and string value support', {
         }
     });
 
-    QUnit.test('First century year value should works correctly', function(assert) {
+    QUnit.test('First century year value should works correctly(T905007)', function(assert) {
         try {
             $('#dateBox').dxDateBox({
                 value: '3/16/1964',
                 min: new Date(-50, 1, 1),
-                displayFormat: 'shortdate'
+                displayFormat: 'shortdate',
+                pickerType: 'calendar'
             });
 
             const $input = $('#dateBox').find(`.${TEXTEDITOR_INPUT_CLASS}`);
