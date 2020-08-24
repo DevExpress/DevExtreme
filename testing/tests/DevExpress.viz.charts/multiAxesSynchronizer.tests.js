@@ -1537,7 +1537,7 @@ QUnit.test('Synchronization for 2 axis with zoom by value', function(assert) {
     });
 });
 
-QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #1 adjust range with paddings', function(assert) {
+QUnit.test('Synchronization for 2 axis with different small ticks. T570230. #1 adjust range with paddings', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
             { synchronizedValue: 0, range: { min: -0.000002, max: 5e-7, axisType: 'continuous' }, tickValues: [-0.000002, -0.0000015, -0.000001, -5e-7, 0, 5e-7], tickInterval: 5e-7 },
@@ -1609,6 +1609,184 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 a
             }
         ],
         syncIndexes: [[0, 1, 2]]
+    });
+});
+
+// T920718
+QUnit.test('Synchronization two axis with paddins, should correct zero value, zero paddings', function(assert) {
+    const mockFunctions = {
+        getCorrectedValuesToZero: function(instance) { instance.returns({ start: 0, end: 0 }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 0, max: 1, axisType: 'continuous' },
+                tickValues: [0, 0.25, 0.5, 0.75, 1],
+                tickInterval: 0.25,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 45000, max: 200200, axisType: 'continuous' },
+                tickValues: [50000, 100000, 150000, 200000],
+                tickInterval: 50000,
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 1,
+                    maxVisible: 1
+                },
+                tickValues: [0, 0.25, 0.5, 0.75, 1]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 50000,
+                    minVisible: 50000,
+                    max: 250000,
+                    maxVisible: 250000
+                },
+                tickValues: [50000, 100000, 150000, 200000, 250000]
+            }
+        ],
+        syncIndexes: [[0, 1]]
+    });
+});
+
+QUnit.test('Synchronization two axis with paddins, not correct zero value', function(assert) {
+    const mockFunctions = {
+        getCorrectedValuesToZero: function(instance) { instance.returns({ start: undefined, end: undefined }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 10, max: 11, axisType: 'continuous' },
+                tickValues: [10, 10.25, 10.5, 10.75, 10.1],
+                tickInterval: 0.25,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 45000, max: 200200, axisType: 'continuous' },
+                tickValues: [50000, 100000, 150000, 200000],
+                tickInterval: 50000,
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 9.975,
+                    minVisible: 9.975,
+                    max: 11,
+                    maxVisible: 11
+                },
+                tickValues: [10, 10.25, 10.5, 10.75, 10.1]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 45000,
+                    minVisible: 45000,
+                    max: 250000,
+                    maxVisible: 250000
+                },
+                tickValues: [50000, 100000, 150000, 200000, 250000]
+            }
+        ],
+        syncIndexes: [[0, 0]]
+    });
+});
+
+QUnit.test('Synchronization two axis with paddins, correct zero velue, non zero paddings', function(assert) {
+    const mockFunctions = {
+        getCorrectedValuesToZero: function(instance) { instance.returns({ start: 0.55, end: 0.8 }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 10, max: 11, axisType: 'continuous' },
+                tickValues: [10, 10.25, 10.5, 10.75, 10.1],
+                tickInterval: 0.25,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 45000, max: 200200, axisType: 'continuous' },
+                tickValues: [50000, 100000, 150000, 200000],
+                tickInterval: 50000,
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 9.45,
+                    minVisible: 9.45,
+                    max: 11,
+                    maxVisible: 11
+                },
+                tickValues: [10, 10.25, 10.5, 10.75, 10.1]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: -60000,
+                    minVisible: -60000,
+                    max: 250000,
+                    maxVisible: 250000
+                },
+                tickValues: [50000, 100000, 150000, 200000, 250000]
+            }
+        ],
+        syncIndexes: [[0, 0]]
+    });
+});
+
+QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddings', function(assert) {
+    const mockFunctions = {
+        getCorrectedValuesToZero: function(instance) { instance.returns({ start: 0.55, end: 0.8 }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 10, max: 11, axisType: 'continuous', invert: true },
+                tickValues: [10, 10.25, 10.5, 10.75, 10.1],
+                tickInterval: 0.25,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 45000, max: 200200, axisType: 'continuous' },
+                tickValues: [50000, 100000, 150000, 200000],
+                tickInterval: 50000,
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 9.45,
+                    minVisible: 9.45,
+                    max: 11,
+                    maxVisible: 11,
+                    invert: true
+                },
+                tickValues: [10, 10.25, 10.5, 10.75, 10.1]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: -130000,
+                    minVisible: -130000,
+                    max: 180000,
+                    maxVisible: 180000
+                },
+                tickValues: [50000, 100000, 150000]
+            }
+        ],
+        syncIndexes: [[0, 0]]
     });
 });
 
