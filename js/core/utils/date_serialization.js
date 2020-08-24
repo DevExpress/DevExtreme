@@ -25,7 +25,7 @@ const dateParser = function(text, skipISO8601Parsing) {
     return result ? result : parseDate(text);
 };
 
-function getDimePart(part) {
+function getTimePart(part) {
     return +part || 0;
 }
 
@@ -36,10 +36,10 @@ function parseDate(text) {
 
         const parts = text.match(DATE_SERIALIZATIN_PATTERN);
         if(parts) {
-            const newDate = new Date(getDimePart(parts[1]), getDimePart(parts[2]), getDimePart(parts[3]));
-            newDate.setFullYear(getDimePart(parts[1]));
-            newDate.setMonth(getDimePart(parts[2]) - 1);
-            newDate.setDate(getDimePart(parts[3]));
+            const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
+            newDate.setFullYear(getTimePart(parts[1]));
+            newDate.setMonth(getTimePart(parts[2]) - 1);
+            newDate.setDate(getTimePart(parts[3]));
             return newDate;
         }
     }
@@ -53,7 +53,7 @@ function parseISO8601String(text) {
     if(!parts) {
         parts = text.match(ISO8601_TIME_PATTERN);
         if(parts) {
-            return new Date(0, 0, 0, getDimePart(parts[1]), getDimePart(parts[2]), getDimePart(parts[4]));
+            return new Date(0, 0, 0, getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[4]));
         }
 
         return;
@@ -65,20 +65,20 @@ function parseISO8601String(text) {
     let timeZoneHour = 0;
     let timeZoneMinute = 0;
 
-    timeZoneHour = getDimePart(parts[14]);
-    timeZoneMinute = getDimePart(parts[16]);
+    timeZoneHour = getTimePart(parts[14]);
+    timeZoneMinute = getTimePart(parts[16]);
 
     if(parts[13] === '-') {
         timeZoneHour = -timeZoneHour;
         timeZoneMinute = -timeZoneMinute;
     }
 
-    const hour = getDimePart(parts[6]) - timeZoneHour;
-    const minute = getDimePart(parts[8]) - timeZoneMinute;
-    const second = getDimePart(parts[10]);
+    const hour = getTimePart(parts[6]) - timeZoneHour;
+    const minute = getTimePart(parts[8]) - timeZoneMinute;
+    const second = getTimePart(parts[10]);
     const parseMilliseconds = function(part) {
         part = part || '';
-        return getDimePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
+        return getTimePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
     };
     const millisecond = parseMilliseconds(parts[11]);
 
