@@ -995,7 +995,15 @@ const Calendar = Editor.inherit({
     },
 
     _getDate(value) {
-        return isDate(value) ? new Date(value.getTime()) : new Date(value);
+        let result;
+        if(isDate(value)) { // IE11 fix
+            result = new Date(value.getTime());
+            result.setMilliseconds(0);
+        } else {
+            result = new Date(value);
+        }
+
+        return result;
     },
 
     _toTodayView: function() {
