@@ -146,9 +146,7 @@ const Toast = Overlay.inherit({
             },
             {
                 device: function(device) {
-                    const isPhone = device.deviceType === 'phone';
-
-                    return isPhone;
+                    return device.deviceType === 'phone';
                 },
                 options: {
                     width: function() { return window.visualViewport.width; },

@@ -96,6 +96,7 @@ QUnit.module('general', moduleConfig, () => {
 
         fx.off = true;
         this.instance.show();
+        this.clock.tick(5000);
 
         const $content = this.instance.$content();
         assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
