@@ -3,6 +3,7 @@ import positionUtils from 'animation/position';
 import translator from 'animation/translator';
 import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
+import devices from 'core/devices.js';
 
 const setupPosition = positionUtils.setup;
 const calculatePosition = positionUtils.calculate;
@@ -926,7 +927,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.deepEqual(positionUtils.offset($event), { left: 100, top: 200 }, 'position.offset() is correct');
     });
 
-    QUnit.test('position should return window.innerHeight for mobile safari if window.outerHeight < window.innerHeight', function(assert) {
+    QUnit.test('position should return window.innerHeight if window.outerHeight <= window.innerHeight and visualViewport height if device is mobile', function(assert) {
         if(browser.msie && parseInt(browser.version.split('.')[0]) <= 11) {
             // skip for ie because we can not write window.innerHeight in IE
             assert.expect(0);
@@ -945,7 +946,11 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
                 of: $(window)
             });
 
-            assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
+            if(devices.real().deviceType === 'desktop') {
+                assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
+            } else {
+                assert.roughEqual(resultPosition.v.location, window.visualViewport.height, 50, 'vertical location is correct');
+            }
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
@@ -953,7 +958,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     // T509285
-    QUnit.test('position should return window.innerWidth for mobile safari if window.outerWidth < window.innerWidth', function(assert) {
+    QUnit.test('position should return window.innerWidth if window.outerWidth < window.innerWidth or visualViewport.width on mobile devices', function(assert) {
         if(browser.msie && parseInt(browser.version.split('.')[0]) <= 11) {
             // skip for ie because we can not write window.innerWidth in IE
             assert.expect(0);
@@ -972,7 +977,11 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
                 of: $(window)
             });
 
-            assert.roughEqual(resultPosition.h.location, 100, 50, 'vertical location is correct');
+            if(devices.real().deviceType === 'desktop') {
+                assert.roughEqual(resultPosition.h.location, 100, 50, 'vertical location is correct');
+            } else {
+                assert.roughEqual(resultPosition.h.location, window.visualViewport.width, 50, 'vertical location is correct');
+            }
         } finally {
             window.innerWidth = initialInnerWidth;
             window.outerWidth = initialOuterWidth;
@@ -980,7 +989,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     // T750017
-    QUnit.test('position should return window.innerWidth for chrome on android if window.outerHeight === window.innerHeight but window height is less then innerHeight', function(assert) {
+    QUnit.test('position should return window.innerWidth for chrome if window.outerHeight === window.innerHeight but window height is less then innerHeight or visualViewport width on mobile devices', function(assert) {
         if(browser.msie && parseInt(browser.version.split('.')[0]) <= 11) {
             // skip for ie because we can not write window.innerWidth in IE
             assert.expect(0);
@@ -999,7 +1008,11 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
                 of: $(window)
             });
 
-            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 25, 'innerHeight was used as window height');
+            if(devices.real().deviceType === 'desktop') {
+                assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 25, 'innerHeight was used as window height');
+            } else {
+                assert.roughEqual(resultPosition.v.location, window.visualViewport.height, 25, 'innerHeight was used as window height');
+            }
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
