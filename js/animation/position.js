@@ -309,12 +309,12 @@ const calculatePosition = function(what, options) {
         if(isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
-            if(devices.real().deviceType === 'desktop' || !of[0].visualViewport) {
-                h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
-                v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
-            } else {
+            if(devices.real().deviceType === 'phone' && of[0].visualViewport) {
                 h.atSize = of[0].visualViewport.width;
                 v.atSize = of[0].visualViewport.height;
+            } else {
+                h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
+                v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
             }
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
