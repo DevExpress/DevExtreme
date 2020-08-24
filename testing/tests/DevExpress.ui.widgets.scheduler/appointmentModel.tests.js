@@ -4,6 +4,12 @@ const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
 const config = require('core/config');
 const DataSource = require('data/data_source/data_source').DataSource;
+const timeZoneCalculator = {
+    createDate: (date) => {
+        return date;
+    }
+};
+
 
 (function() {
 
@@ -154,7 +160,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             appointmentModel.filterLoadedAppointments({
                 startDayHour: 3,
                 endDayHour: 4
-            });
+            }, timeZoneCalculator);
 
             assert.equal(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
         });
@@ -555,7 +561,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 7,
             min: new Date(2015, 0, 1, 0),
             max: new Date(2015, 0, 3)
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
     });
@@ -641,7 +647,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
         const appts = appointmentModel.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }], 'Appointments are OK');
     });
@@ -676,7 +682,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
         const appts = appointmentModel.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], 'Appointments are OK. Appointment \'a\' was filtered');
     });
@@ -712,7 +718,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
         const appts = appointmentModel.filterLoadedAppointments({
             startDayHour: 3.5,
             endDayHour: 7.5
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }], 'Appointments are OK');
     });
@@ -752,7 +758,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 7,
             min: new Date(2014, 11, 31).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -792,7 +798,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
             max: new Date(2015, 0, 11, 7, 0).toString()
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [
             { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
@@ -832,7 +838,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
             max: new Date(2015, 0, 5, 7, 0).toString()
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [
             { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
@@ -872,7 +878,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -913,7 +919,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -966,7 +972,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
                     items: [{ 'id': 1, 'text': 'a' }, { 'id': 2, 'text': 'b' }]
                 }
             ]
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 },
@@ -1003,7 +1009,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             startDayHour: 3,
             endDayHour: 7,
             allDay: false
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
     });
@@ -1039,7 +1045,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 10,
             min: new Date(2015, 0, 1, 3),
             max: new Date(2015, 0, 1, 9, 59)
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
     });
@@ -1075,7 +1081,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 10,
             min: new Date(2015, 1, 23, 1, 0),
             max: new Date(2015, 2, 1, 9, 59)
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
@@ -1111,7 +1117,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 10,
             min: new Date(2015, 2, 2, 1, 0),
             max: new Date(2015, 2, 8, 9, 59)
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
@@ -1147,7 +1153,7 @@ const DataSource = require('data/data_source/data_source').DataSource;
             endDayHour: 10,
             min: new Date(2015, 2, 1, 1, 0),
             max: new Date(2015, 2, 8, 9, 59)
-        });
+        }, timeZoneCalculator);
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
