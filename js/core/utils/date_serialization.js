@@ -9,39 +9,53 @@ const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
 
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
+
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
+const DATE_SERIALIZATIN_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})?$/;
 
 const MILLISECOND_LENGHT = 3;
 
 const dateParser = function(text, skipISO8601Parsing) {
     let result;
-    let parsedValue;
 
     if(isString(text) && !skipISO8601Parsing) {
         result = parseISO8601String(text);
     }
 
-    if(!result) {
-        parsedValue = !isDate(text) && Date.parse(text);
+    return result ? result : parseDate(text);
+};
 
-        result = isNumber(parsedValue) ? new Date(parsedValue) : text;
+function getDimePart(part) {
+    return +part || 0;
+}
+
+function parseDate(text) {
+    const parsedValue = !isDate(text) && Date.parse(text);
+
+    if(!parsedValue && getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT) {
+
+        const parts = text.match(DATE_SERIALIZATIN_PATTERN);
+        if(parts) {
+            const newDate = new Date(getDimePart(parts[1]), getDimePart(parts[2]), getDimePart(parts[3]));
+            newDate.setFullYear(getDimePart(parts[1]));
+            newDate.setMonth(getDimePart(parts[2]) - 1);
+            newDate.setDate(getDimePart(parts[3]));
+            return newDate;
+        }
     }
 
-    return result;
-};
+    return isNumber(parsedValue) ? new Date(parsedValue) : text;
+}
 
 function parseISO8601String(text) {
     let parts = text.match(ISO8601_PATTERN);
 
-    const timePart = function(part) {
-        return +part || 0;
-    };
-
     if(!parts) {
         parts = text.match(ISO8601_TIME_PATTERN);
         if(parts) {
-            return new Date(0, 0, 0, timePart(parts[1]), timePart(parts[2]), timePart(parts[4]));
+            return new Date(0, 0, 0, getDimePart(parts[1]), getDimePart(parts[2]), getDimePart(parts[4]));
         }
+
         return;
     }
 
@@ -51,20 +65,20 @@ function parseISO8601String(text) {
     let timeZoneHour = 0;
     let timeZoneMinute = 0;
 
-    timeZoneHour = timePart(parts[14]);
-    timeZoneMinute = timePart(parts[16]);
+    timeZoneHour = getDimePart(parts[14]);
+    timeZoneMinute = getDimePart(parts[16]);
 
     if(parts[13] === '-') {
         timeZoneHour = -timeZoneHour;
         timeZoneMinute = -timeZoneMinute;
     }
 
-    const hour = timePart(parts[6]) - timeZoneHour;
-    const minute = timePart(parts[8]) - timeZoneMinute;
-    const second = timePart(parts[10]);
+    const hour = getDimePart(parts[6]) - timeZoneHour;
+    const minute = getDimePart(parts[8]) - timeZoneMinute;
+    const second = getDimePart(parts[10]);
     const parseMilliseconds = function(part) {
         part = part || '';
-        return timePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
+        return getDimePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
     };
     const millisecond = parseMilliseconds(parts[11]);
 
