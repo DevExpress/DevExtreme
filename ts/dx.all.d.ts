@@ -4217,6 +4217,8 @@ declare module DevExpress.ui {
         tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
+        /** @name dxGantt.Options.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
         /** @name dxGantt.Options.validation */
         validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
