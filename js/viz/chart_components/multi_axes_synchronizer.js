@@ -358,6 +358,28 @@ function updateMinorTicks(axesInfo) {
     });
 }
 
+function correctPaddings(axesInfo, paddings) {
+    let correctedPaddings;
+    axesInfo.some((info) => {
+        const inverted = info.inverted;
+        const { start, end } = info.axis.getCorrectedValuesToZero(info.minValue, info.maxValue);
+        if(isDefined(start) || isDefined(end)) {
+            correctedPaddings = inverted ? {
+                start: end,
+                end: start
+            } : {
+                start: start,
+                end: end
+            };
+            return true;
+        }
+    });
+    return {
+        start: paddings.start === 0 || !correctedPaddings ? paddings.start : correctedPaddings.start,
+        end: paddings.end === 0 || !correctedPaddings ? paddings.end : correctedPaddings.end
+    };
+}
+
 const multiAxesSynchronizer = {
     synchronize: function(valueAxes) {
         each(getValueAxesPerPanes(valueAxes), function(_, axes) {
@@ -367,7 +389,9 @@ const multiAxesSynchronizer = {
                 updateTickValues(axesInfo);
 
                 correctMinMaxValues(axesInfo);
-                const paddings = calculatePaddings(axesInfo);
+
+                let paddings = calculatePaddings(axesInfo);
+                paddings = correctPaddings(axesInfo, paddings);
 
                 correctMinMaxValuesByPaddings(axesInfo, paddings);
 

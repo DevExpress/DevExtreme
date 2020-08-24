@@ -925,6 +925,8 @@ export const MockAxis = function(renderOptions) {
 
         hideOuterElements: sinon.spy(),
 
+        getCorrectedValuesToZero: sinon.stub().returns({}),
+
         setPane: function(pane) {
             this.pane = pane;
             this._options.pane = pane;
