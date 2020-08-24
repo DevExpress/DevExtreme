@@ -84,7 +84,7 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('position on mobile devices', function(assert) {
-        if(devices.deviceType !== 'phone') {
+        if(devices.real().deviceType !== 'phone') {
             assert.ok(true, 'not mobile device');
             return;
         }
@@ -99,7 +99,6 @@ QUnit.module('general', moduleConfig, () => {
         const $content = this.instance.$content();
         assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
         assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
-
     });
 
     QUnit.test('displayTime', function(assert) {
