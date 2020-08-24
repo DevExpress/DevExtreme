@@ -12,7 +12,7 @@ const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
-const DATE_SERIALIZATIN_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})?$/;
+const DATE_SERIALIZATIN_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const MILLISECOND_LENGHT = 3;
 
@@ -25,7 +25,7 @@ const dateParser = function(text, skipISO8601Parsing) {
         result = parseISO8601String(text);
     }
 
-    return result ? result : parseDate(text);
+    return result || parseDate(text);
 };
 
 function getTimePart(part) {
