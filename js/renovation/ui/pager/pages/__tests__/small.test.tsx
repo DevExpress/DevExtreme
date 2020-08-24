@@ -3,8 +3,12 @@ import { mount } from 'enzyme';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../utils/get_computed_style';
 import { NumberBox } from '../../../number_box';
+import messageLocalization from '../../../../../localization/message';
 
 jest.mock('../../utils/get_computed_style');
+jest.mock('../../../../../localization/message', () => ({
+  getFormatter: jest.fn(),
+}));
 
 describe('Small pager pages', () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -24,26 +28,28 @@ describe('Small pager pages', () => {
 
   it('View', () => {
     const pageIndexRef = createRef();
-    const props = {
+    const props = { pageCount: 100, rtlEnabled: true } as PagesSmall['props'];
+    const viewProps = {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
       pageIndexRef: pageIndexRef as unknown as NumberBox,
       selectLastPageIndex: jest.fn(),
-      props: { pageCount: 100, pagesCountText: 'of', rtlEnabled: true },
+      pagesCountText: 'of',
+      props,
     } as Partial<PagesSmall>;
     const {
       tree, pageIndexNumberBox, span, maxPage,
-    } = render(props);
+    } = render(viewProps);
     expect(tree.props().className).toBe('dx-light-pages');
 
     expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toMatchObject({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: props.valueChange, width: 40,
+      className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: viewProps.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toMatchObject({
-      index: 99, selected: false, className: 'dx-pages-count', onClick: props.selectLastPageIndex,
+      index: 99, selected: false, className: 'dx-pages-count', onClick: viewProps.selectLastPageIndex,
     });
   });
 
@@ -77,6 +83,13 @@ describe('Small pager pages', () => {
       component.props.pageIndexChange = pageIndexChangeHandler;
       component.selectLastPageIndex();
       expect(pageIndexChangeHandler).toBeCalledWith(2);
+    });
+
+    it('pagesCountText', () => {
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'of');
+      const component = new PagesSmall({ pageCount: 100 });
+      expect(component.pagesCountText).toBe('of');
+      expect(messageLocalization.getFormatter).toBeCalledWith('dxPager-pagesCountText');
     });
 
     it('valueChange', () => {

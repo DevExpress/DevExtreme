@@ -1,6 +1,11 @@
 import React, { createRef } from 'react';
 import { shallow, mount } from 'enzyme';
 import { InfoText, viewFunction as InfoTextComponent } from '../info';
+import messageLocalization from '../../../../localization/message';
+
+jest.mock('../../../../localization/message', () => ({
+  getFormatter: jest.fn(),
+}));
 
 describe('Info, separate view and component approach', () => {
   describe('View', () => {
@@ -14,7 +19,7 @@ describe('Info, separate view and component approach', () => {
       const ref = createRef<HTMLDivElement>();
       mount(<InfoTextComponent {...{ htmlRef: ref, text: 'text' } as any} /> as any);
       expect(ref.current).not.toBeNull();
-      expect(ref.current!.className).toBe('dx-info');
+      expect(ref.current?.className).toBe('dx-info');
     });
   });
 
@@ -23,6 +28,13 @@ describe('Info, separate view and component approach', () => {
       const infoText = new InfoText({ });
       infoText.htmlRef = {} as any;
       expect(infoText.getHtmlElement()).toBe(infoText.htmlRef);
+    });
+
+    it('text with default infoText', () => {
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'Page {0} of {1} ({2} items)');
+      const infoText = new InfoText({ pageCount: 20, pageIndex: 5, totalCount: 200 });
+      expect(infoText.text).toBe('Page 6 of 20 (200 items)');
+      expect(messageLocalization.getFormatter).toBeCalledWith('dxPager-infoText');
     });
 
     it('text with changed infoText', () => {
