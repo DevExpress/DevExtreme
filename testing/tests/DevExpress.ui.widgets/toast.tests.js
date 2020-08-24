@@ -89,16 +89,21 @@ QUnit.module('general', moduleConfig, () => {
             return;
         }
 
+        const done = assert.async();
         fx.off = false;
 
-        this.instance = new Toast(this.$element);
+        this.instance = this.$element.dxToast({
+            onShown: function(e) {
+                const $content = e.component.$content();
+                assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
+                assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
+
+                done();
+            }
+        }).dxToast('instance');
+
         this.instance.show();
-
         this.clock.tick(5000);
-
-        const $content = this.instance.$content();
-        assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
-        assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
     });
 
     QUnit.test('displayTime', function(assert) {
