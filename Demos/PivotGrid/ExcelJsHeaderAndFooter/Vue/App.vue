@@ -6,6 +6,7 @@
     <DxPivotGrid
       :height="440"
       :show-borders="true"
+      :allow-sorting="true"
       :allow-filtering="true"
       :data-source="dataSource"
       @exporting="onExporting"

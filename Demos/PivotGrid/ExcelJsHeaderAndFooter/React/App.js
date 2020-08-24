@@ -96,6 +96,7 @@ export default function App() {
         dataSource={dataSource}
         height={440}
         showBorders={true}
+        allowSorting={true}
         allowFiltering={true}
         onExporting={onExporting}
       >
