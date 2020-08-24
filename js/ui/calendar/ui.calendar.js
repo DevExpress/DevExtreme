@@ -53,6 +53,8 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
@@ -996,7 +998,7 @@ const Calendar = Editor.inherit({
 
     _getDate(value) {
         let result;
-        if(isDate(value)) { // IE11 fix
+        if(isIE11 && isDate(value)) {
             result = new Date(value.getTime());
             result.setMilliseconds(0);
         } else {
