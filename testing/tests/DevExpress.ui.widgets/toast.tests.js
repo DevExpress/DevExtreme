@@ -84,7 +84,7 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('position on mobile devices', function(assert) {
-        const originalCurrentDevice = devices.real();
+        const originalCurrentDevice = devices.current();
 
         try {
             devices.current({ deviceType: 'phone' });
@@ -102,7 +102,7 @@ QUnit.module('general', moduleConfig, () => {
             assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
             assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
         } finally {
-            devices.real(originalCurrentDevice);
+            devices.current(originalCurrentDevice);
         }
     });
 
