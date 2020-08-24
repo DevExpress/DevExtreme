@@ -2,6 +2,7 @@ import config from '../config';
 import { getFormatter as getLDMLFormatter } from '../../localization/ldml/date.formatter';
 import defaultDateNames from '../../localization/default_date_names';
 import { isString, isDate, isNumeric as isNumber } from './type';
+import browser from './browser';
 
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
@@ -14,6 +15,8 @@ const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', 
 const DATE_SERIALIZATIN_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})?$/;
 
 const MILLISECOND_LENGHT = 3;
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const dateParser = function(text, skipISO8601Parsing) {
     let result;
@@ -30,10 +33,9 @@ function getTimePart(part) {
 }
 
 function parseDate(text) {
+    const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
     const parsedValue = !isDate(text) && Date.parse(text);
-
-    if(!parsedValue && getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT) {
-
+    if((!parsedValue || isIE11) && isDefaultSerializationFormat) {
         const parts = text.match(DATE_SERIALIZATIN_PATTERN);
         if(parts) {
             const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
