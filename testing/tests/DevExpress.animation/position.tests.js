@@ -937,6 +937,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const $what = $('#what').height(300);
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
+        const initialVisualViewport = window.visualViewport;
 
         try {
             window.innerHeight = 500;
@@ -955,6 +956,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
+            window.visualViewport = initialVisualViewport;
         }
     });
 
@@ -969,6 +971,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const $what = $('#what').width(300);
         const initialInnerWidth = window.innerWidth;
         const initialOuterWidth = window.outerWidth;
+        const initialVisualViewport = window.visualViewport;
 
         try {
             window.innerWidth = 500;
@@ -987,6 +990,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerWidth = initialInnerWidth;
             window.outerWidth = initialOuterWidth;
+            window.visualViewport = initialVisualViewport;
         }
     });
 
@@ -1001,6 +1005,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const $what = $('#what').height(50);
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
+        const initialVisualViewport = window.visualViewport;
 
         try {
             window.innerHeight = 2000;
@@ -1019,6 +1024,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
+            window.visualViewport = initialVisualViewport;
         }
     });
 
