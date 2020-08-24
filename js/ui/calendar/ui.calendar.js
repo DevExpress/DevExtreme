@@ -995,7 +995,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDate(value) {
-        return isDate(value) ? value : new Date(value);
+        return isDate(value) ? new Date(value.getTime()) : new Date(value);
     },
 
     _toTodayView: function() {
