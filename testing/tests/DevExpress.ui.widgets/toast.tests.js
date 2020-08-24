@@ -84,13 +84,18 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('position on mobile devices', function(assert) {
+        const originalRealDevice = devices.real();
         const originalCurrentDevice = devices.current();
 
         try {
+            devices.real({ deviceType: 'phone' });
             devices.current({ deviceType: 'phone' });
             fx.off = false;
 
-            this.instance = new Toast(this.$element);
+            this.instance.option({
+                message: 'test42',
+                position: { my: 'bottom center', at: 'bottom center', offset: '0 0' }
+            });
 
             fx.off = true;
             this.instance.show();
@@ -99,6 +104,7 @@ QUnit.module('general', moduleConfig, () => {
             assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
             assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
         } finally {
+            devices.real(originalRealDevice);
             devices.current(originalCurrentDevice);
         }
     });
