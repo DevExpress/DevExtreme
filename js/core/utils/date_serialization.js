@@ -12,7 +12,7 @@ const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
-const DATE_SERIALIZATIN_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
+const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const MILLISECOND_LENGHT = 3;
 
@@ -36,7 +36,7 @@ function parseDate(text) {
     const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
     const parsedValue = !isDate(text) && Date.parse(text);
     if((!parsedValue || isIE11) && isDefaultSerializationFormat) {
-        const parts = text.match(DATE_SERIALIZATIN_PATTERN);
+        const parts = text.match(DATE_SERIALIZATION_PATTERN);
         if(parts) {
             const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
             newDate.setFullYear(getTimePart(parts[1]));
