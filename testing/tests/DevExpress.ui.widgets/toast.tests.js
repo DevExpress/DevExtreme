@@ -90,10 +90,7 @@ QUnit.module('general', moduleConfig, () => {
             devices.current({ deviceType: 'phone' });
             fx.off = false;
 
-            this.instance.option({
-                message: 'test42',
-                position: { my: 'bottom center', at: 'bottom center', offset: '0 0' }
-            });
+            this.instance = new Toast(this.$element);
 
             fx.off = true;
             this.instance.show();
