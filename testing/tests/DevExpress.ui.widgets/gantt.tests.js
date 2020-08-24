@@ -3,6 +3,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 const { test } = QUnit;
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/gantt';
 import { extend } from 'core/utils/extend';
 
@@ -491,6 +492,8 @@ QUnit.module('Actions', moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
 
+        const ganttLeftBorderWidth = parseFloat(this.$element.css('border-left-width'));
+
         const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
         const splitter = this.$element.find(SPLITTER_SELECTOR);
 
@@ -508,7 +511,7 @@ QUnit.module('Actions', moduleConfig, () => {
         splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
         splitter.trigger($.Event('dxpointermove', {
             pointerType: 'mouse',
-            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
+            pageX: treeListWrapperLeftOffset - ganttLeftBorderWidth - parseFloat(splitter.css('margin-left')) + 100,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
@@ -519,7 +522,7 @@ QUnit.module('Actions', moduleConfig, () => {
         splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
         splitter.trigger($.Event('dxpointermove', {
             pointerType: 'touch',
-            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
+            pageX: treeListWrapperLeftOffset - ganttLeftBorderWidth - parseFloat(splitter.css('margin-left')) + 300,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
 
@@ -529,7 +532,7 @@ QUnit.module('Actions', moduleConfig, () => {
 
         splitter.trigger($.Event('dxpointerdown'));
         splitter.trigger($.Event('dxpointermove', {
-            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
+            pageX: treeListWrapperLeftOffset - ganttLeftBorderWidth - parseFloat(splitter.css('margin-left')) - 10,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup'));
 
