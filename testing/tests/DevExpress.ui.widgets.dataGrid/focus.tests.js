@@ -4645,7 +4645,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(this.option('focusedRowKey'), 'Den', 'FocusedRowKey');
             assert.equal(this.pageIndex(), 2, 'PageIndex');
             assert.equal($(rowsView.getCellElement(11, 1)).text(), 'Alice');
-            assert.ok(rowsViewWrapper.isRowVisible(11));
+            assert.ok(rowsViewWrapper.isRowVisible(11, 1));
         });
 
         QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {
