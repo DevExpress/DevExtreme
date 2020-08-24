@@ -941,6 +941,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         try {
             window.innerHeight = 500;
             window.outerHeight = 200;
+            window.visualViewport = { height: 1000 };
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
@@ -949,7 +950,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
             if(devices.real().deviceType === 'desktop') {
                 assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
             } else {
-                assert.roughEqual(resultPosition.v.location, window.visualViewport.height, 50, 'vertical location is correct');
+                assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
             }
         } finally {
             window.innerHeight = initialInnerHeight;
@@ -972,6 +973,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         try {
             window.innerWidth = 500;
             window.outerWidth = 200;
+            window.visualViewport = { width: 1000 };
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
@@ -980,7 +982,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
             if(devices.real().deviceType === 'desktop') {
                 assert.roughEqual(resultPosition.h.location, 100, 50, 'vertical location is correct');
             } else {
-                assert.roughEqual(resultPosition.h.location, window.visualViewport.width, 50, 'vertical location is correct');
+                assert.roughEqual(resultPosition.h.location, 350, 50, 'vertical location is correct');
             }
         } finally {
             window.innerWidth = initialInnerWidth;
@@ -1003,6 +1005,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         try {
             window.innerHeight = 2000;
             window.outerHeight = 2000;
+            window.visualViewport = { height: 1000 };
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
@@ -1011,7 +1014,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
             if(devices.real().deviceType === 'desktop') {
                 assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 25, 'innerHeight was used as window height');
             } else {
-                assert.roughEqual(resultPosition.v.location, window.visualViewport.height, 25, 'innerHeight was used as window height');
+                assert.roughEqual(resultPosition.v.location, (window.visualViewport.height - 50) / 2, 25, 'innerHeight was used as window height');
             }
         } finally {
             window.innerHeight = initialInnerHeight;

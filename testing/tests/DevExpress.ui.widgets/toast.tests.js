@@ -84,23 +84,26 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('position on mobile devices', function(assert) {
-        if(devices.real().deviceType === 'desktop') {
-            assert.ok(true, 'not mobile device');
-            return;
+        const originalRealDevice = devices.real();
+
+        try {
+            devices.real({ deviceType: 'phone' });
+            fx.off = false;
+
+            this.instance.option({
+                message: 'test42',
+                position: { my: 'bottom center', at: 'bottom center', offset: '0 0' }
+            });
+
+            fx.off = true;
+            this.instance.show();
+
+            const $content = this.instance.$content();
+            assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
+            assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
+        } finally {
+            devices.real(originalRealDevice);
         }
-
-        this.instance.option({
-            message: 'test42',
-            position: { my: 'bottom center', at: 'bottom center', offset: '0 0' }
-        });
-
-        fx.off = true;
-        this.instance.show();
-        this.clock.tick(5000);
-
-        const $content = this.instance.$content();
-        assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
-        assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
     });
 
     QUnit.test('displayTime', function(assert) {
