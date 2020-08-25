@@ -1723,8 +1723,8 @@ QUnit.test('Synchronization two axis with paddins, correct zero velue, non zero 
             {
                 range: {
                     axisType: 'continuous',
-                    min: 9.45,
-                    minVisible: 9.45,
+                    min: 9.975,
+                    minVisible: 9.975,
                     max: 11,
                     maxVisible: 11
                 },
@@ -1733,8 +1733,8 @@ QUnit.test('Synchronization two axis with paddins, correct zero velue, non zero 
             {
                 range: {
                     axisType: 'continuous',
-                    min: -60000,
-                    minVisible: -60000,
+                    min: 45000,
+                    minVisible: 45000,
                     max: 250000,
                     maxVisible: 250000
                 },
@@ -1767,10 +1767,10 @@ QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddi
             {
                 range: {
                     axisType: 'continuous',
-                    min: 9.45,
-                    minVisible: 9.45,
-                    max: 11,
-                    maxVisible: 11,
+                    min: 10,
+                    minVisible: 10,
+                    max: 11.651,
+                    maxVisible: 11.651,
                     invert: true
                 },
                 tickValues: [10, 10.25, 10.5, 10.75, 10.1]
@@ -1778,12 +1778,12 @@ QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddi
             {
                 range: {
                     axisType: 'continuous',
-                    min: -130000,
-                    minVisible: -130000,
-                    max: 180000,
-                    maxVisible: 180000
+                    min: -260200,
+                    minVisible: -260200,
+                    max: 70000,
+                    maxVisible: 70000
                 },
-                tickValues: [50000, 100000, 150000]
+                tickValues: [50000]
             }
         ],
         syncIndexes: [[0, 0]]
