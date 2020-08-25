@@ -340,6 +340,7 @@ const LayoutManager = Widget.inherit({
             const $container = $('<div>').appendTo(that.$element());
 
             that._prepareItemsWithMerging(colCount);
+            this._cashedColCount = null; // T923489
 
             const layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
@@ -492,11 +493,7 @@ const LayoutManager = Widget.inherit({
     },
 
     isCachedColCountObsolete: function() {
-        if(this._cashedColCount) {
-            const virtualColCount = this._items.filter(i => i.merged === true).length;
-            return this._getMaxColCount() !== (this._cashedColCount + virtualColCount);
-        }
-        return false;
+        return this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
     },
 
     _prepareItemsWithMerging: function(colCount) {
