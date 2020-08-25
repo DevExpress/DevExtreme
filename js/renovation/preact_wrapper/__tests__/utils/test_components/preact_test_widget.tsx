@@ -7,7 +7,6 @@ import {
   Method,
   OneWay,
   Ref,
-  TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 import {
   keyboard,
