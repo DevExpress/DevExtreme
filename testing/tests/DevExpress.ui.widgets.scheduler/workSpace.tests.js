@@ -3731,31 +3731,19 @@ QUnit.module('Renovated Render', {
     QUnit.module('Generate View Data', () => {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
-            const viewModel = this.instance.viewDataGenerator.generate();
-            const expected = {
-                viewData: {
-                    groupedData: [{
-                        allDayPanel: [{
-                            startDate: new Date(2020, 6, 29),
-                            endDate: new Date(2020, 6, 29),
-                            allDay: true,
-                        }],
-                        dateTable: [[{
-                            startDate: new Date(2020, 6, 29, 0, 0),
-                            endDate: new Date(2020, 6, 29, 0, 30),
-                            allDay: false,
-                            text: '12:00 AM',
-                        }], [{
-                            startDate: new Date(2020, 6, 29, 0, 30),
-                            endDate: new Date(2020, 6, 29, 1, 0),
-                            allDay: false,
-                            text: '',
-                        }]],
-                        isGroupedAllDayPanel: false
-                    }]
-                },
-                viewDataMap: [
-                    [{
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData, viewDataMap } = this.instance.viewDataProvider;
+
+            const expectedViewData = {
+                groupedData: [{
+                    allDayPanel: [{
+                        startDate: new Date(2020, 6, 29),
+                        endDate: new Date(2020, 6, 29),
+                        allDay: true,
+                    }],
+                    dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
@@ -3765,11 +3753,26 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                    }]
-                ]
+                    }]],
+                    isGroupedAllDayPanel: false
+                }]
             };
+            const expectedViewDataMap = [
+                [{
+                    startDate: new Date(2020, 6, 29, 0, 0),
+                    endDate: new Date(2020, 6, 29, 0, 30),
+                    allDay: false,
+                    text: '12:00 AM',
+                }], [{
+                    startDate: new Date(2020, 6, 29, 0, 30),
+                    endDate: new Date(2020, 6, 29, 1, 0),
+                    allDay: false,
+                    text: '',
+                }]
+            ];
 
-            assert.deepEqual(viewModel, expected, 'correct view model');
+            assert.deepEqual(viewData, expectedViewData, 'correct view data');
+            assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct view data map');
         });
 
         QUnit.test('should work with horizontal grouping', function(assert) {
@@ -3785,7 +3788,10 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            const { viewData, viewDataMap } = this.instance.viewDataGenerator.generate();
+            this.instance.viewDataProvider.update();
+
+            const { viewData, viewDataMap } = this.instance.viewDataProvider;
+
             const expectedViewData = {
                 groupedData: [{
                     allDayPanel: [
@@ -3848,7 +3854,10 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            const { viewData, viewDataMap } = this.instance.viewDataGenerator.generate();
+            this.instance.viewDataProvider.update();
+
+            const { viewData, viewDataMap } = this.instance.viewDataProvider;
+
             const expectedViewData = {
                 groupedData: [{
                     allDayPanel: [{
