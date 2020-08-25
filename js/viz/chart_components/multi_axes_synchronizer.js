@@ -359,25 +359,20 @@ function updateMinorTicks(axesInfo) {
 }
 
 function correctPaddings(axesInfo, paddings) {
-    let correctedPaddings;
-    axesInfo.some((info) => {
+    return axesInfo.reduce((prev, info) => {
         const inverted = info.inverted;
         const { start, end } = info.axis.getCorrectedValuesToZero(info.minValue, info.maxValue);
         if(isDefined(start) || isDefined(end)) {
-            correctedPaddings = inverted ? {
-                start: end,
-                end: start
+            return inverted ? {
+                start: Math.min(end, prev.end),
+                end: prev.start
             } : {
-                start: start,
-                end: end
+                start: Math.min(start, prev.start),
+                end: prev.end
             };
-            return true;
         }
-    });
-    return {
-        start: paddings.start === 0 || !correctedPaddings ? paddings.start : correctedPaddings.start,
-        end: paddings.end === 0 || !correctedPaddings ? paddings.end : correctedPaddings.end
-    };
+        return prev;
+    }, paddings);
 }
 
 const multiAxesSynchronizer = {
