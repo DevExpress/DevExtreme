@@ -21,6 +21,7 @@ import { createEvent } from 'events/utils';
 
 import Pager from 'ui/pager';
 
+import { act } from 'preact/test-utils';
 
 QUnit.module('Pager', {
     beforeEach: function() {
@@ -59,6 +60,7 @@ QUnit.module('Pager', {
     }
 }, () => {
 
+    const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     QUnit.test('Not initialize pager when pager is not visible', function(assert) {
     // arrange
         const testElement = $('#container');
@@ -125,7 +127,9 @@ QUnit.module('Pager', {
         const pagerView = this.pagerView;
 
         // act
-        pagerView.render(testElement);
+        act(() => {
+            pagerView.render(testElement);
+        });
         $(testElement.find('.dx-page')[5]).trigger('dxclick');
 
         this.clock.tick();
@@ -214,7 +218,12 @@ QUnit.module('Pager', {
         this.dataController.updatePagesCount(1);
 
         // assert
-        assert.ok(pagerView._getPager()._testShowMoreButton, 'showMoreButton in pager');
+        if(isRenovation) {
+            assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
+            assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
+        } else {
+            assert.ok(pagerView._getPager()._testShowMoreButton, 'showMoreButton in pager');
+        }
     });
 
     QUnit.test('Visible is changed from dataController', function(assert) {
@@ -689,21 +698,22 @@ QUnit.module('Pager', {
             pageIndex: 0,
             totalCount: 6
         };
-        this.pagerView.render($testElement);
-
+        act(() => {
+            this.pagerView.render($testElement);
+        });
         // act
         $pageElement = $(this.pagerView.element().find('.dx-pages .dx-page').eq(2)).focus();
         $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
 
         // assert
-        assert.equal(this.pagerView.element().dxPager('instance').selectedPage.index, 2, 'Selected page index');
+        assert.equal(this.pagerView.element().find('.dx-pages .dx-page.dx-selection').text(), '3', 'Selected 2 page index');
 
         // act
         $pageElement = $(this.pagerView.element().find('.dx-pages .dx-page').eq(3)).focus();
         $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: ' ' }));
 
         // assert
-        assert.equal(this.pagerView.element().dxPager('instance').selectedPage.index, 3, 'Selected page index');
+        assert.equal(this.pagerView.element().find('.dx-pages .dx-page.dx-selection').text(), '4', 'Selected 3 page index');
     });
 
     QUnit.test('Key down Enter, Space key by page size element', function(assert) {
@@ -717,17 +727,16 @@ QUnit.module('Pager', {
             pageIndex: 0,
             totalCount: 6
         };
-        this.pagerView.render($testElement);
-
-        const pager = this.pagerView.element().dxPager('instance');
-        sinon.spy(pager, '_renderPageSizes');
+        act(() => {
+            this.pagerView.render($testElement);
+        });
 
         // act
+        assert.equal(this.pagerView.element().find('.dx-page-sizes .dx-page-size.dx-selection').text(), '', 'Page size not selected');
         const $pageElement = $(this.pagerView.element().find('.dx-page-sizes .dx-page-size').eq(1)).focus();
         $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
-
         // assert
-        assert.equal(pager._renderPageSizes.callCount, 1, 'Selected page index');
+        assert.equal(this.pagerView.element().find('.dx-page-sizes .dx-page-size.dx-selection').text(), '4', 'Page size 4 is selected');
     });
 
     QUnit.test('dxPager - infoText has rtl direction with rtlEnabled true (T753000)', function(assert) {
