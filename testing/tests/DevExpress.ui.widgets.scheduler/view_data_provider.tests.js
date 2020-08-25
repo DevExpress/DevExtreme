@@ -65,6 +65,16 @@ module('View Data Provider', {
 
             assert.deepEqual(group3Info, 'group_3', 'Group 3 info is correct');
         });
+
+        test('getCellData', function(assert) {
+            const cellData_0_1 = this.viewDataProvider.getCellData(0, 1);
+            const expectedCellData_0_1 = { startDate: new Date(2020, 8, 25), endDate: new Date(2020, 8, 26) };
+            assert.deepEqual(cellData_0_1, expectedCellData_0_1, 'Cell data [0, 1] is correct');
+
+            const cellData_1_1 = this.viewDataProvider.getCellData(1, 1);
+            const expectedCellData_1_1 = { startDate: new Date(2020, 8, 27), endDate: new Date(2020, 8, 28) };
+            assert.deepEqual(cellData_1_1, expectedCellData_1_1, 'Cell data [1, 1] is correct');
+        });
     });
 
     module('Generator', () => {

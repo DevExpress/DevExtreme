@@ -10,15 +10,15 @@ class ViewDataGenerator {
         let result;
 
         if(this.workspace.isVirtualScrolling()) {
-            result = this._generateVirtualView();
+            result = this._generateVirtualViewData();
         } else {
-            result = this._generateView();
+            result = this._generateViewData();
         }
 
         return result;
     }
 
-    _generateVirtualView() {
+    _generateVirtualViewData() {
         const workspace = this._workspace;
         const options = workspace.generateRenderOptions();
         const {
@@ -75,17 +75,14 @@ class ViewDataGenerator {
         }
 
         return {
-            viewData: {
-                groupedData,
-                isVirtual: true,
-                topVirtualRowHeight,
-                bottomVirtualRowHeight
-            },
-            viewDataMap: this._getViewDataMap(groupedData)
+            groupedData,
+            isVirtual: true,
+            topVirtualRowHeight,
+            bottomVirtualRowHeight
         };
     }
 
-    _generateView() {
+    _generateViewData() {
         const workspace = this._workspace;
         const options = workspace.generateRenderOptions();
         const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
@@ -115,10 +112,7 @@ class ViewDataGenerator {
         }
 
         return {
-            viewData: {
-                groupedData
-            },
-            viewDataMap: this._getViewDataMap(groupedData)
+            groupedData
         };
     }
 
@@ -139,7 +133,6 @@ class ViewDataGenerator {
 
                 cellDataGetters.forEach(getter => {
                     const value = getter(undefined, rowIndex, j).value;
-                    value.hash = `${rowIndex}_${j}`;
                     Object.assign(cellDataValue, value);
                 });
 
@@ -148,10 +141,6 @@ class ViewDataGenerator {
         }
 
         return viewCellsData;
-    }
-
-    _getCellDataHash(rowIndex, cellIndex) {
-        return `${rowIndex}_${cellIndex}`;
     }
 
     _generateAllDayPanelData(groupIndex, cellCount) {
@@ -172,17 +161,22 @@ class ViewDataGenerator {
         return allDayPanel;
     }
 
-    _getViewDataMap(groupedData) {
+    getViewDataMap(groupedData) {
         const viewDataMap = [];
         const addToMap = cellsData => {
+            const cellsMap = [];
             cellsData.forEach((cellData, cellIndex) => {
-                cellData.position = {
-                    rowIndex: viewDataMap.length,
-                    cellIndex: cellIndex
+                const cellMap = {
+                    cellData,
+                    position: {
+                        rowIndex: viewDataMap.length,
+                        cellIndex: cellIndex
+                    }
                 };
+                cellsMap.push(cellMap);
             });
 
-            viewDataMap.push(cellsData);
+            viewDataMap.push(cellsMap);
         };
 
         groupedData?.forEach(({
@@ -233,25 +227,24 @@ export default class ViewDataProvider {
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
 
-    get viewDataMap() { return this._viewDataMap; }
-    set viewDataMap(value) { this._viewDataMap = value; }
+    get viewDataMap() {
+        if(!this._viewDataMap.length && this.viewData) {
+            const { groupedData } = this.viewData;
+            this._viewDataMap = this.viewDataGenerator.getViewDataMap(groupedData);
+        }
+        return this._viewDataMap;
+    }
 
     get groupedDataMap() {
         if(!this._groupedDataMap.length && this.viewData) {
-            this._groupedDataMap = this.viewDataGenerator.getGroupedDataMap(this.viewData.groupedData);
+            const { groupedData } = this.viewData;
+            this._groupedDataMap = this.viewDataGenerator.getGroupedDataMap(groupedData);
         }
         return this._groupedDataMap;
     }
 
     update() {
-        const {
-            viewData,
-            viewDataMap
-        } = this.viewDataGenerator.generate();
-
-        this.viewData = viewData;
-        this.viewDataMap = viewDataMap;
-        this.groupedDataMap = this.viewDataGenerator.getGroupedDataMap(viewData.groupedData);
+        this.viewData = this.viewDataGenerator.generate();
     }
 
     getStartDate() {
@@ -279,6 +272,12 @@ export default class ViewDataProvider {
         const { dateTable } = this._getGroupData(groupIndex);
 
         return dateTable[0][0].groups;
+    }
+
+    getCellData(rowIndex, cellIndex) {
+        const { cellData } = this.viewDataMap[rowIndex][cellIndex];
+
+        return cellData;
     }
 
     _getGroupData(groupIndex) {
