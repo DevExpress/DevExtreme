@@ -1588,7 +1588,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
 });
 
 ['cell', 'batch'].forEach((editMode) => {
-  test(`Moving by "tab" key if scrolling.rowRenderingMode: virtual, editing.mode: ${editMode}`, async (t) => {
+  test(`Moving by "tab" key if scrolling.columnRenderingMode: virtual, editing.mode: ${editMode}`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     await t.click(dataGrid.getDataCell(0, 0).element);
