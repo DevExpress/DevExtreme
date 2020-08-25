@@ -819,3 +819,52 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         }, this));
     }, this));
 });
+
+[
+    {
+        groups: { roomId: 1 },
+        expected: [{
+            data: [{ Id: 1, color: '#cb6bb2', text: 'Room1' }],
+            items: [{ color: '#cb6bb2', id: 1, text: 'Room1' }],
+            name: 'roomId'
+        }]
+    },
+    {
+        groups: { roomId: 2 },
+        expected: [{
+            data: [{ Id: 2, color: '#cb6bb3', text: 'Room2' }],
+            items: [{ color: '#cb6bb3', id: 2, text: 'Room2' }],
+            name: 'roomId'
+        }]
+    },
+].forEach(data => {
+    QUnit.test(`getResourcesDataByGroups if groups: '${data.groups.roomId}'`, function(assert) {
+        const roomData =
+            {
+                field: 'roomId',
+                label: 'Room',
+                allowMultiple: false,
+                valueExpr: 'Id',
+                dataSource: [{
+                    text: 'Room1',
+                    Id: 1,
+                    color: '#cb6bb2'
+                }, {
+                    text: 'Room2',
+                    Id: 2,
+                    color: '#cb6bb3'
+                }]
+            };
+        this.createInstance([roomData]);
+
+        const done = assert.async();
+
+        this.instance.loadResources(['roomId']).done($.proxy(() => {
+            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(data.groups);
+
+            assert.deepEqual(resourcesDataByGroups, data.expected, 'getResourcesDataByGroups works correctly');
+
+            done();
+        }, this));
+    });
+});
