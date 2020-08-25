@@ -119,7 +119,7 @@ export default class SplitterControl extends Widget {
     _getContainerLeftOffset() {
         const offsetLeft = this._$container.offset().left;
         const paddingLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['paddingLeft']) || 0;
-        const borderLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['borderLeftWidth']) || 0;
+        const borderLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['borderLeft']) || 0;
 
         return offsetLeft + paddingLeft + borderLeft;
     }
