@@ -282,7 +282,7 @@ export default class ViewDataProvider {
 
     _getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
-        return groupedData.find(item => item.groupIndex === groupIndex);
+        return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
 
     _updateViewDataMap() {
