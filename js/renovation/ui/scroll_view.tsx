@@ -132,13 +132,13 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   }
 
   private get scrollBarWidth(): number {
-    return this.containerRef.offsetWidth - this.containerRef.clientWidth;
+    return this.containerRef?.offsetWidth - this.containerRef?.clientWidth;
   }
 
   private get scrollLocation(): Location {
     return {
-      left: this.containerRef.scrollLeft,
-      top: this.containerRef.scrollTop,
+      left: this.containerRef?.scrollLeft,
+      top: this.containerRef?.scrollTop,
     } as Location;
   }
 
