@@ -206,7 +206,7 @@ const LayoutManager = Widget.inherit({
             }
 
             this._items = processedItems;
-
+            this._cashedColCount = null; // T923489
             this._sortItems();
         }
     },
@@ -340,7 +340,6 @@ const LayoutManager = Widget.inherit({
             const $container = $('<div>').appendTo(that.$element());
 
             that._prepareItemsWithMerging(colCount);
-            this._cashedColCount = null; // T923489
 
             const layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
@@ -522,6 +521,7 @@ const LayoutManager = Widget.inherit({
             }
         }
         this._items = result;
+        this._cashedColCount = null; // T923489
     },
 
     _getColByIndex: function(index, colCount) {
