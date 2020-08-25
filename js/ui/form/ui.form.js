@@ -30,7 +30,8 @@ import {
     tryGetTabPath,
     getTextWithoutSpaces,
     isExpectedItem,
-    isFullPathContainsTabs
+    isFullPathContainsTabs,
+    getItemPath
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -985,11 +986,12 @@ const Form = Widget.inherit({
         return false;
     },
 
-    _tryChangeLayoutManagerItemOptions(itemPath, options) {
+    _tryChangeLayoutManagerItemOptions(item, itemPath, options) {
         let result;
         this.beginUpdate();
         each(options, (optionName, optionValue) => {
             result = this._tryChangeLayoutManagerItemOption(getFullOptionName(itemPath, optionName), optionValue);
+            this._changeItemOption(item, optionName, optionValue);
             if(!result) {
                 return false;
             }
@@ -1338,7 +1340,7 @@ const Form = Widget.inherit({
     itemOption(id, option, value) {
         const items = this._generateItemsFromData(this.option('items'));
         const item = this._getItemByField(id, items);
-        const path = this._itemsRunTimeInfo.getPathFromItem(item);
+        const path = getItemPath(items, item);
 
         if(!item) {
             return;
@@ -1358,7 +1360,7 @@ const Form = Widget.inherit({
             }
             default: {
                 if(isObject(option)) {
-                    if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
+                    if(!this._tryChangeLayoutManagerItemOptions(item, path, option)) {
                         let allowUpdateItems;
                         each(option, (optionName, optionValue) => {
                             const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
