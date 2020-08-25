@@ -492,8 +492,6 @@ QUnit.module('Actions', moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
 
-        const ganttLeftBorderWidth = parseFloat(this.$element.css('border-left-width'));
-
         const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
         const splitter = this.$element.find(SPLITTER_SELECTOR);
 
@@ -511,7 +509,7 @@ QUnit.module('Actions', moduleConfig, () => {
         splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
         splitter.trigger($.Event('dxpointermove', {
             pointerType: 'mouse',
-            pageX: treeListWrapperLeftOffset - ganttLeftBorderWidth - parseFloat(splitter.css('margin-left')) + 100,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
@@ -522,7 +520,7 @@ QUnit.module('Actions', moduleConfig, () => {
         splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
         splitter.trigger($.Event('dxpointermove', {
             pointerType: 'touch',
-            pageX: treeListWrapperLeftOffset - ganttLeftBorderWidth - parseFloat(splitter.css('margin-left')) + 300,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
 
@@ -532,7 +530,7 @@ QUnit.module('Actions', moduleConfig, () => {
 
         splitter.trigger($.Event('dxpointerdown'));
         splitter.trigger($.Event('dxpointermove', {
-            pageX: treeListWrapperLeftOffset - ganttLeftBorderWidth - parseFloat(splitter.css('margin-left')) - 10,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup'));
 

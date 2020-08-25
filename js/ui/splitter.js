@@ -3,8 +3,11 @@ import Widget from './widget/ui.widget';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import pointerEvents from '../events/pointer';
+import { getWindow } from '../core/utils/window';
 import { addNamespace } from '../events/utils';
 import { isString } from '../core/utils/type';
+
+const window = getWindow();
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_WRAPPER_CLASS = `${SPLITTER_CLASS}-wrapper`;
@@ -107,10 +110,18 @@ export default class SplitterControl extends Widget {
     }
 
     _getNewSplitterPositionLeft(e) {
-        let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX;
+        let newSplitterPositionLeft = e.pageX - this._getContainerLeftOffset() - this._offsetX;
         newSplitterPositionLeft = Math.max(0 - this.getSplitterOffset(), newSplitterPositionLeft);
         newSplitterPositionLeft = Math.min(this._containerWidth - this.getSplitterOffset() - this._getSplitterWidth(), newSplitterPositionLeft);
         return newSplitterPositionLeft;
+    }
+
+    _getContainerLeftOffset() {
+        const offsetLeft = this._$container.offset().left;
+        const paddingLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['paddingLeft']);
+        const borderLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['borderLeft']);
+
+        return offsetLeft + paddingLeft + borderLeft;
     }
 
     _isDomElement(element) {
