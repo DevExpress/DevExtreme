@@ -42,11 +42,11 @@ export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) 
     return !!viewData!.isVirtual;
   }
 
-  get topVirtualRowHeight(): number | undefined {
+  get topVirtualRowHeight(): number {
     return this.props.viewData!.topVirtualRowHeight || 0;
   }
 
-  get bottomVirtualRowHeight(): number | undefined {
+  get bottomVirtualRowHeight(): number {
     return this.props.viewData!.bottomVirtualRowHeight || 0;
   }
 }
