@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as CellView } from '../cell';
 import { DateTableCellBase } from '../../cell';
 
-describe('AllDayPanelCell ', () => {
+describe('AllDayPanelCell', () => {
   describe('Render', () => {
     const render = (viewModel) => shallow(
       <CellView
