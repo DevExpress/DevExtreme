@@ -1767,10 +1767,10 @@ QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddi
             {
                 range: {
                     axisType: 'continuous',
-                    min: 10,
-                    minVisible: 10,
-                    max: 11.651,
-                    maxVisible: 11.651,
+                    min: 9.349,
+                    minVisible: 9.349,
+                    max: 11,
+                    maxVisible: 11,
                     invert: true
                 },
                 tickValues: [10, 10.25, 10.5, 10.75, 10.1]
@@ -1778,12 +1778,12 @@ QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddi
             {
                 range: {
                     axisType: 'continuous',
-                    min: -260200,
-                    minVisible: -260200,
-                    max: 70000,
-                    maxVisible: 70000
+                    min: -130000,
+                    minVisible: -130000,
+                    max: 200200,
+                    maxVisible: 200200
                 },
-                tickValues: [50000]
+                tickValues: [50000, 100000, 150000, 200000]
             }
         ],
         syncIndexes: [[0, 0]]
