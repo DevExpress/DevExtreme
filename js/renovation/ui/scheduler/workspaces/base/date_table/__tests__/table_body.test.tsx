@@ -12,24 +12,40 @@ describe('DateTableBody', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{
-        dateTable: [
-          [{ startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30), groups: 1 }],
-          [{ startDate: new Date(2020, 6, 9, 1), endDate: new Date(2020, 6, 9, 1, 30), groups: 2 }],
-          [{ startDate: new Date(2020, 6, 9, 2), endDate: new Date(2020, 6, 9, 2, 30), groups: 3 }],
-        ],
+        dateTable: [[{
+          startDate: new Date(2020, 6, 9, 0),
+          endDate: new Date(2020, 6, 9, 0, 30),
+          groups: { id: 1 },
+          groupIndex: 1,
+          index: 4,
+        }], [{
+          startDate: new Date(2020, 6, 9, 1),
+          endDate: new Date(2020, 6, 9, 1, 30),
+          groups: { id: 2 },
+          groupIndex: 2,
+          index: 5,
+        }], [{
+          startDate: new Date(2020, 6, 9, 2),
+          endDate: new Date(2020, 6, 9, 2, 30),
+          groups: { id: 3 },
+          groupIndex: 3,
+          index: 6,
+        }]],
+        allDayPanel: [{ startDate: new Date() }],
       }],
     };
     const cellTemplate = () => null;
 
-    const render = (viewModel) => shallow(<TableBodyView {...{
-      ...viewModel,
-      props: {
-        viewData,
-        cellTemplate,
-        ...viewModel.props,
-      },
-    }}
-    />);
+    const render = (viewModel) => shallow(
+      <TableBodyView
+        {...viewModel}
+        props={{
+          viewData,
+          cellTemplate,
+          ...viewModel.props,
+        }}
+      />,
+    );
 
     beforeEach(() => {
       getKeyByDateAndGroup.mockClear();
@@ -44,7 +60,11 @@ describe('DateTableBody', () => {
     });
 
     it('should render cells and pass correct props to them', () => {
-      const tableBody = render({});
+      const dataCellTemplate = () => null;
+      const tableBody = render({
+        props: { dataCellTemplate },
+      });
+
       const assert = (
         cells: any,
         index: number,
@@ -53,15 +73,16 @@ describe('DateTableBody', () => {
       ): void => {
         const cell = cells.at(index);
 
-        expect(cell.prop('isFirstCell'))
-          .toBe(isFirstCell);
-        expect(cell.prop('isLastCell'))
-          .toBe(isLastCell);
         expect(cell.props())
           .toMatchObject({
             startDate: viewData.groupedData[0].dateTable[index][0].startDate,
             endDate: viewData.groupedData[0].dateTable[index][0].endDate,
             groups: viewData.groupedData[0].dateTable[index][0].groups,
+            groupIndex: viewData.groupedData[0].dateTable[index][0].groupIndex,
+            index: viewData.groupedData[0].dateTable[index][0].index,
+            isFirstCell,
+            isLastCell,
+            dataCellTemplate,
           });
       };
 
@@ -114,23 +135,38 @@ describe('DateTableBody', () => {
         );
     });
 
-    it('should call `getIsGroupedAllDayPanel` with correct parameters', () => {
-      (getIsGroupedAllDayPanel as jest.Mock).mockReturnValue(true);
+    it('should render AllDayPanelBody correctly and call getIsGroupedAllDayPanel', () => {
+      const dataCellTemplate = () => null;
+      const tableBody = render({
+        props: { dataCellTemplate },
+      });
 
-      const tableBody = render({});
-
-      expect(tableBody.find(AllDayPanelTableBody).exists())
+      const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
+      expect(allDayPanelTableBody.exists())
         .toBe(true);
 
-      expect(utilsModule.getIsGroupedAllDayPanel)
-        .toHaveBeenCalledTimes(1);
+      expect(allDayPanelTableBody.props())
+        .toMatchObject({
+          viewData: viewData.groupedData[0].allDayPanel,
+          dataCellTemplate,
+        });
 
-      expect(utilsModule.getIsGroupedAllDayPanel)
-        .toHaveBeenNthCalledWith(
-          1,
+      expect(getIsGroupedAllDayPanel)
+        .toHaveBeenCalledTimes(1);
+      expect(getIsGroupedAllDayPanel)
+        .toHaveBeenCalledWith(
           viewData,
           0,
         );
+    });
+
+    it('should not render AllDayPanelBody when getIsGroupedAllDayPanel returns false', () => {
+      (getIsGroupedAllDayPanel as jest.Mock).mockReturnValue(false);
+      const tableBody = render({});
+
+      const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
+      expect(allDayPanelTableBody.exists())
+        .toBe(false);
     });
   });
 });
