@@ -419,7 +419,7 @@ QUnit.module('DataBinding', {
             data: [
                 {
                     id: '1',
-                    text: 'verylongtext'.repeat(30),
+                    text: Array(30).join('verylongtext'),
                     width: 3000
                 },
                 {
