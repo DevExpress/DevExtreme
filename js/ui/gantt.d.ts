@@ -22,6 +22,10 @@ import {
     dxContextMenuItem
 } from './context_menu';
 
+import {
+    template
+} from '../core/templates/template';
+
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid dxGanttOptions.allowSelection
@@ -329,6 +333,15 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     stripLines?: Array<dxGanttStripLine>;
+    /**
+     * @docid dxGanttOptions.tooltipTemplate
+     * @type template|function
+     * @type_function_param1 container:dxElement
+     * @type_function_param2 task:any
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    tooltipTemplate?: template | ((container: dxElement, task: any) => string | Element | JQuery);
 }
 /**
  * @docid dxGantt
@@ -398,7 +411,6 @@ export interface dxGanttStripLine {
      */
     start?: Date | number | string | (() => Date | number | string);
     /**
-     /**
      * @docid dxGanttStripLine.title
      * @type string
      * @default undefined

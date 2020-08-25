@@ -34,8 +34,8 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(args) {
-        return this._createAppointmentSettings(args.appointmentData); // TODO: temporary solution
+    createAppointmentSettings: function(appointment) {
+        return this._getAppointmentSettingsGenerator().create(appointment);
     },
 
     isGroupedByDate: function() {
@@ -203,7 +203,6 @@ const subscribes = {
         const dateFormat = 'monthandday';
         const timeFormat = 'shorttime';
         const isSameDate = startDate.getDate() === endDate.getDate();
-        const isDurationLessThanDay = (endDate.getTime() - startDate.getTime()) <= toMs('day');
 
         switch(formatType) {
             case 'DATETIME':
@@ -218,7 +217,7 @@ const subscribes = {
             case 'TIME':
                 return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
             case 'DATE':
-                return `${dateLocalization.format(startDate, dateFormat)}${isDurationLessThanDay || isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
+                return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
         }
     },
 
@@ -474,7 +473,7 @@ const subscribes = {
             allDay: allDay,
             firstDayOfWeek: this.getFirstDayOfWeek(),
             recurrenceException: this._getRecurrenceException.bind(this),
-        }, this._subscribes['convertDateByTimezone'].bind(this));
+        }, this.timeZoneCalculator);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
@@ -645,7 +644,7 @@ const subscribes = {
 
         return {
             client: clientTimezoneOffset,
-            common: commonTimezoneOffset,
+            common: isDefined(commonTimezoneOffset) ? commonTimezoneOffset : clientTimezoneOffset,
             appointment: appointmentTimezoneOffset
         };
     },

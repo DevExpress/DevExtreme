@@ -4,18 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "mixins" as *;
 
 // adduse
 
-
-$generic-button-border-weight: $generic-base-border-width;
-$generic-button-padding:
-  $generic-base-inline-widget-top-padding - $generic-button-border-weight
-  $generic-button-horizontal-padding
-  $generic-base-inline-widget-bottom-padding - $generic-button-border-weight;
-$generic-button-icononly-padding: $generic-button-icon-horizontal-padding;
-$generic-button-icon-size: $generic-base-icon-size;
-$generic-editor-custom-button-margin: 1px;
 
 .dx-button-content {
   line-height: 0;
@@ -27,25 +19,6 @@ $generic-editor-custom-button-margin: 1px;
 
 .dx-button a {
   text-decoration: none;
-}
-
-@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
-  .dx-button-content {
-    padding: $padding;
-  }
-
-  .dx-icon {
-    @include dx-icon-sizing($icon-size);
-    @include dx-icon-margin($icon-margin);
-  }
-}
-
-@mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icononly-padding, $generic-button-icon-size, 0);
-}
-
-@mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, $generic-button-icon-size / 2);
 }
 
 .dx-button {
@@ -69,69 +42,6 @@ $generic-editor-custom-button-margin: 1px;
 }
 
 // NOTE: Button styles
-
-@mixin dx-button-styling-variant(
-  $background-color, $border-color, $text-color,
-  $hover-background-color, $hover-border-color,
-  $focused-background-color, $focused-border-color,
-  $active-background-color, $active-border-color, $active-text-color,
-  $icon-color
-) {
-  background-color: $background-color;
-  border-color: $border-color;
-  color: $text-color;
-
-  .dx-icon {
-    color: $icon-color;
-  }
-
-  &.dx-state-hover {
-    background-color: $hover-background-color;
-    border-color: $hover-border-color;
-  }
-
-  &.dx-state-focused {
-    background-color: $focused-background-color;
-    border-color: $focused-border-color;
-  }
-
-  &.dx-state-active {
-    background-color: $active-background-color;
-    border-color: $active-border-color;
-    color: $active-text-color;
-  }
-}
-
-@mixin dx-button-styling() {
-  border-radius: $button-border-radius;
-  border-width: $generic-button-border-weight;
-  border-style: solid;
-
-  @at-root #{selector-append(".dx-state-disabled", &)},
-  .dx-state-disabled & {
-    .dx-icon {
-      opacity: $button-disabled-icon-opacity;
-    }
-
-    .dx-button-text {
-      opacity: $button-disabled-text-opacity;
-    }
-  }
-}
-
-@mixin dx-button-special-hover($hover: transparent) {
-  &.dx-state-hover {
-    .dx-button-content {
-      background-color: $hover;
-      border-radius: $button-border-radius;
-    }
-  }
-}
-
-@mixin dx-button-styling-clear() {
-  background: transparent;
-  border-color: transparent;
-}
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
   @include dx-button-styling();

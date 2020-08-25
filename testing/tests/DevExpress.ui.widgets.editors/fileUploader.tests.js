@@ -560,6 +560,82 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(onAbortedSpy.callCount, 0, 'upload aborted event is not called');
     });
 
+    QUnit.test('upload of all files with upload method', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+
+        $element.dxFileUploader('instance').upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(request.uploaded, 'upload is done');
+    });
+
+    QUnit.test('upload of specific file by file from value option with upload method', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+        const instance = $element.dxFileUploader('instance');
+        const files = [fakeFile, fakeFile1];
+
+        simulateFileChoose($element, files);
+
+        instance.upload(instance.option('value[1]'));
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(request.uploaded, 'upload is done');
+        assert.strictEqual(request.loadedSize, files[1].size, 'correct file was uploaded');
+    });
+
+    QUnit.test('upload of specific file by file index with upload method', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+        const files = [fakeFile, fakeFile1];
+
+        simulateFileChoose($element, files);
+
+        $element.dxFileUploader('instance').upload(1);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(request.uploaded, 'upload is done');
+        assert.strictEqual(request.loadedSize, files[1].size, 'correct file was uploaded');
+    });
+
+    QUnit.test('upload of all files with upload method does not work in useForm mode', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useForm'
+        });
+        simulateFileChoose($element, fakeFile);
+
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(!request, 'request is not created');
+    });
+
+    QUnit.test('upload of all files with upload method works in instantly mode if set files to value option', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly'
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile]);
+        this.clock.tick(300);
+        instance.upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        const request = this.xhrMock.getInstanceAt();
+
+        assert.ok(request.uploaded, 'upload is done');
+    });
+
 });
 
 QUnit.module('uploading by chunks', moduleConfig, function() {

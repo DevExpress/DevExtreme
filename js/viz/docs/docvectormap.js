@@ -318,7 +318,10 @@ const dxVectorMap = {
     viewport: function() { },
     convertCoordinates: function() { },
     convertToGeo: function() { },
-    convertToXY: function() { }
+    convertToXY: function() { },
+    commonAnnotationSettings: undefined,
+    annotations: [{}],
+    customizeAnnotation: undefined,
 };
 
 /**
@@ -327,7 +330,10 @@ const dxVectorMap = {
 * @inherits BaseWidgetAnnotationConfig
 */
 const dxVectorMapCommonAnnotationConfig = {
-    coordinates: undefined
+    coordinates: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 };
 
 /**

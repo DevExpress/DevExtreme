@@ -5764,7 +5764,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick();
 
             // act
-            this.removeRow(0);
+            this.deleteRow(0);
             this.clock.tick();
 
             // assert
@@ -5789,7 +5789,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick();
 
             // act
-            this.removeRow(0);
+            this.deleteRow(0);
             this.clock.tick();
 
             // assert

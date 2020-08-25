@@ -1,0 +1,6 @@
+@use "sizes" as *;
+
+@mixin dx-s-font-mixin() {
+  font-weight: 500;
+  font-size: $generic-s-font-size;
+}

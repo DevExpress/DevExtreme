@@ -2,12 +2,13 @@ import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { addHeightToStyle } from '../utils';
+import { combineClasses } from '../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: Row) => (
   <tr
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={`${viewModel.props.className}`}
+    className={viewModel.classes}
     style={viewModel.style}
   >
     {viewModel.props.children}
@@ -19,6 +20,8 @@ export class RowProps {
   @OneWay() height?: number;
 
   @OneWay() className?: string = '';
+
+  @OneWay() isVirtual?: boolean = false;
 
   @Slot() children?: any;
 }
@@ -33,5 +36,14 @@ export class Row extends JSXComponent(RowProps) {
     const { style } = this.restAttributes;
 
     return addHeightToStyle(height, style);
+  }
+
+  get classes(): string {
+    const { className } = this.props;
+
+    return combineClasses({
+      'dx-scheduler-virtual-row': !!this.props.isVirtual,
+      [className!]: !!className,
+    });
   }
 }

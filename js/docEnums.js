@@ -660,6 +660,11 @@
  */
 
 /**
+ * @typedef {string} Enums.SchedulerScrollingMode
+ * @enum {'standard'|'virtual'}
+ */
+
+/**
  * @typedef {string} Enums.ScrollDirection
  * @enum {'both'|'horizontal'|'vertical'}
  */

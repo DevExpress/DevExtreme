@@ -28,7 +28,7 @@ export const viewFunction = ({
     showNavigationButtons, totalCount,
   },
   restAttributes,
-}: PagerContentComponent) => (
+}: PagerContent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div ref={parentRef} className={className} {...restAttributes}>
     {showPageSizes && (
@@ -73,14 +73,9 @@ export const viewFunction = ({
   </div>
 );
 
-/* Vitik bug in generator try to use in resizable-container
-export type TwoWayProps = {
-  pageIndexChange?: (pageIndex: number) => void;
-  pageSizeChange?: (pageSize: number) => void;
-}; */
-
+/* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
+export class PagerContentProps extends PagerProps {
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;
@@ -95,9 +90,9 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContentComponent extends JSXComponent(PagerContentProps) {
+export class PagerContent extends JSXComponent<PagerContentProps>() {
   get infoVisible(): boolean {
-    const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
+    const { showInfo, infoTextVisible } = this.props;
     return showInfo && infoTextVisible;
   }
 
@@ -117,10 +112,9 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get className(): string {
-    const userClasses = this.props.className!;
     const classesMap = {
       'dx-widget': true,
-      [userClasses]: !!userClasses,
+      [`${this.props.className}`]: !!this.props.className,
       [PAGER_CLASS]: true,
       [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,

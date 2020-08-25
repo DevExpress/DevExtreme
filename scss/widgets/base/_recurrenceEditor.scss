@@ -7,6 +7,10 @@ $recurrence-interval-number-box-margin-top: 25px;
 $recurrence-radio-group-item-padding: 10px;
 $recurrence-button-group-item-padding: 8px;
 
+.dx-recurrence-repeat-end-wrapper {
+  display: flex;
+}
+
 .dx-recurrence-repeat-on,
 .dx-recurrence-numberbox-interval-wrapper {
   .dx-layout-manager .dx-field-item {

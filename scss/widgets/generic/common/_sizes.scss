@@ -14,3 +14,5 @@ $generic-dropdownlist-min-height: null !default;
 }
 
 $generic-pending-indicator-size: $generic-invalid-badge-size + 4px;
+$generic-invalid-badge-horizontal-padding: ($generic-base-inline-borderedwidget-inner-size - $generic-invalid-badge-size) / 2;
+$generic-invalid-badge-halfhorizontal-padding: $generic-invalid-badge-horizontal-padding / 2;

@@ -3,7 +3,11 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow } from './row';
 import { ViewCellData } from '../../types.d';
-import { getKeyByDateAndGroup, getIsGroupedAllDayPanel } from '../../utils';
+import {
+  getKeyByGroup,
+  getKeyByDateAndGroup,
+  getIsGroupedAllDayPanel,
+} from '../../utils';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 
@@ -12,10 +16,9 @@ export const viewFunction = (viewModel: DateTableBody) => (
     {
     viewModel.props.viewData!
       .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Fragment key={groupIndex}>
+        <Fragment key={getKeyByGroup(groupIndex)}>
           {
-            getIsGroupedAllDayPanel(viewModel.props.viewData!)
+            getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex)
               && <AllDayPanelTableBody viewData={allDayPanel} />
           }
           { dateTable.map((cellsRow, index) => (

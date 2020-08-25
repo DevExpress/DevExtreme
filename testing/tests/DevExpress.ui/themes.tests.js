@@ -703,9 +703,12 @@ QUnit.module('initialized method', (hooks) => {
         const url = ROOT_URL + 'testing/helpers/themeMarker.css';
         const $frame = createFrame();
 
+        themes.setDefaultTimeout(30000);
+
         themes.resetTheme();
         themes.initialized(() => {
             assert.equal(themes.current(), 'sampleTheme.sampleColorScheme');
+            themes.setDefaultTimeout(defaultTimeout);
             done();
         });
 

@@ -15,6 +15,7 @@ import devices from '../../core/devices';
 import noop from '../utils/noop';
 import Themes from '../../ui/themes';
 import { click } from '../../events/short';
+import { combineClasses } from '../utils/combine_classes';
 import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
@@ -29,17 +30,17 @@ const getCssClasses = (model: ButtonProps): string => {
   const {
     text, icon, stylingMode, type, iconPosition,
   } = model;
-  const classNames = ['dx-button'];
   const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
+  const classesMap = {
+    'dx-button': true,
+    [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
+    [`dx-button-${type || 'normal'}`]: true,
+    'dx-button-has-text': !!text,
+    'dx-button-has-icon': !!icon,
+    'dx-button-icon-right': iconPosition !== 'left',
+  };
 
-  classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
-  classNames.push(`dx-button-${type || 'normal'}`);
-
-  text && classNames.push('dx-button-has-text');
-  icon && classNames.push('dx-button-has-icon');
-  iconPosition !== 'left' && classNames.push('dx-button-icon-right');
-
-  return classNames.join(' ');
+  return combineClasses(classesMap);
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {

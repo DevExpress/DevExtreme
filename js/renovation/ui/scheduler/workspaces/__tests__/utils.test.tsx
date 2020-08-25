@@ -1,5 +1,6 @@
 import {
   getKeyByDateAndGroup,
+  getKeyByGroup,
   addHeightToStyle,
   getIsGroupedAllDayPanel,
   getGroupCellClasses,
@@ -22,6 +23,15 @@ describe('Workspaces utils', () => {
       };
       expect(getKeyByDateAndGroup(testDate, testGroup))
         .toBe(`${testDate.toString()}_resource1_1_resource2_3`);
+    });
+  });
+
+  describe('getKeyByGroup', () => {
+    it('should generate key from group', () => {
+      expect(getKeyByGroup(0))
+        .toBe('key_0');
+      expect(getKeyByGroup(1))
+        .toBe('key_1');
     });
   });
 
@@ -64,7 +74,7 @@ describe('Workspaces utils', () => {
         }],
       };
 
-      expect(getIsGroupedAllDayPanel(viewData))
+      expect(getIsGroupedAllDayPanel(viewData, 0))
         .toBe(false);
     });
 
@@ -73,14 +83,19 @@ describe('Workspaces utils', () => {
         groupedData: [{
           dateTable: [[{ startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test' }]],
           allDayPanel: [{ startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1' }],
+          isGroupedAllDayPanel: true,
         },
         {
           dateTable: [[{ startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3' }]],
           allDayPanel: [{ startDate: new Date(2020, 1, 4), endDate: new Date(2020, 1, 4), text: 'test4' }],
+          isGroupedAllDayPanel: true,
         }],
       };
 
-      expect(getIsGroupedAllDayPanel(viewData))
+      expect(getIsGroupedAllDayPanel(viewData, 0))
+        .toBe(true);
+
+      expect(getIsGroupedAllDayPanel(viewData, 1))
         .toBe(true);
     });
   });

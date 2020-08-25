@@ -3,13 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+@use "mixins" as *;
 
 // adduse
-@mixin dx-s-font-mixin() {
-  font-weight: 500;
-  font-size: $generic-s-font-size;
-}
 
 .dx-theme-generic-typography {
   background-color: $typography-bg;

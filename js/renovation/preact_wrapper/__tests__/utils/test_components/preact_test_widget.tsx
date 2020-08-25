@@ -13,6 +13,8 @@ import {
   keyboard,
 } from '../../../../../events/short';
 
+import BaseComponent from './base_test_widget';
+
 export const view = (viewModel: PreactTestWidget) => (
   <div
     ref={viewModel.rootRef as any}
@@ -51,6 +53,7 @@ export class PreactTestWidgetProps {
 @Component({
   jQuery: {
     register: true,
+    component: BaseComponent,
   },
   view,
 })
@@ -74,7 +77,7 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
   }
 
   @Method()
-  getLastProps(): PreactTestWidgetProps {
+  getLastPreactReceivedProps(): PreactTestWidgetProps {
     return this.props;
   }
 

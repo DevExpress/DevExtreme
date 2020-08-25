@@ -7,9 +7,14 @@ import { act } from 'preact/test-utils';
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
-const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout', 'TimePanelTableLayout', 'DayDateTableLayout', 'AllDayPanelLayout', 'GridPager'];
+const PRIVATE_JQUERY_WIDGETS = [
+    'TooltipItemLayout', 'TimePanelTableLayout',
+    'DayDateTableLayout', 'WeekTableLayout', 'WorkWeekTableLayout',
+    'AllDayPanelLayout', 'AllDayPanelTitle',
+    'GridPager'
+];
 const WRAPPER_WIDGETS = ['DataGrid'];
-const CUSTOM_ROOT_WIDGET_CLASS = { 'dxrGridPager': 'datagrid-pager', 'dxrDataGrid': 'widget' };
+const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
 const widgetsInBundle = publicWidgets.map(widget => widget.name);
 
@@ -22,7 +27,7 @@ const widgets = widgetsMeta
 QUnit.module('Check components registration', () => {
     widgetsMeta.filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
         .forEach((meta) => {
-            QUnit.test(`${`dxr${meta.name}`} is in bundle`, function(assert) {
+            QUnit.test(`${`dx${meta.name}`} is in bundle`, function(assert) {
                 const message = 'You should add your widget to the bundle.'
             + 'See "bundles/modules/parts/renovation"';
 
@@ -41,26 +46,26 @@ QUnit.module('Mandatory component setup', {
     }
 }, () => {
     widgets.forEach((meta) => {
-        QUnit.test(`${`dxr${meta.name}`} - check css class names`, function(assert) {
+        QUnit.test(`${`dx${meta.name}`} - check css class names`, function(assert) {
             act(() => {
-                $('#component')[`dxr${meta.name}`]();
+                $('#component')[`dx${meta.name}`]();
             });
 
             let message = 'You should always set `dx-widget` class to the root of your component';
             assert.equal($('#component').get(0), $('.dx-widget').get(0), message);
-            const className = CUSTOM_ROOT_WIDGET_CLASS[`dxr${meta.name}`] || meta.name.toLowerCase();
+            const className = CUSTOM_ROOT_WIDGET_CLASS[`dx${meta.name}`] || meta.name.toLowerCase();
             message = 'Use `dx-` followed by lowercase Component name as css class name';
             assert.equal($('#component').get(0), $(`.dx-${className}`).get(0), message);
         });
     });
 
     widgets.forEach((meta) => {
-        QUnit.test(`${`dxr${meta.name}`} - pass restAttributes to component's root`, function(assert) {
+        QUnit.test(`${`dx${meta.name}`} - pass restAttributes to component's root`, function(assert) {
             const message = 'You should pass restAttributes to the component\'s root\n'
             + '<root {...viewModel.restAttributes} />';
 
             act(() => {
-                $('#component')[`dxr${meta.name}`]({
+                $('#component')[`dx${meta.name}`]({
                     'data-custom-option': 'custom-value',
                 });
             });
@@ -70,22 +75,22 @@ QUnit.module('Mandatory component setup', {
     });
 
     widgets.forEach((meta) => {
-        QUnit.test(`${`dxr${meta.name}`} - merge own classes with className from restAttributes`, function(assert) {
+        QUnit.test(`${`dx${meta.name}`} - merge own classes with className from restAttributes`, function(assert) {
             const message = 'You should merge your cssClass with className from restAttributes\n'
             + '<root className={viewModel.className} />\n'
             + 'get className() { return \`${this.restAttributes.className} dx-my-component\` }'; // eslint-disable-line
 
             $('#component').addClass('custom-class');
             act(() => {
-                $('#component')[`dxr${meta.name}`]();
+                $('#component')[`dx${meta.name}`]();
             });
-            const className = CUSTOM_ROOT_WIDGET_CLASS[`dxr${meta.name}`] || meta.name.toLowerCase();
+            const className = CUSTOM_ROOT_WIDGET_CLASS[`dx${meta.name}`] || meta.name.toLowerCase();
             assert.equal($('#component').get(0), $(`.custom-class.dx-${className}`).get(0), message);
         });
     });
 
     widgets.forEach((meta) => {
-        QUnit.test(`${`dxr${meta.name}`} - pass style to component's root`, function(assert) {
+        QUnit.test(`${`dx${meta.name}`} - pass style to component's root`, function(assert) {
             const message = 'If you do not specify style in your component just spread restAttributes\n'
             + '<root {...viewModel.restAttributes} />\n\n'
             + 'If you specify some styles then merge it with restAttributes.style object\n'
@@ -97,7 +102,7 @@ QUnit.module('Mandatory component setup', {
             });
 
             act(() => {
-                $('#component')[`dxr${meta.name}`]();
+                $('#component')[`dx${meta.name}`]();
             });
 
             assert.equal($('#component').css('width'), '100px', message);
@@ -109,7 +114,7 @@ QUnit.module('Mandatory component setup', {
     widgets
         .filter((m) => m.props.allProps.indexOf('width') !== -1 && m.props.allProps.indexOf('width') !== -1)
         .forEach((meta) => {
-            QUnit.test(`${`dxr${meta.name}`} - width/height options take priority over container size`, function(assert) {
+            QUnit.test(`${`dx${meta.name}`} - width/height options take priority over container size`, function(assert) {
                 const message = 'If your component has width/height props, they should overwrite width/height properties in restAttributes.style\n'
                 + '<root style={viewModel.styles} />\n'
                 + 'get styles() {\n'
@@ -125,7 +130,7 @@ QUnit.module('Mandatory component setup', {
                 });
 
                 act(() => {
-                    $('#component')[`dxr${meta.name}`]({
+                    $('#component')[`dx${meta.name}`]({
                         width: '110px',
                         height: '55px',
                     });
@@ -139,7 +144,7 @@ QUnit.module('Mandatory component setup', {
     widgets
         .filter((m) => m.props.template.length && WRAPPER_WIDGETS.indexOf(m.name) === -1)
         .forEach((meta) => {
-            QUnit.test(`${`dxr${meta.name}`} - pass right props to template`, function(assert) {
+            QUnit.test(`${`dx${meta.name}`} - pass right props to template`, function(assert) {
                 const message = 'For templates that jQuery users set.\n'
                 + 'You should pass only `data` and `index` (if applicable) props\n'
                 + 'when rendering template.\n'
@@ -160,7 +165,7 @@ QUnit.module('Mandatory component setup', {
                     [template]: sinon.spy()
                 }), {});
 
-                $('#component')[`dxr${meta.name}`](options);
+                $('#component')[`dx${meta.name}`](options);
 
                 meta.props.template.forEach((template) => {
                     const [data, index, element = index] = options[template].getCall(0).args;

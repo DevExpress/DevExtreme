@@ -8,6 +8,9 @@ $generic-fieldset-header-vertical-margin: null !default;
 $generic-field-vertical-margin: null !default;
 $generic-field-labelvalue-spacing: null !default;
 $generic-radiogroup-min-height: null !default;
+$generic-field-value-top-padding: $generic-base-inline-widget-top-padding;
+$generic-field-value-horizontal-padding: $generic-base-inline-horizontal-padding;
+$generic-field-value-bottom-padding: $generic-base-inline-widget-bottom-padding;
 
 @if $size == "default" {
   $generic-fieldset-vertical-margin: 30px;

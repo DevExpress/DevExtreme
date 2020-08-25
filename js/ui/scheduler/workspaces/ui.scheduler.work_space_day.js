@@ -38,6 +38,8 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
     }
 
+    renovatedRenderSupported() { return true; }
+
     generateRenderOptions() {
         const startViewDate = this._getDateWithSkippedDST();
         const _getTimeText = (i) => {
@@ -53,7 +55,8 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         options.cellDataGetters.push((_, rowIndex, cellIndex) => {
             return {
                 value: {
-                    startDate: this._getTimeCellDate(rowIndex, cellIndex),
+                    // TODO check the need
+                    // startDate: this._getTimeCellDate(rowIndex, cellIndex),
                     text: _getTimeText(rowIndex, cellIndex)
                 }
             };

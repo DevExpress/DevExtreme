@@ -3,20 +3,12 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
 
 // adduse
 @use "../scrollable";
 @use "../badge";
-
-
-$generic-tabs-border-width: $generic-base-border-width;
-$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color;
-$generic-tabs-transparent-border: $generic-tabs-border-width solid $tabs-tab-bg;
-$generic-tab-focus-border: $generic-tabs-border-width solid $tabs-focused-border-color;
-
 
 @mixin dx-tabs-border-mixin($border-horizontal, $border-vertical) {
   &:after {

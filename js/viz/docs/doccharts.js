@@ -1249,11 +1249,12 @@ const BaseChart = {
 /**
 * @name BaseChartAnnotationConfig
 * @type object
+* @inherits BaseWidgetAnnotationConfig
 */
 const BaseChartAnnotationConfig = {
     argument: undefined,
     value: undefined,
-    series: undefined,
+    series: undefined
 };
 /**
 * @name dxChartCommonAnnotationConfig
@@ -1261,7 +1262,10 @@ const BaseChartAnnotationConfig = {
 * @inherits BaseChartAnnotationConfig
 */
 const dxChartCommonAnnotationConfig = {
-    axis: undefined
+    axis: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 }
 /**
 * @name dxChartAnnotationConfig
@@ -1279,7 +1283,10 @@ const dxChartAnnotationConfig = {
 */
 const dxPolarChartCommonAnnotationConfig = {
     radius: undefined,
-    angle: undefined
+    angle: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 };
 
 /**

@@ -65,7 +65,6 @@
 @use "../widgets/common/tabPanel";
 @use "../widgets/common/fileUploader";
 @use "../widgets/common/validation";
-@use "../widgets/common/scheduler";
 @use "../widgets/common/form";
 @use "../widgets/common/filterBuilder";
 @use "../widgets/common/drawer";
@@ -86,5 +85,4 @@
 @use "../widgets/common/radioButton";
 @use "../widgets/common/colorView";
 @use "../widgets/common/pager";
-@use "../widgets/common/recurrenceEditor";
 @use "../widgets/common/splitter";

@@ -1125,6 +1125,9 @@ class Diagram extends Widget {
                                 container: getPublicElement($(container))
                             });
                         }),
+                        destroyTemplate: template && ((container) => {
+                            $(container).empty();
+                        }),
                         templateLeft: s.templateLeft,
                         templateTop: s.templateTop,
                         templateWidth: s.templateWidth,

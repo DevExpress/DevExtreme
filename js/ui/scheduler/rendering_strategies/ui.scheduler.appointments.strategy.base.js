@@ -186,10 +186,8 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _getAppointmentCoordinates(appointmentData) {
-        return this.instance.fire('createAppointmentSettings', {
-            appointmentData: appointmentData
-        });
+    _getAppointmentCoordinates(appointment) {
+        return this.instance.fire('createAppointmentSettings', appointment);
     }
 
     _isRtl() {
@@ -493,22 +491,25 @@ class BaseRenderingStrategy {
     }
 
     normalizeEndDateByViewEnd(appointment, endDate) {
+        let result = new Date(endDate.getTime());
+
         if(!this.isAllDay(appointment)) {
             const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
-            if(endDate > viewEndDate) {
-                endDate = viewEndDate;
+            if(result > viewEndDate) {
+                result = viewEndDate;
             }
         }
 
         const endDayHour = this.instance._getCurrentViewOption('endDayHour');
-        const currentViewEndTime = new Date(new Date(endDate).setHours(endDayHour, 0, 0));
+        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
 
-        if(endDate.getTime() > currentViewEndTime.getTime()) {
-            endDate = currentViewEndTime;
+        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
+            result = currentViewEndTime;
         }
 
-        return endDate;
+        return result;
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {

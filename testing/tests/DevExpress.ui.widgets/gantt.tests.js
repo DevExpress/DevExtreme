@@ -38,7 +38,7 @@ const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
 const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
 const PARENT_TASK_SELECTOR = '.dx-gantt-parent';
 const TOOLBAR_SEPARATOR_SELECTOR = '.dx-gantt-toolbar-separator';
-
+const TOOLTIP_SELECTOR = '.dx-gantt-task-edit-tooltip';
 
 const tasks = [
     { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
@@ -1843,5 +1843,50 @@ QUnit.module('First day of week', moduleConfig, () => {
         this.instance.option('firstDayOfWeek', 6);
         this.clock.tick();
         assert.equal(getGanttViewCore(this.instance).range.start.getDay(), 6, 'incorrect first day');
+    });
+});
+
+QUnit.module('Tooltip Template', moduleConfig, () => {
+    test('common', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+
+        const ganttCore = getGanttViewCore(this.instance);
+        ganttCore.taskEditController.show(0);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+
+        this.clock.tick();
+        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        const taskTitle = tasks[0].title;
+        assert.equal(tooltipText.indexOf(taskTitle), 0, 'Default template works correctly');
+    });
+    test('custom text', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const customTooltipText = 'TestTooltipText';
+        this.instance.option('tooltipTemplate', customTooltipText);
+
+        const ganttCore = getGanttViewCore(this.instance);
+        ganttCore.taskEditController.show(0);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+
+        this.clock.tick();
+        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
+    });
+    test('custom jQuery', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const customTooltipText = 'TestCustomTooltipJQuery';
+        const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
+        this.instance.option('tooltipTemplate', customTooltipJQuery);
+
+        const ganttCore = getGanttViewCore(this.instance);
+        ganttCore.taskEditController.show(0);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+
+        this.clock.tick();
+        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        assert.equal(tooltipText, customTooltipText, 'Custom template with jQuery works correctly');
     });
 });

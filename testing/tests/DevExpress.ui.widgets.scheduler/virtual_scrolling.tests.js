@@ -18,7 +18,10 @@ module('Virtual Scrolling model', {
             option: name => this.worksSpaceMock._options[name],
             _getCellData: noop,
             _insertAllDayRowsIntoDateTable: noop,
-            _allDayPanels: undefined
+            _allDayPanels: undefined,
+            isGroupedAllDayPanel: noop,
+            renderRWorkspace: noop,
+            renderRAppointments: noop
         };
 
         this.scrollableMock = {
@@ -51,19 +54,19 @@ module('Virtual Scrolling model', {
 
         assert.equal(state.pageSize, 6, 'PageSize');
         assert.equal(state.topVirtualRowCount, 0, 'Top virtual row count');
-        assert.equal(state.rowCount, 6, 'Data row count');
-        assert.equal(state.bottomVirtualRowCount, 94, 'Bottom virtual row count');
+        assert.equal(state.rowCount, 9, 'Data row count');
+        assert.equal(state.bottomVirtualRowCount, 91, 'Bottom virtual row count');
     });
 
     test('State if scrolling Down', function(assert) {
         [
-            { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 },
-            { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 },
-            { top: 66, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
-            { top: 120, topVirtualRowCount: 2, bottomVirtualRowCount: 92, rowCount: 6 },
-            { top: 150, topVirtualRowCount: 3, bottomVirtualRowCount: 91, rowCount: 6 },
-            { top: 3980, topVirtualRowCount: 79, bottomVirtualRowCount: 15, rowCount: 6 },
-            { top: 4950, topVirtualRowCount: 99, bottomVirtualRowCount: 0, rowCount: 1 }
+            { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 91, rowCount: 9 },
+            { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 91, rowCount: 9 },
+            { top: 66, topVirtualRowCount: 0, bottomVirtualRowCount: 90, rowCount: 10 },
+            { top: 120, topVirtualRowCount: 0, bottomVirtualRowCount: 89, rowCount: 11 },
+            { top: 150, topVirtualRowCount: 0, bottomVirtualRowCount: 88, rowCount: 12 },
+            { top: 3980, topVirtualRowCount: 76, bottomVirtualRowCount: 12, rowCount: 12 },
+            { top: 4950, topVirtualRowCount: 96, bottomVirtualRowCount: 0, rowCount: 4 }
         ].forEach(step => {
             this.scrollDown(step.top);
 
@@ -81,13 +84,13 @@ module('Virtual Scrolling model', {
 
     test('State if scrolling Up', function(assert) {
         [
-            { top: 4950, topVirtualRowCount: 99, bottomVirtualRowCount: 0, rowCount: 1 },
-            { top: 3980, topVirtualRowCount: 79, bottomVirtualRowCount: 15, rowCount: 6 },
-            { top: 150, topVirtualRowCount: 3, bottomVirtualRowCount: 91, rowCount: 6 },
-            { top: 120, topVirtualRowCount: 2, bottomVirtualRowCount: 92, rowCount: 6 },
-            { top: 66, topVirtualRowCount: 1, bottomVirtualRowCount: 93, rowCount: 6 },
-            { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 },
-            { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 94, rowCount: 6 }
+            { top: 4950, topVirtualRowCount: 96, bottomVirtualRowCount: 0, rowCount: 4 },
+            { top: 3980, topVirtualRowCount: 76, bottomVirtualRowCount: 12, rowCount: 12 },
+            { top: 150, topVirtualRowCount: 0, bottomVirtualRowCount: 88, rowCount: 12 },
+            { top: 120, topVirtualRowCount: 0, bottomVirtualRowCount: 89, rowCount: 11 },
+            { top: 66, topVirtualRowCount: 0, bottomVirtualRowCount: 90, rowCount: 10 },
+            { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 90, rowCount: 10 },
+            { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 90, rowCount: 10 }
         ].forEach(step => {
             this.scrollDown(step.top);
 
@@ -103,22 +106,22 @@ module('Virtual Scrolling model', {
         });
     });
 
-    test('Layout map virtual heights', function(assert) {
+    test('Virtual heights', function(assert) {
         [
-            { top: 10, bottomVirtualRowHeight: 4700, topVirtualRowHeight: 0 },
-            { top: 13, bottomVirtualRowHeight: 4700, topVirtualRowHeight: 0 },
-            { top: 66, bottomVirtualRowHeight: 4650, topVirtualRowHeight: 50 },
-            { top: 120, bottomVirtualRowHeight: 4600, topVirtualRowHeight: 100 },
-            { top: 150, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 150 },
-            { top: 3980, bottomVirtualRowHeight: 750, topVirtualRowHeight: 3950 },
-            { top: 4950, bottomVirtualRowHeight: 0, topVirtualRowHeight: 4950 }
+            { top: 10, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 0 },
+            { top: 13, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 0 },
+            { top: 66, bottomVirtualRowHeight: 4500, topVirtualRowHeight: 0 },
+            { top: 120, bottomVirtualRowHeight: 4450, topVirtualRowHeight: 0 },
+            { top: 150, bottomVirtualRowHeight: 4400, topVirtualRowHeight: 0 },
+            { top: 3980, bottomVirtualRowHeight: 600, topVirtualRowHeight: 3800 },
+            { top: 4950, bottomVirtualRowHeight: 0, topVirtualRowHeight: 4800 }
         ].forEach(step => {
             this.scrollDown(step.top);
 
-            const layoutMap = this.virtualScrolling.getLayoutMap();
+            const state = this.virtualScrolling.getState();
 
-            assert.deepEqual(layoutMap.topVirtualRowHeight, step.topVirtualRowHeight, 'Layout map topVirtualRowHeight');
-            assert.deepEqual(layoutMap.bottomVirtualRowHeight, step.bottomVirtualRowHeight, 'Layout map bottomVirtualRowHeight');
+            assert.deepEqual(state.topVirtualRowHeight, step.topVirtualRowHeight, 'Layout map topVirtualRowHeight');
+            assert.deepEqual(state.bottomVirtualRowHeight, step.bottomVirtualRowHeight, 'Layout map bottomVirtualRowHeight');
         });
     });
 

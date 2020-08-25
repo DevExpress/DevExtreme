@@ -6,7 +6,7 @@ describe('Metadata generator - parseComments', () => {
   const commentSamples: string[] = [
     '* $name 10. Constant name',
     '* $wrong some wrong comment',
-    '* $name 10. Name\n* $type select\n* $typeValues 1|2',
+    '* $name 10. Name\n* $type select\n* $type-values 1|2',
   ];
 
   test('name parsed correctly', () => {

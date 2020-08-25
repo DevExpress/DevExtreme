@@ -2,7 +2,7 @@
   <div id="app">
       <Button
         text="Click Me!"
-        @on-click="click"
+        @click="click"
         icon="download"
       >
       </Button>

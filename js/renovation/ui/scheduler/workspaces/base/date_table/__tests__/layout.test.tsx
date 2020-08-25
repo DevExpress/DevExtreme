@@ -4,7 +4,6 @@ import {
   DateTableLayoutBase,
 } from '../layout';
 import { Table } from '../../table';
-import { VirtualTable } from '../../virtual_table';
 import { DateTableBody } from '../table_body';
 
 jest.mock('../table_body', () => ({
@@ -42,7 +41,10 @@ describe('DateTableLayoutBase', () => {
     });
 
     it('should render table', () => {
-      const layout = render({});
+      const layout = render({ classes: 'some-class' });
+
+      expect(layout.hasClass('some-class'))
+        .toBe(true);
 
       expect(layout.find(Table).exists())
         .toBe(true);
@@ -58,10 +60,21 @@ describe('DateTableLayoutBase', () => {
     });
 
     it('should render virtual table', () => {
-      const layout = render({ isVirtual: true });
+      const layout = render({
+        isVirtual: true,
+        topVirtualRowHeight: 100,
+        bottomVirtualRowHeight: 200,
+      });
 
-      expect(layout.find(VirtualTable).exists())
+      const table = layout.find(Table);
+      expect(table.exists())
         .toBe(true);
+      expect(table.prop('isVirtual'))
+        .toBe(true);
+      expect(table.prop('topVirtualRowHeight'))
+        .toEqual(100);
+      expect(table.prop('bottomVirtualRowHeight'))
+        .toEqual(200);
 
       const tableBody = layout.find(DateTableBody);
       expect(tableBody.exists())
@@ -76,13 +89,43 @@ describe('DateTableLayoutBase', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('isVirtual', () => {
-        [true, false].forEach((isVirtual) => {
-          it(`should get correct virtual flag if isVirtual=${isVirtual}`, () => {
-            const layout = new DateTableLayoutBase({ viewData: { groupedData: [], isVirtual } });
+      it('classes', () => {
+        const layout = new DateTableLayoutBase({ className: 'some-class' });
 
-            expect(layout.isVirtual)
-              .toBe(isVirtual);
+        expect(layout.classes.split(' '))
+          .toEqual([
+            'dx-scheduler-date-table',
+            'some-class',
+          ]);
+      });
+
+      [true, false].forEach((isVirtual) => {
+        it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
+          const layout = new DateTableLayoutBase({ viewData: { groupedData: [], isVirtual } });
+
+          expect(layout.isVirtual)
+            .toBe(isVirtual);
+        });
+      });
+
+      [100, undefined].forEach((topVirtualRowHeight) => {
+        [500, undefined].forEach((bottomVirtualRowHeight) => {
+          it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
+            const layout = new DateTableLayoutBase({
+              viewData: {
+                groupedData: [],
+                topVirtualRowHeight,
+                bottomVirtualRowHeight,
+              },
+            });
+
+            let value = topVirtualRowHeight || 0;
+            expect(layout.topVirtualRowHeight)
+              .toEqual(value);
+
+            value = bottomVirtualRowHeight || 0;
+            expect(layout.bottomVirtualRowHeight)
+              .toEqual(value);
           });
         });
       });

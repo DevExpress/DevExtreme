@@ -1521,7 +1521,8 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             sinon.spy(errors, 'log');
             const columns = [{
                 caption: 'Test',
-                allowEditing: true
+                allowEditing: true,
+                setCellValue: () => {}
             }];
             this.applyOptions({ columns });
 
@@ -1566,7 +1567,8 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // act
             this.addColumn({
                 caption: 'Test',
-                allowEditing: true
+                allowEditing: true,
+                setCellValue: () => {}
             });
 
             // assert
@@ -1612,7 +1614,8 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             sinon.spy(errors, 'log');
             const columns = ['Test', 'Test', {
                 caption: 'Test',
-                allowEditing: true
+                allowEditing: true,
+                setCellValue: () => {}
             }];
             this.applyOptions({ columns });
 
@@ -1643,7 +1646,8 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             sinon.spy(errors, 'log');
             const columns = [{
                 caption: '',
-                allowEditing: false
+                allowEditing: false,
+                setCellValue: () => {}
             }];
             this.applyOptions({ columns });
 
@@ -1653,6 +1657,51 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('E1060 should not be fired for band column', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: 'Band',
+                allowEditing: true,
+                columns: [{
+                    dataField: 'Test'
+                }]
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'one error');
+            errors.log.restore();
+        });
+
+        QUnit.test('E1060 should be fired for column without dataField and with empty columns array and setCellValue', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: 'Test',
+                allowEditing: true,
+                setCellValue: () => {},
+                columns: []
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1060', 'error code');
+            errors.log.restore();
+        });
+
+        QUnit.test('E1060 should not be fired for column without dataField and setCellValue', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = [{
+                caption: 'Test',
+                allowEditing: true
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'one error');
             errors.log.restore();
         });
     });

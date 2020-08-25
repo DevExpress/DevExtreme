@@ -9,7 +9,7 @@ import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
 import dateUtils from 'core/utils/date';
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -494,34 +494,29 @@ QUnit.test('onAppointmentAdding event args should be consistent with adding appo
 });
 
 QUnit.test('Appointment should have a correct template with custom timezone(T387040)', function(assert) {
-    this.clock.restore();
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+    const clientTzOffset = new Date(2016, 4, 7).getTimezoneOffset() * 60000;
 
-    try {
-        this.createInstance({
-            currentDate: new Date(2016, 4, 7),
-            startDayHour: 7,
-            views: ['day'],
-            currentView: 'day',
-            dataSource: []
-        });
+    this.createInstance({
+        currentDate: new Date(2016, 4, 7),
+        views: ['week'],
+        currentView: 'week',
+        dataSource: []
+    });
 
-        this.instance.option('dataSource', [{
-            startDate: new Date(Date.UTC(2016, 4, 7, 5)),
-            startDateTimeZone: 'Asia/Qyzylorda',
-            endDateTimeZone: 'Asia/Qyzylorda',
-            endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
-            text: 'new Date sample'
-        }]);
+    this.instance.option('dataSource', [{
+        startDate: new Date(Date.UTC(2016, 4, 7, 1)),
+        startDateTimeZone: 'Asia/Yekaterinburg',
+        endDateTimeZone: 'Asia/Yekaterinburg',
+        endDate: new Date(Date.UTC(2016, 4, 7, 1, 30)),
+        text: 'new Date sample'
+    }]);
 
-        const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-        const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+    const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+    const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+    const expectedStartDate = new Date(new Date(2016, 4, 7, 1).getTime() - clientTzOffset);
+    const expectedEndDate = new Date(new Date(2016, 4, 7, 1, 30).getTime() - clientTzOffset);
 
-        assert.equal($contentDates.first().text(), '11:00 AM - 11:30 AM', 'Date is correct');
-
-    } finally {
-        tzOffsetStub.restore();
-    }
+    assert.equal($contentDates.first().text(), `${dateLocalization.format(expectedStartDate, 'shorttime')} - ${dateLocalization.format(expectedEndDate, 'shorttime')}`, 'Date is correct');
 });
 
 QUnit.test('Appointment with custom timezone should be resized correctly(T390801)', function(assert) {
@@ -592,6 +587,40 @@ QUnit.test('Recurrence appointment with custom timezone should be resized correc
         assert.equal($appointments.length, 2, 'Appointment count is OK');
         assert.equal($appointments.eq(1).position().top, initialAppointmentTop, 'Appointment top is OK');
         assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 5, 2.001, 'Appointment height is OK');
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
+QUnit.test('AllDay appointment with custom timezone should be resized correctly', function(assert) {
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+
+    try {
+        this.createInstance({
+            currentDate: new Date(2015, 5, 12),
+            views: ['week'],
+            currentView: 'week',
+            editing: true,
+            timeZone: 'America/Araguaina', // -3
+            dataSource: [{
+                text: 'a',
+                startDate: new Date(2015, 5, 8, 10),
+                endDate: new Date(2015, 5, 10, 1),
+                allDay: true
+            }]
+        });
+
+        const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().width;
+        let $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
+
+        pointer.dragStart().drag(cellWidth, 0);
+        pointer.dragEnd();
+
+        $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+
+        assert.roughEqual($appointment.outerWidth(), cellWidth * 3, 2.001, 'Appointment width is OK');
     } finally {
         tzOffsetStub.restore();
     }
@@ -823,14 +852,13 @@ QUnit.test('Appointment with custom tz that is equal to scheduler tz should be r
 QUnit.test('Appointment with custom tz should be resized correctly if the scheduler tz is empty(T392414)', function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 11, 25),
-        startDayHour: 6,
         views: ['day'],
         currentView: 'day',
         editing: true,
         dataSource: [{
             text: 'a',
-            startDate: '2015-12-25T17:00:00.000Z',
-            endDate: '2015-12-25T17:15:00.000Z',
+            startDate: '2015-12-25T10:00:00.000Z',
+            endDate: '2015-12-25T10:15:00.000Z',
             startDateTimeZone: 'America/Lima', // -5
             endDateTimeZone: 'America/Lima'
         }]
@@ -1018,52 +1046,21 @@ QUnit.test('Appointment should be rendered correctly when appointment timeZone w
     const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['day'],
             currentView: 'day',
             firstDayOfWeek: 1,
             dataSource: appointments
         });
+        const cellHeight = scheduler.workSpace.getCellHeight();
+        const resultDate = `${dateLocalization.format(new Date(2015, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2015, 1, 4, 6), 'shorttime')}`;
 
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-        const resultDate = `${dateLocalization.format(new Date(2015, 1, 4, 7, 30), 'shorttime')} - ${dateLocalization.format(new Date(2015, 1, 4, 8, 30), 'shorttime')}`;
-
-        assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
-    } finally {
-        tzOffsetStub.restore();
-    }
-});
-
-QUnit.test('Appointment should have correct height, when appointment timeZones were set', function(assert) {
-
-    this.clock.restore();
-
-    const appointments = [{
-        startDate: new Date(2015, 1, 4, 5).toString(),
-        startDateTimeZone: 'Europe/Moscow',
-        endDateTimeZone: 'Asia/Ashkhabad',
-        endDate: new Date(2015, 1, 4, 6).toString(),
-        text: 'abc'
-    }];
-
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
-
-    try {
-        this.createInstance({
-            currentDate: new Date(2015, 1, 4),
-            views: ['day'],
-            currentView: 'day',
-            firstDayOfWeek: 1,
-            dataSource: appointments,
-            startDayHour: 5
-        });
-
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
-
-        assert.roughEqual($appointment.position().top, 0, 2.001, 'Appointment top is correct');
-        assert.roughEqual($appointment.outerHeight(), 6 * cellHeight, 2.001, 'Appointment height is correct');
+        assert.equal(scheduler.appointments.getDateText(), resultDate, 'Appointment content has correct dates');
+        assert.deepEqual(scheduler.appointments.getAppointmentPosition(), {
+            top: 10 * cellHeight,
+            left: 100
+        }, 'Appointment is rendered in right cell');
     } finally {
         tzOffsetStub.restore();
     }
@@ -1351,3 +1348,128 @@ QUnit.test('New added appointment should be rendered correctly in specified time
 
     assert.equal(startDate.getTime(), task.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
 });
+
+if(isDesktopEnvironment()) {
+    QUnit.module('Appointments rendering when appointment timeZone is set', () => {
+        const cases = [{
+            caseName: 'startDateTimeZone = endDateTimezone',
+            appointment: {
+                startDate: new Date(2020, 1, 4, 5).toString(),
+                startDateTimeZone: 'Asia/Yekaterinburg',
+                endDateTimeZone: 'Asia/Yekaterinburg',
+                endDate: new Date(2020, 1, 4, 6).toString(),
+            },
+            expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
+            expectedPosition: {
+                top: 500,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 7:00 AM',
+                endDate: '2/4/2020, 8:00 AM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: true
+        },
+        {
+            caseName: 'startDateTimeZone != endDateTimezone',
+            appointment: {
+                startDate: new Date(2020, 1, 4, 5).toString(),
+                startDateTimeZone: 'Europe/Moscow',
+                endDateTimeZone: 'Asia/Yekaterinburg',
+                endDate: new Date(2020, 1, 4, 6).toString()
+            },
+            expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
+            expectedPosition: {
+                top: 500,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 5:00 AM',
+                endDate: '2/4/2020, 8:00 AM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: true
+        },
+        {
+            caseName: 'startDateTimeZone = endDateTimezone and scheduler timeZone is set',
+            appointment: {
+                startDate: new Date('2020-02-04T14:00:00.000Z'),
+                endDate: new Date('2020-02-04T15:00:00.000Z'),
+                startDateTimeZone: 'Africa/Algiers',
+                endDateTimeZone: 'Africa/Algiers'
+            },
+            schedulerTimeZone: 'Asia/Yekaterinburg',
+            expectedContent: '7:00 PM - 8:00 PM',
+            expectedPosition: {
+                top: 1900,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 3:00 PM',
+                endDate: '2/4/2020, 4:00 PM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: false
+        },
+        {
+            caseName: 'startDateTimeZone != endDateTimezone and scheduler timeZone is set',
+            appointment: {
+                startDate: new Date('2020-02-04T14:00:00.000Z'),
+                endDate: new Date('2020-02-04T15:00:00.000Z'),
+                startDateTimeZone: 'Africa/Algiers',
+                endDateTimeZone: 'Africa/Cairo'
+            },
+            schedulerTimeZone: 'Asia/Yekaterinburg',
+            expectedContent: '7:00 PM - 8:00 PM',
+            expectedPosition: {
+                top: 1900,
+                left: 100
+            },
+            expectedPopupDates: {
+                startDate: '2/4/2020, 3:00 PM',
+                endDate: '2/4/2020, 5:00 PM'
+            },
+            expectedHeight: 100,
+            stubClientTimeZone: false
+        }];
+
+        const test = (config, assert) => {
+            const scheduler = createInstance({
+                currentDate: new Date(2020, 1, 4),
+                views: ['day'],
+                currentView: 'day',
+                firstDayOfWeek: 1,
+                dataSource: [config.appointment],
+                timeZone: config.schedulerTimeZone
+            });
+
+            assert.equal(scheduler.appointments.getDateText(), config.expectedContent, 'Appointment content has correct dates');
+            assert.deepEqual(scheduler.appointments.getAppointmentPosition(), config.expectedPosition, 'Appointment is rendered in right cell');
+
+            scheduler.appointments.dblclick(0);
+            const form = scheduler.instance.getAppointmentDetailsForm();
+            const startDateBox = form.getEditor('startDate');
+            const endDateBox = form.getEditor('endDate');
+
+            assert.equal(startDateBox.option('text'), config.expectedPopupDates.startDate, 'Appointment popup has right startDate');
+            assert.equal(endDateBox.option('text'), config.expectedPopupDates.endDate, 'Appointment popup has right endDate');
+        };
+
+        cases.forEach((config) => {
+            QUnit.test(`Appointment should have correct size, position and popup content if ${config.caseName}`, function(assert) {
+                if(config.stubClientTimeZone) {
+                    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+                    try {
+                        test(config, assert);
+                    } finally {
+                        tzOffsetStub.restore();
+                    }
+                } else {
+                    test(config, assert);
+                }
+            });
+        });
+    });
+
+}

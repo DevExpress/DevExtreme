@@ -1,10 +1,11 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import { viewFunction as LayoutView } from '../layout';
+import { viewFunction as LayoutView, TimePanelTableLayout } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
 import * as utilsModule from '../../../utils';
 import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
+import { Table } from '../../table';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
 
@@ -122,6 +123,24 @@ describe('TimePanelLayout', () => {
       assert(cells, 3, false, true);
     });
 
+    it('should render virtual table', () => {
+      const layout = render({
+        isVirtual: true,
+        topVirtualRowHeight: 100,
+        bottomVirtualRowHeight: 200,
+      });
+
+      const table = layout.find(Table);
+      expect(table.exists())
+        .toBe(true);
+      expect(table.prop('isVirtual'))
+        .toBe(true);
+      expect(table.prop('topVirtualRowHeight'))
+        .toEqual(100);
+      expect(table.prop('bottomVirtualRowHeight'))
+        .toEqual(200);
+    });
+
     it('should call getIsGroupedAllDayPanel with correct arguments', () => {
       render({ });
 
@@ -132,6 +151,7 @@ describe('TimePanelLayout', () => {
         .toHaveBeenNthCalledWith(
           1,
           viewData,
+          0,
         );
     });
 
@@ -144,6 +164,46 @@ describe('TimePanelLayout', () => {
 
         expect(titleCell.find(AllDayPanelTitle).exists())
           .toBe(mockValue);
+      });
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      [true, false].forEach((isVirtual) => {
+        it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
+          const layout = new TimePanelTableLayout({
+            viewData: {
+              groupedData: [],
+              isVirtual,
+            },
+          });
+
+          expect(layout.isVirtual)
+            .toBe(isVirtual);
+        });
+      });
+
+      [100, undefined].forEach((topVirtualRowHeight) => {
+        [500, undefined].forEach((bottomVirtualRowHeight) => {
+          it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
+            const layout = new TimePanelTableLayout({
+              viewData: {
+                groupedData: [],
+                topVirtualRowHeight,
+                bottomVirtualRowHeight,
+              },
+            });
+
+            let value = topVirtualRowHeight || 0;
+            expect(layout.topVirtualRowHeight)
+              .toEqual(value);
+
+            value = bottomVirtualRowHeight || 0;
+            expect(layout.bottomVirtualRowHeight)
+              .toEqual(value);
+          });
+        });
       });
     });
   });

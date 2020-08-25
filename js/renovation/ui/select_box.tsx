@@ -6,7 +6,7 @@ import { WidgetProps } from './common/widget';
 /* eslint-disable-next-line import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
 /* eslint-disable-next-line import/named */
-import DxSelectBox, { Options } from '../../ui/select_box';
+import LegacySelectBox, { Options } from '../../ui/select_box';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
@@ -32,13 +32,13 @@ export class SelectBox extends JSXComponent(SelectBoxProps) {
 
   @Effect()
   updateWidget(): void {
-    const widget = DxSelectBox.getInstance(this.widgetRef);
+    const widget = LegacySelectBox.getInstance(this.widgetRef);
     widget?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
-    const widget = new DxSelectBox(this.widgetRef, this.properties);
+    const widget = new LegacySelectBox(this.widgetRef, this.properties);
 
     return (): void => widget.dispose();
   }

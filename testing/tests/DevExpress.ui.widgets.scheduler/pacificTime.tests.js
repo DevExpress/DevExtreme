@@ -4,7 +4,7 @@ import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
+
 import 'generic_light.css!';
 
 const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)

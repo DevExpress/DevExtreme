@@ -3,7 +3,7 @@ import { join } from 'path';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
 // eslint-disable-next-line import/extensions
-import { version } from '../../src/data/metadata/dx-theme-builder-metadata';
+import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
 
 const buildTimeout = 150000;
 
@@ -58,13 +58,17 @@ describe('Builder integration tests', () => {
   }, buildTimeout);
 
   test('Build theme with changed color constants (generic)', () => {
+    const allChangedVariables = metadata.generic.map((item) => ({
+      key: item.Key,
+      value: item.Type === 'color' ? '#abcdef' : '10px',
+    }));
+
+    allChangedVariables.push({ key: '@undefined-variable', value: '#abcdef' });
+
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
-      items: [
-        { key: '@base-bg', value: '#abcdef' },
-        { key: '@undefined-variable', value: '#abcdef' },
-      ],
+      items: allChangedVariables,
     };
 
     return buildTheme(config).then((result) => {
@@ -74,11 +78,16 @@ describe('Builder integration tests', () => {
   }, buildTimeout);
 
   test('Build theme with changed color constants (material)', () => {
+    const allChangedVariables = metadata.material.map((item) => ({
+      key: item.Key,
+      value: item.Type === 'color' ? '#abcdef' : '10px',
+    }));
+
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
       baseTheme: 'material.blue.light',
-      items: [{ key: '@base-bg', value: '#abcdef' }],
+      items: allChangedVariables,
     };
 
     return buildTheme(config).then((result) => {

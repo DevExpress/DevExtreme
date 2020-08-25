@@ -5,6 +5,16 @@ import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '.
 
 describe('Page index selector', () => {
   describe('View', () => {
+    const defaultComponentProps = (): PageIndexSelector['props'] => (
+      {
+        isLargeDisplayMode: true,
+        maxPagesCount: 10,
+        pageCount: 10,
+        pageIndex: 1,
+        pagesCountText: 'Of',
+        rtlEnabled: true,
+      } as PageIndexSelector['props']
+    );
     const defaultProps = () => ({
       renderPrevButton: true,
       renderNextButton: true,
@@ -13,20 +23,13 @@ describe('Page index selector', () => {
       nextClassName: 'nextClassName',
       navigateToNextPage: jest.fn(),
       pageIndexChange: jest.fn(),
-      props: {
-        isLargeDisplayMode: true,
-        maxPagesCount: 10,
-        pageCount: 10,
-        pageIndex: 1,
-        pagesCountText: 'Of',
-        rtlEnabled: true,
-      },
-    } as Partial<PageIndexSelector>);
+      props: defaultComponentProps(),
+    } as Partial<PageIndexSelector> as PageIndexSelector);
 
     it('renderPrevButton: true, renderNextButton: true, isLargeDisplayMode:true', () => {
       const props = defaultProps();
 
-      const tree = shallow(<PageIndexSelectorComponent {...props as any} /> as any);
+      const tree = shallow(<PageIndexSelectorComponent {...props as any} />);
       const pages = tree.childAt(1);
       const prevButton = tree.childAt(0);
       const nextButton = tree.childAt(2);
@@ -54,7 +57,7 @@ describe('Page index selector', () => {
         renderNextButton: true,
       } as Partial<PageIndexSelector>;
 
-      const tree = shallow(<PageIndexSelectorComponent {...props as any} /> as any);
+      const tree = shallow(<PageIndexSelectorComponent {...props as any} />);
       const pages = tree.childAt(0);
       const nextButton = tree.childAt(1);
 
@@ -78,7 +81,7 @@ describe('Page index selector', () => {
         renderNextButton: false,
       } as Partial<PageIndexSelector>;
 
-      const tree = shallow(<PageIndexSelectorComponent {...props as any} /> as any);
+      const tree = shallow(<PageIndexSelectorComponent {...props as any} />);
       const prevButton = tree.childAt(0);
       const pages = tree.childAt(1);
 

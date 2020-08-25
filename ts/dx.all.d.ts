@@ -2160,6 +2160,8 @@ declare module DevExpress.ui {
     export interface GridBaseEditing {
         /** @name GridBase.Options.editing.confirmDelete */
         confirmDelete?: boolean;
+        /** @name GridBase.Options.editing.editColumnName */
+        editColumnName?: string;
         /** @name GridBase.Options.editing.editRowKey */
         editRowKey?: any;
         /** @name GridBase.Options.editing.form */
@@ -3093,18 +3095,12 @@ declare module DevExpress.ui {
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /** @name dxDataGrid.getVisibleRows() */
         getVisibleRows(): Array<dxDataGridRowObject>;
-        /** @deprecated */
-        /** @name dxDataGrid.insertRow() */
-        insertRow(): void;
         /** @name dxDataGrid.isRowExpanded(key) */
         isRowExpanded(key: any): boolean;
         /** @name dxDataGrid.isRowSelected(data) */
         isRowSelected(data: any): boolean;
         /** @name GridBase.isRowSelected(key) */
         isRowSelected(key: any): boolean;
-        /** @deprecated */
-        /** @name dxDataGrid.removeRow(rowIndex) */
-        removeRow(rowIndex: number): void;
         /** @name dxDataGrid.totalCount() */
         totalCount(): number;
     }
@@ -3831,6 +3827,12 @@ declare module DevExpress.ui {
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
+        /** @name dxFileUploader.upload() */
+        upload(): void;
+        /** @name dxFileUploader.upload(file) */
+        upload(file: File): void;
+        /** @name dxFileUploader.upload(fileIndex) */
+        upload(fileIndex: number): void;
     }
     /** @name dxFilterBuilder.Options */
     export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
@@ -4215,6 +4217,8 @@ declare module DevExpress.ui {
         tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
+        /** @name dxGantt.Options.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
         /** @name dxGantt.Options.validation */
         validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
@@ -5461,6 +5465,8 @@ declare module DevExpress.ui {
         resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxScheduler.Options.resources */
         resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
+        /** @name dxScheduler.Options.scrolling */
+        scrolling?: dxSchedulerScrolling;
         /** @name dxScheduler.Options.selectedCellData */
         selectedCellData?: Array<any>;
         /** @name dxScheduler.Options.shadeUntilCurrentTime */
@@ -5484,7 +5490,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.useDropDownViewSwitcher */
         useDropDownViewSwitcher?: boolean;
         /** @name dxScheduler.Options.views */
-        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: DevExpress.core.template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
+        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: DevExpress.core.template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
     }
     /** @name dxScheduler */
     export class dxScheduler extends Widget {
@@ -5541,6 +5547,11 @@ declare module DevExpress.ui {
         text?: string;
         /** @name dxSchedulerAppointment.visible */
         visible?: boolean;
+    }
+    /** @name dxSchedulerScrolling */
+    export interface dxSchedulerScrolling {
+        /** @name dxSchedulerScrolling.mode */
+        mode?: 'standard' | 'virtual';
     }
     /** @name dxScrollView.Options */
     export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
@@ -6323,9 +6334,6 @@ declare module DevExpress.ui {
         getRootNode(): dxTreeListNode;
         /** @name dxTreeList.getSelectedRowKeys() */
         getSelectedRowKeys(): Array<any>;
-        /** @deprecated */
-        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
-        getSelectedRowKeys(leavesOnly: boolean): Array<any>;
         /** @name dxTreeList.getSelectedRowKeys(mode) */
         getSelectedRowKeys(mode: string): Array<any>;
         /** @name dxTreeList.getSelectedRowsData() */
@@ -6777,7 +6785,7 @@ declare module DevExpress.viz {
         render(renderOptions: any): void;
     }
     /** @name BaseChartAnnotationConfig */
-    export interface BaseChartAnnotationConfig {
+    export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
         /** @name BaseChartAnnotationConfig.argument */
         argument?: number | Date | string;
         /** @name BaseChartAnnotationConfig.series */
@@ -7140,8 +7148,6 @@ declare module DevExpress.viz {
         border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name BaseWidgetAnnotationConfig.color */
         color?: string;
-        /** @name BaseWidgetAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: BaseWidgetAnnotationConfig | any) => any);
         /** @name BaseWidgetAnnotationConfig.data */
         data?: any;
         /** @name BaseWidgetAnnotationConfig.description */
@@ -7164,16 +7170,12 @@ declare module DevExpress.viz {
         paddingTopBottom?: number;
         /** @name BaseWidgetAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-        /** @name BaseWidgetAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name BaseWidgetAnnotationConfig.text */
         text?: string;
         /** @name BaseWidgetAnnotationConfig.textOverflow */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name BaseWidgetAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
-        /** @name BaseWidgetAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseWidgetAnnotationConfig.type */
         type?: 'text' | 'image' | 'custom';
         /** @name BaseWidgetAnnotationConfig.width */
@@ -8178,6 +8180,12 @@ declare module DevExpress.viz {
     export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
+        /** @name dxChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -9730,8 +9738,14 @@ declare module DevExpress.viz {
     export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxPolarChartCommonAnnotationConfig.angle */
         angle?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
         /** @name dxPolarChartCommonAnnotationConfig.radius */
         radius?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPolarChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPolarChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
@@ -10334,6 +10348,12 @@ declare module DevExpress.viz {
     export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
         /** @name dxVectorMapCommonAnnotationConfig.coordinates */
         coordinates?: Array<number>;
+        /** @name dxVectorMapCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
+        /** @name dxVectorMapCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxVectorMapCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name linearCircle */
     export type linearCircle = CommonIndicator;

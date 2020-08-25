@@ -656,16 +656,6 @@ export default class dxTreeList extends Widget implements GridBase {
     getSelectedRowKeys(): Array<any>;
     /**
      * @docid dxTreeListMethods.getSelectedRowKeys
-     * @publicName getSelectedRowKeys(leavesOnly)
-     * @param1 leavesOnly:boolean
-     * @return Array<any>
-     * @deprecated
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    getSelectedRowKeys(leavesOnly: boolean): Array<any>;
-    /**
-     * @docid dxTreeListMethods.getSelectedRowKeys
      * @publicName getSelectedRowKeys(mode)
      * @param1 mode:string
      * @return Array<any>

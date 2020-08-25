@@ -5,7 +5,7 @@ import {
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
 
-import 'common.css!';
+
 import 'generic_light.css!';
 
 const { testStart, test, module } = QUnit;

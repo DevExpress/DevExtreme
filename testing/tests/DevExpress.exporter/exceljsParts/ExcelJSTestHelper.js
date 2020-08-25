@@ -53,9 +53,11 @@ class ExcelJSTestHelper {
     }
 
     checkOutlineLevel(expectedOutlineLevelValues, startRowIndex) {
-        for(let i = 0; i < expectedOutlineLevelValues.length; i++) {
-            assert.equal(this.worksheet.getRow(startRowIndex + i).outlineLevel, expectedOutlineLevelValues[i], `worksheet.getRow(${i}).outlineLevel`);
-        }
+        assert.strictEqual(this.worksheet.actualRowCount, expectedOutlineLevelValues.length, 'worksheet.actualRowCount === expectedOutlineLevelValues');
+
+        this.worksheet.eachRow({ includeEmpty: false }, (row) => {
+            assert.strictEqual(row.outlineLevel, expectedOutlineLevelValues[row.number - startRowIndex], `worksheet.getRow(${row.number}).outlineLevel`);
+        });
     }
 
     checkFont(cellsArray) {
