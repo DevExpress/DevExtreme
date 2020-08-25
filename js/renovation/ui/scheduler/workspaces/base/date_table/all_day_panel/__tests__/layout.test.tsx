@@ -6,7 +6,7 @@ import * as utilsModule from '../../../../utils';
 
 const addHeightToStyle = jest.spyOn(utilsModule, 'addHeightToStyle');
 
-describe('AllDayPanelLayout ', () => {
+describe('AllDayPanelLayout', () => {
   const viewData = {
     groupedData: [{
       allDayPanel: [{
