@@ -3712,6 +3712,10 @@ QUnit.module('Workspace Mouse Interaction', () => {
 })('Work Space Work Week with intervalCount');
 
 QUnit.module('Renovated Render', {
+    before() {
+        this.qUnitMaxDepth = QUnit.dump.maxDepth;
+        QUnit.dump.maxDepth = 10;
+    },
     beforeEach() {
         this.createInstance = (options = {}) => {
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(extend({
@@ -3729,6 +3733,9 @@ QUnit.module('Renovated Render', {
             stubInvokeMethod(this.instance);
         };
     },
+    after() {
+        QUnit.dump.maxDepth = this.qUnitMaxDepth;
+    }
 }, () => {
     QUnit.module('Generate View Data', () => {
         QUnit.test('should work in basic case', function(assert) {
