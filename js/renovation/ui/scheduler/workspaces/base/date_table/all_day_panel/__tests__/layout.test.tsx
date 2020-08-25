@@ -3,8 +3,11 @@ import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTableBody } from '../table_body';
 import { GroupedViewData } from '../../../../types.d';
+import * as utilsModule from '../../../../utils';
 
-describe('AllDayPanelLayout', () => {
+const addHeightToStyle = jest.spyOn(utilsModule, 'addHeightToStyle');
+
+describe('AllDayPanelLayout ', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [
@@ -12,15 +15,16 @@ describe('AllDayPanelLayout', () => {
         { allDayPanel: [{ startDate: new Date(2020, 6, 9, 1) }] },
       ],
     };
-    const render = (viewModel) => shallow(<LayoutView {...{
-      ...viewModel,
-      props: {
-        visible: true,
-        ...viewModel.props,
-        viewData,
-      },
-    }}
-    />);
+    const render = (viewModel) => shallow(
+      <LayoutView
+        {...viewModel}
+        props={{
+          visible: true,
+          viewData,
+          ...viewModel.props,
+        }}
+      />,
+    );
 
     it('should spread restAttributes', () => {
       const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
@@ -46,7 +50,7 @@ describe('AllDayPanelLayout', () => {
         .toHaveLength(1);
     });
 
-    it('should not be rendered table if hidden', () => {
+    it('should not be rendered if "visible" is false', () => {
       const layout = render({ props: { visible: false } });
 
       const allDayTable = layout.find('.dx-scheduler-all-day-table');
@@ -54,7 +58,7 @@ describe('AllDayPanelLayout', () => {
         .toBe(false);
     });
 
-    it('should render correct height', () => {
+    it('should pass "style" to the root', () => {
       const layout = render({ style: { height: 100 } });
 
       expect(layout.prop('style'))
@@ -66,11 +70,9 @@ describe('AllDayPanelLayout', () => {
     describe('Getters', () => {
       it('allDayPanelData', () => {
         const viewData = {
-          groupedData: [
-            {
-              allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
-            },
-          ],
+          groupedData: [{
+            allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
+          }],
         } as GroupedViewData;
         const layout = new AllDayPanelLayout({ viewData });
 
@@ -83,10 +85,14 @@ describe('AllDayPanelLayout', () => {
 
         expect(layout.style)
           .toStrictEqual({ height: '100px' });
+        expect(addHeightToStyle)
+          .toHaveBeenCalledTimes(1);
+        expect(addHeightToStyle)
+          .toHaveBeenCalledWith(100, undefined);
       });
 
       describe('classes', () => {
-        it('if visible', () => {
+        it('should not add dx-hidden class if "visible" is false', () => {
           const layout = new AllDayPanelLayout({
             className: 'some-class',
             visible: true,
@@ -99,7 +105,7 @@ describe('AllDayPanelLayout', () => {
             ]);
         });
 
-        it('if hidden', () => {
+        it('should add dx-hidden class if "visible" is false', () => {
           const layout = new AllDayPanelLayout({
             className: 'some-class',
             visible: false,
