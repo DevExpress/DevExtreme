@@ -364,10 +364,10 @@ function correctPaddings(axesInfo, paddings) {
         const { start, end } = info.axis.getCorrectedValuesToZero(info.minValue, info.maxValue);
         if(isDefined(start) || isDefined(end)) {
             return inverted ? {
-                start: Math.min(end, prev.end),
-                end: prev.start
+                start: prev.start,
+                end: Math.min(prev.end, end)
             } : {
-                start: Math.min(start, prev.start),
+                start: Math.min(prev.start, start),
                 end: prev.end
             };
         }

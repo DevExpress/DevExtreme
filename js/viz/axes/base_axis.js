@@ -1802,8 +1802,8 @@ Axis.prototype = {
             }
         }
         return {
-            start: start,
-            end: end,
+            start,
+            end,
             correctedMin,
             correctedMax
         };
