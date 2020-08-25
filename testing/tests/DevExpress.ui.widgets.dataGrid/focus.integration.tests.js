@@ -2334,6 +2334,56 @@ QUnit.module('View\'s focus', {
             });
         });
     });
+
+    QUnit.testInActiveWindow('Edit command button should be focused in the last column when virtual column rendering mode and fixed columns are used', function(assert) {
+        // arrange
+        this.dataGrid.dispose();
+        const generateData = function() {
+            const items = [];
+            for(let i = 0; i < 2; i += 1) {
+                const item = {};
+                for(let j = 0; j < 17; j += 1) {
+                    item[`field${j}`] = `${i}-${j}`;
+                }
+                items.push(item);
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            width: 500,
+            columnWidth: 70,
+            dataSource: generateData(),
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+            },
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+            }
+        });
+
+        this.clock.tick();
+
+        const $cell1_0 = $(dataGrid.getCellElement(1, 0));
+        $cell1_0.trigger(CLICK_EVENT).trigger('dxclick');
+
+        const keyboard = keyboardMock($cell1_0);
+        keyboard.keyDown('tab', { shiftKey: true });
+        this.clock.tick();
+
+        const $lastCell = $(dataGrid.getRowElement(0)).children().last();
+        const $editButton = $lastCell.find('.dx-link-edit');
+
+        // assert
+        assert.ok($lastCell.hasClass('dx-command-edit'), 'command cell');
+        assert.notOk($lastCell.hasClass('dx-focused'), 'cell is not focused');
+        assert.ok($editButton.is(':focus'), 'edit button is focused');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {

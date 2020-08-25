@@ -1,5 +1,6 @@
 import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
+import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
@@ -222,8 +223,13 @@ const ColumnsControllerExtender = (function() {
             return visibleColumns;
         },
         getColumnIndexOffset: function() {
-            const offset = this._beginPageIndex * this.getColumnPageSize();
-            return offset > 0 ? offset - 1 : 0;
+            let offset = 0;
+            if(this._beginPageIndex > 0) {
+                const fixedColumns = this.getFixedColumns();
+                const leftFixedColumnsOffset = fixedColumns.filter(column => column.fixed && (!isDefined(column.fixedPosition) || column.fixedPosition === 'left')).length;
+                offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnsOffset - 1;
+            }
+            return offset > 0 ? offset : 0;
         },
         dispose: function() {
             clearTimeout(this._changedTimeout);
