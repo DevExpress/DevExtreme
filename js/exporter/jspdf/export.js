@@ -59,7 +59,7 @@ export const Export = {
             selectedRowsOnly
         } = options;
 
-        const tableWidth = component.option('width');
+        const isTableWidthDefined = isDefined(component.option('width'));
         const dataProvider = component.getDataProvider(selectedRowsOnly);
 
         return new Promise((resolve) => {
@@ -68,11 +68,12 @@ export const Export = {
                 const styles = dataProvider.getStyles();
                 const dataRowsCount = dataProvider.getRowsCount();
 
-                if(tableWidth) {
-                    autoTableOptions.tableWidth = this.convertPixelsToPoints(tableWidth);
+                if(isTableWidthDefined) {
+                    const tableWidth = columns.reduce((a, b) => { return a.width + b.width; });
+                    autoTableOptions.tableWidth = this.convertPixelsToPdfUnits(jsPDFDocument, tableWidth);
                 }
 
-                this.setColumnWidths(autoTableOptions, columns, keepColumnWidths);
+                this.setColumnWidths(jsPDFDocument, autoTableOptions, columns, keepColumnWidths);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
 
@@ -125,24 +126,30 @@ export const Export = {
         }
     },
 
-    setColumnWidths: function(autoTableOptions, columns, keepColumnWidths) {
+    setColumnWidths: function(jsPDFDocument, autoTableOptions, columns, keepColumnWidths) {
         const columnStyles = autoTableOptions.columnStyles;
 
         for(let i = 0; i < columns.length; i++) {
             columnStyles[i] = columnStyles[i] || {};
 
-            const columnWidth = columns[i].gridColumn.width;
-            if(keepColumnWidths && (typeof columnWidth === 'number') && isFinite(columnWidth)) {
-                columnStyles[i].cellWidth = this.convertPixelsToPoints(columnWidth);
+            const isColumnWidthDefined = isDefined(columns[i].gridColumn.width);
+            if(keepColumnWidths && isColumnWidthDefined) {
+                columnStyles[i].cellWidth = this.convertPixelsToPdfUnits(jsPDFDocument, columns[i].width);
             } else {
                 columnStyles[i].cellWidth = 'auto';
             }
         }
     },
 
-    convertPixelsToPoints: function(value) {
+    convertPixelsToPdfUnits: function(pdfDoc, pxValue) {
+        const ptValue = this.convertPixelsToPoints(pxValue);
+        const scaleFactor = pdfDoc.internal.scaleFactor;
+        return ptValue / scaleFactor;
+    },
+
+    convertPixelsToPoints: function(pxValue) {
         const pointsPerInch = 72;
         const dotsPerInch = 96;
-        return pointsPerInch / dotsPerInch * value;
+        return pointsPerInch / dotsPerInch * pxValue;
     }
 };
