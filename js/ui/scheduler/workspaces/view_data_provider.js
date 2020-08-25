@@ -75,10 +75,12 @@ class ViewDataGenerator {
         }
 
         return {
-            groupedData,
-            isVirtual: true,
-            topVirtualRowHeight,
-            bottomVirtualRowHeight
+            viewData: {
+                groupedData,
+                isVirtual: true,
+                topVirtualRowHeight,
+                bottomVirtualRowHeight
+            }
         };
     }
 
@@ -112,7 +114,9 @@ class ViewDataGenerator {
         }
 
         return {
-            groupedData
+            viewData: {
+                groupedData
+            }
         };
     }
 
@@ -211,7 +215,7 @@ class ViewDataGenerator {
 export default class ViewDataProvider {
     constructor(workspace) {
         this._viewDataGenerator = null;
-        this._viewData = null;
+        this._viewData = [];
         this._viewDataMap = [];
         this._groupedDataMap = [];
         this._workspace = workspace;
@@ -227,24 +231,20 @@ export default class ViewDataProvider {
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
 
-    get viewDataMap() {
-        if(!this._viewDataMap.length && this.viewData) {
-            const { groupedData } = this.viewData;
-            this._viewDataMap = this.viewDataGenerator.getViewDataMap(groupedData);
-        }
-        return this._viewDataMap;
-    }
+    get viewDataMap() { return this._viewDataMap; }
+    set viewDataMap(value) { this._viewDataMap = value; }
 
-    get groupedDataMap() {
-        if(!this._groupedDataMap.length && this.viewData) {
-            const { groupedData } = this.viewData;
-            this._groupedDataMap = this.viewDataGenerator.getGroupedDataMap(groupedData);
-        }
-        return this._groupedDataMap;
-    }
+    get groupedDataMap() { return this._groupedDataMap; }
+    set groupedDataMap(value) { this._groupedDataMap = value; }
 
     update() {
-        this.viewData = this.viewDataGenerator.generate();
+        const { viewDataGenerator } = this;
+        const { viewData } = viewDataGenerator.generate();
+
+        this.viewData = viewData;
+
+        this._updateViewDataMap();
+        this._updateGroupedDataMap();
     }
 
     getStartDate() {
@@ -283,5 +283,15 @@ export default class ViewDataProvider {
     _getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.find(item => item.groupIndex === groupIndex);
+    }
+
+    _updateViewDataMap() {
+        const { groupedData } = this.viewData;
+        this.viewDataMap = this.viewDataGenerator.getViewDataMap(groupedData);
+    }
+
+    _updateGroupedDataMap() {
+        const { groupedData } = this.viewData;
+        this.groupedDataMap = this.viewDataGenerator.getGroupedDataMap(groupedData);
     }
 }

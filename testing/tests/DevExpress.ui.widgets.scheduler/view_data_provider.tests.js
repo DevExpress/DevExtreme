@@ -67,6 +67,8 @@ module('View Data Provider', {
         });
 
         test('getCellData', function(assert) {
+            this.viewDataProvider._updateViewDataMap();
+
             const cellData_0_1 = this.viewDataProvider.getCellData(0, 1);
             const expectedCellData_0_1 = { startDate: new Date(2020, 8, 25), endDate: new Date(2020, 8, 26) };
             assert.deepEqual(cellData_0_1, expectedCellData_0_1, 'Cell data [0, 1] is correct');
@@ -79,6 +81,8 @@ module('View Data Provider', {
 
     module('Generator', () => {
         test('groupedDataMap', function(assert) {
+            this.viewDataProvider._updateGroupedDataMap();
+
             const expectedGroupedDataMap = [
                 undefined,
                 undefined,
