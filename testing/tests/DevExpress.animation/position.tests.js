@@ -942,7 +942,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         try {
             window.innerHeight = 500;
             window.outerHeight = 200;
-            window.visualViewport = { height: 1000 };
+            window.visualViewport = { height: 1000, offsetLeft: 0, offsetTop: 0 };
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
@@ -952,6 +952,40 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
                 assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
             } else {
                 assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
+            }
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+            window.visualViewport = initialVisualViewport;
+        }
+    });
+
+    QUnit.test('position should be calculated correctly when scrollLeft/scrollTop is non-null', function(assert) {
+        if(browser.msie && parseInt(browser.version.split('.')[0]) <= 11) {
+            // skip for ie because we can not write window.innerHeight in IE
+            assert.expect(0);
+            return;
+        }
+
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialOuterHeight = window.outerHeight;
+        const initialVisualViewport = window.visualViewport;
+
+        try {
+            window.innerHeight = 500;
+            window.outerHeight = 200;
+            window.scrollTo({ x: 300, y: 300 });
+            window.visualViewport = { height: 1000, offsetLeft: 300, offsetTop: 300 };
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            if(devices.real().deviceType === 'desktop') {
+                assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
+            } else {
+                assert.roughEqual(resultPosition.v.location, 650, 50, 'vertical location is correct');
             }
         } finally {
             window.innerHeight = initialInnerHeight;
@@ -976,7 +1010,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         try {
             window.innerWidth = 500;
             window.outerWidth = 200;
-            window.visualViewport = { width: 1000 };
+            window.visualViewport = { width: 1000, offsetLeft: 0, offsetTop: 0 };
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
@@ -1010,7 +1044,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         try {
             window.innerHeight = 2000;
             window.outerHeight = 2000;
-            window.visualViewport = { height: 1000 };
+            window.visualViewport = { height: 1000, offsetLeft: 0, offsetTop: 0 };
 
             const resultPosition = setupPosition($what, {
                 of: $(window)
