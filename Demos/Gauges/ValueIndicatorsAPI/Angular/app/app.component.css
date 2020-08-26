@@ -18,11 +18,9 @@
     margin-top: 10px;
 }
 ::ng-deep .option > span {
-    display: inline-block;
     width: 155px;
     line-height: 36px;
 }
 ::ng-deep .option > .dx-widget {
-    vertical-align: middle;
     float: right;
 }

@@ -131,13 +131,11 @@ export default {
 }
 
 .option > span {
-    display: inline-block;
     width: 155px;
     line-height: 36px;
 }
 
 .option > .dx-widget {
-    vertical-align: middle;
     float: right;
 }
 </style>
