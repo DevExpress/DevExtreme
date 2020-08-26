@@ -19,7 +19,6 @@ import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import getTextDecorationMatcher from './matchers/textDecoration';
-import getNewLineMatcher from './matchers/newLine';
 import FormDialog from './ui/formDialog';
 
 // STYLE htmlEditor
@@ -35,7 +34,6 @@ const MARKDOWN_VALUE_TYPE = 'markdown';
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
 const ELEMENT_NODE = 1;
-const TEXT_NODE = 3;
 
 const HtmlEditor = Editor.inherit({
 
@@ -285,8 +283,8 @@ const HtmlEditor = Editor.inherit({
     _applyTranscludedContent: function() {
         const valueOption = this.option('value');
         if(!isDefined(valueOption)) {
-            const markup = this._deltaConverter.toHtml();
-            const newDelta = this._quillInstance.clipboard.convert(markup);
+            const html = this._deltaConverter.toHtml();
+            const newDelta = this._quillInstance.clipboard.convert({ html });
 
             if(newDelta.ops.length) {
                 this._quillInstance.setContents(newDelta);
@@ -304,22 +302,23 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
-        const newLineMatcher = getNewLineMatcher();
-        const modulesConfig = extend({
+        const modulesConfig = extend({}, {
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
-            dropImage: this._getBaseModuleConfig(),
+            // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
+            uploader: {
+                onDrop: (e) => this._saveValueChangeEvent(e)
+            },
             clipboard: {
+                onPaste: (e) => this._saveValueChangeEvent(e),
                 matchVisual: false,
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [ELEMENT_NODE, getTextDecorationMatcher(quill)],
-                    [ELEMENT_NODE, newLineMatcher],
-                    [TEXT_NODE, newLineMatcher]
+                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
                 ]
             }
         }, this._getCustomModules());
@@ -488,8 +487,8 @@ const HtmlEditor = Editor.inherit({
         toolbar && toolbar.repaint();
     },
 
-    _updateHtmlContent: function(newMarkup) {
-        const newDelta = this._quillInstance.clipboard.convert(newMarkup);
+    _updateHtmlContent: function(html) {
+        const newDelta = this._quillInstance.clipboard.convert({ html });
         this._quillInstance.setContents(newDelta);
     },
 

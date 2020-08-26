@@ -11,7 +11,7 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const TIME_TO_WAIT = 500;
 const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
 
-const { test, module: testModule } = QUnit;
+const { test, module: testModule, skip } = QUnit;
 
 function createEvent(type = 'paste') {
     const customEvent = document.createEvent('Event');
@@ -157,7 +157,7 @@ testModule('Events', createModuleConfig({ value: '<p>Test 1</p><p>Test 2</p><p>T
 
 testModule('ValueChanged event', createModuleConfig(), function() {
     ['drop', 'paste'].forEach((eventType) => {
-        test(`event should keep valueChanged event on ${eventType}`, function(assert) {
+        skip(`event should keep valueChanged event on ${eventType}`, function(assert) {
             const done = assert.async();
             this.createEditor({
                 onValueChanged: ({ event }) => {

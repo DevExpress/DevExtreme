@@ -46,7 +46,7 @@ testModule('Delta converter', {
                 list: 'bullet'
             }
         }];
-        const expected = '<ul><li>item1-1<ul><ul><li>item3-1</li></ul></li></ul></li><li>item1-2</li></ul>';
+        const expected = '<ul><li>item1-1<ul><li><ul><li>item3-1</li></ul></li></ul></li><li>item1-2</li></ul>';
 
         this.quillInstance.setContents(deltaOps);
 
@@ -147,7 +147,7 @@ testModule('Custom list', {
                     insert: '\n'
                 }
             ];
-            const expected = `<${tag} type="a"><li>item1</li><li>item2</li></${tag}>`;
+            const expected = `<${tag}><li type="a">item1</li><li type="a">item2</li></${tag}>`;
 
             this.quillInstance.setContents(deltaOps);
             assert.strictEqual(this.deltaConverter.toHtml(), expected, `attributes of the ${type} list are correct`);
@@ -171,7 +171,7 @@ testModule('Custom list', {
                     insert: '\n'
                 }
             ];
-            const expected = `<${tag} type="a"><li>item1<${tag} type="a"><li>item2</li></${tag}></li></${tag}>`;
+            const expected = `<${tag}><li type="a">item1<${tag}><li type="a">item2</li></${tag}></li></${tag}>`;
 
             this.quillInstance.setContents(deltaOps);
             assert.strictEqual(this.deltaConverter.toHtml(), expected, `attributes of the ${type} list are correct`);
