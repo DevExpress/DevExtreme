@@ -689,8 +689,14 @@ class FileUploader extends Editor {
             focusStateEnabled: false,
             integrationOptions: {}
         });
+        this._selectSelectFileDialogHandler = this._selectButtonClickHandler.bind(this);
 
-        this._attachSelectFileDialogHandler(this._selectButton);
+        // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
+        if(devices.real().deviceType === 'desktop') {
+            this._selectButton.option('onClick', this._selectSelectFileDialogHandler);
+        } else {
+            this._attachSelectFileDialogHandler(this._selectButton.$element());
+        }
         this._attachSelectFileDialogHandler(this.option('dialogTrigger'));
     }
 
@@ -712,14 +718,15 @@ class FileUploader extends Editor {
         if(!isDefined(target)) {
             return;
         }
-        // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
-        if(devices.real().deviceType === 'desktop' && target.option) {
-            target.option('onClick', this._selectButtonClickHandler.bind(this));
-        } else {
-            const $element = target.$element ? target.$element() : $(target);
-            eventsEngine.off($element, 'click');
-            eventsEngine.on($element, 'click', this._selectButtonClickHandler.bind(this));
+        this._detachSelectFileDialogHandler(target);
+        eventsEngine.on($(target), 'click', this._selectSelectFileDialogHandler);
+    }
+
+    _detachSelectFileDialogHandler(target) {
+        if(!isDefined(target) || !isDefined(this._selectSelectFileDialogHandler)) {
+            return;
         }
+        eventsEngine.off($(target), 'click', this._selectSelectFileDialogHandler);
     }
 
     _renderUploadButton() {
@@ -1130,7 +1137,7 @@ class FileUploader extends Editor {
                 this._uploadButton && this._uploadButton.option('type', value);
                 break;
             case 'dialogTrigger':
-                eventsEngine.off($(args.previousValue), 'click');
+                this._detachSelectFileDialogHandler(args.previousValue);
                 this._attachSelectFileDialogHandler(value);
                 break;
             case 'maxFileSize':
