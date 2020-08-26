@@ -1,9 +1,11 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView } from '../layout';
+import { viewFunction as LayoutView, HeaderPanelLayout } from '../layout';
 import { Row } from '../../row';
 import * as utilsModule from '../../../utils';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
 const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
+const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
 
 describe('HeaderPanelLayoutBase', () => {
   describe('Render', () => {
@@ -132,6 +134,22 @@ describe('HeaderPanelLayoutBase', () => {
           1, viewCellsData[0][0].startDate,
           viewCellsData[0][0].groups,
         );
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      it('should calculate isVerticalGroupOrientation correctly', () => {
+        const cell = new HeaderPanelLayout({
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        cell.isVerticalGroupOrientation;
+
+        expect(isVerticalGroupOrientation)
+          .toHaveBeenCalledWith(VERTICAL_GROUP_ORIENTATION);
+      });
     });
   });
 });
