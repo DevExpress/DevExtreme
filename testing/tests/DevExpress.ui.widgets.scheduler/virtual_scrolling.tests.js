@@ -19,7 +19,7 @@ module('Virtual Scrolling model', {
             _getCellData: noop,
             _insertAllDayRowsIntoDateTable: noop,
             _allDayPanels: undefined,
-            isGroupedAllDayPanel: noop,
+            isAllDayPanelInsideDateTable: noop,
             renderRWorkspace: noop,
             renderRAppointments: noop
         };

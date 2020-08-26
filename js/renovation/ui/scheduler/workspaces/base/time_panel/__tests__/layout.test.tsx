@@ -7,7 +7,7 @@ import * as utilsModule from '../../../utils';
 import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
 
-const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
+const getIsAllDayPanelInsideDateTable = jest.spyOn(utilsModule, 'getIsAllDayPanelInsideDateTable');
 
 describe('TimePanelLayout', () => {
   describe('Render', () => {
@@ -25,7 +25,7 @@ describe('TimePanelLayout', () => {
     }}
     />);
 
-    beforeEach(() => getIsGroupedAllDayPanel.mockClear());
+    beforeEach(() => getIsAllDayPanelInsideDateTable.mockClear());
 
     it('should spread restAttributes', () => {
       const layout = render(
@@ -141,13 +141,13 @@ describe('TimePanelLayout', () => {
         .toEqual(200);
     });
 
-    it('should call getIsGroupedAllDayPanel with correct arguments', () => {
+    it('should call getIsAllDayPanelInsideDateTable with correct arguments', () => {
       render({ });
 
-      expect(getIsGroupedAllDayPanel)
+      expect(getIsAllDayPanelInsideDateTable)
         .toHaveBeenCalledTimes(1);
 
-      expect(getIsGroupedAllDayPanel)
+      expect(getIsAllDayPanelInsideDateTable)
         .toHaveBeenNthCalledWith(
           1,
           viewData,
@@ -157,7 +157,7 @@ describe('TimePanelLayout', () => {
 
     [true, false].forEach((mockValue) => {
       it(`AllDayPanelTitle if groupedAllDayPanel=${mockValue}`, () => {
-        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
+        getIsAllDayPanelInsideDateTable.mockImplementation(() => mockValue);
 
         const layout = render({ });
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');

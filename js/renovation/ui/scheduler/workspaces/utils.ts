@@ -38,13 +38,15 @@ export const getGroupCellClasses = (
   [className]: true,
 });
 
-export const getIsGroupedAllDayPanel = (viewData: GroupedViewData, groupIndex: number): boolean => {
+export const getIsAllDayPanelInsideDateTable = (
+  viewData: GroupedViewData, groupIndex: number,
+): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[groupIndex];
   const isAllDayPanel = !!(groupData?.allDayPanel?.length);
-  const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
+  const isAllDayPanelInsideDateTable = !!(groupData?.isAllDayPanelInsideDateTable);
 
-  return (isAllDayPanel && isGroupedAllDayPanel); // WA for Vue Generator (#335)
+  return (isAllDayPanel && isAllDayPanelInsideDateTable); // WA for Vue Generator (#335)
 };
 
 export const isVerticalGroupOrientation = (

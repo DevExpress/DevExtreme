@@ -6,7 +6,7 @@ import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
 
 const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
-const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
+const getIsAllDayPanelInsideDateTable = jest.spyOn(utilsModule, 'getIsAllDayPanelInsideDateTable').mockImplementation(() => true);
 
 describe('DateTableBody', () => {
   describe('Render', () => {
@@ -49,7 +49,7 @@ describe('DateTableBody', () => {
 
     beforeEach(() => {
       getKeyByDateAndGroup.mockClear();
-      getIsGroupedAllDayPanel.mockClear();
+      getIsAllDayPanelInsideDateTable.mockClear();
     });
 
     it('should render rows', () => {
@@ -135,7 +135,7 @@ describe('DateTableBody', () => {
         );
     });
 
-    it('should render AllDayPanelBody correctly and call getIsGroupedAllDayPanel', () => {
+    it('should render AllDayPanelBody correctly and call getIsAllDayPanelInsideDateTable', () => {
       const dataCellTemplate = () => null;
       const tableBody = render({
         props: { dataCellTemplate },
@@ -151,17 +151,17 @@ describe('DateTableBody', () => {
           dataCellTemplate,
         });
 
-      expect(getIsGroupedAllDayPanel)
+      expect(getIsAllDayPanelInsideDateTable)
         .toHaveBeenCalledTimes(1);
-      expect(getIsGroupedAllDayPanel)
+      expect(getIsAllDayPanelInsideDateTable)
         .toHaveBeenCalledWith(
           viewData,
           0,
         );
     });
 
-    it('should not render AllDayPanelBody when getIsGroupedAllDayPanel returns false', () => {
-      (getIsGroupedAllDayPanel as jest.Mock).mockReturnValue(false);
+    it('should not render AllDayPanelBody when getIsAllDayPanelInsideDateTable returns false', () => {
+      (getIsAllDayPanelInsideDateTable as jest.Mock).mockReturnValue(false);
       const tableBody = render({});
 
       const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);

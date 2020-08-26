@@ -34,7 +34,7 @@ export default class ViewDataGenerator {
         const groupedData = [];
         const firstGroupIndex = Math.floor(startRowIndex / rowCountInGroup);
         const lastGroupIndex = Math.floor((startRowIndex + rowCount) / rowCountInGroup);
-        const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
+        const isAllDayPanelInsideDateTable = workspace.isAllDayPanelInsideDateTable();
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
             let allDayPanelData = [];
@@ -65,7 +65,7 @@ export default class ViewDataGenerator {
             groupedData.push({
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
-                isGroupedAllDayPanel
+                isAllDayPanelInsideDateTable
             });
         }
 
@@ -84,7 +84,7 @@ export default class ViewDataGenerator {
     _generateView() {
         const workspace = this._workspace;
         const options = workspace.generateRenderOptions();
-        const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
+        const isAllDayPanelInsideDateTable = workspace.isAllDayPanelInsideDateTable();
         const {
             rowCount,
             cellCount,
@@ -100,7 +100,7 @@ export default class ViewDataGenerator {
             groupedData.push({
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
-                isGroupedAllDayPanel
+                isAllDayPanelInsideDateTable
             });
         }
 
@@ -149,7 +149,6 @@ export default class ViewDataGenerator {
                 viewCellsData[i].push(cellDataValue);
             }
         }
-        console.log(viewCellsData[0]);
 
         return viewCellsData;
     }
@@ -224,9 +223,9 @@ export default class ViewDataGenerator {
         groupedData?.forEach(({
             dateTable,
             allDayPanel,
-            isGroupedAllDayPanel
+            isAllDayPanelInsideDateTable
         }) => {
-            isGroupedAllDayPanel
+            isAllDayPanelInsideDateTable
                 && allDayPanel?.length
                 && result.push(allDayPanel);
             result.push(...dateTable);

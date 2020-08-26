@@ -3751,7 +3751,7 @@ QUnit.module('Renovated Render', {
                             allDay: false,
                             text: '',
                         }]],
-                        isGroupedAllDayPanel: false
+                        isAllDayPanelInsideDateTable: false
                     }]
                 },
                 viewDataMap: [
@@ -3827,7 +3827,7 @@ QUnit.module('Renovated Render', {
                         text: '',
                         groups: { res: 2 },
                     }]],
-                    isGroupedAllDayPanel: false
+                    isAllDayPanelInsideDateTable: false
                 }],
             };
 
