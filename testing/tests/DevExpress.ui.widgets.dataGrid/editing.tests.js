@@ -9301,11 +9301,13 @@ QUnit.module('Editing with real dataController', {
         QUnit.test('Promise in onSaving with cancel', function(assert) {
             // arrange
             const rowsView = this.rowsView;
+            let isPromiseResolved;
             const $testElement = $('#container');
             const onSaving = sinon.spy(e => {
                 e.promise = new Deferred();
                 setTimeout(() => {
                     e.cancel = true;
+                    isPromiseResolved = true;
                     e.promise.resolve();
                 }, 1000);
             });
@@ -9334,6 +9336,7 @@ QUnit.module('Editing with real dataController', {
             this.clock.tick(1000);
 
             // assert
+            assert.ok(isPromiseResolved, 'promise is resolved');
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 0, 'onSaved was not called');

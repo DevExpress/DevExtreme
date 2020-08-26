@@ -1533,8 +1533,8 @@ const EditingController = modules.ViewController.inherit((function() {
             when(fromPromise(onSavingParams.promise))
                 .done(() => {
                     if(!onSavingParams.cancel) {
-                        const isDataSaved = this._processEditData(deferreds, results, changes);
-                        d.resolve(isDataSaved);
+                        this._processEditData(deferreds, results, changes);
+                        d.resolve();
                     } else {
                         d.reject();
                     }
@@ -1563,7 +1563,6 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _processEditData: function(deferreds, results, changes) {
             const store = this._dataController.store();
-            let isDataSaved = true;
 
             each(this._editData, (index, editData) => {
                 const data = editData.data;
@@ -1616,7 +1615,6 @@ const EditingController = modules.ViewController.inherit((function() {
                     const doneDeferred = new Deferred();
                     deferred
                         .always(function(data) {
-                            isDataSaved = data !== 'cancel';
                             results.push({ key: editData.key, result: data });
                         })
                         .always(doneDeferred.resolve);
@@ -1624,8 +1622,6 @@ const EditingController = modules.ViewController.inherit((function() {
                     deferreds.push(doneDeferred.promise());
                 }
             });
-
-            return isDataSaved;
         },
 
         _processSaveEditDataResult: function(results) {
@@ -1711,7 +1707,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _resolveAfterSaveEditDataComplete: function(deferred, { cancel, error } = {}) {
             when(this._afterSaveEditData(cancel)).done(function() {
                 deferred.resolve(error);
-            });
+            }).fail(deferred.reject);
         },
 
         _saveEditDataInner: function() {
@@ -1723,11 +1719,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const result = new Deferred();
             const editData = this._editData.slice(0);
 
-            when(this._saveEditDataCore(deferreds, results, changes)).done(isDataSaved => {
-                if(!isDataSaved && getEditMode(this) === EDIT_MODE_CELL) {
-                    this._focusEditingCell();
-                }
-
+            when(this._saveEditDataCore(deferreds, results, changes)).done(() => {
                 if(deferreds.length) {
                     dataSource?.beginLoading();
 
