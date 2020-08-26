@@ -3,6 +3,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 const { test } = QUnit;
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/gantt';
 import { extend } from 'core/utils/extend';
 
