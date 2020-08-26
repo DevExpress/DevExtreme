@@ -20,7 +20,7 @@ class AppointmentAdapter {
     }
 
     get duration() {
-        return this.endDate.getTime() - this.startDate.getTime();
+        return this.endDate ? this.endDate - this.startDate : 0;
     }
 
     get startDate() {

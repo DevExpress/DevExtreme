@@ -6,6 +6,7 @@ import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
 import timeZoneUtils from './utils.timeZone.js';
+import DateAdapter from './dateAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -53,8 +54,8 @@ class RecurrenceProcessor {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
-                this._correctTimezoneOffset(date);
-                result.push(date);
+                const correctDate = this._getCorrectDateByTimezoneOffset(date);
+                result.push(correctDate);
             }
         });
 
@@ -230,16 +231,14 @@ class RecurrenceProcessor {
         return newDate;
     }
 
-    _correctTimezoneOffset(date) {
-        const timezoneOffsetBefore = date.getTimezoneOffset();
-        const timezoneOffset = timezoneOffsetBefore * toMs('minute');
+    _getCorrectDateByTimezoneOffset(date) {
+        const result = DateAdapter(date);
 
-        date.setTime(date.getTime() + timezoneOffset);
+        const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
+        result.addTime(result.getTimezoneOffset('minute'));
+        result.subtractMinutes(timezoneOffsetBeforeInMin - result.getTimezoneOffset());
 
-        const timezoneOffsetDelta = date.getTimezoneOffset() - timezoneOffsetBefore;
-        if(timezoneOffsetDelta) {
-            date.setTime(date.getTime() + timezoneOffsetDelta * toMs('minute'));
-        }
+        return result.source;
     }
 
     _parseRecurrenceRule(recurrence) {
