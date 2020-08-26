@@ -7,6 +7,7 @@ import {
   isVerticalGroupOrientation,
 } from '../utils';
 import { GroupedViewData } from '../types.d';
+import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
 
 describe('Workspaces utils', () => {
   describe('getKeyByDateAndGroup', () => {
@@ -139,12 +140,12 @@ describe('Workspaces utils', () => {
 
   describe('isVerticalGroupOrientation', () => {
     it('should return true if group orientation is vertical', () => {
-      expect(isVerticalGroupOrientation('vertical'))
+      expect(isVerticalGroupOrientation(VERTICAL_GROUP_ORIENTATION))
         .toBe(true);
     });
 
     it('should return false if group orientation is not vertical', () => {
-      expect(isVerticalGroupOrientation('horizontal'))
+      expect(isVerticalGroupOrientation(HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
       expect(isVerticalGroupOrientation())
         .toBe(false);
