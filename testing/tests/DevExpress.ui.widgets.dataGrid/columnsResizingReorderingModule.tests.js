@@ -2085,7 +2085,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         const posX = resizeController._targetPoint.x + (-9840 - resizeController._resizingInfo.startPosX);
-        assert.equal(resizeController._columnsSeparatorView._testPosX, posX, 'posX of columnsSeparator'); // TODO fail
+        assert.equal(resizeController._columnsSeparatorView._testPosX, posX, 'posX of columnsSeparator');
         assert.equal(testPosX, -9840, 'posX');
     });
 
