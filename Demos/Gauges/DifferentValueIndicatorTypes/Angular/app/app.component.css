@@ -4,6 +4,9 @@
 ::ng-deep #rectangleNeedle, #twoColorNeedle, #triangleNeedle, #rangebar, #textCloud, #triangleMarker {
     display: inline-block;
 }
+::ng-deep #rectangleNeedle, #twoColorNeedle, #rangebar, #textCloud {
+    margin-right: 4px
+}
 ::ng-deep #rectangleNeedle, #twoColorNeedle, #triangleNeedle {
     width: 33%;
 }
