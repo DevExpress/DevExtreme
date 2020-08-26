@@ -715,7 +715,7 @@ class FileUploader extends Editor {
     }
 
     _attachSelectFileDialogHandler(target) {
-        if(!isDefined(target)) {
+        if(!isDefined(target) || !isDefined(this._selectSelectFileDialogHandler)) {
             return;
         }
         this._detachSelectFileDialogHandler(target);
