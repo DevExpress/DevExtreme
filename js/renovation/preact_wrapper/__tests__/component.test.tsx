@@ -453,13 +453,13 @@ describe('templates and slots', () => {
   });
 
   it('correctly change template at runtime', () => {
-    const template = (data, container) => {
+    const template = () => {
       const div = $('<div>');
       div.append('first custom template');
       return div;
     };
 
-    const templateNew = (data, container) => {
+    const templateNew = () => {
       const div = $('<div>');
       div.append('second custom template');
       return div;
