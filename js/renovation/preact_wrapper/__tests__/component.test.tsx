@@ -103,6 +103,20 @@ describe('Widget\'s container manipulations', () => {
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
+  it('preact component\'s root is widget\'s container after render in detached container', () => {
+    const $container = $('#component');
+    const parent = $container.parent();
+    $container.remove();
+    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+
+    act(() => {
+      $container.appendTo(parent);
+    });
+
+    expect($('.dx-test-widget')[0]).not.toBe(undefined);
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
+  });
+
   it('preact component\'s root is widget\'s container after render in detached container and repaint', () => {
     const $container = $('#component');
     const parent = $container.parent();
@@ -110,6 +124,25 @@ describe('Widget\'s container manipulations', () => {
     act(() => $container.dxPreactTestWidget({ text: 'test' }));
 
     act(() => {
+      $container.appendTo(parent);
+      $container.dxPreactTestWidget('repaint');
+    });
+
+    expect($('.dx-test-widget')[0]).not.toBe(undefined);
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
+  });
+
+  it('html tree is correct after repaint detached component', () => {
+    const $container = $('#component');
+    const parent = $container.parent();
+    $container.remove();
+    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+
+    act(() => {
+      $container.appendTo(parent);
+      $container.dxPreactTestWidget('repaint');
+      $container.detach();
+      $container.dxPreactTestWidget('repaint');
       $container.appendTo(parent);
       $container.dxPreactTestWidget('repaint');
     });
