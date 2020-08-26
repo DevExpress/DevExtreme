@@ -5,6 +5,7 @@ const typeUtils = require('./type');
 const isString = typeUtils.isString;
 const isDate = typeUtils.isDate;
 const isNumber = typeUtils.isNumeric;
+const browser = require('./browser');
 
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
@@ -12,39 +13,54 @@ const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
 
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
+
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
+const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const MILLISECOND_LENGHT = 3;
 
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+
 const dateParser = function(text, skipISO8601Parsing) {
     let result;
-    let parsedValue;
 
     if(isString(text) && !skipISO8601Parsing) {
         result = parseISO8601String(text);
     }
 
-    if(!result) {
-        parsedValue = !isDate(text) && Date.parse(text);
+    return result || parseDate(text);
+};
 
-        result = isNumber(parsedValue) ? new Date(parsedValue) : text;
+function getTimePart(part) {
+    return +part || 0;
+}
+
+function parseDate(text) {
+    const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
+    const parsedValue = !isDate(text) && Date.parse(text);
+    if((!parsedValue || isIE11) && isDefaultSerializationFormat) {
+        const parts = text.match(DATE_SERIALIZATION_PATTERN);
+        if(parts) {
+            const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
+            newDate.setFullYear(getTimePart(parts[1]));
+            newDate.setMonth(getTimePart(parts[2]) - 1);
+            newDate.setDate(getTimePart(parts[3]));
+            return newDate;
+        }
     }
 
-    return result;
-};
+    return isNumber(parsedValue) ? new Date(parsedValue) : text;
+}
 
 var parseISO8601String = function(text) {
     let parts = text.match(ISO8601_PATTERN);
 
-    const timePart = function(part) {
-        return +part || 0;
-    };
-
     if(!parts) {
         parts = text.match(ISO8601_TIME_PATTERN);
         if(parts) {
-            return new Date(0, 0, 0, timePart(parts[1]), timePart(parts[2]), timePart(parts[4]));
+            return new Date(0, 0, 0, getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[4]));
         }
+
         return;
     }
 
@@ -54,20 +70,20 @@ var parseISO8601String = function(text) {
     let timeZoneHour = 0;
     let timeZoneMinute = 0;
 
-    timeZoneHour = timePart(parts[14]);
-    timeZoneMinute = timePart(parts[16]);
+    timeZoneHour = getTimePart(parts[14]);
+    timeZoneMinute = getTimePart(parts[16]);
 
     if(parts[13] === '-') {
         timeZoneHour = -timeZoneHour;
         timeZoneMinute = -timeZoneMinute;
     }
 
-    const hour = timePart(parts[6]) - timeZoneHour;
-    const minute = timePart(parts[8]) - timeZoneMinute;
-    const second = timePart(parts[10]);
+    const hour = getTimePart(parts[6]) - timeZoneHour;
+    const minute = getTimePart(parts[8]) - timeZoneMinute;
+    const second = getTimePart(parts[10]);
     const parseMilliseconds = function(part) {
         part = part || '';
-        return timePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
+        return getTimePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
     };
     const millisecond = parseMilliseconds(parts[11]);
 
