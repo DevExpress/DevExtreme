@@ -9043,8 +9043,8 @@ QUnit.module('Editing with real dataController', {
             this.saveEditData();
 
             // assert
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 1, 'onSaved');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
             assert.equal($(this.getCellElement(0, 0)).text(), 'new value', 'cell was modified');
         });
 
@@ -9076,10 +9076,10 @@ QUnit.module('Editing with real dataController', {
             this.saveEditData();
 
             // assert
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 1, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was not called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
         });
 
         QUnit.test('onEditCanceling/onEditCanceled events should be fired after cancelEditData call', function(assert) {
@@ -9103,8 +9103,8 @@ QUnit.module('Editing with real dataController', {
             this.cancelEditData();
 
             // assert
-            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
         });
 
         QUnit.test('onSaved event should not be fired if canceled in onSaving', function(assert) {
@@ -9131,8 +9131,8 @@ QUnit.module('Editing with real dataController', {
             this.saveEditData();
 
             // assert
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
         });
 
@@ -9159,8 +9159,8 @@ QUnit.module('Editing with real dataController', {
             this.cancelEditData();
 
             // assert
-            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
         });
 
@@ -9198,10 +9198,10 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was not called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
 
             // act
             this.clock.tick(500);
@@ -9210,19 +9210,19 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.notOk($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
 
             // act
             this.clock.tick(500);
 
             // assert
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 1, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
         });
 
         QUnit.test('Promise in onSaving with preventing cancelEditData during saving', function(assert) {
@@ -9264,10 +9264,10 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving called once');
+            assert.equal(onSaved.callCount, 0, 'onSaved not called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling not called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled not called');
 
             // act
             this.clock.tick(500);
@@ -9275,27 +9275,27 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving called once');
+            assert.equal(onSaved.callCount, 0, 'onSaved not called');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling called once');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled not called');
 
             // act
             this.clock.tick(500);
 
             // assert
             assert.notOk($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 1, 'onSaved');
-            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled');
+            assert.equal(onSaving.callCount, 1, 'onSaving called once');
+            assert.equal(onSaved.callCount, 1, 'onSaved called once');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling called once');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled not called');
 
             // act
             this.cancelEditData();
 
             // assert
-            assert.equal(onEditCanceling.callCount, 2, 'onEditCanceling');
-            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled');
+            assert.equal(onEditCanceling.callCount, 2, 'onEditCanceling called twice');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled called once');
         });
 
         QUnit.test('Promise in onSaving with cancel', function(assert) {
@@ -9327,16 +9327,16 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
 
             // act
             this.clock.tick(1000);
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.equal(onSaving.callCount, 1, 'onSaving');
-            assert.equal(onSaved.callCount, 0, 'onSaved');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
         });
     });
 });

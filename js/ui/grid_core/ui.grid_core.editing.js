@@ -205,7 +205,6 @@ const EditingController = modules.ViewController.inherit((function() {
             const that = this;
 
             that._editData = [];
-            that._isEditingEndInProgress = {};
             that._columnsController = that.getController('columns');
             that._dataController = that.getController('data');
             that._rowsView = that.getView('rowsView');
@@ -1732,7 +1731,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(deferreds.length) {
                     dataSource?.beginLoading();
 
-                    when.apply($, deferreds).done(() => {
+                    when(...deferreds).done(() => {
                         if(this._processSaveEditDataResult(results)) {
                             this._endSaving(changes, editData, result);
                         } else {
@@ -1904,7 +1903,6 @@ const EditingController = modules.ViewController.inherit((function() {
 
         cancelEditData: function() {
             const params = {
-                promise: null,
                 cancel: false
             };
 
