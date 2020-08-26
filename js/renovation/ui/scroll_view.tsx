@@ -47,6 +47,7 @@ export const viewFunction = ({
   props: {
     disabled, height, width, rtlEnabled, children,
   },
+  restAttributes,
 }: ScrollView): JSX.Element => (
   <Widget
     classes={cssClasses}
@@ -54,6 +55,7 @@ export const viewFunction = ({
     rtlEnabled={rtlEnabled}
     height={height}
     width={width}
+    {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className="dx-scrollable-wrapper">
       <div className="dx-scrollable-container" ref={containerRef as any}>
