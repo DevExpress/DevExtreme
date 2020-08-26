@@ -94,8 +94,7 @@ describe('Workspaces utils', () => {
             startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0,
           }],
           isAllDayPanelInsideDateTable: true,
-        },
-        {
+        }, {
           dateTable: [[{
             startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3', index: 0,
           }]],
