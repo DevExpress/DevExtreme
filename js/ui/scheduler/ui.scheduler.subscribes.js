@@ -476,6 +476,52 @@ const subscribes = {
         }, this.timeZoneCalculator);
     },
 
+    prerenderFilterVirtual: function() {
+        const workspace = this.getWorkSpace();
+        const resourcesManager = this._resourcesManager;
+        const msInHour = 60 * 60 * 1000;
+        let allDay;
+
+        if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
+            allDay = false;
+        }
+
+        const result = [];
+
+        const { viewDataProvider } = workspace;
+        const { groupedData } = viewDataProvider.viewData;
+
+        groupedData.forEach(({ dateTable }, groupIndex) => {
+            if(dateTable.length) {
+                const groups = viewDataProvider.getCellsGroup(groupIndex);
+                const groupResources = resourcesManager.getResourcesDataByGroups(groups);
+                const startDate = viewDataProvider.getGroupStartDate(groupIndex);
+                const endDate = viewDataProvider.getGroupEndDate(groupIndex);
+                const startDayHour = startDate.getHours();
+                const endDayHour = startDayHour + (endDate - startDate) / msInHour;
+                const filterOptions = {
+                    startDayHour,
+                    endDayHour,
+                    min: startDate,
+                    max: endDate,
+                    resources: groupResources,
+                    allDay: allDay,
+                    firstDayOfWeek: this.getFirstDayOfWeek(),
+                    recurrenceException: this._getRecurrenceException.bind(this)
+                };
+
+                const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
+                    filterOptions,
+                    this.timeZoneCalculator
+                );
+
+                result.push(...currentGroupAppointments);
+            }
+        });
+
+        return result;
+    },
+
     dayHasAppointment: function(day, appointment, trimTime) {
         return this.dayHasAppointment(day, appointment, trimTime);
     },

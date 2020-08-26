@@ -268,7 +268,7 @@ export default class ViewDataProvider {
         return dateTable[lastRowIndex][lastCellIndex].endDate;
     }
 
-    getGroupInfo(groupIndex) {
+    getCellsGroup(groupIndex) {
         const { dateTable } = this._getGroupData(groupIndex);
 
         return dateTable[0][0].groups;
