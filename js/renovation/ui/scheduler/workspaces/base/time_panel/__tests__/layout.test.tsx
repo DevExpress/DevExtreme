@@ -6,9 +6,11 @@ import { TimePanelCell as Cell } from '../cell';
 import * as utilsModule from '../../../utils';
 import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
 const getIsAllDayPanelInsideDateTable = jest.spyOn(utilsModule, 'getIsAllDayPanelInsideDateTable');
 const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
+const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
 
 jest.mock('../../table', () => ({
   ...require.requireActual('../../table'),
@@ -287,6 +289,18 @@ describe('TimePanelLayout', () => {
               .toEqual(value);
           });
         });
+      });
+
+      it('should calculate isVerticalGroupOrientation correctly', () => {
+        const layout = new TimePanelTableLayout({
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        layout.isVerticalGroupOrientation;
+
+        expect(isVerticalGroupOrientation)
+          .toHaveBeenCalledWith(VERTICAL_GROUP_ORIENTATION);
       });
     });
   });

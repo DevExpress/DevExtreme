@@ -140,12 +140,12 @@ describe('HeaderPanelLayoutBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       it('should calculate isVerticalGroupOrientation correctly', () => {
-        const cell = new HeaderPanelLayout({
+        const layout = new HeaderPanelLayout({
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
         });
 
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        cell.isVerticalGroupOrientation;
+        layout.isVerticalGroupOrientation;
 
         expect(isVerticalGroupOrientation)
           .toHaveBeenCalledWith(VERTICAL_GROUP_ORIENTATION);
