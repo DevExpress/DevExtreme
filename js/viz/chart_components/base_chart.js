@@ -776,9 +776,8 @@ export const BaseChart = BaseWidget.inherit({
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
 
-        that._clearCanvas();
-
         that._renderExtraElements();
+        that._clearCanvas();
 
         that._drawn();
         that._renderCompleteHandler();

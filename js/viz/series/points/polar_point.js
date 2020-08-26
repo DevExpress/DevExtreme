@@ -20,6 +20,7 @@ const CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 export const polarSymbolPoint = _extend({}, symbolPoint, {
 
     _getLabelCoords: piePoint._getLabelCoords,
+    _getElementCoords: piePoint._getElementCoords,
 
     _moveLabelOnCanvas: function(coord, visibleArea, labelBBox) {
         let x = coord.x;
@@ -155,6 +156,7 @@ export const polarBarPoint = _extend({}, barPoint, {
     _moveLabelOnCanvas: polarSymbolPoint._moveLabelOnCanvas,
 
     _getLabelCoords: piePoint._getLabelCoords,
+    _getElementCoords: piePoint._getElementCoords,
 
     _getLabelConnector: piePoint._getLabelConnector,
 
