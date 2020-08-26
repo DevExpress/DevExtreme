@@ -69,13 +69,13 @@ export const viewFunction = ({
 export class ScrollViewProps {
   @Slot() children?: any;
 
-  @OneWay() direction?: 'both' | 'horizontal' | 'vertical' = 'vertical';
+  @OneWay() direction: 'both' | 'horizontal' | 'vertical' = 'vertical';
 
-  @OneWay() disabled?: boolean = false;
+  @OneWay() disabled = false;
 
   @OneWay() height?: string | number | (() => (string | number));
 
-  @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
+  @OneWay() rtlEnabled= config().rtlEnabled;
 
   @OneWay() width?: string | number | (() => (string | number));
 }

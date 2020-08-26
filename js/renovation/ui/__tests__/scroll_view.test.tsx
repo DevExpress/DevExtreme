@@ -1,5 +1,4 @@
 import React from 'react';
-import { createRef } from 'preact';
 import { mount, shallow } from 'enzyme';
 import config from '../../../core/config';
 import ScrollView, {
@@ -48,21 +47,21 @@ describe('ScrollView', () => {
     });
 
     it('should scrollable content has the ref', () => {
-      const contentRef = createRef();
+      const contentRef = React.createRef();
       const props = {
         props: {},
         contentRef,
-      } as Partial<ScrollView>;
+      } as any as Partial<ScrollView>;
       const scrollView = mount(viewFunction(props as ScrollView) as JSX.Element);
       expect(scrollView.find('.dx-scrollable-content').instance()).toBe(contentRef.current);
     });
 
     it('should scrollable container has the ref', () => {
-      const containerRef = createRef();
+      const containerRef = React.createRef();
       const props = {
         props: {},
         containerRef,
-      } as Partial<ScrollView>;
+      } as any as Partial<ScrollView>;
       const scrollView = mount(viewFunction(props as ScrollView) as JSX.Element);
       expect(scrollView.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
     });
