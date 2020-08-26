@@ -67,7 +67,7 @@ describe('Workspaces utils', () => {
   });
 
   describe('getIsAllDayPanelInsideDateTable', () => {
-    it('Standalone allDayPanel', () => {
+    it('should return false if all-day-panel is a part of the header', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
@@ -84,7 +84,7 @@ describe('Workspaces utils', () => {
         .toBe(false);
     });
 
-    it('Grouped allDayPanel', () => {
+    it('should return true if all-day-panel is a part of the DateTable', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
