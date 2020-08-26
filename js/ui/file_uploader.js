@@ -689,14 +689,15 @@ class FileUploader extends Editor {
             focusStateEnabled: false,
             integrationOptions: {}
         });
-        this._selectSelectFileDialogHandler = this._selectButtonClickHandler.bind(this);
+        this._selectFileDialogHandler = this._selectButtonClickHandler.bind(this);
 
         // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
         if(devices.real().deviceType === 'desktop') {
-            this._selectButton.option('onClick', this._selectSelectFileDialogHandler);
+            this._selectButton.option('onClick', this._selectFileDialogHandler);
         } else {
             this._attachSelectFileDialogHandler(this._selectButton.$element());
         }
+        this._selectFileDialogHandler = undefined;
         this._attachSelectFileDialogHandler(this.option('dialogTrigger'));
     }
 
@@ -715,18 +716,18 @@ class FileUploader extends Editor {
     }
 
     _attachSelectFileDialogHandler(target) {
-        if(!isDefined(target) || !isDefined(this._selectSelectFileDialogHandler)) {
+        if(!isDefined(target)) {
             return;
         }
         this._detachSelectFileDialogHandler(target);
-        eventsEngine.on($(target), 'click', this._selectSelectFileDialogHandler);
+        eventsEngine.on($(target), 'click', this._selectFileDialogHandler);
     }
 
     _detachSelectFileDialogHandler(target) {
-        if(!isDefined(target) || !isDefined(this._selectSelectFileDialogHandler)) {
+        if(!isDefined(target)) {
             return;
         }
-        eventsEngine.off($(target), 'click', this._selectSelectFileDialogHandler);
+        eventsEngine.off($(target), 'click', this._selectFileDialogHandler);
     }
 
     _renderUploadButton() {
