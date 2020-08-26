@@ -29,5 +29,5 @@
 
 .option > .dx-widget {
     vertical-align: middle;
-    display: inline-block;
+    float: right;
 }
