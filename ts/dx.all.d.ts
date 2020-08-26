@@ -3762,6 +3762,8 @@ declare module DevExpress.ui {
         allowedFileExtensions?: Array<string>;
         /** @name dxFileUploader.Options.chunkSize */
         chunkSize?: number;
+        /** @name dxFileUploader.Options.dialogTrigger */
+        dialogTrigger?: string | Element | JQuery;
         /** @name dxFileUploader.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxFileUploader.Options.inputAttr */
