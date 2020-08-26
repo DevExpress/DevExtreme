@@ -12,15 +12,19 @@ import Callbacks from '../../core/utils/callbacks';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 
-const isVirtualMode = function(that) {
+const isVirtualMode = (that) => {
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 };
 
-const isAppendMode = function(that) {
+const isAppendMode = (that) => {
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
-export let getPixelRatio = function(window) {
+const needTwoPagesLoading = (that) => {
+    return that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex >= 0;
+};
+
+export let getPixelRatio = (window) => {
     return window.devicePixelRatio || 1;
 };
 
@@ -173,7 +177,7 @@ export const VirtualScrollController = Class.inherit((function() {
                     pageCount++;
                 }
 
-                if(isAppendMode(that)) {
+                if(isAppendMode(that) || !needTwoPagesLoading(that)) {
                     pageCount--;
                 }
             }
@@ -638,7 +642,7 @@ export const VirtualScrollController = Class.inherit((function() {
                     that._cache.push(cacheItem);
                 }
 
-                const isDelayChanged = isVirtualMode(that) && lastCacheLength === 0;
+                const isDelayChanged = isVirtualMode(that) && lastCacheLength === 0 && needTwoPagesLoading(that);
                 processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {

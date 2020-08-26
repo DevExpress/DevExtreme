@@ -1179,7 +1179,7 @@ QUnit.module('Footer with virtual scroll', {
 
         // act
         that.rowsView.render($testElement);
-        that.rowsView.height(100);
+        that.rowsView.height(200);
         that.rowsView.resize();
 
         // assert

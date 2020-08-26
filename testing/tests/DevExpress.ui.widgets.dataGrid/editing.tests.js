@@ -14701,6 +14701,7 @@ QUnit.module('Editing with scrolling', {
         assert.equal(this.dataController.pageIndex(), 0, 'page index');
 
         // arrange
+        this.rowsView.scrollTo({ y: 1 });
         this.rowsView.scrollTo({ y: 150 });
 
         // assert
