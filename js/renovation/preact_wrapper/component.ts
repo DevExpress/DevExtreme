@@ -59,8 +59,9 @@ export default class PreactWrapper extends DOMComponent {
     Preact.render(
       Preact.h(this._viewComponent, props),
       containerNode,
-      containerNode,
+      this._preactReplaced ? undefined : containerNode,
     );
+    this._preactReplaced = true;
 
     if (containerNode.parentNode === this._documentFragment) {
       this._documentFragment.removeChild(containerNode);

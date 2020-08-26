@@ -452,6 +452,30 @@ describe('templates and slots', () => {
     expect(templateRoot.innerHTML).toBe('<span>Template - new data</span>');
   });
 
+  it('correctly change template at runtime', () => {
+    const template = (data, container) => {
+      const div = $('<div>');
+      div.append('first custom template');
+      return div;
+    };
+
+    const templateNew = (data, container) => {
+      const div = $('<div>');
+      div.append('second custom template');
+      return div;
+    };
+    act(() => $('#component').dxTemplatedTestWidget({
+      template,
+    }));
+    const templateRoot = $('#component').children('.templates-root')[0];
+
+    act(() => $('#component').dxTemplatedTestWidget({
+      template: templateNew,
+    }));
+
+    expect(templateRoot.innerHTML).toBe('<div>second custom template</div>');
+  });
+
   it('replace root with template if it returns .dx-template-wrapper node', () => {
     act(() => $('#component').dxTemplatedTestWidget({
       template() {
