@@ -51,6 +51,8 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
@@ -405,7 +407,7 @@ const Calendar = Editor.inherit({
 
     _getNormalizedDate: function(date) {
         date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-        return typeUtils.isDefined(date) ? new Date(date) : date;
+        return typeUtils.isDefined(date) ? this._getDate(date) : date;
     },
 
     _initActions: function() {
@@ -532,7 +534,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = new Date(date || this.option('currentDate'));
+        date = this._getDate(date || this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -990,6 +992,18 @@ const Calendar = Editor.inherit({
             to: { left: to },
             duration: duration
         });
+    },
+
+    _getDate(value) {
+        let result;
+        if(isIE11 && typeUtils.isDate(value)) {
+            result = new Date(value.getTime());
+            result.setMilliseconds(0);
+        } else {
+            result = new Date(value);
+        }
+
+        return result;
     },
 
     _toTodayView: function() {

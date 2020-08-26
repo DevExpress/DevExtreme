@@ -13,6 +13,9 @@ QUnit.module('date serialization tests', {
 
 QUnit.test('serialization/deserialization', function(assert) {
     const date = new Date(2015, 7, 16);
+    const specialDate = new Date(2015, 0, 2);
+    specialDate.setFullYear(15);
+
     const assertData = [
         {
             value: date,
@@ -59,6 +62,10 @@ QUnit.test('serialization/deserialization', function(assert) {
             value: new Date(2015, 7, 16, 15, 45, 30, 345),
             serializedValue: '20150816T154530.345',
             format: 'yyyyMMddTHHmmss.SSS'
+        },
+        {
+            value: specialDate,
+            serializedValue: '0015/01/02'
         }
     ];
 
