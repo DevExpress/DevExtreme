@@ -117,11 +117,16 @@ export default class SplitterControl extends Widget {
     }
 
     _getContainerLeftOffset() {
-        const offsetLeft = this._$container.offset().left;
-        const paddingLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['paddingLeft']) || 0;
-        const borderLeft = parseFloat(window.getComputedStyle(this._$container.get(0))['borderLeftWidth']) || 0;
+        let offsetLeft = this._$container.offset().left;
 
-        return offsetLeft + paddingLeft + borderLeft;
+        if(window) {
+            const style = window.getComputedStyle(this._$container.get(0));
+            const paddingLeft = parseFloat(style['paddingLeft']) || 0;
+            const borderLeft = parseFloat(style['borderLeftWidth']) || 0;
+            offsetLeft += paddingLeft + borderLeft;
+        }
+
+        return offsetLeft;
     }
 
     _isDomElement(element) {
