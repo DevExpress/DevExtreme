@@ -40,3 +40,17 @@ export interface Group {
   items: GroupItem[];
   data: GroupItem[];
 }
+
+interface TemplateDataProps {
+  date?: Date;
+  startDate?: Date;
+  endDate?: Date;
+  text?: string;
+  groups?: object;
+  groupIndex?: number;
+  allDay?: boolean;
+}
+export interface ContentTemplateProps {
+  data: TemplateDataProps;
+  index: number;
+}

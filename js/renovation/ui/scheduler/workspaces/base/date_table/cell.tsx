@@ -3,35 +3,21 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
+import { ContentTemplateProps } from '../../types.d';
 
-export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => {
-  const DataCellTemplate = viewModel.props.dataCellTemplate;
-
-  return (
-    <Cell
+export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
+  <Cell
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      isFirstCell={viewModel.props.isFirstCell}
-      isLastCell={viewModel.props.isLastCell}
-      className={viewModel.classes}
-    >
-      {DataCellTemplate && (
-        <DataCellTemplate
-          data={{
-            startDate: viewModel.props.startDate,
-            endDate: viewModel.props.endDate,
-            text: viewModel.props.text,
-            groups: viewModel.props.groups,
-            allDay: viewModel.props.allDay,
-            groupIndex: viewModel.props.groupIndex,
-          }}
-          index={viewModel.props.index}
-        />
-      )}
-      {!DataCellTemplate && viewModel.props.children}
-    </Cell>
-  );
-};
+    {...viewModel.restAttributes}
+    isFirstCell={viewModel.props.isFirstCell}
+    isLastCell={viewModel.props.isLastCell}
+    contentTemplate={viewModel.props.dataCellTemplate}
+    contentTemplateProps={viewModel.dataCellTemplateProps}
+    className={viewModel.classes}
+  >
+    {viewModel.props.children}
+  </Cell>
+);
 
 @ComponentBindings()
 export class DateTableCellBaseProps extends CellBaseProps {
@@ -51,5 +37,17 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
       'dx-scheduler-date-table-cell': !allDay,
       [className]: true,
     });
+  }
+
+  get dataCellTemplateProps(): ContentTemplateProps {
+    const {
+      index, startDate, endDate, groups, groupIndex, text, allDay,
+    } = this.props;
+    return {
+      data: {
+        startDate, endDate, groups, groupIndex, text, allDay,
+      },
+      index,
+    };
   }
 }

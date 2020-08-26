@@ -54,7 +54,7 @@ describe('MonthHeaderPanelCell', () => {
     describe('Getters', () => {
       describe('weekDay', () => {
         it('should call getDayNames with correct parameter and choose correct day name', () => {
-          const cell = new Cell({ startDate: new Date(2020, 6, 9) });
+          const cell = new Cell({ startDate: new Date(2020, 6, 9), index: 0 });
 
           const { weekDay } = cell;
           expect(dateLocalization.getDayNames)

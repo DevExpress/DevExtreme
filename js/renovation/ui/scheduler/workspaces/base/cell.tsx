@@ -2,19 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { getGroupCellClasses } from '../utils';
-
-interface TemplateDataProps {
-  date?: Date;
-  startDate?: Date;
-  endDate?: Date;
-  text?: Text;
-  groups?: object;
-  groupIndex?: number;
-}
-interface ContentTemplateProps {
-  data: TemplateDataProps;
-  index: number;
-}
+import { ContentTemplateProps } from '../types.d';
 
 export const viewFunction = (viewModel: CellBase): JSX.Element => {
   const ContentTemplate = viewModel.props.contentTemplate;
@@ -56,7 +44,7 @@ export class CellBaseProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() index?: number;
+  @OneWay() index = 0;
 
   @OneWay() contentTemplateProps?: ContentTemplateProps;
 
