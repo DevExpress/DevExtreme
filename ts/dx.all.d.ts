@@ -9248,10 +9248,16 @@ declare module DevExpress.viz {
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /** @name dxPieChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPieChartAdaptiveLayout;
+        /** @name dxPieChart.Options.annotations */
+        annotations?: Array<dxPieChartAnnotationConfig | any>;
         /** @name dxPieChart.Options.centerTemplate */
         centerTemplate?: DevExpress.core.template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPieChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
         /** @name dxPieChart.Options.commonSeriesSettings */
         commonSeriesSettings?: any;
+        /** @name dxPieChart.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
         /** @name dxPieChart.Options.diameter */
         diameter?: number;
         /** @name dxPieChart.Options.innerRadius */
@@ -9303,6 +9309,26 @@ declare module DevExpress.viz {
         constructor(element: JQuery, options?: dxPieChartOptions)
         /** @name dxPieChart.getInnerRadius() */
         getInnerRadius(): number;
+    }
+    /** @name dxPieChartAnnotationConfig */
+    export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
+        /** @name dxPieChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxPieChartCommonAnnotationConfig */
+    export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+        /** @name dxPieChartCommonAnnotationConfig.argument */
+        argument?: number | Date | string;
+        /** @name dxPieChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
+        /** @name dxPieChartCommonAnnotationConfig.location */
+        location?: 'center' | 'edge';
+        /** @name dxPieChartCommonAnnotationConfig.series */
+        series?: string;
+        /** @name dxPieChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxPieChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPieChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPieChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPieChartSeriesTypes */
     export interface dxPieChartSeriesTypes {
