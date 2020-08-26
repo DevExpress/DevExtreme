@@ -763,7 +763,7 @@ class Diagram extends Widget {
     }
     _refreshNodesDataSource() {
         if(this._nodesOption) {
-            this._nodesOption._disposeDataSource();
+            this._nodesOption.dispose();
             delete this._nodesOption;
         }
         if(this.option('nodes.dataSource')) {
@@ -774,7 +774,7 @@ class Diagram extends Widget {
     }
     _refreshEdgesDataSource() {
         if(this._edgesOption) {
-            this._edgesOption._disposeDataSource();
+            this._edgesOption.dispose();
             delete this._edgesOption;
         }
         if(this.option('edges.dataSource')) {
@@ -800,10 +800,33 @@ class Diagram extends Widget {
     _onDataSourceChanged() {
         this._bindDiagramData();
     }
+    _onDataSourceUpdated(key, changes) {
+        const applyLayout = this._onRequestUpdateLayout(changes);
+        this._reloadContent(key, applyLayout);
+    }
+    _getChangesKeys(changes) {
+        return changes.map(change => change.type === 'update' && change.key).filter(key => !!key);
+    }
+    _onNodesPushed(changes) {
+        const keys = this._getChangesKeys(changes);
+        const applyLayout = this._onRequestUpdateLayout(changes);
+        this._reloadContent(keys, applyLayout, true, false);
+    }
+    _onEdgesPushed(changes) {
+        const keys = this._getChangesKeys(changes);
+        const applyLayout = this._onRequestUpdateLayout(changes);
+        this._reloadContent(keys, applyLayout, false, true);
+    }
     _createOptionGetter(optionName) {
         const expr = this.option(optionName);
         return expr && dataCoreUtils.compileGetter(expr);
     }
+    _onRequestUpdateLayout(changes) {
+        if(isFunction(this.option('nodes.autoLayout.requestUpdate'))) {
+            return this.option('nodes.autoLayout.requestUpdate')(changes);
+        }
+    }
+
     _createOptionSetter(optionName) {
         const expr = this.option(optionName);
         if(isFunction(expr)) {
@@ -962,23 +985,23 @@ class Diagram extends Widget {
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
-    reloadContent(itemKey, applyLayout) {
+    _reloadContent(itemKeys, applyLayout, updateNodes, updateEdges) {
         const getData = () => {
             let nodeDataSource;
             let edgeDataSource;
             this._beginUpdateDiagram();
-            if(this._nodesOption) {
+            if(this._nodesOption && updateNodes) {
                 this._nodesOption.getDataSource().reload();
                 nodeDataSource = this._nodesOption.getItems();
             }
-            if(this._edgesOption) {
+            if(this._edgesOption && updateEdges) {
                 this._edgesOption.getDataSource().reload();
                 edgeDataSource = this._edgesOption.getItems();
             }
             this._endUpdateDiagram(true);
             return { nodeDataSource, edgeDataSource };
         };
-        this._diagramInstance.reloadContent(itemKey, getData,
+        this._diagramInstance.reloadContent(itemKeys, getData,
             applyLayout && this._getDataBindingLayoutParameters()
         );
     }
@@ -1673,6 +1696,12 @@ class Diagram extends Widget {
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.requestUpdate
+                 * @type function(changes)
+                 * @type_function_param1 changes:Array<any>
+                 * @type_function_return boolean
                  */
                 autoLayout: 'auto',
                 /**

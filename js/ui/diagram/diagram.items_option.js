@@ -5,13 +5,23 @@ class ItemsOption extends Component {
     constructor(diagramWidget) {
         super();
         this._diagramWidget = diagramWidget;
+        this._pushHandler = this._handlePush.bind(this);
         this._resetCache();
     }
 
     _dataSourceChangedHandler(newItems, e) {
+        if(e && e.changes) return;
+
         this._resetCache();
         this._items = newItems.map(item => Object.assign({}, item));
         this._diagramWidget._onDataSourceChanged();
+
+        const store = this._getStore();
+        if(this._pushHandlerStore !== store) {
+            this._pushHandlerStore && this._pushHandlerStore.off('push', this._pushHandler);
+            this._pushHandlerStore = store;
+            this._pushHandlerStore && this._pushHandlerStore.on('push', this._pushHandler);
+        }
     }
     _dataSourceLoadingChangedHandler(isLoading) {
         if(isLoading && !this._dataSource.isLoaded()) {
@@ -20,11 +30,20 @@ class ItemsOption extends Component {
             this._diagramWidget._hideLoadingIndicator();
         }
     }
+    _handlePush(changes) {
+    }
+
+    dispose() {
+        this._pushHandlerStore && this._pushHandlerStore.off('push', this._pushHandler);
+
+        this._disposeDataSource();
+    }
     insert(data, callback, errorCallback) {
         this._resetCache();
         this._getStore().insert(data).done(
             (data) => {
                 if(callback) {
+                    this._diagramWidget._onDataSourceUpdated(undefined, [{ type: 'insert', data }]);
                     callback(data);
                 }
                 this._resetCache();
@@ -41,13 +60,14 @@ class ItemsOption extends Component {
     update(key, data, callback, errorCallback) {
         const storeKey = this._getStoreKey(data);
         this._getStore().update(storeKey, data).done(
-            function(data, key) {
+            (data, key) => {
                 if(callback) {
+                    this._diagramWidget._onDataSourceUpdated(key, [{ type: 'update', key, data }]);
                     callback(key, data);
                 }
             }
         ).fail(
-            function(error) {
+            (error) => {
                 if(errorCallback) {
                     errorCallback(error);
                 }
@@ -60,6 +80,7 @@ class ItemsOption extends Component {
         this._getStore().remove(storeKey).done(
             (key) => {
                 if(callback) {
+                    this._diagramWidget._onDataSourceUpdated(key, [{ type: 'remove', key, data }]);
                     callback(key, data);
                 }
                 this._resetCache();
@@ -155,7 +176,7 @@ class ItemsOption extends Component {
         };
     }
     _getStore() {
-        return this._dataSource.store();
+        return this._dataSource && this._dataSource.store();
     }
     _getStoreKey(data) {
         return this._getStore().keyOf(data);

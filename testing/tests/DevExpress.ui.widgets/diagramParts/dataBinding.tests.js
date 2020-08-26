@@ -302,7 +302,6 @@ QUnit.module('DataBinding', {
                 assert.equal(nodes[0].textStyle, undefined);
 
                 values.textStyle = 'font-family: Arial Black1';
-                this.instance.reloadContent(key);
 
                 assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, 'font-family: Arial Black1');
                 assert.equal(values.textStyle, 'font-family: Arial Black1');
@@ -368,11 +367,7 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, undefined);
 
-        nodes[0].textStyle = 'font-family: Arial Black';
-        assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial');
-        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, undefined);
-
-        this.instance.reloadContent('1');
+        nodeStore.push([{ type: 'update', key: '1', data: { 'textStyle': 'font-family: Arial Black' } }]);
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial Black');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, 'font-family: Arial Black');
         assert.equal(nodes[0].textStyle, 'font-family: Arial Black');
@@ -401,11 +396,7 @@ QUnit.module('DataBinding', {
 
         assert.equal(this.instance._diagramInstance.model.items.length, 1);
 
-        nodes.push({ id: '2', text: 'text2', textStyle: 'font-family: Arial Black' });
-        assert.equal(this.instance._diagramInstance.model.items.length, 1);
-        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource.length, 1);
-
-        this.instance.reloadContent();
+        nodeStore.push([{ type: 'insert', data: { id: '2', text: 'text2', textStyle: 'font-family: Arial Black' } }]);
         assert.equal(this.instance._diagramInstance.model.items.length, 2);
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource.length, 2);
         assert.equal(this.instance._diagramInstance.model.items[1].styleText['font-family'], 'Arial Black');
