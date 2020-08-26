@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
       isVirtual={viewModel.isVirtual}
       topVirtualRowHeight={viewModel.topVirtualRowHeight}
       bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-      className={`dx-scheduler-time-panel ${viewModel.props.className}`}
+      className="dx-scheduler-time-panel"
     >
       {viewModel.props.viewData!
         .groupedData.map(({ dateTable }, index) => {

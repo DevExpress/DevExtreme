@@ -8,24 +8,67 @@ import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
 
 const getIsAllDayPanelInsideDateTable = jest.spyOn(utilsModule, 'getIsAllDayPanelInsideDateTable');
+const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
+
+jest.mock('../../table', () => ({
+  ...require.requireActual('../../table'),
+  Table: ({ children }) => (
+    <table>
+      <tbody>
+        {children}
+      </tbody>
+    </table>
+  ),
+}));
 
 describe('TimePanelLayout', () => {
+  const viewDataBase = {
+    groupedData: [{
+      dateTable: [[{
+        startDate: new Date(2020, 6, 9, 1),
+        endDate: new Date(2020, 6, 9, 2),
+        text: '0:00 AM',
+        groups: { id: 2 },
+        groupIndex: 2,
+        index: 0,
+      }, {
+        startDate: new Date(2020, 6, 9, 2),
+        endDate: new Date(2020, 6, 9, 3),
+        text: '0:00 AM',
+        groups: { id: 2 },
+        groupIndex: 2,
+        index: 1,
+      }], [{
+        startDate: new Date(2020, 6, 9, 3),
+        endDate: new Date(2020, 6, 9, 4),
+        text: '1:00 AM',
+        groups: { id: 2 },
+        groupIndex: 2,
+        index: 2,
+      }, {
+        startDate: new Date(2020, 6, 9, 4),
+        endDate: new Date(2020, 6, 9, 4),
+        text: '1:00 AM',
+        groups: { id: 2 },
+        groupIndex: 2,
+        index: 3,
+      }]],
+    }],
+    cellCountInGroupRow: 2,
+  };
+
   describe('Render', () => {
-    const viewData = {
-      groupedData: [{
-        dateTable: [
-          [{ startDate: new Date(2020, 6, 9, 1), text: '0:00 AM' }, { startDate: new Date(2020, 6, 9, 2), text: '0:00 AM' }],
-          [{ startDate: new Date(2020, 6, 9, 3), text: '1:00 AM' }, { startDate: new Date(2020, 6, 9, 4), text: '1:00 AM' }],
-        ],
-      }],
-    };
     const render = (viewModel): ReactWrapper => mount(<LayoutView {...{
       ...viewModel,
-      props: { viewData, ...viewModel.props },
+      props: { viewData: viewDataBase, ...viewModel.props },
     }}
     />);
 
-    beforeEach(() => getIsAllDayPanelInsideDateTable.mockClear());
+    afterEach(jest.resetAllMocks);
+
+    beforeEach(() => {
+      getKeyByGroup.mockImplementation((key) => key.toString());
+    });
 
     it('should spread restAttributes', () => {
       const layout = render(
@@ -36,24 +79,25 @@ describe('TimePanelLayout', () => {
         .toBe('customAttribute');
     });
 
-    it('should render components correctly', () => {
-      const layout = render({ props: { className: 'test-class' } });
+    it('should render Table and Rows correctly', () => {
+      const layout = render({
+        isVirtual: 'isVirtual',
+        topVirtualRowHeight: 100,
+        bottomVirtualRowHeight: 200,
+      });
 
-      const table = layout.find('table');
+      const table = layout.find(Table);
 
       expect(table.exists())
         .toBe(true);
-
       expect(table.hasClass('dx-scheduler-time-panel'))
         .toBe(true);
-
-      const tbody = layout.find('tbody');
-
-      expect(tbody.exists())
-        .toBe(true);
-
-      expect(tbody.hasClass(''))
-        .toBe(true);
+      expect(table.props())
+        .toMatchObject({
+          isVirtual: 'isVirtual',
+          topVirtualRowHeight: 100,
+          bottomVirtualRowHeight: 200,
+        });
 
       const rows = layout.find(Row);
 
@@ -61,29 +105,78 @@ describe('TimePanelLayout', () => {
         .toHaveLength(2);
     });
 
-    it('should render cells and pass correct props to them', () => {
-      const layout = render({ });
+    it('should render cells and pass correct props to them in basic case', () => {
+      const layout = render({});
 
       const cells = layout.find(Cell);
       expect(cells)
         .toHaveLength(2);
 
-      const { dateTable } = viewData.groupedData[0];
+      const { dateTable } = viewDataBase.groupedData[0];
 
       expect(cells.at(0).props())
         .toMatchObject({
           startDate: dateTable[0][0].startDate,
+          groups: undefined,
+          groupIndex: undefined,
+          index: 0,
           text: dateTable[0][0].text,
         });
-
       expect(cells.at(1).props())
         .toMatchObject({
           startDate: dateTable[1][0].startDate,
+          groups: undefined,
+          groupIndex: undefined,
+          index: 1,
           text: dateTable[1][0].text,
         });
     });
 
-    it('should render correct first, last group cells', () => {
+    it('should not pass groups and groupIndex to cells if groupOrientation is not vertical', () => {
+      const layout = render({
+        isVerticalGroupOrientation: false,
+      });
+
+      const cells = layout.find(Cell);
+      expect(cells)
+        .toHaveLength(2);
+
+      expect(cells.at(0).props())
+        .toMatchObject({
+          groups: undefined,
+          groupIndex: undefined,
+        });
+      expect(cells.at(1).props())
+        .toMatchObject({
+          groups: undefined,
+          groupIndex: undefined,
+        });
+    });
+
+    it('should pass groups and groupIndex to cells if groupOrientation is vertical', () => {
+      const layout = render({
+        isVerticalGroupOrientation: true,
+      });
+
+      const cells = layout.find(Cell);
+      expect(cells)
+        .toHaveLength(2);
+
+      const { dateTable } = viewDataBase.groupedData[0];
+
+      expect(cells.at(0).props())
+        .toMatchObject({
+          groups: dateTable[0][0].groups,
+          groupIndex: dateTable[0][0].groupIndex,
+        });
+      expect(cells.at(1).props())
+        .toMatchObject({
+          groups: dateTable[1][0].groups,
+          groupIndex: dateTable[1][0].groupIndex,
+        });
+    });
+
+    it('should pass correct "isFirstCell" and "isLastCell" props to the cells', () => {
       const layout = render({
         props: {
           viewData: {
@@ -123,24 +216,6 @@ describe('TimePanelLayout', () => {
       assert(cells, 3, false, true);
     });
 
-    it('should render virtual table', () => {
-      const layout = render({
-        isVirtual: true,
-        topVirtualRowHeight: 100,
-        bottomVirtualRowHeight: 200,
-      });
-
-      const table = layout.find(Table);
-      expect(table.exists())
-        .toBe(true);
-      expect(table.prop('isVirtual'))
-        .toBe(true);
-      expect(table.prop('topVirtualRowHeight'))
-        .toEqual(100);
-      expect(table.prop('bottomVirtualRowHeight'))
-        .toEqual(200);
-    });
-
     it('should call getIsAllDayPanelInsideDateTable with correct arguments', () => {
       render({ });
 
@@ -148,15 +223,14 @@ describe('TimePanelLayout', () => {
         .toHaveBeenCalledTimes(1);
 
       expect(getIsAllDayPanelInsideDateTable)
-        .toHaveBeenNthCalledWith(
-          1,
-          viewData,
-          0,
+        .toHaveBeenCalledWith(
+          viewDataBase,
+          2,
         );
     });
 
     [true, false].forEach((mockValue) => {
-      it(`AllDayPanelTitle if groupedAllDayPanel=${mockValue}`, () => {
+      it(`AllDayPanelTitle if isAllDayPanelInsideDateTable=${mockValue}`, () => {
         getIsAllDayPanelInsideDateTable.mockImplementation(() => mockValue);
 
         const layout = render({ });
@@ -166,6 +240,15 @@ describe('TimePanelLayout', () => {
           .toBe(mockValue);
       });
     });
+
+    it('should call getKeyByGroup with correct arguments', () => {
+      render({});
+
+      expect(getKeyByGroup)
+        .toHaveBeenCalledTimes(1);
+      expect(getKeyByGroup)
+        .toHaveBeenCalledWith(2);
+    });
   });
 
   describe('Logic', () => {
@@ -174,7 +257,7 @@ describe('TimePanelLayout', () => {
         it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
           const layout = new TimePanelTableLayout({
             viewData: {
-              groupedData: [],
+              ...viewDataBase,
               isVirtual,
             },
           });
@@ -189,7 +272,7 @@ describe('TimePanelLayout', () => {
           it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
             const layout = new TimePanelTableLayout({
               viewData: {
-                groupedData: [],
+                ...viewDataBase,
                 topVirtualRowHeight,
                 bottomVirtualRowHeight,
               },
