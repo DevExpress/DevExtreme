@@ -381,9 +381,9 @@ const pieChartPlugin = {
             let series;
             const coords = {
                 offsetX: annotation.offsetX,
-                offsetY: annotation.offsetY
+                offsetY: annotation.offsetY,
+                canvas: this._canvas
             };
-            coords.canvas = this._canvas;
 
             if(annotation.argument) {
                 if(annotation.series) {
@@ -392,13 +392,9 @@ const pieChartPlugin = {
                     series = this.series[0];
                 }
                 const argument = series.getPointsByArg(annotation.argument)[0];
-                if(annotation.location !== 'edge') {
-                    coords.x = argument.getCenterX();
-                    coords.y = argument.getCenterY();
-                } else {
-                    coords.x = argument.getEdgeX();
-                    coords.y = argument.getEdgeY();
-                }
+                const { x, y } = argument.getAnnotationCoords(annotation.location);
+                coords.x = x;
+                coords.y = y;
             }
 
             return coords;

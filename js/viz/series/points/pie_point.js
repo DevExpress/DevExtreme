@@ -86,62 +86,23 @@ export default _extend({}, symbolPoint, {
         return options.position;
     },
 
-    getCenterX: function() {
+    getAnnotationCoords: function(location) {
+        return this._getElementCoords(location !== 'edge' ? 'inside' : 'outside', this.radiusOuter, 0);
+    },
+
+    _getElementCoords: function(position, elementRadius, radialOffset, bBox = { x: 0, y: 0, width: 0, height: 0 }) {
         const that = this;
+        const angleFunctions = _getCosAndSin(that.middleAngle);
         const radiusInner = that.radiusInner;
         const radiusOuter = that.radiusOuter;
-        const rad = radiusInner + (radiusOuter - radiusInner) / 2;
-        const angleFunctions = _getCosAndSin(that.middleAngle);
-        return that.centerX + rad * angleFunctions.cos;
-    },
-
-    getCenterY: function() {
-        const that = this;
-        const radiusInner = that.radiusInner;
-        const radiusOuter = that.radiusOuter;
-        const angleFunctions = _getCosAndSin(that.middleAngle);
-        const rad = radiusInner + (radiusOuter - radiusInner) / 2;
-        return _round(that.centerY - rad * angleFunctions.sin);
-    },
-
-    getEdgeX: function() {
-        const that = this;
-        const rad = that.radiusOuter;
-        const angleFunctions = _getCosAndSin(that.middleAngle);
-        if(angleFunctions.cos > 0.1) {
-            return that.centerX + rad * angleFunctions.cos;
-        } else if(angleFunctions.cos < -0.1) {
-            return that.centerX + rad * angleFunctions.cos;
-        } else {
-            return that.centerX + rad * angleFunctions.cos;
-        }
-    },
-
-    getEdgeY: function() {
-        const that = this;
-        const rad = that.radiusOuter;
-        const angleFunctions = _getCosAndSin(that.middleAngle);
-        return _round(that.centerY - rad * angleFunctions.sin);
-    },
-
-    _getLabelCoords: function(label) {
-        const that = this;
-        const bBox = label.getBoundingRect();
-        const options = label.getLayoutOptions();
-        const angleFunctions = _getCosAndSin(that.middleAngle);
-        const position = that._getLabelPosition(options);
-        const radiusInner = that.radiusInner;
-        const radiusOuter = that.radiusOuter;
-        const radiusLabels = that.radiusLabels;
         const columnsPosition = position === 'columns';
         let rad;
         let x;
-
         if(position === 'inside') {
-            rad = radiusInner + (radiusOuter - radiusInner) / 2 + options.radialOffset;
+            rad = radiusInner + (radiusOuter - radiusInner) / 2 + radialOffset;
             x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
         } else {
-            rad = radiusLabels + options.radialOffset;
+            rad = elementRadius + radialOffset;
             if(angleFunctions.cos > 0.1 || columnsPosition && angleFunctions.cos >= 0) {
                 x = that.centerX + rad * angleFunctions.cos;
             } else if(angleFunctions.cos < -0.1 || columnsPosition && angleFunctions.cos < 0) {
@@ -155,6 +116,15 @@ export default _extend({}, symbolPoint, {
             x: x,
             y: _round(that.centerY - rad * angleFunctions.sin - bBox.height / 2)
         };
+    },
+
+    _getLabelCoords: function(label) {
+        const that = this;
+        const bBox = label.getBoundingRect();
+        const options = label.getLayoutOptions();
+        const position = that._getLabelPosition(options);
+
+        return that._getElementCoords(position, that.radiusLabels, options.radialOffset, bBox);
     },
 
     _correctLabelCoord: function(coord, moveLabelsFromCenter) {

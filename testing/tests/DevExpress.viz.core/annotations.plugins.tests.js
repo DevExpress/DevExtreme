@@ -10,6 +10,26 @@ import devices from 'core/devices';
 
 import 'viz/chart';
 import 'viz/polar_chart';
+import 'viz/pie_chart';
+
+const checkCoords = (assert, chart, annotation, expected, canvas, testCase) => {
+    const coords = chart._getAnnotationCoords(annotation);
+    if(expected.x !== undefined) {
+        assert.roughEqual(coords.x, expected.x, 0.6, `x is correct for case: ${testCase}`);
+    } else {
+        assert.equal(coords.x, expected.x, `x is correct for case: ${testCase}`);
+    }
+
+    if(expected.y !== undefined) {
+        assert.roughEqual(coords.y, expected.y, 0.6, `y is correct for case: ${testCase}`);
+    } else {
+        assert.equal(coords.y, expected.y, `y is correct for case: ${testCase}`);
+    }
+
+    if(canvas) {
+        assert.deepEqual(coords.canvas, canvas, `canvas is correct for case: ${testCase}`);
+    }
+};
 
 QUnit.module('Coordinates calculation. Chart plugin', {
     p1Canvas: { width: 100, height: 210, top: 0, bottom: 110, left: 0, right: 0, originalTop: 0, originalBottom: 110, originalLeft: 0, originalRight: 0 },
@@ -48,24 +68,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
             synchronizeMultiAxes: false
         }, options)).dxChart('instance');
     },
-    checkCoords(assert, chart, annotation, expected, canvas, testCase) {
-        const coords = chart._getAnnotationCoords(annotation);
-        if(expected.x !== undefined) {
-            assert.roughEqual(coords.x, expected.x, 0.6, `x is correct for case: ${testCase}`);
-        } else {
-            assert.equal(coords.x, expected.x, `x is correct for case: ${testCase}`);
-        }
-
-        if(expected.y !== undefined) {
-            assert.roughEqual(coords.y, expected.y, 0.6, `y is correct for case: ${testCase}`);
-        } else {
-            assert.equal(coords.y, expected.y, `y is correct for case: ${testCase}`);
-        }
-
-        if(canvas) {
-            assert.deepEqual(coords.canvas, canvas, `canvas is correct for case: ${testCase}`);
-        }
-    }
+    checkCoords: checkCoords
 }, function() {
     QUnit.test('Get coordinates from axes', function(assert) {
         const chart = this.getChartForSeriesTests({
@@ -830,6 +833,47 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
         assert.equal(coords.offsetX, 10);
         assert.equal(coords.offsetY, 20);
     });
+});
+
+QUnit.module('Coordinates calculation. PieChart plugin', {
+    getPieChartForSeriesTests(options) {
+        return $('<div>').appendTo('#qunit-fixture').dxPieChart($.extend({
+            size: {
+                width: 200,
+                height: 200
+            },
+            dataSource: [
+                { arg: 'Cat1', val: 50, val2: 200 },
+                { arg: 'Cat2', val: 100, val2: 150 },
+                { arg: 'Cat3', val: 150, val2: 100 },
+                { arg: 'Cat4', val: 200, val2: 50 },
+                { arg: 'Cat5', val: 150, val2: 100 }
+            ],
+            series: [
+                { name: 's1' },
+                { name: 's2', valueField: 'val2' }
+            ],
+            legend: { visible: false }
+        }, options)).dxPieChart('instance');
+    }
+});
+
+QUnit.test('Get coorinates using argument', function(assert) {
+    const pieChart = this.getPieChartForSeriesTests();
+
+    checkCoords(assert, pieChart, { argument: 'Cat3' }, { x: 86.3, y: 120 });
+});
+
+QUnit.test('Get coordinates using series and argument', function(assert) {
+    const pieChart = this.getPieChartForSeriesTests();
+
+    checkCoords(assert, pieChart, { argument: 'Cat3', series: 's2' }, { x: 62, y: 34 });
+});
+
+QUnit.test('Get coordinates using argument and location `edge`', function(assert) {
+    const pieChart = this.getPieChartForSeriesTests();
+
+    checkCoords(assert, pieChart, { argument: 'Cat3', location: 'edge' }, { x: 72.7, y: 140 });
 });
 
 QUnit.module('Lifecycle', {
