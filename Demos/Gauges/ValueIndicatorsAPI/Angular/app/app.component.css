@@ -20,11 +20,9 @@
 ::ng-deep .option > span {
     display: inline-block;
     width: 155px;
+    line-height: 36px;
 }
 ::ng-deep .option > .dx-widget {
-    display: inline-block;
     vertical-align: middle;
-}
-::ng-deep .option > .dx-button {
     float: right;
 }
