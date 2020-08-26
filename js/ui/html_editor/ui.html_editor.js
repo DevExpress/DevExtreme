@@ -18,7 +18,6 @@ import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
-import getTextDecorationMatcher from './matchers/textDecoration';
 import FormDialog from './ui/formDialog';
 
 // STYLE htmlEditor
@@ -32,8 +31,6 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
-
-const ELEMENT_NODE = 1;
 
 const HtmlEditor = Editor.inherit({
 
@@ -317,8 +314,7 @@ const HtmlEditor = Editor.inherit({
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
-                    ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
+                    ['p.MsoListParagraphCxSpLast', wordListMatcher]
                 ]
             }
         }, this._getCustomModules());
