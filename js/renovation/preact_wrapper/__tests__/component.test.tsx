@@ -359,7 +359,6 @@ describe('option', () => {
       oneWayWithoutValue: 15,
       oneWayNullWithValue: 15,
       twoWayWithValue: '15',
-      twoWayWithoutValue: '15',
       twoWayNullWithValue: '15',
     }));
 
@@ -368,7 +367,6 @@ describe('option', () => {
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
-      twoWayWithoutValue: undefined,
       twoWayNullWithValue: undefined,
     }));
 
@@ -377,7 +375,6 @@ describe('option', () => {
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: null,
       twoWayWithValue: '10',
-      twoWayWithoutValue: undefined,
       twoWayNullWithValue: null,
     });
 
@@ -386,7 +383,6 @@ describe('option', () => {
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
-      twoWayWithoutValue: undefined,
       twoWayNullWithValue: undefined,
     });
   });
