@@ -13,6 +13,7 @@ import DataOption from './ui.gantt.data.option';
 import SplitterControl from '../splitter';
 import { GanttDialog } from './ui.gantt.dialogs';
 import LoadPanel from '../load_panel';
+import { getPublicElement } from '../../core/element';
 
 // STYLE gantt
 
@@ -150,7 +151,8 @@ class Gantt extends Widget {
             onPopupMenuShowing: this._showPopupMenu.bind(this),
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
-            modelChangesListener: this._createModelChangesListener()
+            modelChangesListener: this._createModelChangesListener(),
+            tooltipTemplate: this._getTooltipTemplateFunction(this.option('tooltipTemplate'))
         });
         this._fireContentReadyAction();
     }
@@ -798,6 +800,18 @@ class Gantt extends Widget {
         super._clean();
     }
 
+    _getTooltipTemplateFunction(tooltipTemplateOption) {
+        const template = tooltipTemplateOption && this._getTemplate(tooltipTemplateOption);
+        const createTemplateFunction = template && ((container, item) => {
+            template.render({
+                model: item,
+                container: getPublicElement($(container))
+            });
+        });
+
+        return createTemplateFunction;
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
@@ -1052,7 +1066,8 @@ class Gantt extends Widget {
             contextMenu: {
                 enabled: true,
                 items: undefined
-            }
+            },
+            tooltipTemplate: null
         });
     }
 
@@ -1153,6 +1168,9 @@ class Gantt extends Widget {
                 break;
             case 'contextMenu':
                 this._updateContextMenu();
+                break;
+            case 'tooltipTemplate':
+                this._setGanttViewOption('tooltipTemplate', this._getTooltipTemplateFunction(args.value));
                 break;
             default:
                 super._optionChanged(args);

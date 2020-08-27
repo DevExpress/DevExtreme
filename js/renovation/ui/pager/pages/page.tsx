@@ -5,6 +5,7 @@ import {
 import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
+import { EventCallback } from '../../common/event_callback.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -19,13 +20,15 @@ export const viewFunction = ({
   </LightButton>
 );
 
+/* istanbul ignore next: class has only props default */
 @ComponentBindings()
 export class PageProps {
   @OneWay() index = 0;
 
-  @Event() onClick?: () => void;
+  /* istanbul ignore next: EventCallback cannot be tested */
+  @Event() onClick?: EventCallback;
 
-  @OneWay() selected? = false;
+  @OneWay() selected = false;
 
   @OneWay() className?: string;
 }
@@ -35,7 +38,7 @@ export class PageProps {
   view: viewFunction,
 })
 
-export class Page extends JSXComponent(PageProps) {
+export class Page extends JSXComponent<PageProps>() {
   get label(): string {
     return `Page ${this.value}`;
   }
@@ -49,7 +52,7 @@ export class Page extends JSXComponent(PageProps) {
       { selected } = this.props;
     return combineClasses({
       [PAGER_PAGE_CLASS]: true,
-      [this.props.className!]: !!this.props.className,
+      [`${this.props.className}`]: !!this.props.className,
       [PAGER_SELECTION_CLASS]: !!selected,
     });
   }

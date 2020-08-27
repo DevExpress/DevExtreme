@@ -3429,3 +3429,22 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
         'onOptionChanged'
     ]);
 });
+
+[2, 3, 'auto'].forEach(colCount => {
+    [1, undefined].forEach(colSpan => {
+        QUnit.test(`Form.colCount=${colCount}, field.colSpan=${colSpan} -> resizeWindow() //T923489`, function(assert) {
+            $('#form').dxForm({
+                colCount: colCount,
+                items: [
+                    { dataField: 'field1', colSpan: 2 },
+                    { dataField: 'field2', colSpan: colSpan }
+                ]
+            }).dxForm('instance');
+
+            resizeCallbacks.fire();
+
+            assert.equal(1, 1, 'resize of the form does not freeze the page');
+        });
+    });
+});
+

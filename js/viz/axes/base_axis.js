@@ -1672,6 +1672,11 @@ Axis.prototype = {
         return businessInterval;
     },
 
+    _getConvertIntervalCoefficient(intervalInPx, screenDelta) {
+        const ratioOfCanvasRange = this._translator.ratioOfCanvasRange();
+        return ratioOfCanvasRange / (ratioOfCanvasRange * screenDelta / (intervalInPx + screenDelta));
+    },
+
     _calculateValueMargins(ticks) {
         this._resetMargins();
         const that = this;
@@ -1701,16 +1706,11 @@ Axis.prototype = {
             };
         }
 
-        function getConvertIntervalCoefficient(intervalInPx) {
-            const ratioOfCanvasRange = translator.ratioOfCanvasRange();
-            return ratioOfCanvasRange / (ratioOfCanvasRange * screenDelta / (intervalInPx + screenDelta));
-        }
-
         if(that.isArgumentAxis && margins.checkInterval) {
             rangeInterval = that._calculateRangeInterval(dataRange.interval);
             const pxInterval = translator.getInterval(rangeInterval);
             if(isFinite(pxInterval)) {
-                interval = Math.ceil(pxInterval / (2 * getConvertIntervalCoefficient(pxInterval)));
+                interval = Math.ceil(pxInterval / (2 * that._getConvertIntervalCoefficient(pxInterval, screenDelta)));
             } else {
                 rangeInterval = 0;
             }
@@ -1786,7 +1786,7 @@ Axis.prototype = {
 
             if(minTickPadding > minPadding || maxTickPadding > maxPadding) {
                 const commonPadding = (maxTickPadding + minTickPadding);
-                const coeff = getConvertIntervalCoefficient(commonPadding);
+                const coeff = that._getConvertIntervalCoefficient(commonPadding, screenDelta);
                 if(minTickPadding >= minPadding) {
                     minValue = ticks[0].value;
                 }
@@ -1811,36 +1811,58 @@ Axis.prototype = {
             }
         }
 
+        const { correctedMin, correctedMax, start, end } = that.getCorrectedValuesToZero(minValue, maxValue);
+        minPadding = start ?? minPadding;
+        maxPadding = end ?? maxPadding;
+
+        return {
+            startPadding: translator.isInverted() ? maxPadding : minPadding,
+            endPadding: translator.isInverted() ? minPadding : maxPadding,
+
+            minValue: correctedMin ?? minValue,
+            maxValue: correctedMax ?? maxValue,
+
+            interval: rangeInterval,
+            isSpacedMargin: minPadding === maxPadding && minPadding !== 0
+        };
+    },
+
+    getCorrectedValuesToZero(minValue, maxValue) {
+        const that = this;
+        const translator = that._translator;
+        const canvasStartEnd = that._getCanvasStartEnd();
+        const dataRange = that._getViewportRange();
+        const screenDelta = that._getScreenDelta();
+        const options = that._options;
+        let start;
+        let end;
+        let correctedMin;
+        let correctedMax;
         function correctZeroLevel(minPoint, maxPoint) {
             const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
             const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
 
-            const coeff = getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding);
+            const coeff = that._getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding, screenDelta);
 
-            minPadding = minExpectedPadding / coeff;
-            maxPadding = maxExpectedPadding / coeff;
+            start = minExpectedPadding / coeff;
+            end = maxExpectedPadding / coeff;
         }
-
         if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
-                minValue = 0;
+                correctedMin = 0;
             }
 
             if(maxValue * dataRange.max <= 0 && maxValue * dataRange.maxVisible <= 0) {
                 correctZeroLevel(translator.translate(minValue), translator.translate(0));
-                maxValue = 0;
+                correctedMax = 0;
             }
         }
         return {
-            startPadding: this._translator.isInverted() ? maxPadding : minPadding,
-            endPadding: this._translator.isInverted() ? minPadding : maxPadding,
-
-            minValue,
-            maxValue,
-
-            interval: rangeInterval,
-            isSpacedMargin: minPadding === maxPadding && minPadding !== 0
+            start,
+            end,
+            correctedMin,
+            correctedMax
         };
     },
 

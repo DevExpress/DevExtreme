@@ -5,7 +5,10 @@ export default class MetadataGenerator {
   };
 
   static capitalize(key: string): string {
-    return key.charAt(0).toUpperCase() + key.slice(1);
+    return key
+      .split('-')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('');
   }
 
   clean(): void {
@@ -30,7 +33,7 @@ export default class MetadataGenerator {
   static parseComments(comments: string): MetaItem {
     const metaItem: MetaItem = {};
 
-    MetadataGenerator.executor(comments, /\$(type|name|typeValues)\s(.+)/g, (matches: RegExpMatchArray) => {
+    MetadataGenerator.executor(comments, /\$(type|name|type-values)\s(.+)/g, (matches: RegExpMatchArray) => {
       const key = MetadataGenerator.capitalize(matches[1]);
       metaItem[key] = matches[2].trim();
     });
