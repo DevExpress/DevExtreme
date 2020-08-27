@@ -101,7 +101,7 @@ class ViewDataGenerator {
         const groupedData = [];
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
-            const allDayPanelData = this._generateAllDayPanelData(groupIndex, cellCount);
+            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
             const viewCellsData = this._generateViewCellsData(
                 options,
                 groupIndex,
@@ -170,12 +170,11 @@ class ViewDataGenerator {
         }
 
         const { realGroupCount } = options;
-        // const rowCount = this.workspace._getRowCount();
 
         const allDayPanel = [];
 
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
-            const rowIndex = Math.max(groupIndex * rowCount - 1, 0); // const rowIndex = Math.max(groupIndex * rowCount, 0);
+            const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex).value;
             cellDataValue.groupIndex = this._calculateGroupIndex(
                 realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
@@ -213,13 +212,14 @@ class ViewDataGenerator {
     }
 
     _calculateCellIndex(realGroupCount, groupOrientation, isGroupedByDate, rowIndex, columnIndex, columnsNumber) {
+        const groupCount = realGroupCount || 1;
         let index = rowIndex * columnsNumber + columnIndex;
-        const columnsInGroup = columnsNumber / realGroupCount;
+        const columnsInGroup = columnsNumber / groupCount;
 
         if(groupOrientation === 'horizontal') {
             let columnIndexInCurrentGroup = columnIndex % columnsInGroup;
             if(isGroupedByDate) {
-                columnIndexInCurrentGroup = Math.floor(columnIndex / realGroupCount);
+                columnIndexInCurrentGroup = Math.floor(columnIndex / groupCount);
             }
 
             index = rowIndex * columnsInGroup + columnIndexInCurrentGroup;

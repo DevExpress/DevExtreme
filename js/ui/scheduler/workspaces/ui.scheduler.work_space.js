@@ -1065,7 +1065,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const groupCountForRender = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const groupCount = this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
-        const rowCountInGroup = this._getTotalRowCount() / this._getGroupCount();
+        const rowCountInGroup = this._getRowCount();
 
         const options = {
             realGroupCount: groupCount,
@@ -1100,7 +1100,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRAllDayPanel();
 
-        this.renderRTimePanel();
+        this.renderRTimeTable();
 
         this.renderRDateTable();
     }
