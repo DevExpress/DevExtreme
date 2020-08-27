@@ -5,7 +5,7 @@ import 'ui/html_editor';
 
 import nativePointerMock from '../../../helpers/nativePointerMock.js';
 
-const { test, module, skip } = QUnit;
+const { test, module } = QUnit;
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -60,7 +60,7 @@ module('Mentions integration', {
 
         this.addText = (element, text, prevText) => {
             if(IS_IE11) {
-                element.innerText = `${prevText}${text}\n`;
+                element.outerText = `${prevText}${text}`;
             } else {
                 element.innerText += text;
             }
@@ -366,14 +366,11 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    // IE11
-    skip('list should show relevant items on typing text', function(assert) {
+    test('list should show relevant items on typing text', function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
-
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
-
                 this.addText(element, 'F', '@');
                 this.clock.tick();
             } else {
@@ -394,8 +391,7 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    // IE11
-    skip('first list item should be focused on filtering', function(assert) {
+    test('first list item should be focused on filtering', function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             if(valueChangeSpy.calledOnce) {
@@ -420,8 +416,7 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    // IE11
-    skip('input text should be removed after item select', function(assert) {
+    test('input text should be removed after item select', function(assert) {
         const done = assert.async();
         const expectedMention = '<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>@</span>Freddy</span></span> </p>';
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -451,8 +446,7 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    // IE11
-    skip('search timeout', function(assert) {
+    test('search timeout', function(assert) {
         const done = assert.async();
         const TIMEOUT = 700;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -481,19 +475,19 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    // IE11
-    skip('minimal search length', function(assert) {
+    test('minimal search length', function(assert) {
         const done = assert.async();
+        const getParagraph = () => this.$element.find('p').get(0);
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
             if(valueChangeSpy.calledOnce) {
-                const element = this.$element.find('p').get(0);
-
-                this.addText(element, 'F', '@');
+                this.addText(getParagraph(), 'F', '@');
                 this.clock.tick();
                 const $items = this.getItems();
                 assert.strictEqual($items.length, 4, 'dataSource isn\'t filtered');
-                this.addText(element, 'r', '@F');
+            } else if(valueChangeSpy.calledTwice) {
+                this.addText(getParagraph(), 'r', '@F');
+                this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
                 $items = this.getItems();
@@ -512,8 +506,7 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    // IE11
-    skip('search expression', function(assert) {
+    test('search expression', function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
