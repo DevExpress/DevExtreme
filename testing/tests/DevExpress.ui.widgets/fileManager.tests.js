@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="fileManager"></div>';

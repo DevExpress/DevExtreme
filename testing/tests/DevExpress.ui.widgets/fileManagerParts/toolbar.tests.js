@@ -765,7 +765,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
 
         const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 400;
+        renderer.fn.width = () => 360;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);
@@ -801,7 +801,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
 
         const originalWidth = renderer.fn.width;
-        renderer.fn.width = () => 400;
+        renderer.fn.width = () => 360;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);
