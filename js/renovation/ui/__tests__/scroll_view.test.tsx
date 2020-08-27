@@ -213,7 +213,7 @@ describe('ScrollView', () => {
       });
 
       describe('ScrollTo', () => {
-        it('should scroll position as number in the vertical direction', () => {
+        it('should scroll to position as number in the vertical direction', () => {
           const containerRefMock = { scrollTop: 150, scrollLeft: 0 };
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
