@@ -20,7 +20,7 @@ const isAppendMode = (that) => {
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
-const needTwoPagesLoading = (that) => {
+const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex >= 0;
     return that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex >= 0;
 };
 
