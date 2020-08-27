@@ -9,11 +9,11 @@ class JSPdfDataGridTestHelper {
     }
 
     checkTableAndColumnWidths(expectedTableWidth, expectedColumnWidths, actualAutoTableOptions) {
-        const expectedTableWidthInPoints = isNumeric(expectedTableWidth)
+        const expectedTableWidthInPdfUnits = isNumeric(expectedTableWidth)
             ? Export.convertPixelsToPdfUnits(this.jsPDFDocument, expectedTableWidth)
             : expectedTableWidth;
-        const expectedColumnWidthsInPoints = expectedColumnWidths.map((w) => {
-            return isNumeric(w) ? Export.convertPixelsToPoints(w) : w;
+        const expectedColumnWidthsInPdfUnits = expectedColumnWidths.map((w) => {
+            return isNumeric(w) ? Export.convertPixelsToPdfUnits(this.jsPDFDocument, w) : w;
         });
 
         const actualColumnWidths = [];
@@ -22,8 +22,8 @@ class JSPdfDataGridTestHelper {
             actualColumnWidths.push(columnStyles[i].cellWidth);
         }
 
-        assert.equal(actualAutoTableOptions.tableWidth, expectedTableWidthInPoints, 'Table width');
-        assert.deepEqual(actualColumnWidths, expectedColumnWidthsInPoints, 'Column widths');
+        assert.equal(actualAutoTableOptions.tableWidth, expectedTableWidthInPdfUnits, 'Table width');
+        assert.deepEqual(actualColumnWidths, expectedColumnWidthsInPdfUnits, 'Column widths');
     }
 
     checkTableAndColumnWidthsInOutput(expectedTableWidth, expectedColumnWidths) {

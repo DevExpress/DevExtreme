@@ -70,6 +70,8 @@ const moduleConfig = {
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then((jsPDFDocument) => {
+                const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+                helper.checkTableAndColumnWidths(500, [50, 'auto'], autoTableOptions);
                 helper.checkTableAndColumnWidthsInOutput(500, [50, 450]);
                 done();
             });
