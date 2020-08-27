@@ -28,7 +28,7 @@ export const ensureLocation = (location: number | Location): Location => {
       top: location,
     } as Location;
   }
-  return { ...{ top: 0, left: 0 }, ...(location as Location) } as Location;
+  return { top: 0, left: 0, ...(location as Location) } as Location;
 };
 
 export const getRelativeLocation = (element: HTMLElement): Location => {
