@@ -107,6 +107,8 @@ class FileUploader extends Editor {
 
             progress: 0,
 
+            dialogTrigger: undefined,
+
             readyToUploadMessage: messageLocalization.format('dxFileUploader-readyToUpload'),
 
             uploadedMessage: messageLocalization.format('dxFileUploader-uploaded'),
@@ -687,14 +689,16 @@ class FileUploader extends Editor {
             focusStateEnabled: false,
             integrationOptions: {}
         });
+        this._selectFileDialogHandler = this._selectButtonClickHandler.bind(this);
 
         // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
         if(devices.real().deviceType === 'desktop') {
-            this._selectButton.option('onClick', this._selectButtonClickHandler.bind(this));
+            this._selectButton.option('onClick', this._selectFileDialogHandler);
         } else {
-            eventsEngine.off($button, 'click');
-            eventsEngine.on($button, 'click', this._selectButtonClickHandler.bind(this));
+            this._attachSelectFileDialogHandler(this._selectButton.$element());
         }
+        this._selectFileDialogHandler = undefined;
+        this._attachSelectFileDialogHandler(this.option('dialogTrigger'));
     }
 
     _selectButtonClickHandler() {
@@ -709,6 +713,21 @@ class FileUploader extends Editor {
         this._isCustomClickEvent = true;
         eventsEngine.trigger(this._$fileInput, 'click');
         this._isCustomClickEvent = false;
+    }
+
+    _attachSelectFileDialogHandler(target) {
+        if(!isDefined(target)) {
+            return;
+        }
+        this._detachSelectFileDialogHandler(target);
+        eventsEngine.on($(target), 'click', this._selectFileDialogHandler);
+    }
+
+    _detachSelectFileDialogHandler(target) {
+        if(!isDefined(target)) {
+            return;
+        }
+        eventsEngine.off($(target), 'click', this._selectFileDialogHandler);
     }
 
     _renderUploadButton() {
@@ -1117,6 +1136,10 @@ class FileUploader extends Editor {
                 break;
             case '_uploadButtonType':
                 this._uploadButton && this._uploadButton.option('type', value);
+                break;
+            case 'dialogTrigger':
+                this._detachSelectFileDialogHandler(args.previousValue);
+                this._attachSelectFileDialogHandler(value);
                 break;
             case 'maxFileSize':
             case 'minFileSize':
