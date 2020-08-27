@@ -319,15 +319,15 @@ module('Mentions integration', {
         this.clock.tick();
     });
 
-    skip('new mention should be selected after press \'enter\' key', function(assert) {
+    test('new mention should be selected after press \'enter\' key', function(assert) {
         const done = assert.async();
         const expectedMention = '<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>';
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 this.clock.tick();
                 const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
-                KeyEventsMock.simulateEvent($content.get(0), 'keydown', { which: KEY_CODES.ARROW_DOWN });
-                KeyEventsMock.simulateEvent($content.get(0), 'keydown', { which: KEY_CODES.ENTER });
+                KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ARROW_DOWN });
+                KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ENTER });
                 this.clock.tick();
             } else {
                 assert.strictEqual(value.replace(/\uFEFF/g, ''), expectedMention, 'mention has been added');

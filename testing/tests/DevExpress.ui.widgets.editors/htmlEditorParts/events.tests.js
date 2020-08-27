@@ -174,7 +174,7 @@ testModule('ValueChanged event', createModuleConfig(), function() {
         });
     });
 
-    test('event should keep the last raised event', function(assert) {
+    skip('event should keep the last raised event', function(assert) {
         const done = assert.async();
         this.createEditor({
             onValueChanged: ({ event }) => {

@@ -7,6 +7,7 @@ import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import { Event as dxEvent } from 'events';
+import { normalizeKeyName } from 'events/utils';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -23,7 +24,7 @@ const KEY_CODES = {
 const POPUP_HIDING_TIMEOUT = 500;
 const IS_EDGE_BROWSER = browser.msie && parseInt(browser.version) > 11;
 
-const APPLY_VALUE_KEYS = [{ key: 'Enter', code: KEY_CODES.ENTER }, { key: 'Space', code: KEY_CODES.SPACE }];
+const APPLY_VALUE_KEYS = [{ key: 'Enter', code: KEY_CODES.ENTER }, { key: ' ', code: KEY_CODES.SPACE }];
 
 const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: '@' }] };
 const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: '#' }] };
@@ -37,8 +38,9 @@ const moduleConfig = {
 
         this.log = [];
 
-        this.$element.on('keydown', ({ which }) => {
-            const handlers = this.quillMock.keyboard.bindings[which];
+        this.$element.on('keydown', (event) => {
+            const handlers = this.quillMock.keyboard.bindings[normalizeKeyName(event)]
+                || this.quillMock.keyboard.bindings[event.which];
             if(handlers) {
                 handlers.forEach((handler) => {
                     handler();
@@ -417,7 +419,6 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
         this.clock.tick();
-
         this.$element.trigger($.Event('keydown', { key: 'ArrowDown', which: KEY_CODES.ARROW_DOWN }));
 
         const $list = $(`.${SUGGESTION_LIST_CLASS}`);
