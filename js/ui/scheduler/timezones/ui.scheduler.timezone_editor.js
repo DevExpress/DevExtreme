@@ -5,6 +5,7 @@ import publisherMixin from '../ui.scheduler.publisher_mixin';
 import messageLocalization from '../../../localization/message';
 import Editor from '../../editor/editor';
 import SelectBox from '../../select_box';
+import DataSource from '../../../data/data_source';
 
 const TIMEZONE_EDITOR_CLASS = 'dx-timezone-editor';
 const TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS = 'dx-timezone-display-name';
@@ -32,7 +33,7 @@ const SchedulerTimezoneEditor = Editor.inherit({
 
     _render: function() {
         this._renderDisplayNameEditor();
-        this._renderIanaIdEditor();
+        // this._renderIanaIdEditor();
         this.callBase();
     },
 
@@ -40,24 +41,35 @@ const SchedulerTimezoneEditor = Editor.inherit({
         const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
         const value = this.invoke('getTimezoneDisplayNameById', this.option('value')) || noTzTitle;
 
+        const productsStore = new DataSource({
+            // key: 'name',
+            store: [noTzTitle].concat(this.invoke('getTimezonesDisplayName')),
+            paginate: true,
+            pageSize: 10
+        });
+
         this._displayNameEditor = this._renderSelectBox(TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS, {
-            items: [noTzTitle].concat(this.invoke('getTimezonesDisplayName')),
+            // items: productsStore,
             value: value,
-            onValueChanged: function(e) {
-                this._processDisplayNameChanging(e.value);
-            }.bind(this)
+            displayExpr: 'title',
+            dataSource: productsStore,
+            searchEnabled: true,
+            // onValueChanged: function(e) {
+            //     this._processDisplayNameChanging(e.value);
+            // }.bind(this)
         });
     },
 
     _renderIanaIdEditor: function() {
         this._ianaIdEditor = this._renderSelectBox(TIMEZONE_IANA_ID_SELECTBOX_CLASS, {
             items: this._idsDataSource(),
-            value: this.option('value'),
+            // value: this.option('value'),
             onValueChanged: function(e) {
                 this.option('value', e.value);
             }.bind(this),
             valueExpr: 'id',
             displayExpr: 'displayName',
+            // placeholder: ''
             disabled: this._calculateIanaIdEditorDisabledState()
         });
     },

@@ -8,7 +8,7 @@ import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
+import SchedulerTimezones from './timezones/ui.scheduler.timezones_new';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
