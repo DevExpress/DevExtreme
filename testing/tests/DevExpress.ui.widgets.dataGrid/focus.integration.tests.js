@@ -2453,6 +2453,7 @@ QUnit.module('View\'s focus', {
             columnWidth: 70,
             dataSource: generateData(),
             scrolling: {
+                useNative: false,
                 columnRenderingMode: 'virtual',
             }
         });
