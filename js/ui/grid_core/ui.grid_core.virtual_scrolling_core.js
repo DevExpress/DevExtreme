@@ -16,7 +16,7 @@ const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 };
 
-const isAppendMode = (that) => {
+const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
