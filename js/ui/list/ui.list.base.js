@@ -650,9 +650,7 @@ const ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
-        if(this.option('onItemSwipe')) {
-            this._attachSwipeEvent($(args.itemElement));
-        }
+        this._attachSwipeEvent($(args.itemElement));
     },
 
     _attachSwipeEvent: function($itemElement) {
