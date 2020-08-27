@@ -326,7 +326,7 @@ describe('ScrollView', () => {
           });
         };
 
-        describe('Element less than container', () => {
+        describe('Element is smaller than container', () => {
           it('should scroll to element from top side by vertical orientation', () => {
             const element = createTargetElement({ location: { top: 20, left: 0 } });
             const containerRef = createContainerRef({ top: 200, left: 0 } as Location);
