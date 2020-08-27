@@ -73,20 +73,20 @@ export class AppComponent {
       worksheet: priceSheet,
       component: context.priceDataGrid.instance,
       topLeftCell: { row: 4, column: 2 },
-      customizeCell: function(options) {
-        setAlternatingRowsBackground(options.gridCell, options.excelCell)
+      customizeCell: ({ gridCell, excelCell }) => {
+        setAlternatingRowsBackground(gridCell, excelCell)
       }
-    }).then(function() {
+    }).then(() => {
       return exportDataGrid({
         worksheet: ratingSheet,
         component: context.ratingDataGrid.instance,
         topLeftCell: { row: 4, column: 2 },
-        customizeCell: function(options) {
-          setAlternatingRowsBackground(options.gridCell, options.excelCell)
+        customizeCell: ({ gridCell, excelCell }) => {
+          setAlternatingRowsBackground(gridCell, excelCell)
         }
       });
-    }).then(function() {   
-      workbook.xlsx.writeBuffer().then(function(buffer) {
+    }).then(() => {   
+      workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
       });
     });

@@ -38,9 +38,9 @@ export class AppComponent {
       component: e.component,
       worksheet: worksheet,
       autoFilterEnabled: true
-    }).then(function() {
+    }).then(() => {
       // https://github.com/exceljs/exceljs#writing-xlsx
-      workbook.xlsx.writeBuffer().then(function(buffer) {
+      workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
       });
     });

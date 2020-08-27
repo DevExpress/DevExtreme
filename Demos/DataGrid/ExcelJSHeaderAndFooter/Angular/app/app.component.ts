@@ -39,7 +39,7 @@ export class AppComponent {
       component: e.component,
       worksheet: worksheet,
       topLeftCell: { row: 4, column: 1 }
-    }).then(function(cellRange) {
+    }).then((cellRange) => {
       // header
       // https://github.com/exceljs/exceljs#rows
       const headerRow = worksheet.getRow(2);
@@ -62,9 +62,9 @@ export class AppComponent {
       footerRow.getCell(1).value = 'www.wikipedia.org';
       footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
       footerRow.getCell(1).alignment = { horizontal: 'right' };
-    }).then(function() {
+    }).then(() => {
       // https://github.com/exceljs/exceljs#writing-xlsx
-      workbook.xlsx.writeBuffer().then(function(buffer) {
+      workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
       });
     });

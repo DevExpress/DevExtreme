@@ -84,20 +84,20 @@ class App extends React.Component {
       worksheet: priceSheet,
       component: context.priceDataGrid,
       topLeftCell: { row: 4, column: 2 },
-      customizeCell: function(options) {
-        context.setAlternatingRowsBackground(options.gridCell, options.excelCell);
+      customizeCell: ({ gridCell, excelCell }) => {
+        context.setAlternatingRowsBackground(gridCell, excelCell);
       }
-    }).then(function() {
+    }).then(() => {
       return exportDataGrid({
         worksheet: ratingSheet,
         component: context.ratingDataGrid,
         topLeftCell: { row: 4, column: 2 },
-        customizeCell: function(options) {
-          context.setAlternatingRowsBackground(options.gridCell, options.excelCell);
+        customizeCell: ({ gridCell, excelCell }) => {
+          context.setAlternatingRowsBackground(gridCell, excelCell);
         }
       });
-    }).then(function() {
-      workbook.xlsx.writeBuffer().then(function(buffer) {
+    }).then(() => {
+      workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
       });
     });

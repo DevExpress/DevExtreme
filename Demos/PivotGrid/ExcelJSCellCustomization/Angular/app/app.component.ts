@@ -7,9 +7,9 @@ import { exportPivotGrid } from 'devextreme/excel_exporter';
 import ExcelJS from 'exceljs';
 import saveAs from 'file-saver';
 /*
-// Use this import for codeSandBox
-import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
-import * as FileSaver from 'file-saver';
+  // Use this import for codeSandBox
+  import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
+  import * as FileSaver from 'file-saver';
 */
 
 if(!/localhost/.test(document.location.host)) {
@@ -98,18 +98,18 @@ export class AppComponent {
     e.cancel = true;
   }
   
-  onCellPrepared(e) {
-    if(e.rowType === 'T' || e.type === 'T' || e.type === 'GT' || e.rowType === 'GT' || e.columnType === 'GT') {
-      e.cellElement.style.backgroundColor = '#DDDDDD';
+  onCellPrepared({ area, type, rowType, columnType, cellElement, cell }) {
+    if(rowType === 'T' || type === 'T' || type === 'GT' || rowType === 'GT' || columnType === 'GT') {
+      cellElement.style.backgroundColor = '#DDDDDD';
     }
-    if(e.area === 'data') {
-      if(e.cell.dataIndex === 1) {
-        e.cellElement.style.fontWeight = 'bold';
+    if(area === 'data') {
+      if(cell.dataIndex === 1) {
+        cellElement.style.fontWeight = 'bold';
       } else {
-        if(e.cell.value < 100000) {
-          e.cellElement.style.color = '#DC3545';
+        if(cell.value < 100000) {
+          cellElement.style.color = '#DC3545';
         } else {
-          e.cellElement.style.color = '#28A745';
+          cellElement.style.color = '#28A745';
         }
       }
     }

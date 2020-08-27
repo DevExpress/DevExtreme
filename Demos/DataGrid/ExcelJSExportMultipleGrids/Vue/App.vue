@@ -150,20 +150,20 @@ export default {
         worksheet: priceSheet,
         component: context.priceGridInstance,
         topLeftCell: { row: 4, column: 2 },
-        customizeCell: function(options) {
-          setAlternatingRowsBackground(options.gridCell, options.excelCell);
+        customizeCell: ({ gridCell, excelCell }) => {
+          setAlternatingRowsBackground(gridCell, excelCell);
         }
-      }).then(function() {
+      }).then(() => {
         return exportDataGrid({
           worksheet: ratingSheet,
           component: context.ratingGridInstance,
           topLeftCell: { row: 4, column: 2 },
-          customizeCell: function(options) {
-            setAlternatingRowsBackground(options.gridCell, options.excelCell);
+          customizeCell: ({ gridCell, excelCell }) => {
+            setAlternatingRowsBackground(gridCell, excelCell);
           }
         });
-      }).then(function() {
-        workbook.xlsx.writeBuffer().then(function(buffer) {
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
         });
       });

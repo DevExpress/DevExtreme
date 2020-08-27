@@ -789,6 +789,7 @@
       {
         "Name": "Export to PDF",
         "Equivalents": "",
+        "Badge": "New",
         "Demos": [
           {
             "Title": "Overview",
@@ -804,7 +805,6 @@
       {
         "Name": "Export to Excel",
         "Equivalents": "",
-        "Badge": "New",
         "Demos": [
           {
             "Title": "Advanced Document Customization",

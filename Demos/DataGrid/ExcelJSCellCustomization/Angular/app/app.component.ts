@@ -44,9 +44,7 @@ export class AppComponent {
       worksheet: worksheet,
       keepColumnWidths: false,
       topLeftCell: { row: 2, column: 2 },
-      customizeCell: function(options) {
-        const { gridCell, excelCell } = options;
-        
+      customizeCell: ({ gridCell, excelCell }) => {        
         if(gridCell.rowType === "data") {
           if(gridCell.column.dataField === 'Phone') {
             excelCell.value = parseInt(gridCell.value);
@@ -70,8 +68,8 @@ export class AppComponent {
           excelCell.font.italic = true;
         }
       }
-    }).then(function() {
-      workbook.xlsx.writeBuffer().then(function(buffer) {
+    }).then(() => {
+      workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), "Companies.xlsx");
       });
     });

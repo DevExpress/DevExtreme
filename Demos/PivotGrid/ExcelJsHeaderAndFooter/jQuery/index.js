@@ -60,8 +60,25 @@ $(function(){
                 topLeftCell: { row: 4, column: 1 },
                 keepColumnWidths: false
             }).then(function(cellRange) {
-                exportHeader(worksheet);
-                exportFooter(worksheet, cellRange, cellRange);
+                // Header
+                var headerRow = worksheet.getRow(2);
+                headerRow.height = 30; 
+
+                var columnFromIndex = worksheet.views[0].xSplit + 1;
+                var columnToIndex = columnFromIndex + 3;
+                worksheet.mergeCells(2, columnFromIndex, 2, columnToIndex);
+
+                var headerCell = headerRow.getCell(columnFromIndex);
+                headerCell.value = 'Sales Amount by Region';
+                headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
+                headerCell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+
+                // Footer
+                var footerRowIndex = cellRange.to.row + 2;
+                var footerCell = worksheet.getRow(footerRowIndex).getCell(cellRange.to.column);
+                footerCell.value = 'www.wikipedia.org';
+                footerCell.font = { color: { argb: 'BFBFBF' }, italic: true };
+                footerCell.alignment = { horizontal: 'right' };
             }).then(function() {
                 workbook.xlsx.writeBuffer().then(function(buffer) {
                     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
@@ -71,25 +88,3 @@ $(function(){
         }  
     });
 });
-
-function exportHeader(worksheet) {
-    var headerRow = worksheet.getRow(2);
-    headerRow.height = 30; 
-
-    var columnFromIndex = worksheet.views[0].xSplit + 1;
-    var columnToIndex = columnFromIndex + 3;
-    worksheet.mergeCells(2, columnFromIndex, 2, columnToIndex);
-
-    var headerCell = headerRow.getCell(columnFromIndex);
-    headerCell.value = 'Sales Amount by Region';
-    headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
-    headerCell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
-}
-
-function exportFooter(worksheet, cellRange) {
-    var footerRowIndex = cellRange.to.row + 2;
-    var footerCell = worksheet.getRow(footerRowIndex).getCell(cellRange.to.column);
-    footerCell.value = 'www.wikipedia.org';
-    footerCell.font = { color: { argb: 'BFBFBF' }, italic: true };
-    footerCell.alignment = { horizontal: 'right' };
-}

@@ -39,8 +39,7 @@ export class AppComponent {
       worksheet: worksheet,
       topLeftCell: { row: 2, column: 2 },
       autoFilterEnabled: true,
-      customizeCell: (options) => {
-        const { excelCell, gridCell } = options;
+      customizeCell: ({ gridCell, excelCell }) => {
         if(gridCell.rowType === "data") {
           if(gridCell.column.dataField === "Picture") {
             excelCell.value = undefined;
@@ -58,8 +57,8 @@ export class AppComponent {
           }
         }
       }
-    }).then(function() {
-      workbook.xlsx.writeBuffer().then(function(buffer) {
+    }).then(() => {
+      workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), "DataGrid.xlsx");
       });
     });
