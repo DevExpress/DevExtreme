@@ -65,15 +65,17 @@ const moduleConfig = {
             insertText: (index, text, source) => { this.log.push({ operation: 'insertText', index, text, source }); },
             keyboard: {
                 addBinding: ({ key }, handler) => {
+                    const keys = Array.isArray(key) ? key : [key];
+                    keys.forEach((keyName) => {
+                        if(!this.quillMock.keyboard.bindings[keyName]) {
+                            this.quillMock.keyboard.bindings[keyName] = [];
+                        }
 
-                    if(!this.quillMock.keyboard.bindings[key]) {
-                        this.quillMock.keyboard.bindings[key] = [];
-                    }
-
-                    this.quillMock.keyboard.bindings[key].push(handler);
+                        this.quillMock.keyboard.bindings[keyName].push(handler);
+                    });
                 },
                 bindings: {
-                    13: [noop]
+                    'enter': [noop]
                 }
             }
         };
