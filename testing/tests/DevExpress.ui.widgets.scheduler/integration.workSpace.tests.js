@@ -1978,3 +1978,47 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+QUnit.module('Templates in renovated views', () => {
+    QUnit.test('dataCellTemplate should have correct options in Day View in basic case', function(assert) {
+        const templateOptions = [];
+
+        createWrapper({
+            dataSource: [],
+            views: ['day'],
+            currentView: 'day',
+            showAllDayPanel: false,
+            startDayHour: 0,
+            endDayHour: 1,
+            currentDate: new Date(2020, 7, 27),
+            renovateRender: true,
+            dataCellTemplate: (data, index) => {
+                templateOptions.push({ data, index });
+            },
+        });
+
+        const expectedTemplateOptions = [{
+            data: {
+                startDate: new Date(2020, 7, 27, 0, 0),
+                endDate: new Date(2020, 7, 27, 0, 30),
+                allDay: undefined,
+                groupIndex: undefined,
+                groups: undefined,
+                text: '',
+            },
+            index: 0,
+        }, {
+            data: {
+                startDate: new Date(2020, 7, 27, 0, 30),
+                endDate: new Date(2020, 7, 27, 1, 0),
+                allDay: undefined,
+                groupIndex: undefined,
+                groups: undefined,
+                text: '',
+            },
+            index: 1,
+        }];
+
+        assert.deepEqual(templateOptions, expectedTemplateOptions, 'Correct number of templates has been rendered');
+    });
+});
