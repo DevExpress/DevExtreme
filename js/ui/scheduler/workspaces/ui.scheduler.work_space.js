@@ -1048,9 +1048,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._renderTimePanel();
             this._renderGroupAllDayPanel();
             this._renderDateTable();
+            this._renderAllDayPanel();
         }
-
-        this._renderAllDayPanel();
 
         this._updateGroupTableHeight();
 
@@ -1117,6 +1116,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
             this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
         }
+        this._toggleAllDayVisibility();
     }
 
     renderRTimeTable() {
