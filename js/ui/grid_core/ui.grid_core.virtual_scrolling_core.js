@@ -13,20 +13,12 @@ const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
-    return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
-};
 
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
-    return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
-};
 
 const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex >= 0;
-    return that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex >= 0;
-};
 
 export let getPixelRatio = (window) => window.devicePixelRatio || 1;
-    return window.devicePixelRatio || 1;
-};
 
 ///#DEBUG
 export function _setPixelRatioFn(value) {
