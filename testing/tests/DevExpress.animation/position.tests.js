@@ -1012,6 +1012,13 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should be correct relative to the viewport on mobile devices when window is scrolled and window.scrollTop is bigger than visualViewport.offsetTop (T750017)', function(assert) {
+        const isPhone = devices.real().deviceType === 'phone';
+        const isAndroid = devices.real().platform === 'android';
+        if(!isPhone || isAndroid) {
+            // NOTE: scrollTop/Left are always 0 on android devices
+            assert.ok(true, 'only for non-android mobiles');
+        }
+
         const $what = $('#what').height(300).width(300);
         const initialVisualViewport = window.visualViewport;
 
