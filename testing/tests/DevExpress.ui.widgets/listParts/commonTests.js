@@ -1016,6 +1016,36 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
     });
 
+    QUnit.test('onItemSwipe - subscription by on method', function(assert) {
+        assert.expect(2);
+
+        const swipeHandler = () => {
+            assert.ok(true, 'swipe handled');
+        };
+
+        const list = this.element.dxList({
+            items: [0],
+            itemHoldTimeout: 0,
+            scrollingEnabled: true
+        }).dxList('instance');
+        list.on('itemSwipe', swipeHandler);
+
+        const item = $.proxy(function() {
+            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        }, this);
+        const swipeItem = () => {
+            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
+        };
+
+        swipeItem();
+
+        list.off('itemSwipe');
+        swipeItem();
+
+        list.on('itemSwipe', swipeHandler);
+        swipeItem();
+    });
+
     QUnit.test('displayExpr option change', function(assert) {
         const instance = this.element.dxList({
             items: [{ id: 1, name: 'Item text', caption: 'New item text' }],
