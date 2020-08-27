@@ -630,7 +630,7 @@ describe('ScrollView', () => {
     });
 
     describe('Default options', () => {
-      it('should define rtlEnabled', () => {
+      it('should use rtlEnabled from config', () => {
         const props = new ScrollViewProps();
         expect(props.rtlEnabled).toEqual(config().rtlEnabled);
       });
