@@ -1,5 +1,5 @@
 @use "../base/mixins" as *;
-@use "./popover" as *;
+@use "../base/popover/mixins" as *;
 
 // adduse
 $slider-tooltip-content-height: 28px;
