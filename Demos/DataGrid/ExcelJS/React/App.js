@@ -153,7 +153,6 @@ class App extends React.Component {
         font: { italic: true },
         alignment: { horizontal: 'right' }
       });
-      return Promise.resolve();
     }).then(function() {
       workbook.xlsx.writeBuffer().then(function(buffer) { // https://github.com/exceljs/exceljs#writing-xlsx
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
