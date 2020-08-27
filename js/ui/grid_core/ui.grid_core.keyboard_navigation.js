@@ -939,7 +939,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const rowsViewElement = $(this._getRowsViewElement());
         const $focusedView = $element.closest(rowsViewElement);
         const isRowFocusType = this.isRowFocusType();
-        let args = { };
+        let args = {};
 
         if(!$focusedView.length || isCellElement($element) && !this._isCellValid($element)) {
             return;
@@ -1254,7 +1254,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     setFocusedRowIndex: function(rowIndex) {
         if(!this._focusedCellPosition) {
-            this._focusedCellPosition = { };
+            this._focusedCellPosition = {};
         }
         this.option('focusedRowIndex', rowIndex);
         this._focusedCellPosition.rowIndex = rowIndex;
@@ -1262,7 +1262,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     setFocusedColumnIndex: function(columnIndex) {
         if(!this._focusedCellPosition) {
-            this._focusedCellPosition = { };
+            this._focusedCellPosition = {};
         }
         this.option('focusedColumnIndex', columnIndex);
         this._focusedCellPosition.columnIndex = columnIndex;
@@ -1563,8 +1563,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     // #region Events
     _fireFocusChangingEvents: function($event, $cell, fireRowEvent, isHighlighted) {
-        let args = { };
-        const cellPosition = this._getCellPosition($cell) || { };
+        let args = {};
+        const cellPosition = this._getCellPosition($cell) || {};
 
         if(this.isCellFocusType()) {
             args = this._fireFocusedCellChanging($event, $cell, isHighlighted);
@@ -1986,7 +1986,7 @@ export default {
                     }
 
                     const cellElements = this.getCellElements(rowIndex);
-                    if(keyboardController.isKeyboardEnabled() && cellElements) {
+                    if(keyboardController.isKeyboardEnabled() && cellElements.length) {
                         this.updateFocusElementTabIndex(cellElements);
                     }
                 },
@@ -1994,16 +1994,20 @@ export default {
                 updateFocusElementTabIndex: function(cellElements) {
                     const keyboardController = this.getController('keyboardNavigation');
                     const $row = cellElements.eq(0).parent();
-                    let columnIndex = keyboardController.getColumnIndex();
-
-                    if(!isDefined(columnIndex) || columnIndex < 0) {
-                        columnIndex = 0;
-                    }
 
                     if(isGroupRow($row)) {
                         keyboardController._applyTabIndexToElement($row);
                     } else {
-                        this._updateFocusedCellTabIndex(cellElements, columnIndex);
+                        const $tabbedElement = cellElements.filter('td[tabindex]');
+                        const columnsController = this.getController('columns');
+                        const columnsAreScrolled = keyboardController._isVirtualColumnRender() && columnsController.getColumnIndexOffset() > 0;
+                        if(!columnsAreScrolled || isElementDefined($tabbedElement)) {
+                            let columnIndex = keyboardController.getColumnIndex();
+                            if(!isDefined(columnIndex) || columnIndex < 0) {
+                                columnIndex = 0;
+                            }
+                            this._updateFocusedCellTabIndex(cellElements, columnIndex);
+                        }
                     }
                 },
 
