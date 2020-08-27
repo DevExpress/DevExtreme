@@ -372,6 +372,49 @@ const vectorMapPlugin = {
         }
     }
 };
+const pieChartPlugin = {
+    name: 'annotations_pie_chart',
+    init() {},
+    dispose() {},
+    members: {
+        _getAnnotationCoords(annotation) {
+            let series;
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY,
+                canvas: this._canvas
+            };
+
+            if(annotation.argument) {
+                if(annotation.series) {
+                    series = this.getSeriesByName(annotation.series);
+                } else {
+                    series = this.series[0];
+                }
+                const argument = series.getPointsByArg(annotation.argument)[0];
+                const { x, y } = argument.getAnnotationCoords(annotation.location);
+                coords.x = x;
+                coords.y = y;
+            }
+
+            return coords;
+        },
+        _isAnnotationBounded(options) {
+            return options.argument;
+        },
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _pullOptions(options) {
+            const pieChartOptions = extend({}, {
+                location: options.location
+            }, chartPlugin.members._pullOptions(options));
+
+            delete pieChartOptions.axis;
+            return pieChartOptions;
+        },
+        _clear: chartPlugin.members._clear,
+        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender
+    }
+};
 const corePlugin = {
     name: 'annotations_core',
     init() {
@@ -471,5 +514,6 @@ export const plugins = {
     core: corePlugin,
     chart: chartPlugin,
     polarChart: polarChartPlugin,
-    vectorMap: vectorMapPlugin
+    vectorMap: vectorMapPlugin,
+    pieChart: pieChartPlugin
 };

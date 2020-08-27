@@ -315,6 +315,11 @@
  */
 
 /**
+  * @typedef {string} Enums.PieChartAnnotationLocation
+  * @enum {'center'|'edge'}
+  */
+
+/**
  * @typedef {string} Enums.PolarChartResolveLabelOverlapping
  * @enum {'hide'|'none'}
  */
