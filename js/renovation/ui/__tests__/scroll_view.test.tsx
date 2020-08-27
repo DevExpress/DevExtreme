@@ -46,7 +46,7 @@ describe('ScrollView', () => {
       });
     });
 
-    it('should scrollable content has the ref', () => {
+    it('should have ref to scrollable content', () => {
       const contentRef = React.createRef();
       const props = {
         props: {},
