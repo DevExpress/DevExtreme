@@ -17,6 +17,7 @@ import utils from './utils';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
+const HOUR_MS = toMs('hour');
 
 const subscribes = {
     isCurrentViewAgenda: function() {
@@ -479,7 +480,6 @@ const subscribes = {
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
         const resourcesManager = this._resourcesManager;
-        const msInHour = 60 * 60 * 1000;
         let allDay;
 
         if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
@@ -490,33 +490,37 @@ const subscribes = {
 
         const { viewDataProvider } = workspace;
         const { groupedData } = viewDataProvider.viewData;
+        const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
 
-        groupedData.forEach(({ dateTable }, groupIndex) => {
-            if(dateTable.length) {
-                const groups = viewDataProvider.getCellsGroup(groupIndex);
-                const groupResources = resourcesManager.getResourcesDataByGroups(groups);
-                const startDate = viewDataProvider.getGroupStartDate(groupIndex);
-                const endDate = viewDataProvider.getGroupEndDate(groupIndex);
-                const startDayHour = startDate.getHours();
-                const endDayHour = startDayHour + (endDate - startDate) / msInHour;
-                const filterOptions = {
-                    startDayHour,
-                    endDayHour,
-                    min: startDate,
-                    max: endDate,
-                    resources: groupResources,
-                    allDay: allDay,
-                    firstDayOfWeek: this.getFirstDayOfWeek(),
-                    recurrenceException: this._getRecurrenceException.bind(this)
-                };
+        groupedDataToRender.forEach(({ groupIndex }) => {
+            const startDate = viewDataProvider.getGroupStartDate(groupIndex);
+            const endDate = viewDataProvider.getGroupEndDate(groupIndex);
+            const startDayHour = startDate.getHours();
+            const endDayHour = startDayHour + (endDate - startDate) / HOUR_MS;
 
-                const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
-                    filterOptions,
-                    this.timeZoneCalculator
-                );
+            const groups = viewDataProvider.getCellsGroup(groupIndex);
+            const groupResources = isVerticalGrouping
+                ? resourcesManager.getResourcesDataByGroups(groups)
+                : resourcesManager.getResourcesData();
 
-                result.push(...currentGroupAppointments);
-            }
+            const filterOptions = {
+                startDayHour,
+                endDayHour,
+                min: startDate,
+                max: endDate,
+                resources: groupResources,
+                allDay: allDay,
+                firstDayOfWeek: this.getFirstDayOfWeek(),
+                recurrenceException: this._getRecurrenceException.bind(this)
+            };
+
+            const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
+                filterOptions,
+                this.timeZoneCalculator
+            );
+
+            result.push(...currentGroupAppointments);
         });
 
         return result;
