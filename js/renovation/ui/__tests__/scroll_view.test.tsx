@@ -56,7 +56,7 @@ describe('ScrollView', () => {
       expect(scrollView.find('.dx-scrollable-content').instance()).toBe(contentRef.current);
     });
 
-    it('should scrollable container has the ref', () => {
+    it('should have ref to scrollable container', () => {
       const containerRef = React.createRef();
       const props = {
         props: {},
