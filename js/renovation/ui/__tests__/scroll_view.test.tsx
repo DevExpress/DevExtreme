@@ -646,7 +646,7 @@ describe('ScrollView', () => {
         expect(ensureLocation(location)).toMatchObject(location);
       });
 
-      it('should to fill undefined value with value by default', () => {
+      it('should fill undefined value with value by default', () => {
         expect(ensureLocation({ top: 100 } as Location)).toMatchObject({ top: 100, left: 0 });
         expect(ensureLocation({ left: 100 } as Location)).toMatchObject({ left: 100, top: 0 });
         expect(ensureLocation({} as Location)).toMatchObject({ top: 0, left: 0 });
