@@ -1,21 +1,23 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { mount } from 'enzyme';
-import { PagerContentComponent } from '../content';
+import { PagerContent } from '../content';
 import { Pager as PagerComponent } from '../pager';
 import { PageSizeLarge } from '../page_size/large';
 import { PageIndexSelector } from '../pages/page_index_selector';
+import PagerProps from '../common/pager_props';
 
-jest.mock('../../select_box', () => ({ __esModule: true, SelectBox: jest.fn() }));
+jest.mock('../../select_box', () => ({ SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {
     it('render pager with defaults', () => {
-      const tree = mount<PagerComponent>(<PagerComponent />);
+      const props = new PagerProps();
+      const tree = mount<PagerComponent>(<PagerComponent {...props} />);
       const pager = tree.childAt(0);
       expect(pager.props()).toEqual({
         'rest-attributes': 'restAttributes',
-        contentTemplate: PagerContentComponent,
+        contentTemplate: PagerContent,
         pagerProps: {
           gridCompatibility: true,
           className: 'dx-datagrid-pager',
@@ -24,14 +26,12 @@ describe('Pager', () => {
           pageIndexChange: tree.instance().pageIndexChange,
           pageSizeChange: tree.instance().pageSizeChange,
           hasKnownLastPage: true,
-          infoText: 'Page {0} of {1} ({2} items)',
           lightModeEnabled: false,
           maxPagesCount: 10,
           pageCount: 10,
           pageIndex: 0,
           pageSize: 5,
           pageSizes: [5, 10],
-          pagesCountText: 'of',
           rtlEnabled: false,
           showInfo: false,
           showPageSizes: true,
@@ -39,7 +39,7 @@ describe('Pager', () => {
           totalCount: 0,
         },
       });
-      expect(tree.find(PagerContentComponent)).not.toBeNull();
+      expect(tree.find(PagerContent)).not.toBeNull();
       expect(tree.find(PageSizeLarge).props().pageSizeChange)
         .toEqual(tree.instance().pageSizeChange);
       expect(tree.find(PageIndexSelector).props().pageIndexChange)

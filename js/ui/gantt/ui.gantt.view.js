@@ -29,7 +29,8 @@ export class GanttView extends Widget {
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
-            cultureInfo: this._getCultureInfo()
+            cultureInfo: this._getCultureInfo(),
+            tooltipTemplate: this.option('tooltipTemplate')
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
@@ -167,6 +168,9 @@ export class GanttView extends Widget {
                 break;
             case 'stripLines':
                 this._ganttViewCore.setStripLines({ stripLines: args.value });
+                break;
+            case 'tooltipTemplate':
+                this._ganttViewCore.setTooltipTemplate(args.value);
                 break;
             default:
                 super._optionChanged(args);

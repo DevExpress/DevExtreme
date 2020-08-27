@@ -8,7 +8,6 @@ import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
 import { GetHtmlElement } from './common/types.d';
 import { getElementWidth } from './utils/get_element_width';
-import { PagerContentProps } from './content';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -75,13 +74,14 @@ function getElementsWidth({
 export class ResizableContainerProps {
   @OneWay() pagerProps!: PagerProps;
 
-  @Template() contentTemplate!: (props: PagerContentProps) => JSX.Element;
+  // renovation bug
+  @Template() contentTemplate!: any;
 }
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>(ResizableContainerProps) {
+export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>() {
   @ForwardRef() parentRef!: HTMLElement;
 
   @ForwardRef() pageSizesRef?: GetHtmlElement;

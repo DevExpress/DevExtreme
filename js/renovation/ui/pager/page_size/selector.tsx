@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  ComponentBindings, JSXComponent, Event, TwoWay, OneWay, Component, Method, Ref,
+  ComponentBindings, JSXComponent, OneWay, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import { GetHtmlElement, FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
+import PagerProps from '../common/pager_props';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { EventCallback } from '../../common/event_callback.d';
 
 export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
 
@@ -35,24 +38,15 @@ export const viewFunction = ({
     )}
   </div>
 );
-
-type PageSize = number;// | FullPageSize;
+/* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageSizeSelectorProps {
-  @OneWay() isLargeDisplayMode?: boolean = true;
-
-  @TwoWay() pageSize?: number = 5;
-
-  @OneWay() pageSizes?: PageSize[] = [5, 10];
-
-  @OneWay() rtlEnabled?: boolean = false;
-
-  @Event() pageSizeChange?: (pageSize: number) => void;
+class PageSizeSelectorProps {
+  @OneWay() isLargeDisplayMode = true;
 }
-
+type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize'| 'pageSizeChange' | 'pageSizes' | 'rtlEnabled'> & PageSizeSelectorProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
-  extends JSXComponent(PageSizeSelectorProps)
+  extends JSXComponent<PageSizeSelectorPropsType>()
   implements GetHtmlElement {
   @Ref() htmlRef!: HTMLDivElement;
 
@@ -61,7 +55,7 @@ export class PageSizeSelector
   }
 
   get normalizedPageSizes(): FullPageSize[] {
-    const { pageSizes } = this.props as Required<PageSizeSelectorProps>;
+    const { pageSizes } = this.props;
     return pageSizes.map((p) => ({ text: String(p), value: p } as FullPageSize));
   }
 }

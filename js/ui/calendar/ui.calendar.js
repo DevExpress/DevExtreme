@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import { isNumeric, isString, isFunction, isDefined } from '../../core/utils/type';
+import { isNumeric, isString, isFunction, isDefined, isDate } from '../../core/utils/type';
 import { inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
 import Button from '../button';
@@ -52,6 +52,8 @@ const ZOOM_LEVEL = {
     DECADE: 'decade',
     CENTURY: 'century'
 };
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
@@ -407,7 +409,7 @@ const Calendar = Editor.inherit({
 
     _getNormalizedDate: function(date) {
         date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-        return isDefined(date) ? new Date(date) : date;
+        return isDefined(date) ? this._getDate(date) : date;
     },
 
     _initActions: function() {
@@ -534,7 +536,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = new Date(date || this.option('currentDate'));
+        date = this._getDate(date || this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -992,6 +994,18 @@ const Calendar = Editor.inherit({
             to: { left: to },
             duration: duration
         });
+    },
+
+    _getDate(value) {
+        let result;
+        if(isIE11 && isDate(value)) {
+            result = new Date(value.getTime());
+            result.setMilliseconds(0);
+        } else {
+            result = new Date(value);
+        }
+
+        return result;
     },
 
     _toTodayView: function() {

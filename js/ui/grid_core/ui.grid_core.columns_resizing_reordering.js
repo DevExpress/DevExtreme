@@ -634,9 +634,13 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-                    that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : $cell.outerWidth()));
-                    that._tablePositionController.update(that._targetPoint.y);
-                    e.preventDefault();
+                    const cell = $cell[0];
+                    if(cell) {
+                        const outerWidth = cell.getBoundingClientRect().width;
+                        that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth));
+                        that._tablePositionController.update(that._targetPoint.y);
+                        e.preventDefault();
+                    }
                 }
             }
         } else {

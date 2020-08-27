@@ -9,6 +9,12 @@ import { getPublicElement } from '../../core/element';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
+const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
+  if (options.hasOwnProperty(name) && options[name] === undefined) {
+    options[name] = defaultValueGetter(name);
+  }
+};
+
 export default class PreactWrapper extends DOMComponent {
   getInstance() {
     return this;
@@ -23,7 +29,7 @@ export default class PreactWrapper extends DOMComponent {
       true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
-      (this._twoWayProps || []).reduce((options, [name, eventName, defaultValue]) => ({
+      this._propsInfo.twoway.reduce((options, [name, defaultValue, eventName]) => ({
         ...options,
         [name]: defaultValue,
         [eventName]: (value) => this.option(name, value),
@@ -106,17 +112,21 @@ export default class PreactWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
+  _patchOptionValues(options) {
+    this._propsInfo.allowNull.forEach(setDefaultOptionValue(options, () => null));
+
+    Object.keys(this._viewComponent.defaultProps).forEach(setDefaultOptionValue(options, (name) => this._viewComponent.defaultProps[name]));
+
+    this._propsInfo.twoway.forEach(([name, defaultValue]) => setDefaultOptionValue(options, () => defaultValue)(name));
+
+    return options;
+  }
+
   getProps() {
-    const options = {
+    const options = this._patchOptionValues({
       ...this.option(),
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
-    };
-
-    (this._twoWayProps || []).forEach(([name]) => {
-      if (options.hasOwnProperty(name) && options[name] === undefined) {
-        options[name] = null;
-      }
     });
 
     return {
@@ -143,22 +153,20 @@ export default class PreactWrapper extends DOMComponent {
     super._init();
     this._actionsMap = {};
 
-    Object.keys(this._getActionConfigs()).forEach((name) =>
-      this._addAction(name)
-    );
+    Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
 
     this._viewRef = Preact.createRef();
     this._supportedKeys = () => ({});
   }
 
   _addAction(event, action) {
-    if(!action) {
+    if (!action) {
       const actionByOption = this._createActionByOption(
         event,
-        this._getActionConfigs()[event]
+        this._getActionConfigs()[event],
       );
 
-      action = function(args) {
+      action = function (args) {
         Object.keys(args).forEach((name) => {
           if (/element$/i.exec(name)) {
             args[name] = getPublicElement($(args[name]));
@@ -198,7 +206,7 @@ export default class PreactWrapper extends DOMComponent {
         Preact.h('div', {
           style: { display: 'none' },
           ref: dummyDivRefCallback,
-        })
+        }),
       );
     }
   }
@@ -223,7 +231,7 @@ export default class PreactWrapper extends DOMComponent {
               container: getPublicElement($parent),
               model: data,
               ...(isFinite(index) ? { index } : {}),
-            })
+            }),
           );
 
           if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
@@ -241,7 +249,7 @@ export default class PreactWrapper extends DOMComponent {
       return Preact.h(
         Preact.Fragment,
         {},
-        Preact.h('div', { style: { display: 'none' }, ref: dummyDivRef })
+        Preact.h('div', { style: { display: 'none' }, ref: dummyDivRef }),
       );
     };
   }
@@ -288,6 +296,6 @@ export default class PreactWrapper extends DOMComponent {
   }
 }
 
-///#DEBUG
+/// #DEBUG
 PreactWrapper.IS_RENOVATED_WIDGET = true;
-///#ENDDEBUG
+/// #ENDDEBUG

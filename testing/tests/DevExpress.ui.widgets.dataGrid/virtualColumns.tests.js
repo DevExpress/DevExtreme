@@ -2,6 +2,7 @@ import $ from 'jquery';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid/ui.data_grid';
 import 'common.css!';
+import 'generic_light.css!';
 import { DataSource } from 'data/data_source/data_source';
 import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
 
@@ -595,7 +596,7 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         // assert
         const $cells = this.rowsView.element().find('.dx-data-row').children();
         assert.strictEqual($cells.length, 12, 'cell count in data row');
-        assert.strictEqual($cells.eq(0).outerWidth(), 250, 'virtual cell width');
+        assert.strictEqual($cells[0].getBoundingClientRect().width, 250, 'virtual cell width');
         assert.strictEqual(this.getVisibleColumns()[1].dataField, 'field6', 'first rendered dataField');
     });
 

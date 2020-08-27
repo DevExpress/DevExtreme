@@ -66,7 +66,7 @@ export default class CheckBox extends Component {
         }, 150);
       }
     };
-    props.saveValueChangedEvent = (e: Event): void => {
+    props.saveValueChangeEvent = (e: Event): void => {
       this._valueChangeEventInstance = e;
     };
     return props;

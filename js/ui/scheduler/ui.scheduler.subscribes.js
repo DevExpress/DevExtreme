@@ -473,7 +473,7 @@ const subscribes = {
             allDay: allDay,
             firstDayOfWeek: this.getFirstDayOfWeek(),
             recurrenceException: this._getRecurrenceException.bind(this),
-        }, this._subscribes['convertDateByTimezone'].bind(this));
+        }, this.timeZoneCalculator);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

@@ -726,7 +726,10 @@ class Diagram extends Widget {
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
         this._diagramInstance.registerBar(this.optionsUpdateBar);
-
+        if(hasWindow()) {
+            // eslint-disable-next-line spellcheck/spell-checker
+            this._diagramInstance.initMeasurer(this.$element()[0]);
+        }
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
@@ -1005,10 +1008,8 @@ class Diagram extends Widget {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
         const layoutParametersOption = this.option('nodes.autoLayout') || 'off';
         const layoutType = layoutParametersOption.type || layoutParametersOption;
-        if(layoutType === 'off' || (layoutType === 'auto' && this._hasNodePositionExprs())) {
-            return undefined;
-        } else {
-            const parameters = {};
+        const parameters = {};
+        if(layoutType !== 'off' && (layoutType !== 'auto' || !this._hasNodePositionExprs())) {
             switch(layoutType) {
                 case 'tree':
                     parameters.type = DataLayoutType.Tree;
@@ -1028,8 +1029,9 @@ class Diagram extends Widget {
             if(this.option('edges.fromPointIndexExpr') || this.option('edges.toPointIndexExpr')) {
                 parameters.skipPointIndices = true;
             }
-            return parameters;
         }
+        parameters.autoSizeEnabled = !!this.option('nodes.autoSizeEnabled');
+        return parameters;
     }
     _hasNodePositionExprs() {
         return this.option('nodes.topExpr') && this.option('nodes.leftExpr');
@@ -1129,7 +1131,8 @@ class Diagram extends Widget {
                         templateLeft: s.templateLeft,
                         templateTop: s.templateTop,
                         templateWidth: s.templateWidth,
-                        templateHeight: s.templateHeight
+                        templateHeight: s.templateHeight,
+                        keepRatioOnAutoSize: s.keepRatioOnAutoSize
                     };
                 }
             ));
@@ -1440,6 +1443,12 @@ class Diagram extends Widget {
             startLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineStart')),
             endLineEnding: this._getConnectorLineEnding(this.option('defaultItemProperties.connectorLineEnd'))
         });
+        this._diagramInstance.applySettings({
+            shapeMinWidth: this.option('defaultItemProperties.shapeMinWidth'),
+            shapeMaxWidth: this.option('defaultItemProperties.shapeMaxWidth'),
+            shapeMinHeight: this.option('defaultItemProperties.shapeMinHeight'),
+            shapeMaxHeight: this.option('defaultItemProperties.shapeMaxHeight')
+        });
     }
 
     focus() {
@@ -1665,7 +1674,13 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
                  */
-                autoLayout: 'auto'
+                autoLayout: 'auto',
+                /**
+                * @name dxDiagramOptions.nodes.autoSizeEnabled
+                * @type boolean
+                * @default true
+                */
+                autoSizeEnabled: true,
             },
             edges: {
                 /**

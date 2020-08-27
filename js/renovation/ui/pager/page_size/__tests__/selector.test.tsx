@@ -2,13 +2,17 @@
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../selector';
+import { PageSizeSmall } from '../small';
+import { PageSizeLarge } from '../large';
+
+jest.mock('../small', () => ({ PageSizeSmall: () => null }));
+jest.mock('../large', () => ({ PageSizeLarge: () => null }));
 
 describe('Pager size selector', () => {
   function defaultProps(): PageSizeSelector {
     const htmlRef = createRef();
     return {
       htmlRef: htmlRef as unknown as HTMLDivElement,
-      visible: true,
       normalizedPageSizes: [{
         text: '5',
         value: 5,
@@ -23,7 +27,7 @@ describe('Pager size selector', () => {
         pageSize: 5,
         pageSizeChange: jest.fn(),
         rtlEnabled: false,
-      },
+      } as Partial<PageSizeSelector['props']>,
     } as Partial<PageSizeSelector> as PageSizeSelector;
   }
 
@@ -31,6 +35,7 @@ describe('Pager size selector', () => {
     const props = defaultProps();
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
     expect(tree.props()).toMatchObject({ className: 'dx-page-sizes' });
+    expect(tree.find(PageSizeLarge)).toHaveLength(1);
     expect(tree.childAt(0).props()).toMatchObject({
       pageSize: 5,
       pageSizeChange: props.props?.pageSizeChange,
@@ -52,6 +57,7 @@ describe('Pager size selector', () => {
     props.props.isLargeDisplayMode = false;
     const tree = mount(<PageSizeSelectorComponent {...props as any} /> as any).childAt(0);
     expect(tree.props()).toMatchObject({ className: 'dx-page-sizes' });
+    expect(tree.find(PageSizeSmall)).toHaveLength(1);
     expect(tree.instance()).toBe((props.htmlRef as any).current);
     expect(tree.childAt(0).props()).toMatchObject({
       pageSize: 5,

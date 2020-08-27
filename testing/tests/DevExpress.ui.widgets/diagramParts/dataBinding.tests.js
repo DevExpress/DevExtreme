@@ -412,4 +412,55 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].textStyle, 'font-family: Arial Black');
         assert.equal(nodes[1].textStyle, 'font-family: Arial Black');
     });
+
+    test('databinding should auto-size items if widthExpr is not specified or enableAutoSize = false', function(assert) {
+        const store = new ArrayStore({
+            key: 'id',
+            data: [
+                {
+                    id: '1',
+                    text: Array(30).join('verylongtext'),
+                    width: 3000
+                },
+                {
+                    id: '2',
+                    text: 'text2',
+                    width: 3000
+                }
+            ],
+        });
+        const dataSource = new DataSource({
+            store
+        });
+        this.instance.option({
+            nodes: {
+                dataSource: dataSource,
+                textExpr: function(obj) { return obj.text; }
+            }
+        });
+        const defaultWidth = this.instance._diagramInstance.model.findShapeByDataKey('2').size.width;
+        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+
+        this.instance.option({
+            nodes: {
+                dataSource: dataSource,
+                textExpr: function(obj) { return obj.text; },
+                widthExpr: function(obj) { return obj.width; }
+            }
+        });
+
+        const boundWidth = this.instance._diagramInstance.model.findShapeByDataKey('2').size.width;
+        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, boundWidth);
+
+        this.instance.option({
+            nodes: {
+                dataSource: dataSource,
+                textExpr: function(obj) { return obj.text; },
+                widthExpr: null,
+                autoSizeEnabled: false
+            }
+        });
+
+        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+    });
 });
