@@ -12,7 +12,7 @@ import Callbacks from '../../core/utils/callbacks';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 
-const isVirtualMode = (that) => {
+const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 };
 
