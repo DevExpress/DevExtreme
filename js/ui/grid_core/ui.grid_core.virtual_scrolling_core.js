@@ -24,7 +24,7 @@ const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart
     return that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex >= 0;
 };
 
-export let getPixelRatio = (window) => {
+export let getPixelRatio = (window) => window.devicePixelRatio || 1;
     return window.devicePixelRatio || 1;
 };
 
