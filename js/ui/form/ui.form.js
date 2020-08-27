@@ -986,12 +986,11 @@ const Form = Widget.inherit({
         return false;
     },
 
-    _tryChangeLayoutManagerItemOptions(item, itemPath, options) {
+    _tryChangeLayoutManagerItemOptions(itemPath, options) {
         let result;
         this.beginUpdate();
         each(options, (optionName, optionValue) => {
             result = this._tryChangeLayoutManagerItemOption(getFullOptionName(itemPath, optionName), optionValue);
-            this._changeItemOption(item, optionName, optionValue);
             if(!result) {
                 return false;
             }
@@ -1360,7 +1359,7 @@ const Form = Widget.inherit({
             }
             default: {
                 if(isObject(option)) {
-                    if(!this._tryChangeLayoutManagerItemOptions(item, path, option)) {
+                    if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
                         let allowUpdateItems;
                         each(option, (optionName, optionValue) => {
                             const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
