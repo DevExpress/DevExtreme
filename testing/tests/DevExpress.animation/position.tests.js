@@ -1017,6 +1017,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         if(!isPhone || isAndroid) {
             // NOTE: scrollTop/Left are always 0 on android devices
             assert.ok(true, 'only for non-android mobiles');
+            return;
         }
 
         const $what = $('#what').height(300).width(300);
