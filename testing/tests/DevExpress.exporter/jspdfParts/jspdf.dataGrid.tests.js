@@ -10,7 +10,6 @@ import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
 import 'generic_light.css!';
-import { Export } from 'exporter/jspdf/export';
 
 QUnit.testStart(() => {
     const markup = '<div id="dataGrid"></div>';
@@ -30,14 +29,15 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
-    const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-        const { /* keepColumnWidths = true, selectedRowsOnly = false, */ autoTableOptions = {} } = options || {};
+QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
+    const getOptions = (context, dataGrid, options) => {
+        const { keepColumnWidths = true, /* selectedRowsOnly = false, */ autoTableOptions = {} } = options || {};
 
         const result = {
             component: dataGrid,
             jsPDFDocument: context.jsPDFDocument
         };
+        result.keepColumnWidths = keepColumnWidths;
         result.autoTableOptions = autoTableOptions;
         return result;
     };
@@ -45,11 +45,9 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
     QUnit.test('Empty grid', function(assert) {
         const done = assert.async();
         const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
-        const expectedCells = [];
 
-        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((jsPDFDocument) => {
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
             const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkTableAndColumnWidths(undefined, [], autoTableOptions);
             helper.checkCellsContent([], [], autoTableOptions);
             done();
         });
@@ -57,24 +55,50 @@ QUnit.module('Scenarios, generate autoTable options', moduleConfig, () => {
 
     QUnit.test('Simple grid', function(assert) {
         const done = assert.async();
-        const ds = [{ id: 1, name: 'test' }];
+        const ds = [{ prop1: 'text1' }];
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
-            keyExpr: 'id',
-            columns: [
-                { dataField: 'id', width: 50, caption: 'id' },
-                { dataField: 'name', caption: 'name' }
-            ],
+            columns: [{ dataField: 'prop1', caption: 'f1' }],
             loadingTimeout: undefined,
-            showColumnHeaders: true,
-            width: 500
+            showColumnHeaders: true
         }).dxDataGrid('instance');
-        const expectedCells = [];
-        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((jsPDFDocument) => {
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
             const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkTableAndColumnWidths(Export.convertPixelsToPoints(500), [Export.convertPixelsToPoints(50), 'auto'], autoTableOptions);
-            helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
+            helper.checkCellsContent([['f1']], [['text1']], autoTableOptions);
             done();
+        });
+    });
+
+    [true, false].forEach((keepColumnWidths) => {
+        QUnit.test(`Table and column widths, keepColumnWidths: ${keepColumnWidths}`, function(assert) {
+            const done = assert.async();
+            const ds = [{ id: 1, name: 'test' }];
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: ds,
+                keyExpr: 'id',
+                columns: [
+                    { dataField: 'id', width: 50, caption: 'id' },
+                    { dataField: 'name', caption: 'name' }
+                ],
+                loadingTimeout: undefined,
+                showColumnHeaders: true,
+                width: 500
+            }).dxDataGrid('instance');
+            const options = {
+                autoTableOptions: {
+                    tableWidth: 500
+                },
+                keepColumnWidths: keepColumnWidths
+            };
+
+            exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
+                const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+                const expectedColumnWidths = keepColumnWidths ? [50, 450] : ['auto', 'auto'];
+                helper.checkColumnWidths(expectedColumnWidths, autoTableOptions);
+                helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
+                done();
+            });
         });
     });
 });

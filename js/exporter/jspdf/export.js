@@ -1,4 +1,4 @@
-import { isDefined, isObject, isFunction } from '../../core/utils/type';
+import { isDefined, isObject, isFunction, isNumeric } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 
@@ -59,7 +59,6 @@ export const Export = {
             selectedRowsOnly
         } = options;
 
-        const tableWidth = component.option('width');
         const dataProvider = component.getDataProvider(selectedRowsOnly);
 
         return new Promise((resolve) => {
@@ -68,11 +67,8 @@ export const Export = {
                 const styles = dataProvider.getStyles();
                 const dataRowsCount = dataProvider.getRowsCount();
 
-                if(tableWidth) {
-                    autoTableOptions.tableWidth = this.convertPixelsToPoints(tableWidth);
-                }
-
-                this.setColumnWidths(autoTableOptions, columns, keepColumnWidths);
+                const pdfColumnWidths = this.getDefaultPdfColumnWidths(autoTableOptions.tableWidth, dataProvider.getColumnsWidths());
+                this.updateColumnWidths(jsPDFDocument, autoTableOptions, pdfColumnWidths, keepColumnWidths);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
 
@@ -125,24 +121,25 @@ export const Export = {
         }
     },
 
-    setColumnWidths: function(autoTableOptions, columns, keepColumnWidths) {
-        const columnStyles = autoTableOptions.columnStyles;
-
-        for(let i = 0; i < columns.length; i++) {
-            columnStyles[i] = columnStyles[i] || {};
-
-            const columnWidth = columns[i].gridColumn.width;
-            if(keepColumnWidths && (typeof columnWidth === 'number') && isFinite(columnWidth)) {
-                columnStyles[i].cellWidth = this.convertPixelsToPoints(columnWidth);
-            } else {
-                columnStyles[i].cellWidth = 'auto';
-            }
+    getDefaultPdfColumnWidths(autoTableWidth, columnWidths) {
+        if(isNumeric(autoTableWidth)) {
+            const tableWidth = columnWidths.reduce((a, b) => { return a + b; });
+            return columnWidths.map((columnWidth) => {
+                return autoTableWidth * columnWidth / tableWidth;
+            });
         }
     },
 
-    convertPixelsToPoints: function(value) {
-        const pointsPerInch = 72;
-        const dotsPerInch = 96;
-        return pointsPerInch / dotsPerInch * value;
+    updateColumnWidths: function(jsPDFDocument, autoTableOptions, pdfColumnWidths, keepColumnWidths) {
+        if(!keepColumnWidths || !pdfColumnWidths) {
+            return;
+        }
+        const columnStyles = autoTableOptions.columnStyles;
+        for(let i = 0; i < pdfColumnWidths.length; i++) {
+            columnStyles[i] = columnStyles[i] || {};
+            if(!isDefined(columnStyles[i].cellWidth)) {
+                columnStyles[i].cellWidth = pdfColumnWidths[i];
+            }
+        }
     }
 };
