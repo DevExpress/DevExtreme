@@ -42,7 +42,8 @@ QUnit.module('DataBinding', {
             ],
         });
         const dataSource = new DataSource({
-            store
+            store,
+            paginate: false
         });
         this.instance.option({
             nodes: { dataSource }
@@ -90,7 +91,8 @@ QUnit.module('DataBinding', {
             ],
         });
         const dataSource = new DataSource({
-            store
+            store,
+            paginate: false
         });
         this.instance.option({
             nodes: {
@@ -171,13 +173,15 @@ QUnit.module('DataBinding', {
         this.instance.option({
             nodes: {
                 dataSource: new DataSource({
-                    store: nodeStore
+                    store: nodeStore,
+                    paginate: false
                 }),
                 textStyleExpr: 'textStyle'
             },
             edges: {
                 dataSource: new DataSource({
-                    store: edgeStore
+                    store: edgeStore,
+                    paginate: false
                 }),
                 textStyleExpr: 'textStyle'
             }
@@ -250,12 +254,14 @@ QUnit.module('DataBinding', {
         this.instance.option({
             nodes: {
                 dataSource: new DataSource({
-                    store: nodeStore
+                    store: nodeStore,
+                    paginate: false
                 })
             },
             edges: {
                 dataSource: new DataSource({
-                    store: edgeStore
+                    store: edgeStore,
+                    paginate: false
                 })
             }
         });
@@ -317,7 +323,8 @@ QUnit.module('DataBinding', {
         this.instance.option({
             nodes: {
                 dataSource: new DataSource({
-                    store: nodeStore
+                    store: nodeStore,
+                    paginate: false
                 }),
                 textStyleExpr: 'textStyle'
             }
@@ -342,6 +349,54 @@ QUnit.module('DataBinding', {
         assert.equal(nodes[0].textStyle, 'font-family: Arial Black1');
     });
 
+    test('reloadContent should update data correctly (update on events, null values)', function(assert) {
+        const nodes = [
+            {
+                id: '1',
+                text: 'text1'
+            },
+            {
+                id: '2',
+                text: 'text1',
+                parentId: '1'
+            }
+        ];
+        const nodeStore = new ArrayStore({
+            key: 'id',
+            data: nodes,
+            onUpdating: (key, values) => {
+                assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].parentId, null);
+                assert.equal(values.parentId, null);
+                assert.equal(nodes[1].parentId, '1');
+            },
+            onUpdated: (key, values) => {
+                assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].parentId, null);
+                assert.equal(values.parentId, null);
+                assert.equal(nodes[1].parentId, null);
+            }
+        });
+
+        this.instance.option({
+            nodes: {
+                dataSource: new DataSource({
+                    store: nodeStore,
+                    paginate: false
+                }),
+                parentKeyExpr: 'parentId'
+            }
+        });
+        assert.equal(this.instance._diagramInstance.model.items.length, 3);
+        assert.equal(this.instance._diagramInstance.model.items[1].attachedConnectors.length, 1);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].parentId, '1');
+
+        this.instance._diagramInstance.selection.set(['2']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
+
+        assert.equal(this.instance._diagramInstance.model.items[1].attachedConnectors.length, 0);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].parentId, null);
+        assert.equal(nodes[1].parentId, null);
+    });
+
     test('reloadContent should update data correctly (external update)', function(assert) {
         const nodes = [
             {
@@ -357,7 +412,8 @@ QUnit.module('DataBinding', {
         this.instance.option({
             nodes: {
                 dataSource: new DataSource({
-                    store: nodeStore
+                    store: nodeStore,
+                    paginate: false
                 }),
                 textStyleExpr: 'textStyle'
             }
@@ -368,6 +424,7 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, undefined);
 
         nodeStore.push([{ type: 'update', key: '1', data: { 'textStyle': 'font-family: Arial Black' } }]);
+        this.clock.tick(100);
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial Black');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, 'font-family: Arial Black');
         assert.equal(nodes[0].textStyle, 'font-family: Arial Black');
@@ -388,7 +445,8 @@ QUnit.module('DataBinding', {
         this.instance.option({
             nodes: {
                 dataSource: new DataSource({
-                    store: nodeStore
+                    store: nodeStore,
+                    paginate: false
                 }),
                 textStyleExpr: 'textStyle'
             }
@@ -397,6 +455,7 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.model.items.length, 1);
 
         nodeStore.push([{ type: 'insert', data: { id: '2', text: 'text2', textStyle: 'font-family: Arial Black' } }]);
+        this.clock.tick(100);
         assert.equal(this.instance._diagramInstance.model.items.length, 2);
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource.length, 2);
         assert.equal(this.instance._diagramInstance.model.items[1].styleText['font-family'], 'Arial Black');
@@ -421,7 +480,8 @@ QUnit.module('DataBinding', {
             ],
         });
         const dataSource = new DataSource({
-            store
+            store,
+            paginate: false
         });
         this.instance.option({
             nodes: {

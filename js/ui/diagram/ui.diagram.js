@@ -763,7 +763,7 @@ class Diagram extends Widget {
     }
     _refreshNodesDataSource() {
         if(this._nodesOption) {
-            this._nodesOption.dispose();
+            this._nodesOption._disposeDataSource();
             delete this._nodesOption;
         }
         if(this.option('nodes.dataSource')) {
@@ -774,7 +774,7 @@ class Diagram extends Widget {
     }
     _refreshEdgesDataSource() {
         if(this._edgesOption) {
-            this._edgesOption.dispose();
+            this._edgesOption._disposeDataSource();
             delete this._edgesOption;
         }
         if(this.option('edges.dataSource')) {
@@ -800,23 +800,10 @@ class Diagram extends Widget {
     _onDataSourceChanged() {
         this._bindDiagramData();
     }
-    _onDataSourceUpdated(key, changes) {
-        const applyLayout = this._onRequestUpdateLayout(changes);
-        this._reloadContent(key, applyLayout);
-    }
     _getChangesKeys(changes) {
         return changes.map(change => change.type === 'update' && change.key).filter(key => !!key);
     }
-    _onNodesPushed(changes) {
-        const keys = this._getChangesKeys(changes);
-        const applyLayout = this._onRequestUpdateLayout(changes);
-        this._reloadContent(keys, applyLayout, true, false);
-    }
-    _onEdgesPushed(changes) {
-        const keys = this._getChangesKeys(changes);
-        const applyLayout = this._onRequestUpdateLayout(changes);
-        this._reloadContent(keys, applyLayout, false, true);
-    }
+
     _createOptionGetter(optionName) {
         const expr = this.option(optionName);
         return expr && dataCoreUtils.compileGetter(expr);
@@ -985,24 +972,25 @@ class Diagram extends Widget {
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
-    _reloadContent(itemKeys, applyLayout, updateNodes, updateEdges) {
+    _reloadContentByChanges(changes, isExternalChanges) {
+        const keys = this._getChangesKeys(changes);
+        const applyLayout = this._onRequestUpdateLayout(changes);
+        this._reloadContent(keys, applyLayout, isExternalChanges);
+    }
+    _reloadContent(itemKeys, applyLayout, isExternalChanges) {
         const getData = () => {
             let nodeDataSource;
             let edgeDataSource;
-            this._beginUpdateDiagram();
-            if(this._nodesOption && updateNodes) {
-                this._nodesOption.getDataSource().reload();
+            if(this._nodesOption && isExternalChanges) {
                 nodeDataSource = this._nodesOption.getItems();
             }
-            if(this._edgesOption && updateEdges) {
-                this._edgesOption.getDataSource().reload();
+            if(this._edgesOption && isExternalChanges) {
                 edgeDataSource = this._edgesOption.getItems();
             }
-            this._endUpdateDiagram(true);
             return { nodeDataSource, edgeDataSource };
         };
         this._diagramInstance.reloadContent(itemKeys, getData,
-            applyLayout && this._getDataBindingLayoutParameters()
+            applyLayout && this._getDataBindingLayoutParameters(), isExternalChanges
         );
     }
     _getConnectorLineOption(lineType) {
@@ -1077,9 +1065,9 @@ class Diagram extends Widget {
     _beginUpdateDiagram() {
         this._updateDiagramLockCount++;
     }
-    _endUpdateDiagram(preventBindDiagram) {
+    _endUpdateDiagram() {
         this._updateDiagramLockCount = Math.max(this._updateDiagramLockCount - 1, 0);
-        if(!this._updateDiagramLockCount && !preventBindDiagram) {
+        if(!this._updateDiagramLockCount) {
             this._bindDiagramData();
         }
     }
