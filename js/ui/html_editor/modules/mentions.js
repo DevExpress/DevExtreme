@@ -1,5 +1,5 @@
 import $ from '../../../core/renderer';
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 import { compileGetter } from '../../../core/utils/data';
 import { isString } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';

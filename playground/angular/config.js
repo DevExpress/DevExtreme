@@ -33,7 +33,7 @@ System.config({
         'rxjs/operators': 'npm:rxjs@6.3.3/operators',
 
         'jszip': 'npm:jszip@3.1.3/dist/jszip.min.js',
-        'quill': 'npm:quill@1.3.6/dist/quill.js',
+        'devextreme-quill': 'npm:devextreme-quill@0.9.0/dist/quill.js',
         'devextreme': '../../artifacts/angular'
     },
     packages: {
