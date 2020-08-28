@@ -840,7 +840,6 @@ export const ListBase = CollectionWidget.inherit({
             case 'pulledDownText':
             case 'refreshingText':
             case 'pageLoadingText':
-            case 'useNative':
             case 'showScrollbar':
             case 'bounceEnabled':
             case 'scrollByContent':
