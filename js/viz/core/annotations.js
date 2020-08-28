@@ -356,18 +356,21 @@ const vectorMapPlugin = {
         _forceAnnotationRender() {
             this._change(['EXTRA_ELEMENTS']);
         },
+        _getAnnotationStyles() {
+            return { 'text-anchor': 'start' };
+        },
         _clear() {}
     },
     extenders: {
         _prepareExtraElements() {
             const that = this;
+            const renderElements = () => {
+                that._renderExtraElements();
+            };
             that._annotations._offTracker = that._tracker.on({
-                'move': function() {
-                    that._renderExtraElements();
-                },
-                'zoom': function() {
-                    that._renderExtraElements();
-                }
+                'move': renderElements,
+                'zoom': renderElements,
+                'end': renderElements
             });
         }
     }
@@ -443,7 +446,10 @@ const corePlugin = {
     },
     extenders: {
         _createHtmlStructure() {
-            this._annotationsGroup = this._renderer.g().attr({ 'class': `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, 'annotations').linkAppend();
+            this._annotationsGroup = this._renderer.g()
+                .attr({ 'class': `${this._rootClassPrefix}-annotations` })
+                .css(this._getAnnotationStyles())
+                .linkOn(this._renderer.root, 'annotations').linkAppend();
             eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
             eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
                 this._annotations._hideToolTipForDrag = false;
@@ -475,7 +481,8 @@ const corePlugin = {
             this._annotations.tooltip.update(tooltipOptions);
         },
         _getAnnotationCoords() { return {}; },
-        _pullOptions() { return {}; }
+        _pullOptions() { return {}; },
+        _getAnnotationStyles() { return {}; }
     },
     customize(constructor) {
         constructor.addChange({
