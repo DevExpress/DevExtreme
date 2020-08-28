@@ -47,14 +47,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxButtonGroupOptions.itemTemplate
-     * @type template|function
-     * @deprecated dxButtonGroupOptions.buttonTemplate
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    itemTemplate?: template | Function;
-    /**
      * @docid dxButtonGroupOptions.items
      * @type Array<dxButtonGroupItem>
      * @prevFileNamespace DevExpress.ui
