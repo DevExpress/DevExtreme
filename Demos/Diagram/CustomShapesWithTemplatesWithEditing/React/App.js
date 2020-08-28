@@ -19,18 +19,12 @@ class App extends React.Component {
     this.dataSource = new ArrayStore({
       key: 'ID',
       data: this.employees,
-      onInserted: function(values, key) {
+      onInserting: function(values, key) {
         this.update(key, {
+          ID: values.ID || that.generatedID++,
           Full_Name: values.Full_Name || "Employee's Name",
-          Title: values.Title || "Employee's Title",
-          Head_ID: values.Head_ID
+          Title: values.Title || "Employee's Title"
         });
-      },
-      onUpdated: function(key, values) {
-        that.diagramRef.current.instance.reloadContent(key, values.Head_ID !== undefined);
-      },
-      onRemoved: function(key) {
-        that.diagramRef.current.instance.reloadContent(key, true);
       }
     });
 
@@ -80,6 +74,15 @@ class App extends React.Component {
       obj.Mobile_Phone = value.Mobile_Phone;
     }
   }
+  requestUpdate(changes) {
+    for(var i = 0; i < changes.length; i++) {
+      if(changes[i].type === 'remove')
+        return true;
+      else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null)
+        return true;
+    }
+    return false;
+  }
   customShapeTemplate(item) {
     return CustomShapeTemplate(item.dataItem,
       function() { this.editEmployee(item.dataItem); }.bind(this),
@@ -96,18 +99,22 @@ class App extends React.Component {
     });
   }
   deleteEmployee(employee) {
-    this.dataSource.remove(employee.ID);
+    this.dataSource.push([{ type: 'remove', key: employee.ID }]);
   }
   updateEmployee() {
-    this.dataSource.update(this.state.currentEmployee.ID, {
-      'Full_Name': this.state.currentEmployee.Full_Name,
-      'Title': this.state.currentEmployee.Title,
-      'City': this.state.currentEmployee.City,
-      'State': this.state.currentEmployee.State,
-      'Email': this.state.currentEmployee.Email,
-      'Skype': this.state.currentEmployee.Skype,
-      'Mobile_Phone': this.state.currentEmployee.Mobile_Phone
-    });
+    this.dataSource.push([{ 
+      type: 'update',
+      key: this.state.currentEmployee.ID, 
+      data: {
+        'Full_Name': this.state.currentEmployee.Full_Name,
+        'Title': this.state.currentEmployee.Title,
+        'City': this.state.currentEmployee.City,
+        'State': this.state.currentEmployee.State,
+        'Email': this.state.currentEmployee.Email,
+        'Skype': this.state.currentEmployee.Skype,
+        'Mobile_Phone': this.state.currentEmployee.Mobile_Phone
+      }
+    }]);
     this.setState({
       currentEmployee: {},
       popupVisible: false
@@ -174,7 +181,7 @@ class App extends React.Component {
             minWidth={1.5} minHeight={1} maxWidth={3} maxHeight={2}
             allowEditText={false} />
           <Nodes dataSource={this.dataSource} keyExpr="ID" typeExpr={this.itemTypeExpr} customDataExpr={this.itemCustomDataExpr} parentKeyExpr="Head_ID">
-            <AutoLayout type="tree" />
+            <AutoLayout type="tree" requestUpdate={this.requestUpdate} />
           </Nodes>
           <ContextToolbox shapeIconsPerRow={1} width={100} />
           <Toolbox showSearch={false} shapeIconsPerRow={1}>

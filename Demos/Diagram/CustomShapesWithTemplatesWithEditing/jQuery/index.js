@@ -3,17 +3,10 @@ $(function() {
     var store = new DevExpress.data.ArrayStore({
         key: "ID",
         data: employees,
-        onInserted: function(values) {
+        onInserting: function(values) {
             values.ID = values.ID || generatedID++;
             values.Full_Name = values.Full_Name || "Employee's Name";
             values.Title = values.Title || "Employee's Title";
-            diagram.reloadContent(values.ID, values.Head_ID !== undefined);
-        },
-        onUpdated: function(key, values) {
-            diagram.reloadContent(key, values.Head_ID !== undefined);
-        },
-        onRemoved: function(key) {
-            diagram.reloadContent(key, true);
         }
     });
     var diagram = $("#diagram").dxDiagram({
@@ -80,7 +73,16 @@ $(function() {
                 }
             },
             autoLayout: {
-                type: "tree"
+                type: "tree",
+                requestUpdate: function(changes) {
+                    for(var i = 0; i < changes.length; i++) {
+                        if(changes[i].type === 'remove')
+                            return true;
+                        else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null)
+                            return true;
+                    }
+                    return false;
+                }
             }
         },
         contextToolbox: {
@@ -160,18 +162,22 @@ $(function() {
         });
     };
     var deleteEmployee = function(employee) {
-        store.remove(employee.ID);
+        store.push([{ type: 'remove', key: employee.ID }]);
     };
     var updateEmployee = function() {
-        store.update(currentEmployee.ID, {
-            "Full_Name": currentEmployee.Full_Name,
-            "Title": currentEmployee.Title,
-            "City": currentEmployee.City,
-            "State": currentEmployee.State,
-            "Email": currentEmployee.Email,
-            "Skype": currentEmployee.Skype,
-            "Mobile_Phone": currentEmployee.Mobile_Phone
-        });
+        store.push([{ 
+            type: 'update',
+            key: currentEmployee.ID, 
+            data: {
+                "Full_Name": currentEmployee.Full_Name,
+                "Title": currentEmployee.Title,
+                "City": currentEmployee.City,
+                "State": currentEmployee.State,
+                "Email": currentEmployee.Email,
+                "Skype": currentEmployee.Skype,
+                "Mobile_Phone": currentEmployee.Mobile_Phone
+            }
+        }]);
         popup.hide();
     };
     var cancelEditEmployee = function() {
