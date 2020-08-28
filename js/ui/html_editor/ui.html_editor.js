@@ -300,17 +300,19 @@ const HtmlEditor = Editor.inherit({
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
         const modulesConfig = extend({}, {
+            table: true,
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
-                onDrop: (e) => this._saveValueChangeEvent(e)
+                onDrop: (e) => this._saveValueChangeEvent(e),
+                imageBlot: 'extendedImage'
             },
             clipboard: {
                 onPaste: (e) => this._saveValueChangeEvent(e),
-                matchVisual: false,
+                onCut: (e) => this._saveValueChangeEvent(e),
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
