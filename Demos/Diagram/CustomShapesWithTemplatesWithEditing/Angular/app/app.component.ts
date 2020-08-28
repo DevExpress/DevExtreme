@@ -34,17 +34,10 @@ export class AppComponent {
         this.dataSource = new ArrayStore({
             key: "ID",
             data: service.getEmployees(),
-            onInserted: function(values) {
+            onInserting: function(values) {
                 values.ID = values.ID || that.generatedID++;
                 values.Full_Name = values.Full_Name || "Employee's Name";
                 values.Title = values.Title || "Employee's Title";
-                that.diagram.instance.reloadContent(values.ID, values.Head_ID !== undefined);
-            },
-            onUpdated: function(key, values) {
-                that.diagram.instance.reloadContent(key, values.Head_ID !== undefined);
-            },
-            onRemoved: function(key) {
-                that.diagram.instance.reloadContent(key, true);
             }
         });
     }
@@ -74,23 +67,36 @@ export class AppComponent {
             obj.Mobile_Phone = value.Mobile_Phone;
         }
     }
+    requestUpdate(changes: any[]) {
+        for(var i = 0; i < changes.length; i++) {
+            if(changes[i].type === 'remove')
+                return true;
+            else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null)
+                return true;
+        }
+        return false;
+    }
     editEmployee(employee) {
         this.currentEmployee = Object.assign({}, employee);
         this.popupVisible = true;
     }
     deleteEmployee(employee) {
-        this.dataSource.remove(employee.ID);
+        this.dataSource.push([{ type: 'remove', key: employee.ID }]);
     }
     updateEmployee() {
-        this.dataSource.update(this.currentEmployee.ID, {
-            "Full_Name": this.currentEmployee.Full_Name,
-            "Title": this.currentEmployee.Title,
-            "City": this.currentEmployee.City,
-            "State": this.currentEmployee.State,
-            "Email": this.currentEmployee.Email,
-            "Skype": this.currentEmployee.Skype,
-            "Mobile_Phone": this.currentEmployee.Mobile_Phone
-        });
+        this.dataSource.push([{ 
+            type: 'update',
+            key: this.currentEmployee.ID, 
+            data: {
+                "Full_Name": this.currentEmployee.Full_Name,
+                "Title": this.currentEmployee.Title,
+                "City": this.currentEmployee.City,
+                "State": this.currentEmployee.State,
+                "Email": this.currentEmployee.Email,
+                "Skype": this.currentEmployee.Skype,
+                "Mobile_Phone": this.currentEmployee.Mobile_Phone
+            }
+        }]);
         this.popupVisible = false;
     }
     cancelEditEmployee() {

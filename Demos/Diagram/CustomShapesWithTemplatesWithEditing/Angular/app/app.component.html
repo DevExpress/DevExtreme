@@ -23,7 +23,7 @@
         <text x="50%" y="70%">Employee</text>
     </svg>
     <dxo-nodes [dataSource]="dataSource" keyExpr="ID" [typeExpr]="itemTypeExpr" [customDataExpr]="itemCustomDataExpr" parentKeyExpr="Head_ID">
-        <dxo-auto-layout type="tree"></dxo-auto-layout>
+        <dxo-auto-layout type="tree" [requestUpdate]="requestUpdate"></dxo-auto-layout>
     </dxo-nodes>
     <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="1">
     </dxo-context-toolbox>
