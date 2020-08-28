@@ -37,7 +37,7 @@ export class NumberBoxProps extends WidgetProps {
 
   @OneWay() useLargeSpinButtons?: boolean;
 
-  @TwoWay() value?: number;
+  @TwoWay() value: number | null = 0;
 
   @Event() valueChange?: ((value: number) => void) = () => {};
 }
