@@ -286,14 +286,14 @@ QUnit.module('Options', {
     });
 
     test('should apply defaultItemProperties.min/max width/height to settings', function(assert) {
-        this.instance.option('defaultItemProperties.shapeMinWidth', 100);
-        this.instance.option('defaultItemProperties.shapeMaxWidth', 1000);
-        this.instance.option('defaultItemProperties.shapeMinHeight', 200);
-        this.instance.option('defaultItemProperties.shapeMaxHeight', 2000);
-        assert.equal(this.instance._diagramInstance.settings.shapeMinWidth, 100);
-        assert.equal(this.instance._diagramInstance.settings.shapeMaxWidth, 1000);
-        assert.equal(this.instance._diagramInstance.settings.shapeMinHeight, 200);
-        assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 2000);
+        this.instance.option('defaultItemProperties.shapeMinWidth', 1);
+        this.instance.option('defaultItemProperties.shapeMaxWidth', 10);
+        this.instance.option('defaultItemProperties.shapeMinHeight', 2);
+        this.instance.option('defaultItemProperties.shapeMaxHeight', 20);
+        assert.equal(this.instance._diagramInstance.settings.shapeMinWidth, 1440);
+        assert.equal(this.instance._diagramInstance.settings.shapeMaxWidth, 14400);
+        assert.equal(this.instance._diagramInstance.settings.shapeMinHeight, 2880);
+        assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 28800);
     });
 
     test('should change dataSource options', function(assert) {
