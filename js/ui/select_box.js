@@ -177,7 +177,6 @@ const SelectBox = DropDownList.inherit({
 
             displayCustomValue: false,
 
-            _isAdaptablePopupPosition: false,
             useInkRipple: false,
             useHiddenSubmitElement: true
         });
@@ -822,8 +821,6 @@ const SelectBox = DropDownList.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case '_isAdaptablePopupPosition':
-                break;
             case 'onCustomItemCreating':
                 this._initCustomItemCreatingAction();
                 break;
