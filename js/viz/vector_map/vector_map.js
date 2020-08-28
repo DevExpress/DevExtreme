@@ -178,9 +178,9 @@ const dxVectorMap = BaseWidget.inherit({
         that._layoutControl.suspend();
 
         that._initLayerCollection(dataKey);
+        that._createHtmlStructure();
         that._initControlBar(dataKey);
         that._initLegendsControl();
-        that._createHtmlStructure();
         that._prepareExtraElements();
         that._tooltipViewer = new tooltipViewerModule.TooltipViewer({ tracker: that._tracker, tooltip: that._tooltip, layerCollection: that._layerCollection });
     },
