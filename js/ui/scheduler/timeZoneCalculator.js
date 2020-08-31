@@ -27,7 +27,7 @@ export class TimeZoneCalculator {
     }
 
     createDate(sourceDate, info) {
-        const date = new Date(sourceDate.getTime());
+        const date = new Date(sourceDate);
 
         switch(info.path) {
             case PathTimeZoneConversion.fromSourceToAppointment:
