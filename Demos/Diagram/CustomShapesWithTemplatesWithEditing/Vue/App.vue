@@ -191,10 +191,11 @@ export default {
     },
     requestUpdate(changes) {
       for(var i = 0; i < changes.length; i++) {
-        if(changes[i].type === 'remove')
+        if(changes[i].type === 'remove') {
           return true;
-        else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null)
+        } else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null) {
           return true;
+        }
       }
       return false;
     },
@@ -215,9 +216,9 @@ export default {
       this.dataSource.push([{ type: 'remove', key: employee.ID }]);
     },
     updateEmployee() {
-      this.dataSource.push([{ 
+      this.dataSource.push([{
         type: 'update',
-        key: this.currentEmployee.ID, 
+        key: this.currentEmployee.ID,
         data: {
           'Full_Name': this.currentEmployee.Full_Name,
           'Title': this.currentEmployee.Title,
