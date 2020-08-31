@@ -74,7 +74,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({});
           const content = { };
           scrollView.contentRef = content as HTMLDivElement;
-          expect(scrollView.content()).toMatchObject(content);
+          expect(scrollView.content()).toEqual(content);
         });
       });
 
