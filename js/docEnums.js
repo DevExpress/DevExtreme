@@ -1177,3 +1177,13 @@
  * @typedef {string} Enums.floatingActionButtonDirection
  * @enum {'auto'|'up'|'down'}
  */
+
+/**
+ * @typedef {string} Enums.GridPagerDisplayMode
+ * @enum {'adaptive'|'compact'|'full'}
+ */
+
+/**
+ * @typedef {string} Enums.GridPagerPageSize
+ * @enum {'all'}
+ */
