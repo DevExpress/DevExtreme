@@ -2485,6 +2485,69 @@ QUnit.module('Cell Templates in renovated views', () => {
 
     [{
         viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(0, 7),
+            ...groupedCells.slice(7, 14),
+        ],
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(1, 6),
+            ...groupedCells.slice(8, 13),
+        ].map(({ index, ...restProps }) => ({
+            ...restProps,
+            index: index - 1,
+        })),
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} with grouping and virtual scrolling`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                height: 1000,
+                showAllDayPanel: false,
+                currentDate: new Date(2020, 7, 23),
+                scrolling: { mode: 'virtual' },
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources: [
+                    {
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John' },
+                            { id: 2, text: 'Mike' }
+                        ]
+                    }
+                ],
+            });
+
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
+                const { index, groupIndex, groups } = singleTemplateOptions;
+                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
+
+                assert.equal(index, expectedIndex, 'Index is correct');
+                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
+                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
+            });
+        });
+    });
+
+    [{
+        viewType: 'day',
         expectedTemplateOptions: timeCells,
     }].forEach(({ viewType, expectedTemplateOptions }) => {
         QUnit.test(`timeCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
@@ -2604,6 +2667,54 @@ QUnit.module('Cell Templates in renovated views', () => {
                 cellDuration: 60,
                 currentDate: new Date(2020, 7, 23),
                 renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources: [
+                    {
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John' },
+                            { id: 2, text: 'Mike' }
+                        ]
+                    }
+                ],
+            });
+
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
+                const { index, groupIndex, groups } = singleTemplateOptions;
+                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
+
+                assert.equal(index, expectedIndex, 'Index is correct');
+                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
+                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
+            });
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} view with grouping and virtual scrolling`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                height: 1000,
+                showAllDayPanel: false,
+                currentDate: new Date(2020, 7, 23),
+                scrolling: { mode: 'virtual' },
                 timeCellTemplate: (data, index) => {
                     templateOptions.push({ ...data, index });
                 },
