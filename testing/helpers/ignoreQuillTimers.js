@@ -5,8 +5,11 @@ QUnit.timersDetector.ignoreRules.register(function(args) {
 
     if(
         timerType === 'timeouts' &&
-        /handleDOM.*quill.js/.test(stack) &&
-        callback.indexOf('function(){[nativecode]}') > -1
+        /handleDOM.*quill\.js|register.*quill\.js/.test(stack) &&
+        (
+            callback.indexOf('function(){[nativecode]}') > -1 ||
+            callback.toLowerCase().indexOf('firefox') > -1
+        )
     ) {
         return true;
     }
