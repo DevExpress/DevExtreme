@@ -478,11 +478,11 @@ QUnit.module('Appointment filtering', function() {
         }
     }, function() {
         [
-            { y: 0, indices: [0, 1, 2] },
-            { y: 300, indices: [1, 2] },
-            { y: 900, indices: [3, 5] },
-            { y: 1700, indices: [4, 5] },
-            { y: 2400, indices: [4, 5] }
+            { y: 0, expectedIndices: [0, 1, 2] },
+            { y: 300, expectedIndices: [1, 2] },
+            { y: 900, expectedIndices: [3, 5] },
+            { y: 1700, expectedIndices: [4, 5] },
+            { y: 2400, expectedIndices: [4, 5] }
         ].forEach(option => {
             QUnit.test(`Scrolling Down if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 this.createInstance();
@@ -491,24 +491,24 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const dataIndices = option.indices;
+                const { expectedIndices } = option;
                 const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, dataIndices.length, 'Filtered items length is correct');
+                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
                 filteredItems.forEach((_, index) => {
-                    const expected = this.data[dataIndices[index]];
+                    const expected = this.data[expectedIndices[index]];
                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                 });
             });
         });
 
         [
-            { y: 2400, indices: [4, 5] },
-            { y: 1700, indices: [4, 5] },
-            { y: 900, indices: [3, 5] },
-            { y: 300, indices: [1, 2] },
-            { y: 0, indices: [0, 1, 2] }
+            { y: 2400, expectedIndices: [4, 5] },
+            { y: 1700, expectedIndices: [4, 5] },
+            { y: 900, expectedIndices: [3, 5] },
+            { y: 300, expectedIndices: [1, 2] },
+            { y: 0, expectedIndices: [0, 1, 2] }
         ].forEach(option => {
             QUnit.test(`Scrolling Up if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 this.createInstance();
@@ -517,28 +517,28 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const dataIndices = option.indices;
+                const { expectedIndices } = option;
                 const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, dataIndices.length, 'Filtered items length is correct');
+                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
                 filteredItems.forEach((_, index) => {
-                    const expected = this.data[dataIndices[index]];
+                    const expected = this.data[expectedIndices[index]];
                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                 });
             });
         });
 
         [
-            { y: 0, indices: [0, 2] },
-            { y: 300, indices: [2] },
-            { y: 900, indices: [5] },
-            { y: 1700, indices: [4, 5] },
-            { y: 2400, indices: [5, 1] },
-            { y: 2700, indices: [1] },
-            { y: 3000, indices: [] },
-            { y: 3300, indices: [3] },
-            { y: 4300, indices: [] },
+            { y: 0, expectedIndices: [0, 2] },
+            { y: 300, expectedIndices: [2] },
+            { y: 900, expectedIndices: [5] },
+            { y: 1700, expectedIndices: [4, 5] },
+            { y: 2400, expectedIndices: [5, 1] },
+            { y: 2700, expectedIndices: [1] },
+            { y: 3000, expectedIndices: [] },
+            { y: 3300, expectedIndices: [3] },
+            { y: 4300, expectedIndices: [] },
         ].forEach(option => {
             QUnit.test(`Scrolling Down if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 this.createInstance({
@@ -557,28 +557,28 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const dataIndices = option.indices;
+                const { expectedIndices } = option;
                 const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, dataIndices.length, 'Filtered items length is correct');
+                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
                 filteredItems.forEach((_, index) => {
-                    const expected = this.data[dataIndices[index]];
+                    const expected = this.data[expectedIndices[index]];
                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                 });
             });
         });
 
         [
-            { y: 4300, indices: [] },
-            { y: 3300, indices: [3] },
-            { y: 3000, indices: [] },
-            { y: 2700, indices: [1] },
-            { y: 2400, indices: [5, 1] },
-            { y: 1700, indices: [4, 5] },
-            { y: 900, indices: [5] },
-            { y: 300, indices: [2] },
-            { y: 0, indices: [0, 2] }
+            { y: 4300, expectedIndices: [] },
+            { y: 3300, expectedIndices: [3] },
+            { y: 3000, expectedIndices: [] },
+            { y: 2700, expectedIndices: [1] },
+            { y: 2400, expectedIndices: [5, 1] },
+            { y: 1700, expectedIndices: [4, 5] },
+            { y: 900, expectedIndices: [5] },
+            { y: 300, expectedIndices: [2] },
+            { y: 0, expectedIndices: [0, 2] }
         ].forEach(option => {
             QUnit.test(`Scrolling Up if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 this.createInstance({
@@ -597,13 +597,13 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const dataIndices = option.indices;
+                const { expectedIndices } = option;
                 const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, dataIndices.length, 'Filtered items length is correct');
+                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
                 filteredItems.forEach((_, index) => {
-                    const expected = this.data[dataIndices[index]];
+                    const expected = this.data[expectedIndices[index]];
                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                 });
             });
