@@ -117,7 +117,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollBy({ top: 100, left: 70 } as Location);
+          scrollView.scrollBy({ top: 100 });
 
           expect(containerRefMock.scrollTop).toEqual(250);
           expect(containerRefMock.scrollLeft).toEqual(0);
@@ -128,7 +128,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollBy({ top: 70, left: 100 } as Location);
+          scrollView.scrollBy({ top: 70, left: 100 });
 
           expect(containerRefMock.scrollLeft).toEqual(250);
           expect(containerRefMock.scrollTop).toEqual(0);
@@ -139,7 +139,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollBy({ top: 70, left: 70 } as Location);
+          scrollView.scrollBy({ top: 70, left: 70 });
 
           expect(containerRefMock.scrollTop).toEqual(220);
           expect(containerRefMock.scrollLeft).toEqual(220);
@@ -183,7 +183,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollBy({ top: -50, left: 70 } as Location);
+          scrollView.scrollBy({ top: -50, left: 70 });
 
           expect(containerRefMock.scrollTop).toEqual(100);
           expect(containerRefMock.scrollLeft).toEqual(0);
@@ -194,7 +194,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollBy({ top: 70, left: -50 } as Location);
+          scrollView.scrollBy({ top: 70, left: -50 });
 
           expect(containerRefMock.scrollLeft).toEqual(100);
           expect(containerRefMock.scrollTop).toEqual(0);
@@ -205,7 +205,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollBy({ top: -70, left: -50 } as Location);
+          scrollView.scrollBy({ top: -70, left: -50 });
 
           expect(containerRefMock.scrollTop).toEqual(80);
           expect(containerRefMock.scrollLeft).toEqual(100);
@@ -251,7 +251,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollTo({ top: 100, left: 70 } as Location);
+          scrollView.scrollTo({ top: 100, left: 70 });
 
           expect(containerRefMock.scrollTop).toEqual(100);
           expect(containerRefMock.scrollLeft).toEqual(0);
@@ -262,7 +262,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollTo({ top: 70, left: 100 } as Location);
+          scrollView.scrollTo({ top: 70, left: 100 });
 
           expect(containerRefMock.scrollLeft).toEqual(100);
           expect(containerRefMock.scrollTop).toEqual(0);
@@ -273,7 +273,7 @@ describe('ScrollView', () => {
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
-          scrollView.scrollTo({ top: 70, left: 70 } as Location);
+          scrollView.scrollTo({ top: 70, left: 70 });
 
           expect(containerRefMock.scrollTop).toEqual(70);
           expect(containerRefMock.scrollLeft).toEqual(70);
@@ -329,7 +329,7 @@ describe('ScrollView', () => {
         describe('Element is smaller than container', () => {
           it('should scroll to element from top side by vertical orientation', () => {
             const element = createTargetElement({ location: { top: 20, left: 0 } });
-            const containerRef = createContainerRef({ top: 200, left: 0 } as Location);
+            const containerRef = createContainerRef({ top: 200, left: 0 });
             const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -340,7 +340,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from bottom side by vertical orientation', () => {
             const element = createTargetElement({ location: { top: 500, left: 0 } });
-            const containerRef = createContainerRef({ top: 100, left: 0 } as Location);
+            const containerRef = createContainerRef({ top: 100, left: 0 });
             const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -351,7 +351,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from left side by horizontal orientation', () => {
             const element = createTargetElement({ location: { left: 20, top: 0 } });
-            const containerRef = createContainerRef({ left: 200, top: 0 } as Location);
+            const containerRef = createContainerRef({ left: 200, top: 0 });
             const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -362,7 +362,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from right side by horizontal orientation', () => {
             const element = createTargetElement({ location: { left: 500, top: 0 } });
-            const containerRef = createContainerRef({ left: 100, top: 0 } as Location);
+            const containerRef = createContainerRef({ left: 100, top: 0 });
             const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -373,7 +373,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from left side and top side by both orientation', () => {
             const element = createTargetElement({ location: { left: 20, top: 20 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -384,7 +384,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from right side and top side by both orientation', () => {
             const element = createTargetElement({ location: { left: 500, top: 20 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -395,7 +395,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from left side and bottom side by both orientation', () => {
             const element = createTargetElement({ location: { left: 20, top: 500 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -406,7 +406,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from right side and bottom side by both orientation', () => {
             const element = createTargetElement({ location: { left: 500, top: 500 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -417,7 +417,7 @@ describe('ScrollView', () => {
 
           it('should do not scroll to an element when it in the visible area', () => {
             const element = createTargetElement({ location: { top: 200, left: 200 } });
-            const containerRef = createContainerRef({ top: 100, left: 100 } as Location, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -440,7 +440,7 @@ describe('ScrollView', () => {
               offsetParent: parent,
               isInScrollableContent: true,
             });
-            const containerRef = createContainerRef({ top: 100, left: 100 } as Location, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -451,7 +451,7 @@ describe('ScrollView', () => {
 
           it('it should not scroll to element when it is not located inside the scrollable content', () => {
             const element = createElement({ location: { top: 200, left: 200 } });
-            const containerRef = createContainerRef({ top: 100, left: 100 } as Location, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -468,7 +468,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ top: 200, left: 0 } as Location);
+            const containerRef = createContainerRef({ top: 200, left: 0 });
             const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -483,7 +483,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ top: 100, left: 0 } as Location);
+            const containerRef = createContainerRef({ top: 100, left: 0 });
             const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -498,7 +498,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 200, top: 0 } as Location);
+            const containerRef = createContainerRef({ left: 200, top: 0 });
             const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -513,7 +513,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 0 } as Location);
+            const containerRef = createContainerRef({ left: 100, top: 0 });
             const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -528,7 +528,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -543,7 +543,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -558,7 +558,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -573,7 +573,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 } as Location, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -588,7 +588,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ top: 100, left: 100 } as Location, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -638,18 +638,18 @@ describe('ScrollView', () => {
 
     describe('Ensure location', () => {
       it('should convert number type to Location type', () => {
-        expect(ensureLocation(350)).toMatchObject({ top: 350, left: 350 } as Location);
+        expect(ensureLocation(350)).toMatchObject({ top: 350, left: 350 });
       });
 
       it('should return Location type if input type is Location', () => {
-        const location = { top: 345, left: 10 } as Location;
+        const location = { top: 345, left: 10 };
         expect(ensureLocation(location)).toMatchObject(location);
       });
 
       it('should fill undefined value with value by default', () => {
-        expect(ensureLocation({ top: 100 } as Location)).toMatchObject({ top: 100, left: 0 });
-        expect(ensureLocation({ left: 100 } as Location)).toMatchObject({ left: 100, top: 0 });
-        expect(ensureLocation({} as Location)).toMatchObject({ top: 0, left: 0 });
+        expect(ensureLocation({ top: 100 })).toMatchObject({ top: 100, left: 0 });
+        expect(ensureLocation({ left: 100 })).toMatchObject({ left: 100, top: 0 });
+        expect(ensureLocation({})).toMatchObject({ top: 0, left: 0 });
       });
     });
   });

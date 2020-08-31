@@ -21,18 +21,18 @@ export interface Location {
   left: number;
 }
 
-export const ensureLocation = (location: number | Location): Location => {
+export const ensureLocation = (location: number | Partial<Location>): Location => {
   if (isNumeric(location)) {
     return {
       left: location,
       top: location,
-    } as Location;
+    };
   }
-  return { top: 0, left: 0, ...(location as Location) } as Location;
+  return { top: 0, left: 0, ...location };
 };
 
 export const getRelativeLocation = (element: HTMLElement): Location => {
-  const result = { top: 0, left: 0 } as Location;
+  const result = { top: 0, left: 0 };
   let targetElement = element;
   while (!targetElement.matches(`.${SCROLLABLE_CONTENT_CLASS}`)) {
     result.top += targetElement.offsetTop;
@@ -97,7 +97,7 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   }
 
   @Method()
-  scrollBy(distance: number | Location): void {
+  scrollBy(distance: number | Partial<Location>): void {
     const { direction } = this.props;
     const location = ensureLocation(distance);
 
@@ -110,12 +110,12 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   }
 
   @Method()
-  scrollTo(targetLocation: number | Location): void {
+  scrollTo(targetLocation: number | Partial<Location>): void {
     const location = ensureLocation(targetLocation);
     this.scrollBy({
       left: location.left - this.scrollLocation.left,
       top: location.top - this.scrollLocation.top,
-    } as Location);
+    });
   }
 
   @Method()
@@ -124,7 +124,7 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
       this.scrollTo({
         top: this.getScrollTopLocation(element),
         left: this.getScrollLeftLocation(element),
-      } as Location);
+      });
     }
   }
 
@@ -141,7 +141,7 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
     return {
       left: this.containerRef?.scrollLeft,
       top: this.containerRef?.scrollTop,
-    } as Location;
+    };
   }
 
   private getScrollTopLocation(element: HTMLElement): number {
