@@ -1979,7 +1979,7 @@ if(devices.real().deviceType === 'desktop') {
     });
 }
 
-QUnit.module('Data Cell Templates in renovated views', () => {
+QUnit.module('Cell Templates in renovated views', () => {
     const allDayCells = [{
         data: {
             startDate: new Date(2020, 7, 23),
@@ -2333,8 +2333,8 @@ QUnit.module('Data Cell Templates in renovated views', () => {
                 ],
             });
 
-            templateOptions.forEach((singleTemplateOptions, templateIndex) => {
-                const expectedSingleTemplateOptions = expectedTemplateOptions[templateIndex];
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
                 const { index, groupIndex, groups } = singleTemplateOptions;
                 const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
 
@@ -2394,8 +2394,8 @@ QUnit.module('Data Cell Templates in renovated views', () => {
                 ],
             });
 
-            templateOptions.forEach((singleTemplateOptions, templateIndex) => {
-                const expectedSingleTemplateOptions = expectedTemplateOptions[templateIndex];
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
                 const { index, groupIndex, groups } = singleTemplateOptions;
                 const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
 
@@ -2461,8 +2461,8 @@ QUnit.module('Data Cell Templates in renovated views', () => {
                 ],
             });
 
-            templateOptions.forEach((singleTemplateOptions, templateIndex) => {
-                const expectedSingleTemplateOptions = expectedTemplateOptions[templateIndex];
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
                 const { index, groupIndex, groups } = singleTemplateOptions;
                 const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
 
