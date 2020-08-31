@@ -2175,6 +2175,16 @@ QUnit.module('Cell Templates in renovated views', () => {
         index: 6,
     }];
 
+    const timeCells = [{
+        data: {
+            date: dataCells[0].data.startDate,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '12:00 AM',
+        },
+        index: 0
+    }];
+
     [{
         viewType: 'day',
         expectedTemplateOptions: [dataCells[0]],
@@ -2447,6 +2457,154 @@ QUnit.module('Cell Templates in renovated views', () => {
                 currentDate: new Date(2020, 7, 23),
                 renovateRender: true,
                 dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources: [
+                    {
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John' },
+                            { id: 2, text: 'Mike' }
+                        ]
+                    }
+                ],
+            });
+
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
+                const { index, groupIndex, groups } = singleTemplateOptions;
+                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
+
+                assert.equal(index, expectedIndex, 'Index is correct');
+                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
+                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
+            });
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: timeCells,
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [viewType],
+                currentView: viewType,
+                showAllDayPanel: false,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ data, index });
+                },
+            });
+
+            assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: timeCells,
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [viewType],
+                currentView: viewType,
+                showAllDayPanel: true,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ data, index });
+                },
+            });
+
+            assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources: [
+                    {
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John' },
+                            { id: 2, text: 'Mike' }
+                        ]
+                    }
+                ],
+            });
+
+            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+                const singleTemplateOptions = templateOptions[templateIndex];
+                const { index, groupIndex, groups } = singleTemplateOptions;
+                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
+
+                assert.equal(index, expectedIndex, 'Index is correct');
+                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
+                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
+            });
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [{
+            index: 0,
+            groupIndex: undefined,
+            groups: undefined,
+        }],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
