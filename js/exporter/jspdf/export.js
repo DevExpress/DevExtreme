@@ -69,7 +69,7 @@ export const Export = {
 
                 if(keepColumnWidths) {
                     const pdfColumnWidths = this._getDefaultPdfColumnWidths(autoTableOptions.tableWidth, dataProvider.getColumnsWidths());
-                    this._updateColumnWidths(autoTableOptions, pdfColumnWidths);
+                    this._setColumnWidths(autoTableOptions, pdfColumnWidths);
                 }
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
@@ -132,16 +132,14 @@ export const Export = {
         }
     },
 
-    _updateColumnWidths: function(autoTableOptions, pdfColumnWidths) {
+    _setColumnWidths: function(autoTableOptions, pdfColumnWidths) {
         if(!pdfColumnWidths) {
             return;
         }
         const columnStyles = autoTableOptions.columnStyles;
         for(let i = 0; i < pdfColumnWidths.length; i++) {
             columnStyles[i] = columnStyles[i] || {};
-            if(!isDefined(columnStyles[i].cellWidth)) {
-                columnStyles[i].cellWidth = pdfColumnWidths[i];
-            }
+            columnStyles[i].cellWidth = pdfColumnWidths[i];
         }
     }
 };

@@ -87,7 +87,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
             const options = {
                 autoTableOptions: {
-                    tableWidth: 250
+                    tableWidth: 250,
+                    columnStyles: { 0: { cellWidth: 100 } }
                 },
                 keepColumnWidths: keepColumnWidths
             };
@@ -95,7 +96,7 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
                 const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
                 assert.equal(autoTableOptions.tableWidth, 250, 'autoTableWidth');
-                const expectedColumnWidths = keepColumnWidths ? [25, 225] : ['auto', 'auto'];
+                const expectedColumnWidths = keepColumnWidths ? [25, 225] : [100, 'auto'];
                 helper.checkColumnWidths(expectedColumnWidths, autoTableOptions);
                 helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
                 done();
