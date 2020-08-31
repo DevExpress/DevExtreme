@@ -697,7 +697,6 @@ class FileUploader extends Editor {
         } else {
             this._attachSelectFileDialogHandler(this._selectButton.$element());
         }
-        this._selectFileDialogHandler = undefined;
         this._attachSelectFileDialogHandler(this.option('dialogTrigger'));
     }
 
