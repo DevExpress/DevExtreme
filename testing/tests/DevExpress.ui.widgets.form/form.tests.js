@@ -27,6 +27,7 @@ import {
     FORM_GROUP_CAPTION_CLASS
 } from 'ui/form/constants';
 import 'ui/html_editor';
+import '../../helpers/ignoreQuillTimers';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';

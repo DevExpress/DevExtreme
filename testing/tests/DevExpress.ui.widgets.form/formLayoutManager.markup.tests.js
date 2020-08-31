@@ -37,6 +37,7 @@ import 'ui/radio_group';
 import 'ui/range_slider';
 import 'ui/slider';
 import 'ui/html_editor';
+import '../../helpers/ignoreQuillTimers';
 
 import 'common.css!';
 
