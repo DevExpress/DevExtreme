@@ -84,7 +84,7 @@ import {
 } from 'devextreme-vue/chart';
 import CustomStore from 'devextreme/data/custom_store';
 import TooltipTemplate from './TooltipTemplate.vue';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 
 export default {
   components: {
@@ -112,7 +112,10 @@ export default {
 
   mounted() {
     var hubConnection = new HubConnectionBuilder()
-      .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub')
+      .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
       .build();
 
     var store = new CustomStore({

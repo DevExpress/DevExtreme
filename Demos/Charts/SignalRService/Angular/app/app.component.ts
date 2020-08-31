@@ -2,7 +2,7 @@ import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { DxChartModule, DxChartComponent } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
 
@@ -25,7 +25,10 @@ export class AppComponent {
         this.connectionStarted = false;
 
         var hubConnection = new HubConnectionBuilder()
-            .withUrl("https://js.devexpress.com/Demos/NetCore/stockTickDataHub")
+            .withUrl("https://js.devexpress.com/Demos/NetCore/stockTickDataHub", {
+                skipNegotiation: true,
+                transport: HttpTransportType.WebSockets
+            })
             .build();
 
         var store = new CustomStore({

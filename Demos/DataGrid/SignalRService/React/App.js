@@ -3,7 +3,7 @@ import DataGrid, {
   Column
 } from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 
 import PriceCell from './PriceCell.js';
 import ChangeCell from './ChangeCell.js';
@@ -15,7 +15,10 @@ class App extends React.Component {
     this.state = { connectionStarted: false, dataSource: null };
 
     var hubConnection = new HubConnectionBuilder()
-      .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub')
+      .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
       .build();
 
     var store = new CustomStore({
