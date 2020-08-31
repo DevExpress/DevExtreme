@@ -6,13 +6,12 @@ import DataSource from '../../data/data_source';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones_new';
 
 import './ui.scheduler.recurrence_editor';
-import './timezones/ui.scheduler.timezone_editor';
 import '../text_area';
 import '../tag_box';
 import '../switch';
+import '../select_box';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
-const TIMEZONE_EDITOR = 'dx-timezone-editor';
 
 export const APPOINTMENT_FORM_GROUP_NAMES = {
     Main: 'mainGroup',
@@ -79,33 +78,10 @@ const SchedulerAppointmentForm = {
     },
 
     _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
-        // return {
-        //     dataField: timeZoneExpr,
-        //     editorType: 'dxSchedulerTimezoneEditor',
-        //     visibleIndex: visibleIndex,
-        //     colSpan: colSpan,
-        //     label: {
-        //         text: ' ',
-        //     },
-        //     editorOptions: {
-        //         observer: schedulerInst,
-        //         onValueChanged: (args) => {
-        //             const form = this._appointmentForm;
-        //             const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
-        //             if(isMainTimeZone) {
-        //                 secondTimezoneEditor.option('value', args.value);
-        //             }
-        //         }
-        //     },
-        //     visible: isShow
-        // };
-
         const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
-        // const value = this.option('value');
 
-        const productsStore = new DataSource({
-            // key: 'name',
-            store: [noTzTitle].concat(SchedulerTimezones.getTimezonesDisplayName()),
+        const timeZoneDataSource = new DataSource({
+            store: SchedulerTimezones.getTimezonesDisplayName(),
             paginate: true,
             pageSize: 10
         });
@@ -118,13 +94,12 @@ const SchedulerAppointmentForm = {
             label: {
                 text: ' ',
             },
-            cssClass: TIMEZONE_EDITOR,
             editorOptions: {
                 displayExpr: 'title',
                 valueExpr: 'id',
-                dataSource: productsStore,
+                dataSource: timeZoneDataSource,
+                placeholder: noTzTitle,
                 searchEnabled: true,
-                // observer: schedulerInst,
                 onValueChanged: (args) => {
                     const form = this._appointmentForm;
                     const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);

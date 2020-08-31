@@ -8,25 +8,6 @@ const SchedulerTimezones = {
     _displayNames: tzData.zones,
     _list: tzData.zones,
 
-    // loadData: function() {
-    //     const window = getWindow();
-    //     const reader = new window.FileReader();
-
-    //     // Closure to capture the file information.
-    //     reader.onload = (function(theFile) {
-    //         return function(e) {
-    //             debugger;
-    //             // Render thumbnail.
-    //             // const span = document.createElement('span');
-    //             // span.innerHTML = ['<img class="thumb" src="', e.target.result,
-    //             //     '" title="', escape(theFile.name), '"/>'].join('');
-    //             // document.getElementById('list').insertBefore(span, null);
-    //         };
-    //     })('./ui.scheduler.timezonesRawData');
-
-    //     // Read in the image file as a data URL.
-    //     reader.readAsDataURL('./ui.scheduler.timezonesRawData');
-    // },
     getTimezones: function() {
         return this._list;
     },
@@ -36,7 +17,7 @@ const SchedulerTimezones = {
         const result = [];
         this._list.forEach((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime());
-            const title = `(GMT  ${this.formatOffset(offset)}) ${timezone.id}`;
+            const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
 
             result.push(extend(timezone, {
                 offset: offset,
