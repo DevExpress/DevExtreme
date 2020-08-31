@@ -4938,7 +4938,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         } catch(err) {
             assert.ok(false, 'the error is thrown');
         } finally {
-            assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
+            assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
         }
     });
 
@@ -5007,7 +5007,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         assert.ok(dataGrid);
-        assert.equal(loadCallCount, 2, 'two load count on start');
+        assert.equal(loadCallCount, 1, 'two load count on start');
         assert.equal(contentReadyCallCount, 1, 'one contentReady on start');
     });
 
@@ -5629,9 +5629,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(200);
 
         // assert
-        assert.deepEqual(pageIndexesForLoad, [0, 1]);
-        assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+        assert.deepEqual(pageIndexesForLoad, [0]);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 20);
 
+        dataGrid.getScrollable().scrollTo({ y: 1 });
+        this.clock.tick(200);
         dataGrid.getScrollable().scrollTo({ y: 700 });
         this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ y: 1400 });
@@ -5681,6 +5683,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         that.clock.tick(1000);
         const scrollable = dataGrid.getScrollable();
 
+        scrollable.scrollTo({ y: 1 });
+        that.clock.tick(100);
+
         // assert
         assert.deepEqual(loadedPages, [0, 1], 'loaded pages');
 
@@ -5698,7 +5703,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T815141
     QUnit.test('Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow', function(assert) {
-        fastScrollTest(assert, this, 500, 1200, [0, 1, 2, 8, 9]);
+        fastScrollTest(assert, this, 500, 1200, [0, 1, 3, 8, 9]);
     });
 
     // T815141
@@ -6433,6 +6438,10 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         this.clock.tick(2000);
 
         dataGrid.columnOption('group', 'groupIndex', 0);
+
+        this.clock.tick(2000);
+
+        dataGrid.getScrollable().scrollTo(1);
 
         this.clock.tick(2000);
 
@@ -9259,7 +9268,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataSource.reload();
 
         // assert
-        assert.deepEqual(dataGrid.getVisibleRows().map(item => item.data.id), [0, 1, 2, 3], 'visible row keys');
+        assert.deepEqual(dataGrid.getVisibleRows().map(item => item.data.id), [0, 1], 'visible row keys');
     });
 
     // T750728
@@ -9362,7 +9371,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         this.clock.tick(301);
 
-        assert.equal(loadingCount, 2, 'virtual scrolling load 2 pages');
+        assert.equal(loadingCount, 1, 'virtual scrolling load 1 page');
         assert.equal(contentReadyCount, 1, 'contentReady is called once');
 
         loadingCount = 0;
@@ -9373,7 +9382,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(loadingCount, 2, 'virtual scrolling load 2 pages');
+        assert.equal(loadingCount, 1, 'virtual scrolling load 1 page');
         assert.equal(contentReadyCount, 1, 'contentReady is called once');
     });
 
@@ -9762,7 +9771,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         }
 
         const dataGrid = createDataGrid({
-            height: 200,
+            height: 400,
             dataSource: array,
             scrolling: {
                 mode: 'virtual',
@@ -11772,7 +11781,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataSource.store().push([{ type: 'update', key: 2, data: { name: 'updated' } }]);
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows().length, 4, 'visible rows');
+        assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'visible rows');
         assert.ok($(dataGrid.getCellElement(1, 0)).is($firstCell), 'first cell is not recreated');
         assert.notOk($(dataGrid.getCellElement(1, 1)).is($secondCell), 'second cell is recreated');
         assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), 'updated', 'second cell value is updated');
@@ -11861,13 +11870,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(loadingCount, 2, 'loadingCount after init');
+        assert.strictEqual(loadingCount, 1, 'loadingCount after init');
 
         // act
         arrayStore.push([{ type: 'update', key: 2, data: { name: 'updated' } }]);
 
         // assert
-        assert.strictEqual(loadingCount, 2, 'loadingCount is not changed after push');
+        assert.strictEqual(loadingCount, 1, 'loadingCount is not changed after push');
         assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), 'updated', 'second cell value is updated');
     });
 
@@ -12430,6 +12439,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         });
 
         // act
+        dataGrid.getScrollable().scrollTo({ top: 1 });
         dataGrid.getScrollable().scrollTo({ top: 4 * rowHeight });
 
         // assert
@@ -13505,8 +13515,8 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 18, 'current page index is changed'); // T881314
-        assert.strictEqual(instance.getTopVisibleRowData().name, 'name38', 'top visible row is changed');
+        assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name40', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
         assert.strictEqual(instance.getVisibleRows().length, 8, 'row count');

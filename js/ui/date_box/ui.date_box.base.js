@@ -63,15 +63,6 @@ const DateBox = DropDownEditor.inherit({
         return extend(this.callBase(), this._strategy.supportedKeys());
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'maxZoomLevel': { since: '18.1', alias: 'calendarOptions.maxZoomLevel' },
-            'minZoomLevel': { since: '18.1', alias: 'calendarOptions.minZoomLevel' }
-        });
-    },
-
     _renderButtonContainers: function() {
         this.callBase.apply(this, arguments);
         this._strategy.customizeButtons();
@@ -97,10 +88,6 @@ const DateBox = DropDownEditor.inherit({
             interval: 30,
 
             disabledDates: null,
-
-            maxZoomLevel: 'month',
-
-            minZoomLevel: 'century',
 
             pickerType: PICKER_TYPE['calendar'],
 
@@ -664,8 +651,6 @@ const DateBox = DropDownEditor.inherit({
             case 'interval':
             case 'disabledDates':
             case 'calendarOptions':
-            case 'minZoomLevel':
-            case 'maxZoomLevel':
                 this._invalidate();
                 break;
             case 'displayFormat':

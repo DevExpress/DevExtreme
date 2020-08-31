@@ -46,7 +46,7 @@ export const getIsAllDayPanelInsideDateTable = (
   const isAllDayPanel = !!(groupData?.allDayPanel?.length);
   const isAllDayPanelInsideDateTable = !!(groupData?.isAllDayPanelInsideDateTable);
 
-  return (isAllDayPanel && isAllDayPanelInsideDateTable); // WA for Vue Generator (#335)
+  return isAllDayPanel && isAllDayPanelInsideDateTable;
 };
 
 export const isVerticalGroupOrientation = (

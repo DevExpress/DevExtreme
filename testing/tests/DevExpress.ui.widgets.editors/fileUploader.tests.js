@@ -636,6 +636,20 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.ok(request.uploaded, 'upload is done');
     });
 
+    QUnit.test('set custom dialog trigger attaches click event handler on targets', function(assert) {
+        const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
+        sinon.stub(instance, '_attachSelectFileDialogHandler');
+
+        instance.option('dialogTrigger', '.pic');
+
+        assert.strictEqual(instance._attachSelectFileDialogHandler.callCount, 1, 'attachHandlers method called');
+        const items = instance._attachSelectFileDialogHandler.args[0];
+        assert.strictEqual(items.length, 1, 'attachHandlers args is valid');
+        assert.strictEqual(items[0], '.pic', 'attachHandlers args is valid');
+
+        instance._attachSelectFileDialogHandler.restore();
+    });
+
 });
 
 QUnit.module('uploading by chunks', moduleConfig, function() {

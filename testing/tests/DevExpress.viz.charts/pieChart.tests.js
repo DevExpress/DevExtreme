@@ -251,8 +251,19 @@ const overlappingEnvironment = $.extend({}, environment, {
             'title.font',
             'title.subtitle.font',
             'tooltip.font',
-            'loadingIndicator.font'
+            'loadingIndicator.font',
+            'commonAnnotationSettings.font'
         ] }]);
+    });
+
+    QUnit.test('`_clearCanvas` method should called after `_renderExtraElements` (canvas using for the annotations)', function(assert) {
+        const chart = this.createPieChart({});
+        chart._renderExtraElements = sinon.stub();
+        chart._clearCanvas = sinon.stub();
+
+        chart._forceRender();
+
+        assert.ok(chart._renderExtraElements.calledBefore(chart._clearCanvas));
     });
 
     QUnit.test('Creation layoutManager with options', function(assert) {

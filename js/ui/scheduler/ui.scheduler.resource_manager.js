@@ -483,8 +483,14 @@ export default class ResourceManager {
     }
 
     getResourcesDataByGroups(groups) {
+        const resourcesData = this.getResourcesData();
+
+        if(!groups) {
+            return resourcesData;
+        }
+
         const fieldNames = Object.getOwnPropertyNames(groups);
-        const resourceData = this.getResourcesData().filter(item => fieldNames.indexOf(item.name) !== -1);
+        const resourceData = resourcesData.filter(item => fieldNames.indexOf(item.name) !== -1);
         const currentResourcesData = [];
 
         resourceData.forEach(

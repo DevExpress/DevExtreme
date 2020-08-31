@@ -18,17 +18,15 @@ export const view = ({ restAttributes }: OptionsCheckWidget): JSX.Element => (
 export class OptionsCheckWidgetProps {
   @OneWay() text = 'default text';
 
-  @TwoWay() twoWayProp?: number = 1;
+  @TwoWay() twoWayProp = 1;
 
-  @OneWay() objectProp?= { someVal: true };
+  @OneWay() objectProp = { someVal: true };
 
   @OneWay() oneWayWithoutValue?: number;
 
   @OneWay() oneWayWithValue = 10;
 
   @OneWay() oneWayNullWithValue: number | null = 20;
-
-  @TwoWay() twoWayWithoutValue?: string;
 
   @TwoWay() twoWayWithValue = '10';
 

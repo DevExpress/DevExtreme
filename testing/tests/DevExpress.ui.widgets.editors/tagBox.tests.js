@@ -3394,7 +3394,6 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $element = $('#tagBox').dxTagBox({
             dataSource: items,
             searchEnabled: true,
-            autocompletionEnabled: true,
             searchMode: 'startswith'
         });
         const $input = $element.find('.dx-texteditor-input');

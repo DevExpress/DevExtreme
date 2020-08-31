@@ -1297,7 +1297,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         listInstance.scrollTo(1000);
         const scrollTop = listInstance.scrollTop();
@@ -1339,7 +1338,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const keyboard = keyboardMock($input);

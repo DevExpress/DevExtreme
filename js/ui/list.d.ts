@@ -47,15 +47,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     allowItemDeleting?: boolean;
     /**
-     * @docid dxListOptions.allowItemReordering
-     * @type boolean
-     * @default false
-     * @deprecated dxListOptions.itemDragging
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    allowItemReordering?: boolean;
-    /**
      * @docid dxListOptions.bounceEnabled
      * @type boolean
      * @default true

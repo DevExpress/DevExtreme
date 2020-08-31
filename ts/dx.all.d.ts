@@ -2804,9 +2804,6 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
-        /** @deprecated */
-        /** @name dxButtonGroup.Options.itemTemplate */
-        itemTemplate?: DevExpress.core.template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
@@ -3191,14 +3188,8 @@ declare module DevExpress.ui {
         invalidDateMessage?: string;
         /** @name dxDateBox.Options.max */
         max?: Date | number | string;
-        /** @deprecated */
-        /** @name dxDateBox.Options.maxZoomLevel */
-        maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.min */
         min?: Date | number | string;
-        /** @deprecated */
-        /** @name dxDateBox.Options.minZoomLevel */
-        minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
         /** @name dxDateBox.Options.placeholder */
@@ -3272,7 +3263,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.mainToolbar */
         mainToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, autoSizeEnabled?: boolean, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', requestUpdate?: ((changes: Array<any>) => boolean), type?: 'auto' | 'off' | 'tree' | 'layered' }, autoSizeEnabled?: boolean, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onCustomCommand */
         onCustomCommand?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, name?: string }) => any);
         /** @name dxDiagram.Options.onItemClick */
@@ -3322,8 +3313,6 @@ declare module DevExpress.ui {
         getNodeDataSource(): DevExpress.data.DataSource;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly?: boolean): void;
-        /** @name dxDiagram.reloadContent(itemKey, applyLayout) */
-        reloadContent(itemKey?: any, applyLayout?: boolean): void;
     }
     /** @name dxDiagramConnector */
     export interface dxDiagramConnector extends dxDiagramItem {
@@ -3762,6 +3751,8 @@ declare module DevExpress.ui {
         allowedFileExtensions?: Array<string>;
         /** @name dxFileUploader.Options.chunkSize */
         chunkSize?: number;
+        /** @name dxFileUploader.Options.dialogTrigger */
+        dialogTrigger?: string | Element | JQuery;
         /** @name dxFileUploader.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxFileUploader.Options.inputAttr */
@@ -4379,9 +4370,6 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxList.Options.allowItemDeleting */
         allowItemDeleting?: boolean;
-        /** @deprecated */
-        /** @name dxList.Options.allowItemReordering */
-        allowItemReordering?: boolean;
         /** @name dxList.Options.bounceEnabled */
         bounceEnabled?: boolean;
         /** @name dxList.Options.collapsibleGroups */
@@ -5830,12 +5818,6 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** @name dxSwitch.Options.name */
         name?: string;
-        /** @deprecated */
-        /** @name dxSwitch.Options.offText */
-        offText?: string;
-        /** @deprecated */
-        /** @name dxSwitch.Options.onText */
-        onText?: string;
         /** @name dxSwitch.Options.switchedOffText */
         switchedOffText?: string;
         /** @name dxSwitch.Options.switchedOnText */
@@ -9248,10 +9230,16 @@ declare module DevExpress.viz {
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /** @name dxPieChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPieChartAdaptiveLayout;
+        /** @name dxPieChart.Options.annotations */
+        annotations?: Array<dxPieChartAnnotationConfig | any>;
         /** @name dxPieChart.Options.centerTemplate */
         centerTemplate?: DevExpress.core.template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPieChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
         /** @name dxPieChart.Options.commonSeriesSettings */
         commonSeriesSettings?: any;
+        /** @name dxPieChart.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
         /** @name dxPieChart.Options.diameter */
         diameter?: number;
         /** @name dxPieChart.Options.innerRadius */
@@ -9303,6 +9291,26 @@ declare module DevExpress.viz {
         constructor(element: JQuery, options?: dxPieChartOptions)
         /** @name dxPieChart.getInnerRadius() */
         getInnerRadius(): number;
+    }
+    /** @name dxPieChartAnnotationConfig */
+    export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
+        /** @name dxPieChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxPieChartCommonAnnotationConfig */
+    export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+        /** @name dxPieChartCommonAnnotationConfig.argument */
+        argument?: number | Date | string;
+        /** @name dxPieChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
+        /** @name dxPieChartCommonAnnotationConfig.location */
+        location?: 'center' | 'edge';
+        /** @name dxPieChartCommonAnnotationConfig.series */
+        series?: string;
+        /** @name dxPieChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxPieChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPieChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPieChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPieChartSeriesTypes */
     export interface dxPieChartSeriesTypes {

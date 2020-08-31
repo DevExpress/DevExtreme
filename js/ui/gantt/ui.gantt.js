@@ -363,7 +363,7 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = data;
-            const expandedRowKeys = data.map(t => t.parentId).filter((value, index, self) => value && self.indexOf(value) === index);
+            const expandedRowKeys = data.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
             this._setTreeListOption('expandedRowKeys', expandedRowKeys);
             this._setTreeListOption('dataSource', data);
         }

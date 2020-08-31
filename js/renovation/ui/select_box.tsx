@@ -16,11 +16,11 @@ export class SelectBoxProps extends WidgetProps {
 
   @OneWay() displayExpr?: string;
 
-  @TwoWay() value?: number;
+  @TwoWay() value: number | null = null;
 
   @OneWay() valueExpr?: string;
 
-  @Event() valueChange?: ((value: number) => void) = () => { };
+  @Event() valueChange: ((value: number) => void) = () => { };
 }
 @Component({
   defaultOptionRules: null,

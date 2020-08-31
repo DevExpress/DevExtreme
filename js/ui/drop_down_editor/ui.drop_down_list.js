@@ -121,8 +121,6 @@ const DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions.applyValueMode
             * @hidden
             */
-
-            popupWidthExtension: 0
         }));
     },
 
@@ -920,7 +918,6 @@ const DropDownList = DropDownEditor.inherit({
                 break;
             case 'itemTemplate':
             case 'searchTimeout':
-            case 'popupWidthExtension':
                 break;
             case 'selectedItem':
                 if(args.previousValue !== args.value) {

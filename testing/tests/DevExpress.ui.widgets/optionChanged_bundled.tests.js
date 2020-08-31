@@ -80,8 +80,6 @@ define(function(require) {
                 };
 
                 QUnit.test(componentName, function(assert) {
-                    const done = assert.async();
-
                     const $element = this.$element;
                     const component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance');
                     const options = component.option();
@@ -132,13 +130,6 @@ define(function(require) {
                     });
 
                     assert.ok(true, optionCount + ' options was checked');
-
-                    // Since jQuery 2.2.0 have the following code
-                    // https://github.com/jquery/jquery/blob/2.2-stable/src/ajax/xhr.js#L133
-                    // QUnit recognize it as uncleared timeout, so this test are async now.
-                    setTimeout(function() {
-                        done();
-                    });
                 });
             }
         });

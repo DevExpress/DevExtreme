@@ -2,6 +2,7 @@
 import * as Preact from 'preact';
 import { useLayoutEffect, useRef } from 'preact/hooks';
 import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
 import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
 import { wrapElement, removeDifferentElements } from './utils';
@@ -56,19 +57,21 @@ export default class PreactWrapper extends DOMComponent {
 
   _renderPreact(props) {
     const containerNode = this.$element().get(0);
-    const replaceNode = !this._preactReplaced && containerNode.parentNode
-      ? containerNode
-      : undefined;
 
-    if (containerNode.parentNode) {
-      this._preactReplaced = true;
+    if (!containerNode.parentNode) {
+      this._documentFragment.appendChild(containerNode);
     }
 
     Preact.render(
       Preact.h(this._viewComponent, props),
       containerNode,
-      replaceNode,
+      this._preactReplaced ? undefined : containerNode,
     );
+    this._preactReplaced = true;
+
+    if (containerNode.parentNode === this._documentFragment) {
+      this._documentFragment.removeChild(containerNode);
+    }
   }
 
   _render() {}
@@ -91,6 +94,7 @@ export default class PreactWrapper extends DOMComponent {
       };
     }
     const elemStyle = this.$element()[0].style;
+
     const style = {};
     for (let i = 0; i < elemStyle.length; i++) {
       style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
@@ -151,6 +155,7 @@ export default class PreactWrapper extends DOMComponent {
 
   _init() {
     super._init();
+    this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
     Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
