@@ -12,6 +12,7 @@ import '../tag_box';
 import '../switch';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
+const TIMEZONE_EDITOR = 'dx-timezone-editor';
 
 export const APPOINTMENT_FORM_GROUP_NAMES = {
     Main: 'mainGroup',
@@ -117,6 +118,7 @@ const SchedulerAppointmentForm = {
             label: {
                 text: ' ',
             },
+            cssClass: TIMEZONE_EDITOR,
             editorOptions: {
                 displayExpr: 'title',
                 valueExpr: 'id',
