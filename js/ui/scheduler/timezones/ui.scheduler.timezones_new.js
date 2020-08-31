@@ -31,12 +31,12 @@ const SchedulerTimezones = {
         return this._list;
     },
     getDisplayNames: function() {
-        const today = new Date();
+        const today = new Date(); // NOTE: use startDate from appointment instead
 
         const result = [];
         this._list.forEach((timezone) => {
-            const offset = -(this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime())) / 60;
-            const title = `(GMT  ${this.formatOffset(offset)}) ${timezone.name}`;
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime());
+            const title = `(GMT  ${this.formatOffset(offset)}) ${timezone.id}`;
 
             result.push(extend(timezone, {
                 offset: offset,
@@ -141,7 +141,7 @@ const SchedulerTimezones = {
             index++;
         }
 
-        return offsetsList[Number(offsetIndicesList[index])];
+        return -(offsetsList[Number(offsetIndicesList[index])] / 60);
     },
 
     getTimezoneShortDisplayNameById: function(id) {

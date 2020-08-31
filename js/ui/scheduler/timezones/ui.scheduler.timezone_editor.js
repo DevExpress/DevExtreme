@@ -9,7 +9,7 @@ import DataSource from '../../../data/data_source';
 
 const TIMEZONE_EDITOR_CLASS = 'dx-timezone-editor';
 const TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS = 'dx-timezone-display-name';
-const TIMEZONE_IANA_ID_SELECTBOX_CLASS = 'dx-timezone-iana-id';
+// const TIMEZONE_IANA_ID_SELECTBOX_CLASS = 'dx-timezone-iana-id';
 
 const SchedulerTimezoneEditor = Editor.inherit({
     _getDefaultOptions: function() {
@@ -39,7 +39,7 @@ const SchedulerTimezoneEditor = Editor.inherit({
 
     _renderDisplayNameEditor: function() {
         const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
-        const value = this.invoke('getTimezoneDisplayNameById', this.option('value')) || noTzTitle;
+        const value = this.option('value');
 
         const productsStore = new DataSource({
             // key: 'name',
@@ -52,27 +52,31 @@ const SchedulerTimezoneEditor = Editor.inherit({
             // items: productsStore,
             value: value,
             displayExpr: 'title',
+            valueExpr: 'id',
             dataSource: productsStore,
             searchEnabled: true,
+            onValueChanged: (e) => {
+                this.option('value', e.value);
+            }
             // onValueChanged: function(e) {
             //     this._processDisplayNameChanging(e.value);
             // }.bind(this)
         });
     },
 
-    _renderIanaIdEditor: function() {
-        this._ianaIdEditor = this._renderSelectBox(TIMEZONE_IANA_ID_SELECTBOX_CLASS, {
-            items: this._idsDataSource(),
-            // value: this.option('value'),
-            onValueChanged: function(e) {
-                this.option('value', e.value);
-            }.bind(this),
-            valueExpr: 'id',
-            displayExpr: 'displayName',
-            // placeholder: ''
-            disabled: this._calculateIanaIdEditorDisabledState()
-        });
-    },
+    // _renderIanaIdEditor: function() {
+    //     this._ianaIdEditor = this._renderSelectBox(TIMEZONE_IANA_ID_SELECTBOX_CLASS, {
+    //         items: this._idsDataSource(),
+    //         // value: this.option('value'),
+    //         onValueChanged: function(e) {
+    //             this.option('value', e.value);
+    //         }.bind(this),
+    //         valueExpr: 'id',
+    //         displayExpr: 'displayName',
+    //         // placeholder: ''
+    //         disabled: this._calculateIanaIdEditorDisabledState()
+    //     });
+    // },
 
     _renderSelectBox: function(cssClass, options) {
         options = options || {};
@@ -109,16 +113,16 @@ const SchedulerTimezoneEditor = Editor.inherit({
         const value = args.value;
         switch(args.name) {
             case 'value':
-                this._ianaIdEditor.option({
-                    value: value,
-                    items: this._idsDataSource()
-                });
+                // this._ianaIdEditor.option({
+                //     value: value,
+                //     items: this._idsDataSource()
+                // });
 
-                if(value) {
-                    this._displayNameEditor.option('value', this.invoke('getTimezoneDisplayNameById', value));
-                } else {
-                    this._displayNameEditor.option('value', messageLocalization.format('dxScheduler-noTimezoneTitle'));
-                }
+                // if(value) {
+                //     this._displayNameEditor.option('value', this.invoke('getTimezoneDisplayNameById', value));
+                // } else {
+                //     this._displayNameEditor.option('value', messageLocalization.format('dxScheduler-noTimezoneTitle'));
+                // }
 
                 this.callBase(args);
                 break;

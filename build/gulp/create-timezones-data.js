@@ -5,13 +5,19 @@ const through = require('through2');
 function prepareUntils(untils) {
     const result = [];
 
-    untils.forEach(until => {
-        if(until != null) {
-            result.push((until / 1000).toString(36));
-        } else {
+    untils.forEach((until, index) => {
+        if(until === null) {
             result.push('Infinity');
-        }
+        } else {
+            if(until != null && index !== 0) {
+                const currentOffset = until - untils[index - 1];
+                result.push((currentOffset / 1000).toString(36));
+            }
 
+            if(index === 0) {
+                result.push((until / 1000).toString(36));
+            }
+        }
     });
     return result.join('|');
 }
@@ -38,7 +44,7 @@ function transformJson(input) {
             const offsets = prepareOffsets(timezoneOffsets);
 
             result.push({
-                name: timezone.name,
+                id: timezone.name,
                 untils: prepareUntils(timezone.untils),
                 offsets: offsets.join('|'),
                 offsetIndices: prepareOffsetIndices(offsets, timezoneOffsets)

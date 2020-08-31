@@ -5,7 +5,8 @@ import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironme
 
 import $ from 'jquery';
 import devices from 'core/devices';
-import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
+import SelectBox from 'ui/select_box';
+// import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -1256,8 +1257,8 @@ QUnit.test('It should be possible to render startDateTimeZone editor on appt for
     const form = this.instance.getAppointmentDetailsForm();
     const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
 
-    assert.ok(startDateTimezoneEditor instanceof SchedulerTimezoneEditor, 'Editor is SchedulerTimezoneEditor');
-    assert.equal(startDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
+    assert.ok(startDateTimezoneEditor instanceof SelectBox, 'Editor is SelectBox');
+    assert.equal(startDateTimezoneEditor.option('value'), null, 'Value is correct');
 });
 
 QUnit.test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
@@ -1269,8 +1270,8 @@ QUnit.test('It should be possible to render endDateTimeZone editor on appt form'
     const form = this.instance.getAppointmentDetailsForm();
     const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
 
-    assert.ok(endDateTimezoneEditor instanceof SchedulerTimezoneEditor, 'Editor is SchedulerTimezoneEditor');
-    assert.equal(endDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
+    assert.ok(endDateTimezoneEditor instanceof SelectBox, 'Editor is SelectBox');
+    assert.equal(endDateTimezoneEditor.option('value'), null, 'Value is correct');
 });
 
 ['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
