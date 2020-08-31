@@ -113,16 +113,20 @@ export default class AppointmentSettingsGenerator {
         };
     }
 
-    _createRecurrenceAppointments(appointment) {
-        const [startDateOption, endDateOption] = this._createRecurrenceOptions(appointment);
+    _createRecurrenceAppointments(appointment, duration) {
+        const [startDateOption] = this._createRecurrenceOptions(appointment);
 
         const startDates = getRecurrenceProcessor().generateDates(startDateOption);
-        const endDates = getRecurrenceProcessor().generateDates(endDateOption);
 
         return startDates.map((date, index) => {
+
+            const utcDate = getRecurrenceProcessor()._getRRuleUtcDate(new Date(date));
+            utcDate.setTime(utcDate.getTime() + duration);
+            const rawEndDate = getRecurrenceProcessor()._getCorrectDateByTimezoneOffset(utcDate);
+
             return {
                 startDate: new Date(date),
-                endDate: endDates[index]
+                endDate: rawEndDate
             };
         });
     }
