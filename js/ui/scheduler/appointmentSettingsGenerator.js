@@ -81,7 +81,7 @@ export default class AppointmentSettingsGenerator {
     }
 
     _createRecurrenceOptions(appointment) {
-        const [minRecurrenceDate, maxRecurrenceDate] = this._createExtremeRecurrenceDate(appointment.source);
+        const [minRecurrenceDate, maxRecurrenceDate] = this._createExtremeRecurrenceDate(appointment.source());
 
         const baseOption = {
             rule: appointment.recurrenceRule,
