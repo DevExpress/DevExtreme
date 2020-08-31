@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'common.css!';
 import 'generic_light.css!';
+import devices from 'core/devices';
 
 import {
     createWrapper,
@@ -29,9 +30,11 @@ module('Initialization', {
                 const instance = createWrapper({
                     views: supportedViews,
                     currentView: view,
+                    dataSource: [],
                     scrolling: {
                         mode: scrolling.mode,
                     },
+                    height: 400
                 }).instance;
 
                 assert.equal(
@@ -48,7 +51,8 @@ module('Initialization', {
                             mode: scrolling.mode,
                         },
                     }],
-                    currentView: view
+                    currentView: view,
+                    height: 400
                 }).instance;
 
                 assert.equal(
@@ -61,7 +65,8 @@ module('Initialization', {
         test(`Virtual scrolling optional if view: ${view}`, function(assert) {
             const instance = createWrapper({
                 views: supportedViews,
-                currentView: view
+                currentView: view,
+                height: 400
             }).instance;
 
             instance.option('scrolling.mode', 'virtual');
@@ -78,7 +83,8 @@ module('Initialization', {
                 views: [{
                     type: view,
                 }],
-                currentView: view
+                currentView: view,
+                height: 400
             }).instance;
 
             instance.option('views[0].scrolling.mode', 'virtual');
@@ -104,6 +110,7 @@ module('Initialization', {
                     scrolling: {
                         mode: scrolling.mode,
                     },
+                    height: 400
                 }).instance;
 
                 assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
@@ -118,7 +125,8 @@ module('Initialization', {
                             mode: scrolling.mode,
                         },
                     }],
-                    currentView: view
+                    currentView: view,
+                    height: 400
                 }).instance;
 
                 assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
@@ -129,7 +137,8 @@ module('Initialization', {
         test(`Virtual scrolling optional if view: ${view}`, function(assert) {
             const instance = createWrapper({
                 views: unsupportedViews,
-                currentView: view
+                currentView: view,
+                height: 400
             }).instance;
 
             instance.option('scrolling.mode', 'virtual');
@@ -146,7 +155,8 @@ module('Initialization', {
                 views: [{
                     type: view,
                 }],
-                currentView: view
+                currentView: view,
+                height: 400
             }).instance;
 
             instance.option('views[0].scrolling.mode', 'virtual');
@@ -410,6 +420,19 @@ QUnit.module('Appointment filtering', function() {
     });
 
     QUnit.module('Scrolling', {
+        before: function() {
+            this.checkResultByDeviceType = (assert, callback) => {
+                if(devices.real().deviceType === 'desktop') {
+                    callback();
+                } else {
+                    const done = assert.async();
+                    setTimeout(() => {
+                        callback();
+                        done();
+                    });
+                }
+            };
+        },
         beforeEach: function() {
             this.data = [
                 {
@@ -485,20 +508,25 @@ QUnit.module('Appointment filtering', function() {
             { y: 2400, expectedIndices: [4, 5] }
         ].forEach(option => {
             QUnit.test(`Scrolling Down if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+                const { expectedIndices } = option;
+
                 this.createInstance();
 
                 const { instance } = this;
 
+                window.scheduler = instance;
+
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const { expectedIndices } = option;
-                const filteredItems = instance.getFilteredItems();
+                this.checkResultByDeviceType(assert, () => {
+                    const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
-                filteredItems.forEach((_, index) => {
-                    const expected = this.data[expectedIndices[index]];
-                    assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    filteredItems.forEach((_, index) => {
+                        const expected = this.data[expectedIndices[index]];
+                        assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    });
                 });
             });
         });
@@ -511,20 +539,23 @@ QUnit.module('Appointment filtering', function() {
             { y: 0, expectedIndices: [0, 1, 2] }
         ].forEach(option => {
             QUnit.test(`Scrolling Up if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+                const { expectedIndices } = option;
+
                 this.createInstance();
 
                 const { instance } = this;
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const { expectedIndices } = option;
-                const filteredItems = instance.getFilteredItems();
+                this.checkResultByDeviceType(assert, () => {
+                    const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
-                filteredItems.forEach((_, index) => {
-                    const expected = this.data[expectedIndices[index]];
-                    assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    filteredItems.forEach((_, index) => {
+                        const expected = this.data[expectedIndices[index]];
+                        assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    });
                 });
             });
         });
@@ -541,6 +572,8 @@ QUnit.module('Appointment filtering', function() {
             { y: 4300, expectedIndices: [] },
         ].forEach(option => {
             QUnit.test(`Scrolling Down if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+                const { expectedIndices } = option;
+
                 this.createInstance({
                     groups: ['resourceId0'],
                     resources: [{
@@ -557,14 +590,15 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const { expectedIndices } = option;
-                const filteredItems = instance.getFilteredItems();
+                this.checkResultByDeviceType(assert, () => {
+                    const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
-                filteredItems.forEach((_, index) => {
-                    const expected = this.data[expectedIndices[index]];
-                    assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    filteredItems.forEach((_, index) => {
+                        const expected = this.data[expectedIndices[index]];
+                        assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    });
                 });
             });
         });
@@ -581,6 +615,8 @@ QUnit.module('Appointment filtering', function() {
             { y: 0, expectedIndices: [0, 2] }
         ].forEach(option => {
             QUnit.test(`Scrolling Up if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+                const { expectedIndices } = option;
+
                 this.createInstance({
                     groups: ['resourceId0'],
                     resources: [{
@@ -597,14 +633,15 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                const { expectedIndices } = option;
-                const filteredItems = instance.getFilteredItems();
+                this.checkResultByDeviceType(assert, () => {
+                    const filteredItems = instance.getFilteredItems();
 
-                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
-                filteredItems.forEach((_, index) => {
-                    const expected = this.data[expectedIndices[index]];
-                    assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    filteredItems.forEach((_, index) => {
+                        const expected = this.data[expectedIndices[index]];
+                        assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
+                    });
                 });
             });
         });
