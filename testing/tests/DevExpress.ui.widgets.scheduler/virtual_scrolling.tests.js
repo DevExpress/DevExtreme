@@ -46,6 +46,7 @@ module('Virtual Scrolling model', {
 
         this.viewportHeight = 300;
         this.virtualScrolling = new VirtualScrolling(this.worksSpaceMock, this.viewportHeight, this.scrollableMock);
+        this.virtualScrolling._getRenderTimeout = () => -1;
     }
 },
 () => {
