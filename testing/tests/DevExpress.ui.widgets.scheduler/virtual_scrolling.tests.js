@@ -21,7 +21,8 @@ module('Virtual Scrolling model', {
             _allDayPanels: undefined,
             isGroupedAllDayPanel: noop,
             renderRWorkspace: noop,
-            renderRAppointments: noop
+            renderRAppointments: noop,
+            invoke: noop
         };
 
         this.scrollableMock = {
