@@ -60,7 +60,7 @@ import {
   DxColumn
 } from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 
 import PriceCell from './PriceCell.vue';
 import ChangeCell from './ChangeCell.vue';
@@ -80,7 +80,10 @@ export default {
   },
   mounted() {
     var hubConnection = new HubConnectionBuilder()
-      .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub')
+      .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
       .build();
 
     var store = new CustomStore({

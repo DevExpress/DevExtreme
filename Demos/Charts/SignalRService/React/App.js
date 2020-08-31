@@ -13,7 +13,7 @@ import Chart, {
   Crosshair
 } from 'devextreme-react/chart';
 import CustomStore from 'devextreme/data/custom_store';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.js';
 
 class App extends React.Component {
@@ -23,7 +23,10 @@ class App extends React.Component {
     this.state = { dataSource: null };
 
     const hubConnection = new HubConnectionBuilder()
-      .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub')
+      .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
       .build();
 
     const store = new CustomStore({

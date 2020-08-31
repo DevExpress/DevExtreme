@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { DxDataGridModule } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
 
@@ -22,7 +22,10 @@ export class AppComponent {
         this.connectionStarted = false;
 
         var hubConnection = new HubConnectionBuilder()
-            .withUrl("https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub")
+            .withUrl("https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub" {
+                skipNegotiation: true,
+                transport: HttpTransportType.WebSockets
+            })
             .build();
 
         var store = new CustomStore({
