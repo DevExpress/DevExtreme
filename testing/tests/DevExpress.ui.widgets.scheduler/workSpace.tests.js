@@ -3784,7 +3784,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: undefined,
                         index: 0,
                     },
-                    position: { cellIndex: 0, rowIndex: 0 }
+                    position: { cellIndex: 0, rowIndex: 0, groupIndex: 0 }
                 }], [{
                     cellData: {
                         startDate: new Date(2020, 6, 29, 0, 30),
@@ -3794,7 +3794,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: undefined,
                         index: 1,
                     },
-                    position: { cellIndex: 0, rowIndex: 1 }
+                    position: { cellIndex: 0, rowIndex: 1, groupIndex: 0 }
                 }]
             ];
 
@@ -3888,7 +3888,7 @@ QUnit.module('Renovated Render', {
                     groupIndex: 0,
                     index: 0,
                 },
-                position: { cellIndex: 0, rowIndex: 0 }
+                position: { cellIndex: 0, rowIndex: 0, groupIndex: 0 }
             }, {
                 cellData: {
                     startDate: new Date(2020, 6, 29, 0, 0),
@@ -3899,7 +3899,7 @@ QUnit.module('Renovated Render', {
                     groupIndex: 1,
                     index: 0,
                 },
-                position: { cellIndex: 1, rowIndex: 0 }
+                position: { cellIndex: 1, rowIndex: 0, groupIndex: 0 }
             }], [{
                 cellData: {
                     startDate: new Date(2020, 6, 29, 0, 30),
@@ -3910,7 +3910,7 @@ QUnit.module('Renovated Render', {
                     groupIndex: 0,
                     index: 1,
                 },
-                position: { cellIndex: 0, rowIndex: 1 }
+                position: { cellIndex: 0, rowIndex: 1, groupIndex: 0 }
             }, {
                 cellData: {
                     startDate: new Date(2020, 6, 29, 0, 30),
@@ -3921,7 +3921,7 @@ QUnit.module('Renovated Render', {
                     groupIndex: 1,
                     index: 1,
                 },
-                position: { cellIndex: 1, rowIndex: 1 }
+                position: { cellIndex: 1, rowIndex: 1, groupIndex: 0 }
             }]];
 
             assert.deepEqual(viewData, expectedViewData, 'correct view data');
@@ -4014,7 +4014,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: 0,
                         index: 0,
                     },
-                    position: { rowIndex: 0, cellIndex: 0 }
+                    position: { rowIndex: 0, cellIndex: 0, groupIndex: 0 }
                 }], [{
                     cellData: {
                         startDate: new Date(2020, 6, 29, 0, 0),
@@ -4025,7 +4025,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: 0,
                         index: 0,
                     },
-                    position: { rowIndex: 1, cellIndex: 0 }
+                    position: { rowIndex: 1, cellIndex: 0, groupIndex: 0 }
                 }], [{
                     cellData: {
                         startDate: new Date(2020, 6, 29, 0, 30),
@@ -4036,7 +4036,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: 0,
                         index: 1,
                     },
-                    position: { rowIndex: 2, cellIndex: 0 }
+                    position: { rowIndex: 2, cellIndex: 0, groupIndex: 0 }
                 }], [{
                     cellData: {
                         allDay: true,
@@ -4046,7 +4046,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: 1,
                         index: 0,
                     },
-                    position: { rowIndex: 3, cellIndex: 0 }
+                    position: { rowIndex: 3, cellIndex: 0, groupIndex: 1 }
                 }], [{
                     cellData: {
                         startDate: new Date(2020, 6, 29, 0, 0),
@@ -4057,7 +4057,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: 1,
                         index: 0,
                     },
-                    position: { rowIndex: 4, cellIndex: 0 }
+                    position: { rowIndex: 4, cellIndex: 0, groupIndex: 1 }
                 }], [{
                     cellData: {
                         startDate: new Date(2020, 6, 29, 0, 30),
@@ -4068,7 +4068,7 @@ QUnit.module('Renovated Render', {
                         groupIndex: 1,
                         index: 1,
                     },
-                    position: { rowIndex: 5, cellIndex: 0 }
+                    position: { rowIndex: 5, cellIndex: 0, groupIndex: 1 }
                 }]
             ];
 

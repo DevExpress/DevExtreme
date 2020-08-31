@@ -2131,6 +2131,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getCellPositionByIndex(index, groupIndex, inAllDayRow) {
         const cellCoordinates = this._getCellCoordinatesByIndex(index);
         const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow);
+
+        return this._getCellPositionWithCache(
+            $cell,
+            cellCoordinates,
+            groupIndex
+        );
+    }
+
+    _getCellPositionWithCache($cell, cellCoordinates, groupIndex) {
         const result = this._getCellPosition($cell);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
@@ -2153,12 +2162,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
         const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
+        return this._dom_getDateCell(indexes);
+    }
 
+    // TODO DOM adapter
+    _dom_getDateCell(position) {
         return this._$dateTable
             .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
-            .eq(indexes.rowIndex)
+            .eq(position.rowIndex)
             .find('td')
-            .eq(indexes.cellIndex);
+            .eq(position.cellIndex);
     }
 
     _getCells(allDay, direction) {
@@ -2359,9 +2372,23 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
+        let position;
 
-        const index = this.getCellIndexByDate(date, inAllDayRow);
-        const position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
+        if(this.isVirtualScrolling()) {
+            const positionByMap = this.viewDataProvider._findCellPositionInMap(groupIndex, date);
+
+            if(!positionByMap) {
+                return;
+            }
+
+            const $cell = this._dom_getDateCell(positionByMap);
+
+            position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
+        } else {
+            const index = this.getCellIndexByDate(date, inAllDayRow);
+            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
+        }
+
         const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
         const horizontalHMax = this._getHorizontalMax(groupIndex, date);
 
@@ -2369,7 +2396,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             throw errors.Error('E1039');
         }
 
-        const coordinates = {
+        return {
             cellPosition: position.left + shift.cellPosition,
             top: position.top + shift.top,
             left: position.left + shift.left,
@@ -2379,8 +2406,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             vMax: this.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
-
-        return coordinates;
     }
 
     getVerticalMax(groupIndex) {
@@ -2447,21 +2472,21 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isSkippedData() { return false; }
 
-    getCoordinatesByDateInGroup(date, appointmentResources, inAllDayRow) {
-        const indexes = this._getGroupIndexes(appointmentResources);
+    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow) {
         const result = [];
 
-        if(this._isSkippedData(date)) {
+        if(this._isSkippedData(startDate)) {
             return result;
         }
 
-        if(indexes.length) {
-            for(let i = 0; i < indexes.length; i++) {
-                result.push(this.getCoordinatesByDate(date, indexes[i], inAllDayRow));
-            }
-        } else {
-            result.push(this.getCoordinatesByDate(date, 0, inAllDayRow));
-        }
+        const groupIndices = this._getGroupCount()
+            ? this._getGroupIndexes(appointmentResources)
+            : [0];
+
+        groupIndices.forEach(groupIndex => {
+            const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
+            coordinates && result.push(coordinates);
+        });
 
         return result;
     }

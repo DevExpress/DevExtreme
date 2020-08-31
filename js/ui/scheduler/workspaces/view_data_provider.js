@@ -218,50 +218,52 @@ class ViewDataGenerator {
         return index;
     }
 
-    getViewDataMap(groupedData) {
+    generateMaps(groupedData) {
         const viewDataMap = [];
-        const addToMap = cellsData => {
+        const groupedDataMap = [];
+        const addToViewDataMap = (cellsData, groupIndex) => {
             const cellsMap = [];
             cellsData.forEach((cellData, cellIndex) => {
                 const cellMap = {
                     cellData,
                     position: {
                         rowIndex: viewDataMap.length,
-                        cellIndex: cellIndex
+                        cellIndex: cellIndex,
+                        groupIndex: groupIndex
                     }
                 };
                 cellsMap.push(cellMap);
             });
 
             viewDataMap.push(cellsMap);
+
+            return cellsMap;
         };
 
-        groupedData?.forEach(({
-            dateTable,
-            allDayPanel,
-            isGroupedAllDayPanel
-        }) => {
+        groupedData?.forEach(data => {
+            const {
+                dateTable,
+                allDayPanel,
+                isGroupedAllDayPanel,
+                groupIndex
+            } = data;
+            const cellsMap = [];
+
             if(isGroupedAllDayPanel && allDayPanel?.length) {
-                addToMap(allDayPanel);
+                cellsMap.push(addToViewDataMap(allDayPanel, groupIndex));
             }
 
-            dateTable.forEach(cellsData => {
-                addToMap(cellsData);
+            dateTable.forEach(rows => {
+                cellsMap.push(addToViewDataMap(rows, groupIndex));
             });
+
+            groupedDataMap[groupIndex] = cellsMap;
         });
 
-        return viewDataMap;
-    }
-
-    getGroupedDataMap(groupedData) {
-        const result = [];
-
-        groupedData.forEach(data => {
-            const { groupIndex } = data;
-            result[groupIndex] = data;
-        });
-
-        return result;
+        return {
+            viewDataMap,
+            groupedDataMap
+        };
     }
 }
 
@@ -296,8 +298,7 @@ export default class ViewDataProvider {
 
         this.viewData = viewData;
 
-        this._updateViewDataMap();
-        this._updateGroupedDataMap();
+        this._generateMaps();
     }
 
     getStartDate() {
@@ -333,18 +334,61 @@ export default class ViewDataProvider {
         return cellData;
     }
 
+    findCellPosition(groupIndices, startDate) {
+        for(let i = 0; i < groupIndices.length; ++i) {
+            const groupIndex = groupIndices[i];
+            const position = this._findCellPositionInMap(groupIndex, startDate);
+
+            if(position) {
+                return position;
+            }
+        }
+    }
+
+    _findCellPositionInMap(groupIndex, startDate) {
+        const startTime = startDate.getTime();
+        const isStartTimeInCell = cellData => {
+            const cellStartTime = cellData.startDate.getTime();
+            const cellEndTime = cellData.endDate.getTime();
+            return startTime >= cellStartTime && startTime < cellEndTime;
+        };
+
+        const isVerticalGrouping = this.viewDataGenerator.workspace._isVerticalGroupedWorkSpace();
+        const rows = isVerticalGrouping
+            ? this.groupedDataMap[groupIndex]
+            : this.groupedDataMap[0];
+
+        for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
+            const row = rows[rowIndex];
+
+            for(let cellIndex = 0; cellIndex < row.length; ++cellIndex) {
+                const cell = row[cellIndex];
+                const { position } = cell;
+
+                if(position.groupIndex === groupIndex) {
+                    if(isStartTimeInCell(cell.cellData)) {
+                        const { position } = cell;
+
+                        return position;
+                    }
+                }
+            }
+        }
+    }
+
     _getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
 
-    _updateViewDataMap() {
+    _generateMaps() {
         const { groupedData } = this.viewData;
-        this.viewDataMap = this.viewDataGenerator.getViewDataMap(groupedData);
-    }
+        const {
+            viewDataMap,
+            groupedDataMap
+        } = this.viewDataGenerator.generateMaps(groupedData);
 
-    _updateGroupedDataMap() {
-        const { groupedData } = this.viewData;
-        this.groupedDataMap = this.viewDataGenerator.getGroupedDataMap(groupedData);
+        this.viewDataMap = viewDataMap;
+        this.groupedDataMap = groupedDataMap;
     }
 }

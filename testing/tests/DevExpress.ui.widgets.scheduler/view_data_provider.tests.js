@@ -67,7 +67,7 @@ module('View Data Provider', {
         });
 
         test('getCellData', function(assert) {
-            this.viewDataProvider._updateViewDataMap();
+            this.viewDataProvider._generateMaps();
 
             const cellData_0_1 = this.viewDataProvider.getCellData(0, 1);
             const expectedCellData_0_1 = { startDate: new Date(2020, 8, 25), endDate: new Date(2020, 8, 26) };
@@ -81,13 +81,33 @@ module('View Data Provider', {
 
     module('Generator', () => {
         test('groupedDataMap', function(assert) {
-            this.viewDataProvider._updateGroupedDataMap();
+            this.viewDataProvider._generateMaps();
+
+            const { viewData } = this;
 
             const expectedGroupedDataMap = [
                 undefined,
                 undefined,
-                this.viewData.groupedData[0],
-                this.viewData.groupedData[1]
+                [
+                    [{
+                        cellData: viewData.groupedData[0].dateTable[0][0],
+                        position: { rowIndex: 0, cellIndex: 0, groupIndex: 2 }
+                    },
+                    {
+                        cellData: viewData.groupedData[0].dateTable[0][1],
+                        position: { rowIndex: 0, cellIndex: 1, groupIndex: 2 }
+                    }]
+                ],
+                [
+                    [{
+                        cellData: viewData.groupedData[1].dateTable[0][0],
+                        position: { rowIndex: 1, cellIndex: 0, groupIndex: 3 }
+                    },
+                    {
+                        cellData: viewData.groupedData[1].dateTable[0][1],
+                        position: { rowIndex: 1, cellIndex: 1, groupIndex: 3 }
+                    }]
+                ]
             ];
 
             assert.deepEqual(
