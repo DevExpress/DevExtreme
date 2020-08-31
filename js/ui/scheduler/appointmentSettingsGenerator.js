@@ -99,6 +99,7 @@ export default class AppointmentSettingsGenerator {
         const endDateOption = Object.assign({
             start: appointment.endDate,
             end: appointment.endDate,
+            min: appointment.endDate
         }, baseOption);
 
         return [startDateOption, endDateOption];
