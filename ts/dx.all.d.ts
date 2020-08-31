@@ -4217,6 +4217,32 @@ declare module DevExpress.ui {
     export class dxGantt extends Widget {
         constructor(element: Element, options?: dxGanttOptions)
         constructor(element: JQuery, options?: dxGanttOptions)
+        /** @name dxGantt.assignResourceToTask(resourceKey, taskKey) */
+        assignResourceToTask(resourceKey: any, taskKey: any): void;
+        /** @name dxGantt.deleteDependency(key) */
+        deleteDependency(key: any): void;
+        /** @name dxGantt.deleteResource(key) */
+        deleteResource(key: any): void;
+        /** @name dxGantt.deleteTask(key) */
+        deleteTask(key: any): void;
+        /** @name dxGantt.getDependencyData(key) */
+        getDependencyData(key: any): any;
+        /** @name dxGantt.getResourceAssignmentData(key) */
+        getResourceAssignmentData(key: any): any;
+        /** @name dxGantt.getResourceData(key) */
+        getResourceData(key: any): any;
+        /** @name dxGantt.getTaskData(key) */
+        getTaskData(key: any): any;
+        /** @name dxGantt.insertDependency(data) */
+        insertDependency(data: any): void;
+        /** @name dxGantt.insertResource(data, taskKeys) */
+        insertResource(data: any, taskKeys?: Array<any>): void;
+        /** @name dxGantt.insertTask(data) */
+        insertTask(data: any): void;
+        /** @name dxGantt.unassignResourceFromTask(resourceKey, taskKey) */
+        unassignResourceFromTask(resourceKey: any, taskKey: any): void;
+        /** @name dxGantt.updateTask(key, data) */
+        updateTask(key: any, data: any): void;
     }
     /** @name dxGanttStripLine */
     export interface dxGanttStripLine {
