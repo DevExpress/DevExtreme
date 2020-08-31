@@ -1,0 +1,27 @@
+<dx-gantt
+    taskListWidth="300"
+    height="700"
+    taskTitlePosition="none">
+
+    <dxi-strip-line
+        [start]="tasks[0].start"
+        title="Start">
+    </dxi-strip-line>
+    <dxi-strip-line
+        [start]="tasks[tasks.length - 3].start"
+        [end]="tasks[tasks.length - 1].end"
+        title="Final Phase">
+    </dxi-strip-line>
+    <dxi-strip-line
+        [start]="currentTime"
+        title="Current Time"
+        cssClass="current-time">
+    </dxi-strip-line>
+
+    <dxo-validation [autoUpdateParentTasks]="true"></dxo-validation>
+
+    <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+
+    <dxi-column dataField="title" caption="Task" [width]="300"></dxi-column>
+</dx-gantt>
+

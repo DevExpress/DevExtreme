@@ -24,9 +24,10 @@ $(function() {
         },
         columns: [{
             dataField: "title",
-            caption: "Subject",
+            caption: "Task",
             width: 300
         }],
-        taskListWidth: 300
+        taskListWidth: 300,
+        taskTitlePosition: "none"
     });
 });

@@ -1,8 +1,19 @@
-var currentDate = new Date(Date.now()),
-    month = currentDate.getMonth(),
-    year = currentDate.getFullYear();
+import { Injectable } from '@angular/core';
 
-var tasks = [{
+export class Task {
+    id: number;
+    parentId: number;
+    title: string;
+    start: Date;
+    end: Date;
+    progress: number;
+}
+
+const currentDate: Date = new Date(Date.now());
+const month: number = currentDate.getMonth();
+const year: number = currentDate.getFullYear();
+
+let tasks: Task[] = [{
     'id': 1,
     'parentId': 0,
     'title': 'Johnson Residence Construction Project',
@@ -157,3 +168,10 @@ var tasks = [{
     'end': new Date(year, month + 2, 30),
     'progress': 0
 }];
+
+@Injectable()
+export class Service {
+    getTasks(): Task[] {
+        return tasks;
+    }
+}
