@@ -5,12 +5,10 @@ import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
-// import themes from 'ui/themes';
 
 import 'common.css!';
 import 'generic_light.css!';
 
-// TODO we need this style because positionFixtures (in some cases popover cant fit at the top)
 $('<style>.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));
 
 const POPOVER_CLASS = 'dx-popover';
@@ -60,7 +58,8 @@ const getElementsPositionAndSize = function($popover, $target) {
             height: $content.outerHeight(true),
             width: $content.width(),
             offsetTop: $content.offset().top,
-            offsetLeft: $content.offset().left
+            offsetLeft: $content.offset().left,
+            borderWidth: parseInt($content.css('borderBottomWidth'))
         },
         popupContent: {
             height: $popupContent.outerHeight(true),
@@ -71,8 +70,6 @@ const getElementsPositionAndSize = function($popover, $target) {
         }
     };
 };
-
-// themes.setDefaultTimeout(0);
 
 QUnit.module('render', () => {
     QUnit.test('render', function(assert) {
@@ -1296,11 +1293,13 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $overlayContent = wrapper().find('.dx-overlay-content');
             const arrowOffsetTop = $target.offset().top - $arrow.height();
+            const overlayContentBorderWidth = parseInt($overlayContent.css('borderBottomWidth'));
+            const contentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - $overlayContent.outerHeight();
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow position above target');
-            assert.equal($content[0].getBoundingClientRect().bottom, arrowOffsetTop, 'content position above arrow'); // TODO
+            assert.equal($overlayContent.offset().top, contentOffsetTop, 'content position above arrow');
         } finally {
             fixtures.collisionBottomLeft.drop();
         }
@@ -1363,11 +1362,15 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $popupContent = $('.dx-popup-content');
+            const $overlayContent = $('.dx-overlay-content');
+
+            const arrowOffsetTop = $(window).height() - $target.height() - $arrow.height();
+            const overlayContentBorderWidth = parseInt($overlayContent.css('borderBottomWidth'));
+            const overlayContentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - $overlayContent.outerHeight();
 
             assert.ok(wrapper().hasClass('dx-position-top'), 'arrow has flipping css class');
-            assert.equal($arrow.offset().top, $(window).height() - $target.height() - $arrow.height());
-            assert.equal($popupContent[0].getBoundingClientRect().bottom, $arrow.offset().top); // TODO
+            assert.equal($arrow.offset().top, arrowOffsetTop);
+            assert.equal($overlayContent.offset().top, overlayContentOffsetTop);
 
         } finally {
             fixtures.collisionBottomLeft.drop();
@@ -1667,8 +1670,7 @@ QUnit.module('popover content size', () => {
             const target = elements.target;
             const arrow = elements.arrow;
 
-            // TODO it seems the border is not fit
-            assert.equal(content.height, $boundary.height() - target.positionTop - target.height - arrow.height, 'content shrunk to available space by height');
+            assert.equal(content.height, $boundary.height() - target.positionTop - target.height - arrow.height + content.borderWidth, 'content shrunk to available space by height');
 
         } finally {
             fixtures.customBoundary.drop();
@@ -1736,8 +1738,7 @@ QUnit.module('popover content size', () => {
             const target = elements.target;
             const arrow = elements.arrow;
 
-            // TODO it seems that border does not fit
-            assert.equal(content.height, $boundary.height() - target.positionTop - target.height - arrow.height - verticalOffset, 'content shrunk to available space by height');
+            assert.equal(content.height, $boundary.height() - target.positionTop - target.height - verticalOffset - arrow.height + content.borderWidth, 'content shrunk to available space by height');
 
         } finally {
             fixtures.customBoundary.drop();
