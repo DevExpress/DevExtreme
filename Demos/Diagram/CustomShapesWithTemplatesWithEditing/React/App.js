@@ -76,10 +76,11 @@ class App extends React.Component {
   }
   requestUpdate(changes) {
     for(var i = 0; i < changes.length; i++) {
-      if(changes[i].type === 'remove')
+      if(changes[i].type === 'remove') {
         return true;
-      else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null)
+      } else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null) {
         return true;
+      }
     }
     return false;
   }
@@ -102,9 +103,9 @@ class App extends React.Component {
     this.dataSource.push([{ type: 'remove', key: employee.ID }]);
   }
   updateEmployee() {
-    this.dataSource.push([{ 
+    this.dataSource.push([{
       type: 'update',
-      key: this.state.currentEmployee.ID, 
+      key: this.state.currentEmployee.ID,
       data: {
         'Full_Name': this.state.currentEmployee.Full_Name,
         'Title': this.state.currentEmployee.Title,
