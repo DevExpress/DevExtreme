@@ -240,7 +240,7 @@ QUnit.module('Keyboard controller', {
 
         // act
         navigationController.init();
-        navigationController._focusView(this.getView('rowsView'));
+        navigationController._focusView();
 
         const element = navigationController.getFocusedView().element();
 
@@ -256,7 +256,7 @@ QUnit.module('Keyboard controller', {
 
         // act
         navigationController.init();
-        navigationController._focusView(this.getView('rowsView'));
+        navigationController._focusView();
 
         const element = navigationController.getFocusedView().element();
 

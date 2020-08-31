@@ -1,6 +1,5 @@
 import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
-import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
@@ -226,8 +225,9 @@ const ColumnsControllerExtender = (function() {
             let offset = 0;
             if(this._beginPageIndex > 0) {
                 const fixedColumns = this.getFixedColumns();
-                const leftFixedColumnsOffset = fixedColumns.filter(column => column.fixed && (!isDefined(column.fixedPosition) || column.fixedPosition === 'left')).length;
-                offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnsOffset - 1;
+                const transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
+                const leftFixedColumnCount = transparentColumnIndex >= 0 ? transparentColumnIndex : 0;
+                offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnCount - 1;
             }
             return offset > 0 ? offset : 0;
         },

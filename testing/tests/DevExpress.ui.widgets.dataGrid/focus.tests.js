@@ -187,7 +187,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         rowsView.resize(150);
         this.clock.tick();
 
-        this.keyboardNavigationController._focusView(rowsView);
+        this.keyboardNavigationController._focusView();
 
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex');

@@ -2435,7 +2435,7 @@ QUnit.module('View\'s focus', {
         assert.ok($editButton.is(':focus'), 'edit button is focused');
     });
 
-    QUnit.test('Data rows should not contain a cell with tabindex when the first column is not rendered', function(assert) {
+    QUnit.test('The second cell in a row should be focused on Tab when fixed columns are enabled', function(assert) {
         // arrange
         const generateData = () => {
             const items = [];
@@ -2446,8 +2446,6 @@ QUnit.module('View\'s focus', {
             items.push(item);
             return items;
         };
-        const firstColumnIsFound = () => !!this.dataGrid.getVisibleColumns().filter(column => column.dataField === 'field1').length;
-        const cellWithTabIndexIsFound = () => !!this.dataGrid.getView('rowsView').element().find('td[tabindex]').length;
         this.dataGrid.option({
             width: 400,
             columnWidth: 70,
@@ -2455,21 +2453,262 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
+            }
+        });
+        this.clock.tick();
+        const scrollable = this.dataGrid.getScrollable();
+        const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
+        scrollable.scrollTo({ left: this.keyboardNavigationController._getMaxHorizontalOffset() });
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), maxScrollOffset, 'max scroll offset');
+
+        // act
+        const $firstCell = $(this.dataGrid.getCellElement(0, 0));
+        $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
+        const keyboard = keyboardMock($firstCell);
+        keyboard.keyDown('tab');
+        this.clock.tick();
+        const $secondCell = $(this.dataGrid.getCellElement(0, 1));
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), 0, 'min scroll offset');
+        assert.deepEqual(this.dataGrid.option('focusedRowIndex'), 0, 'focused row index');
+        assert.deepEqual(this.dataGrid.option('focusedColumnIndex'), 1, 'focused column index');
+        assert.ok($secondCell.hasClass('dx-focused'), 'the second cell is focused');
+    });
+
+    QUnit.test('The penultimate cell in a row should be focused on Shift+Tab when fixed columns are enabled', function(assert) {
+        // arrange
+        const generateData = () => {
+            const items = [];
+            const item = {};
+            for(let j = 0; j < 17; j += 1) {
+                item[`field${j}`] = `0-${j}`;
+            }
+            items.push(item);
+            return items;
+        };
+        this.dataGrid.option({
+            width: 400,
+            columnWidth: 70,
+            dataSource: generateData(),
+            scrolling: {
+                useNative: false,
+                columnRenderingMode: 'virtual',
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
+            }
+        });
+        this.clock.tick();
+        const scrollable = this.dataGrid.getScrollable();
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), 0, 'min scroll offset');
+
+        // act
+        const $lastCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
+        $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
+        const keyboard = keyboardMock($lastCell);
+        keyboard.keyDown('tab', { shiftKey: true });
+        this.clock.tick();
+        const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
+        const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), maxScrollOffset, 'max scroll offset');
+        assert.deepEqual(this.dataGrid.option('focusedRowIndex'), 0, 'focused row index');
+        assert.deepEqual(this.dataGrid.option('focusedColumnIndex'), 15, 'focused column index');
+        assert.ok($penultimateCell.hasClass('dx-focused'), 'the second cell is focused');
+    });
+
+    QUnit.test('The first cell in the second row should be focused if Tab is pressed for the last cell in the first row when fixed columns are enabled', function(assert) {
+        // arrange
+        const generateData = () => {
+            const items = [];
+            for(let i = 0; i < 2; i += 1) {
+                const item = {};
+                for(let j = 0; j < 17; j += 1) {
+                    item[`field${j}`] = `${i}-${j}`;
+                }
+                items.push(item);
+            }
+            return items;
+        };
+        this.dataGrid.option({
+            width: 400,
+            columnWidth: 70,
+            dataSource: generateData(),
+            scrolling: {
+                useNative: false,
+                columnRenderingMode: 'virtual',
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
             }
         });
         this.clock.tick();
 
-        // assert
-        assert.ok(firstColumnIsFound(), 'first column is rendered initially');
-        assert.ok(cellWithTabIndexIsFound(), 'cell with tab index is rendered initially');
-
         // act
-        this.dataGrid.getScrollable().scrollTo({ left: 1000 });
+        const $cell0_last = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
+        $cell0_last.trigger(CLICK_EVENT).trigger('dxclick');
+        const keyboard = keyboardMock($cell0_last);
+        keyboard.keyDown('tab');
+        this.clock.tick();
+        const $cell1_first = $(this.dataGrid.getCellElement(1, 0));
+
+        // assert
+        assert.deepEqual(this.dataGrid.option('focusedRowIndex'), 1, 'focused row index');
+        assert.deepEqual(this.dataGrid.option('focusedColumnIndex'), 0, 'focused column index');
+        assert.ok($cell1_first.hasClass('dx-focused'), 'the second cell is focused');
+    });
+
+    QUnit.test('The last cell in the first row should be focused if Shift+Tab is pressed for the first cell in the second row when fixed columns are enabled', function(assert) {
+        // arrange
+        const generateData = () => {
+            const items = [];
+            for(let i = 0; i < 2; i += 1) {
+                const item = {};
+                for(let j = 0; j < 17; j += 1) {
+                    item[`field${j}`] = `${i}-${j}`;
+                }
+                items.push(item);
+            }
+            return items;
+        };
+        this.dataGrid.option({
+            width: 400,
+            columnWidth: 70,
+            dataSource: generateData(),
+            scrolling: {
+                useNative: false,
+                columnRenderingMode: 'virtual',
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
+            }
+        });
         this.clock.tick();
 
+        // act
+        const $cell1_first = $(this.dataGrid.getCellElement(1, 0));
+        $cell1_first.trigger(CLICK_EVENT).trigger('dxclick');
+        const keyboard = keyboardMock($cell1_first);
+        keyboard.keyDown('tab', { shiftKey: true });
+        this.clock.tick();
+        const $cell0_last = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
+
         // assert
-        assert.notOk(firstColumnIsFound(), 'first column is not rendered after horizontal scrolling');
-        assert.notOk(cellWithTabIndexIsFound(), 'cell with tab index is not found after horizontal scrolling');
+        assert.deepEqual(this.dataGrid.option('focusedRowIndex'), 0, 'focused row index');
+        assert.deepEqual(this.dataGrid.option('focusedColumnIndex'), 16, 'focused column index');
+        assert.ok($cell0_last.hasClass('dx-focused'), 'the second cell is focused');
+    });
+
+    QUnit.test('The second cell in a row should be focused if the Right arrow key is pressed when fixed columns are enabled', function(assert) {
+        // arrange
+        const generateData = () => {
+            const items = [];
+            const item = {};
+            for(let j = 0; j < 17; j += 1) {
+                item[`field${j}`] = `0-${j}`;
+            }
+            items.push(item);
+            return items;
+        };
+        this.dataGrid.option({
+            width: 400,
+            columnWidth: 70,
+            dataSource: generateData(),
+            scrolling: {
+                useNative: false,
+                columnRenderingMode: 'virtual',
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
+            }
+        });
+        this.clock.tick();
+        const scrollable = this.dataGrid.getScrollable();
+        const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
+        scrollable.scrollTo({ left: this.keyboardNavigationController._getMaxHorizontalOffset() });
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), maxScrollOffset, 'max scroll offset');
+
+        // act
+        const $firstCell = $(this.dataGrid.getCellElement(0, 0));
+        $firstCell.trigger(CLICK_EVENT).trigger('dxclick');
+        const keyboard = keyboardMock($firstCell);
+        keyboard.keyDown('right');
+        this.clock.tick();
+        const $secondCell = $(this.dataGrid.getCellElement(0, 1));
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), 0, 'min scroll offset');
+        assert.deepEqual(this.dataGrid.option('focusedRowIndex'), 0, 'focused row index');
+        assert.deepEqual(this.dataGrid.option('focusedColumnIndex'), 1, 'focused column index');
+        assert.ok($secondCell.hasClass('dx-focused'), 'the second cell is focused');
+    });
+
+    QUnit.test('The penultimate cell in a row should be focused if the Left arrow key is pressed when fixed columns are enabled', function(assert) {
+        // arrange
+        const generateData = () => {
+            const items = [];
+            const item = {};
+            for(let j = 0; j < 17; j += 1) {
+                item[`field${j}`] = `0-${j}`;
+            }
+            items.push(item);
+            return items;
+        };
+        this.dataGrid.option({
+            width: 400,
+            columnWidth: 70,
+            dataSource: generateData(),
+            scrolling: {
+                useNative: false,
+                columnRenderingMode: 'virtual',
+            },
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+                columns[16].fixedPosition = 'right';
+                columns[16].fixed = true;
+            }
+        });
+        this.clock.tick();
+        const scrollable = this.dataGrid.getScrollable();
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), 0, 'min scroll offset');
+
+        // act
+        const $lastCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 1));
+        $lastCell.trigger(CLICK_EVENT).trigger('dxclick');
+        const keyboard = keyboardMock($lastCell);
+        keyboard.keyDown('left');
+        this.clock.tick();
+        const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
+        const $penultimateCell = $(this.dataGrid.getCellElement(0, this.dataGrid.getVisibleColumns().length - 2));
+
+        // assert
+        assert.equal(scrollable.scrollLeft(), maxScrollOffset, 'max scroll offset');
+        assert.deepEqual(this.dataGrid.option('focusedRowIndex'), 0, 'focused row index');
+        assert.deepEqual(this.dataGrid.option('focusedColumnIndex'), 15, 'focused column index');
+        assert.ok($penultimateCell.hasClass('dx-focused'), 'the second cell is focused');
     });
 });
 
