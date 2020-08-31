@@ -1,8 +1,26 @@
-var currentDate = new Date(Date.now()),
-    month = currentDate.getMonth(),
-    year = currentDate.getFullYear();
+import { Injectable } from '@angular/core';
 
-var tasks = [{
+export class Task {
+    id: number;
+    parentId: number;
+    title: string;
+    start: Date;
+    end: Date;
+    progress: number;
+}
+
+export class Dependency {
+    id: number;
+    predecessorId: number;
+    successorId: number;
+    type: number;
+}
+
+const currentDate: Date = new Date(Date.now());
+const month: number = currentDate.getMonth();
+const year: number = currentDate.getFullYear();
+
+let tasks: Task[] = [{
     'id': 1,
     'parentId': 0,
     'title': 'Johnson Residence Construction Project',
@@ -157,3 +175,45 @@ var tasks = [{
     'end': new Date(year, month + 2, 30),
     'progress': 0
 }];
+
+let dependencies: Dependency[] = [{
+    'id': 1,
+    'predecessorId': 4,
+    'successorId': 5,
+    'type': 0
+}, {
+    'id': 2,
+    'predecessorId': 5,
+    'successorId': 7,
+    'type': 0
+}, {
+    'id': 3,
+    'predecessorId': 12,
+    'successorId': 13,
+    'type': 0
+}, {
+    'id': 4,
+    'predecessorId': 13,
+    'successorId': 14,
+    'type': 0
+}, {
+    'id': 5,
+    'predecessorId': 18,
+    'successorId': 20,
+    'type': 0
+}, {
+    'id': 6,
+    'predecessorId': 21,
+    'successorId': 22,
+    'type': 0
+}];
+
+@Injectable()
+export class Service {
+    getTasks(): Task[] {
+        return tasks;
+    }
+    getDependencies(): Dependency[] {
+        return dependencies;
+    }
+}

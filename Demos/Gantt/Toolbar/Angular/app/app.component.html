@@ -1,0 +1,51 @@
+<dx-gantt
+    taskListWidth="500"
+    scaleType="weeks"
+    height="700">
+
+    <dxo-toolbar>
+        <dxi-item name="undo"></dxi-item>
+        <dxi-item name="redo"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="collapseAll"></dxi-item>
+        <dxi-item name="expandAll"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="addTask"></dxi-item>
+        <dxi-item name="deleteTask"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="zoomIn"></dxi-item>
+        <dxi-item name="zoomOut"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item
+            widget="dxButton"
+            [options]="customButtonOptions">
+        </dxi-item>
+    </dxo-toolbar>
+
+    <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+    <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+    <dxo-resources [dataSource]="resources"></dxo-resources>
+    <dxo-resource-assignments [dataSource]="resourceAssignments"></dxo-resource-assignments>
+
+    <dxi-column dataField="title" caption="Subject" [width]="300"></dxi-column>
+    <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
+    <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
+
+    <dxo-editing [enabled]="true"></dxo-editing>
+</dx-gantt>
+
+<dx-popup
+    [height]="auto"
+    [showTitle]="true"
+    title="About"
+    [closeOnOutsideClick]="true"
+    [(visible)]="popupVisible">
+    <div>
+        The DevExtreme HTML5 JavaScript <b>Gantt</b> allows you to display the task flow and dependencies between tasks over a certain period.
+        <br />
+        <br />
+        You can move and modify tasks (a task name, duration or progress, for example) directly from the chart.
+        Adjust the timescale to display tasks in smaller or greater time intervals, from hours to years.
+        Hold the CTRL key and rotate your mouse's scroll wheel to zoom (in or out) to browse data across various levels of detail.
+    </div>
+</dx-popup>

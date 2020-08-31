@@ -1,0 +1,43 @@
+<div id="demo-container">
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <span>Scale Type</span>
+            <dx-select-box
+                [items]="['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years']"
+                [(value)]="scaleType"></dx-select-box>
+        </div>
+        <div class="option">
+            <span>Title Position</span>
+            <dx-select-box
+                [items]="['inside', 'outside', 'none']"
+                [(value)]="titlePosition"></dx-select-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Show Resources"
+                [(value)]="showResources"></dx-check-box>
+        </div>
+    </div>
+    <div class="widget-container">
+        <dx-gantt 
+            taskListWidth="500"
+            height="700"
+            [taskTitlePosition]="titlePosition"
+            [scaleType]="scaleType"
+            [showResources]="showResources">
+
+            <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+            <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+            <dxo-resources [dataSource]="resources"></dxo-resources>
+            <dxo-resource-assignments [dataSource]="resourceAssignments"></dxo-resource-assignments>
+
+            <dxi-column dataField="title" caption="Subject" [width]="300"></dxi-column>
+            <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
+            <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
+
+            <dxo-editing [enabled]="true"></dxo-editing>
+        </dx-gantt>
+    </div>
+</div>
+

@@ -1,4 +1,33 @@
-var tasks = [{
+import { Injectable } from '@angular/core';
+
+export class Task {
+    id: number;
+    parentId: number;
+    title: string;
+    start: Date;
+    end: Date;
+    progress: number;
+}
+
+export class Dependency {
+    id: number;
+    predecessorId: number;
+    successorId: number;
+    type: number;
+}
+
+export class Resource {
+    id: number;
+    text: string;
+}
+
+export class ResourceAssignment {
+    id: number;
+    taskId: number;
+    resourceId: number;
+}
+
+let tasks: Task[] = [{
     'id': 1,
     'parentId': 0,
     'title': 'Software Development',
@@ -609,7 +638,7 @@ var tasks = [{
     'progress': 0
 }];
 
-var dependencies = [{
+let dependencies: Dependency[] = [{
     'id': 1,
     'predecessorId': 3,
     'successorId': 4,
@@ -921,7 +950,7 @@ var dependencies = [{
     'type': 0
 }];
 
-var resources = [{
+let resources: Resource[] = [{
     'id': 1,
     'text': 'Management'
 }, {
@@ -947,7 +976,7 @@ var resources = [{
     'text': 'Deployment Team'
 }];
 
-var resourceAssignments = [{
+let resourceAssignments: ResourceAssignment[] = [{
     'id': 0,
     'taskId': 3,
     'resourceId': 1
@@ -1204,3 +1233,20 @@ var resourceAssignments = [{
     'taskId': 85,
     'resourceId': 2
 }];
+
+
+@Injectable()
+export class Service {
+    getTasks(): Task[] {
+        return tasks;
+    }
+    getDependencies(): Dependency[] {
+        return dependencies;
+    }
+    getResources(): Resource[] {
+        return resources;
+    }
+    getResourceAssignments(): ResourceAssignment[] {
+        return resourceAssignments;
+    }
+}
