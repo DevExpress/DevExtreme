@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 
 export const Export = {
-    _getFullOptions: function(options) {
+    getFullOptions: function(options) {
         const fullOptions = extend({}, options);
         if(!(isDefined(fullOptions.jsPDFDocument) && isObject(fullOptions.jsPDFDocument))) {
             throw Error('The "jsPDFDocument" field must contain a jsPDF instance.');
@@ -15,18 +15,18 @@ export const Export = {
             fullOptions.keepColumnWidths = true;
         }
         if(!isDefined(fullOptions.autoTableOptions)) {
-            fullOptions.autoTableOptions = this._getDefaultAutoTableOptions();
+            fullOptions.autoTableOptions = this.getDefaultAutoTableOptions();
         } else {
             if(!isObject(fullOptions.autoTableOptions)) {
                 throw Error('The "autoTableOptions" option must be of object type.');
             }
-            fullOptions.autoTableOptions = extend(true, {}, this._getDefaultAutoTableOptions(), fullOptions.autoTableOptions);
+            fullOptions.autoTableOptions = extend(true, {}, this.getDefaultAutoTableOptions(), fullOptions.autoTableOptions);
         }
 
         return fullOptions;
     },
 
-    _getDefaultAutoTableOptions: function() {
+    getDefaultAutoTableOptions: function() {
         return {
             theme: 'plain',
             tableLineColor: 149,
@@ -68,8 +68,8 @@ export const Export = {
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(keepColumnWidths) {
-                    const pdfColumnWidths = this._getDefaultPdfColumnWidths(autoTableOptions.tableWidth, dataProvider.getColumnsWidths());
-                    this._setColumnWidths(autoTableOptions, pdfColumnWidths);
+                    const pdfColumnWidths = this.getDefaultPdfColumnWidths(autoTableOptions.tableWidth, dataProvider.getColumnsWidths());
+                    this.setColumnWidths(autoTableOptions, pdfColumnWidths);
                 }
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
@@ -87,7 +87,7 @@ export const Export = {
                             styles: {}
                         };
 
-                        this._assignCellStyle(pdfCell, gridCell, columns[cellIndex], cellStyle);
+                        this.assignCellStyle(pdfCell, gridCell, columns[cellIndex], cellStyle);
 
                         if(!isDefined(rowType)) { rowType = gridCell.rowType; }
 
@@ -108,7 +108,7 @@ export const Export = {
         });
     },
 
-    _assignCellStyle: function(pdfCell, gridCell, column, cellStyle) {
+    assignCellStyle: function(pdfCell, gridCell, column, cellStyle) {
         if(gridCell.rowType === 'header') {
             // eslint-disable-next-line spellcheck/spell-checker
             if(column.alignment) { pdfCell.styles.halign = column.alignment; }
@@ -123,7 +123,7 @@ export const Export = {
         }
     },
 
-    _getDefaultPdfColumnWidths(autoTableWidth, columnWidths) {
+    getDefaultPdfColumnWidths(autoTableWidth, columnWidths) {
         if(isNumeric(autoTableWidth)) {
             const tableWidth = columnWidths.reduce((a, b) => { return a + b; });
             return columnWidths.map((columnWidth) => {
@@ -132,7 +132,7 @@ export const Export = {
         }
     },
 
-    _setColumnWidths: function(autoTableOptions, pdfColumnWidths) {
+    setColumnWidths: function(autoTableOptions, pdfColumnWidths) {
         if(!pdfColumnWidths) {
             return;
         }

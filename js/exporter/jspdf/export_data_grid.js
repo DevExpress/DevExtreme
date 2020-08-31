@@ -16,7 +16,7 @@ function _getFullOptions(options) {
     if(!isDefined(options.selectedRowsOnly)) {
         options.selectedRowsOnly = false;
     }
-    return Export._getFullOptions(options);
+    return Export.getFullOptions(options);
 }
 
 //#DEBUG
