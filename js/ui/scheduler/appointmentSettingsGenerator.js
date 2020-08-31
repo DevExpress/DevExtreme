@@ -1,7 +1,6 @@
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
-import DateAdapter from './dateAdapter';
 
 export default class AppointmentSettingsGenerator {
     constructor(scheduler) {
@@ -14,9 +13,9 @@ export default class AppointmentSettingsGenerator {
         const renderingStrategy = this.scheduler.getLayoutManager().getRenderingStrategyInstance();
         let allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
 
-        const appointmentDuration = appointment.endDate ? appointment.endDate.getTime() - appointment.startDate.getTime() : 0; // TODO
+        const appointmentDuration = appointment.duration;
 
-        const appointmentList = this._createRecurrenceAppointments(appointment);
+        const appointmentList = this._createRecurrenceAppointments(appointment, appointment.duration);
         if(appointmentList.length === 0) {
             appointmentList.push({
                 startDate: appointment.startDate,
@@ -37,7 +36,6 @@ export default class AppointmentSettingsGenerator {
             return this._createAppointmentInfo(startDate, endDate, source);
         });
 
-        gridAppointmentList = this._tryGetProcessedAppointmentsAfterTimezones(gridAppointmentList, rawAppointment);
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
@@ -126,22 +124,6 @@ export default class AppointmentSettingsGenerator {
                 endDate: endDates[index]
             };
         });
-    }
-
-    _tryGetProcessedAppointmentsAfterTimezones(appointments, rawAppointment) {
-        if(appointments.length > 1) {
-            const appointment = this.scheduler.createAppointmentAdapter(rawAppointment);
-            const sourceDuration = appointment.duration;
-
-            appointments.forEach(a => {
-                const duration = a.endDate - a.startDate;
-
-                if(duration < sourceDuration) {
-                    a.endDate = DateAdapter(a.endDate).addTime(sourceDuration).source;
-                }
-            });
-        }
-        return appointments;
     }
 
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
