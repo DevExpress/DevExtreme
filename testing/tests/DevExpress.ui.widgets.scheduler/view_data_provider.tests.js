@@ -56,14 +56,14 @@ module('View Data Provider', {
             assert.deepEqual(group3EndDate, new Date(2020, 8, 28), 'Group 3 end date is correct');
         });
 
-        test('getGroupInfo', function(assert) {
-            const group2Info = this.viewDataProvider.getGroupInfo(2);
+        test('getCellsGroup', function(assert) {
+            const group2Info = this.viewDataProvider.getCellsGroup(2);
 
-            assert.deepEqual(group2Info, 'group_2', 'Group 2 info is correct');
+            assert.deepEqual(group2Info, 'group_2', 'Group 2 cells group is correct');
 
-            const group3Info = this.viewDataProvider.getGroupInfo(3);
+            const group3Info = this.viewDataProvider.getCellsGroup(3);
 
-            assert.deepEqual(group3Info, 'group_3', 'Group 3 info is correct');
+            assert.deepEqual(group3Info, 'group_3', 'Group 3 cells group is correct');
         });
 
         test('getCellData', function(assert) {
