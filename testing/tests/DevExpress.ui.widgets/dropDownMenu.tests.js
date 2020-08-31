@@ -16,6 +16,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -775,20 +776,23 @@ QUnit.module('widget sizing render', {
     }
 }, () => {
     QUnit.test('constructor', function(assert) {
+        const dropDownMenuWidth = 400;
         const $element = $('#dropDownMenu').dxDropDownMenu({
             items: [
                 'Item 0',
                 'Item 1',
                 'Item 2'
             ],
-            width: 400
+            width: dropDownMenuWidth
         });
         const instance = $element.dxDropDownMenu('instance');
+        const borderWidth = parseInt($element.css('borderWidth'));
 
         instance.open();
 
-        assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual(instance._popup.$element().outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance.option('width'), dropDownMenuWidth);
+        assert.strictEqual($element.outerWidth(), dropDownMenuWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance._popup.$element().outerWidth(), dropDownMenuWidth - 2 * borderWidth, 'outer width of the popup must be equal to custom width minus border');
     });
 
     QUnit.test('change width', function(assert) {
@@ -801,11 +805,12 @@ QUnit.module('widget sizing render', {
         });
         const instance = $element.dxDropDownMenu('instance');
         const customWidth = 400;
+        const borderWidth = parseInt($element.css('borderWidth'));
 
         instance.option('width', customWidth);
         instance.open();
 
-        assert.strictEqual(instance._popup.$element().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance._popup.$element().outerWidth(), customWidth - 2 * borderWidth, 'outer width of the element must be equal to custom width');
     });
 });
 
