@@ -1067,7 +1067,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowCountInGroup = this._getRowCount();
 
         const options = {
-            realGroupCount: groupCount,
+            horizontalGroupsCount: groupCount,
             groupCount: groupCountForRender,
             rowCountInGroup,
             cellCount: this._getTotalCellCount(groupCount),
