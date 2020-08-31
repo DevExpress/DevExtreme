@@ -2123,6 +2123,16 @@ QUnit.module('Cell Templates in renovated views', () => {
         index: 6,
     }];
 
+
+    const resources = [
+        {
+            field: 'ownerId',
+            dataSource: [
+                { id: 1, text: 'John' },
+                { id: 2, text: 'Mike' }
+            ]
+        }
+    ];
     const firstGroup = {
         groupIndex: 0,
         groups: { ownerId: 1 },
@@ -2174,6 +2184,18 @@ QUnit.module('Cell Templates in renovated views', () => {
         ...secondGroup,
         index: 6,
     }];
+
+    const checkGroups = (assert, expectedTemplateOptions, templateOptions) => {
+        expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+            const singleTemplateOptions = templateOptions[templateIndex];
+            const { index, groupIndex, groups } = singleTemplateOptions;
+            const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
+
+            assert.equal(index, expectedIndex, 'Index is correct');
+            assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
+            assert.deepEqual(groups, expectedGroups, 'Groups are correct');
+        });
+    };
 
     const timeCells = [{
         data: {
@@ -2332,26 +2354,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 
@@ -2393,26 +2399,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 
@@ -2460,26 +2450,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 
@@ -2523,26 +2497,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 
@@ -2621,26 +2579,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 
@@ -2671,26 +2613,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 
@@ -2719,26 +2645,10 @@ QUnit.module('Cell Templates in renovated views', () => {
                     templateOptions.push({ ...data, index });
                 },
                 groups: ['ownerId'],
-                resources: [
-                    {
-                        field: 'ownerId',
-                        dataSource: [
-                            { id: 1, text: 'John' },
-                            { id: 2, text: 'Mike' }
-                        ]
-                    }
-                ],
+                resources,
             });
 
-            expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
-                const singleTemplateOptions = templateOptions[templateIndex];
-                const { index, groupIndex, groups } = singleTemplateOptions;
-                const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
-
-                assert.equal(index, expectedIndex, 'Index is correct');
-                assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
-                assert.deepEqual(groups, expectedGroups, 'Groups are correct');
-            });
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
         });
     });
 });
