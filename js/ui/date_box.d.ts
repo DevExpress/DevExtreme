@@ -105,15 +105,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      */
     max?: Date | number | string;
     /**
-     * @docid dxDateBoxOptions.maxZoomLevel
-     * @type Enums.CalendarZoomLevel
-     * @default 'month'
-     * @deprecated dxDateBoxOptions.calendarOptions
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
-    /**
      * @docid dxDateBoxOptions.min
      * @type Date|number|string
      * @default undefined
@@ -121,15 +112,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @public
      */
     min?: Date | number | string;
-    /**
-     * @docid dxDateBoxOptions.minZoomLevel
-     * @type Enums.CalendarZoomLevel
-     * @default 'century'
-     * @deprecated dxDateBoxOptions.calendarOptions
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
     /**
      * @docid dxDateBoxOptions.pickerType
      * @type Enums.DateBoxPickerType

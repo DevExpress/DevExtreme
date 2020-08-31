@@ -2804,9 +2804,6 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
-        /** @deprecated */
-        /** @name dxButtonGroup.Options.itemTemplate */
-        itemTemplate?: DevExpress.core.template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
@@ -3191,14 +3188,8 @@ declare module DevExpress.ui {
         invalidDateMessage?: string;
         /** @name dxDateBox.Options.max */
         max?: Date | number | string;
-        /** @deprecated */
-        /** @name dxDateBox.Options.maxZoomLevel */
-        maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.min */
         min?: Date | number | string;
-        /** @deprecated */
-        /** @name dxDateBox.Options.minZoomLevel */
-        minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
         /** @name dxDateBox.Options.placeholder */
@@ -4379,9 +4370,6 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxList.Options.allowItemDeleting */
         allowItemDeleting?: boolean;
-        /** @deprecated */
-        /** @name dxList.Options.allowItemReordering */
-        allowItemReordering?: boolean;
         /** @name dxList.Options.bounceEnabled */
         bounceEnabled?: boolean;
         /** @name dxList.Options.collapsibleGroups */
@@ -5830,12 +5818,6 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** @name dxSwitch.Options.name */
         name?: string;
-        /** @deprecated */
-        /** @name dxSwitch.Options.offText */
-        offText?: string;
-        /** @deprecated */
-        /** @name dxSwitch.Options.onText */
-        onText?: string;
         /** @name dxSwitch.Options.switchedOffText */
         switchedOffText?: string;
         /** @name dxSwitch.Options.switchedOnText */

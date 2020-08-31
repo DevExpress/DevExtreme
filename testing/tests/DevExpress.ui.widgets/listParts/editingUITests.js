@@ -2605,10 +2605,12 @@ QUnit.test('no sortable without allowReordering', function(assert) {
     assert.strictEqual($list.find('.dx-sortable').length, 0, 'no sortable');
 });
 
-QUnit.test('sortable should be created with deprecated option allowItemReordering', function(assert) {
+QUnit.test('sortable should be created with itemDragging.allowItemReordering option', function(assert) {
     const $list = $('#templated-list').dxList({
         items: ['0'],
-        allowItemReordering: true
+        itemDragging: {
+            allowReordering: true
+        }
     });
 
     const sortable = $list.find('.dx-sortable').dxSortable('instance');
