@@ -1613,7 +1613,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
     QUnit.module('Virtual Scrolling', function() {
         ['vertical', 'horizontal'].forEach(groupOrientation => {
-            QUnit.test(`Appointments should filter correctly if scrolling.mode = "virtual", groupOrientation: ${groupOrientation}`, function(assert) {
+            QUnit.test(`Appointments should be filtered correctly when groupOrientation: ${groupOrientation}`, function(assert) {
                 const data = [
                     {
                         startDate: new Date(2016, 9, 5, 0, 0),
@@ -1663,7 +1663,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
                 assert.deepEqual(filteredItems[2], data[2], 'Filtered item 2 is correct');
             });
 
-            QUnit.test(`Appointments should filter correctly if resources and scrolling.mode = "virtual", groupOrientation: ${groupOrientation}`, function(assert) {
+            QUnit.test(`Appointments with different resources should be filtered correctly when groupOrientation: ${groupOrientation}`, function(assert) {
                 const data = [
                     {
                         startDate: new Date(2016, 9, 5, 0, 0),
@@ -1727,7 +1727,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             });
         });
 
-        QUnit.test('Appointments should filter correctly if groups, resources and scrolling.mode = "virtual", groupOrientation: "vertical"', function(assert) {
+        QUnit.test('Appointments should be filtered correctly when they are grouped vertically', function(assert) {
             const data = [
                 {
                     startDate: new Date(2016, 9, 5, 0, 0),
@@ -1791,7 +1791,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             assert.deepEqual(filteredItems[1], data[2], 'Filtered item 1 is correct');
         });
 
-        QUnit.test('Appointments should filter correctly if groups, resources and scrolling.mode = "virtual", groupOrientation: "horizontal"', function(assert) {
+        QUnit.test('Appointments should be filtered correctly when they are grouped horizontally"', function(assert) {
             const data = [
                 {
                     startDate: new Date(2016, 9, 5, 0, 0),
