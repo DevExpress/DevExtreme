@@ -149,8 +149,7 @@ class ViewDataGenerator {
                 });
 
                 cellDataValue.groupIndex = this._calculateGroupIndex(
-                    realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
-                    groupIndex, columnIndex, cellCount,
+                    realGroupCount, this._workspace.option('groupOrientation'), groupIndex, columnIndex,
                 );
                 cellDataValue.index = this._calculateCellIndex(
                     realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
@@ -177,8 +176,7 @@ class ViewDataGenerator {
             const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex).value;
             cellDataValue.groupIndex = this._calculateGroupIndex(
-                realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
-                groupIndex, columnIndex, cellCount,
+                realGroupCount, this._workspace.option('groupOrientation'), groupIndex, columnIndex,
             );
             cellDataValue.index = this._calculateCellIndex(
                 realGroupCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
@@ -190,22 +188,14 @@ class ViewDataGenerator {
         return allDayPanel;
     }
 
-    _calculateGroupIndex(
-        realGroupCount, groupOrientation, isGroupedByDate,
-        currentGroupIndex, columnIndex, columnsNumber,
-    ) {
+    _calculateGroupIndex(realGroupCount, groupOrientation, currentGroupIndex, columnIndex) {
         if(realGroupCount === 0) {
             return undefined;
         }
 
         let groupIndex = currentGroupIndex;
-
-        if(isGroupedByDate) {
-            groupIndex = columnIndex % realGroupCount;
-        }
-        if(!isGroupedByDate && groupOrientation === 'horizontal') {
-            const columnsInGroup = columnsNumber / realGroupCount;
-            groupIndex = Math.floor(columnIndex / columnsInGroup);
+        if(groupOrientation === 'horizontal') {
+            groupIndex = this._workspace._getGroupIndex(undefined, columnIndex);
         }
 
         return groupIndex;
