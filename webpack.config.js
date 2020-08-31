@@ -17,7 +17,7 @@ module.exports = {
         'globalize/currency': 'window.Globalize',
         'globalize/date': 'window.Globalize',
         'globalize/message': 'window.Globalize',
-        'devextreme-quill': 'window.Quill',
+        'devextreme-quill': 'window.DevExpress.Quill',
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown',
         'exceljs': 'window.ExcelJS',

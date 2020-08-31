@@ -31,7 +31,7 @@
     "devexpress-diagram": "1.1.21",
     "devexpress-gantt": "1.1.7",
     "jszip": "^2.0.0 || ^3.0.0",
-    "devextreme-quill": "^0.9.0",
+    "devextreme-quill": "^0.9.2",
     "rrule": "2.6.4",
     "es6-object-assign": "^1.1.0",
     "showdown": "^1.8.6",
