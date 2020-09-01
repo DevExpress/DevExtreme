@@ -193,6 +193,7 @@ export const ListBase = CollectionWidget.inherit({
 
             wrapItemText: false,
 
+            _swipeEnabled: true,
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -658,7 +659,9 @@ export const ListBase = CollectionWidget.inherit({
     _attachSwipeEvent: function($itemElement) {
         const endEventName = eventUtils.addNamespace(swipeEventEnd, this.NAME);
 
-        eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
+        if(this.option('_swipeEnabled')) {
+            eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
+        }
     },
 
     _itemSwipeEndHandler: function(e) {
