@@ -23,7 +23,7 @@ class JSPdfDataGridTestHelper {
                 assert.equal(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
             });
         } else {
-            assert.equal(actualAutoTableOptions.head.length, 0, 'AutoTable head is empty');
+            assert.strictEqual(actualAutoTableOptions.head.length, 0, 'AutoTable head is empty');
         }
 
         if(bodyCellsArray.length > 0) {
@@ -31,7 +31,7 @@ class JSPdfDataGridTestHelper {
                 assert.equal(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
             });
         } else {
-            assert.equal(actualAutoTableOptions.body.length, 0, 'AutoTable body is empty');
+            assert.strictEqual(actualAutoTableOptions.body.length, 0, 'AutoTable body is empty');
         }
     }
 

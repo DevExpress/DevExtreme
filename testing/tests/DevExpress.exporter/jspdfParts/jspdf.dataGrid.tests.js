@@ -31,7 +31,7 @@ const moduleConfig = {
 
 QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
     const getOptions = (context, dataGrid, options) => {
-        const { keepColumnWidths = true, /* selectedRowsOnly = false, */ autoTableOptions = {} } = options || {};
+        const { keepColumnWidths = true, autoTableOptions = {} } = options || {};
 
         const result = {
             component: dataGrid,
@@ -45,8 +45,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
     QUnit.test('Empty grid', function(assert) {
         const done = assert.async();
         const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
+        const options = {
+            autoTableOptions: { tableWidth: 250 }
+        };
 
-        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+        exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
             const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkCellsContent([], [], autoTableOptions);
             done();
@@ -62,8 +65,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             loadingTimeout: undefined,
             showColumnHeaders: true
         }).dxDataGrid('instance');
+        const options = {
+            autoTableOptions: { tableWidth: 250 }
+        };
 
-        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+        exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
             const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkCellsContent([['f1']], [['text1']], autoTableOptions);
             done();

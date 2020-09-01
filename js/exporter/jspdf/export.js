@@ -124,12 +124,11 @@ export const Export = {
     },
 
     getDefaultPdfColumnWidths(autoTableWidth, columnWidths) {
-        if(isNumeric(autoTableWidth)) {
-            const tableWidth = columnWidths.reduce((a, b) => { return a + b; });
-            return columnWidths.map((columnWidth) => {
-                return autoTableWidth * columnWidth / tableWidth;
-            });
+        if(!isNumeric(autoTableWidth) || !(columnWidths?.length > 0)) {
+            return;
         }
+        const tableWidth = columnWidths.reduce((a, b) => { return a + b; });
+        return columnWidths.map((columnWidth) => autoTableWidth * columnWidth / tableWidth);
     },
 
     setColumnWidths: function(autoTableOptions, pdfColumnWidths) {
