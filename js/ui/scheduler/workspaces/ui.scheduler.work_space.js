@@ -1735,12 +1735,18 @@ class SchedulerWorkSpace extends WidgetObserver {
     _prepareCellData(rowIndex, cellIndex) {
         const startDate = this._getDateByCellIndexes(rowIndex, cellIndex);
         const endDate = this.calculateEndDate(startDate);
+        const groupIndex = this._getGroupIndex(rowIndex, cellIndex);
         const data = {
             startDate: startDate,
             endDate: endDate,
             allDay: this._getTableAllDay()
         };
-        const groups = this._getCellGroups(this._getGroupIndex(rowIndex, cellIndex));
+
+        if(this.isVirtualScrolling()) {
+            data.groupIndex = groupIndex;
+        }
+
+        const groups = this._getCellGroups(groupIndex);
 
         if(groups.length) {
             data.groups = {};
