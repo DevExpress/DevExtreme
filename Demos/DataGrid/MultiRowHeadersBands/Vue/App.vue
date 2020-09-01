@@ -6,6 +6,7 @@
     :allow-column-reordering="true"
     :show-borders="true"
   >
+    <DxColumnChooser :enabled="true"/>
     <DxColumn data-field="Country"/>
     <DxColumn
       data-field="Area"
@@ -59,13 +60,14 @@
 
 <script>
 
-import DxDataGrid, { DxColumn } from 'devextreme-vue/data-grid';
+import DxDataGrid, { DxColumn, DxColumnChooser } from 'devextreme-vue/data-grid';
 import { countries } from './data.js';
 
 export default {
   components: {
     DxDataGrid,
-    DxColumn
+    DxColumn,
+    DxColumnChooser
   },
   data() {
     return {
@@ -86,11 +88,19 @@ export default {
     line-height: 0;
 }
 
+.long-title {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    right: 45px;
+    z-index: 1;
+}
+
 .long-title h3 {
     font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
     font-weight: 200;
     font-size: 28px;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 0 0 0 45px;
 }
 </style>

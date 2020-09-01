@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, ColumnChooser } from 'devextreme-react/data-grid';
 import { countries } from './data.js';
 
 const gdpFormat = {
@@ -19,6 +19,7 @@ class App extends React.Component {
         allowColumnReordering={true}
         showBorders={true}
       >
+        <ColumnChooser enabled={true} />
         <Column dataField="Country" />
         <Column dataField="Area" headerCellRender={this.renderAreaCellHeader} />
         <Column caption="Population">

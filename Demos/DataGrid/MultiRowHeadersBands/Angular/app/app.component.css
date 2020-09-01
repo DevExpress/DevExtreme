@@ -4,11 +4,18 @@
     line-height: 0;
 }
 
+::ng-deep .long-title {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    right: 45px;
+    z-index: 1;
+}
 
 ::ng-deep .long-title h3 {
     font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
     font-weight: 200;
     font-size: 28px;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 0 0 0 45px;
 }

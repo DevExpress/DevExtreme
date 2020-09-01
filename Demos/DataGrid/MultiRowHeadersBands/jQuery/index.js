@@ -4,6 +4,9 @@ $(function(){
         columnAutoWidth: true,
         allowColumnReordering: true,
         showBorders: true,
+        columnChooser: {
+            enabled: true
+        },
         columns: ["Country", {
             headerCellTemplate: function(container) {
                 container.append($("<div>Area, km<sup>2</sup></div>"));
