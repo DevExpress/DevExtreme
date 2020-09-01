@@ -228,8 +228,7 @@ class ViewDataGenerator {
                     cellData,
                     position: {
                         rowIndex: viewDataMap.length,
-                        cellIndex: cellIndex,
-                        groupIndex: groupIndex
+                        cellIndex: cellIndex
                     }
                 };
                 cellsMap.push(cellMap);
@@ -336,12 +335,7 @@ export default class ViewDataProvider {
 
     findCellPosition(groupIndices, startDate) {
         for(let i = 0; i < groupIndices.length; ++i) {
-            const groupIndex = groupIndices[i];
-            const position = this._findCellPositionInMap(groupIndex, startDate);
-
-            if(position) {
-                return position;
-            }
+            return this._findCellPositionInMap(groupIndices[i], startDate);
         }
     }
 
@@ -363,13 +357,11 @@ export default class ViewDataProvider {
 
             for(let cellIndex = 0; cellIndex < row.length; ++cellIndex) {
                 const cell = row[cellIndex];
-                const { position } = cell;
+                const { cellData } = cell;
 
-                if(position.groupIndex === groupIndex) {
+                if(cellData.groupIndex === groupIndex) {
                     if(isStartTimeInCell(cell.cellData)) {
-                        const { position } = cell;
-
-                        return position;
+                        return cell.position;
                     }
                 }
             }
