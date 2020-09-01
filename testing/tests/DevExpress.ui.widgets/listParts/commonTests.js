@@ -1015,6 +1015,29 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
     });
 
+    QUnit.test('onItemSwipe handler should not be triggered if "_swipeEnabled" is false on init', function(assert) {
+        assert.expect(0);
+
+        const swipeHandler = () => {
+            assert.ok(true, 'swipe handled');
+        };
+
+        this.element.dxList({
+            items: [0],
+            onItemSwipe: swipeHandler,
+            _swipeEnabled: false
+        }).dxList('instance');
+
+        const item = $.proxy(function() {
+            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        }, this);
+        const swipeItem = () => {
+            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
+        };
+
+        swipeItem();
+    });
+
     QUnit.test('onItemSwipe - subscription by on method', function(assert) {
         assert.expect(2);
 

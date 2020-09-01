@@ -661,15 +661,6 @@ const ListBase = CollectionWidget.inherit({
         eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 
-    _detachSwipeEvent: function($itemElement) {
-        const endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
-        eventsEngine.off($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
-    },
-
-    _toggleSwipeEvent: function(isSwipeEnabled) {
-        isSwipeEnabled ? this._attachSwipeEvent() : this._detachSwipeEvent();
-    },
-
     _itemSwipeEndHandler: function(e) {
         this._itemDXEventHandler(e, 'onItemSwipe', {
             direction: e.offset < 0 ? 'left' : 'right'
@@ -900,7 +891,6 @@ const ListBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case '_swipeEnabled':
-                this._toggleSwipeEvent(args.value);
                 break;
             case '_listAttributes':
                 break;
