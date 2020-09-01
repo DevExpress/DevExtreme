@@ -3,7 +3,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
 import devices from '../../core/devices';
 import DataSource from '../../data/data_source';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones_new';
+import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 
 import './ui.scheduler.recurrence_editor';
 import '../text_area';

@@ -1,5 +1,5 @@
 import dateUtils from '../../core/utils/date';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones_new';
+import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;

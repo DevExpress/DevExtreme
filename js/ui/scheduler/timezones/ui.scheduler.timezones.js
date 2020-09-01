@@ -1,17 +1,52 @@
 import query from '../../../data/query';
 import errors from '../../../core/errors';
-import tzData from './ui.scheduler.timezones_data';
+import tzData from './timezonesRawData';
+import { extend } from '../../../core/utils/extend';
+// import dateLocalization from '../../localization/date';
 
 const SchedulerTimezones = {
-    _displayNames: tzData.displayNames,
-    _list: tzData.timezones,
+    _displayNames: tzData.zones,
+    _list: tzData.zones,
 
     getTimezones: function() {
         return this._list;
     },
     getDisplayNames: function() {
-        return this._displayNames;
+        const today = new Date(); // NOTE: use startDate from appointment instead
+
+        const result = [];
+        this._list.forEach((timezone) => {
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime());
+            const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
+
+            result.push(extend(timezone, {
+                offset: offset,
+                title: title
+            }));
+        });
+
+        return result;
+        // return this._list.map((timezone) => {
+        //     debugger;
+        //     timezone.offset = (this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime())) / 60;
+        //     timezone.title = `(GMT + ${timezone.offset}) ${timezone.name}`;
+        // });
+        // return this._displayNames;
     },
+    formatOffset: function(offset) {
+        const a = Math.floor(offset);
+        const b = offset - a;
+        const sign = Math.sign(offset);
+        let signString = '';
+        if(sign === -1) signString = '-';
+        if(sign === 1) signString = '+';
+
+        // `0${Math(abs(a))}`.slice(-2)
+        const aString = `0${Math.abs(a)}`.slice(-2);
+        const bString = b > 0 ? `:${b * 60}` : ':00';
+        return signString + aString + bString;
+    },
+
     queryableTimezones: function() {
         return query(this.getTimezones());
     },
@@ -62,6 +97,7 @@ const SchedulerTimezones = {
     getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
         let index = 0;
         const offsetIndicesList = offsetIndices.split('');
+        const offsetsList = offsets.split('|');
 
         const untilsList = untils.split('|').map(function(until) {
             if(until === 'Infinity') {
@@ -86,8 +122,9 @@ const SchedulerTimezones = {
             index++;
         }
 
-        return offsets[Number(offsetIndicesList[index])];
+        return -(offsetsList[Number(offsetIndicesList[index])] / 60);
     },
+
     getTimezoneShortDisplayNameById: function(id) {
         const tz = this.getTimezoneById(id);
         let result;
@@ -99,7 +136,8 @@ const SchedulerTimezones = {
         return result;
     },
     getTimezonesDisplayName: function() {
-        return query(this.getDisplayNames()).sortBy().toArray();
+        // return query(this.getTimezones()).sortBy().toArray();
+        return query(this.getDisplayNames()).sortBy('offset').toArray();
     },
     getTimezoneDisplayNameById: function(id) {
         const tz = this.getTimezoneById(id);
