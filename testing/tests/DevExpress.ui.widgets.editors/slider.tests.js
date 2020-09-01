@@ -252,26 +252,28 @@ module('render', moduleOptions, () => {
     });
 
     test('drag handler', function(assert) {
+        // TODO write the right comment
+        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('head'));
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
             value: 0,
             useInkRipple: false
-        }).css('width', 500 + 2 * SLIDER_PADDING);
+        }).css('width', 500);
 
-        const offsetX = $element.offset().left;
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
         const $bar = $element.find('.' + SLIDER_BAR_CLASS);
+        const offsetX = $element.offset().left;
 
-        pointerMock($bar).start({ x: SLIDER_PADDING }).move(offsetX).down().move(250).up();
+        pointerMock($bar).start().move(offsetX).down().move(250).up();
         assert.equal(handlePositionAgainstTrackBar($handle).left, 250);
         assert.equal($range.width(), 250);
 
-        pointerMock($bar).start({ x: SLIDER_PADDING }).down().move(500 + $handle.outerWidth() / 2).up();
+        pointerMock($bar).start().down().move(500 + $handle.outerWidth() / 2).up();
         assert.equal(handlePositionAgainstTrackBar($handle).left, 500);
         assert.equal($range.width(), 500);
-
+        styles.remove();
     });
 
     test('smooth drag of handler', function(assert) {
