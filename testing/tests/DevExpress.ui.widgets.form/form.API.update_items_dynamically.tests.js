@@ -16,7 +16,7 @@ class FormTestWrapper {
         this._form = this._getTestContainer().dxForm(options).dxForm('instance');
         this._formContentReadyStub = sinon.stub();
         this._form.on('contentReady', this._formContentReadyStub);
-        this._contentReadyStubs = this._createLayoutManagerStubs(this._form.$element());
+        this.updateLayoutManagerStubs();
     }
 
     _getTestContainer() {
@@ -69,6 +69,10 @@ class FormTestWrapper {
         this._form.endUpdate();
     }
 
+    updateLayoutManagerStubs() {
+        this._contentReadyStubs = this._createLayoutManagerStubs(this._form.$element());
+    }
+
     checkValidationSummaryContent(expectedMessages) {
         const $itemsContent = this._form.$element().find('.dx-validationsummary-item-content');
 
@@ -85,8 +89,8 @@ class FormTestWrapper {
         QUnit.assert.equal(result.validators.length, validatorsCount, 'validators count of validation result');
     }
 
-    checkFormsReRender(message = '') {
-        QUnit.assert.equal(this._formContentReadyStub.callCount, 0, `${message}, form is not re-render`);
+    checkFormsReRender(message = '', isReRender = false) {
+        QUnit.assert.equal(this._formContentReadyStub.callCount, Number(isReRender), `${message}, form is ${isReRender ? '' : 'not'} re-render`);
         this._formContentReadyStub.reset();
     }
 
@@ -151,6 +155,10 @@ class FormTestWrapper {
     checkLabelsBySelector({ itemSelector, columnIndex = 0, etalonLabelText }) {
         const $texts = this._form.$element().find(`${itemSelector}.dx-col-${columnIndex} .${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
         this._checkLabelTextsWidthByEtalon($texts, etalonLabelText);
+    }
+
+    checkRequired(selector, expected, message) {
+        QUnit.assert.equal(this._form.$element().find(`${selector} .dx-field-item-required-mark`).length > 0, expected, message || 'item required');
     }
 }
 
@@ -574,6 +582,41 @@ module('Group item. Use the option method', function() {
         testWrapper.checkLabelText('.test-item3', 'Test Label 3');
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
+
+    test('Set { items: [{itemType: \'group\', items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}] }, change required of dataField1 and change visible of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        {
+                            itemType: 'group',
+                            items: [{
+                                dataField: 'dataField2',
+                                cssClass: 'test-item2'
+                            }]
+                        },
+                        {
+                            dataField: 'dataField1',
+                            cssClass: 'test-item1'
+                        }
+                    ]
+                }
+            ]
+        });
+
+        testWrapper.setOption('items[0].items[1]', 'isRequired', true);
+        testWrapper.checkFormsReRender('change isRequired of dataField1');
+        testWrapper.checkLayoutManagerRendering([false, true, false], 'change isRequired of dataField1');
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
+
+        testWrapper.updateLayoutManagerStubs();
+        testWrapper.setOption('items[0].items[0].items[0]', 'visible', false);
+        testWrapper.checkFormsReRender('change visible of dataField2');
+        testWrapper.checkLayoutManagerRendering([false, false, true], 'change visible of dataField2');
+        testWrapper.checkItemElement('.test-item2', false);
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
+    });
 });
 
 module('Tabbed item. Use the option method', function() {
@@ -816,6 +859,44 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkSimpleItem('dataField2', 'DataField2', 'Data Field 2');
         testWrapper.checkItemElement('.test-tab', true, 'tabbed item element');
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
+    });
+
+    test('Set { items: [{itemType: \'tabbed\', tabs[{items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}] }, change required of dataField1 and change visible of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: [
+                {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'tab1',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: 'dataField2',
+                                    cssClass: 'test-item2'
+                                }]
+                            },
+                            {
+                                dataField: 'dataField1',
+                                cssClass: 'test-item1'
+                            }
+                        ]
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setOption('items[0].tabs[0].items[1]', 'isRequired', true);
+        testWrapper.checkFormsReRender('change isRequired of dataField1');
+        testWrapper.checkLayoutManagerRendering([false, true, false], 'change isRequired of dataField1');
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
+
+        testWrapper.updateLayoutManagerStubs();
+        testWrapper.setOption('items[0].tabs[0].items[0].items[0]', 'visible', false);
+        testWrapper.checkFormsReRender('change visible of dataField2');
+        testWrapper.checkLayoutManagerRendering([false, false, true], 'change visible of dataField2');
+        testWrapper.checkItemElement('.test-item2', false);
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
     });
 });
 
@@ -1337,6 +1418,45 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkLabelText('.test-item3', 'Test Label 3');
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
+
+    test('Set { items: [{itemType: \'group\', items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}] }, change required of dataField1 and change visible of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        {
+                            itemType: 'group',
+                            items: [{
+                                dataField: 'dataField2',
+                                cssClass: 'test-item2'
+                            }]
+                        },
+                        {
+                            dataField: 'dataField1',
+                            cssClass: 'test-item1'
+                        }
+                    ]
+                }
+            ]
+        });
+
+        testWrapper.setItemOption('dataField1', {
+            isRequired: true
+        });
+        testWrapper.checkFormsReRender('change isRequired of dataField1');
+        testWrapper.checkLayoutManagerRendering([false, true, false], 'change isRequired of dataField1');
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
+
+        testWrapper.updateLayoutManagerStubs();
+        testWrapper.setItemOption('dataField2', {
+            visible: false
+        });
+        testWrapper.checkFormsReRender('change visible of dataField2');
+        testWrapper.checkLayoutManagerRendering([false, false, true], 'change visible of dataField2');
+        testWrapper.checkItemElement('.test-item2', false);
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
+    });
 });
 
 module('Tabbed item. Use the itemOption method', function() {
@@ -1586,6 +1706,48 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkSimpleItem('dataField2', 'DataField2', 'Data Field 2');
         testWrapper.checkItemElement('.test-tab', true, 'tabbed item element');
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
+    });
+
+    test('Set { items: [{itemType: \'tabbed\', tabs:[{items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}]}] }, change required of dataField1 and change visible of dataField2)', function() {
+        const testWrapper = new FormTestWrapper({
+            items: [
+                {
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'tab1',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: 'dataField2',
+                                    cssClass: 'test-item2'
+                                }]
+                            },
+                            {
+                                dataField: 'dataField1',
+                                cssClass: 'test-item1'
+                            }
+                        ]
+                    }]
+                }
+            ]
+        });
+
+        testWrapper.setItemOption('tab1.dataField1', {
+            isRequired: true
+        });
+        testWrapper.checkFormsReRender('change isRequired of dataField1');
+        testWrapper.checkLayoutManagerRendering([false, true, false], 'change isRequired of dataField1');
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
+
+        testWrapper.updateLayoutManagerStubs();
+        testWrapper.setItemOption('tab1.dataField2', {
+            visible: false
+        });
+        testWrapper.checkFormsReRender('change visible of dataField2');
+        testWrapper.checkLayoutManagerRendering([false, false, true], 'change visible of dataField2');
+        testWrapper.checkItemElement('.test-item2', false);
+        testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
     });
 });
 
