@@ -651,15 +651,23 @@ const ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
-        this._attachSwipeEvent($(args.itemElement));
+        if(this.option('_swipeEnabled')) {
+            this._attachSwipeEvent($(args.itemElement));
+        }
     },
 
     _attachSwipeEvent: function($itemElement) {
         const endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
+        eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
+    },
 
-        if(this.option('_swipeEnabled')) {
-            eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
-        }
+    _detachSwipeEvent: function($itemElement) {
+        const endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
+        eventsEngine.off($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
+    },
+
+    _toggleSwipeEvent: function(isSwipeEnabled) {
+        isSwipeEnabled ? this._attachSwipeEvent() : this._detachSwipeEvent();
     },
 
     _itemSwipeEndHandler: function(e) {
@@ -890,6 +898,9 @@ const ListBase = CollectionWidget.inherit({
             case 'showChevronExpr':
             case 'badgeExpr':
                 this._invalidate();
+                break;
+            case '_swipeEnabled':
+                this._toggleSwipeEvent(args.value);
                 break;
             case '_listAttributes':
                 break;
