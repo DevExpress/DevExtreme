@@ -153,7 +153,7 @@ export default class VirtualScrolling {
             : topRowsDelta;
 
         let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
-        if(workspace.isAllDayPanelInsideDateTable()) {
+        if(workspace.isGroupedAllDayPanel()) {
             bottomVirtualRowCount -= 1;
         }
 

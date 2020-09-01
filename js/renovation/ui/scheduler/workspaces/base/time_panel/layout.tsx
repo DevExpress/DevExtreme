@@ -7,7 +7,7 @@ import { CellBase } from '../cell';
 import {
   getKeyByDateAndGroup,
   getKeyByGroup,
-  getIsAllDayPanelInsideDateTable,
+  getIsGroupedAllDayPanel,
   isVerticalGroupOrientation,
 } from '../../utils';
 import { Table } from '../table';
@@ -31,7 +31,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
 
           return (
             <Fragment key={getKeyByGroup(groupIndex)}>
-              {getIsAllDayPanelInsideDateTable(viewModel.props.viewData!, groupIndex) && (
+              {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
                 <Row>
                   <CellBase className="dx-scheduler-time-panel-title-cell">
                     <AllDayPanelTitle />

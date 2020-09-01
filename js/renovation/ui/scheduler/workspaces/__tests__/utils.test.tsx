@@ -2,7 +2,7 @@ import {
   getKeyByDateAndGroup,
   getKeyByGroup,
   addHeightToStyle,
-  getIsAllDayPanelInsideDateTable,
+  getIsGroupedAllDayPanel,
   getGroupCellClasses,
   isVerticalGroupOrientation,
 } from '../utils';
@@ -67,7 +67,7 @@ describe('Workspaces utils', () => {
     });
   });
 
-  describe('getIsAllDayPanelInsideDateTable', () => {
+  describe('getIsGroupedAllDayPanel', () => {
     it('should return false if all-day-panel is a part of the header', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
@@ -81,7 +81,7 @@ describe('Workspaces utils', () => {
         cellCountInGroupRow: 1,
       };
 
-      expect(getIsAllDayPanelInsideDateTable(viewData, 0))
+      expect(getIsGroupedAllDayPanel(viewData, 0))
         .toBe(false);
     });
 
@@ -94,7 +94,7 @@ describe('Workspaces utils', () => {
           allDayPanel: [{
             startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0,
           }],
-          isAllDayPanelInsideDateTable: true,
+          isGroupedAllDayPanel: true,
         }, {
           dateTable: [[{
             startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3', index: 0,
@@ -102,15 +102,15 @@ describe('Workspaces utils', () => {
           allDayPanel: [{
             startDate: new Date(2020, 1, 4), endDate: new Date(2020, 1, 4), text: 'test4', index: 0,
           }],
-          isAllDayPanelInsideDateTable: true,
+          isGroupedAllDayPanel: true,
         }],
         cellCountInGroupRow: 1,
       };
 
-      expect(getIsAllDayPanelInsideDateTable(viewData, 0))
+      expect(getIsGroupedAllDayPanel(viewData, 0))
         .toBe(true);
 
-      expect(getIsAllDayPanelInsideDateTable(viewData, 1))
+      expect(getIsGroupedAllDayPanel(viewData, 1))
         .toBe(true);
     });
   });

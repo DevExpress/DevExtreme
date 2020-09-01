@@ -38,15 +38,15 @@ export const getGroupCellClasses = (
   [className]: true,
 });
 
-export const getIsAllDayPanelInsideDateTable = (
+export const getIsGroupedAllDayPanel = (
   viewData: GroupedViewData, groupIndex: number,
 ): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[groupIndex];
   const isAllDayPanel = !!(groupData?.allDayPanel?.length);
-  const isAllDayPanelInsideDateTable = !!(groupData?.isAllDayPanelInsideDateTable);
+  const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
 
-  return isAllDayPanel && isAllDayPanelInsideDateTable;
+  return isAllDayPanel && isGroupedAllDayPanel;
 };
 
 export const isVerticalGroupOrientation = (

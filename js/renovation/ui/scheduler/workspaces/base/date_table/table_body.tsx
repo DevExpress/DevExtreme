@@ -6,7 +6,7 @@ import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
   getKeyByDateAndGroup,
-  getIsAllDayPanelInsideDateTable,
+  getIsGroupedAllDayPanel,
 } from '../../utils';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
@@ -16,7 +16,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
     {viewModel.props.viewData!
       .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsAllDayPanelInsideDateTable(viewModel.props.viewData!, groupIndex) && (
+          {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
               dataCellTemplate={viewModel.props.dataCellTemplate}

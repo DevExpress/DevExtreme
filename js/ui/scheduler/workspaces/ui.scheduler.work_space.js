@@ -1056,7 +1056,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._shader = new VerticalShader(this);
     }
 
-    isAllDayPanelInsideDateTable() {
+    isGroupedAllDayPanel() {
         return this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace();
     }
 
@@ -1105,7 +1105,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRAllDayPanel() {
-        const visible = this.option('showAllDayPanel') && !this.isAllDayPanelInsideDateTable();
+        const visible = this.option('showAllDayPanel') && !this.isGroupedAllDayPanel();
         if(visible) {
             const options = {
                 viewData: this.viewDataProvider.viewData,

@@ -3770,7 +3770,7 @@ QUnit.module('Renovated Render', {
                         index: 1,
                     }]],
                     groupIndex: 0,
-                    isAllDayPanelInsideDateTable: false,
+                    isGroupedAllDayPanel: false,
                 }],
                 cellCountInGroupRow: 1,
             };
@@ -3873,7 +3873,7 @@ QUnit.module('Renovated Render', {
                         index: 1,
                     }]],
                     groupIndex: 0,
-                    isAllDayPanelInsideDateTable: false
+                    isGroupedAllDayPanel: false
                 }],
                 cellCountInGroupRow: 1,
             };

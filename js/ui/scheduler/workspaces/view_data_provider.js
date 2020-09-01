@@ -34,7 +34,7 @@ class ViewDataGenerator {
         const groupedData = [];
         const firstGroupIndex = Math.floor(startRowIndex / rowCountInGroup);
         const lastGroupIndex = Math.floor((startRowIndex + rowCount) / rowCountInGroup);
-        const isAllDayPanelInsideDateTable = workspace.isAllDayPanelInsideDateTable();
+        const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
 
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
             let allDayPanelData = [];
@@ -72,7 +72,7 @@ class ViewDataGenerator {
                 groupIndex: groupIndex,
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
-                isAllDayPanelInsideDateTable
+                isGroupedAllDayPanel
             });
         }
 
@@ -90,7 +90,7 @@ class ViewDataGenerator {
     _generateViewData() {
         const workspace = this._workspace;
         const options = workspace.generateRenderOptions();
-        const isAllDayPanelInsideDateTable = workspace.isAllDayPanelInsideDateTable();
+        const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
         const {
             rowCount,
             cellCount,
@@ -114,7 +114,7 @@ class ViewDataGenerator {
                 groupIndex,
                 dateTable: viewCellsData,
                 allDayPanel: allDayPanelData,
-                isAllDayPanelInsideDateTable
+                isGroupedAllDayPanel
             });
         }
 
@@ -239,9 +239,9 @@ class ViewDataGenerator {
         groupedData?.forEach(({
             dateTable,
             allDayPanel,
-            isAllDayPanelInsideDateTable
+            isGroupedAllDayPanel
         }) => {
-            if(isAllDayPanelInsideDateTable && allDayPanel?.length) {
+            if(isGroupedAllDayPanel && allDayPanel?.length) {
                 addToMap(allDayPanel);
             }
 

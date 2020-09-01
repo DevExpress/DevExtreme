@@ -8,7 +8,7 @@ import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
-const getIsAllDayPanelInsideDateTable = jest.spyOn(utilsModule, 'getIsAllDayPanelInsideDateTable');
+const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
 const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
 
@@ -218,13 +218,13 @@ describe('TimePanelLayout', () => {
       assert(cells, 3, false, true);
     });
 
-    it('should call getIsAllDayPanelInsideDateTable with correct arguments', () => {
+    it('should call getIsGroupedAllDayPanel with correct arguments', () => {
       render({ });
 
-      expect(getIsAllDayPanelInsideDateTable)
+      expect(getIsGroupedAllDayPanel)
         .toHaveBeenCalledTimes(1);
 
-      expect(getIsAllDayPanelInsideDateTable)
+      expect(getIsGroupedAllDayPanel)
         .toHaveBeenCalledWith(
           viewDataBase,
           2,
@@ -232,8 +232,8 @@ describe('TimePanelLayout', () => {
     });
 
     [true, false].forEach((mockValue) => {
-      it(`AllDayPanelTitle if isAllDayPanelInsideDateTable=${mockValue}`, () => {
-        getIsAllDayPanelInsideDateTable.mockImplementation(() => mockValue);
+      it(`AllDayPanelTitle if isGroupedAllDayPanel=${mockValue}`, () => {
+        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
         const layout = render({ });
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
