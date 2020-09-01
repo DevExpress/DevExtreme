@@ -60,7 +60,7 @@ const moduleOptions = {
 
 const handlePositionAgainstTrackBar = ($handle) => {
     const $range = $handle.parent();
-    const rangeBorderWidth = parseInt($range.css('borderWidth'));
+    const rangeBorderWidth = parseInt($range.css('borderLeftWidth'));
     const positionAgainstRange = $handle.position();
     const handleHalfWidth = $handle.outerWidth() / 2;
     const handleHalfHeight = $handle.outerHeight() / 2;
