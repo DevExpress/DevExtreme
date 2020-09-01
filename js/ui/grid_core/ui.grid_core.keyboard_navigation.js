@@ -826,13 +826,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return false;
     },
 
-    _getCellModel: function(rowIndex, columnIndex) {
-        const rowOffset = this._dataController.getRowIndexOffset();
-        const columnIndexOffset = this._columnsController.getColumnIndexOffset();
-        const row = this._dataController.getVisibleRows()[rowIndex - rowOffset];
-        return row && row.cells && row.cells[columnIndex - columnIndexOffset];
-    },
-
     _beginFastEditing: function(originalEvent, isDeleting) {
         if(!this._isFastEditingAllowed() || originalEvent.altKey || originalEvent.ctrlKey || this._editingController.isEditing()) {
             return false;
