@@ -81,7 +81,7 @@ const SchedulerAppointmentForm = {
         const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
 
         const timeZoneDataSource = new DataSource({
-            store: SchedulerTimezones.getTimezonesDisplayName(),
+            store: SchedulerTimezones.getSortedTimeZones(),
             paginate: true,
             pageSize: 10
         });

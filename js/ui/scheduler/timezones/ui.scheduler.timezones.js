@@ -1,23 +1,22 @@
 import query from '../../../data/query';
 import errors from '../../../core/errors';
-import tzData from './timezonesRawData';
+import tzData from './ui.scheduler.timezones_data';
 import { extend } from '../../../core/utils/extend';
-// import dateLocalization from '../../localization/date';
 
 const SchedulerTimezones = {
-    _displayNames: tzData.zones,
-    _list: tzData.zones,
+    _timeZones: tzData.zones,
 
     getTimezones: function() {
-        return this._list;
+        return this._timeZones;
     },
-    getDisplayNames: function() {
+
+    getDisplayedTimeZones: function() {
         const today = new Date(); // NOTE: use startDate from appointment instead
 
         const result = [];
-        this._list.forEach((timezone) => {
+        this.getTimezones().forEach((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime());
-            const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
+            const title = `(GMT${this.formatOffset(offset)}) ${timezone.id}`;
 
             result.push(extend(timezone, {
                 offset: offset,
@@ -26,13 +25,12 @@ const SchedulerTimezones = {
         });
 
         return result;
-        // return this._list.map((timezone) => {
-        //     debugger;
-        //     timezone.offset = (this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, today.getTime())) / 60;
-        //     timezone.title = `(GMT + ${timezone.offset}) ${timezone.name}`;
-        // });
-        // return this._displayNames;
     },
+
+    getSortedTimeZones: function() {
+        return query(this.getDisplayedTimeZones()).sortBy('offset').toArray();
+    },
+
     formatOffset: function(offset) {
         const a = Math.floor(offset);
         const b = offset - a;
@@ -47,9 +45,6 @@ const SchedulerTimezones = {
         return signString + aString + bString;
     },
 
-    queryableTimezones: function() {
-        return query(this.getTimezones());
-    },
     getTimezoneById: function(id) {
         let result;
         let i = 0;
@@ -70,6 +65,7 @@ const SchedulerTimezones = {
         }
         return result;
     },
+
     getTimezoneOffsetById: function(id, dateTimeStamp) {
         const tz = this.getTimezoneById(id);
         let offsets;
@@ -94,6 +90,7 @@ const SchedulerTimezones = {
 
         return result;
     },
+
     getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
         let index = 0;
         const offsetIndicesList = offsetIndices.split('');
@@ -125,65 +122,8 @@ const SchedulerTimezones = {
         return -(offsetsList[Number(offsetIndicesList[index])] / 60);
     },
 
-    getTimezoneShortDisplayNameById: function(id) {
-        const tz = this.getTimezoneById(id);
-        let result;
-
-        if(tz) {
-            result = tz.DisplayName.substring(0, 11);
-        }
-
-        return result;
-    },
-    getTimezonesDisplayName: function() {
-        // return query(this.getTimezones()).sortBy().toArray();
-        return query(this.getDisplayNames()).sortBy('offset').toArray();
-    },
-    getTimezoneDisplayNameById: function(id) {
-        const tz = this.getTimezoneById(id);
-        return tz ? this.getDisplayNames()[tz.winIndex] : '';
-    },
-    getSimilarTimezones: function(id) {
-        if(!id) {
-            return [];
-        }
-
-        const tz = this.getTimezoneById(id);
-
-        return this.getTimezonesIdsByWinIndex(tz.winIndex);
-
-    },
-    getTimezonesIdsByWinIndex: function(winIndex) {
-        return this.queryableTimezones()
-            .filter(['winIndex', winIndex])
-            .sortBy('title')
-            .toArray()
-            .map(function(item) {
-                return {
-                    id: item.id,
-                    displayName: item.title
-                };
-            });
-    },
-    getTimezonesIdsByDisplayName: function(displayName) {
-        const displayNameIndex = this.getDisplayNames().indexOf(displayName);
-
-        return this.getTimezonesIdsByWinIndex(displayNameIndex);
-    },
-
     getClientTimezoneOffset: function(date) {
         return date.getTimezoneOffset() * 60000;
-    },
-
-    processDateDependOnTimezone: function(date, tzOffset) {
-        let result = new Date(date);
-
-        if(tzOffset) {
-            const tzDiff = tzOffset + this.getClientTimezoneOffset(date) / 3600000;
-            result = new Date(result.setHours(result.getHours() + tzDiff));
-        }
-
-        return result;
     }
 };
 

@@ -1707,7 +1707,7 @@ module('Timezone Editors in appointment popup', moduleOptions, () => {
 
         [startDateTimezoneEditor, endDateTimezoneEditor].forEach(editor => {
             assert.equal(startDateTimezoneEditor.option('value'), 'Europe/Paris', 'value is ok');
-            assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe/Paris', 'displayValue is ok');
+            assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT+02:00) Europe/Paris', 'displayValue is ok');
         });
     });
 
