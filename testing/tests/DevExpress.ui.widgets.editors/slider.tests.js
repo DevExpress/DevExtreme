@@ -1,6 +1,7 @@
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import 'common.css!';
+import 'generic_light.css!';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -14,6 +15,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 
 const { module, testStart, test, testInActiveWindow } = QUnit;
+const SLIDER_PADDING = 7;
 
 testStart(() => {
     const markup =
@@ -54,6 +56,19 @@ const moduleOptions = {
         fx.off = false;
         this.clock.restore();
     }
+};
+
+const handlePositionAgainstTrackBar = ($handle) => {
+    const $range = $handle.parent();
+    const rangeBorderWidth = parseInt($range.css('borderWidth'));
+    const positionAgainstRange = $handle.position();
+    const handleHalfWidth = $handle.outerWidth() / 2;
+    const handleHalfHeight = $handle.outerHeight() / 2;
+
+    return {
+        left: positionAgainstRange.left + rangeBorderWidth + handleHalfWidth,
+        top: positionAgainstRange.top + rangeBorderWidth + handleHalfHeight
+    };
 };
 
 module('render', moduleOptions, () => {
@@ -129,17 +144,17 @@ module('render', moduleOptions, () => {
             min: 0,
             value: 0,
             useInkRipple: false
-        }).css('width', 500);
+        }).css('width', 500 + 2 * SLIDER_PADDING);
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
 
-        pointerMock($element).start().move(250 + $element.offset().left).down();
-        assert.equal($handle.position().left, 250 - $handle.outerWidth() / 2);
+        pointerMock($element).start({ x: SLIDER_PADDING }).move(250 + $element.offset().left).down();
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 250);
         assert.equal($range.width(), 250);
 
-        pointerMock($element).start().move(350 + $element.offset().left).down();
-        assert.equal($handle.position().left, 350 - $handle.outerWidth() / 2);
+        pointerMock($element).start({ x: SLIDER_PADDING }).move(350 + $element.offset().left).down();
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 350);
         assert.equal($range.width(), 350);
     });
 
@@ -242,41 +257,43 @@ module('render', moduleOptions, () => {
             min: 0,
             value: 0,
             useInkRipple: false
-        }).css('width', 500);
+        }).css('width', 500 + 2 * SLIDER_PADDING);
 
         const offsetX = $element.offset().left;
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
         const $bar = $element.find('.' + SLIDER_BAR_CLASS);
-        const handleWidth = $handle.outerWidth();
 
-        pointerMock($bar).start().move(offsetX).down().move(250).up();
-        assert.equal($handle.position().left, 250 - handleWidth / 2);
+        pointerMock($bar).start({ x: SLIDER_PADDING }).move(offsetX).down().move(250).up();
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 250);
         assert.equal($range.width(), 250);
 
-        pointerMock($bar).start().down().move(500 + $handle.outerWidth() / 2).up();
-        assert.equal($handle.position().left, 500 - handleWidth / 2);
+        pointerMock($bar).start({ x: SLIDER_PADDING }).down().move(500 + $handle.outerWidth() / 2).up();
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 500);
         assert.equal($range.width(), 500);
 
     });
 
     test('smooth drag of handler', function(assert) {
+        // TODO write the right comment
+        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('head'));
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
             value: 0,
             step: 250,
-            width: 500,
+            width: 500 + 2 * 20,
             useInkRipple: false
         });
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
-        const halfHandleWidth = $handle.outerWidth() / 2;
+        const $range = $element.find('.' + SLIDER_RANGE_CLASS);
         const pointer = pointerMock($handle);
 
-        pointer.start().down($element.offset().left).move(100);
-        assert.equal($handle.position().left, 100 - halfHandleWidth);
+        pointer.start().down($range.offset().left).move(100);
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 100);
         pointer.up();
+        styles.remove();
     });
 
     test('value should be updated on swipestart on mobile devices', function(assert) {
@@ -284,7 +301,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 0,
-            width: 500,
+            width: 500 + 2 * SLIDER_PADDING,
             useInkRipple: false
         });
         const instance = $element.dxSlider('instance');
@@ -292,7 +309,7 @@ module('render', moduleOptions, () => {
         const $handle = $element.find('.' + SLIDER_WRAPPER_CLASS);
         const pointer = pointerMock($handle);
 
-        pointer.start('touch').move($element.offset().left + 300).swipeStart();
+        pointer.start({ pointerType: 'touch', x: SLIDER_PADDING }).move($element.offset().left + 300).swipeStart();
         assert.equal(instance.option('value'), 300, 'value set after dxswipestart');
     });
 
@@ -301,7 +318,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 0,
-            width: 500,
+            width: 500 + 2 * SLIDER_PADDING,
             useInkRipple: false
         });
         const instance = $element.dxSlider('instance');
@@ -309,7 +326,7 @@ module('render', moduleOptions, () => {
         const $handle = $element.find('.' + SLIDER_WRAPPER_CLASS);
         const pointer = pointerMock($handle);
 
-        pointer.start('touch').move($element.offset().left + 300).click();
+        pointer.start({ pointerType: 'touch', x: SLIDER_PADDING }).move($element.offset().left + 300).click();
         assert.equal(instance.option('value'), 300, 'value set after dxclick');
     });
 
@@ -318,7 +335,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 0,
-            width: 500,
+            width: 500 + 2 * SLIDER_PADDING,
             useInkRipple: false,
             onOptionChanged: ({ component, name }) =>
                 name === 'value' && component.option('step', 2000)
@@ -335,7 +352,7 @@ module('render', moduleOptions, () => {
             .move(100)
             .move(100);
 
-        assert.equal($handle.position().left, 500, 'handle is positioned at the max');
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 500, 'handle is positioned at the max');
         assert.equal($range.width(), 500, 'the width of the range doesn\'t exceed the maximum');
     });
 });
@@ -487,9 +504,13 @@ module('slider with tooltip', () => {
         });
 
         const $tooltip = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
-        const $arrow = $('.dx-popover-arrow');
+        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
 
-        assert.equal(Math.floor(($tooltip.outerWidth() - $arrow.outerWidth()) / 2), -$tooltip.position().left + parseInt($arrow.css('margin-left').replace('px', '')), 'tooltip position is centered');
+        const tooltipWidth = $tooltip.outerWidth();
+        const tooltipCenter = tooltipWidth / 2;
+        const tooltipOffsetAgainstHandle = Math.abs($tooltip.position().left) + $handle.width() / 2;
+
+        assert.equal(tooltipCenter, tooltipOffsetAgainstHandle, 'tooltip position is centered');
     });
 
     test('tooltip should be fitted into slide right and left bounds', function(assert) {
@@ -1170,7 +1191,7 @@ module('regression tests', moduleOptions, () => {
             min: 0,
             value: 20,
             useInkRipple: false
-        }).css('width', 100);
+        }).css('width', 100 + SLIDER_PADDING * 2);
         const instance = $element.dxSlider('instance');
         const range = $element.find('.' + SLIDER_RANGE_CLASS);
 
@@ -1280,7 +1301,7 @@ module('regression tests', moduleOptions, () => {
     });
 
     test('B234766 dxSlider - incorrect value calculation with fractional step', function(assert) {
-        const $element = $('#slider').css('width', 960);
+        const $element = $('#slider').css('width', 960 + 2 * SLIDER_PADDING);
 
         $element.dxSlider({
             max: 100,
@@ -1297,14 +1318,14 @@ module('regression tests', moduleOptions, () => {
         slider.option('step', 2.5);
         slider.option('value', 2.5);
 
-        assert.equal($handle.position().left, 960 / 40 - $handle.outerWidth() / 2);
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 960 / 40);
         assert.equal($range.width(), 960 / 40);
 
         slider.option('max', 10);
         slider.option('step', 0.5);
         slider.option('value', 0.5);
 
-        assert.equal($handle.position().left, 960 / 20 - $handle.outerWidth() / 2);
+        assert.equal(handlePositionAgainstTrackBar($handle).left, 960 / 20);
         assert.equal($range.width(), 960 / 20);
     });
 
@@ -1446,7 +1467,7 @@ module('regression tests', moduleOptions, () => {
 
 module('RTL', moduleOptions, () => {
     test('render value', function(assert) {
-        const $element = $('#slider').css('width', 960);
+        const $element = $('#slider').css('width', 960 + 2 * SLIDER_PADDING);
 
         $element.dxSlider({
             max: 100,
@@ -1458,12 +1479,13 @@ module('RTL', moduleOptions, () => {
 
         const slider = $element.dxSlider('instance');
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
+        const rangeBorderWidth = parseInt($range.css('borderWidth'));
 
-        assert.equal($range.position().left, 960);
+        assert.equal($range.position().left + rangeBorderWidth * 2, 960);
 
         slider.option('value', 100);
 
-        assert.equal($range.position().left, 0);
+        assert.equal($range.position().left + rangeBorderWidth * 2, 0);
     });
 
     test('mousedown/touchstart on slider set new value', function(assert) {
@@ -1473,14 +1495,14 @@ module('RTL', moduleOptions, () => {
             value: 0,
             rtlEnabled: true,
             useInkRipple: false
-        }).css('width', 500);
+        }).css('width', 500 + 2 * SLIDER_PADDING);
 
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
 
-        pointerMock($element).start().move(250 + $element.offset().left).down();
+        pointerMock($element).start({ x: SLIDER_PADDING }).move(250 + $element.offset().left).down();
         assert.equal($range.width(), 250);
 
-        pointerMock($element).start().move(350 + $element.offset().left).down();
+        pointerMock($element).start({ x: SLIDER_PADDING }).move(350 + $element.offset().left).down();
         assert.equal($range.width(), 150);
     });
 });
@@ -1503,9 +1525,13 @@ module('visibility change', () => {
         triggerShownEvent($parent);
 
         const $tooltip = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
-        const $arrow = $('.dx-popover-arrow');
+        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
 
-        assert.equal(Math.floor(($tooltip.outerWidth() - $arrow.outerWidth()) / 2), -$tooltip.position().left + parseInt($arrow.css('margin-left').replace('px', '')), 'tooltip position is centered');
+        const tooltipWidth = $tooltip.outerWidth();
+        const tooltipCenter = tooltipWidth / 2;
+        const tooltipOffsetAgainstHandle = Math.abs($tooltip.position().left) + $handle.width() / 2;
+
+        assert.equal(tooltipCenter, tooltipOffsetAgainstHandle, 'tooltip position is centered');
     });
 });
 
