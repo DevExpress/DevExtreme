@@ -28,30 +28,13 @@
     <!-- <script type="text/javascript" src="../artifacts/js-renovation/dx.all.debug.js" charset="utf-8"></script> -->
 </head>
 <body>
-    <div id="scheduler"></div>
+    <div id="button"></div>
     <script>
         $(function() {
-            var data = [
-    {
-        text: "Website Re-Design Plan",
-        startDate: new Date(2017, 4, 1),
-        endDate: new Date(2017, 4, 2),
-        // recurrenceRule: "FREQ=YEARLY;BYMONTHDAY=-1;BYMONTH=5"
-    }
-];
-  
-
-            $("#scheduler").dxScheduler({
-        dataSource: data,
-        views: ["week", "month"],
-        currentView: "month",
-        editing: {
-            allowTimeZoneEditing: true
-        },
-        currentDate: new Date(2017, 4, 25),
-        // startDayHour: 9,
-        height: 600
-    }).dxScheduler("instance");
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
