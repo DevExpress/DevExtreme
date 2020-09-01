@@ -1588,7 +1588,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
 });
 
 ['cell', 'batch'].forEach((editMode) => {
-  test(`Moving by "tab" key if scrolling.columnRenderingMode: virtual, editing.mode: ${editMode}`, async (t) => {
+  test(`Moving by Tab key if scrolling.columnRenderingMode: virtual, editing.mode: ${editMode}`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     await t.click(dataGrid.getDataCell(0, 0).element);
@@ -1648,5 +1648,196 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
         enabled: false,
       },
     });
+  });
+});
+
+test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed columns are enabled', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getFixedDataRow(0).getSelectCheckBox());
+
+  // Tab
+  for (let rowIndex = 0; rowIndex < 2; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex <= 17; columnIndex += 1) {
+      if (columnIndex === 0) {
+        const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
+
+        await t.expect(rowCheckBox.focused).ok()
+          .pressKey('tab');
+      } else {
+        let cell;
+        if (columnIndex <= 2 || columnIndex >= 16) {
+          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
+        } else {
+          cell = dataGrid.getDataCell(rowIndex, columnIndex);
+        }
+
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
+
+        if (rowIndex === 1 && columnIndex === 17) {
+          break;
+        }
+
+        await t.pressKey('tab');
+      }
+    }
+  }
+
+  // Shift + Tab
+  for (let rowIndex = 1; rowIndex >= 0; rowIndex -= 1) {
+    for (let columnIndex = 17; columnIndex >= 0; columnIndex -= 1) {
+      if (columnIndex === 0) {
+        const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
+
+        await t.expect(rowCheckBox.focused).ok()
+          .pressKey('shift+tab');
+      } else {
+        let cell;
+        if (columnIndex <= 2 || columnIndex >= 16) {
+          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
+        } else {
+          cell = dataGrid.getDataCell(rowIndex, columnIndex);
+        }
+
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
+
+        if (rowIndex === 0 && columnIndex === 0) {
+          break;
+        }
+
+        await t.pressKey('shift+tab');
+      }
+    }
+  }
+}).before(() => {
+  const generateData = function (rowCount, columnCount) {
+    const items = [];
+
+    for (let i = 0; i < rowCount; i += 1) {
+      const item = {};
+      for (let j = 0; j < columnCount; j += 1) {
+        item[`field${j}`] = `${i}-${j}`;
+      }
+      items.push(item);
+    }
+    return items;
+  };
+  const data = generateData(2, 17);
+
+  return createWidget('dxDataGrid', {
+    columnWidth: 70,
+    dataSource: data,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    width: 500,
+    selection: {
+      mode: 'multiple',
+      showCheckBoxesMode: 'always',
+    },
+    customizeColumns(columns) {
+      columns[0].fixed = true;
+      columns[1].fixed = true;
+      columns[15].fixedPosition = 'right';
+      columns[15].fixed = true;
+      columns[16].fixedPosition = 'right';
+      columns[16].fixed = true;
+    },
+  });
+});
+
+test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed columns are enabled (rtlEnabled)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getFixedDataRow(0).getSelectCheckBox());
+
+  // Tab
+  for (let rowIndex = 0; rowIndex < 2; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex <= 17; columnIndex += 1) {
+      if (columnIndex === 0) {
+        const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
+
+        await t.expect(rowCheckBox.focused).ok()
+          .pressKey('tab');
+      } else {
+        let cell;
+        if (columnIndex <= 2 || columnIndex >= 16) {
+          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
+        } else {
+          cell = dataGrid.getDataCell(rowIndex, columnIndex);
+        }
+
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
+
+        if (rowIndex === 1 && columnIndex === 17) {
+          break;
+        }
+
+        await t.pressKey('tab');
+      }
+    }
+  }
+
+  // Shift + Tab
+  for (let rowIndex = 1; rowIndex >= 0; rowIndex -= 1) {
+    for (let columnIndex = 17; columnIndex >= 0; columnIndex -= 1) {
+      if (columnIndex === 0) {
+        const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
+
+        await t.expect(rowCheckBox.focused).ok()
+          .pressKey('shift+tab');
+      } else {
+        let cell;
+        if (columnIndex <= 2 || columnIndex >= 16) {
+          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
+        } else {
+          cell = dataGrid.getDataCell(rowIndex, columnIndex);
+        }
+
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
+
+        if (rowIndex === 0 && columnIndex === 0) {
+          break;
+        }
+
+        await t.pressKey('shift+tab');
+      }
+    }
+  }
+}).before(() => {
+  const generateData = function (rowCount, columnCount) {
+    const items = [];
+
+    for (let i = 0; i < rowCount; i += 1) {
+      const item = {};
+      for (let j = 0; j < columnCount; j += 1) {
+        item[`field${j}`] = `${i}-${j}`;
+      }
+      items.push(item);
+    }
+    return items;
+  };
+  const data = generateData(2, 17);
+
+  return createWidget('dxDataGrid', {
+    columnWidth: 70,
+    dataSource: data,
+    rtlEnabled: true,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    width: 500,
+    selection: {
+      mode: 'multiple',
+      showCheckBoxesMode: 'always',
+    },
+    customizeColumns(columns) {
+      columns[0].fixedPosition = 'right';
+      columns[0].fixed = true;
+      columns[1].fixedPosition = 'right';
+      columns[1].fixed = true;
+      columns[15].fixed = true;
+      columns[16].fixed = true;
+    },
   });
 });

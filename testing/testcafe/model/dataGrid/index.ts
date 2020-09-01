@@ -23,6 +23,7 @@ const CLASS = {
   overlayContent: 'edit-popup',
   popupContent: 'dx-overlay-content',
   toolbar: 'dx-toolbar',
+  fixedGridView: 'content-fixed',
 };
 
 export default class DataGrid extends Widget {
@@ -58,8 +59,16 @@ export default class DataGrid extends Widget {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.name);
   }
 
+  getFixedDataRow(index: number): DataRow {
+    return new DataRow(this.element.find(`.${this.addWidgetPrefix(CLASS.fixedGridView)} .${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.name);
+  }
+
   getDataCell(rowIndex: number, columnIndex: number): DataCell {
     return this.getDataRow(rowIndex).getDataCell(columnIndex);
+  }
+
+  getFixedDataCell(rowIndex: number, columnIndex: number): DataCell {
+    return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
   }
 
   getGroupRow(index: number): GroupRow {
