@@ -4160,4 +4160,63 @@ QUnit.module('Renovated Render', {
             groups: undefined,
         }, 'Cell Data is correct');
     });
+
+    QUnit.module('Renovated Components Disposing', () => {
+        QUnit.test('Renovated Comonents should not be disposed on currentDate change', function(assert) {
+            this.createInstance({
+                currentDate: new Date(2020, 8, 1),
+            });
+
+            const cleanRenovatedComponentsStub = sinon.spy(noop);
+
+            this.instance._cleanRenovatedComponents = cleanRenovatedComponentsStub;
+
+            this.instance.option('currentDate', new Date(2020, 8, 2));
+
+            assert.notOk(cleanRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
+        });
+
+        QUnit.test('Renovated Comonents should be disposed on showAllDayPanel change when vertical grouping is used', function(assert) {
+            this.createInstance({
+                showAllDayPanel: false,
+                groupOrientation: 'vertical',
+            });
+            this.instance.option('groups', [
+                {
+                    name: 'res',
+                    items: [
+                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                    ]
+                }
+            ]);
+
+            const cleanRenovatedComponentsStub = sinon.spy(noop);
+
+            this.instance._cleanRenovatedComponents = cleanRenovatedComponentsStub;
+
+            this.instance.option('showAllDayPanel', true);
+
+            assert.ok(cleanRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
+        });
+
+        QUnit.test('Renovated Comonents should be disposed on groups change', function(assert) {
+            this.createInstance({
+                groupOrientation: 'vertical',
+            });
+
+            const cleanRenovatedComponentsStub = sinon.spy(noop);
+            this.instance._cleanRenovatedComponents = cleanRenovatedComponentsStub;
+
+            this.instance.option('groups', [
+                {
+                    name: 'res',
+                    items: [
+                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                    ]
+                }
+            ]);
+
+            assert.ok(cleanRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
+        });
+    });
 });
