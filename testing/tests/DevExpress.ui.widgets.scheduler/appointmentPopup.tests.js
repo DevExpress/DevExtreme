@@ -1729,6 +1729,23 @@ module('Timezone Editors', moduleOptions, () => {
         assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe/Paris', 'displayValue is ok, DST');
     });
 
+    QUnit.test('dataSource of timezoneEditor could be filtered', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            const startDateTimezoneEditor = e.form.getEditor('startDateTimeZone');
+            const dataSource = startDateTimezoneEditor.option('dataSource');
+            dataSource.paginate(false);
+            dataSource.filter(['id', 'contains', 'Pacific']);
+            startDateTimezoneEditor.option('opened', true);
+        });
+
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        assert.equal(startDateTimezoneEditor.option('items').length, 46, 'Items are filtered');
+
+    });
+
     ['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
         test(`startDateTimeZone and endDateTimeZone editor should be rendered with ${allowTimeZoneEditingOption} option`, function(assert) {
             this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
