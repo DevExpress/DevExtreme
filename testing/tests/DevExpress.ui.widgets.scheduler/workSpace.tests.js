@@ -4160,4 +4160,12 @@ QUnit.module('Renovated Render', {
             groups: undefined,
         }, 'Cell Data is correct');
     });
+
+    QUnit.test('Workspace should not have dx-scheduler-work-space-odd-cells class when scrolling mode is "virtual"', function(assert) {
+        this.createInstance({
+            scrolling: { mode: 'virtual' },
+        });
+
+        assert.notOk(this.instance.$element().hasClass('dx-scheduler-work-space-odd-cells'), 'Workspace does not have odd-cells class');
+    });
 });
