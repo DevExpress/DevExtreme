@@ -170,7 +170,7 @@ const DropDownButton = Widget.inherit({
         this._renderButtonGroup();
         this._updateArrowClass();
 
-        if(this.option('selectedItemKey')) {
+        if(isDefined(this.option('selectedItemKey'))) {
             this._loadSelectedItem().done(this._updateActionButton.bind(this));
         }
     },
