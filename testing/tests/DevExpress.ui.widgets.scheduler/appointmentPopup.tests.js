@@ -1729,7 +1729,7 @@ module('Timezone Editors', moduleOptions, () => {
         assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe/Paris', 'displayValue is ok, DST');
     });
 
-    QUnit.test('dataSource of timezoneEditor could be filtered', function(assert) {
+    QUnit.test('dataSource of timezoneEditor should be filtered', function(assert) {
         this.instance.option('editing.allowTimeZoneEditing', true);
         this.instance.option('onAppointmentFormOpening', function(e) {
             const startDateTimezoneEditor = e.form.getEditor('startDateTimeZone');
