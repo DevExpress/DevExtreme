@@ -490,6 +490,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'groups':
                 this._cleanView();
+                this._cleanRenovatedComponents();
                 this._removeAllDayElements();
                 this._initGrouping();
                 this.repaint();
@@ -504,6 +505,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'showAllDayPanel':
                 if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanView();
+                    this._cleanRenovatedComponents();
                     this._removeAllDayElements();
                     this._initGrouping();
                     this.repaint();
@@ -551,6 +553,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
+                this._cleanRenovatedComponents();
                 this.repaint();
                 break;
             default:
@@ -1129,13 +1132,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     renderRComponent(parentElement, componentClass, componentName, viewModel) {
         let component = this[componentName];
-        const modelName = Object.getOwnPropertyNames(viewModel)[0];
         if(!component) {
             const container = getPublicElement(parentElement);
             component = this._createComponent(container, componentClass, viewModel);
             this[componentName] = component;
         } else {
-            component.option(modelName, viewModel[modelName]);
+            Object.getOwnPropertyNames(viewModel).forEach((optionName) => {
+                component.option(optionName, viewModel[optionName]);
+            });
         }
     }
 
@@ -1938,7 +1942,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _cleanView() {
-        this._cleanRenovatedComponents();
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
         this._$thead.empty();
