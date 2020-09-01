@@ -20,7 +20,7 @@ class JSPdfDataGridTestHelper {
     checkCellsContent(headCellsArray, bodyCellsArray, actualAutoTableOptions) {
         if(headCellsArray.length > 0) {
             this._iterateCells(headCellsArray, (content, rowIndex, columnIndex) => {
-                assert.equal(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
+                assert.strictEqual(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
             });
         } else {
             assert.strictEqual(actualAutoTableOptions.head.length, 0, 'AutoTable head is empty');
@@ -28,7 +28,7 @@ class JSPdfDataGridTestHelper {
 
         if(bodyCellsArray.length > 0) {
             this._iterateCells(bodyCellsArray, (content, rowIndex, columnIndex) => {
-                assert.equal(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
+                assert.strictEqual(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
             });
         } else {
             assert.strictEqual(actualAutoTableOptions.body.length, 0, 'AutoTable body is empty');

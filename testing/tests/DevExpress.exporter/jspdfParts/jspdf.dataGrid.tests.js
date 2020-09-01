@@ -101,10 +101,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
             exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
                 const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
-                assert.equal(autoTableOptions.tableWidth, 250, 'autoTableWidth');
+                assert.strictEqual(autoTableOptions.tableWidth, 250, 'autoTableWidth');
                 const expectedColumnWidths = keepColumnWidths ? [25, 225] : [100, 'auto'];
                 helper.checkColumnWidths(expectedColumnWidths, autoTableOptions);
-                helper.checkCellsContent([['id', 'name']], [['1', 'test']], autoTableOptions);
+                helper.checkCellsContent([['id', 'name']], [[1, 'test']], autoTableOptions);
                 done();
             });
         });

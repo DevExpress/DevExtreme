@@ -124,10 +124,10 @@ export const Export = {
     },
 
     getDefaultPdfColumnWidths(autoTableWidth, columnWidths) {
-        if(!isNumeric(autoTableWidth) || !(columnWidths?.length > 0)) {
+        if(!isNumeric(autoTableWidth) || !isDefined(columnWidths)) {
             return;
         }
-        const tableWidth = columnWidths.reduce((a, b) => { return a + b; });
+        const tableWidth = columnWidths.reduce((a, b) => a + b, 0);
         return columnWidths.map((columnWidth) => autoTableWidth * columnWidth / tableWidth);
     },
 
