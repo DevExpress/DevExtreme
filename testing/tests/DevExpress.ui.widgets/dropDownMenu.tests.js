@@ -786,7 +786,7 @@ QUnit.module('widget sizing render', {
             width: dropDownMenuWidth
         });
         const instance = $element.dxDropDownMenu('instance');
-        const borderWidth = parseInt($element.css('borderWidth'));
+        const borderWidth = parseInt($element.css('borderLeftWidth'));
 
         instance.open();
 
@@ -805,7 +805,7 @@ QUnit.module('widget sizing render', {
         });
         const instance = $element.dxDropDownMenu('instance');
         const customWidth = 400;
-        const borderWidth = parseInt($element.css('borderWidth'));
+        const borderWidth = parseInt($element.css('borderLeftWidth'));
 
         instance.option('width', customWidth);
         instance.open();
