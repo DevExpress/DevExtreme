@@ -90,7 +90,8 @@ export class TooltipStrategyBase {
             dataSource: dataList,
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) => this._renderTemplate(item.data, this._getCurrentAppointmentData(item), index, item.color)
+            itemTemplate: (item, index) => this._renderTemplate(item.data, this._getCurrentAppointmentData(item), index, item.color),
+            _swipeEnabled: false
         };
     }
 
