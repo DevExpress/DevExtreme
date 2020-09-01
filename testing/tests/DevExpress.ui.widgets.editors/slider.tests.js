@@ -282,7 +282,7 @@ module('render', moduleOptions, () => {
             min: 0,
             value: 0,
             step: 250,
-            width: 500 + 2 * 20,
+            width: 500,
             useInkRipple: false
         });
 
@@ -1479,7 +1479,7 @@ module('RTL', moduleOptions, () => {
 
         const slider = $element.dxSlider('instance');
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
-        const rangeBorderWidth = parseInt($range.css('borderWidth'));
+        const rangeBorderWidth = parseInt($range.css('borderLeftWidth'));
 
         assert.equal($range.position().left + rangeBorderWidth * 2, 960);
 
