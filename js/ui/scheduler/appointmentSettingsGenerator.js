@@ -18,6 +18,7 @@ export default class AppointmentSettingsGenerator {
         let allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
 
         const minRecurrenceDate = scheduler.option('timeZone') ? scheduler.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' }) : startViewDate;
+        const itemResources = this.scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
         const appointmentList = this._createRecurrenceAppointments(appointment, appointment.duration);
         if(appointmentList.length === 0) {
             if(workspace.isVirtualScrolling()) {
@@ -38,6 +39,8 @@ export default class AppointmentSettingsGenerator {
                 });
             }
         }
+
+        this._updateGroupIndices(appointmentList, itemResources);
 
         let gridAppointmentList = appointmentList.map(source => {
             const startDate = this.scheduler.timeZoneCalculator.createDate(source.startDate, {
@@ -78,6 +81,20 @@ export default class AppointmentSettingsGenerator {
         allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
 
         return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+    }
+
+    _updateGroupIndices(appointments, itemResources) {
+        const workspace = this.scheduler.getWorkSpace();
+
+        if(workspace.isVirtualScrolling()) {
+            const groupIndices = workspace._isVerticalGroupedWorkSpace()
+                ? workspace._getGroupIndexes(itemResources)
+                : [0];
+
+            groupIndices.forEach(groupIndex => {
+                appointments.forEach(appointment => appointment.groupIndex = groupIndex);
+            });
+        }
     }
 
     _createExtremeRecurrenceDates(rawAppointment) {
@@ -138,7 +155,7 @@ export default class AppointmentSettingsGenerator {
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
         const workspace = this.scheduler.getWorkSpace();
         let startDayHour = this.scheduler._getCurrentViewOption('startDayHour');
-        let firstViewDate = this.scheduler._workSpace.getStartViewDate();
+        let firstViewDate = this.scheduler.getStartViewDate();
 
         return appointments.map(appointment => {
             let startDate = new Date(appointment.startDate);
