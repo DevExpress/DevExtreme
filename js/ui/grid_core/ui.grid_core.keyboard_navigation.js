@@ -91,6 +91,17 @@ function isCellInHeaderRow($cell) {
     return !!$cell.parent(`.${HEADER_ROW_CLASS}`).length;
 }
 
+function isFixedColumnIndexOffsetRequired(that, column) {
+    const rtlEnabled = that.option('rtlEnabled');
+    let result = false;
+    if(rtlEnabled) {
+        result = !(column.fixedPosition === 'right' || (isDefined(column.command) && !isDefined(column.fixedPosition)));
+    } else {
+        result = !(!isDefined(column.fixedPosition) || column.fixedPosition === 'left');
+    }
+    return result;
+}
+
 const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
@@ -483,7 +494,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _getMaxHorizontalOffset: function() {
         const scrollable = this.component.getScrollable();
-        const offset = scrollable && this._focusedView ? scrollable.scrollWidth() - $(this._focusedView.element()).width() : 0;
+        const rowsView = this.getView('rowsView');
+        const offset = scrollable ? scrollable.scrollWidth() - $(rowsView.element()).width() : 0;
         return offset;
     },
     _isColumnRendered: function(columnIndex) {
@@ -553,7 +565,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             });
             const currentCellWidth = $currentCell && $currentCell.outerWidth();
             if(currentCellWidth > 0) {
-                horizontalScrollPosition = direction === 'nextInRow' || direction === 'next' ? currentCellWidth : currentCellWidth * -1;
+                const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
+                horizontalScrollPosition = direction === 'nextInRow' || direction === 'next' ? currentCellWidth * rtlMultiplier : currentCellWidth * rtlMultiplier * (-1);
                 scrollable.scrollBy({ left: horizontalScrollPosition, top: 0 });
             }
         }
@@ -1147,7 +1160,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         let offset = 0;
         const column = this._columnsController.getVisibleColumns()[columnIndex];
         if(column && column.fixed) {
-            if(column.fixedPosition === 'right') {
+            if(isFixedColumnIndexOffsetRequired(this, column)) {
                 offset = this._getVisibleColumnCount() - this._columnsController.getVisibleColumns().length;
             }
         } else if(columnIndex >= 0) {
@@ -1723,9 +1736,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _getCell: function(cellPosition) {
         if(this._focusedView && cellPosition) {
             const rowIndexOffset = this._dataController.getRowIndexOffset();
-            const column = this._columnsController.getVisibleColumns()[cellPosition.columnIndex];
-            const isFixedLeftColumn = !!column && !!column.fixed && column.fixedPosition !== 'right';
-            const columnIndexOffset = isFixedLeftColumn ? 0 : this._columnsController.getColumnIndexOffset();
+            const column = this._columnsController.getVisibleColumns(null, true)[cellPosition.columnIndex];
+            const columnIndexOffset = column && column.fixed && !isFixedColumnIndexOffsetRequired(this, column) ? 0 : this._columnsController.getColumnIndexOffset();
             const rowIndex = cellPosition.rowIndex >= 0 ? cellPosition.rowIndex - rowIndexOffset : -1;
             const columnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex - columnIndexOffset : -1;
 
