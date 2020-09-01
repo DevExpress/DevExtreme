@@ -522,9 +522,9 @@ const DropDownButton = Widget.inherit({
         const key = this._getKey();
         const selectedItemKey = this.option('selectedItemKey');
         const items = this.option('items');
-        const filter = item => (key === 'this' ? item : item[key]) === selectedItemKey;
+        const filterFunction = item => (key === 'this' ? item : item[key]) === selectedItemKey;
 
-        return items?.find(filter) || null;
+        return items?.filter(filterFunction)?.[0] || null;
     },
 
     _updateItemCollection(optionName) {
