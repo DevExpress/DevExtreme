@@ -518,9 +518,22 @@ const DropDownButton = Widget.inherit({
         }
     },
 
+    _getItemByKey() {
+        const key = this._getKey();
+        const selectedItemKey = this.option('selectedItemKey');
+        const items = this.option('items');
+        const filter = item => (key === 'this' ? item : item[key]) === selectedItemKey;
+
+        return items?.find(filter) || null;
+    },
+
     _updateItemCollection(optionName) {
+        const selectedItem = this._getItemByKey();
+        const listSelectedItemKeys = selectedItem ? [this._keyGetter(selectedItem)] : [];
+
         this._setWidgetOption('_list', [optionName]);
-        this._setListOption('selectedItemKeys', []);
+        this._setListOption('selectedItemKeys', listSelectedItemKeys);
+        this._setListOption('selectedItem', selectedItem);
         this._loadSelectedItem().done(this._updateActionButton.bind(this));
     },
 
