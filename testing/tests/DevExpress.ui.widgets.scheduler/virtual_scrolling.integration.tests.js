@@ -170,6 +170,102 @@ module('Initialization', {
     });
 });
 
+QUnit.module('AppointmentSettings', {
+    before: function() {
+        this.createInstance = function(options) {
+            this.scheduler = createWrapper(options);
+            this.scheduler.instance
+                .getWorkSpace()
+                ._virtualScrolling
+                ._getRenderTimeout = () => -1;
+        };
+    }
+}, function() {
+    supportedViews.forEach(viewName => {
+        [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
+            QUnit.test(`Appointments should contains groupIndex if recurrenceRule: ${recurrenceRule}, view: ${viewName}`, function(assert) {
+                this.createInstance({
+                    currentDate: new Date(2015, 2, 2),
+                    scrolling: {
+                        mode: 'virtual'
+                    }
+                });
+
+                const { instance } = this.scheduler;
+
+                const settings = instance.fire('createAppointmentSettings', {
+                    startDate: new Date(2015, 2, 2, 0),
+                    endDate: new Date(2015, 2, 3, 0),
+                    recurrenceRule
+                });
+
+                assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+            });
+        });
+
+        QUnit.test(`Grouped appointments should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 2),
+                views: [{
+                    type: viewName,
+                    groupOrientation: 'vertical'
+                }],
+                currentView: viewName,
+                scrolling: {
+                    mode: 'virtual'
+                },
+                groups: ['resourceId0'],
+                resources: [{
+                    fieldExpr: 'resourceId0',
+                    dataSource: [{ id: 0 }]
+                }]
+            });
+
+            const { instance } = this.scheduler;
+
+            const settings = instance.fire('createAppointmentSettings', {
+                startDate: new Date(2015, 2, 2, 0),
+                endDate: new Date(2015, 2, 3, 0),
+                resourceId0: 0
+            });
+
+            assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+        });
+
+        QUnit.test(`Grouped appointments should contains correct groupIndex if ${viewName} view has horizontal group orientation`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 2),
+                views: [{
+                    type: viewName,
+                    groupOrientation: 'horizontal'
+                }],
+                currentView: viewName,
+                scrolling: {
+                    mode: 'virtual'
+                },
+                groups: ['resourceId0'],
+                resources: [{
+                    fieldExpr: 'resourceId0',
+                    dataSource: [
+                        { id: 0 },
+                        { id: 1 }
+                    ]
+                }]
+            });
+
+            const { instance } = this.scheduler;
+
+            const settings = instance.fire('createAppointmentSettings', {
+                startDate: new Date(2015, 2, 2, 0),
+                endDate: new Date(2015, 2, 3, 0),
+                resourceId0: 1
+            });
+
+            assert.equal(settings[0].groupIndex, 1, 'groupIndex is correct');
+        });
+    });
+});
+
 QUnit.module('Appointment filtering', function() {
     QUnit.module('Init', function() {
         ['vertical', 'horizontal'].forEach(groupOrientation => {
@@ -419,7 +515,7 @@ QUnit.module('Appointment filtering', function() {
         });
     });
 
-    QUnit.module('Scrolling', {
+    QUnit.module('Rendering', {
         before: function() {
             this.checkResultByDeviceType = (assert, callback) => {
                 if(devices.real().deviceType === 'desktop') {

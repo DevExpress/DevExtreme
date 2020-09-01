@@ -1113,6 +1113,22 @@ QUnit.module('Subscribes', {
             text: 'Appointment test text'
         });
     });
+
+    [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
+        QUnit.test(`Appointments should not contains groupIndex if recurrenceRule: ${recurrenceRule}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 2)
+            });
+
+            const settings = this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2015, 2, 2, 0),
+                endDate: new Date(2015, 2, 3, 0),
+                recurrenceRule
+            });
+
+            assert.notOk(settings[0].groupIndex, 'no groupIndex');
+        });
+    });
 });
 
 QUnit.module('Agenda', {
