@@ -303,6 +303,7 @@ const HtmlEditor = Editor.inherit({
             table: true,
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
+            // TODO: extract some IE11 tweaks for the Quill uploader module
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
