@@ -13,18 +13,15 @@ const SchedulerTimezones = {
     getDisplayedTimeZones: function(date) {
         date = date || new Date();
 
-        const result = [];
-        this.getTimezones().forEach((timezone) => {
+        return this.getTimezones().map((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
-            const title = `(GMT${this.formatOffset(offset)}) ${timezone.id}`;
+            const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
 
-            result.push(extend(timezone, {
+            return extend(timezone, {
                 offset: offset,
                 title: title
-            }));
+            });
         });
-
-        return result;
     },
 
     getSortedTimeZones: function(date) {
@@ -32,17 +29,15 @@ const SchedulerTimezones = {
     },
 
     formatOffset: function(offset) {
-        const a = Math.floor(offset);
-        const b = offset - a;
+        const hours = Math.floor(offset);
+        const minutesInDecimal = offset - hours;
         const sign = Math.sign(offset);
-        let signString = '';
-        if(sign === -1) signString = '-';
-        if(sign === 1) signString = '+';
 
-        // `0${Math(abs(a))}`.slice(-2)
-        const aString = `0${Math.abs(a)}`.slice(-2);
-        const bString = b > 0 ? `:${b * 60}` : ':00';
-        return signString + aString + bString;
+        const signString = sign === 1 ? '+' : '-';
+        const hoursString = `0${Math.abs(hours)}`.slice(-2);
+        const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
+
+        return signString + hoursString + minutesString;
     },
 
     getTimezoneById: function(id) {
@@ -74,16 +69,9 @@ const SchedulerTimezones = {
         let result;
 
         if(tz) {
-            if(tz.link) {
-                const rootTz = this.getTimezones()[tz.link];
-                offsets = rootTz.offsets;
-                untils = rootTz.untils;
-                offsetIndices = rootTz.offsetIndices;
-            } else {
-                offsets = tz.offsets;
-                untils = tz.untils;
-                offsetIndices = tz.offsetIndices;
-            }
+            offsets = tz.offsets;
+            untils = tz.untils;
+            offsetIndices = tz.offsetIndices;
 
             result = this.getUtcOffset(offsets, offsetIndices, untils, dateTimeStamp);
         }
