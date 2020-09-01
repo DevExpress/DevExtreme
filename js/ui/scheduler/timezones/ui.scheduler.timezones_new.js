@@ -34,7 +34,7 @@ const SchedulerTimezones = {
         // return this._displayNames;
     },
     formatOffset: function(offset) {
-        const a = Math.trunc(offset);
+        const a = Math.floor(offset);
         const b = offset - a;
         const sign = Math.sign(offset);
         let signString = '';
