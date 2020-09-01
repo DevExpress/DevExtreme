@@ -2,6 +2,7 @@ import query from '../../../data/query';
 import errors from '../../../core/errors';
 import tzData from './ui.scheduler.timezones_data';
 import { extend } from '../../../core/utils/extend';
+import { sign } from '../../../core/utils/math';
 
 const SchedulerTimezones = {
     _timeZones: tzData.zones,
@@ -31,9 +32,8 @@ const SchedulerTimezones = {
     formatOffset: function(offset) {
         const hours = Math.floor(offset);
         const minutesInDecimal = offset - hours;
-        const sign = Math.sign(offset);
 
-        const signString = sign === 1 ? '+' : '-';
+        const signString = sign(offset) === 1 ? '+' : '-';
         const hoursString = `0${Math.abs(hours)}`.slice(-2);
         const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
 
