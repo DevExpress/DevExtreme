@@ -634,6 +634,23 @@ QUnit.module('common use cases', {
         this.listItems = this.list.itemElements();
     }
 }, () => {
+    QUnit.test('dataSource store should have correct key', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I'
+            }],
+            keyExpr: 'id'
+        }).dxDropDownButton('instance');
+
+        let store = dropDownButton.getDataSource().store();
+        assert.strictEqual(store.key(), 'id', 'store key is correct');
+
+        dropDownButton.option('keyExpr', 'this');
+        store = dropDownButton.getDataSource().store();
+        assert.strictEqual(store.key(), 'this', 'store key is correct');
+    });
+
     QUnit.test('toggleButton should have static width (T847072)', function(assert) {
         const dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
@@ -824,12 +841,12 @@ QUnit.module('common use cases', {
         const items = [{ id: 3, name: 'test' }];
         this.dropDownButton.option('items', items);
 
-        assert.strictEqual(this.dropDownButton.option('selectedItemKey'), null, 'selectedItemKey is correct');
-        assert.strictEqual(this.dropDownButton.option('selectedItem'), null, 'selectedItem is correct');
+        assert.strictEqual(this.dropDownButton.option('selectedItemKey'), undefined, 'selectedItemKey is correct');
+        assert.strictEqual(this.dropDownButton.option('selectedItem'), undefined, 'selectedItem is correct');
 
         const list = getList(this.dropDownButton);
         assert.deepEqual(list.option('selectedItemKeys'), [], 'list selectedItemKey is kept');
-        assert.strictEqual(list.option('selectedItem'), null, 'list selectedItem is correct');
+        assert.strictEqual(list.option('selectedItem'), undefined, 'list selectedItem is correct');
     });
 
     QUnit.test('click on item should raise selectionChanged - subscription by "on" method', function(assert) {

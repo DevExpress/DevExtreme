@@ -143,8 +143,11 @@ const DropDownButton = Widget.inherit({
     _itemsToDataSource: function() {
         if(!this._dataSource) {
             this._dataSource = new DataSource({
-                store: new ArrayStore(this.option('items')),
-                pageSize: 0
+                store: new ArrayStore({
+                    data: this.option('items'),
+                    key: this.option('keyExpr')
+                }),
+                pageSize: 0,
             });
         }
     },
@@ -528,13 +531,20 @@ const DropDownButton = Widget.inherit({
     },
 
     _updateItemCollection(optionName) {
-        const selectedItem = this._getItemByKey();
-        const listSelectedItemKeys = selectedItem ? [this._keyGetter(selectedItem)] : [];
+        this.getDataSource().store().byKey(this.option('selectedItemKey')).done(selectedItem => {
+            this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
+            this._setListOption('selectedItem', selectedItem);
+        }).catch(error => {
+            this._setListOption('selectedItemKeys', []);
+        }).done(() => {
+            this._setWidgetOption('_list', [optionName]);
+            this._loadSelectedItem().done(this._updateActionButton.bind(this));
+        });
+    },
 
-        this._setWidgetOption('_list', [optionName]);
-        this._setListOption('selectedItemKeys', listSelectedItemKeys);
-        this._setListOption('selectedItem', selectedItem);
-        this._loadSelectedItem().done(this._updateActionButton.bind(this));
+    _updateDataSourceKey: function() {
+        this._dataSource = undefined;
+        this._itemsToDataSource();
     },
 
     _optionChanged(args) {
@@ -553,6 +563,7 @@ const DropDownButton = Widget.inherit({
                 this._updateActionButton(this.option('selectedItem'));
                 break;
             case 'keyExpr':
+                this._updateDataSourceKey();
                 this._compileKeyGetter();
                 this._setListOption(name, value);
                 break;
