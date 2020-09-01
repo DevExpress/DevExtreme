@@ -23,7 +23,7 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
-require('./build/gulp/create-timezones-data');
+
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
 }
