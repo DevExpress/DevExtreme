@@ -1534,10 +1534,11 @@ const EditingController = modules.ViewController.inherit((function() {
                 .done(() => {
                     if(!onSavingParams.cancel) {
                         this._processEditData(deferreds, results, changes);
-                        d.resolve();
-                    } else {
-                        d.reject();
                     }
+                    d.resolve(onSavingParams.cancel);
+                }).fail(arg => {
+                    createFailureHandler(d);
+                    this._fireDataErrorOccurred(arg);
                 });
 
             return d;
@@ -1679,6 +1680,8 @@ const EditingController = modules.ViewController.inherit((function() {
                         break;
                 }
             });
+
+            this.executeAction('onSaved');
         },
 
         saveEditData: function() {
@@ -1691,14 +1694,19 @@ const EditingController = modules.ViewController.inherit((function() {
                 when(this._beforeSaveEditData()).done(cancel => {
                     if(cancel) {
                         this._resolveAfterSaveEditDataComplete(deferred, { cancel });
-                        this._saving = false;
                         return;
                     }
                     this._saving = true;
-                    this._saveEditDataInner().done(result => {
-                        this._saving = false;
-                        deferred.resolve(result);
-                    }).fail(deferred.reject);
+                    this._saveEditDataInner()
+                        .done(result => {
+                            deferred.resolve(result);
+                        })
+                        .fail(arg => {
+                            deferred.reject(arg);
+                        })
+                        .always(() => {
+                            this._saving = false;
+                        });
                 }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
@@ -1719,7 +1727,11 @@ const EditingController = modules.ViewController.inherit((function() {
             const result = new Deferred();
             const editData = this._editData.slice(0);
 
-            when(this._saveEditDataCore(deferreds, results, changes)).done(() => {
+            when(this._saveEditDataCore(deferreds, results, changes)).done(isCanceled => {
+                if(isCanceled) {
+                    return result.resolve().promise();
+                }
+
                 if(deferreds.length) {
                     dataSource?.beginLoading();
 
@@ -1730,21 +1742,18 @@ const EditingController = modules.ViewController.inherit((function() {
                             dataSource?.endLoading();
                             result.resolve();
                         }
-                    }).fail(function(error) {
+                    }).fail(error => {
                         dataSource?.endLoading();
                         result.resolve(error);
                     });
 
-                    this.executeAction('onSaved');
                     return result.always(() => {
                         this._focusEditingCell();
-                        this._saving = false;
                     }).promise();
                 }
 
-                this._cancelSaving();
-                this._resolveAfterSaveEditDataComplete(result);
-            });
+                this._cancelSaving(result);
+            }).fail(result.reject);
 
             return result.promise();
         },
@@ -1783,7 +1792,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this._refreshDataControllerAfterSaveEditData(changes, editData, deferred);
         },
 
-        _cancelSaving: function() {
+        _cancelSaving: function(result) {
             const editMode = getEditMode(this);
             const dataController = this._dataController;
 
@@ -1802,6 +1811,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             this.executeAction('onSaved');
+            this._resolveAfterSaveEditDataComplete(result);
         },
 
         _refreshDataControllerAfterSaveEditData: function(changes, editData, deferred) {

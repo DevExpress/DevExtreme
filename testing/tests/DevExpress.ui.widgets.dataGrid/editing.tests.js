@@ -2973,7 +2973,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search', 'errorHandling'], {
             initViews: true
         });
 
@@ -9127,10 +9127,11 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editRow(0);
-            this.cellValue(0, 0, 'new value');
+            this.cellValue(0, 'name', 'new value');
             this.saveEditData();
 
             // assert
+            assert.equal(this.array[0].name, 'Alex', 'data was not saved');
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 0, 'onSaved was not called');
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
@@ -9193,7 +9194,7 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editRow(0);
-            this.cellValue(0, 0, 'new value');
+            this.cellValue(0, 'name', 'new value');
             this.saveEditData();
 
             // assert
@@ -9219,10 +9220,50 @@ QUnit.module('Editing with real dataController', {
             this.clock.tick(500);
 
             // assert
+            assert.equal(this.array[0].name, 'Alex', 'data is not saved');
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
             assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
             assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
+        });
+
+        QUnit.test('Promise in onSaving and reject', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.promise = new $.Deferred().reject('my error');
+            });
+            const onSaved = sinon.spy();
+            const onEditCanceling = sinon.spy();
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 'name', 'new value');
+            this.saveEditData();
+
+            // assert
+            assert.equal($('.dx-error-row').text(), 'my error', 'error row is showed');
+            assert.equal(this.array[0].name, 'Alex', 'data is not saved');
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was called');
         });
 
         QUnit.test('Promise in onSaving with preventing cancelEditData during saving', function(assert) {
@@ -9285,6 +9326,7 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.notOk($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
+            assert.equal(this.array[0].name, 'new value', 'data is saved');
             assert.equal(onSaving.callCount, 1, 'onSaving called once');
             assert.equal(onSaved.callCount, 1, 'onSaved called once');
             assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling called once');
