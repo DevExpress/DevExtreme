@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import each from 'jest-each';
 import DxDataGrid from '../../../../ui/data_grid';
 import { viewFunction as DataGridView, DataGrid } from '../data_grid';
 import { DataGridProps } from '../props';
@@ -8,14 +9,22 @@ import { DataGridProps } from '../props';
 const mockDispose = jest.fn();
 const mockOption = jest.fn();
 
-jest.mock('../../../../ui/data_grid', () => {
-  const MockDxDataGrid = jest.fn().mockImplementation(() => ({
-    dispose: mockDispose,
-    option: mockOption,
-  }));
+const mockDataGridMethods = {
+  dispose: mockDispose,
+  option: mockOption,
+};
+
+jest.mock('../../../../ui/data_grid/ui.data_grid', () => {
+  const MockDxDataGrid = jest.fn().mockImplementation(() => mockDataGridMethods);
   (MockDxDataGrid as any).getInstance = jest.fn();
   return MockDxDataGrid;
 });
+
+const createWidget = () => {
+  const component = new DataGrid({});
+  component.widgetRef = {} as HTMLDivElement;
+  return component;
+};
 
 describe('DataGrid', () => {
   beforeEach(() => {
@@ -71,13 +80,6 @@ describe('DataGrid', () => {
     });
 
     describe('effects', () => {
-      const widgetRef = {} as HTMLDivElement;
-      const createWidget = () => {
-        const component = new DataGrid({});
-        component.widgetRef = widgetRef;
-        return component;
-      };
-
       it('setupWidget', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
@@ -85,7 +87,7 @@ describe('DataGrid', () => {
         component.setupWidget();
 
         expect(DxDataGrid).toBeCalledTimes(1);
-        expect(DxDataGrid).toBeCalledWith(widgetRef, spy.mock.results[0].value);
+        expect(DxDataGrid).toBeCalledWith(component.widgetRef, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -109,12 +111,103 @@ describe('DataGrid', () => {
 
       it('updateWidget. Widget is initialized', () => {
         const component = createWidget();
+        component.setupWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
-        (DxDataGrid as any).getInstance.mockReturnValue(new DxDataGrid('ref' as any as Element, {}));
+
         component.updateWidget();
 
         expect(mockOption).toBeCalledWith(spy.mock.results[0].value);
       });
     });
+
+    each`
+      methodName
+      ${'beginCustomLoading'}
+      ${'byKey'}
+      ${'cancelEditData'}
+      ${'cellValue'}
+      ${'clearFilter'}
+      ${'clearSelection'}
+      ${'clearSorting'}
+      ${'closeEditCell'}
+      ${'collapseAdaptiveDetailRow'}
+      ${'columnCount'}
+      ${'columnOption'}
+      ${'deleteColumn'}
+      ${'deleteRow'}
+      ${'deselectAll'}
+      ${'deselectRows'}
+      ${'editCell'}
+      ${'editRow'}
+      ${'endCustomLoading'}
+      ${'expandAdaptiveDetailRow'}
+      ${'filter'}
+      ${'focus'}
+      ${'getCellElement'}
+      ${'getCombinedFilter'}
+      ${'getDataSource'}
+      ${'getKeyByRowIndex'}
+      ${'getRowElement'}
+      ${'getRowIndexByKey'}
+      ${'getScrollable'}
+      ${'getVisibleColumnIndex'}
+      ${'hasEditData'}
+      ${'hideColumnChooser'}
+      ${'isAdaptiveDetailRowExpanded'}
+      ${'isRowFocused'}
+      ${'isRowSelected'}
+      ${'keyOf'}
+      ${'navigateToRow'}
+      ${'pageCount'}
+      ${'pageIndex'}
+      ${'pageSize'}
+      ${'refresh'}
+      ${'repaintRows'}
+      ${'saveEditData'}
+      ${'searchByText'}
+      ${'selectAll'}
+      ${'selectRows'}
+      ${'selectRowsByIndexes'}
+      ${'showColumnChooser'}
+      ${'undeleteRow'}
+      ${'updateDimensions'}
+      ${'addColumn'}
+      ${'addRow'}
+      ${'clearGrouping'}
+      ${'collapseAll'}
+      ${'collapseRow'}
+      ${'expandAll'}
+      ${'expandRow'}
+      ${'exportToExcel'}
+      ${'getSelectedRowKeys'}
+      ${'getSelectedRowsData'}
+      ${'getTotalSummaryValue'}
+      ${'getVisibleColumns'}
+      ${'getVisibleRows'}
+      ${'isRowExpanded'}
+      ${'totalCount'}
+      ${'getController'}
+    `
+      .describe('Methods', ({
+        methodName,
+      }) => {
+        it(methodName, () => {
+          mockDataGridMethods[methodName] = jest.fn();
+          const component = createWidget();
+          component.setupWidget();
+
+          component[methodName]();
+
+          expect(mockDataGridMethods[methodName]).toHaveBeenCalled();
+        });
+
+        it(`${methodName} if widget is not initialized`, () => {
+          const component = createWidget();
+
+          component[methodName]();
+
+          expect.assertions(0);
+        });
+      });
   });
 });

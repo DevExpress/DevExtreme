@@ -27,7 +27,7 @@ export const viewFunction = ({
 
 @Component({
   defaultOptionRules: null,
-  // jQuery: { register: true },
+  jQuery: { register: true },
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
@@ -301,7 +301,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   /*
   @Method()
   state(state: any): any {
-    return this.widget?.beginCustomLoading();
+    return this.widget?.state();
   } */
 
   @Method()
