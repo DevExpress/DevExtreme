@@ -221,17 +221,21 @@ class ViewDataGenerator {
     generateMaps(groupedData) {
         const viewDataMap = [];
         const groupedDataMap = [];
-        const addToViewDataMap = (cellsData, groupIndex) => {
+        const addToViewDataMap = (cellsData, dataRowIndex) => {
             const cellsMap = [];
             cellsData.forEach((cellData, cellIndex) => {
                 const cellMap = {
                     cellData,
                     position: {
                         rowIndex: viewDataMap.length,
-                        cellIndex: cellIndex
+                        cellIndex
                     }
                 };
                 cellsMap.push(cellMap);
+
+                const { groupIndex } = cellData;
+
+                addToGroupedDataMap(groupIndex, dataRowIndex, cellMap);
             });
 
             viewDataMap.push(cellsMap);
@@ -239,24 +243,34 @@ class ViewDataGenerator {
             return cellsMap;
         };
 
+        const addToGroupedDataMap = (groupIndex, rowIndex, cellMap) => {
+            if(!groupedDataMap[groupIndex]) {
+                groupedDataMap[groupIndex] = [];
+            }
+            if(!groupedDataMap[groupIndex][rowIndex]) {
+                groupedDataMap[groupIndex][rowIndex] = [];
+            }
+
+            groupedDataMap[groupIndex][rowIndex].push(cellMap);
+        };
+
         groupedData?.forEach(data => {
             const {
                 dateTable,
                 allDayPanel,
-                isGroupedAllDayPanel,
-                groupIndex
+                isGroupedAllDayPanel
             } = data;
             const cellsMap = [];
 
+            let rowIndex = 0;
             if(isGroupedAllDayPanel && allDayPanel?.length) {
-                cellsMap.push(addToViewDataMap(allDayPanel, groupIndex));
+                cellsMap.push(addToViewDataMap(allDayPanel, rowIndex));
+                ++rowIndex;
             }
 
-            dateTable.forEach(rows => {
-                cellsMap.push(addToViewDataMap(rows, groupIndex));
+            dateTable.forEach(cells => {
+                cellsMap.push(addToViewDataMap(cells, rowIndex++));
             });
-
-            groupedDataMap[groupIndex] = cellsMap;
         });
 
         return {
@@ -333,27 +347,18 @@ export default class ViewDataProvider {
         return cellData;
     }
 
-    findCellPosition(groupIndices, startDate) {
-        for(let i = 0; i < groupIndices.length; ++i) {
-            return this._findCellPositionInMap(groupIndices[i], startDate);
-        }
-    }
-
-    _findCellPositionInMap(groupIndex, startDate, isAllDay) {
+    findCellPositionInMap(groupIndex, startDate, isAllDay) {
         const startTime = startDate.getTime();
         const isStartTimeInCell = cellData => {
             const cellStartTime = cellData.startDate.getTime();
             const cellEndTime = cellData.endDate.getTime();
 
             return isAllDay
-                ? startTime >= cellStartTime && startTime <= cellEndTime
+                ? cellData.allDay && startTime >= cellStartTime && startTime <= cellEndTime
                 : startTime >= cellStartTime && startTime < cellEndTime;
         };
 
-        const isVerticalGrouping = this.viewDataGenerator.workspace._isVerticalGroupedWorkSpace();
-        const rows = isVerticalGrouping
-            ? this.groupedDataMap[groupIndex]
-            : this.groupedDataMap[0];
+        const rows = this.groupedDataMap[groupIndex];
 
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
             const row = rows[rowIndex];

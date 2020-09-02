@@ -3751,6 +3751,7 @@ QUnit.module('Renovated Render', {
                         allDayPanel: [{
                             startDate: new Date(2020, 6, 29),
                             endDate: new Date(2020, 6, 29),
+                            groupIndex: 0,
                             allDay: true
                         }],
                         dateTable: [[{
