@@ -523,12 +523,12 @@ const DropDownButton = Widget.inherit({
 
     _updateItemCollection(optionName) {
         this._setWidgetOption('_list', [optionName]);
-        this.getDataSource().store().byKey(this.option('selectedItemKey')).then(selectedItem => {
+        this.getDataSource().store().byKey(this.option('selectedItemKey')).done(selectedItem => {
             this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
             this._setListOption('selectedItem', selectedItem);
-        }).catch(error => {
+        }).fail(error => {
             this._setListOption('selectedItemKeys', []);
-        }).then(() => {
+        }).always(() => {
             this._loadSelectedItem().done(this._updateActionButton.bind(this));
         });
     },
