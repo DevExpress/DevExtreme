@@ -2,7 +2,6 @@ import { isDefined } from '../../core/utils/type';
 import timeZoneUtils from './utils.timeZone';
 import dateUtils from '../../core/utils/date';
 
-const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 
 class TimeZoneOffsets {
@@ -42,68 +41,30 @@ export class TimeZoneCalculator {
         throw new Error('not specified pathTimeZoneConversion');
     }
 
-    _isNeedConvertToCommonTimeZone(appointmentTimezone, skipConvert) {
-        if(!skipConvert || skipConvert && !appointmentTimezone) { // TODO may be !skipConvert || !appointmentTimezone
-            return true;
-        }
-        return false;
+    _useAppointmentTimeZone(appointmentTimezone, useAppointmentTimeZone) {
+        return useAppointmentTimeZone && !!appointmentTimezone;
     }
 
-    _getConvertedDate(date, appointmentTimezone, skipCommonTimezone, isBack) {
-        let result = new Date(date.getTime());
+    _getConvertedDate(date, appointmentTimezone, useAppointmentTimeZone, isBack) {
+        const newDate = new Date(date.getTime());
+        const offsets = this._getComplexOffsets(newDate, appointmentTimezone);
 
-        const startYearDate = new Date((new Date(date.getTime())).setMonth(0, 0));
-        const dateMinusHour = new Date((new Date(date.getTime())).setHours(date.getHours() - 1, 0, 0));
-
-        const startYearOffsets = this._getComplexOffsets(startYearDate, appointmentTimezone);
-        const dateMinusHourOffsets = this._getComplexOffsets(dateMinusHour, appointmentTimezone);
-
-        const offsets = this._getComplexOffsets(result, appointmentTimezone);
-        result = this._getConvertedToAppointmentTimeZone(result, offsets, isBack, startYearOffsets, dateMinusHourOffsets);
-
-        if(this._isNeedConvertToCommonTimeZone(appointmentTimezone, skipCommonTimezone)) {
-            result = this._getConvertedToCommonTimeZone(result, offsets, isBack, startYearOffsets, dateMinusHourOffsets);
+        if(this._useAppointmentTimeZone(appointmentTimezone, useAppointmentTimeZone)) {
+            return this._getConvertedDateByOffsets(date, offsets.client, offsets.appointment, isBack);
         }
 
-        return result;
+        return this._getConvertedDateByOffsets(date, offsets.client, offsets.common, isBack);
     }
 
-    _getDelta(startYearOffset, dateMinusHourOffsets, currentOffset) {
-        if(dateMinusHourOffsets === currentOffset) {
-            return startYearOffset - currentOffset;
-        }
-        return 0;
-    }
+    _getConvertedDateByOffsets(date, clientOffset, targetOffset, isBack) {
+        const operation = isBack ? -1 : 1;
+        const utcTime = date.getTime() - clientOffset * toMs('hour');
 
-    _getConvertedToAppointmentTimeZone(date, offsets, back, startYearOffsets, dateMinusHourOffsets) {
-        const timezonesIsIdentical = offsets.client === offsets.appointment;
-        const delta = timezonesIsIdentical ? 0 : this._getDelta(startYearOffsets.appointment, dateMinusHourOffsets.appointment, offsets.appointment);
-
-        const operation = back ? -1 : 1;
-        const dateInUTC = date.getTime() - operation * offsets.client * toMs('hour');
-        const result = new Date(dateInUTC + operation * (offsets.appointment + delta) * toMs('hour'));
-
-        return result;
-    }
-
-    _getConvertedToCommonTimeZone(date, offsets, back, startYearOffsets, dateMinusHourOffsets) {
-        const operation = back ? -1 : 1;
-
-        const timezonesIsIdentical = offsets.client === offsets.common;
-        const delta = timezonesIsIdentical ? 0 : this._getDelta(startYearOffsets.common, dateMinusHourOffsets.common, offsets.common);
-
-        const offset = offsets.common - offsets.appointment + delta;
-        const hoursOffset = (offset < 0 ? -1 : 1) * Math.floor(Math.abs(offset));
-        const minutesOffset = offset % 1;
-
-        date.setHours(date.getHours() + operation * hoursOffset);
-        date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
-
-        return date;
+        return new Date(utcTime + operation * targetOffset * toMs('hour'));
     }
 
     _getComplexOffsets(date, appointmentTimezone) {
-        const clientTimezoneOffset = -this.scheduler.fire('getClientTimezoneOffset', date) / toMs('hour'); // TODO
+        const clientTimezoneOffset = -this.scheduler.fire('getClientTimezoneOffset', date) / toMs('hour');
         let commonTimezoneOffset = this.scheduler._getTimezoneOffsetByOption(date);
         let appointmentTimezoneOffset = timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date);
 
