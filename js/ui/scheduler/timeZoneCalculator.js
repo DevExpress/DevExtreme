@@ -50,17 +50,16 @@ export class TimeZoneCalculator {
         const offsets = this._getComplexOffsets(newDate, appointmentTimezone);
 
         if(this._useAppointmentTimeZone(appointmentTimezone, useAppointmentTimeZone)) {
-            return this._getConvertedDateByOffsets(date, offsets.client, offsets.appointment, isBack);
+            return this._getConvertedDateByOffsets(date, offsets.appointment, isBack);
         }
 
-        return this._getConvertedDateByOffsets(date, offsets.client, offsets.common, isBack);
+        return this._getConvertedDateByOffsets(date, offsets.common, isBack);
     }
 
-    _getConvertedDateByOffsets(date, clientOffset, targetOffset, isBack) {
-        const operation = isBack ? -1 : 1;
-        const utcTime = date.getTime() - clientOffset * toMs('hour');
+    _getConvertedDateByOffsets(date, targetOffset, isBack) {
+        const direction = isBack ? -1 : 1;
 
-        return new Date(utcTime + operation * targetOffset * toMs('hour'));
+        return new Date(date.getTime() + direction * targetOffset * toMs('hour'));
     }
 
     _getComplexOffsets(date, appointmentTimezone) {
