@@ -648,7 +648,7 @@ QUnit.module('common use cases', {
 
         dropDownButton.option('keyExpr', 'this');
         store = dropDownButton.getDataSource().store();
-        assert.strictEqual(store.key(), 'this', 'store key is correct');
+        assert.strictEqual(store.key(), null, 'store key is correct');
     });
 
     QUnit.test('toggleButton should have static width (T847072)', function(assert) {
@@ -811,7 +811,6 @@ QUnit.module('common use cases', {
             done();
         });
     });
-
 
     QUnit.test('selectedItem should be kept after dataSource reload when new dataSource includes selectedItemKey and keyExpr is default (T919804)', function(assert) {
         const done = assert.async();
@@ -1146,6 +1145,22 @@ QUnit.module('deferred datasource', {
         dropDownButton.option('selectedItemKey', 2);
         this.clock.tick();
         assert.strictEqual(getList(dropDownButton).option('selectedItemKeys')[0], 2, 'selectedItemKeys is correct');
+    });
+
+    QUnit.test('dropDownButton should not try to load selected item after dataSource change if selectedItemKey is undefined', function(assert) {
+        const byKeySpy = sinon.spy(this.dataSourceConfig, 'byKey');
+
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            useSelectMode: true,
+            keyExpr: 'id',
+            displayExpr: 'text',
+            items: [1, 2, 3]
+        });
+
+        dropDownButton.option('dataSource', this.dataSourceConfig);
+
+        assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
     });
 });
 

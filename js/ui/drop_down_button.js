@@ -142,10 +142,13 @@ const DropDownButton = Widget.inherit({
 
     _itemsToDataSource: function() {
         if(!this._dataSource) {
+            const keyExpr = this.option('keyExpr');
+            const key = keyExpr === 'this' ? null : keyExpr;
+
             this._dataSource = new DataSource({
                 store: new ArrayStore({
-                    data: this.option('items'),
-                    key: this.option('keyExpr')
+                    key,
+                    data: this.option('items')
                 }),
                 pageSize: 0,
             });
@@ -522,15 +525,19 @@ const DropDownButton = Widget.inherit({
     },
 
     _updateItemCollection(optionName) {
+        const selectedItemKey = this.option('selectedItemKey');
         this._setWidgetOption('_list', [optionName]);
-        this.getDataSource().store().byKey(this.option('selectedItemKey')).done(selectedItem => {
-            this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
-            this._setListOption('selectedItem', selectedItem);
-        }).fail(error => {
-            this._setListOption('selectedItemKeys', []);
-        }).always(() => {
-            this._loadSelectedItem().done(this._updateActionButton.bind(this));
-        });
+
+        if(isDefined(selectedItemKey)) {
+            this.getDataSource().store().byKey(selectedItemKey).done(selectedItem => {
+                this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
+                this._setListOption('selectedItem', selectedItem);
+            }).fail(error => {
+                this._setListOption('selectedItemKeys', []);
+            }).always(() => {
+                this._loadSelectedItem().done(this._updateActionButton.bind(this));
+            });
+        }
     },
 
     _updateDataSourceKey: function() {
