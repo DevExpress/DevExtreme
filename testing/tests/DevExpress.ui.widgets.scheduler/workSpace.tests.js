@@ -4167,13 +4167,13 @@ QUnit.module('Renovated Render', {
                 currentDate: new Date(2020, 8, 1),
             });
 
-            const cleanRenovatedComponentsStub = sinon.spy(noop);
+            const disposeRenovatedComponentsStub = sinon.spy(noop);
 
-            this.instance._disposeRenovatedComponents = cleanRenovatedComponentsStub;
+            this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
 
             this.instance.option('currentDate', new Date(2020, 8, 2));
 
-            assert.notOk(cleanRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
+            assert.notOk(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
 
         QUnit.test('Renovated Comonents should be disposed on showAllDayPanel change when vertical grouping is used', function(assert) {
@@ -4190,13 +4190,13 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            const cleanRenovatedComponentsStub = sinon.spy(noop);
+            const disposeRenovatedComponentsStub = sinon.spy(noop);
 
-            this.instance._disposeRenovatedComponents = cleanRenovatedComponentsStub;
+            this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
 
             this.instance.option('showAllDayPanel', true);
 
-            assert.ok(cleanRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
+            assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
 
         QUnit.test('Renovated Comonents should be disposed on groups change', function(assert) {
@@ -4204,8 +4204,8 @@ QUnit.module('Renovated Render', {
                 groupOrientation: 'vertical',
             });
 
-            const cleanRenovatedComponentsStub = sinon.spy(noop);
-            this.instance._disposeRenovatedComponents = cleanRenovatedComponentsStub;
+            const disposeRenovatedComponentsStub = sinon.spy(noop);
+            this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
 
             this.instance.option('groups', [
                 {
@@ -4216,7 +4216,7 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            assert.ok(cleanRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
+            assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
     });
 });
