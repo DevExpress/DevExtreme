@@ -1698,12 +1698,8 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                     this._saving = true;
                     this._saveEditDataInner()
-                        .done(result => {
-                            deferred.resolve(result);
-                        })
-                        .fail(arg => {
-                            deferred.reject(arg);
-                        })
+                        .done(deferred.resolve)
+                        .fail(deferred.reject)
                         .always(() => {
                             this._saving = false;
                         });
