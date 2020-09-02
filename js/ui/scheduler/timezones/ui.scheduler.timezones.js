@@ -12,10 +12,9 @@ const SchedulerTimezones = {
     },
 
     getDisplayedTimeZones: function(date) {
-        date = date || new Date();
-
         return this.getTimezones().map((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
+
             const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
 
             return extend(timezone, {
@@ -33,7 +32,7 @@ const SchedulerTimezones = {
         const hours = Math.floor(offset);
         const minutesInDecimal = offset - hours;
 
-        const signString = sign(offset) === 1 ? '+' : '-';
+        const signString = sign(offset) >= 0 ? '+' : '-';
         const hoursString = `0${Math.abs(hours)}`.slice(-2);
         const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
 
@@ -107,7 +106,8 @@ const SchedulerTimezones = {
             index++;
         }
 
-        return -(offsetsList[Number(offsetIndicesList[index])] / 60);
+        const offset = Number(offsetsList[Number(offsetIndicesList[index])]);
+        return offset === 0 ? offset : -offset / 60;
     },
 
     getClientTimezoneOffset: function(date) {

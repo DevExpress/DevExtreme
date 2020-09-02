@@ -78,7 +78,7 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
+    _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, isShow = false) {
         const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
 
         return {
@@ -136,14 +136,14 @@ const SchedulerAppointmentForm = {
                     this._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                 }),
 
-            this._createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, true, allowTimeZoneEditing),
+            this._createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, true, allowTimeZoneEditing),
 
             this._createDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
                 (args) => {
                     this._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                 }),
 
-            this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, false, allowTimeZoneEditing)
+            this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, false, allowTimeZoneEditing)
         ];
     },
 
@@ -274,14 +274,14 @@ const SchedulerAppointmentForm = {
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
                 visible: recurrenceEditorVisibility,
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
-                items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
+                items: this._createRecurrenceEditor(dataExprs, schedulerInst, readOnly),
             }
         ];
 
         return this._editors;
     },
 
-    _createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly) {
+    _createRecurrenceEditor(dataExprs, schedulerInst, readOnly) {
         return [{
             dataField: dataExprs.recurrenceRuleExpr,
             editorType: 'dxRecurrenceEditor',
@@ -347,8 +347,11 @@ const SchedulerAppointmentForm = {
         editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
     },
 
-    updateFormData: function(appointmentForm, formData, dataExprs, startDate, endDate) {
+    updateFormData: function(appointmentForm, formData, dataExprs) {
         appointmentForm._lockDateShiftFlag = true;
+
+        const startDate = new Date(formData[dataExprs.startDateExpr]);
+        const endDate = new Date(formData[dataExprs.endDateExpr]);
 
         this.updateTimeZoneEditorDataSource(startDate, dataExprs.startDateTimeZoneExpr);
         this.updateTimeZoneEditorDataSource(endDate, dataExprs.endDateTimeZoneExpr);

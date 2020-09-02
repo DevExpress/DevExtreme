@@ -215,7 +215,7 @@ export default class AppointmentPopup {
 
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
-        AppointmentForm.updateFormData(this._appointmentForm, formData, this.scheduler._dataAccessors.expr, startDate, endDate);
+        AppointmentForm.updateFormData(this._appointmentForm, formData, this.scheduler._dataAccessors.expr);
         AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
     }
 

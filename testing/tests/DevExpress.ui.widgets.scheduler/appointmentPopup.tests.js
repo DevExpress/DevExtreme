@@ -1645,7 +1645,7 @@ module('Timezone Editors', moduleOptions, () => {
         const form = this.instance.getAppointmentDetailsForm();
         const endDateTimeZoneEditor = form.getEditor('endDateTimeZone');
 
-        assert.notOk(endDateTimeZoneEditor, 'StartDateTZ editor isn\'t visible by default');
+        assert.notOk(endDateTimeZoneEditor, 'EndDateTZ editor isn\'t visible by default');
     });
 
     test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
@@ -1709,6 +1709,19 @@ module('Timezone Editors', moduleOptions, () => {
             assert.equal(editor.option('value'), 'Europe/Paris', 'value is ok');
             assert.equal(editor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
         });
+    });
+
+    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        startDateTimezoneEditor.option('value', 'Etc/UTC');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +00:00) Etc/UTC', 'displayValue is ok');
+        startDateTimezoneEditor.option('value', 'America/Los_Angeles');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America/Los_Angeles', 'displayValue is ok');
     });
 
     QUnit.test('timeZone editor display value for timeZone with DST should depend on date', function(assert) {
