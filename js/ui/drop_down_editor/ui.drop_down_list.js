@@ -532,8 +532,8 @@ const DropDownList = DropDownEditor.inherit({
 
     _prepareDataSource: function() {
         const currentDataSource = this._getDataSource();
-        currentDataSource.pageIndex(0);
-        currentDataSource.reload();
+        currentDataSource?.pageIndex(0);
+        currentDataSource?.reload();
     },
 
     _listConfig: function() {
