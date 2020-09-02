@@ -1171,7 +1171,7 @@ QUnit.module('deferred datasource', {
             useSelectMode: true,
             keyExpr: 'id',
             displayExpr: 'text',
-            items: [1, 2, 3]
+            items: this.dataSourceConfig
         });
 
         assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
