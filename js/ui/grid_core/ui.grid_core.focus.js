@@ -556,7 +556,7 @@ export default {
                             }
                         });
                     } else if(operationTypes.paging && !isVirtualScrolling) {
-                        if(isAutoNavigate || keyboardController._isNeedFocus) {
+                        if(isAutoNavigate) {
                             const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
                             const isValidRowIndexByKey = rowIndexByKey >= 0;
                             const focusedRowIndex = this.option('focusedRowIndex');

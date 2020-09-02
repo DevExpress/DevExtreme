@@ -866,7 +866,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock.tick();
 
         // assert
-        assert.ok(keyboardNavigationController._isNeedFocus, 'is key down or click');
+        assert.ok(!keyboardNavigationController._isNeedFocus, 'is key down');
         assert.ok(keyboardNavigationController._isHiddenFocus, 'is hidden focus');
         assert.deepEqual(keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition is empty');
         assert.equal($(rowsView.getCellElement(0, 0)).attr('tabIndex'), 0, 'expand cell has tab index');
