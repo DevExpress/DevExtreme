@@ -230,6 +230,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 that.createAction('onRowUpdated', { excludeValidators: ['disabled', 'readOnly'] });
                 that.createAction('onRowRemoving', { excludeValidators: ['disabled', 'readOnly'] });
                 that.createAction('onRowRemoved', { excludeValidators: ['disabled', 'readOnly'] });
+                that.createAction('onSaved', { excludeValidators: ['disabled', 'readOnly'] });
+                that.createAction('onSaving', { excludeValidators: ['disabled', 'readOnly'] });
+                that.createAction('onEditCanceling', { excludeValidators: ['disabled', 'readOnly'] });
+                that.createAction('onEditCanceled', { excludeValidators: ['disabled', 'readOnly'] });
                 // chrome 73+
                 let $pointerDownTarget;
                 let isResizing;
@@ -1046,6 +1050,11 @@ const EditingController = modules.ViewController.inherit((function() {
             this._setEditRowKey(null, true);
         },
 
+        _resetEditIndices: function() {
+            this._resetEditColumnName();
+            this._resetEditRowKey();
+        },
+
         editRow: function(rowIndex) {
             return this._editRow(rowIndex);
         },
@@ -1503,43 +1512,63 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
         _saveEditDataCore: function(deferreds, results, changes) {
-            const that = this;
-            const store = that._dataController.store();
-            let isDataSaved = true;
-
-            function executeEditingAction(actionName, params, func) {
-                const deferred = new Deferred();
-
-                that.executeAction(actionName, params);
-
-                when(fromPromise(params.cancel)).done(function(cancel) {
-                    if(cancel) {
-                        setTimeout(function() {
-                            deferred.resolve('cancel');
-                        });
-                    } else {
-                        func(params).done(deferred.resolve).fail(createFailureHandler(deferred));
+            const onSavingParams = {
+                cancel: false,
+                promise: null
+            };
+            this.executeAction('onSaving', onSavingParams);
+            const d = new Deferred();
+            when(fromPromise(onSavingParams.promise))
+                .done(() => {
+                    if(!onSavingParams.cancel) {
+                        this._processEditData(deferreds, results, changes);
                     }
-                }).fail(createFailureHandler(deferred));
+                    d.resolve(onSavingParams.cancel);
+                }).fail(arg => {
+                    createFailureHandler(d);
+                    this._fireDataErrorOccurred(arg);
+                    d.resolve(true);
+                });
 
-                return deferred;
-            }
+            return d;
+        },
 
-            each(that._editData, function(index, editData) {
+        _executeEditingAction: function(actionName, params, func) {
+            const deferred = new Deferred();
+
+            this.executeAction(actionName, params);
+
+            when(fromPromise(params.cancel)).done(function(cancel) {
+                if(cancel) {
+                    setTimeout(function() {
+                        deferred.resolve('cancel');
+                    });
+                } else {
+                    func(params).done(deferred.resolve).fail(createFailureHandler(deferred));
+                }
+            }).fail(createFailureHandler(deferred));
+
+            return deferred;
+        },
+
+        _processEditData: function(deferreds, results, changes) {
+            const store = this._dataController.store();
+
+            each(this._editData, (index, editData) => {
                 const data = editData.data;
                 const oldData = editData.oldData;
                 const type = editData.type;
                 let deferred;
                 let params;
 
-                if(that._beforeSaveEditData(editData, index)) {
+                if(this._beforeSaveEditData(editData, index)) {
                     return;
                 }
 
                 switch(type) {
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         params = { data: oldData, key: editData.key, cancel: false };
-                        deferred = executeEditingAction('onRowRemoving', params, function() {
+                        deferred = this._executeEditingAction('onRowRemoving', params, function() {
                             return store.remove(editData.key).done(function(key) {
                                 changes.push({ type: 'remove', key: key });
                             });
@@ -1547,7 +1576,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         break;
                     case DATA_EDIT_DATA_INSERT_TYPE:
                         params = { data: data, cancel: false };
-                        deferred = executeEditingAction('onRowInserting', params, function() {
+                        deferred = this._executeEditingAction('onRowInserting', params, function() {
                             return store.insert(params.data).done(function(data, key) {
                                 if(isDefined(key)) {
                                     editData.key = key;
@@ -1561,7 +1590,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         break;
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         params = { newData: data, oldData: oldData, key: editData.key, cancel: false };
-                        deferred = executeEditingAction('onRowUpdating', params, function() {
+                        deferred = this._executeEditingAction('onRowUpdating', params, function() {
                             return store.update(editData.key, params.newData).done(function(data, key) {
                                 if(data && isObject(data) && data !== params.newData) {
                                     editData.data = data;
@@ -1576,7 +1605,6 @@ const EditingController = modules.ViewController.inherit((function() {
                     const doneDeferred = new Deferred();
                     deferred
                         .always(function(data) {
-                            isDataSaved = data !== 'cancel';
                             results.push({ key: editData.key, result: data });
                         })
                         .always(doneDeferred.resolve);
@@ -1584,9 +1612,8 @@ const EditingController = modules.ViewController.inherit((function() {
                     deferreds.push(doneDeferred.promise());
                 }
             });
-
-            return isDataSaved;
         },
+
         _processSaveEditDataResult: function(results) {
             const that = this;
             let hasSavedData = false;
@@ -1642,131 +1669,157 @@ const EditingController = modules.ViewController.inherit((function() {
                         break;
                 }
             });
+
+            this.executeAction('onSaved');
         },
+
         saveEditData: function() {
             const deferred = new Deferred();
-            const afterSaveEditData = (cancel) => {
-                when(this._afterSaveEditData(cancel)).done(function() {
-                    deferred.resolve();
-                });
-            };
             this.waitForDeferredOperations().done(() => {
-                if(this._saving) {
-                    afterSaveEditData();
+                if(this.isSaving()) {
+                    this._resolveAfterSaveEditDataComplete(deferred);
                     return;
                 }
                 when(this._beforeSaveEditData()).done(cancel => {
                     if(cancel) {
-                        afterSaveEditData(cancel);
+                        this._resolveAfterSaveEditDataComplete(deferred, { cancel });
                         return;
                     }
-                    this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
+                    this._saving = true;
+                    this._saveEditDataInner()
+                        .done(deferred.resolve)
+                        .fail(deferred.reject)
+                        .always(() => {
+                            this._saving = false;
+                        });
                 }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
         },
+
+        _resolveAfterSaveEditDataComplete: function(deferred, { cancel, error } = {}) {
+            when(this._afterSaveEditData(cancel)).done(function() {
+                deferred.resolve(error);
+            }).fail(deferred.reject);
+        },
+
         _saveEditDataInner: function() {
             const results = [];
             const deferreds = [];
             const changes = [];
             const dataController = this._dataController;
             const dataSource = dataController.dataSource();
-            const editMode = getEditMode(this);
             const result = new Deferred();
             const editData = this._editData.slice(0);
 
-            const resetEditIndices = () => {
-                if(editMode !== EDIT_MODE_CELL) {
-                    this._resetEditColumnName();
-                    this._resetEditRowKey();
+            when(this._saveEditDataCore(deferreds, results, changes)).done(isCanceled => {
+                if(isCanceled) {
+                    return result.resolve().promise();
                 }
-            };
-            const resetModifiedClassCells = () => {
-                if(editMode === EDIT_MODE_BATCH) {
-                    const columnsCount = this._columnsController.getVisibleColumns().length;
-                    editData.forEach(({ key }) => {
-                        const rowIndex = this._dataController.getRowIndexByKey(key);
-                        if(rowIndex !== -1) {
-                            for(let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
-                                this._rowsView._getCellElement(rowIndex, columnIndex).removeClass(CELL_MODIFIED);
-                            }
+
+                if(deferreds.length) {
+                    dataSource?.beginLoading();
+
+                    when(...deferreds).done(() => {
+                        if(this._processSaveEditDataResult(results)) {
+                            this._endSaving(changes, editData, result);
+                        } else {
+                            dataSource?.endLoading();
+                            result.resolve();
                         }
+                    }).fail(error => {
+                        dataSource?.endLoading();
+                        result.resolve(error);
                     });
+
+                    return result.always(() => {
+                        this._focusEditingCell();
+                    }).promise();
                 }
-            };
-            const afterSaveEditData = (error) => {
-                when(this._afterSaveEditData()).done(function() {
-                    result.resolve(error);
-                });
-            };
 
-            if(!this._saveEditDataCore(deferreds, results, changes) && editMode === EDIT_MODE_CELL) {
-                this._focusEditingCell();
-            }
+                this._cancelSaving(result);
+            }).fail(result.reject);
 
-            if(deferreds.length) {
-                this._saving = true;
+            return result.promise();
+        },
 
-                dataSource && dataSource.beginLoading();
+        _resetModifiedClassCells: function(editData) {
+            const editMode = getEditMode(this);
 
-                when.apply($, deferreds).done(() => {
-                    if(this._processSaveEditDataResult(results)) {
-                        resetModifiedClassCells();
-                        resetEditIndices();
-
-                        if(editMode === EDIT_MODE_POPUP && this._editPopup) {
-                            this._editPopup.hide();
+            if(editMode === EDIT_MODE_BATCH) {
+                const columnsCount = this._columnsController.getVisibleColumns().length;
+                editData.forEach(({ key }) => {
+                    const rowIndex = this._dataController.getRowIndexByKey(key);
+                    if(rowIndex !== -1) {
+                        for(let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+                            this._rowsView._getCellElement(rowIndex, columnIndex).removeClass(CELL_MODIFIED);
                         }
-
-                        dataSource && dataSource.endLoading();
-
-                        const refreshMode = this.option('editing.refreshMode');
-                        const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
-
-                        if(!isFullRefresh) {
-                            dataController.push(changes);
-                        }
-
-                        when(dataController.refresh({
-                            selection: isFullRefresh,
-                            reload: isFullRefresh,
-                            load: refreshMode === 'reshape',
-                            changesOnly: this.option('repaintChangesOnly')
-                        })).always(() => {
-                            this._fireSaveEditDataEvents(editData);
-                        }).done(() => {
-                            afterSaveEditData();
-                        }).fail((error) => {
-                            afterSaveEditData(error);
-                        });
-                    } else {
-                        dataSource && dataSource.endLoading();
-                        result.resolve();
                     }
-                }).fail(function(error) {
-                    dataSource && dataSource.endLoading();
-                    result.resolve(error);
                 });
-
-                return result.always(() => {
-                    this._focusEditingCell();
-                    this._saving = false;
-                }).promise();
             }
+        },
+
+        _endSaving: function(changes, editData, deferred) {
+            const editMode = getEditMode(this);
+            const dataSource = this._dataController.dataSource();
+
+            if(editMode !== EDIT_MODE_CELL) {
+                this._resetModifiedClassCells(editData);
+                this._resetEditIndices();
+            }
+
+            if(editMode === EDIT_MODE_POPUP && this._editPopup) {
+                this._editPopup.hide();
+            }
+
+            dataSource?.endLoading();
+
+            this._refreshDataControllerAfterSaveEditData(changes, editData, deferred);
+        },
+
+        _cancelSaving: function(result) {
+            const editMode = getEditMode(this);
+            const dataController = this._dataController;
 
             if(isRowEditMode(this)) {
                 if(!this.hasChanges()) {
-                    this.cancelEditData();
+                    this._cancelEditDataCore();
                 }
             } else if(this.isCellOrBatchEditMode()) {
-                resetEditIndices();
+                if(editMode !== EDIT_MODE_CELL) {
+                    this._resetEditIndices();
+                }
+
                 dataController.updateItems();
             } else {
                 this._focusEditingCell();
             }
 
-            afterSaveEditData();
-            return result.promise();
+            this.executeAction('onSaved');
+            this._resolveAfterSaveEditDataComplete(result);
+        },
+
+        _refreshDataControllerAfterSaveEditData: function(changes, editData, deferred) {
+            const dataController = this._dataController;
+            const refreshMode = this.option('editing.refreshMode');
+            const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
+
+            if(!isFullRefresh) {
+                dataController.push(changes);
+            }
+
+            when(dataController.refresh({
+                selection: isFullRefresh,
+                reload: isFullRefresh,
+                load: refreshMode === 'reshape',
+                changesOnly: this.option('repaintChangesOnly')
+            })).always(() => {
+                this._fireSaveEditDataEvents(editData);
+            }).done(() => {
+                this._resolveAfterSaveEditDataComplete(deferred);
+            }).fail((error) => {
+                this._resolveAfterSaveEditDataComplete(deferred, { error });
+            });
         },
 
         isSaving: function() {
@@ -1836,16 +1889,27 @@ const EditingController = modules.ViewController.inherit((function() {
         _beforeCloseEditCellInBatchMode: function() { },
 
         cancelEditData: function() {
-            const that = this;
-            const editMode = getEditMode(that);
+            const params = {
+                cancel: false
+            };
+
+            this.executeAction('onEditCanceling', params);
+            if(!params.cancel) {
+                this._cancelEditDataCore();
+                this.executeAction('onEditCanceled');
+            }
+        },
+
+        _cancelEditDataCore: function() {
+            const editMode = getEditMode(this);
             const rowIndex = this._getVisibleEditRowIndex();
-            const dataController = that._dataController;
+            const dataController = this._dataController;
 
-            that._beforeCancelEditData();
+            this._beforeCancelEditData();
 
-            that.init();
-            that._resetEditColumnName();
-            that._resetEditRowKey();
+            this.init();
+            this._resetEditColumnName();
+            this._resetEditRowKey();
 
             if(ROW_BASED_MODES.indexOf(editMode) !== -1 && rowIndex >= 0) {
                 dataController.updateItems({
@@ -1854,12 +1918,12 @@ const EditingController = modules.ViewController.inherit((function() {
                 });
             } else {
                 dataController.updateItems({
-                    repaintChangesOnly: that.option('repaintChangesOnly')
+                    repaintChangesOnly: this.option('repaintChangesOnly')
                 });
             }
 
             if(editMode === EDIT_MODE_POPUP) {
-                that._hideEditPopup();
+                this._hideEditPopup();
             }
         },
 
