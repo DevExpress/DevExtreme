@@ -83,7 +83,7 @@ describe('HeaderPanelLayoutBase', () => {
           groups: viewCellsData[0][0].groups,
           groupIndex: viewCellsData[0][0].groupIndex,
           index: viewCellsData[0][0].index,
-          dateCellTemplate,
+          // dateCellTemplate,
         });
       expect(cells.at(1).props())
         .toMatchObject({
@@ -93,7 +93,7 @@ describe('HeaderPanelLayoutBase', () => {
           groups: viewCellsData[0][1].groups,
           groupIndex: viewCellsData[0][1].groupIndex,
           index: viewCellsData[0][1].index,
-          dateCellTemplate,
+          // dateCellTemplate,
         });
     });
 

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Template,
+  Component, ComponentBindings, JSXComponent, Template, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import dateLocalization from '../../../../../../localization/date';
 import { CellBaseProps } from '../../base/cell';
@@ -38,6 +38,8 @@ export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
 @ComponentBindings()
 export class MonthHeaderPanelCellProps extends CellBaseProps {
   @Template() dateCellTemplate?: any;
+
+  @OneWay() today?: boolean = false;
 }
 
 @Component({

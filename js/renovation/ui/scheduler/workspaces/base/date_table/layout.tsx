@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
@@ -15,7 +15,8 @@ export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
     className={viewModel.classes}
   >
     <DateTableBody
-      cellTemplate={viewModel.props.cellTemplate}
+      // This is a workaround: cannot use template inside a template
+      viewType={viewModel.props.viewType}
       viewData={viewModel.props.viewData}
       dataCellTemplate={viewModel.props.dataCellTemplate}
     />
@@ -25,7 +26,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
 export class DateTableLayoutBaseProps extends LayoutProps {
   @OneWay() className?: string;
 
-  @Template() cellTemplate?: any;
+  @OneWay() viewType?: string;
 }
 
 @Component({

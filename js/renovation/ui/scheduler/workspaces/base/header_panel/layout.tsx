@@ -24,7 +24,9 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
             groupIndex={!viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
             today={today}
             index={index}
-            dateCellTemplate={viewModel.props.dateCellTemplate}
+            // TODO: implement this when bug in Vue is fixed
+            // But since we do not use it for now, it can be commented
+            // dateCellTemplate={viewModel.props.dateCellTemplate}
             key={getKeyByDateAndGroup(startDate, groups)}
           />
         ))}

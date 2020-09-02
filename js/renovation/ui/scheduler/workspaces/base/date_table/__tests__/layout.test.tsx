@@ -30,6 +30,7 @@ describe('DateTableLayoutBase', () => {
       props: {
         cellTemplate,
         viewData: viewDataBase,
+        viewType: 'month',
         ...viewModel.props,
       },
     } as any) as any);
@@ -76,8 +77,9 @@ describe('DateTableLayoutBase', () => {
       expect(tableBody.props())
         .toMatchObject({
           viewData: viewDataBase,
-          cellTemplate,
+          // cellTemplate,
           dataCellTemplate,
+          viewType: 'month',
         });
     });
   });
