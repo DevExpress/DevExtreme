@@ -85,7 +85,7 @@ System.config({
     'devextreme': 'npm:devextreme',
     'devextreme-vue': 'npm:devextreme-vue',
     'jszip': 'npm:jszip/dist/jszip.min.js',
-    'quill': 'npm:quill/dist/quill.js',
+    'devextreme-quill': 'npm:devextreme-quill/dist/quill.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',
     'preact': 'npm:preact/dist/preact.js',
