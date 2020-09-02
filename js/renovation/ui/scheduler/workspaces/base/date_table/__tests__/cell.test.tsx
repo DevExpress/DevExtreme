@@ -132,6 +132,33 @@ describe('DateTableCellBase', () => {
               data,
             });
         });
+
+        it('should add all-day prop correctly', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 27),
+            groups: { id: 1 },
+            groupIndex: 3,
+            text: 'Test text',
+            allDay: false,
+          };
+          const props = {
+            index: 0,
+            ...data,
+          };
+          const cell = new DateTableCellBase(props);
+
+          const templateProps = cell.dataCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data: {
+                ...data,
+                allDay: undefined,
+              },
+            });
+        });
       });
     });
   });
