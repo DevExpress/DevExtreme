@@ -536,13 +536,13 @@ const DropDownButton = Widget.inherit({
                 .store()
                 .byKey(selectedItemKey)
                 .done(selectedItem => {
-                this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
-                this._setListOption('selectedItem', selectedItem);
-            }).fail(error => {
-                this._setListOption('selectedItemKeys', []);
-            }).always(() => {
-                this._loadSelectedItem().done(this._updateActionButton.bind(this));
-            });
+                    this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
+                    this._setListOption('selectedItem', selectedItem);
+                }).fail(error => {
+                    this._setListOption('selectedItemKeys', []);
+                }).always(() => {
+                    this._loadSelectedItem().done(this._updateActionButton.bind(this));
+                });
         }
     },
 
