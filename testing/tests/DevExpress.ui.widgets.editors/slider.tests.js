@@ -252,7 +252,7 @@ module('render', moduleOptions, () => {
     });
 
     test('drag handler', function(assert) {
-        // TODO write the right comment
+        // the width of the right and left margin must be 0 (T927984)
         const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('head'));
         const $element = $('#slider').dxSlider({
             max: 500,
@@ -277,7 +277,7 @@ module('render', moduleOptions, () => {
     });
 
     test('smooth drag of handler', function(assert) {
-        // TODO write the right comment
+        // the width of the right and left margin must be 0 (T927984)
         const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('head'));
         const $element = $('#slider').dxSlider({
             max: 500,
