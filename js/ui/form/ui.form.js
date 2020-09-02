@@ -31,7 +31,8 @@ import {
     tryGetTabPath,
     getTextWithoutSpaces,
     isExpectedItem,
-    isFullPathContainsTabs
+    isFullPathContainsTabs,
+    getItemPath
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -1338,10 +1339,10 @@ const Form = Widget.inherit({
         return deferred.promise();
     },
 
-    itemOption(id, option, value) {
+    itemOption: function(id, option, value) {
         const items = this._generateItemsFromData(this.option('items'));
         const item = this._getItemByField(id, items);
-        const path = this._itemsRunTimeInfo.getPathFromItem(item);
+        const path = getItemPath(items, item);
 
         if(!item) {
             return;
@@ -1377,6 +1378,7 @@ const Form = Widget.inherit({
             }
         }
     },
+
     validate: function() {
         return ValidationEngine.validateGroup(this._getValidationGroup());
     },

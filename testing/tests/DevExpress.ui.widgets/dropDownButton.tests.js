@@ -1162,6 +1162,20 @@ QUnit.module('deferred datasource', {
 
         assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
     });
+
+    QUnit.test('dropDownButton should not try to load value on init if selectedItemKey is undefined (T925687)', function(assert) {
+        const byKeySpy = sinon.spy(this.dataSourceConfig, 'byKey');
+
+        new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            useSelectMode: true,
+            keyExpr: 'id',
+            displayExpr: 'text',
+            items: [1, 2, 3]
+        });
+
+        assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
+    });
 });
 
 QUnit.module('events', {}, () => {
