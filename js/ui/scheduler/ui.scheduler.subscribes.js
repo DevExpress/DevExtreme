@@ -699,22 +699,6 @@ const subscribes = {
         };
     },
 
-    getTimezonesDisplayName: function() {
-        return SchedulerTimezones.getTimezonesDisplayName();
-    },
-
-    getTimezoneDisplayNameById: function(id) {
-        return SchedulerTimezones.getTimezoneDisplayNameById(id);
-    },
-
-    getSimilarTimezones: function(id) {
-        return SchedulerTimezones.getSimilarTimezones(id);
-    },
-
-    getTimezonesIdsByDisplayName: function(displayName) {
-        return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
-    },
-
     getTargetedAppointmentData: function(appointment, element) {
         return this.getTargetedAppointment(appointment, element);
     },

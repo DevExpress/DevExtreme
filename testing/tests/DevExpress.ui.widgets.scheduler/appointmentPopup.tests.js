@@ -5,7 +5,8 @@ import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironme
 
 import $ from 'jquery';
 import devices from 'core/devices';
-import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
+import SelectBox from 'ui/select_box';
+// import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -14,6 +15,8 @@ import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointm
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
+
+const { module, test } = QUnit;
 
 const APPOINTMENT_POPUP_WIDTH = 485;
 const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
@@ -1229,96 +1232,6 @@ QUnit.test('There are no exceptions when select date on the appointment popup,if
     assert.ok(true, 'There are no exceptions');
 });
 
-QUnit.test('Popup should not contain startDateTimeZone editor by default', function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-
-    assert.notOk(startDateTimezoneEditor, 'StartDateTZ editor isn\'t visible by default');
-});
-
-QUnit.test('Popup should not contain endDateTimeZone editor by default', function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const endDateTimeZoneEditor = form.getEditor('endDateTimeZone');
-
-    assert.notOk(endDateTimeZoneEditor, 'StartDateTZ editor isn\'t visible by default');
-});
-
-QUnit.test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
-    this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
-    });
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-
-    assert.ok(startDateTimezoneEditor instanceof SchedulerTimezoneEditor, 'Editor is SchedulerTimezoneEditor');
-    assert.equal(startDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
-});
-
-QUnit.test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
-    this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, { visible: true });
-    });
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-    assert.ok(endDateTimezoneEditor instanceof SchedulerTimezoneEditor, 'Editor is SchedulerTimezoneEditor');
-    assert.equal(endDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
-});
-
-['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
-    QUnit.test(`startDateTimeZone and endDateTimeZone editor should be rendered with ${allowTimeZoneEditingOption} option`, function(assert) {
-        this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
-        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-        const form = this.instance.getAppointmentDetailsForm();
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-        assert.ok(startDateTimezoneEditor.option('visible'), 'startDateTimeZone editor is visible');
-        assert.ok(endDateTimezoneEditor.option('visible'), 'endDateTimeZone editor is visible');
-
-        assert.equal(startDateTimezoneEditor.option('value'), null, 'startDateTimeZone editor value should be null');
-        assert.equal(endDateTimezoneEditor.option('value'), null, 'endDateTimeZone editor value should be null');
-    });
-
-    QUnit.test(`Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
-        this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
-        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-        const form = this.instance.getAppointmentDetailsForm();
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-        startDateTimezoneEditor.option('value', 'Africa/Cairo');
-
-        assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
-        assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
-    });
-
-    QUnit.test(`Change value in endDateTimeZone editor shouldn't trigger change value in startDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
-        this.instance.option('editing.allowTimeZoneEditing', true);
-        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-        const form = this.instance.getAppointmentDetailsForm();
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-        startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
-        endDateTimezoneEditor.option('value', 'Africa/Cairo');
-
-        assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
-        assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
-    });
-});
-
 QUnit.test('Validate works always before done click', function(assert) {
     const data = new DataSource({
         store: this.tasks
@@ -1716,3 +1629,179 @@ QUnit.test('Popup should not be closed until the valid value is typed', function
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
 });
 
+module('Timezone Editors', moduleOptions, () => {
+    test('Popup should not contain startDateTimeZone editor by default', function(assert) {
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.notOk(startDateTimezoneEditor, 'StartDateTZ editor isn\'t visible by default');
+    });
+
+    test('Popup should not contain endDateTimeZone editor by default', function(assert) {
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const endDateTimeZoneEditor = form.getEditor('endDateTimeZone');
+
+        assert.notOk(endDateTimeZoneEditor, 'EndDateTZ editor isn\'t visible by default');
+    });
+
+    test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
+        });
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.ok(startDateTimezoneEditor instanceof SelectBox, 'Editor is SelectBox');
+        assert.equal(startDateTimezoneEditor.option('value'), null, 'Value is correct');
+    });
+
+    test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, { visible: true });
+        });
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+        assert.ok(endDateTimezoneEditor instanceof SelectBox, 'Editor is SelectBox');
+        assert.equal(endDateTimezoneEditor.option('value'), null, 'Value is correct');
+    });
+
+    test('timeZone editors should have correct options', function(assert) {
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, { visible: true });
+        });
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        [startDateTimezoneEditor, endDateTimezoneEditor].forEach(editor => {
+            assert.equal(editor.option('displayExpr'), 'title', 'displayExpr is correct');
+            assert.equal(editor.option('valueExpr'), 'id', 'valueExpr is correct');
+            assert.strictEqual(editor.option('searchEnabled'), true, 'searchEnabled is correct');
+            assert.equal(editor.option('placeholder'), 'No timezone', 'placeholder is correct');
+
+            assert.ok(editor.option('dataSource') instanceof DataSource, 'editor has dataSource');
+            assert.equal(editor.option('dataSource')._paginate, true, 'paging is enabled');
+            assert.equal(editor.option('dataSource')._pageSize, 10, 'pageSize is correct');
+        });
+    });
+
+    QUnit.test('timeZone editors should have correct value & display value on init', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        [startDateTimezoneEditor, endDateTimezoneEditor].forEach(editor => {
+            assert.equal(editor.option('value'), 'Europe/Paris', 'value is ok');
+            assert.equal(editor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
+        });
+    });
+
+    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        startDateTimezoneEditor.option('value', 'Etc/UTC');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +00:00) Etc/UTC', 'displayValue is ok');
+        startDateTimezoneEditor.option('value', 'America/Los_Angeles');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America/Los_Angeles', 'displayValue is ok');
+    });
+
+    QUnit.test('timeZone editor display value for timeZone with DST should depend on date', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        let form = this.instance.getAppointmentDetailsForm();
+        let startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
+        this.instance.getAppointmentPopup().hide();
+
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 5, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 5, 1, 2), text: 'test_text' });
+
+        form = this.instance.getAppointmentDetailsForm();
+        startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe/Paris', 'displayValue is ok, DST');
+    });
+
+    QUnit.test('dataSource of timezoneEditor should be filtered', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            const startDateTimezoneEditor = e.form.getEditor('startDateTimeZone');
+            const dataSource = startDateTimezoneEditor.option('dataSource');
+            dataSource.paginate(false);
+            dataSource.filter(['id', 'contains', 'Pacific']);
+            startDateTimezoneEditor.option('opened', true);
+        });
+
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        assert.equal(startDateTimezoneEditor.option('items').length, 46, 'Items are filtered');
+
+    });
+
+    ['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
+        test(`startDateTimeZone and endDateTimeZone editor should be rendered with ${allowTimeZoneEditingOption} option`, function(assert) {
+            this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
+            this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+            const form = this.instance.getAppointmentDetailsForm();
+            const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+            const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+            assert.ok(startDateTimezoneEditor.option('visible'), 'startDateTimeZone editor is visible');
+            assert.ok(endDateTimezoneEditor.option('visible'), 'endDateTimeZone editor is visible');
+
+            assert.equal(startDateTimezoneEditor.option('value'), null, 'startDateTimeZone editor value should be null');
+            assert.equal(endDateTimezoneEditor.option('value'), null, 'endDateTimeZone editor value should be null');
+        });
+
+        test(`Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
+            this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
+            this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+            const form = this.instance.getAppointmentDetailsForm();
+            const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+            const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+            startDateTimezoneEditor.option('value', 'Africa/Cairo');
+
+            assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
+            assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+        });
+
+        test(`Change value in endDateTimeZone editor shouldn't trigger change value in startDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
+            this.instance.option('editing.allowTimeZoneEditing', true);
+            this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+            const form = this.instance.getAppointmentDetailsForm();
+            const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+            const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+            startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
+            endDateTimezoneEditor.option('value', 'Africa/Cairo');
+
+            assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
+            assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+        });
+    });
+});
