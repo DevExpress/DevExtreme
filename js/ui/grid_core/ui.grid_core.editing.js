@@ -1539,6 +1539,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }).fail(arg => {
                     createFailureHandler(d);
                     this._fireDataErrorOccurred(arg);
+                    d.resolve(true);
                 });
 
             return d;

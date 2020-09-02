@@ -9167,6 +9167,7 @@ QUnit.module('Editing with real dataController', {
 
         QUnit.test('Promise in onSaving', function(assert) {
             // arrange
+            const done = assert.async();
             const rowsView = this.rowsView;
             const $testElement = $('#container');
             const onSaving = sinon.spy(e => {
@@ -9195,7 +9196,11 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 'name', 'new value');
-            this.saveEditData();
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
@@ -9229,6 +9234,7 @@ QUnit.module('Editing with real dataController', {
 
         QUnit.test('Promise in onSaving and reject', function(assert) {
             // arrange
+            const done = assert.async();
             const rowsView = this.rowsView;
             const $testElement = $('#container');
             const onSaving = sinon.spy(e => {
@@ -9254,7 +9260,11 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 'name', 'new value');
-            this.saveEditData();
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
 
             // assert
             assert.equal($('.dx-error-row').text(), 'my error', 'error row is showed');
@@ -9268,6 +9278,7 @@ QUnit.module('Editing with real dataController', {
 
         QUnit.test('Promise in onSaving with preventing cancelEditData during saving', function(assert) {
             // arrange
+            const done = assert.async();
             let isSaving = false;
             const rowsView = this.rowsView;
             const $testElement = $('#container');
@@ -9301,7 +9312,11 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 0, 'new value');
-            this.saveEditData();
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
@@ -9342,6 +9357,7 @@ QUnit.module('Editing with real dataController', {
 
         QUnit.test('Promise in onSaving with cancel', function(assert) {
             // arrange
+            const done = assert.async();
             const rowsView = this.rowsView;
             let isPromiseResolved;
             const $testElement = $('#container');
@@ -9367,7 +9383,11 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 0, 'new value');
-            this.saveEditData();
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
 
             // assert
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
