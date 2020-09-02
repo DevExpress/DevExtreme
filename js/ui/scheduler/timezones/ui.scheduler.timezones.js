@@ -107,7 +107,7 @@ const SchedulerTimezones = {
         }
 
         const offset = Number(offsetsList[Number(offsetIndicesList[index])]);
-        return offset === 0 ? offset : -offset / 60;
+        return -offset / 60 || offset;
     },
 
     getClientTimezoneOffset: function(date) {
