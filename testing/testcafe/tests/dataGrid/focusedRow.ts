@@ -603,7 +603,6 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     scrolling: {
       mode: 'virtual',
       rowRenderingMode: 'virtual',
-      loadTwoPagesOnStart: true,
     },
     onFocusedRowChanging: () => {
       if (!(window as any).focusedRowChanging_Counter) {
