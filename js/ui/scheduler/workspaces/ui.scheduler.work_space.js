@@ -1566,16 +1566,21 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllDayCellData(cell, rowIndex, cellIndex, groupIndex) {
         let startDate = this._getDateByCellIndexes(rowIndex, cellIndex);
+        const cellGroupIndex = groupIndex || this._getGroupIndex(rowIndex, cellIndex);
 
         startDate = dateUtils.trimTime(startDate);
 
         const data = {
             startDate: startDate,
             endDate: startDate,
-            allDay: true
+            allDay: true,
         };
 
-        const groups = this._getCellGroups(groupIndex || this._getGroupIndex(rowIndex, cellIndex));
+        if(this.isVirtualScrolling()) {
+            data.groupIndex = cellGroupIndex;
+        }
+
+        const groups = this._getCellGroups(cellGroupIndex);
 
         if(groups.length) {
             data.groups = {};
@@ -2381,7 +2386,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let position;
 
         if(this.isVirtualScrolling()) {
-            const positionByMap = this.viewDataProvider._findCellPositionInMap(groupIndex, date);
+            const positionByMap = this.viewDataProvider._findCellPositionInMap(groupIndex, date, inAllDayRow);
 
             if(!positionByMap) {
                 return;

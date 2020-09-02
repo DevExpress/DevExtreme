@@ -339,12 +339,15 @@ export default class ViewDataProvider {
         }
     }
 
-    _findCellPositionInMap(groupIndex, startDate) {
+    _findCellPositionInMap(groupIndex, startDate, isAllDay) {
         const startTime = startDate.getTime();
         const isStartTimeInCell = cellData => {
             const cellStartTime = cellData.startDate.getTime();
             const cellEndTime = cellData.endDate.getTime();
-            return startTime >= cellStartTime && startTime < cellEndTime;
+
+            return isAllDay
+                ? startTime >= cellStartTime && startTime <= cellEndTime
+                : startTime >= cellStartTime && startTime < cellEndTime;
         };
 
         const isVerticalGrouping = this.viewDataGenerator.workspace._isVerticalGroupedWorkSpace();
