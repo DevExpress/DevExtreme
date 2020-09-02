@@ -4169,7 +4169,7 @@ QUnit.module('Renovated Render', {
 
             const cleanRenovatedComponentsStub = sinon.spy(noop);
 
-            this.instance._cleanRenovatedComponents = cleanRenovatedComponentsStub;
+            this.instance._disposeRenovatedComponents = cleanRenovatedComponentsStub;
 
             this.instance.option('currentDate', new Date(2020, 8, 2));
 
@@ -4192,7 +4192,7 @@ QUnit.module('Renovated Render', {
 
             const cleanRenovatedComponentsStub = sinon.spy(noop);
 
-            this.instance._cleanRenovatedComponents = cleanRenovatedComponentsStub;
+            this.instance._disposeRenovatedComponents = cleanRenovatedComponentsStub;
 
             this.instance.option('showAllDayPanel', true);
 
@@ -4205,7 +4205,7 @@ QUnit.module('Renovated Render', {
             });
 
             const cleanRenovatedComponentsStub = sinon.spy(noop);
-            this.instance._cleanRenovatedComponents = cleanRenovatedComponentsStub;
+            this.instance._disposeRenovatedComponents = cleanRenovatedComponentsStub;
 
             this.instance.option('groups', [
                 {

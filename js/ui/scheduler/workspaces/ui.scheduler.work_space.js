@@ -490,7 +490,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'groups':
                 this._cleanView();
-                this._cleanRenovatedComponents();
+                this._disposeRenovatedComponents();
                 this._removeAllDayElements();
                 this._initGrouping();
                 this.repaint();
@@ -505,7 +505,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'showAllDayPanel':
                 if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanView();
-                    this._cleanRenovatedComponents();
+                    this._disposeRenovatedComponents();
                     this._removeAllDayElements();
                     this._initGrouping();
                     this.repaint();
@@ -553,7 +553,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
-                this._cleanRenovatedComponents();
+                this._disposeRenovatedComponents();
                 this.repaint();
                 break;
             default:
@@ -1960,7 +1960,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         super._clean();
     }
 
-    _cleanRenovatedComponents() {
+    _disposeRenovatedComponents() {
         this.renovatedAllDayPanel?.dispose();
         this.renovatedAllDayPanel = undefined;
 
