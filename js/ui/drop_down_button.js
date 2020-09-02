@@ -532,7 +532,10 @@ const DropDownButton = Widget.inherit({
         this._setWidgetOption('_list', [optionName]);
 
         if(isDefined(selectedItemKey)) {
-            this.getDataSource().store().byKey(selectedItemKey).done(selectedItem => {
+            this.getDataSource()
+                .store()
+                .byKey(selectedItemKey)
+                .done(selectedItem => {
                 this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
                 this._setListOption('selectedItem', selectedItem);
             }).fail(error => {
