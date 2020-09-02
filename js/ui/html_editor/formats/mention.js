@@ -1,5 +1,5 @@
 
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 
 let Mention = {};
