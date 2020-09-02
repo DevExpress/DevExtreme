@@ -7,6 +7,7 @@ import { AllDayPanelTableBody as TableBody } from './table_body';
 import { addHeightToStyle } from '../../../utils';
 import { ViewCellData } from '../../../types.d';
 import { LayoutProps } from '../../layout_props';
+import { DefaultSizes } from '../../../const';
 
 export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
   <div
@@ -16,7 +17,7 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
     style={viewModel.style}
   >
     {viewModel.props.visible && (
-      <Table className="dx-scheduler-all-day-table">
+      <Table className="dx-scheduler-all-day-table" height={viewModel.emptyTableHeight}>
         <TableBody
           viewData={viewModel.allDayPanelData}
           dataCellTemplate={viewModel.props.dataCellTemplate}
@@ -47,11 +48,10 @@ export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
     return this.props.viewData!.groupedData[0].allDayPanel;
   }
 
-  get style(): { [key: string]: string | number | undefined } {
-    const { height } = this.props;
-    const { style } = this.restAttributes;
-
-    return addHeightToStyle(height, style);
+  get emptyTableHeight(): number | undefined {
+    return this.allDayPanelData
+      ? undefined
+      : DefaultSizes.allDayPanelHeight;
   }
 
   get classes(): string {

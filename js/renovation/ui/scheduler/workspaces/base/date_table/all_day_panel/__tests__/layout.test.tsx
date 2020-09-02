@@ -3,8 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTableBody } from '../table_body';
 import * as utilsModule from '../../../../utils';
-
-const addHeightToStyle = jest.spyOn(utilsModule, 'addHeightToStyle');
+import { DefaultSizes } from '../../../../const';
 
 describe('AllDayPanelLayout', () => {
   const viewData = {
@@ -42,18 +41,14 @@ describe('AllDayPanelLayout', () => {
 
     it('should render components correctly', () => {
       const dataCellTemplate = () => null;
-      const style = { height: 100 };
       const layout = render({
         classes: 'some-class',
-        style,
         restAttributes: { style: { height: 500 } },
         props: { dataCellTemplate },
       });
 
       expect(layout.hasClass('some-class'))
         .toBe(true);
-      expect(layout.prop('style'))
-        .toEqual(style);
 
       const allDayTable = layout.find('.dx-scheduler-all-day-table');
 
@@ -82,26 +77,59 @@ describe('AllDayPanelLayout', () => {
       expect(allDayTable.exists())
         .toBe(false);
     });
+
+    it('should render correct height', () => {
+      const layout = render({ style: { height: 100 } });
+
+      expect(layout.prop('style'))
+        .toStrictEqual({ height: 100 });
+    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
       it('allDayPanelData', () => {
+        const viewData = {
+          groupedData: [
+            {
+              allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
+            },
+          ],
+        } as GroupedViewData;
         const layout = new AllDayPanelLayout({ viewData });
 
         expect(layout.allDayPanelData)
           .toStrictEqual(viewData.groupedData[0].allDayPanel);
       });
 
-      it('style', () => {
-        const layout = new AllDayPanelLayout({ height: 100 });
+      it('emptyTableHeight should not return height if allDayPanel data is present', () => {
+        const viewData = {
+          groupedData: [
+            {
+              allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
+            },
+          ],
+        } as GroupedViewData;
 
-        expect(layout.style)
-          .toStrictEqual({ height: '100px' });
-        expect(addHeightToStyle)
-          .toHaveBeenCalledTimes(1);
-        expect(addHeightToStyle)
-          .toHaveBeenCalledWith(100, undefined);
+        const layout = new AllDayPanelLayout({ viewData });
+
+        expect(layout.emptyTableHeight)
+          .toEqual(undefined);
+      });
+
+      it('emptyTableHeight should return default height if allDayPanel data is empty', () => {
+        const viewData = {
+          groupedData: [
+            {
+              allDayPanel: undefined,
+            },
+          ],
+        } as GroupedViewData;
+
+        const layout = new AllDayPanelLayout({ viewData });
+
+        expect(layout.emptyTableHeight)
+          .toEqual(DefaultSizes.allDayPanelHeight);
       });
 
       describe('classes', () => {
