@@ -150,6 +150,7 @@
         "dxTreeList-editingAddRowToNode": "Hinzufügen",
         "dxPager-infoText": "Seite {0} von {1} ({2} Elemente)",
         "dxPager-pagesCountText": "von",
+        "dxPager-pageSizesAllText": "Alle",
         "dxPivotGrid-grandTotal": "Gesamt",
         "dxPivotGrid-total": "{0} Gesamt",
         "dxPivotGrid-fieldChooserTitle": "Feldauswahl",

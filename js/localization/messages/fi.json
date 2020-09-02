@@ -164,6 +164,7 @@
 
         "dxPager-infoText": "Sivu {0}/{1} ({2} kohdetta)",
         "dxPager-pagesCountText": "/",
+        "dxPager-pageSizesAllText": "Kaikki",
 
         "dxPivotGrid-grandTotal": "Loppusumma",
         "dxPivotGrid-total": "{0} Summa",

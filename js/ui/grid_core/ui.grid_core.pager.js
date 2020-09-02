@@ -56,6 +56,7 @@ const PagerView = modules.View.inherit({
             pageSize: dataController.pageSize(),
             showPageSizes: pagerOptions.showPageSizeSelector,
             showInfo: pagerOptions.showInfo,
+            displayMode: pagerOptions.displayMode,
             pagesNavigatorVisible: pagerOptions.visible,
             showNavigationButtons: pagerOptions.showNavigationButtons,
             pageSizes: that.getPageSizes(),
@@ -181,7 +182,7 @@ export default {
                 showPageSizeSelector: false,
                 /**
                  * @name GridBaseOptions.pager.allowedPageSizes
-                 * @type Array<number>|Enums.Mode
+                 * @type Array<number,Enums.GridPagerPageSize>|Enums.Mode
                  * @default "auto"
                 */
                 allowedPageSizes: 'auto'
@@ -200,6 +201,10 @@ export default {
                  * @type string
                  * @default "Page {0} of {1} ({2} items)"
                  */
+                /**
+                 * @name GridBaseOptions.pager.displayMode
+                 * @type Enums.GridPagerDisplayMode
+                */
             }
         };
     },

@@ -164,7 +164,7 @@
 
     "dxPager-infoText": "第{0}页,共{1}页 ({2} 个项目)",
     "dxPager-pagesCountText": "到",
-
+    "dxPager-pageSizesAllText": "全部",
     "dxPivotGrid-grandTotal": "合计",
     "dxPivotGrid-total": "{0} 总计",
     "dxPivotGrid-fieldChooserTitle": "字段选择器",

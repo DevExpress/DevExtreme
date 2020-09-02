@@ -8,7 +8,7 @@ import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
 import { PAGER_PAGES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS } from './common/consts';
-import PagerProps from './common/pager_props';
+import PagerProps, { DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
@@ -93,7 +93,15 @@ export class PagerContentProps extends PagerProps {
 export class PagerContent extends JSXComponent<PagerContentProps>() {
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props;
-    return showInfo && infoTextVisible;
+    return showInfo && infoTextVisible && this.isLargeDisplayMode;
+  }
+
+  private get normalizedDisplayMode(): DisplayMode {
+    const { lightModeEnabled, displayMode } = this.props;
+    if (displayMode === 'adaptive' && lightModeEnabled !== undefined) {
+      return lightModeEnabled ? 'compact' : 'full';
+    }
+    return displayMode;
   }
 
   get pagesContainerVisible(): boolean {
@@ -108,7 +116,15 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   }
 
   get isLargeDisplayMode(): boolean {
-    return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
+    const displayMode = this.normalizedDisplayMode;
+    let result = false;
+    if (displayMode === 'adaptive') {
+      result = this.props.isLargeDisplayMode;
+    } else {
+      result = displayMode === 'full';
+    }
+    return result;
+    // return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
   }
 
   get className(): string {

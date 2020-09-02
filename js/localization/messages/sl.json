@@ -162,7 +162,7 @@
 
         "dxPager-infoText": "Stran {0} od {1} ({2} zapisov)",
         "dxPager-pagesCountText": "od",
-
+        "dxPager-pageSizesAllText": "Vse",
         "dxPivotGrid-grandTotal": "Skupna vsota",
         "dxPivotGrid-total": "{0} skupaj",
         "dxPivotGrid-fieldChooserTitle": "Izbirnik polj",
