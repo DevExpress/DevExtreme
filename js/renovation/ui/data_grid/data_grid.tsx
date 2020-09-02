@@ -34,20 +34,24 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 
-  @InternalState() widget: any;
+  @InternalState() widget: { instance?: any } = { instance: null };
+
+  get instance(): any {
+    return this.widget.instance;
+  }
 
   @Effect()
   updateWidget(): void {
-    this.widget?.option(this.properties);
+    this.instance?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
-    const widget = new LegacyDataGrid(this.widgetRef, this.properties);
-    this.widget = widget;
+    const instance = new LegacyDataGrid(this.widgetRef, this.properties);
+    this.widget.instance = instance;
 
     return (): void => {
-      widget.dispose();
+      instance.dispose();
     };
   }
 
@@ -57,340 +61,340 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   beginCustomLoading(messageText: string): void {
-    return this.widget?.beginCustomLoading(messageText);
+    return this.instance?.beginCustomLoading(messageText);
   }
 
   @Method()
   byKey(key: any | string | number): Promise<any> & JQueryPromise<any> {
-    return this.widget?.byKey(key);
+    return this.instance?.byKey(key);
   }
 
   @Method()
   cancelEditData(): void {
-    return this.widget?.cancelEditData();
+    return this.instance?.cancelEditData();
   }
 
   @Method()
   cellValue(rowIndex: number, dataField: string | number, value: any): any {
-    return this.widget?.cellValue(rowIndex, dataField, value);
+    return this.instance?.cellValue(rowIndex, dataField, value);
   }
 
   @Method()
   clearFilter(filterName: string): void {
-    return this.widget?.clearFilter(filterName);
+    return this.instance?.clearFilter(filterName);
   }
 
   @Method()
   clearSelection(): void {
-    return this.widget?.clearSelection();
+    return this.instance?.clearSelection();
   }
 
   @Method()
   clearSorting(): void {
-    return this.widget?.clearSorting();
+    return this.instance?.clearSorting();
   }
 
   @Method()
   closeEditCell(): void {
-    return this.widget?.closeEditCell();
+    return this.instance?.closeEditCell();
   }
 
   @Method()
   collapseAdaptiveDetailRow(): void {
-    return this.widget?.collapseAdaptiveDetailRow();
+    return this.instance?.collapseAdaptiveDetailRow();
   }
 
   @Method()
   columnCount(): number {
-    return this.widget?.columnCount();
+    return this.instance?.columnCount();
   }
 
   @Method()
   columnOption(id: number | string, optionName: any, optionValue: any): void {
-    return this.widget?.columnOption(id, optionName, optionValue);
+    return this.instance?.columnOption(id, optionName, optionValue);
   }
 
   @Method()
   deleteColumn(id: number | string): void {
-    return this.widget?.deleteColumn(id);
+    return this.instance?.deleteColumn(id);
   }
 
   @Method()
   deleteRow(rowIndex: number): void {
-    return this.widget?.deleteRow(rowIndex);
+    return this.instance?.deleteRow(rowIndex);
   }
 
   @Method()
   deselectAll(): Promise<void> & JQueryPromise<void> {
-    return this.widget?.deselectAll();
+    return this.instance?.deselectAll();
   }
 
   @Method()
   deselectRows(keys: any[]): Promise<any> & JQueryPromise<any> {
-    return this.widget?.deselectRows(keys);
+    return this.instance?.deselectRows(keys);
   }
 
   @Method()
   editCell(rowIndex: number, dataField: string | number): void {
-    return this.widget?.editCell(rowIndex, dataField);
+    return this.instance?.editCell(rowIndex, dataField);
   }
 
   @Method()
   editRow(rowIndex: number): void {
-    return this.widget?.editRow(rowIndex);
+    return this.instance?.editRow(rowIndex);
   }
 
   @Method()
   endCustomLoading(): void {
-    return this.widget?.endCustomLoading();
+    return this.instance?.endCustomLoading();
   }
 
   @Method()
   expandAdaptiveDetailRow(key: any): void {
-    return this.widget?.expandAdaptiveDetailRow(key);
+    return this.instance?.expandAdaptiveDetailRow(key);
   }
 
   @Method()
   filter(filterExpr: any): void {
-    return this.widget?.filter(filterExpr);
+    return this.instance?.filter(filterExpr);
   }
 
   @Method()
   focus(element: undefined | Element | JQuery): void {
-    return this.widget?.focus(element);
+    return this.instance?.focus(element);
   }
 
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
   ): any/* dxElement | undefined */ {
-    return this.widget?.getCellElement(rowIndex, dataField);
+    return this.instance?.getCellElement(rowIndex, dataField);
   }
 
   @Method()
   getCombinedFilter(returnDataField: undefined | boolean): any {
-    return this.widget?.getCombinedFilter(returnDataField);
+    return this.instance?.getCombinedFilter(returnDataField);
   }
 
   @Method()
   getDataSource(): any /* DataSource */ {
-    return this.widget?.getDataSource();
+    return this.instance?.getDataSource();
   }
 
   @Method()
   getKeyByRowIndex(rowIndex: number): any {
-    return this.widget?.getKeyByRowIndex(rowIndex);
+    return this.instance?.getKeyByRowIndex(rowIndex);
   }
 
   @Method()
   getRowElement(rowIndex: number): Element[] & JQuery | undefined {
-    return this.widget?.getRowElement(rowIndex);
+    return this.instance?.getRowElement(rowIndex);
   }
 
   @Method()
   getRowIndexByKey(key: any | string | number): number {
-    return this.widget?.getRowIndexByKey(key);
+    return this.instance?.getRowIndexByKey(key);
   }
 
   @Method()
   getScrollable(): any /* dxScrollable */ {
-    return this.widget?.getScrollable();
+    return this.instance?.getScrollable();
   }
 
   @Method()
   getVisibleColumnIndex(id: number | string): number {
-    return this.widget?.getVisibleColumnIndex(id);
+    return this.instance?.getVisibleColumnIndex(id);
   }
 
   @Method()
   hasEditData(): boolean {
-    return this.widget?.hasEditData();
+    return this.instance?.hasEditData();
   }
 
   @Method()
   hideColumnChooser(): void {
-    return this.widget?.hideColumnChooser();
+    return this.instance?.hideColumnChooser();
   }
 
   @Method()
   isAdaptiveDetailRowExpanded(key: any): boolean {
-    return this.widget?.isAdaptiveDetailRowExpanded(key);
+    return this.instance?.isAdaptiveDetailRowExpanded(key);
   }
 
   @Method()
   isRowFocused(key: any): boolean {
-    return this.widget?.isRowFocused(key);
+    return this.instance?.isRowFocused(key);
   }
 
   @Method()
   isRowSelected(key: any): boolean {
-    return this.widget?.isRowSelected(key);
+    return this.instance?.isRowSelected(key);
   }
 
   @Method()
   keyOf(obj: any): any {
-    return this.widget?.keyOf(obj);
+    return this.instance?.keyOf(obj);
   }
 
   @Method()
   navigateToRow(key: any): void {
-    return this.widget?.navigateToRow(key);
+    return this.instance?.navigateToRow(key);
   }
 
   @Method()
   pageCount(): number {
-    return this.widget?.pageCount();
+    return this.instance?.pageCount();
   }
 
   @Method()
   pageIndex(
     newIndex: undefined | number,
   ): Promise<void> & JQueryPromise<void> | number {
-    return this.widget?.pageIndex(newIndex);
+    return this.instance?.pageIndex(newIndex);
   }
 
   @Method()
   pageSize(value: number): void {
-    return this.widget?.pageSize(value);
+    return this.instance?.pageSize(value);
   }
 
   @Method()
   refresh(
     changesOnly: undefined | boolean,
   ): Promise<void> & JQueryPromise<void> {
-    return this.widget?.refresh(changesOnly);
+    return this.instance?.refresh(changesOnly);
   }
 
   @Method()
   repaintRows(rowIndexes: number[]): void {
-    return this.widget?.repaintRows(rowIndexes);
+    return this.instance?.repaintRows(rowIndexes);
   }
 
   @Method()
   saveEditData(): Promise<void> & JQueryPromise<void> {
-    return this.widget?.saveEditData();
+    return this.instance?.saveEditData();
   }
 
   @Method()
   searchByText(text: string): void {
-    return this.widget?.searchByText(text);
+    return this.instance?.searchByText(text);
   }
 
   @Method()
   selectAll(): Promise<void> & JQueryPromise<void> {
-    return this.widget?.selectAll();
+    return this.instance?.selectAll();
   }
 
   @Method()
   selectRows(
     keys: any[], preserve: boolean,
   ): Promise<any> & JQueryPromise<any> {
-    return this.widget?.selectRows(keys, preserve);
+    return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
   selectRowsByIndexes(indexes: number[]): Promise<any> & JQueryPromise<any> {
-    return this.widget?.selectRowsByIndexes(indexes);
+    return this.instance?.selectRowsByIndexes(indexes);
   }
 
   @Method()
   showColumnChooser(): void {
-    return this.widget?.showColumnChooser();
+    return this.instance?.showColumnChooser();
   }
 
   /*
   @Method()
   state(state: any): any {
-    return this.widget?.state();
+    return this.instance?.state();
   } */
 
   @Method()
   undeleteRow(rowIndex: number): void {
-    return this.widget?.undeleteRow(rowIndex);
+    return this.instance?.undeleteRow(rowIndex);
   }
 
   @Method()
   updateDimensions(): void {
-    return this.widget?.updateDimensions();
+    return this.instance?.updateDimensions();
   }
 
   @Method()
   addColumn(columnOptions: any | string): void {
-    return this.widget?.addColumn(columnOptions);
+    return this.instance?.addColumn(columnOptions);
   }
 
   @Method()
   addRow(): Promise<void> & JQueryPromise<void> {
-    return this.widget?.addRow();
+    return this.instance?.addRow();
   }
 
   @Method()
   clearGrouping(): void {
-    return this.widget?.clearGrouping();
+    return this.instance?.clearGrouping();
   }
 
   @Method()
   collapseAll(groupIndex?: number): void {
-    return this.widget?.collapseAll(groupIndex);
+    return this.instance?.collapseAll(groupIndex);
   }
 
   @Method()
   collapseRow(key: any): Promise<void> & JQueryPromise<void> {
-    return this.widget?.collapseRow(key);
+    return this.instance?.collapseRow(key);
   }
 
   @Method()
   expandAll(groupIndex?: number): void {
-    return this.widget?.expandAll(groupIndex);
+    return this.instance?.expandAll(groupIndex);
   }
 
   @Method()
   expandRow(key: any): Promise<void> & JQueryPromise<void> {
-    return this.widget?.expandRow(key);
+    return this.instance?.expandRow(key);
   }
 
   @Method()
   exportToExcel(selectionOnly: boolean): void {
-    return this.widget?.exportToExcel(selectionOnly);
+    return this.instance?.exportToExcel(selectionOnly);
   }
 
   @Method()
   getSelectedRowKeys(): any[] & Promise<any> & JQueryPromise<any> {
-    return this.widget?.getSelectedRowKeys();
+    return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
   getSelectedRowsData(): any[] & Promise<any> & JQueryPromise<any> {
-    return this.widget?.getSelectedRowsData();
+    return this.instance?.getSelectedRowsData();
   }
 
   @Method()
   getTotalSummaryValue(summaryItemName: string): any {
-    return this.widget?.getTotalSummaryValue(summaryItemName);
+    return this.instance?.getTotalSummaryValue(summaryItemName);
   }
 
   @Method()
   getVisibleColumns(headerLevel: undefined | number): any /* dxDataGridColumn[] */ {
-    return this.widget?.getVisibleColumns(headerLevel);
+    return this.instance?.getVisibleColumns(headerLevel);
   }
 
   @Method()
   getVisibleRows(): any /* dxDataGridRowObject[] */ {
-    return this.widget?.getVisibleRows();
+    return this.instance?.getVisibleRows();
   }
 
   @Method()
   isRowExpanded(key: any): boolean {
-    return this.widget?.isRowExpanded(key);
+    return this.instance?.isRowExpanded(key);
   }
 
   @Method()
   totalCount(): number {
-    return this.widget?.totalCount();
+    return this.instance?.totalCount();
   }
 
   @Method()
   getController(name: string): any {
-    return this.widget?.getController(name);
+    return this.instance?.getController(name);
   }
 }
