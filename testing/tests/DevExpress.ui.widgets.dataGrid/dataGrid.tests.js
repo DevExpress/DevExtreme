@@ -5038,7 +5038,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         } catch(err) {
             assert.ok(false, 'the error is thrown');
         } finally {
-            assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
+            assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
         }
     });
 
