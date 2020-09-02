@@ -11,12 +11,14 @@
     @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN: 6px;
     @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING: 19px;
     @MATERIAL_FORM_TOP_LABEL_PADDING: 16px 0 3px;
+    @MATERIAL_FORM_DEFAULT_TOP_PADDING: 26px;
 }
 
 .dx-size-compact() {
     @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN: 4px;
     @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING: 10px;
     @MATERIAL_FORM_TOP_LABEL_PADDING: 4px 0 2px;
+    @MATERIAL_FORM_DEFAULT_TOP_PADDING: 20px;
 }
 
 .dx-form-group-caption {
@@ -41,26 +43,37 @@
     padding-right: 5px;
 }
 
-.dx-layout-manager .dx-field-item:not(.dx-last-col) {
-    padding-right: 20px;
-}
-
-.dx-layout-manager .dx-field-item:not(.dx-first-col) {
-    padding-left: 20px;
-}
-
-.dx-field-item {
-    padding-bottom: 10px;
-    font-size: @MATERIAL_FORM_LABEL_FONT_SIZE;
-
+.dx-layout-manager {
     .dx-field-item {
-        &.dx-last-row {
-            padding-bottom: 0;
+        &:not(.dx-last-col) {
+            padding-right: 20px;
+        }
+
+        &:not(.dx-first-col) {
+            padding-left: 20px;
+        }
+
+        padding-bottom: 10px;
+        font-size: @MATERIAL_FORM_LABEL_FONT_SIZE;
+
+        .dx-field-item {
+            &.dx-last-row {
+                padding-bottom: 0;
+            }
         }
     }
 }
 
 .dx-field-item-content {
+    &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs) {
+        padding-top: @MATERIAL_FORM_DEFAULT_TOP_PADDING;
+
+        .dx-first-row > &,
+        .dx-label-v-align & {
+            padding-top: 0;
+        }
+    }
+
     .dx-switch {
         vertical-align: middle;
     }
