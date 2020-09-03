@@ -119,7 +119,7 @@ const DropDownButton = Widget.inherit({
         this._initDataSource();
         this._compileKeyGetter();
         this._compileDisplayGetter();
-        this._itemsToDataSource();
+        this._itemsToDataSource(this.option('items'));
         this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
     },
@@ -140,7 +140,7 @@ const DropDownButton = Widget.inherit({
         this.callBase();
     },
 
-    _itemsToDataSource: function() {
+    _itemsToDataSource: function(value) {
         if(!this._dataSource) {
             const keyExpr = this.option('keyExpr');
             const key = keyExpr === 'this' ? null : keyExpr;
@@ -148,7 +148,7 @@ const DropDownButton = Widget.inherit({
             this._dataSource = new DataSource({
                 store: new ArrayStore({
                     key,
-                    data: this.option('items')
+                    data: value
                 }),
                 pageSize: 0,
             });
@@ -546,9 +546,9 @@ const DropDownButton = Widget.inherit({
         }
     },
 
-    _updateDataSourceKey: function() {
+    _updateDataSource: function(items = this._dataSource.items()) {
         this._dataSource = undefined;
-        this._itemsToDataSource();
+        this._itemsToDataSource(items);
     },
 
     _optionChanged(args) {
@@ -567,7 +567,7 @@ const DropDownButton = Widget.inherit({
                 this._updateActionButton(this.option('selectedItem'));
                 break;
             case 'keyExpr':
-                this._updateDataSourceKey();
+                this._updateDataSource();
                 this._compileKeyGetter();
                 this._setListOption(name, value);
                 break;
@@ -593,12 +593,15 @@ const DropDownButton = Widget.inherit({
                 this.callBase(args);
                 break;
             case 'items':
-                this._dataSource = null;
-                this._itemsToDataSource();
+                this._updateDataSource(value);
                 this._updateItemCollection(name);
                 break;
             case 'dataSource':
-                this._initDataSource();
+                if(value instanceof Array) {
+                    this._updateDataSource(value);
+                } else {
+                    this._initDataSource(value);
+                }
                 this._updateItemCollection(name);
                 break;
             case 'icon':

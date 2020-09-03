@@ -4,6 +4,8 @@ import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import browser from 'core/utils/browser';
+import ArrayStore from 'data/array_store';
+import { DataSource } from 'data/data_source/data_source';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -785,7 +787,7 @@ QUnit.module('common use cases', {
         assert.strictEqual(selectionChangeHandler.callCount, 2, 'onSelectionChange is raised');
     });
 
-    QUnit.test('selectedItem should be kept after dataSource reload when new dataSource includes selectedItemKey (T919804)', function(assert) {
+    QUnit.test('selectedItem should be kept after items option change when new dataSource includes selectedItemKey (T919804)', function(assert) {
         const done = assert.async();
         this.dropDownButton.option({
             items: [{
@@ -799,6 +801,70 @@ QUnit.module('common use cases', {
 
         const items = [{ id: 1, name: 'test' }];
         this.dropDownButton.option('items', items);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
+            assert.deepEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selectedItemKey is kept');
+            assert.deepEqual(list.option('selectedItem'), items[0], 'list selectedItem is correct');
+
+            done();
+        });
+    });
+
+    QUnit.test('selectedItem should be kept after dataSource option change when new dataSource-array includes selectedItemKey (T919804)', function(assert) {
+        const done = assert.async();
+        this.dropDownButton.option({
+            dataSource: [{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }],
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        const items = [{ id: 1, name: 'test' }];
+        this.dropDownButton.option('dataSource', items);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
+            assert.deepEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selectedItemKey is kept');
+            assert.deepEqual(list.option('selectedItem'), items[0], 'list selectedItem is correct');
+
+            done();
+        });
+    });
+
+    QUnit.test('selectedItem should be kept after dataSource option change when new dataSource includes selectedItemKey (T919804)', function(assert) {
+        const oldDataSource = new DataSource({
+            store: new ArrayStore([{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }]),
+            key: 'id'
+        });
+
+        const newDataSource = new DataSource({
+            store: new ArrayStore([{ key: 1, name: 'test' }]),
+            key: 'key'
+        });
+
+        const done = assert.async();
+        this.dropDownButton.option({
+            dataSource: oldDataSource,
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        const items = [{ key: 1, name: 'test' }];
+        this.dropDownButton.option('dataSource', newDataSource);
 
         setTimeout(() => {
             assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
