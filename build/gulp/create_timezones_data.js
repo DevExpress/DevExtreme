@@ -62,8 +62,10 @@ function transformTimezoneData(input) {
 }
 
 gulp.task('create-timezones-data', function() {
+    const momentTimezonesRawUrl = 'https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/';
+
     return remoteSrc(['latest.json'], {
-        base: 'https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/'
+        base: momentTimezonesRawUrl
     }).pipe(
         through.obj((file, enc, cb) => {
             const rawJSON = file.contents.toString();
