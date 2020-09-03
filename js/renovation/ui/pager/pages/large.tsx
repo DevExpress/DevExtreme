@@ -5,7 +5,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars	
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { EventCallback } from '../../common/event_callback.d';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';

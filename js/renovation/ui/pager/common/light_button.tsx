@@ -5,8 +5,8 @@ import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 import { PAGER_CLASS } from './consts';
 import { closestClass } from '../utils/closest_class';
 import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
-import { DisposeEffectReturn } from '../../../utils/effect_return';
-import { EventCallback } from '../../common/event_callback';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { EventCallback } from '../../common/event_callback.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({

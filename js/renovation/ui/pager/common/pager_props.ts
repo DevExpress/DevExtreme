@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay, TwoWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-import { EventCallback } from '../../common/event_callback';
+import { EventCallback } from '../../common/event_callback.d';
 
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 

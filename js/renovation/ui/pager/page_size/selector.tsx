@@ -9,7 +9,7 @@ import { PageSizeLarge } from './large';
 import PagerProps from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars	
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { EventCallback } from '../../common/event_callback.d';
 
 export const viewFunction = ({

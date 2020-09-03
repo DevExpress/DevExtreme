@@ -17,7 +17,7 @@ import Themes from '../../ui/themes';
 import BaseComponent from '../preact_wrapper/check_box';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
-import { EffectReturn } from '../utils/effect_return';
+import { EffectReturn } from '../utils/effect_return.d';
 import noop from '../utils/noop';
 
 const getCssClasses = (model: CheckBoxProps): string => {

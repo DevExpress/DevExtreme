@@ -7,7 +7,7 @@ import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_wid
 import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
 import PagerProps from '../common/pager_props';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars	
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { EventCallback } from '../../common/event_callback.d';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
