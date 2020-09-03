@@ -195,7 +195,7 @@ QUnit.module('AppointmentSettings', {
 
                 const settings = instance.fire('createAppointmentSettings', {
                     startDate: new Date(2015, 2, 2, 0),
-                    endDate: new Date(2015, 2, 3, 0),
+                    endDate: new Date(2015, 2, 2, 0, 30),
                     recurrenceRule
                 });
 
@@ -203,7 +203,7 @@ QUnit.module('AppointmentSettings', {
             });
         });
 
-        QUnit.test(`Grouped appointments should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
+        QUnit.test(`Grouped appointment should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 2, 2),
                 views: [{
@@ -225,14 +225,14 @@ QUnit.module('AppointmentSettings', {
 
             const settings = instance.fire('createAppointmentSettings', {
                 startDate: new Date(2015, 2, 2, 0),
-                endDate: new Date(2015, 2, 3, 0),
+                endDate: new Date(2015, 2, 2, 0, 30),
                 resourceId0: 0
             });
 
             assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
         });
 
-        QUnit.test(`Grouped appointments should contains correct groupIndex if ${viewName} view has horizontal group orientation`, function(assert) {
+        QUnit.test(`Grouped appointment should contains correct groupIndex if ${viewName} view has horizontal group orientation`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 2, 2),
                 views: [{
@@ -257,11 +257,71 @@ QUnit.module('AppointmentSettings', {
 
             const settings = instance.fire('createAppointmentSettings', {
                 startDate: new Date(2015, 2, 2, 0),
-                endDate: new Date(2015, 2, 3, 0),
+                endDate: new Date(2015, 2, 2, 0, 30),
                 resourceId0: 1
             });
 
             assert.equal(settings[0].groupIndex, 1, 'groupIndex is correct');
+        });
+
+        QUnit.test(`Grouped allDay appointment should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 2),
+                scrolling: {
+                    mode: 'virtual'
+                },
+                views: [{
+                    type: viewName,
+                    groupOrientation: 'vertical'
+                }],
+                currentView: viewName,
+                groups: ['resourceId0'],
+                resources: [{
+                    fieldExpr: 'resourceId0',
+                    dataSource: [{ id: 0 }]
+                }]
+            });
+
+            const { instance } = this.scheduler;
+
+            const settings = instance.fire('createAppointmentSettings', {
+                startDate: new Date(2015, 2, 2),
+                endDate: new Date(2015, 2, 2),
+                resourceId0: 0,
+                allDay: true
+            });
+
+            assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+        });
+
+        QUnit.test('Appointment settings should not being created if allDay appointment and group orientation "horizontal"', function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 2),
+                scrolling: {
+                    mode: 'virtual'
+                },
+                views: [{
+                    type: viewName,
+                    groupOrientation: 'horizontal'
+                }],
+                currentView: viewName,
+                groups: ['resourceId0'],
+                resources: [{
+                    fieldExpr: 'resourceId0',
+                    dataSource: [{ id: 0 }]
+                }]
+            });
+
+            const { instance } = this.scheduler;
+
+            const settings = instance.fire('createAppointmentSettings', {
+                startDate: new Date(2015, 2, 2),
+                endDate: new Date(2015, 2, 2),
+                resourceId0: 0,
+                allDay: true
+            });
+
+            assert.equal(settings.length, 0, 'appotinment setings was not created');
         });
     });
 });
