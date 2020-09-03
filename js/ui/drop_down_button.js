@@ -592,14 +592,14 @@ const DropDownButton = Widget.inherit({
                 this.callBase(args);
                 break;
             case 'items':
-                this._updateDataSource(value);
+                this._updateDataSource(this.option('items'));
                 this._updateItemCollection(name);
                 break;
             case 'dataSource':
                 if(value instanceof Array) {
-                    this._updateDataSource(value);
+                    this._updateDataSource(this.option('dataSource'));
                 } else {
-                    this._initDataSource(value);
+                    this._initDataSource();
                     this._updateKeyExpr();
                 }
                 this._updateItemCollection(name);
