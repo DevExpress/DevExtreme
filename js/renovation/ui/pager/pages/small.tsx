@@ -13,6 +13,8 @@ import messageLocalization from '../../../../localization/message';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getElementMinWidth } from '../utils/get_element_width';
 import PagerProps from '../common/pager_props';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { EventCallback } from '../../common/event_callback.d';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';

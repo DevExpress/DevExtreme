@@ -4,7 +4,7 @@ import {
 
 import { format } from '../../../core/utils/string';
 import messageLocalization from '../../../localization/message';
-import { GetHtmlElement } from './common/types';
+import { GetHtmlElement } from './common/types.d';
 import PagerProps from './common/pager_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';

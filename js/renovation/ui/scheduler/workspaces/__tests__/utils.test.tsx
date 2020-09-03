@@ -5,7 +5,7 @@ import {
   getIsGroupedAllDayPanel,
   getGroupCellClasses,
 } from '../utils';
-import { GroupedViewData } from '../types';
+import { GroupedViewData } from '../types.d';
 
 describe('Workspaces utils', () => {
   describe('getKeyByDateAndGroup', () => {

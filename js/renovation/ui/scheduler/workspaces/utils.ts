@@ -1,5 +1,5 @@
 import { combineClasses } from '../../../utils/combine_classes';
-import { GroupedViewData } from './types';
+import { GroupedViewData } from './types.d';
 
 export const getKeyByDateAndGroup = (date: Date, group?: object): string => {
   let key = date.toString();

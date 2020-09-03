@@ -4,7 +4,7 @@ import {
 import { AllDayPanelRow as Row } from './row';
 import { AllDayPanelCell as Cell } from './cell';
 import { getKeyByDateAndGroup } from '../../../utils';
-import { ViewCellData } from '../../../types';
+import { ViewCellData } from '../../../types.d';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody) => (
   <Row
