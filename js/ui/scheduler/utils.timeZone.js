@@ -1,8 +1,34 @@
 import dateUtils from '../../core/utils/date';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
+import DateAdapter from './dateAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
+
+const createUTCDate = date => {
+    if(!date) {
+        return null;
+    }
+
+    return new Date(Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()
+    ));
+};
+
+const createDateFromUTC = date => {
+    const result = DateAdapter(date);
+
+    const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
+    result.addTime(result.getTimezoneOffset('minute'));
+    result.subtractMinutes(timezoneOffsetBeforeInMin - result.getTimezoneOffset());
+
+    return result.source;
+};
 
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
@@ -81,7 +107,10 @@ const utils = {
     getCorrectedDateByDaylightOffsets,
     isTimezoneChangeInDate,
     isSameAppointmentDates,
-    correctRecurrenceExceptionByTimezone
+    correctRecurrenceExceptionByTimezone,
+
+    createUTCDate,
+    createDateFromUTC
 };
 
 export default utils;

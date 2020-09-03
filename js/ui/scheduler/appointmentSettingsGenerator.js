@@ -1,6 +1,8 @@
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
+import timeZoneUtils from './utils.timeZone.js';
+
 
 export default class AppointmentSettingsGenerator {
     constructor(scheduler) {
@@ -107,13 +109,13 @@ export default class AppointmentSettingsGenerator {
         const generatedStartDates = getRecurrenceProcessor().generateDates(option);
 
         return generatedStartDates.map(date => {
-            const utcDate = getRecurrenceProcessor()._getRRuleUtcDate(new Date(date));
+            const utcDate = timeZoneUtils.createUTCDate(date);
             utcDate.setTime(utcDate.getTime() + duration);
-            const rawEndDate = getRecurrenceProcessor()._getCorrectDateByTimezoneOffset(utcDate);
+            const endDate = timeZoneUtils.createDateFromUTC(utcDate);
 
             return {
                 startDate: new Date(date),
-                endDate: rawEndDate
+                endDate: endDate
             };
         });
     }
