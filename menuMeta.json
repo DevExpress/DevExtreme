@@ -5316,6 +5316,19 @@
               "/Models/SampleData/PangaeaContinents.cs"
             ],
             "DemoType": "Viz"
+          },
+          {
+            "Title": "Custom Annotations",
+            "Name": "CustomAnnotations",
+            "DocUrl": "ApiReference/Data_Visualization_Widgets/dxVectorMap/Configuration/annotations",
+            "Widget": "VectorMap",
+            "Modules": "vectormap",
+            "Badge": "New",
+            "MvcAdditionalFiles": [
+              "/Models/StateData.cs",
+              "/Models/SampleData/StatesData.cs"
+            ],
+            "DemoType": "Viz"
           }
         ]
       }

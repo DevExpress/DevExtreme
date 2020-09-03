@@ -1,0 +1,20 @@
+::ng-deep #vector-map {
+    height: 440px;
+}
+
+::ng-deep .annotation {
+    font-size: 12px;
+}
+
+::ng-deep .state {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+::ng-deep .caption {
+    font-weight: 500;
+}
+
+::ng-deep .sup {
+    font-size: 0.8em;
+}
