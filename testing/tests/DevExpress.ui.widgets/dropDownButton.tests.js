@@ -876,6 +876,31 @@ QUnit.module('common use cases', {
         assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
     });
 
+    QUnit.test('list keyExpr should be updated after keyExpr option change', function(assert) {
+        this.dropDownButton.option({
+            keyExpr: 'newValue',
+        });
+
+        const list = getList(this.dropDownButton);
+        assert.strictEqual(list.option('keyExpr'), 'newValue', 'list keyExpr was updated');
+    });
+
+    QUnit.test('list keyExpr should be updated after dataSource option change', function(assert) {
+        this.dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+
+        this.dropDownButton.option({
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    data: [{ key: 1, name: 'test' }],
+                    key: 'newValue'
+                }),
+            })
+        });
+
+        const list = getList(this.dropDownButton);
+        assert.strictEqual(list.option('keyExpr'), 'newValue', 'list keyExpr was updated');
+    });
+
     QUnit.test('selectedItem should be kept after dataSource option change when new dataSource includes selectedItemKey (T919804)', function(assert) {
         this.dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
         const done = assert.async();

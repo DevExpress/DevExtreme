@@ -529,27 +529,25 @@ const DropDownButton = Widget.inherit({
         this._setWidgetOption('_list', [optionName]);
 
         if(isDefined(selectedItemKey)) {
-            this.getDataSource()
-                .store()
-                .byKey(selectedItemKey)
+            this._loadSelectedItem()
                 .done(selectedItem => {
                     this._setListOption('selectedItemKeys', [selectedItemKey]);
                     this._setListOption('selectedItem', selectedItem);
                 }).fail(error => {
                     this._setListOption('selectedItemKeys', []);
-                }).always(() => {
-                    this._loadSelectedItem().done(this._updateActionButton.bind(this));
-                });
+                })
+                .always(this._updateActionButton.bind(this));
         }
     },
 
     _updateDataSource: function(items = this._dataSource.items()) {
         this._dataSource = undefined;
         this._itemsToDataSource(items);
-        this._synchronizeListKeyExpr();
+        this._updateKeyExpr();
     },
 
-    _synchronizeListKeyExpr: function() {
+    _updateKeyExpr: function() {
+        this._compileKeyGetter();
         this._setListOption('keyExpr', this._getKey());
     },
 
@@ -570,8 +568,6 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'keyExpr':
                 this._updateDataSource();
-                this._compileKeyGetter();
-                this._setListOption(name, value);
                 break;
             case 'buttonGroupOptions':
                 this._innerWidgetOptionChanged(this._buttonGroup, args);
@@ -603,9 +599,8 @@ const DropDownButton = Widget.inherit({
                     this._updateDataSource(value);
                 } else {
                     this._initDataSource(value);
+                    this._updateKeyExpr();
                 }
-                this._compileKeyGetter();
-                this._synchronizeListKeyExpr();
                 this._updateItemCollection(name);
                 break;
             case 'icon':
