@@ -2125,6 +2125,22 @@
             ]
         },
         {
+          "Name": "User Interaction",
+          "Equivalents": "",
+          "Demos": [
+            {
+              "Title": "Item Selection",
+              "Name": "ItemSelection",
+              "DocUrl": "",
+              "Widget": "Diagram",
+              "DemoType": "Web",
+              "WideDemo": true,
+              "Modules": "whatwg-fetch",
+              "Badge": "New"
+            }
+          ]
+        },
+        {
             "Name": "UI Customization",
             "Equivalents": "",
             "Demos": [

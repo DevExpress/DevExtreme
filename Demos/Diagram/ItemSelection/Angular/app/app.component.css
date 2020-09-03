@@ -1,0 +1,14 @@
+::ng-deep #diagram {
+    height: 600px;
+}
+
+::ng-deep .selected-data {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .selected-data .caption {
+    font-weight: bold;
+    font-size: 115%;
+}
