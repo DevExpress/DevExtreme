@@ -395,6 +395,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getGroupIndexByCell($cell) {
+        if(this.isVirtualScrolling()) {
+            // TODO
+        }
         return this._groupedStrategy.getGroupIndexByCell($cell);
     }
 
@@ -2830,6 +2833,31 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     removeDroppableCellClass($cellElement) {
         ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+    }
+
+    _getCoordinatesByCell($cell) {
+        const columnIndex = $cell.index();
+        let rowIndex = $cell.parent().index();
+
+        if(this.isVirtualScrolling()) {
+            rowIndex -= 1;
+        }
+
+        return { rowIndex, columnIndex };
+    }
+
+    _getDimensions() {
+        const isVirtualScrolling = this.isVirtualScrolling();
+        if(isVirtualScrolling) {
+            return this.viewDataProvider.getDimensions();
+        }
+
+        const groupCount = this._getGroupCount();
+
+        const columnCount = this._getTotalCellCount(groupCount);
+        const rowCount = this._getTotalRowCount(groupCount);
+
+        return { columnCount, rowCount };
     }
 }
 

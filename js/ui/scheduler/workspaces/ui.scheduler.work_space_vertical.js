@@ -9,28 +9,34 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
         }
 
         let $cells = this._getCells();
-        const firstColumn = $first.index();
-        const firstRow = $first.parent().index();
-        const lastColumn = $last.index();
-        const lastRow = $last.parent().index();
-        const groupCount = this._getGroupCount();
-        const cellCount = groupCount > 0 ? this._getTotalCellCount(groupCount) : this._getCellCount();
-        const rowCount = this._getTotalRowCount(groupCount);
+
+        const {
+            columnIndex: firstCellColumnIndex,
+            rowIndex: firstCellRowIndex,
+        } = this._getCoordinatesByCell($first);
+        const {
+            columnIndex: lastCellColumnIndex,
+            rowIndex: lastCellRowIndex,
+        } = this._getCoordinatesByCell($last);
+
+        const {
+            columnCount, rowCount,
+        } = this._getDimensions();
         const result = [];
 
-        for(let i = 0; i < cellCount; i++) {
+        for(let i = 0; i < columnCount; i++) {
             for(let j = 0; j < rowCount; j++) {
-                const cell = $cells.get(cellCount * j + i);
-                result.push(cell);
+                const cell = $cells.get(columnCount * j + i);
+                cell && result.push(cell);
             }
         }
 
         const lastCellGroup = this.getCellData($last).groups;
         const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace()
-            ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
+            ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0; // TODO
 
-        let newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference;
-        let newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
+        let newFirstIndex = rowCount * firstCellColumnIndex + firstCellRowIndex - indexesDifference;
+        let newLastIndex = rowCount * lastCellColumnIndex + lastCellRowIndex - indexesDifference;
 
         if(newFirstIndex > newLastIndex) {
             const buffer = newFirstIndex;
