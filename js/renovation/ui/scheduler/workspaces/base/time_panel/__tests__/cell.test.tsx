@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { viewFunction as CellView } from '../cell';
+import { viewFunction as CellView, TimePanelCell } from '../cell';
 
 describe('TimePanelCell', () => {
   describe('Render', () => {
@@ -9,9 +9,9 @@ describe('TimePanelCell', () => {
     const render = (viewModel) => shallow(<CellView {...{
       ...viewModel,
       props: {
-        ...viewModel.props,
         startDate,
         text,
+        ...viewModel.props,
       },
     }}
     />);
@@ -39,21 +39,58 @@ describe('TimePanelCell', () => {
         .toBe(true);
     });
 
-    it('should render props correctly', () => {
+    it('should pass correct props to the base cell', () => {
+      const timeCellTemplateProps = {};
+      const timeCellTemplate = () => null;
       const cell = render({
         props: {
-          className: 'some-class',
           isFirstCell: true,
           isLastCell: true,
+          timeCellTemplate,
         },
+        timeCellTemplateProps,
       });
 
-      expect(cell.prop('className'))
-        .toContain('some-class');
-      expect(cell.prop('isFirstCell'))
-        .toBe(true);
-      expect(cell.prop('isLastCell'))
-        .toBe(true);
+      expect(cell.props())
+        .toMatchObject({
+          isFirstCell: true,
+          isLastCell: true,
+          contentTemplate: timeCellTemplate,
+          contentTemplateProps: timeCellTemplateProps,
+        });
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('timeCellTemplateProps', () => {
+        it('should collect template props correctly', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            groups: { id: 1 },
+            groupIndex: 3,
+            text: 'Test text',
+          };
+          const props = {
+            index: 0,
+            ...data,
+          };
+          const cell = new TimePanelCell(props);
+
+          const templateProps = cell.timeCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data: {
+                date: data.startDate,
+                groups: data.groups,
+                groupIndex: data.groupIndex,
+                text: data.text,
+              },
+            });
+        });
+      });
     });
   });
 });

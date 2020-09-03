@@ -3751,21 +3751,28 @@ QUnit.module('Renovated Render', {
                         startDate: new Date(2020, 6, 29),
                         endDate: new Date(2020, 6, 29),
                         allDay: true,
+                        groupIndex: undefined,
+                        index: 0,
                     }],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
-                        text: '12:00 AM'
+                        text: '12:00 AM',
+                        groupIndex: undefined,
+                        index: 0,
                     }], [{
                         startDate: new Date(2020, 6, 29, 0, 30),
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
-                        text: ''
+                        text: '',
+                        groupIndex: undefined,
+                        index: 1,
                     }]],
                     groupIndex: 0,
-                    isGroupedAllDayPanel: false
-                }]
+                    isGroupedAllDayPanel: false,
+                }],
+                cellCountInGroupRow: 1,
             };
             const expectedViewDataMap = [
                 [{
@@ -3773,7 +3780,9 @@ QUnit.module('Renovated Render', {
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
-                        text: '12:00 AM'
+                        text: '12:00 AM',
+                        groupIndex: undefined,
+                        index: 0,
                     },
                     position: { cellIndex: 0, rowIndex: 0 }
                 }], [{
@@ -3781,7 +3790,9 @@ QUnit.module('Renovated Render', {
                         startDate: new Date(2020, 6, 29, 0, 30),
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
-                        text: ''
+                        text: '',
+                        groupIndex: undefined,
+                        index: 1,
                     },
                     position: { cellIndex: 0, rowIndex: 1 }
                 }]
@@ -3815,13 +3826,17 @@ QUnit.module('Renovated Render', {
                             allDay: true,
                             startDate: new Date(2020, 6, 29),
                             endDate: new Date(2020, 6, 29),
-                            groups: { res: 1 }
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 0,
                         },
                         {
                             allDay: true,
                             startDate: new Date(2020, 6, 29),
                             endDate: new Date(2020, 6, 29),
-                            groups: { res: 2 }
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 0,
                         }
                     ],
                     dateTable: [[{
@@ -3829,29 +3844,38 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
                         text: '12:00 AM',
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 0,
                     }, {
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
                         text: '12:00 AM',
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 0,
                     }], [{
                         startDate: new Date(2020, 6, 29, 0, 30),
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 1,
                     }, {
                         startDate: new Date(2020, 6, 29, 0, 30),
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 1,
                     }]],
                     groupIndex: 0,
                     isGroupedAllDayPanel: false
                 }],
+                cellCountInGroupRow: 1,
             };
 
             const expectedViewDataMap = [[{
@@ -3860,7 +3884,9 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     text: '12:00 AM',
-                    groups: { res: 1 }
+                    groups: { res: 1 },
+                    groupIndex: 0,
+                    index: 0,
                 },
                 position: { cellIndex: 0, rowIndex: 0 }
             }, {
@@ -3869,7 +3895,9 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     text: '12:00 AM',
-                    groups: { res: 2 }
+                    groups: { res: 2 },
+                    groupIndex: 1,
+                    index: 0,
                 },
                 position: { cellIndex: 1, rowIndex: 0 }
             }], [{
@@ -3878,7 +3906,9 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 1, 0),
                     allDay: false,
                     text: '',
-                    groups: { res: 1 }
+                    groups: { res: 1 },
+                    groupIndex: 0,
+                    index: 1,
                 },
                 position: { cellIndex: 0, rowIndex: 1 }
             }, {
@@ -3887,7 +3917,9 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 1, 0),
                     allDay: false,
                     text: '',
-                    groups: { res: 2 }
+                    groups: { res: 2 },
+                    groupIndex: 1,
+                    index: 1,
                 },
                 position: { cellIndex: 1, rowIndex: 1 }
             }]];
@@ -3920,20 +3952,26 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29),
                         groups: {
                             res: 1
-                        }
+                        },
+                        groupIndex: 0,
+                        index: 0,
                     }],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
                         text: '12:00 AM',
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 0,
                     }], [{
                         startDate: new Date(2020, 6, 29, 0, 30),
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 1,
                     }]]
                 }, {
                     allDayPanel: [{
@@ -3943,19 +3981,25 @@ QUnit.module('Renovated Render', {
                         groups: {
                             res: 2
                         },
+                        groupIndex: 1,
+                        index: 0,
                     }],
                     dateTable: [[{
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
                         text: '12:00 AM',
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 0,
                     }], [{
                         startDate: new Date(2020, 6, 29, 0, 30),
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 1,
                     }]]
                 }],
             };
@@ -3966,7 +4010,9 @@ QUnit.module('Renovated Render', {
                         allDay: true,
                         startDate: new Date(2020, 6, 29),
                         endDate: new Date(2020, 6, 29),
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 0,
                     },
                     position: { rowIndex: 0, cellIndex: 0 }
                 }], [{
@@ -3975,7 +4021,9 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
                         text: '12:00 AM',
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 0,
                     },
                     position: { rowIndex: 1, cellIndex: 0 }
                 }], [{
@@ -3984,7 +4032,9 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                        groups: { res: 1 }
+                        groups: { res: 1 },
+                        groupIndex: 0,
+                        index: 1,
                     },
                     position: { rowIndex: 2, cellIndex: 0 }
                 }], [{
@@ -3992,7 +4042,9 @@ QUnit.module('Renovated Render', {
                         allDay: true,
                         startDate: new Date(2020, 6, 29),
                         endDate: new Date(2020, 6, 29),
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 0,
                     },
                     position: { rowIndex: 3, cellIndex: 0 }
                 }], [{
@@ -4001,7 +4053,9 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
                         text: '12:00 AM',
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 0,
                     },
                     position: { rowIndex: 4, cellIndex: 0 }
                 }], [{
@@ -4010,7 +4064,9 @@ QUnit.module('Renovated Render', {
                         endDate: new Date(2020, 6, 29, 1, 0),
                         allDay: false,
                         text: '',
-                        groups: { res: 2 }
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        index: 1,
                     },
                     position: { rowIndex: 5, cellIndex: 0 }
                 }]
@@ -4026,12 +4082,12 @@ QUnit.module('Renovated Render', {
 
     QUnit.module('getCellData', () => {
 
-        [true, false].forEach(virtualScrollingEnabled => {
-            QUnit.test(`should return cell data in basic case if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+        ['virtual', 'standard'].forEach(scrollingMode => {
+            QUnit.test(`should return cell data in basic case if scrolling is ${scrollingMode}`, function(assert) {
                 this.createInstance({
                     showAllDayPanel: false,
-                    virtualScrolling: {
-                        enabled: virtualScrollingEnabled
+                    scrolling: {
+                        mode: scrollingMode
                     }
                 });
                 const $cell = this.instance.$element().find(`.${CELL_CLASS}`).eq(0);
@@ -4041,16 +4097,17 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     text: '12:00 AM',
+                    index: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
             });
 
-            QUnit.test(`should return cell data when all-day-panel is enabled if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+            QUnit.test(`should return cell data when all-day-panel is enabled if scrolling is ${scrollingMode}`, function(assert) {
                 this.createInstance({
                     showAllDayPanel: true,
-                    virtualScrolling: {
-                        enabled: virtualScrollingEnabled
+                    scrolling: {
+                        mode: scrollingMode
                     }
                 });
                 const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
@@ -4060,16 +4117,17 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     text: '12:00 AM',
+                    index: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
             });
 
-            QUnit.test(`should return cell data when appointments are grouped horizontally if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+            QUnit.test(`should return cell data when appointments are grouped horizontally if scrolling is ${scrollingMode}`, function(assert) {
                 this.createInstance({
                     groupOrientation: 'horizontal',
-                    virtualScrolling: {
-                        enabled: virtualScrollingEnabled
+                    scrolling: {
+                        mode: scrollingMode
                     }
                 });
                 this.instance.option('groups', [
@@ -4088,17 +4146,19 @@ QUnit.module('Renovated Render', {
                     allDay: false,
                     text: '12:00 AM',
                     groups: { res: 2 },
+                    index: 0,
+                    groupIndex: 1,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
             });
 
-            QUnit.test(`should return cell data when appointments are grouped vertically if virtualScrollingEnabled: ${virtualScrollingEnabled}`, function(assert) {
+            QUnit.test(`should return cell data when appointments are grouped vertically if scrolling: ${scrollingMode}`, function(assert) {
                 this.createInstance({
                     groupOrientation: 'vertical',
                     showAllDayPanel: false,
-                    virtualScrolling: {
-                        enabled: virtualScrollingEnabled
+                    scrolling: {
+                        mode: scrollingMode
                     }
                 });
                 this.instance.option('groups', [
@@ -4117,6 +4177,8 @@ QUnit.module('Renovated Render', {
                     allDay: false,
                     text: '',
                     groups: { res: 1 },
+                    index: 1,
+                    groupIndex: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');

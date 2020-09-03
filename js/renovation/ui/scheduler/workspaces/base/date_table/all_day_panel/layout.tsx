@@ -8,16 +8,19 @@ import { addHeightToStyle } from '../../../utils';
 import { ViewCellData } from '../../../types.d';
 import { LayoutProps } from '../../layout_props';
 
-export const viewFunction = (viewModel: AllDayPanelLayout) => (
+export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
   <div
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     className={viewModel.classes}
     style={viewModel.style}
   >
-    { viewModel.props.visible && (
+    {viewModel.props.visible && (
       <Table className="dx-scheduler-all-day-table">
-        <TableBody viewData={viewModel.allDayPanelData} />
+        <TableBody
+          viewData={viewModel.allDayPanelData}
+          dataCellTemplate={viewModel.props.dataCellTemplate}
+        />
       </Table>
     )}
   </div>
