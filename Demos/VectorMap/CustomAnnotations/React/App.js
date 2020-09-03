@@ -19,7 +19,7 @@ export default function App() {
     }
 
     return annotationItem;
-  };
+  }
   return (
     <VectorMap
       id="vector-map"
@@ -43,7 +43,7 @@ export default function App() {
           >
           </Annotation>
         );
-        })
+      })
       }
     </VectorMap>
   );
