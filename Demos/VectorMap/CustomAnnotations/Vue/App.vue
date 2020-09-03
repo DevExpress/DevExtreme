@@ -46,11 +46,11 @@ export default {
   },
   methods: {
     customizeAnnotation: (annotationItem) => {
-      if (annotationItem.data.name === "Illinois") {
+      if (annotationItem.data.name === 'Illinois') {
         annotationItem.offsetY = -80;
         annotationItem.offsetX = -100;
       }
-  
+      
       return annotationItem;
     }
   },
