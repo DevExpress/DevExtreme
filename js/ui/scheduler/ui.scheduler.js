@@ -1237,7 +1237,11 @@ class Scheduler extends Widget {
 
         this._subscribes = subscribes;
 
-        this.timeZoneCalculator = new TimeZoneCalculator(this);
+        this.timeZoneCalculator = new TimeZoneCalculator({
+            getClientOffset: date => this.fire('getClientTimezoneOffset', date),
+            getCommonOffset: date => this._getTimezoneOffsetByOption(date),
+            getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+        });
     }
 
     _initTemplates() {
