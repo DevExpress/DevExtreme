@@ -25,3 +25,21 @@ export default async function createWidget(
     }))();
   }
 }
+
+export async function disposeWidget(
+  widgetName: string,
+  selector = '#container',
+) {
+  await ClientFunction(() => {
+    const $element = $(`${selector}`);
+    if ($element.length && $element.data()[widgetName]) {
+      $element[widgetName]('dispose');
+      $element.empty();
+    }
+  }, {
+    dependencies: {
+      widgetName,
+      selector,
+    },
+  })();
+}

@@ -1,11 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 
-fixture`Editing`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Editing`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(() => disposeWidget('dxDataGrid'));
 
 const getGridConfig = (config) => {
   const defaultConfig = {
@@ -82,7 +83,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
     },
   }),
   createWidget('dxSelectBox', {}, false, '#otherContainer'),
-]));
+])).after(() => disposeWidget('dxSelectBox', '#otherContainer'));
 
 test('Async Validation(Row) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');

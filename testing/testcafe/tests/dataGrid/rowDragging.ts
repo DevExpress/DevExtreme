@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 const isPlaceholderVisible = ClientFunction(() => $('.dx-sortable-placeholder').is(':visible'));
@@ -35,8 +35,9 @@ function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<voi
   })();
 }
 
-fixture`Row dragging`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Row dragging`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(() => disposeWidget('dxDataGrid'));
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
@@ -128,4 +129,4 @@ test('The placeholder should appear when a cross-component dragging rows after s
       },
     }, false, '#otherContainer'),
   ]);
-});
+}).after(() => disposeWidget('dxTreeList', '#otherContainer'));
