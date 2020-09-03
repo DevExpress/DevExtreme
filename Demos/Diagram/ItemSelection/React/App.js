@@ -23,12 +23,12 @@ class App extends React.Component {
       .filter(function(item) { return item.itemType === 'shape'; })
       .map(function(item) { return item.text; });
     if(items.length > 0) {
-      selectedItemNames = items.join(", ");
+      selectedItemNames = items.join(', ');
     }
     this.setState({
       selectedItemNames
     });
-  }  
+  }
 
   render() {
     return (

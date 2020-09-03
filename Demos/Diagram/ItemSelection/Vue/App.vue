@@ -51,7 +51,7 @@ export default {
         .filter(function(item) { return item.itemType === 'shape'; })
         .map(function(item) { return item.text; });
       if(items.length > 0) {
-        this.selectedItemNames = items.join(", ");
+        this.selectedItemNames = items.join(', ');
       }
     }
   }
