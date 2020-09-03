@@ -175,7 +175,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      */
     onSelectionChanged?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
     /**
-     * @docid dxDiagramOptions.onRequestOperation
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
