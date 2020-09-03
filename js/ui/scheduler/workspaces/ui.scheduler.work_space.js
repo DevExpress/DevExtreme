@@ -1051,9 +1051,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._renderTimePanel();
             this._renderGroupAllDayPanel();
             this._renderDateTable();
+            this._renderAllDayPanel();
         }
-
-        this._renderAllDayPanel();
 
         this._updateGroupTableHeight();
 
@@ -1068,12 +1067,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         const groupCountForRender = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const groupCount = this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
-        const rowCountInGroup = this._getTotalRowCount() / this._getGroupCount();
+        const rowCountInGroup = this._getRowCount();
 
         const options = {
+            horizontalGroupsCount: groupCount,
             groupCount: groupCountForRender,
             rowCountInGroup,
             cellCount: this._getTotalCellCount(groupCount),
+            cellCountInGroupRow: this._getCellCount(),
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0
@@ -1111,12 +1112,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(visible) {
             const options = {
                 viewData: this.viewDataProvider.viewData,
-                visible
+                visible,
+                dataCellTemplate: this.option('dataCellTemplate'),
             };
 
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
             this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
         }
+        this._toggleAllDayVisibility();
     }
 
     renderRTimeTable() {
@@ -1124,7 +1127,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$timePanel,
             dxrTimePanelTableLayout,
             'renovatedTimePanel',
-            { viewData: this.viewDataProvider.viewData }
+            {
+                viewData: this.viewDataProvider.viewData,
+                timeCellTemplate: this.option('timeCellTemplate'),
+            }
         );
     }
 
@@ -1134,7 +1140,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         let component = this[componentName];
         if(!component) {
             const container = getPublicElement(parentElement);
-            component = this._createComponent(container, componentClass, viewModel);
+            component = this._createComponent(container, componentClass, {
+                ...viewModel,
+                groupOrientation: this.option('groupOrientation'),
+            });
             this[componentName] = component;
         } else {
             Object.getOwnPropertyNames(viewModel).forEach((optionName) => {

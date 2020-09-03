@@ -48,13 +48,53 @@ describe('MonthHeaderPanelCell', () => {
       expect(cell.childAt(0).text())
         .toBe('week day');
     });
+
+    it('should render template and should not render children', () => {
+      const dateCellTemplate = () => null;
+      const cell = render({
+        props: {
+          dateCellTemplate,
+        },
+      });
+
+      expect(cell.children())
+        .toHaveLength(1);
+      expect(cell.find(dateCellTemplate).exists())
+        .toBe(true);
+    });
+
+    it('should pass correct props to the template', () => {
+      const dateCellTemplate = () => null;
+      const props = {
+        groups: { id: 1 },
+        groupIndex: 1,
+        index: 0,
+        text: 'Test text',
+        dateCellTemplate,
+      };
+
+      const cell = render({ props });
+
+      const renderedTemplate = cell.find(dateCellTemplate);
+
+      expect(renderedTemplate.props())
+        .toEqual({
+          data: {
+            date: startDate,
+            text: props.text,
+            groups: props.groups,
+            groupIndex: props.groupIndex,
+          },
+          index: props.index,
+        });
+    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
       describe('weekDay', () => {
         it('should call getDayNames with correct parameter and choose correct day name', () => {
-          const cell = new Cell({ startDate: new Date(2020, 6, 9) });
+          const cell = new Cell({ startDate: new Date(2020, 6, 9), index: 0 });
 
           const { weekDay } = cell;
           expect(dateLocalization.getDayNames)

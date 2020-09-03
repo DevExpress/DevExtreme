@@ -1,18 +1,19 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
+import { combineClasses } from '../../../../../utils/combine_classes';
+import { ContentTemplateProps } from '../../types.d';
 
-export const viewFunction = (viewModel: DateTableCellBase) => (
+export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
   <Cell
-    // eslint-disable-next-line react/jsx-props-no-spreading
+      // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     isFirstCell={viewModel.props.isFirstCell}
     isLastCell={viewModel.props.isLastCell}
-    className={
-        `dx-scheduler-date-table-cell dx-scheduler-cell-sizes-horizontal
-        dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`
-      }
+    contentTemplate={viewModel.props.dataCellTemplate}
+    contentTemplateProps={viewModel.dataCellTemplateProps}
+    className={viewModel.classes}
   >
     {viewModel.props.children}
   </Cell>
@@ -20,15 +21,34 @@ export const viewFunction = (viewModel: DateTableCellBase) => (
 
 @ComponentBindings()
 export class DateTableCellBaseProps extends CellBaseProps {
-  @OneWay() startDate?: Date = new Date();
-
-  @OneWay() endDate?: Date = new Date();
-
-  @OneWay() groups?: object;
+  @Template() dataCellTemplate?: any;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {}
+export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
+  get classes(): string {
+    const { className = '', allDay } = this.props;
+    return combineClasses({
+      'dx-scheduler-cell-sizes-horizontal': true,
+      'dx-scheduler-cell-sizes-vertical': !allDay,
+      'dx-scheduler-date-table-cell': !allDay,
+      [className]: true,
+    });
+  }
+
+  get dataCellTemplateProps(): ContentTemplateProps {
+    const {
+      index, startDate, endDate, groups, groupIndex, text, allDay,
+    } = this.props;
+
+    return {
+      data: {
+        startDate, endDate, groups, groupIndex, text: text || '', allDay: allDay || undefined,
+      },
+      index,
+    };
+  }
+}

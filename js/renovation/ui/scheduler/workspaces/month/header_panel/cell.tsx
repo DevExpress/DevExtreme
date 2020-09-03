@@ -1,29 +1,45 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, Template, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import dateLocalization from '../../../../../../localization/date';
+import { CellBaseProps } from '../../base/cell';
 
-export const viewFunction = (viewModel: MonthHeaderPanelCell) => (
-  <td
-    className={
+export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
+  const DateCellTemplate = viewModel.props.dateCellTemplate;
+
+  return (
+    <th
+      className={
       `dx-scheduler-header-panel-cell dx-scheduler-cell-sizes-horizontal ${viewModel.props.className}`
     }
       // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-  >
-    <div>
-      {viewModel.weekDay}
-    </div>
-  </td>
-);
+      {...viewModel.restAttributes}
+    >
+      {DateCellTemplate && (
+        <DateCellTemplate
+          data={{
+            date: viewModel.props.startDate,
+            text: viewModel.props.text,
+            groups: viewModel.props.groups,
+            groupIndex: viewModel.props.groupIndex,
+          }}
+          index={viewModel.props.index}
+        />
+      )}
+      {!DateCellTemplate && (
+        <div>
+          {viewModel.weekDay}
+        </div>
+      )}
+    </th>
+  );
+};
 
 @ComponentBindings()
-export class MonthHeaderPanelCellProps {
-  @OneWay() startDate?: Date = new Date();
+export class MonthHeaderPanelCellProps extends CellBaseProps {
+  @Template() dateCellTemplate?: any;
 
-  @OneWay() endDate?: Date = new Date();
-
-  @OneWay() className?: string = '';
+  @OneWay() today?: boolean = false;
 }
 
 @Component({

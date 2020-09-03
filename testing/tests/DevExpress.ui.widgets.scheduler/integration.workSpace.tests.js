@@ -1978,3 +1978,677 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+QUnit.module('Cell Templates in renovated views', () => {
+    const allDayCells = [{
+        data: {
+            startDate: new Date(2020, 7, 23),
+            endDate: new Date(2020, 7, 23),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 0,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 24),
+            endDate: new Date(2020, 7, 24),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 1,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 25),
+            endDate: new Date(2020, 7, 25),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 2,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 26),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 3,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 27),
+            endDate: new Date(2020, 7, 27),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 4,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 28),
+            endDate: new Date(2020, 7, 28),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 5,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 29),
+            endDate: new Date(2020, 7, 29),
+            allDay: true,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 6,
+    }];
+    const dataCells = [{
+        data: {
+            startDate: new Date(2020, 7, 23, 0),
+            endDate: new Date(2020, 7, 23, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 0,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 24, 0),
+            endDate: new Date(2020, 7, 24, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 1,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 25, 0),
+            endDate: new Date(2020, 7, 25, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 2,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 26, 0),
+            endDate: new Date(2020, 7, 26, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 3,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 27, 0),
+            endDate: new Date(2020, 7, 27, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 4,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 28, 0),
+            endDate: new Date(2020, 7, 28, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 5,
+    }, {
+        data: {
+            startDate: new Date(2020, 7, 29, 0),
+            endDate: new Date(2020, 7, 29, 1),
+            allDay: undefined,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '',
+        },
+        index: 6,
+    }];
+
+
+    const resources = [
+        {
+            field: 'ownerId',
+            dataSource: [
+                { id: 1, text: 'John' },
+                { id: 2, text: 'Mike' }
+            ]
+        }
+    ];
+    const firstGroup = {
+        groupIndex: 0,
+        groups: { ownerId: 1 },
+    };
+    const secondGroup = {
+        groupIndex: 1,
+        groups: { ownerId: 2 },
+    };
+    const groupedCells = [{
+        ...firstGroup,
+        index: 0,
+    }, {
+        ...firstGroup,
+        index: 1,
+    }, {
+        ...firstGroup,
+        index: 2,
+    }, {
+        ...firstGroup,
+        index: 3,
+    }, {
+        ...firstGroup,
+        index: 4,
+    }, {
+        ...firstGroup,
+        index: 5,
+    }, {
+        ...firstGroup,
+        index: 6,
+    }, {
+        ...secondGroup,
+        index: 0,
+    }, {
+        ...secondGroup,
+        index: 1
+    }, {
+        ...secondGroup,
+        index: 2
+    }, {
+        ...secondGroup,
+        index: 3,
+    }, {
+        ...secondGroup,
+        index: 4,
+    }, {
+        ...secondGroup,
+        index: 5,
+    }, {
+        ...secondGroup,
+        index: 6,
+    }];
+
+    const checkGroups = (assert, expectedTemplateOptions, templateOptions) => {
+        expectedTemplateOptions.forEach((expectedSingleTemplateOptions, templateIndex) => {
+            const singleTemplateOptions = templateOptions[templateIndex];
+            const { index, groupIndex, groups } = singleTemplateOptions;
+            const { index: expectedIndex, groupIndex: expectedGroupIndex, groups: expectedGroups } = expectedSingleTemplateOptions;
+
+            assert.equal(index, expectedIndex, 'Index is correct');
+            assert.equal(groupIndex, expectedGroupIndex, 'Group index is correct');
+            assert.deepEqual(groups, expectedGroups, 'Groups are correct');
+        });
+    };
+
+    const timeCells = [{
+        data: {
+            date: dataCells[0].data.startDate,
+            groupIndex: undefined,
+            groups: undefined,
+            text: '12:00 AM',
+        },
+        index: 0
+    }];
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [dataCells[0]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: dataCells,
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [{
+            ...dataCells[1],
+            index: 0,
+        }, {
+            ...dataCells[2],
+            index: 1,
+        }, {
+            ...dataCells[3],
+            index: 2,
+        }, {
+            ...dataCells[4],
+            index: 3,
+        }, {
+            ...dataCells[5],
+            index: 4,
+        }],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [viewType],
+                currentView: viewType,
+                showAllDayPanel: false,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ data, index });
+                },
+            });
+
+            assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [allDayCells[0], dataCells[0]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: [...allDayCells, ...dataCells],
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [{
+            ...allDayCells[1],
+            index: 0,
+        }, {
+            ...allDayCells[2],
+            index: 1,
+        }, {
+            ...allDayCells[3],
+            index: 2,
+        }, {
+            ...allDayCells[4],
+            index: 3,
+        }, {
+            ...allDayCells[5],
+            index: 4,
+        }, {
+            ...dataCells[1],
+            index: 0,
+        }, {
+            ...dataCells[2],
+            index: 1,
+        }, {
+            ...dataCells[3],
+            index: 2,
+        }, {
+            ...dataCells[4],
+            index: 3,
+        }, {
+            ...dataCells[5],
+            index: 4,
+        }],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [viewType],
+                currentView: viewType,
+                showAllDayPanel: true,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ data, index });
+                },
+            });
+
+            assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[0], groupedCells[7], groupedCells[7]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(0, 7), ...groupedCells.slice(0, 7),
+            ...groupedCells.slice(7, 14), ...groupedCells.slice(7, 14),
+        ],
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(1, 6), ...groupedCells.slice(1, 6),
+            ...groupedCells.slice(8, 13), ...groupedCells.slice(8, 13),
+        ].map(({ index, ...restProps }) => ({
+            ...restProps,
+            index: index - 1,
+        })),
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7], groupedCells[0], groupedCells[7]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(0, 7), ...groupedCells.slice(7, 14),
+            ...groupedCells.slice(0, 7), ...groupedCells.slice(7, 14),
+        ],
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(1, 6), ...groupedCells.slice(8, 13),
+            ...groupedCells.slice(1, 6), ...groupedCells.slice(8, 13),
+        ].map(({ index, ...restProps }) => ({
+            ...restProps,
+            index: index - 1,
+        })),
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+
+    const groupedByDateWeek = [
+        groupedCells[0], groupedCells[7],
+        groupedCells[1], groupedCells[8],
+        groupedCells[2], groupedCells[9],
+        groupedCells[3], groupedCells[10],
+        groupedCells[4], groupedCells[11],
+        groupedCells[5], groupedCells[12],
+        groupedCells[6], groupedCells[13],
+    ];
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7], groupedCells[0], groupedCells[7]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: [...groupedByDateWeek, ...groupedByDateWeek],
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [
+            ...groupedByDateWeek.slice(2, 12), ...groupedByDateWeek.slice(2, 12),
+        ].map(({ index, ...restProps }) => ({
+            ...restProps,
+            index: index - 1,
+        })),
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} view when appointments are grouped by date`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
+    }, {
+        viewType: 'week',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(0, 7),
+            ...groupedCells.slice(7, 14),
+        ],
+    }, {
+        viewType: 'workWeek',
+        expectedTemplateOptions: [
+            ...groupedCells.slice(1, 6),
+            ...groupedCells.slice(8, 13),
+        ].map(({ index, ...restProps }) => ({
+            ...restProps,
+            index: index - 1,
+        })),
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${viewType} with grouping and virtual scrolling`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                height: 1000,
+                showAllDayPanel: false,
+                currentDate: new Date(2020, 7, 23),
+                scrolling: { mode: 'virtual' },
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: timeCells,
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [viewType],
+                currentView: viewType,
+                showAllDayPanel: false,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ data, index });
+                },
+            });
+
+            assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: timeCells,
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [viewType],
+                currentView: viewType,
+                showAllDayPanel: true,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ data, index });
+                },
+            });
+
+            assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [{
+            index: 0,
+            groupIndex: undefined,
+            groups: undefined,
+        }],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                currentDate: new Date(2020, 7, 23),
+                renovateRender: true,
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+
+    [{
+        viewType: 'day',
+        expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
+    }].forEach(({ viewType, expectedTemplateOptions }) => {
+        QUnit.test(`timeCellTemplate should have correct options in ${viewType} view with grouping and virtual scrolling`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [{
+                    type: viewType,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: viewType,
+                startDayHour: 0,
+                endDayHour: 1,
+                cellDuration: 60,
+                height: 1000,
+                showAllDayPanel: false,
+                currentDate: new Date(2020, 7, 23),
+                scrolling: { mode: 'virtual' },
+                timeCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+                groups: ['ownerId'],
+                resources,
+            });
+
+            checkGroups(assert, expectedTemplateOptions, templateOptions);
+        });
+    });
+});
