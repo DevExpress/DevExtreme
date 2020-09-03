@@ -3,6 +3,7 @@ const gulp = require('gulp');
 const through = require('through2');
 const remoteSrc = require('gulp-remote-src');
 const rename = require('gulp-rename');
+const lint = require('gulp-eslint');
 
 function prepareUntils(untils) {
     const result = [];
@@ -25,8 +26,7 @@ function prepareUntils(untils) {
 }
 
 function prepareOffsets(offsets) {
-    const uniqueOffsets = offsets.filter((v, i, a) => a.indexOf(v) === i);
-    return uniqueOffsets;
+    return offsets.filter((v, i, a) => a.indexOf(v) === i);
 }
 
 function prepareOffsetIndices(offsets, timezoneOffsets) {
@@ -34,28 +34,31 @@ function prepareOffsetIndices(offsets, timezoneOffsets) {
     return offsetIndices.join('');
 }
 
-function transformJson(input) {
-    const result1 = { zones: {} };
+function transformTimezoneData(input) {
     const result = [];
 
-    Object.keys(input).forEach(topLevelKey => {
-        if(topLevelKey === 'zones') {
-            const items = input[topLevelKey];
+    Object.keys(input).forEach(key => {
+        if(key === 'zones') {
+            const items = input[key];
             items.forEach(timezone => {
                 const timezoneOffsets = timezone.offsets;
                 const offsets = prepareOffsets(timezoneOffsets);
+                const untils = prepareUntils(timezone.untils);
+                const offsetIndices = prepareOffsetIndices(offsets, timezoneOffsets);
 
                 result.push({
                     id: timezone.name,
-                    untils: prepareUntils(timezone.untils),
+                    untils: untils,
                     offsets: offsets.join('|'),
-                    offsetIndices: prepareOffsetIndices(offsets, timezoneOffsets)
+                    offsetIndices: offsetIndices
                 });
             });
         }
     });
-    result1.zones = result;
-    return result1;
+
+    return {
+        zones: result
+    };
 }
 
 gulp.task('create-timezones-data', function() {
@@ -65,10 +68,16 @@ gulp.task('create-timezones-data', function() {
         through.obj((file, enc, cb) => {
             const rawJSON = file.contents.toString();
             const parsed = JSON.parse(rawJSON);
-            const transformed = transformJson(parsed);
+            const transformed = transformTimezoneData(parsed);
             const stringify = JSON.stringify(transformed, null, 2);
-            file.contents = Buffer.from('export default' + stringify);
+            file.contents = Buffer.from('export default ' + stringify);
             cb(null, file);
-        })
-    ).pipe(rename('ui.scheduler.timezones_data_1.js')).pipe(gulp.dest('js/ui/scheduler/timezones'));
+        }))
+        .pipe(rename('ui.scheduler.timezones_data.js'))
+        .pipe(lint({
+            fix: true,
+            configFile: './.eslintrc'
+        }))
+        .pipe(lint.format())
+        .pipe(gulp.dest('js/ui/scheduler/timezones'));
 });
