@@ -49,9 +49,17 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             autoTableOptions: { tableWidth: 250 }
         };
 
+        const expectedCells = {
+            head: [],
+            body: []
+        };
+
         exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
             const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkCellsContent([], [], autoTableOptions);
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+            });
             done();
         });
     });
@@ -69,9 +77,17 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             autoTableOptions: { tableWidth: 250 }
         };
 
+        const expectedCells = {
+            head: [[{ content: 'f1' }]],
+            body: [[{ content: 'text1' }]]
+        };
+
         exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
             const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkCellsContent([['f1']], [['text1']], autoTableOptions);
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+            });
             done();
         });
     });
@@ -99,12 +115,110 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
                 keepColumnWidths: keepColumnWidths
             };
 
+            const expectedColumnWidths = keepColumnWidths ? [25, 225] : [100, 'auto'];
+            const expectedCells = {
+                head: [[{ content: 'id' }, { content: 'name' }]],
+                body: [[{ content: 1 }, { content: 'test' }]]
+            };
+
             exportDataGrid(getOptions(this, dataGrid, options)).then((jsPDFDocument) => {
                 const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
                 assert.strictEqual(autoTableOptions.tableWidth, 250, 'autoTableWidth');
-                const expectedColumnWidths = keepColumnWidths ? [25, 225] : [100, 'auto'];
                 helper.checkColumnWidths(expectedColumnWidths, autoTableOptions);
-                helper.checkCellsContent([['id', 'name']], [[1, 'test']], autoTableOptions);
+                ['head', 'body'].forEach((rowType) => {
+                    helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                    helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                });
+                done();
+            });
+        });
+    });
+
+    QUnit.test('grouping, row hasn\'t additional items', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'text1_1', f2: 'text1_2', f3: 'group1' },
+            { f1: 'text2_1', f2: 'text2_2', f3: 'group1' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            columns: [
+                { dataField: 'f1', caption: 'f1' },
+                { dataField: 'f2', caption: 'f2' },
+                { dataField: 'f3', caption: 'f3', groupIndex: 0 }
+            ],
+            loadingTimeout: undefined,
+            showColumnHeaders: true
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[{ content: 'f1' }, { content: 'f2' }]],
+            body: [
+                [{ content: 'f3: group1', colSpan: 2 }],
+                [{ content: 'text1_1' }, { content: 'text1_2' }],
+                [{ content: 'text2_1' }, { content: 'text2_2' }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    [true, false].forEach((alignByColumn) => {
+        QUnit.test(`grouping, row has additional items, alignByColumn === ${alignByColumn}`, function(assert) {
+            const done = assert.async();
+            const ds = [
+                { f1: 'text1_1', f2: 'text1_2', f3: 1, f4: 'group1', f5: 'text1_5' },
+                { f1: 'text2_1', f2: 'text2_2', f3: 1, f4: 'group1', f5: 'text2_5' }
+            ];
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: ds,
+                columns: [
+                    { dataField: 'f1', caption: 'f1' },
+                    { dataField: 'f2', caption: 'f2' },
+                    { dataField: 'f3', caption: 'f3' },
+                    { dataField: 'f4', caption: 'f4', groupIndex: 0 },
+                    { dataField: 'f5', caption: 'f5' }
+                ],
+                summary: {
+                    groupItems: [{
+                        column: 'f3',
+                        summaryType: 'sum',
+                        showInGroupFooter: false,
+                        alignByColumn: alignByColumn
+                    }]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: true
+            }).dxDataGrid('instance');
+
+            const groupRow = alignByColumn
+                ? [{ content: 'f4: group1', colSpan: 2 }, { content: 'Sum: 2' }, {}]
+                : [{ content: 'f4: group1 (Sum of f3 is 2)', colSpan: 4 }];
+
+            const expectedCells = {
+                head: [[{ content: 'f1' }, { content: 'f2' }, { content: 'f3' }, { content: 'f5' }]],
+                body: [
+                    groupRow,
+                    [{ content: 'text1_1' }, { content: 'text1_2' }, { content: 1 }, { content: 'text1_5' } ],
+                    [{ content: 'text2_1' }, { content: 'text2_2' }, { content: 1 }, { content: 'text2_5' }]
+                ]
+            };
+
+            exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+                const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+                ['head', 'body'].forEach((rowType) => {
+                    helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                    helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                    helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+                });
                 done();
             });
         });

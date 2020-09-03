@@ -91,11 +91,21 @@ export const Export = {
 
                         if(!isDefined(rowType)) { rowType = gridCell.rowType; }
 
-                        row.push(pdfCell);
+                        if(rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
+                            if(!isDefined(row[0].colSpan)) {
+                                row[0].colSpan = 1;
+                            }
+                            row[0].colSpan += 1;
+                        } else {
+                            row.push(pdfCell);
+                        }
                     }
 
-                    if(rowType === 'header') { autoTableOptions.head.push(row); }
-                    if(rowType === 'data') { autoTableOptions.body.push(row); }
+                    if(rowType === 'header') {
+                        autoTableOptions.head.push(row);
+                    } else {
+                        autoTableOptions.body.push(row);
+                    }
                 }
 
                 jsPDFDocument.autoTable(autoTableOptions);
