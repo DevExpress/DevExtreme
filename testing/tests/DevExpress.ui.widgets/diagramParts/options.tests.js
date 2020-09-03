@@ -296,6 +296,19 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 28800);
     });
 
+    test('should apply operationSettins to settings', function(assert) {
+        this.instance.option('operationSettings.allowAddShape', false);
+        this.instance.option('operationSettings.allowDeleteShape', false);
+        this.instance.option('operationSettings.allowDeleteConnector', false);
+        this.instance.option('operationSettings.allowChangeConnection', false);
+        this.instance.option('operationSettings.allowChangeConnectorPoints', false);
+        assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.deleteConnector, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.connectionChange, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorPoints, false);
+    });
+
     test('should change dataSource options', function(assert) {
         assert.equal(this.instance._diagramInstance.documentDataSource, undefined);
         this.instance.option('nodes.dataSource', [
