@@ -73,15 +73,15 @@ const isSameAppointmentDates = (startDate, endDate) => {
 };
 
 const utils = {
-    getDaylightOffset: getDaylightOffset,
-    getDaylightOffsetInMs: getDaylightOffsetInMs,
-    getTimezoneOffsetChangeInMinutes: getTimezoneOffsetChangeInMinutes,
-    getTimezoneOffsetChangeInMs: getTimezoneOffsetChangeInMs,
-    calculateTimezoneByValue: calculateTimezoneByValue,
-    getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
-    isTimezoneChangeInDate: isTimezoneChangeInDate,
-    isSameAppointmentDates: isSameAppointmentDates,
-    correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
+    getDaylightOffset,
+    getDaylightOffsetInMs,
+    getTimezoneOffsetChangeInMinutes,
+    getTimezoneOffsetChangeInMs,
+    calculateTimezoneByValue,
+    getCorrectedDateByDaylightOffsets,
+    isTimezoneChangeInDate,
+    isSameAppointmentDates,
+    correctRecurrenceExceptionByTimezone
 };
 
 export default utils;

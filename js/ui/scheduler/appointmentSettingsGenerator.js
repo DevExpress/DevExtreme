@@ -13,8 +13,6 @@ export default class AppointmentSettingsGenerator {
         const renderingStrategy = this.scheduler.getLayoutManager().getRenderingStrategyInstance();
         let allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
 
-        const appointmentDuration = appointment.duration;
-
         const appointmentList = this._createRecurrenceAppointments(appointment, appointment.duration);
         if(appointmentList.length === 0) {
             appointmentList.push({
@@ -51,7 +49,7 @@ export default class AppointmentSettingsGenerator {
                 });
 
                 const newArr = longParts.filter(el => new Date(el) < maxDate)
-                    .map(date => this._createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointmentDuration)), gridAppointment.source));
+                    .map(date => this._createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointment.duration)), gridAppointment.source));
 
                 resultDates = resultDates.concat(newArr);
             });
@@ -65,7 +63,7 @@ export default class AppointmentSettingsGenerator {
         return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
     }
 
-    _createExtremeRecurrenceDate(rawAppointment) {
+    _createExtremeRecurrenceDates(rawAppointment) {
         const dateRange = this.scheduler._workSpace.getDateRange();
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0];
         const commonTimeZone = this.scheduler.option('timeZone');
@@ -73,6 +71,7 @@ export default class AppointmentSettingsGenerator {
         const minRecurrenceDate = commonTimeZone ?
             this.scheduler.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' }) :
             startViewDate;
+
         const maxRecurrenceDate = commonTimeZone ?
             this.scheduler.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' }) :
             dateRange[1];
@@ -81,28 +80,18 @@ export default class AppointmentSettingsGenerator {
     }
 
     _createRecurrenceOptions(appointment) {
-        const [minRecurrenceDate, maxRecurrenceDate] = this._createExtremeRecurrenceDate(appointment.source());
+        const [minRecurrenceDate, maxRecurrenceDate] = this._createExtremeRecurrenceDates(appointment.source());
 
-        const baseOption = {
+        return {
             rule: appointment.recurrenceRule,
             exception: appointment.recurrenceException,
             min: minRecurrenceDate,
             max: maxRecurrenceDate,
-            firstDayOfWeek: this.scheduler.getFirstDayOfWeek()
-        };
+            firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
 
-        const startDateOption = Object.assign({
             start: appointment.startDate,
             end: appointment.endDate,
-        }, baseOption);
-
-        const endDateOption = Object.assign({
-            start: appointment.endDate,
-            end: appointment.endDate,
-            min: appointment.endDate
-        }, baseOption);
-
-        return [startDateOption, endDateOption];
+        };
     }
 
     _createAppointmentInfo(startDate, endDate, source) {
@@ -114,12 +103,10 @@ export default class AppointmentSettingsGenerator {
     }
 
     _createRecurrenceAppointments(appointment, duration) {
-        const [startDateOption] = this._createRecurrenceOptions(appointment);
+        const option = this._createRecurrenceOptions(appointment);
+        const generatedStartDates = getRecurrenceProcessor().generateDates(option);
 
-        const startDates = getRecurrenceProcessor().generateDates(startDateOption);
-
-        return startDates.map((date, index) => {
-
+        return generatedStartDates.map(date => {
             const utcDate = getRecurrenceProcessor()._getRRuleUtcDate(new Date(date));
             utcDate.setTime(utcDate.getTime() + duration);
             const rawEndDate = getRecurrenceProcessor()._getCorrectDateByTimezoneOffset(utcDate);
