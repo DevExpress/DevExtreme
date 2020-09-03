@@ -596,7 +596,7 @@ const DropDownButton = Widget.inherit({
                 this._updateItemCollection(name);
                 break;
             case 'dataSource':
-                if(value instanceof Array) {
+                if(Array.isArray(value)) {
                     this._updateDataSource(this.option('dataSource'));
                 } else {
                     this._initDataSource();
