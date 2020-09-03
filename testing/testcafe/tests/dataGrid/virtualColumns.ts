@@ -1,10 +1,10 @@
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidget } from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture.disablePageReloads`Virtual Columns`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidget('dxDataGrid'));
+  .afterEach(() => disposeWidgets());
 
 test('DataGrid should not scroll back to the focused cell after horizontal scrolling if \'columnRenderingMode\' is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');

@@ -1,11 +1,11 @@
 import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidget } from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture.disablePageReloads`Keyboard Navigation`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidget('dxDataGrid'));
+  .afterEach(() => disposeWidgets());
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');

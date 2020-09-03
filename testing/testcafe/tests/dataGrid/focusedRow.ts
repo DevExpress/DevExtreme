@@ -1,11 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidget } from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture.disablePageReloads`Focused row`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidget('dxDataGrid'));
+  .afterEach(() => disposeWidgets());
 
 test('onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)', async (t) => {
   const dataGrid = new DataGrid('#container');
