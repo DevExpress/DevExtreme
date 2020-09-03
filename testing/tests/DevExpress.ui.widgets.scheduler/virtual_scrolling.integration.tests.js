@@ -188,7 +188,8 @@ QUnit.module('AppointmentSettings', {
                     currentDate: new Date(2015, 2, 2),
                     scrolling: {
                         mode: 'virtual'
-                    }
+                    },
+                    height: 400
                 });
 
                 const { instance } = this.scheduler;
@@ -218,7 +219,8 @@ QUnit.module('AppointmentSettings', {
                 resources: [{
                     fieldExpr: 'resourceId0',
                     dataSource: [{ id: 0 }]
-                }]
+                }],
+                height: 400
             });
 
             const { instance } = this.scheduler;
@@ -250,7 +252,8 @@ QUnit.module('AppointmentSettings', {
                         { id: 0 },
                         { id: 1 }
                     ]
-                }]
+                }],
+                height: 400
             });
 
             const { instance } = this.scheduler;
@@ -279,7 +282,8 @@ QUnit.module('AppointmentSettings', {
                 resources: [{
                     fieldExpr: 'resourceId0',
                     dataSource: [{ id: 0 }]
-                }]
+                }],
+                height: 400
             });
 
             const { instance } = this.scheduler;
@@ -309,7 +313,8 @@ QUnit.module('AppointmentSettings', {
                 resources: [{
                     fieldExpr: 'resourceId0',
                     dataSource: [{ id: 0 }]
-                }]
+                }],
+                height: 400
             });
 
             const { instance } = this.scheduler;
