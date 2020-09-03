@@ -1,36 +1,6 @@
-@use "../base/mixins" as *;
+@use "./mixins" as *;
 
 // adduse
-
-
-@mixin dx-popover-arrow-size($width) {
-  $sqrt-2: 1.4142;
-  $popover-arrow-width: $width;
-  $popover-arrow-heiht: $popover-arrow-width / 2;
-
-  .dx-popover-wrapper {
-    .dx-popover-arrow:after {
-      width: $popover-arrow-width / $sqrt-2;
-      height: $popover-arrow-width / $sqrt-2;
-    }
-
-    &.dx-position-top,
-    &.dx-position-bottom {
-      .dx-popover-arrow {
-        width: $popover-arrow-width;
-        height: $popover-arrow-heiht;
-      }
-    }
-
-    &.dx-position-right,
-    &.dx-position-left {
-      .dx-popover-arrow {
-        width: $popover-arrow-heiht;
-        height: $popover-arrow-width;
-      }
-    }
-  }
-}
 
 @include dx-popover-arrow-size(20px);
 
