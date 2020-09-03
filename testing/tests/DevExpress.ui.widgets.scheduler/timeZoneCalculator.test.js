@@ -1,4 +1,4 @@
-import { TimeZoneCalculator } from 'ui/scheduler/TimeZoneCalculator';
+import { TimeZoneCalculator } from 'ui/scheduler/timeZoneCalculator';
 import dateUtils from 'core/utils/date';
 
 const toMs = dateUtils.dateToMilliseconds;
