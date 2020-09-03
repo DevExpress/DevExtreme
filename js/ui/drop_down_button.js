@@ -526,6 +526,7 @@ const DropDownButton = Widget.inherit({
 
     _updateItemCollection(optionName) {
         const selectedItemKey = this.option('selectedItemKey');
+        this._setListOption('selectedItem', null);
         this._setWidgetOption('_list', [optionName]);
 
         if(isDefined(selectedItemKey)) {
