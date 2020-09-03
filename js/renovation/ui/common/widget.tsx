@@ -22,7 +22,7 @@ import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
-import { EffectReturn } from '../../utils/effect_return.d';
+import { EffectReturn } from '../../utils/effect_return';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {

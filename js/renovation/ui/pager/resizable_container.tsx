@@ -8,7 +8,7 @@ import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
 import { GetHtmlElement } from './common/types';
 import { getElementWidth } from './utils/get_element_width';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({

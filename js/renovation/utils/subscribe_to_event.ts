@@ -1,6 +1,6 @@
 import eventsEngine from '../../events/core/events_engine';
 import * as clickEvent from '../../events/click';
-import { DisposeEffectReturn } from './effect_return.d';
+import { DisposeEffectReturn } from './effect_return';
 
 export function subscribeToEvent(eventName: string) {
   return (element: HTMLElement, handler): DisposeEffectReturn => {

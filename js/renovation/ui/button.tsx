@@ -22,7 +22,7 @@ import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
 import BaseComponent from '../preact_wrapper/button';
-import { EffectReturn } from '../utils/effect_return.d';
+import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
