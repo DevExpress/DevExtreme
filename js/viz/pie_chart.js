@@ -510,6 +510,11 @@ _each(OPTIONS_FOR_REFRESH_SERIES, function(_, name) {
     dxPieChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_DATA_INIT';
 });
 
+import { plugins } from './core/annotations';
+
+dxPieChart.addPlugin(plugins.core);
+dxPieChart.addPlugin(plugins.pieChart);
+
 registerComponent('dxPieChart', dxPieChart);
 
 export default dxPieChart;

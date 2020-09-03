@@ -11,7 +11,15 @@ class ItemsOption extends Component {
     _dataSourceChangedHandler(newItems, e) {
         this._resetCache();
         this._items = newItems.map(item => Object.assign({}, item));
-        this._diagramWidget._onDataSourceChanged();
+
+        if(e && e.changes) {
+            const changes = e.changes.filter(change => !change.internalChange);
+            if(changes.length) {
+                this._diagramWidget._reloadContentByChanges(changes, true);
+            }
+        } else {
+            this._diagramWidget._onDataSourceChanged();
+        }
     }
     _dataSourceLoadingChangedHandler(isLoading) {
         if(isLoading && !this._dataSource.isLoaded()) {
@@ -20,10 +28,25 @@ class ItemsOption extends Component {
             this._diagramWidget._hideLoadingIndicator();
         }
     }
+    _prepareData(dataObj) {
+        for(const key in dataObj) {
+            if(!Object.prototype.hasOwnProperty.call(dataObj, key)) continue;
+
+            if(dataObj[key] === undefined) {
+                dataObj[key] = null;
+            }
+        }
+        return dataObj;
+    }
+
     insert(data, callback, errorCallback) {
         this._resetCache();
-        this._getStore().insert(data).done(
-            (data) => {
+        const store = this._getStore();
+        store.insert(this._prepareData(data)).done(
+            (data, key) => {
+                const changes = [{ type: 'insert', key, data, internalChange: true }];
+                store.push(changes);
+                this._diagramWidget._reloadContentByChanges(changes, false);
                 if(callback) {
                     callback(data);
                 }
@@ -39,15 +62,19 @@ class ItemsOption extends Component {
         );
     }
     update(key, data, callback, errorCallback) {
-        const storeKey = this._getStoreKey(data);
-        this._getStore().update(storeKey, data).done(
-            function(data, key) {
+        const store = this._getStore();
+        const storeKey = store.keyOf(data);
+        store.update(storeKey, this._prepareData(data)).done(
+            (data, key) => {
+                const changes = [{ type: 'update', key, data, internalChange: true }];
+                store.push(changes);
+                this._diagramWidget._reloadContentByChanges(changes, false);
                 if(callback) {
                     callback(key, data);
                 }
             }
         ).fail(
-            function(error) {
+            (error) => {
                 if(errorCallback) {
                     errorCallback(error);
                 }
@@ -56,11 +83,15 @@ class ItemsOption extends Component {
     }
     remove(key, data, callback, errorCallback) {
         this._resetCache();
-        const storeKey = this._getStoreKey(data);
-        this._getStore().remove(storeKey).done(
+        const store = this._getStore();
+        const storeKey = store.keyOf(data);
+        store.remove(storeKey).done(
             (key) => {
+                const changes = [{ type: 'remove', key, internalChange: true }];
+                store.push(changes);
+                this._diagramWidget._reloadContentByChanges(changes, false);
                 if(callback) {
-                    callback(key, data);
+                    callback(key);
                 }
                 this._resetCache();
             }
@@ -155,10 +186,7 @@ class ItemsOption extends Component {
         };
     }
     _getStore() {
-        return this._dataSource.store();
-    }
-    _getStoreKey(data) {
-        return this._getStore().keyOf(data);
+        return this._dataSource && this._dataSource.store();
     }
     _resetCache() {
         this._cache = {};

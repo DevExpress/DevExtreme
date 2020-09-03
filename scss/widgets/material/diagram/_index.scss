@@ -89,6 +89,42 @@ $diagram-toolbox-title-size: 18px;
     }
   }
 
+  .dxdi-control:not(.focused) .dxdi-canvas {
+    .selection-mark,
+    .geometry-mark {
+      stroke: #666;
+    }
+
+    .item-selection-rect,
+    .items-selection-rect {
+      fill: transparent;
+      stroke: #666;
+    }
+
+    .items-selection-rect {
+      fill: rgba(144, 144, 144, 0.02);
+    }
+
+    .item-multi-selection-rect {
+      fill: rgba(144, 144, 144, 0.02);
+      stroke: #666;
+    }
+
+    .connector-selection,
+    .connector-multi-selection {
+      stroke: #666;
+    }
+
+    .connector-point-mark,
+    .connector-side-mark {
+      stroke: #666;
+    }
+
+    .connector-side-mark {
+      fill: #666;
+    }
+  }
+
   .dxdi-text-input-container.connector-text .dxdi-text-input {
     border-color: $button-default-bg;
   }

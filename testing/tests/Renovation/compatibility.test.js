@@ -25,7 +25,9 @@ const widgets = widgetsMeta
     });
 
 QUnit.module('Check components registration', () => {
-    widgetsMeta.filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
+    widgetsMeta
+        .filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
+        .filter(meta => WRAPPER_WIDGETS.indexOf(meta.name) === -1)
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} is in bundle`, function(assert) {
                 const message = 'You should add your widget to the bundle.'

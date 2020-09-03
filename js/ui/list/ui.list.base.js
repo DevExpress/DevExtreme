@@ -193,6 +193,7 @@ export const ListBase = CollectionWidget.inherit({
 
             wrapItemText: false,
 
+            _swipeEnabled: true,
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -652,14 +653,13 @@ export const ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
-        if(this.option('onItemSwipe')) {
+        if(this.option('_swipeEnabled')) {
             this._attachSwipeEvent($(args.itemElement));
         }
     },
 
     _attachSwipeEvent: function($itemElement) {
         const endEventName = eventUtils.addNamespace(swipeEventEnd, this.NAME);
-
         eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 
@@ -840,7 +840,6 @@ export const ListBase = CollectionWidget.inherit({
             case 'pulledDownText':
             case 'refreshingText':
             case 'pageLoadingText':
-            case 'useNative':
             case 'showScrollbar':
             case 'bounceEnabled':
             case 'scrollByContent':
@@ -891,6 +890,8 @@ export const ListBase = CollectionWidget.inherit({
             case 'showChevronExpr':
             case 'badgeExpr':
                 this._invalidate();
+                break;
+            case '_swipeEnabled':
                 break;
             case '_listAttributes':
                 break;

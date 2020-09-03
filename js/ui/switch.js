@@ -54,9 +54,9 @@ const Switch = Editor.inherit({
 
             activeStateEnabled: true,
 
-            switchedOnText: this._getLocalizationMessage('On'),
+            switchedOnText: messageLocalization.format('dxSwitch-switchedOnText'),
 
-            switchedOffText: this._getLocalizationMessage('Off'),
+            switchedOffText: messageLocalization.format('dxSwitch-switchedOffText'),
 
             value: false,
 
@@ -75,24 +75,6 @@ const Switch = Editor.inherit({
                 }
             }
         ]);
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            onText: { since: '18.2', alias: 'switchedOnText' },
-
-            offText: { since: '18.2', alias: 'switchedOffText' }
-        });
-    },
-
-    _getLocalizationMessage: function(state) {
-        // todo: remove this method when deprecated dxSwitchOptions.switchedOnText/switchedOffText will be removed
-        const newMessage = messageLocalization.format('dxSwitch-switched' + state + 'Text');
-        const oldMessage = messageLocalization.format('dxSwitch-' + state.toLowerCase() + 'Text');
-
-        return newMessage || oldMessage;
     },
 
     _feedbackHideTimeout: 0,

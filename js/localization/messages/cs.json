@@ -164,6 +164,7 @@
 
         "dxPager-infoText": "Strana {0} ze {1} ({2} položek)",
         "dxPager-pagesCountText": "ze",
+        "dxPager-pageSizesAllText": "Vše",
 
         "dxPivotGrid-grandTotal": "Celkem",
         "dxPivotGrid-total": "{0} Celkem",

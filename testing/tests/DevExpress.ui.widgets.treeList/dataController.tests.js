@@ -506,7 +506,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
-        assert.equal(this.getVisibleRows().length, 4, 'row count');
+        assert.equal(this.getVisibleRows().length, 2, 'row count');
         assert.strictEqual(this.getVisibleRows()[0].node, this.getNodeByKey(1), 'first node instance is correct');
     });
 

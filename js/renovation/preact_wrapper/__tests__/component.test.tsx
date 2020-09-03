@@ -104,6 +104,20 @@ describe('Widget\'s container manipulations', () => {
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
+  it('preact component\'s root is widget\'s container after render in detached container', () => {
+    const $container = $('#component');
+    const parent = $container.parent();
+    $container.remove();
+    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+
+    act(() => {
+      $container.appendTo(parent);
+    });
+
+    expect($('.dx-test-widget')[0]).not.toBe(undefined);
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
+  });
+
   it('preact component\'s root is widget\'s container after render in detached container and repaint', () => {
     const $container = $('#component');
     const parent = $container.parent();
@@ -111,6 +125,25 @@ describe('Widget\'s container manipulations', () => {
     act(() => $container.dxPreactTestWidget({ text: 'test' }));
 
     act(() => {
+      $container.appendTo(parent);
+      $container.dxPreactTestWidget('repaint');
+    });
+
+    expect($('.dx-test-widget')[0]).not.toBe(undefined);
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
+  });
+
+  it('html tree is correct after repaint detached component', () => {
+    const $container = $('#component');
+    const parent = $container.parent();
+    $container.remove();
+    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+
+    act(() => {
+      $container.appendTo(parent);
+      $container.dxPreactTestWidget('repaint');
+      $container.detach();
+      $container.dxPreactTestWidget('repaint');
       $container.appendTo(parent);
       $container.dxPreactTestWidget('repaint');
     });
@@ -326,7 +359,6 @@ describe('option', () => {
       oneWayWithoutValue: 15,
       oneWayNullWithValue: 15,
       twoWayWithValue: '15',
-      twoWayWithoutValue: '15',
       twoWayNullWithValue: '15',
     }));
 
@@ -335,7 +367,6 @@ describe('option', () => {
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
-      twoWayWithoutValue: undefined,
       twoWayNullWithValue: undefined,
     }));
 
@@ -344,7 +375,6 @@ describe('option', () => {
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: null,
       twoWayWithValue: '10',
-      twoWayWithoutValue: undefined,
       twoWayNullWithValue: null,
     });
 
@@ -353,7 +383,6 @@ describe('option', () => {
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
-      twoWayWithoutValue: undefined,
       twoWayNullWithValue: undefined,
     });
   });
@@ -443,6 +472,30 @@ describe('templates and slots', () => {
     }));
 
     expect(templateRoot.innerHTML).toBe('<span>Template - new data</span>');
+  });
+
+  it('correctly change template at runtime', () => {
+    const template = () => {
+      const div = $('<div>');
+      div.append('first custom template');
+      return div;
+    };
+
+    const templateNew = () => {
+      const div = $('<div>');
+      div.append('second custom template');
+      return div;
+    };
+    act(() => $('#component').dxTemplatedTestWidget({
+      template,
+    }));
+    const templateRoot = $('#component').children('.templates-root')[0];
+
+    act(() => $('#component').dxTemplatedTestWidget({
+      template: templateNew,
+    }));
+
+    expect(templateRoot.innerHTML).toBe('<div>second custom template</div>');
   });
 
   it('replace root with template if it returns .dx-template-wrapper node', () => {

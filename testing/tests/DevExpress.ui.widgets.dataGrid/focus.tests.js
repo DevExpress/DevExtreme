@@ -715,7 +715,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // act
         $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
-        assert.equal(this.option('focusedRowIndex'), 3, 'FocusedRowIndex = 3');
+        assert.equal(this.option('focusedRowIndex'), 5, 'FocusedRowIndex = 3');
         assert.ok(this.keyboardNavigationController.isRowFocusType(), 'Row focus type');
     });
 
@@ -862,9 +862,9 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(this.option('focusedRowKey'), 40, 'focusedRowKey');
-        assert.equal(this.option('focusedRowIndex'), 39, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowIndex'), undefined, 'focusedRowIndex');
         assert.equal(visibleRows.length, 0, 'visible rows count');
-        assert.equal(loadCallCount, 5, 'load call count');
+        assert.equal(loadCallCount, 4, 'load call count');
     });
 
     QUnit.testInActiveWindow('Tab index should not exist for the previous focused row', function(assert) {
@@ -3422,9 +3422,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[0], 'Focused row data is on the page');
 
         // loadSpy.getCall(0) - load first page
-        // loadSpy.getCall(1) - load second page
-        // loadSpy.getCall(2) - load focused row
-        assert.deepEqual(loadSpy.getCall(3).args[0].filter, [
+        // loadSpy.getCall(1) - load focused row
+        assert.deepEqual(loadSpy.getCall(2).args[0].filter, [
             ['isRoom', '<>', true], 'or', [
                 ['isRoom', '=', true ], 'and', [
                     ['name', '<', 'Alex'], 'or', [
@@ -4267,7 +4266,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             // assert
             assert.equal(this.option('focusedRowIndex'), 4, 'FocusedRowIndex = 4');
-            assert.equal($(rowsView.getRow(2)).find('td').eq(0).text(), 'Test', 'Focused row ');
+            assert.equal($(rowsView.getRow(0)).find('td').eq(0).text(), 'Test', 'Focused row is rendered');
         });
 
         QUnit.testInActiveWindow('Focus row if virtual scrolling and index is on the not loaded page', function(assert) {
@@ -4341,6 +4340,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             addOptionChangedHandlers(this);
 
             this.gridView.render($('#container'));
+            this.gridView.update();
 
             // act
             this.pageIndex(1);
@@ -4386,7 +4386,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.gridView.render($('#container'));
 
             this.pageIndex(2);
-            assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+            assert.equal(this.getVisibleRows()[0].key, 'Dan', 'top visible row key');
 
             // act
             this.pageIndex(0);
@@ -4644,8 +4644,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(this.option('focusedRowIndex'), 6, 'FocusedRowIndex');
             assert.equal(this.option('focusedRowKey'), 'Den', 'FocusedRowKey');
             assert.equal(this.pageIndex(), 2, 'PageIndex');
-            assert.equal($(rowsView.getCellElement(11, 1)).text(), 'Alice');
-            assert.ok(rowsViewWrapper.isRowVisible(11));
+            assert.equal($(rowsView.getCellElement(5, 1)).text(), 'Alice');
+            assert.ok(rowsViewWrapper.isRowVisible(5, 1));
         });
 
         QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {

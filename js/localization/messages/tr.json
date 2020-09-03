@@ -147,6 +147,7 @@
         "dxTreeList-editingAddRowToNode": "Ekle",
         "dxPager-infoText": "Sayfa {0} / {1} ({2} veri)",
         "dxPager-pagesCountText": "arasında",
+        "dxPager-pageSizesAllText": "Tümü",
         "dxPivotGrid-grandTotal": "Genel Toplam",
         "dxPivotGrid-total": "{0} Toplam",
         "dxPivotGrid-fieldChooserTitle": "Alan Seçici",

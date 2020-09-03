@@ -65,7 +65,7 @@ $datagrid-row-focused-color: $base-inverted-text-color !default;
 */
 $datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
 $datagrid-hover-bg: $base-hover-bg !default;
-$datagrid-row-hovered-color: $datagrid-base-color !default;
+$datagrid-row-hovered-color: $base-hover-color !default;
 
 /**
 * $name 30. Context menu icons color

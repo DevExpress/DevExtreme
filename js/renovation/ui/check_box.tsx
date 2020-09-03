@@ -26,7 +26,6 @@ const getCssClasses = (model: CheckBoxProps): string => {
   } = model;
 
   const checked = value;
-  // TODO: replace null with undefined after generator bug fix
   const indeterminate = checked === null;
 
   const classesMap = {
@@ -110,7 +109,6 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() isValid?: boolean = true;
 
-  // TODO: remove null after generator bug fix
   @TwoWay() value?: boolean | null = false;
 
   @OneWay() useInkRipple?: boolean = false;
@@ -211,7 +209,6 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   get aria(): object {
     const { readOnly, isValid } = this.props;
     const checked = !!this.props.value;
-    // TODO: replace null with undefined after generator bug fix
     const indeterminate = this.props.value === null;
 
     return {

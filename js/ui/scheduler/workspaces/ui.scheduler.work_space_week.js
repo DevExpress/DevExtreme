@@ -59,7 +59,7 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
             this._$dateTable,
             dxrWeekTableLayout,
             'renovatedDateTable',
-            { viewData: this.viewData }
+            { viewData: this.viewDataProvider.viewData }
         );
     }
 }

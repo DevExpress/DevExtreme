@@ -40,7 +40,8 @@ import {
 import {
     Font,
     WordWrapType,
-    VizTextOverflowType
+    VizTextOverflowType,
+    BaseWidgetAnnotationConfig
 } from './core/base_widget';
 
 export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
@@ -236,6 +237,102 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @public
      */
     type?: PieSeriesType;
+    /**
+     * @docid dxPieChartOptions.annotations
+     * @type Array<dxPieChartAnnotationConfig,object>
+     * @inherits dxPieChartOptions.commonAnnotationSettings
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    annotations?: Array<dxPieChartAnnotationConfig | any>;
+    /**
+     * @docid dxPieChartOptions.commonAnnotationSettings
+     * @type dxPieChartCommonAnnotationConfig
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
+    /**
+     * @docid dxPieChartOptions.customizeAnnotation
+     * @type function(annotation)
+     * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
+     * @type_function_return dxPieChartAnnotationConfig
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
+}
+export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
+    /**
+     * @docid dxPieChartAnnotationConfig.name
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    name?: string;
+}
+
+export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+    /**
+     * @docid dxPieChartCommonAnnotationConfig.location
+     * @type Enums.PieChartAnnotationLocation
+     * @default 'center'
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    location?: 'center' | 'edge';
+    /**
+     * @docid dxPieChartCommonAnnotationConfig.argument
+     * @type number | datetime | string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    argument?: number | Date | string;
+    /**
+     * @docid dxPieChartCommonAnnotationConfig.series
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    series?: string;
+    /**	
+     * @docid dxPieChartCommonAnnotationConfig.customizeTooltip	
+     * @type function(annotation)	
+     * @type_function_param1 annotation:dxPieChartAnnotationConfig|any	
+     * @type_function_return object	
+     * @default undefined	
+     * @notUsedInTheme	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
+    /**	
+     * @docid dxPieChartCommonAnnotationConfig.template	
+     * @type template|function	
+     * @default undefined	
+     * @type_function_param1 annotation:dxPieChartCommonAnnotationConfig|any	
+     * @type_function_param2 element:SVGGElement	
+     * @type_function_return string|SVGElement|jQuery	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    /**	
+     * @docid dxPieChartCommonAnnotationConfig.tooltipTemplate	
+     * @type template|function(annotation, element)	
+     * @type_function_param1 annotation:dxPieChartAnnotationConfig|any	
+     * @type_function_param2 element:dxElement	
+     * @type_function_return string|Element|jQuery	
+     * @default undefined	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
 }
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**

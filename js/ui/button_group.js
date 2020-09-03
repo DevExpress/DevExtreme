@@ -130,14 +130,6 @@ const ButtonGroup = Widget.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'itemTemplate': { since: '19.2', alias: 'buttonTemplate' }
-        });
-    },
-
     _init() {
         this.callBase();
         this._createItemClickAction();

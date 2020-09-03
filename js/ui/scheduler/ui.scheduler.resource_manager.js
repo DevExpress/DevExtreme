@@ -481,4 +481,36 @@ export default class ResourceManager {
 
         return _result;
     }
+
+    getResourcesDataByGroups(groups) {
+        const resourcesData = this.getResourcesData();
+
+        if(!groups) {
+            return resourcesData;
+        }
+
+        const fieldNames = Object.getOwnPropertyNames(groups);
+        const resourceData = resourcesData.filter(item => fieldNames.indexOf(item.name) !== -1);
+        const currentResourcesData = [];
+
+        resourceData.forEach(
+            data => currentResourcesData.push(Object.assign({}, data))
+        );
+
+        iteratorUtils.each(groups, (_, value) => {
+            currentResourcesData.forEach(resourceData => {
+
+                const { items, data, name } = resourceData;
+                const resource = this.getResourceByField(name);
+                const valueExpr = getValueExpr(resource);
+
+                const currentItems = items.filter(item => item.id === value);
+                const currentData = data.filter(item => item[valueExpr] === value);
+                resourceData.items = currentItems;
+                resourceData.data = currentData;
+            });
+        });
+
+        return currentResourcesData;
+    }
 }

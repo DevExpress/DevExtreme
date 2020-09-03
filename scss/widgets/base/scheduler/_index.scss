@@ -2265,20 +2265,6 @@ $scheduler-appointment-form-label-padding: 20px;
     right: 0;
   }
 
-  .dx-timezone-editor {
-    overflow: hidden;
-
-    .dx-timezone-display-name {
-      float: left;
-      width: 60%;
-    }
-
-    .dx-timezone-iana-id {
-      float: right;
-      width: 38%;
-    }
-  }
-
   .dx-scheduler-work-space-horizontal-grouped {
     &.dx-scheduler-timeline {
       @include dx-scheduler-timeline-horizontal-grouping-mixin($scheduler-header-panel-offset);
@@ -2708,16 +2694,6 @@ $scheduler-appointment-form-label-padding: 20px;
         .dx-scheduler-date-table {
           float: left;
         }
-      }
-    }
-
-    .dx-timezone-editor {
-      .dx-timezone-display-name {
-        float: right;
-      }
-
-      .dx-timezone-iana-id {
-        float: left;
       }
     }
   }

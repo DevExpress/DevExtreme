@@ -354,6 +354,118 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
 export default class dxGantt extends Widget {
     constructor(element: Element, options?: dxGanttOptions)
     constructor(element: JQuery, options?: dxGanttOptions)
+    /**
+     * @docid dxGanttMethods.getTaskData
+     * @publicName getTaskData(key)
+     * @param1 key:object
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getTaskData(key: any): any;
+    /**
+     * @docid dxGanttMethods.getDependencyData
+     * @publicName getDependencyData(key)
+     * @param1 key:object
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getDependencyData(key: any): any;
+    /**
+     * @docid dxGanttMethods.getResourceData
+     * @publicName getResourceData(key)
+     * @param1 key:object
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getResourceData(key: any): any;
+    /**
+     * @docid dxGanttMethods.getResourceAssignmentData
+     * @publicName getResourceAssignmentData(key)
+     * @param1 key:object
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getResourceAssignmentData(key: any): any;
+    /**
+     * @docid dxGanttMethods.insertTask
+     * @publicName insertTask(data)
+     * @param1 data:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    insertTask(data: any): void;
+    /**
+     * @docid dxGanttMethods.deleteTask
+     * @publicName deleteTask(key)
+     * @param1 key:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    deleteTask(key: any): void;
+    /**
+     * @docid dxGanttMethods.updateTask
+     * @publicName updateTask(key, data)
+     * @param1 key:object
+     * @param2 data:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    updateTask(key: any, data: any): void;
+    /**
+     * @docid dxGanttMethods.insertDependency
+     * @publicName insertDependency(data)
+     * @param1 data:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    insertDependency(data: any): void;
+    /**
+     * @docid dxGanttMethods.deleteDependency
+     * @publicName deleteDependency(key)
+     * @param1 key:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    deleteDependency(key: any): void;
+    /**
+     * @docid dxGanttMethods.insertResource
+     * @publicName insertResource(data, taskKeys)
+     * @param1 data:object
+     * @param2 taskKeys?:Array<object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    insertResource(data: any,  taskKeys?: Array<any>): void;
+    /**
+     * @docid dxGanttMethods.deleteResource
+     * @publicName deleteResource(key)
+     * @param1 key:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    deleteResource(key: any): void;
+    /**
+     * @docid dxGanttMethods.assignResourceToTask
+     * @publicName assignResourceToTask(resourceKey, taskKey)
+     * @param1 resourceKey:object
+     * @param2 taskKey:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    assignResourceToTask(resourceKey, taskKey)
+    /**
+     * @docid dxGanttMethods.unassignResourceFromTask
+     * @publicName unassignResourceFromTask(resourceKey, taskKey)
+     * @param1 resourceKey:object
+     * @param2 taskKey:object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    unassignResourceFromTask(resourceKey, taskKey)
 }
 
 export interface dxGanttToolbar {

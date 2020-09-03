@@ -7,6 +7,7 @@ import { GetHtmlElement, FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
 import PagerProps from '../common/pager_props';
+import messageLocalization from '../../../../localization/message';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { EventCallback } from '../../common/event_callback.d';
 
@@ -38,6 +39,10 @@ export const viewFunction = ({
     )}
   </div>
 );
+
+function getAllText(): string {
+  return messageLocalization.getFormatter('dxPager-pageSizesAllText')();
+}
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
 class PageSizeSelectorProps {
@@ -56,6 +61,6 @@ export class PageSizeSelector
 
   get normalizedPageSizes(): FullPageSize[] {
     const { pageSizes } = this.props;
-    return pageSizes.map((p) => ({ text: String(p), value: p } as FullPageSize));
+    return pageSizes.map((p) => (((p === 'all' || p === 0) ? { text: getAllText(), value: 0 } : { text: String(p), value: p }) as FullPageSize));
   }
 }

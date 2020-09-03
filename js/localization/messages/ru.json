@@ -150,6 +150,7 @@
         "dxTreeList-editingAddRowToNode": "Добавить",
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
         "dxPager-pagesCountText": "из",
+        "dxPager-pageSizesAllText": "Все",
         "dxPivotGrid-grandTotal": "Итого",
         "dxPivotGrid-total": "{0} Всего",
         "dxPivotGrid-fieldChooserTitle": "Выбор полей",

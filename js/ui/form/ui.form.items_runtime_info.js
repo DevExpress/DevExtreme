@@ -87,10 +87,6 @@ export default class FormItemsRunTimeInfo {
         return this._findFieldByCondition(({ path }) => path === targetPath, 'guid');
     }
 
-    getPathFromItem(targetItem) {
-        return this._findFieldByCondition(({ item }) => item === targetItem, 'path');
-    }
-
     findWidgetInstanceByName(name) {
         return this._findWidgetInstance(item => name === item.name);
     }

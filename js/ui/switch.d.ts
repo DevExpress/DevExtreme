@@ -36,22 +36,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     name?: string;
     /**
-     * @docid dxSwitchOptions.offText
-     * @type string
-     * @deprecated dxSwitchOptions.switchedOffText
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    offText?: string;
-    /**
-     * @docid dxSwitchOptions.onText
-     * @type string
-     * @deprecated dxSwitchOptions.switchedOnText
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onText?: string;
-    /**
      * @docid dxSwitchOptions.switchedOffText
      * @type string
      * @default "OFF"
