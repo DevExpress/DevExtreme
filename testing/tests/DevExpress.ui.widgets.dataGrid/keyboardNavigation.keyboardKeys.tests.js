@@ -939,7 +939,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: true };
+        $.extend(this.options.editing, { allowUpdating: true });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -1820,7 +1820,7 @@ QUnit.module('Keyboard keys', {
             };
 
             // act
-            this.options.editing = { allowUpdating: true };
+            $.extend(this.options.editing, { allowUpdating: true });
             this.gridView.render($container);
 
             this.focusFirstCell();
@@ -1908,7 +1908,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: true };
+        $.extend(this.options.editing, { allowUpdating: true });
         this.gridView.render($container);
 
         this.focusFirstCell();
@@ -1933,10 +1933,10 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         this.gridView.render($container);
         this.focusFirstCell();
@@ -1965,10 +1965,10 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         this.gridView.render($container);
         this.focusFirstCell();
@@ -1998,7 +1998,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: false };
+        $.extend(this.options.editing, { allowUpdating: false });
         this.gridView.render($container);
 
         this.focusFirstCell();
@@ -2014,7 +2014,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -2037,7 +2037,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -2071,7 +2071,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -2108,7 +2108,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = { allowUpdating: true, mode: 'cell' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'cell' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -2125,7 +2125,7 @@ QUnit.module('Keyboard keys', {
         // arrange
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -2149,7 +2149,7 @@ QUnit.module('Keyboard keys', {
         // arrange
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
@@ -2320,7 +2320,7 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -2351,7 +2351,7 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = { editEnabled: true, editMode: 'batch' };
+        $.extend(this.options.editing, { editEnabled: true, editMode: 'batch' });
         this.gridView.render($('#container'));
 
         this.editCell(0, 1);
@@ -2380,7 +2380,7 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         const $lastCell = this.rowsView.element().find('.dx-row').filter(':visible').last().find('td').last();
@@ -2412,7 +2412,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         this.options.scrolling = { mode: 'virtual' };
-        this.options.editing = { mode: 'batch' };
+        $.extend(this.options.editing, { mode: 'batch' });
         this.gridView.render($('#container'));
 
         this.editCell(0, 1);
@@ -2534,7 +2534,7 @@ QUnit.module('Keyboard keys', {
         ];
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         // act
@@ -2565,7 +2565,7 @@ QUnit.module('Keyboard keys', {
         ];
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'row' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'row' });
         this.gridView.render($('#container'));
 
         this.editRow(0);
@@ -2591,7 +2591,7 @@ QUnit.module('Keyboard keys', {
         ];
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'row' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'row' });
         this.gridView.render($('#container'));
 
         this.editRow(0);
@@ -2790,7 +2790,7 @@ QUnit.module('Keyboard keys', {
         ];
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         // act
@@ -2817,7 +2817,7 @@ QUnit.module('Keyboard keys', {
         ];
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'row' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'row' });
         this.gridView.render($('#container'));
 
         // act
@@ -2839,7 +2839,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
         this.keyboardNavigationController._focusedView = this.rowsView;
 
-        this.options.editing = { allowUpdating: false, mode: 'row' };
+        $.extend(this.options.editing, { allowUpdating: false, mode: 'row' });
         this.gridView.render($('#container'));
 
         this.editingController.editRow(0);
@@ -2862,7 +2862,7 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('Edit next cell after tab key when first cell focused at \'editCell\' function call', function(assert) {
         setupModules(this);
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
         this.gridView.render($('#container'));
 
         // act
@@ -2879,7 +2879,7 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Focus next cell after tab key when first cell focused at \'editCell\' function call and editing is false', function(assert) {
         // arrange
         setupModules(this);
-        this.options.editing = { allowUpdating: false, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: false, mode: 'batch' });
         this.gridView.render($('#container'));
 
         // act
@@ -2899,7 +2899,7 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Focus next editor after tab key for inserted row when editing mode is cell and allowUpdating is false', function(assert) {
         // arrange
         setupModules(this);
-        this.options.editing = { allowUpdating: false, mode: 'cell' };
+        $.extend(this.options.editing, { allowUpdating: false, mode: 'cell' });
         this.dataControllerOptions.items[0].isNewRow = true;
         this.gridView.render($('#container'));
 
@@ -2926,7 +2926,7 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
 
         const $container = $('#container');
         this.gridView.render($container);
@@ -2955,7 +2955,7 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
 
         const $container = $('#container');
         this.gridView.render($container);
@@ -2983,7 +2983,7 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
 
         const $container = $('#container');
         this.gridView.render($container);
@@ -3015,7 +3015,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         this.options.selectionOptions = { mode: 'multiple' };
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
 
         const $container = $('#container');
         this.gridView.render($container);
@@ -3045,7 +3045,7 @@ QUnit.module('Keyboard keys', {
             rowIndex: 9,
             columnIndex: 1
         };
-        this.options.editing = { allowUpdating: true, mode: 'batch' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'batch' });
 
         const $container = $('#container');
         this.gridView.render($container);
@@ -3063,7 +3063,7 @@ QUnit.module('Keyboard keys', {
         // arrange
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'cell' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'cell' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -3094,7 +3094,7 @@ QUnit.module('Keyboard keys', {
         // arrange
         setupModules(this);
 
-        this.options.editing = { allowUpdating: true, mode: 'row' };
+        $.extend(this.options.editing, { allowUpdating: true, mode: 'row' });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -3449,7 +3449,7 @@ QUnit.module('Keyboard keys', {
         // arrange, act
         setupModules(this);
 
-        this.options.editing = { mode: 'batch' };
+        $.extend(this.options.editing, { mode: 'batch' });
         this.options.selection = { mode: 'multiple', allowSelectAll: true };
         this.gridView.render($('#container'));
 
@@ -3467,7 +3467,7 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('key A_T103450 ', function(assert) {
         // arrange, act
         setupModules(this);
-        this.options.editing = { mode: 'batch', allowUpdating: true };
+        $.extend(this.options.editing, { mode: 'batch', allowUpdating: true });
         this.options.selection = { mode: 'multiple' };
         this.gridView.render($('#container'));
 
@@ -3733,12 +3733,12 @@ QUnit.module('Keyboard keys', {
         setupModules(this);
 
         // act
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'row',
             allowUpdating: function(options) {
                 return options.row.rowIndex % 2 === 0;
             }
-        };
+        });
         this.gridView.render($('#container'));
 
         this.focusFirstCell();
@@ -3827,10 +3827,10 @@ QUnit.module('Keyboard keys', {
 
         setupModules(this);
         this.options.scrolling = { mode: 'virtual' };
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         this.gridView.render($('#container'));
         this.rowsView.height(70);

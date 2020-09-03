@@ -2166,6 +2166,8 @@ declare module DevExpress.ui {
     }
     /** @name GridBase.Options.editing */
     export interface GridBaseEditing {
+        /** @name GridBase.Options.editing.changes */
+        changes?: Array<any>;
         /** @name GridBase.Options.editing.confirmDelete */
         confirmDelete?: boolean;
         /** @name GridBase.Options.editing.editColumnName */
