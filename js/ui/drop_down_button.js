@@ -142,12 +142,9 @@ const DropDownButton = Widget.inherit({
 
     _itemsToDataSource: function(value) {
         if(!this._dataSource) {
-            const keyExpr = this.option('keyExpr');
-            const key = keyExpr === 'this' ? null : keyExpr;
-
             this._dataSource = new DataSource({
                 store: new ArrayStore({
-                    key,
+                    key: this._getKey(),
                     data: value
                 }),
                 pageSize: 0,
@@ -200,7 +197,7 @@ const DropDownButton = Widget.inherit({
     _loadSelectedItem() {
         const d = new Deferred();
 
-        if(this._list) {
+        if(this._list && this._lastSelectedItemData !== undefined) {
             const cachedResult = this.option('useSelectMode') ? this._list.option('selectedItem') : this._lastSelectedItemData;
             return d.resolve(cachedResult);
         }
@@ -536,7 +533,7 @@ const DropDownButton = Widget.inherit({
                 .store()
                 .byKey(selectedItemKey)
                 .done(selectedItem => {
-                    this._setListOption('selectedItemKeys', [this._keyGetter(selectedItem)]);
+                    this._setListOption('selectedItemKeys', [selectedItemKey]);
                     this._setListOption('selectedItem', selectedItem);
                 }).fail(error => {
                     this._setListOption('selectedItemKeys', []);
@@ -549,6 +546,11 @@ const DropDownButton = Widget.inherit({
     _updateDataSource: function(items = this._dataSource.items()) {
         this._dataSource = undefined;
         this._itemsToDataSource(items);
+        this._synchronizeListKeyExpr();
+    },
+
+    _synchronizeListKeyExpr: function() {
+        this._setListOption('keyExpr', this._getKey());
     },
 
     _optionChanged(args) {
@@ -602,6 +604,8 @@ const DropDownButton = Widget.inherit({
                 } else {
                     this._initDataSource(value);
                 }
+                this._compileKeyGetter();
+                this._synchronizeListKeyExpr();
                 this._updateItemCollection(name);
                 break;
             case 'icon':
