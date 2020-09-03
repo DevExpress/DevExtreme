@@ -13,7 +13,7 @@ const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYA
 
 const { test, module: testModule } = QUnit;
 
-function createEvent(type = 'paste') {
+function createEvent(type = 'paste', element) {
     const customEvent = document.createEvent('Event');
 
     customEvent.initEvent(type, true, true);
@@ -21,12 +21,20 @@ function createEvent(type = 'paste') {
         getData: () => 'test'
     };
 
+    if(element) {
+        const { x, y } = element.getBoundingClientRect();
+        customEvent.clientX = x;
+        customEvent.clientY = y;
+        customEvent.dataTransfer = { files: [] };
+    }
+
     return customEvent;
 }
 
-const createModuleConfig = function(initialOptions = {}) {
+const createModuleConfig = function({ initialOptions = {}, beforeCallback, afterCallback }) {
     return {
         beforeEach: function() {
+            beforeCallback && beforeCallback();
             this.clock = sinon.useFakeTimers();
 
             this.options = initialOptions;
@@ -38,12 +46,13 @@ const createModuleConfig = function(initialOptions = {}) {
             };
         },
         afterEach: function() {
+            afterCallback && afterCallback();
             this.clock.restore();
         }
     };
 };
 
-testModule('Events', createModuleConfig({ value: '<p>Test 1</p><p>Test 2</p><p>Test 3</p>' }), () => {
+testModule('Events', createModuleConfig({ initialOptions: { value: '<p>Test 1</p><p>Test 2</p><p>Test 3</p>' } }), () => {
     test('focusIn event by API', function(assert) {
         this.createEditor();
 
@@ -155,7 +164,10 @@ testModule('Events', createModuleConfig({ value: '<p>Test 1</p><p>Test 2</p><p>T
     });
 });
 
-testModule('ValueChanged event', createModuleConfig(), function() {
+testModule('drop and paste events', createModuleConfig({
+    beforeCallback: () => $('#qunit-fixture').addClass('qunit-fixture-visible'),
+    afterCallback: () => $('#qunit-fixture').removeClass('qunit-fixture-visible')
+}), function() {
     ['drop', 'paste'].forEach((eventType) => {
         test(`event should keep valueChanged event on ${eventType}`, function(assert) {
             const done = assert.async();
@@ -169,7 +181,7 @@ testModule('ValueChanged event', createModuleConfig(), function() {
             this.clock.tick(TIME_TO_WAIT);
             const contentElem = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
 
-            contentElem.dispatchEvent(createEvent(eventType));
+            contentElem.dispatchEvent(createEvent(eventType, eventType === 'drop' ? contentElem : null));
             contentElem.textContent = 'test';
         });
     });
@@ -186,13 +198,14 @@ testModule('ValueChanged event', createModuleConfig(), function() {
         this.clock.tick(TIME_TO_WAIT);
         const contentElem = $(this.instance.element()).find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
 
-        contentElem.dispatchEvent(createEvent('drop'));
+        contentElem.dispatchEvent(createEvent('drop', contentElem));
         contentElem.dispatchEvent(createEvent('paste'));
 
         contentElem.textContent = 'test';
     });
+});
 
-
+testModule('ValueChanged event', createModuleConfig({}), function() {
     test('event should keep valueChanged event on typing', function(assert) {
         const done = assert.async();
         this.createEditor({

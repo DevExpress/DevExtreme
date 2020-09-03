@@ -343,6 +343,25 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      */
     onDataErrorOccurred?: ((e: { component?: T, element?: dxElement, model?: any, error?: Error }) => any);
     /**
+     * @docid GridBaseOptions.onEditCanceled
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @extends Action
+     * @action
+     * @public
+     */
+    onEditCanceled?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    /**
+     * @docid GridBaseOptions.onEditCanceling
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @extends Action
+     * @action
+     * @public
+     */
+    onEditCanceling?: ((e: { component?: T, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    /**
      * @docid GridBaseOptions.onInitNewRow
      * @type function(e)
      * @type_function_param1 e:object
@@ -508,6 +527,26 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      */
     onRowValidating?: ((e: { component?: T, element?: dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: Promise<void> | JQueryPromise<void> }) => any);
     /**
+     * @docid GridBaseOptions.onSaved
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @extends Action
+     * @action
+     * @public
+     */
+    onSaved?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    /**
+     * @docid GridBaseOptions.onSaving
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 promise:Promise<void>
+     * @type_function_param1_field5 cancel:boolean
+     * @extends Action
+     * @action
+     * @public
+     */
+    onSaving?: ((e: { component?: T, element?: dxElement, model?: any, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
+    /**
      * @docid GridBaseOptions.onSelectionChanged
      * @type function(e)
      * @type_function_param1 e:object
@@ -538,7 +577,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+    pager?: { allowedPageSizes?: Array<(number | 'all')> | 'auto', displayMode: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
     /**
      * @docid GridBaseOptions.paging
      * @type object

@@ -1,4 +1,4 @@
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';

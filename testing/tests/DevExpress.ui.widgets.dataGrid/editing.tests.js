@@ -2973,7 +2973,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search', 'errorHandling'], {
             initViews: true
         });
 
@@ -9010,6 +9010,398 @@ QUnit.module('Editing with real dataController', {
                 assert.notEqual(row.key, newRowKey, 'not insert key');
                 assert.notOk(row.isNewRow, 'not new row');
             });
+        });
+    });
+
+    QUnit.module('Save/cancel events', {
+        beforeEach: function() {
+            this.options.dataSource = this.options.dataSource.store;
+            this.options.keyExpr = 'room';
+            this.dataController.init();
+        }
+    }, () => {
+        QUnit.test('onSaving/onSaved events should be fired after saveEditData call', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy();
+            const onSaved = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true,
+                mode: 'row'
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 0, 'new value');
+            this.saveEditData();
+
+            // assert
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.equal($(this.getCellElement(0, 0)).text(), 'new value', 'cell was modified');
+        });
+
+        QUnit.test('Cancel events should not be fired if nothing was saved during saveEditData', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy();
+            const onSaved = sinon.spy();
+            const onEditCanceling = sinon.spy();
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true,
+                mode: 'row'
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.saveEditData();
+
+            // assert
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was not called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
+        });
+
+        QUnit.test('onEditCanceling/onEditCanceled events should be fired after cancelEditData call', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onEditCanceling = sinon.spy();
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cancelEditData();
+
+            // assert
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
+        });
+
+        QUnit.test('onSaved event should not be fired if canceled in onSaving', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.cancel = true;
+            });
+            const onSaved = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 'name', 'new value');
+            this.saveEditData();
+
+            // assert
+            assert.equal(this.array[0].name, 'Alex', 'data was not saved');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+        });
+
+        QUnit.test('onEditCanceled event should not be fired if canceled in onEditCanceling', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onEditCanceling = sinon.spy(e => {
+                e.cancel = true;
+            });
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cancelEditData();
+
+            // assert
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+        });
+
+        QUnit.test('Promise in onSaving', function(assert) {
+            // arrange
+            const done = assert.async();
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.promise = new Deferred();
+                setTimeout(() => {
+                    e.promise.resolve();
+                }, 1000);
+            });
+            const onSaved = sinon.spy();
+            const onEditCanceling = sinon.spy();
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 'name', 'new value');
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
+
+            // assert
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was not called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
+
+            // act
+            this.clock.tick(500);
+            this.saveEditData();
+            this.cancelEditData();
+
+            // assert
+            assert.notOk($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
+
+            // act
+            this.clock.tick(500);
+
+            // assert
+            assert.equal(this.array[0].name, 'Alex', 'data is not saved');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
+        });
+
+        QUnit.test('Promise in onSaving and reject', function(assert) {
+            // arrange
+            const done = assert.async();
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.promise = new $.Deferred().reject('my error');
+            });
+            const onSaved = sinon.spy();
+            const onEditCanceling = sinon.spy();
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 'name', 'new value');
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
+
+            // assert
+            assert.equal($('.dx-error-row').text(), 'my error', 'error row is showed');
+            assert.equal(this.array[0].name, 'Alex', 'data is not saved');
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was called');
+        });
+
+        QUnit.test('Promise in onSaving with preventing cancelEditData during saving', function(assert) {
+            // arrange
+            const done = assert.async();
+            let isSaving = false;
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                isSaving = true;
+                e.promise = new Deferred();
+                setTimeout(() => {
+                    isSaving = false;
+                    e.promise.resolve();
+                }, 1000);
+            });
+            const onSaved = sinon.spy();
+            const onEditCanceling = sinon.spy(e => {
+                e.cancel = isSaving;
+            });
+            const onEditCanceled = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.options.onEditCanceling = onEditCanceling;
+            this.options.onEditCanceled = onEditCanceled;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            this.editingController.optionChanged({ name: 'onEditCanceling' });
+            this.editingController.optionChanged({ name: 'onEditCanceled' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 0, 'new value');
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
+
+            // assert
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving called once');
+            assert.equal(onSaved.callCount, 0, 'onSaved not called');
+            assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling not called');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled not called');
+
+            // act
+            this.clock.tick(500);
+            this.cancelEditData();
+
+            // assert
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving called once');
+            assert.equal(onSaved.callCount, 0, 'onSaved not called');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling called once');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled not called');
+
+            // act
+            this.clock.tick(500);
+
+            // assert
+            assert.notOk($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
+            assert.equal(this.array[0].name, 'new value', 'data is saved');
+            assert.equal(onSaving.callCount, 1, 'onSaving called once');
+            assert.equal(onSaved.callCount, 1, 'onSaved called once');
+            assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling called once');
+            assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled not called');
+
+            // act
+            this.cancelEditData();
+
+            // assert
+            assert.equal(onEditCanceling.callCount, 2, 'onEditCanceling called twice');
+            assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled called once');
+        });
+
+        QUnit.test('Promise in onSaving with cancel', function(assert) {
+            // arrange
+            const done = assert.async();
+            const rowsView = this.rowsView;
+            let isPromiseResolved;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.promise = new Deferred();
+                setTimeout(() => {
+                    e.cancel = true;
+                    isPromiseResolved = true;
+                    e.promise.resolve();
+                }, 1000);
+            });
+            const onSaved = sinon.spy();
+
+            this.options.editing = {
+                allowUpdating: true
+            };
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 0, 'new value');
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
+
+            // assert
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+
+            // act
+            this.clock.tick(1000);
+
+            // assert
+            assert.ok(isPromiseResolved, 'promise is resolved');
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
         });
     });
 });

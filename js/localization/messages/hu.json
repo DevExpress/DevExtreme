@@ -164,6 +164,7 @@
 
     "dxPager-infoText": "Oldal: {0}/{1} ({2} elem)",
     "dxPager-pagesCountText": "/",
+    "dxPager-pageSizesAllText": "Mind",
 
     "dxPivotGrid-grandTotal": "Teljes összeg",
     "dxPivotGrid-total": "{0} Összeg",

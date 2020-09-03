@@ -2089,6 +2089,10 @@ declare module DevExpress.ui {
         onAdaptiveDetailRowPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, formOptions?: any }) => any);
         /** @name GridBase.Options.onDataErrorOccurred */
         onDataErrorOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, error?: Error }) => any);
+        /** @name GridBase.Options.onEditCanceled */
+        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        /** @name GridBase.Options.onEditCanceling */
+        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
         /** @name GridBase.Options.onInitNewRow */
         onInitNewRow?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, promise?: Promise<void> | JQueryPromise<void> }) => any);
         /** @name GridBase.Options.onKeyDown */
@@ -2115,12 +2119,16 @@ declare module DevExpress.ui {
         onRowUpdating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** @name GridBase.Options.onRowValidating */
         onRowValidating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: Promise<void> | JQueryPromise<void> }) => any);
+        /** @name GridBase.Options.onSaved */
+        onSaved?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        /** @name GridBase.Options.onSaving */
+        onSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /** @name GridBase.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** @name GridBase.Options.onToolbarPreparing */
         onToolbarPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /** @name GridBase.Options.pager */
-        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number | 'all'> | 'auto', displayMode?: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
         /** @name GridBase.Options.paging */
         paging?: GridBasePaging;
         /** @name GridBase.Options.renderAsync */

@@ -164,6 +164,7 @@
 
         "dxPager-infoText": "Pagina {0} di {1} ({2} elementi)",
         "dxPager-pagesCountText": "di",
+        "dxPager-pageSizesAllText": "Tutti",
 
         "dxPivotGrid-grandTotal": "Totale",
         "dxPivotGrid-total": "{0} Totale",
