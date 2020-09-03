@@ -1686,6 +1686,51 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(list.scrollTop(), 0, 'scroll to top after reload');
     });
 
+    QUnit.test('list should set dataSource pageIndex to 0 on init (T915805)', function(assert) {
+        const data = [];
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
+
+        const dataSource = new DataSource({
+            store: new ArrayStore(data),
+            paginate: true,
+            pageSize: 20
+        });
+        let list;
+        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
+        try {
+            $toggleButton.dxButton({
+                onClick: () => {
+                    if(list) {
+                        list.dispose();
+                        list = null;
+                    } else {
+                        list = this.element
+                            .dxList({
+                                dataSource,
+                                opened: true,
+                                pageLoadMode: 'scrollBottom',
+                                useNativeScrolling: true
+                            }).dxList('instance');
+                    }
+
+                }
+            });
+            $toggleButton.trigger('dxclick');
+            dataSource.pageIndex(2);
+            dataSource.load();
+
+            $toggleButton.trigger('dxclick');
+            $toggleButton.trigger('dxclick');
+
+            const listDataSource = list.getDataSource();
+            assert.strictEqual(listDataSource.pageIndex(), 0, 'pageIndex is set to 0');
+        } finally {
+            $toggleButton.remove();
+        }
+    });
+
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
         setScrollView(ScrollViewMock.inherit({
             isFull() {

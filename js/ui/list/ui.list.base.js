@@ -320,8 +320,20 @@ export const ListBase = CollectionWidget.inherit({
         return true;
     },
 
+    _resetDataSourcePageIndex: function() {
+        const currentDataSource = this.getDataSource();
+
+        if(!currentDataSource || currentDataSource.pageIndex() === 0) {
+            return;
+        }
+
+        currentDataSource.pageIndex(0);
+        currentDataSource.load();
+    },
+
     _init: function() {
         this.callBase();
+        this._resetDataSourcePageIndex();
         this._$container = this.$element();
 
         this._initScrollView();

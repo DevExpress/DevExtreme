@@ -530,15 +530,7 @@ const DropDownList = DropDownEditor.inherit({
         return devices.real().deviceType === 'desktop';
     },
 
-    _prepareDataSource: function() {
-        const currentDataSource = this._getDataSource();
-        currentDataSource?.pageIndex(0);
-        currentDataSource?.reload();
-    },
-
     _listConfig: function() {
-        this._prepareDataSource();
-
         const options = {
             selectionMode: 'single',
             _templates: this.option('_templates'),

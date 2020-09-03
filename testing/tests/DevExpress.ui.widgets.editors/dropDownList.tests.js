@@ -1423,60 +1423,6 @@ QUnit.module('dataSource integration', moduleConfig, function() {
         assert.deepEqual($dropDownList.dxDropDownList('option', 'selectedItem'), data[0], 'value found');
     });
 
-
-    QUnit.test('dropDownList should set dataSource pageIndex to 0 on init (T915805)', function(assert) {
-        this.clock.restore();
-
-        const data = [];
-        const done = assert.async();
-
-        for(let i = 100; i >= 0; i--) {
-            data.push(i);
-        }
-
-        const dataSource = new DataSource({
-            store: new ArrayStore(data),
-            paginate: true,
-            pageSize: 20
-        });
-        let dropDownList;
-        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
-
-        $toggleButton.dxButton({
-            onClick: () => {
-                if(dropDownList) {
-                    dropDownList.dispose();
-                    dropDownList = null;
-                } else {
-                    dropDownList = $('#dropDownList')
-                        .dxDropDownList({
-                            dataSource,
-                            opened: true
-                        }).dxDropDownList('instance');
-                }
-
-            }
-        });
-        $toggleButton.trigger('dxclick');
-
-        const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
-
-        listInstance.option('pageLoadMode', 'scrollBottom');
-        listInstance.option('useNativeScrolling', 'true');
-
-        listInstance.scrollTo(1000);
-
-        setTimeout(() => {
-            $toggleButton.trigger('dxclick');
-            $toggleButton.trigger('dxclick');
-
-            const dataSource = dropDownList.getDataSource();
-            assert.strictEqual(dataSource.pageIndex(), 0, 'pageIndex is set to 0');
-            $toggleButton.remove();
-            done();
-        });
-    });
-
     QUnit.test('dataSource loading longer than 400ms should not lead to the load panel being displayed', function(assert) {
         const loadDelay = 1000;
         const instance = $('#dropDownList').dxDropDownList({
