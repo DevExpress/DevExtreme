@@ -30,7 +30,7 @@ export default class PreactWrapper extends DOMComponent {
       true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
-      this._propsInfo.twoway.reduce((options, [name, defaultValue, eventName]) => ({
+      this._propsInfo.twoWay.reduce((options, [name, defaultValue, eventName]) => ({
         ...options,
         [name]: defaultValue,
         [eventName]: (value) => this.option(name, value),
@@ -121,7 +121,7 @@ export default class PreactWrapper extends DOMComponent {
 
     Object.keys(this._viewComponent.defaultProps).forEach(setDefaultOptionValue(options, (name) => this._viewComponent.defaultProps[name]));
 
-    this._propsInfo.twoway.forEach(([name, defaultValue]) => setDefaultOptionValue(options, () => defaultValue)(name));
+    this._propsInfo.twoWay.forEach(([name, defaultValue]) => setDefaultOptionValue(options, () => defaultValue)(name));
 
     return options;
   }

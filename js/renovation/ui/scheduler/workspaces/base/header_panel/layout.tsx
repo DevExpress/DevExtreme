@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
-import { ViewCellData } from '../../types.d';
+import { ViewCellData } from '../../types';
 import { getKeyByDateAndGroup } from '../../utils';
 
 export const viewFunction = (viewModel: HeaderPanelLayout) => (

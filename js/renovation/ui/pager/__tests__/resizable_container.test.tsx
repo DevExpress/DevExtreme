@@ -9,7 +9,7 @@ import {
   ResizableContainerProps,
   calculateAdaptivityProps,
 } from '../resizable_container';
-import { GetHtmlElement } from '../common/types.d';
+import { GetHtmlElement } from '../common/types';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../utils/get_computed_style');

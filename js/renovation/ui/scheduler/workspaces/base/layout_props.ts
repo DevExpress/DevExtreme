@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { GroupedViewData } from '../types.d';
+import { GroupedViewData } from '../types';
 
 @ComponentBindings()
 export class LayoutProps {

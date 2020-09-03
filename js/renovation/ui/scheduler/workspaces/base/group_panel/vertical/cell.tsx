@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
-import { GroupItem } from '../../../types.d';
+import { GroupItem } from '../../../types';
 
 export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
   const useTemplate = !!viewModel.props.cellTemplate;

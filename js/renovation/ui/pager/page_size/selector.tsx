@@ -3,15 +3,12 @@ import {
   ComponentBindings, JSXComponent, OneWay, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
-import { GetHtmlElement, FullPageSize } from '../common/types.d';
+import { GetHtmlElement, FullPageSize } from '../common/types';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
 import PagerProps from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { EventCallback } from '../../common/event_callback.d';
-
-export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
+import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
 
 export const viewFunction = ({
   htmlRef,

@@ -5,7 +5,7 @@ import { combineClasses } from '../../../../../../utils/combine_classes';
 import { Table } from '../../table';
 import { AllDayPanelTableBody as TableBody } from './table_body';
 import { addHeightToStyle } from '../../../utils';
-import { ViewCellData } from '../../../types.d';
+import { ViewCellData } from '../../../types';
 import { LayoutProps } from '../../layout_props';
 
 export const viewFunction = (viewModel: AllDayPanelLayout) => (

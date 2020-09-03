@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, Fragment, Template,
 } from 'devextreme-generator/component_declaration/common';
 import { DateTableRow } from './row';
-import { ViewCellData } from '../../types.d';
+import { ViewCellData } from '../../types';
 import {
   getKeyByGroup,
   getKeyByDateAndGroup,

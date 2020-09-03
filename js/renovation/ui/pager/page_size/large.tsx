@@ -4,15 +4,9 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { LightButton } from '../common/light_button';
-import { FullPageSize } from '../common/types.d';
-import { PAGER_SELECTION_CLASS } from '../common/consts';
+import { FullPageSize } from '../common/types';
 import PagerProps from '../common/pager_props';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { EventCallback } from '../../common/event_callback.d';
-
-export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
-export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
+import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
 
 export const viewFunction = ({ pageSizesText }: PageSizeLarge) => (
   <Fragment>

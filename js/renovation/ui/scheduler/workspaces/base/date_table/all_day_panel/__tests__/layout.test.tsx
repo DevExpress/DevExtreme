@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTableBody } from '../table_body';
-import { GroupedViewData } from '../../../../types.d';
+import { GroupedViewData } from '../../../../types';
 
 describe('AllDayPanelLayout', () => {
   describe('Render', () => {
