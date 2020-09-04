@@ -1,3 +1,5 @@
+import dateUtils from '../../../core/utils/date';
+
 class ViewDataGenerator {
     constructor(workspace) {
         this.workspace = workspace;
@@ -333,6 +335,15 @@ export default class ViewDataProvider {
         const lastCellIndex = dateTable[lastRowIndex].length - 1;
 
         return dateTable[lastRowIndex][lastCellIndex].endDate;
+    }
+
+    getGroupCellStartDate(groupIndex, date) {
+        const { dateTable } = this._getGroupData(groupIndex);
+        const cell = dateTable[0].filter(
+            cell => dateUtils.sameDate(cell.startDate, date)
+        )[0];
+
+        return cell && cell.startDate;
     }
 
     getCellsGroup(groupIndex) {

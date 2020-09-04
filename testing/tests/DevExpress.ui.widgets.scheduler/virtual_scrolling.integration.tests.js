@@ -328,6 +328,62 @@ QUnit.module('AppointmentSettings', {
 
             assert.equal(settings.length, 0, 'appotinment setings was not created');
         });
+
+        QUnit.test(`A long appointment should be correctly croped if view: ${viewName}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 4),
+                scrolling: {
+                    mode: 'virtual'
+                },
+                views: [{
+                    type: viewName,
+                    groupOrientation: 'horizontal'
+                }],
+                currentView: viewName,
+                dataSource: [],
+                height: 400
+            });
+
+            const { instance } = this.scheduler;
+            const workspace = instance.getWorkSpace();
+            const scrollable = workspace.getScrollable();
+            const longAppointment = {
+                startDate: new Date(2015, 2, 4, 0, 10),
+                endDate: new Date(2015, 2, 4, 23, 50)
+            };
+
+            workspace._virtualScrolling._getRenderTimeout = () => -1;
+
+            [
+                { y: 1000, expectedDate: new Date(2015, 2, 4, 8, 30) },
+                { y: 1050, expectedDate: new Date(2015, 2, 4, 9, 0) },
+                { y: 1100, expectedDate: new Date(2015, 2, 4, 9, 30) },
+                { y: 1200, expectedDate: new Date(2015, 2, 4, 10, 30) },
+                { y: 1250, expectedDate: new Date(2015, 2, 4, 11, 0) },
+                { y: 1300, expectedDate: new Date(2015, 2, 4, 11, 30) },
+                { y: 1350, expectedDate: new Date(2015, 2, 4, 12, 0) },
+                { y: 1400, expectedDate: new Date(2015, 2, 4, 12, 30) },
+                { y: 1500, expectedDate: new Date(2015, 2, 4, 13, 30) },
+                { y: 2000, expectedDate: new Date(2015, 2, 4, 18, 30) }
+            ].forEach(option => {
+
+                scrollable.scrollTo({ y: option.y });
+
+                const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+
+                assert.equal(
+                    settings.groupIndex,
+                    0,
+                    `group index is correct when scrolled to ${option.y}`
+                );
+
+                assert.deepEqual(
+                    settings.info.appointment.startDate,
+                    option.expectedDate,
+                    `start date is correct when scrolled to ${option.y}`
+                );
+            });
+        });
     });
 });
 
@@ -580,7 +636,7 @@ QUnit.module('Appointment filtering', function() {
         });
     });
 
-    QUnit.module('Rendering', {
+    QUnit.module('On scrolling', {
         before: function() {
             this.checkResultByDeviceType = (assert, callback) => {
                 if(devices.real().deviceType === 'desktop') {
@@ -808,3 +864,4 @@ QUnit.module('Appointment filtering', function() {
         });
     });
 });
+
