@@ -1054,6 +1054,58 @@ QUnit.test('focusedItemIndex should be reset to -1 after deselect all', function
     assert.strictEqual(selection._focusedItemIndex, -1, 'focusedItemIndex');
 });
 
+QUnit.test('selectedItemKeys with key = 0', function(assert) {
+    const selectionChangedArgs = [];
+    const dataSource = new DataSource({
+        pageSize: 2,
+        store: {
+            type: 'array',
+            data: [
+                { data: { id: 0 }, text: 'Item 0' },
+                { data: { id: 1 }, text: 'Item 1' },
+                { data: { id: 2 }, text: 'Item 2' }
+            ],
+            key: 'data.id'
+        }
+    });
+
+    const selection = new Selection({
+        onSelectionChanged: function(args) {
+            selectionChangedArgs.push(args);
+        },
+        key: function() {
+            const store = dataSource && dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            const store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        filter: function() {
+            return dataSource && dataSource.filter();
+        }
+    });
+
+    dataSource.load();
+
+    // act
+    selection.selectedItemKeys(0);
+
+    // assert
+    assert.equal(selectionChangedArgs.length, 1, 'selectionChanged is called once');
+    assert.deepEqual(selectionChangedArgs[0].selectedItemKeys, [0], 'selectedItemsKeys is right');
+    assert.deepEqual(selectionChangedArgs[0].selectedItems, [{ data: { id: 0 }, text: 'Item 0' }], 'selectedItems is right');
+});
+
 
 const createDeferredSelection = function(data, options, dataSource) {
     return new Selection($.extend({
