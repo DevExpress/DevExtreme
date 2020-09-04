@@ -302,11 +302,15 @@ QUnit.module('Options', {
         this.instance.option('operationSettings.allowDeleteConnector', false);
         this.instance.option('operationSettings.allowChangeConnection', false);
         this.instance.option('operationSettings.allowChangeConnectorPoints', false);
+        this.instance.option('operationSettings.allowChangeShapeText', false);
+        this.instance.option('operationSettings.allowChangeConnectorText', false);
         assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
         assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
         assert.equal(this.instance._diagramInstance.operationSettings.deleteConnector, false);
         assert.equal(this.instance._diagramInstance.operationSettings.connectionChange, false);
         assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorPoints, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeShapeText, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorText, false);
     });
 
     test('should change dataSource options', function(assert) {

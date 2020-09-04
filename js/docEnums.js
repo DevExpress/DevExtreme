@@ -1150,12 +1150,12 @@
 
 /**
  * @typedef {string} Enums.DiagramModelOperation
- * @enum {'addShape'|'addShapeFromToolbox'|'deleteShape'|'deleteConnector'|'changeConnection'|'changeConnectorPoints'}
+ * @enum {'addShape'|'addShapeFromToolbox'|'deleteShape'|'deleteConnector'|'changeConnection'|'changeConnectorPoints'|'beforeChangeShapeText'|'changeShapeText'|'beforeChangeConnectorText'|'changeConnectorText'}
  */
 
 /**
  * @typedef {string} Enums.DiagramConnectorPosition
- * @enum {'begin'|'end'}
+ * @enum {'start'|'end'}
  */
 
 /**
