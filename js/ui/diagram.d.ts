@@ -416,6 +416,7 @@ export interface dxDiagramItem {
      */
     itemType?: 'shape' | 'connector';
 }
+
 /**
  * @docid dxDiagramShape
  * @inherits dxDiagramItem
