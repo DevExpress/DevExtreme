@@ -1534,6 +1534,10 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _executeEditingAction: function(actionName, params, func) {
+            if(this.component._disposed) {
+                return null;
+            }
+
             const deferred = new Deferred();
 
             this.executeAction(actionName, params);
