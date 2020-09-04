@@ -1645,7 +1645,7 @@ QUnit.test('Different stacks', function(assert) {
     const stackedPoints = chart.getStackedPoints(s4Points[1]);
 
     // assert
-    assert.deepEqual(stackedPoints, [s1Points[1], s4Points[1]]);
+    assert.deepEqual(stackedPoints, [s1Points[1], s3Points[1], s4Points[1]]);
 });
 
 QUnit.test('Invisible series don\'t count', function(assert) {
