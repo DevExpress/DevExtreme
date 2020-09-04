@@ -126,12 +126,12 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit'
             }
-        };
+        });
         // act
         rowsView.render(testElement);
 
@@ -146,10 +146,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         // act
         rowsView.render(testElement);
@@ -164,10 +164,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         // act
         rowsView.render(testElement);
@@ -182,11 +182,11 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: false,
             allowAdding: false,
             allowDeleting: false
-        };
+        });
 
         // act
         rowsView.render(testElement);
@@ -201,12 +201,12 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowDeleting: true,
             texts: {
                 deleteRow: 'Delete'
             }
-        };
+        });
 
         // act
         rowsView.render(testElement);
@@ -222,12 +222,12 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -245,14 +245,14 @@ QUnit.module('Editing', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             texts: {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -274,7 +274,7 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container').width(80);
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowAdding: true,
             mode: 'batch',
@@ -283,7 +283,7 @@ QUnit.module('Editing', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -309,10 +309,10 @@ QUnit.module('Editing', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -335,7 +335,7 @@ QUnit.module('Editing', {
         let $button;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowDeleting: true,
             allowUpdating: false,
@@ -344,7 +344,7 @@ QUnit.module('Editing', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -366,7 +366,7 @@ QUnit.module('Editing', {
         let $button;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: false,
             allowDeleting: true,
             allowUpdating: false,
@@ -375,7 +375,7 @@ QUnit.module('Editing', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -397,7 +397,7 @@ QUnit.module('Editing', {
         let $button;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowDeleting: false,
             allowUpdating: false,
@@ -406,7 +406,7 @@ QUnit.module('Editing', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -428,7 +428,7 @@ QUnit.module('Editing', {
         let $button;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: false,
             allowDeleting: false,
             allowUpdating: false,
@@ -437,7 +437,7 @@ QUnit.module('Editing', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         // act
         headerPanel.render(testElement);
@@ -458,14 +458,14 @@ QUnit.module('Editing', {
         let saveEditDataCallCount = 0;
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             texts: {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         assert.ok(this.editingController.hasChanges);
         this.editingController.hasChanges = function() {
@@ -493,14 +493,14 @@ QUnit.module('Editing', {
         let cancelEditDataCallCount = 0;
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             texts: {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         assert.ok(this.editingController.hasChanges);
         this.editingController.hasChanges = function() {
@@ -536,12 +536,12 @@ QUnit.module('Editing', {
         let editRowCallCount = 0;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit'
             }
-        };
+        });
 
         const editRow = that.editingController.editRow;
         that.editingController.editRow = function() {
@@ -578,12 +578,12 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit'
             }
-        };
+        });
         that.keyboardNavigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };
 
         rowsView.render(testElement);
@@ -611,12 +611,12 @@ QUnit.module('Editing', {
         let rowClickCallCount = 0;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit'
             }
-        };
+        });
         that.options.onRowClick = function() {
             rowClickCallCount++;
         };
@@ -648,10 +648,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -677,9 +677,9 @@ QUnit.module('Editing', {
         let editCellCallCount = 0;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true
-        };
+        });
 
         const editCell = that.editingController.editCell;
         that.editingController.editCell = function() {
@@ -704,10 +704,10 @@ QUnit.module('Editing', {
         let editCellCallCount = 0;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         const editCell = that.editingController.editCell;
         that.editingController.editCell = function() {
@@ -734,10 +734,10 @@ QUnit.module('Editing', {
         let testColumnIndex;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.editingController.editCell = function(rowIndex, columnIndex) {
             testColumnIndex = columnIndex;
@@ -771,10 +771,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.columns[0].allowEditing = false;
 
@@ -804,10 +804,11 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let $boolCell;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
+
         that.$element = function() {
             return testElement;
         };
@@ -840,10 +841,10 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let editingStartCount = 0;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.options.onEditingStart = function(e) {
             editingStartCount++;
@@ -876,10 +877,10 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let $boolCell;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -906,13 +907,13 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -947,13 +948,13 @@ QUnit.module('Editing', {
         that.columns[0].showEditorAlways = true;
         that.columnsController = new MockColumnsController(that.columns);
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -986,13 +987,13 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let $boolCell;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1040,10 +1041,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: false,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1062,9 +1063,9 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1083,9 +1084,9 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1114,10 +1115,10 @@ QUnit.module('Editing', {
             }
         }).appendTo(testElement);
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: false,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1147,10 +1148,10 @@ QUnit.module('Editing', {
         };
         that.columns[0].alignment = 'right';
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1172,13 +1173,13 @@ QUnit.module('Editing', {
         let removeKey;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowDeleting: true,
             texts: {
                 deleteRow: 'Delete',
                 confirmDeleteMessage: null
             }
-        };
+        });
         that.dataControllerOptions.store = {
             key: function() { },
             remove: function(key) {
@@ -1205,7 +1206,7 @@ QUnit.module('Editing', {
         let removeKey;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowDeleting: true,
             texts: {
@@ -1213,7 +1214,7 @@ QUnit.module('Editing', {
                 undeleteRow: 'Undelete',
                 confirmDeleteMessage: 'TestMessage'
             }
-        };
+        });
         that.dataControllerOptions.store = {
             key: function() { },
             remove: function(key) {
@@ -1244,7 +1245,7 @@ QUnit.module('Editing', {
             const testElement = $('#container');
             const body = $('body');
 
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 allowDeleting: true,
                 confirmDelete: true,
                 texts: {
@@ -1252,7 +1253,8 @@ QUnit.module('Editing', {
                     confirmDeleteMessage: 'TestMessage',
                     confirmDeleteTitle: 'TestTitle'
                 }
-            };
+            });
+
             that.dataControllerOptions.store = {
                 key: function() { },
                 remove: function(key) {
@@ -1298,7 +1300,7 @@ QUnit.module('Editing', {
             const testElement = $('#container');
             const body = $('body');
 
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 allowDeleting: true,
                 confirmDelete: true,
                 mode: 'cell',
@@ -1307,7 +1309,8 @@ QUnit.module('Editing', {
                     confirmDeleteMessage: 'TestMessage',
                     confirmDeleteTitle: 'TestTitle'
                 }
-            };
+            });
+
             that.dataControllerOptions.store = {
                 key: function() { },
                 remove: function(key) {
@@ -1351,14 +1354,14 @@ QUnit.module('Editing', {
             const testElement = $('#container');
             const body = $('body').addClass('dx-viewport');
 
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 allowDeleting: true,
                 confirmDelete: true,
                 texts: {
                     confirmDeleteMessage: 'TestMessage',
                     confirmDeleteTitle: 'TestTitle'
                 }
-            };
+            });
             that.dataControllerOptions.store = {
                 key: function() { },
                 remove: function(key) {
@@ -1400,13 +1403,13 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let updateArgs;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 editRow: 'Edit'
             }
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -1444,13 +1447,13 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let updateArgs;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 editRow: 'Edit'
             }
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -1482,9 +1485,9 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1511,13 +1514,13 @@ QUnit.module('Editing', {
         let updateArgs;
         let serializingValue;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 editRow: 'Edit'
             }
-        };
+        });
 
         that.columns[0].serializeValue = function(value) {
             serializingValue = value;
@@ -1554,13 +1557,13 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 cancelRowChanges: 'Cancel',
                 editRow: 'Edit'
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -1581,13 +1584,13 @@ QUnit.module('Editing', {
         let updateArgs;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             texts: {
                 editRow: 'Edit'
             }
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -1624,10 +1627,10 @@ QUnit.module('Editing', {
     QUnit.test('Editing Cell should be closed without timeout on click outside dataGrid', function(assert) {
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         this.rowsView.render(testElement);
 
@@ -1657,13 +1660,13 @@ QUnit.module('Editing', {
         let updateArgs;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell',
             texts: {
                 editRow: 'Edit'
             }
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -1698,10 +1701,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
         testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
@@ -1735,10 +1738,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const rowsViewWrapper = dataGridWrapper.rowsView;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render($('#container'));
         rowsViewWrapper.getCellElement(0, 2).trigger('dxclick'); // Edit
@@ -1762,10 +1765,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.columns[0].editCellTemplate = function(e) {
             return $('<div>').dxDropDownBox({
@@ -1819,10 +1822,10 @@ QUnit.module('Editing', {
             }
         }).dxPopup('instance');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         popupInstance.show();
         const $popupContent = popupInstance.overlayContent();
@@ -1848,10 +1851,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
         testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
@@ -1884,10 +1887,10 @@ QUnit.module('Editing', {
         const that = this;
         const rowsView = this.rowsView;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(that.gridContainer);
         that.gridContainer.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
@@ -1915,7 +1918,7 @@ QUnit.module('Editing', {
         const removeKeys = [];
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'batch',
@@ -1923,7 +1926,7 @@ QUnit.module('Editing', {
                 editRow: 'Edit',
                 deleteRow: 'Delete'
             }
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -1969,10 +1972,10 @@ QUnit.module('Editing', {
         const updateArgs = [];
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -2016,10 +2019,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         headerPanel.render(testElement);
         rowsView.render(testElement);
@@ -2050,7 +2053,7 @@ QUnit.module('Editing', {
         const removeKeys = [];
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'batch',
@@ -2058,7 +2061,7 @@ QUnit.module('Editing', {
                 editRow: 'Edit',
                 deleteRow: 'Delete'
             }
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -2106,7 +2109,7 @@ QUnit.module('Editing', {
         const removeKeys = [];
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'batch',
@@ -2114,7 +2117,7 @@ QUnit.module('Editing', {
                 editRow: 'Edit',
                 deleteRow: 'Delete'
             }
-        };
+        });
 
         that.options.onRowRemoving = function(e) {
             e.cancel = true;
@@ -2153,7 +2156,7 @@ QUnit.module('Editing', {
         assert.deepEqual(updateArgs, [['test1', { 'name': 'Test1' }]]);
         assert.deepEqual(removeKeys, []);
         assert.ok(that.dataController.refreshed, 'data is refreshed');
-        assert.deepEqual(that.editingController._editData, [{ key: 'test3', oldData: that.dataControllerOptions.items[2].data, type: 'remove' }], 'edit data');
+        assert.deepEqual(that.option('editing.changes'), [{ key: 'test3', oldData: that.dataControllerOptions.items[2].data, type: 'remove' }], 'edit data');
     });
 
     QUnit.test('Close Editing Cell when batch mode on click inside freespace row', function(assert) {
@@ -2163,10 +2166,10 @@ QUnit.module('Editing', {
         let updateArgs;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -2205,10 +2208,10 @@ QUnit.module('Editing', {
         const testElement = $('#container');
         let testInput;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         that.dataControllerOptions.store = {
             key: function() { },
@@ -2252,13 +2255,13 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             texts: {
                 editRow: 'Edit',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         rowsView.render(testElement);
         this.click(testElement.find('tbody > tr').first(), 'a:contains(Edit)');
@@ -2279,13 +2282,13 @@ QUnit.module('Editing', {
     QUnit.test('Title of delete dialog is not displayed when title text is empty or undefined', function(assert) {
     // arrange
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             confirmDelete: true,
             texts: {
                 confirmDeleteMessage: 'Test'
             }
-        };
+        });
 
         // act
         this.editingController.deleteRow(0);
@@ -2299,14 +2302,14 @@ QUnit.module('Editing', {
     QUnit.test('Title of delete dialog is displayed when title text is defined', function(assert) {
     // arrange
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             confirmDelete: true,
             texts: {
                 confirmDeleteMessage: 'Test',
                 confirmDeleteTitle: 'Title'
             }
-        };
+        });
 
         // act
         this.editingController.deleteRow(0);
@@ -2325,10 +2328,10 @@ QUnit.module('Editing', {
         let isCellClosed = false;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         that.columns[0].allowEditing = false;
 
@@ -2363,10 +2366,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that.columns[0].disabled = true;
         rowsView.render(testElement);
 
@@ -2385,10 +2388,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that.columns[0].editorOptions = { disabled: true };
         rowsView.render(testElement);
 
@@ -2409,10 +2412,10 @@ QUnit.module('Editing', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that.dataControllerOptions.items.length = 1;
         that.columns.length = 1;
         that.columns.push({
@@ -2447,14 +2450,14 @@ QUnit.module('Editing', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'cell',
             texts: {
                 confirmDeleteMessage: ''
             }
-        };
+        });
         that.options.onRowRemoving = function(e) {
             countCallOnRowRemoving++;
             e.cancel = $.Deferred().resolve(true);
@@ -2481,7 +2484,7 @@ QUnit.module('Editing', {
         let $editCellElement;
         const $testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true,
@@ -2492,7 +2495,7 @@ QUnit.module('Editing', {
                 saveRowChanges: 'Save',
                 cancelRowChanges: 'Cancel'
             }
-        };
+        });
 
         this.editingController.init();
         this.rowsView.render($testElement);
@@ -2525,10 +2528,10 @@ QUnit.module('Editing', {
     if(browser.msie && parseInt(browser.version) <= 11) {
         QUnit.test('Update value for row edit mode', function(assert) {
         // arrange
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 mode: 'row'
-            };
+            });
 
             this.editingController.editRow(0);
 
@@ -2562,10 +2565,10 @@ QUnit.module('Editing', {
 
         QUnit.test('Update value for form edit mode', function(assert) {
         // arrange
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 mode: 'form'
-            };
+            });
 
             this.editingController.editRow(0);
 
@@ -2599,10 +2602,10 @@ QUnit.module('Editing', {
 
         QUnit.test('Do not update value on keyup event for row edit mode', function(assert) {
         // arrange
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 mode: 'row'
-            };
+            });
 
             this.editingController.editRow(0);
 
@@ -2635,10 +2638,10 @@ QUnit.module('Editing', {
 
         QUnit.test('Do not update value on keyup event for form edit mode', function(assert) {
         // arrange
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 mode: 'form'
-            };
+            });
 
             this.editingController.editRow(0);
 
@@ -2702,10 +2705,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: false,
-        };
+        });
         that.options.tabIndex = 0;
         rowsView.render($testElement);
         that.$element = function() {
@@ -2729,10 +2732,10 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that.columns[0].editorOptions = { mode: 'password' };
         rowsView.render($testElement);
 
@@ -2750,11 +2753,11 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             startEditAction: 'click'
-        };
+        });
         sinon.spy(that.editingController, 'editCell');
 
         rowsView.render($testElement);
@@ -2774,11 +2777,11 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             startEditAction: 'dblClick'
-        };
+        });
         sinon.spy(that.editingController, 'editCell');
 
         rowsView.render($testElement);
@@ -2798,11 +2801,11 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             startEditAction: 'dblClick'
-        };
+        });
         sinon.spy(that.editingController, 'editCell');
 
         rowsView.render($testElement);
@@ -2833,11 +2836,11 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             startEditAction: 'dblClick'
-        };
+        });
         rowsView.render($testElement);
 
         $testElement.find('td').first().trigger('dxdblclick');
@@ -2860,11 +2863,11 @@ QUnit.module('Editing', {
         const rowsView = this.rowsView;
         const allowUpdating = sinon.spy();
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: allowUpdating,
             mode: 'batch',
             startEditAction: 'dblClick'
-        };
+        });
         rowsView.render(that.gridContainer);
         allowUpdating.reset();
 
@@ -3020,9 +3023,9 @@ QUnit.module('Editing with real dataController', {
 
         that.options.columns = [];
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true
-        };
+        });
 
         that.columnsController.reset();
         that.columnsController.init();
@@ -3041,14 +3044,14 @@ QUnit.module('Editing with real dataController', {
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch',
             texts: {
                 cancelGridChanges: 'Cancel changes',
                 saveGridChanges: 'Save changes'
             }
-        };
+        });
         headerPanel.render(testElement);
         rowsView.render(testElement);
 
@@ -3089,10 +3092,10 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const rowsView = this.rowsView;
         const testElement = $('#container');
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         this.options.columns = [{ dataField: 'stateId', dataType: 'boolean' }];
         this.options.repaintChangesOnly = true;
         this.columnsController.init();
@@ -3114,10 +3117,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -3149,10 +3152,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -3177,10 +3180,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form'
-        };
+        });
 
         that.options.rowTemplate = function(container) {
             const markup = $('<tbody class=\'dx-row\'></tbody>');
@@ -3211,10 +3214,10 @@ QUnit.module('Editing with real dataController', {
 
         const UP_KEY = 'ArrowUp';
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         this.headerPanel.render($testElement);
         this.rowsView.render($testElement);
 
@@ -3242,10 +3245,10 @@ QUnit.module('Editing with real dataController', {
 
         const DOWN_KEY = 'ArrowDown';
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         this.headerPanel.render($testElement);
         this.rowsView.render($testElement);
 
@@ -3278,10 +3281,10 @@ QUnit.module('Editing with real dataController', {
         const TAB_KEY = 'Tab';
         let $input;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         headerPanel.render(testElement);
         rowsView.render(testElement);
 
@@ -3323,11 +3326,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowAdding: true,
             allowDeleting: true
-        };
+        });
 
         that.options.columns = ['name', 'age', 'lastName'];
 
@@ -3361,10 +3364,10 @@ QUnit.module('Editing with real dataController', {
             // arrange
                 const that = this;
 
-                that.options.editing = {
+                $.extend(that.options.editing, {
                     mode: 'cell',
                     allowAdding: true
-                };
+                });
 
                 that.dataController.pageSize(3);
 
@@ -3396,10 +3399,10 @@ QUnit.module('Editing with real dataController', {
 
     QUnit.test('AddRow method should return Deferred', function(assert) {
     // arrange
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'batch',
             allowAdding: true
-        };
+        });
 
         this.rowsView.render($('#container'));
 
@@ -3423,9 +3426,9 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true
-        };
+        });
 
         that.options.onEditingStart = function(params) {
             assert.deepEqual(params.data, {
@@ -3475,10 +3478,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         that.options.onEditingStart = function(params) {
             assert.deepEqual(params.data, {
@@ -3528,10 +3531,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         that.options.onEditingStart = function(params) {
             assert.ok(params.data.__KEY__);
@@ -3558,10 +3561,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowUpdating: true
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -3581,13 +3584,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         headerPanel.render(testElement);
         rowsView.render(testElement);
@@ -3623,9 +3626,9 @@ QUnit.module('Editing with real dataController', {
         const testElement = $('#container');
 
         that.options.dataSource.store = [];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true
-        };
+        });
 
         rowsView.render(testElement);
         that.dataController.init();
@@ -3647,13 +3650,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.options.onInitNewRow = function(params) {
             // assert
@@ -3694,13 +3697,13 @@ QUnit.module('Editing with real dataController', {
         const originalInsert = that.dataController.store().insert;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.dataController.store().insert = function(values) {
         // assert
@@ -3773,13 +3776,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.options.onRowInserted = function(params) {
         // assert
@@ -3817,13 +3820,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
         that.options.dataSource = {
             key: 'fieldTest',
             load: function() {
@@ -3866,9 +3869,9 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true
-        };
+        });
         that.options.dataSource = {
             load: function() {
                 const d = $.Deferred();
@@ -3911,14 +3914,14 @@ QUnit.module('Editing with real dataController', {
         const testElement = $('#container');
         const parameters = [];
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.options.onRowInserted = function(params) {
             parameters.push(params);
@@ -3962,14 +3965,14 @@ QUnit.module('Editing with real dataController', {
         const testElement = $('#container');
         const removeParameters = [];
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.options.onRowRemoved = function(params) {
             removeParameters.push(params);
@@ -4008,11 +4011,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'batch',
             startEditAction: 'dblClick'
-        };
+        });
 
         headerPanel.render(testElement);
         rowsView.render(testElement);
@@ -4032,7 +4035,7 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowUpdating: true,
             mode: 'batch',
@@ -4041,7 +4044,7 @@ QUnit.module('Editing with real dataController', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         headerPanel.render(testElement);
         rowsView.render(testElement);
@@ -4098,11 +4101,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
         headerPanel.render(testElement);
         rowsView.render(testElement);
 
@@ -4148,11 +4151,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
         headerPanel.render(testElement);
         rowsView.render(testElement);
 
@@ -4183,13 +4186,13 @@ QUnit.module('Editing with real dataController', {
         const headerPanel = this.headerPanel;
         const rowsView = this.rowsView;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         headerPanel.render(that.gridContainer);
         rowsView.render(that.gridContainer);
@@ -4230,13 +4233,13 @@ QUnit.module('Editing with real dataController', {
         const originalUpdate = that.dataController.store().update;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.dataController.store().update = function(key, values) {
         // assert
@@ -4350,13 +4353,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         sinon.spy(that.dataController.store(), 'update');
 
@@ -4406,13 +4409,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         sinon.spy(that.dataController.store(), 'update');
 
@@ -4467,13 +4470,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         sinon.spy(that.dataController.store(), 'update');
 
@@ -4528,13 +4531,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         sinon.spy(that.dataController.store(), 'update');
 
@@ -4586,13 +4589,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         that.options.onRowUpdated = function(params) {
         // assert
@@ -4643,13 +4646,13 @@ QUnit.module('Editing with real dataController', {
         const booleanColumnIndex = that.options.columns.length;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         rowsView.render(testElement);
         that.editingController.init();
@@ -4687,13 +4690,13 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save'
             }
-        };
+        });
 
         rowsView.render(testElement);
         that.editingController.init();
@@ -4716,10 +4719,10 @@ QUnit.module('Editing with real dataController', {
         let rowUpdatingCallCount = 0;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         that.options.onRowUpdating = function(e) {
         // assert
@@ -4762,10 +4765,10 @@ QUnit.module('Editing with real dataController', {
         let rowUpdatingCallCount = 0;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'cell',
             allowUpdating: true
-        };
+        });
 
         that.options.onRowUpdating = function(e) {
             ++rowUpdatingCallCount;
@@ -4793,10 +4796,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         rowsView.render(testElement);
         that.editingController.init();
@@ -4825,10 +4828,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -4854,10 +4857,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -4886,12 +4889,12 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item'
             }
-        };
+        });
 
         headerPanel.render(testElement);
         rowsView.render(testElement);
@@ -4920,7 +4923,7 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowDeleting: true,
             texts: {
@@ -4928,7 +4931,7 @@ QUnit.module('Editing with real dataController', {
                 undeleteRow: 'Undelete',
                 confirmDeleteMessage: 'TestMessage'
             }
-        };
+        });
 
         rowsView.render(testElement);
         this.editingController.init();
@@ -4961,7 +4964,7 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowDeleting: true,
             confirmDelete: true,
             texts: {
@@ -4969,7 +4972,7 @@ QUnit.module('Editing with real dataController', {
                 undeleteRow: 'Undelete',
                 confirmDeleteMessage: 'TestMessage'
             }
-        };
+        });
 
 
         that.options.onRowRemoving = function(params) {
@@ -5013,13 +5016,13 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'cell',
             allowDeleting: true,
             texts: {
                 confirmDeleteMessage: null
             }
-        };
+        });
 
         that.getDataSource().store().remove = function() {
             return $.Deferred().reject('Test Error');
@@ -5040,14 +5043,14 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowDeleting: true,
             texts: {
                 deleteRow: 'Delete',
                 undeleteRow: 'Undelete',
                 confirmDeleteMessage: 'TestMessage'
             }
-        };
+        });
 
         that.options.onRowRemoved = function(params) {
             assert.deepEqual(params.key,
@@ -5090,9 +5093,9 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowDeleting: true
-        };
+        });
 
         rowsView.render(testElement);
         that.editingController.init();
@@ -5124,11 +5127,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'cell',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
 
         rowsView.render(testElement);
         that.editingController.init();
@@ -5155,11 +5158,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'cell',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
 
         rowsView.render(testElement);
         that.editingController.init();
@@ -5187,10 +5190,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowDeleting: true
-        };
+        });
 
         that.options.columns.push({ dataField: 'booleanField', dataType: 'boolean', validationRules: [{ type: 'required' }] });
         that.columnsController.reset();
@@ -5215,9 +5218,9 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'cell'
-        };
+        });
 
         that.options.onRowValidating = function(e) {
             e.isValid = false;
@@ -5256,10 +5259,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -5291,10 +5294,10 @@ QUnit.module('Editing with real dataController', {
             showCheckBoxesMode: 'always'
         };
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         this.editingController.closeEditCell = function() {
             isCloseEditCell = true;
@@ -5320,10 +5323,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         that.options.columns = ['name', { dataField: 'age', format: { type: 'currency', precision: 3 } }];
 
@@ -5361,10 +5364,10 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         this.rowsView.render(testElement);
         testElement.find('td').eq(1).trigger('dxclick');
@@ -5384,10 +5387,10 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         this.rowsView.render(testElement);
         testElement.find('td').eq(1).trigger('dxclick');
@@ -5411,10 +5414,10 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that._getTemplate = function(name) {
             if(name === '#test') {
                 return {
@@ -5451,10 +5454,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'row'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -5477,10 +5480,10 @@ QUnit.module('Editing with real dataController', {
         const dataField = 'name';
         const newValue = 'Alex1';
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         this.rowsView.render($testElement);
 
@@ -5503,10 +5506,10 @@ QUnit.module('Editing with real dataController', {
         let updateArgs;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         that.options.onRowUpdating = function(params) {
             updateArgs = params.newData;
@@ -5538,10 +5541,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         that.options.loadingTimeout = 0;
 
@@ -5583,10 +5586,10 @@ QUnit.module('Editing with real dataController', {
             showCheckBoxesMode: 'always'
         };
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'row'
-        };
+        });
 
         this.editingController.editRow(0);
 
@@ -5612,10 +5615,10 @@ QUnit.module('Editing with real dataController', {
             showCheckBoxesMode: 'always'
         };
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         this.rowsView.render(testElement);
 
@@ -5642,10 +5645,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         that.options.columns = [{
             dataField: 'name',
@@ -5685,10 +5688,10 @@ QUnit.module('Editing with real dataController', {
             showCheckBoxesMode: 'always'
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(testElement);
         that.selectionController.init();
@@ -5727,10 +5730,10 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
         that.$element = function() {
             return testElement;
         };
@@ -5771,10 +5774,10 @@ QUnit.module('Editing with real dataController', {
 
         that.options.loadingTimeout = 30;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         that.$element = function() {
             return testElement;
@@ -5814,10 +5817,10 @@ QUnit.module('Editing with real dataController', {
         that.options.loadingTimeout = 30;
         that.options.columns[0] = { dataField: 'name', showEditorAlways: true };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         that.$element = function() {
             return testElement;
@@ -5853,10 +5856,10 @@ QUnit.module('Editing with real dataController', {
             dataType: 'boolean'
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
         that.$element = function() {
             return testElement;
         };
@@ -5901,7 +5904,7 @@ QUnit.module('Editing with real dataController', {
         const updatedArgs = [];
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'batch',
@@ -5909,7 +5912,7 @@ QUnit.module('Editing with real dataController', {
                 editRow: 'Edit',
                 deleteRow: 'Delete'
             }
-        };
+        });
         that.options.dataSource = {
             load: function() {
                 return that.array;
@@ -5996,11 +5999,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'cell'
-        };
+        });
         that.$element = function() {
             return $testElement;
         };
@@ -6042,11 +6045,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             allowDeleting: true,
             mode: 'cell'
-        };
+        });
         that.$element = function() {
             return $testElement;
         };
@@ -6082,12 +6085,13 @@ QUnit.module('Editing with real dataController', {
     });
 
     QUnit.test('Add edit data with save array without extend_T256598', function(assert) {
-    // arrange
-        this.editingController._editData = [{
+        // arrange
+        const changes = [{
             data: { A: [11, 12] },
             key: 1,
             test: 'test'
         }];
+        this.options.editing.changes = changes;
 
         // act
         this.editingController._addEditData({
@@ -6097,9 +6101,8 @@ QUnit.module('Editing with real dataController', {
         });
 
         // assert
-        assert.deepEqual(this.editingController._editData[0], {
+        assert.deepEqual(this.editingController.option('editing.changes')[0], {
             key: 1,
-            isValid: true,
             data: { A: [13] },
             test: 'test',
             type: 'number'
@@ -6129,9 +6132,9 @@ QUnit.module('Editing with real dataController', {
                 isEditingRow = e.row.isEditing;
             }
         };
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'batch'
-        };
+        });
 
         this.rowsView.init();
         this.rowsView.render($('#container'));
@@ -6173,10 +6176,10 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const rowsView = this.rowsView;
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowEditing: true,
             mode: 'batch'
-        };
+        });
         rowsView.render(that.gridContainer);
 
         that.editCell(0, 0);
@@ -6204,10 +6207,10 @@ QUnit.module('Editing with real dataController', {
             enabled: true
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -6230,7 +6233,7 @@ QUnit.module('Editing with real dataController', {
             enabled: true
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form',
             form: {
@@ -6245,7 +6248,7 @@ QUnit.module('Editing with real dataController', {
                     }
                 ]
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -6268,10 +6271,10 @@ QUnit.module('Editing with real dataController', {
             enabled: true
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -6299,10 +6302,10 @@ QUnit.module('Editing with real dataController', {
             enabled: true
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form'
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -6331,7 +6334,7 @@ QUnit.module('Editing with real dataController', {
             return testElement;
         };
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'popup',
             form: {
@@ -6340,7 +6343,7 @@ QUnit.module('Editing with real dataController', {
             popup: {
                 animation: false
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -6388,9 +6391,10 @@ QUnit.module('Editing with real dataController', {
         deferreds[0].resolve();
 
         // assert
-        assert.deepEqual(that.editingController._editData.length, 1, 'count of edit data');
-        assert.deepEqual(that.editingController._editData[0].data, { name: 'Test2' }, 'new data');
-        assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], 'old data');
+        const changes = this.option('editing.changes');
+        assert.deepEqual(changes.length, 1, 'count of edit data');
+        assert.deepEqual(changes[0].data, { name: 'Test2' }, 'new data');
+        assert.deepEqual(changes[0].oldData, that.array[1], 'old data');
     });
 
     // T539602
@@ -6452,10 +6456,10 @@ QUnit.module('Editing with real dataController', {
                 this.defaultSetCellValue(rowData, value);
             }
         };
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
         that.$element = function() {
             return $testElement;
         };
@@ -6493,10 +6497,10 @@ QUnit.module('Editing with real dataController', {
                 this.defaultSetCellValue(rowData, value);
             }
         };
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'row'
-        };
+        });
         that.$element = function() {
             return $testElement;
         };
@@ -6540,10 +6544,10 @@ QUnit.module('Editing with real dataController', {
                 this.defaultSetCellValue(rowData, value);
             }
         };
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that.$element = function() {
             return $testElement;
         };
@@ -6576,7 +6580,7 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             allowUpdating: true,
             allowDeleting: true,
@@ -6586,7 +6590,7 @@ QUnit.module('Editing with real dataController', {
                 saveGridChanges: 'Save changes',
                 cancelGridChanges: 'Cancel changes'
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -6606,12 +6610,12 @@ QUnit.module('Editing with real dataController', {
     // arrange
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowAdding: true,
             allowUpdating: true,
             allowDeleting: true,
             mode: 'row'
-        };
+        });
         this.options.noDataText = 'No Data';
         this.options.dataSource = [];
         this.$element = function() {
@@ -6637,10 +6641,10 @@ QUnit.module('Editing with real dataController', {
     // arrange
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowAdding: true,
             mode: 'form'
-        };
+        });
         this.options.dataSource = [];
         this.$element = function() {
             return testElement;
@@ -6663,10 +6667,10 @@ QUnit.module('Editing with real dataController', {
     // arrange
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         this.options.loadingTimeout = 0;
 
@@ -6705,10 +6709,10 @@ QUnit.module('Editing with real dataController', {
         const testElement = $('#container');
         const onRowUpdatingSpy = sinon.spy();
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         this.options.onRowUpdating = onRowUpdatingSpy;
 
@@ -6796,9 +6800,9 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(this.dataController.items().length, 1, 'item count');
 
         this.options.loadingTimeout = 30;
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'popup'
-        };
+        });
 
         try {
         // act
@@ -6836,14 +6840,14 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowAdding: true,
             texts: {
                 addRow: 'Add New Item',
                 saveRowChanges: 'Save'
             }
-        };
+        });
         that.options.dataSource = [new Employee(1, 'joe', 25)];
         that.options.columns = ['id', 'name', 'age', 'isYoung'];
         that.options.onInitNewRow = function(e) {
@@ -6882,10 +6886,10 @@ QUnit.module('Editing with real dataController', {
             const testElement = $('#container');
 
             that.options.columns = ['name', 'age'];
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 allowUpdating: true,
                 mode: 'batch'
-            };
+            });
 
             rowsView.render(testElement);
 
@@ -6900,10 +6904,10 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const testElement = $('#container');
 
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 allowUpdating: false,
                 mode: 'batch'
-            };
+            });
             // act
             rowsView.render(testElement);
 
@@ -6923,10 +6927,10 @@ QUnit.module('Editing with real dataController', {
             useNative: false
         };
         that.options.columns = ['name', 'age'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(that.gridContainer);
         that.columnsController.init();
@@ -6958,10 +6962,10 @@ QUnit.module('Editing with real dataController', {
             useNative: false
         };
         that.options.columns = [{ dataField: 'name', fixed: true }, 'age'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(that.gridContainer);
         that.columnsController.init();
@@ -6994,10 +6998,10 @@ QUnit.module('Editing with real dataController', {
             useNative: false
         };
         that.options.columns = ['name', 'age'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render(that.gridContainer);
         that.columnsController.init();
@@ -7028,10 +7032,10 @@ QUnit.module('Editing with real dataController', {
                 valueExpr: 'id'
             }
         });
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         rowsView.render(testElement);
         that.columnsController.init();
 
@@ -7068,10 +7072,10 @@ QUnit.module('Editing with real dataController', {
                 valueExpr: 'id'
             }
         });
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         rowsView.render(testElement);
         that.columnsController.init();
 
@@ -7107,10 +7111,10 @@ QUnit.module('Editing with real dataController', {
                     valueExpr: 'id'
                 }
             });
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 allowUpdating: true,
                 mode: 'batch'
-            };
+            });
             rowsView.render(testElement);
             that.columnsController.init();
 
@@ -7145,10 +7149,10 @@ QUnit.module('Editing with real dataController', {
                 valueExpr: 'id'
             }
         });
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         rowsView.render(testElement);
         that.columnsController.init();
 
@@ -7182,10 +7186,10 @@ QUnit.module('Editing with real dataController', {
                 valueExpr: 'id'
             }
         });
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'row'
-        };
+        });
         rowsView.render(testElement);
         that.columnsController.init();
 
@@ -7233,10 +7237,10 @@ QUnit.module('Editing with real dataController', {
                 valueExpr: 'id'
             }
         });
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         rowsView.render(testElement);
         that.columnsController.init();
 
@@ -7261,14 +7265,14 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 editRow: 'Edit'
             }
-        };
+        });
         that.options.columns[0] = {
             dataField: 'name',
             setCellValue: function(data, value) {
@@ -7305,14 +7309,14 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 editRow: 'Edit'
             }
-        };
+        });
         that.options.columns[0] = {
             dataField: 'name',
             setCellValue: function(newData, value, currentRowData) {
@@ -7342,10 +7346,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
         that.options.columns[0] = {
             dataField: 'name',
             setCellValue: (newData, value) => newData[this.dataField] = value,
@@ -7379,10 +7383,10 @@ QUnit.module('Editing with real dataController', {
         const $testElement = $('#container');
         const validationCallback = sinon.spy(() => false);
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
 
         that.options.columns = [{
             dataField: 'name',
@@ -7418,14 +7422,14 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 editRow: 'Edit'
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -7469,10 +7473,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         that.array[0].arr = [1, 3];
 
@@ -7576,10 +7580,10 @@ QUnit.module('Editing with real dataController', {
             },
             showEditorAlways: true
         }, 'age'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         rowsView.render(that.gridContainer);
         that.columnsController.init();
@@ -7607,9 +7611,9 @@ QUnit.module('Editing with real dataController', {
         let editingStartCallCount = 0;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row'
-        };
+        });
 
         that.options.onInitNewRow = function(e) {
             initNewRowCallCount++;
@@ -7650,10 +7654,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
 
         rowsView.render($testElement);
 
@@ -7671,10 +7675,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true
-        };
+        });
         that.options.selection = {
             mode: 'multiple',
             showCheckBoxesMode: 'always'
@@ -7700,11 +7704,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             buttons: ['edit', 'delete', { name: 'cancel', visible: false }, {
@@ -7742,10 +7746,10 @@ QUnit.module('Editing with real dataController', {
         const that = this;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true
-        };
+        });
 
         that.options.columns.push({
             type: 'buttons',
@@ -7774,11 +7778,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             buttons: ['edit', 'delete', {
@@ -7856,11 +7860,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({ type: 'buttons' }, {
             type: 'buttons',
             cssClass: 'mybuttons',
@@ -7901,11 +7905,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             buttons: [{ name: 'edit', icon: 'doc' }, 'delete']
@@ -7930,11 +7934,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             buttons: ['edit', {
@@ -7970,10 +7974,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: false,
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             buttons: [{ name: 'edit', visible: true }]
@@ -8000,12 +8004,12 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: function(options) {
                 return options.row.rowIndex % 2 === 0;
             }
-        };
+        });
         that.editingController.init();
 
         // act
@@ -8024,12 +8028,12 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowDeleting: function(options) {
                 return options.row.rowIndex % 2 === 0;
             }
-        };
+        });
         that.editingController.init();
 
         // act
@@ -8049,10 +8053,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
         that.options.columns.unshift({
             type: 'buttons',
             buttons: ['edit']
@@ -8082,10 +8086,10 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'cell'
-        };
+        });
 
         rowsView.render($testElement);
         that.columnOption('name', 'editCellTemplate', editCellTemplate);
@@ -8118,7 +8122,7 @@ QUnit.module('Editing with real dataController', {
             const that = this;
             const $testElement = $('#container');
 
-            that.options.editing = {
+            $.extend(that.options.editing, {
                 mode: 'row',
                 allowUpdating: true,
                 allowDeleting: true,
@@ -8126,7 +8130,7 @@ QUnit.module('Editing with real dataController', {
                     confirmDeleteMessage: '',
                     editRow: ''
                 }
-            };
+            });
             that.options.loadPanel = {
                 enabled: true
             };
@@ -8165,11 +8169,11 @@ QUnit.module('Editing with real dataController', {
         const $testElement = $('#container');
 
         that.options.showColumnHeaders = true;
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             caption: 'Command Column',
@@ -8194,11 +8198,11 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         that.options.columns.push({
             type: 'buttons',
             buttons: ['edit', {
@@ -8231,10 +8235,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
         that.options.dataSource.store = [{ StateID: 1, CityID: 1 }, { StateID: 2, CityID: 2 }];
         that.options.columns = [{
             dataField: 'StateID',
@@ -8276,10 +8280,10 @@ QUnit.module('Editing with real dataController', {
         const rowsView = this.rowsView;
         const $testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             allowAdding: true
-        };
+        });
         rowsView.render($testElement);
 
         // act
@@ -8309,10 +8313,10 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         that._getTemplate = function(name) {
             if(name === '#test') {
                 return {
@@ -8353,10 +8357,10 @@ QUnit.module('Editing with real dataController', {
                     const lookup2InitializedSpy = sinon.spy();
 
                     this.options.repaintChangesOnly = repaintChangesOnly;
-                    this.options.editing = {
+                    $.extend(this.options.editing, {
                         mode: 'form',
                         allowUpdating: true
-                    };
+                    });
                     this.options.dataSource = [{
                         id: 1, lookup1: 1, lookup2: 11
                     }];
@@ -8473,10 +8477,10 @@ QUnit.module('Editing with real dataController', {
         const $testElement = $('#container');
 
         this.options.repaintChangesOnly = true;
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'batch',
             allowUpdating: true
-        };
+        });
 
         this.options.columns = [{
             dataField: 'name'
@@ -8555,9 +8559,9 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -8574,10 +8578,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8594,10 +8598,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8626,10 +8630,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8648,9 +8652,9 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -8673,9 +8677,9 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -8698,9 +8702,9 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -8722,9 +8726,9 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -8755,10 +8759,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8781,10 +8785,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8814,10 +8818,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8842,10 +8846,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8870,10 +8874,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8898,10 +8902,10 @@ QUnit.module('Editing with real dataController', {
                 const rowsView = this.rowsView;
                 const $testElement = $('#container');
 
-                this.options.editing = {
+                $.extend(this.options.editing, {
                     allowUpdating: true,
                     mode: editMode
-                };
+                });
                 rowsView.render($testElement);
 
                 // act
@@ -8927,11 +8931,11 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 allowAdding: true,
                 mode: 'batch'
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -8974,11 +8978,11 @@ QUnit.module('Editing with real dataController', {
             const rowsView = this.rowsView;
             const $testElement = $('#container');
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 allowAdding: true,
                 mode: 'cell'
-            };
+            });
             rowsView.render($testElement);
 
             // act
@@ -9011,6 +9015,318 @@ QUnit.module('Editing with real dataController', {
                 assert.notOk(row.isNewRow, 'not new row');
             });
         });
+
+        QUnit.test('Changes - add row', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            $.extend(this.options.editing, {
+                allowAdding: true,
+                mode: 'cell'
+            });
+            rowsView.render($testElement);
+
+            // act
+            const oldChanges = this.option('editing.changes');
+            this.addRow();
+            this.clock.tick();
+
+            // assert
+            const newChanges = this.option('editing.changes');
+            assert.equal(oldChanges.length, 0, 'old changes were not modified');
+            assert.equal(newChanges.length, 1, 'new changes');
+            assert.deepEqual(newChanges[0], {
+                'data': {},
+                'key': {
+                    '__DX_INSERT_INDEX__': 1,
+                    'dataRowIndex': 0,
+                    'pageIndex': 0,
+                    'parentKey': undefined,
+                    'rowIndex': 0
+                },
+                'type': 'insert'
+            });
+        });
+
+        QUnit.test('Changes - edit row', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            let newChanges; let previousChanges;
+            const $testElement = $('#container');
+
+            $.extend(this.options.editing, {
+                allowAdding: true,
+                mode: 'cell'
+            });
+            rowsView.render($testElement);
+
+            // act
+            previousChanges = this.option('editing.changes');
+            this.cellValue(0, 0, 'test');
+            this.clock.tick();
+
+            // assert
+            newChanges = this.option('editing.changes');
+            assert.equal(previousChanges.length, 0, 'old changes were not modified');
+            assert.deepEqual(newChanges[0], {
+                'data': {
+                    'name': 'test'
+                },
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'update'
+            });
+
+            // act
+            previousChanges = newChanges;
+            this.cellValue(0, 1, 'test2');
+            this.clock.tick();
+
+            // assert
+            newChanges = this.option('editing.changes');
+            assert.deepEqual(previousChanges[0], {
+                'data': {
+                    'name': 'test'
+                },
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'update'
+            });
+            assert.deepEqual(newChanges[0], {
+                'data': {
+                    'age': 'test2',
+                    'name': 'test'
+                },
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'update'
+            });
+        });
+
+        QUnit.test('Changes - delete row', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            $.extend(this.options.editing, {
+                allowAdding: true,
+                mode: 'batch'
+            });
+            rowsView.render($testElement);
+
+            // act
+            const oldChanges = this.option('editing.changes');
+            this.deleteRow(0);
+            this.clock.tick();
+
+            // assert
+            const newChanges = this.option('editing.changes');
+            assert.equal(oldChanges.length, 0, 'old changes were not modified');
+            assert.equal(newChanges.length, 1, 'new changes');
+            assert.deepEqual(newChanges[0], {
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'remove'
+            });
+        });
+
+        QUnit.test('Changes - delete row (cell edit mode)', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            let changesInOnRowRemoving;
+
+            $.extend(this.options.editing, {
+                allowAdding: true,
+                mode: 'cell'
+            });
+            this.options.onRowRemoving = (e) => {
+                changesInOnRowRemoving = this.option('editing.changes');
+
+            };
+            rowsView.render($testElement);
+            this.editingController.optionChanged({ name: 'onRowRemoving' });
+
+            // act
+            const oldChanges = this.option('editing.changes');
+            this.deleteRow(0);
+            this.clock.tick();
+
+            // assert
+            const newChanges = this.option('editing.changes');
+            assert.equal(newChanges.length, 0, 'new changes');
+            assert.equal(oldChanges.length, 0, 'old changes');
+            assert.equal(changesInOnRowRemoving.length, 1, 'changes in onRowRemoving');
+            assert.deepEqual(changesInOnRowRemoving[0], {
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'remove'
+            });
+        });
+
+        // TODO
+        QUnit.skip('Changes - update row (custom store)', function(assert) {
+            // arrange
+            const that = this;
+            let countCallOnRowUpdated = 0;
+            let countCallOnRowUpdating = 0;
+            let changes;
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            $.extend(that.options.editing, {
+                allowUpdating: true
+            });
+            that.options.dataSource = {
+                load: function() {
+                    const d = $.Deferred();
+                    d.resolve(that.array);
+                    return d.promise();
+                },
+                update: function(key, values) {
+                    const d = $.Deferred();
+                    return d.resolve({ id: 2, name: 'Updated', fromServer: true }).promise();
+                }
+            };
+
+            that.options.onRowUpdating = function(params) {
+                countCallOnRowUpdating++;
+
+                changes = that.option('editing.changes');
+
+                // assert
+                assert.deepEqual(changes[0], {
+                    'data': {
+                        'name': 'some value'
+                    },
+                    'key': {
+                        'age': 16,
+                        'lastName': 'Skip',
+                        'name': 'Dan',
+                        'phone': '553355',
+                        'room': 2,
+                        'state': {
+                            'name': 'state 2'
+                        },
+                        'stateId': 1
+                    },
+                    'oldData': {
+                        'age': 16,
+                        'lastName': 'Skip',
+                        'name': 'Dan',
+                        'phone': '553355',
+                        'room': 2,
+                        'state': {
+                            'name': 'state 2'
+                        },
+                        'stateId': 1
+                    },
+                    'type': 'update'
+                }, 'changes');
+            };
+
+            that.options.onRowUpdated = function(params) {
+                countCallOnRowUpdated++;
+
+                // assert
+                assert.deepEqual(changes[0], {
+                    'data': {
+                        'name': 'some value'
+                    },
+                    'key': {
+                        'age': 16,
+                        'lastName': 'Skip',
+                        'name': 'Dan',
+                        'phone': '553355',
+                        'room': 2,
+                        'state': {
+                            'name': 'state 2'
+                        },
+                        'stateId': 1
+                    },
+                    'oldData': {
+                        'age': 16,
+                        'lastName': 'Skip',
+                        'name': 'Dan',
+                        'phone': '553355',
+                        'room': 2,
+                        'state': {
+                            'name': 'state 2'
+                        },
+                        'stateId': 1
+                    },
+                    'type': 'update'
+                }, 'changes are immutable');
+
+                assert.deepEqual(that.option('editing.changes'), [], 'new empty changes');
+                assert.deepEqual(params.data, { id: 2, name: 'Updated', fromServer: true }, 'parameter data');
+                assert.strictEqual(params.key, that.array[1], 'parameter key');
+            };
+
+            that.dataController.init();
+            rowsView.render($testElement);
+            that.editingController.optionChanged({ name: 'onRowUpdating' });
+            that.editingController.optionChanged({ name: 'onRowUpdated' });
+
+            // act
+            that.cellValue(1, 'name', 'some value');
+            that.saveEditData();
+
+            // assert
+            assert.strictEqual(countCallOnRowUpdating, 1, 'count call onRowUpdating');
+            assert.strictEqual(countCallOnRowUpdated, 1, 'count call onRowUpdated');
+        });
     });
 
     QUnit.module('Save/cancel events', {
@@ -9027,10 +9343,10 @@ QUnit.module('Editing with real dataController', {
             const onSaving = sinon.spy();
             const onSaved = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 mode: 'row'
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.editingController.optionChanged({ name: 'onSaving' });
@@ -9040,11 +9356,16 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 0, 'new value');
+
+            const changes = this.option('editing.changes');
+
             this.saveEditData();
 
             // assert
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.deepEqual(onSaving.firstCall.args[0].changes, changes, 'onSaving args');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.deepEqual(onSaved.firstCall.args[0].changes, changes, 'onSaved args');
             assert.equal($(this.getCellElement(0, 0)).text(), 'new value', 'cell was modified');
         });
 
@@ -9057,10 +9378,10 @@ QUnit.module('Editing with real dataController', {
             const onEditCanceling = sinon.spy();
             const onEditCanceled = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true,
                 mode: 'row'
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.options.onEditCanceling = onEditCanceling;
@@ -9073,11 +9394,16 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editRow(0);
+
+            const changes = this.option('editing.changes');
+
             this.saveEditData();
 
             // assert
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.deepEqual(onSaving.firstCall.args[0].changes, changes, 'onSaving args');
+            assert.deepEqual(onSaved.firstCall.args[0].changes, [], 'onSaved args');
             assert.equal(onEditCanceling.callCount, 0, 'onEditCanceling was not called');
             assert.equal(onEditCanceled.callCount, 0, 'onEditCanceled was not called');
         });
@@ -9089,9 +9415,9 @@ QUnit.module('Editing with real dataController', {
             const onEditCanceling = sinon.spy();
             const onEditCanceled = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onEditCanceling = onEditCanceling;
             this.options.onEditCanceled = onEditCanceled;
             this.editingController.optionChanged({ name: 'onEditCanceling' });
@@ -9100,11 +9426,17 @@ QUnit.module('Editing with real dataController', {
 
             // act
             this.editRow(0);
+            this.cellValue(0, 0, 'new value');
+
+            const changes = this.option('editing.changes');
+
             this.cancelEditData();
 
             // assert
             assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
             assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled was called');
+            assert.deepEqual(onEditCanceling.firstCall.args[0].changes, changes, 'onEditCanceling args');
+            assert.deepEqual(onEditCanceled.firstCall.args[0].changes, changes, 'onEditCanceled args');
         });
 
         QUnit.test('onSaved event should not be fired if canceled in onSaving', function(assert) {
@@ -9116,9 +9448,9 @@ QUnit.module('Editing with real dataController', {
             });
             const onSaved = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.editingController.optionChanged({ name: 'onSaving' });
@@ -9146,9 +9478,9 @@ QUnit.module('Editing with real dataController', {
             });
             const onEditCanceled = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onEditCanceling = onEditCanceling;
             this.options.onEditCanceled = onEditCanceled;
             this.editingController.optionChanged({ name: 'onEditCanceling' });
@@ -9180,9 +9512,9 @@ QUnit.module('Editing with real dataController', {
             const onEditCanceling = sinon.spy();
             const onEditCanceled = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.options.onEditCanceling = onEditCanceling;
@@ -9244,9 +9576,9 @@ QUnit.module('Editing with real dataController', {
             const onEditCanceling = sinon.spy();
             const onEditCanceled = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.options.onEditCanceling = onEditCanceling;
@@ -9296,9 +9628,9 @@ QUnit.module('Editing with real dataController', {
             });
             const onEditCanceled = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.options.onEditCanceling = onEditCanceling;
@@ -9371,9 +9703,9 @@ QUnit.module('Editing with real dataController', {
             });
             const onSaved = sinon.spy();
 
-            this.options.editing = {
+            $.extend(this.options.editing, {
                 allowUpdating: true
-            };
+            });
             this.options.onSaving = onSaving;
             this.options.onSaved = onSaved;
             this.editingController.optionChanged({ name: 'onSaving' });
@@ -9402,6 +9734,63 @@ QUnit.module('Editing with real dataController', {
             assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+        });
+
+        QUnit.test('Modify changes in onSaving callback', function(assert) {
+            // arrange
+            const done = assert.async();
+            const rowsView = this.rowsView;
+            let isPromiseResolved;
+            let modifiedChanges;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.promise = new Deferred();
+                setTimeout(() => {
+                    // assert
+                    assert.deepEqual(e.changes, this.option('editing.changes'), 'onSaving args');
+
+                    // act
+                    e.changes[0].data.name = 'another new value';
+                    modifiedChanges = e.changes;
+                    isPromiseResolved = true;
+                    e.promise.resolve();
+                }, 1000);
+            });
+            const onSaved = sinon.spy();
+
+            $.extend(this.options.editing, {
+                allowUpdating: true
+            });
+            this.options.onSaving = onSaving;
+            this.options.onSaved = onSaved;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            this.editingController.optionChanged({ name: 'onSaved' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.cellValue(0, 0, 'new value');
+            this.saveEditData().done(() => {
+                assert.ok(true, 'saveEditData promise is resolved');
+            }).fail(() => {
+                assert.notOk(true, 'saveEditData promise should be resolved');
+            }).always(done);
+
+            // assert
+            assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 0, 'onSaved was not called');
+
+            // act
+            this.clock.tick(1000);
+
+            // assert
+            assert.ok(isPromiseResolved, 'promise is resolved');
+            assert.notOk($(this.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal(onSaved.callCount, 1, 'onSaved was called');
+            assert.deepEqual(onSaved.firstCall.args[0].changes, modifiedChanges, 'onSaved args');
+            assert.equal(this.array[0].name, 'another new value', 'value from onSaving');
         });
     });
 });
@@ -9669,11 +10058,11 @@ QUnit.module('Refresh modes', {
     // arrange
         let $cellElement;
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         this.options.columnFixing = { enabled: true };
         this.options.columns = [{ dataField: 'id', allowEditing: false }, 'name', 'age'];
         this.options.repaintChangesOnly = true;
@@ -9699,11 +10088,11 @@ QUnit.module('Refresh modes', {
     QUnit.test('The cell should be editable after selecting the row when repaintChangesOnly is true', function(assert) {
     // arrange
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         this.options.selection = {
             mode: 'multiple',
             showCheckBoxesMode: 'always'
@@ -9732,11 +10121,11 @@ QUnit.module('Refresh modes', {
     // arrange
         let $linkElements;
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowUpdating: true,
             allowDeleting: true
-        };
+        });
         this.options.columns = [
             {
                 type: 'buttons',
@@ -9807,9 +10196,10 @@ QUnit.module('Refresh modes', {
                     data: items
                 }
             };
-            this.options.editing = {
+            $.extend(this.options.editing, {
+                mode: 'row',
                 refreshMode: refreshMode.toLowerCase()
-            };
+            });
             this.options.selection = {
                 mode: 'multiple'
             };
@@ -10399,10 +10789,10 @@ QUnit.module('Editing with validation', {
                 valueExpr: 'id'
             }
         };
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'batch'
-        };
+        });
         rowsView.render(testElement);
         that.columnsController.init();
 
@@ -13375,7 +13765,7 @@ QUnit.module('Editing with validation', {
     QUnit.test('Prevent cell validation if template with editor is used', function(assert) {
         this.rowsView.render($('#container'));
         // arrange
-        this.options.editing = {};
+        $.extend(this.options.editing, {});
         this.options.columns = ['name', {
             dataField: 'age',
             cellTemplate: function(cellElement) {
@@ -13917,7 +14307,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(result1.status, 'result1 should be restored from cache');
         assert.ok(result2.status, 'result2 should be restored from cache');
-        assert.ok(editData.validated, 'editData should be validated');
 
         this.validatingController.resetRowValidationResults(editData);
         result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
@@ -13926,7 +14315,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.notOk(result1, 'result1 should not be defined');
         assert.notOk(result2, 'result2 should not be defined');
-        assert.notOk(editData.validated, 'editData should not be validated');
     });
 
     QUnit.test('Row - An untouched cell should not be validated (T872003)', function(assert) {
@@ -15079,10 +15467,10 @@ QUnit.module('Editing with scrolling', {
 
         this.options.dataSource = generateDataSource(6, 2);
         this.options.paging.pageSize = 2;
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowUpdating: true,
-        };
+        });
 
         this.setupDataGrid();
         this.rowsView.render(testElement);
@@ -15132,10 +15520,10 @@ QUnit.module('Editing with scrolling', {
 
         this.options.dataSource = generateDataSource(10, 2);
         this.options.paging.pageSize = 2;
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowUpdating: true,
-        };
+        });
 
         this.setupDataGrid();
         this.rowsView.render(testElement);
@@ -15187,10 +15575,10 @@ QUnit.module('Editing with scrolling', {
 
         this.options.dataSource = generateDataSource(10, 2);
         this.options.paging.pageSize = 10;
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowUpdating: true
-        };
+        });
 
         this.setupDataGrid();
         this.rowsView.render(testElement);
@@ -15282,10 +15670,10 @@ QUnit.module('Editing with scrolling', {
         const that = this;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowUpdating: true,
             mode: 'form'
-        };
+        });
         that.options.columns = ['C0', { }];
         that.options.dataSource.store = [{ C0: 0 }, { C0: 1 }];
 
@@ -15899,10 +16287,10 @@ QUnit.module('Edit Form', {
         const that = this;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
         that.options.columns = [{ caption: 'Person data', columns: ['name', 'lastName'] }, 'age'];
 
         that.setupModules(that);
@@ -15958,7 +16346,7 @@ QUnit.module('Edit Form', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
@@ -15970,7 +16358,7 @@ QUnit.module('Edit Form', {
                     dataField: 'custom'
                 }]
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -15999,7 +16387,7 @@ QUnit.module('Edit Form', {
             columns: [{ dataField: 'room' }]
         }];
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
@@ -16007,7 +16395,7 @@ QUnit.module('Edit Form', {
                     dataField: 'room'
                 }]
             }
-        };
+        });
 
         that.setupModules(that);
 
@@ -16029,7 +16417,7 @@ QUnit.module('Edit Form', {
 
         that.options.columns[3].name = 'test';
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
@@ -16037,7 +16425,7 @@ QUnit.module('Edit Form', {
                     name: 'test'
                 }]
             }
-        };
+        });
 
         that.setupModules(that);
 
@@ -16061,7 +16449,7 @@ QUnit.module('Edit Form', {
 
         that.options.columns.push({ caption: 'band' });
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
@@ -16070,7 +16458,7 @@ QUnit.module('Edit Form', {
                     caption: 'group'
                 }]
             }
-        };
+        });
 
         that.setupModules(that);
 
@@ -16096,10 +16484,10 @@ QUnit.module('Edit Form', {
             caption: 'band',
             columns: [{ dataField: 'column1', allowEditing: true }, 'column2'],
         }];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowAdding: true
-        };
+        });
 
         that.setupModules(that);
 
@@ -16213,14 +16601,14 @@ QUnit.module('Edit Form', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             texts: {
                 saveRowChanges: 'Save',
                 cancelRowChanges: 'Cancel',
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -16304,7 +16692,7 @@ QUnit.module('Edit Form', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
@@ -16319,7 +16707,7 @@ QUnit.module('Edit Form', {
                     dataField: 'custom'
                 }]
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -16341,7 +16729,7 @@ QUnit.module('Edit Form', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
@@ -16353,7 +16741,7 @@ QUnit.module('Edit Form', {
                     dataField: 'custom'
                 }]
             }
-        };
+        });
 
         rowsView.render(testElement);
 
@@ -16400,11 +16788,12 @@ QUnit.module('Edit Form', {
 
     // T369851
     QUnit.test('no Edit link when editing with allowAdding true', function(assert) {
-    // arrange
-        this.options.editing = {
+        // arrange
+        $.extend(this.options.editing, {
             mode: 'form',
-            allowAdding: true
-        };
+            allowAdding: true,
+            allowUpdating: false
+        });
         this.setupModules(this);
 
         const rowsView = this.rowsView;
@@ -16425,10 +16814,10 @@ QUnit.module('Edit Form', {
         const that = this;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
 
         that.setupModules(that);
         that.rowsView.render($testElement);
@@ -16450,13 +16839,13 @@ QUnit.module('Edit Form', {
         const that = this;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true,
             form: {
                 items: [{ dataField: 'age' }, { dataField: 'name' }]
             }
-        };
+        });
 
         that.setupModules(that);
         that.rowsView.render($testElement);
@@ -16644,10 +17033,10 @@ QUnit.module('Edit Form', {
         const that = this;
         const $testElement = $('#container');
 
-        that.options.editing = {
+        $.extend(that.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
 
         that.options.masterDetail = {
             enabled: true
@@ -16673,10 +17062,10 @@ QUnit.module('Edit Form', {
     // arrange
         const $testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'form',
             allowUpdating: true
-        };
+        });
         this.options.columns[3] = { dataField: 'phone', formItem: { visible: false } };
         this.options.columns[4] = { dataField: 'room', visible: false };
 
@@ -18234,10 +18623,10 @@ QUnit.module('Promises in callbacks and events', {
         const rowData = { room: 42 };
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: mode
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18293,10 +18682,10 @@ QUnit.module('Promises in callbacks and events', {
         const errorText = 'error text';
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: mode
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18349,10 +18738,10 @@ QUnit.module('Promises in callbacks and events', {
         let index = 8;
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'batch'
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18404,10 +18793,10 @@ QUnit.module('Promises in callbacks and events', {
         let index = 8;
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'cell'
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18457,10 +18846,10 @@ QUnit.module('Promises in callbacks and events', {
         let index = 8;
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'row'
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18511,10 +18900,10 @@ QUnit.module('Promises in callbacks and events', {
         const errorText = 'error text';
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'batch'
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18576,10 +18965,10 @@ QUnit.module('Promises in callbacks and events', {
         const errorText = 'error text';
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'cell'
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18639,10 +19028,10 @@ QUnit.module('Promises in callbacks and events', {
         const errorText = 'error text';
 
         that.options.columns = ['room'];
-        that.options.editing = {
+        $.extend(that.options.editing, {
             allowAdding: true,
             mode: 'row'
-        };
+        });
         that.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {
@@ -18698,10 +19087,10 @@ QUnit.module('Promises in callbacks and events', {
         const $testElement = $('#container');
 
         this.options.columns = ['room'];
-        this.options.editing = {
+        $.extend(this.options.editing, {
             allowAdding: true,
             mode: 'row'
-        };
+        });
         this.options.onInitNewRow = function(e) {
             e.promise = $.Deferred();
             setTimeout(() => {

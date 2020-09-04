@@ -951,6 +951,16 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             that.options.legacyRendering = false;
         }
 
+        if(that.options.editing?.changes === undefined) {
+            if(that.options.editing) {
+                that.options.editing.changes = [];
+            } else {
+                that.options.editing = {
+                    changes: []
+                };
+            }
+        }
+
         that.optionCalled = $.Callbacks();
 
         that.option = function(options, value) {
@@ -965,6 +975,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         if(result[path[0]] !== value) {
                             changed = true;
                             result[path[0]] = value;
+                            if(that._optionCache) {
+                                that._optionCache[options] = value;
+                            }
                         }
                     }
                     result = result[path[0]];
