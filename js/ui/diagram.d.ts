@@ -484,18 +484,15 @@ export interface dxDiagramRequestOperationAddShapeArgs {
     shape?: dxDiagramShape;
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.position
-     * @name dxDiagramRequestOperationAddShapeArgs.position
      * @type Object
      */
     position?: Object;
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.position.x
-     * @name dxDiagramRequestOperationAddShapeArgs.position.x
      * @type Number
      */
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.position.y
-     * @name dxDiagramRequestOperationAddShapeArgs.position.y
      * @type Number
      */
 }
@@ -586,34 +583,28 @@ export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
   connector?: dxDiagramConnector;
   /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
     * @type Array<Object>
     */
    points?: Array<Object>;
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
     * @type Number
     */
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
     * @type Number
     */
   /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
     * @type Array<Object>
     */
    oldPoints?: Array<Object>;
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
     * @type Number
     */
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
     * @type Number
     */
 }
