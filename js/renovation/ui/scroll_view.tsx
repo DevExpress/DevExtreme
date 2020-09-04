@@ -77,7 +77,7 @@ export class ScrollViewProps {
 
   @OneWay() height?: string | number | (() => (string | number));
 
-  @OneWay() rtlEnabled= config().rtlEnabled;
+  @OneWay() rtlEnabled = config().rtlEnabled;
 
   @OneWay() width?: string | number | (() => (string | number));
 }
@@ -102,10 +102,10 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
     const location = ensureLocation(distance);
 
     if (direction === DIRECTION_VERTICAL || direction === DIRECTION_BOTH) {
-      this.containerRef.scrollTop = Math.round(this.scrollLocation.top + location.top);
+      this.containerRef.scrollTop = Math.round(this.getScrollLocation().top + location.top);
     }
     if (direction === DIRECTION_HORIZONTAL || direction === DIRECTION_BOTH) {
-      this.containerRef.scrollLeft = Math.round(this.scrollLocation.left + location.left);
+      this.containerRef.scrollLeft = Math.round(this.getScrollLocation().left + location.left);
     }
   }
 
@@ -113,8 +113,8 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
   scrollTo(targetLocation: number | Partial<Location>): void {
     const location = ensureLocation(targetLocation);
     this.scrollBy({
-      left: location.left - this.scrollLocation.left,
-      top: location.top - this.scrollLocation.top,
+      left: location.left - this.getScrollLocation().left,
+      top: location.top - this.getScrollLocation().top,
     });
   }
 
@@ -133,14 +133,14 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
     return `dx-scrollview dx-scrollable dx-scrollable-${direction} dx-scrollable-native dx-scrollable-native-generic`;
   }
 
-  private get scrollBarWidth(): number {
-    return this.containerRef?.offsetWidth - this.containerRef?.clientWidth;
+  private getScrollBarWidth(): number {
+    return this.containerRef.offsetWidth - this.containerRef.clientWidth;
   }
 
-  private get scrollLocation(): Location {
+  private getScrollLocation(): Location {
     return {
-      left: this.containerRef?.scrollLeft,
-      top: this.containerRef?.scrollTop,
+      left: this.containerRef.scrollLeft,
+      top: this.containerRef.scrollTop,
     };
   }
 
@@ -148,13 +148,13 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
     const offsetTop = getRelativeLocation(element).top;
     const { offsetHeight } = element;
     const containerHeight = this.containerRef.offsetHeight;
-    const { top } = this.scrollLocation;
+    const { top } = this.getScrollLocation();
 
     if ((offsetHeight >= containerHeight) || (offsetTop + offsetHeight <= top)) {
       return offsetTop;
     }
     if (offsetTop + offsetHeight >= top + containerHeight) {
-      return offsetTop + offsetHeight + this.scrollBarWidth - containerHeight;
+      return offsetTop + offsetHeight + this.getScrollBarWidth() - containerHeight;
     }
     return top;
   }
@@ -163,13 +163,13 @@ export default class ScrollView extends JSXComponent(ScrollViewProps) {
     const offsetLeft = getRelativeLocation(element).left;
     const { offsetWidth } = element;
     const containerWidth = this.containerRef.offsetWidth;
-    const { left } = this.scrollLocation;
+    const { left } = this.getScrollLocation();
 
     if ((offsetWidth >= containerWidth) || (offsetLeft + offsetWidth <= left)) {
       return offsetLeft;
     }
     if (offsetLeft + offsetWidth >= left + containerWidth) {
-      return offsetLeft + offsetWidth + this.scrollBarWidth - containerWidth;
+      return offsetLeft + offsetWidth + this.getScrollBarWidth() - containerWidth;
     }
     return left;
   }
