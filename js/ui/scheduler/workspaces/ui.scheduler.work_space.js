@@ -2350,7 +2350,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getVirtualRowOffset() {
         return this.isVirtualScrolling()
-            ? this._virtualScrolling.getState().startIndex
+            ? this._virtualScrolling.getState().topVirtualRowHeight
             : 0;
     }
 
@@ -2384,8 +2384,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
+        const shouldFindPositionByViewData = this.isVirtualScrolling() && (!inAllDayRow || this._isVerticalGroupedWorkSpace());
 
-        if(this.isVirtualScrolling()) {
+        if(shouldFindPositionByViewData) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
 
             if(!positionByMap) {
@@ -2396,8 +2397,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
         } else {
-            const index = this.getCellIndexByDate(date, inAllDayRow);
-            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
+            position = this.calculateCellPositionByView(date, groupIndex, inAllDayRow);
         }
 
         const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
@@ -2417,6 +2417,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             vMax: this.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
+    }
+    calculateCellPositionByView(date, groupIndex, inAllDayRow,) {
+        const index = this.getCellIndexByDate(date, inAllDayRow);
+        const position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
+
+        position.top -= this._getVirtualRowOffset();
+
+        return position;
     }
 
     getVerticalMax(groupIndex) {
@@ -2586,9 +2594,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._maxAllowedPosition = [];
 
             this._$dateTable
-                .find('tr')
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
                 .first()
-                .find('td:nth-child(' + this._getCellCount() + 'n)')
+                .find(`td:nth-child(${this._getCellCount()}n)`)
                 .each((function(_, cell) {
 
                     let maxPosition = $(cell).position().left;

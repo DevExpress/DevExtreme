@@ -163,7 +163,13 @@ export default class AppointmentSettingsGenerator {
 
             if(workspace.isVirtualScrolling()) {
                 const { groupIndex } = appointment.source;
-                firstViewDate = workspace.viewDataProvider.getGroupCellStartDate(groupIndex, startDate);
+                const { viewDataProvider } = workspace;
+
+                firstViewDate = viewDataProvider.getGroupCellStartDate(groupIndex, startDate);
+                if(!firstViewDate) {
+                    firstViewDate = viewDataProvider.getGroupStartDate(groupIndex);
+                }
+
                 startDayHour = firstViewDate.getHours();
             }
 
