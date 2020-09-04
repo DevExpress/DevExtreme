@@ -5,6 +5,29 @@ const remoteSrc = require('gulp-remote-src');
 const rename = require('gulp-rename');
 const lint = require('gulp-eslint');
 
+gulp.task('create-timezones-data', () => {
+    const momentTimezonesRawUrl = 'https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/';
+
+    return remoteSrc(['latest.json'], {
+        base: momentTimezonesRawUrl
+    }).pipe(
+        through.obj((file, enc, cb) => {
+            const rawJSON = file.contents.toString();
+            const parsed = JSON.parse(rawJSON);
+            const transformed = transformTimezoneData(parsed);
+            const stringify = JSON.stringify(transformed, null, 2);
+            file.contents = Buffer.from('export default ' + stringify);
+            cb(null, file);
+        }))
+        .pipe(rename('ui.scheduler.timezones_data.js'))
+        .pipe(lint({
+            fix: true,
+            configFile: './.eslintrc'
+        }))
+        .pipe(lint.format())
+        .pipe(gulp.dest('js/ui/scheduler/timezones'));
+});
+
 function prepareUntils(untils) {
     const result = [];
 
@@ -60,26 +83,3 @@ function transformTimezoneData(input) {
         zones: result
     };
 }
-
-gulp.task('create-timezones-data', function() {
-    const momentTimezonesRawUrl = 'https://raw.githubusercontent.com/moment/moment-timezone/develop/data/unpacked/';
-
-    return remoteSrc(['latest.json'], {
-        base: momentTimezonesRawUrl
-    }).pipe(
-        through.obj((file, enc, cb) => {
-            const rawJSON = file.contents.toString();
-            const parsed = JSON.parse(rawJSON);
-            const transformed = transformTimezoneData(parsed);
-            const stringify = JSON.stringify(transformed, null, 2);
-            file.contents = Buffer.from('export default ' + stringify);
-            cb(null, file);
-        }))
-        .pipe(rename('ui.scheduler.timezones_data.js'))
-        .pipe(lint({
-            fix: true,
-            configFile: './.eslintrc'
-        }))
-        .pipe(lint.format())
-        .pipe(gulp.dest('js/ui/scheduler/timezones'));
-});
