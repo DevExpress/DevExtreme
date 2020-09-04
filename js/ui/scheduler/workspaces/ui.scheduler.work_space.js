@@ -400,7 +400,11 @@ class SchedulerWorkSpace extends WidgetObserver {
                 rowIndex,
                 columnIndex,
             } = this._getCoordinatesByCell($cell);
-            return this.viewDataProvider.getCellData(rowIndex, columnIndex).groupIndex;
+            const isAllDayCell = $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
+
+            return this.viewDataProvider.getCellData(
+                rowIndex, columnIndex, isAllDayCell,
+            ).groupIndex;
         }
         return this._groupedStrategy.getGroupIndexByCell($cell);
     }

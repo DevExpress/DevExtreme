@@ -327,7 +327,11 @@ export default class ViewDataProvider {
         return dateTable[0][0].groups;
     }
 
-    getCellData(rowIndex, cellIndex) {
+    getCellData(rowIndex, cellIndex, isAllDay) {
+        if(isAllDay && this._workspace._isHorizontalGroupedWorkSpace()) {
+            return this._viewData.groupedData[0].allDayPanel[cellIndex];
+        }
+
         const { cellData } = this.viewDataMap[rowIndex][cellIndex];
 
         return cellData;
