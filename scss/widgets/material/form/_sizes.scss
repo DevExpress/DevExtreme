@@ -16,6 +16,7 @@ $material-form-label-font-size: 12px;
   $material-form-top-label-padding: 16px 0 3px;
   $material-form-group-caption-font-size: 20px;
   $material-form-group-content-padding-bottom: 20px;
+  $material-form-default-top-padding: 26px;
 }
 
 @else if $size == "compact" {
@@ -24,4 +25,5 @@ $material-form-label-font-size: 12px;
   $material-form-top-label-padding: 4px 0 2px;
   $material-form-group-caption-font-size: 16px;
   $material-form-group-content-padding-bottom: 10px;
+  $material-form-default-top-padding: 20px;
 }
