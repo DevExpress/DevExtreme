@@ -39,7 +39,6 @@ export default class PreactWrapper extends DOMComponent {
   };
   _viewRef!: Preact.RefObject<unknown>;
   _viewComponent!: any;
-  lastPassedProps: any;
 
   get viewRef() {
     return this._viewRef.current;
