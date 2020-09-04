@@ -2905,11 +2905,10 @@ export default {
                     const isEditableCell = parameters.setValue;
                     const isEditing = parameters.isEditing || editingController.isEditRow(parameters.rowIndex) && parameters.column.allowEditing;
 
-                    if(parameters.rowType === 'data' && !parameters.column.command && (isEditing || parameters.column.showEditorAlways)) {
+                    if(parameters.rowType === 'data' && !isCommandCell && (isEditing || parameters.column.showEditorAlways)) {
                         const alignment = parameters.column.alignment;
 
                         $cell
-                            .addClass(EDITOR_CELL_CLASS)
                             .toggleClass(this.addWidgetPrefix(READONLY_CLASS), !isEditableCell)
                             .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell);
 
@@ -2955,6 +2954,17 @@ export default {
                     cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
 
                     return cellOptions;
+                },
+                _createCell: function(options) {
+                    const $cell = this.callBase(options);
+
+                    const isCommandCell = !!options.column.command;
+                    const isEditing = options.isEditing || this._editingController.isEditRow(options.rowIndex) && options.column.allowEditing;
+                    const isEditorCell = !isCommandCell && (isEditing || options.column.showEditorAlways);
+
+                    options.rowType === 'data' && isEditorCell && $cell.addClass(EDITOR_CELL_CLASS);
+
+                    return $cell;
                 },
                 _renderCellContent: function($cell, options) {
                     if(options.rowType === 'data' && getEditMode(this) === EDIT_MODE_POPUP && options.row.visible === false) {
