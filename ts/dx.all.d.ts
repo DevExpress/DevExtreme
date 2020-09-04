@@ -3788,6 +3788,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
+        /** @name dxFileManagerToolbarItem.icon */
+        icon?: string;
         /** @name dxFileManagerToolbarItem.location */
         location?: 'after' | 'before' | 'center';
         /** @name dxFileManagerToolbarItem.name */
