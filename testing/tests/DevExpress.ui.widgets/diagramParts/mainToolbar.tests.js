@@ -118,7 +118,8 @@ QUnit.module('Main Toolbar', {
         assert.ok($selectButtonTemplates.length > 0, 'select buttons are rendered');
         const selectButtonsCount = $selectButtonTemplates.length;
         assert.equal($selectButtonTemplates.find('.dx-diagram-i').length, selectButtonsCount, 'icons are rendered');
-        assert.equal(Math.round($selectButtonTemplates.find('.dx-textbox')[0].getBoundingClientRect().width), 0, 'textbox is hidden');
+        assert.equal($selectButtonTemplates.find('.dx-textbox')[0].offsetWidth, 0, 'textbox is hidden');
+
     });
     test('colorboxes should be replaced with color buttons', function(assert) {
         const $selectButtonTemplates = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-edit-item').find('.dx-dropdowneditor-field-template-wrapper');
