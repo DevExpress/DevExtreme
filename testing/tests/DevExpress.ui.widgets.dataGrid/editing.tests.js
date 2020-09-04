@@ -8535,7 +8535,8 @@ QUnit.module('Editing with real dataController', {
             this.options = {
                 dataSource: [{ field1: 'test' }],
                 editing: {
-                    mode: editMode.toLowerCase()
+                    mode: editMode.toLowerCase(),
+                    changes: []
                 },
                 onEditorPreparing: function(e) {
                     isEditorCell = $(e.editorElement).closest('td').hasClass('dx-editor-cell');
