@@ -1,3 +1,7 @@
-import { TemplateBase } from './template_base';
-
-export class FunctionTemplate extends TemplateBase { }
+export class FunctionTemplate {
+  render(template: {
+    container: unknown,
+    model?: object,
+    transclude?: boolean
+  }): void;
+}
