@@ -1149,6 +1149,16 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramModelOperation
+ * @enum {'addShape'|'addShapeFromToolbox'|'deleteShape'|'deleteConnector'|'changeConnection'|'changeConnectorPoints'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorPosition
+ * @enum {'begin'|'end'}
+ */
+
+/**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
  */

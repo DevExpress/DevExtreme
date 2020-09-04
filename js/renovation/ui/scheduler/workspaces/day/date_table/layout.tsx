@@ -1,12 +1,13 @@
 import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { LayoutProps } from '../../base/layout_props';
-import { DateTableCellBase } from '../../base/date_table/cell';
 
 export const viewFunction = (viewModel: DayDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
     viewData={viewModel.props.viewData}
-    cellTemplate={DateTableCellBase}
+    // This is a workaround: cannot use template inside a template
+    viewType="day"
+    dataCellTemplate={viewModel.props.dataCellTemplate}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   />

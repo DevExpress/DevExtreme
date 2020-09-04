@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from './row';
 
-export const viewFunction = (viewModel: Table) => (
+export const viewFunction = (viewModel: Table): JSX.Element => (
   <table
         // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -13,12 +13,12 @@ export const viewFunction = (viewModel: Table) => (
       <Fragment>
         {
         viewModel.props.isVirtual
-        && <Row isVirtual height={viewModel.props.topVirtualRowHeight} />
+          && <Row isVirtual height={viewModel.props.topVirtualRowHeight} />
         }
         {viewModel.props.children}
         {
         viewModel.props.isVirtual
-         && <Row isVirtual height={viewModel.props.bottomVirtualRowHeight} />
+          && <Row isVirtual height={viewModel.props.bottomVirtualRowHeight} />
         }
       </Fragment>
     </tbody>

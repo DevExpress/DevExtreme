@@ -42,7 +42,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
             this._$dateTable,
             dxrDayDateTableLayout,
             'renovatedDateTable',
-            { viewData: this.viewDataProvider.viewData }
+            { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
         );
     }
 }

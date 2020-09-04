@@ -88,6 +88,14 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      */
     defaultItemProperties?: { style?: Object, textStyle?: Object, connectorLineType?: 'straight' | 'orthogonal', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', shapeMinWidth?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMaxHeight?: number };
     /**
+     * @docid dxDiagramOptions.operationSettings
+     * @type Object
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    operationSettings?: { allowAddShape?: boolean, allowDeleteShape?: boolean, allowDeleteConnector?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean };
+    /**
      * @docid dxDiagramOptions.edges
      * @type Object
      * @default null
@@ -166,6 +174,19 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @public
      */
     onSelectionChanged?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
+    /**
+     * @docid dxDiagramOptions.onRequestOperation
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 operation:Enums.DiagramModelOperation
+     * @type_function_param1_field5 args:dxDiagramAddShapeRequestOperationArgs|dxDiagramAddShapeFromToolboxRequestOperationArgs|dxDiagramDeleteShapeRequestOperationArgs|dxDiagramDeleteConnectorRequestOperationArgs|dxDiagramChangeConnectionRequestOperationArgs|dxDiagramChangeConnectorPointsRequestOperationArgs
+     * @type_function_param1_field6 allowed:boolean
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeRequestOperationArgs|dxDiagramAddShapeFromToolboxRequestOperationArgs|dxDiagramDeleteShapeRequestOperationArgs|dxDiagramDeleteConnectorRequestOperationArgs|dxDiagramChangeConnectionRequestOperationArgs|dxDiagramChangeConnectorPointsRequestOperationArgs, allowed?: boolean }) => any);
     /**
      * @docid dxDiagramOptions.pageColor
      * @type String
@@ -435,6 +456,135 @@ export interface dxDiagramCustomCommand {
      * @public
      */
     items?: Array<dxDiagramCustomCommand>;
+}
+
+export interface dxDiagramAddShapeRequestOperationArgs {
+    /**
+     * @docid dxDiagramAddShapeRequestOperationArgs.shape
+     * @type dxDiagramShape
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    shape?: dxDiagramShape;
+    /**
+     * @docid dxDiagramAddShapeRequestOperationArgs.position
+     * @name dxDiagramAddShapeRequestOperationArgs.position
+     * @type Object
+     */
+    position?: Object;
+    /**
+     * @docid dxDiagramAddShapeRequestOperationArgs.position.x
+     * @name dxDiagramAddShapeRequestOperationArgs.position.x
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramAddShapeRequestOperationArgs.position.y
+     * @name dxDiagramAddShapeRequestOperationArgs.position.y
+     * @type Number
+     */
+}
+
+export interface dxDiagramAddShapeFromToolboxRequestOperationArgs {
+  /**
+   * @docid dxDiagramAddShapeFromToolboxRequestOperationArgs.shapeType
+   * @type Enums.DiagramShapeType|String
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+}
+
+export interface dxDiagramDeleteShapeRequestOperationArgs {
+  /**
+   * @docid dxDiagramDeleteShapeRequestOperationArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+}
+
+export interface dxDiagramDeleteConnectorRequestOperationArgs {
+  /**
+   * @docid dxDiagramDeleteConnectorRequestOperationArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+}
+
+export interface dxDiagramChangeConnectionRequestOperationArgs {
+  /**
+   * @docid dxDiagramChangeConnectionRequestOperationArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+  /**
+   * @docid dxDiagramChangeConnectionRequestOperationArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+   * @docid dxDiagramChangeConnectionRequestOperationArgs.connectionPointIndex
+   * @type number
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connectionPointIndex?: number;
+  /**
+   * @docid dxDiagramChangeConnectionRequestOperationArgs.connectorPosition
+   * @type Enums.DiagramConnectorPosition
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connectorPosition?: 'begin' | 'end';
+}
+
+export interface dxDiagramChangeConnectorPointsRequestOperationArgs {
+  /**
+   * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.points
+    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.points
+    * @type Array<Object>
+    */
+   points?: Array<Object>;
+   /**
+    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.points.x
+    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.points.x
+    * @type Number
+    */
+   /**
+    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.points.y
+    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.points.y
+    * @type Number
+    */
+  /**
+    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints
+    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints
+    * @type Array<Object>
+    */
+   oldPoints?: Array<Object>;
+   /**
+    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.x
+    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.x
+    * @type Number
+    */
+   /**
+    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.y
+    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.y
+    * @type Number
+    */
 }
 
 declare global {
