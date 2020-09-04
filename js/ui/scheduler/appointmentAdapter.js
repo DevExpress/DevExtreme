@@ -14,9 +14,9 @@ const PROPERTY_NAMES = {
     recurrenceException: 'recurrenceException'
 };
 class AppointmentAdapter {
-    constructor(scheduler, appointment) {
-        this.scheduler = scheduler;
-        this.appointment = appointment;
+    constructor(rawAppointment, options) {
+        this.rawAppointment = rawAppointment;
+        this.options = options;
     }
 
     get duration() {
@@ -24,65 +24,77 @@ class AppointmentAdapter {
     }
 
     get startDate() {
-        const result = this.scheduler.fire('getField', PROPERTY_NAMES.startDate, this.appointment);
+        const result = this.getField(PROPERTY_NAMES.startDate);
         return result === undefined ? result : new Date(result);
     }
 
     set startDate(value) {
-        this.scheduler.fire('setField', PROPERTY_NAMES.startDate, this.appointment, value);
+        this.setField(PROPERTY_NAMES.startDate, value);
     }
 
     get endDate() {
-        const result = this.scheduler.fire('getField', PROPERTY_NAMES.endDate, this.appointment);
+        const result = this.getField(PROPERTY_NAMES.endDate);
         return result === undefined ? result : new Date(result);
     }
 
     set endDate(value) {
-        this.scheduler.fire('setField', PROPERTY_NAMES.endDate, this.appointment, value);
+        this.setField(PROPERTY_NAMES.endDate, value);
     }
 
     get allDay() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.allDay, this.appointment);
+        return this.getField(PROPERTY_NAMES.allDay);
     }
 
     set allDay(value) {
-        this.scheduler.fire('setField', PROPERTY_NAMES.allDay, this.appointment, value);
+        this.setField(PROPERTY_NAMES.allDay, value);
     }
 
     get text() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.text, this.appointment);
+        return this.getField(PROPERTY_NAMES.text);
     }
 
     set text(value) {
-        this.scheduler.fire('setField', PROPERTY_NAMES.text, this.appointment, value);
+        this.setField(PROPERTY_NAMES.text, value);
     }
 
     get description() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.description, this.appointment);
+        return this.getField(PROPERTY_NAMES.description);
     }
 
     set description(value) {
-        this.scheduler.fire('setField', PROPERTY_NAMES.description, this.appointment, value);
+        this.setField(PROPERTY_NAMES.description, value);
     }
 
     get startDateTimeZone() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.startDateTimeZone, this.appointment);
+        return this.getField(PROPERTY_NAMES.startDateTimeZone);
     }
 
     get endDateTimeZone() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.endDateTimeZone, this.appointment);
+        return this.getField(PROPERTY_NAMES.endDateTimeZone);
     }
 
     get recurrenceRule() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.recurrenceRule, this.appointment);
+        return this.getField(PROPERTY_NAMES.recurrenceRule);
     }
 
     get recurrenceException() {
-        return this.scheduler.fire('getField', PROPERTY_NAMES.recurrenceException, this.appointment);
+        return this.getField(PROPERTY_NAMES.recurrenceException);
     }
 
     get disabled() {
-        return !!this.appointment.disabled;
+        return !!this.rawAppointment.disabled;
+    }
+
+    get timeZoneCalculator() {
+        return this.options.getTimeZoneCalculator();
+    }
+
+    getField(property) {
+        return this.options.getField(this.rawAppointment, property);
+    }
+
+    setField(property, value) {
+        return this.options.setField(this.rawAppointment, property, value);
     }
 
     calculateStartDate(pathTimeZoneConversion) {
@@ -102,14 +114,14 @@ class AppointmentAdapter {
             return undefined;
         }
 
-        return this.scheduler.timeZoneCalculator.createDate(date, {
+        return this.timeZoneCalculator.createDate(date, {
             appointmentTimeZone: appointmentTimeZone,
             path: pathTimeZoneConversion
         });
     }
 
     clone(options = undefined) {
-        const result = new AppointmentAdapter(this.scheduler, objectUtils.deepExtendArraySafe({}, this.appointment));
+        const result = new AppointmentAdapter(objectUtils.deepExtendArraySafe({}, this.rawAppointment), this.options);
 
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);
@@ -128,7 +140,7 @@ class AppointmentAdapter {
             return clonedAdapter.source();
         }
 
-        return extend({}, this.appointment);
+        return extend({}, this.rawAppointment);
     }
 }
 

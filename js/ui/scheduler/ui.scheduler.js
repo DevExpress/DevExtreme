@@ -2459,8 +2459,13 @@ class Scheduler extends Widget {
         return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
     }
 
-    createAppointmentAdapter(appointment) {
-        return new AppointmentAdapter(this, appointment);
+    createAppointmentAdapter(rawAppointment) {
+        const options = {
+            getField: (rawAppointment, property) => this.fire('getField', property, rawAppointment),
+            setField: (rawAppointment, property, value) => this.fire('setField', property, rawAppointment, value),
+            getTimeZoneCalculator: () => this.timeZoneCalculator
+        };
+        return new AppointmentAdapter(rawAppointment, options);
     }
 
     /**

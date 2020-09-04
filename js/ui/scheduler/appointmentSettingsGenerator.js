@@ -33,7 +33,11 @@ export default class AppointmentSettingsGenerator {
                 path: 'toGrid'
             });
 
-            return this._createAppointmentInfo(startDate, endDate, source);
+            return {
+                startDate,
+                endDate,
+                source // TODO
+            };
         });
 
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
@@ -62,7 +66,7 @@ export default class AppointmentSettingsGenerator {
         const itemResources = this.scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
         allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
 
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+        return this._createAppointmentInfos(gridAppointmentList, rawAppointment, itemResources, allDay);
     }
 
     _createExtremeRecurrenceDates(rawAppointment) {
@@ -93,14 +97,6 @@ export default class AppointmentSettingsGenerator {
 
             start: appointment.startDate,
             end: appointment.endDate,
-        };
-    }
-
-    _createAppointmentInfo(startDate, endDate, source) {
-        return {
-            startDate,
-            endDate,
-            source // TODO
         };
     }
 
@@ -144,7 +140,7 @@ export default class AppointmentSettingsGenerator {
         });
     }
 
-    _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
+    _createAppointmentInfos(gridAppointments, rawAppointment, appointmentResources, allDay) {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
