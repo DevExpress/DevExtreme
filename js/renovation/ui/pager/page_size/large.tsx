@@ -4,7 +4,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { LightButton } from '../common/light_button';
-import { FullPageSize } from '../common/types';
+import { FullPageSize } from '../common/types.d';
 import PagerProps from '../common/pager_props';
 import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
