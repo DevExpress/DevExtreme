@@ -1052,6 +1052,20 @@ QUnit.module('deferred datasource', {
         this.clock.tick();
         assert.strictEqual(getList(dropDownButton).option('selectedItemKeys')[0], 2, 'selectedItemKeys is correct');
     });
+
+    QUnit.test('dropDownButton should not try to load value on init if selectedItemKey is undefined (T925687)', function(assert) {
+        const byKeySpy = sinon.spy(this.dataSourceConfig, 'byKey');
+
+        new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            useSelectMode: true,
+            keyExpr: 'id',
+            displayExpr: 'text',
+            dataSource: this.dataSourceConfig
+        });
+
+        assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
+    });
 });
 
 QUnit.module('events', {}, () => {

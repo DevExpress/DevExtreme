@@ -71,6 +71,7 @@ const browser = require('../core/utils/browser');
 
 const translator = require('./translator');
 const support = require('../core/utils/support');
+const devices = require('../core/devices');
 
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
@@ -308,8 +309,15 @@ const calculatePosition = function(what, options) {
         if(isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
-            h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
-            v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+            if(devices.real().deviceType === 'phone' && of[0].visualViewport) {
+                h.atLocation = Math.max(h.atLocation, of[0].visualViewport.offsetLeft);
+                v.atLocation = Math.max(v.atLocation, of[0].visualViewport.offsetTop);
+                h.atSize = of[0].visualViewport.width;
+                v.atSize = of[0].visualViewport.height;
+            } else {
+                h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
+                v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+            }
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
             v.atLocation = 0;

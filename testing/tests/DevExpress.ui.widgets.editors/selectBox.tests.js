@@ -5516,8 +5516,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
             });
 
-            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: false });
+            QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
+                helper.createWidget({ opened: false, deferRendering: true });
 
                 const inputAttributes = {
                     role: 'combobox',

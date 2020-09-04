@@ -205,8 +205,7 @@ const LayoutManager = Widget.inherit({
                 that._updateItemWatchers(items);
             }
 
-            this._items = processedItems;
-
+            this._setItems(processedItems);
             this._sortItems();
         }
     },
@@ -520,11 +519,16 @@ const LayoutManager = Widget.inherit({
                 delete item.colSpan;
             }
         }
-        this._items = result;
+        this._setItems(result);
     },
 
     _getColByIndex: function(index, colCount) {
         return index % colCount;
+    },
+
+    _setItems: function(items) {
+        this._items = items;
+        this._cashedColCount = null; // T923489
     },
 
     _generateLayoutItems: function() {

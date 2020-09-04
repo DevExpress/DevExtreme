@@ -10,6 +10,7 @@ import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
 
 import 'common.css!';
+import 'ui/validator';
 
 const realDevice = devices.real();
 
@@ -800,4 +801,23 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.ok(inputFocusedHandler.callCount, 1, 'input get focused');
     });
 
+});
+
+QUnit.module('validation', moduleConfig, () => {
+    QUnit.test('validation message should be visible if validation is failed even when popup is opened (T923454)', function(assert) {
+        this.$element.dxDropDownBox({
+            value: [1],
+            showClearButton: true,
+        }).dxValidator({
+            validationRules: [ { type: 'required' } ]
+        });
+        const instance = this.$element.dxDropDownBox('instance');
+
+        const $clearButton = this.$element.find('.dx-clear-button-area');
+        $clearButton.trigger('dxclick');
+        assert.strictEqual($('.dx-overlay-wrapper.dx-invalid-message').css('visibility'), 'visible', 'validation message is shown');
+
+        instance.open();
+        assert.strictEqual($('.dx-overlay-wrapper.dx-invalid-message').css('visibility'), 'visible', 'validation message is shown after popup opening');
+    });
 });
