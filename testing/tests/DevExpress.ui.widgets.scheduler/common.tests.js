@@ -944,6 +944,18 @@ QUnit.module('Initialization', {
         });
     });
 
+    QUnit.test('Scheduler should not crash when some timezones are set(T913941)', function(assert) {
+        this.createInstance({
+            currentView: 'day',
+            currentDate: new Date(2020, 9, 3)
+        });
+
+        this.instance.option('timeZone', 'America/Indianapolis');
+        this.instance.option('timeZone', 'America/Indiana/Indianapolis');
+
+        assert.ok(true, 'Timezones were applied correctly');
+    });
+
     QUnit.test('Scheduler should work correctly when groupOrientation is set without groups', function(assert) {
         assert.expect(1);
 
