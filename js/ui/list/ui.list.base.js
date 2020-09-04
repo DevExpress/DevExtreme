@@ -323,12 +323,10 @@ export const ListBase = CollectionWidget.inherit({
     _resetDataSourcePageIndex: function() {
         const currentDataSource = this.getDataSource();
 
-        if(!currentDataSource || currentDataSource.pageIndex() === 0) {
-            return;
+        if(currentDataSource && currentDataSource.pageIndex() !== 0) {
+            currentDataSource.pageIndex(0);
+            currentDataSource.load();
         }
-
-        currentDataSource.pageIndex(0);
-        currentDataSource.load();
     },
 
     _init: function() {
