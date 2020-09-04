@@ -396,7 +396,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndexByCell($cell) {
         if(this.isVirtualScrolling()) {
-            // TODO
+            const {
+                rowIndex,
+                columnIndex,
+            } = this._getCoordinatesByCell($cell);
+            return this.viewDataProvider.getCellData(rowIndex, columnIndex).groupIndex;
         }
         return this._groupedStrategy.getGroupIndexByCell($cell);
     }
