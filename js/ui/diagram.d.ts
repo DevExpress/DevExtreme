@@ -362,6 +362,10 @@ export default class dxDiagram extends Widget {
     import(data: string, updateExistingItemsOnly?: boolean): void;
 }
 
+/**
+ * @docid dxDiagramConnector
+ * @inherits dxDiagramItem
+ */
 export interface dxDiagramConnector extends dxDiagramItem {
     /**
      * @docid dxDiagramConnector.fromKey
@@ -386,6 +390,9 @@ export interface dxDiagramConnector extends dxDiagramItem {
     toKey?: any;
 }
 
+/**
+ * @docid dxDiagramItem
+ */
 export interface dxDiagramItem {
     /**
      * @docid dxDiagramItem.dataItem
@@ -409,7 +416,10 @@ export interface dxDiagramItem {
      */
     itemType?: 'shape' | 'connector';
 }
-
+/**
+ * @docid dxDiagramShape
+ * @inherits dxDiagramItem
+ */
 export interface dxDiagramShape extends dxDiagramItem {
     /**
      * @docid dxDiagramShape.text
@@ -427,6 +437,9 @@ export interface dxDiagramShape extends dxDiagramItem {
     type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
 }
 
+/**
+ * @docid dxDiagramCustomCommand
+ */
 export interface dxDiagramCustomCommand {
     /**
      * @docid dxDiagramCustomCommand.name
@@ -458,6 +471,9 @@ export interface dxDiagramCustomCommand {
     items?: Array<dxDiagramCustomCommand>;
 }
 
+/**
+ * @docid dxDiagramRequestOperationAddShapeArgs
+ */
 export interface dxDiagramRequestOperationAddShapeArgs {
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.shape
@@ -484,6 +500,9 @@ export interface dxDiagramRequestOperationAddShapeArgs {
      */
 }
 
+/**
+ * @docid dxDiagramRequestOperationAddShapeFromToolboxArgs
+ */
 export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
   /**
    * @docid dxDiagramRequestOperationAddShapeFromToolboxArgs.shapeType
@@ -494,6 +513,9 @@ export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
   shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
 }
 
+/**
+ * @docid dxDiagramRequestOperationDeleteShapeArgs
+ */
 export interface dxDiagramRequestOperationDeleteShapeArgs {
   /**
    * @docid dxDiagramRequestOperationDeleteShapeArgs.shape
@@ -504,6 +526,9 @@ export interface dxDiagramRequestOperationDeleteShapeArgs {
   shape?: dxDiagramShape;
 }
 
+/**
+ * @docid dxDiagramRequestOperationDeleteConnectorArgs
+ */
 export interface dxDiagramRequestOperationDeleteConnectorArgs {
   /**
    * @docid dxDiagramRequestOperationDeleteConnectorArgs.connector
@@ -514,6 +539,9 @@ export interface dxDiagramRequestOperationDeleteConnectorArgs {
   connector?: dxDiagramConnector;
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeConnectionArgs
+ */
 export interface dxDiagramRequestOperationChangeConnectionArgs {
   /**
    * @docid dxDiagramRequestOperationChangeConnectionArgs.shape
@@ -545,6 +573,9 @@ export interface dxDiagramRequestOperationChangeConnectionArgs {
   connectorPosition?: 'start' | 'end';
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeConnectorPointsArgs
+ */
 export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
   /**
    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.connector
@@ -587,6 +618,9 @@ export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
     */
 }
 
+/**
+ * @docid dxDiagramRequestOperationBeforeChangeShapeTextArgs
+ */
 export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
   /**
    * @docid dxDiagramRequestOperationBeforeChangeShapeTextArgs.shape
@@ -597,6 +631,9 @@ export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
   shape?: dxDiagramShape;
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeShapeTextArgs
+ */
 export interface dxDiagramRequestOperationChangeShapeTextArgs {
   /**
    * @docid dxDiagramRequestOperationChangeShapeTextArgs.shape
@@ -614,6 +651,9 @@ export interface dxDiagramRequestOperationChangeShapeTextArgs {
   text?: string;
 }
 
+/**
+ * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs
+ */
 export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
   /**
    * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs.connector
@@ -631,6 +671,9 @@ export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
   index?: number;
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeConnectorTextArgs
+ */
 export interface dxDiagramRequestOperationChangeConnectorTextArgs {
   /**
    * @docid dxDiagramRequestOperationChangeConnectorTextArgs.connector
