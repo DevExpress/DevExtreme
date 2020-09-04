@@ -20,6 +20,7 @@ import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
+import { hasWindow } from '../../core/utils/window';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -781,7 +782,9 @@ const DropDownEditor = TextBox.inherit({
             case 'popupPosition':
                 break;
             case 'deferRendering':
-                this._createPopup();
+                if(hasWindow()) {
+                    this._createPopup();
+                }
                 break;
             case 'applyValueMode':
             case 'applyButtonText':
