@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-import { DiagramCommand } from 'devexpress-diagram';
+import { DiagramCommand, DiagramModelOperation } from 'devexpress-diagram';
 import { Consts } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
@@ -108,6 +108,23 @@ QUnit.module('ClientSideEvents.requestOperation', {
         this.clock.reset();
     }
 }, () => {
+    test('requestOperation arguments', function(assert) {
+        const $element = $('#diagram').dxDiagram({});
+        const instance = $element.dxDiagram('instance');
+        const operationCount = 10;
+        let count = 0;
+        for(const key in DiagramModelOperation) {
+            if(Object.prototype.hasOwnProperty.call(DiagramModelOperation, key)) { count++; }
+        }
+        assert.equal(count, operationCount * 2);
+
+        for(let i = 0; i < operationCount - 1; i++) {
+            const e = instance._getRequestOperationEventArgs(i, { allowed: true });
+            assert.notEqual(e.operation, undefined);
+            assert.notEqual(e.args, undefined);
+            assert.notEqual(e.allowed, undefined);
+        }
+    });
     test('requestOperation on bound diagram', function(assert) {
         const onRequestOperation = sinon.spy(function(e) { e.allowed = false; });
         const nodes = [

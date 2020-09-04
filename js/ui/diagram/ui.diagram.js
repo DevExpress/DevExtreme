@@ -1470,7 +1470,9 @@ class Diagram extends Widget {
             deleteShape: this.option('operationSettings.allowDeleteShape'),
             deleteConnector: this.option('operationSettings.allowDeleteConnector'),
             connectionChange: this.option('operationSettings.allowChangeConnection'),
-            changeConnectorPoints: this.option('operationSettings.allowChangeConnectorPoints')
+            changeConnectorPoints: this.option('operationSettings.allowChangeConnectorPoints'),
+            changeShapeText: this.option('operationSettings.allowChangeShapeText'),
+            changeConnectorText: this.option('operationSettings.allowChangeConnectorText')
         });
     }
 
@@ -2217,6 +2219,18 @@ class Diagram extends Widget {
                 * @default true
                 */
                 allowChangeConnectorPoints: true,
+                /**
+                * @name dxDiagramOptions.operationSettings.allowChangeShapeText
+                * @type boolean
+                * @default true
+                */
+                allowChangeShapeText: true,
+                /**
+                * @name dxDiagramOptions.operationSettings.allowChangeConnectorText
+                * @type boolean
+                * @default true
+                */
+                allowChangeConnectorText: true,
             },
             export: {
                 /**
@@ -2415,6 +2429,14 @@ class Diagram extends Widget {
                 return 'changeConnection';
             case DiagramModelOperation.ChangeConnectorPoints:
                 return 'changeConnectorPoints';
+            case DiagramModelOperation.BeforeChangeShapeText:
+                return 'beforeChangeShapeText';
+            case DiagramModelOperation.ChangeShapeText:
+                return 'changeShapeText';
+            case DiagramModelOperation.BeforeChangeConnectorText:
+                return 'beforeChangeConnectorText';
+            case DiagramModelOperation.ChangeConnectorText:
+                return 'changeConnectorText';
         }
     }
     _getRequestOperationEventArgs(operation, args) {
@@ -2427,7 +2449,7 @@ class Diagram extends Widget {
             case DiagramModelOperation.AddShape:
                 eventArgs.args = {
                     shape: args.shape && this._nativeItemToDiagramItem(args.shape),
-                    position: { x: args.position.x, y: args.position.y }
+                    position: args.position && { x: args.position.x, y: args.position.y }
                 };
                 break;
             case DiagramModelOperation.DragShapeFromToolbox:
@@ -2450,14 +2472,38 @@ class Diagram extends Widget {
                     shape: args.shape && this._nativeItemToDiagramItem(args.shape),
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector),
                     connectionPointIndex: args.connectionPointIndex,
-                    connectorPosition: (args.position === ConnectorPosition.Begin) ? 'begin' : 'end',
+                    connectorPosition: (args.position === ConnectorPosition.Begin) ? 'start' : 'end',
                 };
                 break;
             case DiagramModelOperation.ChangeConnectorPoints:
                 eventArgs.args = {
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector),
-                    points: args.points.map(pt => { return { x: pt.x, y: pt.y }; }),
-                    oldPoints: args.oldPoints.map(pt => { return { x: pt.x, y: pt.y }; })
+                    newPoints: args.points && args.points.map(pt => { return { x: pt.x, y: pt.y }; }),
+                    oldPoints: args.oldPoints && args.oldPoints.map(pt => { return { x: pt.x, y: pt.y }; })
+                };
+                break;
+            case DiagramModelOperation.BeforeChangeShapeText:
+                eventArgs.args = {
+                    shape: args.shape && this._nativeItemToDiagramItem(args.shape)
+                };
+                break;
+            case DiagramModelOperation.ChangeShapeText:
+                eventArgs.args = {
+                    shape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    text: args.text
+                };
+                break;
+            case DiagramModelOperation.BeforeChangeConnectorText:
+                eventArgs.args = {
+                    connector: args.connector && this._nativeItemToDiagramItem(args.connector),
+                    index: args.index
+                };
+                break;
+            case DiagramModelOperation.ChangeConnectorText:
+                eventArgs.args = {
+                    connector: args.connector && this._nativeItemToDiagramItem(args.connector),
+                    index: args.index,
+                    text: args.text
                 };
                 break;
         }
