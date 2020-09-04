@@ -338,21 +338,15 @@ export default class ViewDataProvider {
     }
 
     getDimensions() {
-        const shouldCountAllDayPanel = this._workspace.isGroupedAllDayPanel();
         const { groupedData } = this._viewData;
 
         const columnCount = groupedData[0].dateTable[0].length;
 
-        const rowCount = groupedData.reduce((currentRowCount, { dateTable, allDayPanel }) => {
+        const rowCount = groupedData.reduce((currentRowCount, { dateTable }) => {
             const dateTableSize = dateTable?.length;
             const rowsInDateTable = dateTableSize || 0;
 
-            let rowsInAllDayPanel = 0;
-            if(shouldCountAllDayPanel) {
-                rowsInAllDayPanel = allDayPanel ? allDayPanel.length : 0;
-            }
-
-            return currentRowCount + rowsInDateTable + rowsInAllDayPanel;
+            return currentRowCount + rowsInDateTable;
         }, 0);
 
         return { rowCount, columnCount };
