@@ -360,7 +360,8 @@ const timezones = [{
 }, {
     'id': 'America/Indianapolis',
     'title': 'Indianapolis',
-    'winIndex': 12
+    'winIndex': 12,
+    'link': 260
 }, {
     'id': 'America/Jujuy',
     'title': 'Jujuy',
@@ -1542,7 +1543,10 @@ const timezones = [{
 }, {
     'id': 'America/Indiana/Indianapolis',
     'title': 'Indianapolis',
-    'winIndex': 12
+    'winIndex': 12,
+    'offsets': [-6, -5, -4],
+    'offsetIndices': '010101011010101010101010101010121212121212121212121212121212121212121212121212121212121212121212121',
+    'untils': '-r0esg0|ast80|7x9g0|ast80|baw840|51ek0|6w840|1tz8c0|2dsw0|asys0|7x3w0|asys0|7x3w0|asys0|7x3w0|asys0|7x3w0|b5xg0|7k580|b5xg0|7x3w0|asys0|7x3w0|asys0|7x3w0|asys0|7x3w0|asys0|19q7w0|asys0|5qonw0|9cyk0|9d440|9cyk0|ihslg0|ast80|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|Infinity'
 }, {
     'id': 'America/Indiana/Knox',
     'title': 'Knox',
