@@ -635,7 +635,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _isWorkspaceWithOddCells() {
-        return this.option('hoursInterval') === 0.5;
+        return this.option('hoursInterval') === 0.5 && !this.isVirtualScrolling();
     }
 
     _toggleGroupingDirectionClass() {

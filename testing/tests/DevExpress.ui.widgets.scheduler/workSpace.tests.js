@@ -4281,4 +4281,12 @@ QUnit.module('Renovated Render', {
             assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
     });
+
+    QUnit.test('Workspace should not have dx-scheduler-work-space-odd-cells class when scrolling mode is "virtual"', function(assert) {
+        this.createInstance({
+            scrolling: { mode: 'virtual' },
+        });
+
+        assert.notOk(this.instance.$element().hasClass('dx-scheduler-work-space-odd-cells'), 'Workspace does not have odd-cells class');
+    });
 });
