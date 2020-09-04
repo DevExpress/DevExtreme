@@ -779,7 +779,9 @@ const DropDownEditor = TextBox.inherit({
                 this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'popupPosition':
+                break;
             case 'deferRendering':
+                this._createPopup();
                 break;
             case 'applyValueMode':
             case 'applyButtonText':
