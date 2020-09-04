@@ -22,7 +22,7 @@ export class AppComponent {
         this.connectionStarted = false;
 
         var hubConnection = new HubConnectionBuilder()
-            .withUrl("https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub" {
+            .withUrl("https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub", {
                 skipNegotiation: true,
                 transport: HttpTransportType.WebSockets
             })
