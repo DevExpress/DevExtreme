@@ -2,7 +2,6 @@
 
 import $ from 'jquery';
 import themes from 'ui/themes';
-import { themeInitializedCallback } from 'ui/themes_callback';
 import viewPortUtils from 'core/utils/view_port';
 
 const viewPortChanged = viewPortUtils.changeCallback;
