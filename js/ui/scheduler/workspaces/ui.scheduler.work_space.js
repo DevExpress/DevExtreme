@@ -2422,7 +2422,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const index = this.getCellIndexByDate(date, inAllDayRow);
         const position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
 
-        position.top -= this._getVirtualRowOffset();
+        if(position) {
+            position.top -= this._getVirtualRowOffset();
+        }
 
         return position;
     }
