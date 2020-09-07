@@ -2137,6 +2137,16 @@
               "WideDemo": true,
               "Modules": "whatwg-fetch",
               "Badge": "New"
+            },
+            {
+              "Title": "Operation Restrictions",
+              "Name": "OperationRestrictions",
+              "DocUrl": "",
+              "Widget": "Diagram",
+              "DemoType": "Web",
+              "WideDemo": true,
+              "Modules": "whatwg-fetch",
+              "Badge": "New"
             }
           ]
         },
