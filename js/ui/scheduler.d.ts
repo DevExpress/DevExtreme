@@ -710,6 +710,40 @@ export default class dxScheduler extends Widget {
      * @public
      */
     updateAppointment(target: any, appointment: any): void;
+
+    /**
+     * @docid dxSchedulerMethods.getTimeZones
+     * @static
+     * @publicName getTimeZones(date)
+     * @param1 date:Date|undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
+}
+
+export interface dxSchedulerTimeZone {
+    /**
+     * @docid dxSchedulerTimeZone.id
+     * @type String
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    id: string;
+    /**
+     * @docid dxSchedulerTimeZone.title
+     * @type String
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    title: string;
+    /**
+     * @docid dxSchedulerTimeZone.offset
+     * @type number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    offset: number;
 }
 
 export interface dxSchedulerAppointment extends CollectionWidgetItem {
