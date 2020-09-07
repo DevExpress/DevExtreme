@@ -298,37 +298,6 @@ QUnit.module('AppointmentSettings', {
             assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
         });
 
-        QUnit.test('Appointment settings should not being created if allDay appointment and group orientation "horizontal"', function(assert) {
-            this.createInstance({
-                currentDate: new Date(2015, 2, 2),
-                scrolling: {
-                    mode: 'virtual'
-                },
-                views: [{
-                    type: viewName,
-                    groupOrientation: 'horizontal'
-                }],
-                currentView: viewName,
-                groups: ['resourceId0'],
-                resources: [{
-                    fieldExpr: 'resourceId0',
-                    dataSource: [{ id: 0 }]
-                }],
-                height: 400
-            });
-
-            const { instance } = this.scheduler;
-
-            const settings = instance.fire('createAppointmentSettings', {
-                startDate: new Date(2015, 2, 2),
-                endDate: new Date(2015, 2, 2),
-                resourceId0: 0,
-                allDay: true
-            });
-
-            assert.equal(settings.length, 0, 'appotinment setings was not created');
-        });
-
         QUnit.test(`A long appointment should be correctly croped if view: ${viewName}`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 2, 4),
