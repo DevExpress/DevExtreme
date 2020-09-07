@@ -312,6 +312,8 @@ const Editor = Widget.inherit({
             case 'validationBoundary':
             case 'validationMessageMode':
             case 'validationMessageOffset':
+                this._setValidationMessageOption(args);
+                break;
             case 'rtlEnabled':
                 this._setValidationMessageOption(args);
                 this.callBase(args);
