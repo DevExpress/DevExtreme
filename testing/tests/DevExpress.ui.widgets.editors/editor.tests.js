@@ -329,7 +329,7 @@ QUnit.module('Validation - UI', {
         assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), 'Tooltip should be marked with auto');
         assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'Tooltip should be marked with auto');
         assert.ok(!editor._$validationMessage.hasClass('dx-invalid-message-always'), 'Tooltip should not be marked with always');
-        assert.equal(editor._$validationMessage.dxOverlay('instance').$content().text(), message, 'Correct message should be set');
+        assert.equal(editor._validationMessage.$content().text(), message, 'Correct message should be set');
     });
 
     QUnit.test('Widget message (tooltip) should be created and always shown', function(assert) {
@@ -536,7 +536,7 @@ QUnit.module('Validation - UI', {
             isValid: false
         });
 
-        assert.equal($element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxOverlay('option', 'propagateOutsideClick'), true, '\'propagateOutsideClick\' option has correct value');
+        assert.equal($element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxValidationMessage('option', 'propagateOutsideClick'), true, '\'propagateOutsideClick\' option has correct value');
     });
 
     QUnit.test('Validation overlay should not inherit templates from the editor', function(assert) {
@@ -642,7 +642,7 @@ QUnit.module('Validation overlay options', {
             isValid: false
         });
 
-        const overlay = $element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxOverlay('instance');
+        const overlay = $element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxValidationMessage('instance');
 
         assert.equal(overlay.option('customOption'), 'Test', 'a custom option has been created');
         assert.equal(overlay.option('width'), 200, 'a default option has been redefined');
