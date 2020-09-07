@@ -62,7 +62,7 @@ $transparent-border: 1px solid transparent;
     ol li.ql-indent-#{$counter} {
       counter-increment: list-#{$counter};
 
-      &::before {
+      & > .ql-ui::before { // stylelint-disable-line selector-class-pattern
         content: counter(list-#{$counter}, nth($list-style, ($counter % 3) + 1)) ". ";
       }
     }
@@ -75,6 +75,15 @@ $transparent-border: 1px solid transparent;
   display: flex;
   flex-direction: column;
   border: $transparent-border;
+
+  &:not(.dx-state-disabled) {
+    li[data-list=checked],
+    li[data-list=unchecked] {
+      > .ql-ui { // stylelint-disable-line selector-class-pattern
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .dx-quill-container {
@@ -173,7 +182,20 @@ $transparent-border: 1px solid transparent;
     padding-left: $list-style-outer-width;
     position: relative;
 
-    &::before {
+    // stylelint-disable selector-class-pattern
+    &[data-list=bullet] > .ql-ui::before {
+      content: '\2022';
+    }
+
+    &[data-list=checked] > .ql-ui::before {
+      content: '\2611';
+    }
+
+    &[data-list=unchecked] > .ql-ui::before {
+      content: '\2610';
+    }
+
+    & > .ql-ui::before {
       display: inline-block;
       margin-left: -1 * $list-style-outer-width;
       margin-right: $list-style-margin;
@@ -186,23 +208,21 @@ $transparent-border: 1px solid transparent;
       padding-left: 0;
       padding-right: $list-style-outer-width;
 
-      &::before {
+      & > .ql-ui::before {
         margin-left: $list-style-margin;
         margin-right: -1 * $list-style-outer-width;
         text-align: left;
       }
     }
-  }
 
-  ul > li::before {
-    content: '\2022';
+    // stylelint-enable selector-class-pattern
   }
 
   li {  // stylelint-disable-line no-duplicate-selectors
     counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
-    &::before {  // stylelint-disable-line no-duplicate-selectors
+    & > .ql-ui::before {  // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
       content: counter(list-0, nth($list-style, 1)) ". ";
     }
   }
@@ -213,7 +233,7 @@ $transparent-border: 1px solid transparent;
   .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
     padding-right: $list-style-outer-width;
 
-    &::before { // stylelint-disable-line no-duplicate-selectors
+    & > .ql-ui::before { // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
       margin-left: $list-style-margin;
       margin-right: -1 * $list-style-outer-width;
       text-align: left;
