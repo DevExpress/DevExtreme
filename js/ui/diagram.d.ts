@@ -188,6 +188,18 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      */
     onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs, allowed?: boolean }) => any);
     /**
+     * @docid dxDiagramOptions.onRequestLayoutUpdate
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field5 allowed:boolean
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, changes?: any[], allowed?: boolean }) => any);
+    /**
      * @docid dxDiagramOptions.pageColor
      * @type String
      * @default "white"
