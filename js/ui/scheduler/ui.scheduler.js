@@ -2470,7 +2470,11 @@ class Scheduler extends Widget {
         */
 }
 
-Scheduler.getTimeZones = function(date) {
+/**
+* @name ui.dxScheduler
+* @section utils
+*/
+Scheduler.getTimeZones = date => {
     if(!isDefined(date)) {
         date = new Date();
     }
