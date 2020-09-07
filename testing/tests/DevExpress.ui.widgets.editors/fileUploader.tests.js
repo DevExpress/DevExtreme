@@ -2770,18 +2770,14 @@ QUnit.module('readOnly option', moduleConfig, () => {
     });
 
     QUnit.test('dialogTrigger should be unable to call _selectButtonClickHandler', function(assert) {
-        const triggerClass = 'pic';
         const instance = $('#fileuploader').dxFileUploader({
             readOnly: true,
             uploadMode: 'useButtons'
         }).dxFileUploader('instance');
-        sinon.stub(instance, '_selectButtonClickHandler');
+        sinon.stub(instance, '_selectButtonClickHandler', function() { return instance._selectFileDialogHandler(); });
 
-        $('<div>').addClass(triggerClass).appendTo($('#fileuploader'));
-
-        instance.option('dialogTrigger', '.' + triggerClass);
-
-        assert.strictEqual(instance._selectButtonClickHandler.callCount, 0, 'selectFile method not called');
+        instance._selectButtonClickHandler();
+        assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');
 
         instance._selectButtonClickHandler.restore();
     });
