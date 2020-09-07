@@ -201,6 +201,39 @@ QUnit.module('options changed callbacks', {
         assert.equal(instance.option('indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
     });
 
+    QUnit.test('indicatorSrc option change', function(assert) {
+        const url = '../../testing/content/customLoadIndicator.png';
+        const instance = this.element
+            .dxLoadPanel({
+                showIndicator: true
+            })
+            .dxLoadPanel('instance');
+        instance.show();
+
+        instance.option('indicatorSrc', url);
+
+        const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
+
+        assert.strictEqual(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
+        instance.option('indicatorSrc', '');
+        assert.equal(instance.option('indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
+    });
+
+    QUnit.test('indicatorSrc option change when showIndicator is false', function(assert) {
+        const url = '../../testing/content/customLoadIndicator.png';
+        const instance = this.element
+            .dxLoadPanel({})
+            .dxLoadPanel('instance');
+
+        instance.show();
+        instance.option('indicatorSrc', url);
+        instance.option('showIndicator', true);
+
+        const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
+
+        assert.strictEqual(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
+    });
+
     QUnit.test('Load panel should not close on esc button when focusStateEnabled is true', function(assert) {
         const instance = this.element
             .dxLoadPanel({
