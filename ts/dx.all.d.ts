@@ -5614,6 +5614,8 @@ declare module DevExpress.ui {
         showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
         /** @name dxScheduler.updateAppointment(target, appointment) */
         updateAppointment(target: any, appointment: any): void;
+        /** @name dxScheduler.getTimeZones(date) */
+        getTimeZones(date: Date): void;
     }
     /** @name dxSchedulerAppointment */
     export interface dxSchedulerAppointment extends CollectionWidgetItem {
