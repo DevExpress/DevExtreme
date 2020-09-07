@@ -2619,7 +2619,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const rows = this._getRowCount();
             this._$dateTable
-                .find('tr:nth-child(' + rows + 'n)')
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS}):nth-child(${rows}n)`)
                 .each(function(_, row) {
 
                     const maxPosition = $(row).position().top + getBoundingRect(row).height;
