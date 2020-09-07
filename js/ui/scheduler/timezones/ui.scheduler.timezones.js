@@ -11,7 +11,7 @@ const SchedulerTimezones = {
     },
 
     getDisplayedTimeZones: function(date) {
-        const timeZones = this.this._timeZones.map((timezone) => {
+        const timeZones = this._timeZones.map((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
 
             const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
@@ -23,7 +23,7 @@ const SchedulerTimezones = {
             };
         });
 
-        query(timeZones).sortBy('offset').toArray();
+        return query(timeZones).sortBy('offset').toArray();
     },
 
     formatOffset: function(offset) {
