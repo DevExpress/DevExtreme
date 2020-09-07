@@ -1576,7 +1576,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             allDay: true,
         };
 
-        if(this.isVirtualScrolling()) {
+        if(this.isRenovatedRender()) {
             data.groupIndex = cellGroupIndex;
         }
 
@@ -1747,7 +1747,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             allDay: this._getTableAllDay()
         };
 
-        if(this.isVirtualScrolling()) {
+        if(this.isRenovatedRender()) {
             data.groupIndex = groupIndex;
         }
 
