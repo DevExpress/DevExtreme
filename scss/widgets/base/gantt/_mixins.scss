@@ -1,5 +1,5 @@
 @use "sass:string";
-@use "./string" as *;
+@use "../string" as *;
 
 @mixin gantt-icon-colored($data-uri, $color) {
   $uri: replace("#{$data-uri}", "currentColor", escape("#{$color}"));
