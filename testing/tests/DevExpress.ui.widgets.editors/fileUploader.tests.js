@@ -2652,3 +2652,188 @@ QUnit.module('disabled option', () => {
     });
 });
 
+QUnit.module('readOnly option', moduleConfig, () => {
+    QUnit.test('file input should be hidden', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: false,
+            uploadMode: 'useButtons'
+        });
+        const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+
+        assert.notOk($fileInput.prop('disabled'), 'input is visible');
+
+        $fileUploader.dxFileUploader('option', 'readOnly', true);
+        assert.ok($fileInput.prop('disabled'), 'input is hidden');
+
+        $fileUploader.dxFileUploader('option', 'readOnly', false);
+        assert.notOk($fileInput.prop('disabled'), 'input is visible');
+    });
+
+    QUnit.test('select button should be disabled', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            uploadMode: 'useButtons'
+        });
+        const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS).children('.' + FILEUPLOADER_BUTTON_CLASS);
+
+        assert.ok($selectButton.hasClass('dx-state-disabled'), 'button is disabled');
+    });
+
+    QUnit.test('dialogTrigger should be unable to call _selectButtonClickHandler', function(assert) {
+        const instance = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            uploadMode: 'useButtons'
+        }).dxFileUploader('instance');
+        sinon.stub(instance, '_selectButtonClickHandler', function() { return instance._selectFileDialogHandler(); });
+
+        instance._selectButtonClickHandler();
+        assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');
+
+        instance._selectButtonClickHandler.restore();
+    });
+
+    QUnit.test('uploading events can be fired (successful upload)', function(assert) {
+        const onProgressSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadStartedSpy = sinon.spy();
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            multiple: true,
+            uploadMode: 'instantly',
+            chunkSize: 200,
+            onProgress: onProgressSpy,
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploadStarted: onUploadStartedSpy,
+            onValueChanged: onValueChangedSpy
+        });
+
+        const file1 = createBlobFile('image1.png', 150);
+        simulateFileChoose($fileUploader, [file1]);
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 1, 'uploaded event raised');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event not raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event raised');
+    });
+
+    QUnit.test('uploading events can be fired (feature - onUploadAborted)', function(assert) {
+        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy(() => executeAfterDelay());
+        const onProgressSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadStartedSpy = sinon.spy();
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            multiple: true,
+            uploadMode: 'instantly',
+            chunkSize: 200,
+            abortUpload: abortUploadSpy,
+            uploadChunk: uploadChunkSpy,
+            onProgress: onProgressSpy,
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploadStarted: onUploadStartedSpy,
+            onValueChanged: onValueChangedSpy
+        });
+        const file = createBlobFile('image1.png', 1500);
+        simulateFileChoose($fileUploader, [file]);
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event is not raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event raised');
+
+        $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).eq(0).trigger('dxclick');
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after error');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event is not raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 2, 'value changed event raised');
+    });
+
+    QUnit.test('uploading events can be fired (feature - onUploadError)', function(assert) {
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay(() => {
+            throw 'Some error.';
+        }));
+        const onProgressSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadStartedSpy = sinon.spy();
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            multiple: true,
+            uploadMode: 'instantly',
+            uploadFile: uploadFileSpy,
+            onProgress: onProgressSpy,
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploadStarted: onUploadStartedSpy,
+            onValueChanged: onValueChangedSpy
+        });
+
+        const file1 = createBlobFile('image1.png', 150);
+        simulateFileChoose($fileUploader, [file1]);
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 0, 'progress event not called');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 1, 'upload error event raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event raised');
+    });
+
+    QUnit.test('it is impossible to drop files', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            useDragOver: true
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        const files = [fakeFile];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+
+        $inputWrapper.trigger(event);
+        assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), [], 'dragged files count is correct');
+    });
+
+    QUnit.test('drag event should not be handled', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            useDragOver: true,
+            uploadMode: 'instantly'
+        });
+
+        $fileUploader.find('.dx-fileuploader-input-wrapper').trigger('dragenter');
+        assert.notOk($fileUploader.hasClass('dx-fileuploader-dragover'), 'drag event was not handled for input wrapper element');
+    });
+
+});
+

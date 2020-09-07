@@ -262,7 +262,8 @@ class FileUploader extends Editor {
         this._$fileInput.prop({
             multiple: this.option('multiple'),
             accept: this.option('accept'),
-            tabIndex: -1
+            tabIndex: -1,
+            disabled: this.option('readOnly')
         });
     }
 
@@ -445,23 +446,23 @@ class FileUploader extends Editor {
     }
 
     _createUploadStartedAction() {
-        this._uploadStartedAction = this._createActionByOption('onUploadStarted');
+        this._uploadStartedAction = this._createActionByOption('onUploadStarted', { excludeValidators: ['readOnly'] });
     }
 
     _createUploadedAction() {
-        this._uploadedAction = this._createActionByOption('onUploaded');
+        this._uploadedAction = this._createActionByOption('onUploaded', { excludeValidators: ['readOnly'] });
     }
 
     _createProgressAction() {
-        this._progressAction = this._createActionByOption('onProgress');
+        this._progressAction = this._createActionByOption('onProgress', { excludeValidators: ['readOnly'] });
     }
 
     _createUploadAbortedAction() {
-        this._uploadAbortedAction = this._createActionByOption('onUploadAborted');
+        this._uploadAbortedAction = this._createActionByOption('onUploadAborted', { excludeValidators: ['readOnly'] });
     }
 
     _createUploadErrorAction() {
-        this._uploadErrorAction = this._createActionByOption('onUploadError');
+        this._uploadErrorAction = this._createActionByOption('onUploadError', { excludeValidators: ['readOnly'] });
     }
 
     _createFile(value) {
@@ -683,7 +684,8 @@ class FileUploader extends Editor {
         this._selectButton = this._createComponent($button, Button, {
             text: this.option('selectButtonText'),
             focusStateEnabled: false,
-            integrationOptions: {}
+            integrationOptions: {},
+            disabled: this.option('readOnly')
         });
 
         // NOTE: click triggering on input 'file' works correctly only in native click handler when device is used
@@ -700,7 +702,7 @@ class FileUploader extends Editor {
             return;
         }
 
-        if(this.option('disabled')) {
+        if(this.option('disabled') || this.option('readOnly')) {
             return false;
         }
 
@@ -791,7 +793,7 @@ class FileUploader extends Editor {
     _renderDragEvents() {
         eventsEngine.off(this._$inputWrapper, '.' + this.NAME);
 
-        if(!this._shouldDragOverBeRendered()) {
+        if(!this._shouldDragOverBeRendered() || this.option('readOnly')) {
             return;
         }
 
@@ -1091,6 +1093,12 @@ class FileUploader extends Editor {
                 if(!args.value) {
                     this.reset();
                 }
+                break;
+            case 'readOnly':
+                this._$fileInput.prop('disabled', value);
+                this._selectButton.option('disabled', value);
+                this._renderDragEvents();
+                super._optionChanged(args);
                 break;
             case 'selectButtonText':
                 this._selectButton.option('text', value);
