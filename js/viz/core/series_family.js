@@ -313,9 +313,11 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
 
         _each(singleSeries.getPoints(), function(index, point) {
             const stackSum = getAbsStackSumByArg(stackKeepers, stackName, point.argument.valueOf());
-            point.value = point.value / stackSum;
-            if(isNumeric(point.minValue)) {
-                point.minValue = point.minValue / stackSum;
+            if(stackSum !== 0) {
+                point.value = point.value / stackSum;
+                if(isNumeric(point.minValue)) {
+                    point.minValue = point.minValue / stackSum;
+                }
             }
         });
     });
