@@ -324,7 +324,7 @@ const SchedulerAppointmentForm = {
 
     updateTimeZoneEditorDataSource(date, expression) {
         const timeZoneDataSource = new DataSource({
-            store: SchedulerTimezones.getSortedTimeZones(date),
+            store: SchedulerTimezones.getDisplayedTimeZones(date),
             paginate: true,
             pageSize: 10
         });

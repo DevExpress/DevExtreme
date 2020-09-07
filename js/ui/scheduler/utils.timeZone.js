@@ -98,6 +98,10 @@ const isSameAppointmentDates = (startDate, endDate) => {
     return dateUtils.sameDate(startDate, endDate);
 };
 
+const getClientTimezoneOffset = (date) => {
+    return date.getTimezoneOffset() * 60000;
+};
+
 const utils = {
     getDaylightOffset,
     getDaylightOffsetInMs,
@@ -108,6 +112,7 @@ const utils = {
     isTimezoneChangeInDate,
     isSameAppointmentDates,
     correctRecurrenceExceptionByTimezone,
+    getClientTimezoneOffset,
 
     createUTCDate,
     createDateFromUTC

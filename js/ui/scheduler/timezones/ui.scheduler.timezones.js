@@ -1,7 +1,6 @@
 import query from '../../../data/query';
 import errors from '../../../core/errors';
 import tzData from './ui.scheduler.timezones_data';
-import { extend } from '../../../core/utils/extend';
 import { sign } from '../../../core/utils/math';
 
 const SchedulerTimezones = {
@@ -12,20 +11,19 @@ const SchedulerTimezones = {
     },
 
     getDisplayedTimeZones: function(date) {
-        return this.getTimezones().map((timezone) => {
+        const timeZones = this.this._timeZones.map((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
 
             const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
 
-            return extend(timezone, {
+            return {
                 offset: offset,
-                title: title
-            });
+                title: title,
+                id: timezone.id
+            };
         });
-    },
 
-    getSortedTimeZones: function(date) {
-        return query(this.getDisplayedTimeZones(date)).sortBy('offset').toArray();
+        query(timeZones).sortBy('offset').toArray();
     },
 
     formatOffset: function(offset) {
@@ -42,7 +40,7 @@ const SchedulerTimezones = {
     getTimezoneById: function(id) {
         let result;
         let i = 0;
-        const tzList = this.getTimezones();
+        const tzList = this._timeZones;
 
         if(id) {
             while(!result) {
@@ -108,10 +106,6 @@ const SchedulerTimezones = {
 
         const offset = Number(offsetsList[Number(offsetIndicesList[index])]);
         return -offset / 60 || offset;
-    },
-
-    getClientTimezoneOffset: function(date) {
-        return date.getTimezoneOffset() * 60000;
     }
 };
 

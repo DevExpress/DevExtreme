@@ -53,6 +53,7 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
 import utils from './utils';
+import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -2345,6 +2346,14 @@ class Scheduler extends Widget {
         }
     }
 
+    getTimeZones(date) {
+        if(!isDefined(date)) {
+            date = new Date();
+        }
+
+        return SchedulerTimezones.getDisplayedTimeZones(date);
+    }
+
     getStartViewDate() {
         return this._workSpace.getStartViewDate();
     }
@@ -2399,7 +2408,6 @@ class Scheduler extends Widget {
     scrollToTime(hours, minutes, date) {
         this._workSpace.scrollToTime(hours, minutes, date);
     }
-
 
     addAppointment(appointment) {
         const adapter = this.createAppointmentAdapter(appointment);
