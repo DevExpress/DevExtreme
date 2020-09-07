@@ -16,7 +16,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
 import 'ui/scheduler/ui.scheduler';
-import dxScheduler from 'ui/scheduler/ui.scheduler';
+import dxScheduler, { getTimeZones } from 'ui/scheduler/ui.scheduler';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -278,6 +278,14 @@ QUnit.module('Initialization', {
             this.clock.restore();
             fx.off = false;
         }
+    });
+
+    QUnit.test('Getting timeZones', function(assert) {
+        const summer = new Date(2020, 6, 1);
+
+        const timeZones = getTimeZones(summer);
+
+        assert.equal(timeZones.length, 500);
     });
 
     QUnit.test('Add new item', function(assert) {
