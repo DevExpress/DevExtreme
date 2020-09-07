@@ -136,6 +136,17 @@ const isRowEditMode = function(that) {
     return ROW_BASED_MODES.indexOf(editMode) !== -1;
 };
 
+const isEditingCell = function(isEditRow, cellOptions) {
+    return cellOptions.isEditing || isEditRow && cellOptions.column.allowEditing;
+};
+
+const isEditingOrShowEditorAlwaysDataCell = function(isEditRow, cellOptions) {
+    const isCommandCell = !!cellOptions.column.command;
+    const isEditing = isEditingCell(isEditRow, cellOptions);
+    const isEditorCell = !isCommandCell && (isEditing || cellOptions.column.showEditorAlways);
+    return cellOptions.rowType === 'data' && isEditorCell;
+};
+
 const EditingController = modules.ViewController.inherit((function() {
     const getDefaultEditorTemplate = function(that) {
         return function(container, options) {
@@ -2693,9 +2704,10 @@ module.exports = {
                     const editingController = this._editingController;
                     const isCommandCell = !!parameters.column.command;
                     const isEditableCell = parameters.setValue;
-                    const isEditing = parameters.isEditing || editingController.isEditRow(parameters.rowIndex) && parameters.column.allowEditing;
+                    const isEditRow = editingController.isEditRow(parameters.rowIndex);
+                    const isEditing = isEditingCell(isEditRow, parameters);
 
-                    if(parameters.rowType === 'data' && !isCommandCell && (isEditing || parameters.column.showEditorAlways)) {
+                    if(isEditingOrShowEditorAlwaysDataCell(isEditRow, parameters)) {
                         const alignment = parameters.column.alignment;
 
                         $cell
@@ -2747,12 +2759,9 @@ module.exports = {
                 },
                 _createCell: function(options) {
                     const $cell = this.callBase(options);
+                    const isEditRow = this._editingController.isEditRow(options.rowIndex);
 
-                    const isCommandCell = !!options.column.command;
-                    const isEditing = options.isEditing || this._editingController.isEditRow(options.rowIndex) && options.column.allowEditing;
-                    const isEditorCell = !isCommandCell && (isEditing || options.column.showEditorAlways);
-
-                    options.rowType === 'data' && isEditorCell && $cell.addClass(EDITOR_CELL_CLASS);
+                    isEditingOrShowEditorAlwaysDataCell(isEditRow, options) && $cell.addClass(EDITOR_CELL_CLASS);
 
                     return $cell;
                 },
