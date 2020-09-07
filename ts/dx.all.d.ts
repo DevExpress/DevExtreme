@@ -4065,9 +4065,6 @@ declare module DevExpress.ui {
     }
     /** @name dxFormButtonItem */
     export interface dxFormButtonItem {
-        /** @deprecated */
-        /** @name dxFormButtonItem.alignment */
-        alignment?: 'center' | 'left' | 'right';
         /** @name dxFormButtonItem.buttonOptions */
         buttonOptions?: dxButtonOptions;
         /** @name dxFormButtonItem.colSpan */
