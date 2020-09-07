@@ -5615,7 +5615,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.updateAppointment(target, appointment) */
         updateAppointment(target: any, appointment: any): void;
         /** @name dxScheduler.getTimeZones(date) */
-        getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
+        static getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
     }
     /** @name dxSchedulerAppointment */
     export interface dxSchedulerAppointment extends CollectionWidgetItem {

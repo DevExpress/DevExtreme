@@ -2345,7 +2345,7 @@ class Scheduler extends Widget {
         }
     }
 
-    getTimeZones(date) {
+    static getTimeZones(date) {
         if(!isDefined(date)) {
             date = new Date();
         }
