@@ -315,7 +315,8 @@ QUnit.module('Integration: allDay appointments', {
                     $.extend(true, options, {
                         scrolling: {
                             mode: scrollingMode
-                        }
+                        },
+                        height: 600
                     });
                     createInstance(options);
                 };
