@@ -5614,8 +5614,6 @@ declare module DevExpress.ui {
         showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
         /** @name dxScheduler.updateAppointment(target, appointment) */
         updateAppointment(target: any, appointment: any): void;
-        /** @name dxScheduler.getTimeZones(date) */
-        static getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
     }
     /** @name dxSchedulerAppointment */
     export interface dxSchedulerAppointment extends CollectionWidgetItem {
@@ -5645,15 +5643,6 @@ declare module DevExpress.ui {
         text?: string;
         /** @name dxSchedulerAppointment.visible */
         visible?: boolean;
-    }
-    /** @name dxSchedulerTimeZone */
-    export interface dxSchedulerTimeZone {
-        /** @name dxSchedulerTimeZone.id */
-        id: string;
-        /** @name dxSchedulerTimeZone.title */
-        title: string;
-        /** @name dxSchedulerTimeZone.offset */
-        offset: number;
     }
     /** @name dxSchedulerScrolling */
     export interface dxSchedulerScrolling {
