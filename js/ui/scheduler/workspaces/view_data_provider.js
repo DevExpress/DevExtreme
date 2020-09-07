@@ -63,7 +63,6 @@ class ViewDataGenerator {
 
                 viewCellsData = this._generateViewCellsData(
                     options,
-                    groupIndex,
                     renderRowCount,
                     startRowIndex,
                     groupOffset
@@ -106,7 +105,6 @@ class ViewDataGenerator {
             const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
             const viewCellsData = this._generateViewCellsData(
                 options,
-                groupIndex,
                 rowCount,
                 0,
                 rowCount * groupIndex
@@ -128,7 +126,7 @@ class ViewDataGenerator {
         };
     }
 
-    _generateViewCellsData(options, groupIndex, renderRowCount, startRowIndex, rowOffset) {
+    _generateViewCellsData(options, renderRowCount, startRowIndex, rowOffset) {
         const {
             cellCount,
             cellDataGetters,
@@ -173,7 +171,7 @@ class ViewDataGenerator {
 
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
             const rowIndex = Math.max(groupIndex * rowCount, 0);
-            const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex).value;
+            const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex, groupIndex).value;
             cellDataValue.index = this._calculateCellIndex(
                 horizontalGroupsCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
                 0, columnIndex, cellCount,
@@ -217,7 +215,6 @@ class ViewDataGenerator {
                 cellsMap.push(cellMap);
 
                 const { groupIndex } = cellData;
-
                 addToGroupedDataMap(groupIndex, dataRowIndex, cellMap);
             });
 
@@ -247,8 +244,7 @@ class ViewDataGenerator {
 
             let rowIndex = 0;
             if(isGroupedAllDayPanel && allDayPanel?.length) {
-                cellsMap.push(addToViewDataMap(allDayPanel, rowIndex));
-                ++rowIndex;
+                cellsMap.push(addToViewDataMap(allDayPanel, rowIndex++));
             }
 
             dateTable.forEach(cells => {
