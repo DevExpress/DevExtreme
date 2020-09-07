@@ -1211,6 +1211,28 @@ QUnit.module('Check empty columns and rows', {
         assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
     });
 
+    QUnit.test('reset isEmpty cache on the second summary value calculation', function(assert) {
+        this.descriptions.values[0].calculateSummaryValue = function() {
+            return 0;
+        };
+
+        applyDisplaySummaryMode(this.descriptions, this.data);
+
+        this.descriptions.values[0].calculateSummaryValue = function() {
+            return null;
+        };
+
+        applyDisplaySummaryMode(this.descriptions, this.data);
+
+        pivotGridUtils.foreachTree(this.data.rows, function(items) {
+            assert.deepEqual(items[0].isEmpty, [true]);
+        });
+
+        pivotGridUtils.foreachTree(this.data.columns, function(items) {
+            assert.deepEqual(items[0].isEmpty, [true]);
+        });
+    });
+
     QUnit.test('not empty data when no summary calculations', function(assert) {
         this.data.values[1][0] = null;
         // act
