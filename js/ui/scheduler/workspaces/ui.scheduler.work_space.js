@@ -315,41 +315,63 @@ class SchedulerWorkSpace extends WidgetObserver {
     _moveToCell($cell, isMultiSelection) {
         isMultiSelection = isMultiSelection && this.option('allowMultipleCellSelection');
 
-        this._setFocusedCell($cell, isMultiSelection);
+        this._setSelectedAndFocusedCells($cell, isMultiSelection);
         this._dateTableScrollable.scrollToElement($cell);
     }
 
-    _setFocusedCell($cell, isMultiSelection) {
+    _setSelectedAndFocusedCells($cell, isMultiSelection, $firstSelectedCell) {
         if(!isDefined($cell) || !$cell.length) {
             return;
         }
 
+        this._setFocusedCell($cell, true);
+        this._setSelectedCells($cell, isMultiSelection);
+
+        const selectedCellData = this.getFocusedCellData();
+        this.option('selectedCellData', selectedCellData);
+        this._selectionChangedAction({ selectedCellData });
+    }
+
+    _setFocusedCell($cell, updateViewData = false) {
         this._releaseFocusedCell();
+
+        this._toggleFocusedCellClass(true, $cell);
+        this._$focusedCell = $cell;
+
+        if(this.isVirtualScrolling() && updateViewData) {
+            const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
+            const isAllDayCell = this._hasAllDayClass($cell);
+            this._viewDataProvider.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
+        }
+    }
+
+    _setSelectedCells($cell, isMultiSelection) {
+        this._releaseSelectedCells();
         this._focusedCells = [];
 
         if(isMultiSelection) {
             $cell = this._correctCellForGroup($cell);
+            const $previousCell = this._$prevCell;
             const orientation = this.option('type') === 'day' && (!this.option('groups').length || this.option('groupOrientation') === 'vertical')
                 ? 'vertical'
                 : 'horizontal';
-            const $targetCells = this._getCellsBetween($cell, this._$prevCell, orientation);
+
+            const $targetCells = this._getCellsBetween($cell, $previousCell, orientation);
             this._focusedCells = $targetCells.toArray();
         } else {
             this._focusedCells = [$cell.get(0)];
             this._$prevCell = $cell;
+            if(this.isVirtualScrolling()) {
+                const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
+                const isAllDayCell = this._hasAllDayClass($cell);
+                this._viewDataProvider.setFirstSelectedCell(rowIndex, columnIndex, isAllDayCell);
+            }
         }
 
         const $focusedCells = $(this._focusedCells);
 
         this._toggleFocusClass(true, $focusedCells);
         this.setAria('label', 'Add appointment', $focusedCells);
-
-        this._toggleFocusedCellClass(true, $cell);
-        this._$focusedCell = $cell;
-
-        const selectedCellData = this.getFocusedCellData();
-        this.option('selectedCellData', selectedCellData);
-        this._selectionChangedAction({ selectedCellData });
     }
 
     _correctCellForGroup($cell) {
@@ -414,16 +436,29 @@ class SchedulerWorkSpace extends WidgetObserver {
         $focusTarget.toggleClass(DATE_TABLE_FOCUSED_CELL_CLASS, isFocused);
     }
 
-    _releaseFocusedCell($cell) {
-        $cell = $cell || $(this._focusedCells);
+    _releaseSelectedAndFocusedCells() {
+        this._releaseFocusedCell();
+        this._releaseSelectedCells();
+
+        this.option('selectedCellData', []);
+    }
+
+    _releaseFocusedCell() {
+        const $cell = this._$focusedCell;
 
         if(isDefined($cell) && $cell.length) {
-            this._toggleFocusClass(false, $cell);
             this._toggleFocusedCellClass(false, $cell);
             this.setAria('label', undefined, $cell);
         }
+    }
 
-        this.option('selectedCellData', []);
+    _releaseSelectedCells() {
+        const $cells = $(this._focusedCells);
+
+        if(isDefined($cells) && $cells.length) {
+            this._toggleFocusClass(false, $cells);
+            this.setAria('label', undefined, $cells);
+        }
     }
 
     _focusInHandler(e) {
@@ -432,7 +467,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             delete this._contextMenuHandled;
             super._focusInHandler.apply(this, arguments);
             const $cell = this._getFocusedCell();
-            this._setFocusedCell($cell);
+            this._setSelectedAndFocusedCells($cell);
         }
     }
 
@@ -440,7 +475,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         super._focusOutHandler.apply(this, arguments);
 
         if(!this._contextMenuHandled) {
-            this._releaseFocusedCell();
+            this._releaseSelectedAndFocusedCells();
         }
     }
 
@@ -1116,6 +1151,29 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.renderRTimeTable();
 
         this.renderRDateTable();
+
+        const { coordinates, cellData } = this.viewDataProvider.getFocusedCell();
+        const firstCellInSelection = this.viewDataProvider.getFirstCellInSelection();
+        const lastCellInSelection = this.viewDataProvider.getLastCellInSelection();
+
+        if(coordinates && coordinates.rowIndex !== -1) {
+            const $cell = this._getCellByCoordinates(coordinates, cellData.allDay, cellData.groupIndex);
+            // const $previousCell = this._getCellByCoordinates(firstCoordinates, firstCellData.allDay, firstCellData.groupIndex);
+            // this._setSelectedAndFocusedCells($cell, !!$previousCell, $previousCell);
+            $cell && this._setFocusedCell($cell);
+        }
+        // if(firstCellInSelection && lastCellInSelection) {
+        //     const {
+        //         cellData: firstCellData,
+        //         coordinates: firstCoordinates,
+        //     } = firstCellInSelection;
+        //     const {
+        //         cellData: secondCellData,
+        //         coordinates: secondCoordinates,
+        //     } = lastCellInSelection;
+
+        //     const $firstCell =
+        // }
     }
 
     renderRAllDayPanel() {
@@ -1176,7 +1234,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setFocusOnCellByOption(data) {
         const cells = [];
 
-        this._releaseFocusedCell();
+        this._releaseSelectedAndFocusedCells();
 
         for(let i = 0; i < data.length; i++) {
             const groups = data[i].groups;
@@ -1334,7 +1392,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         if($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
             this._showPopup = true;
         } else {
-            this._setFocusedCell($target);
+            this._setSelectedAndFocusedCells($target);
         }
     }
 

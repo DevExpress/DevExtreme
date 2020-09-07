@@ -272,6 +272,8 @@ export default class ViewDataProvider {
         this._viewDataMap = [];
         this._groupedDataMap = [];
         this._workspace = workspace;
+        this._focusedCell = null;
+        this._firstSelectedCell = null;
     }
 
     get viewDataGenerator() {
@@ -350,6 +352,131 @@ export default class ViewDataProvider {
         }, 0);
 
         return { rowCount, columnCount };
+    }
+
+    setFocusedCell(rowIndex, columnIndex, isAllDay) {
+        const cell = this.getCellData(rowIndex, columnIndex, isAllDay);
+        this._focusedCell = cell;
+    }
+
+    getFocusedCell() {
+        const { _focusedCell } = this;
+        if(!_focusedCell) {
+            return {};
+        }
+
+        const columnIndex = this._getColumnIndexByCellData(_focusedCell);
+        const rowIndex = this._getRowIndexByColumnAndData(_focusedCell, columnIndex);
+
+        return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: _focusedCell };
+    }
+
+    _getColumnIndexByCellData(cellData) {
+        const isVerticalGrouping = this._workspace._isVerticalGroupedWorkSpace();
+        const { viewDataMap } = this;
+        const { startDate, groupIndex } = cellData;
+
+        return viewDataMap[0].findIndex(({
+            cellData: { startDate: currentStartDate, groupIndex: currentGroupIndex },
+        }) => {
+            return startDate.getDate() === currentStartDate.getDate()
+              && ((groupIndex === currentGroupIndex) || isVerticalGrouping);
+        });
+    }
+
+    setFirstSelectedCell(rowIndex, columnIndex, isAllDay) {
+        const cell = this.getCellData(rowIndex, columnIndex, isAllDay);
+        this._firstSelectedCell = cell;
+    }
+
+    getFirstCellInSelection() {
+        const { _firstSelectedCell, _focusedCell, viewDataMap } = this;
+        if(!_firstSelectedCell) {
+            return null;
+        }
+
+        const isFirstSelectedCellBeforeLast = _firstSelectedCell.startDate.getTime() < _focusedCell.startDate.getTime();
+        const firstCellInSelection = isFirstSelectedCellBeforeLast
+            ? _firstSelectedCell
+            : _focusedCell;
+        const lastCellInSelection = !isFirstSelectedCellBeforeLast
+            ? _firstSelectedCell
+            : _focusedCell;
+
+        const columnIndex = this._getColumnIndexByCellData(firstCellInSelection);
+        const rowIndex = this._getRowIndexByColumnAndData(firstCellInSelection, columnIndex);
+        if(rowIndex !== -1) {
+            return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: firstCellInSelection };
+        }
+
+        const firstCellInColumn = viewDataMap[0][columnIndex].cellData;
+        const firstCellInNextColumn = viewDataMap[0][columnIndex + 1]?.cellData;
+
+        if(firstCellInColumn.groupIndex === firstCellInSelection.groupIndex
+            && firstCellInColumn.startDate.getTime() > firstCellInSelection.startDate.getTime()
+            && firstCellInColumn.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
+            return firstCellInColumn;
+        }
+        if(firstCellInNextColumn
+            && firstCellInNextColumn.groupIndex === firstCellInSelection.groupIndex
+            && firstCellInNextColumn.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
+            return firstCellInNextColumn;
+        }
+
+        return null;
+    }
+
+    getLastCellInSelection() {
+        const { _firstSelectedCell, _focusedCell, viewDataMap } = this;
+        if(!_firstSelectedCell) {
+            return null;
+        }
+
+        const isFirstSelectedCellBeforeLast = _firstSelectedCell.startDate.getTime() < _focusedCell.startDate.getTime();
+        const firstCellInSelection = isFirstSelectedCellBeforeLast
+            ? _firstSelectedCell
+            : _focusedCell;
+        const lastCellInSelection = !isFirstSelectedCellBeforeLast
+            ? _firstSelectedCell
+            : _focusedCell;
+
+        const columnIndex = this._getColumnIndexByCellData(lastCellInSelection);
+        const rowIndex = this._getRowIndexByColumnAndData(lastCellInSelection, columnIndex);
+        if(rowIndex !== -1) {
+            return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: lastCellInSelection };
+        }
+
+        const lastCellInColumn = viewDataMap[viewDataMap.length][columnIndex].cellData;
+        const lastCellInNextColumn = viewDataMap[viewDataMap.length][columnIndex - 1]?.cellData;
+
+        if(lastCellInColumn.groupIndex === lastCellInSelection.groupIndex
+            && lastCellInColumn.startDate.getTime() > firstCellInSelection.startDate.getTime()
+            && lastCellInColumn.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
+            return lastCellInColumn;
+        }
+        if(lastCellInNextColumn
+            && lastCellInNextColumn.groupIndex === lastCellInSelection.groupIndex
+            && lastCellInNextColumn.startDate.getTime() >= firstCellInSelection.startDate.getTime()) {
+            return lastCellInNextColumn;
+        }
+
+        return null;
+    }
+
+    _getRowIndexByColumnAndData(cellData, columnIndex) {
+        const { viewDataMap } = this;
+        const { startDate, groupIndex } = cellData;
+
+        return viewDataMap.findIndex((cellsRow) => {
+            const { cellData: currentCellData } = cellsRow[columnIndex];
+            const {
+                startDate: currentStartDate,
+                groupIndex: currentGroupIndex,
+            } = currentCellData;
+
+            return startDate.getTime() === currentStartDate.getTime()
+              && groupIndex === currentGroupIndex;
+        });
     }
 
     _getGroupData(groupIndex) {
