@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTableBody } from '../table_body';
-import * as utilsModule from '../../../../utils';
 import { DefaultSizes } from '../../../../const';
 
 describe('AllDayPanelLayout', () => {
@@ -44,13 +43,19 @@ describe('AllDayPanelLayout', () => {
       const layout = render({
         classes: 'some-class',
         restAttributes: { style: { height: 500 } },
-        props: { dataCellTemplate },
+        emptyTableHeight: 123,
+        props: {
+          dataCellTemplate,
+        },
       });
 
       expect(layout.hasClass('some-class'))
         .toBe(true);
 
       const allDayTable = layout.find('.dx-scheduler-all-day-table');
+
+      expect(allDayTable.prop('height'))
+        .toBe(123);
 
       expect(allDayTable.exists())
         .toBe(true);
@@ -77,25 +82,11 @@ describe('AllDayPanelLayout', () => {
       expect(allDayTable.exists())
         .toBe(false);
     });
-
-    it('should render correct height', () => {
-      const layout = render({ style: { height: 100 } });
-
-      expect(layout.prop('style'))
-        .toStrictEqual({ height: 100 });
-    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
       it('allDayPanelData', () => {
-        const viewData = {
-          groupedData: [
-            {
-              allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
-            },
-          ],
-        } as GroupedViewData;
         const layout = new AllDayPanelLayout({ viewData });
 
         expect(layout.allDayPanelData)
@@ -103,14 +94,6 @@ describe('AllDayPanelLayout', () => {
       });
 
       it('emptyTableHeight should not return height if allDayPanel data is present', () => {
-        const viewData = {
-          groupedData: [
-            {
-              allDayPanel: [{ startDate: new Date(2020, 6, 9, 0) }],
-            },
-          ],
-        } as GroupedViewData;
-
         const layout = new AllDayPanelLayout({ viewData });
 
         expect(layout.emptyTableHeight)
@@ -118,15 +101,15 @@ describe('AllDayPanelLayout', () => {
       });
 
       it('emptyTableHeight should return default height if allDayPanel data is empty', () => {
-        const viewData = {
-          groupedData: [
-            {
+        const layout = new AllDayPanelLayout({
+          viewData: {
+            groupedData: [{
+              dateTable: [[]],
               allDayPanel: undefined,
-            },
-          ],
-        } as GroupedViewData;
-
-        const layout = new AllDayPanelLayout({ viewData });
+            }],
+            cellCountInGroupRow: 1,
+          },
+        });
 
         expect(layout.emptyTableHeight)
           .toEqual(DefaultSizes.allDayPanelHeight);

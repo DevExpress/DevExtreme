@@ -29,8 +29,6 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
 export class AllDayPanelLayoutProps extends LayoutProps {
   @OneWay() className? = '';
 
-  @OneWay() height? = 25;
-
   @OneWay() visible? = true;
 }
 
