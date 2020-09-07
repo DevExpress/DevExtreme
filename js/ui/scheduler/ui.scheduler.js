@@ -2346,14 +2346,6 @@ class Scheduler extends Widget {
         }
     }
 
-    static getTimeZones(date) {
-        if(!isDefined(date)) {
-            date = new Date();
-        }
-
-        return SchedulerTimezones.getDisplayedTimeZones(date);
-    }
-
     getStartViewDate() {
         return this._workSpace.getStartViewDate();
     }
@@ -2477,6 +2469,14 @@ class Scheduler extends Widget {
         * @hidden
         */
 }
+
+Scheduler.getTimeZones = function(date) {
+    if(!isDefined(date)) {
+        date = new Date();
+    }
+
+    return SchedulerTimezones.getDisplayedTimeZones(date);
+};
 
 Scheduler.include(DataHelperMixin);
 
