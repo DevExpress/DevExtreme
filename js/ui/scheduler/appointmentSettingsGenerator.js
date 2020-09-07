@@ -17,7 +17,6 @@ export default class AppointmentSettingsGenerator {
         const renderingStrategy = this.scheduler.getLayoutManager().getRenderingStrategyInstance();
         let allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
 
-        const minRecurrenceDate = scheduler.option('timeZone') ? scheduler.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' }) : startViewDate;
         const itemResources = this.scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
         const appointmentList = this._createRecurrenceAppointments(appointment, appointment.duration);
         if(appointmentList.length === 0) {
@@ -27,15 +26,15 @@ export default class AppointmentSettingsGenerator {
                     : [0];
                 groupIndices.forEach(groupIndex => {
                     appointmentList.push({
-                        startDate: adapter.startDate,
-                        endDate: adapter.endDate,
+                        startDate: appointment.startDate,
+                        endDate: appointment.endDate,
                         groupIndex
                     });
                 });
             } else {
                 appointmentList.push({
-                    startDate: adapter.startDate,
-                    endDate: adapter.endDate
+                    startDate: appointment.startDate,
+                    endDate: appointment.endDate
                 });
             }
         }
