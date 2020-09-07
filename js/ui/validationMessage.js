@@ -30,9 +30,9 @@ const ValidationMessage = Overlay.inherit({
             mode: 'auto',
             validationErrors: [],
             contentTemplate: this._renderInnerHtml,
-            positionRequest: null,
-            parentBoundary: null,
-            parentOffset: null,
+            positionRequest: undefined,
+            parentBoundary: undefined,
+            parentOffset: { h: 0, v: 0 },
             rtlEnabled: false
         });
     },
