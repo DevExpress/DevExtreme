@@ -78,7 +78,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type_function_param1_field1 text:string
      * @type_function_param1_field2 icon:string
      * @type_function_param2 contentElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

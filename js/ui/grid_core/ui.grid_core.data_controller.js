@@ -108,8 +108,13 @@ module.exports = {
                     that._items = [];
                     that._columnsController = that.getController('columns');
 
+                    that._currentOperationTypes = null;
+                    that._dataChangedHandler = (e) => {
+                        that._currentOperationTypes = this._dataSource.operationTypes();
+                        that._handleDataChanged(e);
+                        that._currentOperationTypes = null;
+                    };
                     that._columnsChangedHandler = that._handleColumnsChanged.bind(that);
-                    that._dataChangedHandler = that._handleDataChanged.bind(that);
                     that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
                     that._loadErrorHandler = that._handleLoadError.bind(that);
                     that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
@@ -490,7 +495,8 @@ module.exports = {
                     const changeType = change.changeType;
                     const visibleColumns = that._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
                     const visibleItems = that._items;
-                    const dataIndex = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0;
+                    const lastVisibleItem = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null;
+                    const dataIndex = typeUtils.isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
                     const options = {
                         visibleColumns: visibleColumns,
                         dataIndex: dataIndex
@@ -905,9 +911,12 @@ module.exports = {
                     return dataSource && dataSource.loadingOperationTypes() || {};
                 },
                 _fireChanged: function(change) {
-                    const that = this;
-                    deferRender(function() {
-                        that.changed.fire(change);
+                    if(this._currentOperationTypes) {
+                        change.operationTypes = this._currentOperationTypes;
+                        this._currentOperationTypes = null;
+                    }
+                    deferRender(() => {
+                        this.changed.fire(change);
                     });
                 },
                 isLoading: function() {

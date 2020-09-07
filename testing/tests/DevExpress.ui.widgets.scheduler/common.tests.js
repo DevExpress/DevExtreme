@@ -944,6 +944,18 @@ QUnit.module('Initialization', {
         });
     });
 
+    QUnit.test('Scheduler should not crash when some timezones are set(T913941)', function(assert) {
+        this.createInstance({
+            currentView: 'day',
+            currentDate: new Date(2020, 9, 3)
+        });
+
+        this.instance.option('timeZone', 'America/Indianapolis');
+        this.instance.option('timeZone', 'America/Indiana/Indianapolis');
+
+        assert.ok(true, 'Timezones were applied correctly');
+    });
+
     QUnit.test('Scheduler should work correctly when groupOrientation is set without groups', function(assert) {
         assert.expect(1);
 
@@ -2283,6 +2295,46 @@ QUnit.module('Initialization', {
             assert.equal(errors.log.callCount, 1, 'warning has been called once');
             assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
         });
+    });
+
+    QUnit.test('Data source should not be loaded on option change if it is already being loaded (T916558)', function(assert) {
+        const dataSource = new DataSource({
+            store: []
+        });
+        this.createInstance({
+            currentDate: new Date(2015, 4, 24),
+            views: ['day', 'workWeek', { type: 'week' }],
+            currentView: 'day',
+            dataSource,
+        });
+
+        const initMarkupSpy = sinon.spy(this.instance, '_initMarkup');
+        const reloadDataSourceSpy = sinon.spy(this.instance, '_reloadDataSource');
+
+        const nextDataSource = new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([]);
+                    }, 300);
+
+                    return d.promise();
+                }
+            })
+        });
+        this.instance.option({
+            'dataSource': nextDataSource,
+        });
+        this.instance.option({
+            'views[2].intervalCount': 2,
+            'views[2].startDate': new Date(),
+        });
+
+        this.clock.tick(400);
+
+        assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
+        assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
     });
 })('Options');
 

@@ -13,12 +13,12 @@ import {
 import { type } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
 import { overlapping } from './chart_components/base_chart';
-import LayoutManagerModule from './chart_components/layout_manager';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
 import crosshairModule from './chart_components/crosshair';
 import { getViewPortFilter } from './series/helpers/range_data_calculator';
+import LayoutManagerModule from './chart_components/layout_manager';
 import rangeModule from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
@@ -580,6 +580,10 @@ const dxChart = AdvancedChart.inherit({
         return inArray(seriesTheme.pane, paneList) !== -1;
     },
 
+    _resetAxesAnimation(isFirstDrawing) {
+        this._argumentAxes.concat(this._valueAxes).forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+    },
+
     _getValueAxis: function(paneName, axisName) {
         const that = this;
         const valueAxes = that._valueAxes;
@@ -829,13 +833,9 @@ const dxChart = AdvancedChart.inherit({
 
             newCanvas.right = panes[panes.length - 1].canvas.right;
             newCanvas.bottom = panes[panes.length - 1].canvas.bottom;
-            layoutManager.setOptions({ width: 0, height: 0 });
-            layoutManager.layoutElements(
-                [that._legend],
-                newCanvas,
-                noop,
-                [{ canvas: newCanvas }],
-                undefined
+            layoutManager.layoutInsideLegend(
+                that._legend,
+                newCanvas
             );
         }
     },

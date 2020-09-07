@@ -105,7 +105,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1 groupData:object
      * @type_function_param2 groupIndex:number
      * @type_function_param3 groupElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -509,7 +509,7 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid dxListMethods.deleteItem
      * @publicName deleteItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -536,7 +536,7 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid dxListMethods.isItemSelected
      * @publicName isItemSelected(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -561,8 +561,8 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid dxListMethods.reorderItem
      * @publicName reorderItem(itemElement, toItemElement)
-     * @param1 itemElement:Node
-     * @param2 toItemElement:Node
+     * @param1 itemElement:Element
+     * @param2 toItemElement:Element
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -605,7 +605,7 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid dxListMethods.scrollToItem
      * @publicName scrollToItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -636,7 +636,7 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid dxListMethods.selectItem
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -659,7 +659,7 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid dxListMethods.unselectItem
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Node
+     * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
      * @public
      */

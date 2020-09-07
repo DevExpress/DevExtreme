@@ -424,7 +424,10 @@ const SelectBox = DropDownList.inherit({
         const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
         if(!(fieldTemplate && this.option('fieldTemplate'))) {
-            this._renderDisplayText(this._displayGetter(item));
+            const text = this._displayGetter(item);
+
+            this.option('text', text);
+            this._renderDisplayText(text);
             return;
         }
 

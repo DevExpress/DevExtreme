@@ -1156,5 +1156,58 @@ QUnit.module('Column chooser', {
         assert.strictEqual(popupInstance.option('width'), 500, 'changed width');
         assert.strictEqual(popupInstance.option('height'), 600, 'changed height');
     });
+
+    // T907091
+    [true, false].forEach(useBeginEndUpdate => {
+        QUnit.test(`ColumnChooser's item captions should be updated if column captions were changed (${useBeginEndUpdate ? 'with' : 'without'} optimization)`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+
+            this.options.columnChooser.mode = 'select';
+            $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
+            this.setTestElement($testElement);
+
+            sinon.spy(this.columnChooserView, '_renderTreeView');
+
+            // act
+            this.columnChooserView.showColumnChooser();
+            this.clock.tick(1000);
+
+            assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview is rendered');
+
+            const optionNames = {
+                caption: true,
+                length: 1
+            };
+
+            if(useBeginEndUpdate) {
+                this.beginUpdate();
+                for(let i = 0; i < 2; i++) {
+                    this.columnsController.columnOption(i, 'caption', 'new caption');
+                }
+                this.endUpdate();
+                this.columnsController.columnsChanged.fire({
+                    optionNames
+                });
+            } else {
+                for(let i = 0; i < 2; i++) {
+                    this.columnsController.columnOption(i, 'caption', 'new caption');
+                    this.columnsController.columnsChanged.fire({
+                        optionNames,
+                        columnIndex: i
+                    });
+                }
+            }
+
+            // assert
+            const $treeViewItems = $('.dx-treeview-item');
+
+            assert.strictEqual(this.columnChooserView._renderTreeView.callCount, useBeginEndUpdate ? 2 : 3, 'treeview render count');
+            assert.equal($treeViewItems.eq(0).text(), 'new caption', 'caption was changed');
+            assert.equal($treeViewItems.eq(1).text(), 'new caption', 'caption was changed');
+
+            this.columnChooserView.hideColumnChooser();
+        });
+    });
 });
 

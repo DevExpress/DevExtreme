@@ -1749,6 +1749,66 @@ function setDiscreteType(series) {
         checkGroups(assert, series);
     });
 
+    QUnit.test('resetApplyingAnimation with first drawing should not call attr for path (T876376)', function(assert) {
+        const series = this.createSeries({
+            type: seriesType,
+            point: { visible: false }
+
+        });
+        series.updateData(this.data);
+        series.createPoints();
+        $.each(series._points, function(i, pt) {
+            pt.x = pt.argument;
+            pt.y = pt.value;
+            pt.minX = 0;
+            pt.minY = 5;
+        });
+        // act
+
+        series.draw(true);
+        this.renderer.stub('path').lastCall.returnValue.attr.reset();
+
+        series.resetApplyingAnimation(true);
+
+        series.draw(true);
+
+        // assert
+        assert.notOk(this.renderer.stub('path').lastCall.returnValue.attr.called);
+    });
+
+    QUnit.test('resetApplyingAnimation with second drawing should call attr for path only one time (T876376)', function(assert) {
+        const series = this.createSeries({
+            type: seriesType,
+            point: { visible: false }
+
+        });
+        series.updateData(this.data);
+        series.createPoints();
+        $.each(series._points, function(i, pt) {
+            pt.x = pt.argument;
+            pt.y = pt.value;
+            pt.minX = 0;
+            pt.minY = 5;
+        });
+        // act
+
+        // first drawing
+        series.draw(true);
+        series.resetApplyingAnimation(true);
+        series.draw(true);
+
+        this.renderer.stub('path').lastCall.returnValue.attr.reset();
+
+        // second drawing
+        series.draw(true);
+        series.resetApplyingAnimation();
+        series.draw(true);
+
+
+        // assert
+        assert.equal(this.renderer.stub('path').lastCall.returnValue.attr.callCount, 1);
+    });
+
     QUnit.test('Draw data with null values', function(assert) {
         const series = this.createSeries({
             type: seriesType,

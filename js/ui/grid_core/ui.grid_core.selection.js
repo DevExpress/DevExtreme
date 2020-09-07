@@ -693,8 +693,8 @@ module.exports = {
                         lookup: null,
                         value: options.value,
                         setValue: function(value, e) {
-                            if(e && e.event && e.event.type === 'keydown') {
-                                eventsEngine.trigger(container, clickEvent.name, e);
+                            if(e?.event?.type === 'keydown') {
+                                eventsEngine.trigger(e.element, clickEvent.name, e);
                             }
                         },
                         row: options.row

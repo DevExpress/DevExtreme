@@ -328,7 +328,7 @@ const TextEditorBase = Editor.inherit({
         if(devices.real().ios) {
             // WA to fix vAlign (T898735)
             // https://bugs.webkit.org/show_bug.cgi?id=142968
-            defaultAttributes.placeholder = '&nbsp;';
+            defaultAttributes.placeholder = ' ';
         }
 
         return defaultAttributes;

@@ -31,14 +31,20 @@ function isPercentFormat(format) {
     return format.indexOf('%') !== -1 && !format.match(/'[^']*%[^']*'/g);
 }
 
+function removeStubs(str) {
+    return str.replace(/'.+'/g, '');
+}
+
 function getNonRequiredDigitCount(floatFormat) {
     if(!floatFormat) return 0;
-    return floatFormat.length - floatFormat.replace(/[#]/g, '').length;
+    const format = removeStubs(floatFormat);
+    return format.length - format.replace(/[#]/g, '').length;
 }
 
 function getRequiredDigitCount(floatFormat) {
     if(!floatFormat) return 0;
-    return floatFormat.length - floatFormat.replace(/[0]/g, '').length;
+    const format = removeStubs(floatFormat);
+    return format.length - format.replace(/[0]/g, '').length;
 }
 
 function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {

@@ -38,6 +38,11 @@ const CLONE_CLASS = 'clone';
 let targetDraggable;
 let sourceDraggable;
 
+const getMousePosition = (event) => ({
+    x: event.pageX - $(window).scrollLeft(),
+    y: event.pageY - $(window).scrollTop()
+});
+
 class ScrollHelper {
     constructor(orientation, component) {
         this._preventScroll = true;
@@ -181,7 +186,8 @@ class ScrollHelper {
         const scrollableSize = getBoundingRect($scrollable.get(0));
         const start = scrollableSize[this._limitProps.start];
         const size = scrollableSize[this._sizeAttr];
-        const location = this._sizeAttr === 'width' ? event.pageX : event.pageY;
+        const mousePosition = getMousePosition(event);
+        const location = this._sizeAttr === 'width' ? mousePosition.x : mousePosition.y;
 
         return location < start || location > (start + size);
     }
@@ -256,7 +262,7 @@ const Draggable = DOMComponentWithTemplate.inherit({
             /**
              * @name DraggableBaseOptions.contentTemplate
              * @type template|function
-             * @type_function_return string|Node|jQuery
+             * @type_function_return string|Element|jQuery
              * @hidden
              * @default "content"
              */
@@ -704,11 +710,7 @@ const Draggable = DOMComponentWithTemplate.inherit({
         const that = this;
 
         if(that.option('autoScroll')) {
-            const $window = $(window);
-            const mousePosition = {
-                x: e.pageX - $window.scrollLeft(),
-                y: e.pageY - $window.scrollTop()
-            };
+            const mousePosition = getMousePosition(e);
             const allObjects = that.getElementsFromPoint(mousePosition);
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);

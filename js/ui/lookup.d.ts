@@ -90,7 +90,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default null
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -120,7 +120,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -352,7 +352,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type template|function
      * @default "title"
      * @type_function_param1 titleElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -379,14 +379,14 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      */
     usePopover?: boolean;
     /**
-     * @docid dxLookupOptions.itemCenteringEnabled
+     * @docid dxLookupOptions.dropDownCentered
      * @type boolean
      * @default false
      * @default true [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemCenteringEnabled?: boolean;
+    dropDownCentered?: boolean;
 }
 /**
  * @docid dxLookup

@@ -476,6 +476,19 @@
                 padding-left: 0;
                 padding-top: 0;
                 padding-bottom: 0;
+                margin-top: 0;
+            }
+
+            .dx-tag-container {
+                min-height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
+                padding: 0;
+            }
+
+            &:not(.dx-editor-filled):not(.dx-editor-outlined) {
+                .dx-texteditor-input,
+                .dx-tag-container {
+                    margin-top: 0;
+                }
             }
 
             .dx-texteditor-buttons-container {
@@ -690,6 +703,10 @@
                         padding-bottom: 12px;
                         vertical-align: bottom;
                         border-right: 1px solid @MATERIAL_GRID_BASE_BORDER_COLOR;
+                    }
+
+                    &:last-child {
+                        border-right: none;
                     }
                 }
             }

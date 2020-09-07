@@ -30,6 +30,7 @@ export default class CustomButton extends TextEditorButton {
         this._addToContainer($element);
 
         const instance = editor._createComponent($element, Button, extend({}, this.options, {
+            ignoreParentReadOnly: true,
             disabled: this._isDisabled(),
             integrationOptions: this._prepareIntegrationOptions(editor)
         }));

@@ -421,7 +421,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const sign = number.getSign(text, format?.formatter || format);
         const textWithoutStubs = this._removeStubs(text, true);
         const parsedValue = this._parse(textWithoutStubs, format);
-        const parsedValueWithSign = parsedValue ? sign * parsedValue : parsedValue;
+        const parsedValueSign = parsedValue < 0 ? -1 : 1;
+        const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 
         return parsedValueWithSign;
     },

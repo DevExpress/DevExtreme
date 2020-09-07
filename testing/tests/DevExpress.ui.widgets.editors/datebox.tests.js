@@ -5100,6 +5100,26 @@ QUnit.module('DateBox number and string value support', {
         }
     });
 
+    QUnit.test('First century year value should works correctly(T905007)', function(assert) {
+        try {
+            const dateBox = $('#dateBox').dxDateBox({
+                value: '3/16/1964',
+                min: new Date(-50, 1, 1),
+                displayFormat: 'shortdate',
+                pickerType: 'calendar'
+            }).dxDateBox('instance');
+
+            const $input = $('#dateBox').find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            $($input.val('1/1/15')).trigger('change');
+            dateBox.option('opened', true);
+
+            assert.deepEqual($('#dateBox').dxDateBox('option', 'text'), '1/1/15');
+        } catch(e) {
+            assert.ok(false, 'exception raised: ' + e.message);
+        }
+    });
+
     QUnit.test('onValueChanged should not be fired when on popup opening', function(assert) {
         let isValueChangedCalled = false;
 

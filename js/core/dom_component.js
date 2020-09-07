@@ -40,7 +40,7 @@ const DOMComponent = Component.inherit({
     /**
     * @name DOMComponentMethods.ctor
     * @publicName ctor(element,options)
-    * @param1 element:Node|JQuery
+    * @param1 element:Element|JQuery
     * @param2 options:DOMComponentOptions|undefined
     * @hidden
     */

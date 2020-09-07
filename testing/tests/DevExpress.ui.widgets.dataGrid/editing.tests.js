@@ -86,7 +86,7 @@ QUnit.module('Editing', {
             { allowEditing: true, calculateCellValue: function(data) { return data.customer && data.customer.name; }, defaultSetCellValue: defaultSetCellValue, setCellValue: function(data, value) { data.customer = { name: value }; }, dataType: 'string' },
             { command: 'edit' }
         ];
-
+        this.isResizing = false;
         setupDataGridModules(this, ['data', 'columns', 'headerPanel', 'rows', 'pager', 'editing', 'editorFactory', 'keyboardNavigation', 'virtualScrolling'], {
             initViews: true,
             options: {
@@ -96,7 +96,8 @@ QUnit.module('Editing', {
             },
             controllers: {
                 columns: new MockColumnsController(this.columns),
-                data: new MockDataController(this.dataControllerOptions)
+                data: new MockDataController(this.dataControllerOptions),
+                columnsResizer: { isResizing: () => this.isResizing }
             }
         });
         this.clock = sinon.useFakeTimers();
@@ -1959,7 +1960,7 @@ QUnit.module('Editing', {
 
     // T501010
     QUnit.test('Save changes on save button click when batch mode', function(assert) {
-    // arrange
+        // arrange
         const that = this;
         const headerPanel = this.headerPanel;
         const rowsView = this.rowsView;
@@ -2003,6 +2004,40 @@ QUnit.module('Editing', {
 
         // assert
         assert.deepEqual(updateArgs, [['test1', { 'name': 'Test1' }], ['test2', { 'name': 'Test2' }]], 'changed rows are saved');
+    });
+
+    // T450598, T915568
+    QUnit.test('Dont close editor then column resize', function(assert) {
+        // arrange
+        const that = this;
+        const headerPanel = this.headerPanel;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        that.options.editing = {
+            allowUpdating: true,
+            mode: 'batch'
+        };
+
+        headerPanel.render(testElement);
+        rowsView.render(testElement);
+        this.isResizing = true;
+
+        testElement.find('td').eq(0).trigger('dxclick'); // Edit
+        assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1);
+        getInputElements(testElement).eq(0).val('Test11_Modified');
+        const inputEl = getInputElements(testElement)[0];
+
+        const mouse = pointerMock(testElement).start();
+
+        // act
+        mouse.down();
+        this.clock.tick();
+        mouse.up();
+
+        // assert
+        assert.equal(inputEl, getInputElements(testElement)[0]);
+        assert.equal(inputEl.value, 'Test11_Modified');
     });
 
     QUnit.test('Cancel changes when batch mode', function(assert) {
@@ -2989,6 +3024,29 @@ QUnit.module('Editing with real dataController', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'inputs count');
         assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass('dx-state-disabled'), 'save changes button enabled');
         assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass('dx-state-disabled'), 'cancel changes button enabled');
+    });
+    // T919206
+    QUnit.test('Reset modified cell class (T919206)', function(assert) {
+    // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        that.options.editing = {
+            allowUpdating: true,
+            mode: 'batch'
+        };
+        this.options.columns = [{ dataField: 'stateId', dataType: 'boolean' }];
+        this.options.repaintChangesOnly = true;
+        this.columnsController.init();
+        rowsView.render(testElement);
+
+        // act
+        $(this.getCellElement(0, 0)).find('.dx-checkbox').trigger('dxclick');
+        $(this.getCellElement(1, 0)).find('.dx-checkbox').trigger('dxclick');
+        assert.equal($('.dx-cell-modified').length, 2);
+        this.saveEditData();
+        // assert
+        assert.equal($('.dx-cell-modified').length, 0);
     });
 
     // T181661
@@ -8099,7 +8157,7 @@ QUnit.module('Editing with real dataController', {
 
         const $links = $commandCellElement.children('.dx-link');
         assert.equal($links.length, 2, 'link count');
-        assert.equal($links.eq(0).css('display'), 'inline', 'text link display style');
+        assert.equal($links.eq(0).css('display'), 'inline-block', 'text link display style');
         // T848364
         assert.equal($links.eq(1).css('display'), 'inline-block', 'icon link display style');
     });

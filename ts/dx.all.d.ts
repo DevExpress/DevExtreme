@@ -940,7 +940,9 @@ declare module DevExpress.core {
         on(events: any): this;
     }
     /** @name dxElement */
-    export type dxElement = Element & JQuery;
+    export type dxElement = HTMLElement & JQuery;
+    /** @name dxSVGElement */
+    export type dxSVGElement = SVGElement & JQuery;
     /** @name dxTemplate.Options */
     export interface dxTemplateOptions {
         /** @name dxTemplate.Options.name */
@@ -3361,6 +3363,8 @@ declare module DevExpress.ui {
     }
     /** @name dxDropDownButtonItem */
     export interface dxDropDownButtonItem extends dxListItem {
+        /** @name dxDropDownButtonItem.onClick */
+        onClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
     }
     /** @name dxDropDownEditor.Options */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
@@ -4337,6 +4341,8 @@ declare module DevExpress.ui {
         clearButtonText?: string;
         /** @name dxLookup.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | (() => boolean);
+        /** @name dxLookup.Options.dropDownCentered */
+        dropDownCentered?: boolean;
         /** @name dxLookup.Options.fieldTemplate */
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.focusStateEnabled */
@@ -4347,8 +4353,6 @@ declare module DevExpress.ui {
         groupTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxLookup.Options.grouped */
         grouped?: boolean;
-        /** @name dxLookup.Options.itemCenteringEnabled */
-        itemCenteringEnabled?: boolean;
         /** @name dxLookup.Options.nextButtonText */
         nextButtonText?: string;
         /** @name dxLookup.Options.onPageLoading */

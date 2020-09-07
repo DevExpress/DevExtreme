@@ -74,21 +74,21 @@ const dropTargetRegistration = {
 * @name UI Events.dxdragenter
 * @type eventType
 * @type_function_param1 event:event
-* @type_function_param1_field1 draggingElement:Node
+* @type_function_param1_field1 draggingElement:Element
 * @module events/drag
 */
 /**
 * @name UI Events.dxdrop
 * @type eventType
 * @type_function_param1 event:event
-* @type_function_param1_field1 draggingElement:Node
+* @type_function_param1_field1 draggingElement:Element
 * @module events/drag
 */
 /**
 * @name UI Events.dxdragleave
 * @type eventType
 * @type_function_param1 event:event
-* @type_function_param1_field1 draggingElement:Node
+* @type_function_param1_field1 draggingElement:Element
 * @module events/drag
 */
 

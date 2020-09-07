@@ -11,6 +11,7 @@ const CLASS = {
   cellModified: 'dx-cell-modified',
   pendingIndicator: 'dx-pending-indicator',
   popupContent: 'dx-overlay-content',
+  revertButton: 'dx-revert-button',
 };
 
 export default class DataCell extends FocusableElement {
@@ -43,5 +44,9 @@ export default class DataCell extends FocusableElement {
 
   getEditor(): FocusableElement {
     return new FocusableElement(this.element.find(`.${CLASS.editorInput}`));
+  }
+
+  getRevertButton(): Selector {
+    return this.element.find(`.${CLASS.revertButton}`);
   }
 }

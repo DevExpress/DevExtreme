@@ -232,6 +232,8 @@ const EditingController = modules.ViewController.inherit((function() {
                 that.createAction('onRowRemoved', { excludeValidators: ['disabled', 'readOnly'] });
                 // chrome 73+
                 let $pointerDownTarget;
+                let isResizing;
+                that._pointerUpEditorHandler = () => { isResizing = that.getController('columnsResizer')?.isResizing(); };
                 that._pointerDownEditorHandler = e => $pointerDownTarget = $(e.target);
                 that._saveEditorHandler = that.createAction(function(e) {
                     const event = e.event;
@@ -253,12 +255,12 @@ const EditingController = modules.ViewController.inherit((function() {
                         const isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
                         const isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         const isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
-                        if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
+                        if(!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
                             that._closeEditItem.bind(that)($target);
                         }
                     }
                 });
-
+                eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, that._pointerUpEditorHandler);
                 eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, that._pointerDownEditorHandler);
                 eventsEngine.on(domAdapter.getDocument(), clickEvent.name, that._saveEditorHandler);
             }
@@ -449,7 +451,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 const $container = $(container);
 
                 if(options.rowType === 'data') {
-                    options.rtlEnabled = this.option('rtlEnabled');
                     const buttons = this._getEditingButtons(options);
 
                     this._renderEditingButtons($container, buttons, options);
@@ -547,6 +548,7 @@ const EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
+            eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
             eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
             eventsEngine.off(domAdapter.getDocument(), clickEvent.name, this._saveEditorHandler);
         },
@@ -1519,6 +1521,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataSource = dataController.dataSource();
             const editMode = getEditMode(this);
             const result = new Deferred();
+            const editData = this._editData.slice(0);
 
             const resetEditIndices = () => {
                 if(editMode !== EDIT_MODE_CELL) {
@@ -1526,14 +1529,24 @@ const EditingController = modules.ViewController.inherit((function() {
                     this._editRowIndex = -1;
                 }
             };
-
+            const resetModifiedClassCells = () => {
+                if(editMode === EDIT_MODE_BATCH) {
+                    const columnsCount = this._columnsController.getVisibleColumns().length;
+                    editData.forEach(({ key }) => {
+                        const rowIndex = this._dataController.getRowIndexByKey(key);
+                        if(rowIndex !== -1) {
+                            for(let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+                                this._rowsView._getCellElement(rowIndex, columnIndex).removeClass(CELL_MODIFIED);
+                            }
+                        }
+                    });
+                }
+            };
             const afterSaveEditData = (error) => {
                 when(this._afterSaveEditData()).done(function() {
                     result.resolve(error);
                 });
             };
-
-            const editData = this._editData.slice(0);
 
             if(!this._saveEditDataCore(deferreds, results, changes) && editMode === EDIT_MODE_CELL) {
                 this._focusEditingCell();
@@ -1546,6 +1559,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 when.apply($, deferreds).done(() => {
                     if(this._processSaveEditDataResult(results)) {
+                        resetModifiedClassCells();
                         resetEditIndices();
 
                         if(editMode === EDIT_MODE_POPUP && this._editPopup) {
@@ -2189,7 +2203,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     e.event.preventDefault();
                     e.event.stopPropagation();
                 }));
-                options.rtlEnabled ? $container.prepend($button, '&nbsp;') : $container.append($button, '&nbsp;');
+                $container.append($button, '&nbsp;');
             }
         },
 

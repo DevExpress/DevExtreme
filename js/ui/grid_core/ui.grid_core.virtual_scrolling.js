@@ -159,10 +159,10 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
             this._virtualScrollController.handleDataChanged(callBase, e);
         },
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             const that = this;
 
-            if(!that.option('legacyRendering') && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._renderTime < that.option('scrolling.renderingThreshold')) {
+            if(!that.option('legacyRendering') && isVirtualMode(that) && !operationTypes.reload && operationTypes.skip && that._renderTime < that.option('scrolling.renderingThreshold')) {
                 options.delay = undefined;
             }
 
@@ -223,12 +223,12 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                 return this.callBase.apply(this, arguments);
             }
         },
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
             const dataSource = that._dataSource;
 
-            if(isReload || operationTypes.reload) {
+            if(operationTypes.reload) {
                 that._virtualScrollController.reset();
                 dataSource.items().length = 0;
                 that._isLoaded = false;
@@ -249,7 +249,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                         storeLoadOptions.skip = that.pageIndex() * that.pageSize();
                     }
                 }
-            } else if(isAppendMode(that) && storeLoadOptions.skip) {
+            } else if(isAppendMode(that) && storeLoadOptions.skip && that._skipCorrection < 0) {
                 storeLoadOptions.skip += that._skipCorrection;
             }
             return that.callBase.apply(that, arguments);
@@ -1081,6 +1081,15 @@ module.exports = {
 
                         const dataSource = this._dataSource;
                         return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
+                    },
+                    refresh: function(options) {
+                        const dataSource = this._dataSource;
+
+                        if(dataSource && options && options.load && isAppendMode(this)) {
+                            dataSource.resetCurrentTotalCount();
+                        }
+
+                        return this.callBase.apply(this, arguments);
                     },
                     dispose: function() {
                         const rowsScrollController = this._rowsScrollController;

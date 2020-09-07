@@ -618,3 +618,36 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     },
   };
 }));
+
+test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual row is focused (T907192)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.getFocusedRow().exists).ok()
+    .click(dataGrid.element, { offsetX: 195, offsetY: 180 })
+    .expect(dataGrid.getFocusedRow().exists)
+    .notOk();
+}).before(() => createWidget('dxDataGrid', () => {
+  const data = (function () {
+    const result = [];
+    for (let i = 0; i < 100; i += 1) {
+      result.push({ id: i + 1 });
+    }
+    return result;
+  }());
+
+  return {
+    height: 200,
+    width: 200,
+    keyExpr: 'id',
+    dataSource: data,
+    focusedRowEnabled: true,
+    focusedRowKey: 1,
+    columns: ['id'],
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      showScrollbar: 'always',
+    },
+  };
+}));

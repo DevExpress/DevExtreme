@@ -423,7 +423,7 @@ export interface BaseWidgetTooltip {
     color?: string;
     /**
      * @docid BaseWidgetOptions.tooltip.container
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

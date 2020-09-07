@@ -378,6 +378,12 @@ function getNormalizedFields(fields) {
             if(!isDefined(normalizedField.dataType)) {
                 normalizedField.dataType = DEFAULT_DATA_TYPE;
             }
+            if(!isDefined(normalizedField.trueText)) {
+                normalizedField.trueText = messageLocalization.format('dxDataGrid-trueText');
+            }
+            if(!isDefined(normalizedField.falseText)) {
+                normalizedField.falseText = messageLocalization.format('dxDataGrid-falseText');
+            }
             result.push(normalizedField);
         }
         return result;

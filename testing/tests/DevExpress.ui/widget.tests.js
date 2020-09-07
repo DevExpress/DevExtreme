@@ -420,6 +420,31 @@ QUnit.module('render', {}, () => {
         const instance = $('#widget').dxWidget().dxWidget('instance');
         assert.equal(instance.option('hint'), undefined);
     });
+
+    QUnit.test('init with ignoreParentReadOnly option', function(assert) {
+        const $element = $('#widget').dxWidget({
+            ignoreParentReadOnly: true
+        });
+
+        assert.ok($element.hasClass('dx-state-independent'), 'button with icon has icon class');
+    });
+
+    QUnit.test('ignoreParentReadOnly option change', function(assert) {
+        const element = $('#widget');
+        const instance = element.dxWidget({}).dxWidget('instance');
+
+        assert.notOk(element.hasClass('dx-state-independent'));
+
+        instance.option({
+            ignoreParentReadOnly: true
+        });
+        assert.ok(element.hasClass('dx-state-independent'));
+
+        instance.option({
+            ignoreParentReadOnly: false
+        });
+        assert.notOk(element.hasClass('dx-state-independent'));
+    });
 });
 
 QUnit.module('API', {

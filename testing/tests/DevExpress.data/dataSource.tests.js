@@ -417,6 +417,32 @@ QUnit.test('page index change', function(assert) {
 
 });
 
+QUnit.test('save custom field of groups after mapping', function(assert) {
+    const source = new DataSource({
+        store: [
+            {
+                'key': 1,
+                'field': 'value 1'
+            },
+            {
+                'key': 1,
+                'field': 'value 2'
+            }
+        ],
+        onCustomizeLoadResult: function(loadResult) {
+            loadResult.data[0].customField = true;
+        },
+        map: item => {
+            return { ...item };
+        },
+        group: 'key'
+    });
+
+    source.load();
+
+    assert.ok(source.items()[0].customField);
+});
+
 QUnit.test('paginate option', function(assert) {
     const data = [];
 

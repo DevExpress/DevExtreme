@@ -310,12 +310,15 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
         this.callBase(e);
 
         if(isSelectMode) {
-            if(optionNames.visible && optionNames.length === 1 && e.columnIndex !== undefined) {
+            const needPartialRender = optionNames.visible && optionNames.length === 1 && e.columnIndex !== undefined;
+            const needFullRender = optionNames.showInColumnChooser || optionNames.caption || optionNames.visible || changeTypes.columns && optionNames.all;
+
+            if(needPartialRender) {
                 this.render(null, {
                     changeType: 'selection',
                     columnIndex: e.columnIndex
                 });
-            } else if(optionNames.showInColumnChooser || optionNames.visible || changeTypes.columns && optionNames.all) {
+            } else if(needFullRender) {
                 this.render(null, 'full');
             }
         }

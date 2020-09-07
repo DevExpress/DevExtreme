@@ -162,6 +162,10 @@ const DataConverter = Class.inherit({
     },
 
     getByKey: function(data, key) {
+        if(key === null || key === undefined) {
+            return null;
+        }
+
         let result = null;
         const that = this;
 

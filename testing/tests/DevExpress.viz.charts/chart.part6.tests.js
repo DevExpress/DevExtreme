@@ -539,6 +539,22 @@ QUnit.test('change title option only. change title settings', function(assert) {
     assert.strictEqual(this.validateData.callCount, 0, 'validation');
 });
 
+// T906065
+QUnit.test('change commonPanesSettings option only', function(assert) {
+    // arrange
+    const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    const commonPaneSettings = { backgroundColor: 'red', border: {} };
+    chartMocks.seriesMockData.series.push(stubSeries);
+    const chart = this.createChart({
+        series: { name: 'series1', type: 'line' }
+    });
+    this.themeManager.getOptions.withArgs('commonPaneSettings').returns(commonPaneSettings);
+    // Act
+    chart.option({ commonPaneSettings });
+    // assert
+    assert.strictEqual(chart.panesBackground[0], chart._renderer.rect.getCall(1).returnValue);
+});
+
 QUnit.test('change panes option only', function(assert) {
     // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });

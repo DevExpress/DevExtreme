@@ -75,19 +75,23 @@ class AppointmentLayoutManager {
         });
     }
 
-    _hasChangesInData(data) {
+    _isDataChanged(data) {
         const updatedData = this.instance.getUpdatedAppointment();
         return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
     }
 
-    _hasChangesInSettings(settingList, oldSettingList) {
-        if(settingList.length !== oldSettingList.length) {
+    _isAppointmentShouldAppear(currentAppointment, sourceAppointment) {
+        return currentAppointment.needRepaint && sourceAppointment.needRemove;
+    }
+
+    _isSettingChanged(settings, sourceSetting) {
+        if(settings.length !== sourceSetting.length) {
             return true;
         }
 
-        for(let i = 0; i < settingList.length; i++) {
-            const newSettings = settingList[i];
-            const oldSettings = oldSettingList[i];
+        for(let i = 0; i < settings.length; i++) {
+            const newSettings = settings[i];
+            const oldSettings = sourceSetting[i];
 
             if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
@@ -101,44 +105,46 @@ class AppointmentLayoutManager {
         return false;
     }
 
-    _getEqualAppointmentFromList(appointment, list) {
-        for(let i = 0; i < list.length; i++) {
-            const item = list[i];
-            if(item.itemData === appointment.itemData) {
+    _getAssociatedSourceAppointment(currentAppointment, sourceAppointments) {
+        for(let i = 0; i < sourceAppointments.length; i++) {
+            const item = sourceAppointments[i];
+            if(item.itemData === currentAppointment.itemData) {
                 return item;
             }
         }
         return null;
     }
 
-    _getDeletedAppointments(appointmentList, oldAppointmentList) {
+    _getDeletedAppointments(currentAppointments, sourceAppointments) {
         const result = [];
 
-        for(let i = 0; i < oldAppointmentList.length; i++) {
-            const oldAppointment = oldAppointmentList[i];
-            const appointment = this._getEqualAppointmentFromList(oldAppointment, appointmentList);
-            if(!appointment) {
-                oldAppointment.needRemove = true;
-                result.push(oldAppointment);
+        for(let i = 0; i < sourceAppointments.length; i++) {
+            const sourceAppointment = sourceAppointments[i];
+            const currentAppointment = this._getAssociatedSourceAppointment(sourceAppointment, currentAppointments);
+            if(!currentAppointment) {
+                sourceAppointment.needRemove = true;
+                result.push(sourceAppointment);
             }
         }
 
         return result;
     }
 
-    getRepaintedAppointments(appointmentList, oldAppointmentList) {
-        if(oldAppointmentList.length === 0 || this.renderingStrategy === 'agenda') {
-            return appointmentList;
+    getRepaintedAppointments(currentAppointments, sourceAppointments) {
+        if(sourceAppointments.length === 0 || this.renderingStrategy === 'agenda') {
+            return currentAppointments;
         }
 
-        for(let i = 0; i < appointmentList.length; i++) {
-            const appointment = appointmentList[i];
-            const oldAppointment = this._getEqualAppointmentFromList(appointment, oldAppointmentList);
-            if(oldAppointment) {
-                appointment.needRepaint = this._hasChangesInData(appointment.itemData) || this._hasChangesInSettings(appointment.settings, oldAppointment.settings);
+        currentAppointments.forEach(appointment => {
+            const sourceAppointment = this._getAssociatedSourceAppointment(appointment, sourceAppointments);
+            if(sourceAppointment) {
+                appointment.needRepaint = this._isDataChanged(appointment.itemData) ||
+                    this._isSettingChanged(appointment.settings, sourceAppointment.settings) ||
+                    this._isAppointmentShouldAppear(appointment, sourceAppointment);
             }
-        }
-        return appointmentList.concat(this._getDeletedAppointments(appointmentList, oldAppointmentList));
+        });
+
+        return currentAppointments.concat(this._getDeletedAppointments(currentAppointments, sourceAppointments));
     }
 
     getRenderingStrategyInstance() {

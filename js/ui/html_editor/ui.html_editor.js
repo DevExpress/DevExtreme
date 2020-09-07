@@ -10,15 +10,16 @@ import Errors from '../widget/ui.errors';
 import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
-import { isDxMouseWheelEvent, addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
-import { allowScroll } from '../text_box/utils.scroll';
+import { prepareScrollData } from '../text_box/utils.scroll';
 
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import getTextDecorationMatcher from './matchers/textDecoration';
+import getNewLineMatcher from './matchers/newLine';
 import FormDialog from './ui/formDialog';
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
@@ -32,6 +33,7 @@ const MARKDOWN_VALUE_TYPE = 'markdown';
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
 const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
 
 const HtmlEditor = Editor.inherit({
 
@@ -272,31 +274,24 @@ const HtmlEditor = Editor.inherit({
     _renderScrollHandler: function() {
         const $scrollContainer = this._getContent();
 
-        const initScrollData = {
-            validate: (e) => {
-                if(isDxMouseWheelEvent(e)) {
-                    if(allowScroll($scrollContainer, -e.delta, e.shiftKey)) {
-                        e._needSkipEvent = true;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-        };
+        const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     },
 
     _applyTranscludedContent: function() {
-        const markup = this._deltaConverter.toHtml();
-        const newDelta = this._quillInstance.clipboard.convert(markup);
+        const valueOption = this.option('value');
+        if(!isDefined(valueOption)) {
+            const markup = this._deltaConverter.toHtml();
+            const newDelta = this._quillInstance.clipboard.convert(markup);
 
-        if(newDelta.ops.length) {
-            this._quillInstance.setContents(newDelta);
-        } else {
-            this._finalizeContentRendering();
+            if(newDelta.ops.length) {
+                this._quillInstance.setContents(newDelta);
+                return;
+            }
         }
+
+        this._finalizeContentRendering();
     },
 
     _hasTranscludedContent: function() {
@@ -306,6 +301,7 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
+        const newLineMatcher = getNewLineMatcher();
         const modulesConfig = extend({
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
@@ -318,7 +314,9 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
+                    [ELEMENT_NODE, getTextDecorationMatcher(quill)],
+                    [ELEMENT_NODE, newLineMatcher],
+                    [TEXT_NODE, newLineMatcher]
                 ]
             }
         }, this._getCustomModules());

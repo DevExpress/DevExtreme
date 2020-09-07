@@ -262,6 +262,17 @@ module.exports = {
                             }
                         });
                     }
+                },
+                _toggleBestFitMode: function(isBestFit) {
+                    this.callBase.apply(this, arguments);
+                    if(this.option('masterDetail.template')) {
+                        const $rowsTable = this._rowsView._getTableElement();
+                        if($rowsTable) {
+                            $rowsTable
+                                .find('.dx-master-detail-cell')
+                                .toggleClass('dx-hidden', isBestFit);
+                        }
+                    }
                 }
             }
         },

@@ -71,7 +71,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     showTitle?: boolean;
     /**
      * @docid dxActionSheetOptions.target
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

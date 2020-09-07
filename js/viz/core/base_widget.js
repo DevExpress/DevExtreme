@@ -410,8 +410,15 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0;
-        const elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0;
+        const getSizeOfSide = (size, side) => {
+            if(sizeIsValid(size[side]) || !windowUtils.hasWindow()) {
+                return 0;
+            }
+            const elementSize = that._$element[side]();
+            return elementSize <= 1 ? 0 : elementSize;
+        };
+        const elementWidth = getSizeOfSide(size, 'width');
+        const elementHeight = getSizeOfSide(size, 'height');
         let canvas = {
             width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
             height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),

@@ -11,4 +11,4 @@ export default (options = {}) => createWidget('dxScheduler', extend({
   maxAppointmentsPerCell: 5,
   currentView: 'month',
   currentDate: new Date(2019, 3, 1),
-}, options));
+}, options), true);

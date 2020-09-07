@@ -120,7 +120,7 @@ export default class DOMComponent extends Component {
      * @static
      * @section uiWidgets
      * @publicName getInstance(element)
-     * @param1 element:Node|JQuery
+     * @param1 element:Element|JQuery
      * @return DOMComponent
      * @prevFileNamespace DevExpress.core
      * @public

@@ -2698,7 +2698,7 @@ export interface dxChartCommonAnnotationConfig {
      * @type template|function(annotation, element)
      * @type_function_param1 annotation:dxChartAnnotationConfig|any
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

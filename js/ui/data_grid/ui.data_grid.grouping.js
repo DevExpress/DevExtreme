@@ -128,7 +128,7 @@ const GroupingDataSourceAdapterExtender = (function() {
                 }
             }
         },
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             const remoteOperations = options.remoteOperations;
 
             if(options.storeLoadOptions.group) {
@@ -589,7 +589,7 @@ const GroupingRowsViewExtender = (function() {
             const allowCollapsing = this._columnsController.columnOption('groupIndex:' + row.groupIndex, 'allowCollapsing');
 
             if(row.rowType === 'data' || row.rowType === 'group' && allowCollapsing !== false) {
-                dataController.changeRowExpand(row.key);
+                dataController.changeRowExpand(row.key, true);
                 e.event.preventDefault();
                 e.handled = true;
             }

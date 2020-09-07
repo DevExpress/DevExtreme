@@ -937,7 +937,7 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
      * @type_function_param2_field6 rowIndex:number
      * @type_function_param2_field7 rowType:string
      * @type_function_param2_field8 row:dxTreeListRowObject
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

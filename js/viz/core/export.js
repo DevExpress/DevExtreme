@@ -372,11 +372,6 @@ extend(ExportMenu.prototype, {
         return bBox;
     },
 
-    probeDraw() {
-        this._fillSpace();
-        this.show();
-    },
-
     shift(_, y) {
         this._group.attr({ translateY: this._group.attr('translateY') + y });
     },

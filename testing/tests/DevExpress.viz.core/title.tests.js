@@ -351,32 +351,6 @@ QUnit.test('Draw with size', function(assert) {
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { text: this.options.subtitle.text, y: 0 });
 });
 
-QUnit.test('Probe draw', function(assert) {
-    const title = this.createTitle();
-
-    sinon.spy(title, 'draw');
-    title.probeDraw(50, 20);
-
-    assert.equal(title.draw.callCount, 1, 'Draw was called');
-    assert.equal(title.draw.getCall(0).args[0], 50, 'width');
-    assert.equal(title.draw.getCall(0).args[1], 20, 'height');
-
-    assert.deepEqual(title.getLayoutOptions(), {
-        cutLayoutSide: 'top',
-        cutSide: 'vertical',
-        height: 5,
-        horizontalAlignment: 'center',
-        position: {
-            horizontal: 'center',
-            vertical: 'top'
-        },
-        verticalAlignment: 'top',
-        width: 40,
-        x: 1,
-        y: 24
-    }, 'Layout options');
-});
-
 QUnit.module('Title and subtitle does not fit in canvas', environment);
 
 QUnit.test('Length of title greater than canvas width', function(assert) {

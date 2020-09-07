@@ -22,6 +22,7 @@ import { normalizeLoadResult } from '../data/data_source/data_source';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
+import { allowScroll } from './text_box/utils.scroll';
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
 
@@ -526,11 +527,14 @@ const TagBox = SelectBox.inherit({
         eventsEngine.on($element, mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
     },
 
-    _tagContainerMouseWheelHandler: function({ delta }) {
+    _tagContainerMouseWheelHandler: function(e) {
         const scrollLeft = this._$tagsContainer.scrollLeft();
-        this._$tagsContainer.scrollLeft(scrollLeft + delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER);
+        const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
-        return false;
+        if(allowScroll(this._$tagsContainer, delta, true)) {
+            this._$tagsContainer.scrollLeft(scrollLeft + delta);
+            return false;
+        }
     },
 
     _renderTypingEvent: function() {
@@ -879,15 +883,17 @@ const TagBox = SelectBox.inherit({
         }
 
         if(!isPlainDataUsed) {
-            this._loadTagsData().always((items) => {
-                if(this._disposed) {
-                    d.reject();
-                    return;
-                }
+            this._loadTagsData()
+                .done((items) => {
+                    if(this._disposed) {
+                        d.reject();
+                        return;
+                    }
 
-                this._renderTagsImpl(items);
-                d.resolve();
-            });
+                    this._renderTagsImpl(items);
+                    d.resolve();
+                })
+                .fail(d.reject);
         }
 
         return d.promise();

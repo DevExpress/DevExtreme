@@ -937,10 +937,9 @@ const SchedulerWorkSpace = Widget.inherit({
     _getCellCount: noop,
 
     _getRowCountWithAllDayRows() {
-        const allDayRowsCount = this.option('showAllDayPanel')
-            ? this._getGroupCount() : 0;
+        const allDayRowCount = this.option('showAllDayPanel') ? 1 : 0;
 
-        return this._getRowCount() + allDayRowsCount;
+        return this._getRowCount() + allDayRowCount;
     },
 
     _initMarkup: function() {
@@ -1037,19 +1036,28 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getGroupIndexByResourceId: function(id) {
         const groups = this.option('groups');
-        const groupKey = Object.keys(id)[0];
-        const groupValue = id[groupKey];
-        const tree = this.invoke('createResourcesTree', groups);
-        let index = 0;
+        const resourceTree = this.invoke('createResourcesTree', groups);
 
-        for(let i = 0; i < tree.length; i++) {
+        if(!resourceTree.length) return 0;
 
-            if(tree[i].name === groupKey && tree[i].value === groupValue) {
-                index = tree[i].leafIndex;
+        return this._getGroupIndexRecursively(resourceTree, id);
+    },
+
+    _getGroupIndexRecursively(resourceTree, id) {
+        const currentKey = resourceTree[0].name;
+        const currentValue = id[currentKey];
+
+        return resourceTree.reduce((prevIndex, { leafIndex, value, children }) => {
+            const areValuesEqual = currentValue === value;
+            if(areValuesEqual && leafIndex !== undefined) {
+                return leafIndex;
             }
-        }
+            if(areValuesEqual) {
+                return this._getGroupIndexRecursively(children, id);
+            }
 
-        return index;
+            return prevIndex;
+        }, 0);
     },
 
     _setFirstViewDate: function() {
