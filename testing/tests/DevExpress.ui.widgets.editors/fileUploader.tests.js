@@ -2782,58 +2782,123 @@ QUnit.module('readOnly option', moduleConfig, () => {
         instance._selectButtonClickHandler.restore();
     });
 
-    QUnit.test('uploading events can be fired ', function(assert) {
-        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
-        const abortUploadSpy = sinon.spy(() => executeAfterDelay());
+    QUnit.test('uploading events can be fired (successful upload)', function(assert) {
         const onProgressSpy = sinon.spy();
-        const onUploadedSpy = sinon.spy();
         const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadStartedSpy = sinon.spy();
+        const onValueChangedSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             readOnly: true,
             multiple: true,
             uploadMode: 'instantly',
-            chunkSize: 20000,
-            uploadChunk: uploadChunkSpy,
-            abortUpload: abortUploadSpy,
+            chunkSize: 200,
             onProgress: onProgressSpy,
+            onUploadAborted: onUploadAbortedSpy,
             onUploaded: onUploadedSpy,
-            onUploadAborted: onUploadAbortedSpy
+            onUploadError: onUploadErrorSpy,
+            onUploadStarted: onUploadStartedSpy,
+            onValueChanged: onValueChangedSpy
         });
-        const file = createBlobFile('image1.png', 50100);
-        simulateFileChoose($fileUploader, [file]);
 
-        this.clock.tick(1500);
-        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function called for 2nd chunk');
-        assert.strictEqual(abortUploadSpy.callCount, 0, 'abort upload not called');
-        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
-        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
-        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
-
-        $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).eq(0).trigger('dxclick');
-
-        this.clock.tick(1000);
-        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function is not called after error');
-        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called once');
-        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after error');
-        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
-        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
-
-        uploadChunkSpy.reset();
-        abortUploadSpy.reset();
-        onProgressSpy.reset();
-        onUploadedSpy.reset();
-        onUploadAbortedSpy.reset();
-
-        const file1 = createBlobFile('image2.png', 1500);
+        const file1 = createBlobFile('image1.png', 150);
         simulateFileChoose($fileUploader, [file1]);
 
         this.clock.tick(1500);
-        assert.strictEqual(uploadChunkSpy.callCount, 1, 'custom function called for 1st chunk');
-        assert.strictEqual(abortUploadSpy.callCount, 0, 'abort upload not called');
         assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
-        assert.strictEqual(onUploadedSpy.callCount, 1, 'uploaded event raised');
         assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 1, 'uploaded event raised');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event not raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event raised');
+    });
+
+    QUnit.test('uploading events can be fired (feature - onUploadAborted)', function(assert) {
+        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy(() => executeAfterDelay());
+        const onProgressSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadStartedSpy = sinon.spy();
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            multiple: true,
+            uploadMode: 'instantly',
+            chunkSize: 200,
+            abortUpload: abortUploadSpy,
+            uploadChunk: uploadChunkSpy,
+            onProgress: onProgressSpy,
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploadStarted: onUploadStartedSpy,
+            onValueChanged: onValueChangedSpy
+        });
+        const file = createBlobFile('image1.png', 1500);
+        simulateFileChoose($fileUploader, [file]);
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event is not raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event raised');
+
+        $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).eq(0).trigger('dxclick');
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after error');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event is not raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 2, 'value changed event raised');
+    });
+
+    QUnit.test('uploading events can be fired (feature - onUploadError)', function(assert) {
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay(() => {
+            throw 'Some error.';
+        }));
+        const onProgressSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadStartedSpy = sinon.spy();
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            multiple: true,
+            uploadMode: 'instantly',
+            uploadFile: uploadFileSpy,
+            onProgress: onProgressSpy,
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploadStarted: onUploadStartedSpy,
+            onValueChanged: onValueChangedSpy
+        });
+
+        const file1 = createBlobFile('image1.png', 150);
+        simulateFileChoose($fileUploader, [file1]);
+
+        this.clock.tick(1500);
+        assert.strictEqual(onProgressSpy.callCount, 0, 'progress event not called');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+
+        assert.strictEqual(onUploadErrorSpy.callCount, 1, 'upload error event raised');
+        assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event raised');
     });
 
     QUnit.test('it is impossible to drop files', function(assert) {
