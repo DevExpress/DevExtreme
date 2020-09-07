@@ -159,6 +159,32 @@ describe('DateTableCellBase', () => {
               },
             });
         });
+
+        it('should add groupIndex prop correctly if groups undefined', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 27),
+            groups: undefined,
+            groupIndex: 3,
+            text: 'Test text',
+          };
+          const props = {
+            index: 0,
+            ...data,
+          };
+          const cell = new DateTableCellBase(props);
+
+          const templateProps = cell.dataCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data: {
+                ...data,
+                groupIndex: undefined,
+              },
+            });
+        });
       });
     });
   });
