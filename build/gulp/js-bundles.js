@@ -28,8 +28,7 @@ const namedDebug = lazyPipe()
 const BUNDLES = [
     '/bundles/dx.all.js',
     '/bundles/dx.web.js',
-    '/bundles/dx.viz.js',
-    '/bundles/dx.viz-web.js'
+    '/bundles/dx.viz.js'
 ];
 
 const DEBUG_BUNDLES = BUNDLES.concat([
