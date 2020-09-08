@@ -8404,6 +8404,38 @@ QUnit.module('Editing with real dataController', {
             });
         });
     });
+
+    ['Row', 'Batch', 'Cell'].forEach((editMode) => {
+        QUnit.test(`${editMode} - Cell should be prepared before creating an editor (T928363)`, function(assert) {
+            // arrange
+            let isEditorCell = false;
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            this.options = {
+                dataSource: [{ field1: 'test' }],
+                editing: {
+                    mode: editMode.toLowerCase()
+                },
+                onEditorPreparing: function(e) {
+                    isEditorCell = $(e.editorElement).closest('td').hasClass('dx-editor-cell');
+                }
+            };
+
+            this.editorFactoryController.init();
+            rowsView.render($testElement);
+            this.clock.tick();
+
+            if(editMode === 'Row') {
+                this.editRow(0);
+            } else {
+                this.editCell(0, 0);
+            }
+
+            this.clock.tick();
+
+            assert.ok(isEditorCell, 'cell is rendered for an editor');
+        });
+    });
 });
 
 QUnit.module('Refresh modes', {
