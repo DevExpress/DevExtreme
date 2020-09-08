@@ -211,7 +211,7 @@ class FileManagerProgressPanel extends Widget {
     completeSingleOperationWithError(info, errorText) {
         const detailsItem = info.details?.[0];
         info.completed = true;
-        this._renderOperationError(detailsItem ? detailsItem : info.common, errorText);
+        this._renderOperationError(detailsItem || info.common, errorText);
         this._setCloseButtonVisible(info.common, true);
         if(detailsItem) {
             this._setCloseButtonVisible(detailsItem, false);
