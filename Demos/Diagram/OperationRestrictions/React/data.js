@@ -36,7 +36,7 @@
 }, {
   'id':'119',
   'name':'Laurence Lebihan',
- 'parentId': '110'
+  'parentId': '110'
 }, {
   'id':'122',
   'name': 'Patricio Simpson',
@@ -46,7 +46,7 @@
   'name':'Francisco Chang',
   'parentId': '110'
 }];
-  
+
 export default {
   getOrgItems() {
     return orgItems;
