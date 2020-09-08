@@ -418,7 +418,7 @@ export default class ViewDataProvider {
         const firstCellInNextColumnData = firstCellInNextColumn?.cellData;
 
         if(firstCellInColumnData.groupIndex === firstCellInSelection.groupIndex
-            && firstCellInColumnData.startDate.getTime() > firstCellInSelection.startDate.getTime()
+            && firstCellInColumnData.startDate.getTime() >= firstCellInSelection.startDate.getTime()
             && firstCellInColumnData.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
             return {
                 cellData: firstCellInColumnData,
@@ -461,23 +461,23 @@ export default class ViewDataProvider {
         const lastCellInColumnData = lastCellInColumn.cellData;
 
         const stepSize = this._workspace.isGroupedByDate() ? this._workspace._getGroupCount() : 1;
-        const lastCellInNextColumn = viewDataMap[viewDataMap.length - 1][columnIndex - stepSize];
-        const lastCellInNextColumnData = lastCellInNextColumn?.cellData;
+        const lastCellInPreviousColumn = viewDataMap[viewDataMap.length - 1][columnIndex - stepSize];
+        const lastCellInPreviousColumnData = lastCellInPreviousColumn?.cellData;
 
-        if(lastCellInColumn.groupIndex === lastCellInSelection.groupIndex
-            && lastCellInColumnData.startDate.getTime() > firstCellInSelection.startDate.getTime()
+        if(lastCellInColumnData.groupIndex === lastCellInSelection.groupIndex
+            && lastCellInColumnData.startDate.getTime() >= firstCellInSelection.startDate.getTime()
             && lastCellInColumnData.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
             return {
                 cellData: lastCellInColumnData,
                 coordinates: lastCellInColumn.position,
             };
         }
-        if(lastCellInNextColumn
-            && lastCellInNextColumnData.groupIndex === lastCellInSelection.groupIndex
-            && lastCellInNextColumnData.startDate.getTime() >= firstCellInSelection.startDate.getTime()) {
+        if(lastCellInPreviousColumn
+            && lastCellInPreviousColumnData.groupIndex === lastCellInSelection.groupIndex
+            && lastCellInPreviousColumnData.startDate.getTime() >= firstCellInSelection.startDate.getTime()) {
             return {
-                cellData: lastCellInNextColumnData,
-                coordinates: lastCellInNextColumn.position,
+                cellData: lastCellInPreviousColumnData,
+                coordinates: lastCellInPreviousColumn.position,
             };
         }
 
