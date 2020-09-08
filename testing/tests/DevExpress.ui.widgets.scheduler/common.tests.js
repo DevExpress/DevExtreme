@@ -4674,7 +4674,7 @@ QUnit.module('Getting timezones', {}, () => {
         const timeZones = getTimeZones(date);
         const firstTimeZone = timeZones[0];
 
-        assert.ok(timeZones instanceof Array, 'methods returns an array');
+        assert.ok(timeZones instanceof Array, 'method returns an array');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'id'), 'returned timeZone has an id');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'offset'), 'returned timeZone has an offset');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'title'), 'returned timeZone has a title');
