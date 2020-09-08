@@ -614,6 +614,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
             uploadMode: 'useForm'
         });
         simulateFileChoose($element, fakeFile);
+        $element.dxFileUploader('instance').upload();
 
         const request = this.xhrMock.getInstanceAt();
 
