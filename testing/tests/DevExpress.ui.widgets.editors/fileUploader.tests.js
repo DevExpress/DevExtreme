@@ -2776,7 +2776,7 @@ QUnit.module('readOnly option', moduleConfig, () => {
             readOnly: true,
             uploadMode: 'useButtons'
         }).dxFileUploader('instance');
-        sinon.stub(instance, '_selectButtonClickHandler', function() { return instance._selectFileDialogHandler(); });
+        sinon.stub(instance, '_selectButtonClickHandler', () => instance._selectFileDialogHandler());
 
         instance._selectButtonClickHandler();
         assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');
