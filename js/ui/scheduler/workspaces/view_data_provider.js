@@ -405,22 +405,32 @@ export default class ViewDataProvider {
 
         const columnIndex = this._getColumnIndexByCellData(firstCellInSelection);
         const rowIndex = this._getRowIndexByColumnAndData(firstCellInSelection, columnIndex);
+
         if(rowIndex !== -1) {
             return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: firstCellInSelection };
         }
 
-        const firstCellInColumn = viewDataMap[0][columnIndex].cellData;
-        const firstCellInNextColumn = viewDataMap[0][columnIndex + 1]?.cellData;
+        const firstCellInColumn = viewDataMap[0][columnIndex];
+        const firstCellInColumnData = firstCellInColumn.cellData;
 
-        if(firstCellInColumn.groupIndex === firstCellInSelection.groupIndex
-            && firstCellInColumn.startDate.getTime() > firstCellInSelection.startDate.getTime()
-            && firstCellInColumn.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
-            return firstCellInColumn;
+        const firstCellInNextColumn = viewDataMap[0][columnIndex + 1];
+        const firstCellInNextColumnData = firstCellInNextColumn?.cellData;
+
+        if(firstCellInColumnData.groupIndex === firstCellInSelection.groupIndex
+            && firstCellInColumnData.startDate.getTime() > firstCellInSelection.startDate.getTime()
+            && firstCellInColumnData.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
+            return {
+                cellData: firstCellInColumnData,
+                coordinates: firstCellInColumn.position,
+            };
         }
         if(firstCellInNextColumn
-            && firstCellInNextColumn.groupIndex === firstCellInSelection.groupIndex
-            && firstCellInNextColumn.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
-            return firstCellInNextColumn;
+            && firstCellInNextColumnData.groupIndex === firstCellInSelection.groupIndex
+            && firstCellInNextColumnData.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
+            return {
+                cellData: firstCellInNextColumnData,
+                coordinates: firstCellInNextColumn.position,
+            };
         }
 
         return null;
@@ -446,18 +456,27 @@ export default class ViewDataProvider {
             return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: lastCellInSelection };
         }
 
-        const lastCellInColumn = viewDataMap[viewDataMap.length][columnIndex].cellData;
-        const lastCellInNextColumn = viewDataMap[viewDataMap.length][columnIndex - 1]?.cellData;
+        const lastCellInColumn = viewDataMap[viewDataMap.length - 1][columnIndex];
+        const lastCellInColumnData = lastCellInColumn.cellData;
+
+        const lastCellInNextColumn = viewDataMap[viewDataMap.length - 1][columnIndex - 1];
+        const lastCellInNextColumnData = lastCellInNextColumn?.cellData;
 
         if(lastCellInColumn.groupIndex === lastCellInSelection.groupIndex
-            && lastCellInColumn.startDate.getTime() > firstCellInSelection.startDate.getTime()
-            && lastCellInColumn.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
-            return lastCellInColumn;
+            && lastCellInColumnData.startDate.getTime() > firstCellInSelection.startDate.getTime()
+            && lastCellInColumnData.startDate.getTime() <= lastCellInSelection.startDate.getTime()) {
+            return {
+                cellData: lastCellInColumnData,
+                coordinates: lastCellInColumn.position,
+            };
         }
         if(lastCellInNextColumn
-            && lastCellInNextColumn.groupIndex === lastCellInSelection.groupIndex
-            && lastCellInNextColumn.startDate.getTime() >= firstCellInSelection.startDate.getTime()) {
-            return lastCellInNextColumn;
+            && lastCellInNextColumnData.groupIndex === lastCellInSelection.groupIndex
+            && lastCellInNextColumnData.startDate.getTime() >= firstCellInSelection.startDate.getTime()) {
+            return {
+                cellData: lastCellInNextColumnData,
+                coordinates: lastCellInNextColumn.position,
+            };
         }
 
         return null;

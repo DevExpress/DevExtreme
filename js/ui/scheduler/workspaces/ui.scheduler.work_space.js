@@ -319,13 +319,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._dateTableScrollable.scrollToElement($cell);
     }
 
-    _setSelectedAndFocusedCells($cell, isMultiSelection, $firstSelectedCell) {
+    _setSelectedAndFocusedCells($cell, isMultiSelection) {
         if(!isDefined($cell) || !$cell.length) {
             return;
         }
 
         this._setFocusedCell($cell, true);
-        this._setSelectedCells($cell, isMultiSelection);
+        this._setSelectedCells($cell, undefined, isMultiSelection);
 
         const selectedCellData = this.getFocusedCellData();
         this.option('selectedCellData', selectedCellData);
@@ -345,25 +345,26 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    _setSelectedCells($cell, isMultiSelection) {
+    _setSelectedCells($firstCell, $lastCell, isMultiSelection, updateViewData = false) {
         this._releaseSelectedCells();
         this._focusedCells = [];
 
         if(isMultiSelection) {
-            $cell = this._correctCellForGroup($cell);
-            const $previousCell = this._$prevCell;
+            // const $correctedFirstCell = this._correctCellForGroup($firstCell);
+            const $correctedFirstCell = $firstCell;
+            const $previousCell = $lastCell || this._$prevCell;
             const orientation = this.option('type') === 'day' && (!this.option('groups').length || this.option('groupOrientation') === 'vertical')
                 ? 'vertical'
                 : 'horizontal';
 
-            const $targetCells = this._getCellsBetween($cell, $previousCell, orientation);
+            const $targetCells = this._getCellsBetween($correctedFirstCell, $previousCell, orientation);
             this._focusedCells = $targetCells.toArray();
         } else {
-            this._focusedCells = [$cell.get(0)];
-            this._$prevCell = $cell;
+            this._focusedCells = [$firstCell.get(0)];
+            this._$prevCell = $firstCell;
             if(this.isVirtualScrolling()) {
-                const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
-                const isAllDayCell = this._hasAllDayClass($cell);
+                const { rowIndex, columnIndex } = this._getCoordinatesByCell($firstCell);
+                const isAllDayCell = this._hasAllDayClass($firstCell);
                 this._viewDataProvider.setFirstSelectedCell(rowIndex, columnIndex, isAllDayCell);
             }
         }
@@ -1158,22 +1159,28 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(coordinates && coordinates.rowIndex !== -1) {
             const $cell = this._getCellByCoordinates(coordinates, cellData.allDay, cellData.groupIndex);
-            // const $previousCell = this._getCellByCoordinates(firstCoordinates, firstCellData.allDay, firstCellData.groupIndex);
-            // this._setSelectedAndFocusedCells($cell, !!$previousCell, $previousCell);
             $cell && this._setFocusedCell($cell);
         }
-        // if(firstCellInSelection && lastCellInSelection) {
-        //     const {
-        //         cellData: firstCellData,
-        //         coordinates: firstCoordinates,
-        //     } = firstCellInSelection;
-        //     const {
-        //         cellData: secondCellData,
-        //         coordinates: secondCoordinates,
-        //     } = lastCellInSelection;
+        if(firstCellInSelection && lastCellInSelection) {
+            const {
+                cellData: firstCellData,
+                coordinates: firstCoordinates,
+            } = firstCellInSelection;
+            const {
+                cellData: secondCellData,
+                coordinates: secondCoordinates,
+            } = lastCellInSelection;
 
-        //     const $firstCell =
-        // }
+            const $firstCell = this._getCellByCoordinates(firstCoordinates, firstCellData.allDay, firstCellData.groupIndex);
+            const $secondCell = this._getCellByCoordinates(secondCoordinates, secondCellData.allDay, secondCellData.groupIndex);
+            console.log($firstCell);
+            console.log($secondCell);
+            console.log('/////////');
+            const isMultipleSelection = firstCellData.startDate.getTime() !== secondCellData.startDate.getTime();
+
+            $firstCell && $secondCell
+                && this._setSelectedCells($firstCell, $secondCell, isMultipleSelection);
+        }
     }
 
     renderRAllDayPanel() {
