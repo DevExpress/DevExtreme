@@ -3,7 +3,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
 import devices from '../../core/devices';
 import DataSource from '../../data/data_source';
-import SchedulerTimezones from './timezones/utils.timezones_data';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
 import { extend } from '../../core/utils/extend';
 
 import './ui.scheduler.recurrence_editor';
@@ -324,7 +324,7 @@ const SchedulerAppointmentForm = {
 
     updateTimeZoneEditorDataSource(date, expression) {
         const timeZoneDataSource = new DataSource({
-            store: SchedulerTimezones.getDisplayedTimeZones(date),
+            store: timeZoneDataUtils.getDisplayedTimeZones(date),
             paginate: true,
             pageSize: 10
         });
