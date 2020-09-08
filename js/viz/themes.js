@@ -63,10 +63,6 @@ function registerTheme(theme, baseThemeName) {
     }
 }
 
-function registerThemeAlias(alias, theme) {
-    registerThemeName(_normalizeEnum(alias), _normalizeEnum(theme));
-}
-
 function registerThemeSchemeAlias(from, to) {
     themesSchemeMapping[from] = to;
 }
@@ -197,7 +193,6 @@ _extend(exports, {
     currentTheme: currentTheme,
     registerTheme: registerTheme,
     getTheme: getTheme,
-    registerThemeAlias: registerThemeAlias,
     registerThemeSchemeAlias: registerThemeSchemeAlias,
     refreshTheme: refreshTheme,
     addCacheItem: addCacheItem,

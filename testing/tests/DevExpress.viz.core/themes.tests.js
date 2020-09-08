@@ -77,6 +77,22 @@ QUnit.test('registerTheme with options', function(assert) {
     });
 });
 
+QUnit.test('register compact theme with the same name (T925673)', function(assert) {
+    const darkTheme = {
+        name: 'generic.dark.compact',
+        rangeSelector: { background: { color: 'test-background' } },
+    };
+    themeModule.registerTheme(darkTheme, 'generic.dark.compact');
+
+    assert.deepEqual(themeModule.getTheme('generic.dark.compact').rangeSelector.background, {
+        'color': 'test-background',
+        'image': {
+            'location': 'full'
+        },
+        'visible': true
+    });
+});
+
 QUnit.test('Patched properties on register theme', function(assert) {
     let theme = {
         name: 'custom theme',
