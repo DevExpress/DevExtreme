@@ -2680,19 +2680,6 @@ QUnit.module('readOnly option', moduleConfig, () => {
         assert.ok($selectButton.hasClass('dx-state-disabled'), 'button is disabled');
     });
 
-    QUnit.test('dialogTrigger should be unable to call _selectButtonClickHandler', function(assert) {
-        const instance = $('#fileuploader').dxFileUploader({
-            readOnly: true,
-            uploadMode: 'useButtons'
-        }).dxFileUploader('instance');
-        sinon.stub(instance, '_selectButtonClickHandler', () => instance._selectFileDialogHandler());
-
-        instance._selectButtonClickHandler();
-        assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');
-
-        instance._selectButtonClickHandler.restore();
-    });
-
     QUnit.test('uploading events can be fired (successful upload)', function(assert) {
         const onProgressSpy = sinon.spy();
         const onUploadAbortedSpy = sinon.spy();
