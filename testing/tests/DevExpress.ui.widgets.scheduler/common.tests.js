@@ -14,7 +14,7 @@ import dragEvents from 'events/drag';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
+import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import 'ui/scheduler/ui.scheduler';
 import dxScheduler, { getTimeZones } from 'ui/scheduler/ui.scheduler';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
@@ -878,8 +878,8 @@ QUnit.module('Initialization', {
             { tz: 'Asia/Brunei', offset: 8, daylightOffset: 8, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'Asia/Damascus', offset: 2, daylightOffset: 3, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) }
         ].forEach(function(item) {
-            const offset = SchedulerTimezones.getTimezoneOffsetById(item.tz, item.date);
-            const daylightOffset = SchedulerTimezones.getTimezoneOffsetById(item.tz, item.daylightDate);
+            const offset = timeZoneDataUtils.getTimezoneOffsetById(item.tz, item.date);
+            const daylightOffset = timeZoneDataUtils.getTimezoneOffsetById(item.tz, item.daylightDate);
 
             assert.equal(offset, item.offset, item.tz + ': Common offset is OK');
             assert.equal(daylightOffset, item.daylightOffset, item.tz + ': DST offset is OK');
