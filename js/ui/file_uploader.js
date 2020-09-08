@@ -1098,6 +1098,14 @@ class FileUploader extends Editor {
         return this._$inputWrapper;
     }
 
+    _updateReadOnlyState() {
+        const readOnly = this.option('readOnly');
+        this._selectButton.option('disabled', readOnly);
+        this._files.forEach(file => file.cancelButton?.option('disabled', readOnly));
+        this._displayInputContainerIfNeeded();
+        this._renderDragEvents();
+    }
+
     _optionChanged(args) {
         const value = args.value;
 
@@ -1133,10 +1141,7 @@ class FileUploader extends Editor {
                 }
                 break;
             case 'readOnly':
-                this._selectButton.option('disabled', value);
-                this._files.forEach(file => file.cancelButton.option('disabled', value));
-                this._displayInputContainerIfNeeded();
-                this._renderDragEvents();
+                this._updateReadOnlyState();
                 super._optionChanged(args);
                 break;
             case 'selectButtonText':
