@@ -26,14 +26,14 @@ const ValidationMessage = Overlay.inherit({
             visible: true,
             propagateOutsideClick: true,
             _checkParentVisibility: false,
+            rtlEnabled: false,
+            contentTemplate: this._renderInnerHtml,
 
             mode: 'auto',
-            validationErrors: [],
-            contentTemplate: this._renderInnerHtml,
+            validationErrors: undefined,
             positionRequest: undefined,
             parentBoundary: undefined,
-            parentOffset: { h: 0, v: 0 },
-            rtlEnabled: false
+            parentOffset: { h: 0, v: 0 }
         });
     },
 
@@ -56,6 +56,7 @@ const ValidationMessage = Overlay.inherit({
     },
 
     _renderInnerHtml(element) {
+        const $element = element && $(element);
         const validationErrors = this.option('validationErrors') || [];
         let validationErrorMessage = '';
         validationErrors.forEach((err) => {
@@ -63,7 +64,7 @@ const ValidationMessage = Overlay.inherit({
             validationErrorMessage += separator + encodeHtml(err?.message || '');
         });
 
-        return $(element).html(validationErrorMessage);
+        $element?.html(validationErrorMessage);
     },
 
     _toggleModeClass() {
@@ -74,7 +75,7 @@ const ValidationMessage = Overlay.inherit({
     },
 
     updateMaxWidth() {
-        const targetWidth = this.option('target').outerWidth();
+        const targetWidth = this.option('target')?.outerWidth();
         let maxWidth = '100%';
         if(targetWidth !== 0) {
             maxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);
