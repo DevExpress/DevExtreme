@@ -4115,7 +4115,8 @@ QUnit.module('Validation', {
             ],
             editing: {
                 mode: 'cell',
-                allowUpdating: true
+                allowUpdating: true,
+                changes: []
             },
             dataSource: {
                 asyncLoadEnabled: false,

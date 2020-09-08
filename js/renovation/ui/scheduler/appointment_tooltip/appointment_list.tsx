@@ -7,7 +7,7 @@ import { TooltipItemLayout } from './item_layout';
 import {
   GetTextAndFormatDateFn, GetSingleAppointmentFn,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
-} from './types';
+} from './types.d';
 import getCurrentAppointment from './utils/get_current_appointment';
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,

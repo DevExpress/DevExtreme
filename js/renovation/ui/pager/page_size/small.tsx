@@ -5,15 +5,10 @@ import {
 import { SelectBox } from '../../select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types.d';
-import { PAGER_SELECTION_CLASS } from '../common/consts';
 import { getElementMinWidth } from '../utils/get_element_width';
 import PagerProps from '../common/pager_props';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { EventCallback } from '../../common/event_callback.d';
-
-export const PAGER_PAGE_SIZES_CLASS = 'dx-page-sizes';
-export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
-export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({

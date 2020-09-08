@@ -742,7 +742,6 @@ class Scheduler extends Widget {
         super._setDeprecatedOptions();
 
         extend(this._deprecatedOptions, {
-            onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
             dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
             allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
         });
@@ -1241,7 +1240,11 @@ class Scheduler extends Widget {
 
         this._subscribes = subscribes;
 
-        this.timeZoneCalculator = new TimeZoneCalculator(this);
+        this.timeZoneCalculator = new TimeZoneCalculator({
+            getClientOffset: date => this.fire('getClientTimezoneOffset', date),
+            getCommonOffset: date => this._getTimezoneOffsetByOption(date),
+            getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+        });
     }
 
     _initTemplates() {

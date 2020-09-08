@@ -1,5 +1,5 @@
 @use "sass:string";
-@use "./string" as *;
+@use "../string" as *;
 
 @mixin diagram-icon-colored($data-uri, $current-color, $width, $height) {
   $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));

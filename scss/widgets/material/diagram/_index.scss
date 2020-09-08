@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/diagram" as *;
+@use "../../base/diagram";
+@use "../../base/diagram/mixins" as *;
 @use "../button/colors" as *;
 @use "../overlay/colors" as *;
 @use "../accordion/colors" as *;

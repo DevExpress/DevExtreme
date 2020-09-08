@@ -180,13 +180,25 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
-     * @type_function_param1_field5 args:dxDiagramAddShapeRequestOperationArgs|dxDiagramAddShapeFromToolboxRequestOperationArgs|dxDiagramDeleteShapeRequestOperationArgs|dxDiagramDeleteConnectorRequestOperationArgs|dxDiagramChangeConnectionRequestOperationArgs|dxDiagramChangeConnectorPointsRequestOperationArgs
+     * @type_function_param1_field5 args:dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs
      * @type_function_param1_field6 allowed:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeRequestOperationArgs|dxDiagramAddShapeFromToolboxRequestOperationArgs|dxDiagramDeleteShapeRequestOperationArgs|dxDiagramDeleteConnectorRequestOperationArgs|dxDiagramChangeConnectionRequestOperationArgs|dxDiagramChangeConnectorPointsRequestOperationArgs, allowed?: boolean }) => any);
+    onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs, allowed?: boolean }) => any);
+    /**
+     * @docid dxDiagramOptions.onRequestLayoutUpdate
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field5 allowed:boolean
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, changes?: any[], allowed?: boolean }) => any);
     /**
      * @docid dxDiagramOptions.pageColor
      * @type String
@@ -458,35 +470,35 @@ export interface dxDiagramCustomCommand {
     items?: Array<dxDiagramCustomCommand>;
 }
 
-export interface dxDiagramAddShapeRequestOperationArgs {
+export interface dxDiagramRequestOperationAddShapeArgs {
     /**
-     * @docid dxDiagramAddShapeRequestOperationArgs.shape
+     * @docid dxDiagramRequestOperationAddShapeArgs.shape
      * @type dxDiagramShape
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     shape?: dxDiagramShape;
     /**
-     * @docid dxDiagramAddShapeRequestOperationArgs.position
-     * @name dxDiagramAddShapeRequestOperationArgs.position
+     * @docid dxDiagramRequestOperationAddShapeArgs.position
+     * @name dxDiagramRequestOperationAddShapeArgs.position
      * @type Object
      */
     position?: Object;
     /**
-     * @docid dxDiagramAddShapeRequestOperationArgs.position.x
-     * @name dxDiagramAddShapeRequestOperationArgs.position.x
+     * @docid dxDiagramRequestOperationAddShapeArgs.position.x
+     * @name dxDiagramRequestOperationAddShapeArgs.position.x
      * @type Number
      */
     /**
-     * @docid dxDiagramAddShapeRequestOperationArgs.position.y
-     * @name dxDiagramAddShapeRequestOperationArgs.position.y
+     * @docid dxDiagramRequestOperationAddShapeArgs.position.y
+     * @name dxDiagramRequestOperationAddShapeArgs.position.y
      * @type Number
      */
 }
 
-export interface dxDiagramAddShapeFromToolboxRequestOperationArgs {
+export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
   /**
-   * @docid dxDiagramAddShapeFromToolboxRequestOperationArgs.shapeType
+   * @docid dxDiagramRequestOperationAddShapeFromToolboxArgs.shapeType
    * @type Enums.DiagramShapeType|String
    * @prevFileNamespace DevExpress.ui
    * @public
@@ -494,9 +506,9 @@ export interface dxDiagramAddShapeFromToolboxRequestOperationArgs {
   shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
 }
 
-export interface dxDiagramDeleteShapeRequestOperationArgs {
+export interface dxDiagramRequestOperationDeleteShapeArgs {
   /**
-   * @docid dxDiagramDeleteShapeRequestOperationArgs.shape
+   * @docid dxDiagramRequestOperationDeleteShapeArgs.shape
    * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
@@ -504,9 +516,9 @@ export interface dxDiagramDeleteShapeRequestOperationArgs {
   shape?: dxDiagramShape;
 }
 
-export interface dxDiagramDeleteConnectorRequestOperationArgs {
+export interface dxDiagramRequestOperationDeleteConnectorArgs {
   /**
-   * @docid dxDiagramDeleteConnectorRequestOperationArgs.connector
+   * @docid dxDiagramRequestOperationDeleteConnectorArgs.connector
    * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
@@ -514,77 +526,145 @@ export interface dxDiagramDeleteConnectorRequestOperationArgs {
   connector?: dxDiagramConnector;
 }
 
-export interface dxDiagramChangeConnectionRequestOperationArgs {
+export interface dxDiagramRequestOperationChangeConnectionArgs {
   /**
-   * @docid dxDiagramChangeConnectionRequestOperationArgs.shape
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.shape
    * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   shape?: dxDiagramShape;
   /**
-   * @docid dxDiagramChangeConnectionRequestOperationArgs.connector
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.connector
    * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   connector?: dxDiagramConnector;
   /**
-   * @docid dxDiagramChangeConnectionRequestOperationArgs.connectionPointIndex
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.connectionPointIndex
    * @type number
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   connectionPointIndex?: number;
   /**
-   * @docid dxDiagramChangeConnectionRequestOperationArgs.connectorPosition
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.connectorPosition
    * @type Enums.DiagramConnectorPosition
    * @prevFileNamespace DevExpress.ui
    * @public
    */
-  connectorPosition?: 'begin' | 'end';
+  connectorPosition?: 'start' | 'end';
 }
 
-export interface dxDiagramChangeConnectorPointsRequestOperationArgs {
+export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
   /**
-   * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.connector
+   * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.connector
    * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   connector?: dxDiagramConnector;
   /**
-    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.points
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.points
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
     * @type Array<Object>
     */
    points?: Array<Object>;
    /**
-    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.points.x
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.points.x
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
     * @type Number
     */
    /**
-    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.points.y
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.points.y
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
     * @type Number
     */
   /**
-    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
     * @type Array<Object>
     */
    oldPoints?: Array<Object>;
    /**
-    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.x
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.x
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
     * @type Number
     */
    /**
-    * @docid dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.y
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs.oldPoints.y
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
     * @type Number
     */
+}
+
+export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationBeforeChangeShapeTextArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+}
+
+export interface dxDiagramRequestOperationChangeShapeTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationChangeShapeTextArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+  /**
+   * @docid dxDiagramRequestOperationChangeShapeTextArgs.text
+   * @type string
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  text?: string;
+}
+
+export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+   * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs.index
+   * @type number
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  index?: number;
+}
+
+export interface dxDiagramRequestOperationChangeConnectorTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorTextArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorTextArgs.index
+   * @type number
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  index?: number;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorTextArgs.text
+   * @type string
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  text?: string;
 }
 
 declare global {

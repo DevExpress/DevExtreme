@@ -1988,6 +1988,49 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell should be invalid');
         });
     });
+
+    QUnit.testInActiveWindow('There should not be errors when a widget is disposed during validation on saving data', function(assert) {
+        // arrange
+        const gridConfig = {
+            dataSource: [{ field1: 'test', field2: 1 }],
+            keyExpr: 'field2',
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'field1',
+                    validationRules: [{
+                        type: 'async',
+                        validationCallback: function(params) {
+                            return $.Deferred().promise();
+                        }
+                    }]
+                }
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+        grid.editCell(0, 0);
+        this.clock.tick();
+        grid.cellValue(0, 0, 'test1');
+        this.clock.tick();
+
+        try {
+            grid.saveEditData();
+            this.clock.tick();
+            grid.dispose();
+            this.clock.tick();
+
+            // assert
+            assert.ok(true);
+        } catch(error) {
+            // assert
+            assert.ok(false, `the following error is thrown: ${error.message}`);
+        }
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
