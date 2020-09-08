@@ -811,9 +811,12 @@ class Diagram extends Widget {
         return expr && dataCoreUtils.compileGetter(expr);
     }
     _onRequestUpdateLayout(changes) {
-        if(isFunction(this.option('nodes.autoLayout.requestUpdate'))) {
-            return this.option('nodes.autoLayout.requestUpdate')(changes);
+        if(!this._requestLayoutUpdateAction) {
+            this._createRequestLayoutUpdateAction();
         }
+        const eventArgs = { changes, allowed: false };
+        this._requestLayoutUpdateAction(eventArgs);
+        return eventArgs.allowed;
     }
 
     _createOptionSetter(optionName) {
@@ -1700,12 +1703,6 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
                  */
-                /**
-                 * @name dxDiagramOptions.nodes.autoLayout.requestUpdate
-                 * @type function(changes)
-                 * @type_function_param1 changes:Array<any>
-                 * @type_function_return boolean
-                 */
                 autoLayout: 'auto',
                 /**
                 * @name dxDiagramOptions.nodes.autoSizeEnabled
@@ -2254,7 +2251,9 @@ class Diagram extends Widget {
 
             onSelectionChanged: null,
 
-            onRequestOperation: null
+            onRequestOperation: null,
+
+            onRequestLayoutUpdate: null
 
             /**
              * @name dxDiagramOptions.accessKey
@@ -2384,6 +2383,9 @@ class Diagram extends Widget {
     }
     _createRequestOperationAction() {
         this._requestOperationAction = this._createActionByOption('onRequestOperation');
+    }
+    _createRequestLayoutUpdateAction() {
+        this._requestLayoutUpdateAction = this._createActionByOption('onRequestLayoutUpdate');
     }
     _createCustomCommand() {
         this._customCommandAction = this._createActionByOption('onCustomCommand');
@@ -2718,6 +2720,9 @@ class Diagram extends Widget {
                 break;
             case 'onRequestOperation':
                 this._createRequestOperationAction();
+                break;
+            case 'onRequestLayoutUpdate':
+                this._createRequestLayoutUpdateAction();
                 break;
             case 'onCustomCommand':
                 this._createCustomCommand();
