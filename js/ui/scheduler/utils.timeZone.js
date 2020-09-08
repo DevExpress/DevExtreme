@@ -48,15 +48,7 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 
 const calculateTimezoneByValue = (timezone, date) => {
     if(typeof timezone === 'string') {
-        date = date || new Date();
-        const dateUtc = Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes()
-        );
-        timezone = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
+        timezone = SchedulerTimezones.getTimezoneOffsetById(timezone, date);
     }
     return timezone;
 };
