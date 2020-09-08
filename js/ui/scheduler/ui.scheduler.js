@@ -2469,11 +2469,19 @@ class Scheduler extends Widget {
         */
 }
 
+const getTimeZones = (date) => {
+    if(!isDefined(date)) {
+        date = new Date();
+    }
+
+    const dateInUTC = timeZoneUtils.createUTCDate(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
 /**
 * @name ui.dxScheduler
 * @section utils
 */
-Scheduler.getTimeZones = (date) => timeZoneDataUtils.getDisplayedTimeZones(date);
+Scheduler.getTimeZones = getTimeZones;
 
 Scheduler.include(DataHelperMixin);
 

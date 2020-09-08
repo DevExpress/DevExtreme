@@ -1,6 +1,7 @@
 import dateUtils from '../../core/utils/date';
 import timeZoneDataUtils from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
+import { isDefined } from '../../core/utils/type';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
@@ -49,7 +50,12 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 const calculateTimezoneByValue = (timezone, date) => {
     // NOTE: This check could be removed. We don't support numerical timezones
     if(typeof timezone === 'string') {
-        timezone = timeZoneDataUtils.getTimezoneOffsetById(timezone, date);
+        if(!isDefined(date)) {
+            date = new Date();
+        }
+
+        const dateInUTC = createUTCDate(date);
+        timezone = timeZoneDataUtils.getTimezoneOffsetById(timezone, dateInUTC.getTime());
     }
     return timezone;
 };
