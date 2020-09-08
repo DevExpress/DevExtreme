@@ -2771,6 +2771,20 @@ QUnit.module('readOnly option', moduleConfig, () => {
         assert.ok($selectButton.hasClass('dx-state-disabled'), 'button is disabled');
     });
 
+    QUnit.test('file cancel buttons should be disabled', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            uploadMode: 'useButtons'
+        });
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
+
+        const $cancelButtons = $fileUploader.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS);
+
+        assert.strictEqual($cancelButtons.length, 2, 'there are 2 cancel buttons');
+        assert.ok($cancelButtons.eq(0).hasClass('dx-state-disabled'), '1st button is disabled');
+        assert.ok($cancelButtons.eq(1).hasClass('dx-state-disabled'), '2nd button is disabled');
+    });
+
     QUnit.test('dialogTrigger should be unable to call _selectButtonClickHandler', function(assert) {
         const instance = $('#fileuploader').dxFileUploader({
             readOnly: true,
