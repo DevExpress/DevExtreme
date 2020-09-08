@@ -39,9 +39,8 @@
       :shape-icons-per-row="2"
       :width="100"
       :shapes="['team', 'employee']"
-    >
-    </DxContextToolbox>
-    <DxToolbox 
+    />
+    <DxToolbox
       :shape-icons-per-row="2"
     >
       <DxGroup
@@ -51,8 +50,7 @@
     </DxToolbox>
     <DxPropertiesPanel
       :visibility="'disabled'"
-    >
-    </DxPropertiesPanel>
+    />
   </DxDiagram>
 </template>
 <script>
