@@ -596,6 +596,7 @@ class FileUploader extends Editor {
                 onClick: () => this._removeFile(file),
                 icon: 'close',
                 visible: this.option('allowCanceling'),
+                disabled: this.option('readOnly'),
                 integrationOptions: {}
             }
         );
@@ -1098,6 +1099,7 @@ class FileUploader extends Editor {
                 break;
             case 'readOnly':
                 this._selectButton.option('disabled', value);
+                this._files.forEach(file => file.cancelButton.option('disabled', value));
                 this._displayInputContainerIfNeeded();
                 this._renderDragEvents();
                 super._optionChanged(args);

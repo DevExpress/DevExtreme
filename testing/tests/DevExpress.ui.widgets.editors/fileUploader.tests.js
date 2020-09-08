@@ -2680,6 +2680,20 @@ QUnit.module('readOnly option', moduleConfig, () => {
         assert.ok($selectButton.hasClass('dx-state-disabled'), 'button is disabled');
     });
 
+    QUnit.test('file cancel buttons should be disabled', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            readOnly: true,
+            uploadMode: 'useButtons'
+        });
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
+
+        const $cancelButtons = $fileUploader.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS);
+
+        assert.strictEqual($cancelButtons.length, 2, 'there are 2 cancel buttons');
+        assert.ok($cancelButtons.eq(0).hasClass('dx-state-disabled'), '1st button is disabled');
+        assert.ok($cancelButtons.eq(1).hasClass('dx-state-disabled'), '2nd button is disabled');
+    });
+
     QUnit.test('uploading events can be fired (successful upload)', function(assert) {
         const onProgressSpy = sinon.spy();
         const onUploadAbortedSpy = sinon.spy();
@@ -2738,7 +2752,7 @@ QUnit.module('readOnly option', moduleConfig, () => {
             onUploadStarted: onUploadStartedSpy,
             onValueChanged: onValueChangedSpy
         });
-        const file = createBlobFile('image1.png', 1500);
+        const file = createBlobFile('image1.png', 250);
         simulateFileChoose($fileUploader, [file]);
 
         this.clock.tick(1500);
@@ -2753,13 +2767,13 @@ QUnit.module('readOnly option', moduleConfig, () => {
         $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).eq(0).trigger('dxclick');
 
         this.clock.tick(1500);
-        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after error');
-        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
-        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+        assert.strictEqual(onProgressSpy.callCount, 2, 'progress event is called for 2nd chunk');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event not raised');
+        assert.strictEqual(onUploadedSpy.callCount, 1, 'uploaded event raised');
 
         assert.strictEqual(onUploadErrorSpy.callCount, 0, 'upload error event is not raised');
         assert.strictEqual(onUploadStartedSpy.callCount, 1, 'upload started event raised');
-        assert.strictEqual(onValueChangedSpy.callCount, 2, 'value changed event raised');
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'value changed event not raised');
     });
 
     QUnit.test('uploading events can be fired (feature - onUploadError)', function(assert) {
