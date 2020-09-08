@@ -111,7 +111,7 @@ class FileManagerContextMenu extends Widget {
 
     _extendAttributes(targetObject, sourceObject, objectKeysArray) {
         objectKeysArray.forEach(objectKey => {
-            extend(targetObject, sourceObject[objectKey]
+            extend(targetObject, isDefined(sourceObject[objectKey])
                 ? { [objectKey]: sourceObject[objectKey] }
                 : {});
         });

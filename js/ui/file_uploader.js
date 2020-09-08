@@ -274,7 +274,7 @@ class FileUploader extends Editor {
         const fileName = this._$fileInput.val().replace(/^.*\\/, '');
         const files = this._$fileInput.prop('files');
 
-        if(files && !files.length) {
+        if(files && !files.length && this.option('uploadMode') !== 'useForm') {
             return;
         }
 

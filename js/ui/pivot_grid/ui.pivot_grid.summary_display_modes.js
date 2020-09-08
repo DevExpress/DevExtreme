@@ -438,6 +438,10 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 
     data.values = data.values || [];
 
+    foreachTree(columnElements, (columnPath) => {
+        columnPath[0].isEmpty = [];
+    }, false);
+
     foreachTree(rowElements, function(rowPath) {
         const rowItem = rowPath[0];
 
@@ -449,7 +453,6 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
             const columnItem = columnPath[0];
             let isEmptyCell;
 
-            columnItem.isEmpty = columnItem.isEmpty || [];
 
             processDataCell(data, rowItem.index, columnItem.index, false);
 
