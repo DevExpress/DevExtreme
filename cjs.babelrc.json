@@ -1,0 +1,8 @@
+{
+    "extends": "./esm.babelrc.json",
+    "presets": ["@babel/preset-env"],
+    "plugins": [
+        "add-module-exports",
+        ["@babel/plugin-transform-modules-commonjs", { "strict": true }]
+    ]
+}

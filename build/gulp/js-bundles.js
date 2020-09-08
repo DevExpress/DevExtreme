@@ -30,10 +30,9 @@ const BUNDLES = [
     '/bundles/dx.web.js',
     '/bundles/dx.viz.js'
 ];
-
-const DEBUG_BUNDLES = BUNDLES.concat([
-    '/bundles/dx.custom.js'
-]);
+const BUNDLES_NPM = BUNDLES.map(file => '/cjs' + file);
+const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
+const DEBUG_BUNDLES_NPM = DEBUG_BUNDLES.map(file => '/cjs' + file);
 
 function processBundles(bundles, pathPrefix) {
     return bundles.map(function(bundle) {
@@ -52,13 +51,13 @@ const bundleProdPipe = lazyPipe()
     .pipe(compressionPipes.minify);
 
 gulp.task('js-bundles-prod-renovation', function() {
-    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_RENOVATION_PATH))
+    return gulp.src(processBundles(BUNDLES_NPM, context.TRANSPILED_PROD_RENOVATION_PATH))
         .pipe(bundleProdPipe())
         .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
 });
 
 gulp.task('js-bundles-prod', function() {
-    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_PATH))
+    return gulp.src(processBundles(BUNDLES_NPM, context.TRANSPILED_PROD_PATH))
         .pipe(bundleProdPipe())
         .pipe(gulp.dest(context.RESULT_JS_PATH));
 });
@@ -71,7 +70,7 @@ function prepareDebugMeta(watch, renovation) {
         bundles = processBundles(DEBUG_BUNDLES, renovation ? renovationPipes.TEMP_PATH : 'js');
     } else {
         debugConfig = Object.assign({}, webpackConfig);
-        bundles = processBundles(DEBUG_BUNDLES, renovation ? context.TRANSPILED_PROD_RENOVATION_PATH : context.TRANSPILED_PROD_PATH);
+        bundles = processBundles(DEBUG_BUNDLES_NPM, renovation ? context.TRANSPILED_PROD_RENOVATION_PATH : context.TRANSPILED_PROD_PATH);
     }
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;

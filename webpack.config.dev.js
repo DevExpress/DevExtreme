@@ -2,6 +2,7 @@
 
 const baseConfig = require('./webpack.config.js');
 const path = require('path');
+const cjsConfig = require('./cjs.babelrc.json');
 
 module.exports = Object.assign({
     watch: true,
@@ -12,6 +13,7 @@ module.exports = Object.assign({
                 loaders: [
                     {
                         loader: 'babel-loader',
+                        options: cjsConfig,
                     },
                     {
                         loader: 'devextreme-generator/webpack-loader',
@@ -30,7 +32,8 @@ module.exports = Object.assign({
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    options: cjsConfig,
                 }
             },
             {

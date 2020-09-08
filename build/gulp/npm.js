@@ -25,6 +25,8 @@ const TRANSPILED_GLOBS = [
     '!' + context.TRANSPILED_PROD_PATH + '/viz/docs/*.js'
 ];
 
+const TRANSPILED_PROD_JSON_GLOB = context.TRANSPILED_PROD_PATH + '/**/*.json';
+
 const JSON_GLOBS = [
     'js/**/*.json',
     '!js/viz/vector_map.utils/*.*'
@@ -97,6 +99,9 @@ gulp.task('npm-sources', gulp.series('ts-sources', function() {
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())
+            .pipe(gulp.dest(packagePath)),
+
+        gulp.src(TRANSPILED_PROD_JSON_GLOB)
             .pipe(gulp.dest(packagePath)),
 
         gulp.src(JSON_GLOBS)

@@ -13,6 +13,9 @@ const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
+const cjsConfig = require('../../../cjs.babelrc.json');
+const esmConfig = require('../../../esm.babelrc.json');
+
 const {
     BASE_GENERATOR_OPTIONS,
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
@@ -86,10 +89,13 @@ function generatePreactComponents(dev = false) {
                 error: processErrors(knownErrors, errors),
                 finish() {}
             }))
-            .pipe(babel())
+            .pipe(babel(esmConfig))
+            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_PATH, './esm')))
+            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_RENOVATION_PATH, './esm')))
+            .pipe(babel(cjsConfig))
             .pipe(gulp.dest(context.TRANSPILED_PATH))
-            .pipe(gulp.dest(context.TRANSPILED_PROD_PATH))
-            .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH))
+            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_PATH, './cjs')))
+            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_RENOVATION_PATH, './cjs')))
             .on('end', function() {
                 done(!dev && errors.length || undefined);
             });
@@ -159,7 +165,7 @@ function addGenerationTask(
                 error: processErrors(knownErrors),
                 finish() { }
             })))
-            .pipe(gulpIf(babelGeneratedFiles, babel()))
+            .pipe(gulpIf(babelGeneratedFiles, babel(cjsConfig)))
             .pipe(gulp.dest(frameworkDest));
     });
 
@@ -177,7 +183,7 @@ function addGenerationTask(
                 .pipe(
                     gulpIf(
                         file => file.extname === '.js',
-                        babel()
+                        babel(cjsConfig)
                     )
                 )
                 .pipe(gulp.dest(frameworkDest));
@@ -207,7 +213,7 @@ function addGenerationTask(
                 .pipe(
                     gulpIf(
                         file => file.extname === '.js',
-                        babel()
+                        babel(cjsConfig)
                     )
                 )
                 .pipe(gulp.dest(frameworkDest));

@@ -30,13 +30,13 @@
   "dependencies": {
     "devexpress-diagram": "1.1.40",
     "devexpress-gantt": "1.1.21",
-    "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "^0.9.5",
-    "rrule": "2.6.4",
     "es6-object-assign": "^1.1.0",
+    "jszip": "^2.0.0 || ^3.0.0",
+    "preact": "^10.4.5",
+    "rrule": "2.6.4",
     "showdown": "^1.8.6",
-    "turndown": "^6.0.0",
-    "preact": "^10.4.5"
+    "turndown": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
@@ -94,6 +94,7 @@
     "gulp-eol": "^0.1.2",
     "gulp-eslint": "^6.0.0",
     "gulp-file": "^0.4.0",
+    "gulp-flatmap": "^1.0.2",
     "gulp-footer": "^1.0.5",
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
