@@ -413,7 +413,8 @@ export default class ViewDataProvider {
         const firstCellInColumn = viewDataMap[0][columnIndex];
         const firstCellInColumnData = firstCellInColumn.cellData;
 
-        const firstCellInNextColumn = viewDataMap[0][columnIndex + 1];
+        const stepSize = this._workspace.isGroupedByDate() ? this._workspace._getGroupCount() : 1;
+        const firstCellInNextColumn = viewDataMap[0][columnIndex + stepSize];
         const firstCellInNextColumnData = firstCellInNextColumn?.cellData;
 
         if(firstCellInColumnData.groupIndex === firstCellInSelection.groupIndex
@@ -459,7 +460,8 @@ export default class ViewDataProvider {
         const lastCellInColumn = viewDataMap[viewDataMap.length - 1][columnIndex];
         const lastCellInColumnData = lastCellInColumn.cellData;
 
-        const lastCellInNextColumn = viewDataMap[viewDataMap.length - 1][columnIndex - 1];
+        const stepSize = this._workspace.isGroupedByDate() ? this._workspace._getGroupCount() : 1;
+        const lastCellInNextColumn = viewDataMap[viewDataMap.length - 1][columnIndex - stepSize];
         const lastCellInNextColumnData = lastCellInNextColumn?.cellData;
 
         if(lastCellInColumn.groupIndex === lastCellInSelection.groupIndex

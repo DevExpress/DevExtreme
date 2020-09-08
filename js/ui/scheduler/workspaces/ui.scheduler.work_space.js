@@ -1168,12 +1168,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRDateTable();
 
-        const { coordinates, cellData } = this.viewDataProvider.getFocusedCell();
+        const { coordinates } = this.viewDataProvider.getFocusedCell();
         const firstCellInSelection = this.viewDataProvider.getFirstCellInSelection();
         const lastCellInSelection = this.viewDataProvider.getLastCellInSelection();
 
         if(coordinates && coordinates.rowIndex !== -1) {
-            const $cell = this._getCellByCoordinates(coordinates, cellData.allDay, cellData.groupIndex);
+            const $cell = this._getCellByPosition(coordinates);
             $cell && this._setFocusedCell($cell);
         }
         if(firstCellInSelection && lastCellInSelection) {
@@ -1186,8 +1186,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 coordinates: secondCoordinates,
             } = lastCellInSelection;
 
-            const $firstCell = this._getCellByCoordinates(firstCoordinates, firstCellData.allDay, firstCellData.groupIndex);
-            const $secondCell = this._getCellByCoordinates(secondCoordinates, secondCellData.allDay, secondCellData.groupIndex);
+            const $firstCell = this._getCellByPosition(firstCoordinates);
+            const $secondCell = this._getCellByPosition(secondCoordinates);
             const isMultipleSelection = firstCellData.startDate.getTime() !== secondCellData.startDate.getTime();
 
             $firstCell && $secondCell
@@ -2242,11 +2242,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
         const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
 
+        return this._getCellByPosition(indexes);
+    }
+
+    _getCellByPosition(position) {
         return this._$dateTable
             .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
-            .eq(indexes.rowIndex)
+            .eq(position.rowIndex)
             .find('td')
-            .eq(indexes.cellIndex);
+            .eq(position.cellIndex);
     }
 
     _getCells(allDay, direction) {
