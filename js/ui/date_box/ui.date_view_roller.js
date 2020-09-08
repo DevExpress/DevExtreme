@@ -7,6 +7,7 @@ import { getBoundingRect } from '../../core/utils/position';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
+import devices from '../../core/devices';
 import fx from '../../animation/fx';
 import translator from '../../animation/translator';
 
@@ -186,7 +187,7 @@ const DateViewRoller = Scrollable.inherit({
         if(this._isVisible() && (delta.x || delta.y)) {
             this._strategy._prepareDirections(true);
 
-            if(this._animation) {
+            if(this._animation && devices.real().deviceType !== 'desktop') {
                 const that = this;
 
                 fx.stop(this._$content);
@@ -210,12 +211,34 @@ const DateViewRoller = Scrollable.inherit({
         return this._strategy.validate(e);
     },
 
+    _fitSelectedIndexInRange: function(index) {
+        const itemsCount = this.option('items').length;
+        return Math.max(Math.min(index, itemsCount - 1), 0);
+    },
+
+    _getSelectedIndexAfterScroll: function(currentSelectedIndex) {
+        const locationTop = -this._location().top;
+
+        const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
+        const dy = locationTop - currentSelectedIndexPosition;
+        const direction = dy > 0 || dy === 0 && currentSelectedIndex > 0 ? 1 : -1;
+        const newSelectedIndex = this._fitSelectedIndexInRange(currentSelectedIndex + direction);
+
+        return newSelectedIndex;
+    },
+
     _endActionHandler: function() {
         const currentSelectedIndex = this.option('selectedIndex');
-        const ratio = -this._location().top / this._itemHeight();
-        const newSelectedIndex = Math.round(ratio);
+        let newSelectedIndex;
 
-        this._animation = true;
+        if(devices.real().deviceType !== 'desktop') {
+            const ratio = -this._location().top / this._itemHeight();
+            newSelectedIndex = Math.round(ratio);
+
+            this._animation = true;
+        } else {
+            newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
+        }
 
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);

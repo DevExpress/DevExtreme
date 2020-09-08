@@ -1655,6 +1655,26 @@ QUnit.module('Aria accessibility', {
         helper.checkAttributes(helper.getItems().eq(2), { role: 'menuitem', tabindex: '-1' }, 'Items[0],items[1]');
         helper.checkAttributes(helper.getItems().eq(3), { role: 'menuitem', tabindex: '-1' }, 'Items[1]');
     });
+
+    // T927422
+    QUnit.test('Items: [{items[{}, {}], {}], any <li>, <ul> tags need role=none', function() {
+        helper.createWidget({
+            focusStateEnabled: true,
+            items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }]
+        });
+
+        helper.widget.show();
+
+        keyboardMock(helper.widget.itemsContainer()).keyDown('down');
+        keyboardMock(helper.widget.itemsContainer()).keyDown('right');
+
+        helper.checkAttributes(helper.widget._overlay.$content().find('ul'), { role: 'none' }, 'Items[1]');
+        const $listItems = helper.widget._overlay.$content().find('li');
+
+        $listItems.each((_, listItem) => {
+            helper.checkAttributes($(listItem), { role: 'none' }, 'list item');
+        });
+    });
 });
 
 QUnit.module('Keyboard navigation', moduleConfig, () => {

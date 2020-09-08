@@ -1,7 +1,6 @@
 import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
-import DataGrid from '../../ui/data_grid';
 
 const privateOptions = {
     _setAutoFilter: function(dataProvider, worksheet, cellRange, autoFilterEnabled) {
@@ -55,7 +54,7 @@ function _getFullOptions(options) {
     if(!(isDefined(options) && isObject(options))) {
         throw Error('The "exportDataGrid" method requires a configuration object.');
     }
-    if(!(isDefined(options.component) && isObject(options.component) && options.component instanceof DataGrid)) {
+    if(!(isDefined(options.component) && isObject(options.component) && options.component.NAME === 'dxDataGrid')) {
         throw Error('The "component" field must contain a DataGrid instance.');
     }
     if(!isDefined(options.selectedRowsOnly)) {

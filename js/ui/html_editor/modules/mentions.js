@@ -1,5 +1,5 @@
 import $ from '../../../core/renderer';
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 import { compileGetter } from '../../../core/utils/data';
 import { isString } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
@@ -16,27 +16,27 @@ if(Quill) {
     const SILENT_ACTION = 'silent';
     const DEFAULT_MARKER = '@';
 
-    const KEY_CODES = {
-        ARROW_UP: 38,
-        ARROW_DOWN: 40,
-        ARROW_LEFT: 37,
-        ARROW_RIGHT: 39,
-        ENTER: 13,
-        ESCAPE: 27,
-        SPACE: 32,
-        PAGE_UP: 33,
-        PAGE_DOWN: 34,
-        END: 35,
-        HOME: 36
+    const KEYS = {
+        ARROW_UP: 'upArrow',
+        ARROW_DOWN: 'downArrow',
+        ARROW_LEFT: 'leftArrow',
+        ARROW_RIGHT: 'rightArrow',
+        ENTER: 'enter',
+        ESCAPE: 'escape',
+        SPACE: 'space',
+        PAGE_UP: 'pageUp',
+        PAGE_DOWN: 'pageDown',
+        END: 'end',
+        HOME: 'home'
     };
 
     const NAVIGATION_KEYS = [
-        KEY_CODES.ARROW_LEFT,
-        KEY_CODES.ARROW_RIGHT,
-        KEY_CODES.PAGE_UP,
-        KEY_CODES.PAGE_DOWN,
-        KEY_CODES.END,
-        KEY_CODES.HOME
+        KEYS.ARROW_LEFT,
+        KEYS.ARROW_RIGHT,
+        KEYS.PAGE_UP,
+        KEYS.PAGE_DOWN,
+        KEYS.END,
+        KEYS.HOME
     ];
 
     const ALLOWED_PREFIX_CHARS = [' ', '\n'];
@@ -87,43 +87,32 @@ if(Quill) {
 
         _attachKeyboardHandlers() {
             this.quill.keyboard.addBinding({
-                key: KEY_CODES.ARROW_UP
+                key: KEYS.ARROW_UP
             }, this._moveToItem.bind(this, 'prev'));
 
             this.quill.keyboard.addBinding({
-                key: KEY_CODES.ARROW_DOWN
+                key: KEYS.ARROW_DOWN
             }, this._moveToItem.bind(this, 'next'));
 
             this.quill.keyboard.addBinding({
-                key: KEY_CODES.ENTER
+                key: [KEYS.ENTER, KEYS.SPACE]
             }, this._selectItemHandler.bind(this));
 
-            const enterBindings = this.quill.keyboard.bindings[KEY_CODES.ENTER];
+            const enterBindings = this.quill.keyboard.bindings[KEYS.ENTER];
             enterBindings.unshift(enterBindings.pop());
 
             this.quill.keyboard.addBinding({
-                key: KEY_CODES.ESCAPE
+                key: KEYS.ESCAPE
             }, this._escapeKeyHandler.bind(this));
 
             this.quill.keyboard.addBinding({
-                key: KEY_CODES.SPACE
-            }, this._selectItemHandler.bind(this));
-
-            this.quill.keyboard.addBinding({
-                key: KEY_CODES.ARROW_LEFT,
+                key: [KEYS.ARROW_LEFT, KEYS.ARROW_RIGHT],
                 shiftKey: true
             }, this._ignoreKeyHandler.bind(this));
 
             this.quill.keyboard.addBinding({
-                key: KEY_CODES.ARROW_RIGHT,
-                shiftKey: true
+                key: NAVIGATION_KEYS
             }, this._ignoreKeyHandler.bind(this));
-
-            NAVIGATION_KEYS.forEach((key) => {
-                this.quill.keyboard.addBinding({
-                    key
-                }, this._ignoreKeyHandler.bind(this));
-            });
         }
 
         _moveToItem(direction) {

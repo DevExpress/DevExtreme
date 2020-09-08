@@ -3325,8 +3325,7 @@ QUnit.module('search substitution', {
             searchTimeout: 0,
             searchEnabled: true,
             focusStateEnabled: true,
-            searchMode: 'startswith',
-            autocompletionEnabled: true
+            searchMode: 'startswith'
         });
 
         this.selectBox = this.$selectBox.dxSelectBox('instance');
@@ -3393,44 +3392,6 @@ QUnit.module('search substitution', {
 
         this.keyboard.type('1');
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is good');
-    });
-
-    QUnit.test('search value should not be substituted if the \'autocompletionEnabled\' is false', function(assert) {
-        this.reinit({
-            items: [this.testItem],
-            searchTimeout: 0,
-            searchEnabled: true,
-            focusStateEnabled: true,
-            searchMode: 'startswith',
-            autocompletionEnabled: false
-        });
-
-        this.keyboard
-            .focus()
-            .type(this.testItem[0]);
-
-        assert.equal(this.$input.val(), this.testItem[0], 'search value is not substituted');
-    });
-
-    QUnit.test('autocompletionEnabled - runtime change', function(assert) {
-        this.reinit({
-            items: [this.testItem],
-            searchTimeout: 0,
-            searchEnabled: true,
-            focusStateEnabled: true,
-            searchMode: 'startswith'
-        });
-
-        this.keyboard
-            .focus()
-            .type(this.testItem[0]);
-
-        this.selectBox.option('autocompletionEnabled', false);
-        this.keyboard
-            .focus()
-            .type(this.testItem[1]);
-
-        assert.equal(this.$input.val(), this.testItem[0] + this.testItem[1], 'search value is not substituted after option runtime change');
     });
 
     QUnit.test('search value is substituted while typing', function(assert) {
@@ -5516,8 +5477,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
             });
 
-            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: false });
+            QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
+                helper.createWidget({ opened: false, deferRendering: true });
 
                 const inputAttributes = {
                     role: 'combobox',

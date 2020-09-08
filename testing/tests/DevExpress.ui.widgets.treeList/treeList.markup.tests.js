@@ -1,7 +1,5 @@
 import $ from 'jquery';
 import 'ui/tree_list';
-import 'common.css!';
-
 
 QUnit.testStart(function() {
     const markup =

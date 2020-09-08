@@ -17,6 +17,7 @@ import utils from './utils';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
+const HOUR_MS = toMs('hour');
 
 const subscribes = {
     isCurrentViewAgenda: function() {
@@ -34,8 +35,8 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(args) {
-        return this._createAppointmentSettings(args.appointmentData); // TODO: temporary solution
+    createAppointmentSettings: function(appointment) {
+        return this._getAppointmentSettingsGenerator().create(appointment);
     },
 
     isGroupedByDate: function() {
@@ -203,7 +204,6 @@ const subscribes = {
         const dateFormat = 'monthandday';
         const timeFormat = 'shorttime';
         const isSameDate = startDate.getDate() === endDate.getDate();
-        const isDurationLessThanDay = (endDate.getTime() - startDate.getTime()) <= toMs('day');
 
         switch(formatType) {
             case 'DATETIME':
@@ -218,7 +218,7 @@ const subscribes = {
             case 'TIME':
                 return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
             case 'DATE':
-                return `${dateLocalization.format(startDate, dateFormat)}${isDurationLessThanDay || isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
+                return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
         }
     },
 
@@ -474,7 +474,56 @@ const subscribes = {
             allDay: allDay,
             firstDayOfWeek: this.getFirstDayOfWeek(),
             recurrenceException: this._getRecurrenceException.bind(this),
-        }, this._subscribes['convertDateByTimezone'].bind(this));
+        }, this.timeZoneCalculator);
+    },
+
+    prerenderFilterVirtual: function() {
+        const workspace = this.getWorkSpace();
+        const resourcesManager = this._resourcesManager;
+        let allDay;
+
+        if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
+            allDay = false;
+        }
+
+        const result = [];
+
+        const { viewDataProvider } = workspace;
+        const { groupedData } = viewDataProvider.viewData;
+        const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+
+        groupedDataToRender.forEach(({ groupIndex }) => {
+            const startDate = viewDataProvider.getGroupStartDate(groupIndex);
+            const endDate = viewDataProvider.getGroupEndDate(groupIndex);
+            const startDayHour = startDate.getHours();
+            const endDayHour = startDayHour + (endDate - startDate) / HOUR_MS;
+
+            const groups = viewDataProvider.getCellsGroup(groupIndex);
+            const groupResources = isVerticalGrouping
+                ? resourcesManager.getResourcesDataByGroups(groups)
+                : resourcesManager.getResourcesData();
+
+            const filterOptions = {
+                startDayHour,
+                endDayHour,
+                min: startDate,
+                max: endDate,
+                resources: groupResources,
+                allDay: allDay,
+                firstDayOfWeek: this.getFirstDayOfWeek(),
+                recurrenceException: this._getRecurrenceException.bind(this)
+            };
+
+            const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
+                filterOptions,
+                this.timeZoneCalculator
+            );
+
+            result.push(...currentGroupAppointments);
+        });
+
+        return result;
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
@@ -645,25 +694,9 @@ const subscribes = {
 
         return {
             client: clientTimezoneOffset,
-            common: commonTimezoneOffset,
+            common: isDefined(commonTimezoneOffset) ? commonTimezoneOffset : clientTimezoneOffset,
             appointment: appointmentTimezoneOffset
         };
-    },
-
-    getTimezonesDisplayName: function() {
-        return SchedulerTimezones.getTimezonesDisplayName();
-    },
-
-    getTimezoneDisplayNameById: function(id) {
-        return SchedulerTimezones.getTimezoneDisplayNameById(id);
-    },
-
-    getSimilarTimezones: function(id) {
-        return SchedulerTimezones.getSimilarTimezones(id);
-    },
-
-    getTimezonesIdsByDisplayName: function(displayName) {
-        return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
     getTargetedAppointmentData: function(appointment, element) {

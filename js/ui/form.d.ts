@@ -328,15 +328,6 @@ export default class dxForm extends Widget {
 
 export interface dxFormButtonItem {
     /**
-     * @docid dxFormButtonItem.alignment
-     * @type Enums.HorizontalAlignment
-     * @default "right"
-     * @deprecated dxFormButtonItem.horizontalAlignment
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    alignment?: 'center' | 'left' | 'right';
-    /**
      * @docid dxFormButtonItem.buttonOptions
      * @type dxButtonOptions
      * @default undefined

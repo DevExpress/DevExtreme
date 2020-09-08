@@ -4,6 +4,8 @@ import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import browser from 'core/utils/browser';
+import ArrayStore from 'data/array_store';
+import { DataSource } from 'data/data_source/data_source';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -634,6 +636,23 @@ QUnit.module('common use cases', {
         this.listItems = this.list.itemElements();
     }
 }, () => {
+    QUnit.test('dataSource store should have correct key', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I'
+            }],
+            keyExpr: 'id'
+        }).dxDropDownButton('instance');
+
+        let store = dropDownButton.getDataSource().store();
+        assert.strictEqual(store.key(), 'id', 'store key is correct');
+
+        dropDownButton.option('keyExpr', 'this');
+        store = dropDownButton.getDataSource().store();
+        assert.strictEqual(store.key(), 'this', 'store key is correct');
+    });
+
     QUnit.test('toggleButton should have static width (T847072)', function(assert) {
         const dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
@@ -759,13 +778,220 @@ QUnit.module('common use cases', {
         });
 
         const firstListItems = getList(this.dropDownButton).itemElements();
-        eventsEngine.trigger(firstListItems[0], 'dxclick');
+        eventsEngine.trigger(firstListItems[1], 'dxclick');
 
         this.dropDownButton.option('items', [{ id: 1, name: 'test' }]);
         this.dropDownButton.option('selectedItemKey', 1);
 
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'test', 'actionButton text is correct');
         assert.strictEqual(selectionChangeHandler.callCount, 2, 'onSelectionChange is raised');
+    });
+
+    QUnit.test('selectedItem should be kept after items option change when new dataSource includes selectedItemKey (T919804)', function(assert) {
+        const done = assert.async();
+        this.dropDownButton.option({
+            items: [{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }],
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        const items = [{ id: 1, name: 'test' }];
+        this.dropDownButton.option('items', items);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
+            assert.deepEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selectedItemKey is kept');
+            assert.deepEqual(list.option('selectedItem'), items[0], 'list selectedItem is correct');
+
+            done();
+        });
+    });
+
+    QUnit.test('selectedItem should be kept after dataSource option change when new dataSource-array includes selectedItemKey (T919804)', function(assert) {
+        const done = assert.async();
+        this.dropDownButton.option({
+            dataSource: [{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }],
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        const items = [{ id: 1, name: 'test' }];
+        this.dropDownButton.option('dataSource', items);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
+            assert.deepEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selectedItemKey is kept');
+            assert.deepEqual(list.option('selectedItem'), items[0], 'list selectedItem is correct');
+
+            done();
+        });
+    });
+
+    QUnit.test('keyGetter should be updated after keyExpr option change', function(assert) {
+        this.dropDownButton.option({
+            dataSource: [{
+                key: 1, name: 'a'
+            }, {
+                key: 2, name: 'b'
+            }],
+            keyExpr: 'key',
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
+    });
+
+    QUnit.test('keyGetter should be updated after dataSource option change', function(assert) {
+        this.dropDownButton.option({
+            keyExpr: 'this',
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    data: [{
+                        key: 1, name: 'a'
+                    }, {
+                        key: 2, name: 'b'
+                    }],
+                    key: 'key'
+                })
+            }),
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        assert.strictEqual(this.dropDownButton._getKey(), 'key', '_keyGetter was updated');
+    });
+
+    QUnit.test('list keyExpr should be updated after keyExpr option change', function(assert) {
+        this.dropDownButton.option({
+            keyExpr: 'newValue',
+        });
+
+        const list = getList(this.dropDownButton);
+        assert.strictEqual(list.option('keyExpr'), 'newValue', 'list keyExpr was updated');
+    });
+
+    QUnit.test('list keyExpr should be updated after dataSource option change', function(assert) {
+        this.dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+
+        this.dropDownButton.option({
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    data: [{ key: 1, name: 'test' }],
+                    key: 'newValue'
+                }),
+            })
+        });
+
+        const list = getList(this.dropDownButton);
+        assert.strictEqual(list.option('keyExpr'), 'newValue', 'list keyExpr was updated');
+    });
+
+    QUnit.test('selectedItem should be kept after dataSource option change when new dataSource includes selectedItemKey (T919804)', function(assert) {
+        this.dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+        const done = assert.async();
+
+        const oldDataSource = new DataSource({
+            store: new ArrayStore({
+                data: [{
+                    id: 1, name: 'a'
+                }, {
+                    id: 2, name: 'b'
+                }],
+                key: 'id'
+            }),
+        });
+
+        const newDataSource = new DataSource({
+            store: new ArrayStore({
+                data: [{ key: 1, name: 'test' }],
+                key: 'key'
+            }),
+        });
+
+        this.dropDownButton.option({
+            dataSource: oldDataSource,
+            useSelectMode: true,
+            selectedItemKey: 1,
+        });
+
+        const items = [{ key: 1, name: 'test' }];
+        this.dropDownButton.option('dataSource', newDataSource);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
+            assert.deepEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selectedItemKeys is kept');
+            assert.deepEqual(list.option('selectedItem'), items[0], 'list selectedItem is correct');
+
+            done();
+        });
+    });
+
+    QUnit.test('selectedItem should be kept after dataSource reload when new dataSource includes selectedItemKey and keyExpr is default (T919804)', function(assert) {
+        const done = assert.async();
+        this.dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [1, 2],
+            useSelectMode: true,
+            selectedItemKey: 1,
+            deferRendering: false
+        });
+
+        const items = [1, 4, 5];
+        this.dropDownButton.option('items', items);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), 1, 'selectedItemKey is kept');
+            assert.strictEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selectedItemKey is kept');
+            assert.strictEqual(list.option('selectedItem'), items[0], 'list selectedItem is correct');
+
+            done();
+        });
+    });
+
+    QUnit.test('list selectedItem should be restored after dataSource reload when new dataSource doesn\'t include selectedItemKey', function(assert) {
+        const done = assert.async();
+        this.dropDownButton.option({
+            items: [{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }],
+            useSelectMode: true,
+            selectedItemKey: 1
+        });
+
+        const items = [{ id: 3, name: 'test' }];
+        this.dropDownButton.option('items', items);
+
+        setTimeout(() => {
+            assert.strictEqual(this.dropDownButton.option('selectedItemKey'), null, 'selectedItemKey is correct');
+            assert.strictEqual(this.dropDownButton.option('selectedItem'), null, 'selectedItem is correct');
+
+            const list = getList(this.dropDownButton);
+            assert.deepEqual(list.option('selectedItemKeys'), [], 'list selectedItemKey is kept');
+            assert.strictEqual(list.option('selectedItem'), undefined, 'list selectedItem is correct');
+            done();
+        });
     });
 
     QUnit.test('click on item should raise selectionChanged - subscription by "on" method', function(assert) {
@@ -1051,6 +1277,36 @@ QUnit.module('deferred datasource', {
         dropDownButton.option('selectedItemKey', 2);
         this.clock.tick();
         assert.strictEqual(getList(dropDownButton).option('selectedItemKeys')[0], 2, 'selectedItemKeys is correct');
+    });
+
+    QUnit.test('dropDownButton should not try to load selected item after dataSource change if selectedItemKey is undefined', function(assert) {
+        const byKeySpy = sinon.spy(this.dataSourceConfig, 'byKey');
+
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            useSelectMode: true,
+            keyExpr: 'id',
+            displayExpr: 'text',
+            items: [1, 2, 3]
+        });
+
+        dropDownButton.option('dataSource', this.dataSourceConfig);
+
+        assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
+    });
+
+    QUnit.test('dropDownButton should not try to load value on init if selectedItemKey is undefined (T925687)', function(assert) {
+        const byKeySpy = sinon.spy(this.dataSourceConfig, 'byKey');
+
+        new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            useSelectMode: true,
+            keyExpr: 'id',
+            displayExpr: 'text',
+            dataSource: this.dataSourceConfig
+        });
+
+        assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
     });
 });
 

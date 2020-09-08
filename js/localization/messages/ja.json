@@ -150,6 +150,7 @@
         "dxTreeList-editingAddRowToNode": "追加",
         "dxPager-infoText": "ページ {0} / {1} ({2} アイテム)",
         "dxPager-pagesCountText": "/",
+        "dxPager-pageSizesAllText": "すべて",
         "dxPivotGrid-grandTotal": "総計",
         "dxPivotGrid-total": "{0} 合計",
         "dxPivotGrid-fieldChooserTitle": "フィールドの選択",

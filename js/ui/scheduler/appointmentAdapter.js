@@ -20,7 +20,7 @@ class AppointmentAdapter {
     }
 
     get duration() {
-        return this.endDate.getTime() - this.startDate.getTime();
+        return this.endDate ? this.endDate - this.startDate : 0;
     }
 
     get startDate() {
@@ -98,7 +98,7 @@ class AppointmentAdapter {
     }
 
     calculateDate(date, appointmentTimeZone, pathTimeZoneConversion) {
-        if(!date) { // TODO: E1032 should be trown only for startDate above
+        if(!date) { // TODO: E1032 should be thrown only for startDate above
             return undefined;
         }
 

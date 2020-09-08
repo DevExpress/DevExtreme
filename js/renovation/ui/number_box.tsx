@@ -2,7 +2,7 @@ import {
   Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method,
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable-next-line import/named */
-import DxNumberBox, { Options } from '../../ui/number_box';
+import LegacyNumberBox, { Options } from '../../ui/number_box';
 import { WidgetProps } from './common/widget';
 
 export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: NumberBox) => (
@@ -37,7 +37,7 @@ export class NumberBoxProps extends WidgetProps {
 
   @OneWay() useLargeSpinButtons?: boolean;
 
-  @TwoWay() value?: number;
+  @TwoWay() value: number | null = 0;
 
   @Event() valueChange?: ((value: number) => void) = () => {};
 }
@@ -57,13 +57,13 @@ export class NumberBox extends JSXComponent(NumberBoxProps) {
 
   @Effect()
   updateWidget(): void {
-    const widget = DxNumberBox.getInstance(this.widgetRef);
+    const widget = LegacyNumberBox.getInstance(this.widgetRef);
     widget?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
-    const widget = new DxNumberBox(this.widgetRef, this.properties);
+    const widget = new LegacyNumberBox(this.widgetRef, this.properties);
 
     return (): void => widget.dispose();
   }

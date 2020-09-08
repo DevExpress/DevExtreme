@@ -8,7 +8,7 @@ import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
 import { PAGER_PAGES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS } from './common/consts';
-import PagerProps from './common/pager_props';
+import PagerProps, { DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
@@ -28,7 +28,7 @@ export const viewFunction = ({
     showNavigationButtons, totalCount,
   },
   restAttributes,
-}: PagerContentComponent) => (
+}: PagerContent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div ref={parentRef} className={className} {...restAttributes}>
     {showPageSizes && (
@@ -73,14 +73,9 @@ export const viewFunction = ({
   </div>
 );
 
-/* Vitik bug in generator try to use in resizable-container
-export type TwoWayProps = {
-  pageIndexChange?: (pageIndex: number) => void;
-  pageSizeChange?: (pageSize: number) => void;
-}; */
-
+/* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PagerContentProps extends PagerProps /* bug in generator  implements TwoWayProps */ {
+export class PagerContentProps extends PagerProps {
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;
@@ -95,10 +90,18 @@ export class PagerContentProps extends PagerProps /* bug in generator  implement
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContentComponent extends JSXComponent(PagerContentProps) {
+export class PagerContent extends JSXComponent<PagerContentProps>() {
   get infoVisible(): boolean {
-    const { showInfo, infoTextVisible } = this.props as Required<PagerContentProps>;
-    return showInfo && infoTextVisible;
+    const { showInfo, infoTextVisible } = this.props;
+    return showInfo && infoTextVisible && this.isLargeDisplayMode;
+  }
+
+  private get normalizedDisplayMode(): DisplayMode {
+    const { lightModeEnabled, displayMode } = this.props;
+    if (displayMode === 'adaptive' && lightModeEnabled !== undefined) {
+      return lightModeEnabled ? 'compact' : 'full';
+    }
+    return displayMode;
   }
 
   get pagesContainerVisible(): boolean {
@@ -113,14 +116,21 @@ export class PagerContentComponent extends JSXComponent(PagerContentProps) {
   }
 
   get isLargeDisplayMode(): boolean {
-    return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
+    const displayMode = this.normalizedDisplayMode;
+    let result = false;
+    if (displayMode === 'adaptive') {
+      result = this.props.isLargeDisplayMode;
+    } else {
+      result = displayMode === 'full';
+    }
+    return result;
+    // return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
   }
 
   get className(): string {
-    const userClasses = this.props.className!;
     const classesMap = {
       'dx-widget': true,
-      [userClasses]: !!userClasses,
+      [`${this.props.className}`]: !!this.props.className,
       [PAGER_CLASS]: true,
       [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,

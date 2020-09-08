@@ -244,7 +244,7 @@ const DragEmitter = GestureEmitter.inherit({
             const $target = $(target);
             iteratorUtils.each(getItemDelegatedTargets($target), function(_, delegatedTarget) {
                 const $delegatedTarget = $(delegatedTarget);
-                if(that._checkDropTarget(getItemConfig($target), $delegatedTarget, e)) {
+                if(that._checkDropTarget(getItemConfig($target), $delegatedTarget, $(result), e)) {
                     result = delegatedTarget;
                 }
             });
@@ -264,7 +264,7 @@ const DragEmitter = GestureEmitter.inherit({
         return active;
     },
 
-    _checkDropTarget: function(config, $target, e) {
+    _checkDropTarget: function(config, $target, $prevTarget, e) {
         const isDraggingElement = $target.get(0) === $(e.target).get(0);
         if(isDraggingElement) {
             return false;
@@ -283,6 +283,10 @@ const DragEmitter = GestureEmitter.inherit({
             return false;
         }
         if(e.pageY > targetPosition.top + targetSize.height) {
+            return false;
+        }
+
+        if($prevTarget.length && $prevTarget.closest($target).length) {
             return false;
         }
 

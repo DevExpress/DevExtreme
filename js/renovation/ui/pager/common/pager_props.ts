@@ -1,45 +1,51 @@
 import {
   ComponentBindings, OneWay, TwoWay, Event,
 } from 'devextreme-generator/component_declaration/common';
-import messageLocalization from '../../../../localization/message';
+import { EventCallback } from '../../common/event_callback.d';
+
+export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 @ComponentBindings()
 export default class PagerProps {
+  @OneWay() gridCompatibility = true;
+
   @OneWay() className?: string;
 
-  @OneWay() showInfo?: boolean = false;
+  @OneWay() showInfo = false;
 
-  @OneWay() infoText?: string = messageLocalization.getFormatter('dxPager-infoText')();
+  @OneWay() infoText?: string;
 
-  @OneWay() lightModeEnabled?: boolean = false;
+  @OneWay() lightModeEnabled?: boolean;
 
-  @OneWay() maxPagesCount?: number = 10;
+  @OneWay() displayMode: DisplayMode = 'adaptive';
 
-  @OneWay() pageCount?: number = 10;
+  @OneWay() maxPagesCount = 10;
 
-  @OneWay() pagesCountText?: string = messageLocalization.getFormatter('dxPager-pagesCountText')();
+  @OneWay() pageCount = 10;
 
-  @OneWay() visible?: boolean = true;
+  @OneWay() pagesCountText?: string;
 
-  @OneWay() hasKnownLastPage?: boolean = true;
+  @OneWay() visible = true;
 
-  @OneWay() pagesNavigatorVisible?: boolean | 'auto' = 'auto';
+  @OneWay() hasKnownLastPage = true;
 
-  @TwoWay() pageIndex?: number = 0;
+  @OneWay() pagesNavigatorVisible: boolean | 'auto' = 'auto';
 
-  @Event() pageIndexChange?: (newPageIndex: number) => void;
+  @TwoWay() pageIndex = 1;
 
-  @TwoWay() pageSize?: number = 5;
+  @Event() pageIndexChange?: EventCallback<number>;
 
-  @Event() pageSizeChange?: (newPageSize: number) => void;
+  @TwoWay() pageSize = 5;
 
-  @OneWay() showPageSizes? = true;
+  @Event() pageSizeChange?: EventCallback<number>;
 
-  @OneWay() pageSizes?: number[] = [5, 10];
+  @OneWay() showPageSizes = true;
 
-  @OneWay() rtlEnabled?: boolean = false;
+  @OneWay() pageSizes: (number | 'all')[] = [5, 10];
 
-  @OneWay() showNavigationButtons?: boolean = false;
+  @OneWay() rtlEnabled = false;
 
-  @OneWay() totalCount?: number = 0;
+  @OneWay() showNavigationButtons = false;
+
+  @OneWay() totalCount = 0;
 }

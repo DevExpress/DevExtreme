@@ -252,6 +252,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     showFileList?: boolean;
     /**
+     * @docid dxFileUploaderOptions.dialogTrigger
+     * @type string|Element|jQuery
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dialogTrigger?: string | Element | JQuery;
+    /**
      * @docid dxFileUploaderOptions.uploadButtonText
      * @type string
      * @default "Upload"
@@ -347,6 +355,29 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
 export default class dxFileUploader extends Editor {
     constructor(element: Element, options?: dxFileUploaderOptions)
     constructor(element: JQuery, options?: dxFileUploaderOptions)
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(): void;
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(file: File): void;
 }
 
 declare global {

@@ -776,9 +776,8 @@ export const BaseChart = BaseWidget.inherit({
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
 
-        that._clearCanvas();
-
         that._renderExtraElements();
+        that._clearCanvas();
 
         that._drawn();
         that._renderCompleteHandler();
@@ -1355,7 +1354,7 @@ export const BaseChart = BaseWidget.inherit({
     getStackedPoints: function(point) {
         const stackName = point.series.getStackName();
         return this._getVisibleSeries().reduce((stackPoints, series) => {
-            if((!_isDefined(series.getStackName()) && !_isDefined(stackName)) || stackName === series.getStackName()) {
+            if((!_isDefined(series.getStackName()) || !_isDefined(stackName)) || stackName === series.getStackName()) {
                 stackPoints = stackPoints.concat(series.getPointsByArg(point.argument));
             }
             return stackPoints;

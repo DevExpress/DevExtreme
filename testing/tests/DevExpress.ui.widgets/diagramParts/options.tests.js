@@ -285,6 +285,34 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.selection.inputPosition.initialProperties.connectorProperties.endLineEnding, 2);
     });
 
+    test('should apply defaultItemProperties.min/max width/height to settings', function(assert) {
+        this.instance.option('defaultItemProperties.shapeMinWidth', 1);
+        this.instance.option('defaultItemProperties.shapeMaxWidth', 10);
+        this.instance.option('defaultItemProperties.shapeMinHeight', 2);
+        this.instance.option('defaultItemProperties.shapeMaxHeight', 20);
+        assert.equal(this.instance._diagramInstance.settings.shapeMinWidth, 1440);
+        assert.equal(this.instance._diagramInstance.settings.shapeMaxWidth, 14400);
+        assert.equal(this.instance._diagramInstance.settings.shapeMinHeight, 2880);
+        assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 28800);
+    });
+
+    test('should apply operationSettins to settings', function(assert) {
+        this.instance.option('operationSettings.allowAddShape', false);
+        this.instance.option('operationSettings.allowDeleteShape', false);
+        this.instance.option('operationSettings.allowDeleteConnector', false);
+        this.instance.option('operationSettings.allowChangeConnection', false);
+        this.instance.option('operationSettings.allowChangeConnectorPoints', false);
+        this.instance.option('operationSettings.allowChangeShapeText', false);
+        this.instance.option('operationSettings.allowChangeConnectorText', false);
+        assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.deleteConnector, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.connectionChange, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorPoints, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeShapeText, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorText, false);
+    });
+
     test('should change dataSource options', function(assert) {
         assert.equal(this.instance._diagramInstance.documentDataSource, undefined);
         this.instance.option('nodes.dataSource', [
@@ -350,28 +378,31 @@ QUnit.module('Options', {
 
     test('should return correct autoLayout parameters based on the nodes.autoLayout option', function(assert) {
         assert.equal(this.instance.option('nodes.autoLayout'), 'auto');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: true });
 
         this.instance.option('nodes.leftExpr', 'left');
         this.instance.option('nodes.topExpr', 'left');
-        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
         this.instance.option('nodes.autoLayout', { type: 'auto' });
-        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
 
         this.instance.option('nodes.leftExpr', '');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: true });
         this.instance.option('nodes.topExpr', '');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: true });
 
         this.instance.option('nodes.autoLayout', 'off');
-        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
         this.instance.option('nodes.autoLayout', { type: 'off' });
-        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
 
         this.instance.option('nodes.autoLayout', 'tree');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: true });
         this.instance.option('nodes.autoLayout', { type: 'tree' });
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: true });
+
+        this.instance.option('nodes.autoSizeEnabled', false);
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: false });
     });
 
     test('should change customShapes option', function(assert) {
@@ -436,7 +467,8 @@ QUnit.module('Options', {
                 templateLeft: 0,
                 templateTop: 0,
                 templateWidth: 1,
-                templateHeight: 1
+                templateHeight: 1,
+                keepRatioOnAutoSize: true
             }
         ]);
         const keys = Object.keys(descriptions);
@@ -479,6 +511,7 @@ QUnit.module('Options', {
         assert.equal(description.properties.templateTop, 0);
         assert.equal(description.properties.templateWidth, 1);
         assert.equal(description.properties.templateHeight, 1);
+        assert.equal(description.properties.keepRatioOnAutoSize, true);
     });
 
     test('hasChanges changes on import or editing of an unbound diagram', function(assert) {

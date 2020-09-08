@@ -164,7 +164,7 @@
 
         "dxPager-infoText": "Trang {0} của {1} ({2} mục)",
         "dxPager-pagesCountText": "của",
-
+        "dxPager-pageSizesAllText": "Tất cả",
         "dxPivotGrid-grandTotal": "Tổng tất cả",
         "dxPivotGrid-total": "{0} Tổng",
         "dxPivotGrid-fieldChooserTitle": "Trình lựa chọn Trường",

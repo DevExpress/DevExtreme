@@ -1186,7 +1186,8 @@ export default {
                             const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
                             const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
                             const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
-                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey;
+                            const isChanges = args.fullName?.indexOf('editing.changes') === 0;
+                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges;
 
                             if(needReinit) {
                                 this.reinit(ignoreColumnOptionNames);
@@ -2039,7 +2040,13 @@ export default {
                                     const selector = sortParameters[i].selector;
                                     const isExpanded = sortParameters[i].isExpanded;
 
-                                    if(selector === column.dataField || selector === column.name || selector === column.selector || selector === column.calculateCellValue || selector === column.calculateGroupValue) {
+                                    if(selector === column.dataField ||
+                                        selector === column.name ||
+                                        selector === column.selector ||
+                                        selector === column.calculateCellValue ||
+                                        selector === column.calculateGroupValue ||
+                                        selector === column.calculateDisplayValue
+                                    ) {
                                         column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
 
                                         if(isExpanded !== undefined) {

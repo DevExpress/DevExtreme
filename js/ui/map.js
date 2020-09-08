@@ -420,11 +420,11 @@ const Map = Widget.inherit({
                 result = wrapToArray(result);
 
                 const mapRefreshed = result[0];
-                if(mapRefreshed) {
+                if(mapRefreshed && !this._disposed) {
                     this._triggerReadyAction();
                 }
                 ///#DEBUG
-                if(!mapRefreshed && name !== 'clean') {
+                if(!mapRefreshed && name !== 'clean' && !this._disposed) {
                     this._triggerUpdateAction();
                 }
                 ///#ENDDEBUG

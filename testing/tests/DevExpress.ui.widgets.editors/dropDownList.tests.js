@@ -1297,7 +1297,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         listInstance.scrollTo(1000);
         const scrollTop = listInstance.scrollTop();
@@ -1339,7 +1338,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const keyboard = keyboardMock($input);
@@ -1547,13 +1545,25 @@ QUnit.module('aria accessibility', moduleConfig, () => {
     QUnit.test('aria-owns should point to list', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
 
-        assert.notEqual($dropDownList.attr('aria-owns'), undefined, 'aria-owns exists');
-        assert.equal($dropDownList.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+    });
+
+    QUnit.test('aria-owns should point to the list even if popup is closed but rendered', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            deferRendering: false
+        });
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
     });
 
     QUnit.test('input aria-owns should point to list', function(assert) {
-        const $dropDownList = $('#dropDownList').dxDropDownList({ items: [1, 2, 3], opened: true });
+        const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
 
@@ -1561,7 +1571,7 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
     });
 
-    QUnit.test('aria-controls should be removed when popup is not visible', function(assert) {
+    QUnit.test('aria-controls should not be removed when popup is not visible', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $dropDownList.dxDropDownList('instance');
@@ -1572,7 +1582,18 @@ QUnit.module('aria accessibility', moduleConfig, () => {
 
         instance.close();
 
-        assert.strictEqual($input.attr('aria-controls'), undefined, 'controls does not exist');
+        assert.notEqual($input.attr('aria-controls'), undefined, 'controls exists');
+        assert.equal($input.attr('aria-controls'), $list.attr('id'), 'aria-controls points to list\'s id');
+    });
+
+    QUnit.test('aria-controls should be defined immediately if deferRendering is false', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({ deferRendering: false });
+        const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const instance = $dropDownList.dxDropDownList('instance');
+        const $list = $(instance.content()).find(`.${LIST_CLASS}`);
+
+        assert.notEqual($input.attr('aria-controls'), undefined, 'controls exists');
+        assert.equal($input.attr('aria-controls'), $list.attr('id'), 'aria-controls points to list\'s id');
     });
 
     QUnit.test('input\'s aria-activedescendant attribute should point to the focused item', function(assert) {

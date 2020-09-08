@@ -9,10 +9,6 @@ import {
 } from '../../core/element';
 
 import {
-    template
-} from '../../core/templates/template';
-
-import {
     format
 } from '../../ui/widget/ui.widget';
 
@@ -660,17 +656,6 @@ export interface BaseWidgetAnnotationConfig {
      */
     color?: string;
     /**
-     * @docid BaseWidgetAnnotationConfig.customizeTooltip
-     * @type function(annotation)
-     * @type_function_param1 annotation:BaseWidgetAnnotationConfig|any
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    customizeTooltip?: ((annotation: BaseWidgetAnnotationConfig | any) => any);
-    /**
      * @docid BaseWidgetAnnotationConfig.data
      * @type object
      * @prevFileNamespace DevExpress.viz
@@ -756,17 +741,6 @@ export interface BaseWidgetAnnotationConfig {
      */
     shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
     /**
-     * @docid BaseWidgetAnnotationConfig.template
-     * @type template|function
-     * @default undefined
-     * @type_function_param1 annotation:BaseWidgetAnnotationConfig|any
-     * @type_function_param2 element:SVGGElement
-     * @type_function_return string|SVGElement|jQuery
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    template?: template | ((annotation: BaseWidgetAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
-    /**
      * @docid BaseWidgetAnnotationConfig.text
      * @type string
      * @default undefined
@@ -790,17 +764,6 @@ export interface BaseWidgetAnnotationConfig {
      * @public
      */
     tooltipEnabled?: boolean;
-    /**
-     * @docid BaseWidgetAnnotationConfig.tooltipTemplate
-     * @type template|function(annotation, element)
-     * @type_function_param1 annotation:BaseWidgetAnnotationConfig|any
-     * @type_function_param2 element:dxElement
-     * @type_function_return string|Element|jQuery
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    tooltipTemplate?: template | ((annotation: BaseWidgetAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
     /**
      * @docid BaseWidgetAnnotationConfig.type
      * @type Enums.AnnotationType

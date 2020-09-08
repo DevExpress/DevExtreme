@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/gantt" as *;
+@use "../../base/gantt";
+@use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
 
 // adduse
@@ -133,6 +134,9 @@ $gantt-successor-background-color: white;
         height: $gantt-task-height - 2px;
         line-height: $gantt-task-height - 2px;
         background-color: $gantt-parent-task-bg;
+        border-left-color: $gantt-parent-task-bg;
+        border-right-color: $gantt-parent-task-bg;
+        border-top-color: $gantt-parent-task-bg;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
 
@@ -158,11 +162,6 @@ $gantt-successor-background-color: white;
           border-bottom-color: transparent;
         }
 
-        &::before {
-          border-left-color: $gantt-parent-task-bg;
-          border-top-color: $gantt-parent-task-bg;
-        }
-
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
           border-left-color: rgba(255, 255, 255, 0.2);
           border-top-color: rgba(255, 255, 255, 0.2);
@@ -173,11 +172,6 @@ $gantt-successor-background-color: white;
           right: 0;
           border-left-color: transparent;
           border-bottom-color: transparent;
-        }
-
-        &::after {
-          border-right-color: $gantt-parent-task-bg;
-          border-top-color: $gantt-parent-task-bg;
         }
 
         &.dx-gantt-cmpl::after {

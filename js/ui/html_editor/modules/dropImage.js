@@ -1,4 +1,4 @@
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';

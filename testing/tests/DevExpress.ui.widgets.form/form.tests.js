@@ -27,6 +27,7 @@ import {
     FORM_GROUP_CAPTION_CLASS
 } from 'ui/form/constants';
 import 'ui/html_editor';
+import '../../helpers/ignoreQuillTimers.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
@@ -3429,3 +3430,22 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
         'onOptionChanged'
     ]);
 });
+
+[2, 3, 'auto'].forEach(colCount => {
+    [1, undefined].forEach(colSpan => {
+        QUnit.test(`Form.colCount=${colCount}, field.colSpan=${colSpan} -> resizeWindow() //T923489`, function(assert) {
+            $('#form').dxForm({
+                colCount: colCount,
+                items: [
+                    { dataField: 'field1', colSpan: 2 },
+                    { dataField: 'field2', colSpan: colSpan }
+                ]
+            }).dxForm('instance');
+
+            resizeCallbacks.fire();
+
+            assert.equal(1, 1, 'resize of the form does not freeze the page');
+        });
+    });
+});
+

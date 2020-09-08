@@ -368,19 +368,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onAppointmentDeleting?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, cancel: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
     /**
-     * @docid dxSchedulerOptions.onAppointmentFormCreated
-     * @extends Action
-     * @type function(e)
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 form:dxForm
-     * @action
-     * @deprecated dxSchedulerOptions.onAppointmentFormOpening
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onAppointmentFormCreated?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData?: any, form: dxForm }) => any);
-    /**
      * @docid dxSchedulerOptions.onAppointmentFormOpening
      * @extends Action
      * @type function(e)
@@ -507,6 +494,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DataSource | DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
     /**
+     * @docid dxSchedulerOptions.scrolling
+     * @type dxSchedulerScrolling
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    scrolling?: dxSchedulerScrolling;
+    /**
      * @docid dxSchedulerOptions.selectedCellData
      * @readonly
      * @type Array<any>
@@ -603,7 +597,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: dxElement) => string | Element | JQuery), appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
+    views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: dxElement) => string | Element | JQuery), appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek', scrolling?: dxSchedulerScrolling }>;
 }
 /**
  * @docid dxScheduler
@@ -811,6 +805,21 @@ interface JQuery {
 }
 }
 export type Options = dxSchedulerOptions;
+
+/**
+ * @docid dxSchedulerScrolling
+ * @public
+ */
+export interface dxSchedulerScrolling {
+  /**
+   * @docid dxSchedulerScrolling.mode
+   * @type Enums.SchedulerScrollingMode
+   * @default "standard"
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  mode?: 'standard' | 'virtual';
+}
 
 /** @deprecated use Options instead */
 export type IOptions = dxSchedulerOptions;

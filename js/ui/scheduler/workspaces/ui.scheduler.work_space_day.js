@@ -38,7 +38,7 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
     }
 
-    renovateRenderSupported() { return true; }
+    renovatedRenderSupported() { return true; }
 
     generateRenderOptions() {
         const startViewDate = this._getDateWithSkippedDST();
@@ -66,7 +66,12 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
     }
 
     renderRDateTable() {
-        this.renderRComponent(this._$dateTable, dxrDayDateTableLayout, 'renovatedDateTable', { viewData: this.viewData });
+        this.renderRComponent(
+            this._$dateTable,
+            dxrDayDateTableLayout,
+            'renovatedDateTable',
+            { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
+        );
     }
 }
 

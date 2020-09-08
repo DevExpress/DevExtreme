@@ -2089,6 +2089,10 @@ declare module DevExpress.ui {
         onAdaptiveDetailRowPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, formOptions?: any }) => any);
         /** @name GridBase.Options.onDataErrorOccurred */
         onDataErrorOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, error?: Error }) => any);
+        /** @name GridBase.Options.onEditCanceled */
+        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        /** @name GridBase.Options.onEditCanceling */
+        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
         /** @name GridBase.Options.onInitNewRow */
         onInitNewRow?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, promise?: Promise<void> | JQueryPromise<void> }) => any);
         /** @name GridBase.Options.onKeyDown */
@@ -2115,12 +2119,16 @@ declare module DevExpress.ui {
         onRowUpdating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** @name GridBase.Options.onRowValidating */
         onRowValidating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: Promise<void> | JQueryPromise<void> }) => any);
+        /** @name GridBase.Options.onSaved */
+        onSaved?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        /** @name GridBase.Options.onSaving */
+        onSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /** @name GridBase.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** @name GridBase.Options.onToolbarPreparing */
         onToolbarPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /** @name GridBase.Options.pager */
-        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number | 'all'> | 'auto', displayMode?: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
         /** @name GridBase.Options.paging */
         paging?: GridBasePaging;
         /** @name GridBase.Options.renderAsync */
@@ -2158,8 +2166,12 @@ declare module DevExpress.ui {
     }
     /** @name GridBase.Options.editing */
     export interface GridBaseEditing {
+        /** @name GridBase.Options.editing.changes */
+        changes?: Array<any>;
         /** @name GridBase.Options.editing.confirmDelete */
         confirmDelete?: boolean;
+        /** @name GridBase.Options.editing.editColumnName */
+        editColumnName?: string;
         /** @name GridBase.Options.editing.editRowKey */
         editRowKey?: any;
         /** @name GridBase.Options.editing.form */
@@ -2802,9 +2814,6 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
-        /** @deprecated */
-        /** @name dxButtonGroup.Options.itemTemplate */
-        itemTemplate?: DevExpress.core.template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
@@ -3093,18 +3102,12 @@ declare module DevExpress.ui {
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /** @name dxDataGrid.getVisibleRows() */
         getVisibleRows(): Array<dxDataGridRowObject>;
-        /** @deprecated */
-        /** @name dxDataGrid.insertRow() */
-        insertRow(): void;
         /** @name dxDataGrid.isRowExpanded(key) */
         isRowExpanded(key: any): boolean;
         /** @name dxDataGrid.isRowSelected(data) */
         isRowSelected(data: any): boolean;
         /** @name GridBase.isRowSelected(key) */
         isRowSelected(key: any): boolean;
-        /** @deprecated */
-        /** @name dxDataGrid.removeRow(rowIndex) */
-        removeRow(rowIndex: number): void;
         /** @name dxDataGrid.totalCount() */
         totalCount(): number;
     }
@@ -3195,14 +3198,8 @@ declare module DevExpress.ui {
         invalidDateMessage?: string;
         /** @name dxDateBox.Options.max */
         max?: Date | number | string;
-        /** @deprecated */
-        /** @name dxDateBox.Options.maxZoomLevel */
-        maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.min */
         min?: Date | number | string;
-        /** @deprecated */
-        /** @name dxDateBox.Options.minZoomLevel */
-        minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
         /** @name dxDateBox.Options.placeholder */
@@ -3276,15 +3273,21 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.mainToolbar */
         mainToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, autoSizeEnabled?: boolean, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onCustomCommand */
         onCustomCommand?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, name?: string }) => any);
         /** @name dxDiagram.Options.onItemClick */
         onItemClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
         /** @name dxDiagram.Options.onItemDblClick */
         onItemDblClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
+        /** @name dxDiagram.Options.onRequestLayoutUpdate */
+        onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any>, allowed?: boolean }) => any);
+        /** @name dxDiagram.Options.onRequestOperation */
+        onRequestOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText', args?: dxDiagramRequestOperationAddShapeArgs | dxDiagramRequestOperationAddShapeFromToolboxArgs | dxDiagramRequestOperationDeleteShapeArgs | dxDiagramRequestOperationDeleteConnectorArgs | dxDiagramRequestOperationChangeConnectionArgs | dxDiagramRequestOperationChangeConnectorPointsArgs | dxDiagramRequestOperationBeforeChangeShapeTextArgs | dxDiagramRequestOperationChangeShapeTextArgs | dxDiagramRequestOperationBeforeChangeConnectorTextArgs | dxDiagramRequestOperationChangeConnectorTextArgs, allowed?: boolean }) => any);
         /** @name dxDiagram.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
+        /** @name dxDiagram.Options.operationSettings */
+        operationSettings?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean };
         /** @name dxDiagram.Options.pageColor */
         pageColor?: string;
         /** @name dxDiagram.Options.pageOrientation */
@@ -3326,8 +3329,6 @@ declare module DevExpress.ui {
         getNodeDataSource(): DevExpress.data.DataSource;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly?: boolean): void;
-        /** @name dxDiagram.reloadContent(itemKey, applyLayout) */
-        reloadContent(itemKey?: any, applyLayout?: boolean): void;
     }
     /** @name dxDiagramConnector */
     export interface dxDiagramConnector extends dxDiagramItem {
@@ -3357,6 +3358,76 @@ declare module DevExpress.ui {
         id?: string;
         /** @name dxDiagramItem.itemType */
         itemType?: 'shape' | 'connector';
+    }
+    /** @name dxDiagramRequestOperationAddShapeArgs */
+    export interface dxDiagramRequestOperationAddShapeArgs {
+        /** @name dxDiagramRequestOperationAddShapeArgs.position */
+        position?: any;
+        /** @name dxDiagramRequestOperationAddShapeArgs.shape */
+        shape?: dxDiagramShape;
+    }
+    /** @name dxDiagramRequestOperationAddShapeFromToolboxArgs */
+    export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
+        /** @name dxDiagramRequestOperationAddShapeFromToolboxArgs.shapeType */
+        shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+    }
+    /** @name dxDiagramRequestOperationBeforeChangeConnectorTextArgs */
+    export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
+        /** @name dxDiagramRequestOperationBeforeChangeConnectorTextArgs.connector */
+        connector?: dxDiagramConnector;
+        /** @name dxDiagramRequestOperationBeforeChangeConnectorTextArgs.index */
+        index?: number;
+    }
+    /** @name dxDiagramRequestOperationBeforeChangeShapeTextArgs */
+    export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
+        /** @name dxDiagramRequestOperationBeforeChangeShapeTextArgs.shape */
+        shape?: dxDiagramShape;
+    }
+    /** @name dxDiagramRequestOperationChangeConnectionArgs */
+    export interface dxDiagramRequestOperationChangeConnectionArgs {
+        /** @name dxDiagramRequestOperationChangeConnectionArgs.connectionPointIndex */
+        connectionPointIndex?: number;
+        /** @name dxDiagramRequestOperationChangeConnectionArgs.connector */
+        connector?: dxDiagramConnector;
+        /** @name dxDiagramRequestOperationChangeConnectionArgs.connectorPosition */
+        connectorPosition?: 'start' | 'end';
+        /** @name dxDiagramRequestOperationChangeConnectionArgs.shape */
+        shape?: dxDiagramShape;
+    }
+    /** @name dxDiagramRequestOperationChangeConnectorPointsArgs */
+    export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
+        /** @name dxDiagramRequestOperationChangeConnectorPointsArgs.connector */
+        connector?: dxDiagramConnector;
+        /** @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints */
+        newPoints?: Array<any>;
+        /** @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints */
+        oldPoints?: Array<any>;
+    }
+    /** @name dxDiagramRequestOperationChangeConnectorTextArgs */
+    export interface dxDiagramRequestOperationChangeConnectorTextArgs {
+        /** @name dxDiagramRequestOperationChangeConnectorTextArgs.connector */
+        connector?: dxDiagramConnector;
+        /** @name dxDiagramRequestOperationChangeConnectorTextArgs.index */
+        index?: number;
+        /** @name dxDiagramRequestOperationChangeConnectorTextArgs.text */
+        text?: string;
+    }
+    /** @name dxDiagramRequestOperationChangeShapeTextArgs */
+    export interface dxDiagramRequestOperationChangeShapeTextArgs {
+        /** @name dxDiagramRequestOperationChangeShapeTextArgs.shape */
+        shape?: dxDiagramShape;
+        /** @name dxDiagramRequestOperationChangeShapeTextArgs.text */
+        text?: string;
+    }
+    /** @name dxDiagramRequestOperationDeleteConnectorArgs */
+    export interface dxDiagramRequestOperationDeleteConnectorArgs {
+        /** @name dxDiagramRequestOperationDeleteConnectorArgs.connector */
+        connector?: dxDiagramConnector;
+    }
+    /** @name dxDiagramRequestOperationDeleteShapeArgs */
+    export interface dxDiagramRequestOperationDeleteShapeArgs {
+        /** @name dxDiagramRequestOperationDeleteShapeArgs.shape */
+        shape?: dxDiagramShape;
     }
     /** @name dxDiagramShape */
     export interface dxDiagramShape extends dxDiagramItem {
@@ -3747,6 +3818,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
+        /** @name dxFileManagerToolbarItem.icon */
+        icon?: string;
         /** @name dxFileManagerToolbarItem.location */
         location?: 'after' | 'before' | 'center';
         /** @name dxFileManagerToolbarItem.name */
@@ -3766,6 +3839,8 @@ declare module DevExpress.ui {
         allowedFileExtensions?: Array<string>;
         /** @name dxFileUploader.Options.chunkSize */
         chunkSize?: number;
+        /** @name dxFileUploader.Options.dialogTrigger */
+        dialogTrigger?: string | Element | JQuery;
         /** @name dxFileUploader.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxFileUploader.Options.inputAttr */
@@ -3831,6 +3906,12 @@ declare module DevExpress.ui {
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
+        /** @name dxFileUploader.upload() */
+        upload(): void;
+        /** @name dxFileUploader.upload(file) */
+        upload(file: File): void;
+        /** @name dxFileUploader.upload(fileIndex) */
+        upload(fileIndex: number): void;
     }
     /** @name dxFilterBuilder.Options */
     export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
@@ -3986,9 +4067,6 @@ declare module DevExpress.ui {
     }
     /** @name dxFormButtonItem */
     export interface dxFormButtonItem {
-        /** @deprecated */
-        /** @name dxFormButtonItem.alignment */
-        alignment?: 'center' | 'left' | 'right';
         /** @name dxFormButtonItem.buttonOptions */
         buttonOptions?: dxButtonOptions;
         /** @name dxFormButtonItem.colSpan */
@@ -4215,6 +4293,8 @@ declare module DevExpress.ui {
         tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.toolbar */
         toolbar?: dxGanttToolbar;
+        /** @name dxGantt.Options.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
         /** @name dxGantt.Options.validation */
         validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
@@ -4222,6 +4302,32 @@ declare module DevExpress.ui {
     export class dxGantt extends Widget {
         constructor(element: Element, options?: dxGanttOptions)
         constructor(element: JQuery, options?: dxGanttOptions)
+        /** @name dxGantt.assignResourceToTask(resourceKey, taskKey) */
+        assignResourceToTask(resourceKey: any, taskKey: any): void;
+        /** @name dxGantt.deleteDependency(key) */
+        deleteDependency(key: any): void;
+        /** @name dxGantt.deleteResource(key) */
+        deleteResource(key: any): void;
+        /** @name dxGantt.deleteTask(key) */
+        deleteTask(key: any): void;
+        /** @name dxGantt.getDependencyData(key) */
+        getDependencyData(key: any): any;
+        /** @name dxGantt.getResourceAssignmentData(key) */
+        getResourceAssignmentData(key: any): any;
+        /** @name dxGantt.getResourceData(key) */
+        getResourceData(key: any): any;
+        /** @name dxGantt.getTaskData(key) */
+        getTaskData(key: any): any;
+        /** @name dxGantt.insertDependency(data) */
+        insertDependency(data: any): void;
+        /** @name dxGantt.insertResource(data, taskKeys) */
+        insertResource(data: any, taskKeys?: Array<any>): void;
+        /** @name dxGantt.insertTask(data) */
+        insertTask(data: any): void;
+        /** @name dxGantt.unassignResourceFromTask(resourceKey, taskKey) */
+        unassignResourceFromTask(resourceKey: any, taskKey: any): void;
+        /** @name dxGantt.updateTask(key, data) */
+        updateTask(key: any, data: any): void;
     }
     /** @name dxGanttStripLine */
     export interface dxGanttStripLine {
@@ -4375,9 +4481,6 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxList.Options.allowItemDeleting */
         allowItemDeleting?: boolean;
-        /** @deprecated */
-        /** @name dxList.Options.allowItemReordering */
-        allowItemReordering?: boolean;
         /** @name dxList.Options.bounceEnabled */
         bounceEnabled?: boolean;
         /** @name dxList.Options.collapsibleGroups */
@@ -5434,9 +5537,6 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** @name dxScheduler.Options.onAppointmentDeleting */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** @deprecated */
-        /** @name dxScheduler.Options.onAppointmentFormCreated */
-        onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** @name dxScheduler.Options.onAppointmentFormOpening */
         onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm, popup?: dxPopup, cancel?: boolean }) => any);
         /** @name dxScheduler.Options.onAppointmentRendered */
@@ -5461,6 +5561,8 @@ declare module DevExpress.ui {
         resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxScheduler.Options.resources */
         resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
+        /** @name dxScheduler.Options.scrolling */
+        scrolling?: dxSchedulerScrolling;
         /** @name dxScheduler.Options.selectedCellData */
         selectedCellData?: Array<any>;
         /** @name dxScheduler.Options.shadeUntilCurrentTime */
@@ -5484,7 +5586,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.useDropDownViewSwitcher */
         useDropDownViewSwitcher?: boolean;
         /** @name dxScheduler.Options.views */
-        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: DevExpress.core.template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
+        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: DevExpress.core.template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
     }
     /** @name dxScheduler */
     export class dxScheduler extends Widget {
@@ -5541,6 +5643,11 @@ declare module DevExpress.ui {
         text?: string;
         /** @name dxSchedulerAppointment.visible */
         visible?: boolean;
+    }
+    /** @name dxSchedulerScrolling */
+    export interface dxSchedulerScrolling {
+        /** @name dxSchedulerScrolling.mode */
+        mode?: 'standard' | 'virtual';
     }
     /** @name dxScrollView.Options */
     export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
@@ -5819,12 +5926,6 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** @name dxSwitch.Options.name */
         name?: string;
-        /** @deprecated */
-        /** @name dxSwitch.Options.offText */
-        offText?: string;
-        /** @deprecated */
-        /** @name dxSwitch.Options.onText */
-        onText?: string;
         /** @name dxSwitch.Options.switchedOffText */
         switchedOffText?: string;
         /** @name dxSwitch.Options.switchedOnText */
@@ -6323,9 +6424,6 @@ declare module DevExpress.ui {
         getRootNode(): dxTreeListNode;
         /** @name dxTreeList.getSelectedRowKeys() */
         getSelectedRowKeys(): Array<any>;
-        /** @deprecated */
-        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
-        getSelectedRowKeys(leavesOnly: boolean): Array<any>;
         /** @name dxTreeList.getSelectedRowKeys(mode) */
         getSelectedRowKeys(mode: string): Array<any>;
         /** @name dxTreeList.getSelectedRowsData() */
@@ -6777,7 +6875,7 @@ declare module DevExpress.viz {
         render(renderOptions: any): void;
     }
     /** @name BaseChartAnnotationConfig */
-    export interface BaseChartAnnotationConfig {
+    export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
         /** @name BaseChartAnnotationConfig.argument */
         argument?: number | Date | string;
         /** @name BaseChartAnnotationConfig.series */
@@ -7140,8 +7238,6 @@ declare module DevExpress.viz {
         border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name BaseWidgetAnnotationConfig.color */
         color?: string;
-        /** @name BaseWidgetAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotation: BaseWidgetAnnotationConfig | any) => any);
         /** @name BaseWidgetAnnotationConfig.data */
         data?: any;
         /** @name BaseWidgetAnnotationConfig.description */
@@ -7164,16 +7260,12 @@ declare module DevExpress.viz {
         paddingTopBottom?: number;
         /** @name BaseWidgetAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-        /** @name BaseWidgetAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name BaseWidgetAnnotationConfig.text */
         text?: string;
         /** @name BaseWidgetAnnotationConfig.textOverflow */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name BaseWidgetAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
-        /** @name BaseWidgetAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotation: BaseWidgetAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseWidgetAnnotationConfig.type */
         type?: 'text' | 'image' | 'custom';
         /** @name BaseWidgetAnnotationConfig.width */
@@ -8178,6 +8270,12 @@ declare module DevExpress.viz {
     export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
+        /** @name dxChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -9240,10 +9338,16 @@ declare module DevExpress.viz {
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /** @name dxPieChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPieChartAdaptiveLayout;
+        /** @name dxPieChart.Options.annotations */
+        annotations?: Array<dxPieChartAnnotationConfig | any>;
         /** @name dxPieChart.Options.centerTemplate */
         centerTemplate?: DevExpress.core.template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPieChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
         /** @name dxPieChart.Options.commonSeriesSettings */
         commonSeriesSettings?: any;
+        /** @name dxPieChart.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
         /** @name dxPieChart.Options.diameter */
         diameter?: number;
         /** @name dxPieChart.Options.innerRadius */
@@ -9295,6 +9399,26 @@ declare module DevExpress.viz {
         constructor(element: JQuery, options?: dxPieChartOptions)
         /** @name dxPieChart.getInnerRadius() */
         getInnerRadius(): number;
+    }
+    /** @name dxPieChartAnnotationConfig */
+    export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
+        /** @name dxPieChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxPieChartCommonAnnotationConfig */
+    export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+        /** @name dxPieChartCommonAnnotationConfig.argument */
+        argument?: number | Date | string;
+        /** @name dxPieChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
+        /** @name dxPieChartCommonAnnotationConfig.location */
+        location?: 'center' | 'edge';
+        /** @name dxPieChartCommonAnnotationConfig.series */
+        series?: string;
+        /** @name dxPieChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxPieChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPieChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPieChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPieChartSeriesTypes */
     export interface dxPieChartSeriesTypes {
@@ -9730,8 +9854,14 @@ declare module DevExpress.viz {
     export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /** @name dxPolarChartCommonAnnotationConfig.angle */
         angle?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
         /** @name dxPolarChartCommonAnnotationConfig.radius */
         radius?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxPolarChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxPolarChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
@@ -10334,6 +10464,12 @@ declare module DevExpress.viz {
     export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
         /** @name dxVectorMapCommonAnnotationConfig.coordinates */
         coordinates?: Array<number>;
+        /** @name dxVectorMapCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
+        /** @name dxVectorMapCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        /** @name dxVectorMapCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name linearCircle */
     export type linearCircle = CommonIndicator;

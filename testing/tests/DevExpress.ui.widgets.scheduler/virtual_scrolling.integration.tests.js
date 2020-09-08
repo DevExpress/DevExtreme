@@ -3,8 +3,8 @@ import {
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day'];
-const unsupportedViews = ['week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const supportedViews = ['day', 'week', 'workWeek'];
+const unsupportedViews = ['month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
 const { testStart, test, module } = QUnit;
 
@@ -15,18 +15,41 @@ module('Initialization', {
     }
 }, () => {
     supportedViews.forEach(view => {
-        [true, false].forEach(virtualScrollingEnabled => {
-            test(`Virtual scrolling if view: ${view}, virtualScrolling.enabled: ${virtualScrollingEnabled}`, function(assert) {
+        [{
+            mode: 'standard', result: false,
+        }, {
+            mode: 'virtual', result: true,
+        }].forEach(scrolling => {
+            test(`Virtual Scrolling as the ${view} view option, scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: supportedViews,
                     currentView: view,
-                    virtualScrolling: {
-                        enabled: virtualScrollingEnabled
+                    scrolling: {
+                        mode: scrolling.mode,
                     },
-                    renovateRender: true
                 }).instance;
 
-                assert.equal(!!instance.getWorkSpace()._virtualScrolling, virtualScrollingEnabled, 'Virtual scrolling initialization');
+                assert.equal(
+                    !!instance.getWorkSpace()._virtualScrolling, scrolling.result, 'Virtual scrolling initialization',
+                );
+                assert.equal(instance.getWorkSpace().isRenovatedRender(), scrolling.result, 'Correct render is used');
+            });
+
+            test(`Virtual Scrolling as the ${view} view option, view.scrolling.mode: ${scrolling.mode}`, function(assert) {
+                const instance = createWrapper({
+                    views: [{
+                        type: view,
+                        scrolling: {
+                            mode: scrolling.mode,
+                        },
+                    }],
+                    currentView: view
+                }).instance;
+
+                assert.equal(
+                    !!instance.getWorkSpace()._virtualScrolling, scrolling.result, 'Virtual scrolling initialization',
+                );
+                assert.equal(instance.getWorkSpace().isRenovatedRender(), scrolling.result, 'Correct render is used');
             });
         });
 
@@ -36,27 +59,65 @@ module('Initialization', {
                 currentView: view
             }).instance;
 
-            instance.option('virtualScrolling.enabled', true);
+            instance.option('scrolling.mode', 'virtual');
             assert.ok(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling Initialized');
+            assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
-            instance.option('virtualScrolling.enabled', false);
+            instance.option('scrolling.mode', 'standard');
             assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+        });
+
+        test(`Optional Virtual Scrolling as the ${view} view option`, function(assert) {
+            const instance = createWrapper({
+                views: [{
+                    type: view,
+                }],
+                currentView: view
+            }).instance;
+
+            instance.option('views[0].scrolling.mode', 'virtual');
+            assert.ok(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is initialized');
+            assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+            instance.option('views[0].scrolling.mode', 'standard');
+            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is not initialized');
+            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
         });
     });
 
     unsupportedViews.forEach(view => {
-        [true, false].forEach(virtualScrollingEnabled => {
-            test(`Virtual scrolling if view: ${view}, virtualScrolling.enabled: ${virtualScrollingEnabled}`, function(assert) {
+        [{
+            mode: 'standard', result: false,
+        }, {
+            mode: 'virtual', result: true,
+        }].forEach(scrolling => {
+            test(`Virtual Scrolling as the ${view} view option, scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: unsupportedViews,
                     currentView: view,
-                    virtualScrolling: {
-                        enabled: virtualScrollingEnabled
+                    scrolling: {
+                        mode: scrolling.mode,
                     },
-                    renovateRender: true
                 }).instance;
 
                 assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+            });
+
+            test(`Virtual Scrolling as the ${view} view option, view.scrolling.mode: ${scrolling.mode}`, function(assert) {
+                const instance = createWrapper({
+                    views: [{
+                        type: view,
+                        scrolling: {
+                            mode: scrolling.mode,
+                        },
+                    }],
+                    currentView: view
+                }).instance;
+
+                assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
         });
 
@@ -66,11 +127,30 @@ module('Initialization', {
                 currentView: view
             }).instance;
 
-            instance.option('virtualScrolling.enabled', true);
+            instance.option('scrolling.mode', 'virtual');
             assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
 
-            instance.option('virtualScrolling.enabled', false);
+            instance.option('scrolling.mode', 'standard');
             assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+        });
+
+        test(`Optional Virtual Scrolling as the ${view} view option`, function(assert) {
+            const instance = createWrapper({
+                views: [{
+                    type: view,
+                }],
+                currentView: view
+            }).instance;
+
+            instance.option('views[0].scrolling.mode', 'virtual');
+            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is not initialized');
+            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+
+            instance.option('views[0].scrolling.mode', 'standard');
+            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is not initialized');
+            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
         });
     });
 });

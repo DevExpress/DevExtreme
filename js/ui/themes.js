@@ -248,12 +248,14 @@ export function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
-        if((themeReadyCallback.has() || options._forceTimeout)) {
+        if((themeReadyCallback.has() || themeInitializedCallback.has() || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
         }
     } else {
         if(isAutoInit) {
             waitForThemeLoad(ANY_THEME);
+            themeReadyCallback.fire();
+            themeReadyCallback.empty();
         } else {
             throw errors.Error('E0021', currentThemeName);
         }

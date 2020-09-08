@@ -554,10 +554,12 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
   .dx-data-row.dx-state-hover {
     &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
-      background-color: $datagrid-hover-bg;
-
       > td {
         color: $datagrid-row-hovered-color;
+
+        &:not(.dx-focused) {
+          background-color: $datagrid-hover-bg;
+        }
       }
 
       & > .dx-#{$widget-name}-readonly .dx-texteditor {

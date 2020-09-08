@@ -194,7 +194,8 @@ const PivotGrid = Widget.inherit({
 
                 removeInvisiblePages: true,
                 virtualRowHeight: 50,
-                virtualColumnWidth: 100
+                virtualColumnWidth: 100,
+                loadTwoPagesOnStart: true
             },
             encodeHtml: true,
             dataSource: null,

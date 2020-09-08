@@ -93,15 +93,7 @@ export const custom = function(options) {
 
     const popupToolbarItems = [];
 
-    let toolbarItemsOption = options.toolbarItems;
-
-    if(toolbarItemsOption) {
-        errors.log('W0001', 'DevExpress.ui.dialog', 'toolbarItems', '16.2', 'Use the \'buttons\' option instead');
-    } else {
-        toolbarItemsOption = options.buttons;
-    }
-
-    each(toolbarItemsOption || [DEFAULT_BUTTON], function() {
+    each(options.buttons || [DEFAULT_BUTTON], function() {
         const action = new Action(this.onClick, {
             context: popupInstance
         });

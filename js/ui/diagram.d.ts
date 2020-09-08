@@ -78,7 +78,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageToolboxUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
+    customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageToolboxUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string, keepRatioOnAutoSize?: boolean }>;
     /**
      * @docid dxDiagramOptions.defaultItemProperties
      * @type Object
@@ -86,7 +86,15 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    defaultItemProperties?: { style?: Object, textStyle?: Object, connectorLineType?: 'straight' | 'orthogonal', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle' };
+    defaultItemProperties?: { style?: Object, textStyle?: Object, connectorLineType?: 'straight' | 'orthogonal', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', shapeMinWidth?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMaxHeight?: number };
+    /**
+     * @docid dxDiagramOptions.operationSettings
+     * @type Object
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    operationSettings?: { allowAddShape?: boolean, allowDeleteShape?: boolean, allowDeleteConnector?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean };
     /**
      * @docid dxDiagramOptions.edges
      * @type Object
@@ -124,7 +132,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DataSource | DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+    nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, autoSizeEnabled?: boolean, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DataSource | DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
     /**
      * @docid dxDiagramOptions.hasChanges
      * @type Boolean
@@ -166,6 +174,31 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @public
      */
     onSelectionChanged?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
+    /**
+     * @docid dxDiagramOptions.onRequestOperation
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 operation:Enums.DiagramModelOperation
+     * @type_function_param1_field5 args:dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs
+     * @type_function_param1_field6 allowed:boolean
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs, allowed?: boolean }) => any);
+    /**
+     * @docid dxDiagramOptions.onRequestLayoutUpdate
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field5 allowed:boolean
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, changes?: any[], allowed?: boolean }) => any);
     /**
      * @docid dxDiagramOptions.pageColor
      * @type String
@@ -314,15 +347,6 @@ export default class dxDiagram extends Widget {
      */
     getEdgeDataSource(): DataSource;
     /**
-     * @docid dxDiagramMethods.reloadContent
-     * @publicName reloadContent(itemKey, applyLayout)
-     * @param1 itemKey?:any
-     * @param2 applyLayout?:boolean
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    reloadContent(itemKey?: any, applyLayout?: boolean): void;
-    /**
      * @docid dxDiagramMethods.export
      * @publicName export()
      * @return string
@@ -444,6 +468,203 @@ export interface dxDiagramCustomCommand {
      * @public
      */
     items?: Array<dxDiagramCustomCommand>;
+}
+
+export interface dxDiagramRequestOperationAddShapeArgs {
+    /**
+     * @docid dxDiagramRequestOperationAddShapeArgs.shape
+     * @type dxDiagramShape
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    shape?: dxDiagramShape;
+    /**
+     * @docid dxDiagramRequestOperationAddShapeArgs.position
+     * @name dxDiagramRequestOperationAddShapeArgs.position
+     * @type Object
+     */
+    position?: Object;
+    /**
+     * @docid dxDiagramRequestOperationAddShapeArgs.position.x
+     * @name dxDiagramRequestOperationAddShapeArgs.position.x
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramRequestOperationAddShapeArgs.position.y
+     * @name dxDiagramRequestOperationAddShapeArgs.position.y
+     * @type Number
+     */
+}
+
+export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
+  /**
+   * @docid dxDiagramRequestOperationAddShapeFromToolboxArgs.shapeType
+   * @type Enums.DiagramShapeType|String
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+}
+
+export interface dxDiagramRequestOperationDeleteShapeArgs {
+  /**
+   * @docid dxDiagramRequestOperationDeleteShapeArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+}
+
+export interface dxDiagramRequestOperationDeleteConnectorArgs {
+  /**
+   * @docid dxDiagramRequestOperationDeleteConnectorArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+}
+
+export interface dxDiagramRequestOperationChangeConnectionArgs {
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.connectionPointIndex
+   * @type number
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connectionPointIndex?: number;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectionArgs.connectorPosition
+   * @type Enums.DiagramConnectorPosition
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connectorPosition?: 'start' | 'end';
+}
+
+export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
+    * @type Array<Object>
+    */
+   points?: Array<Object>;
+   /**
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
+    * @type Number
+    */
+   /**
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
+    * @type Number
+    */
+  /**
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
+    * @type Array<Object>
+    */
+   oldPoints?: Array<Object>;
+   /**
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
+    * @type Number
+    */
+   /**
+    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
+    * @type Number
+    */
+}
+
+export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationBeforeChangeShapeTextArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+}
+
+export interface dxDiagramRequestOperationChangeShapeTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationChangeShapeTextArgs.shape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  shape?: dxDiagramShape;
+  /**
+   * @docid dxDiagramRequestOperationChangeShapeTextArgs.text
+   * @type string
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  text?: string;
+}
+
+export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+   * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs.index
+   * @type number
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  index?: number;
+}
+
+export interface dxDiagramRequestOperationChangeConnectorTextArgs {
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorTextArgs.connector
+   * @type dxDiagramConnector
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  connector?: dxDiagramConnector;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorTextArgs.index
+   * @type number
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  index?: number;
+  /**
+   * @docid dxDiagramRequestOperationChangeConnectorTextArgs.text
+   * @type string
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  text?: string;
 }
 
 declare global {

@@ -9,6 +9,7 @@ const named = require('vinyl-named');
 const webpack = require('webpack');
 const lazyPipe = require('lazypipe');
 const webpackStream = require('webpack-stream');
+const gulpWatch = require('gulp-watch');
 
 const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
@@ -17,6 +18,7 @@ const compressionPipes = require('./compression-pipes.js');
 const renovationPipes = require('./renovation-pipes');
 const context = require('./context.js');
 const utils = require('./utils');
+const env = require('./env-variables');
 
 const namedDebug = lazyPipe()
     .pipe(named, function(file) {
@@ -100,20 +102,30 @@ function createDebugBundlesStream(watch, renovation) {
         .pipe(gulp.dest(destination));
 }
 
-gulp.task('create-renovation-temp', utils.skipTaskOnTestCI(function() {
-    return gulp.src(['js/**/*.*'])
+function createRenovationTemp(isWatch) {
+    const src = ['js/**/*.*'];
+    const pipe = isWatch ? gulpWatch(src) : gulp.src(src);
+    return pipe
         .pipe(renovationPipes.replaceWidgets())
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
+}
+
+gulp.task('create-renovation-temp', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+    return createRenovationTemp(false);
+}));
+
+gulp.task('create-renovation-temp-watch', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+    return createRenovationTemp(true);
 }));
 
 gulp.task('js-bundles-debug', gulp.series(function() {
     return createDebugBundlesStream(false, false);
-}, utils.skipTaskOnTestCI(function() {
+}, utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
     return createDebugBundlesStream(false, true);
 })));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true, false);
-}, utils.skipTaskOnTestCI(function() {
+}, utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
     return createDebugBundlesStream(true, true);
 })));

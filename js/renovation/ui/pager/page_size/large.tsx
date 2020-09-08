@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  ComponentBindings, JSXComponent, TwoWay, OneWay, Component, Fragment, Event,
+  ComponentBindings, JSXComponent, OneWay, Component, Fragment,
 } from 'devextreme-generator/component_declaration/common';
 
 import { LightButton } from '../common/light_button';
 import { FullPageSize } from '../common/types.d';
-import { PAGER_SELECTION_CLASS } from '../common/consts';
-
-export const PAGER_PAGE_SIZE_CLASS = 'dx-page-size';
-export const PAGER_SELECTED_PAGE_SIZE_CLASS = `${PAGER_PAGE_SIZE_CLASS} ${PAGER_SELECTION_CLASS}`;
+import PagerProps from '../common/pager_props';
+import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { EventCallback } from '../../common/event_callback.d';
 
 export const viewFunction = ({ pageSizesText }: PageSizeLarge) => (
   <Fragment>
@@ -25,15 +25,11 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge) => (
 );
 @ComponentBindings()
 export class PageSizeLargeProps {
-  @TwoWay() pageSize?: number = 5;
-
   @OneWay() pageSizes!: FullPageSize[];
-
-  @Event() pageSizeChange?: (pageSize: number) => void; // commonUtils.noop
 }
-
+type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent<PageSizeLargeProps, 'pageSizes'>(PageSizeLargeProps) {
+export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSizes'>() {
   get pageSizesText() {
     const { pageSize, pageSizes } = this.props;
     return pageSizes.map(({ value: processedPageSize, text }) => {

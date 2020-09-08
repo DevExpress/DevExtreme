@@ -7,7 +7,12 @@ import { act } from 'preact/test-utils';
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
-const PRIVATE_JQUERY_WIDGETS = ['TooltipItemLayout', 'TimePanelTableLayout', 'DayDateTableLayout', 'AllDayPanelLayout', 'AllDayPanelTitle', 'GridPager'];
+const PRIVATE_JQUERY_WIDGETS = [
+    'TooltipItemLayout', 'TimePanelTableLayout',
+    'DayDateTableLayout', 'WeekTableLayout', 'WorkWeekTableLayout',
+    'AllDayPanelLayout', 'AllDayPanelTitle',
+    'GridPager'
+];
 const WRAPPER_WIDGETS = ['DataGrid'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
@@ -20,7 +25,9 @@ const widgets = widgetsMeta
     });
 
 QUnit.module('Check components registration', () => {
-    widgetsMeta.filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
+    widgetsMeta
+        .filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
+        .filter(meta => WRAPPER_WIDGETS.indexOf(meta.name) === -1)
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} is in bundle`, function(assert) {
                 const message = 'You should add your widget to the bundle.'

@@ -47,9 +47,11 @@ registerDecorator(
 
         beforeBag: function(config) {
             const $itemElement = config.$itemElement;
-            const $container = config.$container;
+            const $container = config.$container.addClass(this._containerClass);
 
-            const $control = $('<div>').addClass(this._controlClass);
+            const $control = $('<div>')
+                .addClass(this._controlClass)
+                .appendTo($container);
             new this._controlWidget($control, extend(this._commonOptions(), {
                 value: this._isSelected($itemElement),
                 focusStateEnabled: false,
@@ -59,9 +61,6 @@ registerDecorator(
                     e.event && e.event.stopPropagation();
                 }).bind(this)
             }));
-
-            $container.addClass(this._containerClass);
-            $container.append($control);
         },
 
         modifyElement: function(config) {

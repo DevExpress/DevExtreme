@@ -230,6 +230,9 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             height: 50,
             paging: { pageSize: 2, pageIndex: 1 },
             columns: ['name', 'age'],
+            scrolling: {
+                useNative: false
+            },
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 19 },
                 { id: 2, parentId: 0, name: 'Name 2', age: 19 },

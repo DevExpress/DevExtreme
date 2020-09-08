@@ -894,7 +894,10 @@ const dxPieChart = {
     innerRadius: 0.5,
     onLegendClick: function() { },
     sizeGroup: undefined,
-    centerTemplate: undefined
+    centerTemplate: undefined,
+    commonAnnotationSettings: undefined,
+    annotations: [{}],
+    customizeAnnotation: undefined
 };
 
 const dxPolarChart = {
@@ -1249,11 +1252,12 @@ const BaseChart = {
 /**
 * @name BaseChartAnnotationConfig
 * @type object
+* @inherits BaseWidgetAnnotationConfig
 */
 const BaseChartAnnotationConfig = {
     argument: undefined,
     value: undefined,
-    series: undefined,
+    series: undefined
 };
 /**
 * @name dxChartCommonAnnotationConfig
@@ -1261,7 +1265,10 @@ const BaseChartAnnotationConfig = {
 * @inherits BaseChartAnnotationConfig
 */
 const dxChartCommonAnnotationConfig = {
-    axis: undefined
+    axis: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 }
 /**
 * @name dxChartAnnotationConfig
@@ -1279,7 +1286,10 @@ const dxChartAnnotationConfig = {
 */
 const dxPolarChartCommonAnnotationConfig = {
     radius: undefined,
-    angle: undefined
+    angle: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 };
 
 /**
@@ -1288,5 +1298,28 @@ const dxPolarChartCommonAnnotationConfig = {
 * @inherits dxPolarChartCommonAnnotationConfig
 */
 const dxPolarChartAnnotationConfig = {
+    name: undefined
+};
+
+/**
+* @name dxPieChartCommonAnnotationConfig
+* @type object
+* @inherits BaseWidgetAnnotationConfig
+*/
+const dxPieChartCommonAnnotationConfig = {
+    argument: undefined,
+    series: undefined,
+    location: 'center',
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
+};
+
+/**
+* @name dxPieChartAnnotationConfig
+* @type object
+* @inherits dxPieChartCommonAnnotationConfig
+*/
+const dxPieChartAnnotationConfig = {
     name: undefined
 };

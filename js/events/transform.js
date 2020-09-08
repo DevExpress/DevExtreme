@@ -211,35 +211,6 @@ const TransformEmitter = Emitter.inherit({
 */
 
 /**
- * @name UI Events.dxzoomstart
- * @type eventType
- * @deprecated UI Events.dxpinchstart
- * @type_function_param1 event:event
- * @type_function_param1_field1 cancel:boolean
- * @module events/transform
-*/
-/**
-  * @name UI Events.dxzoom
-  * @type eventType
-  * @deprecated UI Events.dxpinch
-  * @type_function_param1 event:event
-  * @type_function_param1_field1 scale:number
-  * @type_function_param1_field2 deltaScale:number
-  * @type_function_param1_field3 cancel:boolean
-  * @module events/transform
-*/
-/**
-  * @name UI Events.dxzoomend
-  * @type eventType
-  * @deprecated UI Events.dxpinchend
-  * @type_function_param1 event:event
-  * @type_function_param1_field1 scale:number
-  * @type_function_param1_field2 deltaScale:number
-  * @type_function_param1_field3 cancel:boolean
-  * @module events/transform
-*/
-
-/**
 * @name UI Events.dxpinchstart
 * @type eventType
 * @type_function_param1 event:event

@@ -1,4 +1,4 @@
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 import { ensureDefined } from '../../../core/utils/common';
 import { extend } from '../../../core/utils/extend';
 

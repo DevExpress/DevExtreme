@@ -22,6 +22,7 @@ $scheduler-dd-appointment-hover-text-color: null !default;
 
 @use "../mixins" as *;
 @use "../icons" as *;
+@use "./common";
 @use "./tooltip" with (
   $scheduler-appointment-base-color: $scheduler-appointment-base-color
 );
@@ -2126,10 +2127,8 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-small & {
         &.dx-rtl {
           padding-left: 0;
-          padding-right: $scheduler-agenda-left-column-width * $scheduler-small-size-factor;
+          padding-right: $scheduler-agenda-left-column-width;
         }
-
-        padding-left: $scheduler-agenda-left-column-width * $scheduler-small-size-factor;
       }
 
       width: 100%;
@@ -2264,20 +2263,6 @@ $scheduler-appointment-form-label-padding: 20px;
     top: 45%;
     left: 0;
     right: 0;
-  }
-
-  .dx-timezone-editor {
-    overflow: hidden;
-
-    .dx-timezone-display-name {
-      float: left;
-      width: 60%;
-    }
-
-    .dx-timezone-iana-id {
-      float: right;
-      width: 38%;
-    }
   }
 
   .dx-scheduler-work-space-horizontal-grouped {
@@ -2709,16 +2694,6 @@ $scheduler-appointment-form-label-padding: 20px;
         .dx-scheduler-date-table {
           float: left;
         }
-      }
-    }
-
-    .dx-timezone-editor {
-      .dx-timezone-display-name {
-        float: right;
-      }
-
-      .dx-timezone-iana-id {
-        float: left;
       }
     }
   }

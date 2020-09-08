@@ -7,11 +7,12 @@ import {
   Method,
   OneWay,
   Ref,
-  TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 import {
   keyboard,
 } from '../../../../../events/short';
+
+import BaseComponent from './base_test_widget';
 
 export const view = (viewModel: PreactTestWidget) => (
   <div
@@ -33,13 +34,9 @@ export class PreactTestWidgetProps {
 
   @OneWay() text = 'default text';
 
-  @TwoWay() twoWayProp?: number = 1;
-
   @OneWay() subscribeEffect?: any;
 
   @OneWay() unsubscribeEffect?: any;
-
-  @OneWay() objectProp? = { someVal: true };
 
   @Event() onKeyDown?: (e: any) => any;
 
@@ -51,6 +48,7 @@ export class PreactTestWidgetProps {
 @Component({
   jQuery: {
     register: true,
+    component: BaseComponent,
   },
   view,
 })
@@ -64,17 +62,12 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
   }
 
   @Method()
-  updateTwoWayPropCheck(): void {
-    this.props.twoWayProp += 1;
-  }
-
-  @Method()
   eventPropCheck(arg): void {
     this.props.onEventProp?.(arg);
   }
 
   @Method()
-  getLastProps(): PreactTestWidgetProps {
+  getLastPreactReceivedProps(): PreactTestWidgetProps {
     return this.props;
   }
 

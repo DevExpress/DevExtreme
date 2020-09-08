@@ -742,7 +742,8 @@ export default {
                 rowPageSize: 5,
                 mode: 'standard',
                 preloadEnabled: false,
-                rowRenderingMode: 'standard'
+                rowRenderingMode: 'standard',
+                loadTwoPagesOnStart: false
             }
         };
     },

@@ -335,7 +335,10 @@ function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapse
         each(paths, function(_, path) {
             path = path.slice(startSliceIndex, level);
             if(index < path.length) {
-                filterValues.push(path[index]);
+                const filterValue = path[index];
+                if(filterValues.indexOf(filterValue) === -1) {
+                    filterValues.push(filterValue);
+                }
             }
         });
 
