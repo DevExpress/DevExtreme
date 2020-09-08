@@ -181,6 +181,29 @@ QUnit.module('Integration: Appointments', {
         });
     });
 
+    QUnit.test('Short tasks should have a right height (T725948)', function(assert) {
+        this.createInstance({
+            dataSource: [
+                {
+                    endDate: '2019-03-20T12:06:41.000Z',
+                    startDate: '2019-03-20T12:06:40.000Z'
+                }
+            ],
+            currentView: 'day',
+            views: ['day'],
+            height: 800,
+            currentDate: new Date(2019, 2, 20),
+            firstDayOfWeek: 1,
+            cellDuration: 15
+        });
+
+        this.clock.tick();
+
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+
+        assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
+    });
+
     [
         'standard',
         'virtual'
@@ -642,37 +665,6 @@ QUnit.module('Integration: Appointments', {
 
                 assert.roughEqual(this.scheduler.appointments.getAppointmentHeight(0), (cellHeight - 30) / 4, 2, 'Task has a right height');
                 assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
-            });
-
-            QUnit.test('Short tasks should have a right height (T725948)', function(assert) {
-                this.createInstance({
-                    dataSource: [
-                        {
-                            endDate: '2019-03-20T12:06:41.000Z',
-                            startDate: '2019-03-20T12:06:40.000Z'
-                        }
-                    ],
-                    currentView: 'day',
-                    views: ['day'],
-                    height: 800,
-                    currentDate: new Date(2019, 2, 20),
-                    firstDayOfWeek: 1,
-                    cellDuration: 15
-                });
-
-                this.clock.tick();
-
-                if(scrollingMode === 'virtual') {
-                    this.scrollTo({ y: 2700 });
-                }
-
-                this.clock.restore();
-
-                checkResultByDeviceType(assert, () => {
-                    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-                    assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
-                });
             });
 
             QUnit.test('Two not rival appointments with fractional coordinates should have correct positions(ie)', function(assert) {
