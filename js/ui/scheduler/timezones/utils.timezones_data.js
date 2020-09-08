@@ -5,7 +5,7 @@ import { sign } from '../../../core/utils/math';
 import timeZoneUtils from './utils.timeZone.js';
 import { isDefined } from '../../../core/utils/type';
 
-const SchedulerTimezones = {
+const timeZoneDataUtils = {
     _timeZones: tzData.zones,
 
     getTimezones: function() {
@@ -118,4 +118,4 @@ const SchedulerTimezones = {
     }
 };
 
-export default SchedulerTimezones;
+export default timeZoneDataUtils;
