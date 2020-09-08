@@ -29,16 +29,15 @@ $(function() {
             textExpr: "name",
             parentKeyExpr: "parentId",
             autoLayout: {
-                type: "tree",
-                requestUpdate: function(changes) { 
-                    for(var i = 0; i < changes.length; i++) {
-                        if(changes[i].type === 'remove')
-                            return true;
-                        else if(changes[i].data.parentId !== undefined && changes[i].data.parentId !== null)
-                            return true;
-                    }
-                    return false;
-                } 
+                type: "tree"
+            }
+        },
+        onRequestLayoutUpdate: function(e) { 
+            for(var i = 0; i < e.changes.length; i++) {
+                if(e.changes[i].type === 'remove')
+                    e.allowed = true;
+                else if(e.changes[i].data.parentId !== undefined && e.changes[i].data.parentId !== null)
+                    e.allowed = true;
             }
         },
         onRequestOperation: (e) => {

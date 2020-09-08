@@ -12,11 +12,12 @@ class App extends React.Component {
       data: service.getOrgItems()
     });
     this.onRequestOperation = this.onRequestOperation.bind(this);
+    this.onRequestLayoutUpdate = this.onRequestLayoutUpdate.bind(this);
   }
 
   render() {
     return (
-      <Diagram id="diagram" onRequestOperation={this.onRequestOperation}>
+      <Diagram id="diagram" onRequestOperation={this.onRequestOperation} onRequestLayoutUpdate={this.onRequestLayoutUpdate}>
         <CustomShape category="items" type="root" baseType="octagon"
           defaultText="Development" />
         <CustomShape category="items" type="team" baseType="ellipse"
@@ -24,7 +25,7 @@ class App extends React.Component {
         <CustomShape category="items" type="employee" baseType="rectangle"
           title="Employee" defaultText="Employee Name" />
         <Nodes dataSource={this.orgItemsDataSource} typeExpr={this.itemTypeExpr} textExpr="name" parentKeyExpr="parentId">
-          <AutoLayout type="tree" requestUpdate={this.requestUpdate} />
+          <AutoLayout type="tree" />
         </Nodes>
         <ContextToolbox shapeIconsPerRow={2} width={100} shapes={['team', 'employee']}>
         </ContextToolbox>
@@ -51,15 +52,14 @@ class App extends React.Component {
       return 'employee';
     }
   }
-  requestUpdate(changes) {
-    for(var i = 0; i < changes.length; i++) {
-      if(changes[i].type === 'remove') {
-        return true;
-      } else if(changes[i].data.parentId !== undefined && changes[i].data.parentId !== null) {
-        return true;
+  onRequestLayoutUpdate(e) {
+    for(var i = 0; i < e.changes.length; i++) {
+      if(e.changes[i].type === 'remove') {
+        e.allowed = true;
+      } else if(e.changes[i].data.parentId !== undefined && e.changes[i].data.parentId !== null) {
+        e.allowed = true;
       }
     }
-    return false;
   }
   onRequestOperation(e) {
     if(e.operation === 'addShape') {
@@ -68,10 +68,10 @@ class App extends React.Component {
       }
     } else if(e.operation === 'deleteShape') {
       if(e.args.shape.dataItem && e.args.shape.dataItem.type === 'root') {
-         e.allowed = false;
+        e.allowed = false;
       }
       if(e.args.shape.dataItem && e.args.shape.dataItem.type === 'team') {
-        var children = orgItems.filter(function(item) { 
+        var children = service.getOrgItems().filter(function(item) {
           return item.parentId === e.args.shape.dataItem.id;
         });
         if(children.length > 0) {
@@ -82,10 +82,10 @@ class App extends React.Component {
       e.allowed = false;
     } else if(e.operation === 'changeConnection') {
       if(e.args.connectorPosition === 'end' && e.args.shape === undefined) {
-         e.allowed = false;
+        e.allowed = false;
       }
       if(e.args.shape.dataItem && e.args.shape.dataItem.type === 'root' && e.args.connectorPosition === 'end') {
-         e.allowed = false;
+        e.allowed = false;
       }
       if(e.args.shape.dataItem && e.args.shape.dataItem.type === undefined) {
         if(e.args.connectorPosition === 'start') {

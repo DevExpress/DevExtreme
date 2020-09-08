@@ -12,8 +12,8 @@ $(function() {
                 type: "tree"
             }
         },
-        onSelectionChanged: function(args) {
-            var items = args.items
+        onSelectionChanged: function(e) {
+            var items = e.items
                 .filter(function(item) { return item.itemType === "shape"; })
                 .map(function(item) { return item.text; });
             if(items.length > 0)

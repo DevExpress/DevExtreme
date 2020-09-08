@@ -3,6 +3,7 @@
     id="diagram"
     ref="diagram"
     @request-operation="onRequestOperation"
+    @request-layout-update="onRequestLayoutUpdate"
   >
     <DxCustomShape
       :category="'items'"
@@ -32,7 +33,6 @@
     >
       <DxAutoLayout
         :type="'tree'"
-        :request-update="requestUpdate"
       />
     </DxNodes>
     <DxContextToolbox
@@ -87,16 +87,14 @@ export default {
         return 'employee';
       }
     },
-    requestUpdate(changes) {
-      debugger
-      for(var i = 0; i < changes.length; i++) {
-        if(changes[i].type === 'remove') {
-          return true;
-        } else if(changes[i].data.parentId !== undefined && changes[i].data.parentId !== null) {
-          return true;
+    onRequestLayoutUpdate(e) {
+      for(var i = 0; i < e.changes.length; i++) {
+        if(e.changes[i].type === 'remove') {
+          e.allowed = true;
+        } else if(e.changes[i].data.parentId !== undefined && e.changes[i].data.parentId !== null) {
+          e.allowed = true;
         }
       }
-      return false;
     },
     onRequestOperation(e) {
       if(e.operation === 'addShape') {
@@ -108,7 +106,7 @@ export default {
           e.allowed = false;
         }
         if(e.args.shape.dataItem && e.args.shape.dataItem.type === 'team') {
-          var children = orgItems.filter(function(item) { 
+          var children = service.getOrgItems().filter(function(item) {
             return item.parentId === e.args.shape.dataItem.id;
           });
           if(children.length > 0) {

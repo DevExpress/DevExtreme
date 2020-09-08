@@ -33,6 +33,7 @@ class App extends React.Component {
       popupVisible: false
     };
 
+    this.onRequestLayoutUpdate = this.onRequestLayoutUpdate.bind(this);
     this.customShapeTemplate = this.customShapeTemplate.bind(this);
     this.customShapeToolboxTemplate = this.customShapeToolboxTemplate.bind(this);
     this.editEmployee = this.editEmployee.bind(this);
@@ -74,15 +75,14 @@ class App extends React.Component {
       obj.Mobile_Phone = value.Mobile_Phone;
     }
   }
-  requestUpdate(changes) {
-    for(var i = 0; i < changes.length; i++) {
-      if(changes[i].type === 'remove') {
-        return true;
-      } else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null) {
-        return true;
+  onRequestLayoutUpdate(e) {
+    for(var i = 0; i < e.changes.length; i++) {
+      if(e.changes[i].type === 'remove') {
+        e.allowed = true;
+      } else if(e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
+        e.allowed = true;
       }
     }
-    return false;
   }
   customShapeTemplate(item) {
     return CustomShapeTemplate(item.dataItem,
@@ -176,13 +176,13 @@ class App extends React.Component {
     };
     return (
       <div id="container">
-        <Diagram id="diagram" ref={this.diagramRef} customShapeRender={this.customShapeTemplate} customShapeToolboxRender={this.customShapeToolboxTemplate}>
+        <Diagram id="diagram" ref={this.diagramRef} customShapeRender={this.customShapeTemplate} customShapeToolboxRender={this.customShapeToolboxTemplate} onRequestLayoutUpdate={this.onRequestLayoutUpdate}>
           <CustomShape type="employee" baseType="rectangle" category="employee" title="New Employee"
             defaultWidth={1.5} defaultHeight={1} toolboxWidthToHeightRatio={2}
             minWidth={1.5} minHeight={1} maxWidth={3} maxHeight={2}
             allowEditText={false} />
           <Nodes dataSource={this.dataSource} keyExpr="ID" typeExpr={this.itemTypeExpr} customDataExpr={this.itemCustomDataExpr} parentKeyExpr="Head_ID">
-            <AutoLayout type="tree" requestUpdate={this.requestUpdate} />
+            <AutoLayout type="tree" />
           </Nodes>
           <ContextToolbox shapeIconsPerRow={1} width={100} />
           <Toolbox showSearch={false} shapeIconsPerRow={1}>

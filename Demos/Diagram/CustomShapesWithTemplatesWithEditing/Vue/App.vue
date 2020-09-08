@@ -5,6 +5,7 @@
       ref="diagram"
       custom-shape-template="CustomShapeTemplate"
       custom-shape-toolbox-template="CustomShapeToolboxTemplate"
+      @request-layout-update="onRequestLayoutUpdate"
     >
       <DxCustomShape
         :type="'employee'"
@@ -37,7 +38,7 @@
         :custom-data-expr="itemCustomDataExpr"
         :parent-key-expr="'Head_ID'"
       >
-        <DxAutoLayout :type="'tree'" :request-update="requestUpdate"/>
+        <DxAutoLayout :type="'tree'"/>
       </DxNodes>
       <DxContextToolbox
         :shape-icons-per-row="1"
@@ -189,15 +190,14 @@ export default {
         obj.Mobile_Phone = value.Mobile_Phone;
       }
     },
-    requestUpdate(changes) {
-      for(var i = 0; i < changes.length; i++) {
-        if(changes[i].type === 'remove') {
-          return true;
-        } else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null) {
-          return true;
+    onRequestOperation(e) {
+      for(var i = 0; i < e.changes.length; i++) {
+        if(e.changes[i].type === 'remove') {
+          e.allowed = true;
+        } else if(e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) {
+          e.allowed = true;
         }
       }
-      return false;
     },
     editEmployee(employee) {
       this.currentEmployee = Object.assign({

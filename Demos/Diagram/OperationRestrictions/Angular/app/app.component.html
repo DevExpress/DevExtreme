@@ -1,4 +1,4 @@
-<dx-diagram #diagram id="diagram" (onRequestOperation)="requestOperationHandler($event)">
+<dx-diagram #diagram id="diagram" (onRequestOperation)="requestOperationHandler($event)" (onRequestLayoutUpdate)="requestLayoutUpdateHandler($event)">
     <dxi-custom-shape
         category="items"
         [type]="root"
@@ -20,7 +20,7 @@
         [defaultText]="Employee Name">
     </dxi-custom-shape>
     <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" [typeExpr]="itemTypeExpr" textExpr="Name" parentKeyExpr="ParentID">
-        <dxo-auto-layout type="tree" [requestUpdate]="requestUpdate"></dxo-auto-layout>
+        <dxo-auto-layout type="tree"></dxo-auto-layout>
     </dxo-nodes>
     <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="2" [shapes]="['team', 'employee']">
         <dxi-group category="general" title="General"></dxi-group>

@@ -67,15 +67,14 @@ export class AppComponent {
             obj.Mobile_Phone = value.Mobile_Phone;
         }
     }
-    requestUpdate(changes: any[]) {
-        for(var i = 0; i < changes.length; i++) {
-            if(changes[i].type === 'remove')
-                return true;
-            else if(changes[i].data.Head_ID !== undefined && changes[i].data.Head_ID !== null)
-                return true;
+    requestLayoutUpdateHandler(e) { 
+        for(var i = 0; i < e.changes.length; i++) {
+            if(e.changes[i].type === 'remove')
+                e.allowed = true;
+            else if(e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null)
+                e.allowed = true;
         }
-        return false;
-    }
+    } 
     editEmployee(employee) {
         this.currentEmployee = Object.assign({}, employee);
         this.popupVisible = true;

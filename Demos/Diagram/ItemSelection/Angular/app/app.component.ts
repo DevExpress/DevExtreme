@@ -31,8 +31,8 @@ export class AppComponent {
         });
     }
 
-    selectionChangedHandler(args) {
-        this.selectedItems = args.items.filter(item => item.itemType === "shape");
+    selectionChangedHandler(e) {
+        this.selectedItems = e.items.filter(item => item.itemType === "shape");
     }    
 }
 

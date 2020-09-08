@@ -21,13 +21,14 @@ if(!/localhost/.test(document.location.host)) {
     preserveWhitespaces: true
 })
 export class AppComponent {
+    items: any[];
     orgItemsDataSource: ArrayStore;
-    orgLinksDataSource: ArrayStore;
 
     constructor(service: Service) {
+        this.items = service.getOrgItems();
         this.orgItemsDataSource = new ArrayStore({
             key: "ID",
-            data: service.getOrgItems()
+            data: this.items
         });
     }
     itemTypeExpr(obj, value) {
@@ -42,16 +43,15 @@ export class AppComponent {
             return "employee";
         }
     }
-    requestUpdate(changes: any[]) { 
-        for(var i = 0; i < changes.length; i++) {
-            if(changes[i].type === 'remove')
-                return true;
-            else if(changes[i].data.ParentID !== undefined && changes[i].data.ParentID !== null)
-                return true;
+    requestLayoutUpdateHandler(e) { 
+        for(var i = 0; i < e.changes.length; i++) {
+            if(e.changes[i].type === 'remove')
+                e.allowed = true;
+            else if(e.changes[i].data.ParentID !== undefined && e.changes[i].data.ParentID !== null)
+                e.allowed = true;
         }
-        return false;
     } 
-    onRequestOperation(e) {
+    requestOperationHandler(e) {
         if(e.operation === "addShape") {
             if(e.args.shape.Type !== "employee" && e.args.shape.Type !== "team") {
                 e.allowed = false;
@@ -62,7 +62,7 @@ export class AppComponent {
                 e.allowed = false;
             }
             if(e.args.shape.dataItem && e.args.shape.dataItem.Type === "team") {
-                var children = orgItems.filter(function(item) { 
+                var children = this.items.filter(function(item) { 
                     return item.ParentID === e.args.shape.dataItem.ID;
                 });
                 if(children.length > 0)
