@@ -200,8 +200,8 @@ const Editor = Widget.inherit({
                 container: $element,
                 mode: this.option('validationMessageMode'),
                 positionRequest: 'below',
-                parentOffset: this.option('validationMessageOffset'),
-                parentBoundary: this.option('validationBoundary'),
+                offset: this.option('validationMessageOffset'),
+                boundary: this.option('validationBoundary'),
                 rtlEnabled: this.option('rtlEnabled')
             }, this._options.cache('validationTooltipOptions')));
 
@@ -266,8 +266,8 @@ const Editor = Widget.inherit({
     _setValidationMessageOption: function({ name, value }) {
         const KEY_MAP = {
             validationMessageMode: 'mode',
-            validationMessageOffset: 'parentOffset',
-            validationBoundary: 'parentBoundary',
+            validationMessageOffset: 'offset',
+            validationBoundary: 'boundary',
         };
 
         const optionKey = KEY_MAP[name] ? KEY_MAP[name] : name;

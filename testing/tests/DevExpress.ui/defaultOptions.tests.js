@@ -187,8 +187,8 @@ testComponentDefaults(ValidationMessage,
         mode: 'auto',
         validationErrors: undefined,
         positionRequest: undefined,
-        parentBoundary: undefined,
-        parentOffset: { h: 0, v: 0 }
+        boundary: undefined,
+        offset: { h: 0, v: 0 }
     }
 );
 

@@ -33,8 +33,8 @@ const ValidationMessage = Overlay.inherit({
             mode: 'auto',
             validationErrors: undefined,
             positionRequest: undefined,
-            parentBoundary: undefined,
-            parentOffset: { h: 0, v: 0 }
+            boundary: undefined,
+            offset: { h: 0, v: 0 }
         });
     },
 
@@ -89,7 +89,7 @@ const ValidationMessage = Overlay.inherit({
         const positionRequest = this.option('positionRequest');
         const rtlEnabled = this.option('rtlEnabled');
         const positionSide = getDefaultAlignment(rtlEnabled);
-        const offset = this.option('parentOffset');
+        const offset = this.option('offset');
         const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
 
         if(rtlEnabled) offset.h = -offset.h;
@@ -97,7 +97,7 @@ const ValidationMessage = Overlay.inherit({
 
         this.option('position', {
             offset,
-            boundary: this.option('parentBoundary'),
+            boundary: this.option('boundary'),
             my: positionSide + verticalPositions[0],
             at: positionSide + verticalPositions[1],
             collision: 'none flip'
@@ -109,14 +109,14 @@ const ValidationMessage = Overlay.inherit({
             case 'target':
                 this.updateMaxWidth();
                 break;
-            case 'parentBoundary':
+            case 'boundary':
                 this.option('position.boundary', args.value);
                 break;
             case 'mode':
                 this._toggleModeClass(args.value);
                 break;
             case 'rtlEnabled':
-            case 'parentOffset':
+            case 'offset':
             case 'positionRequest':
                 this._updatePosition();
                 break;

@@ -90,14 +90,14 @@ QUnit.module('position', moduleSetup, () => {
         }
     }, () => {
         QUnit.module('rtlEnabled = true', rtlEnabledSetupModule, () => {
-            QUnit.test('position boundary should be equal to parentBoundary option value, collision should be "none flip"', function(assert) {
-                this._validationMessage.option('parentBoundary', this._$container);
+            QUnit.test('position boundary should be equal to boundary option value, collision should be "none flip"', function(assert) {
+                this._validationMessage.option('boundary', this._$container);
                 assert.strictEqual(this._validationMessage.option('position.boundary'), this._$container, 'boundary is correct');
                 assert.strictEqual(this._validationMessage.option('position.collision'), 'none flip', 'collision is correct');
             });
             QUnit.test('position offset should be calculated correctly', function(assert) {
                 const offset = { h: 10, v: 20 };
-                this._validationMessage.option('parentOffset', offset);
+                this._validationMessage.option('offset', offset);
                 offset.h = -offset.h;
                 assert.deepEqual(this._validationMessage.option('position.offset'), offset, 'offset is correct');
             });
@@ -108,15 +108,15 @@ QUnit.module('position', moduleSetup, () => {
             });
         });
         QUnit.module('rtlEnabled = false', {}, () => {
-            QUnit.test('position boundary should be equal to parentBoundary option value', function(assert) {
-                this._validationMessage.option('parentBoundary', this._$container);
+            QUnit.test('position boundary should be equal to boundary option value', function(assert) {
+                this._validationMessage.option('boundary', this._$container);
                 assert.strictEqual(this._validationMessage.option('position.boundary'), this._$container, 'boundary is correct');
                 assert.strictEqual(this._validationMessage.option('position.collision'), 'none flip', 'collision is correct');
             });
 
-            QUnit.test('position offset should be equal to parentOffset option value', function(assert) {
+            QUnit.test('position offset should be equal to offset option value', function(assert) {
                 const offset = { h: 10, v: 20 };
-                this._validationMessage.option('parentOffset', offset);
+                this._validationMessage.option('offset', offset);
                 assert.deepEqual(this._validationMessage.option('position.offset'), offset, 'offset is correct');
             });
 
@@ -129,15 +129,15 @@ QUnit.module('position', moduleSetup, () => {
 
     QUnit.module('positionRequest is not below', {}, () => {
         QUnit.module('rtlEnabled=true', rtlEnabledSetupModule, () => {
-            QUnit.test('position boundary should be equal to parentBoundary option value', function(assert) {
-                this._validationMessage.option('parentBoundary', this._$container);
+            QUnit.test('position boundary should be equal to boundary option value', function(assert) {
+                this._validationMessage.option('boundary', this._$container);
                 assert.strictEqual(this._validationMessage.option('position.boundary'), this._$container, 'boundary is correct');
                 assert.strictEqual(this._validationMessage.option('position.collision'), 'none flip', 'collision is correct');
             });
 
-            QUnit.test('position offset should be equal to parentOffset option value', function(assert) {
+            QUnit.test('position offset should be equal to offset option value', function(assert) {
                 const offset = { h: 10, v: 20 };
-                this._validationMessage.option('parentOffset', offset);
+                this._validationMessage.option('offset', offset);
                 offset.v = -offset.v;
                 offset.h = -offset.h;
                 assert.deepEqual(this._validationMessage.option('position.offset'), offset, 'offset is correct');
@@ -149,15 +149,15 @@ QUnit.module('position', moduleSetup, () => {
             });
         });
         QUnit.module('rtlEnabled=false', {}, () => {
-            QUnit.test('position boundary should be equal to parentBoundary option value', function(assert) {
-                this._validationMessage.option('parentBoundary', this._$container);
+            QUnit.test('position boundary should be equal to boundary option value', function(assert) {
+                this._validationMessage.option('boundary', this._$container);
                 assert.strictEqual(this._validationMessage.option('position.boundary'), this._$container, 'boundary is correct');
                 assert.strictEqual(this._validationMessage.option('position.collision'), 'none flip', 'collision is correct');
             });
 
-            QUnit.test('position offset should be equal to parentOffset option value', function(assert) {
+            QUnit.test('position offset should be equal to offset option value', function(assert) {
                 const offset = { h: 10, v: 20 };
-                this._validationMessage.option('parentOffset', offset);
+                this._validationMessage.option('offset', offset);
                 offset.v = -offset.v;
                 assert.deepEqual(this._validationMessage.option('position.offset'), offset, 'offset is correct');
             });
