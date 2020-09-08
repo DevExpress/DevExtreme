@@ -686,4 +686,118 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems().eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), 'item disabled');
     });
 
+    test('default items visibility - all items are visible (T922557)', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+
+        const fileManagerInstance = $('#fileManager').dxFileManager('instance');
+        fileManagerInstance.option('contextMenu', {
+            items: [
+                {
+                    name: 'create',
+                    visible: true
+                },
+                {
+                    name: 'upload',
+                    visible: true
+                },
+                {
+                    name: 'rename',
+                    visible: true
+                },
+                {
+                    name: 'move',
+                    visible: true
+                },
+                {
+                    name: 'copy',
+                    visible: true
+                },
+                {
+                    name: 'delete',
+                    visible: true
+                },
+                {
+                    name: 'refresh',
+                    visible: true
+                },
+                {
+                    name: 'download',
+                    visible: true
+                }
+            ]
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 8, 'all of items but "create" are visible');
+
+        assert.ok($items.eq(0).text().indexOf('New directory') > -1, 'create item is rendered correctly');
+        assert.ok($items.eq(1).text().indexOf('Upload files') > -1, 'upload item is rendered correctly');
+        assert.ok($items.eq(2).text().indexOf('Rename') > -1, 'rename item is rendered correctly');
+        assert.ok($items.eq(3).text().indexOf('Move to') > -1, 'move item is rendered correctly');
+
+        assert.ok($items.eq(4).text().indexOf('Copy to') > -1, 'copy item is rendered correctly');
+        assert.ok($items.eq(5).text().indexOf('Delete') > -1, 'delete item is rendered correctly');
+        assert.ok($items.eq(6).text().indexOf('Refresh') > -1, 'refresh item is rendered correctly');
+        assert.ok($items.eq(7).text().indexOf('Download') > -1, 'download item is rendered correctly');
+    });
+
+    test('default items visibility - none items are visible (T922557)', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+
+        const fileManagerInstance = $('#fileManager').dxFileManager('instance');
+        fileManagerInstance.option('contextMenu', {
+            items: [
+                {
+                    name: 'create',
+                    visible: false
+                },
+                {
+                    name: 'upload',
+                    visible: false
+                },
+                {
+                    name: 'rename',
+                    visible: false
+                },
+                {
+                    name: 'move',
+                    visible: false
+                },
+                {
+                    name: 'copy',
+                    visible: false
+                },
+                {
+                    name: 'delete',
+                    visible: false
+                },
+                {
+                    name: 'refresh',
+                    visible: false
+                },
+                {
+                    name: 'download',
+                    visible: false
+                }
+            ]
+        });
+        this.clock.tick(800);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 0, 'none of items are visible');
+    });
+
 });
