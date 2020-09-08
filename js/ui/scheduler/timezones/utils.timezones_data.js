@@ -2,7 +2,7 @@ import query from '../../../data/query';
 import errors from '../../../core/errors';
 import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
-import timeZoneUtils from './utils.timeZone.js';
+import timeZoneUtils from '../utils.timeZone.js';
 import { isDefined } from '../../../core/utils/type';
 
 const timeZoneDataUtils = {
