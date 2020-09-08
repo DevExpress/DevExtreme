@@ -53,7 +53,7 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
 import utils from './utils';
-import SchedulerTimezones from './timezones/utils.timezones_data';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -2470,18 +2470,11 @@ class Scheduler extends Widget {
         */
 }
 
-const getTimeZones = (date) => {
-    if(!isDefined(date)) {
-        date = new Date();
-    }
-
-    return SchedulerTimezones.getDisplayedTimeZones(date);
-};
 /**
 * @name ui.dxScheduler
 * @section utils
 */
-Scheduler.getTimeZones = getTimeZones;
+Scheduler.getTimeZones = (date) => timeZoneDataUtils.getDisplayedTimeZones(date);
 
 Scheduler.include(DataHelperMixin);
 

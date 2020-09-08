@@ -1,5 +1,5 @@
 import dateUtils from '../../core/utils/date';
-import SchedulerTimezones from './timezones/utils.timezones_data';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -47,8 +47,9 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 };
 
 const calculateTimezoneByValue = (timezone, date) => {
+    // NOTE: This check could be removed. We don't support numerical timezones
     if(typeof timezone === 'string') {
-        timezone = SchedulerTimezones.getTimezoneOffsetById(timezone, date);
+        timezone = timeZoneDataUtils.getTimezoneOffsetById(timezone, date);
     }
     return timezone;
 };
