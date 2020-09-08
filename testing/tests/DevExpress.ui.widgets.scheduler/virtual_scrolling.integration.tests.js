@@ -2,11 +2,11 @@ import $ from 'jquery';
 
 import 'common.css!';
 import 'generic_light.css!';
-import devices from 'core/devices';
 
 import {
     createWrapper,
-    initTestMarkup
+    initTestMarkup,
+    checkResultByDeviceType
 } from '../../helpers/scheduler/helpers.js';
 
 const supportedViews = ['day', 'week', 'workWeek'];
@@ -298,31 +298,7 @@ QUnit.module('AppointmentSettings', {
             assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
         });
 
-        QUnit.test(`A long appointment should be correctly croped if view: ${viewName}`, function(assert) {
-            this.createInstance({
-                currentDate: new Date(2015, 2, 4),
-                scrolling: {
-                    mode: 'virtual'
-                },
-                views: [{
-                    type: viewName,
-                    groupOrientation: 'horizontal'
-                }],
-                currentView: viewName,
-                dataSource: [],
-                height: 400
-            });
-
-            const { instance } = this.scheduler;
-            const workspace = instance.getWorkSpace();
-            const scrollable = workspace.getScrollable();
-            const longAppointment = {
-                startDate: new Date(2015, 2, 4, 0, 10),
-                endDate: new Date(2015, 2, 4, 23, 50)
-            };
-
-            workspace._virtualScrolling._getRenderTimeout = () => -1;
-
+        ['horizontal', 'vertical'].forEach(groupOrientation => {
             [
                 { y: 1000, expectedDate: new Date(2015, 2, 4, 8, 30) },
                 { y: 1050, expectedDate: new Date(2015, 2, 4, 9, 0) },
@@ -335,22 +311,52 @@ QUnit.module('AppointmentSettings', {
                 { y: 1500, expectedDate: new Date(2015, 2, 4, 13, 30) },
                 { y: 2000, expectedDate: new Date(2015, 2, 4, 18, 30) }
             ].forEach(option => {
+                QUnit.test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation, scroll position ${option.y}`, function(assert) {
+                    this.createInstance({
+                        currentDate: new Date(2015, 2, 4),
+                        scrolling: {
+                            mode: 'virtual'
+                        },
+                        views: [{
+                            type: viewName,
+                            groupOrientation: groupOrientation
+                        }],
+                        currentView: viewName,
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 4, 0, 10),
+                            endDate: new Date(2015, 2, 4, 23, 50)
+                        }],
+                        height: 400
+                    });
 
-                scrollable.scrollTo({ y: option.y });
+                    const { instance } = this.scheduler;
+                    const workspace = instance.getWorkSpace();
+                    const scrollable = workspace.getScrollable();
+                    const longAppointment = {
+                        startDate: new Date(2015, 2, 4, 0, 10),
+                        endDate: new Date(2015, 2, 4, 23, 50)
+                    };
 
-                const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+                    workspace._virtualScrolling._getRenderTimeout = () => -1;
 
-                assert.equal(
-                    settings.groupIndex,
-                    0,
-                    `group index is correct when scrolled to ${option.y}`
-                );
+                    scrollable.scrollTo({ y: option.y });
 
-                assert.deepEqual(
-                    settings.info.appointment.startDate,
-                    option.expectedDate,
-                    `start date is correct when scrolled to ${option.y}`
-                );
+                    checkResultByDeviceType(assert, () => {
+                        const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+
+                        assert.equal(
+                            settings.groupIndex,
+                            0,
+                            `group index is correct when scrolled to ${option.y}`
+                        );
+
+                        assert.deepEqual(
+                            settings.info.appointment.startDate,
+                            option.expectedDate,
+                            `start date is correct when scrolled to ${option.y}`
+                        );
+                    });
+                });
             });
         });
     });
@@ -606,19 +612,6 @@ QUnit.module('Appointment filtering', function() {
     });
 
     QUnit.module('On scrolling', {
-        before: function() {
-            this.checkResultByDeviceType = (assert, callback) => {
-                if(devices.real().deviceType === 'desktop') {
-                    callback();
-                } else {
-                    const done = assert.async();
-                    setTimeout(() => {
-                        callback();
-                        done();
-                    });
-                }
-            };
-        },
         beforeEach: function() {
             this.data = [
                 {
@@ -704,7 +697,7 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                this.checkResultByDeviceType(assert, () => {
+                checkResultByDeviceType(assert, () => {
                     const filteredItems = instance.getFilteredItems();
 
                     assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
@@ -733,7 +726,7 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                this.checkResultByDeviceType(assert, () => {
+                checkResultByDeviceType(assert, () => {
                     const filteredItems = instance.getFilteredItems();
 
                     assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
@@ -776,7 +769,7 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                this.checkResultByDeviceType(assert, () => {
+                checkResultByDeviceType(assert, () => {
                     const filteredItems = instance.getFilteredItems();
 
                     assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
@@ -819,7 +812,7 @@ QUnit.module('Appointment filtering', function() {
 
                 instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
 
-                this.checkResultByDeviceType(assert, () => {
+                checkResultByDeviceType(assert, () => {
                     const filteredItems = instance.getFilteredItems();
 
                     assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');

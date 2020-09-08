@@ -32,6 +32,19 @@ export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULE
 
 export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
 
+export const checkResultByDeviceType = (assert, callback) => {
+    if(isDesktopEnvironment()) {
+        callback();
+    } else {
+        const done = assert.async();
+        setTimeout(() => {
+            callback();
+            done();
+        });
+    }
+};
+
+
 class ElementWrapper {
     constructor(selector, parent) {
         this.selector = selector;

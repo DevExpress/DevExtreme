@@ -14,10 +14,16 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, initTestMarkup, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import browser from 'core/utils/browser';
 import { Deferred } from 'core/utils/deferred';
 import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointment_form';
+import {
+    SchedulerTestWrapper,
+    initTestMarkup,
+    createWrapper,
+    CLASSES,
+    checkResultByDeviceType
+} from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
@@ -165,10 +171,14 @@ QUnit.module('Integration: Appointments', {
         workspace._virtualScrolling._getRenderTimeout = () => -1;
         workspace.getScrollable().scrollTo({ y: 1000 });
 
-        appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+        this.clock.restore();
 
-        assert.equal(appointmentsItems.length, 2, 'Items length is correct');
-        assert.equal(appointmentsItems[0].itemData, dataSourceItems[1], 'Item is correct');
+        checkResultByDeviceType(assert, () => {
+            appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+
+            assert.equal(appointmentsItems.length, 2, 'Items length is correct');
+            assert.equal(appointmentsItems[0].itemData, dataSourceItems[1], 'Item is correct');
+        });
     });
 
     [
@@ -649,15 +659,20 @@ QUnit.module('Integration: Appointments', {
                     firstDayOfWeek: 1,
                     cellDuration: 15
                 });
+
                 this.clock.tick();
 
                 if(scrollingMode === 'virtual') {
                     this.scrollTo({ y: 2700 });
                 }
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                this.clock.restore();
 
-                assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
+                checkResultByDeviceType(assert, () => {
+                    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+
+                    assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
+                });
             });
 
             QUnit.test('Two not rival appointments with fractional coordinates should have correct positions(ie)', function(assert) {
@@ -1335,12 +1350,16 @@ QUnit.module('Integration: Appointments', {
                     this.scrollTo({ y: 1000 });
                 }
 
-                const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                this.clock.restore();
 
-                const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
-                pointer.dragStart().drag(0, cellHeight).dragEnd();
+                checkResultByDeviceType(assert, () => {
+                    const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
 
-                assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 15), 'End date is OK');
+                    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+                    pointer.dragStart().drag(0, cellHeight).dragEnd();
+
+                    assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 15), 'End date is OK');
+                });
             });
 
             // TODO: also need test when task is dragging outside the area. updated dates should be equal to old dates
