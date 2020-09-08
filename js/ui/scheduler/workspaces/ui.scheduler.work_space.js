@@ -325,7 +325,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const updateViewData = this.isVirtualScrolling()
-            && !(this._hasAllDayClass($cell) && this._isHorizontalGroupedWorkSpace());
+            && !(this._hasAllDayClass($cell) && !this._isVerticalGroupedWorkSpace());
+        !updateViewData && this.viewDataProvider?.releaseSelectedAndFocusedCells();
 
         this._setFocusedCell($cell, updateViewData);
         this._setSelectedCells($cell, undefined, isMultiSelection, updateViewData);
@@ -344,7 +345,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(updateViewData) {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
-            this._viewDataProvider.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
+            this.viewDataProvider.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
         }
     }
 
@@ -369,7 +370,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(updateViewData) {
                 const { rowIndex, columnIndex } = this._getCoordinatesByCell($firstCell);
                 const isAllDayCell = this._hasAllDayClass($firstCell);
-                this._viewDataProvider.setFirstSelectedCell(rowIndex, columnIndex, isAllDayCell);
+                this.viewDataProvider.setFirstSelectedCell(rowIndex, columnIndex, isAllDayCell);
             }
         }
 
@@ -481,6 +482,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(!this._contextMenuHandled) {
             this._releaseSelectedAndFocusedCells();
+            this.viewDataProvider?.releaseSelectedAndFocusedCells();
         }
     }
 

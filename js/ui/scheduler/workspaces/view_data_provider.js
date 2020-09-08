@@ -482,6 +482,11 @@ export default class ViewDataProvider {
         return null;
     }
 
+    releaseSelectedAndFocusedCells() {
+        this._focusedCell = null;
+        this._firstSelectedCell = null;
+    }
+
     _getRowIndexByColumnAndData(cellData, columnIndex) {
         const { viewDataMap } = this;
         const { startDate, groupIndex } = cellData;
