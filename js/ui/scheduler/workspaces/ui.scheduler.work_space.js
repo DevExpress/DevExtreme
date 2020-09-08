@@ -324,8 +324,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             return;
         }
 
-        this._setFocusedCell($cell, true);
-        this._setSelectedCells($cell, undefined, isMultiSelection);
+        const updateViewData = this.isVirtualScrolling()
+            && !(this._hasAllDayClass($cell) && this._isHorizontalGroupedWorkSpace());
+
+        this._setFocusedCell($cell, updateViewData);
+        this._setSelectedCells($cell, undefined, isMultiSelection, updateViewData);
 
         const selectedCellData = this.getFocusedCellData();
         this.option('selectedCellData', selectedCellData);
@@ -338,7 +341,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleFocusedCellClass(true, $cell);
         this._$focusedCell = $cell;
 
-        if(this.isVirtualScrolling() && updateViewData) {
+        if(updateViewData) {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
             this._viewDataProvider.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
@@ -362,7 +365,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             this._focusedCells = [$firstCell.get(0)];
             this._$prevCell = $firstCell;
-            if(this.isVirtualScrolling()) {
+
+            if(updateViewData) {
                 const { rowIndex, columnIndex } = this._getCoordinatesByCell($firstCell);
                 const isAllDayCell = this._hasAllDayClass($firstCell);
                 this._viewDataProvider.setFirstSelectedCell(rowIndex, columnIndex, isAllDayCell);
@@ -1173,9 +1177,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const $firstCell = this._getCellByCoordinates(firstCoordinates, firstCellData.allDay, firstCellData.groupIndex);
             const $secondCell = this._getCellByCoordinates(secondCoordinates, secondCellData.allDay, secondCellData.groupIndex);
-            console.log($firstCell);
-            console.log($secondCell);
-            console.log('/////////');
             const isMultipleSelection = firstCellData.startDate.getTime() !== secondCellData.startDate.getTime();
 
             $firstCell && $secondCell

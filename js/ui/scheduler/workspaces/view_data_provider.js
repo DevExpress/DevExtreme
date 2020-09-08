@@ -330,7 +330,7 @@ export default class ViewDataProvider {
     }
 
     getCellData(rowIndex, cellIndex, isAllDay) {
-        if(isAllDay && this._workspace._isHorizontalGroupedWorkSpace()) {
+        if(isAllDay && !this._workspace._isVerticalGroupedWorkSpace()) {
             return this._viewData.groupedData[0].allDayPanel[cellIndex];
         }
 
