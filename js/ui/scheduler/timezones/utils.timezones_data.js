@@ -1,6 +1,6 @@
 import query from '../../../data/query';
 import errors from '../../../core/errors';
-import tzData from './ui.scheduler.timezones_data';
+import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
 
 const SchedulerTimezones = {

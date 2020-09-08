@@ -1,5 +1,5 @@
 import dateUtils from '../../core/utils/date';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
+import SchedulerTimezones from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
