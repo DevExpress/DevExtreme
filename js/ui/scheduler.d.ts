@@ -806,7 +806,7 @@ interface JQuery {
 }
 
 /**
- * @docid ui.dxDxSchedulerMethods.getTimeZones
+ * @docid ui.dxScheduler.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
  * @namespace DevExpress.ui.dxScheduler
