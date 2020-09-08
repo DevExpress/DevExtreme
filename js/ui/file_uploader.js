@@ -262,8 +262,7 @@ class FileUploader extends Editor {
         this._$fileInput.prop({
             multiple: this.option('multiple'),
             accept: this.option('accept'),
-            tabIndex: -1,
-            disabled: this.option('readOnly')
+            tabIndex: -1
         });
     }
 
@@ -734,7 +733,7 @@ class FileUploader extends Editor {
     }
 
     _shouldDragOverBeRendered() {
-        return this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported');
+        return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
     }
 
     _renderInputContainer() {
@@ -742,9 +741,7 @@ class FileUploader extends Editor {
             .addClass(FILEUPLOADER_INPUT_CONTAINER_CLASS)
             .appendTo(this._$inputWrapper);
 
-        if(!this._shouldDragOverBeRendered()) {
-            this._$inputContainer.css('display', 'none');
-        }
+        this._displayInputContainerIfNeeded();
 
         this._$fileInput
             .addClass(FILEUPLOADER_INPUT_CLASS);
@@ -759,6 +756,11 @@ class FileUploader extends Editor {
             .appendTo(this._$inputContainer);
 
         this.setAria('labelledby', labelId, this._$fileInput);
+    }
+
+    _displayInputContainerIfNeeded() {
+        const displayProperty = this._shouldDragOverBeRendered() ? '' : 'none';
+        this._$inputContainer.css('display', displayProperty);
     }
 
     _renderInput() {
@@ -793,7 +795,7 @@ class FileUploader extends Editor {
     _renderDragEvents() {
         eventsEngine.off(this._$inputWrapper, '.' + this.NAME);
 
-        if(!this._shouldDragOverBeRendered() || this.option('readOnly')) {
+        if(!this._shouldDragOverBeRendered()) {
             return;
         }
 
@@ -1095,8 +1097,8 @@ class FileUploader extends Editor {
                 }
                 break;
             case 'readOnly':
-                this._$fileInput.prop('disabled', value);
                 this._selectButton.option('disabled', value);
+                this._displayInputContainerIfNeeded();
                 this._renderDragEvents();
                 super._optionChanged(args);
                 break;
