@@ -559,18 +559,19 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(needToScroll) {
             scrollable.scrollTo({ left: horizontalScrollPosition });
         } else if(isDefined(nextColumnIndex) && isDefined(direction) && this._isColumnVirtual(nextColumnIndex)) {
-            const $currentCell = this._getCell({
-                columnIndex: this._focusedCellPosition.columnIndex,
-                rowIndex: this._focusedCellPosition.rowIndex
-            });
-            const currentCellWidth = $currentCell && $currentCell.outerWidth();
-            if(currentCellWidth > 0) {
-                const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
-                horizontalScrollPosition = direction === 'nextInRow' || direction === 'next' ? currentCellWidth * rtlMultiplier : currentCellWidth * rtlMultiplier * (-1);
-                scrollable.scrollBy({ left: horizontalScrollPosition, top: 0 });
-            }
+            horizontalScrollPosition = this._getHorizontalScrollPositionOffset(direction);
+            horizontalScrollPosition !== 0 && scrollable.scrollBy({ left: horizontalScrollPosition, top: 0 });
         }
-
+    },
+    _getHorizontalScrollPositionOffset: function(direction) {
+        let positionOffset = 0;
+        const $currentCell = this._getCell(this._focusedCellPosition);
+        const currentCellWidth = $currentCell && $currentCell.outerWidth();
+        if(currentCellWidth > 0) {
+            const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
+            positionOffset = direction === 'nextInRow' || direction === 'next' ? currentCellWidth * rtlMultiplier : currentCellWidth * rtlMultiplier * (-1);
+        }
+        return positionOffset;
     },
     _editingCellTabHandler: function(eventArgs, direction) {
         const eventTarget = eventArgs.originalEvent.target;
@@ -611,7 +612,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         if(this._focusCell($cell, !nextCellInfo.isHighlighted)) {
             if(!this._isRowEditMode() && isEditingAllowed) {
-                setTimeout(() => this._editFocusedCell());
+                this._editFocusedCell();
             } else {
                 this._focusInteractiveElement($cell, eventArgs.shift);
             }
@@ -1147,12 +1148,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         let offset = 0;
         const column = this._columnsController.getVisibleColumns()[columnIndex];
         if(column && column.fixed) {
-            if(isFixedColumnIndexOffsetRequired(this, column)) {
-                offset = this._getVisibleColumnCount() - this._columnsController.getVisibleColumns().length;
-            }
+            offset = this._getFixedColumnIndexOffset(column);
         } else if(columnIndex >= 0) {
             offset = this._columnsController.getColumnIndexOffset();
         }
+        return offset;
+    },
+    _getFixedColumnIndexOffset: function(column) {
+        const offset = isFixedColumnIndexOffsetRequired(this, column) ? this._getVisibleColumnCount() - this._columnsController.getVisibleColumns().length : 0;
         return offset;
     },
     _getCellPosition: function($cell, direction) {
@@ -1517,7 +1520,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _isAllowEditing: function(row, column) {
         return this._editingController.allowUpdating({ row: row }) && column && column.allowEditing;
     },
-    _editFocusedCell: function(eventArgs, fastEditingKey) {
+    _editFocusedCell: function() {
         const rowIndex = this.getVisibleRowIndex();
         const colIndex = this.getVisibleColumnIndex();
 
@@ -1724,7 +1727,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(this._focusedView && cellPosition) {
             const rowIndexOffset = this._dataController.getRowIndexOffset();
             const column = this._columnsController.getVisibleColumns(null, true)[cellPosition.columnIndex];
-            const columnIndexOffset = column && column.fixed && !isFixedColumnIndexOffsetRequired(this, column) ? 0 : this._columnsController.getColumnIndexOffset();
+            const columnIndexOffset = column && column.fixed ? this._getFixedColumnIndexOffset(column) : this._columnsController.getColumnIndexOffset();
             const rowIndex = cellPosition.rowIndex >= 0 ? cellPosition.rowIndex - rowIndexOffset : -1;
             const columnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex - columnIndexOffset : -1;
 
