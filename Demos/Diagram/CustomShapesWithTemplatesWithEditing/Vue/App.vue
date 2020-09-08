@@ -190,7 +190,7 @@ export default {
         obj.Mobile_Phone = value.Mobile_Phone;
       }
     },
-    onRequestOperation(e) {
+    onRequestLayoutUpdate(e) {
       for(var i = 0; i < e.changes.length; i++) {
         if(e.changes[i].type === 'remove') {
           e.allowed = true;
