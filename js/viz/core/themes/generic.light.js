@@ -19,7 +19,6 @@ const OUTSIDE = 'outside';
 
 const themeModule = require('../../themes');
 const registerTheme = themeModule.registerTheme;
-const registerThemeAlias = themeModule.registerThemeAlias;
 
 registerTheme({
     name: 'generic.light',
@@ -1742,4 +1741,4 @@ registerTheme({
     }
 });
 
-registerThemeAlias('generic.light.compact', 'generic.light');
+registerTheme({ name: 'generic.light.compact' }, 'generic.light');
