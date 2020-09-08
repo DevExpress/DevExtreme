@@ -279,9 +279,7 @@ class FileUploader extends Editor {
         const files = this._$fileInput.prop('files');
 
         if(files && !files.length) {
-            if(this.option('value').length && this._useInputForDrop()) {
-                this._$fileInput.prop('files', this._createFileList(this.option('value')));
-            }
+            this.reset();
             return;
         }
 
@@ -291,13 +289,6 @@ class FileUploader extends Editor {
         if(this.option('uploadMode') === 'instantly') {
             this._uploadFiles();
         }
-    }
-
-    _createFileList(files) {
-        const dataTransfer = new window.DataTransfer();
-        files.forEach(file => dataTransfer.items.add(file));
-
-        return dataTransfer.files;
     }
 
     _shouldFileListBeExtended() {
