@@ -2743,20 +2743,21 @@ QUnit.module('disabled option', () => {
 });
 
 QUnit.module('readOnly option', moduleConfig, () => {
-    QUnit.test('file input should be hidden', function(assert) {
+    QUnit.test('file input container should be hidden', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             readOnly: false,
+            useDragOver: true,
             uploadMode: 'useButtons'
         });
-        const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
 
-        assert.notOk($fileInput.prop('disabled'), 'input is visible');
+        assert.ok($inputContainer.is(':visible'), 'input container is hidden');
 
         $fileUploader.dxFileUploader('option', 'readOnly', true);
-        assert.ok($fileInput.prop('disabled'), 'input is hidden');
+        assert.notOk($inputContainer.is(':visible'), 'input container is hidden');
 
         $fileUploader.dxFileUploader('option', 'readOnly', false);
-        assert.notOk($fileInput.prop('disabled'), 'input is visible');
+        assert.ok($inputContainer.is(':visible'), 'input container is hidden');
     });
 
     QUnit.test('select button should be disabled', function(assert) {
