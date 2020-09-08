@@ -59,7 +59,7 @@ $transparent-border: 1px solid transparent;
   @if $counter > 0 {
     @include add-counter($counter - 1);
 
-    ol li.ql-indent-#{$counter} {
+    ol li[data-list=ordered].ql-indent-#{$counter} {
       counter-increment: list-#{$counter};
 
       & > .ql-ui::before { // stylelint-disable-line selector-class-pattern
@@ -218,7 +218,7 @@ $transparent-border: 1px solid transparent;
     // stylelint-enable selector-class-pattern
   }
 
-  li {  // stylelint-disable-line no-duplicate-selectors
+  li[data-list=ordered] {  // stylelint-disable-line no-duplicate-selectors
     counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
