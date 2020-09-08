@@ -182,6 +182,7 @@ testComponentDefaults(ValidationMessage,
         _checkParentVisibility: false,
         rtlEnabled: false,
         contentTemplate: ValidationMessage._renderInnerHtml,
+        maxWidth: '100%',
 
         mode: 'auto',
         validationErrors: undefined,

@@ -28,6 +28,7 @@ const ValidationMessage = Overlay.inherit({
             _checkParentVisibility: false,
             rtlEnabled: false,
             contentTemplate: this._renderInnerHtml,
+            maxWidth: '100%',
 
             mode: 'auto',
             validationErrors: undefined,
@@ -77,7 +78,7 @@ const ValidationMessage = Overlay.inherit({
     updateMaxWidth() {
         const targetWidth = this.option('target')?.outerWidth();
         let maxWidth = '100%';
-        if(targetWidth !== 0) {
+        if(targetWidth) {
             maxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);
         }
 
@@ -105,20 +106,22 @@ const ValidationMessage = Overlay.inherit({
 
     _optionChanged(args) {
         switch(args.name) {
-            case 'rtlEnabled':
-                this._updatePosition();
+            case 'target':
+                this.updateMaxWidth();
                 break;
             case 'parentBoundary':
                 this.option('position.boundary', args.value);
                 break;
-            case 'parentOffset':
-                this.option('position.offset', args.value);
-                break;
             case 'mode':
                 this._toggleModeClass(args.value);
                 break;
+            case 'rtlEnabled':
+            case 'parentOffset':
             case 'positionRequest':
                 this._updatePosition();
+                break;
+            case 'validationErrors':
+                this._renderInnerHtml(this.$content());
                 break;
             default:
                 this.callBase(args);
