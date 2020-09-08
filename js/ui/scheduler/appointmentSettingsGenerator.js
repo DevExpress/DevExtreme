@@ -55,7 +55,13 @@ export default class AppointmentSettingsGenerator {
                 });
 
                 const newArr = longParts.filter(el => new Date(el) < maxDate)
-                    .map(date => this._createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointment.duration)), gridAppointment.source));
+                    .map(date => {
+                        return {
+                            startDate: date,
+                            endDate: new Date(new Date(date).setMilliseconds(appointment.duration)),
+                            source: gridAppointment.source
+                        };
+                    });
 
                 resultDates = resultDates.concat(newArr);
             });
@@ -66,7 +72,7 @@ export default class AppointmentSettingsGenerator {
         const itemResources = this.scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
         allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
 
-        return this._createAppointmentInfos(gridAppointmentList, rawAppointment, itemResources, allDay);
+        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
     }
 
     _createExtremeRecurrenceDates(rawAppointment) {
@@ -140,7 +146,7 @@ export default class AppointmentSettingsGenerator {
         });
     }
 
-    _createAppointmentInfos(gridAppointments, rawAppointment, appointmentResources, allDay) {
+    _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
