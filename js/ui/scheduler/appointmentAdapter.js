@@ -77,8 +77,16 @@ class AppointmentAdapter {
         return this.getField(PROPERTY_NAMES.recurrenceRule);
     }
 
+    set recurrenceRule(value) {
+        this.setField(PROPERTY_NAMES.recurrenceRule, value);
+    }
+
     get recurrenceException() {
         return this.getField(PROPERTY_NAMES.recurrenceException);
+    }
+
+    set recurrenceException(value) {
+        this.setField(PROPERTY_NAMES.recurrenceException, value);
     }
 
     get disabled() {

@@ -53,6 +53,7 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
 import utils from './utils';
+import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1944,28 +1945,40 @@ class Scheduler extends Widget {
         }
     }
 
-    _singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        this.fire('setField', 'recurrenceRule', singleAppointment, '');
-        this.fire('setField', 'recurrenceException', singleAppointment, '');
+    _getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment) {
+        const offset = appointment.startDate.getTimezoneOffset() - targetedAppointment.startDate.getTimezoneOffset();
+        if(offset !== 0) {
+            return DateAdapter(exceptionDate)
+                .addTime(offset * dateUtils.dateToMilliseconds('minute'))
+                .result();
+        }
+        return exceptionDate;
+    }
+
+    _singleAppointmentChangesHandler(rawAppointment, rawTargetedAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const targetedAppointment = this.createAppointmentAdapter(rawTargetedAppointment);
+        const updatedAppointment = this.createAppointmentAdapter(rawAppointment);
+
+        targetedAppointment.recurrenceRule = '';
+        targetedAppointment.recurrenceException = '';
 
         if(!isDeleted && !isPopupEditing) {
-            this.addAppointment(singleAppointment);
+            this.addAppointment(rawTargetedAppointment);
         }
 
-        const recurrenceException = this._createRecurrenceException(exceptionDate, targetAppointment);
-        const updatedAppointment = extend({}, targetAppointment);
-
-        this.fire('setField', 'recurrenceException', updatedAppointment, recurrenceException);
+        const correctedExceptionDate = this._getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment);
+        updatedAppointment.recurrenceException = this._createRecurrenceException(correctedExceptionDate, rawAppointment);
 
         if(isPopupEditing) {
             // TODO: need to refactor - move as parameter to appointment popup
-            this._updatedRecAppointment = updatedAppointment;
+            this._updatedRecAppointment = updatedAppointment.source();
 
-            this._appointmentPopup.show(singleAppointment, true);
-            this._editAppointmentData = targetAppointment;
+            this._appointmentPopup.show(rawTargetedAppointment, true);
+            this._editAppointmentData = rawAppointment;
 
         } else {
-            this._updateAppointment(targetAppointment, updatedAppointment, function() {
+            this._updateAppointment(rawAppointment, updatedAppointment.source(), function() {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
         }
@@ -2353,17 +2366,17 @@ class Scheduler extends Widget {
         return this._workSpace.getEndViewDate();
     }
 
-    showAppointmentPopup(appointment, createNewAppointment, currentAppointment) {
-        const adapter = this.createAppointmentAdapter(currentAppointment || appointment);
-        const newCurrentAppointment = extend({}, appointment, currentAppointment);
+    showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
+        const appointment = this.createAppointmentAdapter(rawTargetedAppointment || rawAppointment);
+        const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
-        this._checkRecurringAppointment(appointment, newCurrentAppointment, adapter.startDate, () => {
-            if(createNewAppointment || isEmptyObject(appointment)) {
+        this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
+            if(createNewAppointment || isEmptyObject(rawAppointment)) {
                 delete this._editAppointmentData;
-                this._editing.allowAdding && this._appointmentPopup.show(appointment, true);
+                this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
             } else {
-                this._editAppointmentData = appointment;
-                this._appointmentPopup.show(appointment, this._editing.allowUpdating);
+                this._editAppointmentData = rawAppointment;
+                this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
             }
         }, false, true);
     }
