@@ -1,6 +1,5 @@
 import themeModule from '../../themes';
 const registerTheme = themeModule.registerTheme;
-const registerThemeAlias = themeModule.registerThemeAlias;
 const WHITE = '#ffffff';
 const BLACK = '#000000';
 const CONTRAST_ACTIVE = '#cf00da';
@@ -337,4 +336,4 @@ registerTheme({
     }
 }, 'generic.light');
 
-registerThemeAlias('generic.contrast.compact', 'generic.contrast');
+registerTheme({ name: 'generic.contrast.compact' }, 'generic.contrast');
