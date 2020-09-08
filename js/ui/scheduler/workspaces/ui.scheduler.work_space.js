@@ -328,8 +328,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             && !(this._hasAllDayClass($cell) && !this._isVerticalGroupedWorkSpace());
         !updateViewData && this.viewDataProvider?.releaseSelectedAndFocusedCells();
 
-        this._setFocusedCell($cell, updateViewData);
-        this._setSelectedCells($cell, undefined, isMultiSelection, updateViewData);
+        let $correctedCell = $cell;
+        if(isMultiSelection) {
+            $correctedCell = this._correctCellForGroup($cell);
+        }
+
+        this._setFocusedCell($correctedCell, updateViewData);
+        this._setSelectedCells($correctedCell, undefined, isMultiSelection, updateViewData);
 
         const selectedCellData = this.getFocusedCellData();
         this.option('selectedCellData', selectedCellData);
@@ -381,6 +386,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _correctCellForGroup($cell) {
+        if(!this._$focusedCell) {
+            return $cell;
+        }
+
         const $focusedCell = this._$focusedCell;
         const cellGroupIndex = this._getGroupIndexByCell($cell);
         const focusedCellGroupIndex = this._getGroupIndexByCell($focusedCell);
