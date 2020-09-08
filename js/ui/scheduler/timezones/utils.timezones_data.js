@@ -2,6 +2,8 @@ import query from '../../../data/query';
 import errors from '../../../core/errors';
 import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
+import timeZoneUtils from './utils.timeZone.js';
+import { isDefined } from '../../../core/utils/type';
 
 const SchedulerTimezones = {
     _timeZones: tzData.zones,
@@ -11,8 +13,14 @@ const SchedulerTimezones = {
     },
 
     getDisplayedTimeZones: function(date) {
+        if(!isDefined(date)) {
+            date = new Date();
+        }
+
+        const dateInUTC = timeZoneUtils.createUTCDate(date);
+
         const timeZones = this._timeZones.map((timezone) => {
-            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, dateInUTC.getTime());
 
             const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
 
@@ -58,7 +66,7 @@ const SchedulerTimezones = {
         return result;
     },
 
-    getTimezoneOffsetById: function(id, dateTimeStamp) {
+    getTimezoneOffsetById: function(id, date) {
         const tz = this.getTimezoneById(id);
         let offsets;
         let offsetIndices;
@@ -66,11 +74,12 @@ const SchedulerTimezones = {
         let result;
 
         if(tz) {
+            const dateInUTC = timeZoneUtils.createUTCDate(date);
             offsets = tz.offsets;
             untils = tz.untils;
             offsetIndices = tz.offsetIndices;
 
-            result = this.getUtcOffset(offsets, offsetIndices, untils, dateTimeStamp);
+            result = this.getUtcOffset(offsets, offsetIndices, untils, dateInUTC.getTime());
         }
 
         return result;
