@@ -21,7 +21,8 @@ module('Virtual Scrolling model', {
             _allDayPanels: undefined,
             isGroupedAllDayPanel: noop,
             renderRWorkspace: noop,
-            renderRAppointments: noop
+            renderRAppointments: noop,
+            invoke: noop
         };
 
         this.scrollableMock = {
@@ -46,6 +47,7 @@ module('Virtual Scrolling model', {
 
         this.viewportHeight = 300;
         this.virtualScrolling = new VirtualScrolling(this.worksSpaceMock, this.viewportHeight, this.scrollableMock);
+        this.virtualScrolling._getRenderTimeout = () => -1;
     }
 },
 () => {
