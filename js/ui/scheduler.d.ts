@@ -862,3 +862,4 @@ export interface dxSchedulerScrolling {
 
 /** @deprecated use Options instead */
 export type IOptions = dxSchedulerOptions;
+export type TimeZone = dxSchedulerTimeZone;
