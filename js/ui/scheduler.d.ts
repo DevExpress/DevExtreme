@@ -833,7 +833,7 @@ export interface dxSchedulerTimeZone {
  * @docid ui.dxScheduler.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
- * @return Array<{id?: string, title?: string, offset?: number}>
+ * @return Array<Object>
  * @namespace DevExpress.ui.dxScheduler
  * @module ui/scheduler
  * @export dxScheduler.getTimeZones
