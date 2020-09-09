@@ -335,6 +335,15 @@ class FileUploader extends Editor {
         return values;
     }
 
+    _getFile(fileData) {
+        let file;
+        if(isDefined(fileData)) {
+            const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
+            file = this._files.filter(file => file.value === targetFileValue)[0];
+        }
+        return file;
+    }
+
     _initLabel() {
         if(!this._$inputLabel) {
             this._$inputLabel = $('<div>');
@@ -624,7 +633,10 @@ class FileUploader extends Editor {
             }
         );
 
-        file.onLoadStart.add(() => file.uploadButton.$element().remove());
+        file.onLoadStart.add(() => file.uploadButton.option({
+            visible: false,
+            disabled: true
+        }));
 
         return $('<div>')
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
@@ -984,16 +996,21 @@ class FileUploader extends Editor {
         super._clean();
     }
 
+    cancel(fileData) {
+        if(this.option('uploadMode') !== 'useButtons') {
+            return;
+        }
+        const file = this._getFile(fileData);
+        this._preventFilesUploading(file ? [file] : this._files);
+    }
+
     upload(fileData) {
         if(this.option('uploadMode') === 'useForm') {
             return;
         }
-        if(isDefined(fileData)) {
-            const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
-            const file = this._files.filter(file => file.value === targetFileValue)[0];
-            if(file && isFormDataSupported()) {
-                this._uploadFile(file);
-            }
+        const file = this._getFile(fileData);
+        if(file && isFormDataSupported()) {
+            this._uploadFile(file);
         } else {
             this._uploadFiles();
         }
