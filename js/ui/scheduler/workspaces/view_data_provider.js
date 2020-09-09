@@ -6,6 +6,10 @@ class ViewDataGenerator {
     get workspace() { return this._workspace; }
     set workspace(value) { this._workspace = value; }
 
+    generateCompleteViewData() {
+        return this._generateViewData();
+    }
+
     generate() {
         let result;
 
@@ -87,19 +91,105 @@ class ViewDataGenerator {
         };
     }
 
+    _getCompleteViewDataMap() {
+        const options = this._workspace.generateRenderOptions();
+        const {
+            nonVirtualRowCount: rowCount,
+            cellCount,
+            groupCount,
+        } = options;
+
+        let viewDataMap = [];
+        for(let groupIndex = 0; groupIndex < groupCount; groupIndex += 1) {
+            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
+            const viewCellsData = this._generateViewCellsData(
+                options,
+                groupIndex,
+                rowCount,
+                0,
+                rowCount * groupIndex
+            );
+
+            allDayPanelData && viewDataMap.push(allDayPanelData);
+            viewDataMap = [
+                ...viewDataMap,
+                ...viewCellsData,
+            ];
+        }
+
+        return viewDataMap;
+    }
+
+    _getViewDataMap(completeViewDataMap) {
+        const {
+            startRowIndex,
+            rowCount,
+        } = this._workspace.generateRenderOptions();
+
+        return completeViewDataMap
+            .slice(startRowIndex, startRowIndex + rowCount)
+            .map((cellsRow, rowIndex) => cellsRow.map((cellData, cellIndex) => ({
+                cellData,
+                position: { rowIndex, cellIndex },
+            })));
+    }
+
+    _getViewDataFromMap(viewDataMap) {
+        const {
+            topVirtualRowHeight,
+            bottomVirtualRowHeight,
+            cellCountInGroupRow,
+        } = this._workspace.generateRenderOptions();
+
+        const {
+            previousGroupedData: groupedData,
+        } = viewDataMap.reduce(({ previousGroupIndex, previousGroupedData }, cellsRow) => {
+            const cellDataRow = cellsRow.map(({ cellData }) => cellData);
+
+            const isAllDayRow = cellDataRow[0].allDay;
+            const currentGroupIndex = cellDataRow[0].groupIndex;
+
+            if(currentGroupIndex !== previousGroupIndex) {
+                previousGroupedData.push({
+                    dateTable: [],
+                });
+            }
+
+            if(isAllDayRow) {
+                previousGroupedData[previousGroupedData.length - 1].allDayPanel = cellDataRow;
+            } else {
+                previousGroupedData[previousGroupedData.length - 1].dateTable.push(cellDataRow);
+            }
+
+            return {
+                previousGroupedData,
+                previousGroupIndex: currentGroupIndex,
+            };
+        }, { previousGroupIndex: -1, previousGroupedData: [] });
+
+        const isVirtualScrolling = this.workspace.isVirtualScrolling();
+
+        return {
+            groupedData,
+            isVirtual: isVirtualScrolling,
+            topVirtualRowHeight,
+            bottomVirtualRowHeight,
+            cellCountInGroupRow,
+        };
+    }
+
     _generateViewData() {
         const workspace = this._workspace;
         const options = workspace.generateRenderOptions();
         const isGroupedAllDayPanel = workspace.isGroupedAllDayPanel();
         const {
-            rowCount,
+            nonVirtualRowCount: rowCount,
             cellCount,
             groupCount,
             cellCountInGroupRow,
         } = options;
 
         const groupedData = [];
-
         for(let groupIndex = 0; groupIndex < groupCount; ++groupIndex) {
             const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
             const viewCellsData = this._generateViewCellsData(
@@ -218,7 +308,9 @@ class ViewDataGenerator {
         return index;
     }
 
-    getViewDataMap(groupedData) {
+    getViewDataMap(groupedData, subtractTopRowCount) {
+        const options = this.workspace.generateRenderOptions();
+        const { startRowIndex } = options;
         const viewDataMap = [];
         const addToMap = cellsData => {
             const cellsMap = [];
@@ -226,7 +318,7 @@ class ViewDataGenerator {
                 const cellMap = {
                     cellData,
                     position: {
-                        rowIndex: viewDataMap.length,
+                        rowIndex: subtractTopRowCount ? viewDataMap.length : viewDataMap.length - startRowIndex,
                         cellIndex: cellIndex
                     }
                 };
@@ -269,6 +361,7 @@ export default class ViewDataProvider {
     constructor(workspace) {
         this._viewDataGenerator = null;
         this._viewData = [];
+        this._completeViewData = [];
         this._viewDataMap = [];
         this._groupedDataMap = [];
         this._workspace = workspace;
@@ -290,13 +383,16 @@ export default class ViewDataProvider {
     get groupedDataMap() { return this._groupedDataMap; }
     set groupedDataMap(value) { this._groupedDataMap = value; }
 
-    update() {
+    update(isGenerateNewViewData) {
         const { viewDataGenerator } = this;
-        const { viewData } = viewDataGenerator.generate();
 
-        this.viewData = viewData;
+        if(isGenerateNewViewData) {
+            this._completeViewDataMap = viewDataGenerator._getCompleteViewDataMap();
+        }
 
-        this._updateViewDataMap();
+        this.viewDataMap = viewDataGenerator._getViewDataMap(this._completeViewDataMap);
+        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap);
+
         this._updateGroupedDataMap();
     }
 

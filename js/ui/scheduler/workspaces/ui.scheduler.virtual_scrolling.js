@@ -73,7 +73,7 @@ export default class VirtualScrolling {
 
             const scrollOffset = e?.scrollOffset;
             if(scrollOffset && this._updateState(scrollOffset)) {
-                this.getWorkspace().renderRWorkspace();
+                this.getWorkspace().renderRWorkspace(false);
             }
         });
     }

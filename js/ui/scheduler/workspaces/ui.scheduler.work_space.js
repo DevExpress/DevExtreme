@@ -1087,9 +1087,11 @@ class SchedulerWorkSpace extends WidgetObserver {
                 bottomVirtualRowHeight: virtualScrollingState.bottomVirtualRowHeight,
                 startRowIndex: virtualScrollingState.startIndex,
                 rowCount: virtualScrollingState.rowCount,
+                nonVirtualRowCount: this._getRowCount(),
             });
         } else {
             options.rowCount = this._getRowCount();
+            options.nonVirtualRowCount = this._getRowCount();
         }
 
         return options;
@@ -1097,8 +1099,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     renovatedRenderSupported() { return false; }
 
-    renderRWorkspace() {
-        this.viewDataProvider.update();
+    renderRWorkspace(isGenerateNewViewData = true) {
+        this.viewDataProvider.update(isGenerateNewViewData);
 
         this.renderRAllDayPanel();
 
