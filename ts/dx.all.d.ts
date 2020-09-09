@@ -6773,7 +6773,7 @@ declare module DevExpress.ui.dxOverlay {
 }
 declare module DevExpress.ui.dxScheduler {
     /** @name ui.dxScheduler.getTimeZones(date) */
-    export function getTimeZones(date?: Date): void;
+    export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
 }
 declare module DevExpress.utils {
     /** @name utils.cancelAnimationFrame(requestID) */
