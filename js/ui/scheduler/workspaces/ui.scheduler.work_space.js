@@ -1090,7 +1090,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 nonVirtualRowCount: this._getRowCount(),
             });
         } else {
-            options.rowCount = this._getRowCount();
+            options.rowCount = this._getTotalRowCount(this._getGroupCount(), this._isVerticalGroupedWorkSpace());
             options.nonVirtualRowCount = this._getRowCount();
         }
 
