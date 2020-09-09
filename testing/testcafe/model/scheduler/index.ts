@@ -9,6 +9,7 @@ import Navigator from './navigator';
 const CLASS = {
   appointment: 'dx-scheduler-appointment',
   appointmentCollector: 'dx-scheduler-appointment-collector',
+  dateTable: 'dx-scheduler-date-table',
   dateTableCell: 'dx-scheduler-date-table-cell',
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
@@ -25,11 +26,15 @@ export default class Scheduler extends Widget {
 
   dateTableRows: Selector;
 
+  dateTable: Selector;
+
   dateTableScrollable: Selector;
 
   headerPanelCells: Selector;
 
   headerSpaceScroll: { left: Promise<number>; top: Promise<number> };
+
+  workspaceScrollable: Selector;
 
   workSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
@@ -44,12 +49,13 @@ export default class Scheduler extends Widget {
 
     this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
     this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
+    this.dateTable = this.element.find(`.${CLASS.dateTable}`);
     this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
     this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);
     this.headerPanelCells = this.element.find(`.${CLASS.headerPanelCell}`);
+    this.workspaceScrollable = this.dateTableScrollable.find(`.${CLASS.scrollableContainer}`);
 
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
-    const workSpaceScroll = this.element.find(`.${CLASS.dateTableScrollable} .${CLASS.scrollableContainer}`);
 
     this.headerSpaceScroll = {
       left: headerSpaceScroll.scrollLeft,
@@ -57,8 +63,8 @@ export default class Scheduler extends Widget {
     };
 
     this.workSpaceScroll = {
-      left: workSpaceScroll.scrollLeft,
-      top: workSpaceScroll.scrollTop,
+      left: this.workspaceScrollable.scrollLeft,
+      top: this.workspaceScrollable.scrollTop,
     };
 
     this.appointmentPopup = new AppointmentPopup(this.element);
