@@ -488,7 +488,7 @@ export default gridCore.Controller.inherit((function() {
                     dataSource.load();
                     isLoading = true;
                 }
-            } else if(!args || typeUtils.isDefined(args.changeType)) {
+            } else if(!args || isDefined(args.changeType)) {
                 currentTotalCount = dataSource.pageIndex() * that.pageSize() + itemsCount;
                 that._currentTotalCount = Math.max(that._currentTotalCount, currentTotalCount);
                 if(itemsCount === 0 && dataSource.pageIndex() >= that.pageCount()) {
