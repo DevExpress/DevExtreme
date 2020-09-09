@@ -2737,7 +2737,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid.hasScroll('row'), 'has vertical scroll after resize');
     });
 
-    QUnit.test('Pivot should have scroll after conteiner height was changed', function(assert) {
+    QUnit.test('Pivot should have scroll after container height was changed', function(assert) {
         const $container = $('<div>');
         const $pivotGrid = $('<div>');
         $container.append($pivotGrid).appendTo('#qunit-fixture');
@@ -2750,8 +2750,8 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok(!pivotGrid.hasScroll('row'), 'has vertical scroll');
 
-        $container.css('height', 200);
-        pivotGrid.resize();
+        $container.css('height', 400);
+        pivotGrid.updateDimensions();
 
         assert.ok(pivotGrid.hasScroll('row'), 'has vertical scroll after resize');
     });
