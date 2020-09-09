@@ -495,7 +495,7 @@ QUnit.test('Recurrence editor should not crash when BYDAY rule is blank (T928339
     eventsEngine.trigger(firstButton, 'dxclick');
     this.instance.option('startDate', new Date(2020, 2, 1, 1));
 
-    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=', 'RecurrenceEditor value is correct');
+    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=', 'value is correct');
 });
 
 QUnit.test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', function(assert) {
