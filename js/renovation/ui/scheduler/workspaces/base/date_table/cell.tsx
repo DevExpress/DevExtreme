@@ -46,7 +46,12 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
 
     return {
       data: {
-        startDate, endDate, groups, groupIndex, text: text || '', allDay: allDay || undefined,
+        startDate,
+        endDate,
+        groups,
+        groupIndex: groups ? groupIndex : undefined,
+        text: text || '',
+        allDay: allDay || undefined,
       },
       index,
     };

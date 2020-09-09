@@ -1368,6 +1368,9 @@ export default {
                         return field;
                     });
                 },
+                getColumnIndexOffset: function() {
+                    return 0;
+                },
                 _getFixedColumnsCore: function() {
                     const that = this;
                     const result = [];
