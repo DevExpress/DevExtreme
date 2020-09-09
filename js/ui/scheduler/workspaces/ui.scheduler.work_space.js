@@ -2389,10 +2389,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(shouldFindPositionByViewData) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
 
-            if(!positionByMap) {
-                return;
-            }
-
             const $cell = this._dom_getDateCell(positionByMap);
 
             position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
