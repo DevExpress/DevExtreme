@@ -140,7 +140,8 @@ export default class VirtualScrolling {
 
         const workspace = this.getWorkspace();
         const groupCount = workspace._getGroupCount();
-        const totalRowCount = workspace._getTotalRowCount(groupCount);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const totalRowCount = workspace._getTotalRowCount(groupCount, isVerticalGrouping);
 
         return totalRowCount - topVirtualRowCount - topOutlineCount;
     }
