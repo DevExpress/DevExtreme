@@ -479,8 +479,6 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
     assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU,MO,TU');
 });
 
-const BUTTON_CLASS = 'dx-button';
-
 QUnit.test('Recurrence editor should not crash when BYDAY rule is blank (T928339)', function(assert) {
     this.createInstance({
         startDate: new Date(2020, 1, 1, 1),
@@ -488,10 +486,9 @@ QUnit.test('Recurrence editor should not crash when BYDAY rule is blank (T928339
         value: 'FREQ=WEEKLY;BYDAY=MO'
     });
 
-    const buttonsSelector = `.${BUTTON_CLASS}`;
-    const secondButton = this.instance.$element().find(buttonsSelector).eq(1);
+    const secondButton = this.instance.$element().find('.dx-button').eq(1);
     eventsEngine.trigger(secondButton, 'dxclick');
-    const firstButton = this.instance.$element().find(buttonsSelector).eq(0);
+    const firstButton = this.instance.$element().find('.dx-button').eq(0);
     eventsEngine.trigger(firstButton, 'dxclick');
     this.instance.option('startDate', new Date(2020, 2, 1, 1));
 
