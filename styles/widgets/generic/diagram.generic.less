@@ -210,8 +210,11 @@
             padding: @DIAGRAM_TOOLBOX_INPUT_V_PADDING @DIAGRAM_TOOLBOX_INPUT_H_PADDING;
         }
 
-        .dx-button .dx-button-content {
-            padding: 2px;
+        .dx-button,
+        .dx-button.dx-button-has-icon:not(.dx-button-has-text) {
+            .dx-button-content {
+                padding: 2px;
+            }
         }
 
         .dx-button .dx-icon {
