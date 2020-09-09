@@ -1317,8 +1317,12 @@ class Scheduler extends Widget {
         }
     }
 
+    isVirtualScrolling() {
+        return this.getWorkSpace()?.isVirtualScrolling();
+    }
+
     _filterAppointments() {
-        const prerenderFilterName = this.getWorkSpace().isVirtualScrolling()
+        const prerenderFilterName = this.isVirtualScrolling()
             ? 'prerenderFilterVirtual'
             : 'prerenderFilter';
 

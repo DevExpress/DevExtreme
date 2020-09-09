@@ -54,6 +54,12 @@ const createDetailItems = () => {
     ];
 };
 
+const createDetailItem = () => {
+    return [
+        { commonText: 'File 1.txt', imageUrl: 'doc' }
+    ];
+};
+
 QUnit.module('Progress panel tests', moduleConfig, () => {
 
     test('add operation', function(assert) {
@@ -412,6 +418,32 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.strictEqual(this.progressPanelWrapper.getInfosContainer().text(), 'No operations', 'Empty list text rendered when there are no operatoins left');
+    });
+
+    test('single failed operation with details must not contain a close button for details', function(assert) {
+        createProgressPanel(this);
+
+        const operationInfo = this.progressPanel.addOperation('Common operation text');
+        this.progressPanel.addOperationDetails(operationInfo, createDetailItem());
+
+        this.progressPanel.completeSingleOperationWithError(operationInfo, 'Some error occcurred');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'rendered one operation');
+
+        const common = infos[0].common;
+        assert.ok(common.closeButtonVisible, 'close button visible');
+
+        const details = infos[0].details;
+        assert.equal(details.length, 1, 'one detail item rendered');
+
+        const detail = details[0];
+        assert.ok(detail.hasError, 'error rendered');
+        assert.equal(detail.errorText, 'Some error occcurred', 'error text rendered');
+        assert.equal(detail.commonText, 'File 1.txt', 'detail item common text rendered');
+        assert.notOk(detail.$progressBar.length, 'progress bar not rendered');
+        assert.notOk(detail.closeButton, 'detail item has no close button');
+        assert.ok(detail.$image.hasClass('dx-icon-doc'), 'detail item has correct icon');
     });
 
 });

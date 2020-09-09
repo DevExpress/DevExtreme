@@ -1,6 +1,5 @@
 import themeModule from '../../themes';
 const registerTheme = themeModule.registerTheme;
-const registerThemeAlias = themeModule.registerThemeAlias;
 const ACCENT_COLOR = '#7ab8eb';
 const BACKGROUND_COLOR = '#fff';
 const TITLE_COLOR = '#333';
@@ -133,4 +132,4 @@ registerTheme({
     }
 }, 'generic.light');
 
-registerThemeAlias('generic.softblue.compact', 'generic.softblue');
+registerTheme({ name: 'generic.softblue.compact' }, 'generic.softblue');

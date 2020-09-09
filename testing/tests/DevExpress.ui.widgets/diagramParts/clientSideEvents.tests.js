@@ -146,6 +146,9 @@ QUnit.module('ClientSideEvents.requestOperation', {
                 keyExpr: 'key',
                 fromKey: 'from',
                 toKey: 'to'
+            },
+            contextMenu: {
+                enabled: false
             }
         });
         const instance = $element.dxDiagram('instance');

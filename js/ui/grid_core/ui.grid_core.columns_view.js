@@ -598,7 +598,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(cellOptions.rowType !== 'freeSpace') {
             this.setAria('selected', false, $cell);
             this.setAria('role', 'gridcell', $cell);
-            this.setAria('colindex', cellOptions.columnIndex + 1, $cell);
+
+            const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+            const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
+            this.setAria('colindex', ariaColIndex, $cell);
         }
     },
 
