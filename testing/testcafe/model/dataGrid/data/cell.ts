@@ -32,7 +32,7 @@ export default class DataCell extends FocusableElement {
   isHidden: Promise<boolean>;
 
   constructor(dataRow: Selector, index: number, widgetName: string) {
-    super(dataRow.find(`td:nth-child(${index + 1})`));
+    super(dataRow.find(`td[aria-colindex='${index + 1}']`));
     this.isEditCell = this.element.hasClass(CLASS.editCell);
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
