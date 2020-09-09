@@ -833,7 +833,7 @@ export interface dxSchedulerTimeZone {
  * @docid ui.dxScheduler.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
- * @return Array<dxSchedulerTimeZone>
+ * @return Array<{id?: string, title?: string, offset?: number}>
  * @namespace DevExpress.ui.dxScheduler
  * @module ui/scheduler
  * @export dxScheduler.getTimeZones
@@ -841,7 +841,7 @@ export interface dxSchedulerTimeZone {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
+export function getTimeZones(date?: Date): Array<{id?: string, title?: string, offset?: number}>;
 
 export type Options = dxSchedulerOptions;
 
@@ -862,4 +862,3 @@ export interface dxSchedulerScrolling {
 
 /** @deprecated use Options instead */
 export type IOptions = dxSchedulerOptions;
-export type TimeZone = dxSchedulerTimeZone;
