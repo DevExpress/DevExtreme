@@ -996,7 +996,7 @@ class FileUploader extends Editor {
         super._clean();
     }
 
-    cancel(fileData) {
+    abortUpload(fileData) {
         if(this.option('uploadMode') !== 'useButtons') {
             return;
         }
