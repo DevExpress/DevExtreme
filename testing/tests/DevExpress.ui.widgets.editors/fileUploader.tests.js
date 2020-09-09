@@ -1558,7 +1558,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         assert.strictEqual(request.loadedSize, files[1].size, 'correct file was uploaded');
     });
 
-    QUnit.test('file upload buttons should be removed after upload started', function(assert) {
+    QUnit.test('file upload buttons should become disabled and invisible after upload started', function(assert) {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons'
         });
@@ -1566,15 +1566,24 @@ QUnit.module('file uploading', moduleConfig, () => {
 
         simulateFileChoose($element, files);
 
-        const $uploadButtons = $element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        let $uploadButtons = $element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
         $uploadButtons.eq(0).trigger('dxclick');
-        assert.equal($element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).length, 1, 'clicked button is removed');
+        assert.strictEqual($uploadButtons.length, 2, 'both buttons are still here');
+        assert.ok($uploadButtons.eq(0).hasClass('dx-state-disabled'), 'clicked button is disabled');
+        assert.notOk($uploadButtons.eq(0).is(':visible'), 'clicked button is invisible');
+        assert.ok($uploadButtons.eq(1).is(':visible'), 'other button is visible');
+        assert.notOk($uploadButtons.eq(1).hasClass('dx-state-disabled'), 'other button is enabled');
 
         const $commonUploadButton = $element.find('.' + FILEUPLOADER_CONTENT_CLASS + ' > .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
         $commonUploadButton.trigger('dxclick');
 
-        assert.equal($element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).length, 0, 'upload buttons related to files are removed');
+        $uploadButtons = $element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        assert.strictEqual($uploadButtons.length, 2, 'both buttons are still here');
+        assert.ok($uploadButtons.eq(0).hasClass('dx-state-disabled'), 'first button is still disabled');
+        assert.notOk($uploadButtons.eq(0).is(':visible'), 'first button is still invisible');
+        assert.notOk($uploadButtons.eq(1).is(':visible'), 'clicked button is invisible');
+        assert.ok($uploadButtons.eq(1).hasClass('dx-state-disabled'), 'clicked button is disabled');
     });
 
     QUnit.test('progressBar should reflect file upload progress', function(assert) {
