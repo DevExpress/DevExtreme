@@ -4666,7 +4666,7 @@ QUnit.module('Options for Material theme in components', {
 
 QUnit.module('Getting timezones', {}, () => {
     const findTimeZone = (timeZones, id) => {
-        return timeZones.find((timeZone) => timeZone.id === id);
+        return timeZones.filter((timeZone) => timeZone.id === id)[0];
 
     };
     QUnit.test('getTimeZones method should return accepted timezones with right format', function(assert) {
