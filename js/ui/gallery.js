@@ -754,6 +754,7 @@ const Gallery = CollectionWidget.inherit({
         ) {
             this._loadNextPage().done((function() {
                 this._renderIndicator();
+                this._cloneDuplicateItems();
                 this._renderItemPositions();
                 this._renderNavButtonsVisibility();
                 this._renderItemSizes(selectedIndex);

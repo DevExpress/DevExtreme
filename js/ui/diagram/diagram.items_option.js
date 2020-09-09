@@ -21,9 +21,20 @@ class ItemsOption extends Component {
             this._diagramWidget._hideLoadingIndicator();
         }
     }
+    _prepareData(dataObj) {
+        for(const key in dataObj) {
+            if(!Object.prototype.hasOwnProperty.call(dataObj, key)) continue;
+
+            if(dataObj[key] === undefined) {
+                dataObj[key] = null;
+            }
+        }
+        return dataObj;
+    }
+
     insert(data, callback, errorCallback) {
         this._resetCache();
-        this._getStore().insert(data).done(
+        this._getStore().insert(this._prepareData(data)).done(
             (data) => {
                 if(callback) {
                     callback(data);
@@ -41,14 +52,14 @@ class ItemsOption extends Component {
     }
     update(key, data, callback, errorCallback) {
         const storeKey = this._getStoreKey(data);
-        this._getStore().update(storeKey, data).done(
-            function(data, key) {
+        this._getStore().update(storeKey, this._prepareData(data)).done(
+            (data, key) => {
                 if(callback) {
                     callback(key, data);
                 }
             }
         ).fail(
-            function(error) {
+            (error) => {
                 if(errorCallback) {
                     errorCallback(error);
                 }

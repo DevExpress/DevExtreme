@@ -223,17 +223,21 @@ QUnit.module('dx-theme changing', (hooks) => {
     });
 
     test('Themes functions return right value if theme file loaded after ready event (T666366)', function(assert) {
+        const done = assert.async();
         const linksContainer = $('<div>').addClass('links-container').appendTo('body');
         linksContainer.append('<link rel=\'dx-theme\' href=\'style2.css\' data-theme=\'material.blue.light\' />');
 
         themes.init({ context: window.document, theme: 'material.blue.light' });
-        themes.resetTheme();
+        themes.initialized(() => {
+            themes.resetTheme();
+            linksContainer.append('<style>.dx-theme-marker { font-family: \'dx.generic.light\' }</style>');
 
-        linksContainer.append('<style>.dx-theme-marker { font-family: \'dx.generic.light\' }</style>');
+            assert.equal(themes.isGeneric(), true, 'isGeneric returns \'true\' if css has been added after themes initialization');
 
-        assert.equal(themes.isGeneric(), true, 'isGeneric returns \'true\' if css has been added after themes initialization');
+            linksContainer.remove();
+            done();
+        });
 
-        linksContainer.remove();
     });
 });
 
@@ -267,7 +271,7 @@ QUnit.module('dx-theme links', (hooks) => {
         // assert
         const realStylesheets = getFrameStyleLinks();
         assert.equal(realStylesheets.length, 0, 'No stylesheets should be added');
-        themes.ready(done);
+        themes.initialized(done);
     });
 
     test('should throw if non-existing platform requested', function(assert) {

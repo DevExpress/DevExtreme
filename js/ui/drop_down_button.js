@@ -117,7 +117,7 @@ const DropDownButton = Widget.inherit({
         this._initDataSource();
         this._compileKeyGetter();
         this._compileDisplayGetter();
-        this._itemsToDataSource();
+        this._itemsToDataSource(this.option('items'));
         this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
     },
@@ -138,11 +138,14 @@ const DropDownButton = Widget.inherit({
         this.callBase();
     },
 
-    _itemsToDataSource: function() {
+    _itemsToDataSource: function(value) {
         if(!this._dataSource) {
             this._dataSource = new DataSource({
-                store: new ArrayStore(this.option('items')),
-                pageSize: 0
+                store: new ArrayStore({
+                    key: this._getKey(),
+                    data: value
+                }),
+                pageSize: 0,
             });
         }
     },
@@ -167,7 +170,10 @@ const DropDownButton = Widget.inherit({
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._updateArrowClass();
-        this._loadSelectedItem().done(this._updateActionButton.bind(this));
+
+        if(isDefined(this.option('selectedItemKey'))) {
+            this._loadSelectedItem().done(this._updateActionButton.bind(this));
+        }
     },
 
     _render() {
@@ -189,7 +195,7 @@ const DropDownButton = Widget.inherit({
     _loadSelectedItem() {
         const d = new Deferred();
 
-        if(this._list) {
+        if(this._list && this._lastSelectedItemData !== undefined) {
             const cachedResult = this.option('useSelectMode') ? this._list.option('selectedItem') : this._lastSelectedItemData;
             return d.resolve(cachedResult);
         }
@@ -517,9 +523,31 @@ const DropDownButton = Widget.inherit({
     },
 
     _updateItemCollection(optionName) {
+        const selectedItemKey = this.option('selectedItemKey');
+        this._setListOption('selectedItem', null);
         this._setWidgetOption('_list', [optionName]);
-        this._setListOption('selectedItemKeys', []);
-        this._loadSelectedItem().done(this._updateActionButton.bind(this));
+
+        if(isDefined(selectedItemKey)) {
+            this._loadSelectedItem()
+                .done(selectedItem => {
+                    this._setListOption('selectedItemKeys', [selectedItemKey]);
+                    this._setListOption('selectedItem', selectedItem);
+                }).fail(error => {
+                    this._setListOption('selectedItemKeys', []);
+                })
+                .always(this._updateActionButton.bind(this));
+        }
+    },
+
+    _updateDataSource: function(items = this._dataSource.items()) {
+        this._dataSource = undefined;
+        this._itemsToDataSource(items);
+        this._updateKeyExpr();
+    },
+
+    _updateKeyExpr: function() {
+        this._compileKeyGetter();
+        this._setListOption('keyExpr', this._getKey());
     },
 
     _optionChanged(args) {
@@ -538,8 +566,7 @@ const DropDownButton = Widget.inherit({
                 this._updateActionButton(this.option('selectedItem'));
                 break;
             case 'keyExpr':
-                this._compileKeyGetter();
-                this._setListOption(name, value);
+                this._updateDataSource();
                 break;
             case 'buttonGroupOptions':
                 this._innerWidgetOptionChanged(this._buttonGroup, args);
@@ -563,12 +590,16 @@ const DropDownButton = Widget.inherit({
                 this.callBase(args);
                 break;
             case 'items':
-                this._dataSource = null;
-                this._itemsToDataSource();
+                this._updateDataSource(this.option('items'));
                 this._updateItemCollection(name);
                 break;
             case 'dataSource':
-                this._initDataSource();
+                if(Array.isArray(value)) {
+                    this._updateDataSource(this.option('dataSource'));
+                } else {
+                    this._initDataSource();
+                    this._updateKeyExpr();
+                }
                 this._updateItemCollection(name);
                 break;
             case 'icon':
