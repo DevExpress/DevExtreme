@@ -89,7 +89,7 @@ System.config({
 
         'devextreme': 'npm:devextreme',
         'jszip': 'npm:jszip/dist/jszip.min.js',
-        'devextreme-quill': 'npm:devextreme-quill/dist/quill.js',
+        'devextreme-quill': 'npm:devextreme-quill',
         'devexpress-diagram': 'npm:devexpress-diagram',
         'devexpress-gantt': 'npm:devexpress-gantt',
         'devextreme-angular': 'npm:devextreme-angular',
