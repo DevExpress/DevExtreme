@@ -805,30 +805,6 @@ interface JQuery {
 }
 }
 
-export interface dxSchedulerTimeZone {
-    /**
-     * @docid dxSchedulerTimeZone.id
-     * @type String
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    id: string;
-    /**
-     * @docid dxSchedulerTimeZone.title
-     * @type String
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    title: string;
-    /**
-     * @docid dxSchedulerTimeZone.offset
-     * @type number
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    offset: number;
-}
-
 /**
  * @docid ui.dxScheduler.getTimeZones
  * @publicName getTimeZones(date)

@@ -5649,15 +5649,6 @@ declare module DevExpress.ui {
         /** @name dxSchedulerScrolling.mode */
         mode?: 'standard' | 'virtual';
     }
-    /** @name dxSchedulerTimeZone */
-    export interface dxSchedulerTimeZone {
-        /** @name dxSchedulerTimeZone.id */
-        id: string;
-        /** @name dxSchedulerTimeZone.offset */
-        offset: number;
-        /** @name dxSchedulerTimeZone.title */
-        title: string;
-    }
     /** @name dxScrollView.Options */
     export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
         /** @name dxScrollView.Options.onPullDown */
@@ -6773,7 +6764,7 @@ declare module DevExpress.ui.dxOverlay {
 }
 declare module DevExpress.ui.dxScheduler {
     /** @name ui.dxScheduler.getTimeZones(date) */
-    export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
+    export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.utils {
     /** @name utils.cancelAnimationFrame(requestID) */
