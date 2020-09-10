@@ -8,6 +8,10 @@ require('generic_light.css!');
 const $ = require('jquery');
 const positionUtils = require('animation/position');
 
+// TODO - remove it after update Docker image
+const browser = require('core/utils/browser');
+const isChrome85 = browser.chrome && parseInt(browser.version) === 85;
+
 positionUtils.calculateScrollbarWidth();
 
 QUnit.testStart(function() {
@@ -73,6 +77,10 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 16);
+        if(isChrome85) {
+            assert.measureStyleRecalculation(measureFunction, shading ? 16 : 15);
+        } else {
+            assert.measureStyleRecalculation(measureFunction, 16);
+        }
     });
 });
