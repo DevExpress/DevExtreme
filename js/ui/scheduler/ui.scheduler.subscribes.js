@@ -15,6 +15,7 @@ import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 import utils from './utils';
 
+const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
@@ -499,7 +500,7 @@ const subscribes = {
             const startDate = viewDataProvider.getGroupStartDate(groupIndex);
             const endDate = new Date(Math.min(viewDataProvider.getGroupEndDate(groupIndex), endViewDate));
             const startDayHour = startDate.getHours();
-            const endDayHour = startDayHour + (endDate - startDate) / HOUR_MS;
+            const endDayHour = (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY;
 
             allDay = (allDay !== false) && allDayPanel?.length > 0;
 
