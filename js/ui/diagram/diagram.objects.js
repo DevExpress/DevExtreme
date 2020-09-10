@@ -22,3 +22,53 @@
     * @name dxDiagramCustomCommand
     * @type object
     */
+
+/**
+    * @name dxDiagramRequestOperationAddShapeArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationAddShapeFromToolboxArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationDeleteShapeArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationDeleteConnectorArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationChangeConnectionArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationBeforeChangeShapeTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationChangeShapeTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationBeforeChangeConnectorTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationChangeConnectorTextArgs
+    * @type object
+    */

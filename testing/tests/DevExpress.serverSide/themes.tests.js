@@ -2,6 +2,7 @@ const themes = require('ui/themes');
 const viewportUtils = require('core/utils/view_port');
 
 window.includeThemesLinks();
+themes.setDefaultTimeout(20);
 
 const viewport = document.createElement('div');
 viewport.className = 'dx-viewport';
@@ -29,6 +30,9 @@ QUnit.test('theme changing', function(assert) {
         'dx-theme-generic-typography',
         'dx-color-scheme-light'
     ].join(' '));
+
+    const done = assert.async();
+    themes.initialized(done);
 });
 
 QUnit.test('viewport changing', function(assert) {
@@ -50,4 +54,7 @@ QUnit.test('viewport changing', function(assert) {
     ].join(' '));
 
     fixture.removeChild(newViewport);
+
+    const done = assert.async();
+    themes.initialized(done);
 });

@@ -4,7 +4,7 @@ import {
 import { addHeightToStyle } from '../utils';
 import { combineClasses } from '../../../../utils/combine_classes';
 
-export const viewFunction = (viewModel: Row) => (
+export const viewFunction = (viewModel: Row): JSX.Element => (
   <tr
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}

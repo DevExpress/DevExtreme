@@ -52,7 +52,6 @@
 @use "../widgets/common/slideOutView";
 @use "../widgets/common/slideOut";
 @use "../widgets/common/colorBox";
-@use "../widgets/common/pivotGrid";
 @use "../widgets/common/menuBase";
 @use "../widgets/common/menu";
 @use "../widgets/common/contextMenu";
@@ -65,11 +64,7 @@
 @use "../widgets/common/form";
 @use "../widgets/common/filterBuilder";
 @use "../widgets/common/drawer";
-@use "../widgets/common/htmlEditor";
 @use "../widgets/common/speedDialAction";
-@use "../widgets/common/fileManager";
-@use "../widgets/common/diagram";
-@use "../widgets/common/gantt";
 @use "../widgets/common/deferRendering";
 @use "../widgets/common/badge";
 @use "../widgets/common/textEditor";

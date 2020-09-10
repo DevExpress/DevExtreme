@@ -140,7 +140,7 @@ QUnit.module('Options', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
-        assert.equal(treeListWrapperElement.width(), 300, '300px');
+        assert.roughEqual(treeListWrapperElement.width(), 300, 0.01, '300px');
         this.instance.option('taskListWidth', 500);
         assert.equal(treeListWrapperElement.width(), 500, '500px');
     });

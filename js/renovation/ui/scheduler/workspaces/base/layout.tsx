@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { LayoutProps } from './layout_props';
 
-export const viewFunction = (viewModel: LayoutBase) => (
+export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div {...viewModel.restAttributes}>
     <viewModel.props.headerPanelTemplate

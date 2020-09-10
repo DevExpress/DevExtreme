@@ -192,9 +192,11 @@ const testRendering = function(usePopover) {
                 usePopover: usePopover
             });
 
-            const $overlay = $('.dx-overlay-content').first(); const overlayTop = $overlay.offset().top; const buttonBottom = $button.offset().top + $button.outerHeight();
+            const $overlay = $('.dx-overlay-content').first();
+            const overlayTop = $overlay.offset().top;
+            const buttonBottom = $button.offset().top + $button.outerHeight();
 
-            assert.ok(overlayTop > buttonBottom);
+            assert.ok(overlayTop >= buttonBottom);
         });
 
         QUnit.test('option menuWidget', function(assert) {

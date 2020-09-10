@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { shallow } from 'enzyme';
 import { InkRipple, viewFunction } from '../ink_ripple';
 import { initConfig, showWave, hideWave } from '../../../../ui/widget/utils.ink_ripple';

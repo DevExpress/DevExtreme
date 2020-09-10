@@ -307,6 +307,18 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.equal(rect.element.childNodes[0].textContent, 'test');
     });
 
+    QUnit.test('removeTitle', function(assert) {
+        // arrange
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+
+        rect.setTitle('test');
+        rect.removeTitle();
+
+        assert.equal(rect.element.childNodes.length, 0);
+    });
+
     QUnit.test('Sharp', function(assert) {
         // arrange
         const parent = { element: document.createElement('div') };

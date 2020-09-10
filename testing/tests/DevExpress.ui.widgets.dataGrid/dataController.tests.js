@@ -38,7 +38,7 @@ const setupModule = function() {
     ]);
 
     this.applyOptions = function(options) {
-        $.extend(this.options, options);
+        $.extend(true, this.options, options);
         this.columnsController.init();
     };
 
@@ -7644,10 +7644,10 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { name: 'Dan', phone: '98-75-21' }
         ];
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowAdding: true
-        };
+        });
 
         const dataSource = createDataSource(array, { key: 'name' });
 
@@ -7676,10 +7676,10 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { name: 'Dan', phone: '98-75-21' }
         ];
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'row',
             allowAdding: true
-        };
+        });
 
         const dataSource = createDataSource(array, { key: 'name' });
 
@@ -7834,9 +7834,9 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { id: 3 },
         ];
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'form'
-        };
+        });
 
         const dataSource = createDataSource(array, { key: 'id' });
 
@@ -12738,9 +12738,7 @@ QUnit.module('Refresh changesOnly', {
     QUnit.test('edit row should be updated on cancel', function(assert) {
         this.setupModules();
 
-        this.options.editing = {
-            mode: 'row'
-        };
+        $.extend(this.options.editing, { mode: 'row' });
 
         this.options.repaintChangesOnly = true;
 
@@ -12768,9 +12766,7 @@ QUnit.module('Refresh changesOnly', {
 
         let changedArgs;
 
-        this.options.editing = {
-            mode: 'form'
-        };
+        $.extend(this.options.editing, { mode: 'form' });
 
         this.dataController.changed.add(function(args) {
             changedArgs = args;
@@ -12803,7 +12799,7 @@ QUnit.module('Refresh changesOnly', {
             changedArgs = args;
         });
 
-        this.options.editing = { mode: 'cell' };
+        $.extend(this.options.editing, { mode: 'cell' });
         this.editCell(0, 1);
 
         // act
@@ -12838,7 +12834,7 @@ QUnit.module('Refresh changesOnly', {
         });
 
         this.options.repaintChangesOnly = true;
-        this.options.editing = { mode: 'row', allowUpdating: true };
+        $.extend(this.options.editing, { mode: 'row', allowUpdating: true });
         this.editRow(0);
 
         // act
@@ -13150,7 +13146,7 @@ QUnit.module('Using DataSource instance', {
         };
 
         this.applyOptions = function(options) {
-            $.extend(this.options, options);
+            $.extend(true, this.options, options);
             this.columnsController.init();
         };
 
@@ -13415,7 +13411,7 @@ QUnit.module('Exporting', {
         };
 
         this.applyOptions = function(options) {
-            $.extend(this.options, options);
+            $.extend(true, this.options, options);
             this.columnsController.init();
         };
 
@@ -14367,6 +14363,9 @@ QUnit.module('onOptionChanged', {
         sinon.stub(that, 'option', function(optionName, value) {
             if(optionName === 'paging.pageSize' && value === 3) {
                 pageSize = that.dataController.dataSource().pageSize();
+            }
+            if(optionName === 'editing.changes') {
+                return that.options.editing.changes;
             }
         });
 
