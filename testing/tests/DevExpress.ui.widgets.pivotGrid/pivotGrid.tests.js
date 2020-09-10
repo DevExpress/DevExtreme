@@ -6042,127 +6042,129 @@ QUnit.module('Vertical headers', {
         assert.deepEqual($(grid._dataArea.element()).text(), '10');
     });
 
-    ['row', 'column'].forEach(changedArea => {
-        function createPivotGridAndExpandHeaderItem(fieldsChooserFieldsUpdater) {
-            fx.off = true;
-            const clock = sinon.useFakeTimers();
-            const grid = $('#pivotGrid').dxPivotGrid({
-                fieldChooser: {
-                    applyChangesMode: 'onDemand'
-                },
-                dataSource: {
-                    fields: [
-                        { area: 'row', dataField: 'row1', dataType: 'string' },
-                        { area: 'row', dataField: 'subRow', dataType: 'string' },
-                        { area: undefined, dataField: 'row2', dataType: 'string' },
-                        { area: 'column', dataField: 'col1', dataType: 'string' },
-                        { area: 'column', dataField: 'subColumn', dataType: 'string' },
-                        { area: undefined, dataField: 'col2', dataType: 'string' },
-                        { area: 'data', summaryType: 'count', dataType: 'number' }
-                    ],
-                    store: [{
-                        row1: 'row1', row2: 'row2', subRow: 'subRow',
-                        col1: 'column1', col2: 'column2', subColumn: 'subColumn'
-                    }]
-                }
-            }).dxPivotGrid('instance');
-            clock.tick();
+    ['instantly', 'onDemand'].forEach(applyChangesMode => {
+        ['row', 'column'].forEach(changedArea => {
+            function createPivotGridAndExpandHeaderItem(fieldsChooserFieldsUpdater) {
+                fx.off = true;
+                const clock = sinon.useFakeTimers();
+                const grid = $('#pivotGrid').dxPivotGrid({
+                    fieldChooser: {
+                        applyChangesMode: applyChangesMode
+                    },
+                    dataSource: {
+                        fields: [
+                            { area: 'row', dataField: 'row1', dataType: 'string' },
+                            { area: 'row', dataField: 'subRow', dataType: 'string' },
+                            { area: undefined, dataField: 'row2', dataType: 'string' },
+                            { area: 'column', dataField: 'col1', dataType: 'string' },
+                            { area: 'column', dataField: 'subColumn', dataType: 'string' },
+                            { area: undefined, dataField: 'col2', dataType: 'string' },
+                            { area: 'data', summaryType: 'count', dataType: 'number' }
+                        ],
+                        store: [{
+                            row1: 'row1', row2: 'row2', subRow: 'subRow',
+                            col1: 'column1', col2: 'column2', subColumn: 'subColumn'
+                        }]
+                    }
+                }).dxPivotGrid('instance');
+                clock.tick();
 
-            grid.getDataSource().expandHeaderItem(changedArea, [`${changedArea}1`]);
-            clock.tick();
+                grid.getDataSource().expandHeaderItem(changedArea, [`${changedArea}1`]);
+                clock.tick();
 
-            grid.getFieldChooserPopup().show().done(() => {
-                const fieldChooser = grid.getFieldChooserPopup().$content().dxPivotGridFieldChooser('instance');
+                grid.getFieldChooserPopup().show().done(() => {
+                    const fieldChooser = grid.getFieldChooserPopup().$content().dxPivotGridFieldChooser('instance');
 
-                fieldsChooserFieldsUpdater(fieldChooser);
-            });
-            clock.restore();
-            fx.off = false;
-        }
+                    fieldsChooserFieldsUpdater(fieldChooser);
+                });
+                clock.restore();
+                fx.off = false;
+            }
 
-        QUnit.test(`Remove first of the ${changedArea} must clear expandedPath (T928525)`, function(assert) {
-            createPivotGridAndExpandHeaderItem(function(fieldChooser) {
-                const state = fieldChooser.getDataSource().state();
-                if(changedArea === 'row') {
-                    state.fields[0].area = undefined;
-                } else {
-                    state.fields[3].area = undefined;
-                }
+            QUnit.test(`Remove first of the ${changedArea} must clear expandedPath (T928525)`, function(assert) {
+                createPivotGridAndExpandHeaderItem(function(fieldChooser) {
+                    const state = fieldChooser.getDataSource().state();
+                    if(changedArea === 'row') {
+                        state.fields[0].area = undefined;
+                    } else {
+                        state.fields[3].area = undefined;
+                    }
 
-                fieldChooser.getDataSource().state(state, true);
-                const newState = fieldChooser.getDataSource().state();
+                    fieldChooser.getDataSource().state(state, true);
+                    const newState = fieldChooser.getDataSource().state();
 
-                assert.deepEqual(newState.rowExpandedPaths, []);
-                assert.deepEqual(newState.columnExpandedPaths, []);
-            });
-        });
-
-        QUnit.test(`Append new ${changedArea} to the start of area must clear expandedPath (T928525)`, function(assert) {
-            createPivotGridAndExpandHeaderItem(function(fieldChooser) {
-                const state = fieldChooser.getDataSource().state();
-                if(changedArea === 'row') {
-                    state.fields[0].areaIndex = 1;
-                    state.fields[2].areaIndex = 0;
-                    state.fields[2].area = 'row';
-                } else {
-                    state.fields[3].areaIndex = 1;
-                    state.fields[5].areaIndex = 0;
-                    state.fields[5].area = 'column';
-                }
-
-                fieldChooser.getDataSource().state(state, true);
-                const newState = fieldChooser.getDataSource().state();
-
-                if(changedArea === 'row') {
                     assert.deepEqual(newState.rowExpandedPaths, []);
                     assert.deepEqual(newState.columnExpandedPaths, []);
-                } else {
+                });
+            });
+
+            QUnit.test(`Append new ${changedArea} to the start of area must clear expandedPath (T928525)`, function(assert) {
+                createPivotGridAndExpandHeaderItem(function(fieldChooser) {
+                    const state = fieldChooser.getDataSource().state();
+                    if(changedArea === 'row') {
+                        state.fields[0].areaIndex = 1;
+                        state.fields[2].areaIndex = 0;
+                        state.fields[2].area = 'row';
+                    } else {
+                        state.fields[3].areaIndex = 1;
+                        state.fields[5].areaIndex = 0;
+                        state.fields[5].area = 'column';
+                    }
+
+                    fieldChooser.getDataSource().state(state, true);
+                    const newState = fieldChooser.getDataSource().state();
+
+                    if(changedArea === 'row') {
+                        assert.deepEqual(newState.rowExpandedPaths, []);
+                        assert.deepEqual(newState.columnExpandedPaths, []);
+                    } else {
+                        assert.deepEqual(newState.rowExpandedPaths, []);
+                        assert.deepEqual(newState.columnExpandedPaths, []);
+                    }
+                });
+            });
+
+            QUnit.test(`Append new ${changedArea} to the end of area must keep expandedPath (T928525)`, function(assert) {
+                createPivotGridAndExpandHeaderItem(function(fieldChooser) {
+                    const state = fieldChooser.getDataSource().state();
+                    if(changedArea === 'row') {
+                        state.fields[2].area = 'row';
+                        state.fields[2].areaIndex = 1;
+                    } else {
+                        state.fields[5].area = 'column';
+                        state.fields[5].areaIndex = 1;
+                    }
+
+                    fieldChooser.getDataSource().state(state, true);
+                    const newState = fieldChooser.getDataSource().state();
+
+                    if(changedArea === 'row') {
+                        assert.deepEqual(newState.rowExpandedPaths, [['row1']]);
+                        assert.deepEqual(newState.columnExpandedPaths, []);
+                    } else {
+                        assert.deepEqual(newState.rowExpandedPaths, []);
+                        assert.deepEqual(newState.columnExpandedPaths, [['column1']]);
+                    }
+                });
+            });
+
+            QUnit.test(`Swap the ${changedArea} must clear expandedPath (T928525)`, function(assert) {
+                createPivotGridAndExpandHeaderItem(function(fieldChooser) {
+                    const state = fieldChooser.getDataSource().state();
+                    if(changedArea === 'row') {
+                        state.fields[0].areaIndex = 1;
+                        state.fields[1].areaIndex = 0;
+                    } else {
+                        state.fields[3].areaIndex = 1;
+                        state.fields[4].areaIndex = 0;
+                    }
+
+                    fieldChooser.getDataSource().state(state, true);
+                    const newState = fieldChooser.getDataSource().state();
+
                     assert.deepEqual(newState.rowExpandedPaths, []);
                     assert.deepEqual(newState.columnExpandedPaths, []);
-                }
-            });
-        });
-
-        QUnit.test(`Append new ${changedArea} to the end of area must keep expandedPath (T928525)`, function(assert) {
-            createPivotGridAndExpandHeaderItem(function(fieldChooser) {
-                const state = fieldChooser.getDataSource().state();
-                if(changedArea === 'row') {
-                    state.fields[2].area = 'row';
-                    state.fields[2].areaIndex = 1;
-                } else {
-                    state.fields[5].area = 'column';
-                    state.fields[5].areaIndex = 1;
-                }
-
-                fieldChooser.getDataSource().state(state, true);
-                const newState = fieldChooser.getDataSource().state();
-
-                if(changedArea === 'row') {
-                    assert.deepEqual(newState.rowExpandedPaths, [['row1']]);
-                    assert.deepEqual(newState.columnExpandedPaths, []);
-                } else {
-                    assert.deepEqual(newState.rowExpandedPaths, []);
-                    assert.deepEqual(newState.columnExpandedPaths, [['column1']]);
-                }
-            });
-        });
-
-        QUnit.test(`Swap the ${changedArea} must clear expandedPath (T928525)`, function(assert) {
-            createPivotGridAndExpandHeaderItem(function(fieldChooser) {
-                const state = fieldChooser.getDataSource().state();
-                if(changedArea === 'row') {
-                    state.fields[0].areaIndex = 1;
-                    state.fields[1].areaIndex = 0;
-                } else {
-                    state.fields[3].areaIndex = 1;
-                    state.fields[4].areaIndex = 0;
-                }
-
-                fieldChooser.getDataSource().state(state, true);
-                const newState = fieldChooser.getDataSource().state();
-
-                assert.deepEqual(newState.rowExpandedPaths, []);
-                assert.deepEqual(newState.columnExpandedPaths, []);
+                });
             });
         });
     });
