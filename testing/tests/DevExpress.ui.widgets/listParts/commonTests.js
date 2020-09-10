@@ -2211,7 +2211,7 @@ QUnit.module('scrollView integration', {
         this.clock.tick(1);
 
         const scrollBarSize = Math.round(Math.pow($list.height(), 2) / $scrollViewContent.height());
-        assert.equal($scrollableScroll.height(), scrollBarSize, 'scrollbar has correct height');
+        assert.equal($scrollableScroll.outerHeight(), scrollBarSize, 'scrollbar has correct height');
     });
 
     QUnit.test('update scroll after change items', function(assert) {
