@@ -132,7 +132,7 @@ $(function() {
             $("<button />").dxButton({
                 text: "Cancel",
                 onClick: cancelEditEmployee
-            }),
+            })
         );
     };
     var popup = $("#popup").dxPopup({
