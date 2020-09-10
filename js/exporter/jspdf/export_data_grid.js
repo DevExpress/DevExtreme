@@ -1,6 +1,5 @@
 import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
-
 function exportDataGrid(options) {
     return Export.export(_getFullOptions(options));
 }
