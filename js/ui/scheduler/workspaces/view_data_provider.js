@@ -175,63 +175,41 @@ class ViewDataGenerator {
         return index;
     }
 
-    generateMaps(groupedData) {
-        const viewDataMap = [];
-        const groupedDataMap = [];
-        const addToViewDataMap = (cellsData, dataRowIndex) => {
-            const cellsMap = [];
-            cellsData.forEach((cellData, cellIndex) => {
-                const cellMap = {
-                    cellData,
-                    position: {
-                        rowIndex: viewDataMap.length,
-                        cellIndex
-                    }
-                };
-                cellsMap.push(cellMap);
-
-                const { groupIndex } = cellData;
-                addToGroupedDataMap(groupIndex, dataRowIndex, cellMap);
-            });
-
-            viewDataMap.push(cellsMap);
-
-            return cellsMap;
-        };
-
-        const addToGroupedDataMap = (groupIndex, rowIndex, cellMap) => {
-            if(!groupedDataMap[groupIndex]) {
-                groupedDataMap[groupIndex] = [];
-            }
-            if(!groupedDataMap[groupIndex][rowIndex]) {
-                groupedDataMap[groupIndex][rowIndex] = [];
-            }
-
-            groupedDataMap[groupIndex][rowIndex].push(cellMap);
-        };
-
-        groupedData?.forEach(data => {
+    generateGroupedDataMap(viewDataMap) {
+        const { previousGroupedDataMap: groupedDataMap } = viewDataMap.reduce((previousOptions, cellsRow) => {
             const {
-                dateTable,
-                allDayPanel,
-                isGroupedAllDayPanel
-            } = data;
-            const cellsMap = [];
+                previousGroupedDataMap, previousRowIndex, previousGroupIndex,
+            } = previousOptions;
+            const { groupIndex: currentGroupIndex } = cellsRow[0].cellData;
+            const currentRowIndex = currentGroupIndex === previousGroupIndex
+                ? previousRowIndex + 1
+                : 0;
 
-            let rowIndex = 0;
-            if(isGroupedAllDayPanel && allDayPanel?.length) {
-                cellsMap.push(addToViewDataMap(allDayPanel, rowIndex++));
-            }
+            cellsRow.forEach((cell) => {
+                const { groupIndex } = cell.cellData;
 
-            dateTable.forEach(cells => {
-                cellsMap.push(addToViewDataMap(cells, rowIndex++));
+                if(!previousGroupedDataMap[groupIndex]) {
+                    previousGroupedDataMap[groupIndex] = [];
+                }
+                if(!previousGroupedDataMap[groupIndex][currentRowIndex]) {
+                    previousGroupedDataMap[groupIndex][currentRowIndex] = [];
+                }
+
+                previousGroupedDataMap[groupIndex][currentRowIndex].push(cell);
             });
+
+            return {
+                previousGroupedDataMap,
+                previousRowIndex: currentRowIndex,
+                previousGroupIndex: currentGroupIndex,
+            };
+        }, {
+            previousGroupedDataMap: [],
+            previousRowIndex: -1,
+            previousGroupIndex: -1,
         });
 
-        return {
-            viewDataMap,
-            groupedDataMap
-        };
+        return groupedDataMap;
     }
 }
 
@@ -271,8 +249,7 @@ export default class ViewDataProvider {
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this._completeViewDataMap, renderOptions);
         this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this._completeViewDataMap, renderOptions);
-
-        this._generateMaps();
+        this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(this.viewDataMap);
     }
 
     getStartDate() {
@@ -349,12 +326,5 @@ export default class ViewDataProvider {
     _getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
-    }
-
-    _generateMaps() {
-        const { groupedData } = this.viewData;
-        const { groupedDataMap } = this.viewDataGenerator.generateMaps(groupedData);
-
-        this.groupedDataMap = groupedDataMap;
     }
 }
