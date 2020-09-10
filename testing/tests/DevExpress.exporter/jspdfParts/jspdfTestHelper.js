@@ -20,7 +20,7 @@ class JSPdfDataGridTestHelper {
     checkRowAndColumnCount(expectedCells, actualAutoTableOptions, rowType) {
         assert.strictEqual(expectedCells[rowType].length, actualAutoTableOptions[rowType].length, `actual row count of the ${rowType}`);
         for(let rowIndex = 0; rowIndex < expectedCells[rowType].length; rowIndex++) {
-            assert.strictEqual(expectedCells[rowType][rowIndex].length, actualAutoTableOptions[rowType][rowIndex].length, 'actual column count of the head');
+            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex].length, expectedCells[rowType][rowIndex].length, 'actual column count of the head');
         }
     }
 
@@ -30,10 +30,21 @@ class JSPdfDataGridTestHelper {
         });
     }
 
-    checkMergeCells(expectedCells, actualAutoTableOptions, rowType) {
+    checkCellsStyles(expectedCells, actualAutoTableOptions, rowType) {
         this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
-            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex][columnIndex].colSpan, cell.colSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].colSpan`);
-            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex][columnIndex].rowSpan, cell.rowSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].rowSpan`);
+            const expectedCellStyles = cell.styles || {};
+            const actualCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
+            // eslint-disable-next-line spellcheck/spell-checker
+            assert.strictEqual(actualCellStyles.halign, expectedCellStyles.halign, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+            assert.strictEqual(actualCellStyles.fontStyle, expectedCellStyles.fontStyle, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+        });
+    }
+
+    checkMergeCells(expectedCells, actualAutoTableOptions, rowType) {
+        this._iterateCells(expectedCells[rowType], (expectedCell, rowIndex, columnIndex) => {
+            const actualCell = actualAutoTableOptions[rowType][rowIndex][columnIndex];
+            assert.strictEqual(actualCell.colSpan, expectedCell.colSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].colSpan`);
+            assert.strictEqual(actualCell.rowSpan, expectedCell.rowSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].rowSpan`);
         });
     }
 

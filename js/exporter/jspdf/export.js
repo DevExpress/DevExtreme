@@ -1,6 +1,7 @@
-import { isDefined, isObject, isFunction, isNumeric } from '../../core/utils/type';
+import { isDate, isDefined, isObject, isFunction, isNumeric } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
+import numberLocalization from '../../localization/number';
 
 export const Export = {
     getFullOptions: function(options) {
@@ -87,6 +88,7 @@ export const Export = {
                             styles: {}
                         };
 
+                        this.applyCellDataFormat(pdfCell, gridCell, cellStyle);
                         this.assignCellStyle(pdfCell, gridCell, columns[cellIndex], cellStyle);
 
                         if(!isDefined(rowType)) { rowType = gridCell.rowType; }
@@ -101,10 +103,12 @@ export const Export = {
                         }
                     }
 
-                    if(rowType === 'header') {
-                        autoTableOptions.head.push(row);
-                    } else {
-                        autoTableOptions.body.push(row);
+                    if(isDefined(rowType)) {
+                        if(rowType === 'header') {
+                            autoTableOptions.head.push(row);
+                        } else {
+                            autoTableOptions.body.push(row);
+                        }
                     }
                 }
 
@@ -118,17 +122,27 @@ export const Export = {
         });
     },
 
+    applyCellDataFormat: function(pdfCell, gridCell, cellStyle) {
+        if(gridCell.rowType === 'data' && isDefined(cellStyle) && isDefined(cellStyle.format)) {
+            if(isDate(pdfCell.content) && (cellStyle.dataType === 'date' || cellStyle.dataType === 'datetime')) {
+                pdfCell.content = dateLocalization.format(new Date(pdfCell.content), cellStyle.format);
+            }
+            if(isNumeric(pdfCell.content) && cellStyle.dataType === 'number') {
+                pdfCell.content = numberLocalization.format(pdfCell.content, cellStyle.format);
+            }
+        }
+    },
+
     assignCellStyle: function(pdfCell, gridCell, column, cellStyle) {
         if(gridCell.rowType === 'header') {
             // eslint-disable-next-line spellcheck/spell-checker
             if(column.alignment) { pdfCell.styles.halign = column.alignment; }
         } else {
-            if(cellStyle) {
+            if(isDefined(cellStyle)) {
                 // eslint-disable-next-line spellcheck/spell-checker
                 if(cellStyle.alignment) { pdfCell.styles.halign = cellStyle.alignment; }
                 if(cellStyle.bold) { pdfCell.styles.fontStyle = 'bold'; }
                 if(cellStyle.wrapText) { pdfCell.styles.cellWidth = 'wrap'; }
-                if(cellStyle.dataType === 'date') { pdfCell.content = dateLocalization.format(new Date(pdfCell.content), cellStyle.format); }
             }
         }
     },
