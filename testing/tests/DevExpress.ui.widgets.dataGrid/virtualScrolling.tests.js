@@ -1,4 +1,5 @@
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
