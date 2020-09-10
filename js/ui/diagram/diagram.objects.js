@@ -72,3 +72,8 @@
     * @name dxDiagramRequestOperationChangeConnectorTextArgs
     * @type object
     */
+
+/**
+    * @name dxDiagramRequestOperationResizeShapeArgs
+    * @type object
+    */

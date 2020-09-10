@@ -3283,11 +3283,11 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.onRequestLayoutUpdate */
         onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any>, allowed?: boolean }) => any);
         /** @name dxDiagram.Options.onRequestOperation */
-        onRequestOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText', args?: dxDiagramRequestOperationAddShapeArgs | dxDiagramRequestOperationAddShapeFromToolboxArgs | dxDiagramRequestOperationDeleteShapeArgs | dxDiagramRequestOperationDeleteConnectorArgs | dxDiagramRequestOperationChangeConnectionArgs | dxDiagramRequestOperationChangeConnectorPointsArgs | dxDiagramRequestOperationBeforeChangeShapeTextArgs | dxDiagramRequestOperationChangeShapeTextArgs | dxDiagramRequestOperationBeforeChangeConnectorTextArgs | dxDiagramRequestOperationChangeConnectorTextArgs, updateUI?: boolean, allowed?: boolean }) => any);
+        onRequestOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape', args?: dxDiagramRequestOperationAddShapeArgs | dxDiagramRequestOperationAddShapeFromToolboxArgs | dxDiagramRequestOperationDeleteShapeArgs | dxDiagramRequestOperationDeleteConnectorArgs | dxDiagramRequestOperationChangeConnectionArgs | dxDiagramRequestOperationChangeConnectorPointsArgs | dxDiagramRequestOperationBeforeChangeShapeTextArgs | dxDiagramRequestOperationChangeShapeTextArgs | dxDiagramRequestOperationBeforeChangeConnectorTextArgs | dxDiagramRequestOperationChangeConnectorTextArgs | dxDiagramRequestOperationResizeShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
         /** @name dxDiagram.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
         /** @name dxDiagram.Options.operationSettings */
-        operationSettings?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean };
+        operationSettings?: { allowAddShape?: boolean, allowAddShapeFromToolbox?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowResizeShape?: boolean };
         /** @name dxDiagram.Options.pageColor */
         pageColor?: string;
         /** @name dxDiagram.Options.pageOrientation */
@@ -3427,6 +3427,15 @@ declare module DevExpress.ui {
     /** @name dxDiagramRequestOperationDeleteShapeArgs */
     export interface dxDiagramRequestOperationDeleteShapeArgs {
         /** @name dxDiagramRequestOperationDeleteShapeArgs.shape */
+        shape?: dxDiagramShape;
+    }
+    /** @name dxDiagramRequestOperationResizeShapeArgs */
+    export interface dxDiagramRequestOperationResizeShapeArgs {
+        /** @name dxDiagramRequestOperationResizeShapeArgs.newSize */
+        newSize?: Array<any>;
+        /** @name dxDiagramRequestOperationResizeShapeArgs.oldSize */
+        oldSize?: Array<any>;
+        /** @name dxDiagramRequestOperationResizeShapeArgs.shape */
         shape?: dxDiagramShape;
     }
     /** @name dxDiagramShape */
