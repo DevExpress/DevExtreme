@@ -176,6 +176,7 @@ QUnit.test('scrollbar position calculated correctly when content much greater th
 });
 
 QUnit.test('scrollbar position calculated correctly with scaled content', function(assert) {
+    $('<style>.dx-scrollable-content{padding: 0 !important;}</style>').appendTo($('head'));
     const $scrollable = $('#scaledScrollable');
     const instance = $scrollable.dxScrollable({
         useSimulatedScrollbar: true,
