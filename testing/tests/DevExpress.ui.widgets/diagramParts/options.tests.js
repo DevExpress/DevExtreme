@@ -378,31 +378,31 @@ QUnit.module('Options', {
 
     test('should return correct autoLayout parameters based on the nodes.autoLayout option', function(assert) {
         assert.equal(this.instance.option('nodes.autoLayout'), 'auto');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: false });
 
         this.instance.option('nodes.leftExpr', 'left');
         this.instance.option('nodes.topExpr', 'left');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: false });
         this.instance.option('nodes.autoLayout', { type: 'auto' });
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: false });
 
         this.instance.option('nodes.leftExpr', '');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: false });
         this.instance.option('nodes.topExpr', '');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama, autoSizeEnabled: false });
 
         this.instance.option('nodes.autoLayout', 'off');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: false });
         this.instance.option('nodes.autoLayout', { type: 'off' });
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: true });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { autoSizeEnabled: false });
 
         this.instance.option('nodes.autoLayout', 'tree');
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: true });
-        this.instance.option('nodes.autoLayout', { type: 'tree' });
-        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: true });
-
-        this.instance.option('nodes.autoSizeEnabled', false);
         assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: false });
+        this.instance.option('nodes.autoLayout', { type: 'tree' });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: false });
+
+        this.instance.option('nodes.autoSizeEnabled', true);
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree, autoSizeEnabled: true });
     });
 
     test('should change customShapes option', function(assert) {

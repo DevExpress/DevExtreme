@@ -1707,9 +1707,9 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.nodes.autoSizeEnabled
                 * @type boolean
-                * @default true
+                * @default false
                 */
-                autoSizeEnabled: true,
+                autoSizeEnabled: false
             },
             edges: {
                 /**
@@ -2445,7 +2445,8 @@ class Diagram extends Widget {
         const { DiagramModelOperation, ConnectorPosition } = getDiagram();
         const eventArgs = {
             operation: this._getModelOperation(operation),
-            allowed: args.allowed
+            allowed: args.allowed,
+            updateUI: args.updateUI
         };
         switch(operation) {
             case DiagramModelOperation.AddShape:
