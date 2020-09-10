@@ -6133,7 +6133,7 @@ QUnit.module('Vertical headers', {
                 });
             });
 
-            QUnit.test(`Append new item to the end ${changedArea} of area must keep the expandedPath (T928525)`, function(assert) {
+            QUnit.test(`Append new item to the end of ${changedArea} area must keep the expandedPath (T928525)`, function(assert) {
                 createPivotGridAndExpandHeaderItem(function(fieldChooser) {
                     const state = fieldChooser.getDataSource().state();
                     if(changedArea === 'row') {
