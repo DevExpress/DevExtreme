@@ -22,8 +22,7 @@ class ViewDataGenerator {
         return result;
     }
 
-    _getCompleteViewDataMap() {
-        const options = this._workspace.generateRenderOptions();
+    _getCompleteViewDataMap(options) {
         const {
             nonVirtualRowCount: rowCount,
             cellCount,
@@ -51,11 +50,8 @@ class ViewDataGenerator {
         return viewDataMap;
     }
 
-    _getViewDataMap(completeViewDataMap) {
-        const {
-            startRowIndex,
-            rowCount,
-        } = this._workspace.generateRenderOptions();
+    _generateViewDataMap(completeViewDataMap, options) {
+        const { startRowIndex, rowCount } = options;
 
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
         const showAllDayPanel = this.workspace.option('showAllDayPanel');
@@ -70,12 +66,12 @@ class ViewDataGenerator {
             })));
     }
 
-    _getViewDataFromMap(viewDataMap, completeViewDataMap) {
+    _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             cellCountInGroupRow,
-        } = this._workspace.generateRenderOptions();
+        } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
         const {
@@ -83,8 +79,9 @@ class ViewDataGenerator {
         } = viewDataMap.reduce(({ previousGroupIndex, previousGroupedData }, cellsRow) => {
             const cellDataRow = cellsRow.map(({ cellData }) => cellData);
 
-            const isAllDayRow = cellDataRow[0].allDay;
-            const currentGroupIndex = cellDataRow[0].groupIndex;
+            const firstCell = cellDataRow[0];
+            const isAllDayRow = firstCell.allDay;
+            const currentGroupIndex = firstCell.groupIndex;
 
             if(currentGroupIndex !== previousGroupIndex) {
                 previousGroupedData.push({
@@ -253,17 +250,15 @@ export default class ViewDataProvider {
     set groupedDataMap(value) { this._groupedDataMap = value; }
 
     update(isGenerateNewViewData) {
-        const { viewDataGenerator } = this;
+        const { viewDataGenerator, _workspace } = this;
+        const renderOptions = _workspace.generateRenderOptions();
 
         if(isGenerateNewViewData) {
-            this._completeViewDataMap = viewDataGenerator._getCompleteViewDataMap();
-            // console.log(this._completeViewDataMap);
+            this._completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
         }
 
-        this.viewDataMap = viewDataGenerator._getViewDataMap(this._completeViewDataMap);
-        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this._completeViewDataMap);
-        // console.log(this.viewDataMap);
-        // console.log(this.viewData);
+        this.viewDataMap = viewDataGenerator._generateViewDataMap(this._completeViewDataMap, renderOptions);
+        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this._completeViewDataMap, renderOptions);
 
         this._updateGroupedDataMap();
     }
