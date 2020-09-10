@@ -1400,7 +1400,7 @@ QUnit.test('click on argument axis. Parent of target has data', function(assert)
     const parent = this.renderer.g();
     const target = this.renderer.g();
 
-    parent.element.append(target.element);
+    parent.element.appendChild(target.element);
 
     parent.element['chart-data-argument'] = 'argument1';
     this.tracker.update(this.options);
@@ -1417,7 +1417,7 @@ QUnit.test('hover on argument axis. Parent of target has data', function(assert)
     const axisElement = this.renderer.g();
     const parent = this.renderer.g();
 
-    parent.element.append(axisElement.element);
+    parent.element.appendChild(axisElement.element);
 
     this.axis.coordsIn.withArgs(97, 45).returns(true);
 
