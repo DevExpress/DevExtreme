@@ -3,7 +3,8 @@ import config from '../core/config';
 import Guid from '../core/guid';
 import { extend } from '../core/utils/extend';
 import { errors } from './errors';
-import objectUtils from '../core/utils/object';
+import { deepExtendArraySafe } from '../core/utils/object';
+import { compileGetter } from '../core/utils/data';
 import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
@@ -78,21 +79,36 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
-    batchData.forEach(item => {
-        const items = item.type === 'insert' ? array : getItems(keyInfo, array, item.key, groupCount);
+function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex, immutable) {
+    const isDataImmutable = isDefined(immutable) && immutable === true;
+    const resultItems = isDataImmutable ? [...array] : array;
 
-        generateDataByKeyMap(keyInfo, items);
+    batchData.forEach(item => {
+        const items = item.type === 'insert' ? resultItems : getItems(keyInfo, resultItems, item.key, groupCount);
+
+        !isDefined(immutable) && generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
-            case 'update': update(keyInfo, items, item.key, item.data, true); break;
+            case 'update': update(keyInfo, items, item.key, item.data, true, isDataImmutable); break;
             case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
             case 'remove': remove(keyInfo, items, item.key, true); break;
         }
     });
+    return resultItems;
 }
 
-function update(keyInfo, array, key, data, isBatch) {
+function applyChanges(data, changes, options) {
+    const { keyExpr = 'id', immutable = true } = isDefined(options) && isPlainObject(options) ? options : {};
+    const keyGetter = compileGetter(keyExpr);
+    const keyInfo = {
+        key: () => keyExpr,
+        keyOf: (obj) => keyGetter(obj)
+    };
+
+    return applyBatch(keyInfo, data, changes, 0, false, immutable);
+}
+
+function update(keyInfo, array, key, data, isBatch, immutable) {
     let target;
     const extendComplexObject = true;
     const keyExpr = keyInfo.key();
@@ -108,13 +124,19 @@ function update(keyInfo, array, key, data, isBatch) {
             if(index < 0) {
                 return !isBatch && rejectedPromise(errors.Error('E4009'));
             }
+
             target = array[index];
+
+            if(immutable === true && isDefined(target) && isPlainObject(target)) {
+                target = { ...target };
+                array[index] = target;
+            }
         }
     } else {
         target = key;
     }
 
-    objectUtils.deepExtendArraySafe(target, data, extendComplexObject);
+    deepExtendArraySafe(target, data, extendComplexObject);
     if(!isBatch) {
         if(config().useLegacyStoreResult) {
             return trivialPromise(key, data);
@@ -188,5 +210,6 @@ export {
     update,
     insert,
     remove,
-    indexByKey
+    indexByKey,
+    applyChanges
 };
