@@ -32,6 +32,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
+import fx from 'animation/fx';
 import browser from 'core/utils/browser';
 import dataUtils from 'core/element_data';
 import { getSize } from 'core/utils/size';
@@ -6020,6 +6021,51 @@ QUnit.module('Vertical headers', {
         this.clock.tick();
 
         assert.deepEqual($(grid._dataArea.element()).text(), '10');
+    });
+
+    ['row', 'column'].forEach(changedArea => {
+        QUnit.test(`Change ${changedArea} must clear expandedPath (T928525)`, function(assert) {
+            fx.off = true;
+            const grid = $('#pivotGrid').dxPivotGrid({
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
+                        { area: 'row', dataField: 'subRow', dataType: 'string' },
+                        { area: undefined, dataField: 'row2', dataType: 'string' },
+                        { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                        { area: 'column', dataField: 'subColumn', dataType: 'string' },
+                        { area: undefined, dataField: 'col2', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [{
+                        row1: 'row1', row2: 'row2', subRow: 'subRow',
+                        col1: 'col1', col2: 'col2', subColumn: 'subColumn'
+                    }]
+                }
+            }).dxPivotGrid('instance');
+            const fieldChooserPopup = grid.getFieldChooserPopup();
+            this.clock.tick();
+
+            fieldChooserPopup.show().done(() => {
+                const fieldChooser = fieldChooserPopup.$content().dxPivotGridFieldChooser('instance');
+                const state = fieldChooser.getDataSource().state();
+                if(changedArea === 'row') {
+                    state.fields[0].area = 'filter';
+                    state.fields[2].area = 'row';
+                    state.fields[2].areaIndex = 0;
+                } else {
+                    state.fields[3].area = 'filter';
+                    state.fields[5].area = 'column';
+                    state.fields[5].areaIndex = 0;
+                }
+
+                fieldChooser.getDataSource().state(state, true);
+                const newState = fieldChooser.getDataSource().state();
+
+                assert.deepEqual(newState.rowExpandedPaths, []);
+                assert.deepEqual(newState.columnExpandedPaths, []);
+            });
+        });
     });
 });
 
