@@ -4030,7 +4030,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const changedArgs = [];
 
         this.dataController.viewportSize(2);
-        this.dataController.setViewportItemIndex(0);
+        this.dataController.setViewportItemIndex(0.1);
 
         this.dataController.changed.add(function(e) {
             changedArgs.push(e);
@@ -4216,7 +4216,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const dataController = this.dataController;
 
         dataController.viewportSize(2);
-        dataController.setViewportItemIndex(0);
+        dataController.setViewportItemIndex(0.1);
 
         dataController.changed.add(function(e) {
             changedArgs.push(e);
@@ -4580,7 +4580,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         this.dataController.viewportSize(10);
-        this.dataController.setViewportItemIndex(0);
+        this.dataController.setViewportItemIndex(0.1);
 
         let changedArgs;
 
