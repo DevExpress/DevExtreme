@@ -69,7 +69,8 @@ export const dxGauge = dxBaseGauge.inherit({
             axesContainerGroup: that._scaleGroup,
             axisType: that._scaleTypes.type,
             drawingType: that._scaleTypes.drawingType,
-            widgetClass: 'dxg'
+            widgetClass: 'dxg',
+            getTemplate() {}
         });
     },
 
