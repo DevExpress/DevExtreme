@@ -16,25 +16,49 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
   }
 };
 
+
 export default class PreactWrapper extends DOMComponent {
-  getInstance() {
-    return this;
-  }
+  // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
+  _actionsMap!: {
+    [name: string]: Function;
+  };
+  _documentFragment!: DocumentFragment;
+  _elementAttr!: {
+    class?: string;
+    [name: string]: unknown;
+  };
+  _preactReplaced!: boolean;
+  _propsInfo!: {
+    allowNull: string[],
+    twoWay: any[],
+  };
+  _shouldRefresh!: boolean;
+  _storedClasses?: string;
+  _supportedKeys!: () => {
+    [name: string]: Function,
+  };
+  _viewRef!: Preact.RefObject<unknown>;
+  _viewComponent!: any;
 
   get viewRef() {
     return this._viewRef.current;
   }
-
   _getDefaultOptions() {
     return extend(
       true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
-      this._propsInfo.twoway.reduce((options, [name, defaultValue, eventName]) => ({
-        ...options,
-        [name]: defaultValue,
-        [eventName]: (value) => this.option(name, value),
-      }), {}),
+      this._propsInfo.twoWay.reduce(
+        (
+          options: { [name: string]: unknown },
+          [name, defaultValue, eventName]
+        ) => ({
+          ...options,
+          [name]: defaultValue,
+          [eventName]: (value) => this.option(name, value),
+        }),
+        {}
+      )
     );
   }
 
@@ -56,7 +80,7 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _renderPreact(props) {
-    const containerNode = this.$element().get(0);
+    const containerNode = this.$element()[0];
 
     if (!containerNode.parentNode) {
       this._documentFragment.appendChild(containerNode);
@@ -77,7 +101,7 @@ export default class PreactWrapper extends DOMComponent {
   _render() {}
 
   _dispose() {
-    Preact.render(null, this.$element().get(0));
+    Preact.render(null, this.$element()[0]);
     super._dispose();
   }
 
@@ -102,14 +126,16 @@ export default class PreactWrapper extends DOMComponent {
     this._elementAttr.style = style;
 
     const cssClass = this.$element()[0].getAttribute('class') || '';
-    this.storedClasses = this.storedClasses ?? cssClass
-      .split(' ')
-      .filter((name) => name.indexOf('dx-') === 0)
-      .join(' ');
+    this._storedClasses =
+      this._storedClasses ??
+      cssClass
+        .split(' ')
+        .filter((name) => name.indexOf('dx-') === 0)
+        .join(' ');
     this._elementAttr.class = cssClass
       .split(' ')
       .filter((name) => name.indexOf('dx-') !== 0)
-      .concat(this.storedClasses)
+      .concat(this._storedClasses)
       .join(' ')
       .trim();
 
@@ -117,11 +143,20 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _patchOptionValues(options) {
-    this._propsInfo.allowNull.forEach(setDefaultOptionValue(options, () => null));
+    this._propsInfo.allowNull.forEach(
+      setDefaultOptionValue(options, () => null)
+    );
 
-    Object.keys(this._viewComponent.defaultProps).forEach(setDefaultOptionValue(options, (name) => this._viewComponent.defaultProps[name]));
+    Object.keys(this._viewComponent.defaultProps).forEach(
+      setDefaultOptionValue(
+        options,
+        (name) => this._viewComponent.defaultProps[name]
+      )
+    );
 
-    this._propsInfo.twoway.forEach(([name, defaultValue]) => setDefaultOptionValue(options, () => defaultValue)(name));
+    this._propsInfo.twoWay.forEach(([name, defaultValue]) =>
+      setDefaultOptionValue(options, () => defaultValue)(name)
+    );
 
     return options;
   }
@@ -158,26 +193,28 @@ export default class PreactWrapper extends DOMComponent {
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
-    Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
+    Object.keys(this._getActionConfigs()).forEach((name) =>
+      this._addAction(name)
+    );
 
     this._viewRef = Preact.createRef();
     this._supportedKeys = () => ({});
   }
 
-  _addAction(event, action) {
+  _addAction(event: string, action?: Function) {
     if (!action) {
       const actionByOption = this._createActionByOption(
         event,
-        this._getActionConfigs()[event],
+        this._getActionConfigs()[event]
       );
 
-      action = function (args) {
-        Object.keys(args).forEach((name) => {
+      action = function (actArgs: { [name: string]: unknown }) {
+        Object.keys(actArgs).forEach((name) => {
           if (/element$/i.exec(name)) {
-            args[name] = getPublicElement($(args[name]));
+            actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });
-        return actionByOption(args);
+        return actionByOption(actArgs);
       };
     }
     this._actionsMap[event] = action;
@@ -195,14 +232,17 @@ export default class PreactWrapper extends DOMComponent {
 
   _extractDefaultSlot() {
     if (this.option('_hasAnonymousTemplateContent')) {
-      const dummyDivRefCallback = (dummyDivRef) => {
-        if (!dummyDivRef) return null;
-        const { parentNode } = dummyDivRef;
-        parentNode.removeChild(dummyDivRef);
-        this._getTemplate(this._templateManager.anonymousTemplateName).render({
-          container: getPublicElement($(parentNode)),
-          transclude: true,
-        });
+      const dummyDivRefCallback: (ref: any) => void = (dummyDivRef) => {
+        if (dummyDivRef) {
+          const { parentNode } = dummyDivRef;
+          parentNode.removeChild(dummyDivRef);
+          this._getTemplate(this._templateManager.anonymousTemplateName).render(
+            {
+              container: getPublicElement($(parentNode)),
+              transclude: true,
+            }
+          );
+        }
       };
 
       return Preact.h(
@@ -211,9 +251,10 @@ export default class PreactWrapper extends DOMComponent {
         Preact.h('div', {
           style: { display: 'none' },
           ref: dummyDivRefCallback,
-        }),
+        })
       );
     }
+    return null;
   }
 
   _createTemplateComponent(props, templateOption) {
@@ -223,11 +264,11 @@ export default class PreactWrapper extends DOMComponent {
 
     const template = this._getTemplate(templateOption);
     return ({ data, index }) => {
-      const dummyDivRef = useRef();
+      const dummyDivRef = useRef<any>(); // TS doesn't allow to use <HTMLElement> ref type in Preact.h, only <SVGElement>
       useLayoutEffect(
         () => {
-          const { parentNode } = dummyDivRef.current;
-          parentNode.removeChild(dummyDivRef.current);
+          const { parentNode } = dummyDivRef.current!;
+          parentNode!.removeChild(dummyDivRef.current!);
           const $parent = $(parentNode);
           const $children = $parent.contents();
 
@@ -236,7 +277,7 @@ export default class PreactWrapper extends DOMComponent {
               container: getPublicElement($parent),
               model: data,
               ...(isFinite(index) ? { index } : {}),
-            }),
+            })
           );
 
           if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
@@ -249,12 +290,12 @@ export default class PreactWrapper extends DOMComponent {
             removeDifferentElements($children, $newChildren);
           };
         },
-        Object.keys(props).map((key) => props[key]),
+        Object.keys(props).map((key) => props[key])
       );
       return Preact.h(
         Preact.Fragment,
         {},
-        Preact.h('div', { style: { display: 'none' }, ref: dummyDivRef }),
+        Preact.h("div", { style: { display: "none" }, ref: dummyDivRef })
       );
     };
   }
@@ -296,9 +337,11 @@ export default class PreactWrapper extends DOMComponent {
   //       aria changes should be defined in declaration or passed through property
   setAria() {
     throw new Error(
-      '"setAria" method is deprecated, use "aria" property instead',
+      '"setAria" method is deprecated, use "aria" property instead'
     );
   }
+
+  static IS_RENOVATED_WIDGET = false;
 }
 
 /// #DEBUG

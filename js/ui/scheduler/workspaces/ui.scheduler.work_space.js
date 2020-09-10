@@ -1568,16 +1568,21 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllDayCellData(cell, rowIndex, cellIndex, groupIndex) {
         let startDate = this._getDateByCellIndexes(rowIndex, cellIndex);
+        const cellGroupIndex = groupIndex || this._getGroupIndex(rowIndex, cellIndex);
 
         startDate = dateUtils.trimTime(startDate);
 
         const data = {
             startDate: startDate,
             endDate: startDate,
-            allDay: true
+            allDay: true,
         };
 
-        const groups = this._getCellGroups(groupIndex || this._getGroupIndex(rowIndex, cellIndex));
+        if(this.isRenovatedRender()) {
+            data.groupIndex = cellGroupIndex;
+        }
+
+        const groups = this._getCellGroups(cellGroupIndex);
 
         if(groups.length) {
             data.groups = {};
@@ -1737,12 +1742,18 @@ class SchedulerWorkSpace extends WidgetObserver {
     _prepareCellData(rowIndex, cellIndex) {
         const startDate = this._getDateByCellIndexes(rowIndex, cellIndex);
         const endDate = this.calculateEndDate(startDate);
+        const groupIndex = this._getGroupIndex(rowIndex, cellIndex);
         const data = {
             startDate: startDate,
             endDate: endDate,
             allDay: this._getTableAllDay()
         };
-        const groups = this._getCellGroups(this._getGroupIndex(rowIndex, cellIndex));
+
+        if(this.isRenovatedRender()) {
+            data.groupIndex = groupIndex;
+        }
+
+        const groups = this._getCellGroups(groupIndex);
 
         if(groups.length) {
             data.groups = {};
@@ -2133,6 +2144,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getCellPositionByIndex(index, groupIndex, inAllDayRow) {
         const cellCoordinates = this._getCellCoordinatesByIndex(index);
         const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow);
+
+        return this._getCellPositionWithCache(
+            $cell,
+            cellCoordinates,
+            groupIndex
+        );
+    }
+
+    _getCellPositionWithCache($cell, cellCoordinates, groupIndex) {
         const result = this._getCellPosition($cell);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
@@ -2155,12 +2175,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
         const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
+        return this._dom_getDateCell(indexes);
+    }
 
+    // TODO DOM adapter
+    _dom_getDateCell(position) {
         return this._$dateTable
             .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
-            .eq(indexes.rowIndex)
+            .eq(position.rowIndex)
             .find('td')
-            .eq(indexes.cellIndex);
+            .eq(position.cellIndex);
     }
 
     _getCells(allDay, direction) {
@@ -2328,7 +2352,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getVirtualRowOffset() {
         return this.isVirtualScrolling()
-            ? this._virtualScrolling.getState().startIndex
+            ? this._virtualScrolling.getState().topVirtualRowHeight
             : 0;
     }
 
@@ -2361,9 +2385,23 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
+        let position;
+        const shouldFindPositionByViewData = this.isVirtualScrolling() && (!inAllDayRow || this._isVerticalGroupedWorkSpace());
 
-        const index = this.getCellIndexByDate(date, inAllDayRow);
-        const position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
+        if(shouldFindPositionByViewData) {
+            const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
+
+            if(!positionByMap) {
+                return;
+            }
+
+            const $cell = this._dom_getDateCell(positionByMap);
+
+            position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
+        } else {
+            position = this.calculateCellPositionByView(date, groupIndex, inAllDayRow);
+        }
+
         const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
         const horizontalHMax = this._getHorizontalMax(groupIndex, date);
 
@@ -2371,7 +2409,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             throw errors.Error('E1039');
         }
 
-        const coordinates = {
+        return {
             cellPosition: position.left + shift.cellPosition,
             top: position.top + shift.top,
             left: position.left + shift.left,
@@ -2381,8 +2419,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             vMax: this.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
+    }
+    calculateCellPositionByView(date, groupIndex, inAllDayRow,) {
+        const index = this.getCellIndexByDate(date, inAllDayRow);
+        const position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
 
-        return coordinates;
+        if(position) {
+            position.top -= this._getVirtualRowOffset();
+        }
+
+        return position;
     }
 
     getVerticalMax(groupIndex) {
@@ -2449,21 +2495,21 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isSkippedData() { return false; }
 
-    getCoordinatesByDateInGroup(date, appointmentResources, inAllDayRow) {
-        const indexes = this._getGroupIndexes(appointmentResources);
+    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow) {
         const result = [];
 
-        if(this._isSkippedData(date)) {
+        if(this._isSkippedData(startDate)) {
             return result;
         }
 
-        if(indexes.length) {
-            for(let i = 0; i < indexes.length; i++) {
-                result.push(this.getCoordinatesByDate(date, indexes[i], inAllDayRow));
-            }
-        } else {
-            result.push(this.getCoordinatesByDate(date, 0, inAllDayRow));
-        }
+        const groupIndices = this._getGroupCount()
+            ? this._getGroupIndexes(appointmentResources)
+            : [0];
+
+        groupIndices.forEach(groupIndex => {
+            const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
+            coordinates && result.push(coordinates);
+        });
 
         return result;
     }
@@ -2552,9 +2598,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._maxAllowedPosition = [];
 
             this._$dateTable
-                .find('tr')
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
                 .first()
-                .find('td:nth-child(' + this._getCellCount() + 'n)')
+                .find(`td:nth-child(${this._getCellCount()}n)`)
                 .each((function(_, cell) {
 
                     let maxPosition = $(cell).position().left;
@@ -2577,7 +2623,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const rows = this._getRowCount();
             this._$dateTable
-                .find('tr:nth-child(' + rows + 'n)')
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS}):nth-child(${rows}n)`)
                 .each(function(_, row) {
 
                     const maxPosition = $(row).position().top + getBoundingRect(row).height;

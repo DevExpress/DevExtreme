@@ -14,3 +14,4 @@ export type dxElement = HTMLElement & JQuery;
  */
 export type dxSVGElement = SVGElement & JQuery;
 
+export function getPublicElement(element: unknown): unknown
