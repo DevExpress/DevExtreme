@@ -181,12 +181,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs
-     * @type_function_param1_field6 allowed:boolean
+     * @type_function_param1_field6 updateUI:boolean
+     * @type_function_param1_field7 allowed:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs, allowed?: boolean }) => any);
+    onRequestOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramRequestOperationAddShapeArgs|dxDiagramRequestOperationAddShapeFromToolboxArgs|dxDiagramRequestOperationDeleteShapeArgs|dxDiagramRequestOperationDeleteConnectorArgs|dxDiagramRequestOperationChangeConnectionArgs|dxDiagramRequestOperationChangeConnectorPointsArgs|dxDiagramRequestOperationBeforeChangeShapeTextArgs|dxDiagramRequestOperationChangeShapeTextArgs|dxDiagramRequestOperationBeforeChangeConnectorTextArgs|dxDiagramRequestOperationChangeConnectorTextArgs, updateUI?: boolean, allowed?: boolean }) => any);
     /**
      * @docid dxDiagramOptions.onRequestLayoutUpdate
      * @extends Action
