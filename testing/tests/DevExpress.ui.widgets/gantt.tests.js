@@ -788,6 +788,7 @@ QUnit.module('DataSources', moduleConfig, () => {
     test('removing', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 3);
         this.clock.tick();
 
         const removedTaskId = 3;
@@ -865,6 +866,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             key = e.key;
         });
         const taskToDelete = tasks[tasks.length - 1];
+        this.instance.option('selectedRowKey', taskToDelete.id.toString());
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(taskToDelete.id.toString(), false);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount, 'new task was not deleted');
