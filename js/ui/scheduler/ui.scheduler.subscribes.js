@@ -455,6 +455,10 @@ const subscribes = {
         return obj;
     },
 
+    renderAppointments: function() {
+        this._renderAppointments();
+    },
+
     prerenderFilter: function() {
         const dateRange = this.getWorkSpace().getDateRange();
         const resources = this._resourcesManager.getResourcesData();

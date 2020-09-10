@@ -49,6 +49,7 @@ const DIST_GLOBS = [
     '!artifacts/js/dx.custom*',
     '!artifacts/js/dx-diagram*',
     '!artifacts/js/dx-gantt*',
+    '!artifacts/js/dx-quill*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',

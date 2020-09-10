@@ -217,8 +217,11 @@ $diagram-toolbox-title-size: 12px;
       padding: $diagram-toolbox-input-v-padding $diagram-toolbox-input-h-padding;
     }
 
-    .dx-button .dx-button-content {
-      padding: 2px;
+    .dx-button,
+    .dx-button.dx-button-has-icon:not(.dx-button-has-text) {
+      .dx-button-content {
+        padding: 2px;
+      }
     }
 
     .dx-button .dx-icon {

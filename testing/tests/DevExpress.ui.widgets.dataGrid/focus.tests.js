@@ -98,7 +98,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(rowsView.getRow(0).attr('tabindex'), undefined, 'Row 0 tabIndex');
-        assert.equal(rowsView.getRow(1).find('td').eq(2).attr('tabindex'), 0, 'TabIndex set for the cell(1,2)');
+        assert.equal($(rowsView.getCellElement(1, 2)).attr('tabindex'), 0, 'TabIndex set for the cell(1,2)');
     });
 
     QUnit.testInActiveWindow('PageUp / PageDown keys and focusedRow', function(assert) {
@@ -5347,6 +5347,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                     allowEditing: false
                 },
                 paging: {
+                    enabled: true,
                     pageSize: 2
                 }
             };
@@ -5359,13 +5360,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             const keyboardController = this.getController('keyboardNavigation');
 
             assert.equal(this.pageIndex(), 0, 'Page index');
-            assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
+            assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Focused row index');
 
             this.navigateToRow('Zeb');
             this.clock.tick();
 
             assert.equal(this.pageIndex(), 2, 'Page index');
-            assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
+            assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Focused row index');
         });
 
         QUnit.test('Test navigateToRow method if virtualScrolling', function(assert) {
@@ -5400,13 +5401,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             const keyboardController = this.getController('keyboardNavigation');
 
             assert.equal(this.pageIndex(), 0, 'Page index');
-            assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
+            assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Focused row index');
 
             this.navigateToRow('Zeb');
             this.clock.tick();
 
             assert.equal(this.pageIndex(), 2, 'Page index');
-            assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
+            assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Focused row index');
             assert.ok(dataGridWrapper.rowsView.isRowVisible(1), 'Navigation row is visible');
         });
 

@@ -428,6 +428,25 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
 
         assert.deepEqual(columnsChangedPositions, [950, 700, 450, 200]);
     });
+
+    QUnit.test('The column index offset should depend on fixed columns', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+
+        // act
+        this.columnsController.setScrollPosition(400);
+        let offset = this.columnsController.getColumnIndexOffset();
+
+        // assert
+        assert.equal(offset, 4, 'offset without fixed columns');
+
+        // act
+        this.columnOption(0, 'fixed', true);
+        offset = this.columnsController.getColumnIndexOffset();
+
+        // assert
+        assert.equal(offset, 3, 'offset with fixed column');
+    });
 });
 
 QUnit.testStart(function() {
