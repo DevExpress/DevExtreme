@@ -305,7 +305,7 @@ QUnit.module('Integration: allDay appointments', {
     });
 
     [
-        // 'standard',
+        'standard',
         'virtual'
     ].forEach(scrollingMode => {
         QUnit.module(`Scrolling mode ${scrollingMode}`, {
