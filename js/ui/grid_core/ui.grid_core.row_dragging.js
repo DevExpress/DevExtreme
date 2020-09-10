@@ -51,6 +51,9 @@ const RowDraggingExtender = {
         const sortableFixedName = '_sortableFixed';
         const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
         const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
+        const togglePointerEventsStyle = (toggle) => {
+            this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
+        };
 
         if(allowReordering && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
@@ -69,6 +72,16 @@ const RowDraggingExtender = {
                     e.cancel = !isDataRow;
 
                     rowDragging.onDragStart?.(e);
+                },
+                onDragEnter: () => {
+                    togglePointerEventsStyle(true);
+                },
+                onDragLeave: () => {
+                    togglePointerEventsStyle();
+                },
+                onDragEnd: (e) => {
+                    togglePointerEventsStyle();
+                    rowDragging.onDragEnd?.(e);
                 },
                 dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
