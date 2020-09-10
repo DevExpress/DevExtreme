@@ -29,7 +29,7 @@ class ViewDataGenerator {
             groupCount,
         } = options;
 
-        let viewDataMap = [];
+        const viewDataMap = [];
         for(let groupIndex = 0; groupIndex < groupCount; groupIndex += 1) {
             const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
             const viewCellsData = this._generateViewCellsData(
@@ -41,10 +41,7 @@ class ViewDataGenerator {
             );
 
             allDayPanelData && viewDataMap.push(allDayPanelData);
-            viewDataMap = [
-                ...viewDataMap,
-                ...viewCellsData,
-            ];
+            viewDataMap.push(...viewCellsData);
         }
 
         return viewDataMap;

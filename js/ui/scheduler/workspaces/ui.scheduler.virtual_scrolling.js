@@ -147,16 +147,12 @@ export default class VirtualScrolling {
     }
 
     _calcBottomRowsInfo(topRowsDelta) {
-        const workspace = this.getWorkspace();
         const { pageSize } = this.getState();
         const rowCountWithBottom = topRowsDelta >= pageSize
             ? pageSize
             : topRowsDelta;
 
         let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
-        if(workspace.isGroupedAllDayPanel()) {
-            bottomVirtualRowCount -= 1;
-        }
 
         const bottomOutlineCount = bottomVirtualRowCount > 0
             ? Math.min(bottomVirtualRowCount, this._getOutlineCount())
