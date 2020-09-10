@@ -766,6 +766,7 @@ QUnit.module('DataSources', moduleConfig, () => {
     test('removing', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 3);
         this.clock.tick();
 
         const removedTaskId = 3;

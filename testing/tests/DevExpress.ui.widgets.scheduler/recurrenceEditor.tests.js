@@ -16,6 +16,7 @@ const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
 const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
+const eventsEngine = require('events/core/events_engine');
 
 require('common.css!');
 
@@ -476,6 +477,22 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
     buttonGroup.option('selectedItemKeys', ['TU', 'SU', 'MO']);
 
     assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU,MO,TU');
+});
+
+QUnit.test('Recurrence editor should not crash when BYDAY rule is blank (T928339)', function(assert) {
+    this.createInstance({
+        startDate: new Date(2020, 1, 1, 1),
+        firstDayOfWeek: 0,
+        value: 'FREQ=WEEKLY;BYDAY=MO'
+    });
+
+    const secondButton = this.instance.$element().find('.dx-button').eq(1);
+    eventsEngine.trigger(secondButton, 'dxclick');
+    const firstButton = this.instance.$element().find('.dx-button').eq(0);
+    eventsEngine.trigger(firstButton, 'dxclick');
+    this.instance.option('startDate', new Date(2020, 2, 1, 1));
+
+    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=', 'value is correct');
 });
 
 QUnit.test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', function(assert) {
