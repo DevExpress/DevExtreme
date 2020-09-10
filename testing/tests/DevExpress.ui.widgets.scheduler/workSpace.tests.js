@@ -3773,7 +3773,10 @@ QUnit.module('Renovated Render', {
                         groupIndex: 0,
                         isGroupedAllDayPanel: false
                     }],
-                    cellCountInGroupRow: 1
+                    cellCountInGroupRow: 1,
+                    bottomVirtualRowHeight: undefined,
+                    isVirtual: false,
+                    topVirtualRowHeight: undefined,
                 };
                 const expectedViewDataMap = [
                     [{
@@ -3875,8 +3878,11 @@ QUnit.module('Renovated Render', {
                             index: 1
                         }]],
                         groupIndex: 0,
-                        isGroupedAllDayPanel: false
+                        isGroupedAllDayPanel: false,
                     }],
+                    bottomVirtualRowHeight: undefined,
+                    isVirtual: false,
+                    topVirtualRowHeight: undefined,
                 };
 
                 const expectedViewDataMap = [[{

@@ -69,6 +69,7 @@ class ViewDataGenerator {
                 previousGroupedData.push({
                     dateTable: [],
                     isGroupedAllDayPanel,
+                    groupIndex: currentGroupIndex,
                 });
             }
 
