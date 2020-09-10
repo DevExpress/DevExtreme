@@ -6081,7 +6081,21 @@ QUnit.module('Vertical headers', {
                 fx.off = false;
             }
 
-            QUnit.test(`Remove first of the ${changedArea} must clear expandedPath (T928525)`, function(assert) {
+            QUnit.test(`After expanding the ${changedArea}, expandedPath must be assigned (T928525)`, function(assert) {
+                createPivotGridAndExpandHeaderItem(function(fieldChooser) {
+                    const state = fieldChooser.getDataSource().state();
+
+                    if(changedArea === 'row') {
+                        assert.deepEqual(state.rowExpandedPaths, [['row1']]);
+                        assert.deepEqual(state.columnExpandedPaths, []);
+                    } else {
+                        assert.deepEqual(state.rowExpandedPaths, []);
+                        assert.deepEqual(state.columnExpandedPaths, [['column1']]);
+                    }
+                });
+            });
+
+            QUnit.test(`Remove first item from the ${changedArea} area must clear the expandedPath (T928525)`, function(assert) {
                 createPivotGridAndExpandHeaderItem(function(fieldChooser) {
                     const state = fieldChooser.getDataSource().state();
                     if(changedArea === 'row') {
@@ -6098,7 +6112,7 @@ QUnit.module('Vertical headers', {
                 });
             });
 
-            QUnit.test(`Append new ${changedArea} to the start of area must clear expandedPath (T928525)`, function(assert) {
+            QUnit.test(`Append new item to the start of the ${changedArea} area must clear the expandedPath (T928525)`, function(assert) {
                 createPivotGridAndExpandHeaderItem(function(fieldChooser) {
                     const state = fieldChooser.getDataSource().state();
                     if(changedArea === 'row') {
@@ -6124,7 +6138,7 @@ QUnit.module('Vertical headers', {
                 });
             });
 
-            QUnit.test(`Append new ${changedArea} to the end of area must keep expandedPath (T928525)`, function(assert) {
+            QUnit.test(`Append new item to the end ${changedArea} of area must keep the expandedPath (T928525)`, function(assert) {
                 createPivotGridAndExpandHeaderItem(function(fieldChooser) {
                     const state = fieldChooser.getDataSource().state();
                     if(changedArea === 'row') {
@@ -6148,7 +6162,7 @@ QUnit.module('Vertical headers', {
                 });
             });
 
-            QUnit.test(`Swap the ${changedArea} must clear expandedPath (T928525)`, function(assert) {
+            QUnit.test(`Swapping items in the ${changedArea} area must clear the expandedPath (T928525)`, function(assert) {
                 createPivotGridAndExpandHeaderItem(function(fieldChooser) {
                     const state = fieldChooser.getDataSource().state();
                     if(changedArea === 'row') {
