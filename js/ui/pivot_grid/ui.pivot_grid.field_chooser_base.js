@@ -280,12 +280,11 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
             const pivotGridState = that.option('state');
 
             if(pivotGridState) {
-                dataSource.getData()['rows'] = [];
-                dataSource.getData()['columns'] = [];
                 dataSource.state(pivotGridState, true);
             }
 
             func(dataSource, isInstantlyMode);
+
             dataSource.state(currentState, true);
         }
     },
