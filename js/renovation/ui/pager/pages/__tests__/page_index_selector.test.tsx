@@ -116,7 +116,6 @@ describe('Page index selector', () => {
         pageIndex: 1,
         pageIndexChange: props.pageIndexChange,
         pagesCountText: 'Of',
-        rtlEnabled: true,
       });
     });
   });

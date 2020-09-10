@@ -9,6 +9,8 @@ import {
   OneWay,
   Ref,
   Slot,
+  Consumer,
+  Provider,
 } from 'devextreme-generator/component_declaration/common';
 import '../../../events/click';
 import '../../../events/hover';
@@ -16,6 +18,7 @@ import '../../../events/hover';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
+import config from '../../../core/config';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
@@ -23,6 +26,7 @@ import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
+import { RtlEnabledContext } from './rtl_enabled_context';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -117,6 +121,25 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Ref()
   widgetRef!: HTMLDivElement;
+
+  @Method()
+  getHtmlElement(): HTMLDivElement {
+    return this.widgetRef;
+  }
+
+  @Consumer(RtlEnabledContext)
+  parentRtlEnabled?: boolean;
+
+  @Provider(RtlEnabledContext)
+  get rtlEnabled(): boolean | undefined {
+    if (this.props.rtlEnabled !== undefined) {
+      return this.props.rtlEnabled;
+    }
+    if (this.parentRtlEnabled !== undefined) {
+      return this.parentRtlEnabled;
+    }
+    return config().rtlEnabled;
+  }
 
   @Effect()
   accessKeyEffect(): EffectReturn {

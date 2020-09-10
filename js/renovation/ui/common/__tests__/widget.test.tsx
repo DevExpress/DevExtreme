@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 // Should be before component import
 import { shallow, mount } from 'enzyme';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
@@ -113,7 +114,7 @@ describe('Widget', () => {
           const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
           widget.widgetRef = {} as any;
 
-          const detach = widget.accessKeyEffect();
+          const detach = widget.accessKeyEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
           detach();
@@ -193,7 +194,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
 
-          const detach = widget.activeEffect();
+          const detach = widget.activeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
@@ -256,7 +257,7 @@ describe('Widget', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
 
-          const detach = widget.clickEffect();
+          const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
           emit(EVENT.dxClick);
 
@@ -342,7 +343,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
 
-          const detach = widget.focusEffect();
+          const detach = widget.focusEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
           expect(getEventHandlers(EVENT.blur).length).toBe(1);
@@ -396,7 +397,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
           widget.active = false;
-          const detach = widget.hoverEffect();
+          const detach = widget.hoverEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
@@ -458,7 +459,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
           widget.widgetRef = {} as any;
-          const detach = widget.keyboardEffect();
+          const detach = widget.keyboardEffect() as DisposeEffectReturn;
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -502,7 +503,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
-          const detach = widget.resizeEffect();
+          const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
           detach();
@@ -538,7 +539,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onVisibilityChange });
           widget.widgetRef = {} as any;
-          const detach = widget.visibilityEffect();
+          const detach = widget.visibilityEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
           expect(getEventHandlers(EVENT.hiding).length).toBe(1);
@@ -575,6 +576,14 @@ describe('Widget', () => {
   });
 
   describe('Logic', () => {
+    it('getHtmlElement', () => {
+      const widgetRef = {} as HTMLDivElement;
+      const component = new Widget({});
+      component.widgetRef = widgetRef;
+
+      expect(component.getHtmlElement()).toEqual(widgetRef);
+    });
+
     describe('Getters', () => {
       describe('attributes', () => {
         it('should return ARIA labels', () => {
@@ -723,6 +732,29 @@ describe('Widget', () => {
           expect(widget.tabIndex).toBe(10);
         });
       });
+
+      describe('rtlEnabled', () => {
+        it('should return value from props if props has value', () => {
+          const widget = new Widget({ rtlEnabled: false });
+          // emulate context
+          widget.parentRtlEnabled = true;
+
+          expect(widget.rtlEnabled).toBe(false);
+        });
+
+        it('should return value from parent rtlEnabled context if props isnt defined', () => {
+          const widget = new Widget({ });
+          // emulate context
+          widget.parentRtlEnabled = true;
+          expect(widget.rtlEnabled).toBe(true);
+        });
+
+        it('should return value from config if any other props isnt defined', () => {
+          config().rtlEnabled = true;
+          const widget = new Widget({ });
+          expect(widget.rtlEnabled).toBe(true);
+        });
+      });
     });
   });
 
@@ -737,7 +769,7 @@ describe('Widget', () => {
         focusStateEnabled: false,
         hoverStateEnabled: false,
         onContentReady: expect.any(Function),
-        rtlEnabled: config().rtlEnabled,
+        // rtlEnabled: config().rtlEnabled,
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,

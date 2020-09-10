@@ -39,21 +39,22 @@ describe('PagerContent', () => {
         restAttributes: { 'rest-attribute': {} },
       } as Partial<PagerContent> as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
-      expect((tree.instance() as unknown as Element).className).toEqual('className');
       expect(tree.props()).toMatchObject({
+        rtlEnabled: true,
         className: 'className',
         'rest-attribute': props.restAttributes['rest-attribute'],
       });
-      expect(tree.children()).toHaveLength(2);
+      const childContainer = tree.childAt(0);
+      expect(childContainer.children()).toHaveLength(2);
       expect(tree.find(PageSizeSelector)).toHaveLength(1);
-      expect(tree.childAt(0).props()).toMatchObject({
+      expect(childContainer.childAt(0).props()).toMatchObject({
         isLargeDisplayMode: true,
         pageSize: 5,
         pageSizeChange: props.props.pageSizeChange,
         pageSizes: [5, 10],
-        rtlEnabled: true,
+        // rtlEnabled: true,
       });
-      const pagesContainer = tree.childAt(1);
+      const pagesContainer = childContainer.childAt(1);
       expect((pagesContainer.instance() as unknown as Element).className).toEqual('dx-pages');
       expect(pagesContainer.children()).toHaveLength(2);
       expect(tree.find(PageIndexSelector)).toHaveLength(1);
@@ -72,7 +73,7 @@ describe('PagerContent', () => {
         pageIndex: 2,
         pageIndexChange: props.props.pageIndexChange,
         pagesCountText: 'pagesCountText',
-        rtlEnabled: true,
+        // rtlEnabled: true,
         showNavigationButtons: true,
         totalCount: 100,
       });
@@ -155,9 +156,10 @@ describe('PagerContent', () => {
       } as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
       expect(tree.instance()).toBe(parentRef.current);
-      expect(tree.childAt(0).instance()).toBe(pageSizesRef.current);
-      expect(tree.childAt(1).instance()).toBe(pagesRef.current);
-      expect(tree.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);
+      const childrenContainer = tree.childAt(0);
+      expect(childrenContainer.childAt(0).instance()).toBe(pageSizesRef.current);
+      expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
+      expect(childrenContainer.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);
     });
   });
 
@@ -267,9 +269,11 @@ describe('PagerContent', () => {
       .describe('isLargeDisplayMode', ({
         displayMode, lightModeEnabled, isLargeDisplayMode, expected,
       }) => {
-        it(JSON.stringify({
+        const name = JSON.stringify({
           displayMode, lightModeEnabled, isLargeDisplayMode, expected,
-        }), () => {
+        });
+
+        it(name, () => {
           const component = new PagerContent({
             displayMode,
             lightModeEnabled,
@@ -293,9 +297,11 @@ describe('PagerContent', () => {
       .describe('infoVisible', ({
         showInfo, infoTextVisible, isLargeDisplayMode, expected,
       }) => {
-        it(JSON.stringify({
+        const name = JSON.stringify({
           showInfo, infoTextVisible, isLargeDisplayMode, expected,
-        }), () => {
+        });
+
+        it(name, () => {
           const component = new PagerContent({
             showInfo,
             infoTextVisible,

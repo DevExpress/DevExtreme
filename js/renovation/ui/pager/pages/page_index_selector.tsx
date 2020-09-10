@@ -54,7 +54,6 @@ export const viewFunction = ({
       pageIndex={pageIndex}
       pageIndexChange={pageIndexChange}
       pagesCountText={pagesCountText}
-      rtlEnabled={rtlEnabled}
     />
     )}
     {renderNextButton && (

@@ -10,6 +10,7 @@ import { PageSizeSelector } from './page_size/selector';
 import { PAGER_PAGES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS } from './common/consts';
 import PagerProps, { DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
+import { Widget } from '../common/widget';
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -30,7 +31,7 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div ref={parentRef} className={className} {...restAttributes}>
+  <Widget ref={parentRef} rtlEnabled={rtlEnabled} className={className} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef}
@@ -38,7 +39,6 @@ export const viewFunction = ({
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
       pageSizes={pageSizes}
-      rtlEnabled={rtlEnabled}
     />
     )}
     {pagesContainerVisible && (
@@ -64,13 +64,12 @@ export const viewFunction = ({
           pageIndex={pageIndex}
           pageIndexChange={pageIndexChange}
           pagesCountText={pagesCountText}
-          rtlEnabled={rtlEnabled}
           showNavigationButtons={showNavigationButtons}
           totalCount={totalCount}
         />
       </div>
     )}
-  </div>
+  </Widget>
 );
 
 /* istanbul ignore next: class has only props default */
