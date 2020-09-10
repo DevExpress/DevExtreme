@@ -387,7 +387,7 @@ class FileUploader extends Editor {
         file.progressBar = this._createProgressBar(file.value.size);
         file.progressBar.$element().appendTo(file.$file);
         this._initStatusMessage(file);
-        this._initCancelButton(file);
+        this._ensureCancelButtonInitialized(file);
     }
 
     _setStatusMessage(file, key) {
@@ -491,7 +491,8 @@ class FileUploader extends Editor {
             isValidMinSize: true,
             isValid() {
                 return this.isValidFileExtension && this.isValidMaxSize && this.isValidMinSize;
-            }
+            },
+            isInitialized: false
         };
     }
 
@@ -636,6 +637,11 @@ class FileUploader extends Editor {
         file.onLoadStart.add(() => file.uploadButton.option({
             visible: false,
             disabled: true
+        }));
+
+        file.onAbort.add(() => file.uploadButton.option({
+            visible: true,
+            disabled: false
         }));
 
         return $('<div>')
@@ -1049,10 +1055,15 @@ class FileUploader extends Editor {
     }
 
     _initStatusMessage(file) {
+        file.$statusMessage.text('');
         file.$statusMessage.css('display', 'none');
     }
 
-    _initCancelButton(file) {
+    _ensureCancelButtonInitialized(file) {
+        if(file.isInitialized) {
+            return;
+        }
+
         file.cancelButton.option('onClick', () => {
             this._preventFilesUploading([file]);
             this._removeFile(file);
@@ -1352,8 +1363,13 @@ class FileUploadStrategyBase {
     }
 
     _prepareFileBeforeUpload(file) {
+        file.isAborted = false;
         if(file.$file) {
             this.fileUploader._createFileProgressBar(file);
+        }
+
+        if(file.isInitialized) {
+            return;
         }
 
         file.onLoadStart.add(this._onUploadStarted.bind(this, file));
@@ -1361,6 +1377,7 @@ class FileUploadStrategyBase {
         file.onError.add(this._onErrorHandler.bind(this, file));
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
+        file.isInitialized = true;
     }
 
     _isStatusError(status) {
@@ -1378,6 +1395,14 @@ class FileUploadStrategyBase {
     }
 
     _onAbortHandler(file, e) {
+        file.uploadStarted = false;
+        file.isStartLoad = false;
+        file.isAborted = false;
+        file.loadedSize = 0;
+        file.chunksData = undefined;
+        file.request = undefined;
+        file.progressBar?.dispose();
+        this.fileUploader._setStatusMessage(file, 'uploadAbortedMessage');
         this.fileUploader._uploadAbortedAction({
             file: file.value,
             event: e,
