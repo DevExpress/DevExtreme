@@ -870,8 +870,8 @@ QUnit.module('Initialization', {
             { tz: 'Asia/Brunei', offset: 8, daylightOffset: 8, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'Asia/Damascus', offset: 2, daylightOffset: 3, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) }
         ].forEach(function(item) {
-            const offset = timeZoneDataUtils.getTimezoneOffsetById(item.tz, item.date);
-            const daylightOffset = timeZoneDataUtils.getTimezoneOffsetById(item.tz, item.daylightDate);
+            const offset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.date);
+            const daylightOffset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.daylightDate);
 
             assert.equal(offset, item.offset, item.tz + ': Common offset is OK');
             assert.equal(daylightOffset, item.daylightOffset, item.tz + ': DST offset is OK');
@@ -4669,7 +4669,7 @@ QUnit.module('Getting timezones', {}, () => {
         return timeZones.filter((timeZone) => timeZone.id === id)[0];
 
     };
-    QUnit.test('getTimeZones method should return accepted timezones with right format', function(assert) {
+    QUnit.test('getTimeZones method should return accepted timezones with correct format', function(assert) {
         const date = new Date(2020, 5, 1);
         const timeZones = getTimeZones(date);
         const firstTimeZone = timeZones[0];
@@ -4691,7 +4691,7 @@ QUnit.module('Getting timezones', {}, () => {
         }, 'some of returned timeZone is ok');
     });
 
-    QUnit.test('getTimeZones method should return right offsets depending on the date', function(assert) {
+    QUnit.test('getTimeZones method should return correct offsets depending on the date', function(assert) {
         const winter = new Date(2020, 1, 8, 1);
         const summer = new Date(2020, 6, 8, 2);
         let timeZones = getTimeZones(winter);

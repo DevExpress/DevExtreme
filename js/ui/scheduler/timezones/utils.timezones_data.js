@@ -58,7 +58,7 @@ const timeZoneDataUtils = {
         return result;
     },
 
-    getTimezoneOffsetById: function(id, timestamp) {
+    getTimeZoneOffsetById: function(id, timestamp) {
         const tz = this.getTimezoneById(id);
         let offsets;
         let offsetIndices;

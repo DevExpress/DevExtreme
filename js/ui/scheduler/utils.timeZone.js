@@ -55,7 +55,7 @@ const calculateTimezoneByValue = (timezone, date) => {
         }
 
         const dateInUTC = createUTCDate(date);
-        timezone = timeZoneDataUtils.getTimezoneOffsetById(timezone, dateInUTC.getTime());
+        timezone = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateInUTC.getTime());
     }
     return timezone;
 };
