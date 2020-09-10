@@ -15439,7 +15439,7 @@ QUnit.module('Editing with scrolling', {
         // assert
         items = this.dataController.items();
         assert.equal(this.dataController.pageIndex(), 0, 'page index');
-        assert.equal(items.length, 9, 'count items');
+        assert.equal(items.length, 5, 'count items');
         assert.ok(items[0].isNewRow, 'insert item');
     });
 
@@ -15584,7 +15584,7 @@ QUnit.module('Editing with scrolling', {
         assert.equal(testElement.find('.dx-error-row').length, 0);
 
         // arrange
-        this.rowsView.scrollTo({ y: 0 });
+        this.rowsView.scrollTo({ y: 1 });
 
         // assert
         assert.equal(this.dataController.pageIndex(), 0, 'page index');
