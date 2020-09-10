@@ -16,7 +16,7 @@ const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE
 
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 
-const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') !== false || that._isVirtual || that._viewportItemIndex > 0;
+const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex > 0;
 
 export let getPixelRatio = (window) => window.devicePixelRatio || 1;
 
