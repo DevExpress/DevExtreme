@@ -1246,4 +1246,1201 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             done();
         });
     });
+
+    QUnit.test('Grouping - 1 level', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2' },
+            { f1: 'f1_2', f2: 'f1_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            // eslint-disable-next-line spellcheck/spell-checker
+            head: [[{ content: 'f2', styles: { halign: 'left' } }]],
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1_2', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    [true, false].forEach((remoteOperations) => {
+        [new Date(1996, 6, 4), '1996/7/4', '1996-07-04T00:00:00', new Date(1996, 6, 4).getTime()].forEach((dateValue) => {
+            QUnit.test(`Grouping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', cell.value: ${JSON.stringify(dateValue.value)}, remoteOperations: ${remoteOperations}`, function(assert) {
+                const done = assert.async();
+                const ds = [{ f1: dateValue, f2: 'f1_1' }];
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: ds,
+                    columns: [
+                        { caption: 'f1', dataField: 'f1', dataType: 'date', format: 'yyyy-MM-dd', groupIndex: 0 },
+                        { caption: 'f2', dataField: 'f2', dataType: 'string' }
+                    ],
+                    remoteOperations: remoteOperations,
+                    loadingTimeout: undefined
+                }).dxDataGrid('instance');
+
+                const expectedCells = {
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    head: [[{ content: 'f2', styles: { halign: 'left' } }]],
+                    body: [
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        [{ content: 'f1: 1996-07-04', styles: { halign: 'left', fontStyle: 'bold' } }],
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        [{ content: 'f1_1', styles: { halign: 'left' } }]
+                    ]
+                };
+
+                exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+                    const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+                    ['head', 'body'].forEach((rowType) => {
+                        helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                        helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                        helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                        helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+                    });
+                    done();
+                });
+            });
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, col_1.customizeText: (cell) => \'custom\'', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0, customizeText: (cell) => 'custom' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, col_1_group.calculateGroupValue: () => \'custom\'', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0, calculateGroupValue: () => 'custom' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, col_1_group.calculateGroupValue: () => \'custom\', showWhenGrouped: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', width: 100, groupIndex: 0, calculateGroupValue: () => 'custom', showWhenGrouped: true },
+                { dataField: 'f2', caption: 'f2', width: 150 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            // eslint-disable-next-line spellcheck/spell-checker
+            head: [[ { content: 'f1', styles: { halign: 'left' } }, { content: 'f2', styles: { halign: 'left' } } ]],
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: custom', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1_1', styles: { halign: 'left' } }, { content: 'f2_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1_2', styles: { halign: 'left' } }, { content: 'f2_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, col_1_group.calculateDisplayValue: () => \'custom\', col_2.calculateDisplayValue: () => \'custom_2\'', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0, calculateDisplayValue: () => 'custom' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', calculateDisplayValue: () => 'custom_2' },
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'custom_2', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'custom_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, grid.wordWrapEnabled: true, col_1.alignment: \'center\', col_2.alignment: \'right\'', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0, alignment: 'center' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', alignment: 'right' },
+            ],
+            wordWrapEnabled: true,
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            // eslint-disable-next-line spellcheck/spell-checker
+            head: [[ { content: 'f2', styles: { halign: 'right' } } ]],
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_1', styles: { halign: 'right' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_2', styles: { halign: 'right' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, grid.wordWrapEnabled: true, rtlEnabled: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            wordWrapEnabled: true,
+            dataSource: ds,
+            rtlEnabled: true,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            // eslint-disable-next-line spellcheck/spell-checker
+            head: [[ { content: 'f2', styles: { halign: 'right' } } ]],
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1', styles: { halign: 'right', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_1', styles: { halign: 'right' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2', styles: { halign: 'right', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_2', styles: { halign: 'right' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[0]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false,
+            selectedRowKeys: [ds[0]]
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'F1: str1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str1_1', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[1]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false,
+            selectedRowKeys: [ds[1]]
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'F1: str1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str_1_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[0], ds[1]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'string' }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false,
+            selectedRowKeys: [ds[0], ds[1]]
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'F1: str1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str1_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str_1_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, unbound', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string' },
+                { dataField: 'f2', dataType: 'string', calculateCellValue: rowData => rowData.f1 + '_f2' },
+                { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'Field 3: str1!', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str1', styles: { halign: 'left' } }, { content: 'str1_f2', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str1', styles: { halign: 'left' } }, { content: 'str1_f2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, unbound, selectedRowKeys: [ds[1]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string' },
+                { dataField: 'f2', dataType: 'string', calculateCellValue: rowData => rowData.f1 + '_f2' },
+                { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false,
+            selectedRowKeys: [ds[1]]
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'Field 3: str1!', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str1', styles: { halign: 'left' } }, { content: 'str1_f2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level, 2 group row, selectedRowKeys: [ds[1]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1_1', f2: 'str1_2', f3: 'str1_3' }, { f1: 'str2_1', f2: 'str2_2', f3: 'str2_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false,
+            selectedRowKeys: [ds[1]]
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'F1: str2_1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'str2_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level - 1 summary group node', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 1 },
+            { f1: 'f1_2', f2: 3 }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'number' },
+            ],
+            dataSource: ds,
+            summary: {
+                groupItems: [{ name: 'GroupItems 1', column: 'f2', summaryType: 'max' }]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1 (Max of f2 is 1)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 1, styles: { halign: 'right' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2 (Max of f2 is 3)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 3, styles: { halign: 'right' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level - 1 summary group node, group.customizeText: (cell) => \'custom\'', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 1 },
+            { f1: 'f1_2', f2: 3 }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'number' },
+            ],
+            dataSource: ds,
+            summary: {
+                groupItems: [{ name: 'GroupItems 1', column: 'f2', summaryType: 'max', customizeText: (cell) => 'custom' }]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1 (custom)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 1, styles: { halign: 'right' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2 (custom)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 3, styles: { halign: 'right' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 1 level & 2 column', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+            ],
+            dataSource: ds,
+            summary: {
+                groupItems: [
+                    { name: 'GroupItems 1', column: 'f2', summaryType: 'count' },
+                    { name: 'GroupItems 2', column: 'f3', summaryType: 'count' }
+                ]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1 (Count: 1, Count: 1)', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1_2', styles: { halign: 'left' } }, { content: 'f3_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2 (Count: 1, Count: 1)', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2_2', styles: { halign: 'left' } }, { content: 'f3_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 2 level', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', groupIndex: 1 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f3_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2: f2_2', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f3_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 2 level - 2 summary group node', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
+            { f1: 'f1_1', f2: 'f2_2', f3: 'f3_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', groupIndex: 1 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+            ],
+            dataSource: ds,
+            summary: {
+                groupItems: [{ name: 'GroupItems 1', column: 'f3', summaryType: 'max' }, { name: 'GroupItems 2', column: 'f3', summaryType: 'count' }]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f1: f1_1 (Max of f3 is f3_2, Count: 2)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2: f1_2 (Max of f3 is f3_1, Count: 1)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f3_1', styles: { halign: 'left' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f2: f2_2 (Max of f3 is f3_2, Count: 1)', styles: { halign: 'left', fontStyle: 'bold' } }],
+                // eslint-disable-next-line spellcheck/spell-checker
+                [{ content: 'f3_2', styles: { halign: 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 2 level & 2 column - 2 summary alignByColumn', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1' },
+            { f1: 'f1_1', f2: 'f2_2', f3: 'f3_2', f4: 'f4_2', f5: 'f5_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', groupIndex: 1 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string' },
+                { dataField: 'f5', caption: 'f5', dataType: 'string' }
+            ],
+            dataSource: ds,
+            summary: {
+                groupItems: [
+                    { name: 'GroupItems 1', column: 'f4', summaryType: 'max', alignByColumn: true }, { name: 'GroupItems 2', column: 'f4', summaryType: 'count', alignByColumn: true },
+                    { name: 'GroupItems 3', column: 'f5', summaryType: 'max', alignByColumn: true }, { name: 'GroupItems 4', column: 'f5', summaryType: 'count', alignByColumn: true }
+                ]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'Max: f4_2\nCount: 2', styles: { halign: 'left', fontStyle: 'bold' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'Max: f5_2\nCount: 2', styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2: f1_2', styles: { halign: 'left', fontStyle: 'bold' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'Max: f4_1\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'Max: f5_1\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f5_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2: f2_2', styles: { halign: 'left', fontStyle: 'bold' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'Max: f4_2\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'Max: f5_2\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f5_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 2 level & 2 column - 2 summary alignByColumn: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1' },
+            { f1: 'f1_1', f2: 'f2_2', f3: 'f3_2', f4: 'f4_2', f5: 'f5_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', groupIndex: 1 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string' },
+                { dataField: 'f5', caption: 'f5', dataType: 'string' }
+            ],
+            dataSource: ds,
+            summary: {
+                groupItems: [
+                    { name: 'GroupItems 1', column: 'f4', summaryType: 'max', alignByColumn: false }, { name: 'GroupItems 2', column: 'f4', summaryType: 'count', alignByColumn: false },
+                    { name: 'GroupItems 3', column: 'f5', summaryType: 'max', alignByColumn: false }, { name: 'GroupItems 4', column: 'f5', summaryType: 'count', alignByColumn: false }
+                ]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1: f1_1 (Max of f4 is f4_2, Count: 2, Max of f5 is f5_2, Count: 2)', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2: f1_2 (Max of f4 is f4_1, Count: 1, Max of f5 is f5_1, Count: 1)', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f5_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2: f2_2 (Max of f4 is f4_2, Count: 1, Max of f5 is f5_2, Count: 1)', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f5_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 500,
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', width: 100 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', width: 150 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250 },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4: f4_1', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & group.allowExporting: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 500,
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', width: 100 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', width: 150 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250 },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', width: 500, groupIndex: 0, allowExporting: false },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4: f4_1', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_1.allowExporting: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 500,
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', width: 500, allowExporting: false },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', width: 200 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300 },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', width: 250, groupIndex: 0 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4: f4_1', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_2.allowExporting: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 500,
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', width: 200 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', width: 500, allowExporting: false },
+                { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300 },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', width: 500, groupIndex: 0 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4: f4_1', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_3.allowExporting: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 500,
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', width: 200 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', width: 300 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string', width: 500, allowExporting: false },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', width: 500, groupIndex: 0 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4: f4_1', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_3.fixed: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 500,
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', width: 200 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', width: 300 },
+                { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300, fixed: true },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', width: 300, groupIndex: 0 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [
+                [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f4: f4_1', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_1', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_1', styles: { halign: 'left' } }
+                ], [
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f3_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f1_2', styles: { halign: 'left' } },
+                    // eslint-disable-next-line spellcheck/spell-checker
+                    { content: 'f2_2', styles: { halign: 'left' } }
+                ]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
 });
