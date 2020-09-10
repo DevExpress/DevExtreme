@@ -6128,13 +6128,8 @@ QUnit.module('Vertical headers', {
                     fieldChooser.getDataSource().state(state, true);
                     const newState = fieldChooser.getDataSource().state();
 
-                    if(changedArea === 'row') {
-                        assert.deepEqual(newState.rowExpandedPaths, []);
-                        assert.deepEqual(newState.columnExpandedPaths, []);
-                    } else {
-                        assert.deepEqual(newState.rowExpandedPaths, []);
-                        assert.deepEqual(newState.columnExpandedPaths, []);
-                    }
+                    assert.deepEqual(newState.rowExpandedPaths, []);
+                    assert.deepEqual(newState.columnExpandedPaths, []);
                 });
             });
 
