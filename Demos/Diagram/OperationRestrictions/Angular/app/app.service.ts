@@ -33,37 +33,44 @@ let orgItems: OrgItem[] = [
 	},
 	{  
 		"ID":"112",
-        "Name": "Ana Trujillo",
+		"Name": "Ana Trujillo",
+		"Type": "employee",
 		"ParentID": "107"
 	},
 	{  
 		"ID":"113",
 		"Name":"Antonio Moreno",
+		"Type": "employee",
 		"ParentID": "107"
 	},
 	{  
 		"ID":"115",
 		"Name":"Christina Berglund",
+		"Type": "employee",
 		"ParentID": "109"
 	},
 	{  
 		"ID":"116",
 		"Name":"Hanna Moos",
+		"Type": "employee",
 		"ParentID": "109"
 	},
 	{  
 		"ID":"119",
 		"Name":"Laurence Lebihan",
+		"Type": "employee",
 		"ParentID": "110"
 	},
 	{  
 		"ID":"122",
-        "Name": "Patricio Simpson",
+		"Name": "Patricio Simpson",
+		"Type": "employee",
 		"ParentID": "110"
 	},
 	{  
 		"ID":"123",
 		"Name":"Francisco Chang",
+		"Type": "employee",
 		"ParentID": "110"
 	}
 ];

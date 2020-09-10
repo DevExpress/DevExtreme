@@ -31,18 +31,6 @@ export class AppComponent {
             data: this.items
         });
     }
-    itemTypeExpr(obj, value) {
-        if(value) {
-            if(value !== "employee")
-                obj.Type = value;
-            else
-                obj.Type = undefined;
-        } else {
-            if(obj.Type !== undefined)
-                return obj.Type;
-            return "employee";
-        }
-    }
     requestLayoutUpdateHandler(e) { 
         for(var i = 0; i < e.changes.length; i++) {
             if(e.changes[i].type === 'remove')

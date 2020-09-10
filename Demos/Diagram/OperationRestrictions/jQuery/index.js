@@ -25,7 +25,6 @@ $(function() {
                 key: "id",
                 data: orgItems
             }),
-            typeExpr: itemTypeExpr,
             textExpr: "name",
             parentKeyExpr: "parentId",
             autoLayout: {
@@ -102,17 +101,4 @@ $(function() {
             visibility: "disabled"
         }
     });
-
-    function itemTypeExpr(obj, value) {
-        if(value) {
-            if(value !== "employee")
-                obj.type = value;
-            else
-                obj.type = undefined;
-        } else {
-            if(obj.type !== undefined)
-                return obj.type;
-            return "employee";
-        }
-    }
 });

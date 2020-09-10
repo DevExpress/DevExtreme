@@ -24,37 +24,44 @@
 	},
 	{  
 		"id":"112",
-        "name": "Ana Trujillo",
+		"name": "Ana Trujillo",
+		"type": "employee",
 		"parentId": "107"
 	},
 	{  
 		"id":"113",
 		"name":"Antonio Moreno",
+		"type": "employee",
 		"parentId": "107"
 	},
 	{  
 		"id":"115",
 		"name":"Christina Berglund",
+		"type": "employee",
 		"parentId": "109"
 	},
 	{  
 		"id":"116",
 		"name":"Hanna Moos",
+		"type": "employee",
 		"parentId": "109"
 	},
 	{  
 		"id":"119",
 		"name":"Laurence Lebihan",
+		"type": "employee",
 		"parentId": "110"
 	},
 	{  
 		"id":"122",
-        "name": "Patricio Simpson",
+		"name": "Patricio Simpson",
+		"type": "employee",
 		"parentId": "110"
 	},
 	{  
 		"id":"123",
 		"name":"Francisco Chang",
+		"type": "employee",
 		"parentId": "110"
 	}
 ];

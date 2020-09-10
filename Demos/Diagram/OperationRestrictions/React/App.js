@@ -24,7 +24,7 @@ class App extends React.Component {
           title="Team" defaultText="Team Name" />
         <CustomShape category="items" type="employee" baseType="rectangle"
           title="Employee" defaultText="Employee Name" />
-        <Nodes dataSource={this.orgItemsDataSource} typeExpr={this.itemTypeExpr} textExpr="name" parentKeyExpr="parentId">
+        <Nodes dataSource={this.orgItemsDataSource} textExpr="name" parentKeyExpr="parentId">
           <AutoLayout type="tree" />
         </Nodes>
         <ContextToolbox shapeIconsPerRow={2} width={100} shapes={['team', 'employee']}>
@@ -38,20 +38,6 @@ class App extends React.Component {
     );
   }
 
-  itemTypeExpr(obj, value) {
-    if(value) {
-      if(value !== 'employee') {
-        obj.type = value;
-      } else {
-        obj.type = undefined;
-      }
-    } else {
-      if(obj.type !== undefined) {
-        return obj.type;
-      }
-      return 'employee';
-    }
-  }
   onRequestLayoutUpdate(e) {
     for(var i = 0; i < e.changes.length; i++) {
       if(e.changes[i].type === 'remove') {

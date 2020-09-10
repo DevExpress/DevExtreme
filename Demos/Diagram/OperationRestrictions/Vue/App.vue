@@ -27,7 +27,6 @@
     />
     <DxNodes
       :data-source="orgItemsDataSource"
-      :type-expr="itemTypeExpr"
       :text-expr="'name'"
       :parent-key-expr="'parentId'"
     >
@@ -71,20 +70,6 @@ export default {
     };
   },
   methods: {
-    itemTypeExpr(obj, value) {
-      if(value) {
-        if(value !== 'employee') {
-          obj.type = value;
-        } else {
-          obj.type = undefined;
-        }
-      } else {
-        if(obj.type !== undefined) {
-          return obj.type;
-        }
-        return 'employee';
-      }
-    },
     onRequestLayoutUpdate(e) {
       for(var i = 0; i < e.changes.length; i++) {
         if(e.changes[i].type === 'remove') {
