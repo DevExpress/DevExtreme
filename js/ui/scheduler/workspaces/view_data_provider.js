@@ -8,22 +8,6 @@ class ViewDataGenerator {
     get workspace() { return this._workspace; }
     set workspace(value) { this._workspace = value; }
 
-    generateCompleteViewData() {
-        return this._generateViewData();
-    }
-
-    generate() {
-        let result;
-
-        if(this.workspace.isVirtualScrolling()) {
-            result = this._generateVirtualViewData();
-        } else {
-            result = this._generateViewData();
-        }
-
-        return result;
-    }
-
     _getCompleteViewDataMap(options) {
         const {
             nonVirtualRowCount: rowCount,
@@ -36,7 +20,6 @@ class ViewDataGenerator {
             const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
             const viewCellsData = this._generateViewCellsData(
                 options,
-                groupIndex,
                 rowCount,
                 0,
                 rowCount * groupIndex
@@ -255,7 +238,7 @@ export default class ViewDataProvider {
     constructor(workspace) {
         this._viewDataGenerator = null;
         this._viewData = [];
-        this._completeViewData = [];
+        this._completeViewDataMap = [];
         this._viewDataMap = [];
         this._groupedDataMap = [];
         this._workspace = workspace;
