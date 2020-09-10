@@ -775,7 +775,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
     });
 
     [
-        { format: 'millisecond', expectedPdfCellValue: '009' },
+        // IE doesn't support milliseconds.
+        // { format: 'millisecond', expectedPdfCellValue: '009' },
         { format: 'second', expectedPdfCellValue: '09' },
         { format: 'minute', expectedPdfCellValue: '09' },
         { format: 'hour', expectedPdfCellValue: '09' },
