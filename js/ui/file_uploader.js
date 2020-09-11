@@ -502,17 +502,17 @@ class FileUploader extends Editor {
             isValid() {
                 return this.isValidFileExtension && this.isValidMaxSize && this.isValidMinSize;
             },
-            isInitialized: false,
-            resetAfterAbort: () => {
-                this.isAborted = false;
-                this.uploadStarted = false;
-                this.isStartLoad = false;
-                this.isAborted = false;
-                this.loadedSize = 0;
-                this.chunksData = undefined;
-                this.request = undefined;
-            }
+            isInitialized: false
         };
+    }
+
+    _resetFileState(file) {
+        file.isAborted = false;
+        file.uploadStarted = false;
+        file.isStartLoad = false;
+        file.loadedSize = 0;
+        file.chunksData = undefined;
+        file.request = undefined;
     }
 
     _renderFiles() {
@@ -1333,6 +1333,9 @@ class FileUploadStrategyBase {
     }
 
     upload(file) {
+        if(file.isInitialized && file.isAborted) {
+            this.fileUploader._resetFileState(file);
+        }
         if(file.isValid() && !file.uploadStarted) {
             this._prepareFileBeforeUpload(file);
             this._uploadCore(file);
@@ -1388,7 +1391,6 @@ class FileUploadStrategyBase {
         }
 
         if(file.isInitialized) {
-            file.resetAfterAbort();
             return;
         }
 

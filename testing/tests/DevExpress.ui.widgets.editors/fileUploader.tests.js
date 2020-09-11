@@ -6,7 +6,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'common.css!';
-import 'generic_light.css!';
 
 const { test } = QUnit;
 
@@ -1306,7 +1305,8 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
 
         instance.abortUpload();
-        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
         assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
         assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
@@ -1341,7 +1341,8 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
 
         instance.abortUpload();
-        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
         assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
         assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
@@ -1349,10 +1350,10 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
         const $progressBar = $element.find('.dx-progressbar');
 
-        assert.strictEqual($($fileStatusMessage.get(0)).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
-        assert.ok($($fileStatusMessage.get(0)).is(':visible'), 'status message is visible');
-        assert.strictEqual($($fileStatusMessage.get(1)).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
-        assert.ok($($fileStatusMessage.get(1)).is(':visible'), 'status message is visible');
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($fileStatusMessage.eq(1).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
+        assert.ok($fileStatusMessage.eq(1).is(':visible'), 'status message is visible');
         assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
     });
 
@@ -1371,7 +1372,8 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
 
         instance.abortUpload();
-        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
         assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
         assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
@@ -1383,26 +1385,25 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         let $progressBar = $element.find('.dx-progressbar');
         let $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
-        assert.strictEqual($($fileStatusMessage.eq(0)).text(), instance.option('readyToUploadMessage'), 'status message is returned to original state');
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('readyToUploadMessage'), 'status message is returned to original state');
         assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
         assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
         assert.ok($uploadButton.eq(1).is(':visible'), '\'upload\' button is visible');
         assert.notOk($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button is enabled');
 
-        $uploadButton.eq(1).trigger('click');
-        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        $uploadButton.eq(1).trigger('dxclick');
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
         assert.ok(onUploadAbortedSpy.notCalled, 'upload is not cancelled');
         assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
 
-        onUploadAbortedSpy.reset();
-        onUploadedSpy.reset();
 
         $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
         $progressBar = $element.find('.dx-progressbar');
         $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
-        assert.strictEqual($($fileStatusMessage.eq(0)).text(), instance.option('uploadedMessage'), 'has uploaded status message');
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('uploadedMessage'), 'has uploaded status message');
         assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
         assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
         assert.notOk($uploadButton.eq(1).is(':visible'), '\'upload\' button is invisible');
