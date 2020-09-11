@@ -36,7 +36,7 @@ class ViewDataGenerator {
         const { startRowIndex, rowCount } = options;
 
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
-        const showAllDayPanel = this.workspace.option('showAllDayPanel');
+        const showAllDayPanel = this.workspace._isShowAllDayPanel();
 
         const indexDifference = isVerticalGrouping || (!isVerticalGrouping && !showAllDayPanel) ? 0 : 1;
 
@@ -87,7 +87,7 @@ class ViewDataGenerator {
 
         const isVirtualScrolling = this.workspace.isVirtualScrolling();
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
-        const showAllDayPanel = this.workspace.option('showAllDayPanel');
+        const showAllDayPanel = this.workspace._isShowAllDayPanel();
 
         if(!isVerticalGrouping && showAllDayPanel) {
             groupedData[0].allDayPanel = completeViewDataMap[0];
@@ -108,6 +108,7 @@ class ViewDataGenerator {
             cellDataGetters,
             horizontalGroupsCount,
             rowCountInGroup,
+            groupOrientation,
         } = options;
         const viewCellsData = [];
 
@@ -125,7 +126,7 @@ class ViewDataGenerator {
                 });
 
                 cellDataValue.index = this._calculateCellIndex(
-                    horizontalGroupsCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
+                    horizontalGroupsCount, groupOrientation, this._workspace.isGroupedByDate(),
                     rowIndex % rowCountInGroup, columnIndex, cellCount,
                 );
 
@@ -137,11 +138,11 @@ class ViewDataGenerator {
     }
 
     _generateAllDayPanelData(options, groupIndex, rowCount, cellCount) {
-        if(!this.workspace.option('showAllDayPanel')) {
+        if(!this.workspace._isShowAllDayPanel()) {
             return null;
         }
 
-        const { horizontalGroupsCount } = options;
+        const { horizontalGroupsCount, groupOrientation } = options;
 
         const allDayPanel = [];
 
@@ -149,7 +150,7 @@ class ViewDataGenerator {
             const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex, groupIndex).value;
             cellDataValue.index = this._calculateCellIndex(
-                horizontalGroupsCount, this._workspace.option('groupOrientation'), this._workspace.isGroupedByDate(),
+                horizontalGroupsCount, groupOrientation, this._workspace.isGroupedByDate(),
                 0, columnIndex, cellCount,
             );
             allDayPanel.push(cellDataValue);
@@ -230,6 +231,9 @@ export default class ViewDataProvider {
         return this._viewDataGenerator;
     }
 
+    get completeViewDataMap() { return this._completeViewDataMap; }
+    set completeViewDataMap(value) { this._completeViewDataMap = value; }
+
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
 
@@ -244,11 +248,11 @@ export default class ViewDataProvider {
         const renderOptions = _workspace.generateRenderOptions();
 
         if(isGenerateNewViewData) {
-            this._completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
+            this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
         }
 
-        this.viewDataMap = viewDataGenerator._generateViewDataMap(this._completeViewDataMap, renderOptions);
-        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this._completeViewDataMap, renderOptions);
+        this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
+        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this.completeViewDataMap, renderOptions);
         this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(this.viewDataMap);
     }
 
