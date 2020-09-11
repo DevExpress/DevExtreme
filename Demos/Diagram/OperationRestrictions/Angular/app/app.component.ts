@@ -6,6 +6,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
+import notify from 'devextreme/ui/notify';
 import { Service } from './app.service';
 import ArrayStore from 'devextreme/data/array_store'
 
@@ -40,49 +41,71 @@ export class AppComponent {
         }
     } 
     requestOperationHandler(e) {
+        var dataItem = e.args.shape && e.args.shape.dataItem;
         if(e.operation === "addShape") {
-            if(e.args.shape.Type !== "employee" && e.args.shape.Type !== "team") {
+            if(e.args.shape.type !== "employee" && e.args.shape.type !== "team") {
+                !e.updateUI && notify("You can add only a 'Team' or 'Employee' shape.", "warning", 1000);
                 e.allowed = false;
             }
         }
         else if(e.operation === "deleteShape") {
-            if(e.args.shape.dataItem && e.args.shape.dataItem.Type === "root") {
+            if(dataItem && dataItem.type === "root") {
+                !e.updateUI && notify("You cannot delete the 'Development' shape.", "warning", 1000);
                 e.allowed = false;
             }
-            if(e.args.shape.dataItem && e.args.shape.dataItem.Type === "team") {
+            if(dataItem && dataItem.type === "team") {
                 var children = this.items.filter(function(item) { 
-                    return item.ParentID === e.args.shape.dataItem.ID;
+                    return item.parentId === dataItem.id;
                 });
-                if(children.length > 0)
+                if(children.length > 0) {
+                    !e.updateUI && notify("You cannot delete a 'Team' shape connected to an 'Employee' shape.", "warning", 1000);
                     e.allowed = false;
+                }
             }
         }
-        else if(e.operation === "deleteConnector") {
-            e.allowed = false;
+        else if(e.operation === "resizeShape") {
+            if(e.args.newSize.width < 1 || e.args.newSize.height < 0.75) {
+                !e.updateUI && notify("The shape size is too small.", "warning", 1000);
+                e.allowed = false;
+            }
         }
         else if(e.operation === "changeConnection") {
-            if(e.args.connectorPosition === "end" && e.args.shape === undefined)
+            if(dataItem && dataItem.type === "root" && e.args.connectorPosition === "end") {
+                !e.updateUI && notify("The 'Development' shape cannot have an incoming connection.", "warning", 1000);
                 e.allowed = false;
-            if(e.args.shape.dataItem && e.args.shape.dataItem.Type === "root" && e.args.connectorPosition === "end")
-                e.allowed = false;
-            if(e.args.shape.dataItem && e.args.shape.dataItem.Type === undefined) {
+            }
+            if(dataItem && dataItem.type === "team" && e.args.connectorPosition === "end") {
+                if(dataItem && dataItem.parentId !== undefined && dataItem.parentId !== null) {
+                    !e.updateUI && notify("A 'Team' shape can have only one incoming connection.", "warning", 1000);
+                    e.allowed = false;
+                }
+            }
+            if(dataItem && dataItem.type === "employee") {
                 if(e.args.connectorPosition === "start")
                     e.allowed = false;
-                if(e.args.connectorPosition === "end" && e.args.shape.dataItem.ParentID !== undefined && e.args.shape.dataItem.ParentID !== null)
+                if(e.args.connectorPosition === "end" && dataItem.parentId !== undefined && dataItem.parentId !== null) {
+                    !e.updateUI && notify("An 'Employee' shape can have only one incoming connection.", "warning", 1000);
                     e.allowed = false;
+                }                        
             }
         }
         else if(e.operation === "changeConnectorPoints") {
-            if(e.args.newPoints.length > 2)
+            if(e.args.newPoints.length > 2) {
+                !e.updateUI && notify("You cannot add points to a connector.", "warning", 1000);
                 e.allowed = false;
+            }
         }
         else if(e.operation === "beforeChangeShapeText") {
-            if(e.args.shape.dataItem && e.args.shape.dataItem.Type === "root")
+            if(dataItem && dataItem.type === "root") {
+                !e.updateUI && notify("You cannot change the 'Development' shape's text.", "warning", 1000);
                 e.allowed = false;
+            }
         }
         else if(e.operation === "changeShapeText") {
-            if(e.args.text === "")
+            if(e.args.text === "") {
+                !e.updateUI && notify("A shape text cannot be empty.", "warning", 1000);
                 e.allowed = false;
+            }
         }
         else if(e.operation === "beforeChangeConnectorText") {
             e.allowed = false;
