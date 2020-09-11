@@ -404,6 +404,14 @@ class FileUploader extends Editor {
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
     }
 
+    _setUploadAbortedStatusMessage(file) {
+        if(this.option('uploadMode') === 'instantly') {
+            this._setStatusMessage(file, 'uploadAbortedMessage');
+        } else {
+            this._setStatusMessage(file, 'readyToUploadMessage');
+        }
+    }
+
     _createFiles() {
         const value = this.option('value');
 
@@ -494,7 +502,16 @@ class FileUploader extends Editor {
             isValid() {
                 return this.isValidFileExtension && this.isValidMaxSize && this.isValidMinSize;
             },
-            isInitialized: false
+            isInitialized: false,
+            resetAfterAbort: () => {
+                this.isAborted = false;
+                this.uploadStarted = false;
+                this.isStartLoad = false;
+                this.isAborted = false;
+                this.loadedSize = 0;
+                this.chunksData = undefined;
+                this.request = undefined;
+            }
         };
     }
 
@@ -1366,11 +1383,12 @@ class FileUploadStrategyBase {
 
     _prepareFileBeforeUpload(file) {
         if(file.$file) {
+            file.progressBar?.dispose();
             this.fileUploader._createFileProgressBar(file);
         }
 
         if(file.isInitialized) {
-            file.isAborted = false;
+            file.resetAfterAbort();
             return;
         }
 
@@ -1397,19 +1415,7 @@ class FileUploadStrategyBase {
     }
 
     _onAbortHandler(file, e) {
-        file.uploadStarted = false;
-        file.isStartLoad = false;
-        file.isAborted = false;
-        file.loadedSize = 0;
-        file.chunksData = undefined;
-        file.request = undefined;
-        file.progressBar?.dispose();
-
-        if(this.fileUploader.option('uploadMode') === 'instantly') {
-            this.fileUploader._setStatusMessage(file, 'uploadAbortedMessage');
-        } else {
-            this.fileUploader._setStatusMessage(file, 'readyToUploadMessage');
-        }
+        this.fileUploader._setUploadAbortedStatusMessage(file);
         this.fileUploader._uploadAbortedAction({
             file: file.value,
             event: e,
