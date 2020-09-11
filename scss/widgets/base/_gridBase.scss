@@ -439,7 +439,7 @@
 
       .dx-cell-modified,
       .dx-#{$widget-name}-invalid {
-        &:not(.dx-field-item-content) {
+        &:not(.dx-field-item-content):not(.dx-highlight-outline) {
           padding: 0;
         }
       }
@@ -562,11 +562,11 @@
       margin: 0;
     }
 
-    .dx-highlight-outline {
+    &.dx-highlight-outline {
       padding: 0;
     }
 
-    &.dx-editor-inline-block .dx-highlight-outline::before {
+    &.dx-editor-inline-block.dx-highlight-outline::before {
       display: inline-block;
       content: '\200b';
       vertical-align: middle;
@@ -915,7 +915,7 @@
     }
 
     .dx-data-row.dx-edit-row {
-      .dx-cell-modified .dx-highlight-outline:after {
+      .dx-cell-modified.dx-highlight-outline:after {
         border-color: transparent;
       }
     }

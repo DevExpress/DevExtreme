@@ -2576,21 +2576,20 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         showHighlighting: function($cell) {
-            const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-            if($cell.get(0).tagName === 'TD' && !$highlight.length) {
-                $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
-            }
+            const isHighlighted = $cell.hasClass(CELL_HIGHLIGHT_OUTLINE);
+            !isHighlighted && $cell.addClass(`${CELL_HIGHLIGHT_OUTLINE} ${POINTER_EVENTS_TARGET_CLASS}`);
+            // if($cell.get(0).tagName === 'TD' && !$highlight.length) {
+            //     $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
+            // }
         },
 
         highlightDataCell: function($cell, parameters) {
             const isEditableCell = parameters.setValue;
             const cellModified = this.isCellModified(parameters);
 
-            if(cellModified && parameters.column.setCellValue) {
+            if(cellModified && parameters.column.setCellValue || isEditableCell) {
                 this.showHighlighting($cell);
-                $cell.addClass(CELL_MODIFIED);
-            } else if(isEditableCell) {
-                this.showHighlighting($cell);
+                cellModified && parameters.column.setCellValue && $cell.addClass(CELL_MODIFIED);
             }
         },
 

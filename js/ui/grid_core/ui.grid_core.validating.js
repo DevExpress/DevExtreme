@@ -14,7 +14,7 @@ import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
 import Tooltip from '../tooltip';
 import Overlay from '../overlay';
-import themes from '../themes';
+// import themes from '../themes';
 import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
@@ -1081,9 +1081,9 @@ export default {
                     },
 
                     _showValidationMessage: function($cell, messages, alignment, revertTooltip) {
-                        const $highlightContainer = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-                        const isMaterial = themes.isMaterial();
-                        const overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell;
+                        // const $highlightContainer = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
+                        // const isMaterial = themes.isMaterial();
+                        // const overlayTarget = $cell;// $highlightContainer.length && !isMaterial ? $highlightContainer : $cell;
                         const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
                         const isOverlayVisible = editorPopup && editorPopup.option('visible');
                         const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
@@ -1102,7 +1102,7 @@ export default {
                             .appendTo($cell);
 
                         const overlayOptions = {
-                            target: overlayTarget,
+                            target: $cell,
                             container: $cell,
                             shading: false,
                             width: 'auto',
