@@ -1,8 +1,5 @@
 import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
-function exportDataGrid(options) {
-    return Export.export(_getFullOptions(options));
-}
 
 function _getFullOptions(options) {
     if(!(isDefined(options) && isObject(options))) {
@@ -21,6 +18,6 @@ function _getFullOptions(options) {
 exportDataGrid.__internals = { _getFullOptions };
 //#ENDDEBUG
 
-export {
-    exportDataGrid
-};
+export function exportDataGrid(options) {
+    return Export.export(_getFullOptions(options));
+}
