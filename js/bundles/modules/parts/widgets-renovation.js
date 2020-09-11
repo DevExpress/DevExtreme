@@ -4,7 +4,7 @@
 /* Renovation (dx.module-renovation.js) */
 
 const renovation = require('../../../bundles/modules/renovation');
-require('../../../ui/data_grid'); // TODO: Remove it. This is hack!
+
 renovation.dxButton = require('../../../renovation/ui/button.j').default;
 renovation.dxCheckBox = require('../../../renovation/ui/check_box.j').default;
 renovation.dxWidget = require('../../../renovation/ui/common/widget.j').default;
