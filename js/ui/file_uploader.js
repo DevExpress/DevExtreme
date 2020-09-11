@@ -1022,7 +1022,7 @@ class FileUploader extends Editor {
     }
 
     abortUpload(fileData) {
-        if(this.option('uploadMode') !== 'useButtons') {
+        if(this.option('uploadMode') === 'useForm') {
             return;
         }
         const file = this._getFile(fileData);
