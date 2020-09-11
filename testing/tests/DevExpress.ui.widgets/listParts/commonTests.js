@@ -566,7 +566,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             const $element = this.element.dxList({
                 pageLoadMode: 'scrollBottom',
-                height: 130,
+                height: 160,
                 scrollingEnabled: true,
                 useNativeScrolling: false,
                 dataSource: {

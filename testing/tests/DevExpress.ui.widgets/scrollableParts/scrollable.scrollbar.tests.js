@@ -38,7 +38,7 @@ const moduleConfig = {
         <div id="scaledContainer" style="transform:scale(0.2, 0.5)">\
             <div style="height: 500px; width: 500px;">\
                 <div id="scaledScrollable">\
-                    <div id="scaledContent" style="height: 1000px; width: 1000px;"></div>\
+                    <div id="scaledContent" style="height: 992px; width: 992px;"></div>\
                 </div>\
             </div>\
         </div>';
@@ -176,7 +176,6 @@ QUnit.test('scrollbar position calculated correctly when content much greater th
 });
 
 QUnit.test('scrollbar position calculated correctly with scaled content', function(assert) {
-    $('<style>.dx-scrollable-content{padding: 0 !important;}</style>').appendTo($('head'));
     const $scrollable = $('#scaledScrollable');
     const instance = $scrollable.dxScrollable({
         useSimulatedScrollbar: true,
