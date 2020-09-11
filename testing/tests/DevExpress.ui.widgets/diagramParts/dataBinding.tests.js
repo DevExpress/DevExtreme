@@ -560,7 +560,7 @@ QUnit.module('DataBinding', {
             }
         });
         const defaultWidth = this.instance._diagramInstance.model.findShapeByDataKey('2').size.width;
-        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
 
         this.instance.option({
             nodes: {
@@ -578,10 +578,10 @@ QUnit.module('DataBinding', {
                 dataSource: dataSource,
                 textExpr: function(obj) { return obj.text; },
                 widthExpr: null,
-                autoSizeEnabled: false
+                autoSizeEnabled: true
             }
         });
 
-        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
     });
 });
