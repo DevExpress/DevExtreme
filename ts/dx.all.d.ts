@@ -2346,7 +2346,7 @@ declare module DevExpress.data {
     export function applyChanges(data: Array<any>, changes: Array<any>, keyName?: string, options?: any): Array<any>;
     /**
      * [descr:Utils.base64_encode(input)]
-     * */
+     */
     export function base64_encode(input: string | Array<number>): string;
     /**
      * [descr:Utils.errorHandler]
