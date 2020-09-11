@@ -125,7 +125,7 @@ export const Export = {
     applyCellDataFormat: function(pdfCell, gridCell, cellStyle) {
         if(gridCell.rowType === 'data' && isDefined(cellStyle) && isDefined(cellStyle.format)) {
             if(isDate(pdfCell.content) && (cellStyle.dataType === 'date' || cellStyle.dataType === 'datetime')) {
-                pdfCell.content = dateLocalization.format(new Date(pdfCell.content), cellStyle.format);
+                pdfCell.content = dateLocalization.format(pdfCell.content, cellStyle.format);
             }
             if(isNumeric(pdfCell.content) && cellStyle.dataType === 'number') {
                 pdfCell.content = numberLocalization.format(pdfCell.content, cellStyle.format);
