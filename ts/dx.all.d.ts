@@ -3881,6 +3881,8 @@ declare module DevExpress.ui {
         selectButtonText?: string;
         /** @name dxFileUploader.Options.showFileList */
         showFileList?: boolean;
+        /** @name dxFileUploader.Options.uploadAbortedMessage */
+        uploadAbortedMessage?: string;
         /** @name dxFileUploader.Options.uploadButtonText */
         uploadButtonText?: string;
         /** @name dxFileUploader.Options.uploadChunk */
@@ -3906,6 +3908,12 @@ declare module DevExpress.ui {
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
+        /** @name dxFileUploader.abortUpload() */
+        abortUpload(): void;
+        /** @name dxFileUploader.abortUpload(file) */
+        abortUpload(file: File): void;
+        /** @name dxFileUploader.abortUpload(fileIndex) */
+        abortUpload(fileIndex: number): void;
         /** @name dxFileUploader.upload() */
         upload(): void;
         /** @name dxFileUploader.upload(file) */
