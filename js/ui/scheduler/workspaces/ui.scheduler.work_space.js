@@ -1079,6 +1079,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             allDayElements,
             startRowIndex: 0,
             groupOrientation: this.option('groupOrientation'),
+            nonVirtualRowCount: this._getRowCount(),
         };
 
         if(this.isVirtualScrolling()) {
@@ -1088,11 +1089,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 bottomVirtualRowHeight: virtualScrollingState.bottomVirtualRowHeight,
                 startRowIndex: virtualScrollingState.startIndex,
                 rowCount: virtualScrollingState.rowCount,
-                nonVirtualRowCount: this._getRowCount(),
             });
         } else {
             options.rowCount = this._getTotalRowCount(this._getGroupCount(), this._isVerticalGroupedWorkSpace());
-            options.nonVirtualRowCount = this._getRowCount();
         }
 
         return options;
