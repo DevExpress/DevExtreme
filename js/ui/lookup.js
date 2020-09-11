@@ -448,7 +448,7 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._updateField(this.option('displayValue') || this.option('placeholder'));
+        this._updateField(this.option('displayValue') ?? this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
