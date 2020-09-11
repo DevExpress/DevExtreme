@@ -115,6 +115,8 @@ class FileUploader extends Editor {
 
             uploadFailedMessage: messageLocalization.format('dxFileUploader-uploadFailedMessage'),
 
+            uploadAbortedMessage: messageLocalization.format('dxFileUploader-uploadAbortedMessage'),
+
             uploadMode: 'instantly',
 
             uploadMethod: 'POST',
@@ -1194,6 +1196,7 @@ class FileUploader extends Editor {
             case 'readyToUploadMessage':
             case 'uploadedMessage':
             case 'uploadFailedMessage':
+            case 'uploadAbortedMessage':
                 this._invalidate();
                 break;
             case 'labelText':
@@ -1402,7 +1405,12 @@ class FileUploadStrategyBase {
         file.chunksData = undefined;
         file.request = undefined;
         file.progressBar?.dispose();
-        this.fileUploader._setStatusMessage(file, 'uploadAbortedMessage');
+
+        if(this.fileUploader.option('uploadMode') === 'instantly') {
+            this.fileUploader._setStatusMessage(file, 'uploadAbortedMessage');
+        } else {
+            this.fileUploader._setStatusMessage(file, 'readyToUploadMessage');
+        }
         this.fileUploader._uploadAbortedAction({
             file: file.value,
             event: e,
