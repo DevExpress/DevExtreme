@@ -913,6 +913,49 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.strictEqual(dataGrid.totalCount(), refreshMode === 'repaint' ? 152 : 151, 'totalCount'); // TODO: Fix duplicate added row when editing.refreshMode = 'repaint'
             assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
         });
+
+        QUnit.test(`loading data on scroll after a push to store if scrolling mode is infinite and refreshMode is ${refreshMode} (T914296)`, function(assert) {
+            // arrange
+            const array = [];
+
+            for(let i = 1; i <= 150; i++) {
+                array.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 400,
+                dataSource: array,
+                keyExpr: 'id',
+                editing: {
+                    mode: 'row',
+                    allowAdding: true,
+                    refreshMode: refreshMode
+                },
+                paging: {
+                    pageSize: 50
+                },
+                scrolling: {
+                    mode: 'infinite',
+                    useNative: false
+                },
+                columns: ['id'],
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
+            this.clock.tick();
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+            // assert
+            const rows = dataGrid.getVisibleRows();
+            assert.strictEqual(rows[rows.length - 2].key, 150, 'penultimate row key');
+            assert.strictEqual(dataGrid.totalCount(), 152, 'totalCount'); // TODO: Fix duplicate added row
+        });
     });
 
     // T422575, T411642
