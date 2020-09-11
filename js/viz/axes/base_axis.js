@@ -591,12 +591,13 @@ Axis.prototype = {
 
     _adjustLabelsCoord(offset, maxWidth, checkCanvas) {
         const that = this;
+        const getContainerAttrs = tick => this._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas);
         that._majorTicks.forEach(function(tick) {
             if(tick.label) {
                 tick.updateMultilineTextAlignment();
-                tick.label.attr(that._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas));
-            } else if(tick.templateContainer) {
-                tick.templateContainer.attr(that._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas));
+                tick.label.attr(getContainerAttrs(tick));
+            } else {
+                tick.templateContainer && tick.templateContainer.attr(getContainerAttrs(tick));
             }
         });
     },
@@ -621,7 +622,7 @@ Axis.prototype = {
         return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
     },
 
-    _getLabelAdjustedCoord: function(tick, offset, maxWidth, templateBox) {
+    _getLabelAdjustedCoord: function(tick, offset, maxWidth, _checkCanvas, templateBox) {
         offset = offset || 0;
         const that = this;
         const options = that._options;
@@ -742,7 +743,7 @@ Axis.prototype = {
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
-        !that.drawn() && that._axisElementsGroup.clear(); // for react async templates
+        !that.isRendered() && that._axisElementsGroup.clear(); // for react async templates
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
@@ -1998,12 +1999,12 @@ Axis.prototype = {
         return this._templatesRendered;
     },
 
-    drawn(state) {
-        if(isDefined(state)) {
-            this._drawn = state;
-        } else {
-            return this._drawn;
-        }
+    setRenderedState(state) {
+        this._drawn = state;
+    },
+
+    isRendered() {
+        return this._drawn;
     },
 
     _applyWordWrap() {

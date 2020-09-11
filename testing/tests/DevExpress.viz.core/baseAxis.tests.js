@@ -732,14 +732,14 @@ QUnit.test('arguments passing to render', function(assert) {
     });
 });
 
-QUnit.test('Get drawn state after init axis', function(assert) {
-    assert.strictEqual(this.axis.drawn(), undefined);
+QUnit.test('Get rendered state after init axis', function(assert) {
+    assert.strictEqual(this.axis.isRendered(), undefined);
 });
 
-QUnit.test('Get drawn state after set', function(assert) {
-    this.axis.drawn(true);
+QUnit.test('Get rendered state after set', function(assert) {
+    this.axis.setRenderedState(true);
 
-    assert.strictEqual(this.axis.drawn(), true);
+    assert.strictEqual(this.axis.isRendered(), true);
 });
 
 QUnit.test('getTemplatesDef after drawing', function(assert) {

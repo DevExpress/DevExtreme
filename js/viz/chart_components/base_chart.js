@@ -710,7 +710,7 @@ export const BaseChart = BaseWidget.inherit({
         if(that._changesApplying) {
             that._changesApplying = false;
             allAxes.forEach(function(a) {
-                a.drawn(false);
+                a.setRenderedState(false);
             });
             return;
         }
@@ -720,7 +720,7 @@ export const BaseChart = BaseWidget.inherit({
                 return;
             }
             allAxes.forEach(function(a) {
-                a.drawn(true);
+                a.setRenderedState(true);
             });
             that._changesApplying = true;
 

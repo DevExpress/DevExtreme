@@ -1814,7 +1814,7 @@ QUnit.test('No clear labels group on draw drawn axis', function(assert) {
     this.axis.draw(this.canvas);
 
     // act
-    this.axis.drawn(true);
+    this.axis.setRenderedState(true);
     this.axis.draw(this.canvas);
 
     assert.strictEqual(this.renderer.g.getCall(3).returnValue.clear.callCount, 1);

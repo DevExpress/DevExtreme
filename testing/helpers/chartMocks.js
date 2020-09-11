@@ -1106,7 +1106,8 @@ export const MockAxis = function(renderOptions) {
         resolveOverlappingForCustomPositioning: sinon.spy(),
         resetApplyingAnimation: sinon.spy(),
         getTemplatesDef: sinon.spy(),
-        drawn: sinon.spy()
+        setRenderedState: sinon.spy(),
+        isRendered: sinon.spy()
     };
 };
 

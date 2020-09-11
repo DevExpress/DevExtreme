@@ -119,7 +119,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     false);
             },
             drawLabel: function(range, template) {
-                if(this.templateContainer && axis.drawn()) {
+                if(this.templateContainer && axis.isRendered()) {
                     this.updateLabelPosition();
                     return;
                 }
