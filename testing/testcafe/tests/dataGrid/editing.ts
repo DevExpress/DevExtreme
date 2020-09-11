@@ -1,11 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 
-fixture`Editing`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Editing`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(() => disposeWidgets());
 
 const getGridConfig = (config) => {
   const defaultConfig = {

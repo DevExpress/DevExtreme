@@ -24,31 +24,56 @@
     */
 
 /**
-    * @name dxDiagramAddShapeRequestOperationArgs
+    * @name dxDiagramRequestOperationAddShapeArgs
     * @type object
     */
 
 /**
-    * @name dxDiagramAddShapeFromToolboxRequestOperationArgs
+    * @name dxDiagramRequestOperationAddShapeFromToolboxArgs
     * @type object
     */
 
 /**
-    * @name dxDiagramDeleteShapeRequestOperationArgs
+    * @name dxDiagramRequestOperationDeleteShapeArgs
     * @type object
     */
 
 /**
-    * @name dxDiagramDeleteConnectorRequestOperationArgs
+    * @name dxDiagramRequestOperationDeleteConnectorArgs
     * @type object
     */
 
 /**
-    * @name dxDiagramChangeConnectionRequestOperationArgs
+    * @name dxDiagramRequestOperationChangeConnectionArgs
     * @type object
     */
 
 /**
-    * @name dxDiagramChangeConnectorPointsRequestOperationArgs
+    * @name dxDiagramRequestOperationChangeConnectorPointsArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationBeforeChangeShapeTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationChangeShapeTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationBeforeChangeConnectorTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationChangeConnectorTextArgs
+    * @type object
+    */
+
+/**
+    * @name dxDiagramRequestOperationResizeShapeArgs
     * @type object
     */

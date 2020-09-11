@@ -1,6 +1,5 @@
 import themeModule from '../../themes';
 const registerTheme = themeModule.registerTheme;
-const registerThemeAlias = themeModule.registerThemeAlias;
 const ACCENT_COLOR = '#3cbab2';
 const BACKGROUND_COLOR = '#f5f5f5';
 const TITLE_COLOR = '#28484f';
@@ -143,4 +142,4 @@ registerTheme({
     }
 }, 'generic.light');
 
-registerThemeAlias('generic.greenmist.compact', 'generic.greenmist');
+registerTheme({ name: 'generic.greenmist.compact' }, 'generic.greenmist');

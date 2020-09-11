@@ -23,8 +23,9 @@ $pivotgrid-area-data-image: null !default;
 $pivotgrid-dimension-image: null !default;
 $pivotgrid-hierarchy-image: null !default;
 
-@use "./mixins" as *;
-@use "./icons" as *;
+@use "../mixins" as *;
+@use "../icons" as *;
+@use "./common";
 
 $pivotgrid-drag-header-border: 1px solid $pivotgrid-drag-header-border-color;
 $pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color;
@@ -152,11 +153,6 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-column-header {
-    .dx-pivotgrid-fields-area {
-      margin-left: -5px;
-      padding-left: 5px;
-    }
-
     .dx-pivotgrid-fields-area-head {
       tr > td:first-child {
         padding-left: 0;
@@ -585,13 +581,6 @@ $pivotgrid-expand-icon-text-offset: 0;
     }
 
     .dx-column-header {
-      .dx-pivotgrid-fields-area {
-        margin-left: 0;
-        padding-left: 0;
-        margin-right: -5px;
-        padding-right: 5px;
-      }
-
       .dx-pivotgrid-fields-area-head {
         tr > td:first-child {
           padding-left: 2px;

@@ -331,6 +331,14 @@ export interface dxFileManagerToolbar {
 
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
     /**
+     * @docid dxFileManagerToolbarItem.icon
+     * @type string
+     * @default ""
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    icon?: string;
+    /**
      * @docid dxFileManagerToolbarItem.location
      * @default "before"
      * @prevFileNamespace DevExpress.ui

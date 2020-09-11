@@ -413,7 +413,7 @@ export default {
 
                     this.setRowFocusType();
 
-                    this._focusedCellPosition = { };
+                    this._focusedCellPosition = {};
                     if(isDefined(rowIndex)) {
                         this._focusedCellPosition.rowIndex = this.option('focusedRowIndex');
                     }
@@ -748,18 +748,20 @@ export default {
                     }
                 },
                 _setFocusedRowElementTabIndex: function() {
-                    const that = this;
-                    const focusedRowKey = that.option('focusedRowKey');
-                    const tabIndex = that.option('tabIndex') || 0;
-                    const dataController = that._dataController;
+                    const focusedRowKey = this.option('focusedRowKey');
+                    const tabIndex = this.option('tabIndex') || 0;
+                    const dataController = this._dataController;
+                    const columnsController = this._columnsController;
                     let rowIndex = dataController.getRowIndexByKey(focusedRowKey);
-                    let columnIndex = that.option('focusedColumnIndex');
-                    const $row = that._findRowElementForTabIndex();
+                    let columnIndex = this.option('focusedColumnIndex');
+                    const $row = this._findRowElementForTabIndex();
 
-                    that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
-                        that.scrollToElementVertically(that._findRowElementForTabIndex());
-                        that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                    };
+                    if(!isDefined(this._scrollToFocusOnResize)) {
+                        this._scrollToFocusOnResize = () => {
+                            this.scrollToElementVertically(this._findRowElementForTabIndex());
+                            this.resizeCompleted.remove(this._scrollToFocusOnResize);
+                        };
+                    }
 
                     $row.attr('tabIndex', tabIndex);
 
@@ -769,13 +771,14 @@ export default {
                         }
 
                         rowIndex += dataController.getRowIndexOffset();
-                        that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
+                        columnIndex += columnsController.getColumnIndexOffset();
+                        this.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
                         const dataSource = dataController.dataSource();
                         const operationTypes = dataSource && dataSource.operationTypes();
                         if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {
-                            that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                            that.resizeCompleted.add(that._scrollToFocusOnResize);
+                            this.resizeCompleted.remove(this._scrollToFocusOnResize);
+                            this.resizeCompleted.add(this._scrollToFocusOnResize);
                         }
                     }
                 },

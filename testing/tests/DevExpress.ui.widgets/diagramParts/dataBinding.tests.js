@@ -397,6 +397,44 @@ QUnit.module('DataBinding', {
         assert.equal(nodes[1].parentId, null);
     });
 
+    test('reloadContent should call onRequestLayoutUpdate (update on events)', function(assert) {
+        const onRequestLayoutUpdate = sinon.spy();
+        const nodes = [
+            {
+                id: '1',
+                text: 'text1'
+            }
+        ];
+        const nodeStore = new ArrayStore({
+            key: 'id',
+            data: nodes,
+            onUpdating: (key, values) => {
+                values.textStyle = 'font-family: Arial Black1';
+            }
+        });
+
+        this.instance.option({
+            nodes: {
+                dataSource: new DataSource({
+                    store: nodeStore,
+                    paginate: false
+                }),
+                textStyleExpr: 'textStyle'
+            },
+            onRequestLayoutUpdate
+        });
+
+        assert.equal(this.instance._diagramInstance.model.items.length, 1);
+        assert.notOk(onRequestLayoutUpdate.called);
+
+        this.instance._diagramInstance.selection.set(['0']);
+        const fontSelectBox = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-selectbox').eq(0).dxSelectBox('instance');
+        fontSelectBox.option('value', 'Arial Black');
+        assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial Black');
+        this.clock.tick(100);
+        assert.ok(onRequestLayoutUpdate.called);
+    });
+
     test('reloadContent should update data correctly (external update)', function(assert) {
         const nodes = [
             {
@@ -463,6 +501,38 @@ QUnit.module('DataBinding', {
         assert.equal(nodes[1].textStyle, 'font-family: Arial Black');
     });
 
+    test('reloadContent should call onRequestLayoutUpdate (external update)', function(assert) {
+        const onRequestLayoutUpdate = sinon.spy();
+        const nodes = [
+            {
+                id: '1',
+                text: 'text1'
+            }
+        ];
+        const nodeStore = new ArrayStore({
+            key: 'id',
+            data: nodes
+        });
+
+        this.instance.option({
+            nodes: {
+                dataSource: new DataSource({
+                    store: nodeStore,
+                    paginate: false
+                }),
+                textStyleExpr: 'textStyle'
+            },
+            onRequestLayoutUpdate
+        });
+
+        assert.equal(this.instance._diagramInstance.model.items.length, 1);
+
+        nodeStore.push([{ type: 'update', key: '1', data: { 'textStyle': 'font-family: Arial Black' } }]);
+        assert.notOk(onRequestLayoutUpdate.called);
+        this.clock.tick(100);
+        assert.ok(onRequestLayoutUpdate.called);
+    });
+
     test('databinding should auto-size items if widthExpr is not specified or enableAutoSize = false', function(assert) {
         const store = new ArrayStore({
             key: 'id',
@@ -490,7 +560,7 @@ QUnit.module('DataBinding', {
             }
         });
         const defaultWidth = this.instance._diagramInstance.model.findShapeByDataKey('2').size.width;
-        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
 
         this.instance.option({
             nodes: {
@@ -508,10 +578,10 @@ QUnit.module('DataBinding', {
                 dataSource: dataSource,
                 textExpr: function(obj) { return obj.text; },
                 widthExpr: null,
-                autoSizeEnabled: false
+                autoSizeEnabled: true
             }
         });
 
-        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
     });
 });
