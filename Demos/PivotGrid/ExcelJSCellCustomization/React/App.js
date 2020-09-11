@@ -31,12 +31,12 @@ const dataSource = new PivotGridDataSource({
     dataType: 'date',
     area: 'column'
   }, {
-    caption: "Sales",
-    dataField: "amount",
-    dataType: "number",
-    summaryType: "sum",
-    format: "currency",
-    area: "data"
+    caption: 'Sales',
+    dataField: 'amount',
+    dataType: 'number',
+    summaryType: 'sum',
+    format: 'currency',
+    area: 'data'
   }],
   store: sales
 });
@@ -70,7 +70,7 @@ export default function App() {
     });
     e.cancel = true;
   }
-  
+
   function onCellPrepared({ cell, area, cellElement }) {
     cell.area = area;
 
@@ -81,40 +81,40 @@ export default function App() {
   }
 
   function isDataCell(cell) {
-    return (cell.area === "data" && cell.rowType === "D" && cell.columnType === "D");
+    return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
   }
 
   function isTotalCell(cell) {
-    return (cell.rowType === "T" || cell.type === "T" || cell.type === "GT" || cell.rowType === "GT" || cell.columnType === "GT");
+    return (cell.rowType === 'T' || cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'GT' || cell.columnType === 'GT');
   }
 
   function getExcelCellFormat({ fill, font, bold }) {
     return {
-      fill: { type: "pattern", pattern: "solid", fgColor: { argb: fill }},
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: fill } },
       font: { color: { argb: font }, bold }
     };
   }
 
   function getCssStyles({ fill, font, bold }) {
-    return { 
-      "background-color": `#${fill}`,
+    return {
+      'background-color': `#${fill}`,
       color: `#${font}`,
-      "font-weight": bold ? "bold" : undefined
+      'font-weight': bold ? 'bold' : undefined
     };
   }
 
   function getConditionalAppearance(cell) {
     if(isTotalCell(cell)) {
-      return { fill: "F2F2F2", font: "3F3F3F", bold: true };
+      return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
     } else {
       const { value } = cell;
       if(value < 20000) {
-        return { font: "9C0006", fill: "FFC7CE" };
+        return { font: '9C0006', fill: 'FFC7CE' };
       }
       if(value > 50000) {
-        return { font: "006100", fill: "C6EFCE" };
+        return { font: '006100', fill: 'C6EFCE' };
       }
-      return { font: "9C6500", fill: "FFEB9C" };
+      return { font: '9C6500', fill: 'FFEB9C' };
     }
   }
 
