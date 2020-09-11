@@ -527,10 +527,11 @@ QUnit.module('Horizontal scrolling', () => {
         });
         const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
         const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+        const scrollWidth = Math.round(scrollable.scrollWidth());
 
         assert.ok(!$button.dxButton('instance').option('disabled'));
 
-        scrollable.scrollTo(scrollable.scrollWidth() - scrollable.clientWidth());
+        scrollable.scrollTo(scrollWidth - scrollable.clientWidth());
         assert.ok($button.dxButton('instance').option('disabled'));
 
         scrollable.scrollTo(0);
@@ -652,7 +653,7 @@ QUnit.module('RTL', () => {
 
         const scrollable = $element.find('.dx-scrollable').dxScrollable('instance');
 
-        assert.equal(scrollable.scrollLeft(), Math.round(scrollable.scrollWidth() - scrollable.clientWidth()), 'items are scrolled');
+        assert.equal(Math.round(scrollable.scrollLeft()), Math.round(scrollable.scrollWidth() - scrollable.clientWidth()), 'items are scrolled');
     });
 });
 
