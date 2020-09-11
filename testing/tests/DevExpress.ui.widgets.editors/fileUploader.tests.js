@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'common.css!';
+import 'generic_light.css!';
 
 const { test } = QUnit;
 
@@ -1212,6 +1213,202 @@ QUnit.module('allowCanceling', moduleConfig, () => {
 
         assert.deepEqual(fileUploader.option('value'), [newFile], 'file list was cleared');
     });
+
+    QUnit.test('cancel of all files with abortUpload method', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+    });
+
+    QUnit.test('cancel of specific file by file from value option with abortUpload method', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        const instance = $element.dxFileUploader('instance');
+        const files = [fakeFile, fakeFile1];
+
+        simulateFileChoose($element, files);
+
+        instance.upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload(1);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
+        assert.strictEqual(onUploadAbortedSpy.args[0][0].file.name, files[1].name, 'correct file is cancelled');
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+        assert.strictEqual(onUploadedSpy.args[0][0].file.name, files[0].name, 'correct file is uploaded');
+    });
+
+    QUnit.test('cancel of specific file by file index with abortUpload method', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        const instance = $element.dxFileUploader('instance');
+        const files = [fakeFile, fakeFile1];
+
+        simulateFileChoose($element, files);
+
+        instance.upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload(instance.option('value[1]'));
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
+        assert.strictEqual(onUploadAbortedSpy.args[0][0].file.name, files[1].name, 'correct file is cancelled');
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+        assert.strictEqual(onUploadedSpy.args[0][0].file.name, files[0].name, 'correct file is uploaded');
+    });
+
+    QUnit.test('useButtons: cancel of a file with abortUpload method leads to resetting file state', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+
+        assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        const $progressBar = $element.find('.dx-progressbar');
+        const $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('readyToUploadMessage'), 'status message is returned to original state');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($fileStatusMessage.eq(1).text(), instance.option('readyToUploadMessage'), 'status message is return to original state');
+        assert.ok($fileStatusMessage.eq(1).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+        assert.ok($uploadButton.eq(1).is(':visible'), '\'upload\' button 1 is visible');
+        assert.notOk($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button 1 is enabled');
+        assert.ok($uploadButton.eq(2).is(':visible'), '\'upload\' button 2 is visible');
+        assert.notOk($uploadButton.eq(2).hasClass('dx-state-disabled'), '\'upload\' button 2 is enabled');
+    });
+
+    QUnit.test('instantly: cancel of a file with abortUpload method sets file in aborted state', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        const instance = $element.dxFileUploader('instance');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+
+        assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        const $progressBar = $element.find('.dx-progressbar');
+
+        assert.strictEqual($($fileStatusMessage.get(0)).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
+        assert.ok($($fileStatusMessage.get(0)).is(':visible'), 'status message is visible');
+        assert.strictEqual($($fileStatusMessage.get(1)).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
+        assert.ok($($fileStatusMessage.get(1)).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+    });
+
+    QUnit.test('useButtons: upload can be restarted with button after abortUpload() called', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+
+        assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+
+        onUploadAbortedSpy.reset();
+        onUploadedSpy.reset();
+
+        let $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        let $progressBar = $element.find('.dx-progressbar');
+        let $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+
+        assert.strictEqual($($fileStatusMessage.eq(0)).text(), instance.option('readyToUploadMessage'), 'status message is returned to original state');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+        assert.ok($uploadButton.eq(1).is(':visible'), '\'upload\' button is visible');
+        assert.notOk($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button is enabled');
+
+        $uploadButton.eq(1).trigger('click');
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+
+        assert.ok(onUploadAbortedSpy.notCalled, 'upload is not cancelled');
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+
+        onUploadAbortedSpy.reset();
+        onUploadedSpy.reset();
+
+        $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        $progressBar = $element.find('.dx-progressbar');
+        $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+
+        assert.strictEqual($($fileStatusMessage.eq(0)).text(), instance.option('uploadedMessage'), 'has uploaded status message');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+        assert.notOk($uploadButton.eq(1).is(':visible'), '\'upload\' button is invisible');
+        assert.ok($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button is disabled');
+    });
+
 });
 
 QUnit.module('autoUpload', moduleConfig, () => {
