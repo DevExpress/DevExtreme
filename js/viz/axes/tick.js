@@ -30,10 +30,9 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
     }
 
     function createLabelHint(tick, range) {
-        const label = tick.templateContainer || tick.label;
         const labelHint = axis.formatHint(tick.value, labelOptions, range);
         if(isDefined(labelHint) && labelHint !== '') {
-            label.setTitle(labelHint);
+            tick._getContentContainer().setTitle(labelHint);
         }
     }
 
@@ -177,13 +176,17 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                         createLabelHint(this, range);
                     }
                 }
-                const containerForData = (this.templateContainer || this.label);
+                const containerForData = this._getContentContainer();
                 containerForData && containerForData.data('chart-data-argument', this.value);
                 this.templateContainer && createLabelHint(this, range);
             },
 
             getTemplateDeferred() {
                 return this._templateDef;
+            },
+
+            _getContentContainer() {
+                return this.templateContainer || this.label;
             },
 
             fadeOutElements() {
@@ -193,7 +196,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     partitionDuration: 0.5
                 };
 
-                if(this.label || this.templateContainer) {
+                if(this._getContentContainer()) {
                     this._fadeOutLabel();
                 }
                 if(this.grid) {
@@ -213,7 +216,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                         partitionDuration: 0.5
                     });
 
-                (this.label || this.templateContainer).append(group);
+                this._getContentContainer().append(group);
             },
 
             _fadeOutLabel() {
@@ -223,16 +226,21 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     partitionDuration: 0.5
                 }).append(axis._axisElementsGroup).toBackground();
 
-                (this.label || this.templateContainer).append(group);
+                this._getContentContainer().append(group);
             },
 
             _getTemplateCoords() {
-                return axis._getLabelAdjustedCoord(this, (axis._constantLabelOffset || 0) + (tick.labelOffset || 0), undefined, this.templateContainer.getBBox());
+                return axis._getLabelAdjustedCoord(this,
+                    (axis._constantLabelOffset || 0) + (tick.labelOffset || 0),
+                    undefined,
+                    undefined,
+                    this.templateContainer.getBBox()
+                );
             },
 
             updateLabelPosition: function(animate) {
                 const templateContainer = this.templateContainer;
-                if(!this.label && !templateContainer) {
+                if(!this._getContentContainer()) {
                     return;
                 }
                 if(animate && this._storedLabelsCoords) {
@@ -296,8 +304,8 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             },
 
             removeLabel() {
-                this.label && this.label.remove();
-                this.templateContainer && this.templateContainer.remove();
+                const contentContainer = this._getContentContainer();
+                contentContainer && contentContainer.remove();
                 this._templateDef && this._templateDef.reject();
                 this._templateDef = this.templateContainer = this.label = null;
             }

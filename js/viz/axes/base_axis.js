@@ -1992,7 +1992,6 @@ Axis.prototype = {
 
         offset = that._adjustDateMarkers(offset);
         that._adjustTitle(offset);
-        that.__rendered = true;
     },
 
     getTemplatesDef() {
