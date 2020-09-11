@@ -1186,8 +1186,9 @@ export default {
                             const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
                             const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
                             const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
+                            const isEditColumnName = args.fullName?.indexOf('editing.editColumnName') === 0;
                             const isChanges = args.fullName?.indexOf('editing.changes') === 0;
-                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges;
+                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges && !isEditColumnName;
 
                             if(needReinit) {
                                 this.reinit(ignoreColumnOptionNames);

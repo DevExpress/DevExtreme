@@ -729,19 +729,19 @@ export interface GridBaseEditing {
      */
     changes?: Array<any>;
     /**
-    * @docid GridBaseOptions.editing.editColumnName
-    * @type string
-    * @default null
+     * @docid GridBaseOptions.editing.editColumnName
+     * @type string
+     * @default null
      * @fires GridBaseOptions.onOptionChanged
-    * @public
+     * @public
     */
     editColumnName?: string;
     /**
-    * @docid GridBaseOptions.editing.editRowKey
-    * @type any
-    * @default null
+     * @docid GridBaseOptions.editing.editRowKey
+     * @type any
+     * @default null
      * @fires GridBaseOptions.onOptionChanged
-    * @public
+     * @public
     */
     editRowKey?: any;
     /**

@@ -67,7 +67,10 @@ const ValidatingController = modules.Controller.inherit((function() {
         init: function() {
             this._editingController = this.getController('editing');
             this.createAction('onRowValidating');
-            this._validationState = [];
+
+            if(!this._validationState) {
+                this._validationState = [];
+            }
         },
 
         _rowIsValidated: function(editData) {
