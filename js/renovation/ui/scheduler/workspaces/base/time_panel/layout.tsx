@@ -16,7 +16,7 @@ import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 
 export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
   <Table
-      // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     isVirtual={viewModel.isVirtual}
     topVirtualRowHeight={viewModel.topVirtualRowHeight}
