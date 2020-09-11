@@ -375,6 +375,10 @@ export default class dxDiagram extends Widget {
     import(data: string, updateExistingItemsOnly?: boolean): void;
 }
 
+/**
+ * @docid dxDiagramConnector
+ * @inherits dxDiagramItem
+ */
 export interface dxDiagramConnector extends dxDiagramItem {
     /**
      * @docid dxDiagramConnector.fromKey
@@ -399,6 +403,9 @@ export interface dxDiagramConnector extends dxDiagramItem {
     toKey?: any;
 }
 
+/**
+ * @docid dxDiagramItem
+ */
 export interface dxDiagramItem {
     /**
      * @docid dxDiagramItem.dataItem
@@ -423,6 +430,10 @@ export interface dxDiagramItem {
     itemType?: 'shape' | 'connector';
 }
 
+/**
+ * @docid dxDiagramShape
+ * @inherits dxDiagramItem
+ */
 export interface dxDiagramShape extends dxDiagramItem {
     /**
      * @docid dxDiagramShape.text
@@ -440,6 +451,9 @@ export interface dxDiagramShape extends dxDiagramItem {
     type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
 }
 
+/**
+ * @docid dxDiagramCustomCommand
+ */
 export interface dxDiagramCustomCommand {
     /**
      * @docid dxDiagramCustomCommand.name
@@ -471,6 +485,9 @@ export interface dxDiagramCustomCommand {
     items?: Array<dxDiagramCustomCommand>;
 }
 
+/**
+ * @docid dxDiagramRequestOperationAddShapeArgs
+ */
 export interface dxDiagramRequestOperationAddShapeArgs {
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.shape
@@ -481,22 +498,22 @@ export interface dxDiagramRequestOperationAddShapeArgs {
     shape?: dxDiagramShape;
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.position
-     * @name dxDiagramRequestOperationAddShapeArgs.position
      * @type Object
      */
     position?: Object;
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.position.x
-     * @name dxDiagramRequestOperationAddShapeArgs.position.x
      * @type Number
      */
     /**
      * @docid dxDiagramRequestOperationAddShapeArgs.position.y
-     * @name dxDiagramRequestOperationAddShapeArgs.position.y
      * @type Number
      */
 }
 
+/**
+ * @docid dxDiagramRequestOperationAddShapeFromToolboxArgs
+ */
 export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
   /**
    * @docid dxDiagramRequestOperationAddShapeFromToolboxArgs.shapeType
@@ -507,6 +524,9 @@ export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
   shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
 }
 
+/**
+ * @docid dxDiagramRequestOperationDeleteShapeArgs
+ */
 export interface dxDiagramRequestOperationDeleteShapeArgs {
   /**
    * @docid dxDiagramRequestOperationDeleteShapeArgs.shape
@@ -517,6 +537,9 @@ export interface dxDiagramRequestOperationDeleteShapeArgs {
   shape?: dxDiagramShape;
 }
 
+/**
+ * @docid dxDiagramRequestOperationDeleteConnectorArgs
+ */
 export interface dxDiagramRequestOperationDeleteConnectorArgs {
   /**
    * @docid dxDiagramRequestOperationDeleteConnectorArgs.connector
@@ -527,6 +550,9 @@ export interface dxDiagramRequestOperationDeleteConnectorArgs {
   connector?: dxDiagramConnector;
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeConnectionArgs
+ */
 export interface dxDiagramRequestOperationChangeConnectionArgs {
   /**
    * @docid dxDiagramRequestOperationChangeConnectionArgs.shape
@@ -558,6 +584,9 @@ export interface dxDiagramRequestOperationChangeConnectionArgs {
   connectorPosition?: 'start' | 'end';
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeConnectorPointsArgs
+ */
 export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
   /**
    * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.connector
@@ -568,38 +597,35 @@ export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
   connector?: dxDiagramConnector;
   /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints
     * @type Array<Object>
     */
    newPoints?: Array<Object>;
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.x
     * @type Number
     */
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints.y
     * @type Number
     */
   /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints
     * @type Array<Object>
     */
    oldPoints?: Array<Object>;
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.x
     * @type Number
     */
    /**
     * @docid dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
-    * @name dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints.y
     * @type Number
     */
 }
 
+/**
+ * @docid dxDiagramRequestOperationBeforeChangeShapeTextArgs
+ */
 export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
   /**
    * @docid dxDiagramRequestOperationBeforeChangeShapeTextArgs.shape
@@ -610,6 +636,9 @@ export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
   shape?: dxDiagramShape;
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeShapeTextArgs
+ */
 export interface dxDiagramRequestOperationChangeShapeTextArgs {
   /**
    * @docid dxDiagramRequestOperationChangeShapeTextArgs.shape
@@ -627,6 +656,9 @@ export interface dxDiagramRequestOperationChangeShapeTextArgs {
   text?: string;
 }
 
+/**
+ * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs
+ */
 export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
   /**
    * @docid dxDiagramRequestOperationBeforeChangeConnectorTextArgs.connector
@@ -644,6 +676,9 @@ export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
   index?: number;
 }
 
+/**
+ * @docid dxDiagramRequestOperationChangeConnectorTextArgs
+ */
 export interface dxDiagramRequestOperationChangeConnectorTextArgs {
   /**
    * @docid dxDiagramRequestOperationChangeConnectorTextArgs.connector
@@ -668,6 +703,9 @@ export interface dxDiagramRequestOperationChangeConnectorTextArgs {
   text?: string;
 }
 
+/**
+ * @docid dxDiagramRequestOperationResizeShapeArgs
+ */
 export interface dxDiagramRequestOperationResizeShapeArgs {
   /**
    * @docid dxDiagramRequestOperationResizeShapeArgs.shape
@@ -678,34 +716,28 @@ export interface dxDiagramRequestOperationResizeShapeArgs {
   shape?: dxDiagramShape;
   /**
     * @docid dxDiagramRequestOperationResizeShapeArgs.newSize
-    * @name dxDiagramRequestOperationResizeShapeArgs.newSize
     * @type Array<Object>
     */
    newSize?: Object;
    /**
     * @docid dxDiagramRequestOperationResizeShapeArgs.newSize.width
-    * @name dxDiagramRequestOperationResizeShapeArgs.newSize.width
     * @type Number
     */
    /**
     * @docid dxDiagramRequestOperationResizeShapeArgs.newSize.height
-    * @name dxDiagramRequestOperationResizeShapeArgs.newSize.height
     * @type Number
     */
   /**
     * @docid dxDiagramRequestOperationResizeShapeArgs.oldSize
-    * @name dxDiagramRequestOperationResizeShapeArgs.oldSize
     * @type Array<Object>
     */
    oldSize?: Object;
    /**
     * @docid dxDiagramRequestOperationResizeShapeArgs.oldSize.width
-    * @name dxDiagramRequestOperationResizeShapeArgs.oldSize.width
     * @type Number
     */
    /**
     * @docid dxDiagramRequestOperationResizeShapeArgs.oldSize.height
-    * @name dxDiagramRequestOperationResizeShapeArgs.oldSize.height
     * @type Number
     */
 }
