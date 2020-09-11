@@ -7,7 +7,11 @@ class DateAdapterCore {
         this._source = new Date(source.getTime ? source.getTime() : source);
     }
 
-    get source() {
+    get source() { // TODO
+        return this._source;
+    }
+
+    result() {
         return this._source;
     }
 

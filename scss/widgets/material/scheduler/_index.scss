@@ -53,10 +53,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
 
-.dx-scheduler-scrollable-fixed-content {
-  height: auto;
-}
-
 .dx-scheduler-time-panel-cell {
   height: $material-scheduler-workspace-date-table-cell-height;
 

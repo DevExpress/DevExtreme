@@ -1612,6 +1612,7 @@ Axis.prototype = {
 
         that._ticksToRemove = Object.keys(majorTicksByValues)
             .map(k => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
+        that._ticksToRemove.forEach(t => t.label?.removeTitle());
 
         if(ticks.breaks) {
             that._seriesData.breaks = ticks.breaks;
