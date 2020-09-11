@@ -1057,7 +1057,6 @@ class FileUploader extends Editor {
     }
 
     _initStatusMessage(file) {
-        file.$statusMessage.text('');
         file.$statusMessage.css('display', 'none');
     }
 
@@ -1366,12 +1365,12 @@ class FileUploadStrategyBase {
     }
 
     _prepareFileBeforeUpload(file) {
-        file.isAborted = false;
         if(file.$file) {
             this.fileUploader._createFileProgressBar(file);
         }
 
         if(file.isInitialized) {
+            file.isAborted = false;
             return;
         }
 
