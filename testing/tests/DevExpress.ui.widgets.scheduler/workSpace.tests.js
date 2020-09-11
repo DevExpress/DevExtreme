@@ -3853,7 +3853,7 @@ QUnit.module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
+                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0
