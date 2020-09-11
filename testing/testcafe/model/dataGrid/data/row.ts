@@ -1,8 +1,8 @@
+import { ClientFunction } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
 import CommandCell from '../command-cell';
-import { ClientFunction } from 'testcafe';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',
@@ -54,7 +54,7 @@ export default class DataRow extends FocusableElement {
   }
 
   getOffset(): Promise<any> {
-    const element = this.element;
+    const { element } = this;
 
     return ClientFunction(
       () => ($(element()) as any).offset(),

@@ -150,7 +150,7 @@ test('The cross-component drag and drop rows should work when there are fixed co
     .expect(dataRow.element.exists)
     .ok()
     .expect(getPlaceholderOffset())
-    .eql(dataRowOffset)
+    .eql(dataRowOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
 
