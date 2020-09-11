@@ -27,7 +27,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
             // TODO: implement this when bug in Vue is fixed
             // But since we do not use it for now, it can be commented
             // dateCellTemplate={viewModel.props.dateCellTemplate}
-            key={getKeyByDateAndGroup(startDate, groups)}
+            key={getKeyByDateAndGroup(startDate, groupIndex)}
           />
         ))}
       </Row>

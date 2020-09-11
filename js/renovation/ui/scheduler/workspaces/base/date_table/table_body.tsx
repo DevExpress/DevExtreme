@@ -26,7 +26,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
           )}
           {dateTable.map((cellsRow, rowIndex) => (
             <DateTableRow
-              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groupIndex)}
             >
               {cellsRow.map(({
                 startDate,
@@ -44,7 +44,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                   groupIndex={cellGroupIndex}
                   index={index}
                   dataCellTemplate={viewModel.props.dataCellTemplate}
-                  key={getKeyByDateAndGroup(startDate, groups)}
+                  key={getKeyByDateAndGroup(startDate, cellGroupIndex)}
                 />
               ))}
             </DateTableRow>

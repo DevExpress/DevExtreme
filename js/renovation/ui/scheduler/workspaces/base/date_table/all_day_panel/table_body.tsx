@@ -27,7 +27,7 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
         groupIndex={cellGroupIndex}
         index={cellIndex}
         dataCellTemplate={viewModel.props.dataCellTemplate}
-        key={getKeyByDateAndGroup(startDate, groups)}
+        key={getKeyByDateAndGroup(startDate, cellGroupIndex)}
       />
     ))}
   </Row>

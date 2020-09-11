@@ -49,7 +49,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
                 return (
                   <Row
                     className="dx-scheduler-time-panel-row"
-                    key={getKeyByDateAndGroup(startDate, groups)}
+                    key={getKeyByDateAndGroup(startDate, groupIndex)}
                   >
                     <Cell
                       startDate={startDate}
