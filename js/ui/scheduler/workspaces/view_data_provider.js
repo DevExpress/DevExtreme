@@ -336,7 +336,10 @@ export default class ViewDataProvider {
     }
 
     findCellPositionInMap(groupIndex, startDate, isAllDay) {
-        const startTime = startDate.getTime();
+        const startTime = isAllDay
+            ? dateUtils.trimTime(startDate).getTime()
+            : startDate.getTime();
+
         const isStartTimeInCell = cellData => {
             const cellStartTime = cellData.startDate.getTime();
             const cellEndTime = cellData.endDate.getTime();
