@@ -19,6 +19,7 @@ import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
 import noop from '../utils/noop';
+import { ValidationMessage } from './validationMessage';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -83,6 +84,18 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
+      {!viewModel.props.isValid && viewModel.props.validationErrors?.length
+                && (
+                <ValidationMessage
+                  validationErrors={viewModel.validationErrors}
+                  mode={viewModel.props.validationMessageMode}
+                  positionRequest="below"
+                  rtlEnabled={viewModel.props.rtlEnabled}
+                  target={viewModel.target}
+                  boundary={viewModel.target}
+                  container={viewModel.target}
+                />
+                )}
     </Widget>
   );
 };
@@ -144,6 +157,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() inputRef!: HTMLInputElement;
 
   @Ref() widgetRef!: Widget;
+
+  get target(): HTMLDivElement {
+    return this.widgetRef?.getRootElement();
+  }
 
   @Method()
   focus(): void {
@@ -217,6 +234,15 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
     };
+  }
+
+  get validationErrors(): object[] | null | undefined {
+    const { validationErrors, validationError } = this.props;
+    let allValidationErrors = validationErrors;
+    if (!allValidationErrors && validationError) {
+      allValidationErrors = [validationError];
+    }
+    return allValidationErrors;
   }
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
