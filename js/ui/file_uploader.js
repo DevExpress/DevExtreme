@@ -786,7 +786,7 @@ class FileUploader extends Editor {
         this._uploadFiles();
     }
 
-    _shouldDragOverBeRendered() {
+    _isDragDropEnabled() {
         return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
     }
 
@@ -813,7 +813,7 @@ class FileUploader extends Editor {
     }
 
     _displayInputContainerIfNeeded() {
-        const displayProperty = this._shouldDragOverBeRendered() ? '' : 'none';
+        const displayProperty = this._isDragDropEnabled() ? '' : 'none';
         this._$inputContainer.css('display', displayProperty);
     }
 
@@ -850,7 +850,7 @@ class FileUploader extends Editor {
         const target = isCustomTarget ? $(this.option('dropZone')) : this._getValidationMessageTarget();
         eventsEngine.off(target, '.' + this.NAME);
 
-        if(!this._shouldDragOverBeRendered()) {
+        if(!this._isDragDropEnabled()) {
             return;
         }
 
