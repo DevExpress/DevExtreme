@@ -7727,6 +7727,10 @@ declare module DevExpress.ui {
          */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /**
+         * <-dxGantt.Options.taskTooltipContentTemplate->
+         */
+        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
+        /**
          * <-dxGantt.Options.tasks->
          */
         tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
@@ -7734,10 +7738,6 @@ declare module DevExpress.ui {
          * <-dxGantt.Options.toolbar->
          */
         toolbar?: dxGanttToolbar;
-        /**
-         * <-dxGantt.Options.tooltipTemplate->
-         */
-        tooltipTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
         /**
          * <-dxGantt.Options.validation->
          */
