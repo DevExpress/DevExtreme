@@ -12061,9 +12061,9 @@ QUnit.module('Editing with validation', {
         const that = this;
         let $cellWithRevertButton;
 
-        this.editorFactoryController._showRevertButton = function($cell, $targetElement) {
+        this.editorFactoryController._showRevertButton = function($cell) {
             $cellWithRevertButton = $cell;
-            $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
+            $.proxy(showRevertButton, that.editorFactoryController)($cell);
         };
 
         this.editCell(0, 2);
@@ -12110,9 +12110,9 @@ QUnit.module('Editing with validation', {
         const that = this;
         let $cellWithRevertButton;
 
-        this.editorFactoryController._showRevertButton = function($cell, $targetElement) {
+        this.editorFactoryController._showRevertButton = function($cell) {
             $cellWithRevertButton = $cell;
-            $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
+            $.proxy(showRevertButton, that.editorFactoryController)($cell);
         };
 
         this.editCell(0, 2);
@@ -12349,9 +12349,9 @@ QUnit.module('Editing with validation', {
         const that = this;
         let $cellWithRevertButton;
 
-        this.editorFactoryController._showRevertButton = function($cell, $targetElement) {
+        this.editorFactoryController._showRevertButton = function($cell) {
             $cellWithRevertButton = $cell;
-            $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
+            $.proxy(showRevertButton, that.editorFactoryController)($cell);
         };
         this.editCell(0, 1);
 
