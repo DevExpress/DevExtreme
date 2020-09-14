@@ -5,7 +5,7 @@ const remoteSrc = require('gulp-remote-src');
 let tzData = [];
 
 try {
-    tzData = require('../../artifacts/transpiled/ui/scheduler/timezones/ui.scheduler.timezones_data').zones;
+    tzData = require('../../artifacts/transpiled/ui/scheduler/timezones/ui.scheduler.timezones_data').zones; // eslint-disable-line node/no-missing-require
 } catch(e) {
     if(e instanceof Error && e.code === 'MODULE_NOT_FOUND') {
         console.log('Can not load ui.scheduler.timezones_data');
