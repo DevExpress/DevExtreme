@@ -227,7 +227,7 @@ export default class dxHtmlEditor extends Editor {
     getLength(): number;
     /**
      * @docid dxHtmlEditorMethods.getModule
-     * @publicName getModule()
+     * @publicName getModule(moduleName)
      * @param1 moduleName:string
      * @return Object
      * @prevFileNamespace DevExpress.ui
