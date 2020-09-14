@@ -376,7 +376,7 @@ class FileUploader extends Editor {
 
     _render() {
         this._preventRecreatingFiles = false;
-        this._attachDragEventHandlers(this._getValidationMessageTarget());
+        this._attachDragEventHandlers(this._$inputWrapper);
         this._attachDragEventHandlers(this.option('dropZone'));
 
         this._renderFiles();
@@ -854,16 +854,12 @@ class FileUploader extends Editor {
     }
 
     _attachDragEventHandlers(target) {
-        if(!isDefined(target)) {
+        if(!isDefined(target) || !this._isDragDropEnabled()) {
             return;
         }
-        const isCustomTarget = target !== this._getValidationMessageTarget();
+        const isCustomTarget = target !== this._$inputWrapper;
         this._detachDragEventHandlers(target);
         target = $(target);
-
-        if(!this._isDragDropEnabled()) {
-            return;
-        }
 
         this._dragEventsTargets = [];
 
@@ -1160,16 +1156,12 @@ class FileUploader extends Editor {
         this._updateTotalProgress(this._getTotalFilesSize(), this._getTotalLoadedFilesSize());
     }
 
-    _getValidationMessageTarget() {
-        return this._$inputWrapper;
-    }
-
     _updateReadOnlyState() {
         const readOnly = this.option('readOnly');
         this._selectButton.option('disabled', readOnly);
         this._files.forEach(file => file.cancelButton?.option('disabled', readOnly));
         this._displayInputContainerIfNeeded();
-        this._attachDragEventHandlers(this._getValidationMessageTarget());
+        this._attachDragEventHandlers(this._$inputWrapper);
     }
 
     _optionChanged(args) {
@@ -1283,7 +1275,7 @@ class FileUploader extends Editor {
                 this._renderInput();
                 break;
             case 'useDragOver':
-                this._attachDragEventHandlers(this._getValidationMessageTarget());
+                this._attachDragEventHandlers(this._$inputWrapper);
                 break;
             case 'nativeDropSupported':
                 this._invalidate();
