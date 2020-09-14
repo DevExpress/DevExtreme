@@ -367,7 +367,7 @@ function checkStackedPoints(assert, points1, points2, points3) {
             const valueType = (value >= 0) ? 'positive' : 'negative';
             const currentBound = bound[valueType][i];
 
-            assert.strictEqual(points2[i].correctedValue && points2[i].correctedValue.valueOf(), point.value !== null ? currentBound : undefined, 'Value should be corrected with first series values');
+            assert.strictEqual(points2[i].correctedValue && points2[i].correctedValue.valueOf(), point.value !== null && point.value !== 0 ? currentBound : undefined, 'Value should be corrected with first series values');
 
             bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
         });
@@ -378,7 +378,7 @@ function checkStackedPoints(assert, points1, points2, points3) {
             const valueType = (value >= 0) ? 'positive' : 'negative';
             const currentBound = bound[valueType][i];
 
-            assert.strictEqual(points3[i].correctedValue && points3[i].correctedValue.valueOf(), point.value !== null ? currentBound : undefined, 'Value should be corrected with first series values');
+            assert.strictEqual(points3[i].correctedValue && points3[i].correctedValue.valueOf(), point.value !== null && point.value !== 0 ? currentBound : undefined, 'Value should be corrected with first series values');
 
             bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
         });
@@ -2725,6 +2725,28 @@ QUnit.test('Set three series. inverted', function(assert) {
     checkSeries(assert, series1, expectedWidth, expectedOffset);
     checkFullStackedPoints(assert, points1, points2);
     checkFullStackedPoints(assert, points3);
+});
+
+QUnit.test('Three series with zero values in stack, T925244', function(assert) {
+    const points1 = pointsForStacking.points1();
+    const points2 = pointsForStacking.points2();
+    const points3 = pointsForStacking.points3();
+
+    points1[1] = points2[1] = points3[1] = new MockPoint({ argument: 'Second', value: 0 });
+
+    const series1 = createSeries({
+        points: points1,
+    });
+    const series2 = createSeries({
+        points: points2,
+    });
+    const series3 = createSeries({
+        points: points3,
+    });
+    const series = [series1, series2, series3];
+    createSeriesFamily('fullstackedbar', series);
+
+    checkFullStackedPoints(assert, points1, points2, points3);
 });
 
 QUnit.module('Full Stacked Bar series. Negative values');

@@ -6,6 +6,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import translator from 'animation/translator';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,

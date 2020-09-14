@@ -3,9 +3,10 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
-import { getKeyByDateAndGroup } from '../../utils';
+import { getKeyByDateAndGroup, isVerticalGroupOrientation } from '../../utils';
+import { GroupOrientation } from '../../../types.d';
 
-export const viewFunction = (viewModel: HeaderPanelLayout) => (
+export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
   <table
     className={`dx-scheduler-header-panel ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -14,12 +15,18 @@ export const viewFunction = (viewModel: HeaderPanelLayout) => (
     <thead>
       <Row>
         {viewModel.props.viewCellsData![0].map(({
-          startDate, endDate, today, groups,
+          startDate, endDate, today, groups, groupIndex, index,
         }) => (
           <viewModel.props.cellTemplate
             startDate={startDate}
             endDate={endDate}
+            groups={!viewModel.isVerticalGroupOrientation ? groups : undefined}
+            groupIndex={!viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
             today={today}
+            index={index}
+            // TODO: implement this when bug in Vue is fixed
+            // But since we do not use it for now, it can be commented
+            // dateCellTemplate={viewModel.props.dateCellTemplate}
             key={getKeyByDateAndGroup(startDate, groups)}
           />
         ))}
@@ -34,11 +41,21 @@ export class HeaderPanelLayoutProps {
 
   @OneWay() viewCellsData?: ViewCellData[][] = [[]];
 
+  @OneWay() groupOrientation?: GroupOrientation;
+
   @Template() cellTemplate?: any;
+
+  @Template() dateCellTemplate?: any;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {}
+export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {
+  get isVerticalGroupOrientation(): boolean {
+    const { groupOrientation } = this.props;
+
+    return isVerticalGroupOrientation(groupOrientation);
+  }
+}

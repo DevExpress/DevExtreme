@@ -208,10 +208,6 @@ QUnit.test('format numbers in exponential notation', function(assert) {
     this.testTickLabelFormat(assert, [1.03e-7], 2e-10, ['1.030E-7']);
 });
 
-QUnit.test('format float number. tickInterval = 2.5', function(assert) {
-    this.testTickLabelFormat(assert, [18.5], 2.5, ['18.5']);
-});
-
 QUnit.test('formatting logarithmic ticks', function(assert) {
     this.testFormat(assert, {
         type: 'logarithmic',
@@ -220,7 +216,7 @@ QUnit.test('formatting logarithmic ticks', function(assert) {
         label: {
             visible: true
         }
-    }, [0.00001, 0.0001, 0.001, 0.01, 0.1, 0, 1, 10, 100, 1000, 10000, 1e18 ], 1,
+    }, [0.00000999999999, 0.0000999999999, 0.000999999999, 0.00999999999, 0.0999999999, 0, 1, 10, 100, 1000, 10000, 1e18 ], 1,
     [ '1E-5', '0.0001', '0.001', '0.01', '0.1', '0', '1', '10', '100', '1K', '10K', '1E+18']);
 });
 

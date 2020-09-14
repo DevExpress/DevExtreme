@@ -53,6 +53,15 @@ QUnit.module('API', moduleConfig, () => {
         assert.ok(quillInstance.format, 'specific method isn\'t undefined');
     });
 
+    test('get module instance', function(assert) {
+        this.createEditor();
+        const Clipboard = this.instance.get('modules/clipboard');
+        const clipboardInstance = this.instance.getModule('clipboard');
+
+        assert.ok(clipboardInstance, 'module instance is not undefined');
+        assert.ok(clipboardInstance instanceof Clipboard, 'module is instance of the Clipboard class');
+    });
+
     test('get/set selection', function(assert) {
         this.createEditor();
         this.instance.setSelection(1, 2);

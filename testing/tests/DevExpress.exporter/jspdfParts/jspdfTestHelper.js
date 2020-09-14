@@ -5,9 +5,7 @@ class JSPdfDataGridTestHelper {
         this.jsPDFDocument = jsPDFDocument;
     }
 
-    checkTableAndColumnWidths(expectedTableWidth, expectedColumnWidths, actualAutoTableOptions) {
-        assert.equal(actualAutoTableOptions.tableWidth, expectedTableWidth, 'Table width');
-
+    checkColumnWidths(expectedColumnWidths, actualAutoTableOptions) {
         const columnStyles = actualAutoTableOptions.columnStyles;
         const actualWidths = [];
 
@@ -20,12 +18,21 @@ class JSPdfDataGridTestHelper {
     }
 
     checkCellsContent(headCellsArray, bodyCellsArray, actualAutoTableOptions) {
-        this._iterateCells(headCellsArray, (content, rowIndex, columnIndex) => {
-            assert.equal(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
-        });
-        this._iterateCells(bodyCellsArray, (content, rowIndex, columnIndex) => {
-            assert.equal(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
-        });
+        if(headCellsArray.length > 0) {
+            this._iterateCells(headCellsArray, (content, rowIndex, columnIndex) => {
+                assert.strictEqual(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
+            });
+        } else {
+            assert.strictEqual(actualAutoTableOptions.head.length, 0, 'AutoTable head is empty');
+        }
+
+        if(bodyCellsArray.length > 0) {
+            this._iterateCells(bodyCellsArray, (content, rowIndex, columnIndex) => {
+                assert.strictEqual(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
+            });
+        } else {
+            assert.strictEqual(actualAutoTableOptions.body.length, 0, 'AutoTable body is empty');
+        }
     }
 
     _iterateCells(cellsArray, callback) {

@@ -1,20 +1,44 @@
 import query from '../../../data/query';
 import errors from '../../../core/errors';
 import tzData from './ui.scheduler.timezones_data';
+import { extend } from '../../../core/utils/extend';
+import { sign } from '../../../core/utils/math';
 
 const SchedulerTimezones = {
-    _displayNames: tzData.displayNames,
-    _list: tzData.timezones,
+    _timeZones: tzData.zones,
 
     getTimezones: function() {
-        return this._list;
+        return this._timeZones;
     },
-    getDisplayNames: function() {
-        return this._displayNames;
+
+    getDisplayedTimeZones: function(date) {
+        return this.getTimezones().map((timezone) => {
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
+
+            const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
+
+            return extend(timezone, {
+                offset: offset,
+                title: title
+            });
+        });
     },
-    queryableTimezones: function() {
-        return query(this.getTimezones());
+
+    getSortedTimeZones: function(date) {
+        return query(this.getDisplayedTimeZones(date)).sortBy('offset').toArray();
     },
+
+    formatOffset: function(offset) {
+        const hours = Math.floor(offset);
+        const minutesInDecimal = offset - hours;
+
+        const signString = sign(offset) >= 0 ? '+' : '-';
+        const hoursString = `0${Math.abs(hours)}`.slice(-2);
+        const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
+
+        return signString + hoursString + minutesString;
+    },
+
     getTimezoneById: function(id) {
         let result;
         let i = 0;
@@ -35,6 +59,7 @@ const SchedulerTimezones = {
         }
         return result;
     },
+
     getTimezoneOffsetById: function(id, dateTimeStamp) {
         const tz = this.getTimezoneById(id);
         let offsets;
@@ -43,25 +68,20 @@ const SchedulerTimezones = {
         let result;
 
         if(tz) {
-            if(tz.link) {
-                const rootTz = this.getTimezones()[tz.link];
-                offsets = rootTz.offsets;
-                untils = rootTz.untils;
-                offsetIndices = rootTz.offsetIndices;
-            } else {
-                offsets = tz.offsets;
-                untils = tz.untils;
-                offsetIndices = tz.offsetIndices;
-            }
+            offsets = tz.offsets;
+            untils = tz.untils;
+            offsetIndices = tz.offsetIndices;
 
             result = this.getUtcOffset(offsets, offsetIndices, untils, dateTimeStamp);
         }
 
         return result;
     },
+
     getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
         let index = 0;
         const offsetIndicesList = offsetIndices.split('');
+        const offsetsList = offsets.split('|');
 
         const untilsList = untils.split('|').map(function(until) {
             if(until === 'Infinity') {
@@ -86,66 +106,12 @@ const SchedulerTimezones = {
             index++;
         }
 
-        return offsets[Number(offsetIndicesList[index])];
-    },
-    getTimezoneShortDisplayNameById: function(id) {
-        const tz = this.getTimezoneById(id);
-        let result;
-
-        if(tz) {
-            result = tz.DisplayName.substring(0, 11);
-        }
-
-        return result;
-    },
-    getTimezonesDisplayName: function() {
-        return query(this.getDisplayNames()).sortBy().toArray();
-    },
-    getTimezoneDisplayNameById: function(id) {
-        const tz = this.getTimezoneById(id);
-        return tz ? this.getDisplayNames()[tz.winIndex] : '';
-    },
-    getSimilarTimezones: function(id) {
-        if(!id) {
-            return [];
-        }
-
-        const tz = this.getTimezoneById(id);
-
-        return this.getTimezonesIdsByWinIndex(tz.winIndex);
-
-    },
-    getTimezonesIdsByWinIndex: function(winIndex) {
-        return this.queryableTimezones()
-            .filter(['winIndex', winIndex])
-            .sortBy('title')
-            .toArray()
-            .map(function(item) {
-                return {
-                    id: item.id,
-                    displayName: item.title
-                };
-            });
-    },
-    getTimezonesIdsByDisplayName: function(displayName) {
-        const displayNameIndex = this.getDisplayNames().indexOf(displayName);
-
-        return this.getTimezonesIdsByWinIndex(displayNameIndex);
+        const offset = Number(offsetsList[Number(offsetIndicesList[index])]);
+        return -offset / 60 || offset;
     },
 
     getClientTimezoneOffset: function(date) {
         return date.getTimezoneOffset() * 60000;
-    },
-
-    processDateDependOnTimezone: function(date, tzOffset) {
-        let result = new Date(date);
-
-        if(tzOffset) {
-            const tzDiff = tzOffset + this.getClientTimezoneOffset(date) / 3600000;
-            result = new Date(result.setHours(result.getHours() + tzDiff));
-        }
-
-        return result;
     }
 };
 

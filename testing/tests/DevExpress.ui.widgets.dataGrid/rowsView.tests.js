@@ -1606,10 +1606,10 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, dataController, null);
         const testElement = $('#container');
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'inline',
             allowUpdating: true
-        };
+        });
         rowsView.render(testElement);
         const groupedRows = testElement.find('.' + 'dx-group-row');
 

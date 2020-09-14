@@ -35,3 +35,20 @@ export const tryGetTabPath = fullPath => {
 };
 
 export const isFullPathContainsTabs = fullPath => fullPath.indexOf('tabs') > -1;
+
+export const getItemPath = (items, item, isTabs) => {
+    const index = items.indexOf(item);
+    if(index > -1) {
+        return createItemPathByIndex(index, isTabs);
+    }
+    for(let i = 0; i < items.length; i++) {
+        const targetItem = items[i];
+        const tabOrGroupItems = targetItem.tabs || targetItem.items;
+        if(tabOrGroupItems) {
+            const itemPath = getItemPath(tabOrGroupItems, item, targetItem.tabs);
+            if(itemPath) {
+                return concatPaths(createItemPathByIndex(i, isTabs), itemPath);
+            }
+        }
+    }
+};

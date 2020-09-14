@@ -4,6 +4,11 @@ import { mount } from 'enzyme';
 import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../selector';
 import { PageSizeSmall } from '../small';
 import { PageSizeLarge } from '../large';
+import messageLocalization from '../../../../../localization/message';
+
+jest.mock('../../../../../localization/message', () => ({
+  getFormatter: jest.fn(),
+}));
 
 jest.mock('../small', () => ({ PageSizeSmall: () => null }));
 jest.mock('../large', () => ({ PageSizeLarge: () => null }));
@@ -81,6 +86,12 @@ describe('Pager size selector', () => {
     it('normalizedPageSizes', () => {
       const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });
       expect(component.normalizedPageSizes).toEqual(defaultProps().normalizedPageSizes);
+    });
+
+    it('normalizedPageSizes, all', () => {
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'All');
+      const component = new PageSizeSelector({ pageSizes: ['all', 0], pageSizeChange: jest.fn() });
+      expect(component.normalizedPageSizes).toEqual([{ text: 'All', value: 0 }, { text: 'All', value: 0 }]);
     });
 
     it('getHtmlElement', () => {

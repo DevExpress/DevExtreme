@@ -7,6 +7,7 @@ define(function(require) {
     const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
     const DataSource = require('data/data_source/data_source').DataSource;
 
+    require('../../helpers/ignoreQuillTimers.js');
     require('bundles/modules/parts/widgets-all');
 
     if(!devices.real().generic) {
