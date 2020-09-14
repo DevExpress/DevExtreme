@@ -1,10 +1,12 @@
-import VirtualScrolling from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
+import VirtualScrollingDispatcher from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import { noop } from 'core/utils/common';
 
 const { test, module } = QUnit;
 
-module('Virtual Scrolling model', {
+module('Virtual Scrolling', {
     beforeEach: function() {
+        const height = 300;
+
         this.worksSpaceMock = {
             _getGroupCount: () => 0,
             _getTotalRowCount: () => 100,
@@ -13,7 +15,7 @@ module('Virtual Scrolling model', {
             _getDateTableRowClass: () => 'fake-row-class',
             _options: {
                 dataCellTemplate: noop,
-                groupByDate: false
+                groupByDate: false,
             },
             option: name => this.worksSpaceMock._options[name],
             _getCellData: noop,
@@ -22,8 +24,19 @@ module('Virtual Scrolling model', {
             isGroupedAllDayPanel: noop,
             renderRWorkspace: noop,
             renderRAppointments: noop,
-            invoke: noop,
-            _isVerticalGroupedWorkSpace: () => false,
+            _createAction: noop,
+            $element: () => {
+                return {
+                    height: () => height
+                };
+            },
+            getScrollable: () => this.scrollableMock,
+            invoke: (name, arg0) => {
+                const options = {
+                    getOption: { height }
+                };
+                return options[name] && options[name][arg0];
+            }
         };
 
         this.scrollableMock = {
@@ -46,9 +59,13 @@ module('Virtual Scrolling model', {
             });
         };
 
-        this.viewportHeight = 300;
-        this.virtualScrolling = new VirtualScrolling(this.worksSpaceMock, this.viewportHeight, this.scrollableMock);
-        this.virtualScrolling._getRenderTimeout = () => -1;
+        this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this.worksSpaceMock);
+        this.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        this.virtualScrollingDispatcher.getHeight = () => height;
+        this.virtualScrolling = this.virtualScrollingDispatcher.virtualScrolling;
+    },
+    afterEach: function() {
+        this.virtualScrollingDispatcher.dispose();
     }
 },
 () => {
@@ -61,7 +78,7 @@ module('Virtual Scrolling model', {
         assert.equal(state.bottomVirtualRowCount, 91, 'Bottom virtual row count');
     });
 
-    test('State if scrolling Down', function(assert) {
+    test('State should be correct on scrolling Down', function(assert) {
         [
             { top: 10, topVirtualRowCount: 0, bottomVirtualRowCount: 91, rowCount: 9 },
             { top: 13, topVirtualRowCount: 0, bottomVirtualRowCount: 91, rowCount: 9 },
@@ -85,7 +102,7 @@ module('Virtual Scrolling model', {
         });
     });
 
-    test('State if scrolling Up', function(assert) {
+    test('State should be correct on scrolling Up', function(assert) {
         [
             { top: 4950, topVirtualRowCount: 96, bottomVirtualRowCount: 0, rowCount: 4 },
             { top: 3980, topVirtualRowCount: 76, bottomVirtualRowCount: 12, rowCount: 12 },
@@ -109,7 +126,7 @@ module('Virtual Scrolling model', {
         });
     });
 
-    test('Virtual heights', function(assert) {
+    test('Check virtual heights', function(assert) {
         [
             { top: 10, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 0 },
             { top: 13, bottomVirtualRowHeight: 4550, topVirtualRowHeight: 0 },
@@ -150,19 +167,5 @@ module('Virtual Scrolling model', {
         }
 
         assert.ok(true, 'State validation checked');
-    });
-
-    test('It should call _getTotalRowCount with correct parameters', function(assert) {
-        const getTotalRowCountSpy = sinon.spy(this.worksSpaceMock, '_getTotalRowCount');
-        const isVerticalGroupedWorkSpaceSpy = sinon.spy(this.worksSpaceMock, '_isVerticalGroupedWorkSpace');
-        const isGroupedAllDayPanelSpy = sinon.spy(this.worksSpaceMock, 'isGroupedAllDayPanel');
-
-        this.virtualScrolling._updateState(0);
-
-        assert.ok(isVerticalGroupedWorkSpaceSpy.called, '_isVerticalGroupedWorkSpaceSpy was called');
-        assert.ok(getTotalRowCountSpy.called, 'getTotalRowCountSpy was called');
-        assert.notOk(isGroupedAllDayPanelSpy.called, 'isGroupedAllDayPanel was not called');
-        assert.equal(getTotalRowCountSpy.getCall(0).args[0], 0, 'Correct first parameter');
-        assert.equal(getTotalRowCountSpy.getCall(0).args[1], false, 'Correct second parameter');
     });
 });

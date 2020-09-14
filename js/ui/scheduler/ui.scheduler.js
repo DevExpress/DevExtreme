@@ -1774,7 +1774,7 @@ class Scheduler extends Widget {
             scrolling: scrolling,
             renovateRender: this.option('renovateRender')
                 || scrolling.mode === 'virtual'
-                || currentViewOptions.scrolling?.mode === 'virtual',
+                || currentViewOptions.scrolling?.mode === 'virtual'
         }, currentViewOptions);
 
         result.observer = this;
