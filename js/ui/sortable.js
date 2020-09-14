@@ -26,7 +26,7 @@ const animate = (element, config) => {
     const top = config.to?.top || 0;
 
     element.style.transform = `translate(${left}px,${top}px)`;
-    element.style.transition = fx.off ? '' : `all ${config.duration}ms ${config.easing}`;
+    element.style.transition = fx.off ? '' : `transform ${config.duration}ms ${config.easing}`;
 };
 
 const stopAnimation = (element) => {
@@ -76,7 +76,11 @@ const Sortable = Draggable.inherit({
             fromIndex: null,
             toIndex: null,
             dropInsideItem: false,
-            itemPoints: null
+            itemPoints: null,
+            fromIndexOffset: 0,
+            offset: 0,
+            updateManually: true,
+            draggableElementSize: 0
         });
     },
 
@@ -84,7 +88,10 @@ const Sortable = Draggable.inherit({
         this.option({
             dropInsideItem: false,
             toIndex: null,
-            fromIndex: null
+            fromIndex: null,
+            itemPoints: null,
+            fromIndexOffset: 0,
+            draggableElementSize: 0
         });
 
         if(this._$placeholderElement) {
@@ -116,6 +123,7 @@ const Sortable = Draggable.inherit({
 
         this._updateItemPoints();
         this.option('fromIndex', this._getElementIndex($sourceElement));
+        this.option('fromIndexOffset', this.option('offset'));
     },
 
     _dragEnterHandler: function() {
@@ -225,12 +233,14 @@ const Sortable = Draggable.inherit({
         return (new Deferred()).resolve();
     },
 
-    dragMove: function(e) {
+    dragMove: function(e, scrollBy) {
         const itemPoints = this.option('itemPoints');
 
         if(!itemPoints) {
             return;
         }
+
+        this._correctItemPoints(scrollBy);
 
         const isVertical = this._isVerticalOrientation();
         const axisName = isVertical ? 'top' : 'left';
@@ -370,8 +380,21 @@ const Sortable = Draggable.inherit({
         return result;
     },
 
-    _updateItemPoints: function() {
-        this.option('itemPoints', this._getItemPoints());
+    _updateItemPoints: function(forceUpdate) {
+        if(forceUpdate || !this.option('updateManually') || !this.option('itemPoints')) {
+            this.option('itemPoints', this._getItemPoints());
+        }
+    },
+
+    _correctItemPoints: function(scrollBy) {
+        const itemPoints = this.option('itemPoints');
+        if(scrollBy && itemPoints && this.option('updateManually')) {
+            const isVertical = this._isVerticalOrientation();
+            const positionPropName = isVertical ? 'top' : 'left';
+            itemPoints.forEach((itemPoint) => {
+                itemPoint[positionPropName] -= scrollBy;
+            });
+        }
     },
 
     _getElementIndex: function($itemElement) {
@@ -434,7 +457,6 @@ const Sortable = Draggable.inherit({
             placeholderElement: getPublicElement(this._$placeholderElement),
             dragElement: getPublicElement(sourceDraggable._$dragElement)
         }));
-
         this._updateItemPoints();
     },
 
@@ -544,6 +566,9 @@ const Sortable = Draggable.inherit({
             case 'itemPoints':
             case 'animation':
             case 'allowReordering':
+            case 'fromIndexOffset':
+            case 'offset':
+            case 'draggableElementSize':
                 break;
             case 'fromIndex':
                 if(!this._$sourceElement) {
@@ -616,7 +641,29 @@ const Sortable = Draggable.inherit({
                 this._movePlaceholder();
             }
         } else {
-            this._moveItems(args.previousValue, args.value);
+            this._moveItems(args.previousValue, args.value, args.fullUpdate);
+        }
+    },
+
+    update: function() {
+        if(this.option('fromIndex') === null && this.option('toIndex') === null) {
+            return;
+        }
+
+        this._updateItemPoints(true);
+
+        this._updateDragSourceClass();
+
+        const toIndex = this.option('toIndex');
+        this._optionChangedToIndex({ value: toIndex, fullUpdate: true });
+    },
+
+    _updateDragSourceClass: function() {
+        const fromIndex = this._getActualFromIndex();
+        const $fromElement = $(this._getItems()[fromIndex]);
+        if($fromElement.length) {
+            this._$sourceElement = $fromElement;
+            this._toggleDragSourceClass(true, $fromElement);
         }
     },
 
@@ -715,12 +762,31 @@ const Sortable = Draggable.inherit({
         return positions;
     },
 
-    _moveItems: function(prevToIndex, toIndex) {
-        const fromIndex = this.option('fromIndex');
+    _getDraggableElementSize: function(isVerticalOrientation) {
+        const $draggableItem = this._getDraggableElement();
+        let size = this.option('draggableElementSize');
+        if(!size) {
+            size = isVerticalOrientation ?
+                ($draggableItem.outerHeight() + $draggableItem.outerHeight(true)) / 2 :
+                ($draggableItem.outerWidth() + $draggableItem.outerWidth(true)) / 2;
+
+            if(this.option('updateManually')) {
+                this.option('draggableElementSize', size);
+            }
+        }
+        return size;
+    },
+
+    _getActualFromIndex: function() {
+        const { fromIndex, fromIndexOffset, offset } = this.option();
+        return fromIndex == null ? null : fromIndex + fromIndexOffset - offset;
+    },
+
+    _moveItems: function(prevToIndex, toIndex, fullUpdate) {
+        const fromIndex = this._getActualFromIndex();
         const isVerticalOrientation = this._isVerticalOrientation();
         const positionPropName = isVerticalOrientation ? 'top' : 'left';
-        const $draggableItem = this._getDraggableElement();
-        const elementSize = isVerticalOrientation ? ($draggableItem.outerHeight() + $draggableItem.outerHeight(true)) / 2 : ($draggableItem.outerWidth() + $draggableItem.outerWidth(true)) / 2;
+        const elementSize = this._getDraggableElementSize(isVerticalOrientation);
         const items = this._getItems();
         const prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex);
         const positions = this._getPositions(items, elementSize, fromIndex, toIndex);
@@ -734,7 +800,7 @@ const Sortable = Draggable.inherit({
 
             if(toIndex === null || fromIndex === null) {
                 stopAnimation(itemElement);
-            } else if(prevPosition !== position) {
+            } else if(prevPosition !== position || fullUpdate && position) {
                 animate(itemElement, extend({}, animationConfig, {
                     to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position }
                 }));

@@ -43,16 +43,16 @@ QUnit.testStart(function() {
         </div>
         <div id="scroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
             <div id="itemsWithScroll" style="width: 300px;">
-                <div id="item21" class="draggable" style="height: 50px; background: yellow;">item1</div>
-                <div id="item22" class="draggable" style="height: 50px; background: red;">item2</div>
-                <div id="item23" class="draggable" style="height: 50px; background: blue;">item3</div>
-                <div id="item24" class="draggable" style="height: 50px; background: yellow;">item4</div>
-                <div id="item25" class="draggable" style="height: 50px; background: red;">item5</div>
-                <div id="item26" class="draggable" style="height: 50px; background: blue;">item6</div>
-                <div id="item27" class="draggable" style="height: 50px; background: yellow;">item7</div>
-                <div id="item28" class="draggable" style="height: 50px; background: red;">item8</div>
-                <div id="item31" class="draggable" style="height: 50px; background: yellow;">item9</div>
-                <div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
+                <div id="item21" class="draggable" style="height: 50px; background: yellow;">item1
+                </div><div id="item22" class="draggable" style="height: 50px; background: red;">item2
+                </div><div id="item23" class="draggable" style="height: 50px; background: blue;">item3
+                </div><div id="item24" class="draggable" style="height: 50px; background: yellow;">item4
+                </div><div id="item25" class="draggable" style="height: 50px; background: red;">item5
+                </div><div id="item26" class="draggable" style="height: 50px; background: blue;">item6
+                </div><div id="item27" class="draggable" style="height: 50px; background: yellow;">item7
+                </div><div id="item28" class="draggable" style="height: 50px; background: red;">item8
+                </div><div id="item31" class="draggable" style="height: 50px; background: yellow;">item9
+                </div><div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
             </div>
         </div>
         <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0px; top: 0px;">
@@ -684,6 +684,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
         assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
         assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+        assert.strictEqual(items[1].style.transitionProperty, 'transform', 'apply animation to transform only');
         assert.strictEqual(items[1].style.transitionDuration, '300ms', 'items 2 transition duration');
         assert.strictEqual(items[1].style.transitionTimingFunction, 'ease', 'items 2 transition timing function');
         assert.strictEqual(items[2].style.transform, '', 'items 3 is not moved');
@@ -2216,7 +2217,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         assert.strictEqual(items[2].style.transform, '', 'items 3 is moved up');
     });
 
-    QUnit.test('Update item points when dragging an item to another the sortable widget if dropFeedbackMode is push', function(assert) {
+    QUnit.test('Update item positions when dragging an item to another the sortable widget if dropFeedbackMode is push', function(assert) {
         // arrange
         const sortable1 = this.createSortable({
             dropFeedbackMode: 'push',
@@ -2234,16 +2235,11 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
         // assert
-        const itemPoints = sortable2.option('itemPoints');
-        assert.equal(itemPoints.length, 4, 'point count');
-        assert.deepEqual(itemPoints[0].top, 30, 'top of the first point');
-        assert.deepEqual(itemPoints[0].index, 0, 'index of the first point');
-        assert.deepEqual(itemPoints[1].top, 60, 'top of the first point');
-        assert.deepEqual(itemPoints[1].index, 1, 'index of the first point');
-        assert.deepEqual(itemPoints[2].top, 90, 'top of the second point');
-        assert.deepEqual(itemPoints[2].index, 2, 'index of the second point');
-        assert.deepEqual(itemPoints[3].top, 120, 'top of the third point');
-        assert.deepEqual(itemPoints[3].index, 3, 'index of the third point');
+        const items = $(sortable2.$element()).children();
+        assert.equal(items.length, 3, 'item count');
+        assert.strictEqual(items[0].style.transform, 'translate(0px, 30px)', 'items 1 is moved up');
+        assert.strictEqual(items[1].style.transform, 'translate(0px, 30px)', 'items 2 is moved up');
+        assert.strictEqual(items[2].style.transform, 'translate(0px, 30px)', 'items 3 is moved up');
     });
 
     QUnit.test('Drag and drop item from draggable to sortable', function(assert) {
@@ -2468,6 +2464,8 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
             $('#qunit-fixture').addClass('qunit-fixture-visible');
             this.$element = $(elementSelector);
             this.$scroll = $(scrollSelector);
+            $('#qunit-fixture').children().hide();
+            this.$scroll.show();
 
             this.createSortable = (options) => {
                 return this.sortableInstance = this.$element.dxSortable(options).dxSortable('instance');
@@ -2478,6 +2476,7 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
             this.clock.reset();
 
             animationFrame.requestAnimationFrame = this.originalRAF;
+            $('#qunit-fixture').children().show();
 
             $('#qunit-fixture').removeClass('qunit-fixture-visible');
             this.sortableInstance && this.sortableInstance.dispose();
@@ -3282,4 +3281,242 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         assert.equal($placeholder.get(0).style.width, '30px', 'placeholder width');
         assert.equal($placeholder.get(0).style.transform, 'translate(160px, 500px)', 'placeholder position');
     });
+});
+
+QUnit.module('update', moduleConfig, () => {
+    function repaintItems(count, height) {
+        const $element = $('#items');
+        $element.empty();
+        for(let i = 0; i < count; i++) {
+            $('<div>').addClass('draggable').css('height', height || '').appendTo($element);
+        }
+    }
+
+    const getElement = (index) => $('#items').children().eq(index);
+
+    QUnit.test('source element should be updated', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+
+        pointerMock(getElement(0)).start().down(15, 15).move(0, 10);
+        repaintItems(2);
+
+        // act
+        sortable.update();
+
+        // assert
+        assert.ok(getElement(0).hasClass('dx-sortable-source'), 'source class is added');
+        assert.ok(getElement(0).hasClass('dx-sortable-source-hidden'), 'source-hidden class is added');
+    });
+
+    QUnit.test('source element should be cleared after dragging end', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+
+        pointerMock(getElement(0)).start().down(15, 15).move(0, 10);
+        repaintItems(2);
+
+        // act
+        sortable.update();
+        pointerMock(getElement(0)).start().up();
+
+        // assert
+        assert.notOk(getElement(0).hasClass('dx-sortable-source'), 'source class is removed');
+        assert.notOk(getElement(0).hasClass('dx-sortable-source-hidden'), 'source-hidden class is removed');
+    });
+
+    QUnit.test('itemPoints should be updated', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+
+        pointerMock(getElement(0)).start().down(15, 15).move(0, 10);
+
+        const itemHeight = 100;
+        repaintItems(2, itemHeight);
+
+        // act
+        sortable.update();
+
+        // assert
+        const itemPoints = sortable.option('itemPoints');
+        assert.equal(itemPoints.length, 3, 'item point count is updated');
+        assert.equal(itemPoints[0].height, itemHeight, 'first point height is updated');
+    });
+
+    [false, true].forEach((updateManually) => {
+        const notUpdatedText = updateManually ? 'not ' : '';
+        QUnit.test(`itemPoints should ${notUpdatedText}be updated automatically on move if updateMenuaaly is ${updateManually}`, function(assert) {
+            const sortable = this.createSortable({
+                dropFeedbackMode: 'push',
+                updateManually: updateManually
+            });
+
+            pointerMock(getElement(0)).start().down(15, 15).move(0, 10);
+
+            const itemHeight = 100;
+            repaintItems(2, itemHeight);
+
+            // act
+            pointerMock(getElement(0)).start().move(0, 1);
+
+            // assert
+            const itemPoints = sortable.option('itemPoints');
+            assert.equal(itemPoints.length, updateManually ? 4 : 3, `item point count is ${notUpdatedText}updated`);
+            assert.equal(itemPoints[0].height, updateManually ? 30 : itemHeight, `first point height is ${notUpdatedText}updated`);
+        });
+    });
+
+    QUnit.test('itemPoints should be empty if dragging is not started', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+        // act
+        sortable.update();
+
+        // assert
+        assert.strictEqual(sortable.option('itemPoints'), null, 'item point count is updated');
+    });
+
+    QUnit.test('items should be moved', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+        pointerMock(getElement(0)).start().down().move(0, 50);
+        repaintItems(3);
+
+        // act
+        sortable.update();
+
+        // assert
+        assert.equal(getElement(0).get(0).style.transform, '', 'item 1 is not moved');
+        assert.equal(getElement(1).get(0).style.transform, 'translate(0px, -30px)', 'item 2 is not moved');
+        assert.equal(getElement(2).get(0).style.transform, '', 'item 3 is not moved');
+    });
+
+    QUnit.test('placeholder should be updated if dropFeedbackMode is indicate', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'indicate' });
+
+        pointerMock(getElement(0)).start().down().move(0, 50);
+        const itemHeight = 40;
+        repaintItems(3, itemHeight);
+
+        // act
+        sortable.update();
+
+        const $placeholder = $(PLACEHOLDER_SELECTOR);
+
+        // assert
+        assert.equal($placeholder.length, 1, 'placeholder is once');
+        assert.ok($placeholder.is(':visible'), 'placeholder is visible');
+        assert.equal($placeholder.offset().top, 2 * itemHeight, 'placeholder position is updated');
+    });
+
+    QUnit.test('items should be moved correctly if offset is not changed', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+        sortable.option('offset', 9);
+        pointerMock(getElement(0)).start().down().move(0, 50);
+        repaintItems(3);
+
+        // act
+        sortable.option('offset', 9);
+        sortable.update();
+
+        // assert
+        assert.equal(getElement(0).get(0).style.transform, '', 'item 1 is not moved');
+        assert.equal(getElement(1).get(0).style.transform, 'translate(0px, -30px)', 'item 2 is moved');
+        assert.equal(getElement(2).get(0).style.transform, '', 'item 3 is not moved');
+    });
+
+    QUnit.test('items should be moved correctly if offset is increased', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+        sortable.option('offset', 0);
+        pointerMock(getElement(0)).start().down().move(0, 50);
+        repaintItems(3);
+
+        // act
+        sortable.option('offset', 9);
+        sortable.update();
+
+        // assert
+        assert.equal(getElement(0).get(0).style.transform, 'translate(0px, -30px)', 'item 1 is moved');
+        assert.equal(getElement(1).get(0).style.transform, 'translate(0px, -30px)', 'item 2 is moved');
+        assert.equal(getElement(2).get(0).style.transform, '', 'item 3 is not moved');
+    });
+
+    QUnit.test('items should be moved correctly if offset is decreased', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+        sortable.option('offset', 9);
+        pointerMock(getElement(0)).start().down().move(0, 50);
+        repaintItems(3);
+
+        // act
+        sortable.option('offset', 0);
+        sortable.update();
+
+        // assert
+        assert.equal(getElement(0).get(0).style.transform, '', 'item 1 is not moved');
+        assert.equal(getElement(1).get(0).style.transform, '', 'item 2 is not moved');
+        assert.equal(getElement(2).get(0).style.transform, 'translate(0px, 30px)', 'item 3 is moved');
+    });
+});
+
+QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll', '#scroll'), () => {
+    const getElement = (index) => $('#itemsWithScroll').children().eq(index);
+
+    [false, true].forEach((isHorizontal) => {
+        [false, true].forEach((isBack) => {
+            [false, true].forEach((toEnd) => {
+                const itemCount = 10;
+                const scrollHeight = 250;
+                const scrollProp = isHorizontal ? 'scrollLeft' : 'scrollTop';
+                const positionProp = isHorizontal ? 'left' : 'top';
+                const moveDelta = isBack ? -100 : 100;
+                const downPosition = isBack ? scrollHeight - 25 : 25;
+                let scrollPosition = toEnd ? scrollHeight : 35;
+                if(isBack) {
+                    scrollPosition = scrollHeight - scrollPosition;
+                }
+
+                const itemHeight = 50;
+
+                QUnit.test(`itemPoints should be corrected during scroll ${isBack ? 'up' : 'down'}${toEnd ? ' to end' : ''} if orientation is ${isHorizontal ? 'horizontal' : 'vertical'}`, function(assert) {
+                    if(isHorizontal) {
+                        this.$element.children().css({ width: 50, display: 'inline-block' });
+                        this.$element.css({ width: 500, whiteSpace: 'nowrap' });
+                        this.$scroll.css({ width: 250 });
+                    }
+                    const sortable = this.createSortable({
+                        dropFeedbackMode: 'indicate',
+                        scrollSpeed: 100,
+                        itemOrientation: isHorizontal ? 'horizontal' : 'vertical'
+                    });
+
+                    if(isBack) {
+                        this.$scroll[scrollProp](10000);
+                    }
+
+                    const pointer = pointerMock(getElement(isBack ? itemCount - 1 : 0)).start();
+                    if(isHorizontal) {
+                        pointer.down(downPosition, 25).move(moveDelta, 0).move(moveDelta, 0);
+
+                    } else {
+                        pointer.down(25, downPosition).move(0, moveDelta).move(0, moveDelta);
+                    }
+
+                    // act
+                    this.clock.tick(toEnd ? 100 : 10);
+
+                    // assert
+                    const itemPoints = sortable.option('itemPoints');
+                    assert.equal(this.$scroll[scrollProp](), scrollPosition, 'scroll position');
+                    assert.equal(itemPoints.length, itemCount + 1, 'item posint count');
+                    for(let i = 0; i < 11; i++) {
+                        assert.equal(itemPoints[i][positionProp], -scrollPosition + i * itemHeight, `point ${i} height is corrected`);
+                    }
+                });
+            });
+        });
+    });
+
 });

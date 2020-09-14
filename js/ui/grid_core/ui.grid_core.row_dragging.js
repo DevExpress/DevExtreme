@@ -87,6 +87,15 @@ const RowDraggingExtender = {
         return $content;
     },
 
+    _resizeCore: function() {
+        this.callBase.apply(this, arguments);
+        const offset = this._dataController.getRowIndexOffset();
+        [this._sortable, this._sortableFixed].forEach((sortable) => {
+            sortable?.option('offset', offset);
+            sortable?.update();
+        });
+    },
+
     _getDraggableGridOptions: function(options) {
         const gridOptions = this.option();
         const columns = this.getColumns();
