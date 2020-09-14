@@ -45,7 +45,6 @@ function checkTimeZoneParsing(parsedTimeZone, rawTimeZone) {
         !isOffsetsCorrect(rawTimeZone.offsets, parsedTimeZone.offsets, parsedTimeZone.offsetIndices)) {
         console.log(`Error while parsing timezone ${rawTimeZone.name}`);
     }
-
 }
 
 
@@ -63,7 +62,6 @@ function revertUntils(untilsString) {
     const untils = untilsString.split('|');
     const result = [];
     let prevUntil = 0;
-    let resultUntil = 0;
 
     untils.forEach((until, index) => {
         if(until === 'Infinity') {
@@ -74,9 +72,8 @@ function revertUntils(untilsString) {
                 result.push(prevUntil);
             }
             if(until !== 'Infinity' && index !== 0) {
-                resultUntil = parseInt(until, 36) * 1000 + prevUntil;
-                prevUntil = resultUntil;
-                result.push(resultUntil);
+                prevUntil = parseInt(until, 36) * 1000 + prevUntil;
+                result.push(prevUntil);
             }
         }
     });
