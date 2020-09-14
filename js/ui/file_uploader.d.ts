@@ -260,6 +260,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     dialogTrigger?: string | Element | JQuery;
     /**
+     * @docid dxFileUploaderOptions.dropZone
+     * @type string|Element|jQuery
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dropZone?: string | Element | JQuery;
+    /**
      * @docid dxFileUploaderOptions.uploadButtonText
      * @type string
      * @default "Upload"
