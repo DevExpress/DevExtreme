@@ -338,12 +338,8 @@ class FileUploader extends Editor {
     }
 
     _getFile(fileData) {
-        let file;
-        if(isDefined(fileData)) {
-            const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
-            file = this._files.filter(file => file.value === targetFileValue)[0];
-        }
-        return file;
+        const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
+        return this._files.filter(file => file.value === targetFileValue)[0];
     }
 
     _initLabel() {
@@ -1022,17 +1018,25 @@ class FileUploader extends Editor {
         if(this.option('uploadMode') === 'useForm') {
             return;
         }
-        const file = this._getFile(fileData);
-        this._preventFilesUploading(file ? [file] : this._files);
+        if(isDefined(fileData)) {
+            const file = this._getFile(fileData);
+            if(file) {
+                this._preventFilesUploading([file]);
+            }
+        } else {
+            this._preventFilesUploading(this._files);
+        }
     }
 
     upload(fileData) {
         if(this.option('uploadMode') === 'useForm') {
             return;
         }
-        const file = this._getFile(fileData);
-        if(file && isFormDataSupported()) {
-            this._uploadFile(file);
+        if(isDefined(fileData)) {
+            const file = this._getFile(fileData);
+            if(file && isFormDataSupported()) {
+                this._uploadFile(file);
+            }
         } else {
             this._uploadFiles();
         }
