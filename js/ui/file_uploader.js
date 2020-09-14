@@ -376,8 +376,8 @@ class FileUploader extends Editor {
 
     _render() {
         this._preventRecreatingFiles = false;
-        this._renderDragEvents();
-        this._renderDragEvents(true);
+        this._attachDragEventHandlers(this._getValidationMessageTarget());
+        this._attachDragEventHandlers(this.option('dropZone'));
 
         this._renderFiles();
 
@@ -846,9 +846,20 @@ class FileUploader extends Editor {
             .appendTo(this._$content);
     }
 
-    _renderDragEvents(isCustomTarget) {
-        const target = isCustomTarget ? $(this.option('dropZone')) : this._getValidationMessageTarget();
-        eventsEngine.off(target, '.' + this.NAME);
+    _detachDragEventHandlers(target) {
+        if(!isDefined(target)) {
+            return;
+        }
+        eventsEngine.off($(target), '.' + this.NAME);
+    }
+
+    _attachDragEventHandlers(target) {
+        if(!isDefined(target)) {
+            return;
+        }
+        const isCustomTarget = target !== this._getValidationMessageTarget();
+        this._detachDragEventHandlers(target);
+        target = $(target);
 
         if(!this._isDragDropEnabled()) {
             return;
@@ -1158,7 +1169,7 @@ class FileUploader extends Editor {
         this._selectButton.option('disabled', readOnly);
         this._files.forEach(file => file.cancelButton?.option('disabled', readOnly));
         this._displayInputContainerIfNeeded();
-        this._renderDragEvents();
+        this._attachDragEventHandlers(this._getValidationMessageTarget());
     }
 
     _optionChanged(args) {
@@ -1213,7 +1224,8 @@ class FileUploader extends Editor {
                 this._attachSelectFileDialogHandler(value);
                 break;
             case 'dropZone':
-                this._renderDragEvents(true);
+                this._detachDragEventHandlers(args.previousValue);
+                this._attachDragEventHandlers(value);
                 break;
             case 'maxFileSize':
             case 'minFileSize':
@@ -1271,7 +1283,7 @@ class FileUploader extends Editor {
                 this._renderInput();
                 break;
             case 'useDragOver':
-                this._renderDragEvents();
+                this._attachDragEventHandlers(this._getValidationMessageTarget());
                 break;
             case 'nativeDropSupported':
                 this._invalidate();
