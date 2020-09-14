@@ -8,7 +8,7 @@ import Widget from '../widget/ui.widget';
 import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
 import ValidationMessage from '../validationMessage';
-import Guid from '../core/guid';
+import Guid from '../../core/guid';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
