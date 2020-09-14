@@ -50,7 +50,6 @@ const ROW_REMOVED = 'dx-row-removed';
 const ROW_INSERTED = 'dx-row-inserted';
 const ROW_MODIFIED = 'dx-row-modified';
 const CELL_MODIFIED = 'dx-cell-modified';
-const CELL_HIGHLIGHT_OUTLINE = 'dx-highlight-outline';
 const EDITING_NAMESPACE = 'dxDataGridEditing';
 const DATA_ROW_CLASS = 'dx-data-row';
 
@@ -2573,22 +2572,9 @@ const EditingController = modules.ViewController.inherit((function() {
             return buttonItems;
         },
 
-        showHighlighting: function($cell) {
-            const isHighlighted = $cell.hasClass(CELL_HIGHLIGHT_OUTLINE);
-            !isHighlighted && $cell.addClass(CELL_HIGHLIGHT_OUTLINE);
-            // if($cell.get(0).tagName === 'TD' && !$highlight.length) {
-            //     $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE));
-            // }
-        },
-
         highlightDataCell: function($cell, parameters) {
-            const isEditableCell = parameters.setValue;
             const cellModified = this.isCellModified(parameters);
-
-            if(cellModified && parameters.column.setCellValue || isEditableCell) {
-                this.showHighlighting($cell);
-                cellModified && parameters.column.setCellValue && $cell.addClass(CELL_MODIFIED);
-            }
+            cellModified && parameters.column.setCellValue && $cell.addClass(CELL_MODIFIED);
         },
 
         _afterInsertRow: function() { },
