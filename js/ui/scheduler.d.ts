@@ -31,6 +31,21 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+/** @name dxSchedulerTimeZone */
+export interface dxSchedulerTimeZone {
+    /** @name dxSchedulerTimeZone.id */
+    id: string;
+    /** @name dxSchedulerTimeZone.offset */
+    offset: number;
+    /** @name dxSchedulerTimeZone.title */
+    title: string;
+}
+
+declare module DevExpress.ui.dxScheduler {
+  /** @name ui.dxScheduler.getTimeZones(date) */
+  export function getTimeZones(date?: Date): void;
+}
+
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.adaptivityEnabled
