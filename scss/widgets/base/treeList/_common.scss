@@ -1,0 +1,43 @@
+@use "../mixins" as *;
+@use "../gridBase" as *;
+
+// adduse
+
+
+@include grid-base(treelist);
+
+.dx-treelist-container {
+  position: relative;
+  cursor: default;
+  white-space: normal;
+  line-height: normal;
+}
+
+.dx-treelist-rowsview {
+  .dx-treelist-table:not(.dx-treelist-table-fixed) .dx-treelist-cell-expandable,
+  .dx-treelist-best-fit.dx-treelist-cell-expandable {
+    white-space: nowrap;
+
+    .dx-treelist-text-content {
+      display: inline;
+      white-space: normal;
+    }
+
+    .dx-treelist-icon-container {
+      float: none;
+    }
+  }
+
+  .dx-treelist-icon-container {
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: top;
+    line-height: 1;
+  }
+
+  .dx-treelist-table-fixed {
+    .dx-treelist-icon-container {
+      float: left;
+    }
+  }
+}

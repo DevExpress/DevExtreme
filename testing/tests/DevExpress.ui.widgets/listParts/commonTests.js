@@ -566,7 +566,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             const $element = this.element.dxList({
                 pageLoadMode: 'scrollBottom',
-                height: 130,
+                height: 160,
                 scrollingEnabled: true,
                 useNativeScrolling: false,
                 dataSource: {
@@ -1013,6 +1013,59 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
 
         list.option('onItemSwipe', swipeHandler);
+        swipeItem();
+    });
+
+    QUnit.test('onItemSwipe handler should not be triggered if "_swipeEnabled" is false on init', function(assert) {
+        assert.expect(0);
+
+        const swipeHandler = () => {
+            assert.ok(true, 'swipe handled');
+        };
+
+        this.element.dxList({
+            items: [0],
+            onItemSwipe: swipeHandler,
+            _swipeEnabled: false
+        }).dxList('instance');
+
+        const item = $.proxy(function() {
+            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        }, this);
+        const swipeItem = () => {
+            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
+        };
+
+        swipeItem();
+    });
+
+    QUnit.test('onItemSwipe - subscription by on method', function(assert) {
+        assert.expect(2);
+
+        const swipeHandler = () => {
+            assert.ok(true, 'swipe handled');
+        };
+
+        const list = this.element.dxList({
+            items: [0],
+            itemHoldTimeout: 0,
+            scrollingEnabled: true
+        }).dxList('instance');
+        list.on('itemSwipe', swipeHandler);
+
+        const item = $.proxy(function() {
+            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        }, this);
+        const swipeItem = () => {
+            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
+        };
+
+        swipeItem();
+
+        list.off('itemSwipe');
+        swipeItem();
+
+        list.on('itemSwipe', swipeHandler);
         swipeItem();
     });
 
@@ -1686,6 +1739,51 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(list.scrollTop(), 0, 'scroll to top after reload');
     });
 
+    QUnit.test('list should set dataSource pageIndex to 0 on init (T915805)', function(assert) {
+        const data = [];
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
+
+        const dataSource = new DataSource({
+            store: new ArrayStore(data),
+            paginate: true,
+            pageSize: 20
+        });
+        let list;
+        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
+        try {
+            $toggleButton.dxButton({
+                onClick: () => {
+                    if(list) {
+                        list.dispose();
+                        list = null;
+                    } else {
+                        list = this.element
+                            .dxList({
+                                dataSource,
+                                opened: true,
+                                pageLoadMode: 'scrollBottom',
+                                useNativeScrolling: true
+                            }).dxList('instance');
+                    }
+
+                }
+            });
+            $toggleButton.trigger('dxclick');
+            dataSource.pageIndex(2);
+            dataSource.load();
+
+            $toggleButton.trigger('dxclick');
+            $toggleButton.trigger('dxclick');
+
+            const listDataSource = list.getDataSource();
+            assert.strictEqual(listDataSource.pageIndex(), 0, 'pageIndex is set to 0');
+        } finally {
+            $toggleButton.remove();
+        }
+    });
+
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
         setScrollView(ScrollViewMock.inherit({
             isFull() {
@@ -2113,7 +2211,7 @@ QUnit.module('scrollView integration', {
         this.clock.tick(1);
 
         const scrollBarSize = Math.round(Math.pow($list.height(), 2) / $scrollViewContent.height());
-        assert.equal($scrollableScroll.height(), scrollBarSize, 'scrollbar has correct height');
+        assert.equal($scrollableScroll.outerHeight(), scrollBarSize, 'scrollbar has correct height');
     });
 
     QUnit.test('update scroll after change items', function(assert) {

@@ -742,7 +742,8 @@ export default {
                 rowPageSize: 5,
                 mode: 'standard',
                 preloadEnabled: false,
-                rowRenderingMode: 'standard'
+                rowRenderingMode: 'standard',
+                loadTwoPagesOnStart: false
             }
         };
     },
@@ -761,6 +762,10 @@ export default {
                         const pageSize = this.pageSize();
 
                         return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
+                    },
+                    _applyFilter: function() {
+                        this.setViewportPosition(0);
+                        return this.callBase.apply(this, arguments);
                     },
                     reload: function() {
                         const that = this;

@@ -2456,7 +2456,6 @@ QUnit.module('Native scrolling', () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         listInstance.scrollTo(1000);
         const scrollTop = listInstance.scrollTop();
@@ -2500,7 +2499,6 @@ QUnit.module('Native scrolling', () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
         listInstance._loadNextPage();
 
         const listHeight = $list.outerHeight();

@@ -38,10 +38,10 @@ class RecurrenceProcessor {
             return result;
         }
 
-        const startDateUtc = this._getRRuleUtcDate(options.start);
-        const endDateUtc = this._getRRuleUtcDate(options.end);
-        const minDateUtc = this._getRRuleUtcDate(options.min);
-        const maxDateUtc = this._getRRuleUtcDate(options.max);
+        const startDateUtc = timeZoneUtils.createUTCDate(options.start);
+        const endDateUtc = timeZoneUtils.createUTCDate(options.end);
+        const minDateUtc = timeZoneUtils.createUTCDate(options.min);
+        const maxDateUtc = timeZoneUtils.createUTCDate(options.max);
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
@@ -53,8 +53,8 @@ class RecurrenceProcessor {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
-                this._correctTimezoneOffset(date);
-                result.push(date);
+                const correctDate = timeZoneUtils.createDateFromUTC(date);
+                result.push(correctDate);
             }
         });
 
@@ -182,7 +182,7 @@ class RecurrenceProcessor {
             const splitDates = options.exception.split(',');
             const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
             exceptDates.forEach(date => {
-                const utcDate = this._getRRuleUtcDate(date);
+                const utcDate = timeZoneUtils.createUTCDate(date);
                 this.rRuleSet.exdate(utcDate);
             });
         }
@@ -211,35 +211,6 @@ class RecurrenceProcessor {
         const result = [];
         ruleValues.forEach(rule => result.push(this.getDateByAsciiString(rule, date)));
         return result;
-    }
-
-    _getRRuleUtcDate(date) {
-        if(!date) {
-            return null;
-        }
-
-        const newDate = new Date(Date.UTC(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds()
-        ));
-
-        return newDate;
-    }
-
-    _correctTimezoneOffset(date) {
-        const timezoneOffsetBefore = date.getTimezoneOffset();
-        const timezoneOffset = timezoneOffsetBefore * toMs('minute');
-
-        date.setTime(date.getTime() + timezoneOffset);
-
-        const timezoneOffsetDelta = date.getTimezoneOffset() - timezoneOffsetBefore;
-        if(timezoneOffsetDelta) {
-            date.setTime(date.getTime() + timezoneOffsetDelta * toMs('minute'));
-        }
     }
 
     _parseRecurrenceRule(recurrence) {

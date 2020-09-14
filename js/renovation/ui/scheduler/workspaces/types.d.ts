@@ -6,6 +6,8 @@ export interface ViewCellData {
   today?: boolean;
   allDay?: boolean;
   groups?: object;
+  groupIndex?: number;
+  index: number;
 }
 
 interface ViewData {
@@ -19,6 +21,7 @@ export interface GroupedViewData {
   isVirtual?: boolean;
   topVirtualRowHeight?: number;
   bottomVirtualRowHeight?: number;
+  cellCountInGroupRow: number;
 }
 
 export interface GroupItem {
@@ -36,4 +39,18 @@ export interface Group {
   name: string;
   items: GroupItem[];
   data: GroupItem[];
+}
+
+interface TemplateDataProps {
+  date?: Date;
+  startDate?: Date;
+  endDate?: Date;
+  text?: string;
+  groups?: object;
+  groupIndex?: number;
+  allDay?: boolean;
+}
+export interface ContentTemplateProps {
+  data: TemplateDataProps;
+  index: number;
 }

@@ -3,6 +3,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
+import devices from 'core/devices.js';
 
 import 'common.css!';
 
@@ -80,6 +81,29 @@ QUnit.module('general', moduleConfig, () => {
 
         const $content = this.instance.$content();
         assert.roughEqual($content.offset().top + $content.outerHeight(), $(window).height(), 1.01);
+    });
+
+    QUnit.test('position on mobile devices', function(assert) {
+        if(devices.real().deviceType !== 'phone') {
+            assert.ok(true, 'not mobile device');
+            return;
+        }
+
+        const done = assert.async();
+        fx.off = false;
+
+        this.instance = this.$element.dxToast({
+            onShown: function(e) {
+                const $content = e.component.$content();
+                assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
+                assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
+
+                done();
+            }
+        }).dxToast('instance');
+
+        this.instance.show();
+        this.clock.tick(5000);
     });
 
     QUnit.test('displayTime', function(assert) {

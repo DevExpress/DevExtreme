@@ -276,7 +276,7 @@ QUnit.module('Scrolling', {
         helper.editorOptions.onInitialized = ({ component: instance }) => {
             const Parchment = instance.get('parchment');
 
-            class Label extends Parchment.Embed {
+            class Label extends Parchment.EmbedBlot {
                 static create(value) {
                     const node = super.create(value);
                     node.innerText = value;

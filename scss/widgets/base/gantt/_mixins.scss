@@ -1,0 +1,64 @@
+@use "sass:string";
+@use "../string" as *;
+
+@mixin gantt-icon-colored($data-uri, $color) {
+  $uri: replace("#{$data-uri}", "currentColor", escape("#{$color}"));
+
+  background-image: string.unquote($uri);
+}
+
+@mixin gantt-icons-mixin($color) {
+  .dx-gantt-i {
+    &.dx-gantt-i-add {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/add.svg'), $color);
+    }
+
+    &.dx-gantt-i-add-sub-task {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/add-sub-task.svg'), $color);
+    }
+
+    &.dx-gantt-i-add-task {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/add-task.svg'), $color);
+    }
+
+    &.dx-gantt-i-collapse {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/collapse.svg'), $color);
+    }
+
+    &.dx-gantt-i-delete {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/delete.svg'), $color);
+    }
+
+    &.dx-gantt-i-delete-dependency {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/delete-dependency.svg'), $color);
+    }
+
+    &.dx-gantt-i-expand {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/expand.svg'), $color);
+    }
+
+    &.dx-gantt-i-full-screen {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/full-screen.svg'), $color);
+    }
+
+    &.dx-gantt-i-redo {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/redo.svg'), $color);
+    }
+
+    &.dx-gantt-i-task-details {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/task-details.svg'), $color);
+    }
+
+    &.dx-gantt-i-undo {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/undo.svg'), $color);
+    }
+
+    &.dx-gantt-i-zoom-in {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/zoom-in.svg'), $color);
+    }
+
+    &.dx-gantt-i-zoom-out {
+      @include gantt-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/gantt/zoom-out.svg'), $color);
+    }
+  }
+}

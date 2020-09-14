@@ -63,9 +63,6 @@ export function registerTheme(theme, baseThemeName) {
     }
 }
 
-export function registerThemeAlias(alias, theme) {
-    registerThemeName(_normalizeEnum(alias), _normalizeEnum(theme));
-}
 
 export function registerThemeSchemeAlias(from, to) {
     themesSchemeMapping[from] = to;
@@ -137,7 +134,7 @@ function patchTheme(theme) {
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAxisSettings', null, theme['chart:common:axis']);
     });
-    _each(['chart', 'polar', 'map'], function(_, section) {
+    _each(['chart', 'polar', 'map', 'pie'], function(_, section) {
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAnnotationSettings', null, theme['chart:common:annotation']);
     });

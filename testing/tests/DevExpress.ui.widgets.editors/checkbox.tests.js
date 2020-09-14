@@ -359,7 +359,7 @@ QUnit.module('Checkbox', createRenovationModuleConfig(dxCheckBox, dxrCheckBox), 
             assert.strictEqual(handler.getCalls()[0].args[0].previousValue, undefined, 'previousValue is correct');
         });
 
-        QUnit.skip('value=undefined should be set correctly', function(assert) {
+        QUnit.test('value=undefined should be set correctly', function(assert) {
             const $element = $('#checkbox').dxCheckBox({ value: undefined });
             const checkbox = $element.dxCheckBox('instance');
             assert.strictEqual(checkbox.option('value'), undefined, 'value on init is correct');

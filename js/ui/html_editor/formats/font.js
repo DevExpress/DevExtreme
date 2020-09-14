@@ -1,4 +1,4 @@
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 
 let FontStyle = {};
 

@@ -5,6 +5,7 @@ import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -240,7 +241,7 @@ QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is tru
 
     $scrollable.dxScrollable('instance').update();
 
-    assert.equal($scroll.height(), scrollHeight, 'scrollbar height calculated correctly');
+    assert.equal($scroll.outerHeight(), scrollHeight, 'scrollbar height calculated correctly');
 });
 
 QUnit.test('moving scrollable moves scrollbar', function(assert) {

@@ -10,6 +10,9 @@ import {
     dxElement
 } from './element';
 
+import { TemplateManager } from './template_manager';
+import { FunctionTemplate } from './templates/function_template';
+
 export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
     /**
      * @docid DOMComponentOptions.bindingOptions
@@ -126,6 +129,12 @@ export default class DOMComponent extends Component {
      * @public
      */
     static getInstance(element: Element | JQuery): DOMComponent;
+
+    $element(): Element | JQuery;
+    _getTemplate(template: unknown): FunctionTemplate;
+    _invalidate(): void;
+    _refresh(): void;
+    _templateManager: TemplateManager;
 }
 
 export type Options = DOMComponentOptions;

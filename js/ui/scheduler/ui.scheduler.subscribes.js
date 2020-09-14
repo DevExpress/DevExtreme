@@ -15,8 +15,10 @@ import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 import utils from './utils';
 
+const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
+const HOUR_MS = toMs('hour');
 
 const subscribes = {
     isCurrentViewAgenda: function() {
@@ -455,6 +457,10 @@ const subscribes = {
         return obj;
     },
 
+    renderAppointments: function() {
+        this._renderAppointments();
+    },
+
     prerenderFilter: function() {
         const dateRange = this.getWorkSpace().getDateRange();
         const resources = this._resourcesManager.getResourcesData();
@@ -474,6 +480,55 @@ const subscribes = {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             recurrenceException: this._getRecurrenceException.bind(this),
         }, this.timeZoneCalculator);
+    },
+
+    prerenderFilterVirtual: function() {
+        const workspace = this.getWorkSpace();
+        const resourcesManager = this._resourcesManager;
+
+        let allDay = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
+
+        const result = [];
+
+        const { viewDataProvider } = workspace;
+        const { groupedData } = viewDataProvider.viewData;
+        const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const endViewDate = workspace.getEndViewDateByEndDayHour();
+
+        groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
+            const startDate = viewDataProvider.getGroupStartDate(groupIndex);
+            const endDate = new Date(Math.min(viewDataProvider.getGroupEndDate(groupIndex), endViewDate));
+            const startDayHour = startDate.getHours();
+            const endDayHour = (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY;
+
+            allDay = (allDay !== false) && allDayPanel?.length > 0;
+
+            const groups = viewDataProvider.getCellsGroup(groupIndex);
+            const groupResources = isVerticalGrouping
+                ? resourcesManager.getResourcesDataByGroups(groups)
+                : resourcesManager.getResourcesData();
+
+            const filterOptions = {
+                startDayHour,
+                endDayHour,
+                min: startDate,
+                max: endDate,
+                resources: groupResources,
+                allDay: allDay,
+                firstDayOfWeek: this.getFirstDayOfWeek(),
+                recurrenceException: this._getRecurrenceException.bind(this)
+            };
+
+            const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
+                filterOptions,
+                this.timeZoneCalculator
+            );
+
+            result.push(...currentGroupAppointments);
+        });
+
+        return result;
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
@@ -647,22 +702,6 @@ const subscribes = {
             common: isDefined(commonTimezoneOffset) ? commonTimezoneOffset : clientTimezoneOffset,
             appointment: appointmentTimezoneOffset
         };
-    },
-
-    getTimezonesDisplayName: function() {
-        return SchedulerTimezones.getTimezonesDisplayName();
-    },
-
-    getTimezoneDisplayNameById: function(id) {
-        return SchedulerTimezones.getTimezoneDisplayNameById(id);
-    },
-
-    getSimilarTimezones: function(id) {
-        return SchedulerTimezones.getSimilarTimezones(id);
-    },
-
-    getTimezonesIdsByDisplayName: function(displayName) {
-        return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
     getTargetedAppointmentData: function(appointment, element) {

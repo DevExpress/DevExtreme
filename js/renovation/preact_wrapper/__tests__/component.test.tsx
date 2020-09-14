@@ -6,6 +6,7 @@ import { act } from 'preact/test-utils';
 import $ from '../../../core/renderer';
 import './utils/test_components/empty_test_widget';
 import './utils/test_components/preact_test_widget';
+import './utils/test_components/options_check_widget';
 import './utils/test_components/templated_test_widget';
 import {
   defaultEvent,
@@ -91,15 +92,29 @@ describe('Widget\'s container manipulations', () => {
   });
 
   it('preact component\'s root replaces widget\'s container', () => {
-    act(() => $('#component').dxPreactTestWidget({ }));
+    act(() => $('#component').dxPreactTestWidget({}));
 
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
   it('preact component\'s root is widget\'s container after repaint', () => {
-    act(() => $('#component').dxPreactTestWidget({ }));
+    act(() => $('#component').dxPreactTestWidget({}));
     act(() => $('#component').dxPreactTestWidget('repaint'));
 
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
+  });
+
+  it('preact component\'s root is widget\'s container after render in detached container', () => {
+    const $container = $('#component');
+    const parent = $container.parent();
+    $container.remove();
+    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+
+    act(() => {
+      $container.appendTo(parent);
+    });
+
+    expect($('.dx-test-widget')[0]).not.toBe(undefined);
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
@@ -110,6 +125,25 @@ describe('Widget\'s container manipulations', () => {
     act(() => $container.dxPreactTestWidget({ text: 'test' }));
 
     act(() => {
+      $container.appendTo(parent);
+      $container.dxPreactTestWidget('repaint');
+    });
+
+    expect($('.dx-test-widget')[0]).not.toBe(undefined);
+    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
+  });
+
+  it('html tree is correct after repaint detached component', () => {
+    const $container = $('#component');
+    const parent = $container.parent();
+    $container.remove();
+    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+
+    act(() => {
+      $container.appendTo(parent);
+      $container.dxPreactTestWidget('repaint');
+      $container.detach();
+      $container.dxPreactTestWidget('repaint');
       $container.appendTo(parent);
       $container.dxPreactTestWidget('repaint');
     });
@@ -262,9 +296,9 @@ describe('Widget\'s container manipulations', () => {
 
 describe('option', () => {
   it('should return default props of preact component', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
+    act(() => $('#component').dxOptionsCheckWidget({}));
 
-    expect($('#component').dxPreactTestWidget('option').text).toBe('default text');
+    expect($('#component').dxOptionsCheckWidget('option').text).toBe('default text');
   });
 
   it('should copy default props of preact component (not by reference)', () => {
@@ -276,37 +310,37 @@ describe('option', () => {
       `;
 
     act(() => {
-      $('#component1').dxPreactTestWidget({});
-      $('#component2').dxPreactTestWidget({});
+      $('#component1').dxOptionsCheckWidget({});
+      $('#component2').dxOptionsCheckWidget({});
     });
 
-    const objectProp1 = $('#component1').dxPreactTestWidget('option').objectProp;
-    const objectProp2 = $('#component2').dxPreactTestWidget('option').objectProp;
+    const objectProp1 = $('#component1').dxOptionsCheckWidget('option').objectProp;
+    const objectProp2 = $('#component2').dxOptionsCheckWidget('option').objectProp;
 
     expect(objectProp1).not.toBe(objectProp2);
   });
 
   it('should return default value of TwoWay prop', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
+    act(() => $('#component').dxOptionsCheckWidget({}));
 
-    expect($('#component').dxPreactTestWidget('option').twoWayProp).toBe(1);
+    expect($('#component').dxOptionsCheckWidget('option').twoWayProp).toBe(1);
   });
 
   it('should return updated value of TwoWay prop', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
+    act(() => $('#component').dxOptionsCheckWidget({}));
 
-    $('#component').dxPreactTestWidget('updateTwoWayPropCheck');
+    $('#component').dxOptionsCheckWidget('updateTwoWayPropCheck');
 
-    expect($('#component').dxPreactTestWidget('option').twoWayProp).toBe(2);
+    expect($('#component').dxOptionsCheckWidget('option').twoWayProp).toBe(2);
   });
 
   it('fires optionChanged on TwoWay prop change', () => {
     const optionChanged = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    act(() => $('#component').dxOptionsCheckWidget({
       onOptionChanged: optionChanged,
     }));
 
-    $('#component').dxPreactTestWidget('updateTwoWayPropCheck');
+    $('#component').dxOptionsCheckWidget('updateTwoWayPropCheck');
 
     expect(optionChanged).toBeCalledTimes(1);
     expect(optionChanged.mock.calls[0][0]).toEqual({
@@ -315,21 +349,42 @@ describe('option', () => {
       previousValue: 1,
       value: 2,
       element: $('#component').get(0),
-      component: $('#component').dxPreactTestWidget('instance'),
+      component: $('#component').dxOptionsCheckWidget('instance'),
     });
   });
 
-  it('convert `undefined` to `null` for TwoWay props', () => {
-    act(() => $('#component').dxPreactTestWidget({
-      twoWayProp: 15,
+  it('convert `undefined` to `null` or `default value`', () => {
+    act(() => $('#component').dxOptionsCheckWidget({
+      oneWayWithValue: 15,
+      oneWayWithoutValue: 15,
+      oneWayNullWithValue: 15,
+      twoWayWithValue: '15',
+      twoWayNullWithValue: '15',
     }));
 
-    act(() => $('#component').dxPreactTestWidget({
-      twoWayProp: undefined,
+    act(() => $('#component').dxOptionsCheckWidget({
+      oneWayWithValue: undefined,
+      oneWayWithoutValue: undefined,
+      oneWayNullWithValue: undefined,
+      twoWayWithValue: undefined,
+      twoWayNullWithValue: undefined,
     }));
 
-    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').twoWayProp).toBe(null);
-    expect($('#component').dxPreactTestWidget('option').twoWayProp).toBe(undefined);
+    expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps')).toMatchObject({
+      oneWayWithValue: 10,
+      oneWayWithoutValue: undefined,
+      oneWayNullWithValue: null,
+      twoWayWithValue: '10',
+      twoWayNullWithValue: null,
+    });
+
+    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject({
+      oneWayWithValue: undefined,
+      oneWayWithoutValue: undefined,
+      oneWayNullWithValue: undefined,
+      twoWayWithValue: undefined,
+      twoWayNullWithValue: undefined,
+    });
   });
 });
 
@@ -417,6 +472,30 @@ describe('templates and slots', () => {
     }));
 
     expect(templateRoot.innerHTML).toBe('<span>Template - new data</span>');
+  });
+
+  it('correctly change template at runtime', () => {
+    const template = () => {
+      const div = $('<div>');
+      div.append('first custom template');
+      return div;
+    };
+
+    const templateNew = () => {
+      const div = $('<div>');
+      div.append('second custom template');
+      return div;
+    };
+    act(() => $('#component').dxTemplatedTestWidget({
+      template,
+    }));
+    const templateRoot = $('#component').children('.templates-root')[0];
+
+    act(() => $('#component').dxTemplatedTestWidget({
+      template: templateNew,
+    }));
+
+    expect(templateRoot.innerHTML).toBe('<div>second custom template</div>');
   });
 
   it('replace root with template if it returns .dx-template-wrapper node', () => {

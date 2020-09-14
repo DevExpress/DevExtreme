@@ -751,7 +751,7 @@ QUnit.module('State Storing with real controllers', {
 
         // assert
         assert.strictEqual(this.dataController.pageSize(), 2);
-        assert.strictEqual(this.dataController.items().length, 4);
+        assert.strictEqual(this.dataController.items().length, 2);
     });
 
     QUnit.test('Load pageSize from state when scrolling mode is infinite and pager.visible, pager.showPageSizeSelector is set', function(assert) {
@@ -1327,7 +1327,7 @@ QUnit.module('State Storing with real controllers', {
         const $dataRows = this.gridView.element().find('tr.dx-data-row');
         assert.strictEqual(this.dataController.pageIndex(), 3);
         assert.strictEqual($dataRows.eq(0).text(), '6');
-        assert.strictEqual($dataRows.length, 4);
+        assert.strictEqual($dataRows.length, 2);
     });
 
     QUnit.test('Show NoData message when dataSource is empty and state is loaded', function(assert) {

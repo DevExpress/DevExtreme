@@ -368,19 +368,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onAppointmentDeleting?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, cancel: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
     /**
-     * @docid dxSchedulerOptions.onAppointmentFormCreated
-     * @extends Action
-     * @type function(e)
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 form:dxForm
-     * @action
-     * @deprecated dxSchedulerOptions.onAppointmentFormOpening
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onAppointmentFormCreated?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData?: any, form: dxForm }) => any);
-    /**
      * @docid dxSchedulerOptions.onAppointmentFormOpening
      * @extends Action
      * @type function(e)

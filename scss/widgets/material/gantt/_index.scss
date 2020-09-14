@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/gantt" as *;
+@use "../../base/gantt";
+@use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
 @use "../form/sizes" as *;
 

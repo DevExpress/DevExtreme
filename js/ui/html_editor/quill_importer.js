@@ -1,5 +1,5 @@
 import Errors from '../widget/ui.errors';
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 
 export function getQuill() {
     if(!Quill) {

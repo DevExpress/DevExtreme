@@ -315,6 +315,11 @@
  */
 
 /**
+  * @typedef {string} Enums.PieChartAnnotationLocation
+  * @enum {'center'|'edge'}
+  */
+
+/**
  * @typedef {string} Enums.PolarChartResolveLabelOverlapping
  * @enum {'hide'|'none'}
  */
@@ -1144,6 +1149,16 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramModelOperation
+ * @enum {'addShape'|'addShapeFromToolbox'|'deleteShape'|'deleteConnector'|'changeConnection'|'changeConnectorPoints'|'beforeChangeShapeText'|'changeShapeText'|'beforeChangeConnectorText'|'changeConnectorText'|'resizeShape'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorPosition
+ * @enum {'start'|'end'}
+ */
+
+/**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
  */
@@ -1171,4 +1186,14 @@
 /**
  * @typedef {string} Enums.floatingActionButtonDirection
  * @enum {'auto'|'up'|'down'}
+ */
+
+/**
+ * @typedef {string} Enums.GridPagerDisplayMode
+ * @enum {'adaptive'|'compact'|'full'}
+ */
+
+/**
+ * @typedef {string} Enums.GridPagerPageSize
+ * @enum {'all'}
  */

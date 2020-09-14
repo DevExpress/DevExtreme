@@ -30,13 +30,13 @@ import type {
   EmailRule,
   AsyncRule,
 } from '../../../ui/validation_engine';
-// import { ExcelFont } from '../../exporter/excel/excel.doc_comments';
-// import { ExcelDataGridCell } from '../../excel_exporter';
 import type { format } from '../../../ui/widget/ui.widget';
 import type dxSortable from '../../../ui/sortable';
 import type dxDraggable from '../../../ui/draggable';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../ui/form';
 import type Store from '../../../data/abstract_store';
+import type { ExcelDataGridCell } from '../../../excel_exporter';
+import type { ExcelFont } from '../../../exporter/excel/excel.doc_comments';
 
 @ComponentBindings()
 export class DataGridColumnButton {
@@ -240,8 +240,8 @@ export class DataGridColumn {
   @OneWay()
   format?: format;
 
-  // @Nested()
-  // headerFilter?: DataGridColumnHeaderFilter;
+  @Nested()
+  headerFilter?: DataGridColumnHeaderFilter;
 
   @OneWay()
   hidingPriority?: number;
@@ -1136,33 +1136,40 @@ export class DataGridLoadPanel {
   width?: number;
 }
 
-/*
-export declare type DataGridExport = {
-  allowExportSelectedData?: boolean;
-  customizeExcelCell?: ((options: {
-    component?: DxDataGrid,
+@ComponentBindings()
+export class DataGridExport {
+  @OneWay() allowExportSelectedData?: boolean;
+
+  @Event() customizeExcelCell?: ((options: {
+    component?: DxDataGrid;
     horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' |
-      'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' |
-      'center' | 'distributed' | 'justify' | 'top',
-    wrapTextEnabled?: boolean,
-    backgroundColor?: string,
+    'general' | 'justify' | 'left' | 'right'; verticalAlignment?: 'bottom' |
+    'center' | 'distributed' | 'justify' | 'top';
+    wrapTextEnabled?: boolean;
+    backgroundColor?: string;
     fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' |
-      'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' |
-      'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' |
-      'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid',
-    fillPatternColor?: string,
-    font?: ExcelFont, value?: string | number | Date,
-    numberFormat?: string, gridCell?: ExcelDataGridCell
+    'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' |
+    'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' |
+    'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
+    fillPatternColor?: string;
+    font?: ExcelFont; value?: string | number | Date;
+    numberFormat?: string; gridCell?: ExcelDataGridCell;
   }) => any);
-  enabled?: boolean;
-  excelFilterEnabled?: boolean;
-  excelWrapTextEnabled?: boolean;
-  fileName?: string;
-  ignoreExcelErrors?: boolean;
-  proxyUrl?: string;
-  texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string };
+
+  @OneWay() enabled?: boolean;
+
+  @OneWay() excelFilterEnabled?: boolean;
+
+  @OneWay() excelWrapTextEnabled?: boolean;
+
+  @OneWay() fileName?: string;
+
+  @OneWay() ignoreExcelErrors?: boolean;
+
+  @OneWay() proxyUrl?: string;
+
+  @OneWay() texts?: { exportAll?: string; exportSelectedRows?: string; exportTo?: string };
 }
-*/
 
 @ComponentBindings()
 export class DataGridProps extends WidgetProps /* implements Options */ {
@@ -1170,7 +1177,8 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @Nested() editing?: DataGridEditing;
 
-  // @OneWay() export?: DataGridExport;
+  @OneWay() export?: DataGridExport;
+
   @Nested() groupPanel?: DataGridGroupPanel;
 
   @Nested() grouping?: DataGridGrouping;
@@ -1290,17 +1298,17 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue?: string | any[] | Function;
+  @TwoWay() filterValue: string | any[] | Function | null = null;
 
-  @TwoWay() focusedColumnIndex?: number;
+  @TwoWay() focusedColumnIndex = -1;
 
-  @TwoWay() focusedRowIndex?: number;
+  @TwoWay() focusedRowIndex = -1;
 
-  @TwoWay() focusedRowKey?: any;
+  @TwoWay() focusedRowKey: any | null = null;
 
-  @TwoWay() selectedRowKeys?: any[];
+  @TwoWay() selectedRowKeys: any[] = [];
 
-  @TwoWay() selectionFilter?: string | any[] | Function;
+  @TwoWay() selectionFilter: string | any[] | Function = [];
 
   @Event() onCellClick?:
   | string

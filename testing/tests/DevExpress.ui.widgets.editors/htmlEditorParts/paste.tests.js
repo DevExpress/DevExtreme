@@ -58,7 +58,7 @@ testModule('Paste from MS Word', {
             })
             .dxHtmlEditor('instance');
 
-        const newDelta = instance._quillInstance.clipboard.convert(MS_BULLET_LIST);
+        const newDelta = instance._quillInstance.clipboard.convert({ html: MS_BULLET_LIST });
         instance._quillInstance.setContents(newDelta);
     });
 
@@ -73,7 +73,7 @@ testModule('Paste from MS Word', {
             })
             .dxHtmlEditor('instance');
 
-        const newDelta = instance._quillInstance.clipboard.convert(MS_ORDERED_LIST);
+        const newDelta = instance._quillInstance.clipboard.convert({ html: MS_ORDERED_LIST });
         instance._quillInstance.setContents(newDelta);
     });
 
@@ -88,7 +88,7 @@ testModule('Paste from MS Word', {
             })
             .dxHtmlEditor('instance');
 
-        const newDelta = instance._quillInstance.clipboard.convert(MS_INVALID_LIST_PARAGRAPH);
+        const newDelta = instance._quillInstance.clipboard.convert({ html: MS_INVALID_LIST_PARAGRAPH });
         instance._quillInstance.setContents(newDelta);
     });
 });
@@ -105,7 +105,7 @@ testModule('Text with decoration', () => {
             })
             .dxHtmlEditor('instance');
 
-        const newDelta = instance._quillInstance.clipboard.convert(TEXT_WITH_DECORATION);
+        const newDelta = instance._quillInstance.clipboard.convert({ html: TEXT_WITH_DECORATION });
         instance._quillInstance.setContents(newDelta);
     });
 });

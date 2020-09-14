@@ -194,7 +194,8 @@ const PivotGrid = Widget.inherit({
 
                 removeInvisiblePages: true,
                 virtualRowHeight: 50,
-                virtualColumnWidth: 100
+                virtualColumnWidth: 100,
+                loadTwoPagesOnStart: true
             },
             encodeHtml: true,
             dataSource: null,
@@ -1267,6 +1268,14 @@ const PivotGrid = Widget.inherit({
     _detectHasContainerHeight: function() {
         const that = this;
         const element = that.$element();
+
+        if(isDefined(that._hasHeight)) {
+            const height = that.option('height') || that.$element().get(0).style.height;
+
+            if(height && (that._hasHeight ^ height !== 'auto')) {
+                that._hasHeight = null;
+            }
+        }
 
         if(isDefined(that._hasHeight) || element.is(':hidden')) {
             return;

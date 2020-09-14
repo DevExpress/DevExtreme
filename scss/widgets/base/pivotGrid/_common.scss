@@ -1,0 +1,256 @@
+// adduse
+
+
+.dx-pivotgrid-fields-container {
+  .dx-sort,
+  .dx-header-filter {
+    display: inline-block;
+  }
+
+  .dx-area-field-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.dx-drag {
+    .dx-area-field-content {
+      display: inline-block;
+    }
+
+    .dx-column-indicators {
+      float: none;
+      display: inline-block;
+    }
+  }
+}
+
+.dx-pivotgrid-nodata {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.dx-pivotgrid {
+  cursor: default;
+  width: 100%;
+  position: relative;
+
+  &.dx-overflow-hidden {
+    overflow: hidden;
+  }
+
+  .dx-area-data-cell,
+  .dx-area-column-cell {
+    width: 100%;
+  }
+
+  .dx-area-data-cell {
+    position: relative;
+  }
+
+  table,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    table-layout: auto;
+    border-spacing: 0;
+  }
+
+  td {
+    vertical-align: top;
+    box-sizing: content-box;
+  }
+
+  .dx-area-description-cell {
+    position: relative;
+    background-clip: padding-box;  // T379462
+    .dx-pivotgrid-fields-area {
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
+  .dx-ie {
+    height: 1px;
+
+    .dx-area-description-cell { // T656699, T696419
+      position: static;
+      height: inherit;
+      vertical-align: bottom;
+      font-size: 0;
+
+      .dx-pivotgrid-fields-area {
+        position: relative;
+        display: inline-block;
+      }
+    }
+  }
+
+  .dx-area-field-content {
+    display: inline-block;
+  }
+
+  .dx-column-indicators {
+    display: inline-block;
+  }
+
+  .dx-expand-icon-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dx-incompressible-fields {
+    .dx-pivotgrid-fields-area {
+      position: static;
+
+      &:not(.dx-hidden) {
+        display: table-cell; // T667152
+      }
+    }
+
+    .dx-column-indicators {
+      vertical-align: top;
+      float: none !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .dx-area-field {
+      display: inline-block;
+      white-space: nowrap;
+    }
+  }
+
+  .dx-area-field {
+    white-space: nowrap;
+  }
+
+  .dx-area-field-content { // stylelint-disable-line no-duplicate-selectors
+    white-space: nowrap;
+  }
+
+  .dx-popup-content {
+    .dx-column-indicators {
+      float: none !important; // stylelint-disable-line declaration-no-important
+      display: inline-block;
+    }
+
+    .dx-area-field-content {
+      display: inline-block;
+    }
+  }
+
+  .dx-pivotgrid-area {
+    white-space: nowrap;
+  }
+
+  .dx-pivotgrid-collapsed,
+  .dx-pivotgrid-expanded {
+    cursor: pointer;
+
+    .dx-expand {
+      display: inline-block;
+    }
+  }
+
+  .dx-word-wrap {
+    .dx-pivotgrid-area {
+      white-space: normal;
+    }
+
+    .dx-pivotgrid-collapsed,
+    .dx-pivotgrid-expanded,
+    .dx-pivotgrid-sorted {
+      white-space: nowrap;
+
+      > span {
+        white-space: normal;
+      }
+    }
+
+    .dx-pivotgrid-collapsed,
+    .dx-pivotgrid-expanded {
+      > span {
+        display: inline-flex;
+      }
+    }
+  }
+}
+
+.dx-pivotgridfieldchooser {
+  position: relative;
+
+  .dx-pivotgridfieldchooser-container {
+    display: flex;
+    overflow: hidden;
+    height: 100%;
+
+    &.dx-layout-0 {
+      flex-direction: column;
+    }
+  }
+
+  .dx-pivotgridfieldchooser-container.dx-layout-2 {
+    flex-direction: column;
+
+    .dx-row:nth-child(1) {
+      flex-grow: 3;
+    }
+
+    .dx-row:nth-child(2) {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      flex-grow: 4;
+    }
+  }
+
+  .dx-col {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dx-row {
+    display: flex;
+    flex-direction: row;
+    height: 0;
+  }
+
+  // stylelint-disable no-duplicate-selectors
+  .dx-pivotgridfieldchooser-container {
+    .dx-row:nth-child(1) {
+      flex-grow: 2;
+    }
+
+    .dx-row:nth-child(2) {
+      flex-grow: 1;
+    }
+  }
+
+  // stylelint-enable no-duplicate-selectors
+
+  .dx-area-caption {
+    vertical-align: middle;
+  }
+}
+
+.dx-pivotgrid-action {
+  cursor: pointer;
+}
+
+.dx-pivotgrid-drag-action {
+  touch-action: pinch-zoom;
+}

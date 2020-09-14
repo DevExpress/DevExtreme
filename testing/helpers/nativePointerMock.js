@@ -191,6 +191,7 @@
                     customEvent.shiftKey = shiftKey;
                     customEvent.metaKey = metaKey;
                     customEvent.keyCode = keyCode;
+                    customEvent.which = keyCode;
                     customEvent.charCode = charCode;
                 }
 

@@ -1,0 +1,36 @@
+@use "sass:string";
+@use "../string" as *;
+
+@mixin filemanager-icon-colored($data-uri, $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height) {
+  $uri1: replace("#{$data-uri}", "currentTextColor", escape("#{$text-color}"));
+  $uri2: replace("#{$uri1}", "currentSuccessBgColor", escape("#{$success-bg-color}"));
+  $uri3: replace("#{$uri2}", "currentSuccessTextColor", escape("#{$success-text-color}"));
+  $uri4: replace("#{$uri3}", "currentDangerBgColor", escape("#{$danger-bg-color}"));
+  $uri-final: replace("#{$uri4}", "currentDangerTextColor", escape("#{$danger-text-color}"));
+
+  background: string.unquote($uri-final);
+  width: $width;
+  height: $height;
+}
+
+@mixin filemanager-icons-mixin($text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size) {
+  .dx-filemanager-i,
+  .dx-filemanager-i.dx-icon {
+    &.dx-filemanager-i-refresh,
+    &.dx-filemanager-i-progress {
+      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/refresh.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+    }
+
+    &.dx-filemanager-i-done {
+      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/done.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+    }
+
+    &.dx-filemanager-i-danger {
+      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/danger.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+    }
+
+    &.dx-filemanager-i-cancel {
+      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/cancel.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+    }
+  }
+}

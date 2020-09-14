@@ -23,6 +23,7 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
+require('./build/gulp/create_timezones_data');
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
@@ -75,6 +76,6 @@ gulp.task('default', createDefaultBatch(env.USE_RENOVATION));
 gulp.task('dev', gulp.series(
     'generate-jquery-components',
     'create-renovation-temp',
-    gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev', 'generate-jquery-components-watch')),
+    gulp.parallel('create-renovation-temp-watch', 'bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev', 'generate-jquery-components-watch')),
 );
 

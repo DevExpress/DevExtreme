@@ -12045,6 +12045,35 @@ QUnit.test('Update hint on axis redrawing', function(assert) {
     assert.equal(label.setTitle.lastCall.args[0], 'hint');
 });
 
+QUnit.test('Update hint on axis redrawing after updating the data source (T926456)', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        visible: false,
+        label: {
+            customizeHint() {
+                return 'hint';
+            },
+            visible: true,
+        }
+    });
+    this.generatedTicks = [1];
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    const oldLabel = renderer.text.lastCall.returnValue;
+    oldLabel.setTitle.reset();
+    this.generatedTicks = [111];
+    // act
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+    assert.equal(oldLabel.setTitle.callCount, 0);
+    assert.equal(oldLabel.removeTitle.callCount, 1);
+    assert.equal(oldLabel.parent.toBackground.callCount, 1);
+});
+
 QUnit.test('Fade in new label on second drawing', function(assert) {
     // arrange
     const renderer = this.renderer;

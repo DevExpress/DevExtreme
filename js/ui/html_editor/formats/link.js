@@ -1,4 +1,4 @@
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 import { isObject } from '../../../core/utils/type';
 
 let ExtLink = {};
