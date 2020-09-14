@@ -334,14 +334,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     stripLines?: Array<dxGanttStripLine>;
     /**
-     * @docid dxGanttOptions.tooltipTemplate
+     * @docid dxGanttOptions.taskTooltipContentTemplate
      * @type template|function
      * @type_function_param1 container:dxElement
      * @type_function_param2 task:any
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tooltipTemplate?: template | ((container: dxElement, task: any) => string | Element | JQuery);
+    taskTooltipContentTemplate?: template | ((container: dxElement, task: any) => string | Element | JQuery);
 }
 /**
  * @docid dxGantt
