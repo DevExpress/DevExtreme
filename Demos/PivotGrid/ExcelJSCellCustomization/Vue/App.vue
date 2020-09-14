@@ -115,7 +115,7 @@ export default {
       };
     },
     getCssStyles({ fill, font, bold }) {
-      return { 
+      return {
         'background-color': `#${fill}`,
         color: `#${font}`,
         'font-weight': bold ? 'bold' : undefined
