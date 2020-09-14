@@ -376,8 +376,8 @@ class FileUploader extends Editor {
 
     _render() {
         this._preventRecreatingFiles = false;
-        this._renderDragEvents(this._$inputWrapper);
-        this._renderDragEvents($(this.option('dropZone')));
+        this._renderDragEvents();
+        this._renderDragEvents(true);
 
         this._renderFiles();
 
@@ -846,7 +846,8 @@ class FileUploader extends Editor {
             .appendTo(this._$content);
     }
 
-    _renderDragEvents(target) {
+    _renderDragEvents(isCustomTarget) {
+        const target = isCustomTarget ? $(this.option('dropZone')) : this._getValidationMessageTarget();
         eventsEngine.off(target, '.' + this.NAME);
 
         if(!this._shouldDragOverBeRendered()) {
@@ -855,10 +856,10 @@ class FileUploader extends Editor {
 
         this._dragEventsTargets = [];
 
-        eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this));
-        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
-        eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this));
-        eventsEngine.on(target, addNamespace('drop', this.NAME), this._dropHandler.bind(this));
+        eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this, isCustomTarget));
+        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this, isCustomTarget));
+        eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this, isCustomTarget));
+        eventsEngine.on(target, addNamespace('drop', this.NAME), this._dropHandler.bind(this, isCustomTarget));
     }
 
     _applyInputAttributes(customAttributes) {
@@ -869,7 +870,7 @@ class FileUploader extends Editor {
         return this.option('nativeDropSupported') && this.option('uploadMode') === 'useForm';
     }
 
-    _dragEnterHandler(e) {
+    _dragEnterHandler(isCustomTarget, e) {
         if(this.option('disabled')) {
             return false;
         }
@@ -880,24 +881,26 @@ class FileUploader extends Editor {
 
         this._updateEventTargets(e);
 
-        this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
+        if(!isCustomTarget) {
+            this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
+        }
     }
 
-    _dragOverHandler(e) {
+    _dragOverHandler(isCustomTarget, e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
         e.originalEvent.dataTransfer.dropEffect = 'copy';
     }
 
-    _dragLeaveHandler(e) {
+    _dragLeaveHandler(isCustomTarget, e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
 
         this._updateEventTargets(e);
 
-        if(!this._dragEventsTargets.length) {
+        if(!this._dragEventsTargets.length && !isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
     }
@@ -913,9 +916,11 @@ class FileUploader extends Editor {
         }
     }
 
-    _dropHandler(e) {
+    _dropHandler(isCustomTarget, e) {
         this._dragEventsTargets = [];
-        this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
+        if(!isCustomTarget) {
+            this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
+        }
 
         if(this._useInputForDrop()) {
             return;
@@ -1153,7 +1158,7 @@ class FileUploader extends Editor {
         this._selectButton.option('disabled', readOnly);
         this._files.forEach(file => file.cancelButton?.option('disabled', readOnly));
         this._displayInputContainerIfNeeded();
-        this._renderDragEvents(this._$inputWrapper);
+        this._renderDragEvents();
     }
 
     _optionChanged(args) {
@@ -1208,7 +1213,7 @@ class FileUploader extends Editor {
                 this._attachSelectFileDialogHandler(value);
                 break;
             case 'dropZone':
-                this._renderDragEvents(value);
+                this._renderDragEvents(true);
                 break;
             case 'maxFileSize':
             case 'minFileSize':
@@ -1266,7 +1271,7 @@ class FileUploader extends Editor {
                 this._renderInput();
                 break;
             case 'useDragOver':
-                this._renderDragEvents(this._$inputWrapper);
+                this._renderDragEvents();
                 break;
             case 'nativeDropSupported':
                 this._invalidate();
