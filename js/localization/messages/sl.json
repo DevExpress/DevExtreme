@@ -63,6 +63,7 @@
         "dxFileUploader-upload": "Naloži",
         "dxFileUploader-uploaded": "Naloženo",
         "dxFileUploader-readyToUpload": "Pripravljeno za nalaganje",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Nalaganje je spodletelo",
         "dxFileUploader-invalidFileExtension": "Tip datoteke ni dovoljen",
         "dxFileUploader-invalidMaxFileSize": "Datoteka je prevelika",
