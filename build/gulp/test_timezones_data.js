@@ -38,11 +38,12 @@ function checkTimeZonesParsing(input) {
         }
     });
 }
+
 function checkTimeZoneParsing(parsedTimeZone, rawTimeZone) {
     if(rawTimeZone.name !== parsedTimeZone.id ||
         !isUntilsCorrect(rawTimeZone.untils, parsedTimeZone.untils) ||
         !isOffsetsCorrect(rawTimeZone.offsets, parsedTimeZone.offsets, parsedTimeZone.offsetIndices)) {
-        console.log('Error while parsing timezone ' + rawTimeZone.name);
+        console.log(`Error while parsing timezone ${rawTimeZone.name}`);
     }
 
 }
