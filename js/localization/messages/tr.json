@@ -54,6 +54,7 @@
         "dxFileUploader-upload": "Yükleme",
         "dxFileUploader-uploaded": "Yüklenen",
         "dxFileUploader-readyToUpload": "Yüklemeye hazır",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Yükleme başarısız",
         "dxFileUploader-invalidFileExtension": "Dosya türüne izin verilmiyor",
         "dxFileUploader-invalidMaxFileSize": "Dosya çok büyük",

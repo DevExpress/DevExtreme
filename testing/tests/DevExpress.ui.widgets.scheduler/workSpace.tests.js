@@ -3717,8 +3717,8 @@ QUnit.module('Renovated Render', {
         QUnit.dump.maxDepth = 10;
     },
     beforeEach() {
-        this.createInstance = (options = {}) => {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(extend({
+        this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
+            this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
@@ -3729,7 +3729,7 @@ QUnit.module('Renovated Render', {
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
-            }, options)).dxSchedulerWorkSpaceDay('instance');
+            }, options))[workSpace]('instance');
             stubInvokeMethod(this.instance);
         };
     },
@@ -3853,7 +3853,7 @@ QUnit.module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
+                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0
@@ -3895,7 +3895,7 @@ QUnit.module('Renovated Render', {
                         startDate: new Date(2020, 6, 29, 0, 0),
                         endDate: new Date(2020, 6, 29, 0, 30),
                         allDay: false,
-                        text: '12:00 AM',
+                        text: '',
                         groups: { res: 2 },
                         groupIndex: 1,
                         index: 0
@@ -4082,6 +4082,20 @@ QUnit.module('Renovated Render', {
         });
     });
 
+    QUnit.test('should generate text correctly in week view', function(assert) {
+        this.createInstance({
+            showAllDayPanel: false,
+        }, 'dxSchedulerWorkSpaceWeek');
+
+        this.instance.viewDataProvider.update();
+
+        const { viewData } = this.instance.viewDataProvider;
+        const { dateTable } = viewData.groupedData[0];
+
+        assert.equal(dateTable[0][0].text, '12:00 AM', 'correct text');
+        assert.equal(dateTable[1][0].text, '', 'correct text');
+    });
+
     QUnit.module('getCellData', () => {
         ['standard', 'virtual'].forEach(scrollingMode => {
             QUnit.test(`should return cell data in basic case if ${scrollingMode} scrolling mode`, function(assert) {
@@ -4147,7 +4161,7 @@ QUnit.module('Renovated Render', {
                     startDate: new Date(2020, 6, 29, 0, 0),
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
-                    text: '12:00 AM',
+                    text: '',
                     groups: { res: 2 },
                     groupIndex: 1,
                     index: 0

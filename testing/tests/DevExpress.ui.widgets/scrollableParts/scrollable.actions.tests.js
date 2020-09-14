@@ -5,6 +5,7 @@ import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,

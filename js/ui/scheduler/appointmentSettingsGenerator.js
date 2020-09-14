@@ -51,7 +51,11 @@ export default class AppointmentSettingsGenerator {
                 path: 'toGrid'
             });
 
-            return this._createAppointmentInfo(startDate, endDate, source);
+            return {
+                startDate,
+                endDate,
+                source // TODO
+            };
         });
 
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
@@ -69,7 +73,13 @@ export default class AppointmentSettingsGenerator {
                 });
 
                 const newArr = longParts.filter(el => new Date(el) < maxDate)
-                    .map(date => this._createAppointmentInfo(date, new Date(new Date(date).setMilliseconds(appointment.duration)), gridAppointment.source));
+                    .map(date => {
+                        return {
+                            startDate: date,
+                            endDate: new Date(new Date(date).setMilliseconds(appointment.duration)),
+                            source: gridAppointment.source
+                        };
+                    });
 
                 resultDates = resultDates.concat(newArr);
             });
@@ -124,14 +134,6 @@ export default class AppointmentSettingsGenerator {
 
             start: appointment.startDate,
             end: appointment.endDate,
-        };
-    }
-
-    _createAppointmentInfo(startDate, endDate, source) {
-        return {
-            startDate,
-            endDate,
-            source // TODO
         };
     }
 
