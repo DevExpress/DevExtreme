@@ -118,6 +118,11 @@ export class Widget extends JSXComponent(WidgetProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 
+  @Method()
+  getRootElement(): HTMLDivElement {
+    return this.widgetRef;
+  }
+
   @Effect()
   accessKeyEffect(): EffectReturn {
     const namespace = 'UIFeedback';
