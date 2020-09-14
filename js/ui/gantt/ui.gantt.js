@@ -881,6 +881,16 @@ class Gantt extends Widget {
             * @inherits dxToolbarItem
             */
 
+            /**
+            * @name dxGanttContextMenu
+            * @type object
+            */
+
+            /**
+            * @name dxGanttContextMenuItem
+            * @inherits dxContextMenuItem
+            */
+
             tasks: {
                 /**
                 * @name dxGanttOptions.tasks.dataSource
