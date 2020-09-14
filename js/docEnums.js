@@ -1165,7 +1165,12 @@
 
 /**
  * @typedef {string} Enums.GanttToolbarItem
- * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'| 'zoomOut'}
+ * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttContextMenuItem
+ * @enum {'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'|'deleteDependency'|'taskDetails'}
  */
 
 /**

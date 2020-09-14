@@ -7625,7 +7625,7 @@ declare module DevExpress.ui {
         /**
          * <-dxGantt.Options.contextMenu->
          */
-        contextMenu?: any;
+        contextMenu?: dxGanttContextMenu;
         /**
          * <-dxGantt.Options.dependencies->
          */
@@ -7801,6 +7801,28 @@ declare module DevExpress.ui {
          * <-dxGantt.updateTask(key, data)->
          */
         updateTask(key: any, data: any): void;
+    }
+    /**
+     * <-dxGanttContextMenu->
+     */
+    export interface dxGanttContextMenu {
+        /**
+         * <-dxGanttContextMenu.enabled->
+         */
+        enabled?: boolean;
+        /**
+         * <-dxGanttContextMenu.items->
+         */
+        items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails'>;
+    }
+    /**
+     * <-dxGanttContextMenuItem->
+     */
+    export interface dxGanttContextMenuItem {
+        /**
+         * <-dxGanttContextMenuItem.name->
+         */
+        name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | string;
     }
     /**
      * <-dxGanttStripLine->

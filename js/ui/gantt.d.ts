@@ -320,11 +320,11 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     toolbar?: dxGanttToolbar;
     /**
      * @docid dxGanttOptions.contextMenu
-     * @type Object
+     * @type dxGanttContextMenu
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contextMenu?: { enabled?: boolean, items?: Array<dxContextMenuItem| 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails'> };
+    contextMenu?: dxGanttContextMenu;
     /**
      * @docid dxGanttOptions.stripLines
      * @type Array<dxGanttStripLine>
@@ -478,6 +478,24 @@ export interface dxGanttToolbar {
     items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
 }
 
+export interface dxGanttContextMenu {
+    /**
+     * @docid dxGanttContextMenu.enabled
+     * @type boolean
+     * @default true
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    enabled?: boolean
+    /**
+     * @docid dxGanttContextMenu.items
+     * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails'>;
+}
+
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid dxGanttToolbarItem.name
@@ -493,6 +511,16 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @public
      */
     location?: 'after' | 'before' | 'center';
+}
+
+export interface dxGanttContextMenuItem extends dxContextMenuItem {
+    /**
+     * @docid dxGanttContextMenuItem.name
+     * @type Enums.GanttContextMenuItem|string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | string;
 }
 
 export interface dxGanttStripLine {
