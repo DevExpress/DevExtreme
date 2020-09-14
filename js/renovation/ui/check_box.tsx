@@ -84,7 +84,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
-      {!viewModel.props.isValid && viewModel.props.validationErrors?.length
+      {!viewModel.props.isValid && viewModel.props.validationStatus === 'invalid' && viewModel.props.validationErrors?.length
                 && (
                 <ValidationMessage
                   validationErrors={viewModel.validationErrors}
