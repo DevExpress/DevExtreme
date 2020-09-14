@@ -4,11 +4,14 @@ const through = require('through2');
 const remoteSrc = require('gulp-remote-src');
 let tzData = [];
 
-// eslint-disable-next-line no-useless-catch
 try {
     tzData = require('../../artifacts/transpiled/ui/scheduler/timezones/ui.scheduler.timezones_data').zones; // eslint-disable-line node/no-missing-require
 } catch(e) {
-    throw e;
+    if(e instanceof Error && e.code === 'MODULE_NOT_FOUND') {
+        console.log('Can not load ui.scheduler.timezones_data');
+    } else {
+        throw e;
+    }
 }
 
 gulp.task('test-timezones-data', () => {
