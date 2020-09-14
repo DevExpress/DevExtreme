@@ -474,6 +474,13 @@ interface JQuery {
     dxValidationGroup(options: DevExpress.ui.dxValidationGroupOptions): JQuery;
 }
 interface JQuery {
+    dxValidationMessage(): JQuery;
+    dxValidationMessage(options: "instance"): DevExpress.ui.dxValidationMessage;
+    dxValidationMessage(options: string): any;
+    dxValidationMessage(options: string, ...params: any[]): any;
+    dxValidationMessage(options: DevExpress.ui.dxValidationMessageOptions): JQuery;
+}
+interface JQuery {
     dxValidationSummary(): JQuery;
     dxValidationSummary(options: "instance"): DevExpress.ui.dxValidationSummary;
     dxValidationSummary(options: string): any;
@@ -6683,6 +6690,24 @@ declare module DevExpress.ui {
         status?: 'valid' | 'invalid' | 'pending';
         /** @name dxValidationGroupResult.validators */
         validators?: Array<any>;
+    }
+    /** @name dxValidationMessage.Options */
+    export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
+        /** @name dxValidationMessage.Options.boundary */
+        boundary?: string | Element | JQuery;
+        /** @name dxValidationMessage.Options.mode */
+        mode?: string;
+        /** @name dxValidationMessage.Options.offset */
+        offset?: any;
+        /** @name dxValidationMessage.Options.positionRequest */
+        positionRequest?: string;
+        /** @name dxValidationMessage.Options.validationErrors */
+        validationErrors?: object[] | null;
+    }
+    /** @name dxValidationMessage */
+    export class dxValidationMessage extends dxOverlay {
+        constructor(element: Element, options?: dxValidationMessageOptions)
+        constructor(element: JQuery, options?: dxValidationMessageOptions)
     }
     /** @name dxValidationSummary.Options */
     export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
