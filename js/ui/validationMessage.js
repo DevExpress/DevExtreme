@@ -86,10 +86,12 @@ const ValidationMessage = Overlay.inherit({
     },
 
     _updatePosition: function() {
-        const positionRequest = this.option('positionRequest');
-        const rtlEnabled = this.option('rtlEnabled');
+        const {
+            positionRequest,
+            rtlEnabled,
+            offset
+        } = this.option();
         const positionSide = getDefaultAlignment(rtlEnabled);
-        const offset = this.option('offset');
         const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
 
         if(rtlEnabled) offset.h = -offset.h;
@@ -105,15 +107,16 @@ const ValidationMessage = Overlay.inherit({
     },
 
     _optionChanged(args) {
-        switch(args.name) {
+        const { name, value } = args;
+        switch(name) {
             case 'target':
                 this.updateMaxWidth();
                 break;
             case 'boundary':
-                this.option('position.boundary', args.value);
+                this.option('position.boundary', value);
                 break;
             case 'mode':
-                this._toggleModeClass(args.value);
+                this._toggleModeClass(value);
                 break;
             case 'rtlEnabled':
             case 'offset':

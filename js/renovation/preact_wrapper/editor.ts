@@ -14,26 +14,21 @@ const VALIDATION_TARGET = 'dx-validation-target';
 const VALIDATION_STATUS_INVALID = 'invalid';
 
 export default class Editor extends Component {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   _$validationMessage: any;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   _validationMessage: any;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   showValidationMessageTimeout: any;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   validationRequest: any;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   _valueChangeAction: any;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   _valueChangeEventInstance: any;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   getProps(): any {
+    /* eslint-enable  @typescript-eslint/no-explicit-any */
     const props = super.getProps();
     props.onFocusIn = (): void => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
@@ -91,14 +86,14 @@ export default class Editor extends Component {
   _removeValidationMessage(): void {
     if (this._$validationMessage) {
       this._$validationMessage.remove();
-      this.$element().attr('aria-describedby', null);
+      this.option('aria.describedby', null);
       this._$validationMessage = null;
     }
   }
 
   _toggleValidationClasses(isInvalid): void {
     this.$element().toggleClass(INVALID_CLASS, isInvalid);
-    this.$element().attr(`aria-${VALIDATION_STATUS_INVALID}`, isInvalid || undefined);
+    this.option(`aria.${VALIDATION_STATUS_INVALID}`, isInvalid || undefined);
   }
 
   _renderValidationState(): void {
@@ -126,7 +121,7 @@ export default class Editor extends Component {
         rtlEnabled: this.option('rtlEnabled'),
       }, this._options.cache('validationTooltipOptions')));
 
-      this.$element().attr('aria-describedby', this._validationMessage.$content().attr('id'));
+      this.option('aria.describedby', this._validationMessage.$content().attr('id'));
       this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
     }
   }
