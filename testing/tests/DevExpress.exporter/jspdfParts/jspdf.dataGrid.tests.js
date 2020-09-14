@@ -156,8 +156,7 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                // eslint-disable-next-line spellcheck/spell-checker
-                head: [[{ content: 'f1', styles: { halign: alignment } }]]
+                head: [[{ content: 'f1', styles: { 'halign': alignment } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
@@ -458,11 +457,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            // eslint-disable-next-line spellcheck/spell-checker
-            head: [[{ content: 'F1', styles: { halign: 'right' } }, { content: 'F2', styles: { halign: 'right' } }]],
+            head: [[{ content: 'F1', styles: { 'halign': 'right' } }, { content: 'F2', styles: { 'halign': 'right' } }]],
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: ds[0].f1, styles: { halign: 'right' } }, { content: ds[0].f2, styles: { halign: 'right' } }]
+                [{ content: ds[0].f1, styles: { 'halign': 'right' } }, { content: ds[0].f2, styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -486,10 +483,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'text1_1', styles: { halign: 'left' } }, { content: 'text1_2', styles: { halign: 'right' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'text2_1', styles: { halign: 'left' } }, { content: 'text2_2', styles: { halign: 'right' } }]
+                [{ content: 'text1_1', styles: { 'halign': 'left' } }, { content: 'text1_2', styles: { 'halign': 'right' } }],
+                [{ content: 'text2_1', styles: { 'halign': 'left' } }, { content: 'text2_2', styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -516,12 +511,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             head: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1', }, { content: 'f2', styles: { halign: 'right' } }]
+                [{ content: 'f1', }, { content: 'f2', styles: { 'halign': 'right' } }]
             ],
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: '1', styles: { halign: 'left' } }, { content: '2', styles: { halign: 'right' } }]
+                [{ content: '1', styles: { 'halign': 'left' } }, { content: '2', styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -553,10 +546,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-            // eslint-disable-next-line spellcheck/spell-checker
-                head: [[{ content: 'F1', styles: { halign: config.alignment } }]],
-                // eslint-disable-next-line spellcheck/spell-checker
-                body: [[{ content: config.value, styles: { halign: config.alignment } }]]
+                head: [[{ content: 'F1', styles: { 'halign': config.alignment } }]],
+                body: [[{ content: config.value, styles: { 'halign': config.alignment } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
@@ -597,8 +588,7 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                // eslint-disable-next-line spellcheck/spell-checker
-                body: [[{ content: 'custom', styles: { halign: config.alignment } }]]
+                body: [[{ content: 'custom', styles: { 'halign': config.alignment } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
@@ -634,8 +624,7 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                // eslint-disable-next-line spellcheck/spell-checker
-                body: [[{ content: config.values[0], styles: { halign: config.alignment } }]]
+                body: [[{ content: config.values[0], styles: { 'halign': config.alignment } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
@@ -669,8 +658,7 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                // eslint-disable-next-line spellcheck/spell-checker
-                body: [[{ content: config.values[1], styles: { halign: config.alignment } }]]
+                body: [[{ content: config.values[1], styles: { 'halign': config.alignment } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then((jsPDFDocument) => {
@@ -703,16 +691,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '', styles: { halign: 'left' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: null, styles: { halign: 'left' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '', styles: { halign: 'left' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: 'str1', styles: { halign: 'left' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: 'str2', styles: { halign: 'left' } }
+                { content: '', styles: { 'halign': 'left' } },
+                { content: null, styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: 'str1', styles: { 'halign': 'left' } },
+                { content: 'str2', styles: { 'halign': 'left' } }
             ]]
         };
 
@@ -747,20 +730,13 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: null, styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: 0, styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: 1, styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: -2, styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: 'Infinity', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '-Infinity', styles: { halign: 'right' } }
+                { content: '', styles: { 'halign': 'right' } },
+                { content: null, styles: { 'halign': 'right' } },
+                { content: 0, styles: { 'halign': 'right' } },
+                { content: 1, styles: { 'halign': 'right' } },
+                { content: -2, styles: { 'halign': 'right' } },
+                { content: 'Infinity', styles: { 'halign': 'right' } },
+                { content: '-Infinity', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -809,8 +785,7 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                // eslint-disable-next-line spellcheck/spell-checker
-                body: [[{ content: config.expectedPdfCellValue, styles: { halign: 'left' } }]]
+                body: [[{ content: config.expectedPdfCellValue, styles: { 'halign': 'left' } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
@@ -843,16 +818,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '100.000%', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '100%', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '100%', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '100.0%', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '100.000000%', styles: { halign: 'right' } }
+                { content: '100.000%', styles: { 'halign': 'right' } },
+                { content: '100%', styles: { 'halign': 'right' } },
+                { content: '100%', styles: { 'halign': 'right' } },
+                { content: '100.0%', styles: { 'halign': 'right' } },
+                { content: '100.000000%', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -885,16 +855,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.000', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.000000', styles: { halign: 'right' } }
+                { content: '1.000', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '1.0', styles: { 'halign': 'right' } },
+                { content: '1.000000', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -927,16 +892,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '001', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '000001', styles: { halign: 'right' } }
+                { content: '001', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '000001', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -969,16 +929,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.000E+0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1E+0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.0E+0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.0E+0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.000000E+0', styles: { halign: 'right' } }
+                { content: '1.000E+0', styles: { 'halign': 'right' } },
+                { content: '1E+0', styles: { 'halign': 'right' } },
+                { content: '1.0E+0', styles: { 'halign': 'right' } },
+                { content: '1.0E+0', styles: { 'halign': 'right' } },
+                { content: '1.000000E+0', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1011,16 +966,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.000', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '1.000000', styles: { halign: 'right' } }
+                { content: '1.000', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '1', styles: { 'halign': 'right' } },
+                { content: '1.0', styles: { 'halign': 'right' } },
+                { content: '1.000000', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1053,16 +1003,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.001K', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0K', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0K', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.0K', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.001000K', styles: { halign: 'right' } }
+                { content: '0.001K', styles: { 'halign': 'right' } },
+                { content: '0K', styles: { 'halign': 'right' } },
+                { content: '0K', styles: { 'halign': 'right' } },
+                { content: '0.0K', styles: { 'halign': 'right' } },
+                { content: '0.001000K', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1095,16 +1040,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.000M', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0M', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0M', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.0M', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.000001M', styles: { halign: 'right' } }
+                { content: '0.000M', styles: { 'halign': 'right' } },
+                { content: '0M', styles: { 'halign': 'right' } },
+                { content: '0M', styles: { 'halign': 'right' } },
+                { content: '0.0M', styles: { 'halign': 'right' } },
+                { content: '0.000001M', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1137,16 +1077,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.000B', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0B', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0B', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.0B', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.000000B', styles: { halign: 'right' } }
+                { content: '0.000B', styles: { 'halign': 'right' } },
+                { content: '0B', styles: { 'halign': 'right' } },
+                { content: '0B', styles: { 'halign': 'right' } },
+                { content: '0.0B', styles: { 'halign': 'right' } },
+                { content: '0.000000B', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1179,16 +1114,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.000T', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0T', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0T', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.0T', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '0.000000T', styles: { halign: 'right' } }
+                { content: '0.000T', styles: { 'halign': 'right' } },
+                { content: '0T', styles: { 'halign': 'right' } },
+                { content: '0T', styles: { 'halign': 'right' } },
+                { content: '0.0T', styles: { 'halign': 'right' } },
+                { content: '0.000000T', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1222,18 +1152,12 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '$1.00', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '$1.0000', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '$1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '$1', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '$1.0', styles: { halign: 'right' } },
-                // eslint-disable-next-line spellcheck/spell-checker
-                { content: '$1.00000', styles: { halign: 'right' } }
+                { content: '$1.00', styles: { 'halign': 'right' } },
+                { content: '$1.0000', styles: { 'halign': 'right' } },
+                { content: '$1', styles: { 'halign': 'right' } },
+                { content: '$1', styles: { 'halign': 'right' } },
+                { content: '$1.0', styles: { 'halign': 'right' } },
+                { content: '$1.00000', styles: { 'halign': 'right' } }
             ]]
         };
 
@@ -1263,17 +1187,12 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            // eslint-disable-next-line spellcheck/spell-checker
-            head: [[{ content: 'f2', styles: { halign: 'left' } }]],
+            head: [[{ content: 'f2', styles: { 'halign': 'left' } }]],
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1_2', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }],
+                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1305,13 +1224,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
                 }).dxDataGrid('instance');
 
                 const expectedCells = {
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    head: [[{ content: 'f2', styles: { halign: 'left' } }]],
+                    head: [[{ content: 'f2', styles: { 'halign': 'left' } }]],
                     body: [
-                        // eslint-disable-next-line spellcheck/spell-checker
-                        [{ content: 'f1: 1996-07-04', styles: { halign: 'left', fontStyle: 'bold' } }],
-                        // eslint-disable-next-line spellcheck/spell-checker
-                        [{ content: 'f1_1', styles: { halign: 'left' } }]
+                        [{ content: 'f1: 1996-07-04', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                        [{ content: 'f1_1', styles: { 'halign': 'left' } }]
                     ]
                 };
 
@@ -1347,14 +1263,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'left' } }],
+                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1386,12 +1298,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'left' } }],
+                [{ content: 'f2_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1421,15 +1330,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            // eslint-disable-next-line spellcheck/spell-checker
-            head: [[ { content: 'f1', styles: { halign: 'left' } }, { content: 'f2', styles: { halign: 'left' } } ]],
+            head: [[ { content: 'f1', styles: { 'halign': 'left' } }, { content: 'f2', styles: { 'halign': 'left' } } ]],
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: custom', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1_1', styles: { halign: 'left' } }, { content: 'f2_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1_2', styles: { halign: 'left' } }, { content: 'f2_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: custom', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f1_1', styles: { 'halign': 'left' } }, { content: 'f2_1', styles: { 'halign': 'left' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }, { content: 'f2_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1463,12 +1368,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: custom', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'custom_2', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'custom_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'custom_2', styles: { 'halign': 'left' } }],
+                [{ content: 'custom_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1499,17 +1401,12 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            // eslint-disable-next-line spellcheck/spell-checker
-            head: [[ { content: 'f2', styles: { halign: 'right' } } ]],
+            head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_1', styles: { halign: 'right' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_2', styles: { halign: 'right' } }]
+                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'right' } }],
+                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2_2', styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -1543,17 +1440,12 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            // eslint-disable-next-line spellcheck/spell-checker
-            head: [[ { content: 'f2', styles: { halign: 'right' } } ]],
+            head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1', styles: { halign: 'right', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_1', styles: { halign: 'right' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2', styles: { halign: 'right', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_2', styles: { halign: 'right' } }]
+                [{ content: 'f1: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'right' } }],
+                [{ content: 'f1: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }],
+                [{ content: 'f2_2', styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -1586,10 +1478,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'F1: str1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str1_1', styles: { halign: 'left' } }]
+                [{ content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'str1_1', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1620,10 +1510,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'F1: str1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str_1_2', styles: { halign: 'left' } }]
+                [{ content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'str_1_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1654,12 +1542,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'F1: str1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str1_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str_1_2', styles: { halign: 'left' } }]
+                [{ content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'str1_1', styles: { 'halign': 'left' } }],
+                [{ content: 'str_1_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1689,12 +1574,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'Field 3: str1!', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str1', styles: { halign: 'left' } }, { content: 'str1_f2', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str1', styles: { halign: 'left' } }, { content: 'str1_f2', styles: { halign: 'left' } }]
+                [{ content: 'Field 3: str1!', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'str1', styles: { 'halign': 'left' } }, { content: 'str1_f2', styles: { 'halign': 'left' } }],
+                [{ content: 'str1', styles: { 'halign': 'left' } }, { content: 'str1_f2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1726,10 +1608,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'Field 3: str1!', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str1', styles: { halign: 'left' } }, { content: 'str1_f2', styles: { halign: 'left' } }]
+                [{ content: 'Field 3: str1!', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'str1', styles: { 'halign': 'left' } }, { content: 'str1_f2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1760,10 +1640,8 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'F1: str2_1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'str2_2', styles: { halign: 'left' } }]
+                [{ content: 'F1: str2_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'str2_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1798,14 +1676,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1 (Max of f2 is 1)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 1, styles: { halign: 'right' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2 (Max of f2 is 3)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 3, styles: { halign: 'right' } }]
+                [{ content: 'f1: f1_1 (Max of f2 is 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 1, styles: { 'halign': 'right' } }],
+                [{ content: 'f1: f1_2 (Max of f2 is 3)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 3, styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -1840,14 +1714,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1 (custom)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 1, styles: { halign: 'right' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2 (custom)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 3, styles: { halign: 'right' } }]
+                [{ content: 'f1: f1_1 (custom)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 1, styles: { 'halign': 'right' } }],
+                [{ content: 'f1: f1_2 (custom)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 3, styles: { 'halign': 'right' } }]
             ]
         };
 
@@ -1887,14 +1757,10 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1 (Count: 1, Count: 1)', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1_2', styles: { halign: 'left' } }, { content: 'f3_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2 (Count: 1, Count: 1)', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2_2', styles: { halign: 'left' } }, { content: 'f3_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: f1_1 (Count: 1, Count: 1)', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }, { content: 'f3_1', styles: { 'halign': 'left' } }],
+                [{ content: 'f1: f1_2 (Count: 1, Count: 1)', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2_2', styles: { 'halign': 'left' } }, { content: 'f3_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1928,18 +1794,12 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f3_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_2', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2: f2_2', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f3_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f3_1', styles: { 'halign': 'left' } }],
+                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f3_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -1975,16 +1835,11 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f1: f1_1 (Max of f3 is f3_2, Count: 2)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2: f1_2 (Max of f3 is f3_1, Count: 1)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f3_1', styles: { halign: 'left' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f2: f2_2 (Max of f3 is f3_2, Count: 1)', styles: { halign: 'left', fontStyle: 'bold' } }],
-                // eslint-disable-next-line spellcheck/spell-checker
-                [{ content: 'f3_2', styles: { halign: 'left' } }]
+                [{ content: 'f1: f1_1 (Max of f3 is f3_2, Count: 2)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f2: f1_2 (Max of f3 is f3_1, Count: 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f3_1', styles: { 'halign': 'left' } }],
+                [{ content: 'f2: f2_2 (Max of f3 is f3_2, Count: 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f3_2', styles: { 'halign': 'left' } }]
             ]
         };
 
@@ -2026,40 +1881,25 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1: f1_1', styles: { halign: 'left', fontStyle: 'bold' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'Max: f4_2\nCount: 2', styles: { halign: 'left', fontStyle: 'bold' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'Max: f5_2\nCount: 2', styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                    { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                    { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2: f1_2', styles: { halign: 'left', fontStyle: 'bold' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'Max: f4_1\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'Max: f5_1\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                    { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                    { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f5_1', styles: { halign: 'left' } }
+                    { content: 'f3_1', styles: { 'halign': 'left' } },
+                    { content: 'f4_1', styles: { 'halign': 'left' } },
+                    { content: 'f5_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2: f2_2', styles: { halign: 'left', fontStyle: 'bold' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'Max: f4_2\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'Max: f5_2\nCount: 1', styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                    { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                    { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f5_2', styles: { halign: 'left' } }
+                    { content: 'f3_2', styles: { 'halign': 'left' } },
+                    { content: 'f4_2', styles: { 'halign': 'left' } },
+                    { content: 'f5_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2102,28 +1942,19 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1: f1_1 (Max of f4 is f4_2, Count: 2, Max of f5 is f5_2, Count: 2)', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f1: f1_1 (Max of f4 is f4_2, Count: 2, Max of f5 is f5_2, Count: 2)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2: f1_2 (Max of f4 is f4_1, Count: 1, Max of f5 is f5_1, Count: 1)', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f2: f1_2 (Max of f4 is f4_1, Count: 1, Max of f5 is f5_1, Count: 1)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f5_1', styles: { halign: 'left' } }
+                    { content: 'f3_1', styles: { 'halign': 'left' } },
+                    { content: 'f4_1', styles: { 'halign': 'left' } },
+                    { content: 'f5_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2: f2_2 (Max of f4 is f4_2, Count: 1, Max of f5 is f5_2, Count: 1)', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f2: f2_2 (Max of f4 is f4_2, Count: 1, Max of f5 is f5_2, Count: 1)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f5_2', styles: { halign: 'left' } }
+                    { content: 'f3_2', styles: { 'halign': 'left' } },
+                    { content: 'f4_2', styles: { 'halign': 'left' } },
+                    { content: 'f5_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2161,22 +1992,15 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4: f4_1', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } }
+                    { content: 'f1_1', styles: { 'halign': 'left' } },
+                    { content: 'f2_1', styles: { 'halign': 'left' } },
+                    { content: 'f3_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } }
+                    { content: 'f1_2', styles: { 'halign': 'left' } },
+                    { content: 'f2_2', styles: { 'halign': 'left' } },
+                    { content: 'f3_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2214,22 +2038,15 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4: f4_1', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } }
+                    { content: 'f1_1', styles: { 'halign': 'left' } },
+                    { content: 'f2_1', styles: { 'halign': 'left' } },
+                    { content: 'f3_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } }
+                    { content: 'f1_2', styles: { 'halign': 'left' } },
+                    { content: 'f2_2', styles: { 'halign': 'left' } },
+                    { content: 'f3_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2267,18 +2084,13 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4: f4_1', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } }
+                    { content: 'f2_1', styles: { 'halign': 'left' } },
+                    { content: 'f3_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } }
+                    { content: 'f2_2', styles: { 'halign': 'left' } },
+                    { content: 'f3_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2316,18 +2128,13 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4: f4_1', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } }
+                    { content: 'f1_1', styles: { 'halign': 'left' } },
+                    { content: 'f3_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } }
+                    { content: 'f1_2', styles: { 'halign': 'left' } },
+                    { content: 'f3_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2365,18 +2172,13 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4: f4_1', colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_1', styles: { halign: 'left' } }
+                    { content: 'f1_1', styles: { 'halign': 'left' } },
+                    { content: 'f2_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_2', styles: { halign: 'left' } }
+                    { content: 'f1_2', styles: { 'halign': 'left' } },
+                    { content: 'f2_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };
@@ -2414,22 +2216,15 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
         const expectedCells = {
             body: [
                 [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f4: f4_1', colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }
+                    { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_1', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_1', styles: { halign: 'left' } }
+                    { content: 'f3_1', styles: { 'halign': 'left' } },
+                    { content: 'f1_1', styles: { 'halign': 'left' } },
+                    { content: 'f2_1', styles: { 'halign': 'left' } }
                 ], [
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f3_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f1_2', styles: { halign: 'left' } },
-                    // eslint-disable-next-line spellcheck/spell-checker
-                    { content: 'f2_2', styles: { halign: 'left' } }
+                    { content: 'f3_2', styles: { 'halign': 'left' } },
+                    { content: 'f1_2', styles: { 'halign': 'left' } },
+                    { content: 'f2_2', styles: { 'halign': 'left' } }
                 ]
             ]
         };

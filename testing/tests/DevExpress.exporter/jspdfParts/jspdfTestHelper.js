@@ -34,8 +34,7 @@ class JSPdfDataGridTestHelper {
         this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
             const expectedCellStyles = cell.styles || {};
             const actualCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
-            // eslint-disable-next-line spellcheck/spell-checker
-            assert.strictEqual(actualCellStyles.halign, expectedCellStyles.halign, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+            assert.strictEqual(actualCellStyles['halign'], expectedCellStyles['halign'], `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
             assert.strictEqual(actualCellStyles.fontStyle, expectedCellStyles.fontStyle, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
         });
     }
