@@ -69,8 +69,6 @@ const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
 const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
 
-const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
-
 const DEFAULT_START_EDIT_ACTION = 'click';
 
 const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
@@ -2577,9 +2575,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
         showHighlighting: function($cell) {
             const isHighlighted = $cell.hasClass(CELL_HIGHLIGHT_OUTLINE);
-            !isHighlighted && $cell.addClass(`${CELL_HIGHLIGHT_OUTLINE} ${POINTER_EVENTS_TARGET_CLASS}`);
+            !isHighlighted && $cell.addClass(CELL_HIGHLIGHT_OUTLINE);
             // if($cell.get(0).tagName === 'TD' && !$highlight.length) {
-            //     $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
+            //     $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE));
             // }
         },
 

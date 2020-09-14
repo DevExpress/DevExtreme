@@ -18,7 +18,6 @@ const LAST_CELL_CLASS = 'dx-last-cell';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FIXED_COL_CLASS = 'dx-col-fixed';
 const FIXED_COLUMNS_CLASS = 'dx-fixed-columns';
-const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
 const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const COMMAND_TRANSPARENT = 'transparent';
 const GROUP_ROW_CLASS = 'dx-group-row';
@@ -189,7 +188,7 @@ const baseFixedColumns = {
         const $scrollContainer = this.callBase.apply(this, arguments);
 
         if(this._isFixedTableRendering) {
-            $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS) + ' ' + POINTER_EVENTS_TARGET_CLASS);
+            $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS));
         }
 
         return $scrollContainer;
@@ -641,7 +640,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if(this._isFixedTableRendering) {
             return contentElement
                 .empty()
-                .addClass(this.addWidgetPrefix(CONTENT_CLASS) + ' ' + this.addWidgetPrefix(CONTENT_FIXED_CLASS) + ' ' + POINTER_EVENTS_TARGET_CLASS)
+                .addClass(this.addWidgetPrefix(CONTENT_CLASS) + ' ' + this.addWidgetPrefix(CONTENT_FIXED_CLASS))
                 .append(tableElement);
         }
 
