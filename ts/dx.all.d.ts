@@ -7818,7 +7818,7 @@ declare module DevExpress.ui {
     /**
      * <-dxGanttContextMenuItem->
      */
-    export interface dxGanttContextMenuItem {
+    export interface dxGanttContextMenuItem extends dxContextMenuItem {
         /**
          * <-dxGanttContextMenuItem.name->
          */
