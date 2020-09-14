@@ -405,11 +405,8 @@ class FileUploader extends Editor {
     }
 
     _setUploadAbortedStatusMessage(file) {
-        if(this.option('uploadMode') === 'instantly') {
-            this._setStatusMessage(file, 'uploadAbortedMessage');
-        } else {
-            this._setStatusMessage(file, 'readyToUploadMessage');
-        }
+        const key = this.option('uploadMode') === 'instantly' ? 'uploadAbortedMessage' : 'readyToUploadMessage';
+        this._setStatusMessage(file, key);
     }
 
     _createFiles() {
