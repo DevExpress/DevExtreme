@@ -11,6 +11,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
+import Guid from '../../core/guid';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import Themes from '../../ui/themes';
@@ -224,15 +225,18 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   get aria(): object {
-    const { readOnly, isValid } = this.props;
+    const { readOnly, isValid, validationStatus } = this.props;
     const checked = !!this.props.value;
     const indeterminate = this.props.value === null;
+    const isValidationMessageShown = !isValid && validationStatus === 'invalid' && this.validationErrors?.length;
 
     return {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
+      // eslint-disable-next-line spellcheck/spell-checker
+      describedby: isValidationMessageShown ? `dx-${new Guid()}` : undefined,
     };
   }
 

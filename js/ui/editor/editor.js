@@ -8,6 +8,7 @@ import Widget from '../widget/ui.widget';
 import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
 import ValidationMessage from '../validationMessage';
+import Guid from '../core/guid';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -194,6 +195,8 @@ const Editor = Widget.inherit({
         this._removeValidationMessage();
         if(!isValid && validationErrors) {
             this._$validationMessage = $('<div>').appendTo($element);
+            this.setAria('describedby', 'dx-' + new Guid());
+
             this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
                 validationErrors,
                 target: this._getValidationMessageTarget(),
@@ -204,8 +207,6 @@ const Editor = Widget.inherit({
                 boundary: this.option('validationBoundary'),
                 rtlEnabled: this.option('rtlEnabled')
             }, this._options.cache('validationTooltipOptions')));
-
-            this.setAria('describedby', this._validationMessage.$content().attr('id'));
             this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
         }
     },

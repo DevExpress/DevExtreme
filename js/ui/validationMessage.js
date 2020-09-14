@@ -3,7 +3,6 @@ import registerComponent from '../core/component_registrator';
 import Overlay from './overlay';
 import { extend } from '../core/utils/extend';
 import { encodeHtml } from '../core/utils/string';
-import Guid from '../core/guid';
 import { getDefaultAlignment } from '../core/utils/position';
 
 const INVALID_MESSAGE = 'dx-invalid-message';
@@ -50,10 +49,15 @@ const ValidationMessage = Overlay.inherit({
         this.$element().addClass(INVALID_MESSAGE);
         this._wrapper().addClass(INVALID_MESSAGE);
         this._toggleModeClass();
+        this._updateContentId();
+    },
+
+    _updateContentId() {
+        const contentId = $(this.option('container')).attr('aria-describedby');
 
         this.$content()
             .addClass(INVALID_MESSAGE_CONTENT)
-            .attr('id', 'dx-' + new Guid());
+            .attr('id', contentId);
     },
 
     _renderInnerHtml(element) {

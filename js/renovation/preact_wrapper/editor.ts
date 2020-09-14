@@ -7,6 +7,7 @@ import $ from '../../core/renderer';
 import ValidationMessage from '../../ui/validationMessage';
 import { data } from '../../core/element_data';
 import Callbacks from '../../core/utils/callbacks';
+import Guid from '../../core/guid';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const INVALID_CLASS = 'dx-invalid';
@@ -102,6 +103,8 @@ export default class Editor extends Component {
     this._removeValidationMessage();
     if (!isValid && validationErrors) {
       this._$validationMessage = $('<div>').appendTo($element);
+      this.setAria('describedby', `dx-${new Guid()}`);
+
       this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
         validationErrors,
         target: this._getValidationMessageTarget(),
@@ -113,7 +116,6 @@ export default class Editor extends Component {
         rtlEnabled: this.option('rtlEnabled'),
       }, this._options.cache('validationTooltipOptions')));
 
-      this.option('aria.describedby', this._validationMessage.$content().attr('id'));
       this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
     }
   }
