@@ -467,6 +467,9 @@ export default {
                     .css(vizUtils.patchFontOptions(markerOptions.label.font))
                     .append(that._axisElementsGroup),
                 line: pathElement,
+                getContentContainer() {
+                    return this.label;
+                },
                 getEnd: function() {
                     return this.x + (invert ? -1 : 1) * (textIndent + this.labelBBox.width);
                 },

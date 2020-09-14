@@ -150,7 +150,7 @@ function updateGridsPosition(ticks, animate) {
 }
 export const measureLabels = function(items) {
     items.forEach(function(item) {
-        const label = item.templateContainer || item.label;
+        const label = item.getContentContainer();
         item.labelBBox = label ? label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
     });
 };
@@ -231,7 +231,7 @@ function getOptimalAngle(boxes, labelOpt) {
 
 function updateLabels(ticks, step, func) {
     ticks.forEach(function(tick, index) {
-        if(tick.label || tick.templateContainer) {
+        if(tick.getContentContainer()) {
             if(index % step !== 0) {
                 tick.removeLabel();
             } else if(func) {
@@ -607,7 +607,7 @@ Axis.prototype = {
         const options = that.getOptions();
         const positionsAreConsistent = options.position === options.label.position;
         const maxSize = that._majorTicks.reduce(function(size, tick) {
-            if(!tick.label && !tick.templateContainer) return size;
+            if(!tick.getContentContainer()) return size;
             const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
             return {
                 width: _max(size.width || 0, bBox.width),

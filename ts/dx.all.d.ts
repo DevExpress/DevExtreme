@@ -14797,7 +14797,7 @@ declare module DevExpress.viz {
          * <-dxChart.Options.commonAxisSettings.label.staggeringSpacing->
          */
         staggeringSpacing?: number;
-        /** 
+        /**
          * <-dxChart.Options.commonAxisSettings.label.template->
          */
         template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
