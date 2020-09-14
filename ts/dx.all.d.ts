@@ -7941,6 +7941,10 @@ declare module DevExpress.ui {
          */
         getLength(): number;
         /**
+         * <-dxHtmlEditor.getModule(moduleName)->
+         */
+        getModule(moduleName: string): any;
+        /**
          * <-dxHtmlEditor.getQuillInstance()->
          */
         getQuillInstance(): any;
