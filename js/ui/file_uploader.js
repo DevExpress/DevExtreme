@@ -864,7 +864,7 @@ class FileUploader extends Editor {
         this._dragEventsTargets = [];
 
         eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this, isCustomTarget));
-        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this, isCustomTarget));
+        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
         eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('drop', this.NAME), this._dropHandler.bind(this, isCustomTarget));
     }
@@ -893,7 +893,7 @@ class FileUploader extends Editor {
         }
     }
 
-    _dragOverHandler(isCustomTarget, e) {
+    _dragOverHandler(e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
