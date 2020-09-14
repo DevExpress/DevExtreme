@@ -75,14 +75,6 @@ export default class Editor extends Component {
     );
   }
 
-  _getValidationErrors(): object[] {
-    let validationErrors = this.option('validationErrors');
-    if (!validationErrors && this.option('validationError')) {
-      validationErrors = [this.option('validationError')];
-    }
-    return validationErrors;
-  }
-
   _removeValidationMessage(): void {
     if (this._$validationMessage) {
       this._$validationMessage.remove();
@@ -98,7 +90,7 @@ export default class Editor extends Component {
 
   _renderValidationState(): void {
     const isValid = this.option('isValid') && this.option('validationStatus') !== VALIDATION_STATUS_INVALID;
-    const validationErrors = this._getValidationErrors();
+    const { validationErrors } = this;
     const $element = this.$element();
 
     this._toggleValidationClasses(!isValid);
