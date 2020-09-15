@@ -8526,6 +8526,40 @@ QUnit.module('Editing with real dataController', {
         assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
     });
 
+    ['Row', 'Batch', 'Cell'].forEach((editMode) => {
+        QUnit.test(`${editMode} - Cell should be prepared before creating an editor (T928363)`, function(assert) {
+            // arrange
+            let isEditorCell = false;
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            this.options = {
+                dataSource: [{ field1: 'test' }],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    changes: []
+                },
+                onEditorPreparing: function(e) {
+                    isEditorCell = $(e.editorElement).closest('td').hasClass('dx-editor-cell');
+                }
+            };
+
+            this.editorFactoryController.init();
+            rowsView.render($testElement);
+            this.clock.tick();
+
+            if(editMode === 'Row') {
+                this.editRow(0);
+            } else {
+                this.editCell(0, 0);
+            }
+
+            this.clock.tick();
+
+            assert.ok(isEditorCell, 'cell is rendered for an editor');
+        });
+    });
+
+
     QUnit.module('Editing state', {
         beforeEach: function() {
             this.options.dataSource = this.options.dataSource.store;
@@ -15405,7 +15439,7 @@ QUnit.module('Editing with scrolling', {
         // assert
         items = this.dataController.items();
         assert.equal(this.dataController.pageIndex(), 0, 'page index');
-        assert.equal(items.length, 9, 'count items');
+        assert.equal(items.length, 5, 'count items');
         assert.ok(items[0].isNewRow, 'insert item');
     });
 
@@ -15550,7 +15584,7 @@ QUnit.module('Editing with scrolling', {
         assert.equal(testElement.find('.dx-error-row').length, 0);
 
         // arrange
-        this.rowsView.scrollTo({ y: 0 });
+        this.rowsView.scrollTo({ y: 1 });
 
         // assert
         assert.equal(this.dataController.pageIndex(), 0, 'page index');

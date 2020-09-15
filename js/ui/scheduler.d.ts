@@ -368,19 +368,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onAppointmentDeleting?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, cancel: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
     /**
-     * @docid dxSchedulerOptions.onAppointmentFormCreated
-     * @extends Action
-     * @type function(e)
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 form:dxForm
-     * @action
-     * @deprecated dxSchedulerOptions.onAppointmentFormOpening
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onAppointmentFormCreated?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData?: any, form: dxForm }) => any);
-    /**
      * @docid dxSchedulerOptions.onAppointmentFormOpening
      * @extends Action
      * @type function(e)
@@ -817,6 +804,21 @@ interface JQuery {
     dxScheduler(options: dxSchedulerOptions): JQuery;
 }
 }
+
+/**
+ * @docid ui.dxScheduler.getTimeZones
+ * @publicName getTimeZones(date)
+ * @param1 date:Date|undefined
+ * @return Array<Object>
+ * @namespace DevExpress.ui.dxScheduler
+ * @module ui/scheduler
+ * @export dxScheduler.getTimeZones
+ * @static
+ * @prevFileNamespace DevExpress.ui
+ * @public
+ */
+export function getTimeZones(date?: Date): Array<{id?: string, title?: string, offset?: number}>;
+
 export type Options = dxSchedulerOptions;
 
 /**

@@ -4444,6 +4444,7 @@ QUnit.module('Keyboard navigation', {
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
         assert.equal(this.getActiveInputElement().val(), 'Full Name');

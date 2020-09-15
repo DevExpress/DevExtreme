@@ -14,9 +14,9 @@ import dragEvents from 'events/drag';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
+import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import 'ui/scheduler/ui.scheduler';
-import dxScheduler from 'ui/scheduler/ui.scheduler';
+import dxScheduler, { getTimeZones } from 'ui/scheduler/ui.scheduler';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -870,8 +870,8 @@ QUnit.module('Initialization', {
             { tz: 'Asia/Brunei', offset: 8, daylightOffset: 8, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'Asia/Damascus', offset: 2, daylightOffset: 3, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) }
         ].forEach(function(item) {
-            const offset = SchedulerTimezones.getTimezoneOffsetById(item.tz, item.date);
-            const daylightOffset = SchedulerTimezones.getTimezoneOffsetById(item.tz, item.daylightDate);
+            const offset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.date);
+            const daylightOffset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.daylightDate);
 
             assert.equal(offset, item.offset, item.tz + ': Common offset is OK');
             assert.equal(daylightOffset, item.daylightOffset, item.tz + ': DST offset is OK');
@@ -4661,5 +4661,47 @@ QUnit.module('Options for Material theme in components', {
         appointments = this.instance.getAppointmentsInstance();
 
         assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
+    });
+});
+
+QUnit.module('Getting timezones', {}, () => {
+    const findTimeZone = (timeZones, id) => {
+        return timeZones.filter((timeZone) => timeZone.id === id)[0];
+
+    };
+    QUnit.test('getTimeZones method should return accepted timezones with correct format', function(assert) {
+        const date = new Date(2020, 5, 1);
+        const timeZones = getTimeZones(date);
+        const firstTimeZone = timeZones[0];
+
+        assert.ok(timeZones instanceof Array, 'method returns an array');
+        assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'id'), 'returned timeZone has an id');
+        assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'offset'), 'returned timeZone has an offset');
+        assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'title'), 'returned timeZone has a title');
+    });
+
+    QUnit.test('getTimeZones method should work properly without date passing', function(assert) {
+        const timeZones = getTimeZones();
+        const timeZone = findTimeZone(timeZones, 'Europe/Moscow');
+
+        assert.deepEqual(timeZone, {
+            id: 'Europe/Moscow',
+            offset: 3,
+            title: '(GMT +03:00) Europe/Moscow'
+        }, 'some of returned timeZone is ok');
+    });
+
+    QUnit.test('getTimeZones method should return correct offsets depending on the date', function(assert) {
+        const winter = new Date(2020, 1, 8, 1);
+        const summer = new Date(2020, 6, 8, 2);
+        let timeZones = getTimeZones(winter);
+        let timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
+
+        assert.equal(timeZone.offset, -8, 'returned offset for timeZone with DST is OK');
+
+        timeZones = getTimeZones(summer);
+        timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
+
+        assert.equal(timeZone.offset, -7, 'returned offset for timeZone with DST is OK');
     });
 });

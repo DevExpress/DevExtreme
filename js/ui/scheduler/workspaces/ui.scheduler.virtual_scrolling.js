@@ -1,10 +1,12 @@
 const ROW_HEIGHT = 50;
+const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 75;
 
 export default class VirtualScrolling {
     constructor(workspace, viewportHeight, scrollable) {
         this._workspace = workspace;
         this._viewportHeight = viewportHeight;
         this._scrollable = scrollable;
+        this._renderAppointmentTimeout = null;
 
         this._init();
     }
@@ -36,6 +38,10 @@ export default class VirtualScrolling {
 
     _getOutlineCount() {
         return Math.floor(this._getPageSize() / 2);
+    }
+
+    _getRenderTimeout() {
+        return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
     }
 
     _init() {
@@ -73,9 +79,28 @@ export default class VirtualScrolling {
 
             const scrollOffset = e?.scrollOffset;
             if(scrollOffset && this._updateState(scrollOffset)) {
-                this.getWorkspace().renderRWorkspace();
+                this._updateRender();
             }
         });
+    }
+
+    _updateRender() { // TODO move to the render part (Workspace)
+        const workspace = this.getWorkspace();
+        const renderTimeout = this._getRenderTimeout();
+
+        workspace.renderRWorkspace(false);
+
+        if(renderTimeout >= 0) {
+
+            clearTimeout(this._renderAppointmentTimeout);
+
+            this._renderAppointmentTimeout = setTimeout(
+                () => workspace.invoke('renderAppointments'),
+                renderTimeout
+            );
+        } else {
+            workspace.invoke('renderAppointments');
+        }
     }
 
     _updateState(scrollOffset) {
@@ -140,22 +165,19 @@ export default class VirtualScrolling {
 
         const workspace = this.getWorkspace();
         const groupCount = workspace._getGroupCount();
-        const totalRowCount = workspace._getTotalRowCount(groupCount);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const totalRowCount = workspace._getTotalRowCount(groupCount, isVerticalGrouping);
 
         return totalRowCount - topVirtualRowCount - topOutlineCount;
     }
 
     _calcBottomRowsInfo(topRowsDelta) {
-        const workspace = this.getWorkspace();
         const { pageSize } = this.getState();
         const rowCountWithBottom = topRowsDelta >= pageSize
             ? pageSize
             : topRowsDelta;
 
         let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
-        if(workspace.isGroupedAllDayPanel()) {
-            bottomVirtualRowCount -= 1;
-        }
 
         const bottomOutlineCount = bottomVirtualRowCount > 0
             ? Math.min(bottomVirtualRowCount, this._getOutlineCount())

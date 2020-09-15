@@ -653,4 +653,34 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(errorSpy.args[0][0].fileSystemItem.name, 'File 1.txt', 'fileSystemItem correct');
     });
 
+    test('failed upload notification in notification panel should have an invisible close button in details', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('upload.maxFileSize', 100);
+        this.clock.tick(400);
+        stubFileReader(fileManager._controller._fileProvider);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'rendered one operation');
+
+        const common = infos[0].common;
+        assert.ok(common.closeButtonVisible, 'close button visible');
+
+        const details = infos[0].details;
+        assert.equal(details.length, 1, 'one detail item rendered');
+
+        const detail = details[0];
+        assert.ok(detail.hasError, 'error rendered');
+        assert.equal(detail.errorText, 'File size exceeds the maximum allowed size.', 'error text rendered');
+        assert.equal(detail.commonText, 'Upload file 0.txt', 'detail item common text rendered');
+        assert.notOk(detail.$progressBar.length, 'progress bar not rendered');
+        assert.notOk(detail.closeButtonVisible, 'detail item has an invisible close button');
+    });
+
 });

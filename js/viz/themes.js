@@ -63,9 +63,6 @@ export function registerTheme(theme, baseThemeName) {
     }
 }
 
-export function registerThemeAlias(alias, theme) {
-    registerThemeName(_normalizeEnum(alias), _normalizeEnum(theme));
-}
 
 export function registerThemeSchemeAlias(from, to) {
     themesSchemeMapping[from] = to;
