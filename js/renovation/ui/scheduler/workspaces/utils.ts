@@ -12,7 +12,7 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
   return (key + groupIndex).toString();
 };
 
-export const getKeyByGroup = (groupIndex: number): number => groupIndex;
+export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
 
 export const addHeightToStyle = (
   height?: number, style?: any,

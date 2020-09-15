@@ -33,6 +33,7 @@ describe('TimePanelLayout', () => {
         groups: { id: 2 },
         groupIndex: 2,
         index: 0,
+        key: '1',
       }, {
         startDate: new Date(2020, 6, 9, 2),
         endDate: new Date(2020, 6, 9, 3),
@@ -40,6 +41,7 @@ describe('TimePanelLayout', () => {
         groups: { id: 2 },
         groupIndex: 2,
         index: 1,
+        key: '2',
       }], [{
         startDate: new Date(2020, 6, 9, 3),
         endDate: new Date(2020, 6, 9, 4),
@@ -47,6 +49,7 @@ describe('TimePanelLayout', () => {
         groups: { id: 2 },
         groupIndex: 2,
         index: 2,
+        key: '3',
       }, {
         startDate: new Date(2020, 6, 9, 4),
         endDate: new Date(2020, 6, 9, 4),
@@ -54,6 +57,7 @@ describe('TimePanelLayout', () => {
         groups: { id: 2 },
         groupIndex: 2,
         index: 3,
+        key: '4',
       }]],
     }],
     cellCountInGroupRow: 2,
@@ -103,6 +107,10 @@ describe('TimePanelLayout', () => {
 
       expect(rows)
         .toHaveLength(2);
+      expect(rows.at(0).key())
+        .toBe('1');
+      expect(rows.at(1).key())
+        .toBe('3');
     });
 
     it('should render cells and pass correct props to them in basic case', () => {
@@ -182,10 +190,10 @@ describe('TimePanelLayout', () => {
           viewData: {
             groupedData: [{
               dateTable: [
-                [{ startDate: new Date(2020, 6, 9, 1), text: '0:00 AM' }],
-                [{ startDate: new Date(2020, 6, 9, 2), text: '1:00 AM' }],
-                [{ startDate: new Date(2020, 6, 9, 3), text: '2:00 AM' }],
-                [{ startDate: new Date(2020, 6, 9, 4), text: '3:00 AM' }],
+                [{ startDate: new Date(2020, 6, 9, 1), text: '0:00 AM', key: '1' }],
+                [{ startDate: new Date(2020, 6, 9, 2), text: '1:00 AM', key: '2' }],
+                [{ startDate: new Date(2020, 6, 9, 3), text: '2:00 AM', key: '3' }],
+                [{ startDate: new Date(2020, 6, 9, 4), text: '3:00 AM', key: '4' }],
               ],
             }],
           },

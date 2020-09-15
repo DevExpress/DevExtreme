@@ -12,28 +12,26 @@ import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../
 describe('Workspaces utils', () => {
   describe('getKeyByDateAndGroup', () => {
     const testDate = new Date(2020, 6, 13);
+    const time = testDate.getTime();
 
     it('should generate key from date', () => {
       expect(getKeyByDateAndGroup(testDate))
-        .toBe(testDate.toString());
+        .toBe(time.toString());
     });
 
     it('should generate key from date and group', () => {
-      const testGroup = {
-        resource1: 1,
-        resource2: 3,
-      };
+      const testGroup = 3;
       expect(getKeyByDateAndGroup(testDate, testGroup))
-        .toBe(`${testDate.toString()}_resource1_1_resource2_3`);
+        .toBe(`${time + 3}`);
     });
   });
 
   describe('getKeyByGroup', () => {
     it('should generate key from group', () => {
       expect(getKeyByGroup(0))
-        .toBe('key_0');
+        .toBe('0');
       expect(getKeyByGroup(1))
-        .toBe('key_1');
+        .toBe('1');
     });
   });
 
@@ -72,10 +70,10 @@ describe('Workspaces utils', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
-            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0,
+            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0, key: '1',
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0,
+            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0, key: '2',
           }],
         }],
         cellCountInGroupRow: 1,
@@ -89,18 +87,18 @@ describe('Workspaces utils', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
-            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0,
+            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0, key: '1',
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0,
+            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0, key: '2',
           }],
           isGroupedAllDayPanel: true,
         }, {
           dateTable: [[{
-            startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3', index: 0,
+            startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3', index: 0, key: '3',
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 4), endDate: new Date(2020, 1, 4), text: 'test4', index: 0,
+            startDate: new Date(2020, 1, 4), endDate: new Date(2020, 1, 4), text: 'test4', index: 0, key: '4',
           }],
           isGroupedAllDayPanel: true,
         }],
