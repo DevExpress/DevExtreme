@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, Fragment, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DateTableRow } from './row';
+import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
@@ -26,6 +26,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
           )}
           {dateTable.map((cellsRow, rowIndex) => (
             <DateTableRow
+              className="dx-scheduler-date-table-row"
               key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groupIndex)}
             >
               {cellsRow.map(({

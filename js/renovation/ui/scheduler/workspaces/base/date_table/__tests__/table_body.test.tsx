@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TableBodyView, DateTableBody } from '../table_body';
-import { DateTableRow as Row } from '../row';
+import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
 import { DateTableCellBase } from '../cell';
@@ -60,6 +60,13 @@ describe('DateTableBody', () => {
 
       expect(rows)
         .toHaveLength(3);
+
+      expect(rows.at(0).hasClass('dx-scheduler-date-table-row'))
+        .toBe(true);
+      expect(rows.at(1).hasClass('dx-scheduler-date-table-row'))
+        .toBe(true);
+      expect(rows.at(2).hasClass('dx-scheduler-date-table-row'))
+        .toBe(true);
     });
 
     it('should render cells and pass correct props to them', () => {

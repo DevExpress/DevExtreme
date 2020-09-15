@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { viewFunction as TableBodyView, AllDayPanelTableBody } from '../table_body';
-import { AllDayPanelRow as Row } from '../row';
+import { Row } from '../../../row';
 import { AllDayPanelCell as Cell } from '../cell';
 import * as utilsModule from '../../../../utils';
 
@@ -51,8 +51,12 @@ describe('AllDayPanelTableBody', () => {
     it('should render components correctly', () => {
       const tableBody = render({});
 
-      expect(tableBody.find(Row))
+      const row = tableBody.find(Row);
+
+      expect(row)
         .toHaveLength(1);
+      expect(row.hasClass('dx-scheduler-all-day-table-row'))
+        .toBe(true);
 
       const cells = tableBody.find(Cell);
 
