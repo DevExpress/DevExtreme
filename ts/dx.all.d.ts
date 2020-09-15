@@ -6702,7 +6702,7 @@ declare module DevExpress.ui {
         /** @name dxValidationMessage.Options.positionRequest */
         positionRequest?: string;
         /** @name dxValidationMessage.Options.validationErrors */
-        validationErrors?: object[] | null;
+        validationErrors?: Array<any> | null;
     }
     /** @name dxValidationMessage */
     export class dxValidationMessage extends dxOverlay {
