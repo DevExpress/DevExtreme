@@ -152,7 +152,7 @@ class Gantt extends Widget {
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
-            tooltipTemplate: this._getTooltipTemplateFunction(this.option('tooltipTemplate'))
+            taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate'))
         });
         this._fireContentReadyAction();
     }
@@ -847,11 +847,11 @@ class Gantt extends Widget {
         super._clean();
     }
 
-    _getTooltipTemplateFunction(tooltipTemplateOption) {
-        const template = tooltipTemplateOption && this._getTemplate(tooltipTemplateOption);
+    _getTaskTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
+        const template = taskTooltipContentTemplateOption && this._getTemplate(taskTooltipContentTemplateOption);
         const createTemplateFunction = template && ((container, item) => {
             template.render({
-                model: item,
+                model: this.getTaskDataByCoreData(item),
                 container: getPublicElement($(container))
             });
         });
@@ -879,6 +879,16 @@ class Gantt extends Widget {
             /**
             * @name dxGanttToolbarItem
             * @inherits dxToolbarItem
+            */
+
+            /**
+            * @name dxGanttContextMenu
+            * @type object
+            */
+
+            /**
+            * @name dxGanttContextMenuItem
+            * @inherits dxContextMenuItem
             */
 
             tasks: {
@@ -1114,14 +1124,18 @@ class Gantt extends Widget {
                 enabled: true,
                 items: undefined
             },
-            tooltipTemplate: null
+            taskTooltipContentTemplate: null
         });
     }
 
     getTaskData(key) {
         const coreData = this._ganttView._ganttViewCore.getTaskData(key);
+        const mappedData = this.getTaskDataByCoreData(coreData);
+        return mappedData;
+    }
+    getTaskDataByCoreData(coreData) {
         const mappedData = coreData ? this._convertCoreToMappedData(GANTT_TASKS, coreData) : null;
-        this._addCustomFieldsData(key, mappedData);
+        this._addCustomFieldsData(coreData.id, mappedData);
         return mappedData;
     }
     insertTask(data) {
@@ -1272,8 +1286,8 @@ class Gantt extends Widget {
             case 'contextMenu':
                 this._updateContextMenu();
                 break;
-            case 'tooltipTemplate':
-                this._setGanttViewOption('tooltipTemplate', this._getTooltipTemplateFunction(args.value));
+            case 'taskTooltipContentTemplate':
+                this._setGanttViewOption('taskTooltipContentTemplate', this._getTaskTooltipContentTemplateFunc(args.value));
                 break;
             default:
                 super._optionChanged(args);

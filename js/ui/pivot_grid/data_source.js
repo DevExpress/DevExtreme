@@ -877,8 +877,8 @@ export default Class.inherit((function() {
             } else {
                 return {
                     fields: getFieldsState(that._fields, STATE_PROPERTIES),
-                    columnExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'columns'),
-                    rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'rows')
+                    columnExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'columns', that._lastLoadOptions),
+                    rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'rows', that._lastLoadOptions)
                 };
             }
         },

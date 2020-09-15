@@ -57,6 +57,7 @@
         "dxFileUploader-upload": "Загрузить",
         "dxFileUploader-uploaded": "Загружено",
         "dxFileUploader-readyToUpload": "Готово к загрузке",
+        "dxFileUploader-uploadAbortedMessage": "Загрузка отменена",
         "dxFileUploader-uploadFailedMessage": "Загрузка не удалась",
         "dxFileUploader-invalidFileExtension": "Недопустимое расширение файла",
         "dxFileUploader-invalidMaxFileSize": "Файл слишком большой",

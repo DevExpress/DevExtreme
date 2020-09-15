@@ -115,6 +115,8 @@ class FileUploader extends Editor {
 
             uploadFailedMessage: messageLocalization.format('dxFileUploader-uploadFailedMessage'),
 
+            uploadAbortedMessage: messageLocalization.format('dxFileUploader-uploadAbortedMessage'),
+
             uploadMode: 'instantly',
 
             uploadMethod: 'POST',
@@ -335,6 +337,11 @@ class FileUploader extends Editor {
         return values;
     }
 
+    _getFile(fileData) {
+        const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
+        return this._files.filter(file => file.value === targetFileValue)[0];
+    }
+
     _initLabel() {
         if(!this._$inputLabel) {
             this._$inputLabel = $('<div>');
@@ -378,7 +385,7 @@ class FileUploader extends Editor {
         file.progressBar = this._createProgressBar(file.value.size);
         file.progressBar.$element().appendTo(file.$file);
         this._initStatusMessage(file);
-        this._initCancelButton(file);
+        this._ensureCancelButtonInitialized(file);
     }
 
     _setStatusMessage(file, key) {
@@ -391,6 +398,11 @@ class FileUploader extends Editor {
                 }
             }
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
+    }
+
+    _setUploadAbortedStatusMessage(file) {
+        const key = this.option('uploadMode') === 'instantly' ? 'uploadAbortedMessage' : 'readyToUploadMessage';
+        this._setStatusMessage(file, key);
     }
 
     _createFiles() {
@@ -482,8 +494,18 @@ class FileUploader extends Editor {
             isValidMinSize: true,
             isValid() {
                 return this.isValidFileExtension && this.isValidMaxSize && this.isValidMinSize;
-            }
+            },
+            isInitialized: false
         };
+    }
+
+    _resetFileState(file) {
+        file.isAborted = false;
+        file.uploadStarted = false;
+        file.isStartLoad = false;
+        file.loadedSize = 0;
+        file.chunksData = undefined;
+        file.request = undefined;
     }
 
     _renderFiles() {
@@ -624,7 +646,15 @@ class FileUploader extends Editor {
             }
         );
 
-        file.onLoadStart.add(() => file.uploadButton.$element().remove());
+        file.onLoadStart.add(() => file.uploadButton.option({
+            visible: false,
+            disabled: true
+        }));
+
+        file.onAbort.add(() => file.uploadButton.option({
+            visible: true,
+            disabled: false
+        }));
 
         return $('<div>')
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
@@ -984,13 +1014,26 @@ class FileUploader extends Editor {
         super._clean();
     }
 
+    abortUpload(fileData) {
+        if(this.option('uploadMode') === 'useForm') {
+            return;
+        }
+        if(isDefined(fileData)) {
+            const file = this._getFile(fileData);
+            if(file) {
+                this._preventFilesUploading([file]);
+            }
+        } else {
+            this._preventFilesUploading(this._files);
+        }
+    }
+
     upload(fileData) {
         if(this.option('uploadMode') === 'useForm') {
             return;
         }
         if(isDefined(fileData)) {
-            const targetFileValue = isNumeric(fileData) ? this.option('value')[fileData] : fileData;
-            const file = this._files.filter(file => file.value === targetFileValue)[0];
+            const file = this._getFile(fileData);
             if(file && isFormDataSupported()) {
                 this._uploadFile(file);
             }
@@ -1035,7 +1078,11 @@ class FileUploader extends Editor {
         file.$statusMessage.css('display', 'none');
     }
 
-    _initCancelButton(file) {
+    _ensureCancelButtonInitialized(file) {
+        if(file.isInitialized) {
+            return;
+        }
+
         file.cancelButton.option('onClick', () => {
             this._preventFilesUploading([file]);
             this._removeFile(file);
@@ -1166,6 +1213,7 @@ class FileUploader extends Editor {
             case 'readyToUploadMessage':
             case 'uploadedMessage':
             case 'uploadFailedMessage':
+            case 'uploadAbortedMessage':
                 this._invalidate();
                 break;
             case 'labelText':
@@ -1286,6 +1334,9 @@ class FileUploadStrategyBase {
     }
 
     upload(file) {
+        if(file.isInitialized && file.isAborted) {
+            this.fileUploader._resetFileState(file);
+        }
         if(file.isValid() && !file.uploadStarted) {
             this._prepareFileBeforeUpload(file);
             this._uploadCore(file);
@@ -1336,7 +1387,12 @@ class FileUploadStrategyBase {
 
     _prepareFileBeforeUpload(file) {
         if(file.$file) {
+            file.progressBar?.dispose();
             this.fileUploader._createFileProgressBar(file);
+        }
+
+        if(file.isInitialized) {
+            return;
         }
 
         file.onLoadStart.add(this._onUploadStarted.bind(this, file));
@@ -1344,6 +1400,7 @@ class FileUploadStrategyBase {
         file.onError.add(this._onErrorHandler.bind(this, file));
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
+        file.isInitialized = true;
     }
 
     _isStatusError(status) {
@@ -1361,6 +1418,7 @@ class FileUploadStrategyBase {
     }
 
     _onAbortHandler(file, e) {
+        this.fileUploader._setUploadAbortedStatusMessage(file);
         this.fileUploader._uploadAbortedAction({
             file: file.value,
             event: e,
