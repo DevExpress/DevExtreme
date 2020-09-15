@@ -14,6 +14,49 @@ export default class AppointmentSettingsGenerator {
         return this.scheduler.timeZoneCalculator;
     }
 
+    create(rawAppointment) {
+        const { scheduler } = this;
+        const workspace = scheduler.getWorkSpace();
+        const appointment = scheduler.createAppointmentAdapter(rawAppointment);
+        const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
+
+        let appointmentList = this._createRecurrenceAppointments(appointment, appointment.duration);
+        if(appointmentList.length === 0) {
+            if(workspace.isVirtualScrolling()) {
+                const groupIndices = workspace._isVerticalGroupedWorkSpace()
+                    ? workspace._getGroupIndexes(itemResources)
+                    : [0];
+
+                groupIndices.forEach(groupIndex => {
+                    appointmentList.push({
+                        startDate: appointment.startDate,
+                        endDate: appointment.endDate,
+                        groupIndex
+                    });
+                });
+            } else {
+                appointmentList.push({
+                    startDate: appointment.startDate,
+                    endDate: appointment.endDate
+                });
+            }
+        }
+
+        this._updateGroupIndices(appointmentList, itemResources);
+
+        if(appointmentList.length > 1 && !appointment.startDateTimeZone) {
+            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
+        }
+
+        let gridAppointmentList = this._createGridAppointmentList(appointmentList);
+        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
+
+        this._processLongAppointmentsIfRequired(gridAppointmentList, appointment);
+
+        const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
+        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+    }
+
     _getProcessedNotNativeDateIfCrossDST(date, dateRangeOffset) {
         const newDate = new Date(date);
 
@@ -69,44 +112,12 @@ export default class AppointmentSettingsGenerator {
         return appointmentList;
     }
 
-    create(rawAppointment) {
-        const { scheduler } = this;
-        const workspace = scheduler.getWorkSpace();
-        const appointment = this.scheduler.createAppointmentAdapter(rawAppointment);
+    _processLongAppointmentsIfRequired(gridAppointmentList, appointment) {
+        const rawAppointment = appointment.source();
+
+        const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
         const dateRange = this.scheduler._workSpace.getDateRange();
         const renderingStrategy = this.scheduler.getLayoutManager().getRenderingStrategyInstance();
-        let allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
-
-        const itemResources = this.scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
-        let appointmentList = this._createRecurrenceAppointments(appointment, appointment.duration);
-        if(appointmentList.length === 0) {
-            if(workspace.isVirtualScrolling()) {
-                const groupIndices = workspace._isVerticalGroupedWorkSpace()
-                    ? workspace._getGroupIndexes(itemResources)
-                    : [0];
-                groupIndices.forEach(groupIndex => {
-                    appointmentList.push({
-                        startDate: appointment.startDate,
-                        endDate: appointment.endDate,
-                        groupIndex
-                    });
-                });
-            } else {
-                appointmentList.push({
-                    startDate: appointment.startDate,
-                    endDate: appointment.endDate
-                });
-            }
-        }
-
-        this._updateGroupIndices(appointmentList, itemResources);
-
-        if(appointmentList.length > 1) {
-            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
-        }
-
-        let gridAppointmentList = this._createGridAppointmentList(appointmentList);
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
             let longParts = [];
@@ -134,10 +145,6 @@ export default class AppointmentSettingsGenerator {
 
             gridAppointmentList = resultDates;
         }
-
-        allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
-
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
     }
 
     _createGridAppointmentList(appointmentList) {

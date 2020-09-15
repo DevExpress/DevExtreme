@@ -5,10 +5,14 @@ import {
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
 
-
 import 'generic_light.css!';
 
 const { testStart, test, module } = QUnit;
+
+const timeZones = {
+    LosAngeles: 'America/Los_Angeles',
+    NewYork: 'America/New_York'
+};
 
 testStart(() => initTestMarkup());
 
@@ -26,14 +30,14 @@ const data = [{
     text: 'app_1_Los_Angeles',
     startDate: new Date('2017-05-22T05:00:00.000Z'), // local offset
     endDate: new Date('2017-05-22T05:30:00.000Z'), // local offset
-    startDateTimeZone: 'America/Los_Angeles', // -7
-    endDateTimeZone: 'America/Los_Angeles' // -7
+    startDateTimeZone: timeZones.LosAngeles, // -7
+    endDateTimeZone: timeZones.LosAngeles // -7
 }, {
     text: 'app_2_Los_Angeles',
     startDate: new Date('2017-05-22T12:00:00.000Z'), // local offset
     endDate: new Date('2017-05-22T12:30:00.000Z'), // local offset
-    startDateTimeZone: 'America/Los_Angeles', // -7
-    endDateTimeZone: 'America/Los_Angeles' // -7
+    startDateTimeZone: timeZones.LosAngeles, // -7
+    endDateTimeZone: timeZones.LosAngeles // -7
 }, {
     text: 'app_local',
     startDate: new Date('2017-05-22T16:00:00.000Z'), // local offset
@@ -49,6 +53,16 @@ const createScheduler = (options = {}) => {
         height: 600
     }, options));
 };
+
+module('Not native date DST', moduleConfig, () => {
+    module('summer time', () => {
+
+    });
+
+    module('winter time', () => {
+
+    });
+});
 
 module('Scheduler grid', moduleConfig, () => {
     module('timezone = "America/New_York', () => {
