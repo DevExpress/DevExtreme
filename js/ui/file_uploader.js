@@ -786,7 +786,7 @@ class FileUploader extends Editor {
         this._uploadFiles();
     }
 
-    _isDragDropEnabled() {
+    _shouldDragOverBeRendered() {
         return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
     }
 
@@ -813,7 +813,7 @@ class FileUploader extends Editor {
     }
 
     _displayInputContainerIfNeeded() {
-        const displayProperty = this._isDragDropEnabled() ? '' : 'none';
+        const displayProperty = this._shouldDragOverBeRendered() ? '' : 'none';
         this._$inputContainer.css('display', displayProperty);
     }
 
@@ -850,11 +850,11 @@ class FileUploader extends Editor {
         if(!isDefined(target)) {
             return;
         }
-        eventsEngine.off($(target), '.' + this.NAME);
+        eventsEngine.off($(target), addNamespace('', this.NAME));
     }
 
     _attachDragEventHandlers(target) {
-        if(!isDefined(target) || !this._isDragDropEnabled()) {
+        if(!isDefined(target) || !this._shouldDragOverBeRendered()) {
             return;
         }
         const isCustomTarget = target !== this._$inputWrapper;
