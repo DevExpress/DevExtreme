@@ -10,6 +10,7 @@ import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scroll_view';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
@@ -926,7 +927,7 @@ QUnit.module('scrollbars', moduleConfig, () => {
 
         $scrollView.dxScrollView('instance').update();
 
-        assert.equal($scroll.height(), scrollHeight, 'scrollbar height calculated correctly');
+        assert.equal($scroll.outerHeight(), scrollHeight, 'scrollbar height calculated correctly');
     });
 
     QUnit.test('moving scrollView moves scrollbar in correct position', function(assert) {
@@ -1158,7 +1159,7 @@ QUnit.module('api', moduleConfig, () => {
             onPullDown: noop,
             inertiaEnabled: false,
             onEnd: function() {
-                assert.equal($scroll.height(), Math.pow($container.height(), 2) / $content.height());
+                assert.equal($scroll.outerHeight(), Math.pow($container.height(), 2) / $content.height());
             },
             onReachBottom: function() {
                 $container.height(100);

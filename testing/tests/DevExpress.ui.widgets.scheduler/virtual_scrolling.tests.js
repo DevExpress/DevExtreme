@@ -22,7 +22,8 @@ module('Virtual Scrolling model', {
             isGroupedAllDayPanel: noop,
             renderRWorkspace: noop,
             renderRAppointments: noop,
-            invoke: noop
+            invoke: noop,
+            _isVerticalGroupedWorkSpace: () => false,
         };
 
         this.scrollableMock = {
@@ -149,5 +150,19 @@ module('Virtual Scrolling model', {
         }
 
         assert.ok(true, 'State validation checked');
+    });
+
+    test('It should call _getTotalRowCount with correct parameters', function(assert) {
+        const getTotalRowCountSpy = sinon.spy(this.worksSpaceMock, '_getTotalRowCount');
+        const isVerticalGroupedWorkSpaceSpy = sinon.spy(this.worksSpaceMock, '_isVerticalGroupedWorkSpace');
+        const isGroupedAllDayPanelSpy = sinon.spy(this.worksSpaceMock, 'isGroupedAllDayPanel');
+
+        this.virtualScrolling._updateState(0);
+
+        assert.ok(isVerticalGroupedWorkSpaceSpy.called, '_isVerticalGroupedWorkSpaceSpy was called');
+        assert.ok(getTotalRowCountSpy.called, 'getTotalRowCountSpy was called');
+        assert.notOk(isGroupedAllDayPanelSpy.called, 'isGroupedAllDayPanel was not called');
+        assert.equal(getTotalRowCountSpy.getCall(0).args[0], 0, 'Correct first parameter');
+        assert.equal(getTotalRowCountSpy.getCall(0).args[1], false, 'Correct second parameter');
     });
 });

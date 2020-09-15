@@ -543,6 +543,10 @@ const HtmlEditor = Editor.inherit({
         return this._getRegistrator().getQuill().import(modulePath);
     },
 
+    getModule: function(moduleName) {
+        return this._applyQuillMethod('getModule', arguments);
+    },
+
     getQuillInstance: function() {
         return this._quillInstance;
     },
