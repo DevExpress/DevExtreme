@@ -1236,7 +1236,7 @@ class FileUploader extends Editor {
                 this._invalidate();
                 break;
             case 'labelText':
-                this._$inputLabel.text($(value));
+                this._$inputLabel.text(value);
                 break;
             case 'showFileList':
                 if(!this._preventRecreatingFiles) {
