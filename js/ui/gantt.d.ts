@@ -2,6 +2,10 @@ import {
     dxElement
 } from '../core/element';
 
+import {
+    event
+} from '../events/index';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -231,6 +235,33 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     onResourceUnassigning?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onTaskClick
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 key:any
+     * @type_function_param1_field6 data:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskClick?: ((e: { component?: dxGantt, element?: dxElement, model?: any, event?: event, key?: any, data?: any }) => any);
+    /**
+     * @docid dxGanttOptions.onTaskDblClick
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 key:any
+     * @type_function_param1_field7 data:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTaskDblClick?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, event?: event, key?: any, data?: any }) => any);
     /**
      * @docid dxGanttOptions.resourceAssignments
      * @type Object

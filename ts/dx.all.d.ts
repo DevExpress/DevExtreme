@@ -7671,6 +7671,14 @@ declare module DevExpress.ui {
          */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /**
+         * <-dxGantt.Options.onTaskClick->
+         */
+        onTaskClick?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, key?: any, data?: any }) => any);
+        /**
+         * <-dxGantt.Options.onTaskDblClick->
+         */
+        onTaskDblClick?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, event?: DevExpress.events.event, key?: any, data?: any }) => any);
+        /**
          * <-dxGantt.Options.onTaskDeleting->
          */
         onTaskDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
