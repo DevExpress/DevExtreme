@@ -569,6 +569,7 @@ const Sortable = Draggable.inherit({
             case 'fromIndexOffset':
             case 'offset':
             case 'draggableElementSize':
+            case 'updateManually':
                 break;
             case 'fromIndex':
                 if(!this._$sourceElement) {
