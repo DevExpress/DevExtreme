@@ -297,24 +297,24 @@ QUnit.module('Options', {
     });
 
     test('should apply operationSettins to settings', function(assert) {
-        this.instance.option('operationSettings.allowAddShape', false);
-        this.instance.option('operationSettings.allowAddShapeFromToolbox', false);
-        this.instance.option('operationSettings.allowDeleteShape', false);
-        this.instance.option('operationSettings.allowDeleteConnector', false);
-        this.instance.option('operationSettings.allowChangeConnection', false);
-        this.instance.option('operationSettings.allowChangeConnectorPoints', false);
-        this.instance.option('operationSettings.allowChangeShapeText', false);
-        this.instance.option('operationSettings.allowChangeConnectorText', false);
-        this.instance.option('operationSettings.allowResizeShape', false);
-        assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.addShapeFromToolbox, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.deleteConnector, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.changeConnection, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorPoints, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.changeShapeText, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorText, false);
-        assert.equal(this.instance._diagramInstance.operationSettings.resizeShape, false);
+        this.instance.option('editingSettings.allowAddShape', false);
+        this.instance.option('editingSettings.allowAddShapeFromToolbox', false);
+        this.instance.option('editingSettings.allowDeleteShape', false);
+        this.instance.option('editingSettings.allowDeleteConnector', false);
+        this.instance.option('editingSettings.allowChangeConnection', false);
+        this.instance.option('editingSettings.allowChangeConnectorPoints', false);
+        this.instance.option('editingSettings.allowChangeShapeText', false);
+        this.instance.option('editingSettings.allowChangeConnectorText', false);
+        this.instance.option('editingSettings.allowResizeShape', false);
+        assert.equal(this.instance._diagramInstance.editingSettings.addShape, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.addShapeFromToolbox, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.deleteShape, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.deleteConnector, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.changeConnection, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.changeConnectorPoints, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.changeShapeText, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.changeConnectorText, false);
+        assert.equal(this.instance._diagramInstance.editingSettings.resizeShape, false);
     });
 
     test('should change dataSource options', function(assert) {
