@@ -201,6 +201,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _dispose() {
+        super._dispose();
+
         this.virtualScrollingDispatcher?.dispose();
         this._disposeRenovatedComponents();
     }
