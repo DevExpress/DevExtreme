@@ -5,7 +5,6 @@ import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
-  getKeyByDateAndGroup,
   getIsGroupedAllDayPanel,
 } from '../../utils';
 import { LayoutProps } from '../layout_props';
@@ -27,7 +26,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
           {dateTable.map((cellsRow, rowIndex) => (
             <DateTableRow
               className="dx-scheduler-date-table-row"
-              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groupIndex)}
+              key={cellsRow[0].key}
             >
               {cellsRow.map(({
                 startDate,
@@ -35,6 +34,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                 groups,
                 groupIndex: cellGroupIndex,
                 index,
+                key,
               }: ViewCellData) => (
                 <viewModel.cell
                   isFirstCell={rowIndex === 0}
@@ -45,7 +45,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                   groupIndex={cellGroupIndex}
                   index={index}
                   dataCellTemplate={viewModel.props.dataCellTemplate}
-                  key={getKeyByDateAndGroup(startDate, cellGroupIndex)}
+                  key={key}
                 />
               ))}
             </DateTableRow>

@@ -3,7 +3,6 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../../row';
 import { AllDayPanelCell as Cell } from './cell';
-import { getKeyByDateAndGroup } from '../../../utils';
 import { ViewCellData } from '../../../types.d';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
@@ -18,6 +17,7 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
       groups,
       groupIndex: cellGroupIndex,
       index: cellIndex,
+      key,
     }, index) => (
       <Cell
         isFirstCell={index === 0}
@@ -28,7 +28,7 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
         groupIndex={cellGroupIndex}
         index={cellIndex}
         dataCellTemplate={viewModel.props.dataCellTemplate}
-        key={getKeyByDateAndGroup(startDate, cellGroupIndex)}
+        key={key}
       />
     ))}
   </Row>

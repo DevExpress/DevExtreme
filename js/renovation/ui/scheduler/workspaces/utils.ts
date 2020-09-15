@@ -3,13 +3,13 @@ import { GroupedViewData } from './types.d';
 import { GroupOrientation } from '../types.d';
 import { VERTICAL_GROUP_ORIENTATION } from '../consts';
 
-export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): number => {
+export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
   const key = date.getTime();
   if (!groupIndex) {
-    return key;
+    return key.toString();
   }
 
-  return key + groupIndex;
+  return (key + groupIndex).toString();
 };
 
 export const getKeyByGroup = (groupIndex: number): number => groupIndex;
