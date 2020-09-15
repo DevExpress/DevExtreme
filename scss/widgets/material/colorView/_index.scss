@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/colorView" as *;
+@use "../../base/colorView/mixins" as *;
+@use "../../base/colorView";
 
 // adduse
 
