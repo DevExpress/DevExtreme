@@ -740,7 +740,7 @@ class FileUploader extends Editor {
             return;
         }
 
-        if(this.option('disabled') || this.option('readOnly')) {
+        if(this._isInteractionDisabled()) {
             return false;
         }
 
@@ -788,6 +788,10 @@ class FileUploader extends Editor {
 
     _shouldDragOverBeRendered() {
         return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
+    }
+
+    _isInteractionDisabled() {
+        return this.option('readOnly') || this.option('disabled');
     }
 
     _renderInputContainer() {
@@ -854,10 +858,10 @@ class FileUploader extends Editor {
     }
 
     _attachDragEventHandlers(target) {
-        if(!isDefined(target) || !this._shouldDragOverBeRendered()) {
+        const isCustomTarget = target !== this._$inputWrapper;
+        if(!isDefined(target) || !this._shouldDragOverBeRendered() && !isCustomTarget) {
             return;
         }
-        const isCustomTarget = target !== this._$inputWrapper;
         this._detachDragEventHandlers(target);
         target = $(target);
 
@@ -929,7 +933,7 @@ class FileUploader extends Editor {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
 
-        if(this._useInputForDrop()) {
+        if(this._useInputForDrop() || isCustomTarget && this._isInteractionDisabled()) {
             return;
         }
 
