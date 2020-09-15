@@ -1,6 +1,7 @@
 import dateUtils from '../../core/utils/date';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
+import { isDefined } from '../../core/utils/type';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
@@ -47,16 +48,14 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 };
 
 const calculateTimezoneByValue = (timezone, date) => {
+    // NOTE: This check could be removed. We don't support numerical timezones
     if(typeof timezone === 'string') {
-        date = date || new Date();
-        const dateUtc = Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes()
-        );
-        timezone = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
+        if(!isDefined(date)) {
+            date = new Date();
+        }
+
+        const dateInUTC = createUTCDate(date);
+        timezone = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateInUTC.getTime());
     }
     return timezone;
 };
@@ -98,6 +97,10 @@ const isSameAppointmentDates = (startDate, endDate) => {
     return dateUtils.sameDate(startDate, endDate);
 };
 
+const getClientTimezoneOffset = (date) => {
+    return date.getTimezoneOffset() * 60000;
+};
+
 const utils = {
     getDaylightOffset,
     getDaylightOffsetInMs,
@@ -108,6 +111,7 @@ const utils = {
     isTimezoneChangeInDate,
     isSameAppointmentDates,
     correctRecurrenceExceptionByTimezone,
+    getClientTimezoneOffset,
 
     createUTCDate,
     createDateFromUTC

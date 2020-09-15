@@ -114,7 +114,7 @@ export const acquireTemplate = (templateSource, createTemplate, templates, isAsy
 
     // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
     if(isFunction(templateSource.render) && !isRenderer(templateSource)) {
-        return addOneRenderedCall(templateSource);
+        return isAsyncTemplate ? templateSource : addOneRenderedCall(templateSource);
     }
 
     if(templateSource.nodeType || isRenderer(templateSource)) {

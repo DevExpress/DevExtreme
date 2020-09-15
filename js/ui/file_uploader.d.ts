@@ -286,6 +286,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadFailedMessage?: string;
     /**
+     * @docid dxFileUploaderOptions.uploadAbortedMessage
+     * @type string
+     * @default "Upload cancelled"
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    uploadAbortedMessage?: string;
+    /**
      * @docid dxFileUploaderOptions.uploadFile
      * @type function
      * @type_function_param1 file:File
@@ -378,6 +386,29 @@ export default class dxFileUploader extends Editor {
      * @public
      */
     upload(file: File): void;
+    /**
+     * @docid dxFileUploaderMethods.abortUpload
+     * @publicName abortUpload()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    abortUpload(): void;
+    /**
+     * @docid dxFileUploaderMethods.abortUpload
+     * @publicName abortUpload(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    abortUpload(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.abortUpload
+     * @publicName abortUpload(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    abortUpload(file: File): void;
 }
 
 declare global {

@@ -656,7 +656,7 @@ QUnit.module('Appointment filtering', function() {
 
                 options = options || {};
 
-                $.extend(true, options, {
+                options = $.extend(false, {
                     dataSource: this.data,
                     currentDate: new Date(2016, 9, 5),
                     views: [{
@@ -668,7 +668,7 @@ QUnit.module('Appointment filtering', function() {
                         mode: 'virtual'
                     },
                     height: 400
-                });
+                }, options);
 
                 this.instance = createWrapper(options).instance;
 
@@ -760,6 +760,7 @@ QUnit.module('Appointment filtering', function() {
                         dataSource: [
                             { text: 'Rc0_0', id: 0, color: '#727bd2' },
                             { text: 'Rc0_1', id: 1, color: '#32c9ed' },
+                            { text: 'Rc0_2', id: 2, color: '#52c9ed' },
                         ],
                         label: 'Resource0'
                     }],
@@ -821,6 +822,50 @@ QUnit.module('Appointment filtering', function() {
                         const expected = this.data[expectedIndices[index]];
                         assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                     });
+                });
+            });
+
+            [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300 ].forEach(scrollY => {
+                QUnit.test(`Next day appointments should be filtered if grouping, groupOrientation: 'vertical', scrollY: ${scrollY}`, function(assert) {
+                    this.createInstance({
+                        groups: ['resourceId0'],
+                        dataSource: [{
+                            startDate: new Date(2016, 9, 6, 23),
+                            endDate: new Date(2016, 9, 6, 23, 23),
+                            resourceId0: 0,
+                            text: 'test_00'
+                        }, {
+                            startDate: new Date(2016, 9, 6, 23),
+                            endDate: new Date(2016, 9, 6, 23, 23),
+                            resourceId0: 1,
+                            text: 'test_10'
+                        }],
+                        resources: [{
+                            fieldExpr: 'resourceId0',
+                            dataSource: [
+                                { text: 'Rc0_0', id: 0, color: '#727bd2' },
+                                { text: 'Rc0_1', id: 1, color: '#32c9ed' }
+                            ],
+                            label: 'Resource0'
+                        }],
+                    });
+
+                    try {
+                        const { instance } = this;
+
+                        instance.getWorkSpaceScrollable().scrollTo({ y: scrollY });
+
+                        checkResultByDeviceType(assert, () => {
+                            assert.equal(
+                                instance.getFilteredItems().length,
+                                0,
+                                'Filtered items length is correct'
+                            );
+                        });
+
+                    } catch(e) {
+                        assert.ok(false, `Exception: ${e.message}`);
+                    }
                 });
             });
         });
