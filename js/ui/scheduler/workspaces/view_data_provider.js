@@ -38,10 +38,11 @@ class ViewDataGenerator {
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
         const showAllDayPanel = this.workspace._isShowAllDayPanel();
 
-        const indexDifference = isVerticalGrouping || (!isVerticalGrouping && !showAllDayPanel) ? 0 : 1;
+        const indexDifference = isVerticalGrouping || !showAllDayPanel ? 0 : 1;
+        const correctedStartRowIndex = startRowIndex + indexDifference;
 
         return completeViewDataMap
-            .slice(startRowIndex + indexDifference, startRowIndex + rowCount + indexDifference)
+            .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
             .map((cellsRow, rowIndex) => cellsRow.map((cellData, cellIndex) => ({
                 cellData,
                 position: { rowIndex, cellIndex },
