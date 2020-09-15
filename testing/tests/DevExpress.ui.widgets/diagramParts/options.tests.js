@@ -296,7 +296,7 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 28800);
     });
 
-    test('should apply operationSettins to settings', function(assert) {
+    test('should apply editingSettings to settings', function(assert) {
         this.instance.option('editingSettings.allowAddShape', false);
         this.instance.option('editingSettings.allowAddShapeFromToolbox', false);
         this.instance.option('editingSettings.allowDeleteShape', false);
@@ -306,15 +306,15 @@ QUnit.module('Options', {
         this.instance.option('editingSettings.allowChangeShapeText', false);
         this.instance.option('editingSettings.allowChangeConnectorText', false);
         this.instance.option('editingSettings.allowResizeShape', false);
-        assert.equal(this.instance._diagramInstance.editingSettings.addShape, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.addShapeFromToolbox, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.deleteShape, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.deleteConnector, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.changeConnection, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.changeConnectorPoints, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.changeShapeText, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.changeConnectorText, false);
-        assert.equal(this.instance._diagramInstance.editingSettings.resizeShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.addShapeFromToolbox, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.deleteConnector, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnection, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorPoints, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeShapeText, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorText, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.resizeShape, false);
     });
 
     test('should change dataSource options', function(assert) {
