@@ -130,6 +130,7 @@ class ViewDataGenerator {
                     horizontalGroupsCount, groupOrientation, this._workspace.isGroupedByDate(),
                     rowIndex % rowCountInGroup, columnIndex, cellCount,
                 );
+                cellDataValue.key = this._getKeyByDateAndGroup(cellDataValue.startDate, cellDataValue.groupIndex);
 
                 viewCellsData[i].push(cellDataValue);
             }
@@ -144,20 +145,27 @@ class ViewDataGenerator {
         }
 
         const { horizontalGroupsCount, groupOrientation } = options;
+        const rowIndex = Math.max(groupIndex * rowCount, 0);
 
         const allDayPanel = [];
 
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
-            const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex, groupIndex).value;
+
             cellDataValue.index = this._calculateCellIndex(
                 horizontalGroupsCount, groupOrientation, this._workspace.isGroupedByDate(),
                 0, columnIndex, cellCount,
             );
+            cellDataValue.key = this._getKeyByDateAndGroup(cellDataValue.startDate, cellDataValue.groupIndex);
+
             allDayPanel.push(cellDataValue);
         }
 
         return allDayPanel;
+    }
+
+    _createCellsRow() {
+        // TODO
     }
 
     _calculateCellIndex(horizontalGroupsCount, groupOrientation, isGroupedByDate, rowIndex, columnIndex, columnsNumber) {
@@ -175,6 +183,15 @@ class ViewDataGenerator {
         }
 
         return index;
+    }
+
+    _getKeyByDateAndGroup(date, groupIndex) {
+        const key = date.getTime();
+        if(!groupIndex) {
+            return key.toString();
+        }
+
+        return (key + groupIndex).toString();
     }
 
     generateGroupedDataMap(viewDataMap) {
