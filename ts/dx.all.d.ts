@@ -7625,7 +7625,7 @@ declare module DevExpress.ui {
         /**
          * <-dxGantt.Options.contextMenu->
          */
-        contextMenu?: any;
+        contextMenu?: dxGanttContextMenu;
         /**
          * <-dxGantt.Options.dependencies->
          */
@@ -7727,6 +7727,10 @@ declare module DevExpress.ui {
          */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /**
+         * <-dxGantt.Options.taskTooltipContentTemplate->
+         */
+        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
+        /**
          * <-dxGantt.Options.tasks->
          */
         tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
@@ -7734,10 +7738,6 @@ declare module DevExpress.ui {
          * <-dxGantt.Options.toolbar->
          */
         toolbar?: dxGanttToolbar;
-        /**
-         * <-dxGantt.Options.tooltipTemplate->
-         */
-        tooltipTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
         /**
          * <-dxGantt.Options.validation->
          */
@@ -7801,6 +7801,28 @@ declare module DevExpress.ui {
          * <-dxGantt.updateTask(key, data)->
          */
         updateTask(key: any, data: any): void;
+    }
+    /**
+     * <-dxGanttContextMenu->
+     */
+    export interface dxGanttContextMenu {
+        /**
+         * <-dxGanttContextMenu.enabled->
+         */
+        enabled?: boolean;
+        /**
+         * <-dxGanttContextMenu.items->
+         */
+        items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails'>;
+    }
+    /**
+     * <-dxGanttContextMenuItem->
+     */
+    export interface dxGanttContextMenuItem extends dxContextMenuItem {
+        /**
+         * <-dxGanttContextMenuItem.name->
+         */
+        name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | string;
     }
     /**
      * <-dxGanttStripLine->
@@ -7940,6 +7962,10 @@ declare module DevExpress.ui {
          * <-dxHtmlEditor.getLength()->
          */
         getLength(): number;
+        /**
+         * <-dxHtmlEditor.getModule(moduleName)->
+         */
+        getModule(moduleName: string): any;
         /**
          * <-dxHtmlEditor.getQuillInstance()->
          */
@@ -12404,6 +12430,12 @@ declare module DevExpress.ui.dxOverlay {
      * <-ui.dxOverlay.baseZIndex(zIndex)->
      */
     export function baseZIndex(zIndex: number): void;
+}
+declare module DevExpress.ui.dxScheduler {
+    /**
+     * <-ui.dxScheduler.getTimeZones(date)->
+     */
+    export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.utils {
     /**

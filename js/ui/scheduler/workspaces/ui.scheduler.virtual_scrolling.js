@@ -88,7 +88,7 @@ export default class VirtualScrolling {
         const workspace = this.getWorkspace();
         const renderTimeout = this._getRenderTimeout();
 
-        workspace.renderRWorkspace();
+        workspace.renderRWorkspace(false);
 
         if(renderTimeout >= 0) {
 
@@ -165,22 +165,19 @@ export default class VirtualScrolling {
 
         const workspace = this.getWorkspace();
         const groupCount = workspace._getGroupCount();
-        const totalRowCount = workspace._getTotalRowCount(groupCount);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const totalRowCount = workspace._getTotalRowCount(groupCount, isVerticalGrouping);
 
         return totalRowCount - topVirtualRowCount - topOutlineCount;
     }
 
     _calcBottomRowsInfo(topRowsDelta) {
-        const workspace = this.getWorkspace();
         const { pageSize } = this.getState();
         const rowCountWithBottom = topRowsDelta >= pageSize
             ? pageSize
             : topRowsDelta;
 
         let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
-        if(workspace.isGroupedAllDayPanel()) {
-            bottomVirtualRowCount -= 1;
-        }
 
         const bottomOutlineCount = bottomVirtualRowCount > 0
             ? Math.min(bottomVirtualRowCount, this._getOutlineCount())
