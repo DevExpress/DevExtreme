@@ -12432,7 +12432,9 @@ declare module DevExpress.ui.dxOverlay {
     export function baseZIndex(zIndex: number): void;
 }
 declare module DevExpress.ui.dxScheduler {
-    /** @name ui.dxScheduler.getTimeZones(date) */
+    /**
+     * <-ui.dxScheduler.getTimeZones(date)->
+     */
     export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.utils {
