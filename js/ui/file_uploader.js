@@ -859,7 +859,7 @@ class FileUploader extends Editor {
 
     _attachDragEventHandlers(target) {
         const isCustomTarget = target !== this._$inputWrapper;
-        if(!isDefined(target) || !this._shouldDragOverBeRendered() && !isCustomTarget) {
+        if(!isDefined(target) || !this._shouldDragOverBeRendered()) {
             return;
         }
         this._detachDragEventHandlers(target);
