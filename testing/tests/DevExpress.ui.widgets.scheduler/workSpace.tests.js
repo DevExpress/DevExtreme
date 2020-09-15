@@ -3753,7 +3753,8 @@ QUnit.module('Renovated Render', {
                             endDate: new Date(2020, 6, 29),
                             groupIndex: 0,
                             index: 0,
-                            allDay: true
+                            allDay: true,
+                            key: (new Date(2020, 6, 29)).getTime().toString(),
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -3761,14 +3762,16 @@ QUnit.module('Renovated Render', {
                             allDay: false,
                             groupIndex: 0,
                             index: 0,
-                            text: '12:00 AM'
+                            text: '12:00 AM',
+                            key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             groupIndex: 0,
                             index: 1,
                             allDay: false,
-                            text: ''
+                            text: '',
+                            key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                         }]],
                         groupIndex: 0,
                         isGroupedAllDayPanel: false
@@ -3786,7 +3789,8 @@ QUnit.module('Renovated Render', {
                             allDay: false,
                             groupIndex: 0,
                             index: 0,
-                            text: '12:00 AM'
+                            text: '12:00 AM',
+                            key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                         },
                         position: { cellIndex: 0, rowIndex: 0 }
                     }], [{
@@ -3796,7 +3800,8 @@ QUnit.module('Renovated Render', {
                             allDay: false,
                             groupIndex: 0,
                             index: 1,
-                            text: ''
+                            text: '',
+                            key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                         },
                         position: { cellIndex: 0, rowIndex: 1 }
                     }]
@@ -3833,7 +3838,8 @@ QUnit.module('Renovated Render', {
                                 endDate: new Date(2020, 6, 29),
                                 groups: { res: 1 },
                                 groupIndex: 0,
-                                index: 0
+                                index: 0,
+                                key: (new Date(2020, 6, 29)).getTime().toString(),
                             },
                             {
                                 allDay: true,
@@ -3841,7 +3847,8 @@ QUnit.module('Renovated Render', {
                                 endDate: new Date(2020, 6, 29),
                                 groups: { res: 2 },
                                 groupIndex: 1,
-                                index: 0
+                                index: 0,
+                                key: ((new Date(2020, 6, 29)).getTime() + 1).toString(),
                             }
                         ],
                         dateTable: [[{
@@ -3851,7 +3858,8 @@ QUnit.module('Renovated Render', {
                             text: '12:00 AM',
                             groups: { res: 1 },
                             groupIndex: 0,
-                            index: 0
+                            index: 0,
+                            key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                         }, {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
@@ -3859,7 +3867,8 @@ QUnit.module('Renovated Render', {
                             text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
-                            index: 0
+                            index: 0,
+                            key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -3867,7 +3876,8 @@ QUnit.module('Renovated Render', {
                             text: '',
                             groups: { res: 1 },
                             groupIndex: 0,
-                            index: 1
+                            index: 1,
+                            key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                         }, {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -3875,7 +3885,8 @@ QUnit.module('Renovated Render', {
                             text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
-                            index: 1
+                            index: 1,
+                            key: ((new Date(2020, 6, 29, 0, 30)).getTime() + 1).toString(),
                         }]],
                         groupIndex: 0,
                         isGroupedAllDayPanel: false,
@@ -3893,7 +3904,8 @@ QUnit.module('Renovated Render', {
                         text: '12:00 AM',
                         groups: { res: 1 },
                         groupIndex: 0,
-                        index: 0
+                        index: 0,
+                        key: (new Date(2020, 6, 29)).getTime().toString(),
                     },
                     position: { cellIndex: 0, rowIndex: 0 }
                 }, {
@@ -3904,7 +3916,8 @@ QUnit.module('Renovated Render', {
                         text: '',
                         groups: { res: 2 },
                         groupIndex: 1,
-                        index: 0
+                        index: 0,
+                        key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                     },
                     position: { cellIndex: 1, rowIndex: 0 }
                 }], [{
@@ -3915,7 +3928,8 @@ QUnit.module('Renovated Render', {
                         text: '',
                         groups: { res: 1 },
                         groupIndex: 0,
-                        index: 1
+                        index: 1,
+                        key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                     },
                     position: { cellIndex: 0, rowIndex: 1 }
                 }, {
@@ -3926,7 +3940,8 @@ QUnit.module('Renovated Render', {
                         text: '',
                         groups: { res: 2 },
                         groupIndex: 1,
-                        index: 1
+                        index: 1,
+                        key: ((new Date(2020, 6, 29, 0, 30)).getTime() + 1).toString(),
                     },
                     position: { cellIndex: 1, rowIndex: 1 }
                 }]];
@@ -3962,6 +3977,7 @@ QUnit.module('Renovated Render', {
                             },
                             groupIndex: 0,
                             index: 0,
+                            key: (new Date(2020, 6, 29)).getTime().toString(),
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -3971,6 +3987,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 0,
+                            key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -3979,6 +3996,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 1,
+                            key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                         }]]
                     }, {
                         allDayPanel: [{
@@ -3990,6 +4008,7 @@ QUnit.module('Renovated Render', {
                             },
                             groupIndex: 1,
                             index: 0,
+                            key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -3999,6 +4018,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
+                            key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -4007,6 +4027,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 1,
+                            key: ((new Date(2020, 6, 29, 0, 30)).getTime() + 1).toString(),
                         }]]
                     }],
                 };
@@ -4020,6 +4041,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 0,
+                            key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                         },
                         position: { rowIndex: 0, cellIndex: 0 }
                     }], [{
@@ -4031,6 +4053,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 0,
+                            key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                         },
                         position: { rowIndex: 1, cellIndex: 0 }
                     }], [{
@@ -4042,6 +4065,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 1,
+                            key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                         },
                         position: { rowIndex: 2, cellIndex: 0 }
                     }], [{
@@ -4052,6 +4076,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
+                            key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                         },
                         position: { rowIndex: 3, cellIndex: 0 }
                     }], [{
@@ -4063,6 +4088,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
+                            key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                         },
                         position: { rowIndex: 4, cellIndex: 0 }
                     }], [{
@@ -4074,6 +4100,7 @@ QUnit.module('Renovated Render', {
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 1,
+                            key: ((new Date(2020, 6, 29, 0, 30)).getTime() + 1).toString(),
                         },
                         position: { rowIndex: 5, cellIndex: 0 }
                     }]
@@ -4120,6 +4147,7 @@ QUnit.module('Renovated Render', {
                     groupIndex: 0,
                     index: 0,
                     text: '12:00 AM',
+                    key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4141,6 +4169,7 @@ QUnit.module('Renovated Render', {
                     groupIndex: 0,
                     index: 0,
                     text: '12:00 AM',
+                    key: (new Date(2020, 6, 29, 0, 0)).getTime().toString(),
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4170,7 +4199,8 @@ QUnit.module('Renovated Render', {
                     text: '',
                     groups: { res: 2 },
                     groupIndex: 1,
-                    index: 0
+                    index: 0,
+                    key: ((new Date(2020, 6, 29, 0, 0)).getTime() + 1).toString(),
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4201,7 +4231,8 @@ QUnit.module('Renovated Render', {
                     text: '',
                     groups: { res: 1 },
                     groupIndex: 0,
-                    index: 1
+                    index: 1,
+                    key: (new Date(2020, 6, 29, 0, 30)).getTime().toString(),
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
