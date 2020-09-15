@@ -6839,6 +6839,10 @@ declare module DevExpress.ui {
          */
         dialogTrigger?: string | Element | JQuery;
         /**
+         * <-dxFileUploader.Options.dropZone->
+         */
+        dropZone?: string | Element | JQuery;
+        /**
          * <-dxFileUploader.Options.focusStateEnabled->
          */
         focusStateEnabled?: boolean;

@@ -651,6 +651,21 @@ QUnit.module('custom uploading', moduleConfig, () => {
         instance._attachSelectFileDialogHandler.restore();
     });
 
+    QUnit.test('it is possible to drop files using custom dropzone', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            dropZone: '.drop'
+        });
+        const files = [fakeFile, fakeFile1];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+
+        customDropZone.trigger(event);
+        assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), files, 'files are correct');
+        customDropZone.remove();
+    });
+
 });
 
 QUnit.module('uploading by chunks', moduleConfig, function() {
