@@ -16,12 +16,12 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 
     /**
      * @docid dxValidationMessageOptions.validationErrors
-     * @type object[] | null
+     * @type Array<object> | null
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationErrors?: object[] | null;
+    validationErrors?: Array<object> | null;
 
     /**
      * @docid dxValidationMessageOptions.positionRequest
@@ -52,7 +52,6 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 }
 /**
  * @docid dxValidationMessage
- * @isEditor
  * @inherits dxOverlay
  * @module ui/validation_message
  * @export default
