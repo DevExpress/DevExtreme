@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Ladda upp",
         "dxFileUploader-uploaded": "Uppladdad",
         "dxFileUploader-readyToUpload": "Klar att ladda upp",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Uppladdning misslyckades",
         "dxFileUploader-invalidFileExtension": "",
         "dxFileUploader-invalidMaxFileSize": "",

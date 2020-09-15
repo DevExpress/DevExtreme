@@ -1,4 +1,5 @@
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
@@ -104,6 +105,21 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
         this.scrollController.viewportSize(12);
         this.scrollController.load();
 
+
+        assert.strictEqual(mockDataSource.load.callCount, 1);
+        assert.equal(this.externalDataChangedHandler.callCount, 1);
+
+        assert.strictEqual(this.scrollController.beginPageIndex(), 0);
+        assert.strictEqual(this.scrollController.endPageIndex(), 0);
+
+        assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
+    });
+
+    QUnit.test('Load after scroll to top', function(assert) {
+        this.scrollController.viewportSize(12);
+        this.scrollController.load();
+
+        this.scrollController.setViewportPosition(0);
 
         assert.strictEqual(mockDataSource.load.callCount, 1);
         assert.equal(this.externalDataChangedHandler.callCount, 1);
@@ -227,11 +243,11 @@ QUnit.module('Virtual scrolling', {
     });
 
     QUnit.test('setViewport position. Scroll in the viewport area', function(assert) {
-        this.scrollController.setViewportPosition(0);
+        this.scrollController.setViewportPosition(1);
         mockDataSource.load.reset();
 
         this.scrollController.setViewportPosition(230);
-        this.scrollController.setViewportPosition(0);
+        this.scrollController.setViewportPosition(1);
         this.scrollController.setViewportPosition(this.contentSize - 1);
 
         assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);

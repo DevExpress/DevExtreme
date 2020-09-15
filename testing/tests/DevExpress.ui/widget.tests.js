@@ -934,6 +934,26 @@ QUnit.module('templates support', {}, () => {
         assert.equal(onRenderedHandler.callCount, 1, 'onRendered has been called');
     });
 
+    QUnit.test('external custom template should not call onRendered method with templatesRenderAsynchronously (template.render exists)', function(assert) {
+        const onRenderedHandler = sinon.spy();
+
+        const testContainer = new TestContainer('#container', {
+            templatesRenderAsynchronously: true,
+            template: {
+                render() {
+                    return 'template result';
+                }
+            }
+        });
+
+        const template = testContainer._getTemplateByOption('template');
+
+        const renderResult = template.render({ onRendered: onRenderedHandler });
+
+        assert.equal(renderResult, 'template result', 'render method should have correct context');
+        assert.equal(onRenderedHandler.callCount, 0, 'onRendered has been called');
+    });
+
     QUnit.test('shared external template as script element', function(assert) {
         const testContainer1 = new TestContainer('#container', {
             template: $('#scriptTemplate')

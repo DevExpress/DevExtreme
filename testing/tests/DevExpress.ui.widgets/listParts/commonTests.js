@@ -566,7 +566,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             const $element = this.element.dxList({
                 pageLoadMode: 'scrollBottom',
-                height: 130,
+                height: 160,
                 scrollingEnabled: true,
                 useNativeScrolling: false,
                 dataSource: {
@@ -2211,7 +2211,7 @@ QUnit.module('scrollView integration', {
         this.clock.tick(1);
 
         const scrollBarSize = Math.round(Math.pow($list.height(), 2) / $scrollViewContent.height());
-        assert.equal($scrollableScroll.height(), scrollBarSize, 'scrollbar has correct height');
+        assert.equal($scrollableScroll.outerHeight(), scrollBarSize, 'scrollbar has correct height');
     });
 
     QUnit.test('update scroll after change items', function(assert) {

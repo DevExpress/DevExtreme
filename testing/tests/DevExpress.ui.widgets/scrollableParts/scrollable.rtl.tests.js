@@ -1,5 +1,6 @@
 import animationFrame from 'animation/frame';
 import 'common.css!';
+import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';

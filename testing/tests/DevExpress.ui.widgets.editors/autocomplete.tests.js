@@ -11,6 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/select_box';
 
 QUnit.testStart(() => {
@@ -125,9 +126,9 @@ QUnit.module('dxAutocomplete', {
         const autocomplete = $autocomplete.dxAutocomplete('instance');
         const popup = autocomplete._popup;
         const $overlayContent = $('.dx-overlay-content');
-        const initialPopupWidth = $overlayContent.width();
-        const initialWidth = $autocomplete.width();
-        const initialHeight = $autocomplete.height();
+        const initialPopupWidth = $overlayContent.outerWidth();
+        const initialWidth = $autocomplete.outerWidth();
+        const initialHeight = $autocomplete.outerHeight();
         const increment = 123;
 
         assert.strictEqual(initialWidth, setUpWidth, 'Width was set up successfully');
@@ -158,11 +159,11 @@ QUnit.module('dxAutocomplete', {
 
         const instance = element.dxAutocomplete('instance');
 
-        assert.equal(element.height(), instance.option('height'), 'textbox height is right');
+        assert.equal(element.outerHeight(), instance.option('height'), 'textbox height is right');
 
         instance.option('height', 120);
 
-        assert.equal(element.height(), instance.option('height'), 'textbox height is right');
+        assert.equal(element.outerHeight(), instance.option('height'), 'textbox height is right');
     });
 
     QUnit.test('dataSource support', function(assert) {
