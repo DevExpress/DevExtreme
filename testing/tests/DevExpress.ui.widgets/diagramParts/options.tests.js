@@ -296,7 +296,7 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 28800);
     });
 
-    test('should apply editingSettings to settings', function(assert) {
+    test('should apply editingSettings', function(assert) {
         this.instance.option('editingSettings.allowAddShape', false);
         this.instance.option('editingSettings.allowAddShapeFromToolbox', false);
         this.instance.option('editingSettings.allowDeleteShape', false);
