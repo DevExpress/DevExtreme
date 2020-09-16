@@ -459,7 +459,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             .on('removed', removedKey => {
                 const node = this._dataAdapter.getNodeByKey(removedKey);
 
-                if(node) {
+                if(isDefined(node)) {
                     this.option('items')[this._dataAdapter.getIndexByKey(node.internalFields.key)] = 0;
                     this._markChildrenItemsToRemove(node);
                     this._removeItems();
