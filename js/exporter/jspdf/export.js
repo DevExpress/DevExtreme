@@ -128,7 +128,9 @@ export const Export = {
         return value;
     },
 
-    _assignCellStyle: function(pdfCell, rowType, column, { alignment: horizontalAlignment, bold, wrapText }) {
+    _assignCellStyle: function(pdfCell, rowType, column, cellStyle) {
+        const { alignment: horizontalAlignment, bold, wrapText } = cellStyle;
+
         if(rowType === 'header') {
             if(isDefined(column.alignment)) {
                 pdfCell.styles['halign'] = column.alignment;
