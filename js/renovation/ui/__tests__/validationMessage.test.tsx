@@ -17,7 +17,6 @@ describe('ValidationMessage', () => {
       const props = {
         props: new ValidationMessageProps(),
         widgetRef,
-        restAttributes: { 'rest-attributes': 'true' },
       } as any as Partial<ValidationMessage>;
       const tree = mount<
             typeof ValidationMessageView>(<ValidationMessageView {...props as any} /> as any);
