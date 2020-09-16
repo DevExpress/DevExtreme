@@ -240,7 +240,7 @@ configs.forEach(config => {
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template,
-                __whenPanelContentRendered: () => {
+                __debugWhenPanelContentRendered: () => {
                     if(!config.minSize) {
                         checkPanelIsNotVisible(assert, drawerElement, document.getElementById('template'));
                     }

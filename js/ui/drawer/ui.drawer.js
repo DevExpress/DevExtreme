@@ -179,8 +179,8 @@ const Drawer = Widget.inherit({
 
         this._whenPanelContentRendered.always(() => {
             ///#DEBUG
-            if(this.option('__whenPanelContentRendered')) {
-                this.option('__whenPanelContentRendered')();
+            if(this.option('__debugWhenPanelContentRendered')) {
+                this.option('__debugWhenPanelContentRendered')();
             }
             ///#ENDDEBUG
 
