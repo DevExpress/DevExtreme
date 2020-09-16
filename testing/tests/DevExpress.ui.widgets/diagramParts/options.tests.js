@@ -296,16 +296,16 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.settings.shapeMaxHeight, 28800);
     });
 
-    test('should apply operationSettins to settings', function(assert) {
-        this.instance.option('operationSettings.allowAddShape', false);
-        this.instance.option('operationSettings.allowAddShapeFromToolbox', false);
-        this.instance.option('operationSettings.allowDeleteShape', false);
-        this.instance.option('operationSettings.allowDeleteConnector', false);
-        this.instance.option('operationSettings.allowChangeConnection', false);
-        this.instance.option('operationSettings.allowChangeConnectorPoints', false);
-        this.instance.option('operationSettings.allowChangeShapeText', false);
-        this.instance.option('operationSettings.allowChangeConnectorText', false);
-        this.instance.option('operationSettings.allowResizeShape', false);
+    test('should apply editingSettings', function(assert) {
+        this.instance.option('editingSettings.allowAddShape', false);
+        this.instance.option('editingSettings.allowAddShapeFromToolbox', false);
+        this.instance.option('editingSettings.allowDeleteShape', false);
+        this.instance.option('editingSettings.allowDeleteConnector', false);
+        this.instance.option('editingSettings.allowChangeConnection', false);
+        this.instance.option('editingSettings.allowChangeConnectorPoints', false);
+        this.instance.option('editingSettings.allowChangeShapeText', false);
+        this.instance.option('editingSettings.allowChangeConnectorText', false);
+        this.instance.option('editingSettings.allowResizeShape', false);
         assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
         assert.equal(this.instance._diagramInstance.operationSettings.addShapeFromToolbox, false);
         assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
