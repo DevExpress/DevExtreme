@@ -1175,7 +1175,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const lastCellInSelection = this.viewDataProvider.getLastCellInSelection();
 
         if(coordinates && coordinates.rowIndex !== -1) {
-            const $cell = this._getCellByPosition(coordinates);
+            const $cell = this._dom_getDateCell(coordinates);
             $cell && this._setFocusedCell($cell);
         }
         if(firstCellInSelection && lastCellInSelection) {
@@ -1188,8 +1188,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 coordinates: secondCoordinates,
             } = lastCellInSelection;
 
-            const $firstCell = this._getCellByPosition(firstCoordinates);
-            const $secondCell = this._getCellByPosition(secondCoordinates);
+            const $firstCell = this._dom_getDateCell(firstCoordinates);
+            const $secondCell = this._dom_getDateCell(secondCoordinates);
             const isMultipleSelection = firstCellData.startDate.getTime() !== secondCellData.startDate.getTime();
 
             $firstCell && $secondCell
