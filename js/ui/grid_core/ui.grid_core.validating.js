@@ -1,7 +1,8 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
-import { createObjectWithChanges, getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
+import { getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
+import { createObjectWithChanges } from '../../data/array_utils';
 import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isDefined, isEmptyObject } from '../../core/utils/type';

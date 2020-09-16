@@ -1,7 +1,7 @@
 import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
 import config from '../core/config';
 import Guid from '../core/guid';
-import { extend } from '../core/utils/extend';
+import { extend, extendFromObject } from '../core/utils/extend';
 import { errors } from './errors';
 import { deepExtendArraySafe } from '../core/utils/object';
 import { compileGetter } from '../core/utils/data';
@@ -79,8 +79,16 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
+function createObjectWithChanges(target, changes) {
+    const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
+    const targetWithoutPrototype = extendFromObject({}, target);
+
+    objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+    return objectUtils.deepExtendArraySafe(result, changes, true, true);
+}
+
 function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex, immutable) {
-    const isDataImmutable = isDefined(immutable) && immutable === true;
+    const isDataImmutable = immutable === true;
     const resultItems = isDataImmutable ? [...array] : array;
 
     batchData.forEach(item => {
@@ -97,8 +105,8 @@ function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex, immut
     return resultItems;
 }
 
-function applyChanges(data, changes, options) {
-    const { keyExpr = 'id', immutable = true } = isDefined(options) && isPlainObject(options) ? options : {};
+function applyChanges(data, changes, options = {}) {
+    const { keyExpr = 'id', immutable = true } = options;
     const keyGetter = compileGetter(keyExpr);
     const keyInfo = {
         key: () => keyExpr,
@@ -127,9 +135,9 @@ function update(keyInfo, array, key, data, isBatch, immutable) {
 
             target = array[index];
 
-            if(immutable === true && isDefined(target) && isPlainObject(target)) {
-                target = { ...target };
-                array[index] = target;
+            if(immutable === true && isDefined(target)) {
+                array[index] = createObjectWithChanges(target, data);
+                return;
             }
         }
     } else {
@@ -207,6 +215,7 @@ function indexByKey(keyInfo, array, key) {
 
 export {
     applyBatch,
+    createObjectWithChanges,
     update,
     insert,
     remove,
