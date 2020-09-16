@@ -166,7 +166,7 @@ module('Virtual Scrolling', {
                 assert.equal(state.rowCount, step.rowCount, 'rowCount');
 
                 assert.equal(state.startIndex, state.topVirtualRowCount, 'startIndex');
-                assert.deepEqual(state.scrollOffset, { top: step.top }, 'ScrollOffset');
+                assert.deepEqual(state.scrollPosition, { top: step.top }, 'scrollPosition');
                 assert.equal(state.topVirtualRowCount, step.topVirtualRowCount, `Top virtual row count: ${step.topVirtualRowCount}`);
                 assert.equal(state.bottomVirtualRowCount, step.bottomVirtualRowCount, `Bottom virtual row count: ${step.bottomVirtualRowCount}`);
             });
@@ -192,7 +192,7 @@ module('Virtual Scrolling', {
                 assert.equal(state.rowCount, step.rowCount, 'rowCount');
 
                 assert.equal(state.startIndex, state.topVirtualRowCount, 'startIndex');
-                assert.deepEqual(state.scrollOffset, { top: step.top }, 'ScrollOffset');
+                assert.deepEqual(state.scrollPosition, { top: step.top }, 'ScrollOffset');
                 assert.equal(state.topVirtualRowCount, step.topVirtualRowCount, `Top virtual row count: ${step.topVirtualRowCount}`);
                 assert.equal(state.bottomVirtualRowCount, step.bottomVirtualRowCount, `Bottom virtual row count: ${step.bottomVirtualRowCount}`);
             });

@@ -103,9 +103,9 @@ export default class VirtualScrollingDispatcher {
         eventsEngine.on(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
     }
 
-    _process(scrollOffset) {
-        scrollOffset
-            && this.virtualScrolling.updateState(scrollOffset)
+    _process(scrollPosition) {
+        scrollPosition
+            && this.virtualScrolling.updateState(scrollPosition)
             && this._updateWorkspace();
     }
 
@@ -113,7 +113,7 @@ export default class VirtualScrollingDispatcher {
         const { workspace } = this;
         const renderTimeout = this.getRenderTimeout();
 
-        workspace.renderRWorkspace();
+        workspace.renderRWorkspace(false);
 
         if(renderTimeout >= 0) {
 
@@ -133,7 +133,6 @@ class VirtualScrolling {
     constructor(workspace, viewportHeight) {
         this._workspace = workspace;
         this._viewportHeight = viewportHeight;
-        this._scrollable = scrollable;
         this._renderAppointmentTimeout = null;
 
         this._init();
@@ -146,10 +145,6 @@ class VirtualScrolling {
 
     getViewportHeight() {
         return this._viewportHeight;
-    }
-
-    getScrollable() {
-        return this._scrollable;
     }
 
     getRowHeight() {
@@ -168,19 +163,15 @@ class VirtualScrolling {
         return Math.floor(this._getPageSize() / 2);
     }
 
-    _getRenderTimeout() {
-        return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
-    }
-
     _init() {
-        const scrollOffset = {
+        const scrollPosition = {
             top: 0,
             left: 0
         };
 
         this._state = {
             pageSize: this._getPageSize(),
-            scrollOffset: scrollOffset,
+            scrollPosition: scrollPosition,
             startIndex: -1,
             rowCount: 0,
             topVirtualRowCount: 0,
@@ -193,23 +184,22 @@ class VirtualScrolling {
             bottomOutlineHeight: 0
         };
 
-        this.updateState(scrollOffset);
+        this.updateState(scrollPosition);
     }
 
-    updateState(scrollOffset) {
+    updateState(scrollPosition) {
         const state = this.getState();
-        const top = scrollOffset.top;
+        const top = scrollPosition.top;
         const currentStartIndex = state.startIndex;
         const rowHeight = this.getRowHeight();
         const isFirstInitialization = state.startIndex < 0;
         const topRowsCount = Math.floor(top / rowHeight);
 
-        state.scrollOffset = scrollOffset;
-        state.startIndex = Math.floor(top / rowHeight);
+        state.scrollPosition = scrollPosition;
 
         const needUpdateState = isFirstInitialization || Math.abs(currentStartIndex - topRowsCount) > 0;
         if(needUpdateState) {
-            const topRowsInfo = this._calcTopRowsInfo(scrollOffset);
+            const topRowsInfo = this._calcTopRowsInfo(scrollPosition);
             const topRowsDelta = this._calcTopRowsDelta(topRowsInfo);
             const {
                 bottomOutlineCount,
@@ -239,8 +229,8 @@ class VirtualScrolling {
         return false;
     }
 
-    _calcTopRowsInfo(scrollOffset) {
-        const { top } = scrollOffset;
+    _calcTopRowsInfo(scrollPosition) {
+        const { top } = scrollPosition;
         const rowHeight = this.getRowHeight();
         let topVirtualRowCount = Math.floor(top / rowHeight);
         const topOutlineCount = Math.min(topVirtualRowCount, this._getOutlineCount());
@@ -261,22 +251,19 @@ class VirtualScrolling {
 
         const workspace = this.getWorkspace();
         const groupCount = workspace._getGroupCount();
-        const totalRowCount = workspace._getTotalRowCount(groupCount);
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const totalRowCount = workspace._getTotalRowCount(groupCount, isVerticalGrouping);
 
         return totalRowCount - topVirtualRowCount - topOutlineCount;
     }
 
     _calcBottomRowsInfo(topRowsDelta) {
-        const workspace = this.getWorkspace();
         const { pageSize } = this.getState();
         const rowCountWithBottom = topRowsDelta >= pageSize
             ? pageSize
             : topRowsDelta;
 
         let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
-        if(workspace.isGroupedAllDayPanel()) {
-            bottomVirtualRowCount -= 1;
-        }
 
         const bottomOutlineCount = bottomVirtualRowCount > 0
             ? Math.min(bottomVirtualRowCount, this._getOutlineCount())
@@ -324,8 +311,5 @@ class VirtualScrolling {
             state.topVirtualRowHeight = topVirtualRowHeight;
             state.bottomVirtualRowHeight = bottomVirtualRowHeight;
         }
-    }
-
-    dispose() {
     }
 }
