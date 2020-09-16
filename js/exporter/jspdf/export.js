@@ -71,7 +71,9 @@ export const Export = {
                 if(keepColumnWidths) {
                     const pdfColumnWidths = this._tryGetPdfColumnWidths(autoTableOptions.tableWidth, dataProvider.getColumnsWidths());
 
-                    isDefined(pdfColumnWidths) && this._setColumnWidths(autoTableOptions, pdfColumnWidths);
+                    if(isDefined(pdfColumnWidths) && isDefined(autoTableOptions.columnStyles)) {
+                        this._setColumnWidths(autoTableOptions.columnStyles, pdfColumnWidths);
+                    }
                 }
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
@@ -79,20 +81,16 @@ export const Export = {
 
                     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
 
-                        const { value, cellSourceData: gridCell } = dataProvider.getCellData(rowIndex, cellIndex, true); // TODO: Do we need 'true' flag?
+                        const { value, cellSourceData: gridCell } = dataProvider.getCellData(rowIndex, cellIndex, true);
                         const cellStyle = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
                         const pdfCell = {
                             content: this._getFormattedValue(value, cellStyle.format),
-                            styles: {}
+                            styles: this._getPDFCellStyles(gridCell.rowType, columns[cellIndex].alignment, cellStyle)
                         };
 
-                        this._assignCellStyle(pdfCell, gridCell.rowType, columns[cellIndex], cellStyle);
-
                         if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
-                            if(!isDefined(row[0].colSpan)) {
-                                row[0].colSpan = 1;
-                            }
+                            row[0].colSpan = row[0].colSpan ?? 1;
                             row[0].colSpan++;
                         } else {
                             row.push(pdfCell);
@@ -128,18 +126,22 @@ export const Export = {
         return value;
     },
 
-    _assignCellStyle: function(pdfCell, rowType, column, cellStyle) {
+    _getPDFCellStyles: function(rowType, columnAlignment, cellStyle) {
         const { alignment: horizontalAlignment, bold, wrapText } = cellStyle;
-
-        if(rowType === 'header') {
-            if(isDefined(column.alignment)) {
-                pdfCell.styles['halign'] = column.alignment;
+        const styles = {};
+        const setStyle = (styleName, value) => {
+            if(isDefined(value)) {
+                styles[styleName] = value;
             }
+        };
+        if(rowType === 'header') {
+            setStyle('halign', columnAlignment);
         } else {
-            pdfCell.styles['halign'] = horizontalAlignment;
-            if(bold) { pdfCell.styles.fontStyle = 'bold'; }
-            if(wrapText) { pdfCell.styles.cellWidth = 'wrap'; }
+            setStyle('halign', horizontalAlignment);
+            setStyle('fontStyle', bold ? 'bold' : undefined);
+            setStyle('cellWidth', wrapText ? 'wrap' : undefined);
         }
+        return styles;
     },
 
     _tryGetPdfColumnWidths(autoTableWidth, columnWidths) {
@@ -149,12 +151,10 @@ export const Export = {
         }
     },
 
-    _setColumnWidths: function(autoTableOptions, pdfColumnWidths) {
-        const columnStyles = autoTableOptions.columnStyles;
-
+    _setColumnWidths: function(autoTableColumnStyles, pdfColumnWidths) {
         pdfColumnWidths.forEach((width, index) => {
-            columnStyles[index] = columnStyles[index] || {};
-            columnStyles[index].cellWidth = width;
+            autoTableColumnStyles[index] = autoTableColumnStyles[index] || {};
+            autoTableColumnStyles[index].cellWidth = width;
         });
     }
 };
