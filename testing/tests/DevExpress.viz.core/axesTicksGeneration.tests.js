@@ -53,7 +53,8 @@ const environment = {
             incidentOccurred: this.incidentOccurred,
             eventTrigger: () => { },
             axisType: 'xyAxes',
-            drawingType: 'linear'
+            drawingType: 'linear',
+            getTemplate() {}
         }, options));
     },
     afterEach: function() {

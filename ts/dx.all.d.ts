@@ -14770,6 +14770,10 @@ declare module DevExpress.viz {
          */
         staggeringSpacing?: number;
         /**
+         * <-dxChart.Options.commonAxisSettings.label.template->
+         */
+        template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
+        /**
          * <-dxChart.Options.commonAxisSettings.label.textOverflow->
          */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
