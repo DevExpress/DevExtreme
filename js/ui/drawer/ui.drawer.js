@@ -178,15 +178,27 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._whenPanelContentRendered.always(() => {
+            ///#DEBUG
+            if(this.option('__whenPanelContentRendered')) {
+                this.option('__whenPanelContentRendered')();
+            }
+            ///#ENDDEBUG
+
             this._initMinMaxSize();
             this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
 
             this._renderPosition(this.option('opened'), false);
+            if(this._$panelContentWrapper.css('position') === 'absolute' && this._$panelContentWrapper.css('top') === '-10000px' && this._$panelContentWrapper.css('left') === '-10000px') {
+                this._$panelContentWrapper.css('position', '').css('top', '').css('left', '');
+            }
         });
     },
 
     _renderPanelContentWrapper() {
         this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
+        if(this.option('openedStateMode') !== 'overlap' && !this.option('opened')) {
+            this._$panelContentWrapper.css('position', 'absolute').css('top', '-10000px').css('left', '-10000px');
+        }
         this._$wrapper.append(this._$panelContentWrapper);
     },
 
