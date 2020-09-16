@@ -3030,6 +3030,68 @@ QUnit.test('Get scale breaks in the viewport', function(assert) {
     ]);
 });
 
+QUnit.test('Scale breaks with the viewport passed to the translator', function(assert) {
+    this.updateOptions({
+        breakStyle: { width: 10 },
+        breaks: [
+            { startValue: 10, endValue: 100 },
+            { startValue: 200, endValue: 300 },
+            { startValue: 310, endValue: 360 },
+            { startValue: 500, endValue: 600 }
+        ]
+    });
+
+    this.axis.visualRange(250, 540);
+    this.axis.createTicks(this.canvas);
+
+    const breaks = this.translator.updateBusinessRange.lastCall.args[0].breaks;
+    const userBreaks = this.translator.updateBusinessRange.lastCall.args[0].userBreaks;
+
+    assert.deepEqual(breaks, [
+        { from: 250, to: 300, cumulativeWidth: 10 },
+        { from: 310, to: 360, cumulativeWidth: 20 },
+        { from: 500, to: 540, cumulativeWidth: 30 }
+    ]);
+    assert.deepEqual(userBreaks, [
+        { from: 10, to: 100 },
+        { from: 200, to: 300 },
+        { from: 310, to: 360 },
+        { from: 500, to: 600 }
+    ]);
+});
+
+QUnit.test('Scale breaks passed to the translator', function(assert) {
+    this.updateOptions({
+        breakStyle: { width: 10 },
+        breaks: [
+            { startValue: 10, endValue: 100 },
+            { startValue: 200, endValue: 300 },
+            { startValue: 310, endValue: 360 },
+            { startValue: 500, endValue: 600 }
+        ],
+        min: 0,
+        max: 700
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    const breaks = this.translator.updateBusinessRange.lastCall.args[0].breaks;
+    const userBreaks = this.translator.updateBusinessRange.lastCall.args[0].userBreaks;
+
+    assert.deepEqual(breaks, [
+        { from: 10, to: 100, cumulativeWidth: 10 },
+        { from: 200, to: 300, cumulativeWidth: 20 },
+        { from: 310, to: 360, cumulativeWidth: 30 },
+        { from: 500, to: 600, cumulativeWidth: 40 }
+    ]);
+    assert.deepEqual(userBreaks, [
+        { from: 10, to: 100 },
+        { from: 200, to: 300 },
+        { from: 310, to: 360 },
+        { from: 500, to: 600 }
+    ]);
+});
+
 QUnit.test('Do not get scale break if viewport inside it', function(assert) {
     this.updateOptions({
         breaks: [{ startValue: 200, endValue: 500 }]
@@ -4663,6 +4725,13 @@ QUnit.test('Recalculate scale breaks', function(assert) {
         { from: 250, to: 300, cumulativeWidth: 10 },
         { from: 310, to: 360, cumulativeWidth: 20 },
         { from: 500, to: 540, cumulativeWidth: 30 }
+    ]);
+
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].userBreaks, [
+        { from: 10, to: 100 },
+        { from: 200, to: 300 },
+        { from: 310, to: 360 },
+        { from: 500, to: 600 }
     ]);
 });
 
