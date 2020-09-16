@@ -1,1 +1,3 @@
-The **DataGrid** widget supports custom column templates. In&nbsp;this demo, a&nbsp;custom column template is&nbsp;assigned to&nbsp;the **cellTemplate** option of&nbsp;the _Picture_ column.
+Column templates allow you to display custom content in column cells. Use the [cellTemplate](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#cellTemplate) option ([cellRender](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#cellRender) in React) to configure these templates.
+
+In this demo, a custom column template is configured to display employee photos in the `Picture` column.
