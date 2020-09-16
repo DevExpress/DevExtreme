@@ -996,10 +996,13 @@ module.exports = {
                 seriesData.maxVisible = viewport.max;
             }
 
-            seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
+            const breaks = that._getScaleBreaks(that._options, {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
+
+            seriesData.breaks = that._initialBreaks = breaks.filtered;
+            seriesData.userBreaks = breaks.initial;
 
             that._translator.updateBusinessRange(that._getViewportRange());
         },
@@ -1096,7 +1099,11 @@ module.exports = {
                 && axisOptions.autoBreaksEnabled && axisOptions.maxAutoBreakCount !== 0) {
                 breaks = breaks.concat(generateAutoBreaks(axisOptions, series, viewport));
             }
-            return filterBreaks(sortingBreaks(breaks), viewport, axisOptions.breakStyle);
+            const sortedBreaks = sortingBreaks(breaks);
+            return {
+                filtered: filterBreaks(sortedBreaks, viewport, axisOptions.breakStyle),
+                initial: sortedBreaks
+            };
         },
 
         _drawBreak: function(translatedEnd, positionFrom, positionTo, width, options, group) {

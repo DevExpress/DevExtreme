@@ -1316,7 +1316,9 @@ Axis.prototype = {
         }
         that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
-        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        const breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.breaks = that._initialBreaks = breaks.filtered;
+        that._seriesData.userBreaks = breaks.initial;
 
         that._translator.updateBusinessRange(that._getViewportRange());
     },
@@ -1521,7 +1523,7 @@ Axis.prototype = {
                 const breaks = that._getScaleBreaks(options, {
                     minVisible: start,
                     maxVisible: end
-                }, that._series, that.isArgumentAxis);
+                }, that._series, that.isArgumentAxis).filtered;
                 ticks = generateTicks(tickInterval, false, start, end, breaks).ticks;
             }
         }
@@ -2194,10 +2196,13 @@ Axis.prototype = {
 
         const viewPort = that.getViewport();
 
-        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
+        const breaks = that._getScaleBreaks(that._options, {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);
+
+        that._seriesData.breaks = that._initialBreaks = breaks.filtered;
+        that._seriesData.userBreaks = breaks.initial;
 
         that._translator.updateBusinessRange(that._getViewportRange());
     },
@@ -2681,7 +2686,7 @@ Axis.prototype = {
         return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
     },
 
-    _getScaleBreaks: function() { return []; },
+    _getScaleBreaks: function() { return { filtered: [], initial: [] }; },
 
     _adjustTitle: _noop,
 
