@@ -434,6 +434,20 @@ describe('CheckBox', () => {
             .toEqual(expect.stringMatching('dx-invalid'));
         });
       });
+
+      describe('validationErrors', () => {
+        it('should return "validationErrors" props value when it is specified', () => {
+          const validationErrors = [{ message: 'error message' }];
+          expect(new CheckBox({ validationErrors }).validationErrors)
+            .toEqual(validationErrors);
+        });
+
+        it('should return array with one element equal to "validationError" props value when "validationErrors" is not specified', () => {
+          const validationError = { message: 'error message' };
+          expect(new CheckBox({ validationError }).validationErrors)
+            .toEqual([validationError]);
+        });
+      });
     });
 
     describe('Default options', () => {
