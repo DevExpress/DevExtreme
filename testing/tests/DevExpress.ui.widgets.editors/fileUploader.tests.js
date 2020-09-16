@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'common.css!';
+import 'generic_light.css!';
 
 const { test } = QUnit;
 
