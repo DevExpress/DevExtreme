@@ -65,12 +65,15 @@ class FileManagerEditingControl extends Widget {
         });
     }
 
+    setUploaderDropZone($element) {
+        this._fileUploader.option('dropZone', $element);
+    }
+
     _getFileUploaderController() {
-        const uploadDirectory = this._uploadDirectoryInfo && this._uploadDirectoryInfo.fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
-            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
-            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
+            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, this.uploadDirectoryInfo?.fileItem),
+            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, this.uploadDirectoryInfo?.fileItem)
         };
     }
 
@@ -188,7 +191,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        this._controller.processUploadSession(sessionInfo, this._uploadDirectoryInfo);
+        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
     }
 
     _onEditActionStarting(actionInfo) {
@@ -274,7 +277,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryUpload(destinationFolder) {
-        this._uploadDirectoryInfo = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
+        this._uploadDirectoryInfo = destinationFolder?.[0];
         this._fileUploader.tryUpload();
     }
 
@@ -436,6 +439,10 @@ class FileManagerEditingControl extends Widget {
 
     _getCurrentDirectory() {
         return this._controller.getCurrentDirectory();
+    }
+
+    get uploadDirectoryInfo() {
+        return this._uploadDirectoryInfo || this._getCurrentDirectory();
     }
 
 }

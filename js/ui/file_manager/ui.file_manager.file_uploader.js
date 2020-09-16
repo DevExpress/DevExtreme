@@ -248,6 +248,9 @@ class FileManagerFileUploader extends Widget {
             case 'onUploadProgress':
                 this._actions[name] = this._createActionByOption(name);
                 break;
+            case 'dropZone':
+                this._uploaderInfos?.[0].fileUploader.option('dropZone', args.value);
+                break;
             default:
                 super._optionChanged(args);
         }

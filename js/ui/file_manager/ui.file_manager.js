@@ -141,6 +141,7 @@ class FileManager extends Widget {
 
         this._createBreadcrumbs(this._$itemsPanel);
         this._createItemView(this._$itemsPanel);
+        this._editing.setUploaderDropZone(this._$itemsPanel);
     }
 
     _createFilesTreeView(container) {
