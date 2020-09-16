@@ -2896,11 +2896,11 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         customDropZone.trigger(enterEvent);
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
-        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZone, customDropZone[0], 'dropZone argument is correct');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
 
         customDropZone.trigger(leaveEvent);
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
-        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZone, customDropZone[0], 'dropZone argument is correct');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
 
         customDropZone.remove();
     });
@@ -2921,11 +2921,11 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         $inputWrapper.trigger(enterEvent);
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
-        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZone, $inputWrapper[0], 'dropZone argument is correct');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
 
         $inputWrapper.trigger(leaveEvent);
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
-        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZone, $inputWrapper[0], 'dropZone argument is correct');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
 
     });
 });
