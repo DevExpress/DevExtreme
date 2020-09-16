@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+import { getWindow } from 'core/utils/window';
+
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -151,8 +153,12 @@ module('Initialization', () => {
 
                 const { virtualScrollingDispatcher } = instance.getWorkSpace();
                 const { pageSize } = virtualScrollingDispatcher.getState();
+                const { innerHeight } = getWindow();
 
-                assert.equal(pageSize, 20, 'Page size is correct');
+                const rowHeight = virtualScrollingDispatcher._virtualScrolling.getRowHeight();
+                const expectedPageSize = Math.ceil(innerHeight / rowHeight);
+
+                assert.equal(pageSize, expectedPageSize, 'Page size is correct');
             });
         });
     });
