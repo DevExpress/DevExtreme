@@ -7,12 +7,6 @@ export default class CheckBox extends Editor {
 
     switch (name) {
       case 'value':
-        if (value !== previousValue) {
-          this.validationRequest.fire({
-            value,
-            editor: this,
-          });
-        }
         this._valueChangeAction?.({
           element: this.$element(),
           previousValue,
