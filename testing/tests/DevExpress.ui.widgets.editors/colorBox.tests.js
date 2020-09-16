@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/color_box';
 
 QUnit.testStart(function() {
@@ -264,11 +265,12 @@ QUnit.module('Color Box', {
             editAlphaChannel: true
         });
 
-        const $overlay = getColorBoxOverlay(); const $hueHandle = $overlay.find('.dx-colorview-hue-scale-handle');
+        const $overlay = getColorBoxOverlay();
+        const $hueHandle = $overlay.find('.dx-colorview-hue-scale-handle');
 
         move($hueHandle, {
             left: 0,
-            top: 288
+            top: 289
         });
 
         $('.dx-colorview-apply-button').trigger('dxclick');

@@ -66,7 +66,8 @@ const environment = {
             gridGroup: this.renderer.g(),
             axisType: 'xyAxes',
             drawingType: 'linear',
-            isArgumentAxis: true
+            isArgumentAxis: true,
+            getTemplate() {}
         });
 
         this.axis.updateOptions($.extend(true, {

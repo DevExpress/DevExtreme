@@ -5717,6 +5717,10 @@ declare module DevExpress.ui {
          */
         edges?: { customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /**
+         * <-dxDiagram.Options.editing->
+         */
+        editing?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowResizeShape?: boolean };
+        /**
          * <-dxDiagram.Options.export->
          */
         export?: { fileName?: string, proxyUrl?: string };
@@ -5757,21 +5761,17 @@ declare module DevExpress.ui {
          */
         onItemDblClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
         /**
+         * <-dxDiagram.Options.onRequestEditOperation->
+         */
+        onRequestEditOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape', args?: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
+        /**
          * <-dxDiagram.Options.onRequestLayoutUpdate->
          */
         onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any>, allowed?: boolean }) => any);
         /**
-         * <-dxDiagram.Options.onRequestOperation->
-         */
-        onRequestOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape', args?: dxDiagramRequestOperationAddShapeArgs | dxDiagramRequestOperationAddShapeFromToolboxArgs | dxDiagramRequestOperationDeleteShapeArgs | dxDiagramRequestOperationDeleteConnectorArgs | dxDiagramRequestOperationChangeConnectionArgs | dxDiagramRequestOperationChangeConnectorPointsArgs | dxDiagramRequestOperationBeforeChangeShapeTextArgs | dxDiagramRequestOperationChangeShapeTextArgs | dxDiagramRequestOperationBeforeChangeConnectorTextArgs | dxDiagramRequestOperationChangeConnectorTextArgs | dxDiagramRequestOperationResizeShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
-        /**
          * <-dxDiagram.Options.onSelectionChanged->
          */
         onSelectionChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
-        /**
-         * <-dxDiagram.Options.operationSettings->
-         */
-        operationSettings?: { allowAddShape?: boolean, allowAddShapeFromToolbox?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowResizeShape?: boolean };
         /**
          * <-dxDiagram.Options.pageColor->
          */
@@ -5853,6 +5853,118 @@ declare module DevExpress.ui {
         import(data: string, updateExistingItemsOnly?: boolean): void;
     }
     /**
+     * <-dxDiagramAddShapeArgs->
+     */
+    export interface dxDiagramAddShapeArgs {
+        /**
+         * <-dxDiagramAddShapeArgs.position->
+         */
+        position?: any;
+        /**
+         * <-dxDiagramAddShapeArgs.shape->
+         */
+        shape?: dxDiagramShape;
+    }
+    /**
+     * <-dxDiagramAddShapeFromToolboxArgs->
+     */
+    export interface dxDiagramAddShapeFromToolboxArgs {
+        /**
+         * <-dxDiagramAddShapeFromToolboxArgs.shapeType->
+         */
+        shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+    }
+    /**
+     * <-dxDiagramBeforeChangeConnectorTextArgs->
+     */
+    export interface dxDiagramBeforeChangeConnectorTextArgs {
+        /**
+         * <-dxDiagramBeforeChangeConnectorTextArgs.connector->
+         */
+        connector?: dxDiagramConnector;
+        /**
+         * <-dxDiagramBeforeChangeConnectorTextArgs.index->
+         */
+        index?: number;
+    }
+    /**
+     * <-dxDiagramBeforeChangeShapeTextArgs->
+     */
+    export interface dxDiagramBeforeChangeShapeTextArgs {
+        /**
+         * <-dxDiagramBeforeChangeShapeTextArgs.shape->
+         */
+        shape?: dxDiagramShape;
+    }
+    /**
+     * <-dxDiagramChangeConnectionArgs->
+     */
+    export interface dxDiagramChangeConnectionArgs {
+        /**
+         * <-dxDiagramChangeConnectionArgs.connectionPointIndex->
+         */
+        connectionPointIndex?: number;
+        /**
+         * <-dxDiagramChangeConnectionArgs.connector->
+         */
+        connector?: dxDiagramConnector;
+        /**
+         * <-dxDiagramChangeConnectionArgs.connectorPosition->
+         */
+        connectorPosition?: 'start' | 'end';
+        /**
+         * <-dxDiagramChangeConnectionArgs.shape->
+         */
+        shape?: dxDiagramShape;
+    }
+    /**
+     * <-dxDiagramChangeConnectorPointsArgs->
+     */
+    export interface dxDiagramChangeConnectorPointsArgs {
+        /**
+         * <-dxDiagramChangeConnectorPointsArgs.connector->
+         */
+        connector?: dxDiagramConnector;
+        /**
+         * <-dxDiagramChangeConnectorPointsArgs.newPoints->
+         */
+        newPoints?: Array<any>;
+        /**
+         * <-dxDiagramChangeConnectorPointsArgs.oldPoints->
+         */
+        oldPoints?: Array<any>;
+    }
+    /**
+     * <-dxDiagramChangeConnectorTextArgs->
+     */
+    export interface dxDiagramChangeConnectorTextArgs {
+        /**
+         * <-dxDiagramChangeConnectorTextArgs.connector->
+         */
+        connector?: dxDiagramConnector;
+        /**
+         * <-dxDiagramChangeConnectorTextArgs.index->
+         */
+        index?: number;
+        /**
+         * <-dxDiagramChangeConnectorTextArgs.text->
+         */
+        text?: string;
+    }
+    /**
+     * <-dxDiagramChangeShapeTextArgs->
+     */
+    export interface dxDiagramChangeShapeTextArgs {
+        /**
+         * <-dxDiagramChangeShapeTextArgs.shape->
+         */
+        shape?: dxDiagramShape;
+        /**
+         * <-dxDiagramChangeShapeTextArgs.text->
+         */
+        text?: string;
+    }
+    /**
      * <-dxDiagramConnector->
      */
     export interface dxDiagramConnector extends dxDiagramItem {
@@ -5891,6 +6003,24 @@ declare module DevExpress.ui {
         text?: string;
     }
     /**
+     * <-dxDiagramDeleteConnectorArgs->
+     */
+    export interface dxDiagramDeleteConnectorArgs {
+        /**
+         * <-dxDiagramDeleteConnectorArgs.connector->
+         */
+        connector?: dxDiagramConnector;
+    }
+    /**
+     * <-dxDiagramDeleteShapeArgs->
+     */
+    export interface dxDiagramDeleteShapeArgs {
+        /**
+         * <-dxDiagramDeleteShapeArgs.shape->
+         */
+        shape?: dxDiagramShape;
+    }
+    /**
      * <-dxDiagramItem->
      */
     export interface dxDiagramItem {
@@ -5908,149 +6038,19 @@ declare module DevExpress.ui {
         itemType?: 'shape' | 'connector';
     }
     /**
-     * <-dxDiagramRequestOperationAddShapeArgs->
+     * <-dxDiagramResizeShapeArgs->
      */
-    export interface dxDiagramRequestOperationAddShapeArgs {
+    export interface dxDiagramResizeShapeArgs {
         /**
-         * <-dxDiagramRequestOperationAddShapeArgs.position->
-         */
-        position?: any;
-        /**
-         * <-dxDiagramRequestOperationAddShapeArgs.shape->
-         */
-        shape?: dxDiagramShape;
-    }
-    /**
-     * <-dxDiagramRequestOperationAddShapeFromToolboxArgs->
-     */
-    export interface dxDiagramRequestOperationAddShapeFromToolboxArgs {
-        /**
-         * <-dxDiagramRequestOperationAddShapeFromToolboxArgs.shapeType->
-         */
-        shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
-    }
-    /**
-     * <-dxDiagramRequestOperationBeforeChangeConnectorTextArgs->
-     */
-    export interface dxDiagramRequestOperationBeforeChangeConnectorTextArgs {
-        /**
-         * <-dxDiagramRequestOperationBeforeChangeConnectorTextArgs.connector->
-         */
-        connector?: dxDiagramConnector;
-        /**
-         * <-dxDiagramRequestOperationBeforeChangeConnectorTextArgs.index->
-         */
-        index?: number;
-    }
-    /**
-     * <-dxDiagramRequestOperationBeforeChangeShapeTextArgs->
-     */
-    export interface dxDiagramRequestOperationBeforeChangeShapeTextArgs {
-        /**
-         * <-dxDiagramRequestOperationBeforeChangeShapeTextArgs.shape->
-         */
-        shape?: dxDiagramShape;
-    }
-    /**
-     * <-dxDiagramRequestOperationChangeConnectionArgs->
-     */
-    export interface dxDiagramRequestOperationChangeConnectionArgs {
-        /**
-         * <-dxDiagramRequestOperationChangeConnectionArgs.connectionPointIndex->
-         */
-        connectionPointIndex?: number;
-        /**
-         * <-dxDiagramRequestOperationChangeConnectionArgs.connector->
-         */
-        connector?: dxDiagramConnector;
-        /**
-         * <-dxDiagramRequestOperationChangeConnectionArgs.connectorPosition->
-         */
-        connectorPosition?: 'start' | 'end';
-        /**
-         * <-dxDiagramRequestOperationChangeConnectionArgs.shape->
-         */
-        shape?: dxDiagramShape;
-    }
-    /**
-     * <-dxDiagramRequestOperationChangeConnectorPointsArgs->
-     */
-    export interface dxDiagramRequestOperationChangeConnectorPointsArgs {
-        /**
-         * <-dxDiagramRequestOperationChangeConnectorPointsArgs.connector->
-         */
-        connector?: dxDiagramConnector;
-        /**
-         * <-dxDiagramRequestOperationChangeConnectorPointsArgs.newPoints->
-         */
-        newPoints?: Array<any>;
-        /**
-         * <-dxDiagramRequestOperationChangeConnectorPointsArgs.oldPoints->
-         */
-        oldPoints?: Array<any>;
-    }
-    /**
-     * <-dxDiagramRequestOperationChangeConnectorTextArgs->
-     */
-    export interface dxDiagramRequestOperationChangeConnectorTextArgs {
-        /**
-         * <-dxDiagramRequestOperationChangeConnectorTextArgs.connector->
-         */
-        connector?: dxDiagramConnector;
-        /**
-         * <-dxDiagramRequestOperationChangeConnectorTextArgs.index->
-         */
-        index?: number;
-        /**
-         * <-dxDiagramRequestOperationChangeConnectorTextArgs.text->
-         */
-        text?: string;
-    }
-    /**
-     * <-dxDiagramRequestOperationChangeShapeTextArgs->
-     */
-    export interface dxDiagramRequestOperationChangeShapeTextArgs {
-        /**
-         * <-dxDiagramRequestOperationChangeShapeTextArgs.shape->
-         */
-        shape?: dxDiagramShape;
-        /**
-         * <-dxDiagramRequestOperationChangeShapeTextArgs.text->
-         */
-        text?: string;
-    }
-    /**
-     * <-dxDiagramRequestOperationDeleteConnectorArgs->
-     */
-    export interface dxDiagramRequestOperationDeleteConnectorArgs {
-        /**
-         * <-dxDiagramRequestOperationDeleteConnectorArgs.connector->
-         */
-        connector?: dxDiagramConnector;
-    }
-    /**
-     * <-dxDiagramRequestOperationDeleteShapeArgs->
-     */
-    export interface dxDiagramRequestOperationDeleteShapeArgs {
-        /**
-         * <-dxDiagramRequestOperationDeleteShapeArgs.shape->
-         */
-        shape?: dxDiagramShape;
-    }
-    /**
-     * <-dxDiagramRequestOperationResizeShapeArgs->
-     */
-    export interface dxDiagramRequestOperationResizeShapeArgs {
-        /**
-         * <-dxDiagramRequestOperationResizeShapeArgs.newSize->
+         * <-dxDiagramResizeShapeArgs.newSize->
          */
         newSize?: Array<any>;
         /**
-         * <-dxDiagramRequestOperationResizeShapeArgs.oldSize->
+         * <-dxDiagramResizeShapeArgs.oldSize->
          */
         oldSize?: Array<any>;
         /**
-         * <-dxDiagramRequestOperationResizeShapeArgs.shape->
+         * <-dxDiagramResizeShapeArgs.shape->
          */
         shape?: dxDiagramShape;
     }
@@ -6518,78 +6518,6 @@ declare module DevExpress.ui {
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-dxDropDownMenu.Options->
-     */
-    export interface dxDropDownMenuOptions extends WidgetOptions<dxDropDownMenu> {
-        /**
-         * <-dxDropDownMenu.Options.activeStateEnabled->
-         */
-        activeStateEnabled?: boolean;
-        /**
-         * <-dxDropDownMenu.Options.buttonIcon->
-         */
-        buttonIcon?: string;
-        /**
-         * <-dxDropDownMenu.Options.buttonText->
-         */
-        buttonText?: string;
-        /**
-         * <-dxDropDownMenu.Options.dataSource->
-         */
-        dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        /**
-         * <-dxDropDownMenu.Options.hoverStateEnabled->
-         */
-        hoverStateEnabled?: boolean;
-        /**
-         * <-dxDropDownMenu.Options.itemTemplate->
-         */
-        itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /**
-         * <-dxDropDownMenu.Options.items->
-         */
-        items?: Array<any>;
-        /**
-         * <-dxDropDownMenu.Options.onButtonClick->
-         */
-        onButtonClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any) | string;
-        /**
-         * <-dxDropDownMenu.Options.onItemClick->
-         */
-        onItemClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any) | string;
-        /**
-         * <-dxDropDownMenu.Options.opened->
-         */
-        opened?: boolean;
-        /**
-         * <-dxDropDownMenu.Options.popupHeight->
-         */
-        popupHeight?: number | string | Function;
-        /**
-         * <-dxDropDownMenu.Options.popupWidth->
-         */
-        popupWidth?: number | string | Function;
-        /**
-         * <-dxDropDownMenu.Options.usePopover->
-         */
-        usePopover?: boolean;
-    }
-    /**
-     * <-dxDropDownMenu->
-     */
-    export class dxDropDownMenu extends Widget {
-        constructor(element: Element, options?: dxDropDownMenuOptions)
-        constructor(element: JQuery, options?: dxDropDownMenuOptions)
-        /**
-         * <-dxDropDownMenu.close()->
-         */
-        close(): void;
-        /**
-         * <-dxDropDownMenu.open()->
-         */
-        open(): void;
-    }
-    /**
      * <-dxFileManager.Options->
      */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
@@ -6882,6 +6810,14 @@ declare module DevExpress.ui {
          * <-dxFileUploader.Options.name->
          */
         name?: string;
+        /**
+         * <-dxFileUploader.Options.onDropZoneEnter->
+         */
+        onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, dropZoneElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
+        /**
+         * <-dxFileUploader.Options.onDropZoneLeave->
+         */
+        onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, dropZoneElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
         /**
          * <-dxFileUploader.Options.onProgress->
          */
@@ -14841,6 +14777,10 @@ declare module DevExpress.viz {
          * <-dxChart.Options.commonAxisSettings.label.staggeringSpacing->
          */
         staggeringSpacing?: number;
+        /**
+         * <-dxChart.Options.commonAxisSettings.label.template->
+         */
+        template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
          * <-dxChart.Options.commonAxisSettings.label.textOverflow->
          */
