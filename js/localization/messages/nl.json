@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Uploaden",
         "dxFileUploader-uploaded": "Geüpload",
         "dxFileUploader-readyToUpload": "Klaar om te uploaden",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Uploaden is mislukt",
         "dxFileUploader-invalidFileExtension": "Dit bestandstype is niet toegestaan",
         "dxFileUploader-invalidMaxFileSize": "Het bestand is te groot",

@@ -1,8 +1,35 @@
 import dateUtils from '../../core/utils/date';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
+import DateAdapter from './dateAdapter';
+import { isDefined } from '../../core/utils/type';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
+
+const createUTCDate = date => {
+    if(!date) {
+        return null;
+    }
+
+    return new Date(Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()
+    ));
+};
+
+const createDateFromUTC = date => {
+    const result = DateAdapter(date);
+
+    const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
+    result.addTime(result.getTimezoneOffset('minute'));
+    result.subtractMinutes(timezoneOffsetBeforeInMin - result.getTimezoneOffset());
+
+    return result.source;
+};
 
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
@@ -21,16 +48,14 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 };
 
 const calculateTimezoneByValue = (timezone, date) => {
+    // NOTE: This check could be removed. We don't support numerical timezones
     if(typeof timezone === 'string') {
-        date = date || new Date();
-        const dateUtc = Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes()
-        );
-        timezone = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
+        if(!isDefined(date)) {
+            date = new Date();
+        }
+
+        const dateInUTC = createUTCDate(date);
+        timezone = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateInUTC.getTime());
     }
     return timezone;
 };
@@ -72,16 +97,24 @@ const isSameAppointmentDates = (startDate, endDate) => {
     return dateUtils.sameDate(startDate, endDate);
 };
 
+const getClientTimezoneOffset = (date) => {
+    return date.getTimezoneOffset() * 60000;
+};
+
 const utils = {
-    getDaylightOffset: getDaylightOffset,
-    getDaylightOffsetInMs: getDaylightOffsetInMs,
-    getTimezoneOffsetChangeInMinutes: getTimezoneOffsetChangeInMinutes,
-    getTimezoneOffsetChangeInMs: getTimezoneOffsetChangeInMs,
-    calculateTimezoneByValue: calculateTimezoneByValue,
-    getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
-    isTimezoneChangeInDate: isTimezoneChangeInDate,
-    isSameAppointmentDates: isSameAppointmentDates,
-    correctRecurrenceExceptionByTimezone: correctRecurrenceExceptionByTimezone
+    getDaylightOffset,
+    getDaylightOffsetInMs,
+    getTimezoneOffsetChangeInMinutes,
+    getTimezoneOffsetChangeInMs,
+    calculateTimezoneByValue,
+    getCorrectedDateByDaylightOffsets,
+    isTimezoneChangeInDate,
+    isSameAppointmentDates,
+    correctRecurrenceExceptionByTimezone,
+    getClientTimezoneOffset,
+
+    createUTCDate,
+    createDateFromUTC
 };
 
 export default utils;

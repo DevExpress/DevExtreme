@@ -1,6 +1,5 @@
 import themeModule from '../../themes';
 const registerTheme = themeModule.registerTheme;
-const registerThemeAlias = themeModule.registerThemeAlias;
 const ACCENT_COLOR = '#3debd3';
 const BACKGROUND_COLOR = '#465672';
 const TITLE_COLOR = '#fff';
@@ -175,4 +174,4 @@ registerTheme({
     }
 }, 'generic.dark');
 
-registerThemeAlias('generic.darkmoon.compact', 'generic.darkmoon');
+registerTheme({ name: 'generic.darkmoon.compact' }, 'generic.darkmoon');

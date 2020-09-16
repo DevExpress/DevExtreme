@@ -1,6 +1,5 @@
 import themeModule from '../../themes';
 const registerTheme = themeModule.registerTheme;
-const registerThemeAlias = themeModule.registerThemeAlias;
 
 const FONT_FAMILY = '\'Roboto\', \'RobotoFallback\', \'Helvetica\', \'Arial\', sans-serif';
 
@@ -473,7 +472,7 @@ for(const accent in materialAccents) {
         const color = materialAccents[accent];
         registerMaterialColorScheme(accent, 'light', color);
         registerMaterialColorScheme(accent, 'dark', color);
-        registerThemeAlias(`material.${accent}.light.compact`, `material.${accent}.light`);
-        registerThemeAlias(`material.${accent}.dark.compact`, `material.${accent}.dark`);
+        registerTheme({ name: `material.${accent}.light.compact` }, `material.${accent}.light`);
+        registerTheme({ name: `material.${accent}.dark.compact` }, `material.${accent}.dark`);
     }
 }

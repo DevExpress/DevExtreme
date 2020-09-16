@@ -6061,6 +6061,9 @@ QUnit.module('Remote paging', {
                 if(name === 'scrolling.mode') {
                     return 'virtual';
                 }
+                if(name === 'scrolling.loadTwoPagesOnStart') {
+                    return true;
+                }
             }
         };
 

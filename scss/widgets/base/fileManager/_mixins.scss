@@ -1,5 +1,5 @@
 @use "sass:string";
-@use "./string" as *;
+@use "../string" as *;
 
 @mixin filemanager-icon-colored($data-uri, $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height) {
   $uri1: replace("#{$data-uri}", "currentTextColor", escape("#{$text-color}"));

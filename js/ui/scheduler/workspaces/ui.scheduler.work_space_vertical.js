@@ -1,6 +1,7 @@
 import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
+import dateLocalization from '../../../localization/date';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     _getCellsBetween($first, $last) {
@@ -73,6 +74,31 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
 
     _getFormat() {
         return this._formatWeekdayAndDay;
+    }
+
+    renovatedRenderSupported() { return true; }
+
+    generateRenderOptions() {
+        const startViewDate = this._getDateWithSkippedDST();
+        const _getTimeText = (row, column) => {
+            // T410490: incorrectly displaying time slots on Linux
+            const index = row % this._getRowCount();
+            if(index % 2 === 0 && column === 0) {
+                return dateLocalization.format(this._getTimeCellDateCore(startViewDate, row), 'shorttime');
+            }
+            return '';
+        };
+
+        const options = super.generateRenderOptions();
+        options.cellDataGetters.push((_, rowIndex, cellIndex) => {
+            return {
+                value: {
+                    text: _getTimeText(rowIndex, cellIndex)
+                },
+            };
+        });
+
+        return options;
     }
 }
 

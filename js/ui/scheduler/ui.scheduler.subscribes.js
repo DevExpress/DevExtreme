@@ -8,13 +8,13 @@ import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 import utils from './utils';
 
+const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
@@ -456,6 +456,10 @@ const subscribes = {
         return obj;
     },
 
+    renderAppointments: function() {
+        this._renderAppointments();
+    },
+
     prerenderFilter: function() {
         const dateRange = this.getWorkSpace().getDateRange();
         const resources = this._resourcesManager.getResourcesData();
@@ -480,11 +484,8 @@ const subscribes = {
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
         const resourcesManager = this._resourcesManager;
-        let allDay;
 
-        if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
-            allDay = false;
-        }
+        let allDay = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
 
         const result = [];
 
@@ -492,12 +493,15 @@ const subscribes = {
         const { groupedData } = viewDataProvider.viewData;
         const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
         const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const endViewDate = workspace.getEndViewDateByEndDayHour();
 
-        groupedDataToRender.forEach(({ groupIndex }) => {
+        groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
             const startDate = viewDataProvider.getGroupStartDate(groupIndex);
-            const endDate = viewDataProvider.getGroupEndDate(groupIndex);
+            const endDate = new Date(Math.min(viewDataProvider.getGroupEndDate(groupIndex), endViewDate));
             const startDayHour = startDate.getHours();
-            const endDayHour = startDayHour + (endDate - startDate) / HOUR_MS;
+            const endDayHour = (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY;
+
+            allDay = (allDay !== false) && allDayPanel?.length > 0;
 
             const groups = viewDataProvider.getCellsGroup(groupIndex);
             const groupResources = isVerticalGrouping
@@ -637,7 +641,7 @@ const subscribes = {
 
     getClientTimezoneOffset: function(date) {
         date = date || new Date();
-        return SchedulerTimezones.getClientTimezoneOffset(date);
+        return timeZoneUtils.getClientTimezoneOffset(date);
     },
 
     convertDateByTimezone: function(date, appointmentTimezone, skipAppointmentTimezone) {

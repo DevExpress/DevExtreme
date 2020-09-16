@@ -140,7 +140,7 @@ QUnit.module('Options', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
-        assert.equal(treeListWrapperElement.width(), 300, '300px');
+        assert.roughEqual(treeListWrapperElement.width(), 300, 0.01, '300px');
         this.instance.option('taskListWidth', 500);
         assert.equal(treeListWrapperElement.width(), 500, '500px');
     });
@@ -407,6 +407,38 @@ QUnit.module('Events', moduleConfig, () => {
         this.clock.tick();
 
         assert.equal(onContentReadyHandler.callCount, 1, 'onContentReadyHandler was called 1 times');
+    });
+    test('task click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskClick', (e) => {
+            keyFromEvent = e.key;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+    });
+
+    test('task double click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskDblClick', (e) => {
+            keyFromEvent = e.key;
+            e.cancel = true;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxdblclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 0, 'dialog is not shown');
     });
 });
 
@@ -788,6 +820,7 @@ QUnit.module('DataSources', moduleConfig, () => {
     test('removing', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 3);
         this.clock.tick();
 
         const removedTaskId = 3;
@@ -865,6 +898,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             key = e.key;
         });
         const taskToDelete = tasks[tasks.length - 1];
+        this.instance.option('selectedRowKey', taskToDelete.id.toString());
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(taskToDelete.id.toString(), false);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount, 'new task was not deleted');
@@ -2117,7 +2151,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
-        this.instance.option('tooltipTemplate', customTooltipText);
+        this.instance.option('taskTooltipContentTemplate', customTooltipText);
 
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
@@ -2132,7 +2166,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        this.instance.option('tooltipTemplate', customTooltipJQuery);
+        this.instance.option('taskTooltipContentTemplate', customTooltipJQuery);
 
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);

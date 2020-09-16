@@ -3184,7 +3184,7 @@ QUnit.module('Remote group paging', {
         });
 
         dataSource.load();
-        dataSource.setViewportPosition(0);
+        dataSource.setViewportPosition(1);
 
         // act
         dataSource.changeRowExpand([0]);

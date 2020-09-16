@@ -1354,7 +1354,7 @@ export const BaseChart = BaseWidget.inherit({
     getStackedPoints: function(point) {
         const stackName = point.series.getStackName();
         return this._getVisibleSeries().reduce((stackPoints, series) => {
-            if((!_isDefined(series.getStackName()) && !_isDefined(stackName)) || stackName === series.getStackName()) {
+            if((!_isDefined(series.getStackName()) || !_isDefined(stackName)) || stackName === series.getStackName()) {
                 stackPoints = stackPoints.concat(series.getPointsByArg(point.argument));
             }
             return stackPoints;

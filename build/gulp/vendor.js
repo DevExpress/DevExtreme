@@ -59,6 +59,9 @@ const JS_VENDORS = [
     },
     {
         path: '/devexpress-gantt/dist/dx-@(gantt|gantt.min).js'
+    },
+    {
+        path: '/devextreme-quill/dist/dx-@(quill|quill.min).js'
     }
 ];
 

@@ -1149,13 +1149,28 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramModelOperation
+ * @enum {'addShape'|'addShapeFromToolbox'|'deleteShape'|'deleteConnector'|'changeConnection'|'changeConnectorPoints'|'beforeChangeShapeText'|'changeShapeText'|'beforeChangeConnectorText'|'changeConnectorText'|'resizeShape'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorPosition
+ * @enum {'start'|'end'}
+ */
+
+/**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
  */
 
 /**
  * @typedef {string} Enums.GanttToolbarItem
- * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'| 'zoomOut'}
+ * @enum {'separator'|'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttContextMenuItem
+ * @enum {'undo'|'redo'|'expandAll'|'collapseAll'|'addTask'|'deleteTask'|'zoomIn'|'zoomOut'|'deleteDependency'|'taskDetails'}
  */
 
 /**

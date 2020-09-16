@@ -177,8 +177,14 @@
     margin: 1px $generic-editor-custom-button-margin;
 
     > .dx-button-content {
-      padding-top: $generic-base-inline-widget-top-padding - $generic-button-border-weight - 2px;
-      padding-bottom: $generic-base-inline-widget-bottom-padding - $generic-button-border-weight - 2px;
+      padding-top: $generic-editor-button-top-padding;
+      padding-bottom: $generic-editor-button-bottom-padding;
+    }
+
+    &.dx-button-has-icon:not(.dx-button-has-text) {
+      > .dx-button-content {
+        padding: $generic-editor-button-icononly-top-padding $generic-editor-button-icononly-horizontal-padding $generic-editor-button-icononly-bottom-padding;
+      }
     }
   }
 }

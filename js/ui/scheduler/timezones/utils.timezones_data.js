@@ -1,31 +1,29 @@
 import query from '../../../data/query';
 import errors from '../../../core/errors';
-import tzData from './ui.scheduler.timezones_data';
-import { extend } from '../../../core/utils/extend';
+import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
 
-const SchedulerTimezones = {
+const timeZoneDataUtils = {
     _timeZones: tzData.zones,
 
     getTimezones: function() {
         return this._timeZones;
     },
 
-    getDisplayedTimeZones: function(date) {
-        return this.getTimezones().map((timezone) => {
-            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, date.getTime());
+    getDisplayedTimeZones: function(timestamp) {
+        const timeZones = this._timeZones.map((timezone) => {
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, timestamp);
 
             const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
 
-            return extend(timezone, {
+            return {
                 offset: offset,
-                title: title
-            });
+                title: title,
+                id: timezone.id
+            };
         });
-    },
 
-    getSortedTimeZones: function(date) {
-        return query(this.getDisplayedTimeZones(date)).sortBy('offset').toArray();
+        return query(timeZones).sortBy('offset').toArray();
     },
 
     formatOffset: function(offset) {
@@ -42,7 +40,7 @@ const SchedulerTimezones = {
     getTimezoneById: function(id) {
         let result;
         let i = 0;
-        const tzList = this.getTimezones();
+        const tzList = this._timeZones;
 
         if(id) {
             while(!result) {
@@ -60,7 +58,7 @@ const SchedulerTimezones = {
         return result;
     },
 
-    getTimezoneOffsetById: function(id, dateTimeStamp) {
+    getTimeZoneOffsetById: function(id, timestamp) {
         const tz = this.getTimezoneById(id);
         let offsets;
         let offsetIndices;
@@ -72,7 +70,7 @@ const SchedulerTimezones = {
             untils = tz.untils;
             offsetIndices = tz.offsetIndices;
 
-            result = this.getUtcOffset(offsets, offsetIndices, untils, dateTimeStamp);
+            result = this.getUtcOffset(offsets, offsetIndices, untils, timestamp);
         }
 
         return result;
@@ -108,11 +106,7 @@ const SchedulerTimezones = {
 
         const offset = Number(offsetsList[Number(offsetIndicesList[index])]);
         return -offset / 60 || offset;
-    },
-
-    getClientTimezoneOffset: function(date) {
-        return date.getTimezoneOffset() * 60000;
     }
 };
 
-export default SchedulerTimezones;
+export default timeZoneDataUtils;

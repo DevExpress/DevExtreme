@@ -839,12 +839,18 @@ function cloneAndRemoveAttrs(node) {
     return clone || node;
 }
 
-function detachAndStoreTitleElements(element) {
+function detachTitleElements(element) {
     const titleElements = domAdapter.querySelectorAll(element, 'title');
 
     for(let i = 0; i < titleElements.length; i++) {
         element.removeChild(titleElements[i]);
     }
+
+    return titleElements;
+}
+
+function detachAndStoreTitleElements(element) {
+    const titleElements = detachTitleElements(element);
 
     return () => {
         for(let i = 0; i < titleElements.length; i++) {
@@ -1688,6 +1694,10 @@ SvgElement.prototype = {
         const titleElem = createElement('title');
         titleElem.textContent = text || '';
         this.element.appendChild(titleElem);
+    },
+
+    removeTitle() {
+        detachTitleElements(this.element);
     },
 
     data: function(obj, val) {

@@ -8,7 +8,7 @@ import noop from '../../../utils/noop';
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
   AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
-} from './types';
+} from './types.d';
 import { Marker } from './marker';
 import { Button } from '../../button';
 import { TooltipItemContent } from './item_content';
