@@ -266,6 +266,11 @@
     flex-direction: column;
   }
 
+  .dx-filemanager-fileuploader-dropzone-placeholder {
+    position: absolute;
+    display: none;
+  }
+
   .dx-filemanager-thumbnails {
     width: 100%;
     height: 100%;

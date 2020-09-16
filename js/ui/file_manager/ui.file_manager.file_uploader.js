@@ -10,6 +10,7 @@ import FileUploader from '../file_uploader';
 import { whenSome } from './ui.file_manager.common';
 
 const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
+const FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS = 'dx-filemanager-fileuploader-dropzone-placeholder';
 
 class FileManagerFileUploader extends Widget {
 
@@ -21,6 +22,7 @@ class FileManagerFileUploader extends Widget {
         this._uploaderInfos = [];
 
         this._createInternalFileUploader();
+        this._createDropZonePlaceholder();
 
         super._initMarkup();
     }
@@ -46,7 +48,9 @@ class FileManagerFileUploader extends Widget {
             onProgress: e => this._onFileUploaderProgress(e),
             onUploaded: e => this._onFileUploaderUploaded(e),
             onUploadAborted: e => this._onFileUploaderUploadAborted(e),
-            onUploadError: e => this._onFileUploaderUploadError(e)
+            onUploadError: e => this._onFileUploaderUploadError(e),
+            onDropZoneEnter: () => this._setDropZonePlaceholderVisible(true),
+            onDropZoneLeave: () => this._setDropZonePlaceholderVisible(false)
         });
 
         fileUploader.option({
@@ -140,6 +144,25 @@ class FileManagerFileUploader extends Widget {
     _onFileUploaderUploadError({ component, file, error }) {
         const deferred = this._getDeferredForFile(component, file);
         deferred.reject(error);
+    }
+
+    _createDropZonePlaceholder() {
+        this._$dropZonePlaceholder = $('<div>').addClass(FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS);
+    }
+
+    _adjustDropZonePlaceholder() {
+        const dropZoneElement = this.option('dropZone').get(0);
+        const targetClientRect = dropZoneElement.getBoundingClientRect();
+        this._$dropZonePlaceholder.offset({
+            top: targetClientRect.top,
+            left: targetClientRect.left
+        });
+        this._$dropZonePlaceholder.width(dropZoneElement.offsetWidth);
+        this._$dropZonePlaceholder.height(dropZoneElement.offsetHeight);
+    }
+
+    _setDropZonePlaceholderVisible(visible) {
+        this._$dropZonePlaceholder.css('display', visible ? '' : 'none');
     }
 
     _uploadFiles(uploaderInfo, files) {
@@ -250,6 +273,7 @@ class FileManagerFileUploader extends Widget {
                 break;
             case 'dropZone':
                 this._uploaderInfos[0]?.fileUploader.option('dropZone', args.value);
+                this._adjustDropZonePlaceholder();
                 break;
             default:
                 super._optionChanged(args);
