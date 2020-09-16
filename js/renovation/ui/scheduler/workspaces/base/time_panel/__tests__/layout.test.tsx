@@ -55,6 +55,7 @@ describe('TimePanelLayout', () => {
         groupIndex: 2,
         index: 3,
       }]],
+      groupIndex: 2,
     }],
     cellCountInGroupRow: 2,
   };
@@ -225,7 +226,7 @@ describe('TimePanelLayout', () => {
       expect(getIsGroupedAllDayPanel)
         .toHaveBeenCalledWith(
           viewDataBase,
-          2,
+          0,
         );
     });
 
@@ -234,6 +235,24 @@ describe('TimePanelLayout', () => {
         getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
         const layout = render({ });
+        const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
+
+        expect(titleCell.find(AllDayPanelTitle).exists())
+          .toBe(mockValue);
+      });
+
+      it(`AllDayPanelTitle if isGroupedAllDayPanel=${mockValue} and dateTable is empty`, () => {
+        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
+
+        const viewData = {
+          groupedData: [{
+            dateTable: [],
+            groupIndex: 33,
+          }],
+          cellCountInGroupRow: 2,
+          isGroupedAllDayPanel: true,
+        };
+        const layout = render({ props: { viewData } });
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
 
         expect(titleCell.find(AllDayPanelTitle).exists())
