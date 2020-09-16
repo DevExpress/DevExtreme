@@ -3784,7 +3784,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('target');
-        assert.ok(overlayTarget.hasClass('dx-highlight-outline'), 'target in generic theme');
+        assert.ok(overlayTarget.hasClass('dx-editor-cell'), 'target in generic theme');
 
         // act
         dataGrid.closeEditCell();

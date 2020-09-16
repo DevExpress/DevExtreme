@@ -914,7 +914,7 @@ export default {
                     const isEditableCell = !!parameters.setValue;
                     const cellModified = this.isCellModified(parameters);
                     const isValidated = isDefined(parameters.validationStatus);
-                    const needValidation = (cellModified && parameters.column.setCellValue) || (isEditableCell && !cellModified && isValidated);
+                    const needValidation = (cellModified && parameters.column.setCellValue) || (isEditableCell && !cellModified && !(parameters.row.isNewRow || !isValidated));
                     if(needValidation) {
                         const validator = $cell.data('dxValidator');
                         if(validator) {
