@@ -166,7 +166,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   @Effect({ run: 'once' })
-  afterInit(): void {
+  afterInitEffect(): EffectReturn {
     this.rendered = true;
   }
 
