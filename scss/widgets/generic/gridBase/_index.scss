@@ -877,6 +877,24 @@ $generic-grid-base-checkbox-icon-size: 16px;
           background-color: $datagrid-base-background-color;
         }
       }
+
+      &.dx-editor-cell {
+        .dx-texteditor {
+          &.dx-validation-pending {
+            .dx-texteditor-input {
+              padding-right: $generic-texteditor-invalid-badge-size;
+            }
+
+            &.dx-rtl {
+              .dx-texteditor-input {
+                padding-right: $generic-grid-base-cell-padding;
+                padding-bottom: $generic-grid-base-cell-padding;
+                padding-left: $generic-texteditor-invalid-badge-size;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
