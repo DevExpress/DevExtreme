@@ -446,7 +446,7 @@
         }
       }
 
-      .dx-editor-cell {
+      .dx-editor-cell:not(.dx-command-select) {
         overflow: visible;
         max-width: 0;
         padding: 0;
@@ -527,6 +527,7 @@
     }
   }
 
+  .dx-highlight-outline,
   .dx-cell-modified,
   .dx-#{$widget-name}-invalid {
     position: relative;
@@ -557,6 +558,7 @@
       margin: 0;
     }
 
+    .dx-highlight-outline,
     &.dx-cell-modified,
     &.dx-#{$widget-name}-invalid {
       padding: 0;
@@ -577,6 +579,7 @@
   }
 
   .dx-column-lines {
+    .dx-highlight-outline,
     .dx-cell-modified,
     .dx-#{$widget-name}-invalid {
       &::after {
@@ -711,6 +714,7 @@
     }
 
     .dx-focused {
+      .dx-highlight-outline,
       &.dx-cell-modified,
       &.dx-#{$widget-name}-invalid {
         &::after {

@@ -478,6 +478,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
       }
     }
 
+    .dx-highlight-outline,
     .dx-cell-modified,
     .dx-#{$widget-name}-invalid {
       &::after {
