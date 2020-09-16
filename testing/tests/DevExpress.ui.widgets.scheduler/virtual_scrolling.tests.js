@@ -129,11 +129,13 @@ module('Virtual Scrolling', {
         });
 
         test('It should call _getTotalRowCount with correct parameters', function(assert) {
-            const getTotalRowCountSpy = sinon.spy(this.worksSpaceMock, '_getTotalRowCount');
-            const isVerticalGroupedWorkSpaceSpy = sinon.spy(this.worksSpaceMock, '_isVerticalGroupedWorkSpace');
-            const isGroupedAllDayPanelSpy = sinon.spy(this.worksSpaceMock, 'isGroupedAllDayPanel');
+            this.prepareInstance();
 
-            this.virtualScrolling._updateState(0);
+            const getTotalRowCountSpy = sinon.spy(this.workspaceMock, '_getTotalRowCount');
+            const isVerticalGroupedWorkSpaceSpy = sinon.spy(this.workspaceMock, '_isVerticalGroupedWorkSpace');
+            const isGroupedAllDayPanelSpy = sinon.spy(this.workspaceMock, 'isGroupedAllDayPanel');
+
+            this.virtualScrolling.updateState({ top: 50 });
 
             assert.ok(isVerticalGroupedWorkSpaceSpy.called, '_isVerticalGroupedWorkSpaceSpy was called');
             assert.ok(getTotalRowCountSpy.called, 'getTotalRowCountSpy was called');
