@@ -119,14 +119,14 @@ QUnit.module('ClientSideEvents.requestOperation', {
         assert.equal(count, operationCount * 2);
 
         for(let i = 0; i < operationCount - 1; i++) {
-            const e = instance._getRequestOperationEventArgs(i, { allowed: true });
+            const e = instance._getRequestEditOperationEventArgs(i, { allowed: true });
             assert.notEqual(e.operation, undefined);
             assert.notEqual(e.args, undefined);
             assert.notEqual(e.allowed, undefined);
         }
     });
     test('requestOperation on bound diagram', function(assert) {
-        const onRequestOperation = sinon.spy(function(e) { e.allowed = false; });
+        const onRequestEditOperation = sinon.spy(function(e) { e.allowed = false; });
         const nodes = [
             { key: '123', text: 'mytext', foo: 'bar' },
             { key: '345', text: 'myconnector' }
@@ -135,7 +135,7 @@ QUnit.module('ClientSideEvents.requestOperation', {
             { key: '1', from: '123', to: '345' }
         ];
         const $element = $('#diagram').dxDiagram({
-            onRequestOperation: onRequestOperation,
+            onRequestEditOperation: onRequestEditOperation,
             nodes: {
                 dataSource: nodes,
                 keyExpr: 'key',
@@ -154,31 +154,31 @@ QUnit.module('ClientSideEvents.requestOperation', {
         const instance = $element.dxDiagram('instance');
         let callCount = 0;
         assert.equal(instance._diagramInstance.model.items.length, 3);
-        assert.equal(onRequestOperation.getCalls().length, callCount);
+        assert.equal(onRequestEditOperation.getCalls().length, callCount);
 
         instance._diagramInstance.selection.set(['0']);
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
-        assert.equal(onRequestOperation.getCalls().length, ++callCount);
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['operation'], 'deleteShape');
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['args'].shape.id, '0');
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['allowed'], false);
+        assert.equal(onRequestEditOperation.getCalls().length, ++callCount);
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'deleteShape');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape.id, '0');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
         assert.equal(instance._diagramInstance.model.items.length, 3);
 
         instance._diagramInstance.selection.set(['2']);
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
-        assert.equal(onRequestOperation.getCalls().length, ++callCount);
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['operation'], 'deleteConnector');
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['args'].connector.id, '2');
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['allowed'], false);
+        assert.equal(onRequestEditOperation.getCalls().length, ++callCount);
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'deleteConnector');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].connector.id, '2');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
         assert.equal(instance._diagramInstance.model.items.length, 3);
 
         instance._diagramInstance.selection.set(['0']);
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Copy).execute();
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Paste).execute();
-        assert.equal(onRequestOperation.getCalls().length, ++callCount);
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['operation'], 'addShape');
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['args'].shape.id, '3');
-        assert.equal(onRequestOperation.getCall(callCount - 1).args[0]['allowed'], false);
+        assert.equal(onRequestEditOperation.getCalls().length, ++callCount);
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'addShape');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape.id, '3');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
         assert.equal(instance._diagramInstance.model.items.length, 3);
     });
 });

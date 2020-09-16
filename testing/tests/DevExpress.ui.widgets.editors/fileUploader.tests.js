@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'common.css!';
+import 'generic_light.css!';
 
 const { test } = QUnit;
 
@@ -649,6 +650,21 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(items[0], '.pic', 'attachHandlers args is valid');
 
         instance._attachSelectFileDialogHandler.restore();
+    });
+
+    QUnit.test('it is possible to drop files using custom dropzone', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            dropZone: '.drop'
+        });
+        const files = [fakeFile, fakeFile1];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+
+        customDropZone.trigger(event);
+        assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), files, 'files are correct');
+        customDropZone.remove();
     });
 
 });

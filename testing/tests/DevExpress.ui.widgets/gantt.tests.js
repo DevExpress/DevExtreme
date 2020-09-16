@@ -408,6 +408,38 @@ QUnit.module('Events', moduleConfig, () => {
 
         assert.equal(onContentReadyHandler.callCount, 1, 'onContentReadyHandler was called 1 times');
     });
+    test('task click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskClick', (e) => {
+            keyFromEvent = e.key;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+    });
+
+    test('task double click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskDblClick', (e) => {
+            keyFromEvent = e.key;
+            e.cancel = true;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxdblclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 0, 'dialog is not shown');
+    });
 });
 
 QUnit.module('Actions', moduleConfig, () => {
