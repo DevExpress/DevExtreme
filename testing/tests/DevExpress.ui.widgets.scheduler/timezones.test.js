@@ -47,7 +47,7 @@ const data = [{
 const createScheduler = (options = {}) => {
     return createWrapper($.extend({
         dataSource: data,
-        views: ['week'],
+        views: ['week', 'month'],
         currentView: 'week',
         currentDate: new Date(2017, 4, 22),
         height: 600
@@ -147,13 +147,102 @@ module('Not native date DST', moduleConfig, () => {
                 assert.expect(testCase.expectedTexts.length * 2);
             });
         });
+
+        const from1amTo2amMonthCase = {
+            text: 'Recurrence start from 1 a.m. to 2 a.m.',
+            startDate: new Date('2020-03-06T09:00:00.000Z'),
+            endDate: new Date('2020-03-06T10:00:00.000Z'),
+            expectedTexts: [
+                'March 6 1:00 AM - 2:00 AM',
+                'March 7 1:00 AM - 2:00 AM',
+                'March 8 1:00 AM - 3:00 AM',
+                'March 9 1:00 AM - 2:00 AM',
+                'March 10 1:00 AM - 2:00 AM',
+                'March 11 1:00 AM - 2:00 AM',
+                'March 12 1:00 AM - 2:00 AM'
+            ]
+        };
+
+        const from1amTo3amMonthCase = {
+            text: 'Recurrence start from 1 a.m. to 3 a.m.',
+            startDate: new Date('2020-03-06T09:00:00.000Z'),
+            endDate: new Date('2020-03-06T11:00:00.000Z'),
+            expectedTexts: [
+                'March 6 1:00 AM - 3:00 AM',
+                'March 7 1:00 AM - 3:00 AM',
+                'March 8 1:00 AM - 3:00 AM',
+                'March 9 1:00 AM - 3:00 AM',
+                'March 10 1:00 AM - 3:00 AM',
+                'March 11 1:00 AM - 3:00 AM',
+                'March 12 1:00 AM - 3:00 AM'
+            ]
+        };
+
+        const from2amTo3amMonthCase = {
+            text: 'Recurrence start from 2 a.m. to 3 a.m.',
+            startDate: new Date('2020-03-06T10:00:00.000Z'),
+            endDate: new Date('2020-03-06T11:00:00.000Z'),
+            expectedTexts: [
+                'March 6 2:00 AM - 3:00 AM',
+                'March 7 2:00 AM - 3:00 AM',
+                'March 8 3:00 AM - 4:00 AM',
+                'March 9 2:00 AM - 3:00 AM',
+                'March 10 2:00 AM - 3:00 AM',
+                'March 11 2:00 AM - 3:00 AM',
+                'March 12 2:00 AM - 3:00 AM'
+            ]
+        };
+
+        const from6amTo7amMonthCase = {
+            text: 'Recurrence start from 6 a.m. to 7 a.m.',
+            startDate: new Date('2020-03-06T16:00:00.000Z'),
+            endDate: new Date('2020-03-06T17:00:00.000Z'),
+            expectedTexts: [
+                'March 6 8:00 AM - 9:00 AM',
+                'March 7 8:00 AM - 9:00 AM',
+                'March 8 8:00 AM - 9:00 AM',
+                'March 9 8:00 AM - 9:00 AM',
+                'March 10 8:00 AM - 9:00 AM',
+                'March 11 8:00 AM - 9:00 AM',
+                'March 12 8:00 AM - 9:00 AM'
+            ]
+        };
+
+        [from1amTo2amMonthCase, from1amTo3amMonthCase, from2amTo3amMonthCase, from6amTo7amMonthCase].forEach(testCase => {
+            test(`${testCase.text}, month view type`, function(assert) {
+                const scheduler = createScheduler({
+                    dataSource: [{
+                        startDate: testCase.startDate,
+                        endDate: testCase.endDate,
+                        text: 'Test',
+                        recurrenceRule: 'FREQ=DAILY',
+                    }],
+                    currentView: 'month',
+                    timeZone: timeZones.LosAngeles,
+                    currentDate: new Date(2020, 2, 8)
+                });
+
+                for(let i = 0; i < testCase.expectedTexts.length; i++) {
+                    const expectedText = testCase.expectedTexts[i];
+
+                    scheduler.appointments.click(i);
+
+                    const tooltipText = scheduler.tooltip.getDateText();
+                    assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
+
+                    scheduler.instance.hideAppointmentTooltip();
+                }
+
+                assert.expect(testCase.expectedTexts.length);
+            });
+        });
     });
 
     module('winter time', () => {
         const from1amTo2amCase = {
             text: 'Recurrence start from 1 a.m. to 2 a.m.',
-            startDate: '2020-10-28T08:00:00.000Z',
-            endDate: '2020-10-28T09:00:00.000Z',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T09:00:00.000Z',
             expectedTexts: [
                 '1:00 AM - 2:00 AM',
                 '1:00 AM - 2:00 AM',
@@ -167,8 +256,8 @@ module('Not native date DST', moduleConfig, () => {
 
         const from2amTo3amCase = {
             text: 'Recurrence start from 2 a.m. to 3 a.m.',
-            startDate: '2020-10-28T09:00:00.000Z',
-            endDate: '2020-10-28T10:00:00.000Z',
+            startDate: '2020-10-25T09:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
             expectedTexts: [
                 '2:00 AM - 3:00 AM',
                 '2:00 AM - 3:00 AM',
@@ -182,8 +271,8 @@ module('Not native date DST', moduleConfig, () => {
 
         const from1amTo3amCase = {
             text: 'Recurrence start from 1 a.m. to 3 a.m.',
-            startDate: '2020-10-28T08:00:00.000Z',
-            endDate: '2020-10-28T10:00:00.000Z',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
             expectedTexts: [
                 '1:00 AM - 3:00 AM',
                 '1:00 AM - 3:00 AM',
@@ -197,8 +286,8 @@ module('Not native date DST', moduleConfig, () => {
 
         const from6amTo7amCase = {
             text: 'Recurrence start from 6 a.m. to 7 a.m.',
-            startDate: '2020-10-28T13:00:00.000Z',
-            endDate: '2020-10-28T14:00:00.000Z',
+            startDate: '2020-10-25T13:00:00.000Z',
+            endDate: '2020-10-25T14:00:00.000Z',
             expectedTexts: [
                 '6:00 AM - 7:00 AM',
                 '6:00 AM - 7:00 AM',
@@ -239,6 +328,96 @@ module('Not native date DST', moduleConfig, () => {
                 }
 
                 assert.expect(testCase.expectedTexts.length * 2);
+            });
+        });
+
+        const from1amTo2amWinterCase = {
+            text: 'Recurrence start from 1 a.m. to 2 a.m.',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T09:00:00.000Z',
+            expectedTexts: [
+                'October 29 1:00 AM - 2:00 AM',
+                'October 30 1:00 AM - 2:00 AM',
+                'October 31 1:00 AM - 2:00 AM',
+                'November 1 1:00 AM - 2:00 AM',
+                'November 2 1:00 AM - 2:00 AM',
+                'November 3 1:00 AM - 2:00 AM',
+                'November 4 1:00 AM - 2:00 AM'
+            ]
+        };
+
+        const from2amTo3amWinterCase = {
+            text: 'Recurrence start from 2 a.m. to 3 a.m.',
+            startDate: '2020-10-25T09:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
+            expectedTexts: [
+                'October 29 2:00 AM - 3:00 AM',
+                'October 30 2:00 AM - 3:00 AM',
+                'October 31 2:00 AM - 3:00 AM',
+                'November 1 2:00 AM - 3:00 AM',
+                'November 2 2:00 AM - 3:00 AM',
+                'November 3 2:00 AM - 3:00 AM',
+                'November 4 2:00 AM - 3:00 AM',
+            ]
+        };
+
+        const from1amTo3amWinterCase = {
+            text: 'Recurrence start from 1 a.m. to 3 a.m.',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
+            expectedTexts: [
+                'October 29 1:00 AM - 3:00 AM',
+                'October 30 1:00 AM - 3:00 AM',
+                'October 31 1:00 AM - 3:00 AM',
+                'November 1 1:00 AM - 3:00 AM',
+                'November 2 1:00 AM - 3:00 AM',
+                'November 3 1:00 AM - 3:00 AM',
+                'November 4 1:00 AM - 3:00 AM',
+            ]
+        };
+
+        const from6amTo7amWinterCase = {
+            text: 'Recurrence start from 6 a.m. to 7 a.m.',
+            startDate: '2020-10-25T13:00:00.000Z',
+            endDate: '2020-10-25T14:00:00.000Z',
+            expectedTexts: [
+                'October 29 6:00 AM - 7:00 AM',
+                'October 30 6:00 AM - 7:00 AM',
+                'October 31 6:00 AM - 7:00 AM',
+                'November 1 6:00 AM - 7:00 AM',
+                'November 2 6:00 AM - 7:00 AM',
+                'November 3 6:00 AM - 7:00 AM',
+                'November 4 6:00 AM - 7:00 AM'
+            ]
+        };
+
+        [from1amTo2amWinterCase, from2amTo3amWinterCase, from1amTo3amWinterCase, from6amTo7amWinterCase].forEach(testCase => {
+            test(`${testCase.text}, month view type`, function(assert) {
+                const scheduler = createScheduler({
+                    dataSource: [{
+                        startDate: testCase.startDate,
+                        endDate: testCase.endDate,
+                        text: 'Test',
+                        recurrenceRule: 'FREQ=DAILY',
+                    }],
+                    currentView: 'month',
+                    firstDayOfWeek: 4,
+                    timeZone: timeZones.LosAngeles,
+                    currentDate: new Date(2020, 10, 1),
+                });
+
+                for(let i = 0; i < testCase.expectedTexts.length; i++) {
+                    const expectedText = testCase.expectedTexts[i];
+
+                    scheduler.appointments.click(i);
+
+                    const tooltipText = scheduler.tooltip.getDateText();
+                    assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
+
+                    scheduler.instance.hideAppointmentTooltip();
+                }
+
+                assert.expect(testCase.expectedTexts.length);
             });
         });
     });
