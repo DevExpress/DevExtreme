@@ -10,7 +10,7 @@ function checkBoundingClientRect(assert, element, expectedRect, elementName) {
                 isCorrect = false;
             }
         }
-        assert.ok(isCorrect, message + ', [actual/expected]');
+        assert.strictEqual(isCorrect, true, message + ', [actual/expected]');
     }
 }
 
