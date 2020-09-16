@@ -108,69 +108,67 @@ QUnit.module('Initialization', () => {
 });
 
 QUnit.module('Custom store', () => {
-    function createStoreAndTreeview(dataSourceFilter) {
+    function createTreeView(dataSourceFilter) {
         const store = new ArrayStore({
             key: 'id',
             data: [ { id: 1, parentId: null, text: 'item1' }, { id: 2, parentId: null, text: 'item2' } ]
         });
 
-        const treeView = new TreeViewTestWrapper({
+        return new TreeViewTestWrapper({
             dataSource: new DataSource({
                 store: store,
                 filter: dataSourceFilter
             }),
             dataStructure: 'plain',
             rootValue: null
-        });
-
-        return { store, treeView };
+        }).instance;
     }
 
     QUnit.test('Delete item from store', function(assert) {
-        const testData = createStoreAndTreeview();
-        testData.store.remove(2);
+        const treeView = createTreeView();
+        treeView.getDataSource().store().remove(2);
 
-        const nodes = testData.treeView.instance.getNodes();
+        const nodes = treeView.getNodes();
         assert.equal(nodes.length, 1);
         assert.equal(nodes[0].text, 'item1');
     });
 
     QUnit.test('Delete non exists item from store', function(assert) {
-        const testData = createStoreAndTreeview();
-        testData.store.remove(3);
+        const treeView = createTreeView();
+        treeView.getDataSource().store().remove(3);
 
-        const nodes = testData.treeView.instance.getNodes();
+        const nodes = treeView.getNodes();
         assert.equal(nodes.length, 2);
         assert.equal(nodes[0].text, 'item1');
         assert.equal(nodes[1].text, 'item2');
     });
 
     QUnit.test('Delete non visible item from filtered store', function(assert) {
-        const testData = createStoreAndTreeview(['id', '=', '1']);
-        testData.store.remove(2);
+        const treeView = createTreeView(['id', '=', '1']);
+        treeView.getDataSource().store().remove(2);
 
-        const nodes = testData.treeView.instance.getNodes();
+        const nodes = treeView.getNodes();
         assert.equal(nodes.length, 1);
         assert.equal(nodes[0].text, 'item1');
     });
 
     QUnit.test('Delete visible item from filtered store', function(assert) {
-        const testData = createStoreAndTreeview(['id', '=', '2']);
-        testData.store.remove(2);
+        const treeView = createTreeView(['id', '=', '2']);
+        treeView.getDataSource().store().remove(2);
 
-        const nodes = testData.treeView.instance.getNodes();
+        const nodes = treeView.getNodes();
         assert.equal(nodes.length, 0);
     });
 
     QUnit.test('Remove filter after deleting visible item from filtered store', function(assert) {
-        const testData = createStoreAndTreeview(['id', '=', '2']);
-        testData.store.remove(2);
+        const treeView = createTreeView(['id', '=', '2']);
+        treeView.getDataSource().store().remove(2);
 
-        testData.treeView.instance.option('dataSource', new DataSource({
-            store: testData.store
+        treeView.option('dataSource', new DataSource({
+            store: treeView.getDataSource().store()
         }));
 
-        const nodes = testData.treeView.instance.getNodes();
+        const nodes = treeView.getNodes();
         assert.equal(nodes.length, 1);
         assert.equal(nodes[0].text, 'item1');
     });
