@@ -12290,25 +12290,41 @@ declare module DevExpress.ui {
          */
         validators?: Array<any>;
     }
-    /** @name dxValidationMessage.Options */
+    /**
+     * <-dxValidationMessage.Options->
+     */
     export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
-        /** @name dxValidationMessage.Options.boundary */
+        /**
+         * <-dxValidationMessage.Options.boundary->
+         */
         boundary?: string | Element | JQuery;
-        /** @name dxValidationMessage.Options.mode */
+        /**
+         * <-dxValidationMessage.Options.mode->
+         */
         mode?: string;
-        /** @name dxValidationMessage.Options.offset */
+        /**
+         * <-dxValidationMessage.Options.offset->
+         */
         offset?: any;
-        /** @name dxValidationMessage.Options.positionRequest */
+        /**
+         * <-dxValidationMessage.Options.positionRequest->
+         */
         positionRequest?: string;
-        /** @name dxValidationMessage.Options.validationErrors */
+        /**
+         * <-dxValidationMessage.Options.validationErrors->
+         */
         validationErrors?: Array<any> | null;
     }
-    /** @name dxValidationMessage */
+    /**
+     * <-dxValidationMessage->
+     */
     export class dxValidationMessage extends dxOverlay {
         constructor(element: Element, options?: dxValidationMessageOptions)
         constructor(element: JQuery, options?: dxValidationMessageOptions)
     }
-    /** @name dxValidationSummary.Options */
+    /**
+     * <-dxValidationSummary.Options->
+     */
     export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
         /**
          * <-dxValidationSummary.Options.validationGroup->
