@@ -81,7 +81,7 @@ const ValidationMessage = Overlay.inherit({
 
     updateMaxWidth() {
         const target = this.option('target');
-        const targetWidth = target?.outerWidth() || $(target).outerWidth();
+        const targetWidth = target?.outerWidth?.() || $(target)?.outerWidth?.();
         let maxWidth = '100%';
         if(targetWidth) {
             maxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);
