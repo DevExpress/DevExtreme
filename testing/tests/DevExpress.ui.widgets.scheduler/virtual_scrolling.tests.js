@@ -47,7 +47,8 @@ module('Virtual Scrolling', {
                         getOption: { height: settings.height }
                     };
                     return options[name] && options[name][arg0];
-                }
+                },
+                _isVerticalGroupedWorkSpace: () => false
             };
 
             this.scrollableMock = {
@@ -125,6 +126,20 @@ module('Virtual Scrolling', {
             assert.ok(spyEventsOff.calledOnce, 'scroll event unsubscribed once');
             assert.equal(spyEventsOff.args[0][0], domAdapter.getDocument(), 'scroll event unsubscribed from document');
             assert.equal(spyEventsOff.args[0][1], SCROLL_EVENT_NAME, 'scroll event name is correct');
+        });
+
+        test('It should call _getTotalRowCount with correct parameters', function(assert) {
+            const getTotalRowCountSpy = sinon.spy(this.worksSpaceMock, '_getTotalRowCount');
+            const isVerticalGroupedWorkSpaceSpy = sinon.spy(this.worksSpaceMock, '_isVerticalGroupedWorkSpace');
+            const isGroupedAllDayPanelSpy = sinon.spy(this.worksSpaceMock, 'isGroupedAllDayPanel');
+
+            this.virtualScrolling._updateState(0);
+
+            assert.ok(isVerticalGroupedWorkSpaceSpy.called, '_isVerticalGroupedWorkSpaceSpy was called');
+            assert.ok(getTotalRowCountSpy.called, 'getTotalRowCountSpy was called');
+            assert.notOk(isGroupedAllDayPanelSpy.called, 'isGroupedAllDayPanel was not called');
+            assert.equal(getTotalRowCountSpy.getCall(0).args[0], 0, 'Correct first parameter');
+            assert.equal(getTotalRowCountSpy.getCall(0).args[1], false, 'Correct second parameter');
         });
     });
 
