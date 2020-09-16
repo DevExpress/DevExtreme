@@ -19,6 +19,12 @@ const VALIDATION_STATUS_VALID = 'valid';
 const VALIDATION_STATUS_INVALID = 'invalid';
 const READONLY_NAMESPACE = 'editorReadOnly';
 
+const VALIDATION_MESSAGE_KEYS_MAP = {
+    validationMessageMode: 'mode',
+    validationMessageOffset: 'offset',
+    validationBoundary: 'boundary',
+};
+
 const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
@@ -168,7 +174,7 @@ const Editor = Widget.inherit({
         return validationErrors;
     },
 
-    _removeValidationMessage: function() {
+    _disposeValidationMessage: function() {
         if(this._$validationMessage) {
             this._$validationMessage.remove();
             this.setAria('describedby', null);
@@ -192,7 +198,7 @@ const Editor = Widget.inherit({
             return;
         }
 
-        this._removeValidationMessage();
+        this._disposeValidationMessage();
         if(!isValid && validationErrors) {
             this._$validationMessage = $('<div>').appendTo($element);
             this.setAria('describedby', 'dx-' + new Guid());
@@ -265,13 +271,7 @@ const Editor = Widget.inherit({
     },
 
     _setValidationMessageOption: function({ name, value }) {
-        const KEY_MAP = {
-            validationMessageMode: 'mode',
-            validationMessageOffset: 'offset',
-            validationBoundary: 'boundary',
-        };
-
-        const optionKey = KEY_MAP[name] ? KEY_MAP[name] : name;
+        const optionKey = VALIDATION_MESSAGE_KEYS_MAP[name] ? VALIDATION_MESSAGE_KEYS_MAP[name] : name;
         this._validationMessage?.option(optionKey, value);
     },
 
