@@ -85,7 +85,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
-      {!viewModel.props.isValid && viewModel.props.validationStatus === 'invalid' && viewModel.validationErrors?.length
+      {viewModel.rendered && !viewModel.props.isValid && viewModel.props.validationStatus === 'invalid' && viewModel.validationErrors?.length
                 && (
                 <ValidationMessage
                   validationErrors={viewModel.validationErrors}
@@ -151,6 +151,8 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
+  rendered = false;
+
   @Ref() iconRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
@@ -161,6 +163,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   get target(): HTMLDivElement {
     return this.widgetRef?.getRootElement();
+  }
+
+  @Effect({ run: 'once' })
+  afterInit(): void {
+    this.rendered = true;
   }
 
   @Method()
