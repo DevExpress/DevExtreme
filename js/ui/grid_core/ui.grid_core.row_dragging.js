@@ -52,6 +52,7 @@ const RowDraggingExtender = {
         const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
         const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
         const togglePointerEventsStyle = (toggle) => {
+            // T929503
             this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
         };
 
@@ -77,10 +78,10 @@ const RowDraggingExtender = {
                     togglePointerEventsStyle(true);
                 },
                 onDragLeave: () => {
-                    togglePointerEventsStyle();
+                    togglePointerEventsStyle(false);
                 },
                 onDragEnd: (e) => {
-                    togglePointerEventsStyle();
+                    togglePointerEventsStyle(false);
                     rowDragging.onDragEnd?.(e);
                 },
                 dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
